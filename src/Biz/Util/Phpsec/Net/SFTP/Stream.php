@@ -17,10 +17,10 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Net\SFTP;
+namespace Biz\Util\Phpsec\Net\SFTP;
 
-use Topxia\Service\Util\Phpsec\Net\SFTP;
-use Topxia\Service\Util\Phpsec\Crypt\RSA;
+use Biz\Util\Phpsec\Net\SFTP;
+use Biz\Util\Phpsec\Crypt\RSA;
 
 /**
  * SFTP Stream Wrapper
@@ -214,7 +214,7 @@ class Stream
                 return false;
             }
 
-            // casting $pass to a string is necessary in the event that it's a \Topxia\Service\Util\Phpsec\Crypt\RSA object
+            // casting $pass to a string is necessary in the event that it's a \Biz\Util\Phpsec\Crypt\RSA object
 
             if (isset(self::$instances[$host][$port][$user][(string) $pass])) {
                 $this->sftp = self::$instances[$host][$port][$user][(string) $pass];
@@ -509,7 +509,7 @@ class Stream
      * Renames a file or directory
      *
      * Attempts to rename oldname to newname, moving it between directories if necessary.
-     * If newname exists, it will be overwritten.  This is a departure from what \Topxia\Service\Util\Phpsec\Net\SFTP
+     * If newname exists, it will be overwritten.  This is a departure from what \Biz\Util\Phpsec\Net\SFTP
      * does.
      *
      * @access public
@@ -674,7 +674,7 @@ class Stream
     /**
      * Flushes the output
      *
-     * See <http://php.net/fflush>. Always returns true because \Topxia\Service\Util\Phpsec\Net\SFTP doesn't cache stuff before writing
+     * See <http://php.net/fflush>. Always returns true because \Biz\Util\Phpsec\Net\SFTP doesn't cache stuff before writing
      *
      * @access public
      * @return Boolean
@@ -722,7 +722,7 @@ class Stream
     /**
      * Retrieve information about a file
      *
-     * Ignores the STREAM_URL_STAT_QUIET flag because the entirety of \Topxia\Service\Util\Phpsec\Net\SFTP\Stream is quiet by default
+     * Ignores the STREAM_URL_STAT_QUIET flag because the entirety of \Biz\Util\Phpsec\Net\SFTP\Stream is quiet by default
      * might be worthwhile to reconstruct bits 12-16 (ie. the file type) if mode doesn't have them but we'll
      * cross that bridge when and if it's reached
      *
@@ -771,7 +771,7 @@ class Stream
      * Change stream options
      *
      * STREAM_OPTION_WRITE_BUFFER isn't supported for the same reason stream_flush isn't.
-     * The other two aren't supported because of limitations in \Topxia\Service\Util\Phpsec\Net\SFTP.
+     * The other two aren't supported because of limitations in \Biz\Util\Phpsec\Net\SFTP.
      *
      * @access public
      * @param  Integer   $option

@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\Service\Sms\Job;
+namespace Biz\Sms\Job;
 
-use Topxia\Service\Crontab\Job;
+use Biz\Crontab\Service\Job;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Sms\SmsProcessor\SmsProcessorFactory;

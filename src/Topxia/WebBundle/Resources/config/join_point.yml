@@ -1,6 +1,6 @@
 importer:
-  course-member: Topxia\Service\Importer\CourseMemberImporter
-  classroom-member: Topxia\Service\Importer\ClassroomMemberImporter
+  course-member: Biz\Importer\CourseMemberImporter
+  classroom-member: Biz\Importer\ClassroomMemberImporter
 
 order:
   course:
@@ -10,10 +10,10 @@ order:
     processor: Biz\Order\OrderProcessor\ClassroomOrderProcessor
     order_show_template: order/classroom.html.twig
   vip:
-    processor: Topxia\Service\Order\OrderProcessor\VipOrderProcessor
+    processor: Biz\Order\OrderProcessor\VipOrderProcessor
     order_show_template: order/vip.html.twig
   coin:
-    processor: Topxia\Service\Order\OrderProcessor\CoinOrderProcessor
+    processor: Biz\Order\OrderProcessor\CoinOrderProcessor
   groupSell:
     processor: Topxia\Service\Order\OrderProcessor\GroupSellOrderProcessor
     order_show_template: GroupSellBundle:GroupSell:Order/group_sell.html.twig

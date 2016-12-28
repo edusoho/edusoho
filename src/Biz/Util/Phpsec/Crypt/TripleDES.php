@@ -12,7 +12,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $des = new \Topxia\Service\Util\Phpsec\Crypt\TripleDES();
+ *    $des = new \Biz\Util\Phpsec\Crypt\TripleDES();
  *
  *    $des->setKey('abcdefghijklmnopqrstuvwx');
  *
@@ -36,10 +36,10 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Crypt\DES;
-use Topxia\Service\Util\Phpsec\Crypt\Base;
+use Biz\Util\Phpsec\Crypt\DES;
+use Biz\Util\Phpsec\Crypt\Base;
 
 /**
  * Pure-PHP implementation of Triple DES.
@@ -61,7 +61,7 @@ class TripleDES extends DES
     /**
      * Encrypt / decrypt using outer chaining
      *
-     * Outer chaining is used by SSH-2 and when the mode is set to \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_CBC.
+     * Outer chaining is used by SSH-2 and when the mode is set to \Biz\Util\Phpsec\Crypt\Base::MODE_CBC.
      */
     const MODE_CBC3 = Base::MODE_CBC;
 
@@ -70,9 +70,9 @@ class TripleDES extends DES
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::password_key_size
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::password_key_size
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPassword()
+     * @see \Biz\Util\Phpsec\Crypt\DES::password_key_size
+     * @see \Biz\Util\Phpsec\Crypt\Base::password_key_size
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_key_size = 24;
 
@@ -81,8 +81,8 @@ class TripleDES extends DES
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::password_default_salt
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPassword()
+     * @see \Biz\Util\Phpsec\Crypt\Base::password_default_salt
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_default_salt = 'phpseclib';
 
@@ -91,8 +91,8 @@ class TripleDES extends DES
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::cipher_name_mcrypt
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
+     * @see \Biz\Util\Phpsec\Crypt\DES::cipher_name_mcrypt
+     * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
      */
     public $cipher_name_mcrypt = 'tripledes';
 
@@ -101,7 +101,7 @@ class TripleDES extends DES
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cfb_init_len
+     * @see \Biz\Util\Phpsec\Crypt\Base::cfb_init_len
      */
     public $cfb_init_len = 750;
 
@@ -110,8 +110,8 @@ class TripleDES extends DES
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\TripleDES::setKey()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\TripleDES::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\DES::setKey()
      */
     public $key_size_max = 24;
 
@@ -124,7 +124,7 @@ class TripleDES extends DES
     public $mode_3cbc;
 
     /**
-     * The \Topxia\Service\Util\Phpsec\Crypt\DES objects
+     * The \Biz\Util\Phpsec\Crypt\DES objects
      *
      * Used only if $mode_3cbc === true
      *
@@ -140,23 +140,23 @@ class TripleDES extends DES
      *
      * $mode could be:
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_ECB
+     * - \Biz\Util\Phpsec\Crypt\Base::MODE_ECB
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_CBC
+     * - \Biz\Util\Phpsec\Crypt\Base::MODE_CBC
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_CTR
+     * - \Biz\Util\Phpsec\Crypt\Base::MODE_CTR
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_CFB
+     * - \Biz\Util\Phpsec\Crypt\Base::MODE_CFB
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_OFB
+     * - \Biz\Util\Phpsec\Crypt\Base::MODE_OFB
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\TripleDES::MODE_3CBC
+     * - \Biz\Util\Phpsec\Crypt\TripleDES::MODE_3CBC
      *
-     * If not explicitly set, \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_CBC will be used.
+     * If not explicitly set, \Biz\Util\Phpsec\Crypt\Base::MODE_CBC will be used.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::__construct()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::__construct()
+     * @see \Biz\Util\Phpsec\Crypt\DES::__construct()
+     * @see \Biz\Util\Phpsec\Crypt\Base::__construct()
      *
      * @param optional Integer $mode
      */
@@ -176,7 +176,7 @@ class TripleDES extends DES
                     new DES(Base::MODE_CBC)
                 );
 
-                // we're going to be doing the padding, ourselves, so disable it in the \Topxia\Service\Util\Phpsec\Crypt\DES objects
+                // we're going to be doing the padding, ourselves, so disable it in the \Biz\Util\Phpsec\Crypt\DES objects
                 $this->des[0]->disablePadding();
                 $this->des[1]->disablePadding();
                 $this->des[2]->disablePadding();
@@ -190,10 +190,10 @@ class TripleDES extends DES
     /**
      * Test for engine validity
      *
-     * This is mainly just a wrapper to set things up for \Topxia\Service\Util\Phpsec\Crypt\Base::isValidEngine()
+     * This is mainly just a wrapper to set things up for \Biz\Util\Phpsec\Crypt\Base::isValidEngine()
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::Crypt_Base()
+     * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
      *
      * @param  Integer   $engine
      * @return Boolean
@@ -212,11 +212,11 @@ class TripleDES extends DES
     /**
      * Sets the initialization vector. (optional)
      *
-     * SetIV is not required when \Topxia\Service\Util\Phpsec\Crypt\Base::MODE_ECB is being used.  If not explicitly set, it'll be assumed
+     * SetIV is not required when \Biz\Util\Phpsec\Crypt\Base::MODE_ECB is being used.  If not explicitly set, it'll be assumed
      * to be all zero's.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setIV()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setIV()
      *
      * @param String $iv
      */
@@ -242,8 +242,8 @@ class TripleDES extends DES
      * If the key is not explicitly set, it'll be assumed to be all null bytes.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::setKey()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\DES::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setKey()
      *
      * @param String $key
      */
@@ -278,7 +278,7 @@ class TripleDES extends DES
      * Encrypts a message.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
      *
      * @param  String $plaintext
      * @return String $cipertext
@@ -307,7 +307,7 @@ class TripleDES extends DES
      * Decrypts a message.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      *
      * @param  String $ciphertext
      * @return String $plaintext
@@ -358,14 +358,14 @@ class TripleDES extends DES
      * outputs.  The reason is due to the fact that the initialization vector's change after every encryption /
      * decryption round when the continuous buffer is enabled.  When it's disabled, they remain constant.
      *
-     * Put another way, when the continuous buffer is enabled, the state of the \Topxia\Service\Util\Phpsec\Crypt\DES() object changes after each
+     * Put another way, when the continuous buffer is enabled, the state of the \Biz\Util\Phpsec\Crypt\DES() object changes after each
      * encryption / decryption round, whereas otherwise, it'd remain constant.  For this reason, it's recommended that
      * continuous buffers not be used.  They do offer better security and are, in fact, sometimes required (SSH uses them),
      * however, they are also less intuitive and more likely to cause you problems.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::enableContinuousBuffer()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\TripleDES::disableContinuousBuffer()
+     * @see \Biz\Util\Phpsec\Crypt\Base::enableContinuousBuffer()
+     * @see \Biz\Util\Phpsec\Crypt\TripleDES::disableContinuousBuffer()
      */
     public function enableContinuousBuffer()
     {
@@ -384,8 +384,8 @@ class TripleDES extends DES
      * The default behavior.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::disableContinuousBuffer()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\TripleDES::enableContinuousBuffer()
+     * @see \Biz\Util\Phpsec\Crypt\Base::disableContinuousBuffer()
+     * @see \Biz\Util\Phpsec\Crypt\TripleDES::enableContinuousBuffer()
      */
     public function disableContinuousBuffer()
     {
@@ -402,8 +402,8 @@ class TripleDES extends DES
      * Creates the key schedule
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\DES::_setupKey()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\DES::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
     public function _setupKey()
     {
@@ -439,8 +439,8 @@ class TripleDES extends DES
      * Sets the internal crypt engine
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::Crypt_Base()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPreferredEngine()
+     * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPreferredEngine()
      *
      * @param  Integer   $engine
      * @return Integer

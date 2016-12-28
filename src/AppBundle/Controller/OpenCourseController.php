@@ -16,7 +16,6 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Course\MaterialService;
 
 class OpenCourseController extends BaseOpenCourseController
 {

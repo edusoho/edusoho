@@ -9,7 +9,6 @@ use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
 
 class TaskServiceImpl extends BaseService implements TaskService

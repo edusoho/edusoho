@@ -13,8 +13,7 @@ use Topxia\Common\PluginVersionToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\ShareSdk\WeixinShare;
 use Topxia\WebBundle\Util\CategoryBuilder;
-use Topxia\Service\Util\HTMLPurifierFactory;
-use Topxia\Service\CloudPlatform\Impl\AppServiceImpl;
+use Biz\Util\HTMLPurifierFactory;
 
 class WebExtension extends \Twig_Extension
 {

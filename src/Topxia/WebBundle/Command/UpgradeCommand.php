@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Filesystem\Filesystem;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\PluginUtil;
+use Biz\Util\PluginUtil;
 
 use Biz\User\CurrentUser;
 

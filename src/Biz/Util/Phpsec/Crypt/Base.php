@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Base Class for all \Topxia\Service\Util\Phpsec\Crypt\* cipher classes
+ * Base Class for all \Biz\Util\Phpsec\Crypt\* cipher classes
  *
  * PHP version 5
  *
  * Internally for phpseclib developers:
  *  If you plan to add a new cipher class, please note following rules:
  *
- *  - The new \Topxia\Service\Util\Phpsec\Crypt\* cipher class should extend \Topxia\Service\Util\Phpsec\Crypt\Base
+ *  - The new \Biz\Util\Phpsec\Crypt\* cipher class should extend \Biz\Util\Phpsec\Crypt\Base
  *
  *  - Following methods are then required to be overridden/overloaded:
  *
@@ -20,7 +20,7 @@
  *
  *  - All other methods are optional to be overridden/overloaded
  *
- *  - Look at the source code of the current ciphers how they extend \Topxia\Service\Util\Phpsec\Crypt\Base
+ *  - Look at the source code of the current ciphers how they extend \Biz\Util\Phpsec\Crypt\Base
  *    and take one of them as a start up for the new cipher class.
  *
  *  - Please read all the other comments/notes/hints here also for each class var/method
@@ -40,12 +40,12 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Crypt\Hash;
+use Biz\Util\Phpsec\Crypt\Hash;
 
 /**
- * Base Class for all \Topxia\Service\Util\Phpsec\Crypt\* cipher classes
+ * Base Class for all \Biz\Util\Phpsec\Crypt\* cipher classes
  *
  * @package Base
  *
@@ -56,8 +56,8 @@ abstract class Base
 {
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      */
     /**
      * Encrypt / decrypt using the Counter mode.
@@ -102,13 +102,13 @@ abstract class Base
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_hashInlineCryptFunction()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_hashInlineCryptFunction()
      */
     static $WHIRLPOOL_AVAILABLE;
 
     /**#@+
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::__construct()
+     * @see \Biz\Util\Phpsec\Crypt\Base::__construct()
      */
     /**
      * Base value for the internal implementation $engine switch
@@ -129,7 +129,7 @@ abstract class Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::__construct()
+     * @see \Biz\Util\Phpsec\Crypt\Base::__construct()
      */
     public $mode;
 
@@ -146,7 +146,7 @@ abstract class Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setKey()
      */
     public $key = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
 
@@ -155,7 +155,7 @@ abstract class Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setIV()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setIV()
      */
     public $iv;
 
@@ -164,8 +164,8 @@ abstract class Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::enableContinuousBuffer()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_clearBuffers()
+     * @see \Biz\Util\Phpsec\Crypt\Base::enableContinuousBuffer()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_clearBuffers()
      */
     public $encryptIV;
 
@@ -174,8 +174,8 @@ abstract class Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::enableContinuousBuffer()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_clearBuffers()
+     * @see \Biz\Util\Phpsec\Crypt\Base::enableContinuousBuffer()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_clearBuffers()
      */
     public $decryptIV;
 
@@ -184,7 +184,7 @@ abstract class Base
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::enableContinuousBuffer()
+     * @see \Biz\Util\Phpsec\Crypt\Base::enableContinuousBuffer()
      */
     public $continuousBuffer = false;
 
@@ -193,8 +193,8 @@ abstract class Base
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_clearBuffers()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_clearBuffers()
      */
     public $enbuffer;
 
@@ -203,8 +203,8 @@ abstract class Base
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_clearBuffers()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_clearBuffers()
      */
     public $debuffer;
 
@@ -216,7 +216,7 @@ abstract class Base
      *
      * @var Resource
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
      */
     public $enmcrypt;
 
@@ -228,7 +228,7 @@ abstract class Base
      *
      * @var Resource
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      */
     public $demcrypt;
 
@@ -237,8 +237,8 @@ abstract class Base
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Twofish::setKey()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Twofish::setIV()
+     * @see \Biz\Util\Phpsec\Crypt\Twofish::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Twofish::setIV()
      */
     public $enchanged = true;
 
@@ -247,8 +247,8 @@ abstract class Base
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Twofish::setKey()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Twofish::setIV()
+     * @see \Biz\Util\Phpsec\Crypt\Twofish::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Twofish::setIV()
      */
     public $dechanged = true;
 
@@ -265,9 +265,9 @@ abstract class Base
      * @var Resource
      * @access private
      * @link http://phpseclib.sourceforge.net/cfb-demo.phps
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupMcrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupMcrypt()
      */
     public $ecb;
 
@@ -289,7 +289,7 @@ abstract class Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
      */
     public $cfb_init_len = 600;
 
@@ -309,7 +309,7 @@ abstract class Base
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::enablePadding()
+     * @see \Biz\Util\Phpsec\Crypt\Base::enablePadding()
      */
     public $padding = true;
 
@@ -318,7 +318,7 @@ abstract class Base
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::__construct()
+     * @see \Biz\Util\Phpsec\Crypt\Base::__construct()
      */
     public $paddable = false;
 
@@ -333,9 +333,9 @@ abstract class Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setEngine()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setEngine()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      */
     public $engine;
 
@@ -344,8 +344,8 @@ abstract class Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setEngine()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPreferredEngine()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setEngine()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPreferredEngine()
      */
     public $preferredEngine;
 
@@ -358,7 +358,7 @@ abstract class Base
      * @access private
      * @link http://www.php.net/mcrypt_module_open
      * @link http://www.php.net/mcrypt_list_algorithms
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupMcrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupMcrypt()
      */
     public $cipher_name_mcrypt;
 
@@ -390,7 +390,7 @@ abstract class Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPassword()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_key_size = 32;
 
@@ -399,7 +399,7 @@ abstract class Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setPassword()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_default_salt = 'phpseclib/salt';
 
@@ -411,10 +411,10 @@ abstract class Base
      *
      * @var Callback
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::$use_inline_crypt
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::$use_inline_crypt
      */
     public $inline_crypt;
 
@@ -423,9 +423,9 @@ abstract class Base
      *
      * @var mixed
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::inline_crypt
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::inline_crypt
      */
     public $use_inline_crypt;
 
@@ -434,7 +434,7 @@ abstract class Base
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_openssl_ctr_process()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_openssl_ctr_process()
      */
     public $openssl_emulate_ctr = false;
 
@@ -443,7 +443,7 @@ abstract class Base
      *
      * @var mixed
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::isValidEngine()
+     * @see \Biz\Util\Phpsec\Crypt\Base::isValidEngine()
      */
     public $openssl_options;
 
@@ -504,7 +504,7 @@ abstract class Base
     /**
      * Sets the initialization vector. (optional)
      *
-     * SetIV is not required when self::MODE_ECB (or ie for AES: \Topxia\Service\Util\Phpsec\Crypt\AES::MODE_ECB) is being used.  If not explicitly set, it'll be assumed
+     * SetIV is not required when self::MODE_ECB (or ie for AES: \Biz\Util\Phpsec\Crypt\AES::MODE_ECB) is being used.  If not explicitly set, it'll be assumed
      * to be all zero's.
      *
      * @access public
@@ -659,7 +659,7 @@ abstract class Base
      * @internal Could, but not must, extend by the child Crypt_* class
      *
      *
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      *
      * @param  String $plaintext
      * @return String $ciphertext
@@ -1002,7 +1002,7 @@ abstract class Base
      * @access public
      * @internal Could, but not must, extend by the child Crypt_* class
      *
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
      *
      * @param  String $ciphertext
      * @return String $plaintext
@@ -1543,7 +1543,7 @@ abstract class Base
      * transmitted separately)
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::disablePadding()
+     * @see \Biz\Util\Phpsec\Crypt\Base::disablePadding()
      */
     public function enablePadding()
     {
@@ -1554,7 +1554,7 @@ abstract class Base
      * Do not pad packets.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::enablePadding()
+     * @see \Biz\Util\Phpsec\Crypt\Base::enablePadding()
      */
     public function disablePadding()
     {
@@ -1590,14 +1590,14 @@ abstract class Base
      * outputs.  The reason is due to the fact that the initialization vector's change after every encryption /
      * decryption round when the continuous buffer is enabled.  When it's disabled, they remain constant.
      *
-     * Put another way, when the continuous buffer is enabled, the state of the \Topxia\Service\Util\Phpsec\Crypt\*() object changes after each
+     * Put another way, when the continuous buffer is enabled, the state of the \Biz\Util\Phpsec\Crypt\*() object changes after each
      * encryption / decryption round, whereas otherwise, it'd remain constant.  For this reason, it's recommended that
      * continuous buffers not be used.  They do offer better security and are, in fact, sometimes required (SSH uses them),
      * however, they are also less intuitive and more likely to cause you problems.
      *
      * @access public
      * @internal Could, but not must, extend by the child Crypt_* class
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::disableContinuousBuffer()
+     * @see \Biz\Util\Phpsec\Crypt\Base::disableContinuousBuffer()
      */
     public function enableContinuousBuffer()
     {
@@ -1617,7 +1617,7 @@ abstract class Base
      *
      * @access public
      * @internal Could, but not must, extend by the child Crypt_* class
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::enableContinuousBuffer()
+     * @see \Biz\Util\Phpsec\Crypt\Base::enableContinuousBuffer()
      */
     public function disableContinuousBuffer()
     {
@@ -1640,7 +1640,7 @@ abstract class Base
      *
      * @access public
      *
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::Crypt_Base()
+     * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
      *
      * @param  Integer   $engine
      * @return Boolean
@@ -1708,18 +1708,18 @@ abstract class Base
      *
      * Currently, $engine could be:
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::ENGINE_OPENSSL  [very fast]
+     * - \Biz\Util\Phpsec\Crypt\Base::ENGINE_OPENSSL  [very fast]
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::ENGINE_MCRYPT   [fast]
+     * - \Biz\Util\Phpsec\Crypt\Base::ENGINE_MCRYPT   [fast]
      *
-     * - \Topxia\Service\Util\Phpsec\Crypt\Base::ENGINE_INTERNAL [slow]
+     * - \Biz\Util\Phpsec\Crypt\Base::ENGINE_INTERNAL [slow]
      *
      * If the preferred crypt engine is not available the fastest available one will be used
      *
      * @access public
      *
      *
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::Crypt_Base()
+     * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
      *
      * @param Integer $engine
      */
@@ -1742,7 +1742,7 @@ abstract class Base
      * Returns the engine currently being utilized
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setEngine()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setEngine()
      */
     public function getEngine()
     {
@@ -1753,7 +1753,7 @@ abstract class Base
      * Sets the engine as appropriate
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::Crypt_Base()
+     * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
      */
     public function _setEngine()
     {
@@ -1796,7 +1796,7 @@ abstract class Base
     /**
      * Encrypts a block
      *
-     * Note: Must be extended by the child \Topxia\Service\Util\Phpsec\Crypt\* class
+     * Note: Must be extended by the child \Biz\Util\Phpsec\Crypt\* class
      *
      * @access private
      * @param  String   $in
@@ -1807,7 +1807,7 @@ abstract class Base
     /**
      * Decrypts a block
      *
-     * Note: Must be extended by the child \Topxia\Service\Util\Phpsec\Crypt\* class
+     * Note: Must be extended by the child \Biz\Util\Phpsec\Crypt\* class
      *
      * @access private
      * @param  String   $in
@@ -1820,10 +1820,10 @@ abstract class Base
      *
      * Only used if $engine == self::ENGINE_INTERNAL
      *
-     * Note: Must extend by the child \Topxia\Service\Util\Phpsec\Crypt\* class
+     * Note: Must extend by the child \Biz\Util\Phpsec\Crypt\* class
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setup()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setup()
      */
     abstract public function _setupKey();
 
@@ -1931,7 +1931,7 @@ abstract class Base
      * @access private
      *
      *
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_unpad()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_unpad()
      *
      * @param  String    $text
      * @return String
@@ -1962,7 +1962,7 @@ abstract class Base
      *
      * @access private
      *
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_pad()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_pad()
      *
      * @param  String    $text
      * @return String
@@ -2040,8 +2040,8 @@ abstract class Base
      *
      * @access private
      *
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
      *
      * @param String $var
      */
@@ -2120,7 +2120,7 @@ abstract class Base
      *       - short (as good as possible)
      *
      * Note: - _setupInlineCrypt() is using _createInlineCryptFunction() to create the full callback function code.
-     *       - In case of using inline crypting, _setupInlineCrypt() must extend by the child \Topxia\Service\Util\Phpsec\Crypt\* class.
+     *       - In case of using inline crypting, _setupInlineCrypt() must extend by the child \Biz\Util\Phpsec\Crypt\* class.
      *       - The following variable names are reserved:
      *         - $_*  (all variable names prefixed with an underscore)
      *         - $self (object reference to it self. Do not use $this, but $self instead)
@@ -2130,16 +2130,16 @@ abstract class Base
      *
      * @access private
      * @internal If a Crypt_* class providing inline crypting it must extend _setupInlineCrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setup()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_createInlineCryptFunction()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setup()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_createInlineCryptFunction()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      */
     public function _setupInlineCrypt()
     {
-        // If, for any reason, an extending \Topxia\Service\Util\Phpsec\Crypt\Base() \Topxia\Service\Util\Phpsec\Crypt\* class
+        // If, for any reason, an extending \Biz\Util\Phpsec\Crypt\Base() \Biz\Util\Phpsec\Crypt\* class
         // not using inline crypting then it must be ensured that: $this->use_inline_crypt = false
-        // ie in the class var declaration of $use_inline_crypt in general for the \Topxia\Service\Util\Phpsec\Crypt\* class,
+        // ie in the class var declaration of $use_inline_crypt in general for the \Biz\Util\Phpsec\Crypt\* class,
         // in the constructor at object instance-time
         // or, if it's runtime-specific, at runtime
 
@@ -2236,7 +2236,7 @@ abstract class Base
      *    +----------------------------------------------------------------------------------------------+
      *    </code>
      *
-     *    See also the \Topxia\Service\Util\Phpsec\Crypt\*::_setupInlineCrypt()'s for
+     *    See also the \Biz\Util\Phpsec\Crypt\*::_setupInlineCrypt()'s for
      *    productive inline $cipher_code's how they works.
      *
      *    Structure of:
@@ -2253,9 +2253,9 @@ abstract class Base
      * @access private
      *
      *
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::encrypt()
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::decrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      *
      * @param  Array  $cipher_code
      * @return String (the name of the created callback function)
