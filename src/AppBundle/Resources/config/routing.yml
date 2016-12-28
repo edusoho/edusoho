@@ -1765,6 +1765,34 @@ course_set_manage_cover_crop:
   path: /course_set/{id}/manage/cover_crop
   defaults: {_controller: AppBundle:CourseSetManage:coverCrop}
 
+course_set_manage_files:
+  path: /course_set/{id}/manage/files
+  defaults: {_controller: AppBundle:CourseSetFileManage:index}
+
+course_set_manage_file_show:
+   path:  /course_set/{id}/manage/file/{fileId}
+   defaults: { _controller: AppBundle:CourseSetFileManage:show }
+
+course_set_manage_file_convert:
+   path:  /course_set/{id}/manage/file/{fileId}/convert
+   defaults: { _controller: AppBundle:CourseSetFileManage:convert }
+   methods: [POST]
+
+course_set_manage_file_status:
+   path:  /course_set/manage/file/status
+   defaults: { _controller: AppBundle:CourseSetFileManage:fileStatus }
+
+course_set_manage_delete_materials_show:
+   path:  /course_set/{id}/manage/show/delete/materials
+   defaults: { _controller: AppBundle:CourseSetFileManage:deleteMaterialShow }
+   methods: [POST]
+
+course_set_manage_delete_materials:
+   path:  /course/{id}/manage/delete/materials
+   defaults: { _controller: AppBundle:CourseSetFileManage:deleteCourseFiles }
+   methods: [POST]
+
+
 course_set_manage_publish:
   path: /course_set/{id}/manage/publish
   defaults: {_controller: AppBundle:CourseSetManage:publish}
