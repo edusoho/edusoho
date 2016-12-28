@@ -17,6 +17,7 @@ class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
             'conditions' => array(
                 'id = :id',
                 'courseId = :courseId',
+                'courseSetId = :courseSetId',
                 'lessonId = :lessonId',
                 'lessonId <> ( :excludeLessonId )',
                 'type = :type',
@@ -32,8 +33,7 @@ class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
         );
     }
 
-
-    public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
+    public function findByCopyIdAndLockedCourseIds($copyId, $courseIds)
     {
         if (empty($courseIds)) {
             return array();
@@ -48,33 +48,37 @@ class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
         return $this->db()->fetchAll($sql, $parmaters) ?: array();
     }
 
-    public function deleteMaterialsByLessonId($lessonId, $courseType)
+    public function deleteByLessonId($lessonId, $courseType)
     {
         return $this->db()->delete($this->table(), array('lessonId' => $lessonId, 'type' => $courseType));
     }
 
-    public function deleteMaterialsByCourseId($courseId, $courseType)
+    public function deleteByCourseId($courseId, $courseType)
     {
         return $this->db()->delete($this->table(), array('courseId' => $courseId, 'type' => $courseType));
     }
 
-    public function deleteMaterialsByFileId($fileId)
+    public function deleteByFileId($fileId)
     {
-        return $this->getConnection()->delete($this->table, array('fileId' => $fileId));
+        return $this->db()->delete($this->table, array('fileId' => $fileId));
     }
 
-    public function searchMaterialsGroupByFileId($conditions, $orderBy, $start, $limit)
+    public function searchDistinctFileIds($conditions, $orderBys, $start, $limit)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
+            ->select('fileId, max(createdTime) AS `createdTime`')
             ->groupBy('fileId')
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
+        foreach ($orderBys ?: array() as $field => $direction) {
+            $builder->addOrderBy($field, $direction);
+        }
+
         return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function searchMaterialCountGroupByFileId($conditions)
+    public function countGroupByFileId($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('COUNT(DISTINCT(fileId))');

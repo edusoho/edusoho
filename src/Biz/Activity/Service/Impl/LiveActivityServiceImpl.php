@@ -6,7 +6,7 @@ use Biz\BaseService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\Util\EdusohoLiveClient;
 use Biz\Activity\Service\LiveActivityService;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService

@@ -61,7 +61,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
                 'totalPrice' => $totalPrice,
                 'targetId'   => $targetId,
                 'targetType' => "course",
-
                 'course'     => empty($course) ? null : $course,
                 'users'      => $users
             );

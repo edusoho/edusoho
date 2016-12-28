@@ -4,7 +4,7 @@ namespace Biz\CloudPlatform\Service\Impl;
 use Biz\CloudPlatform\Service\EduCloudService;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-use Topxia\Service\Common\BaseService;
+use Biz\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
 

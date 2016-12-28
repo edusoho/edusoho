@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Question\QuestionService;
+use Biz\Question\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseQuestionManageController extends BaseController

@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Command;
 use Topxia\Common\ArrayToolkit;
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

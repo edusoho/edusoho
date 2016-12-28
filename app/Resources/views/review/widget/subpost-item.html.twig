@@ -8,7 +8,7 @@
     {% if targetType|default('course') == 'classroom' %}
       {% set reviewDeleteUrl = path('classroom_review_delete',{reviewId:post.id}) %}
     {% else %}
-      {% set reviewDeleteUrl = path('course_review_delete',{reviewId:post.id})%}
+      {% set reviewDeleteUrl = path('course_review_delete',{courseId:post.courseId,reviewId:post.id})%}
     {% endif %}
 
     <div class="metas">

@@ -8,7 +8,6 @@ use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\System\Service\SettingService;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Course\MaterialService;
 
 class OpenCourseLessonManageController extends BaseController
 {

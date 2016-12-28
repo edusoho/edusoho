@@ -2,11 +2,10 @@
 
 namespace AppBundle\Controller;
 
-
+use Topxia\Common\ArrayToolkit;
+use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Taxonomy\Service\TagService;
-use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetManageController extends BaseController
@@ -129,10 +128,30 @@ class CourseSetManageController extends BaseController
         ));
     }
 
-    public function deleteAction(Request $request, $id)
+    public function deleteAction($id)
     {
         try {
             $this->getCourseSetService()->deleteCourseSet($id);
+            return $this->createJsonResponse(array('success' => true));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
+    }
+
+    public function publishAction($id)
+    {
+        try {
+            $this->getCourseSetService()->publishCourseSet($id);
+            return $this->createJsonResponse(array('success' => true));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
+    }
+
+    public function closeAction($id)
+    {
+        try {
+            $this->getCourseSetService()->closeCourseSet($id);
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));

@@ -140,6 +140,44 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->delete($courseSet['id']);
     }
 
+    public function updateCourseSetStatistics($id, $fields)
+    {
+        if (empty($fields)) {
+            throw $this->createInvalidArgumentException('Invalid Arguments');
+        }
+
+        $updateFields = array();
+        foreach ($fields as $field) {
+            if ($field === 'ratingNum') {
+                $ratingFields = $this->getReviewService()->countRatingByCourseSetId($id);
+                $updateFields = array_merge($updateFields, $ratingFields);
+            }
+        }
+
+        if (empty($updateFields)) {
+            throw $this->createInvalidArgumentException('Invalid Arguments');
+        }
+
+        return $this->getCourseSetDao()->update($id, $updateFields);
+    }
+
+    public function publishCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+        $this->dispatchEvent('course-set.publish', $courseSet);
+    }
+
+    public function closeCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        if ($courseSet['status'] != 'published') {
+            throw $this->createAccessDeniedException('CourseSet has not bean published');
+        }
+        $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+        $this->dispatchEvent('course-set.closed', $courseSet);
+    }
+
     protected function hasCourseSetManagerRole($courseSetId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
@@ -172,6 +210,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getTagService()
     {
         return $this->biz->service('Taxonomy:TagService');
+    }
+
+    protected function getReviewService()
+    {
+        return $this->biz->service('Course:ReviewService');
     }
 
     protected function getFileService()

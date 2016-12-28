@@ -44,7 +44,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         if ($course['learnMode'] == 'freeMode') {
             return true;
         }
-        //if the task is first return true;
+
         $preTask = $this->getTaskDao()->getPreTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
         if (empty($preTask)) {
             return true;
@@ -72,9 +72,9 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         return 'task-manage/list-item-lock-mode.html.twig';
     }
 
-    public function findCourseItems($courseId)
+    public function prepareCourseItems($courseId, $tasks)
     {
-        return $this->baseFindCourseItems($courseId);
+        return $this->baseFindCourseItems($courseId, $tasks);
     }
 
     public function sortCourseItems($courseId, array $itemIds)
@@ -84,8 +84,8 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             'unit'    => array(),
             'chapter' => array()
         );
-
-        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+        $taskNumber     = 0;
+        $chapterTypes   = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
         foreach ($itemIds as $key => $id) {
             if (strpos($id, 'chapter') === 0) {
                 $id      = str_replace('chapter-', '', $id);
@@ -131,9 +131,11 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             if (strpos($id, 'task') === 0) {
                 $categoryId = empty($chapter) ? 0 : $chapter['id'];
                 $id         = str_replace('task-', '', $id);
+                $taskNumber++;
                 $this->getTaskService()->updateSeq($id, array(
                     'seq'        => $key,
-                    'categoryId' => $categoryId
+                    'categoryId' => $categoryId,
+                    'number'     => $taskNumber
                 ));
             }
         }

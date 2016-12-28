@@ -8,8 +8,6 @@ use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Course\CourseService;
-use Topxia\Service\Course\ThreadService;
 
 class MyTeachingController extends BaseController
 {

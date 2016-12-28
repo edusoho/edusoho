@@ -1,11 +1,11 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Announcement\Processor\AnnouncementProcessor;
-use Biz\Announcement\Service\AnnouncementService;
-use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Announcement\Service\AnnouncementService;
+use Biz\Announcement\Processor\AnnouncementProcessor;
 
 class AnnouncementController extends BaseController
 {
@@ -23,21 +23,12 @@ class AnnouncementController extends BaseController
 
     public function listAction(Request $request, $targetType, $targetId)
     {
-        $conditions = array(
-            'targetType' => $targetType,
-            'targetId'   => $targetId
-        );
+        $processor  = $this->getAnnouncementProcessor($targetType);
+        $controller = $processor->getActions('list');
 
-        $processor = $this->getAnnouncementProcessor($targetType);
-        $canManage = $processor->checkManage($targetId);
-
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10);
-
-        return $this->render('announcement/nnouncement-list-modal.html.twig', array(
-            'announcements' => $announcements,
-            'targetType'    => $targetType,
-            'targetId'      => $targetId,
-            'canManage'     => $canManage
+        return $this->forward($controller, array(
+            'request'  => $request,
+            'targetId' => $targetId
         ));
     }
 
@@ -69,14 +60,20 @@ class AnnouncementController extends BaseController
     {
         $processor    = $this->getAnnouncementProcessor($targetType);
         $targetObject = $processor->tryManageObject($targetId);
+        $controller   = $processor->getActions('create');
 
         if ($request->getMethod() == 'POST') {
             $data               = $request->request->all();
             $data['targetType'] = $targetType;
-            $data['targetId']   = $targetId;
-            $data['url']        = isset($data['url']) ? $data['url'] : '';
-            $data['startTime']  = isset($data['startTime']) ? strtotime($data['startTime']) : time();
-            $data['endTime']    = isset($data['endTime']) ? strtotime($data['endTime']) : time();
+
+            if ($targetType == 'course') {
+                $data['targetId'] = empty($data['targetId']) ? $targetId : $data['targetId'];
+            } else {
+                $data['targetId'] = $targetId;
+            }
+            $data['url']       = isset($data['url']) ? $data['url'] : '';
+            $data['startTime'] = isset($data['startTime']) ? strtotime($data['startTime']) : time();
+            $data['endTime']   = isset($data['endTime']) ? strtotime($data['endTime']) : time();
 
             $announcement = $this->getAnnouncementService()->createAnnouncement($data);
 
@@ -90,11 +87,9 @@ class AnnouncementController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('announcement/announcement-write-modal.html.twig', array(
-            'announcement' => array('id' => '', 'content' => ''),
-            'targetObject' => $targetObject,
-            'targetType'   => $targetType,
-            'targetId'     => $targetId
+        return $this->forward($controller, array(
+            'request'  => $request,
+            'targetId' => $targetId
         ));
     }
 
@@ -104,23 +99,31 @@ class AnnouncementController extends BaseController
         $targetObject = $processor->tryManageObject($targetId);
 
         $announcement = $this->getAnnouncementService()->getAnnouncement($id);
+        if (!$announcement) {
+            return $this->createMessageResponse('error', "Announcement(#{$id}) not found");
+        }
 
         if ($request->getMethod() == 'POST') {
-            $data               = $request->request->all();
+            $data = $request->request->all();
+
             $data['targetType'] = $targetType;
-            $data['targetId']   = $targetId;
-            $data['startTime']  = isset($data['startTime']) ? strtotime($data['startTime']) : time();
-            $data['endTime']    = isset($data['endTime']) ? strtotime($data['endTime']) : time();
+            if ($targetType == 'course') {
+                $data['targetId'] = empty($data['targetId']) ? $targetId : $data['targetId'];
+            } else {
+                $data['targetId'] = $targetId;
+            }
+            $data['startTime'] = isset($data['startTime']) ? strtotime($data['startTime']) : time();
+            $data['endTime']   = isset($data['endTime']) ? strtotime($data['endTime']) : time();
 
             $this->getAnnouncementService()->updateAnnouncement($id, $data);
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('announcement/announcement-write-modal.html.twig', array(
-            'targetObject' => $targetObject,
-            'announcement' => $announcement,
-            'targetType'   => $targetType,
-            'targetId'     => $targetId
+        $controller = $processor->getActions('edit');
+
+        return $this->forward($controller, array(
+            'announcementId' => $announcement['id'],
+            'targetId'       => $targetId
         ));
     }
 
@@ -135,13 +138,12 @@ class AnnouncementController extends BaseController
     }
 
     /**
-     * @param $targetType
-     *
+     * @param  $targetType
      * @return AnnouncementProcessor
      */
     protected function getAnnouncementProcessor($targetType)
     {
-        $biz = $this->get('biz');
+        $biz       = $this->get('biz');
         $processor = $biz['announcement_processor']->create($targetType);
         return $processor;
     }

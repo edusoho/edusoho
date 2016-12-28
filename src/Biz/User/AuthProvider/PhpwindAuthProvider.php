@@ -1,7 +1,7 @@
 <?php
 namespace Biz\User\AuthProvider;
 
-use Topxia\Service\Common\BaseService;
+use Biz\BaseService;
 
 class PhpwindAuthProvider extends BaseService implements AuthProvider
 {
