@@ -23,7 +23,7 @@ export default class Options extends Component {
   }
 
   onChangeChecked(event) {
-    this.props.changeOptionChecked(event.currentTarget.value);
+    this.props.changeOptionChecked(event.currentTarget.id);
   }
 
   initCkeditor(dataSourceUi) {
@@ -66,10 +66,10 @@ export default class Options extends Component {
           <label className="choice-label">{this.state.datas.optionLabel}</label>
         </div>
         <div className="col-sm-8 controls">
-          <textarea className="form-control datas-input col-md-8" id={this.state.datas.optionId}  value={this.state.datas.inputValue} name={this.state.datas.optionId}></textarea>
+          <textarea className="form-control datas-input col-md-8" id={this.state.datas.optionId}  value={this.state.datas.inputValue} name='choices[]'></textarea>
           <div className="mtm">
             <label>
-              <input type={type} name={this.state.datas.checked} value={JSON.stringify({id:this.state.datas.optionId,checked:this.state.datas.checked})}  checked={this.state.datas.checked} className="answer-checkbox" onChange = {(event)=>this.onChangeChecked(event)}/>正确答案 
+              <input type={type} name='answer[]' id={JSON.stringify({id:this.state.datas.optionId,checked:this.state.datas.checked})} value={this.props.index + 1} checked={this.state.datas.checked} className="answer-checkbox" onChange = {(event)=>this.onChangeChecked(event)}/>正确答案 
             </label>
           </div>
           { showDanger && <p className="color-danger">请输入选项内容</p>}
