@@ -59,9 +59,10 @@
           <input type="text" class="form-control width-input width-input-mini item-miss-score" name="missScores[{{ type }}]"  value="0" data-role="missScore" />
         {% endif %}
       </li>
-
     {% endfor %}
+    <input type="hidden" name="questioncount">
   </ul>
+
 </div>
 
 <input type="hidden" name="percentages[simple]">

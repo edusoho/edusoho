@@ -4,8 +4,9 @@ import React,{ Component } from 'react';
 export default class Options extends Component {
   constructor(props) {
     super(props);
+    let datas = this.props.datas;
     this.state = {
-      datas: this.props.datas,
+      datas: datas,
     }
     this.editor = null;
     //value不需传递给付组件的state,因为value是属于自身组件的行为不应该去出发别的组件的Render；
@@ -42,7 +43,6 @@ export default class Options extends Component {
   }
 
   updateInputValue(inputValue) {
-    console.log(this.props.validatorDatas);
     this.props.validatorDatas.Options[this.props.datas.optionId] = inputValue.length > 0 ? 1 : 0;
     if(inputValue.length <=0 ) {
       this.props.publishMessage(false);

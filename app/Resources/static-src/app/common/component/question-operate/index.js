@@ -9,6 +9,27 @@ export default class QuestionOperate {
     this.$form.on('click','[data-role="item-delete-btn"]',event=>this.deleteQuestion(event));
     this.$form.on('click','[data-role="replace-item"]',event=>this.replaceQuestion(event));
     this.$form.on('click','[data-role="preview-btn"]',event=>this.previewQuestion(event));
+    this.initSortList();
+  }
+
+  initSortList() {
+    this.$form.find('table').sortable({
+      containerSelector: 'table',
+      itemPath: '> tbody',
+      itemSelector: 'tr',
+      placeholder: '<tr class="placeholder"/>',
+      onDrop: (item, container, _super) => {
+        _super(item, container);
+        if (item.hasClass('have-sub-questions')) {
+            let $tbody = item.parents('tbody');
+            $tbody.find('tr.is-question').each(function() {
+                let $tr = $(this);
+                $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
+            });
+        }
+        this.refreshSeqs(this.$form.find("tbody:visible"));
+      }
+    });
   }
 
   replaceQuestion(event) {
@@ -16,6 +37,7 @@ export default class QuestionOperate {
     let excludeIds = [];
     let $tbody = this.$form.find("tbody:visible");
 
+    console.log(excludeIds);
     $tbody.find('[name="questionIds[]"]').each(function(){
       excludeIds.push($(this).val());
     })
@@ -41,11 +63,10 @@ export default class QuestionOperate {
   }
 
   refreshSeqs($tbody) {
-    let seq = 0;
     let $tr = $tbody.find('tr');
     $tr.each(function(index,item) {
       let $tr = $(item);
-      $tr.find('td.seq').html(seq+1);
+      $tr.find('td.seq').html(index+1);
     });
     this.$form.find('[name="questionLength"]').val($tr.length > 0 ? $tr.length : null );
   }
