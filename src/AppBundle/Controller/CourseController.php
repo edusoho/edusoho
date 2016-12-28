@@ -24,13 +24,13 @@ class CourseController extends CourseBaseController
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
         $courses     = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
-        $memberCount = $this->getMemberService()->countMembers(array('courseId' => $id));
+        //学习进度
+        //下一个课时
         return $this->render('course-set/header.html.twig', array(
             'courseSet'    => $courseSet,
             'courses'      => $courses,
             'course'       => $course,
             'member'       => $member,
-            'memberCount' => $memberCount,
         ));
     }
 
