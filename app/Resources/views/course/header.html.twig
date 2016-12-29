@@ -1,4 +1,5 @@
-{% set canAccess = (member and 'teacher' in member.role) or 'ROLE_SUPER_ADMIN' in app.user.roles|default('') or 'ROLE_ADMIN' in app.user.roles|default('') %}
+{#{% set canAccess = (member and 'teacher' in member.role) or 'ROLE_SUPER_ADMIN' in app.user.roles|default('') or 'ROLE_ADMIN' in app.user.roles|default('') %}#}
+{% set canAccess =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
 {% if not member|default(null) %}
   <!-- 1、加入前 -->
   {% include 'course/part/header-for-guest.html.twig' %}
