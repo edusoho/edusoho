@@ -92,7 +92,6 @@ class Testpaper {
       if (passScore == '') {
         passScore = Math.ceil(score * 0.6);
       }
-      
       $('#score-single-input').val(passScore);
       $('.js-score-total').text(score);
       this.initScoreSlider(parseInt(passScore),parseInt(score));
@@ -142,7 +141,6 @@ class Testpaper {
   }
 
   initScoreSlider(passScore,score) {
-
     let scoreSlider = document.getElementById('score-slider');
     let option = {
       start: passScore,
@@ -160,12 +158,19 @@ class Testpaper {
       this.scoreSlider = noUiSlider.create(scoreSlider,option);
       scoreSlider.noUiSlider.on('update', function( values, handle ){
         $('.noUi-tooltip').text(`${(values[handle]/score*100).toFixed(0)}%`);
+        $('.js-score-tooltip').css('left',`${(values[handle]/score*100).toFixed(0)}%`);
         $('.js-passScore').text(parseInt(values[handle]));
       });
     }
-    $('.noUi-handle').attr('data-placement','top').attr('data-original-title',`达标分数：<span class="js-passScore">${passScore}</span>分`).attr('data-container','.noUi-base');
-    $('.noUi-handle').tooltip({html: true})
+    let html = `<div class="score-tooltip js-score-tooltip"><div class="tooltip top" role="tooltip" style="">
+      <div class="tooltip-arrow"></div>
+      <div class="tooltip-inner ">
+      达标分数：<span class="js-passScore">${passScore}</span>分
+      </div>
+      </div></div>`;
+    $('.noUi-handle').append(html);
     $('.noUi-tooltip').text(`${(passScore/score*100).toFixed(0)}%`);
+    $('.js-score-tooltip').css('left',`${(passScore/score*100).toFixed(0)}%`);
   }
 
   getItemsTable(url, testpaperId) {

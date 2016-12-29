@@ -1,50 +1,35 @@
-{% set typeDataMap = {
-'live': {
-'name': '直播',
-'icon': 'es-icon-videocam'
+{% set arr = [{
+  'icon': "es-icon-download",
+  'num': '5',
+  'name': "资料"
 },
-'homework': {
-'name': '作业',
-'icon': 'es-icon-mylibrarybooks'
-},
-'testpaper': {
-'name': '考试',
-'icon': 'es-icon-exam'
-},
-'download': {
-'name': '资料',
-'icon': 'es-icon-download'
-},
-'discuss': {
-'name': '讨论',
-'icon': 'es-icon-forum'
-}
-} %}
+{
+  'icon': "es-icon-videocam",
+  'num': '1',
+  'name': "直播"
+}] %}
 
-{% set show = false %}
-{% for type in characteristicData|keys if not show %}
-  {% if type in typeDataMap|keys %}
-    {% set show = true %}
-  {% endif %}
-{% endfor %}
-
-{% if not characteristicData is empty and show %}
+{% if not arr is empty  %}
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">课程特色</h3>
     </div>
     <div class="panel-body pt0">
       <div class="course-features pl0">
-        {% for type, num in characteristicData if typeDataMap[type] is defined %}
+        {% for data in arr  %}
+          {% if loop.index % 2 == 1 %}
           <div class="course-features-item clearfix">
-            <div class="media">
-              <div class="media-left prm">
-                <span class="color-lump bg-primary"> <i class="es-icon {{ typeDataMap[type].icon }} media-logo"></i>
-                </span>
-              </div>
-              <div class="media-body media-middle">含{{ typeDataMap[type].name }}({{ num }})</div>
+        {% endif %}
+          <div class="media">
+            <div class="media-left prm">
+              <span class="color-lump bg-primary"> <i class="es-icon {{ data.icon }} media-logo"></i>
+              </span>
             </div>
+            <div class="media-body media-middle">含{{ data.name }}({{ data.num }})</div>
           </div>
+          {% if loop.index % 2 == 0 or loop.index == arr|length %}
+          </div>
+          {% endif %}
         {% endfor %}
       </div>
     </div>
