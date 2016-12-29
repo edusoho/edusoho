@@ -1,3 +1,5 @@
+import notify from 'common/notify';
+
 export default class QuestionOperate {
   constructor($form, $modal) {
     this.$form = $form;
@@ -9,6 +11,7 @@ export default class QuestionOperate {
     this.$form.on('click','[data-role="item-delete-btn"]',event=>this.deleteQuestion(event));
     this.$form.on('click','[data-role="replace-item"]',event=>this.replaceQuestion(event));
     this.$form.on('click','[data-role="preview-btn"]',event=>this.previewQuestion(event));
+    this.$form.on('click','[data-role="batch-delete-btn"]',event=>this.batchDelete(event));
     this.initSortList();
   }
 
@@ -37,7 +40,6 @@ export default class QuestionOperate {
     let excludeIds = [];
     let $tbody = this.$form.find("tbody:visible");
 
-    console.log(excludeIds);
     $tbody.find('[name="questionIds[]"]').each(function(){
       excludeIds.push($(this).val());
     })
@@ -55,6 +57,25 @@ export default class QuestionOperate {
     $tbody.find('[data-parent-id="'+id+'"]').remove();
     $target.closest('tr').remove();
     this.refreshSeqs($tbody);
+  }
+
+  batchDelete(event) {
+    if (this.$form.find('[data-role="batch-item"]:checked').length == 0) {
+      notify('danger', '请选择题目');
+    }
+    let self = this;
+
+    this.$form.find('[data-role="batch-item"]:checked').each(function(index,item){
+      let questionId = $(this).val();
+
+      if ($(this).closest('tr').data('type') == 'material') {
+        self.$form.find('[data-parent-id="'+questionId+'"]').remove();
+      }
+      $(this).closest('tr').remove();
+      
+    })
+
+    this.refreshSeqs(this.$form.find("tbody:visible"));
   }
 
   previewQuestion(event) {

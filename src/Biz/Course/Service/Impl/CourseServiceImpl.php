@@ -72,8 +72,23 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->validateExpiryMode($course);
 
         $course['status'] = 'draft';
+        try {
+            $this->beginTransaction();
 
-        return $this->getCourseDao()->create($course);
+            $created = $this->getCourseDao()->create($course);
+            //set default teacher
+            $this->setCourseTeachers($created['id'], array(array(
+                'id'        => $this->biz['user']['id'],
+                'isVisible' => 1
+            )));
+
+            $this->commit();
+
+            return $created;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function updateCourse($id, $fields)
@@ -137,7 +152,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             );
         }
 
-        $existTeachers = $this->findMembersByCourseIdAndRole($courseId, 'teacher');
+        $existTeachers = $this->findTeachersByCourseId($courseId);
 
         foreach ($existTeachers as $member) {
             $this->getMemberDao()->delete($member['id']);

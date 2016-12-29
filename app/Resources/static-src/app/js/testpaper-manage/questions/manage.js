@@ -17,7 +17,6 @@ export default class QuestionManage{
   }
 
   _showPickerModal(event) {
-    console.log('_showPickerModal');
     let excludeIds = [];
     $('[data-type="'+this.currentType+'"]').find('[name="questionId[]"]').each(function(){
         excludeIds.push($(this).val());
@@ -40,6 +39,8 @@ export default class QuestionManage{
 
     this.$element.find('[data-role="question-body"]').addClass('hide');
     this.$element.find('#testpaper-items-'+type).removeClass('hide');
+    this.$element.find('[data-role="batch-select"]').prop('checked',false);
+    this.$element.find('[data-role="batch-item"]').prop('checked',false);
   }
   _confirmSave(event) {
     let isOk = this._validateScore();

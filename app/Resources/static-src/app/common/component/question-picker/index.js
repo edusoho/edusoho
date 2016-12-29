@@ -26,9 +26,18 @@ export default class QuestionPicker {
   pickItem(event) {
     let $target = $(event.currentTarget);
     let replace = parseInt($target.data('replace'));
-    $.get($target.data('url'), html=> {
+    let questionId = $target.data('questionId');
+    let questionIds = [];
+    questionIds.push(questionId);
+    
+    this.pickItemGet($target.data('url'),questionIds,replace);
+  }
+
+  pickItemGet(url, questionIds, replace=null) {
+    $.get(url, {questionIds:questionIds}, html=> {
       if (replace) {
         this.$questionAppendForm.find('tr[data-id="'+replace+'"]').replaceWith(html);
+        this.$questionAppendForm.find('tr[data-parent-id="'+replace+'"]').remove();
       } else {
         this.$questionAppendForm.find('tbody:visible').append(html).removeClass('hide');
       }
@@ -42,8 +51,17 @@ export default class QuestionPicker {
     window.open($(event.currentTarget).data('url'), '_blank',"directories=0,height=580,width=820,scrollbars=1,toolbar=0,status=0,menubar=0,location=0");
   }
 
-  batchSelectSave() {
-    console.log('批量添加');
+  batchSelectSave(event) {
+    let $target = $(event.currentTarget);
+    let questionIds = [];
+    let url = $target.data('url');
+
+    this.$questionPickerBody.find('[data-role="batch-item"]:checked').each(function(index,item){
+      let questionId = $(this).data('questionId');
+      questionIds.push(questionId);
+    })
+
+    this.pickItemGet(url, questionIds,null);
   }
 
   _refreshSeqs() {

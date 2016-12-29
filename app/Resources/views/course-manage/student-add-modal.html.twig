@@ -33,7 +33,7 @@
       </div>
       <div class="col-md-7 controls">
         <div class="input-group">
-          <input type="text" id="buy-price" name="price" value="{{ course.price }}" class="form-control">
+          <input type="text" id="buy-price" name="price" value="{{ course.price|currency }}" class="form-control">
           <div class="input-group-addon">{{'元'|trans}}</div>
         </div>
         <div class="help-block">{{'本课程的价格为'|trans}}{{course.price}}{{'元'|trans}}</div>

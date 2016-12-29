@@ -12,23 +12,23 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.delete'                            => 'onCourseDelete',
-            'course.lesson.create'                     => 'onCourseLessonCreate',
-            'course.lesson.delete'                     => 'onCourseLessonDelete',
-            'course.lesson.update'                     => 'onCourseLessonUpdate',
-            'upload.file.delete'                       => 'onUploadFileDelete',
-            'upload.file.finish'                       => 'onUploadFileFinish',
-            'course.material.create'                   => 'onMaterialCreate',
-            'course.material.update'                   => 'onMaterialUpdate',
-            'course.material.delete'                   => 'onMaterialDelete',
+            // 'course.delete'                            => 'onCourseDelete',
+            // 'course.lesson.create'                     => 'onCourseLessonCreate',
+            // 'course.lesson.delete'                     => 'onCourseLessonDelete',
+            // 'course.lesson.update'                     => 'onCourseLessonUpdate',
+            // 'upload.file.delete'                       => 'onUploadFileDelete',
+            // 'upload.file.finish'                       => 'onUploadFileFinish',
+            // 'course.material.create'                   => 'onMaterialCreate',
+            // 'course.material.update'                   => 'onMaterialUpdate',
+            // 'course.material.delete'                   => 'onMaterialDelete',
 
-            'open.course.delete'                       => 'onOpenCourseDelete',
-            'open.course.lesson.create'                => 'onOpenCourseLessonCreate',
-            'open.course.lesson.update'                => 'onOpenCourseLessonUpdate',
-            'open.course.lesson.delete'                => 'onOpenCourseLessonDelete',
+            // 'open.course.delete'                       => 'onOpenCourseDelete',
+            // 'open.course.lesson.create'                => 'onOpenCourseLessonCreate',
+            // 'open.course.lesson.update'                => 'onOpenCourseLessonUpdate',
+            // 'open.course.lesson.delete'                => 'onOpenCourseLessonDelete',
 
-            'course.lesson.generate.video.replay'      => 'onLiveFileReplay',
-            'open.course.lesson.generate.video.replay' => 'onLiveOpenFileReplay'
+            // 'course.lesson.generate.video.replay'      => 'onLiveFileReplay',
+            // 'open.course.lesson.generate.video.replay' => 'onLiveOpenFileReplay'
         );
     }
 

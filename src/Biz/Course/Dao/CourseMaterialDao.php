@@ -12,6 +12,8 @@ interface CourseMaterialDao extends GeneralDaoInterface
 
     public function deleteByCourseId($courseId, $courseType);
 
+    public function deleteByCourseSetId($courseSetId, $courseType);
+
     public function deleteByFileId($fileId);
 
     public function searchDistinctFileIds($conditions, $orderBys, $start, $limit);

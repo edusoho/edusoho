@@ -32,8 +32,12 @@
   <td>{{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
   <td>
     {% set fileQuotes = filesQuote[uploadFile.id]|default(null) %}
-    {% if 'courselesson' in fileQuotes or 'opencourselesson' in fileQuotes %}
+    {# {% if 'courselesson' in fileQuotes or 'opencourselesson' in fileQuotes %}
       <span class="label label-success tip">{{'课时'|trans}}</span>
+    {% endif %}
+
+    {% if 'coursetask' in fileQuotes %}
+      <span class="label label-success tip">{{'任务'|trans}}</span>
     {% endif %}
 
     {% if 'coursematerial' in fileQuotes or 'opencoursematerial' in fileQuotes %}
@@ -42,6 +46,13 @@
 
     {% if not fileQuotes %}
       <span class="label label-default tip">{{'未使用'|trans}}</span>
+    {% endif %} #}
+
+    {# 暂时只需要区分使用和未使用 #}
+    {% if not fileQuotes %}
+      <span class="label label-default tip">{{'未使用'|trans}}</span>
+    {% else %}
+      <span class="label label-success tip">{{'使用中'|trans}}</span>
     {% endif %}
   </td>
   <td>

@@ -38,8 +38,9 @@ class CourseSetFileManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $files      = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
-        $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
+        //XXX 暂不考虑公开课
+        $filesQuote = $this->getMaterialService()->findUsedCourseSetMaterials($fileIds, $id);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
@@ -78,8 +79,8 @@ class CourseSetFileManageController extends BaseController
 
         $materialCount = $this->getMaterialService()->searchMaterialCount(
             array(
-                'courseId' => $id,
-                'fileId'   => $fileId
+                'courseSetId' => $id,
+                'fileId'      => $fileId
             )
         );
 
