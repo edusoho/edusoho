@@ -47,7 +47,7 @@ class CourseController extends CourseBaseController
             $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
         }
 
-        return $this->render('course-set/header.html.twig', array(
+        return $this->render('course/header.html.twig', array(
             'courseSet'            => $courseSet,
             'courses'              => $courses,
             'course'               => $course,
