@@ -19,6 +19,8 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
                 'userId = :userId',
                 'type = :type',
                 'createdTime >= :createdTime_GE',
+                'courseSetId = :courseSetId',
+                'courseSetId IN ( :courseSetIds )',
                 'courseId NOT IN ( :excludeCourseIds )',
             )
         );
@@ -29,15 +31,22 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
         return $this->getByFields(array('userId' => $userId, 'courseId' => $courseId, 'type' => $type));
     }
 
-    public function findByUserId($userId, $start, $limit)
+    public function searchByUserId($userId, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND type = 'course' ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->db()->fetchAll($sql, array($userId)) ?: array();
+        return $this->search(
+            array(
+                'userId' => $userId
+            ),
+            array('createdTime' => 'DESC'),
+            $start,
+            $limit
+        );
     }
 
     public function countByUserId($userId)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? AND type = 'course'";
-        return $this->db()->fetchColumn($sql, array($userId));
+        return $this->count(array(
+            'userId' => $userId
+        ));
     }
 }

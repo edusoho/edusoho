@@ -1683,6 +1683,16 @@ course_set_show:
   path: /course_set/{id}
   defaults: {_controller: AppBundle:CourseSet:show}
 
+course_favorite:
+  path: /course/{id}/favorite
+  defaults: { _controller: AppBundle:Course:favorite }
+  methods: [POST]
+
+course_unfavorite:
+  path: /course/{id}/unfavorite
+  defaults: { _controller: AppBundle:Course:unfavorite }
+  methods: [POST]
+
 course_show:
   path: /course/{id}
   defaults: {_controller: AppBundle:Course:show}
@@ -1983,11 +1993,6 @@ testpaper_do_suspend:
   path: /testpaper/result/{resultId}/suspend
   defaults: { _controller: AppBundle:Testpaper/Testpaper:testSuspend }
   methods: [POST]
-
-#course
-course_show:
-  path: /course/{id}
-  defaults: { _controller: AppBundle:Course/Course:show }
 
 #homework
 course_manage_homework:

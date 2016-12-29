@@ -8,7 +8,7 @@ interface FavoriteDao extends GeneralDaoInterface
 {
     public function getByUserIdAndCourseId($userId, $courseId, $type);
 
-    public function findByUserId($userId, $start, $limit);
+    public function searchByUserId($userId, $start, $limit);
 
     public function countByUserId($userId);
 }

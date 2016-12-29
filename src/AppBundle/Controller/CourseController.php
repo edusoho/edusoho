@@ -4,9 +4,9 @@ namespace AppBundle\Controller;
 
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class CourseController extends CourseBaseController
 {
@@ -34,11 +34,11 @@ class CourseController extends CourseBaseController
         //学习进度
         //下一个课时
         return $this->render('course-set/header.html.twig', array(
-            'courseSet'        => $courseSet,
-            'courses'          => $courses,
-            'course'           => $course,
-            'member'           => $member,
-            'progress'         => $progress,
+            'courseSet'       => $courseSet,
+            'courses'         => $courses,
+            'course'          => $course,
+            'member'          => $member,
+            'progress'        => $progress,
             'taskCount'       => $taskCount,
             'taskResultCount' => $taskResultCount
         ));
@@ -212,6 +212,33 @@ class CourseController extends CourseBaseController
         return $this->render('course/part/newest-students.html.twig', array(
             'students' => $students
         ));
+    }
+
+    public function operationPartAction(Request $request, $id)
+    {
+        list(, $course) = $this->tryGetCourseSetAndCourse($id);
+
+        $user = $this->getCurrentUser();
+
+        $isUserFavorite = $this->getCourseService()->isUserFavorite($user['id'], $course['id']);
+        $canManage      = $this->getCourseService()->hasCourseManagerRole($course['id']);
+        return $this->render('course/part/operation.html.twig', array(
+            'course'         => $course,
+            'isUserFavorite' => $isUserFavorite,
+            'canManage'      => $canManage
+        ));
+    }
+
+    public function favoriteAction($id)
+    {
+        $success = $this->getCourseService()->favorite($id);
+        return $this->createJsonResponse($success);
+    }
+
+    public function unfavoriteAction($id)
+    {
+        $success = $this->getCourseService()->unfavorite($id);
+        return $this->createJsonResponse($success);
     }
 
     // TODO old

@@ -2,6 +2,8 @@
 
 namespace Biz\Course\Service;
 
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+
 interface CourseService
 {
     public function getCourse($id);
@@ -48,6 +50,8 @@ interface CourseService
 
     public function hasCourseManagerRole($courseId = 0);
 
+    public function getUserRoleInCourse($courseId, $userId);
+
 
     /**
      * @param integer $userId
@@ -85,6 +89,49 @@ interface CourseService
      * @return mixed
      */
     public function removeCourseStudent($courseId, $userId);
+
+    /**
+     * collect course
+     *
+     * @param $id
+     * @throws AccessDeniedException
+     * @return bool
+     */
+    public function favorite($id);
+
+    /**
+     * cancel collected course
+     * @param $id
+     *
+     * @throws AccessDeniedException
+     * @return bool
+     */
+    public function unfavorite($id);
+
+    /**
+     * @param integer $userId
+     * @param integer $courseId
+     *
+     * @return bool
+     */
+    public function isUserFavorite($userId, $courseId);
+
+    /**
+     * @param int $userId
+     *
+     * @return integer
+     */
+    public function countUserFavorites($userId);
+
+    /**
+     * @param int $userId
+     *
+     * @param int    $start
+     * @param int    $limit
+     *
+     * @return array[]
+     */
+    public function searchUserFavorites($userId, $start, $limit);
 
     //---start 前两个已经重构了，后面的四个也需要重构，目前还没有用到，用到的时候在重构
     public function findUserLeaningCourseCount($userId, $filters = array());

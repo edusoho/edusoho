@@ -226,25 +226,18 @@ class UserController extends BaseController
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
 
-        $conditions = array(
-            'userId' => $user['id']
-        );
         $paginator  = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->searchCourseFavoriteCount($conditions),
+            $this->getCourseService()->countUserFavorites($user['id']),
             20
         );
 
-        $courseFavorites = $this->getCourseService()->searchCourseFavorites(
-            $conditions,
-            array('createdTime', 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+        $favorites = $this->getCourseService()->searchUserFavorites(
+            $user['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount()
         );
-
         return $this->render('user/courses_favorited.html.twig', array(
             'user'            => $user,
-            'courseFavorites' => $courseFavorites,
+            'courseFavorites' => $favorites,
             'paginator'       => $paginator,
             'type'            => 'favorited'
         ));
