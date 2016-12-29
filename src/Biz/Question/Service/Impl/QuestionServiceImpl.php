@@ -224,7 +224,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         if (!empty($conditions['keyword'])) {
-            $conditions['stem'] = $conditions['keyword'];
+            $conditions['stem'] = '%'.trim($conditions['keyword']).'%';
             unset($conditions['keyword']);
         }
 
