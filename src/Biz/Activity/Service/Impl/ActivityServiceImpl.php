@@ -174,7 +174,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
-            var_dump($e->getMessage());exit;
             throw $e;
         }
 
