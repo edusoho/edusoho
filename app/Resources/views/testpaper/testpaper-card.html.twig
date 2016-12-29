@@ -47,10 +47,10 @@
 	<div class="panel-footer">
 		{% if limitedTime > 0 %}
 			{% if target.testMode|default('normal') != 'realTime' %}
-				<button class="btn btn-default"{% if paperResult.id|default(0) > 0 %} id="suspend" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-goto="{{ path('my_quiz') }}"{% else %} disabled="disabled"{% endif %}>{{'稍后再做'|trans}}</button>
+				<button class="btn btn-default"{% if paperResult.id|default(0) > 0 %} id="suspend" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-goto=""{% else %} disabled="disabled"{% endif %}>{{'稍后再做'|trans}}</button>
 		  {% endif %}
 		{% else %}
-			<button class="btn btn-default"{% if paperResult.testId|default(0) > 0 %} id="suspend" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-goto="{{ path('my_quiz') }}"{% else %} disabled="disabled"{% endif %} data-role="test-suspend">{{'稍后再做'|trans}}</button>
+			<button class="btn btn-default"{% if paperResult.testId|default(0) > 0 %} id="suspend" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-goto=""{% else %} disabled="disabled"{% endif %} data-role="test-suspend">{{'稍后再做'|trans}}</button>
 		{% endif %}
 
 		{% if paperResult.id|default(0) > 0 %}

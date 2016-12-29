@@ -8,11 +8,11 @@
       <label for="testpaper-media">{{'试卷'|trans}}</label>
     </div>
     <div class="col-sm-10 controls">
-      <select id="testpaper-media" class="form-control" name="mediaId"  data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:courseSetId}) }}">
-      {#<select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:courseSetId}) }}">#}
-        <option value="">{{ '请选择试卷'|trans }}</option>>
+      <select id="testpaper-media" class="form-control" name="mediaId"  data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
+      {#<select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">#}
+        <option value="">{{ '请选择试卷'|trans }}</option>
         {% for testpaper in testpapers if testpaper %}
-          <option value="{{ testpaper.id }}" {% if testpaper.id == activity.testpaperMediaId|default('') %}selected{% endif %} data-score="{{ testpaper.score }}">{{ testpaper.name }}</option>>
+          <option value="{{ testpaper.id }}" {% if testpaper.id == activity.testpaperMediaId|default('') %}selected{% endif %} data-score="{{ testpaper.score }}">{{ testpaper.name }}</option>
         {% endfor %}
       </select>
       <div class="help-block">{{'如果找不到试卷，请先确定该试卷已经发布'|trans}}</div>
@@ -35,7 +35,10 @@
   <div class="form-group">
     <div class="col-sm-2 control-label"><label>{{'考试次数'|trans}}</label></div>
     <div class="col-sm-10 controls radios">
-      {{ radios('doTimes', {0:'不限'|trans, 1:'单次'|trans}, activity.doTimes|default('0')) }}
+      <label><input type="radio" name="doTimes" value="0" {% if not activity.doTimes|default('0') %}checked{% endif %}> 不限</label>
+      {% if course.learnMode != 'lockMode' %}
+        <label><input type="radio" name="doTimes" value="1" {% if activity.doTimes|default('0') %}checked{% endif %}> 单次</label>
+      {% endif %}
     </div>
   </div>
 

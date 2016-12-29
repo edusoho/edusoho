@@ -1,12 +1,11 @@
 <?php
 namespace Topxia\WebBundle\Listener;
 
-
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class KernelRequestListener
 {
@@ -56,7 +55,8 @@ class KernelRequestListener
             } else {
                 $token = $request->request->get('_csrf_token', '');
             }
-
+            var_dump($request->isXmlHttpRequest());
+            var_dump($token);exit;
             $request->request->remove('_csrf_token');
 
             $expectedToken = $this->container->get('security.csrf.token_manager')->getToken('site');
@@ -68,7 +68,7 @@ class KernelRequestListener
 
                     $this->container->set('Topxia.RepairProblem', $result);
                 } else {
-                    $response = $this->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
+                    $response = $this->container->get('templating')->renderResponse('default/message.html.twig', array(
                         'type'     => 'error',
                         'message'  => $this->getServiceKernel()->trans('页面已过期，请重新提交数据！'),
                         'goto'     => '',
