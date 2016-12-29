@@ -30,7 +30,8 @@ class CourseController extends CourseBaseController
         $taskCount       = $this->getTaskService()->countTasksByCourseId($id);
         $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish'));
 
-        $progress = round($taskResultCount / $taskCount, 2); //学习进度
+
+        $progress = $taskCount == 0 ? 0 : round($taskResultCount / $taskCount, 2); //学习进度
         //学习进度
         //下一个课时
         return $this->render('course-set/header.html.twig', array(
