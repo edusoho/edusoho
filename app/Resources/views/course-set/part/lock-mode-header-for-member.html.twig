@@ -88,18 +88,21 @@
             <li class="mb20">
               <i class="es-icon es-icon-dot color-warning"></i>
               计划完成{{ planStudyTaskCount }}
-              个任务，{% if planProgressProgress -progress > 0 %} 领先计划 (planProgressProgress -progress)% {% else %}落后计划(progress- planProgressProgress)% {% endif %}
+              个任务，{% if progress -planProgressProgress > 0 %} 落后计划(progress- planProgressProgress)% {% endif %}
             </li>
           {% endif %}
           <li class="pt20 mb10 progress-learn-time">学习有效期</li>
 
-          {% if course.expiryMode == 'days' %}
-            <li class="progress-learn-time"> {% if course.expiryDays %} {{ course.expiryDays }}天 {% else %}无限制 {% endif %}</li>
+          {% if course.expiryMode == 'days' and course.expiryDays == 0 %}
+            <li class="progress-learn-time"> 不限</li>
           {% elseif course.expiryMode == 'date' %}
-            <li class="progress-learn-time">{ {{ course.expiryStartDate|date('Y-m-d ') }}
-              ~ {{ course.expiryEndDate|date('Y-m-d ') }}</li>
+            {#{{ course.expiryStartDate|date('Y-m-d ') }}  ~ #}{{ course.expiryEndDate|date('Y-m-d ') }}
+            <br/>
+            剩余{{ course.expiryEndDate|time_diff }} 天
+          {% else %}
+            {{ member.createdTime|date_modify("+#{course.expiryDays} days") }}
+            {{ member.createdTime|time_diff(course.expiryDays) }} 天
           {% endif %}
-
         </ul>
       </div>
       <div class="col-sm-6 course-detail-content">
