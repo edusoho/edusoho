@@ -6,7 +6,6 @@ namespace AppBundle\Controller\Activity;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
-use Biz\DownloadActivity\Service\DownloadActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class DownloadController extends BaseController implements ActivityActionInterface
@@ -49,7 +48,7 @@ class DownloadController extends BaseController implements ActivityActionInterfa
         if (!empty($downloadFile['link'])) {
             return $this->redirect($downloadFile['link']);
         } else {
-            return $this->forward("MaterialLibBundle:MaterialLib:download", array('fileId' => $downloadFile['fileId']));
+            return $this->forward("AppBundle:MaterialLib/MaterialLib:download", array('fileId' => $downloadFile['fileId']));
         }
     }
 
