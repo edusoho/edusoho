@@ -40,6 +40,7 @@ class BaseStrategy
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
+        $fields['type']          = $fields['mediaType'];
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
@@ -48,6 +49,7 @@ class BaseStrategy
             'categoryId',
             'activityId',
             'title',
+            'type',
             'isFree',
             'isOptional',
             'startTime',
