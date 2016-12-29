@@ -157,6 +157,12 @@ class BuildCommand extends BaseCommand
     private function clean()
     {
         $this->output->writeln('cleaning...');
+        $command = "rm -rf {$this->rootDirectory}/web/install/edusoho_init.sql";
+        exec($command);
+        $command = "rm -rf {$this->distDirectory}/web/install/edusoho_init.sql";
+        exec($command);
+        $command = "rm -rf {$this->rootDirectory}/web/install/edusoho_init_*.sql";
+        exec($command);
     }
 
     private function buildRootDirectory()
