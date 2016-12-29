@@ -4,7 +4,8 @@
 <span class="tags mrm">
   <span class="tag-serialing"></span>
 </span>
-<span class="course-detail-heading gray-darker text-24">{{ course.title }}</span>
+
+<span class="course-detail-heading vertical-top inline-block gray-darker text-24">{{ course.title }}</span>
 <span class="es-qrcode top" data-url="{{ path('course_qrcode', { id: course.id }) }}">
   <i class="es-icon es-icon-qrcode"></i>
   <span class="qrcode-popover">
@@ -15,10 +16,6 @@
 
 <p class="mt10 mb20">{{ courseSet.subtitle }}</p>
 <ul class="course-operation clearfix">
-  <li><i class="es-icon es-icon-people"></i>
-    {{ course.studentNum }} 人
-  </li>
-
   <li id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
       {% if not isUserFavorite %}style="display: none" {% endif %}>
     <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>

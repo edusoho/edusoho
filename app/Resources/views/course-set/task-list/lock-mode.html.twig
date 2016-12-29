@@ -21,11 +21,11 @@
               {% if task_lock %}
               es-icon-lock
               {% elseif  not task.result|default(null) %}
-              es-icon-undone-check
+              es-icon-undone-check color-gray
               {% elseif task.result.status == 'start' %}
-              es-icon-doing
+              es-icon-doing color-primary
               {% elseif task.result.status == 'finish' %}
-              es-icon-iccheckcircleblack24px
+              es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu"></i>
           <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">

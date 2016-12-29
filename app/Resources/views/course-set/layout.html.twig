@@ -5,13 +5,13 @@
 
 {% endblock %}
 
-{% block content %}
+{% block full_content %}
 
   {{ render(controller('AppBundle:Course:header',{id: course.id})) }}
 
   <!-- 中部 -->
   <div class="container">
-    <div class="course-detail row">
+    <div class="row">
       <div class="col-lg-9 col-md-8 course-detail-main">
         {% include 'course-set/announcement/block.html.twig' with { courseSetId:courseSet.id, courseId:course.id } %}
         <!-- 课程详情页中部内容 -->
