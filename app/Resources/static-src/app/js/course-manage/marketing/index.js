@@ -85,11 +85,13 @@ class Marketing {
         	let $item = $(event.currentTarget);
         	let $values = $('#course_services').val();
         	$values = JSON.parse($values);
-        	if($item.hasClass('selected')){
-        		$item.removeClass('selected');
+        	if($item.hasClass('label-primary')){
+        		$item.removeClass('label-primary');
+        		$item.removeClass('label-default');
         		$values.splice($values.indexOf($item.text()), 1);
         	}else{
-        		$item.addClass('selected');
+        		$item.removeClass('label-default');
+        		$item.addClass('label-primary');
         		$values.push($item.text());
         	}
         	$('#course_services').val(JSON.stringify($values));
