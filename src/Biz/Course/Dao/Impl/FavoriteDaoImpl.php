@@ -43,6 +43,15 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
         );
     }
 
+    public function getByUserIdAndCourseSetId($userId, $courseSetId, $type = 'course')
+    {
+        return $this->getByFields(array(
+            'userId'      => $userId,
+            'courseSetId' => $courseSetId,
+            'type'        => $type
+        ));
+    }
+
     public function countByUserId($userId)
     {
         return $this->count(array(

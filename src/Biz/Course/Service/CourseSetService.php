@@ -2,8 +2,39 @@
 
 namespace Biz\Course\Service;
 
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+
 interface CourseSetService
 {
+    /**
+     * collect course set
+     *
+     * @param $id
+     *
+     * @throws AccessDeniedException
+     * @return bool
+     */
+    public function favorite($id);
+
+    /**
+     * cancel collected course set
+     *
+     * @param $id
+     *
+     * @throws AccessDeniedException
+     * @return bool
+     */
+    public function unfavorite($id);
+
+    /**
+     * @param int $userId
+     * @param int $courseSetId
+     *
+     * @return bool
+     *
+     */
+    public function isUserFavorite($userId, $courseSetId);
+
     public function tryManageCourseSet($id);
 
     /**
@@ -102,6 +133,23 @@ interface CourseSetService
      * @return array[]
      */
     public function findPublicCourseSetsByIds(array $ids);
+
+    /**
+     * @param int $userId
+     *
+     * @return integer
+     */
+    public function countUserFavorites($userId);
+
+    /**
+     * @param int $userId
+     *
+     * @param int    $start
+     * @param int    $limit
+     *
+     * @return array[]
+     */
+    public function searchUserFavorites($userId, $start, $limit);
 
     public function updateCourseSetStatistics($id, $fields);
 

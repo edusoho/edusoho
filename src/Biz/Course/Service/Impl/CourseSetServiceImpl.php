@@ -4,12 +4,105 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
+    /**
+     * collect course set
+     *
+     * @param $id
+     *
+     * @throws AccessDeniedException
+     * @return bool
+     */
+    public function favorite($id)
+    {
+        $courseSet = $this->getCourseSet($id);
+        $user      = $this->getCurrentUser();
+
+        if (empty($courseSet)) {
+            return false;
+        }
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('user is not log in');
+        }
+
+        $isFavorite = $this->isUserFavorite($user['id'], $courseSet['id']);
+
+        if ($isFavorite) {
+            return true;
+        }
+
+        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($courseSet['id']);
+
+        if(empty($course)){
+            return false;
+        }
+
+        $favorite = array(
+            'courseSetId' => $courseSet['id'],
+            'type'        => 'course',
+            'userId'      => $user['id'],
+            'courseId'    => $course['id']
+        );
+
+        $favorite = $this->getFavoriteDao()->create($favorite);
+
+        return !empty($favorite);
+    }
+
+    /**
+     * cancel collected course set
+     *
+     * @param $id
+     *
+     * @throws AccessDeniedException
+     * @return bool
+     */
+    public function unfavorite($id)
+    {
+        $courseSet = $this->getCourseSet($id);
+        $user      = $this->getCurrentUser();
+
+        if (empty($courseSet)) {
+            return false;
+        }
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('user is not log in');
+        }
+
+        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseSetId($user['id'], $courseSet['id'], 'course');
+
+        if (empty($favorite)) {
+            return true;
+        }
+
+        $this->getFavoriteDao()->delete($favorite['id']);
+        return true;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $courseSetId
+     *
+     * @return bool
+     *
+     */
+    public function isUserFavorite($userId, $courseSetId)
+    {
+        $courseSet = $this->getCourseSet($courseSetId);
+        $favorite  = $this->getFavoriteDao()->getByUserIdAndCourseSetId($userId, $courseSet['id'], 'course');
+        return !empty($favorite);
+    }
+
+
     public function tryManageCourseSet($id)
     {
         $user = $this->getCurrentUser();
@@ -60,7 +153,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      */
     public function countUserLearnCourseSets($userId)
     {
-        $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
+        $courses    = $this->getCourseService()->findLearnCoursesByUserId($userId);
         $courseSets = $this->findCourseSetsByCourseIds(ArrayToolkit::column($courses, 'id'));
         return count($courseSets);
     }
@@ -75,15 +168,15 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function searchUserLearnCourseSets($userId, $start, $limit)
     {
         $sets = $this->findLearnCourseSetsByUserId($userId);
-        $ids = ArrayToolkit::column($sets, 'id');
+        $ids  = ArrayToolkit::column($sets, 'id');
 
-        if(empty($ids)){
+        if (empty($ids)) {
             return array();
         }
 
         return $this->searchCourseSets(
             array(
-                'ids' => $ids,
+                'ids'    => $ids,
                 'status' => 'published'
             ),
             array(
@@ -101,7 +194,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      */
     public function countUserTeachingCourseSets($userId)
     {
-        $teachSets  = $this->findTeachingCourseSetsByUserId($userId);
+        $teachSets = $this->findTeachingCourseSetsByUserId($userId);
         return count($teachSets);
     }
 
@@ -116,7 +209,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $teachSets = $this->findTeachingCourseSetsByUserId($userId);
 
-        if(empty($teachSets)){
+        if (empty($teachSets)) {
             return array();
         }
 
@@ -130,9 +223,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function findCourseSetsByCourseIds(array $courseIds)
     {
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses      = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
-        $sets = $this->findCourseSetsByIds(array_unique($courseSetIds));
+        $sets         = $this->findCourseSetsByIds(array_unique($courseSetIds));
         return $sets;
     }
 
@@ -281,7 +374,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      */
     public function findPublicCourseSetsByIds(array $ids)
     {
-        if(empty($ids)){
+        if (empty($ids)) {
             return array();
         }
 
@@ -332,6 +425,29 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->dispatchEvent('course-set.closed', $courseSet);
     }
 
+    /**
+     * @param int $userId
+     *
+     * @return integer
+     */
+    public function countUserFavorites($userId)
+    {
+        return $this->getFavoriteDao()->countByUserId($userId);
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @param int $start
+     * @param int $limit
+     *
+     * @return array[]
+     */
+    public function searchUserFavorites($userId, $start, $limit)
+    {
+        return $this->getFavoriteDao()->searchByUserId($userId, $start, $limit);
+    }
+
     protected function hasCourseSetManagerRole($courseSetId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
@@ -380,5 +496,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getFileService()
     {
         return $this->biz->service('Content:FileService');
+    }
+
+    /**
+     * @return FavoriteDao
+     */
+    protected function getFavoriteDao()
+    {
+        return $this->biz->dao('Course:FavoriteDao');
     }
 }

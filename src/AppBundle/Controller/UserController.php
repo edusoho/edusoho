@@ -228,13 +228,14 @@ class UserController extends BaseController
 
         $paginator  = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->countUserFavorites($user['id']),
+            $this->getCourseSetService()->countUserFavorites($user['id']),
             20
         );
 
-        $favorites = $this->getCourseService()->searchUserFavorites(
+        $favorites = $this->getCourseSetService()->searchUserFavorites(
             $user['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount()
         );
+
         return $this->render('user/courses_favorited.html.twig', array(
             'user'            => $user,
             'courseFavorites' => $favorites,

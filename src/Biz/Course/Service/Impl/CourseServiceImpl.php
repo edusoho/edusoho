@@ -16,7 +16,6 @@ use Biz\Task\Strategy\StrategyContext;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 
 
@@ -418,112 +417,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->biz['dispatcher']->dispatch("course.student.delete", new Event($member));
         return $result;
     }
-
-    /**
-     * collect course
-     *
-     * @param $id
-     *
-     * @throws AccessDeniedException
-     * @return bool
-     */
-    public function favorite($id)
-    {
-        $course = $this->getCourse($id);
-        $user = $this->getCurrentUser();
-
-        if(empty($course)){
-            return false;
-        }
-
-        if(!$user->isLogin()){
-            throw $this->createAccessDeniedException('user is not log in');
-        }
-
-        $isFavorite = $this->isUserFavorite($user['id'], $course['id']);
-
-        if($isFavorite){
-            return true;
-        }
-
-        $favorite = array(
-            'courseId' => $course['id'],
-            'courseSetId' => $course['courseSetId'],
-            'type' => 'course',
-            'userId' => $user['id']
-        );
-
-        $favorite = $this->getFavoriteDao()->create($favorite);
-
-        return !empty($favorite);
-    }
-
-    /**
-     * cancel collected course
-     *
-     * @param $id
-     *
-     * @throws AccessDeniedException
-     * @return bool
-     */
-    public function unfavorite($id)
-    {
-        $course = $this->getCourse($id);
-        $user = $this->getCurrentUser();
-
-        if(empty($course)){
-            return false;
-        }
-
-        if(!$user->isLogin()){
-            throw $this->createAccessDeniedException('user is not log in');
-        }
-
-        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'course');
-
-        if(empty($favorite)){
-            return true;
-        }
-        $this->getFavoriteDao()->delete($favorite['id']);
-        return true;
-    }
-
-    /**
-     * @param integer $userId
-     * @param integer $courseId
-     *
-     * @return bool
-     */
-    public function isUserFavorite($userId, $courseId)
-    {
-        $course = $this->getCourse($courseId);
-        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($userId, $course['id'], 'course');
-        return !empty($favorite);
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return integer
-     */
-    public function countUserFavorites($userId)
-    {
-        return $this->getFavoriteDao()->countByUserId($userId);
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @param int $start
-     * @param int $limit
-     *
-     * @return array[]
-     */
-    public function searchUserFavorites($userId, $start, $limit)
-    {
-        return $this->getFavoriteDao()->searchByUserId($userId, $start, $limit);
-    }
-
 
     public function getUserRoleInCourse($courseId, $userId)
     {
@@ -1006,14 +899,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getNoteService()
     {
         return $this->biz->service('Note:CourseNoteService');
-    }
-
-    /**
-     * @return FavoriteDao
-     */
-    protected function getFavoriteDao()
-    {
-        return $this->biz->dao('Course:FavoriteDao');
     }
 
 }

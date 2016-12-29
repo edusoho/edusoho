@@ -1683,13 +1683,18 @@ course_set_show:
   path: /course_set/{id}
   defaults: {_controller: AppBundle:CourseSet:show}
 
-course_favorite:
-  path: /course/{id}/favorite
+course_qrcode:
+  path: /course/{id}/qrcode
+  defaults: { _controller: AppBundle:Course:qrcode }
+  methods: [POST]
+
+course_set_favorite:
+  path: /course_set/{id}/favorite
   defaults: { _controller: AppBundle:Course:favorite }
   methods: [POST]
 
-course_unfavorite:
-  path: /course/{id}/unfavorite
+course_set_unfavorite:
+  path: /course_set/{id}/unfavorite
   defaults: { _controller: AppBundle:Course:unfavorite }
   methods: [POST]
 

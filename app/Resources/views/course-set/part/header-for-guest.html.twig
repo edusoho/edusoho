@@ -10,19 +10,7 @@
   </ol>
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top clearfix">
-      <span class="tags mrm">
-        <span class="tag-serialing"></span>
-      </span>
-      <span class="course-detail-heading gray-darker text-24">{{ course.title }}</span>
-      <span class="es-qrcode top" data-url="/course/2/qrcode">
-        <i class="es-icon es-icon-qrcode"></i>
-        <span class="qrcode-popover">
-          <img src="" alt="">
-          扫二维码继续学习二维码时效为半小时
-        </span>
-      </span>
-      <p class="mt10 mb20">{{ courseSet.subtitle }}</p>
-      {{ render(controller('AppBundle:Course:operationPart', {id: course.id})) }}
+      {{ render(controller('AppBundle:Course:headerTopPart', {id: course.id})) }}
     </div>
     <div class="course-detail-bottom">
       <div class="course-detail-img">

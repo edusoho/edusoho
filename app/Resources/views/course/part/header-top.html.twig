@@ -1,0 +1,49 @@
+{% import "macro.html.twig" as web_macro %}
+{% do script('app/js/course/header-top/index.js') %}
+
+<span class="tags mrm">
+  <span class="tag-serialing"></span>
+</span>
+<span class="course-detail-heading gray-darker text-24">{{ course.title }}</span>
+<span class="es-qrcode top" data-url="{{ path('course_qrcode', { id: course.id }) }}">
+  <i class="es-icon es-icon-qrcode"></i>
+  <span class="qrcode-popover">
+    <img src="" alt="">
+    扫二维码继续学习二维码时效为半小时
+  </span>
+</span>
+
+<p class="mt10 mb20">{{ courseSet.subtitle }}</p>
+<ul class="course-operation clearfix">
+  <li><i class="es-icon es-icon-people"></i>
+    {{ course.studentNum }} 人
+  </li>
+
+  <li id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
+      {% if not isUserFavorite %}style="display: none" {% endif %}>
+    <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
+    </a>
+  </li>
+
+  <li id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
+      {% if isUserFavorite %}style="display: none"{% endif %}>
+    <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmarkoutline"></i>
+    </a>
+  </li>
+
+  <li class="es-share top">
+    <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+      <i class="es-icon es-icon-share"></i>
+    </a>
+    {% include 'common/share-dropdown.html.twig' with {type:'course'} %}
+  </li>
+
+  {% if canManage %}
+    <li class="pull-left">
+      <a class="btn btn-default btn-xs " href="{{ path('course_set_manage', {'id': course.courseSetId }) }}"
+         title="课程管理">
+        <i class="es-icon es-icon-setting"></i>
+      </a>
+    </li>
+  {% endif %}
+</ul>
