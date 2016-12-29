@@ -1,31 +1,8 @@
 import QuestionFormBase from './form-base';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import QuestionOptions from '../../../common/widget/question-options';
+import QuestionOptions from '../../../common/component/question-options';
 import postal from 'postal';
-
-
-// let dataSource = [{
-//   id: 'question-option-1',//是否需要保存ID，
-//   checked: 0,//选项是否为正确答案；
-//   value:"sdfsdf "//选项的value 
-// },
-// {
-//   id: 'question-option-2',//是否需要保存ID，
-//   checked: 0,//选项是否为正确答案；
-//   value:"d123d"//选项的value 
-// },
-// {
-//   id: 'question-option-3',//是否需要保存ID，
-//   checked: 0,//选项是否为正确答案；
-//   value:"d4234d"//选项的value 
-// },
-// {
-//   id: 'question-option-4',//是否需要保存ID，
-//   checked: 0,//选项是否为正确答案；
-//   value:"ddg675"//选项的value 
-// },
-// ];
 
 class Choice extends QuestionFormBase {
   constructor($form) {
@@ -44,8 +21,8 @@ class Choice extends QuestionFormBase {
 
   submitForm(event) {
     this.$submit = $(event.currentTarget);
+    
     if(this.validator.form() && this.isSubmit ) {
-      console.log('submit by subscriptionMessage click');
       this.submit();
     }
     if(!this.isSubmit ) {
@@ -54,13 +31,21 @@ class Choice extends QuestionFormBase {
   }
 
   submit() {
-    console.log('submit...');
     this.$submit.button('loading');
     this.$form.submit();
   }
 
   initOptions() {
-    ReactDOM.render( <QuestionOptions dataSource={[]} inputValueName='value' checkedName="checked" idName="id" minCheckedNum={ 2 } />,
+    let dataSource = $('#question-options').data('choices');
+    let dataAnswer = $('#question-options').data('answer');
+    if(dataSource) {
+      dataSource = JSON.parse(dataSource);
+      dataAnswer = JSON.parse(dataAnswer);
+    }else {
+      dataSource= [];
+    }
+
+    ReactDOM.render( <QuestionOptions dataSource={dataSource} dataAnswer={dataAnswer}  minCheckedNum={ 2 } />,
       document.getElementById('question-options')
     );
   }

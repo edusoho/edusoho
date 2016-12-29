@@ -5,7 +5,7 @@
 
 {% set side_nav = 'testpaper' %}
 
-{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/testpaper-manage/create/index.js']) %}
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','libs/jquery-nouislider.js','app/js/testpaper-manage/create/index.js']) %}
 
 {% block main %}
 
@@ -16,8 +16,16 @@
 
     {% include 'testpaper/manage/form-breadcrumb.html.twig' with {title:'创建试卷'} %}
 
-    <form id="testpaper-form" class="form-horizontal" method="post" data-build-check-url="{{ path('course_manage_testpaper_build_check',{courseId:courseSet.id})}}" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true" data-course-id="{{courseSet.id}}">
+    {#<form id="testpaper-form" class="form-horizontal" method="post" data-build-check-url="{{ path('course_manage_testpaper_build_check',{courseId:courseSet.id})}}" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true" data-course-id="{{courseSet.id}}">#}
+    <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true" data-course-id="{{courseSet.id}}">
       {{ web_macro.flash_messages() }}
+
+      <div id="colorpicker">
+        <div class="sliders" id="red"></div>
+        <div class="sliders" id="green"></div>
+        <div class="sliders" id="blue"></div>
+        <div class="result"></div>
+      </div>
 
       {% include 'testpaper/manage/create-base-info.html.twig'%}
       {% include 'testpaper/manage/create-build-info.html.twig'%}

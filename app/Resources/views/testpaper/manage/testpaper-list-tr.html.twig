@@ -2,7 +2,8 @@
 <tr data-role='item'>
   <td><input value="{{ testpaper.id }}" type="checkbox" data-role="batch-item" ></td>
   <td>
-    <a href="{{ path('course_manage_preview_test', {testId:testpaper.id}) }}" target="_blank">{{ testpaper.name|plain_text(40) }}</a>
+    <a href="{{ path('course_set_manage_testpaper_preivew', {courseSetId:courseSet.id,testpaperId:testpaper.id}) }}" target="_blank">{{ testpaper.name|plain_text(40) }}</a>
+    <a href="" target="_blank">{{ testpaper.name|plain_text(40) }}</a>
   </td>
   <td>
     {% if testpaper.status == 'draft' %}{{'草稿'|trans}}{% endif %}

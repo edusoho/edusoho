@@ -21,9 +21,13 @@ class QuestionFormBase {
   }
 
   submitForm(event) {
+    let submitType = $(event.currentTarget).data('submission');
+    this.$form.find('[name=submission]').val(submitType);
+    let self = this;
+
     if(this.validator.form()){
       $(event.currentTarget).button('loading');
-      $form.submit();
+      self.$form.submit();
     }
   }
 
