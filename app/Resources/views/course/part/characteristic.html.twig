@@ -21,24 +21,75 @@
 }
 } %}
 
-{% if not characteristicData is empty and characteristicData|keys in typeDataMap|keys %}
+{% set show = false %}
+{% for type in characteristicData|keys if not show %}
+  {% if type in typeDataMap|keys %}
+    {% set show = true %}
+  {% endif %}
+{% endfor %}
+
+{#<div class="container-section section-bg">
+  <div class="container  person-section">
+    {{ _self.title_make('大咖秀') }}
+      <div id="carousel-example-generic" class="carousel slide " data-ride="carousel">
+        {% set recommendTeachers = data('RecommendTeachers', {'count': 12})%}
+        {% set teams = recommendTeachers|batch(loopNum , " ") %}
+        <div class="carousel-inner person-carousel" role="listbox">
+          {% for team in teams %}
+          <div class="item {% if loop.index0 == 0 %}active{% endif %}">
+              <div class="row">
+                {% for item in team %}
+              {% if item != " " %}
+                <div class="col-md-6">
+                  <a class="person" href=" {{ path('user_show', {id:item.id}) }}" style="display: block;">
+                    <div class="media">
+                      <div class="media-left">
+                        <div class="img-container">
+                          {{ lazy_img(filepath(item.largeAvatar, 'user_avatar.png'), 'media-object img-circle', '') }}
+                        </div>
+                      </div>
+                      <div class="media-body ">
+                        <div class="signature">{{ item.profile.signature|default('该老师并没有留下什么。') }}</div>
+                        <div class="text-right name ">
+                          ——{{ item.nickname|default('匿名')}}
+                          <span class="job">{{ item.profile.job|default('未显示') }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+                {% endif %}
+              {% endfor %}
+              </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+  </div>
+</div>#}
+
+{% set loopNum = 2 %}
+
+
+{% if not characteristicData is empty and show %}
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">课程特色</h3>
     </div>
-
-    {% for type, num in characteristicData if typeDataMap[type] is defined %}
-      <div class="panel-body row panel-bottom">
-        <div class="col-md-6">
-          <div class="media-left">
-            <button class="media-icon bg-primary"></button>
-            <i class="es-icon {{ typeDataMap[type].icon }} media-logo"></i>
+    <div class="panel-body pt0">
+      <div class="course-features pl0">
+        {% for type, num in characteristicData if typeDataMap[type] is defined %}
+          <div class="course-features-item clearfix">
+            <div class="media">
+              <div class="media-left prm">
+                <span class="color-lump bg-primary"> <i class="es-icon {{ typeDataMap[type].icon }} media-logo"></i>
+                </span>
+              </div>
+              <div class="media-body media-middle">含{{ typeDataMap[type].name }}({{ num }})</div>
+            </div>
           </div>
-          <div class="media-body">
-            含{{ typeDataMap[type].name }}({{ num }})
-          </div>
-        </div>
+        {% endfor %}
       </div>
-    {% endfor %}
+    </div>
   </div>
 {% endif %}
