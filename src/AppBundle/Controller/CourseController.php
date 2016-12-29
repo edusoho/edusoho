@@ -30,32 +30,34 @@ class CourseController extends CourseBaseController
         $taskCount       = $this->getTaskService()->countTasksByCourseId($id);
         $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish'));
 
-        //学习进度
-        $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
+        $progress = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
+        if ($member) {
+            //学习进度
+            $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
 
-        //待学习任务
-        $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($id);
+            //待学习任务
+            $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($id);
+            //任务式课程每日建议学习任务数
+            $taskPerDay = $this->getFinishedTaskPerDay($course, $taskCount);
 
-        //任务式课程每日建议学习任务数
-        $taskPerDay = $this->getFinishedTaskPerDay($course, $taskCount);
+            //计划应学数量
+            $planStudyTaskCount = $this->getPlanStudyTaskCount($course, $member, $taskCount, $taskPerDay);
 
-        //计划应学数量
-        $planStudyTaskCount = $this->getPlanStudyTaskCount($course, $member, $taskCount, $taskPerDay);
-
-        //计划进度
-        $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
+            //计划进度
+            $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
+        }
 
         return $this->render('course-set/header.html.twig', array(
-            'courseSet'           => $courseSet,
-            'courses'             => $courses,
-            'course'              => $course,
-            'member'              => $member,
-            'progress'            => $progress,
-            'taskCount'           => $taskCount,
-            'taskResultCount'     => $taskResultCount,
-            'toLearnTasks'        => $toLearnTasks,
-            'taskPerDay'          => $taskPerDay,
-            'planStudyTaskCount'  => $planStudyTaskCount,
+            'courseSet'            => $courseSet,
+            'courses'              => $courses,
+            'course'               => $course,
+            'member'               => $member,
+            'progress'             => $progress,
+            'taskCount'            => $taskCount,
+            'taskResultCount'      => $taskResultCount,
+            'toLearnTasks'         => $toLearnTasks,
+            'taskPerDay'           => $taskPerDay,
+            'planStudyTaskCount'   => $planStudyTaskCount,
             'planProgressProgress' => $planProgressProgress
         ));
     }
