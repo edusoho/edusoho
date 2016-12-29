@@ -240,7 +240,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderInfoTemplate()
     {
-        return "TopxiaWebBundle:Course:orderInfo";
+        return "AppBundle:Course:orderInfo";
     }
 
     public function isTargetExist($targetId)

@@ -193,9 +193,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
         }
 
-        if (isset($fields['price'])) {
-            $fields['price'] = round(floatval($fields['price']) * 100, 0);
-        }
+        // if (isset($fields['price'])) {
+        //     $fields['price'] = round(floatval($fields['price']) * 100, 0);
+        // }
 
         return $this->getCourseDao()->update($id, $fields);
     }
