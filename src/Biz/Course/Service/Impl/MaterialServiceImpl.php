@@ -14,7 +14,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     public function uploadMaterial($material)
     {
         $argument = $material;
-        if (!ArrayToolkit::requireds($material, array('courseId', 'fileId'))) {
+        if (!ArrayToolkit::requireds($material, array('courseSetId', 'courseId', 'fileId'))) {
             throw $this->createServiceException('参数缺失，上传失败！');
         }
 
@@ -23,10 +23,11 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         if (!empty($fields['fileId'])) {
             $courseMaterials = $this->searchMaterials(
                 array(
-                    'courseId' => $fields['courseId'],
-                    'fileId'   => $fields['fileId'],
-                    'lessonId' => 0,
-                    'type'     => $fields['type']
+                    'courseSetId' => $fields['courseSetId'],
+                    'courseId'    => $fields['courseId'],
+                    'fileId'      => $fields['fileId'],
+                    'lessonId'    => 0,
+                    'type'        => $fields['type']
                 ),
                 array('createdTime' => 'DESC'), 0, PHP_INT_MAX
             );
@@ -96,6 +97,11 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     public function deleteMaterialsByCourseId($courseId, $courseType = 'course')
     {
         return $this->getMaterialDao()->deleteByCourseId($courseId, $courseType);
+    }
+
+    public function deleteMaterialsByCourseSetId($courseSetId, $courseType = 'course')
+    {
+        return $this->getMaterialDao()->deleteByCourseSetId($courseSetId, $courseType);
     }
 
     public function deleteMaterials($courseId, $fileIds, $courseType = 'course')
@@ -179,6 +185,34 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         );
         if ($courseId) {
             $conditions['courseId'] = $courseId;
+        }
+
+        $materials = $this->searchMaterials(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            0,
+            PHP_INT_MAX
+        );
+        $materials = ArrayToolkit::group($materials, 'fileId');
+        $files     = array();
+
+        if ($materials) {
+            foreach ($materials as $fileId => $material) {
+                $files[$fileId] = ArrayToolkit::column($material, 'source');
+            }
+        }
+
+        return $files;
+    }
+
+    public function findUsedCourseSetMaterials($fileIds, $courseSetId)
+    {
+        $conditions = array(
+            'fileIds'         => $fileIds,
+            'excludeLessonId' => 0
+        );
+        if ($courseSetId) {
+            $conditions['courseSetId'] = $courseSetId;
         }
 
         $materials = $this->searchMaterials(
