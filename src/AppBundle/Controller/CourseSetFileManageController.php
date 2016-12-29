@@ -17,10 +17,8 @@ class CourseSetFileManageController extends BaseController
     {
         $courseSet  = $this->getCourseSetService()->tryManageCourseSet($id);
         $conditions = array(
-            // 'courseSetId' => $courseSet['id'],
-            //test only
-            'courseId' => 1,
-            'type'     => 'course'
+            'courseSetId' => $courseSet['id'],
+            'type'        => 'course'
         );
         // XXX
         // if ($courseSet['parentId'] > 0 && $courseSet['locked'] == 1) {

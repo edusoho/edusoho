@@ -1,8 +1,8 @@
 <?php
 namespace Biz\Activity\Type;
 
-use Biz\Activity\Config\Activity;
 use Topxia\Common\ArrayToolkit;
+use Biz\Activity\Config\Activity;
 
 class Download extends Activity
 {
@@ -52,9 +52,7 @@ class Download extends Activity
         $addMaterials    = array_diff_key($files, $existMaterials);
         $updateMaterials = array_intersect_key($existMaterials, $files);
 
-
         $this->getConnection()->transactional(function () use ($id, $dropMaterials, $addMaterials, $updateMaterials, $that) {
-
             foreach ($dropMaterials as $material) {
                 $that->getDownloadFileDao()->delete($material['id']);
             }
@@ -69,7 +67,6 @@ class Download extends Activity
         });
         return $downloadActivity;
     }
-
 
     /**
      * @inheritdoc
@@ -90,7 +87,6 @@ class Download extends Activity
         // TODO: Implement getListeners() method.
     }
 
-
     /**
      * @inheritdoc
      */
@@ -105,12 +101,12 @@ class Download extends Activity
     {
         $files = array();
         array_walk($materials, function ($material) use ($downloadActivityId, &$files) {
-
             $file = array(
                 'downloadActivityId' => $downloadActivityId,
                 'title'              => $material['name'],
                 'fileId'             => intval($material['id']),
-                'fileSize'           => $material['size'],
+                //FIXME undefined index: size
+                // 'fileSize'           => $material['size'],
                 'indicate'           => intval($material['id']),
                 'summary'            => $material['summary']
             );
@@ -142,6 +138,4 @@ class Download extends Activity
     {
         return $this->getBiz()->offsetGet('db');
     }
-
-
 }

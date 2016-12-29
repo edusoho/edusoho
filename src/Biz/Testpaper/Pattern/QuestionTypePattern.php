@@ -139,8 +139,8 @@ class QuestionTypePattern implements TestpaperPatternInterface
 
     protected function getQuestions($options)
     {
-        $conditions        = array();
-        $options['ranges'] = array_filter($options['ranges']);
+        $conditions = array();
+        //$options['ranges'] = array_filter($options['ranges']);
 
         if (empty($options['ranges'])) {
             $conditions['courseId'] = $options['courseId'];
