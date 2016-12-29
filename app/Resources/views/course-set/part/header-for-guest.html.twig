@@ -13,7 +13,7 @@
       <span class="tags mrm">
         <span class="tag-serialing"></span>
       </span>
-      <span class="course-detail-heading gray-darker text-24">{{ course.title }}</span>
+      <span class="gray-darker text-24 text-overflow course-detail-heading">{{ course.title }}</span>
       <span class="es-qrcode top" data-url="/course/2/qrcode">
         <i class="es-icon es-icon-qrcode"></i>
         <span class="qrcode-popover">
@@ -23,9 +23,6 @@
       </span>
       <p class="mt10 mb20">{{ courseSet.subtitle }}</p>
       <ul class="course-operation clearfix ">
-        <li> <i class="es-icon es-icon-people"></i>
-          {{ course.studentNum }} 人
-        </li>
         <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
           <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
           </a>
@@ -69,10 +66,10 @@
         {# end 需要设置是否可以预览 #}
         <img class="img-responsive" src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else  %} {{filepath(courseSet.cover.large) }} {% endif  %}"  alt="{{course.title  }} ">
         <div class="course-detail-remask">
-          <i class="es-icon es-icon-people"></i>{{ course.studentNum }} 人加入学习
+          <i class="es-icon es-icon-people"></i><span class="mhs">{{ course.studentNum }}</span>人加入学习
           <div class="score pull-right">
             {{ web_macro.star(course.rating) }}
-            {{ course.ratingNum }}
+            <span class="vertical-middle">{{ course.ratingNum }}</span>
           </div>
         </div>
 
@@ -81,27 +78,26 @@
         <div class="mb10">
           <span class="course-detail-title">价格</span>
           <!-- 折扣价 -->
-          <span class="gray-darker mrm">¥<span class="text-24 text-blod">75.00</span></span>
+          <span class="gray-darker mrm">¥<b class="text-24">75.00</b></span>
           <!-- 原价 -->
           <span class="original-price">¥<span class="price">{{ course.price }}</span></span>
           <span class="tag-discount"><span class="discount-font">8折</span></span>
         </div>
-        <div class="mb10">
+        <div class="mb10 text-12">
           <span class="course-detail-title">活动</span>
           <span class="color-warning ">
-          <span class="text-blod mrl">双十二活动</span>
+          <b class="mrl">双十二活动</b>
           <i class="es-icon es-icon-alarmon mrm"></i>
           22 时 53 分 44.12 秒</span>
         </div>
-        <div class="course-detail-gray">
+        <div class="course-detail-gray text-12">
           <div class="course-detail-nav mb10">
             <span class="course-detail-title">教学计划</span>
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent ml5">
               {% set current_course = course %}
               {% for course in  courses %}
-                <li>
-                  <a {% if current_course.id == course.id %}class="active" {% endif %}
-                     href="{{ path('course_show',{id: course.id}) }}">{{ course.title }}</a>
+                <li {% if current_course.id == course.id %}class="active" {% endif %}>
+                  <a href="{{ path('course_show',{id: course.id}) }}">{{ course.title }}</a>
                 </li>
               {% endfor %}
             </ul>
@@ -117,12 +113,12 @@
             {% endif %}
           </div>
           <span class="course-detail-title">承诺服务</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
-          <span class="lump-sm color-lump mr5" data-placement="top" data-toggle="popover" title="title" data-content="content. ">疑</span>
-          <span class="lump-sm color-lump mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">业</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-container="body"  data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-container="body"  data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
+          <span class="lump-sm color-lump mr5" data-container="body" ddata-trigger="hover" ata-placement="top" data-toggle="popover" title="title" data-container="body" data-content="content. ">疑</span>
+          <span class="lump-sm color-lump mr5" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">业</span>
         </div>
         <div class="text-right">
           <a class="btn btn-default btn-lg mrm"><i class="es-icon es-icon-crown mr10"></i>会员</a>
