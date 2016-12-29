@@ -92,10 +92,6 @@ class Testpaper {
       if (passScore == '') {
         passScore = Math.ceil(score * 0.6);
       }
-<<<<<<< HEAD
-=======
-      
->>>>>>> feature/x8-migrate
       $('#score-single-input').val(passScore);
       $('.js-score-total').text(score);
       this.initScoreSlider(parseInt(passScore),parseInt(score));
