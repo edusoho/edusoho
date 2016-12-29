@@ -35,6 +35,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('smart_time', array($this, 'smarttimeFilter')),
             new \Twig_SimpleFilter('date_format', array($this, 'dateformatFilter')),
             new \Twig_SimpleFilter('time_range', array($this, 'timeRangeFilter')),
+            new \Twig_SimpleFilter('time_diff', array($this, 'timeDiffFilter')),
             new \Twig_SimpleFilter('remain_time', array($this, 'remainTimeFilter')),
             new \Twig_SimpleFilter('location_text', array($this, 'locationTextFilter')),
             new \Twig_SimpleFilter('tags_html', array($this, 'tagsHtmlFilter'), array('is_safe' => array('html'))),
@@ -683,6 +684,14 @@ class WebExtension extends \Twig_Extension
         }
 
         return $range;
+    }
+
+    public function timeDiffFilter($endTime, $diffDay = '', $start = '')
+    {
+        $endSecond   = $endTime + empty($diffDay) ? 0 : $diffDay * 86400;
+        $startSecond = empty($start) ? time() : $start;
+        $diffDay     = ceil($endSecond - $startSecond) / 86400;
+        return $diffDay > 0 ? $diffDay : 0;
     }
 
     public function tagsJoinFilter($tagIds)

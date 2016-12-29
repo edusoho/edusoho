@@ -15,7 +15,7 @@ class C2Course extends Migration
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `courseSetId` int(11) NOT NULL,
               `title` varchar(1024) DEFAULT NULL,
-              `learnMode` varchar(32) DEFAULT NULL COMMENT 'byOrder, freeOrder',
+              `learnMode` varchar(32) DEFAULT NULL COMMENT 'lockMode, freeMode',
               `expiryMode` varchar(32) DEFAULT NULL COMMENT 'days, date',
               `expiryDays` int(11) DEFAULT NULL,
               `expiryStartDate` int(11) DEFAULT NULL,
