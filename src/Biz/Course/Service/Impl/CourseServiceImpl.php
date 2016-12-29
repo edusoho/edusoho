@@ -190,9 +190,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookLength',
             'watchLimit',
             'buyExpiryTime',
-            'services'
+            'services',
+            'approval'
         ));
-
         if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
