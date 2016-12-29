@@ -150,7 +150,7 @@ class TaskManageController extends BaseController
     }
 
     /**
-     * @param $course
+     * @param  $course
      * @return BaseStrategy
      */
     protected function createCourseStrategy($course)
@@ -164,7 +164,7 @@ class TaskManageController extends BaseController
     }
 
     /**
-     * @param $type
+     * @param  $type
      * @return mixed
      */
     protected function getActivityActionConfig($type)

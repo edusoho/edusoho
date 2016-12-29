@@ -121,47 +121,64 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $savedActivity = $this->getActivity($id);
 
-        if (!$this->canManageCourse($savedActivity['fromCourseId'])) {
-            throw $this->createAccessDeniedException('无权更新教学活动');
+        try {
+            $this->beginTransaction();
+
+            if (!$this->canManageCourse($savedActivity['fromCourseId'])) {
+                throw $this->createAccessDeniedException('无权更新教学活动');
+            }
+
+            $materials = empty($fields['materials']) ? array() : json_decode($fields['materials'], true);
+            if (!empty($materials)) {
+                $this->syncActivityMaterials($savedActivity, $materials, 'update');
+            }
+
+            $media          = array();
+            $activityConfig = $this->getActivityConfig($savedActivity['mediaType']);
+
+            if (!empty($savedActivity['mediaId'])) {
+                $media = $activityConfig->update($savedActivity['mediaId'], $fields);
+            }
+
+            if ($media) {
+                $fields['mediaId'] = $media['id'];
+            }
+
+            $fields                = $this->filterFields($fields);
+            $fields['updatedTime'] = time();
+
+            return $this->getActivityDao()->update($id, $fields);
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
         }
-
-        $materials = empty($fields['materials']) ? array() : json_decode($fields['materials'], true);
-        if (!empty($materials)) {
-            $this->syncActivityMaterials($savedActivity, $materials, 'update');
-        }
-
-        $media          = array();
-        $activityConfig = $this->getActivityConfig($savedActivity['mediaType']);
-
-        if (!empty($savedActivity['mediaId'])) {
-            $media = $activityConfig->update($savedActivity['mediaId'], $fields);
-        }
-
-        if ($media) {
-            $fields['mediaId'] = $media['id'];
-        }
-
-        $fields                = $this->filterFields($fields);
-        $fields['updatedTime'] = time();
-
-        return $this->getActivityDao()->update($id, $fields);
     }
 
     public function deleteActivity($id)
     {
         $activity = $this->getActivity($id);
 
-        if (!$this->canManageCourse($activity['fromCourseId'])) {
-            throw $this->createAccessDeniedException('无权删除教学活动');
+        try {
+            $this->beginTransaction();
+
+            if (!$this->canManageCourse($activity['fromCourseId'])) {
+                throw $this->createAccessDeniedException('无权删除教学活动');
+            }
+
+            $this->syncActivityMaterials($activity, array(), 'delete');
+
+            $activityConfig = $this->getActivityConfig($activity['mediaType']);
+            $activityConfig->delete($activity['mediaId']);
+
+            $this->getActivityDao()->delete($id);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            var_dump($e->getMessage());exit;
+            throw $e;
         }
 
-        $this->syncActivityMaterials($activity, array(), 'delete');
-
-        $activityConfig = $this->getActivityConfig($activity['mediaType']);
-
-        $activityConfig->delete($activity['mediaId']);
-
-        return $this->getActivityDao()->delete($id);
+        return true;
     }
 
     public function isFinished($id)
@@ -223,7 +240,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'description' => $material['summary'],
             'userId'      => $this->getCurrentUser()->offsetGet('id'),
             'type'        => 'course',
-            'source'      => 'coursetask',
+            'source'      => 'courseactivity',
             'copyId'      => 0 //$fields
         );
     }
