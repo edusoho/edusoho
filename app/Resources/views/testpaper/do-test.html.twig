@@ -34,6 +34,7 @@
       <input type="hidden" id="passedStatus" name="passedStatus" value="" />
     {% endif %}
 
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
 
 {% endif %}

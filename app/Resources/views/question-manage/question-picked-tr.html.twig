@@ -4,7 +4,7 @@
   <td><span class="glyphicon glyphicon-resize-vertical sort-handle"></span></td>
   <td>
     <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
-    <input type="hidden" name="questionId[]" value="{{ question.id }}">
+    <input type="hidden" name="questionIds[]" value="{{ question.id }}">
   </td>
   <td class="seq">{% if question.subCount > 0 %}<span class="text-muted">~</span>{% else %}{{ question.seq|default(' ') }}{% endif %}</td>
   <td>
