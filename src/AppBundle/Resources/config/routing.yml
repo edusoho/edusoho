@@ -1690,12 +1690,12 @@ course_qrcode:
 
 course_set_favorite:
   path: /course_set/{id}/favorite
-  defaults: { _controller: AppBundle:Course:favorite }
+  defaults: { _controller: AppBundle:CourseSet:favorite }
   methods: [POST]
 
 course_set_unfavorite:
   path: /course_set/{id}/unfavorite
-  defaults: { _controller: AppBundle:Course:unfavorite }
+  defaults: { _controller: AppBundle:CourseSet:unfavorite }
   methods: [POST]
 
 course_show:

@@ -307,18 +307,6 @@ class CourseController extends CourseBaseController
         return $this->createJsonResponse($response);
     }
 
-    public function favoriteAction($id)
-    {
-        $success = $this->getCourseSetService()->favorite($id);
-        return $this->createJsonResponse($success);
-    }
-
-    public function unfavoriteAction($id)
-    {
-        $success = $this->getCourseSetService()->unfavorite($id);
-        return $this->createJsonResponse($success);
-    }
-
     // TODO old
     protected function getClassroomService()
     {
