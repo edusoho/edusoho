@@ -1,11 +1,11 @@
 <div class="course-list">
   <div class="row">
     {% for set in courseSets %}
-      {% set course = set.course %}
+      {% set course = data('CourseByCourseSet',{ courseSetId: set.id } ) %}
       <div class="col-lg-3 col-md-4 col-xs-6">
         <div class="course-item">
           <div class="course-img">
-            <a href="{{ path('course_show', {id: course.id}) }}" target="_blank">
+            <a href="{{ path('course_set_show', {id: course.id}) }}" target="_blank">
               {% if course.discountId|default(0) > 0 %}
                 {% if course.discount == 0 %}
                   <!-- 限免 -->

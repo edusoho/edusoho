@@ -8,9 +8,9 @@
 {% set mode = mode|default('default') %}
 <ul class="course-grids">
   {% for set in courseSets %}
-    {% set course = set.course %}
+    {% set course = data('CourseByCourseSet',{ courseSetId: set.id } ) %}
     <li class="course-grid">
-      <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
+      <a href="{{ path('course_set_show', {id: set.id}) }}" class="grid-body">
         <img src="{{ filepath(set.cover.large|default(null), 'course.png') }}"  class="img-responsive thumb">
           <span class="course-label">
             {% if set.status == 'draft' %}

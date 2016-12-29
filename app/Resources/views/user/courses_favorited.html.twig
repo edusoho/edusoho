@@ -9,9 +9,9 @@
     <div class="row">
       {% for courseFavorite in courseFavorites if courseFavorite %}
         {% if courseFavorite.type == 'course' %}
-          {% set course = data('Course',{courseId: courseFavorite.courseId}) %}
+          {% set courseSet = data('CourseSet',{ id: courseFavorite.courseSetId} ) %}
           <div class="col-lg-3 col-md-4 col-xs-6">
-            {% include 'course/widget/course-grid.html.twig' %}
+            {% include 'course-set/widget/course-grid.html.twig' %}
           </div>
         {% elseif courseFavorite.type == 'openCourse' %}
           {% set course = data('OpenCourse',{courseId:courseFavorite.courseId})|default(null) %}

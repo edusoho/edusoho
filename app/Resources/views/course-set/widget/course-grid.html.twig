@@ -1,6 +1,7 @@
 <div class="course-item">
   <div class="course-img">
-    <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+    {% set course = data('CourseByCourseSet',{ courseSetId: courseSet.id } ) %}
+    <a href="{{ path('course_set_show', {id: courseSet.id }) }}" target="_blank">
       {% if course.discountId > 0 %}
         {% if course.discount == 0 %}
           <!-- 限免 -->
@@ -10,9 +11,9 @@
           <span class="tag-discount"></span>
         {% endif %}
       {% endif %}
-      {% if course.serializeMode == 'serialize' %}
+      {% if courseSet.serializeMode == 'serialize' %}
         <span class="tags"><span class="tag-serialing"></span></span>
-      {% elseif course.serializeMode == 'finished' %}
+      {% elseif courseSet.serializeMode == 'finished' %}
         <span class="tags"><span class="tag-finished"></span></span>
       {% endif %}
       {% if course.type == 'live' %}
@@ -20,13 +21,13 @@
           <span class="tag-live"></span>
         </span>
       {% endif %}
-      {{ lazy_img(filepath(course.middlePicture|default(''), 'course.png'), 'img-responsive', course.title) }}
+      {{ lazy_img(filepath(courseSet.cover.large|default(''), 'course.png'), 'img-responsive', courseSet.title) }}
     </a>
   </div>
   <div class="course-info">
     <div class="title">
-      <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
-        {{ course.title }}
+      <a class="link-dark" href="{{ path('course_set_show', {id: courseSet.id}) }}" target="_blank">
+        {{ courseSet.title }}
       </a>
     </div>
     <div class="metas clearfix">
@@ -34,7 +35,7 @@
         <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
       {% endif %}
       <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
-      {% include 'course/widget/price.html.twig' with {shows:'price'} %}
+      {% include 'course-set/widget/price.html.twig' with {shows:'price'} %}
     </div>
   </div>
 </div>
