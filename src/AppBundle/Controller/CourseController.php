@@ -2,19 +2,20 @@
 
 namespace AppBundle\Controller;
 
+
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
 {
     public function showAction($id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
+        $courseItems              = $this->getCourseService()->findCourseItems($course['id']);
 
         return $this->render('course-set/overview.html.twig', array(
             'courseSet'   => $courseSet,
@@ -26,24 +27,76 @@ class CourseController extends CourseBaseController
     public function headerAction(Request $request, $id)
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
+        $courses                           = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
         $taskCount       = $this->getTaskService()->countTasksByCourseId($id);
         $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish'));
 
+        $progress = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
+        if ($member) {
+            //学习进度
+            $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
 
-        $progress = $taskCount == 0 ? 0 : round($taskResultCount / $taskCount, 2); //学习进度
-        //学习进度
-        //下一个课时
-        return $this->render('course-set/header.html.twig', array(
-            'courseSet'       => $courseSet,
-            'courses'         => $courses,
-            'course'          => $course,
-            'member'          => $member,
-            'progress'        => $progress,
-            'taskCount'       => $taskCount,
-            'taskResultCount' => $taskResultCount
+            //待学习任务
+            $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($id);
+            //任务式课程每日建议学习任务数
+            $taskPerDay = $this->getFinishedTaskPerDay($course, $taskCount);
+
+
+            //计划应学数量
+            $planStudyTaskCount = $this->getPlanStudyTaskCount($course, $member, $taskCount, $taskPerDay);
+
+            //计划进度
+            $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
+        }
+
+        return $this->render('course/header.html.twig', array(
+            'courseSet'            => $courseSet,
+            'courses'              => $courses,
+            'course'               => $course,
+            'member'               => $member,
+            'progress'             => $progress,
+            'taskCount'            => $taskCount,
+            'taskResultCount'      => $taskResultCount,
+            'toLearnTasks'         => $toLearnTasks,
+            'taskPerDay'           => $taskPerDay,
+            'planStudyTaskCount'   => $planStudyTaskCount,
+            'planProgressProgress' => $planProgressProgress
         ));
+    }
+
+    protected function getFinishedTaskPerDay($course, $taskNum)
+    {
+        //自由式不需要展示每日计划的学习任务数
+        if ($course['learnMode'] == 'freeMode') {
+            return false;
+        }
+        if ($course['expiryMode'] == 'days') {
+            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
+        } else {
+            $diffDay            = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
+            $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
+        }
+        return round($finishedTaskPerDay);
+    }
+
+    protected function getPlanStudyTaskCount($course, $member, $taskNum, $taskPerDay)
+    {
+        //自由式不需要展示应学任务数, 未设置学习有效期不需要展示应学任务数
+        if ($course['learnMode'] == 'freeMode' || empty($taskPerDay)) {
+            return false;
+        }
+        //当前时间减去课程
+        //按天计算有效期， 当前的时间- 加入课程的时间 获得天数* 每天应学任务
+        if ($course['expiryMode'] == 'days') {
+            $joinDays = (time() - $member['createdTime']) / (24 * 60 * 60);
+        } else {
+            //当前时间-减去课程有效期开始时间  获得天数 *应学任务数量
+            $joinDays = (time() - $course['expiryStartDate']) / (24 * 60 * 60);
+        }
+
+        return $taskPerDay * $joinDays >= $taskNum ? $taskNum : round($taskPerDay * $joinDays);
+
     }
 
     public function notesAction($id)
@@ -74,7 +127,7 @@ class CourseController extends CourseBaseController
     public function reviewListAction(Request $request, $id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($course['id']);
+        list($course, $member)    = $this->getCourseService()->tryTakeCourse($course['id']);
 
         $courseId = $request->query->get('courseId', 0);
 
@@ -146,7 +199,7 @@ class CourseController extends CourseBaseController
     public function taskListAction(Request $request, $id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems = $this->getCourseService()->findCourseItems($id);
+        $courseItems              = $this->getCourseService()->findCourseItems($id);
 
         return $this->render('course-set/task-list.html.twig', array(
             'course'      => $course,
@@ -164,7 +217,7 @@ class CourseController extends CourseBaseController
         $characteristicData = array();
 
         foreach ($tasks as $task) {
-            $type = strtolower($task['activity']['mediaType']);
+            $type                                                                                         = strtolower($task['activity']['mediaType']);
             isset($characteristicData[$type]) ? $characteristicData[$type]++ : $characteristicData[$type] = 1;
         }
 
@@ -224,6 +277,7 @@ class CourseController extends CourseBaseController
 
         $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
         $canManage      = $this->getCourseService()->hasCourseManagerRole($course['id']);
+
         return $this->render('course/part/header-top.html.twig', array(
             'course'         => $course,
             'courseSet'      => $courseSet,

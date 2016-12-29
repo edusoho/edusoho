@@ -20,6 +20,11 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 
+    public function findByCourseIds($courseIds)
+    {
+        return $this->findInField('courseId', $courseIds);
+    }
+
     public function findByIds($ids)
     {
         return $this->findInField('id', $ids);
@@ -27,7 +32,13 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
 
     public function getMaxSeqByCourseId($courseId)
     {
-        $sql = "SELECT max(seq) FROM {$this->table()} WHERE courseId = ? ";
+        $sql = "SELECT MAX(seq) FROM {$this->table()} WHERE courseId = ? ";
+        return $this->db()->fetchColumn($sql, array($courseId)) ?: 0;
+    }
+
+    public function getMinSeqByCourseId($courseId)
+    {
+        $sql = "SELECT MIN(seq) FROM {$this->table()} WHERE courseId = ? ";
         return $this->db()->fetchColumn($sql, array($courseId)) ?: 0;
     }
 
@@ -55,11 +66,23 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchAssoc($sql, array($chapterId, $mode));
     }
 
+    public function getByCourseIdAndSeq($courseId, $sql)
+    {
+        return $this->getByFields(array('courseId' => $courseId, 'seq' => $sql));
+    }
+
+
     public function declares()
     {
         return array(
+            'orderbys'   => array('seq'),
             'conditions' => array(
-                'courseId = :courseId'
+                'id = :id',
+                'id IN ( :ids )',
+                'courseId = :courseId',
+                'seq >= :seq_GE',
+                'seq > :seq_GT',
+                'seq < :seq_LT'
             )
         );
     }

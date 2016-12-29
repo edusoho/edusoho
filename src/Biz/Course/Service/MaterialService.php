@@ -15,6 +15,8 @@ interface MaterialService
 
     public function deleteMaterialsByCourseId($courseId, $courseType = 'course');
 
+    public function deleteMaterialsByCourseSetId($courseSetId, $courseType = 'course');
+
     public function deleteMaterials($courseId, $fileIds, $courseType = 'course');
 
     public function deleteMaterialsByFileId($fileId);
@@ -31,7 +33,21 @@ interface MaterialService
 
     public function searchMaterialCountGroupByFileId($conditions);
 
+    /**
+     * for opencourse
+     * @param  $fileIds
+     * @param  $courseId
+     * @return mixed
+     */
     public function findUsedCourseMaterials($fileIds, $courseId);
+
+    /**
+     * for courseSet in course2.0
+     * @param  $fileIds
+     * @param  $courseSetId
+     * @return mixed
+     */
+    public function findUsedCourseSetMaterials($fileIds, $courseSetId);
 
     public function findFullFilesAndSort($materials);
 

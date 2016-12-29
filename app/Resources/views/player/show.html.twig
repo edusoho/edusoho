@@ -49,7 +49,7 @@
             class="{{ player }}"
           {% endif %}
           {% if context.hideQuestion|default(0) == 0 %}
-            data-markerurl="{{ path('course_lesson_question_markers_show', {mediaId: file.id}) }}"
+            data-markerurl="{#{{ path('course_lesson_question_markers_show', {mediaId: file.id}) }}#}"
           {% endif %}
             data-timelimit="{{ context.watchTimeLimit|default('')}}"
             data-starttime="{{ context.starttime|default('')}}"

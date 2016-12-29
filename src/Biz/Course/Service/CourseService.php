@@ -102,6 +102,10 @@ interface CourseService
 
     //public function findUserLearnCourseCount($userId);
 
+    public function findUserTeachCourseCount($conditions, $onlyPublished = true);
+
+    public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
+
     //---end
     public function searchCourses($conditions, $sort, $start, $limit);
 

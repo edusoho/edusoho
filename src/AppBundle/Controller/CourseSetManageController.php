@@ -80,6 +80,13 @@ class CourseSetManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+            if (!empty($data['goals'])) {
+                $data['goals'] = json_decode($data['goals'], true);
+            }
+            if (!empty($data['audiences'])) {
+                $data['audiences'] = json_decode($data['audiences'], true);
+            }
+
             $this->getCourseSetService()->updateCourseSetDetail($id, $data);
             return $this->redirect($this->generateUrl('course_set_manage_detail', array('id' => $id)));
         }

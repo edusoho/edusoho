@@ -78,6 +78,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    course_set_material_event_subscriber:
+        class: Biz\Course\Event\CourseSetMaterialEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     conversation_event_subscriber:
         class: Biz\IM\Event\ConversationEventSubscriber
         arguments: ['@biz']

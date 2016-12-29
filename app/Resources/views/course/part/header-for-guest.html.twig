@@ -19,7 +19,9 @@
           <i class="es-icon es-icon-playcircleoutline"></i>
         </a>
         {# end 需要设置是否可以预览 #}
-        <img class="img-responsive" src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else  %} {{filepath(courseSet.cover.large) }} {% endif  %}"  alt="{{course.title  }} ">
+        <img class="img-responsive"
+             src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(courseSet.cover.large) }} {% endif %}"
+             alt="{{ course.title }} ">
         <div class="course-detail-remask">
           <i class="es-icon es-icon-people"></i>{{ course.studentNum }} 人加入学习
           <div class="score pull-right">
@@ -62,23 +64,31 @@
             <span class="course-detail-title">学习方式</span>
             {% if course.expiryMode == 'days' %}
               <span class="gray-dark mrl">随到随学</span>
-              <span class="gray-dark">{% if course.expiryDays %} {{ course.expiryDays  }}天 {% else %}无限制 {% endif  %}</span>
+              <span
+                  class="gray-dark">{% if course.expiryDays %} {{ course.expiryDays }}天 {% else %}不限 {% endif %}</span>
             {% elseif course.expiryMode == 'date' %}
               <span class="gray-dark mrl">周期开班</span>
-              <span class="gray-dark">{{ course.expiryStartDate|date('Y-m-d ') }} ~ {{ course.expiryEndDate|date('Y-m-d ') }}</span>
+              <span class="gray-dark">{{ course.expiryStartDate|date('Y-m-d ') }}
+                ~ {{ course.expiryEndDate|date('Y-m-d ') }}</span>
             {% endif %}
           </div>
           <span class="course-detail-title">承诺服务</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
-          <span class="lump-sm color-lump mr5" data-placement="top" data-toggle="popover" title="title" data-content="content. ">疑</span>
-          <span class="lump-sm color-lump mr5" data-placement="top" data-toggle="popover" title="title" data-content="content.">业</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title"
+                data-content="content.">练</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title"
+                data-content="content.">试</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title"
+                data-content="content.">问</span>
+          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title"
+                data-content="content.">动</span>
+          <span class="lump-sm color-lump mr5" data-placement="top" data-toggle="popover" title="title"
+                data-content="content. ">疑</span>
+          <span class="lump-sm color-lump mr5" data-placement="top" data-toggle="popover" title="title"
+                data-content="content.">业</span>
         </div>
         <div class="text-right">
           <a class="btn btn-default btn-lg mrm"><i class="es-icon es-icon-crown mr10"></i>会员</a>
-          <a class="btn btn-primary btn-lg" href="{{path('order_show', {targetId: course.id, targetType:'course'})}}">购买课程</a>
+          <a class="btn btn-primary btn-lg" href="{{ path('order_show', {targetId: course.id, targetType:'course'}) }}">购买课程</a>
         </div>
       </div>
     </div>
