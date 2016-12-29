@@ -212,7 +212,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             'doc'       => array(
                 'meta'    => array(
                     'name' => '文档',
-                    'icon' => 'es-icon es-icon-docclass'
+                    'icon' => 'es-icon es-icon-description'
                 ),
                 'actions' => array(
                     'create' => 'AppBundle:Activity/Doc:create',
