@@ -76,14 +76,31 @@ class Marketing {
 				$('.js-enable-try-look').addClass('hidden');
 			}
             // $('.js-enable-try-look').toggle($('input[name="tryLookable"]:checked').val() == 0 ? 'show' : 'hide');
-      });
+        });	
+
+        console.log('js loaded....');
+
+        $('.js-service-item').click(function(event){
+        	console.log(event.currentTarget, $('#course_services').val());
+        	let $item = $(event.currentTarget);
+        	let $values = $('#course_services').val();
+        	$values = JSON.parse($values);
+        	if($item.hasClass('selected')){
+        		$item.removeClass('selected');
+        		$values.splice($values.indexOf($item.text()), 1);
+        	}else{
+        		$item.addClass('selected');
+        		$values.push($item.text());
+        	}
+        	$('#course_services').val(JSON.stringify($values));
+        });
 
 		$('#course-submit').click(function(evt){
-      if(validator.form()){
-        $(evt.currentTarget).button('loading');
-        $form.submit();
-      }
-    });
+	      if(validator.form()){
+	        $(evt.currentTarget).button('loading');
+	        $form.submit();
+	      }
+	    });
 	}
 }
 
