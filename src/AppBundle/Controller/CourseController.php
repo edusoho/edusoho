@@ -274,7 +274,7 @@ class CourseController extends CourseBaseController
 
     public function headerTopPartAction(Request $request, $id)
     {
-        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
+        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
 
         $user = $this->getCurrentUser();
 
@@ -285,7 +285,8 @@ class CourseController extends CourseBaseController
             'course'         => $course,
             'courseSet'      => $courseSet,
             'isUserFavorite' => $isUserFavorite,
-            'canManage'      => $canManage
+            'canManage'      => $canManage,
+            'member'         => $member
         ));
     }
 

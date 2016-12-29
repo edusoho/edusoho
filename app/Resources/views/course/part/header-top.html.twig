@@ -16,6 +16,15 @@
 
 <p class="mt10 mb20">{{ courseSet.subtitle }}</p>
 <ul class="course-operation clearfix">
+  {% if member %}
+    <li>
+      <span class="btn btn-xs">
+        <i class="es-icon es-icon-people text-16"></i>
+        <span class="mls">{{ course.studentNum }}人</span>
+      </span>
+    </li>
+  {% endif %}
+
   <li id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
       {% if not isUserFavorite %}style="display: none" {% endif %}>
     <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
