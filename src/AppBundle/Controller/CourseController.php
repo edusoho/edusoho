@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller;
 
+
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Biz\Task\Service\TaskResultService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
@@ -13,7 +15,7 @@ class CourseController extends CourseBaseController
     public function showAction($id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems              = $this->getCourseService()->findCourseItems($course['id']);
+        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
         return $this->render('course-set/overview.html.twig', array(
             'courseSet'   => $courseSet,
@@ -25,7 +27,7 @@ class CourseController extends CourseBaseController
     public function headerAction(Request $request, $id)
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
-        $courses                           = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
         $taskCount       = $this->getTaskService()->countTasksByCourseId($id);
         $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish'));
@@ -37,14 +39,18 @@ class CourseController extends CourseBaseController
 
             //待学习任务
             $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($id);
+
             //任务式课程每日建议学习任务数
             $taskPerDay = $this->getFinishedTaskPerDay($course, $taskCount);
+
 
             //计划应学数量
             $planStudyTaskCount = $this->getPlanStudyTaskCount($course, $member, $taskCount, $taskPerDay);
 
             //计划进度
             $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
+
+            $previewTaks = $this->getTaskService()->search(array('courseId' => $id, 'isFree' => '1'), array('seq' => 'ASC'), 0, 1);
         }
 
         return $this->render('course/header.html.twig', array(
@@ -124,7 +130,7 @@ class CourseController extends CourseBaseController
     public function reviewListAction(Request $request, $id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        list($course, $member)    = $this->getCourseService()->tryTakeCourse($course['id']);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($course['id']);
 
         $courseId = $request->query->get('courseId', 0);
 
@@ -196,7 +202,7 @@ class CourseController extends CourseBaseController
     public function taskListAction(Request $request, $id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems              = $this->getCourseService()->findCourseItems($id);
+        $courseItems = $this->getCourseService()->findCourseItems($id);
 
         return $this->render('course-set/task-list.html.twig', array(
             'course'      => $course,
@@ -214,7 +220,7 @@ class CourseController extends CourseBaseController
         $characteristicData = array();
 
         foreach ($tasks as $task) {
-            $type                                                                                         = strtolower($task['activity']['mediaType']);
+            $type = strtolower($task['activity']['mediaType']);
             isset($characteristicData[$type]) ? $characteristicData[$type]++ : $characteristicData[$type] = 1;
         }
 
@@ -266,6 +272,45 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    public function headerTopPartAction(Request $request, $id)
+    {
+        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
+
+        $user = $this->getCurrentUser();
+
+        $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
+        $canManage      = $this->getCourseService()->hasCourseManagerRole($course['id']);
+
+        return $this->render('course/part/header-top.html.twig', array(
+            'course'         => $course,
+            'courseSet'      => $courseSet,
+            'isUserFavorite' => $isUserFavorite,
+            'canManage'      => $canManage,
+            'member'         => $member
+        ));
+    }
+
+    public function qrcodeAction(Request $request, $id)
+    {
+        $user  = $this->getCurrentUser();
+        $host  = $request->getSchemeAndHttpHost();
+        $token = $this->getTokenService()->makeToken('qrcode', array(
+            'userId'   => $user['id'],
+            'data'     => array(
+                'url'    => $this->generateUrl('course_show', array('id' => $id), true),
+                'appUrl' => "{$host}/mapi_v2/mobile/main#/course/{$id}"
+            ),
+            'times'    => 1,
+            'duration' => 3600
+        ));
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
+        );
+        return $this->createJsonResponse($response);
+    }
+
     // TODO old
     protected function getClassroomService()
     {
@@ -299,5 +344,13 @@ class CourseController extends CourseBaseController
     protected function getReviewService()
     {
         return $this->createService('Course:ReviewService');
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

@@ -2,9 +2,8 @@
 
 namespace Biz\Activity\Service\Impl;
 
+use Biz\Activity\Service\DownloadActivityService;
 use Biz\BaseService;
-use Biz\DownloadActivity\Dao\DownloadFileRecordDao;
-use Biz\DownloadActivity\Service\DownloadActivityService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 

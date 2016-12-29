@@ -10,7 +10,7 @@
       <div class="piece-header">
         {{'管理小组'|trans}}
       </div>
-      {% include 'group/groups-ul.html.twig' with {'groups':adminGroups,}%}
+      {% include 'my/group:groups-ul.html.twig' with {'groups':adminGroups,}%}
     </div>
     <hr>
   {% endif %}
@@ -18,7 +18,7 @@
     <div class="piece-header">
       {{'加入小组'|trans}}
     </div>
-    {% include 'group/groups-ul.html.twig' with {'groups':groups} %}
+    {% include 'my/group/groups-ul.html.twig' with {'groups':groups} %}
   </div>
   {{ web_macro.paginator(paginator) }}
 {% endblock %}
