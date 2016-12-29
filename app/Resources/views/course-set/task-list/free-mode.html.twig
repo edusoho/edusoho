@@ -21,11 +21,11 @@
               {% if task_lock %}
               es-icon-lock
               {% elseif  not task.result|default(null) %}
-              es-icon-undone-check
+              es-icon-undone-check color-gray
               {% elseif task.result.status == 'start' %}
-              es-icon-doing
+              es-icon-doing color-primary
               {% elseif task.result.status == 'finish' %}
-              es-icon-iccheckcircleblack24px
+              es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu"></i>
             <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
@@ -35,8 +35,7 @@
             <span class="right-menu mouse-leave">
               {{ task.activity.length|default(0)|activity_length_format }}
               {% set meta =  activity_meta(task.activity.mediaType) %}
-              <i class="es-icon es-icon {{ meta.icon }}" data-toggle="tooltip" data-placement="top" title=""
-                 data-original-title="{{ meta.name }}任务"></i>
+              <i class="es-icon es-icon {{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ meta.name }}任务"></i>
             </span>
             <span class="right-menu mouse-enter">
                 <a href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}" class="btn btn-primary btn-sm btn-learn">继续学习</a>
