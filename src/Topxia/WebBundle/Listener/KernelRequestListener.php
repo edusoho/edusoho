@@ -55,8 +55,7 @@ class KernelRequestListener
             } else {
                 $token = $request->request->get('_csrf_token', '');
             }
-            var_dump($request->isXmlHttpRequest());
-            var_dump($token);exit;
+
             $request->request->remove('_csrf_token');
 
             $expectedToken = $this->container->get('security.csrf.token_manager')->getToken('site');
