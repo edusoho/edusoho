@@ -92,7 +92,7 @@ class Testpaper {
       if (passScore == '') {
         passScore = Math.ceil(score * 0.6);
       }
-      console.log(passScore);
+      
       $('#score-single-input').val(passScore);
       $('.js-score-total').text(score);
       this.initScoreSlider(parseInt(passScore),parseInt(score));
@@ -142,8 +142,7 @@ class Testpaper {
   }
 
   initScoreSlider(passScore,score) {
-    console.log(passScore);
-    console.log(score);
+
     let scoreSlider = document.getElementById('score-slider');
     let option = {
       start: passScore,
@@ -156,7 +155,6 @@ class Testpaper {
       }
     }
     if(this.scoreSlider) {
-      console.log('test');
       this.scoreSlider.updateOptions(option);
     }else {
       this.scoreSlider = noUiSlider.create(scoreSlider,option);
@@ -201,9 +199,8 @@ class Testpaper {
   }
 
   showEndTime(date) {
-    console.log(date);
     let limitedTime = $('input[name="limitedTime"]').val();
-    console.log(limitedTime);
+    
     if (limitedTime != 0) {
       let endTime = new Date(date + limitedTime * 60 * 1000);
       let endDate = endTime.Format("yyyy-MM-dd hh:mm");

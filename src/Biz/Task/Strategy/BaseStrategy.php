@@ -26,7 +26,14 @@ class BaseStrategy
 
     public function baseCreateTask($fields)
     {
-        $fields = array_filter($fields);
+        $fields = array_filter($fields, function ($value) {
+            if (is_array($value) || ctype_digit((string) $value)) {
+                return true;
+            }
+
+            return !empty($value);
+        });
+
         if ($this->invalidTask($fields)) {
             throw new InvalidArgumentException('task is invalid');
         }
