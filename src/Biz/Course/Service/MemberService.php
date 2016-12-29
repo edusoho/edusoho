@@ -89,5 +89,19 @@ interface MemberService
 
     public function becomeStudentByClassroomJoined($courseId, $userId);
 
-    public function setMemberNoteNumber($courseId, $userId, $number);
+    public function refreshMemberNoteNumber($courseId, $userId);
+
+    /**
+     * @param integer $userId
+     *
+     * @return array[]
+     */
+    public function findTeacherMembersByUserId($userId);
+
+    /**
+     * @param integer $userId
+     *
+     * @return array[]
+     */
+    public function findStudentMemberByUserId($userId);
 }

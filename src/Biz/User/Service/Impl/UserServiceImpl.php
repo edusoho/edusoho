@@ -111,7 +111,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findUserFollowerCount($userId)
     {
-        return $this->getFriendDao()->countByFromId($userId);
+        return $this->getFriendDao()->countByToId($userId);
     }
 
     public function findAllUserFollower($userId)
@@ -1452,7 +1452,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createAccessDeniedException('You have Followed User#{$toId}.');
         }
 
-        $isFollowed = $this->isFollowed($toId, $fromId);
+        $isFollowed = $this->isFollowed($fromId, $toId);
         $pair       = $isFollowed ? 1 : 0;
         $friend     = $this->getFriendDao()->create(array(
             'fromId'      => $fromId,
@@ -1460,7 +1460,7 @@ class UserServiceImpl extends BaseService implements UserService
             'createdTime' => time(),
             'pair'        => $pair
         ));
-        $this->getFriendDao()->updateByFromIdAndToId($toId, $fromId, array('pair' => $pair));
+        $this->getFriendDao()->updateByFromIdAndToId($fromId, $toId, array('pair' => $pair));
         $this->dispatchEvent('user.follow', new Event($friend));
         return $friend;
     }

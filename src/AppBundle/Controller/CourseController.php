@@ -2,10 +2,12 @@
 
 namespace AppBundle\Controller;
 
+
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Biz\Task\Service\TaskResultService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
@@ -40,6 +42,7 @@ class CourseController extends CourseBaseController
 
             //任务式课程每日建议学习任务数
             $taskPerDay = $this->getFinishedTaskPerDay($course, $taskCount);
+
 
             //计划应学数量
             $planStudyTaskCount = $this->getPlanStudyTaskCount($course, $member, $taskCount, $taskPerDay);
@@ -269,6 +272,44 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    public function headerTopPartAction(Request $request, $id)
+    {
+        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
+
+        $user = $this->getCurrentUser();
+
+        $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
+        $canManage      = $this->getCourseService()->hasCourseManagerRole($course['id']);
+
+        return $this->render('course/part/header-top.html.twig', array(
+            'course'         => $course,
+            'courseSet'      => $courseSet,
+            'isUserFavorite' => $isUserFavorite,
+            'canManage'      => $canManage
+        ));
+    }
+
+    public function qrcodeAction(Request $request, $id)
+    {
+        $user  = $this->getCurrentUser();
+        $host  = $request->getSchemeAndHttpHost();
+        $token = $this->getTokenService()->makeToken('qrcode', array(
+            'userId'   => $user['id'],
+            'data'     => array(
+                'url'    => $this->generateUrl('course_show', array('id' => $id), true),
+                'appUrl' => "{$host}/mapi_v2/mobile/main#/course/{$id}"
+            ),
+            'times'    => 1,
+            'duration' => 3600
+        ));
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
+        );
+        return $this->createJsonResponse($response);
+    }
+
     // TODO old
     protected function getClassroomService()
     {
@@ -302,5 +343,13 @@ class CourseController extends CourseBaseController
     protected function getReviewService()
     {
         return $this->createService('Course:ReviewService');
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

@@ -7,24 +7,25 @@
 </style>
 {% set mode = mode|default('default') %}
 <ul class="course-grids">
-  {% for course in courses %}
+  {% for set in courseSets %}
+    {% set course = data('CourseByCourseSet',{ courseSetId: set.id } ) %}
     <li class="course-grid">
-      <a href="{{ path('course_set_show', {id:course.courseSet.id}) }}" class="grid-body">
-        <img src="{{ filepath(course.courseSet.cover.large, 'course.png') }}"  class="img-responsive thumb">
+      <a href="{{ path('course_set_show', {id: set.id}) }}" class="grid-body">
+        <img src="{{ filepath(set.cover.large|default(null), 'course.png') }}"  class="img-responsive thumb">
           <span class="course-label">
-            {% if course.status == 'draft' %}
+            {% if set.status == 'draft' %}
               <span class="label  label-warning">{{'未发布'|trans}}</span>
-            {% elseif course.status == 'closed' %}
+            {% elseif set.status == 'closed' %}
               <span class="label label-danger">{{'已关闭'|trans}}</span>
             {% endif %}
-            {% if course.status != 'closed' %}
-              {% if course.courseSet.serializeMode=='serialize' %}
+            {% if set.status != 'closed' %}
+              {% if set.serializeMode=='serialize' %}
                 <span class="label label-success">{{'更新中'|trans}}</span>
-              {% elseif course.courseSet.serializeMode=='finished' %}
+              {% elseif set.serializeMode=='finished' %}
                 <span class="label label-warning">{{'已完结'|trans}}</span>
               {% endif %}
             {% endif %}
-            {% if course.courseSet.type == 'live' %}
+            {% if set.type == 'live' %}
               {% set lesson = course['lesson']|default(null) %}
               {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
                 <span class="label label-warning">{{'正在直播中'|trans}}</span>
@@ -33,10 +34,9 @@
               {% endif %}
             {% endif %}
           </span>
-        <span class="title">{{ course.title }}</span>
+        <span class="title">{{ set.title }}</span>
         {% if mode in ['default', 'teach'] %}
-
-          {% if course.type == 'live' %}
+          {% if set.type == 'live' %}
             {% set lesson = course['lesson']|default(null) %}
             {% if lesson %}
               <span class="live-course-lesson metas">
@@ -102,14 +102,11 @@
                 {% endif %}</span>
               {% endif %}
               </div>
-
-
-
-            {% if course.memberIsLearned %}
+            {% if course.memberIsLearned|default(false) %}
               <div class="progress">
                 <div class="progress-bar progress-bar-success" style="width: 100%;"></div>
               </div>
-              {{'学习总时长:%learnTime%'|trans({'%learnTime%': course.learnTime})}}
+              {{'学习总时长:%learnTime%'|trans({'%learnTime%': course.learnTime|default(0)})}}
               <div class="action clearfix"><span class="btn btn-default btn-sm pull-right">{{'查看课程'|trans}}</span></div>
             {% else %}
               <div class="progress">

@@ -5,6 +5,7 @@ namespace Biz\Course\Event;
 
 
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Note\Service\CourseNoteService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -34,6 +35,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
         }*/
 
+        $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
         $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
     }
 
@@ -41,7 +43,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $note      = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
-
+        $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
 
         // @TODO 班级功能改造完后完善
         //$classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
@@ -52,7 +54,6 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         if ($classroom && !$note['status'] && $preStatus) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
         }*/
-
 
     }
 
@@ -65,6 +66,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         }*/
 
         $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
+        $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
     }
 
     public function onCourseNoteLike(Event $event)
@@ -93,5 +95,13 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getCourseNoteService()
     {
         return $this->getBiz()->service('Note:CourseNoteService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 }

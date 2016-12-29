@@ -3,18 +3,20 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\ThreadDao;
-use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\UserService;
-use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseChapterDao;
+use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Note\Service\CourseNoteService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\User\Service\UserService;
+use Topxia\Common\ArrayToolkit;
+
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -40,7 +42,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function getFirstPublishedCourseByCourseSetId($courseSetId)
     {
-        return $this->getCourseDao()->getFirstPublishedByCourseSetId($courseSetId);
+        $courses = $this->searchCourses(
+            array(
+                'courseSetId' => $courseSetId,
+                'status' => 'published'
+            ),
+            array('createdTime' => 'ASC'),
+            0,
+            1
+        );
+
+        return array_shift($courses);
     }
 
     public function createCourse($course)
@@ -190,9 +202,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookLength',
             'watchLimit',
             'buyExpiryTime',
-            'services'
+            'services',
+            'approval'
         ));
-
         if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
@@ -680,6 +692,41 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->findLearnedByCourseIdAndUserId($courseId, $userId);
     }
 
+    public function findTeachingCoursesByUserId($userId)
+    {
+        $members   = $this->getMemberService()->findTeacherMembersByUserId($userId);
+        $courseIds = ArrayToolkit::index($members, 'courseId');
+        $courses   = $this->findPublicCoursesByIds($courseIds);
+        return $courses;
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return mixed
+     */
+    public function findLearnCoursesByUserId($userId)
+    {
+        $members = $this->getMemberService()->findStudentMemberByUserId($userId);
+        $courseIds = ArrayToolkit::index($members, 'courseId');
+        $courses   = $this->findPublicCoursesByIds($courseIds);
+        return $courses;
+    }
+
+    public function findPublicCoursesByIds(array $ids)
+    {
+        if(empty($ids)){
+            return array();
+        }
+
+        $conditions = array(
+            'status'    => 'published',
+            'courseIds' => $ids
+        );
+        $count = $this->searchCourseCount($conditions);
+        return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
+    }
+
     public function hasCourseManagerRole($courseId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
@@ -880,6 +927,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
     /**
