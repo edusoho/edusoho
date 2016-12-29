@@ -7,8 +7,7 @@
 
   {% if course.learnMode == 'freeMode' %}
     <!-- 2、加入后：自由式学习 -->
-    {% include 'course/part/free-mode-header-for-member.html.twig' %}
-
+    {% include 'course/part/header-for-guest.html.twig' %}
   {% elseif course.learnMode == 'lockMode' %}
     <!-- 3、加入后：任务式学习 -->
     {% include 'course/part/lock-mode-header-for-member.html.twig' %}
