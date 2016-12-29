@@ -1,14 +1,14 @@
 <!-- 2、加入后：自由式学习 -->
 <div class="container">
   <ol class="breadcrumb breadcrumb-o">
-    <li><a href="{{path('homepage') }}">首页</a></li>
+    <li><a href="{{ path('homepage') }}">首页</a></li>
     <li class="active">{{ courseSet.title }} </li>
   </ol>
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top">
       <div class="course-detail-heading gray-darker text-24">{{ course.title }}</div>
       <ul class="course-operation clearfix ">
-        <li> <i class="es-icon es-icon-people"></i>
+        <li><i class="es-icon es-icon-people"></i>
           {{ course.studentNum }} 人
         </li>
         <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
@@ -26,9 +26,12 @@
             <i class="es-icon es-icon-share"></i>
           </a>
 
-          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神" data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2" data-picture="/assets/img/default/courseSet.png">
+          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神"
+               data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2"
+               data-picture="/assets/img/default/courseSet.png">
 
-            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
+            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin"
+               data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
               <i class="es-icon es-icon-weixin"></i>
             </a>
             <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
@@ -42,11 +45,13 @@
             </a>
           </div>
         </li>
-        <li class="pull-left">
-          <a class="btn btn-default btn-xs " href="{{ path('course_set_manage',{id:courseSet.id}) }}" title="课程管理">
-            <i class="es-icon es-icon-setting"></i>
-          </a>
-        </li>
+        {% if canAccess %}
+          <li class="pull-left">
+            <a class="btn btn-default btn-xs " href="{{ path('course_set_manage',{id:courseSet.id}) }}" title="课程管理">
+              <i class="es-icon es-icon-setting"></i>
+            </a>
+          </li>
+        {% endif %}
       </ul>
     </div>
     <section class="course-freelearn-section">
@@ -75,14 +80,27 @@
                 <i class="es-icon es-icon-today mrm"></i>
                 学习有效期
               </p>
-              {{ course.expiryDays }} 天
+              {% if course.expiryMode == 'days' and course.expiryDays == 0 %}
+            <li class="progress-learn-time"> 不限</li>
+            {% elseif course.expiryMode == 'date' %}
+              {#{{ course.expiryStartDate|date('Y-m-d ') }}  ~ #}{{ course.expiryEndDate|date('Y-m-d ') }}
+              <br/>
+              剩余{{ course.expiryEndDate|time_diff }} 天
+            {% else %}
+              {{ member.createdTime|date_modify("+#{course.expiryDays} days") }}
+              {{ member.createdTime|time_diff(course.expiryDays) }} 天
+            {% endif %}
             </li>
             <li>
               <p class="mb20 color-gray">
                 <i class="es-icon es-icon-book"></i>
                 下一课
               </p>
-              PS移动工具
+              {% for toLearnTask in toLearnTasks %}
+                {{ toLearnTask.title }}
+              {% else %}
+                暂无任务
+              {% endfor %}
             </li>
           </ul>
           <ul class="course-learn-list-small">
@@ -107,12 +125,21 @@
                 <i class="es-icon es-icon-book mr10"></i>
                 <span class="mr10">下一课</span>
               </span>
-              PS移动工具
+
+              {% for toLearnTask in toLearnTasks %}
+                {{ toLearnTask.title }}
+              {% else %}
+                暂无任务
+              {% endfor %}
             </li>
           </ul>
         </div>
         <div class="col-sm-2 text-center">
-          <a class="btn btn-primary btn-lg">继续学习</a>
+          {% for toLearnTask in toLearnTasks %}
+            <a class="btn btn-primary btn-lg"
+               href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+          {% endfor %}
+
         </div>
       </div>
     </section>

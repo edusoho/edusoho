@@ -72,7 +72,7 @@ class CourseManageController extends BaseController
             $diffDay            = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
             $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
         }
-        return round($finishedTaskPerDay, 1);
+        return round($finishedTaskPerDay, 0);
     }
 
     protected function createCourseStrategy($course)
