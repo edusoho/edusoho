@@ -26,14 +26,20 @@
   <div class="col-md-2 control-label"><label for="testpaper-range-field">{{'出题范围'|trans}}</label></div>
   <div class="col-md-8 controls radios">
     {{ radios('range', {'course':'整个课程'|trans, 'lesson':'按课时范围'|trans}, 'course') }}
-    <input type="hidden" name="ranges" value="">
+    {#<input type="hidden" name="ranges" value="">#}
     <div class="hidden mtm" id="testpaper-range-selects">
-      <select class="form-control width-input width-input-large" id="testpaper-range-start" >
-        {{ select_options(ranges) }}
+      <select class="form-control width-input width-input-large" id="testpaper-range-start" name="ranges[start]" >
+        <option value="">本课程</option>
+        {% for range in ranges if range %}
+          <option value="{{ range.id }}">{{ range.title }}</option>
+        {% endfor %}
       </select>
       <span class="text-muted mrs">{{'到'|trans}}</span>
-      <select class="form-control width-input width-input-large" id="testpaper-range-end">
-        {{ select_options(ranges) }}
+      <select class="form-control width-input width-input-large" id="testpaper-range-end" name="ranges[end]">
+        <option value="">本课程</option>
+        {% for range in ranges if range %}
+          <option value="{{ range.id }}">{{ range.title }}</option>
+        {% endfor %}
       </select>
     </div>
   </div>
