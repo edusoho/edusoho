@@ -1532,9 +1532,9 @@ task_live_trigger:
     defaults: {_controller:  AppBundle:Activity/Live:trigger}
 
 #task_plugin
-course_task_note_create:
-  path: /course/{courseId}/task/{taskId}/note/create
-  defaults: { _controller: AppBundle:Note:createCourseNote}
+course_task_note_save:
+  path: /course/{courseId}/task/{taskId}/note/save
+  defaults: { _controller: AppBundle:Note:saveCourseNote}
 
 course_task_show_plugins:
   path: /course/{courseId}/task/{taskId}/show/plugins
