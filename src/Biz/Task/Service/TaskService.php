@@ -22,10 +22,16 @@ interface TaskService
 
     public function findTasksByCourseId($courseId);
 
+    public function findTasksByCourseIds($courseIds);
+
     public function countTasksByCourseId($courseId);
 
+    public function search($conditions, $orderBy, $start, $limit);
+
+    public function count($conditions);
+
     /**
-     * @param  array $ids
+     * @param  array   $ids
      * @return array
      */
     public function findTasksByIds(array $ids);
@@ -34,9 +40,17 @@ interface TaskService
 
     public function findTasksFetchActivityAndResultByCourseId($courseId);
 
+    /**
+     * for question and testpaper ranges
+     * @param  [type]  $userId
+     * @param  [type]  $courseSetId
+     * @return array
+     */
+    public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId);
+
     public function startTask($taskId);
 
-    public function doTask($taskId, $time = TaskService::LEARN_TIME_STEP);
+    public function doTask($taskId, $time = self::LEARN_TIME_STEP);
 
     public function finishTask($taskId);
 

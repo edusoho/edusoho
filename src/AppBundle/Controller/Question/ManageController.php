@@ -43,7 +43,10 @@ class ManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
 
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseSet['id']);
+        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseIds($courseIds);
         $courseTasks = ArrayToolkit::index($courseTasks, 'id');
 
         return $this->render('question-manage/index.html.twig', array(

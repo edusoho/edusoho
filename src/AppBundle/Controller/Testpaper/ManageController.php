@@ -48,8 +48,8 @@ class ManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         if ($request->getMethod() == 'POST') {
-            $fields                = $request->request->all();
-            $fields['ranges']      = empty($fields['ranges']) ? array() : explode(',', $fields['ranges']);
+            $fields = $request->request->all();
+            //$fields['ranges']      = empty($fields['ranges']) ? array() : explode(',', $fields['ranges']);
             $fields['courseSetId'] = $courseSet['id'];
             $fields['courseId']    = 0;
             $fields['pattern']     = 'questionType';
@@ -72,9 +72,12 @@ class ManageController extends BaseController
         $conditions['subCount']                  = 0;
         $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount($conditions);
 
+        $user   = $this->getUser();
+        $ranges = $this->getTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
+
         return $this->render('testpaper/manage/create.html.twig', array(
             'courseSet'    => $courseSet,
-            'ranges'       => $this->getQuestionRanges($courseSet),
+            'ranges'       => $ranges,
             'types'        => $types,
             'questionNums' => $questionNums
         ));
@@ -232,7 +235,7 @@ class ManageController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
+            return $this->createMessageResponse('error', 'testpaper not found');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -306,7 +309,7 @@ class ManageController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
         if (!$testpaper) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
+            return $this->createMessageResponse('error', 'testpaper not found');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -350,7 +353,7 @@ class ManageController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException();
+            return $this->createMessageResponse('error', 'testpaper not found');
         }
 
         $items    = $this->getTestpaperService()->getItemsCountByParams(array('testId' => $testpaperId, 'parentIdDefault' => 0), $gourpBy = 'questionType');
@@ -371,7 +374,7 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (!$testpaper) {
-            throw $this->createNotFoundException();
+            return $this->createMessageResponse('error', 'testpaper not found');
         }
 
         if ($testpaper['status'] == 'closed') {
@@ -393,13 +396,6 @@ class ManageController extends BaseController
             'attachments'   => $attachments,
             'questionTypes' => $this->getCheckedQuestionType($testpaper)
         ));
-    }
-
-    protected function getQuestionRanges($course, $includeCourse = false)
-    {
-        $ranges = array('本课程');
-
-        return $ranges;
     }
 
     protected function getCheckedEssayQuestions($questions)
@@ -473,6 +469,11 @@ class ManageController extends BaseController
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    public function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     protected function getServiceKernel()

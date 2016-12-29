@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
+use Biz\Task\Service\TaskResultService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
@@ -13,7 +13,7 @@ class CourseController extends CourseBaseController
     public function showAction($id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
+        $courseItems              = $this->getCourseService()->findCourseItems($course['id']);
 
         return $this->render('course-set/overview.html.twig', array(
             'courseSet'   => $courseSet,
@@ -25,21 +25,20 @@ class CourseController extends CourseBaseController
     public function headerAction(Request $request, $id)
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
+        $courses                           = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
         $taskCount       = $this->getTaskService()->countTasksByCourseId($id);
         $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish'));
-
 
         $progress = $taskCount == 0 ? 0 : round($taskResultCount / $taskCount, 2); //学习进度
         //学习进度
         //下一个课时
         return $this->render('course-set/header.html.twig', array(
-            'courseSet'        => $courseSet,
-            'courses'          => $courses,
-            'course'           => $course,
-            'member'           => $member,
-            'progress'         => $progress,
+            'courseSet'       => $courseSet,
+            'courses'         => $courses,
+            'course'          => $course,
+            'member'          => $member,
+            'progress'        => $progress,
             'taskCount'       => $taskCount,
             'taskResultCount' => $taskResultCount
         ));
@@ -73,7 +72,7 @@ class CourseController extends CourseBaseController
     public function reviewListAction(Request $request, $id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($course['id']);
+        list($course, $member)    = $this->getCourseService()->tryTakeCourse($course['id']);
 
         $courseId = $request->query->get('courseId', 0);
 
@@ -145,7 +144,7 @@ class CourseController extends CourseBaseController
     public function taskListAction(Request $request, $id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems = $this->getCourseService()->findCourseItems($id);
+        $courseItems              = $this->getCourseService()->findCourseItems($id);
 
         return $this->render('course-set/task-list.html.twig', array(
             'course'      => $course,
@@ -163,7 +162,7 @@ class CourseController extends CourseBaseController
         $characteristicData = array();
 
         foreach ($tasks as $task) {
-            $type = strtolower($task['activity']['mediaType']);
+            $type                                                                                         = strtolower($task['activity']['mediaType']);
             isset($characteristicData[$type]) ? $characteristicData[$type]++ : $characteristicData[$type] = 1;
         }
 
