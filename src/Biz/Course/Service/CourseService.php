@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Service;
 
-
 interface CourseService
 {
     public function getCourse($id);
@@ -49,28 +48,22 @@ interface CourseService
 
     public function countStudentsByCourseId($courseId);
 
-    public function hasCourseManagerRole($courseId = 0);
-
     public function getUserRoleInCourse($courseId, $userId);
 
-
     /**
-     * @param integer $userId
-     *
+     * @param  integer   $userId
      * @return array[]
      */
     public function findTeachingCoursesByUserId($userId);
 
     /**
-     * @param integer $userId
-     *
+     * @param  integer   $userId
      * @return array[]
      */
     public function findLearnCoursesByUserId($userId);
 
     /**
-     * @param array $ids
-     *
+     * @param  array     $ids
      * @return array[]
      */
     public function findPublicCoursesByIds(array $ids);
