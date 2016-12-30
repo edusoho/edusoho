@@ -114,7 +114,7 @@
   {# <div class="form-group">
     <label class="col-sm-2 control-label">{{'承诺提供服务'|trans}}</label>
     <div class="col-sm-8">
-      <div id="course-services" data-field-name="services" data-init-value="{{course.services|default(['24小时作业批改', '24小时阅卷点评', '提问必答', '一对一在线答疑'])|json_encode()}}"></div>
+      <div id="course-services" data-field-name="services" data-init-value="{{course.services|default(['24小时作业批改', '24小时阅卷点评', '提问必答', '一对一在线答疑'])|json_encode_utf8()}}"></div>
     </div>
   </div> #}
 
@@ -125,7 +125,7 @@
       <span class="label js-service-item {% if '24小时阅卷点评' in course.services|default([]) %}label-primary{% else %}label-default{% endif %}">24小时阅卷点评</span>
       <span class="label js-service-item {% if '提问必答' in course.services|default([]) %}label-primary{% else %}label-default{% endif %}">提问必答</span>
       <span class="label js-service-item {% if '一对一在线答疑' in course.services|default([]) %}label-primary{% else %}label-default{% endif %}">一对一在线答疑</span>
-      <input type="hidden" id="course_services" name="services" value="{{course.services|default([])|json_encode(constant('JSON_UNESCAPED_UNICODE'))}}">
+      <input type="hidden" id="course_services" name="services" value="{{course.services|default(null)|json_encode_utf8()}}">
     </div>
   </div>
 
