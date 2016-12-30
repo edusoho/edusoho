@@ -320,8 +320,7 @@ class CourseController extends CourseBaseController
         $isUserFavorite = $canManage = false;
         if ($user->isLogin()) {
             $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
-            $canManage      = $this->getCourseService()->hasCourseManagerRole($course['id']);
-            var_dump($canManage);
+            $canManage      = $this->getCourseService()->hasCourseManagerRole($course['id'], $courseSet['id']);
         }
 
         return $this->render('course/part/header-top.html.twig', array(
