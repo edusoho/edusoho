@@ -27,13 +27,16 @@ class CourseController extends CourseBaseController
     public function headerAction(Request $request, $id)
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
+
         $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
-        $taskCount       = $this->getTaskService()->countTasksByCourseId($id);
-        $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish'));
-        $progress = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
+        $taskCount = $this->getTaskService()->countTasksByCourseId($id);
 
-        if ($member && $taskCount ) {
+        $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
+
+        if ($member && $taskCount) {
+            //学习记录
+            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish'));
 
             //学习进度
             $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
@@ -330,7 +333,7 @@ class CourseController extends CourseBaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
