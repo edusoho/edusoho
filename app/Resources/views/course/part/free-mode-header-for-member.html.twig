@@ -7,7 +7,7 @@
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top">
       <div class="inline-block vertical-middle gray-darker text-24 course-detail-heading">{{ course.title }}</div>
-      <ul class="course-operation clearfix ">
+      <ul class="course-operation hidden-xs clearfix">
         <li>
           <span class="btn btn-xs">
             <i class="es-icon es-icon-people text-16"></i>
@@ -67,7 +67,7 @@
           </div>
         </div>
         <div class="col-sm-7">
-          <ul class="clearfix text-12 course-learn-list">
+          <ul class="clearfix text-12 course-learn-list hidden-xs">
             <li>
               <p class="mb15 color-gray">
                 <i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>已完成
@@ -108,10 +108,9 @@
         </div>
         <div class="col-sm-2 text-center">
           {% for toLearnTask in toLearnTasks %}
-            <a class="btn btn-primary btn-lg"
-               href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+            <a class="btn btn-primary btn-lg hidden-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+            <a class="btn btn-primary btn-block visible-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
           {% endfor %}
-
         </div>
       </div>
     </section>
