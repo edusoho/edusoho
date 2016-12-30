@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class CourseBaseController extends BaseController
 {
@@ -23,7 +24,7 @@ abstract class CourseBaseController extends BaseController
         return array($courseSet, $course);
     }
 
-    protected function getCourseMember($request, $course)
+    protected function getCourseMember(Request $request, $course)
     {
         $previewAs = $request->query->get('previewAs');
         $user      = $this->getCurrentUser();
@@ -31,7 +32,7 @@ abstract class CourseBaseController extends BaseController
         return $this->previewAsMember($previewAs, $member, $course);
     }
 
-    protected function buildCourseLayoutData($request, $courseId)
+    protected function buildCourseLayoutData(Request $request, $courseId)
     {
         $course    = $this->getCourseService()->getCourse($courseId);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
