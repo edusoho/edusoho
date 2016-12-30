@@ -11,33 +11,32 @@
 
 namespace Topxia\WebBundle\Twig\Asset;
 
-use Symfony\Component\Templating\Asset\Package;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Util\CdnUrl;
+use Symfony\Component\Asset\Package;
+use Symfony\Component\Asset\Context\ContextInterface;
+use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
 
 /**
- * The path packages adds a version and a base path to asset URLs.
+ * Package that adds a base path to asset URLs in addition to a version.
  *
- * @author Kris Wallsmith <kris@symfony.com>
+ * In addition to the provided base path, this package also automatically
+ * prepends the current request base path if a Context is available to
+ * allow a website to be hosted easily under any given path under the Web
+ * Server root directory.
+ *
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class PathPackage extends Package
 {
     private $basePath;
 
     /**
-     * Constructor.
-     *
-     * @param string $basePath The base path to be prepended to relative paths
-     * @param string $version  The package version
-     * @param string $format   The format used to apply the version
+     * @param string                   $basePath        The base path to be prepended to relative paths
+     * @param VersionStrategyInterface $versionStrategy The version strategy
      */
-    public function __construct(Request $request, $version = null, $format = null)
+    public function __construct($basePath, VersionStrategyInterface $versionStrategy, ContextInterface $context = null)
     {
-    	$basePath = $request->getBasePath();
-    	$cdn = new CdnUrl();
-        $cdnUrl = $cdn->get();
-
-        parent::__construct($version, $format);
+        parent::__construct($versionStrategy, $context);
 
         if (!$basePath) {
             $this->basePath = '/';
@@ -49,22 +48,21 @@ class PathPackage extends Package
             $this->basePath = rtrim($basePath, '/').'/';
         }
 
+        $cdn = new CdnUrl();
+        $cdnUrl = $cdn->get();
         $this->basePath = $cdnUrl . $this->basePath;
     }
 
-    public function getUrl($path, $version = null)
+    /**
+     * {@inheritdoc}
+     */
+    public function getUrl($path)
     {
-        if (false !== strpos($path, '://') || 0 === strpos($path, '//')) {
+        if ($this->isAbsoluteUrl($path)) {
             return $path;
         }
 
-        $url = $this->applyVersion($path);
-
-        // apply the base path
-        if ('/' !== substr($url, 0, 1)) {
-            $url = $this->basePath.$url;
-        }
-        return $url;
+        return $this->getBasePath().ltrim($this->getVersionStrategy()->applyVersion($path), '/');
     }
 
     /**
@@ -74,6 +72,6 @@ class PathPackage extends Package
      */
     public function getBasePath()
     {
-        return $this->basePath;
+        return $this->getContext()->getBasePath().$this->basePath;
     }
 }

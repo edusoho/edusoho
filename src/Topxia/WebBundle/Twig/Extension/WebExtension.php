@@ -126,6 +126,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
             new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
+            new \Twig_SimpleFunction('cdn', array($this, 'getCdn'))
         );
     }
 
@@ -159,6 +160,13 @@ class WebExtension extends \Twig_Extension
     public function getAdminRoles()
     {
         return ServiceKernel::instance()->createService('Permission:Role.RoleService')->searchRoles(array(), 'created', 0, 1000);
+    }
+
+    public function getCdn($type='default')
+    {
+        $cdn    = new CdnUrl();
+        $cdnUrl = $cdn->get($type);
+        return $cdnUrl;
     }
 
     public function cdn($content)
@@ -423,21 +431,7 @@ class WebExtension extends \Twig_Extension
 
     public function isPluginInstalled($name)
     {
-        $plugins = $this->container->get('kernel')->getPlugins();
-
-        foreach ($plugins as $plugin) {
-            if (is_array($plugin)) {
-                if (strtolower($name) == strtolower($plugin['code'])) {
-                    return true;
-                }
-            } else {
-                if (strtolower($name) == strtolower($plugin)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($name);
     }
 
     public function getPluginVersion($name)
@@ -460,7 +454,14 @@ class WebExtension extends \Twig_Extension
 
     public function getJsPaths()
     {
-        $basePath = $this->container->get('request')->getBasePath();
+        
+        $cdnUrl = new CdnUrl();
+        $basePath = $cdnUrl->get();
+
+        if(empty($basePath)) {
+            $basePath = $this->container->get('request')->getBasePath();
+        }
+
         $theme    = $this->getSetting('theme.uri', 'default');
 
         $plugins = $this->container->get('kernel')->getPlugins();

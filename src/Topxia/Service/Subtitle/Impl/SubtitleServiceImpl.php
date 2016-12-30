@@ -10,7 +10,7 @@ use Topxia\Common\ArrayToolkit;
 
 class SubtitleServiceImpl extends BaseService implements SubtitleService
 {
-    public function findSubtitlesByMediaId($mediaId)
+    public function findSubtitlesByMediaId($mediaId, $ssl = false)
     {
         $subtitles = $this->getSubtitleDao()->findSubtitlesByMediaId($mediaId);
 
@@ -18,7 +18,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
             return array();
         }
 
-        $subtitles = $this->fillMetas($subtitles);
+        $subtitles = $this->fillMetas($subtitles, $ssl);
 
         return array_values($subtitles);
     }
@@ -93,7 +93,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         return $subtitle;
     }
 
-    protected function fillMetas($subtitles)
+    protected function fillMetas($subtitles, $ssl = false)
     {
         $subtitles = ArrayToolkit::index($subtitles, 'subtitleId');
 
@@ -103,7 +103,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
             if (!($file["type"] == "subtitle" || $file["targetType"] == "subtitle")) {
                 continue;
             }
-            $downloadFile = $this->getUploadFileService()->getDownloadMetas($file['id']);
+            $downloadFile = $this->getUploadFileService()->getDownloadMetas($file['id'], $ssl);
             $subtitles[$file['id']]['url'] = $downloadFile['url'];
             $subtitles[$file['id']]['convertStatus'] = $file['convertStatus'];
         }

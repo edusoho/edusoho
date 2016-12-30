@@ -1,8 +1,8 @@
 <?php
 
 namespace Topxia\Api\Filter;
+use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\PluginToolkit;
 
 class UserFilter implements Filter
 {
@@ -24,7 +24,7 @@ class UserFilter implements Filter
             unset($data['verifiedMobile']);
         }
 
-        if (PluginToolkit::isPluginInstalled('Vip')) {
+        if ($this->isPluginInstalled('Vip')) {
             $userVip = $this->getVipService()->getMemberByUserId($data['id']);
 
             if (!empty($userVip)) {
@@ -145,6 +145,12 @@ class UserFilter implements Filter
 
         return $html;
 
+    }
+
+    protected function isPluginInstalled($code)
+    {
+        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
+        return $pluginManager->isPluginInstalled($code);
     }
 
     protected function getVipLevelService()
