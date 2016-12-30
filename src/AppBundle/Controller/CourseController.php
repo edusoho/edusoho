@@ -10,6 +10,7 @@ use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseController extends CourseBaseController
 {
@@ -349,6 +350,23 @@ class CourseController extends CourseBaseController
         return $this->createJsonResponse($response);
     }
 
+    public function exitAction(Request $request, $id)
+    {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+        $user                  = $this->getCurrentUser();
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程的学员。'));
+        }
+
+        if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
+        }
+        
+        $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
+
+        return $this->createJsonResponse(true);
+    }
+
     // TODO old
     protected function getClassroomService()
     {
@@ -390,6 +408,11 @@ class CourseController extends CourseBaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 
     /**
