@@ -75,6 +75,9 @@ class Marketing {
     $('.js-service-item').click(function(event){
     	let $item = $(event.currentTarget);
     	let $values = $('#course_services').val();
+    	if(!$values){
+    		values = [];
+    	}
     	$values = JSON.parse($values);
     	if($item.hasClass('label-primary')){
     		$item.removeClass('label-primary');
