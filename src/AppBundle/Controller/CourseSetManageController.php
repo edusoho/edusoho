@@ -38,12 +38,13 @@ class CourseSetManageController extends BaseController
         ));
     }
 
-    public function headerAction($courseSet)
+    public function headerAction($courseSet, $course = null)
     {
         $users = empty($courseSet['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($courseSet['teacherIds']);
 
         return $this->render('courseset-manage/header.html.twig', array(
             'courseSet' => $courseSet,
+            'course'    => $course,
             'users'     => $users
         ));
     }
