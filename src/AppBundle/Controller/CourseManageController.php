@@ -112,6 +112,10 @@ class CourseManageController extends BaseController
                 unset($data['buyExpiryTime']);
             }
 
+            if (!empty($data['services'])) {
+                $data['services'] = json_decode($data['services'], true);
+            }
+
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
 
             return $this->redirect($this->generateUrl('course_set_manage_course_marketing', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));

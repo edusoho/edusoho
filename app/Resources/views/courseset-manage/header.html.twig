@@ -2,7 +2,7 @@
 {% do script(['app/js/courseset-manage/header/index.js']) %}
 <div class="es-section course-manage-header clearfix">
   <a href="{{ path('course_set_show', {id:courseSet.id}) }}">
-    <img class="picture" src="{{ filepath(courseSet.cover.large|default(null), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
+    <img class="picture" src="{{ filepath(courseSet.cover.large|default(null), 'course.png') }}" /> <!-- courseSet.largePicture -->
   </a>
   <h1 class="title">
     {% if courseSet.type != 'normal' %}

@@ -183,4 +183,11 @@ class DoTestBase
 
 }
 
+//临时方案，libs/vendor.js这个方法没有起作用
+$(document).ajaxSend(function(a, b, c) {
+  if (c.type == 'POST') {
+    b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+  }
+});
+
 export default DoTestBase;

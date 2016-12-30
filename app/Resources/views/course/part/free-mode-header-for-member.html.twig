@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="col-sm-7">
-          <ul class="course-learn-list text-12">
+          <ul class="clearfix text-12 course-learn-list hidden-xs">
             <li>
               <p class="mb15 color-gray">
                 <i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>已完成
@@ -38,7 +38,7 @@
                 {% elseif course.expiryMode == 'date' %}
                   {{ course.expiryEndDate|date('Y-m-d ') }}剩余{{ course.expiryEndDate|time_diff }} 天
                 {% else %}
-                {{ member.createdTime|date_modify("+#{course.expiryDays} days") }}
+                {{ member.createdTime|date_modify("+#{course.expiryDays} days")|date('Y-m-d ') }}
                 {{ member.createdTime|time_diff(course.expiryDays) }} 天
               </span>
             {% endif %}
@@ -59,10 +59,9 @@
         </div>
         <div class="col-sm-2 text-center">
           {% for toLearnTask in toLearnTasks %}
-            <a class="btn btn-primary btn-lg"
-               href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+            <a class="btn btn-primary btn-lg hidden-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+            <a class="btn btn-primary btn-block visible-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
           {% endfor %}
-
         </div>
       </div>
     </section>

@@ -150,7 +150,7 @@ class PayCenterController extends BaseController
         if ($order['status'] == 'paid') {
             return $this->redirectOrderTarget($order);
         } else {
-            return $this->forward('pay-center/submitPayRequest', array(
+            return $this->forward('AppBundle:PayCenter:submitPayRequest', array(
                 'order' => $order
             ));
         }
@@ -264,7 +264,7 @@ class PayCenterController extends BaseController
         $payData  = $response->getPayData();
 
         if ($payData['status'] == 'waitBuyerConfirmGoods') {
-            return $this->forward('pay-center/resultNotice');
+            return $this->forward('AppBundle:PayCenter:resultNotice');
         }
 
         if ($payData['status'] == 'insufficient balance') {

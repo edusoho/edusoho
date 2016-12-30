@@ -6,15 +6,19 @@
     <div class="panel-body pt0">
       <div class="course-features pl0">
         {% for data in characteristicData %}
-          <div class="course-features-item clearfix">
-            <div class="media">
-              <div class="media-left prm">
+          {% if loop.index % 2 == 1 %}
+            <div class="course-features-item clearfix">
+          {% endif %}
+          <div class="media">
+            <div class="media-left prm">
                 <span class="color-lump bg-primary"> <i class="es-icon {{ data.icon }} media-logo"></i>
                 </span>
-              </div>
-              <div class="media-body media-middle">含{{ data.name }}({{ data.num }})</div>
             </div>
+            <div class="media-body media-middle">含{{ data.name }}({{ data.num }})</div>
           </div>
+          {% if loop.index % 2 == 0 or loop.index == characteristicData|length %}
+            </div>
+          {% endif %}
         {% endfor %}
       </div>
     </div>
