@@ -51,13 +51,13 @@
 
                   </div>
                 </div>
+                {% if nextTask %}
                 <div class="footer text-right">
                   <a class="btn btn-primary btn-sm" 
-                  {% if nextTask %}
                   href="{{path('course_task_show', {courseId: task.courseId, id: nextTask.id})}}"
-                  {% endif %}
                   >下一任务</a>
                 </div>
+                {% endif %}
               </div>'>
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
             </span>
