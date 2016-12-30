@@ -10,6 +10,7 @@ class AlipayResponse extends Response
     public function getPayData()
     {
         $error = $this->hasError();
+
         if ($error) {
             throw new \RuntimeException(sprintf($this->getServiceKernel()->trans('支付宝支付校验失败(%error%)。', array('%error%' => $error))));
         }
@@ -49,7 +50,6 @@ class AlipayResponse extends Response
         } else {
             $data['paidTime'] = time();
         }
-
         $data['raw'] = $params;
 
         return $data;

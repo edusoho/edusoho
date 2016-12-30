@@ -59,26 +59,33 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         return $job;
     }
 
+    protected function syncronizeUpdateExecutingStatus($id)
+    {
+        $lockName = "job_{$id}";
+        $lock = $this->getLock();
+        $lock->get($lockName, 10);
+        $this->getJobDao()->update($job['id'], array('executing' => 1));
+        $lock->release($lockName);
+    }
+
     public function executeJob($id)
     {
         $job = array();
         // 开始执行job的时候，设置next_executed_time为0，防止更多的请求进来执行
         $this->setNextExcutedTime(0);
+        $this->syncronizeUpdateExecutingStatus($id);
+
+        $job = $this->getJobDao()->get($id);
+        if(empty($job) || $job['executing']){
+            $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");
+            return ;
+        }
+
         $this->getJobDao()->db()->beginTransaction();
 
         try {
             // 加锁
             $job = $this->getJob($id, true);
-
-// 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
-
-            if (empty($job) || $job['executing']) {
-                $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");
-                $this->getJobDao()->db()->commit();
-                return;
-            }
-
-            $this->getJobDao()->update($job['id'], array('executing' => 1));
             $jobInstance = new $job['jobClass']();
             if (!empty($job['targetType'])) {
                 $job['jobParams']['targetType'] = $job['targetType'];

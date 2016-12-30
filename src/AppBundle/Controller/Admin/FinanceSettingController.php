@@ -133,4 +133,9 @@ class FinanceSettingController extends BaseController
     {
         return $this->createService('User:AuthService');
     }
+
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');    
+    }
 }
