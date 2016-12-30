@@ -30,7 +30,7 @@ class TaskController extends BaseController
         ));
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
-        if($taskResult['status'] != 'finish') {
+        if($taskResult['status'] == 'finish') {
             list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($id);
         }
 
