@@ -14,6 +14,7 @@
         <span class="tag-serialing"></span>
       </span>
       <span class="gray-darker text-24 text-overflow course-detail-heading">{{ course.title }}</span>
+      <!-- 没有营销活动才显示 -->
       <span class="es-qrcode top vertical-top inline-block" data-url="/course/2/qrcode">
         <i class="es-icon es-icon-qrcode"></i>
         <span class="qrcode-popover">
@@ -82,25 +83,26 @@
         </div>
 
       </div>
-      <div class="course-detail-info gray">
+      <div class="course-detail-info text-12 color-gray">
         <div class="mb10">
-          <span class="course-detail-title">价格</span>
+          <span class="course-detail-title inline-block">价格</span>
           <!-- 折扣价 -->
           <span class="gray-darker mrm">¥<b class="text-24">75.00</b></span>
           <!-- 原价 -->
           <span class="original-price">¥<span class="price">{{ course.price }}</span></span>
           <span class="tag-discount"><span class="discount-font">8折</span></span>
         </div>
-        <div class="mb10 text-12">
-          <span class="course-detail-title">活动</span>
+        <!-- 有活动显示  -->
+        <div class="mb10">
+          <span class="course-detail-title inline-block">活动</span>
           <span class="color-warning ">
           <b class="mrl">双十二活动</b>
           <i class="es-icon es-icon-alarmon mrm"></i>
           22 时 53 分 44.12 秒</span>
         </div>
-        <div class="course-detail-gray text-12">
+        <div class="course-detail-gray">
           <div class="course-detail-nav mb10">
-            <span class="course-detail-title">教学计划</span>
+            <span class="course-detail-title inline-block">教学计划</span>
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent ml5">
               {% set current_course = course %}
               {% for course in  courses %}
@@ -111,7 +113,7 @@
             </ul>
           </div>
           <div class="mbl">
-            <span class="course-detail-title">学习方式</span>
+            <span class="course-detail-title inline-block">学习方式</span>
             {% if course.expiryMode == 'days' %}
               <span class="gray-dark mrl">随到随学</span>
               <span
@@ -122,7 +124,7 @@
                 ~ {{ course.expiryEndDate|date('Y-m-d ') }}</span>
             {% endif %}
           </div>
-          <span class="course-detail-title">承诺服务</span>
+          <span class="course-detail-title inline-block">承诺服务</span>
           <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
           <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
           <span class="lump-sm color-lump bg-primary mr5" data-container="body"  data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
