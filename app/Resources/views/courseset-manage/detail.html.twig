@@ -22,14 +22,14 @@
       <div class="form-group dynamic-collection" id="courseset-goals-form-group">
         <div class="col-md-2 control-label"><label>{{'课程目标'|trans}}</label></div>
         <div class="col-md-8 controls">
-          <div id="course-goals" data-field-name="goals" data-init-value="{{courseSet.goals|default([])|json_encode()}}"></div>
+          <div id="course-goals" data-field-name="goals" data-init-value="{{courseSet.goals|default([])|json_encode_utf8()}}"></div>
         </div>
       </div>
 
       <div class="form-group" id="courseset-audiences-form-group">
         <div class="col-md-2 control-label"><label>{{'适应人群'|trans}}</label></div>
         <div class="col-md-8 controls">
-          <div id="intended-students" data-field-name="audiences" data-init-value="{{courseSet.audiences|default([])|json_encode()}}"></div>
+          <div id="intended-students" data-field-name="audiences" data-init-value="{{courseSet.audiences|default([])|json_encode_utf8()}}"></div>
         </div>
       </div>
 

@@ -38,12 +38,12 @@
           {% if course.expiryMode == 'days' and course.expiryDays == 0 %}
             <li class="mll"> 不限</li>
           {% elseif course.expiryMode == 'date' %}
-            {#{{ course.expiryStartDate|date('Y-m-d ') }}  ~ #}{{ course.expiryEndDate|date('Y-m-d ') }}
-            <br/>
-            剩余{{ course.expiryEndDate|time_diff }} 天
+            <li class="mll">{{ course.expiryEndDate|date('Y-m-d ') }}
+            <span class="mls color-warning">剩余 {{ course.expiryEndDate|time_diff }} 天</span></li>
           {% else %}
-            {{ member.createdTime|date_modify("+#{course.expiryDays} days")|date('Y-m-d') }} <br />
-            {{ member.createdTime|time_diff(course.expiryDays) }} 天
+            <li class="mll">{{ member.createdTime|date_modify("+#{course.expiryDays} days")|date('Y-m-d') }}
+              <span class="mls color-warning">剩余 {{ member.createdTime|time_diff(course.expiryDays) }} 天</span>
+            </li>
           {% endif %}
         </ul>
       </div>

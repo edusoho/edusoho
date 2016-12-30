@@ -33,7 +33,7 @@ export default class List extends Component {
           return (
             <li className="list-group-item" id={item.itemId} key={item.itemId} data-seq={item.seq}>
               { this.props.sortable && <i className="es-icon es-icon-yidong mrl color-gray"></i> }
-              <img src ={item.avatar}/> 
+              <img className="avatar-sm avatar-sm-square" src ={item.avatar}/> 
               <span className="label-name text-overflow">{ item.nickname }</span>
               <label><input type="checkbox" checked={item.isVisible} onChange= {event=>this.props.onChecked(event)} value={item.itemId}/>显示</label>
               <a className="btn-close btn-close-lg link-gray" onClick={event=>this.props.removeItem(event)} id={item.itemId}>
