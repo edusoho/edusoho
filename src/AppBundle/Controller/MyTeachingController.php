@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\System\Service\SettingService;
-use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
