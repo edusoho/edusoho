@@ -56,10 +56,10 @@
             </li>
           </ul>
         </div>
-        <div class="col-sm-2 text-center">
+        <div class="col-sm-2">
           {% for toLearnTask in toLearnTasks %}
-            <a class="btn btn-primary btn-lg hidden-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
-            <a class="btn btn-primary btn-block visible-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+            <a class="btn btn-primary btn-lg hidden-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}" style="margin-top: 1.5px">继续学习</a>
+            <a class="btn btn-primary btn-block visible-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}" style="margin-top: 1.5px">继续学习</a>
           {% endfor %}
         </div>
       </div>
