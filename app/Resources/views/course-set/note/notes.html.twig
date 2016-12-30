@@ -8,7 +8,7 @@
   <div class="note-list" id="note-list">
     {% for note in notes %}
       {% set author = users[note.userId] %}
-      {% set task = tasks[note.taskId] %}
+      {% set task = tasks[note.taskId]|default(null) %}
       <div class="media note-item">
         <div class="media-left">
           <a class=" js-user-card" href="{{ path('user_show', {'id': author.id }) }}"
@@ -23,11 +23,15 @@
           <a href="javascript:;" class="more more-show">[展开全文]</a>
           <div class="metas clearfix">
             <a class="link-dark name" href="{{ path('user_show', {'id': author.id }) }}">{{ author.nickname }}</a>
-            · <span>2天前</span>
-            · <a href="{{ path('course_task_show', {'courseId': course.id, 'id': note.taskId}) }}"
+            · <span>{{ note.createdTime|smart_time }}</span>
+            {% if task %}
+              · <a href="{{ path('course_task_show', {'courseId': course.id, 'id': note.taskId}) }}"
                  class="period" target="_blank">
-              {{ task.title }}
-            </a>
+                {{ task.title }}
+              </a>
+            {% else %}
+              · 该任务已被删除
+            {% endif %}
             <span class="metas-sns">
               <span class="icon-favour">
                 <a href="javascript:;" class="js-like {% if note.id in likeNoteIds %}color-primary{% endif %}"
