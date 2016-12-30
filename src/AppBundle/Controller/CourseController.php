@@ -26,6 +26,7 @@ class CourseController extends CourseBaseController
 
     public function headerAction(Request $request, $id)
     {
+
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
@@ -35,8 +36,10 @@ class CourseController extends CourseBaseController
         $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
         if ($member && $taskCount) {
+            $user = $this->getUser();
+
             //学习记录
-            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish'));
+            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish', 'userId'=>$user['id']));
 
             //学习进度
             $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
