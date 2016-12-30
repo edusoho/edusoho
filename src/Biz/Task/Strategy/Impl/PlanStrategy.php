@@ -26,6 +26,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         $that = $this;
         $this->biz['db']->transactional(function () use ($task, $that) {
             $that->getTaskDao()->delete($task['id']);
+            $that->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
             $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
         });
 

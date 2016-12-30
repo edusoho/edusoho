@@ -68,6 +68,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $result = $this->biz['db']->transactional(function () use ($task, $that) {
             if ($task['mode'] == 'lesson') {
                 $that->getTaskDao()->deleteByCategoryId($task['categoryId']); //删除该课时下的所有课程，
+                $that->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
                 $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
             } else {
                 $that->getTaskDao()->delete($task['id']);
