@@ -19,7 +19,8 @@
     "install": "0.8.1",
     "npm": "3.10.9",
     "perfect-scrollbar": "0.6.13",
-    "webpack": "1.14.0"
+    "webpack": "1.14.0",
+    "babel-polyfill": "6.5.0"
   },
   "dependencies": {
     "bootstrap": "3.3.7",
@@ -31,6 +32,7 @@
     "es-ckeditor": "latest",
     "es-messenger": "latest",
     "es-swfobject": "latest",
+    "es5-shim": "4.5.9",
     "es6-event-emitter": "1.5.2",
     "font-awesome": "4.6.3",
     "html5shiv": "3.7.3",
