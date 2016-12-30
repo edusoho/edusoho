@@ -218,10 +218,19 @@ class CourseController extends CourseBaseController
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
         $characteristicData = array();
-
+        $activities = $this->get('extension.default')->getActivities();
         foreach ($tasks as $task) {
             $type = strtolower($task['activity']['mediaType']);
-            isset($characteristicData[$type]) ? $characteristicData[$type]++ : $characteristicData[$type] = 1;
+
+            if(isset($characteristicData[$type])){
+                $characteristicData[$type]['num']++;
+            }else{
+                $characteristicData[$type] = array(
+                    'icon' => $activities[$type]['meta']['icon'],
+                    'name' => $activities[$type]['meta']['name'],
+                    'num'  => 1
+                );
+            }
         }
 
         return $this->render('course/part/characteristic.html.twig', array(
