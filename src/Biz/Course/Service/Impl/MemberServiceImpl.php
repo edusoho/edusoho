@@ -543,7 +543,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function removeStudent($courseId, $userId)
     {
-        $course = $this->getCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
             throw $this->createNotFoundException("课程(#{$courseId})不存在，退出课程失败。");
