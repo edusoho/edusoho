@@ -16,43 +16,14 @@
         {% include 'course-set/announcement/block.html.twig' with { courseSetId:courseSet.id, courseId:course.id } %}
         <!-- 课程详情页中部内容 -->
         <section class="es-section">
-          <div class="nav-btn-tab">
-            <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation" class="{% if nav|default('') == 'overview' %}active{% endif %}">
-                <a href="{{ path('course_show', {'id': course.id}) }}">课程概览</a>
-              </li>
-
-              <li role="presentation" class="{% if nav|default('') == 'directory' %}active{% endif %}">
-                <a href="{{ path('course_task_list',{id: course.id}) }}">课程目录</a>
-              </li>
-              <li role="presentation" class="{% if nav|default('') == 'thread' %}active{% endif %}">
-                <a href="{{ path('course_threads', {id: course.id}) }}">
-                  话题
-                  <small class="text-muted">({{ course.threadNum|default(0) }})</small>
-                </a>
-              </li>
-              <li role="presentation" class="{% if nav|default('') == 'review' %}active{% endif %}">
-                <a href="{{ path('course_review',{id:course.id}) }}">
-                  评价
-                  <small class="text-muted">({{ course.ratingNum|default(0) }})</small>
-                </a>
-              </li>
-              <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
-                <a href="{{ path('course_notes', { id: course.id }) }}">
-                  笔记
-                  <small class="text-muted">({{ course.noteNum|default(0) }})</small>
-                </a>
-              </li>
-              {#<li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>#}
-            </ul>
-          </div>
+          {{ render(controller('AppBundle:Course:detailNavsPart', {id: course.id})) }}
           <div class="course-detail-content">
             {% block detail_content %}
             {% endblock %}
           </div>
         </section>
-
       </div>
+
       <div class="col-lg-3 col-md-4 course-sidebar">
         {# @TODO 现在数据还是写死的，到时候通过render(controller) 方式去做 #}
 
