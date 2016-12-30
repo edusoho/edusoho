@@ -58,6 +58,11 @@ class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
         return $this->db()->delete($this->table(), array('courseId' => $courseId, 'type' => $courseType));
     }
 
+    public function deleteByCourseSetId($courseSetId, $courseType)
+    {
+        return $this->db()->delete($this->table(), array('courseSetId' => $courseSetId, 'type' => $courseType));
+    }
+
     public function deleteByFileId($fileId)
     {
         return $this->db()->delete($this->table, array('fileId' => $fileId));

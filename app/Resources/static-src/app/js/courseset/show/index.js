@@ -22,9 +22,11 @@ $('#orderprogress-plan').easyPieChart({
   size: 145,
 });
 
+let bg = $('#orderprogress-plan').length > 0 ? 'transparent' : '#ebebeb';
+
 $('#orderprogress').easyPieChart({
   easing: 'easeOutBounce',
-  trackColor: 'transparent',
+  trackColor: bg,
   barColor: '#46c37b',
   scaleColor: false,
   lineWidth: 14,

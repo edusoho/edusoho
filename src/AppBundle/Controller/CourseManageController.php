@@ -72,7 +72,7 @@ class CourseManageController extends BaseController
             $diffDay            = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
             $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
         }
-        return round($finishedTaskPerDay, 1);
+        return round($finishedTaskPerDay, 0);
     }
 
     protected function createCourseStrategy($course)
@@ -84,6 +84,13 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+            $data = $request->request->all();
+            if (!empty($data['goals'])) {
+                $data['goals'] = json_decode($data['goals'], true);
+            }
+            if (!empty($data['audiences'])) {
+                $data['audiences'] = json_decode($data['audiences'], true);
+            }
             $this->getCourseService()->updateCourse($courseId, $data);
 
             return $this->redirect($this->generateUrl('course_set_manage_course_info', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
@@ -101,10 +108,10 @@ class CourseManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            if(empty($data['enableBuyExpiryTime'])) {
+            if (empty($data['enableBuyExpiryTime'])) {
                 unset($data['buyExpiryTime']);
             }
-            
+
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
 
             return $this->redirect($this->generateUrl('course_set_manage_course_marketing', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
