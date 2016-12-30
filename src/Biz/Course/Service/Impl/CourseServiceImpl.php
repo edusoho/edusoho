@@ -765,7 +765,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-        return true;
+        return false;
     }
 
     protected function fillMembersWithUserInfo($members)
