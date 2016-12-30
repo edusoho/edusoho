@@ -4,7 +4,7 @@ namespace Topxia\Service\Subtitle;
 
 interface SubtitleService
 {
-    public function findSubtitlesByMediaId($mediaId);
+    public function findSubtitlesByMediaId($mediaId, $ssl = false);
 
     public function getSubtitle($id);
     

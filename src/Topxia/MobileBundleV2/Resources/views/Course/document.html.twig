@@ -25,7 +25,7 @@ iframe{
     </div>
 <script>
   var app = {};
-  app.basePath = '';
+  app.basePath = '{{cdn()}}';
   app.jsPaths = {"common":"common","theme":"\/themes\/default-b\/js","couponbundle":"\/bundles\/coupon\/js","questionplusbundle":"\/bundles\/questionplus\/js","vipbundle":"\/bundles\/vip\/js","customwebbundle":"\/bundles\/customweb\/js","customadminbundle":"\/bundles\/customadmin\/js"};
 
   app.mainScript = "{{ asset('bundles/topxiaweb/js/app.js') }}";

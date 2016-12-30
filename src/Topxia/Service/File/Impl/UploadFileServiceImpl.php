@@ -106,7 +106,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return false;
     }
 
-    public function getDownloadMetas($id)
+    public function getDownloadMetas($id, $ssl = false)
     {
         $file = $this->getUploadFileDao()->getFile($id);
 
@@ -114,7 +114,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return array('error' => 'not_found', 'message' => $this->getKernel()->trans('文件不存在，不能下载！'));
         }
 
-        return $this->getFileImplementor($file['storage'])->getDownloadFile($file);
+        return $this->getFileImplementor($file['storage'])->getDownloadFile($file, $ssl);
     }
 
     public function getUploadAuth($params)

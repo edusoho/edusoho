@@ -177,7 +177,7 @@ abstract class BaseResource
         if (empty($path)) {
             return '';
         }
-        if (strpos($path, "http://") !== false) {
+        if (strpos($path, $this->getHttpHost()."://") !== false) {
             return $path;
         }
         $path = str_replace('public://', '', $path);
@@ -198,7 +198,16 @@ abstract class BaseResource
 
     protected function getHttpHost()
     {
-        return "//{$_SERVER['HTTP_HOST']}";
+        return $this->getSchema()."://{$_SERVER['HTTP_HOST']}";
+    }
+
+    protected function getSchema()
+    {
+        $https = $_SERVER['HTTPS'];
+        if(!empty($https) && 'off' !== strtolower($https)) {
+            return 'https';
+        }
+        return 'http';
     }
 
     protected function generateUrl($route, $parameters = array())

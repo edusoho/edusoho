@@ -38,7 +38,14 @@ class PlayerController extends BaseController
                     $player = "balloon-cloud-video-player";
 
                     $api    = CloudAPIFactory::create("leaf");
-                    $result = $api->get("/resources/{$file['globalId']}/player");
+
+                    $ssl = $request->isSecure() ? true : false;
+                    $params = array();
+                    if ($ssl) {
+                        $params['protocol'] = 'https';
+                    }
+
+                    $result = $api->get("/resources/{$file['globalId']}/player", $params);
 
                     if (isset($result['subtitles'])) {
                         $this->filterSubtitles($result['subtitles']);

@@ -19,9 +19,9 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return $this->getUploadFileService()->getFileByGlobalId($globalId);
     }
 
-    public function player($globalId)
+    public function player($globalId, $ssl = false)
     {
-        return $this->getCloudFileService()->player($globalId);
+        return $this->getCloudFileService()->player($globalId, $ssl);
     }
 
     public function edit($fileId, $fields)

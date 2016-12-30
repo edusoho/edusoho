@@ -77,8 +77,8 @@ seajs.config({
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
         'video-player': 'balloon-video-player/1.3.0/index',
         'edusoho.tree': 'edusoho/tree/1.0.0/tree.js',
-        'video-player-new': (app.cloudSdkCdn ? app.cloudSdkCdn : 'http://cdn.qiqiuyun.net') + '/js-sdk/video-player/v1/sdk.js',
-        'new-uploader': (app.cloudSdkCdn ? app.cloudSdkCdn : 'http://cdn.qiqiuyun.net') + '/js-sdk/uploader/v1/sdk.js',
+        'video-player-new': (app.cloudSdkCdn ? app.cloudSdkCdn : '//service-cdn.qiqiuyun.net') + '/js-sdk/video-player/sdk-v1.js',
+        'new-uploader': (app.cloudSdkCdn ? app.cloudSdkCdn : '//service-cdn.qiqiuyun.net') + '/js-sdk/uploader/sdk-v1.js',
         'subtitle-browser': 'subtitle/1.0.0/subtitle.browser.min.js',
         'echarts': 'gallery2/echarts/3.1.10/echarts',
         'echarts-debug':'gallery2/echarts/3.1.10/echarts-debug',
@@ -107,6 +107,8 @@ seajs.config({
 
     debug: app.debug,
 
+    base: app.basePath+'/assets/libs',
+
     plugins: ['text']
 });
 
@@ -134,9 +136,7 @@ seajs.on('fetch', function(data) {
         data.requestUri = data.uri + '?flag=' + Math.round(new Date().getTime() / 100000);
         return ;
     }
-    
     data.requestUri = data.uri + __SEAJS_FILE_VERSION;
-
 });
 
 seajs.on('define', function(data) {
