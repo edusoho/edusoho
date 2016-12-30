@@ -25,6 +25,11 @@
     </li>
   {% endif %}
 
+  <li>
+    <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" data-url="{{ path('order_refund', {id: course.id, targetType:'course' }) }}"> <i class="es-icon es-icon-bookmarkoutline"></i>
+    </a>
+  </li>
+
   <li id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
       {% if not isUserFavorite %}style="display: none" {% endif %}>
     <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
