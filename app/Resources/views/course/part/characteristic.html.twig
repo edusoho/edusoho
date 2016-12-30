@@ -28,49 +28,6 @@
   {% endif %}
 {% endfor %}
 
-{#<div class="container-section section-bg">
-  <div class="container  person-section">
-    {{ _self.title_make('大咖秀') }}
-      <div id="carousel-example-generic" class="carousel slide " data-ride="carousel">
-        {% set recommendTeachers = data('RecommendTeachers', {'count': 12})%}
-        {% set teams = recommendTeachers|batch(loopNum , " ") %}
-        <div class="carousel-inner person-carousel" role="listbox">
-          {% for team in teams %}
-          <div class="item {% if loop.index0 == 0 %}active{% endif %}">
-              <div class="row">
-                {% for item in team %}
-              {% if item != " " %}
-                <div class="col-md-6">
-                  <a class="person" href=" {{ path('user_show', {id:item.id}) }}" style="display: block;">
-                    <div class="media">
-                      <div class="media-left">
-                        <div class="img-container">
-                          {{ lazy_img(filepath(item.largeAvatar, 'user_avatar.png'), 'media-object img-circle', '') }}
-                        </div>
-                      </div>
-                      <div class="media-body ">
-                        <div class="signature">{{ item.profile.signature|default('该老师并没有留下什么。') }}</div>
-                        <div class="text-right name ">
-                          ——{{ item.nickname|default('匿名')}}
-                          <span class="job">{{ item.profile.job|default('未显示') }}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                {% endif %}
-              {% endfor %}
-              </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-  </div>
-</div>#}
-
-{% set loopNum = 2 %}
-
-
 {% if not characteristicData is empty and show %}
   <div class="panel panel-default">
     <div class="panel-heading">
