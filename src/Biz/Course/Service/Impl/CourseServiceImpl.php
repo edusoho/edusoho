@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
+use Biz\Course\Service\ReviewService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
@@ -194,7 +195,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $fields = array('teacherIds' => $visibleTeacherIds);
-        $course = $this->getCourseDao()->update($courseId, $fields);
+        return $this->getCourseDao()->update($courseId, $fields);
     }
 
     public function updateCourseMarketing($id, $fields)
@@ -991,6 +992,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->biz->service('Taxonomy:CategoryService');
     }
 
+    /**
+     * @return ReviewService
+     */
     protected function getReviewService()
     {
         return $this->biz->service('Course:ReviewService');
