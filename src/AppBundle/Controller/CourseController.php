@@ -27,13 +27,17 @@ class CourseController extends CourseBaseController
     public function headerAction(Request $request, $id)
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
+
         $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
-        $taskCount       = $this->getTaskService()->countTasksByCourseId($id);
-        $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish'));
+        $taskCount = $this->getTaskService()->countTasksByCourseId($id);
 
-        $progress = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
-        if ($member) {
+        $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
+
+        if ($member && $taskCount) {
+            //学习记录
+            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish'));
+
             //学习进度
             $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
 
@@ -218,10 +222,19 @@ class CourseController extends CourseBaseController
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
         $characteristicData = array();
-
+        $activities = $this->get('extension.default')->getActivities();
         foreach ($tasks as $task) {
             $type = strtolower($task['activity']['mediaType']);
-            isset($characteristicData[$type]) ? $characteristicData[$type]++ : $characteristicData[$type] = 1;
+
+            if(isset($characteristicData[$type])){
+                $characteristicData[$type]['num']++;
+            }else{
+                $characteristicData[$type] = array(
+                    'icon' => $activities[$type]['meta']['icon'],
+                    'name' => $activities[$type]['meta']['name'],
+                    'num'  => 1
+                );
+            }
         }
 
         return $this->render('course/part/characteristic.html.twig', array(
@@ -320,7 +333,7 @@ class CourseController extends CourseBaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
