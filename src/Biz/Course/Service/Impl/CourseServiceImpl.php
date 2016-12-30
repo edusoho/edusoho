@@ -3,20 +3,19 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\ThreadDao;
+use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Note\Service\CourseNoteService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Taxonomy\Service\CategoryService;
-use Biz\User\Service\UserService;
-use Topxia\Common\ArrayToolkit;
-
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -62,9 +61,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createCourse($course)
     {
-        if (!$this->hasCourseManagerRole()) {
-            throw $this->createAccessDeniedException('You have no access to Course Management');
+        if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
+            throw $this->createInvalidArgumentException("Lack of required fields");
         }
+        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
+            throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
+        }
+        //临时注释
+        // if (!$this->hasAdminRole()) {
+        //     throw $this->createAccessDeniedException('You have no access to Course Management');
+        // }
+
         if (!isset($course['isDefault'])) {
             $course['isDefault'] = 0;
         }
@@ -78,13 +85,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'expiryEndDate',
             'isDefault'
         ));
-
-        if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
-            throw $this->createInvalidArgumentException("Lack of required fields");
-        }
-        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
-            throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
-        }
 
         $course = $this->validateExpiryMode($course);
 
@@ -706,8 +706,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -728,7 +727,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count      = $this->searchCourseCount($conditions);
+        $count = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
@@ -751,7 +750,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($teacher) {
             return true;
         }
-        
+
         //不是管理员，无权限管理
         if ($this->hasAdminRole()) {
             return true;
