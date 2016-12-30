@@ -30,9 +30,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->findCoursesByIds($ids);
     }
 
-    public function findCoursesByCourseSetId($courseSetId)
+    public function findCoursesPublishedByCourseSetId($courseSetId)
     {
-        return $this->getCourseDao()->findCoursesByCourseSetId($courseSetId);
+        return $this->getCourseDao()->findCoursesPublishedByCourseSetId($courseSetId);
     }
 
     public function getDefaultCourseByCourseSetId($courseSetId)
