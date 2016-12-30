@@ -31,7 +31,7 @@ class CourseController extends CourseBaseController
 
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
+        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
         $taskCount = $this->getTaskService()->countTasksByCourseId($id);
 
@@ -41,7 +41,7 @@ class CourseController extends CourseBaseController
             $user = $this->getUser();
 
             //学习记录
-            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish', 'userId'=>$user['id']));
+            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish', 'userId' => $user['id']));
 
             //学习进度
             $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
@@ -77,7 +77,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function detailNavsPartAction(Request $request, $id, $nav=null)
+    public function detailNavsPartAction(Request $request, $id, $nav = null)
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
 
@@ -316,10 +316,12 @@ class CourseController extends CourseBaseController
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
 
-        $user = $this->getCurrentUser();
-
-        $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
-        $canManage      = $this->getCourseService()->hasCourseManagerRole($course['id']);
+        $user           = $this->getCurrentUser();
+        $isUserFavorite = $canManage = false;
+        if ($user->isLogin()) {
+            $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
+            $canManage      = $this->getCourseService()->hasCourseManagerRole($course['id']);
+        }
 
         return $this->render('course/part/header-top.html.twig', array(
             'course'         => $course,
@@ -354,7 +356,7 @@ class CourseController extends CourseBaseController
     public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user                  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         if (empty($member)) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程的学员。'));
         }
@@ -362,7 +364,7 @@ class CourseController extends CourseBaseController
         if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
-        
+
         $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);

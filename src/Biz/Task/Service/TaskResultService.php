@@ -10,6 +10,8 @@ interface TaskResultService
 
     public function updateTaskResult($id, $taskResult);
 
+    public function deleteUserTaskResultByTaskId($taskId);
+
     public function waveLearnTime($id, $time);
 
     public function findUserTaskResultsByCourseId($courseId);

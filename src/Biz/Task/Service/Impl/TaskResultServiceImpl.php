@@ -33,6 +33,18 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->getByTaskIdAndUserId($taskId, $user['id']);
     }
 
+    public function deleteUserTaskResultByTaskId($taskId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('can not get task result because user not login');
+        }
+
+        return $this->getTaskResultDao()->deleteByTaskIdAndUserId($taskId, $user['id']);
+    }
+
+
     public function createTaskResult($taskResult)
     {
         ArrayToolkit::requireds($taskResult, array(
