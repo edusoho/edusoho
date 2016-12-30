@@ -751,8 +751,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($teacher) {
             return true;
         }
-
-        $this->getC
+        
         //不是管理员，无权限管理
         if ($this->hasAdminRole()) {
             return true;
