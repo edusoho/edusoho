@@ -1,34 +1,4 @@
 // webpack配置文件
-/* 默认值,可在config中重写，但一般不推荐修改
-  let defaultOptions = {
-    commonsChunkFilename: 'common',
-    entryMainname: 'main',
-    entryFileName: 'index',
-
-    libsName: 'libs',
-    
-    pluginAssetsDir: 'Resources/static-src',
-
-    appName: 'app',
-    appIgnores: ['admin'],
-    appAssetsDir: 'app',
-
-    adminName: 'admin',
-    adminAssetsDir: 'app/js/admin',
-
-    globalDir: 'app/Resources/static-src',
-    libsDir: 'app/Resources/static-src/libs',
-    commonDir: 'app/Resources/static-src/common',
-    nodeModulesDir: 'node_modules',
-
-    fontlimit: 20480,
-    imglimit: 10240,
-    fontName: 'fonts',
-    imgName: 'img',
-
-    onlyCopys: [],
-  }
-*/
 
 const config = {
   output: {
@@ -73,8 +43,28 @@ const config = {
       name: 'es-ckeditor',
       ignore: [
         '**/samples/**',
-        // '**/lang/!(zh-cn.js)',
+        '**/lang/!(zh-cn.js)',
+        '**/kityformula/libs/**',
+        '**/kityformula/kityformula/src/**'
       ]
+    },
+    {
+      name: 'bootstrap/dist/css/bootstrap.css'
+    },
+    {
+      name: 'bootstrap/dist/fonts/'
+    },
+    {
+      name: 'font-awesome/css/font-awesome.css'
+    },
+    {
+      name: 'font-awesome/fonts/'
+    },
+    {
+      name: 'es5-shim/es5-shim.js'
+    },
+    {
+      name: 'es5-shim/es5-sham.js'
     },
     {
       name: 'easy-pie-chart',
