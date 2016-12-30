@@ -2,6 +2,7 @@
  * script loader for modal or html segment loaded by ajax
  */
 const script = (scripts, fn, target) => {
+  if (!scripts.length) return;
   target = !target ? document.getElementsByTagName('body')[0] : target;
   (function callback(s) {
     s = scripts.shift();

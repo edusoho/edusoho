@@ -30,13 +30,19 @@ class TaskController extends BaseController
         ));
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
+        if($taskResult['status'] == 'finish') {
+            list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
+        }
+
         return $this->render('task/show.html.twig', array(
-            'course'     => $this->getCourseService()->getCourse($task['courseId']),
-            'task'       => $task,
-            'taskResult' => $taskResult,
-            'activity'   => $activity,
-            'preview'    => $preview,
-            'backUrl'    => $backUrl
+            'course'        => $this->getCourseService()->getCourse($task['courseId']),
+            'task'          => $task,
+            'taskResult'    => $taskResult,
+            'activity'      => $activity,
+            'preview'       => $preview,
+            'backUrl'       => $backUrl,
+            'nextTask'      => empty($nextTask) ? array() : $nextTask,
+            'finishedRate'  => empty($finishedRate) ? 0 : $finishedRate
         ));
     }
 
@@ -109,7 +115,20 @@ class TaskController extends BaseController
     {
         $result   = $this->getTaskService()->finishTask($id);
         $task     = $this->getTaskService()->getTask($id);
-        $nextTask = $this->getTaskService()->getNextTask($id);
+        list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
+
+        return $this->render('task/finish-result.html.twig', array(
+            'result'   => $result,
+            'task'     => $task,
+            'nextTask' => $nextTask,
+            'course'   => $course,
+            'finishedRate' => $finishedRate
+        ));
+    }
+
+    protected function getNextTaskAndFinishedRate($task)
+    {
+        $nextTask = $this->getTaskService()->getNextTask($task['id']);
         $course   = $this->getCourseService()->getCourse($task['courseId']);
         $user = $this->getUser();
         $conditions = array(
@@ -120,15 +139,8 @@ class TaskController extends BaseController
 
         $finishedCount = $this->getTaskResultService()->countTaskResult($conditions);
 
-        $finishedRate = empty($course['taskCount'])? 0 : intval($finishedCount/$course['taskCount']*100);
-
-        return $this->render('task/finish-result.html.twig', array(
-            'result'   => $result,
-            'task'     => $task,
-            'nextTask' => $nextTask,
-            'course'   => $course,
-            'finishedRate' => $finishedRate
-        ));
+        $finishedRate = empty($course['taskNum'])? 0 : intval($finishedCount/$course['taskNum']*100);
+        return array($course, $nextTask, $finishedRate);
     }
 
     protected function tryLearnTask($courseId, $taskId, $preview = false)

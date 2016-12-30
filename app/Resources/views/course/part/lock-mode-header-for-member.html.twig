@@ -24,26 +24,27 @@
           <li class="mb10">
             <i class="es-icon es-icon-dot color-primary"></i>
             已完成
-            <span class="color-primary">{{ taskResultCount }}</span>
-            ／{{ taskCount }}个任务
+            <span class="mhs"><span class="color-primary">{{ taskResultCount }}</span> / {{ taskCount }}</span>个任务
           </li>
           {% if taskPerDay %}
             <li class="mb10">
               <i class="es-icon es-icon-dot color-warning"></i>
-              计划完成{{ planStudyTaskCount }}
-              个任务，{% if progress -planProgressProgress > 0 %} 落后计划(progress- planProgressProgress)% {% endif %}
+              计划完成<span class="mhs">{{ planStudyTaskCount }}</span>个任务
+              {% if progress -planProgressProgress > 0 %}
+              ，<span class="mlm">落后计划(progress- planProgressProgress)%</span>
+              {% endif %}
             </li>
           {% endif %}
           <li class="pt30 mb10 mll">学习有效期</li>
           {% if course.expiryMode == 'days' and course.expiryDays == 0 %}
             <li class="mll"> 不限</li>
           {% elseif course.expiryMode == 'date' %}
-            {#{{ course.expiryStartDate|date('Y-m-d ') }}  ~ #}{{ course.expiryEndDate|date('Y-m-d ') }}
-            <br/>
-            剩余{{ course.expiryEndDate|time_diff }} 天
+            <li class="mll">{{ course.expiryEndDate|date('Y-m-d ') }}
+            <span class="mls color-warning">剩余 {{ course.expiryEndDate|time_diff }} 天</span></li>
           {% else %}
-            {{ member.createdTime|date_modify("+#{course.expiryDays} days")|date('Y-m-d') }} <br />
-            {{ member.createdTime|time_diff(course.expiryDays) }} 天
+            <li class="mll">{{ member.createdTime|date_modify("+#{course.expiryDays} days")|date('Y-m-d') }}
+              <span class="mls color-warning">剩余 {{ member.createdTime|time_diff(course.expiryDays) }} 天</span>
+            </li>
           {% endif %}
         </ul>
       </div>
