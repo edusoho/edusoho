@@ -11,7 +11,6 @@ class Creator {
     this._initDatePicker('#expiryEndDate');
     TabChange();
 
-
     let $form = $("#course-create-form");
     //init validator
     let validator = $form.validate({

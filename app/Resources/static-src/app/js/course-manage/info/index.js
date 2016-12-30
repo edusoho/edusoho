@@ -1,4 +1,4 @@
-import { TabChange, publishCourse } from '../help';
+import { TabChange } from '../help';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import MultiInput from '../../../common/component/multi-input';
@@ -18,7 +18,6 @@ renderMultiGroupComponent('intended-students','audiences');
 _initDatePicker('#expiryStartDate');
 _initDatePicker('#expiryEndDate');
 TabChange();
-publishCourse();
 
 CKEDITOR.replace('summary', {
   allowedContent: true,
