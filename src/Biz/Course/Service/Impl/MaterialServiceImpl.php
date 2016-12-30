@@ -14,7 +14,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     public function uploadMaterial($material)
     {
         $argument = $material;
-        if (!ArrayToolkit::requireds($material, array('courseId', 'fileId'))) {
+        if (!ArrayToolkit::requireds($material, array('courseSetId', 'courseId', 'fileId'))) {
             throw $this->createServiceException('参数缺失，上传失败！');
         }
 
@@ -23,10 +23,11 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         if (!empty($fields['fileId'])) {
             $courseMaterials = $this->searchMaterials(
                 array(
-                    'courseId' => $fields['courseId'],
-                    'fileId'   => $fields['fileId'],
-                    'lessonId' => 0,
-                    'type'     => $fields['type']
+                    'courseSetId' => $fields['courseSetId'],
+                    'courseId'    => $fields['courseId'],
+                    'fileId'      => $fields['fileId'],
+                    'lessonId'    => 0,
+                    'type'        => $fields['type']
                 ),
                 array('createdTime' => 'DESC'), 0, PHP_INT_MAX
             );

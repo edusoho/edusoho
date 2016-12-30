@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Listener;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
@@ -10,7 +10,7 @@ class PermissionKernelControllerListener
 {
     protected $paths;
 
-    public function __construct(Container $container, $paths)
+    public function __construct(ContainerInterface $container, $paths)
     {
         $this->container = $container;
         $this->paths     = $paths;

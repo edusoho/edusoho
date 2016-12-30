@@ -35,16 +35,20 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
+        $course   = $this->getCourseService()->getCourse($courseId);
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
         $activity = array_merge($activity, $exercise);
 
-        $questionTypes = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(array('courseId' => $course['courseSetId']));
+        $questionNums = ArrayToolkit::index($questionNums, 'type');
+
+        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseId' => $course['courseSetId']));
 
         return $this->render('activity/exercise/modal.html.twig', array(
-            'questionTypes' => $questionTypes,
-            'activity'      => $activity,
-            'courseId'      => $activity['fromCourseId']
+            'questionNums' => $questionNums,
+            'activity'     => $activity,
+            'courseSetId'  => $activity['courseSetId']
         ));
     }
 

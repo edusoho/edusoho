@@ -10,59 +10,7 @@
   </ol>
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top clearfix">
-      <span class="tags mrm">
-        <span class="tag-serialing"></span>
-      </span>
-      <span class="inline-block vertical-middle gray-darker text-24 course-detail-heading">{{ course.title }}</span>
-      <!-- 没有营销活动才显示 -->
-      <span class="es-qrcode top vertical-top inline-block" data-url="/course/2/qrcode">
-        <i class="es-icon es-icon-qrcode"></i>
-        <span class="qrcode-popover">
-          <img src="" alt="">
-          扫二维码继续学习二维码时效为半小时
-        </span>
-      </span>
-      <p class="mt10 mb20">{{ courseSet.subtitle }}</p>
-      <ul class="course-operation hidden-xs clearfix ">
-        <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
-          <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
-          </a>
-        </li>
-        <li id="favorite-btn" data-url="/course/2/favorite">
-          <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmarkoutline"></i>
-          </a>
-        </li>
-        <li class="es-share top">
-          <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
-            <i class="es-icon es-icon-share"></i>
-          </a>
-          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神"
-               data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2"
-               data-picture="/assets/img/default/courseSet.png">
-            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin"
-               data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
-              <i class="es-icon es-icon-weixin"></i>
-            </a>
-            <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
-              <i class="es-icon es-icon-weibo"></i>
-            </a>
-            <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
-              <i class="es-icon es-icon-qq"></i>
-            </a>
-            <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
-              <i class="es-icon es-icon-qzone"></i>
-            </a>
-          </div>
-        </li>
-        {% if canAccess %}
-          <li class="pull-left">
-            <a class="btn btn-default btn-xs " href="{{ path('course_set_manage', {'id': courseSet.id}) }}"
-               title="课程管理">
-              <i class="es-icon es-icon-setting"></i>
-            </a>
-          </li>
-        {% endif %}
-      </ul>
+      {{ render(controller('AppBundle:Course:headerTopPart', {id: course.id})) }}
     </div>
     <div class="course-detail-bottom">
       <div class="course-detail-img">

@@ -6,6 +6,7 @@ namespace Biz\Note\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Note\Dao\CourseNoteDao;
 use Biz\Note\Dao\CourseNoteLikeDao;
 use Biz\Note\Service\CourseNoteService;
@@ -146,12 +147,6 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
             $this->dispatchEvent('course.note.update', new Event($note, array('preStatus' => $existNote['status'])));
         }
 
-        $this->getCourseMemberService()->setMemberNoteNumber(
-            $note['courseId'],
-            $note['userId'],
-            $this->getNoteDao()->countByUserIdAndCourseId($note['userId'], $note['courseId'])
-        );
-
         return $note;
     }
 
@@ -172,12 +167,6 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $this->getNoteDao()->delete($id);
 
         $this->dispatchEvent('course.note.delete', $note);
-
-        $this->getCourseMemberService()->setMemberNoteNumber(
-            $note['courseId'],
-            $note['userId'],
-            $this->getNoteDao()->countByUserIdAndCourseId($note['userId'], $note['courseId'])
-        );
 
         if ($note['userId'] != $currentUser['id']) {
             $this->getLogService()->info('course', 'delete_note', "删除笔记#{$id}");
@@ -271,6 +260,12 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return ArrayToolkit::index($this->getNoteLikeDao()->findByNoteIdsAndUserId($noteIds, $userId), 'noteId');
     }
 
+    public function countNotesByUserIdAndCourseId($userId, $courseId)
+    {
+        return $this->getNoteDao()->countByUserIdAndCourseId($userId, $courseId);
+    }
+
+
     protected function calculateContentLength($content)
     {
         $content = strip_tags(trim(str_replace(array("\\t", "\\r\\n", "\\r", "\\n"), '', $content)));
@@ -354,6 +349,9 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return $this->biz->service('System:LogService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');

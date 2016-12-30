@@ -51,11 +51,11 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
         return $this->render('activity/testpaper/modal.html.twig', array(
-            'activity'    => $activity,
-            'testpapers'  => $testpapers,
-            'features'    => $features,
-            'courseId'    => $activity['fromCourseId'],
-            'courseSetId' => $course['courseSetId']
+            'activity'   => $activity,
+            'testpapers' => $testpapers,
+            'features'   => $features,
+            'courseId'   => $activity['fromCourseId'],
+            'course'     => $course
         ));
     }
 
@@ -67,9 +67,9 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
         return $this->render('activity/testpaper/modal.html.twig', array(
-            'testpapers'  => $testpapers,
-            'features'    => $features,
-            'courseSetId' => $course['courseSetId']
+            'testpapers' => $testpapers,
+            'features'   => $features,
+            'course'     => $course
         ));
     }
 

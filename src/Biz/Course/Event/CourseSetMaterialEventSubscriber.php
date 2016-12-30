@@ -191,10 +191,11 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
         $file    = $context['file'];
 
         if (in_array($file['targetType'], array('courseactivity', 'courselesson', 'coursematerial', 'opencourselesson', 'opencoursematerial'))) {
-            $file['courseId'] = $file['targetId'];
-            $file['fileId']   = $file['id'];
-            $file['source']   = $file['targetType'];
-            $file['type']     = in_array($file['targetType'], array('opencourselesson', 'opencoursematerial')) ? 'openCourse' : 'course';
+            $file['courseSetId'] = $file['targetId'];
+            $file['courseId']    = 0;
+            $file['fileId']      = $file['id'];
+            $file['source']      = $file['targetType'];
+            $file['type']        = in_array($file['targetType'], array('opencourselesson', 'opencoursematerial')) ? 'openCourse' : 'course';
 
             $this->getMaterialService()->uploadMaterial($file);
         }

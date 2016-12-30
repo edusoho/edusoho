@@ -6,7 +6,7 @@
 		<pre style="padding-left: 30px; font-size: 1.2em;">{{activity.content|raw}}</pre>
 		<div style="margin-top: 30px;">
 			{# 如果任务未完成： #}
-			<a href="{{path('course_thread_create', {id: activity.fromCourseId, type: 'discussion'})}}" style="text-decoration: none;" target="_blank">前往课程讨论区</a>发表或回复话题吧
+			<a href="{{path('course_thread_create', {courseId: activity.fromCourseId, type: 'discussion'})}}" style="text-decoration: none;" target="_blank">前往课程讨论区</a>发表或回复话题吧
 		</div>
 	</div>
 {% endblock %}

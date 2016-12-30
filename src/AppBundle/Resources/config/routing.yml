@@ -1532,9 +1532,9 @@ task_live_trigger:
     defaults: {_controller:  AppBundle:Activity/Live:trigger}
 
 #task_plugin
-course_task_note_create:
-  path: /course/{courseId}/task/{taskId}/note/create
-  defaults: { _controller: AppBundle:Note:createCourseNote}
+course_task_note_save:
+  path: /course/{courseId}/task/{taskId}/note/save
+  defaults: { _controller: AppBundle:Note:saveCourseNote}
 
 course_task_show_plugins:
   path: /course/{courseId}/task/{taskId}/show/plugins
@@ -1682,6 +1682,21 @@ course_set_manage_create:
 course_set_show:
   path: /course_set/{id}
   defaults: {_controller: AppBundle:CourseSet:show}
+
+course_qrcode:
+  path: /course/{id}/qrcode
+  defaults: { _controller: AppBundle:Course:qrcode }
+  methods: [POST]
+
+course_set_favorite:
+  path: /course_set/{id}/favorite
+  defaults: { _controller: AppBundle:CourseSet:favorite }
+  methods: [POST]
+
+course_set_unfavorite:
+  path: /course_set/{id}/unfavorite
+  defaults: { _controller: AppBundle:CourseSet:unfavorite }
+  methods: [POST]
 
 course_show:
   path: /course/{id}
@@ -1889,7 +1904,7 @@ course_set_manage_question_picker:
   defaults: { _controller: AppBundle:Question/Manage:questionPicker }
 
 course_set_manage_question_picked:
-  path:  /course_set/{courseSetId}/manage/question/{questionId}/picked
+  path:  /course_set/{courseSetId}/manage/question/picked
   defaults: { _controller: AppBundle:Question/Manage:pickedQuestion }
 
 course_set_manage_question_check:
@@ -1984,11 +1999,6 @@ testpaper_do_suspend:
   defaults: { _controller: AppBundle:Testpaper/Testpaper:testSuspend }
   methods: [POST]
 
-#course
-course_show:
-  path: /course/{id}
-  defaults: { _controller: AppBundle:Course/Course:show }
-
 #homework
 course_manage_homework:
   path: /course/{courseId}/manage/homework
@@ -1999,7 +2009,7 @@ course_set_manage_homework_question_picker:
   defaults: { _controller: AppBundle:HomeworkManage:questionPicker }
 
 course_set_manage_homework_question_picked:
-  path:  /course_set/{courseSetId}/manage/homework/question/{questionId}/picked
+  path:  /course_set/{courseSetId}/manage/homework/question/picked
   defaults: { _controller: AppBundle:HomeworkManage:pickedQuestion }
 
 course_manage_homework_check_list:
