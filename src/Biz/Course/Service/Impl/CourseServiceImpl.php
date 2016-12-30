@@ -733,7 +733,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
-    protected function hasCourseManagerRole($courseId = 0, $courseSetId = 0)
+    public function hasCourseManagerRole($courseId = 0, $courseSetId = 0)
     {
         $user = $this->getCurrentUser();
         //未登录，无权限管理
