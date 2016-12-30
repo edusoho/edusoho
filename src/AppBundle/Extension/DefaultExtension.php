@@ -222,7 +222,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             ),
             'ppt'       => array(
                 'meta'    => array(
-                    'name' => 'Ppt',
+                    'name' => 'PPT',
                     'icon' => 'es-icon es-icon-pptclass'
                 ),
                 'actions' => array(

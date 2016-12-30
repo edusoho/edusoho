@@ -37,8 +37,7 @@ class NavigationController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $navigation = $request->request->all();
-            $navigationId = $this->getNavigationService()->createNavigation($navigation);
-            $navigation = $this->getNavigationService()->getNavigation($navigationId);
+            $navigation = $this->getNavigationService()->createNavigation($navigation);
             return $this->renderTbody($navigation['type']);
         }
 
