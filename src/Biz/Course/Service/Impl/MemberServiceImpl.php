@@ -532,6 +532,14 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $member;
     }
 
+    protected function getWelcomeMessageBody($user, $course)
+    {
+        $setting            = $this->getSettingService()->get('course', array());
+        $valuesToBeReplace  = array('{{nickname}}', '{{course}}');
+        $valuesToReplace    = array($user['nickname'], $course['title']);
+        $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
+        return $welcomeMessageBody;
+    }
 
     public function removeStudent($courseId, $userId)
     {

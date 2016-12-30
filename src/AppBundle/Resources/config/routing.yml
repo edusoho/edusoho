@@ -1702,6 +1702,10 @@ course_show:
   path: /course/{id}
   defaults: {_controller: AppBundle:Course:show}
 
+course_exit:
+  path: /course/{id}/exit
+  defaults: {_controller: AppBundle:Course:exit}
+
 course_notes:
   path: /course/{id}/notes
   defaults: { _controller: AppBundle:Course:notes }
