@@ -3,7 +3,7 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
-use Topxia\Service\Common\ServiceKernel;
+
 
 class Video extends Activity
 {

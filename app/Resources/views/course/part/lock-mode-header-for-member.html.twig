@@ -8,78 +8,19 @@
   </ol>
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top">
-      <div class="course-detail-heading gray-darker text-24">{{ course.title }}  {{ courseSet.subtitle }}
-      </div>
-      <span class="item-icon-font">
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title"
-                data-content="content.">练</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title"
-                data-content="content.">试</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title"
-                data-content="content.">问</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-placement="top" data-toggle="popover" title="title"
-                data-content="content.">动</span>
-      </span>
-      <ul class="course-operation clearfix ">
-        <li>
-          <i class="es-icon es-icon-people"></i>
-          2035 人
-        </li>
-        <li id="unfavorite-btn" data-url="/course/2/unfavorite" style="display:none;">
-          <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmark"></i>
-          </a>
-        </li>
-        <li id="favorite-btn" data-url="/course/2/favorite">
-          <a class="btn btn-default btn-xs" href="javascript:;"> <i class="es-icon es-icon-bookmarkoutline"></i>
-          </a>
-        </li>
-        <li class="es-share top">
-          <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
-            <i class="es-icon es-icon-share"></i>
-          </a>
-
-          <div class="dropdown-menu  js-social-share-params" data-title="sdfdsf " data-summary="大神"
-               data-message="我正在学习《sdfdsf 》，收获巨大哦，一起来学习吧！" data-url="http://www.esdev.com/course/2"
-               data-picture="/assets/img/default/courseSet.png">
-
-            <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin"
-               data-qrcode-url="/common/qrcode?text=http%3A//www.esdev.com/course/2">
-              <i class="es-icon es-icon-weixin"></i>
-            </a>
-            <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo">
-              <i class="es-icon es-icon-weibo"></i>
-            </a>
-            <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq">
-              <i class="es-icon es-icon-qq"></i>
-            </a>
-            <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone">
-              <i class="es-icon es-icon-qzone"></i>
-            </a>
-          </div>
-        </li>
-        {% if canAccess %}
-          <li class="pull-left">
-            <a class="btn btn-default btn-xs " href="{{ path('course_set_manage',{id:courseSet.id}) }}" title="课程管理">
-              <i class="es-icon es-icon-setting"></i>
-            </a>
-          </li>
-        {% endif %}
-      </ul>
+      {{ render(controller('AppBundle:Course:headerTopPart', {id: course.id})) }}
     </div>
     <section class="row course-orderlearn-section">
       <div class="col-sm-6">
-        <span class="progress-img">
-          <div class="course-progress">
-             {% if taskPerDay %}
-               <div class="cricle-progress" id="orderprogress-plan" data-percent="{{ planProgressProgress }}">
-            </div>
-             {% endif %}
-            <div class="cricle-progress" id="orderprogress" data-percent="{{ progress }}">
-              <span class="percent"></span>
-            </div>
+        <div class="course-progress">
+          {% if taskPerDay %}
+            <div class="cricle-progress" id="orderprogress-plan" data-percent="{{ planProgressProgress }}"></div>
+          {% endif %}
+          <div class="cricle-progress" id="orderprogress" data-percent="{{ progress }}">
+            <span class="percent"></span>
           </div>
-        </span>
-        <ul class="progress-info mbl">
+        </div>
+        <ul class="progress-info">
           <li class="mb10">
             <i class="es-icon es-icon-dot color-primary"></i>
             已完成
@@ -87,29 +28,27 @@
             ／{{ taskCount }}个任务
           </li>
           {% if taskPerDay %}
-            <li class="mb20">
+            <li class="mb10">
               <i class="es-icon es-icon-dot color-warning"></i>
               计划完成{{ planStudyTaskCount }}
               个任务，{% if progress -planProgressProgress > 0 %} 落后计划(progress- planProgressProgress)% {% endif %}
             </li>
           {% endif %}
-          <li class="pt20 mb10 progress-learn-time">学习有效期</li>
-
+          <li class="pt30 mb10 mll">学习有效期</li>
           {% if course.expiryMode == 'days' and course.expiryDays == 0 %}
-            <li class="progress-learn-time"> 不限</li>
+            <li class="mll"> 不限</li>
           {% elseif course.expiryMode == 'date' %}
             {#{{ course.expiryStartDate|date('Y-m-d ') }}  ~ #}{{ course.expiryEndDate|date('Y-m-d ') }}
             <br/>
             剩余{{ course.expiryEndDate|time_diff }} 天
           {% else %}
-            {{ member.createdTime|date_modify("+#{course.expiryDays} days") }}
+            {{ member.createdTime|date_modify("+#{course.expiryDays} days")|date('Y-m-d') }} <br />
             {{ member.createdTime|time_diff(course.expiryDays) }} 天
           {% endif %}
         </ul>
       </div>
       <div class="col-sm-6 course-detail-content">
         <ul class="task-list task-list-md task-list-hover task-list-gray">
-
           {% for task in toLearnTasks %}
             {% set meta = activity_meta(task.activity.mediaType|default(null)) %}
             {% set task_lock =  (not  task.result|default(null)) and (not course.isDefault) and course.learnMode  == 'lockMode' %}
@@ -125,17 +64,12 @@
               es-icon-iccheckcircleblack24px
               {% endif %}
               left-menu"></i>
-
-              <a class="text-overflow title"
-                 href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>
+              <a class="text-overflow title" href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>
               <span class="right-menu mouse-leave">
-              {{ task.activity.length|activity_length_format }} <i
-                    class="es-icon es-icon {{ meta.icon|default('') }} mlm" data-toggle="tooltip" data-placement="top"
-                    title="{{ meta.name|default(null) }}任务"></i>
+              {{ task.activity.length|activity_length_format }} <i class="es-icon es-icon {{ meta.icon|default('') }} mlm" data-toggle="tooltip" data-placement="top" title="{{ meta.name|default(null) }}任务"></i>
             </span>
               <span class="right-menu mouse-enter">
-              <a class="btn btn-primary btn-sm btn-learn"
-                 href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">继续学习</a>
+              <a class="btn btn-primary btn-sm btn-learn" href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">继续学习</a>
             </span>
             </li>
           {% endfor %}
