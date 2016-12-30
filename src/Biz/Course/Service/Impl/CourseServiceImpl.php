@@ -32,7 +32,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findCoursesByCourseSetId($courseSetId)
     {
-        return $this->getCourseDao()->findCoursesByCourseSetId($courseSetId);
+        return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, null);
+    }
+
+    public function findPublishedCoursesByCourseSetId($courseSetId)
+    {
+        return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, 'published');
     }
 
     public function getDefaultCourseByCourseSetId($courseSetId)
@@ -45,7 +50,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courses = $this->searchCourses(
             array(
                 'courseSetId' => $courseSetId,
-                'status' => 'published'
+                'status'      => 'published'
             ),
             array('createdTime' => 'ASC'),
             0,
@@ -707,7 +712,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     public function findLearnCoursesByUserId($userId)
     {
-        $members = $this->getMemberService()->findStudentMemberByUserId($userId);
+        $members   = $this->getMemberService()->findStudentMemberByUserId($userId);
         $courseIds = ArrayToolkit::index($members, 'courseId');
         $courses   = $this->findPublicCoursesByIds($courseIds);
         return $courses;
@@ -715,7 +720,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findPublicCoursesByIds(array $ids)
     {
-        if(empty($ids)){
+        if (empty($ids)) {
             return array();
         }
 
@@ -723,13 +728,34 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count = $this->searchCourseCount($conditions);
+        $count      = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
     public function hasCourseManagerRole($courseId = 0)
     {
-        $userId = $this->getCurrentUser()->getId();
+        $user = $this->getCurrentUser();
+        //未登录，无权限管理
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        $course = $this->getCourse($courseId);
+        //课程不存在，无权限管理
+        if (empty($course)) {
+            return false;
+        }
+        //不是管理员，无权限管理
+        if (!$this->hasAdminRole()) {
+            return false;
+        }
+
+        $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
+        //不是课程教师，无权限管理
+        if (empty($teacher)) {
+            return false;
+        }
+
         //TODO
         //1. courseId为空，判断是否有创建教学计划的权限
         //2. courseId不为空，判断是否有该教学计划的管理权限
@@ -879,6 +905,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
+    }
+
+    protected function hasAdminRole()
+    {
+        $user = $this->getCurrentUser();
+        return $user->hasPermission('admin_course_content_manage');
     }
 
     /**
