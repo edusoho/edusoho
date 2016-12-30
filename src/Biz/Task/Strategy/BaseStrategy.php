@@ -3,6 +3,8 @@
 namespace Biz\Task\Strategy;
 
 use Biz\Task\Dao\TaskDao;
+use Biz\Task\Dao\TaskResultDao;
+use Biz\Task\Service\TaskResultService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Dao\CourseChapterDao;
@@ -27,7 +29,7 @@ class BaseStrategy
     public function baseCreateTask($fields)
     {
         $fields = array_filter($fields, function ($value) {
-            if (is_array($value) || ctype_digit((string) $value)) {
+            if (is_array($value) || ctype_digit((string)$value)) {
                 return true;
             }
 
@@ -144,6 +146,14 @@ class BaseStrategy
     public function getTaskDao()
     {
         return $this->biz->dao('Task:TaskDao');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    public function getTaskResultService()
+    {
+        return $this->biz->service('Task:TaskResultService');
     }
 
     /**

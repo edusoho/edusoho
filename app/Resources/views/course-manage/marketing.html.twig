@@ -125,7 +125,7 @@
       <a class="label label-md js-service-item {% if '24小时阅卷点评' in course.services|default([]) %}label-primary{% else %}label-default{% endif %}">24小时阅卷点评</a>
       <a class="label label-md js-service-item {% if '提问必答' in course.services|default([]) %}label-primary{% else %}label-default{% endif %}">提问必答</a>
       <a class="label label-md js-service-item {% if '一对一在线答疑' in course.services|default([]) %}label-primary{% else %}label-default{% endif %}">一对一在线答疑</a>
-      <input type="hidden" id="course_services" name="services" value="{{course.services|default([])|json_encode(constant('JSON_UNESCAPED_UNICODE'))}}">
+      <input type="hidden" id="course_services" name="services" value="{{course.services|default([])|json_encode_utf8()}}">
     </div>
   </div>
 

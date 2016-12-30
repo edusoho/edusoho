@@ -1,0 +1,34 @@
+<div class="nav-btn-tab">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="{% if nav|default('') == 'overview' %}active{% endif %}">
+      <a href="{{ path('course_show', {'id': course.id}) }}">课程概览</a>
+    </li>
+
+    <li role="presentation" class="{% if nav|default('') == 'directory' %}active{% endif %}">
+      <a href="{{ path('course_task_list',{id: course.id}) }}">课程目录</a>
+    </li>
+
+    {% if not member is empty %}
+      <li role="presentation" class="{% if nav|default('') == 'thread' %}active{% endif %}">
+        <a href="{{ path('course_threads', {id: course.id}) }}">
+          话题
+          <small class="text-muted">({{ course.threadNum|default(0) }})</small>
+        </a>
+      </li>
+    {% endif %}
+
+    <li role="presentation" class="{% if nav|default('') == 'review' %}active{% endif %}">
+      <a href="{{ path('course_review',{id:course.id}) }}">
+        评价
+        <small class="text-muted">({{ course.ratingNum|default(0) }})</small>
+      </a>
+    </li>
+    <li role="presentation" class="{% if nav|default('') == 'note' %}active{% endif %}">
+      <a href="{{ path('course_notes', { id: course.id }) }}">
+        笔记
+        <small class="text-muted">({{ course.noteNum|default(0) }})</small>
+      </a>
+    </li>
+    {#<li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>#}
+  </ul>
+</div>

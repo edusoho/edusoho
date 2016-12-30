@@ -41,19 +41,19 @@ class AppExtension extends \Twig_Extension
 
     /**
      * json_encode($arr, JSON_UNESCAPED_UNICODE) 需要PHP5.4以上版本，所以自己写一个以便支持PHP5.3
-     * @param $arr
+     * @param  $arr
      * @return string
      */
     public function json_encode_utf8($arr)
     {
         if (empty($arr)) {
-            return '';
+            return '[]';
         }
 
         $encoded = json_encode($arr);
 
         return preg_replace_callback('/\\\\u(\w{4})/', function ($matches) {
-            return html_entity_decode('&#x' . $matches[1] . ';', ENT_COMPAT, 'UTF-8');
+            return html_entity_decode('&#x'.$matches[1].';', ENT_COMPAT, 'UTF-8');
         }, $encoded);
     }
 

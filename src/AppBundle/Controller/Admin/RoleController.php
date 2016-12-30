@@ -155,12 +155,12 @@ class RoleController extends BaseController
 
     protected function getRoleService()
     {
-        return $this->getServiceKernel()->createService('Role:RoleService');
+        return $this->createService('Role:RoleService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getUserService()

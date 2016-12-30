@@ -4,7 +4,7 @@
 {% set use_webapck_loader = true %}
 
 {% block content %}
-{{ render(controller('AppBundle:CourseSetManage:header', {courseSet:courseSet, manage: true})) }}
+{{ render(controller('AppBundle:CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
 
 <div class="row">
   <div class="col-md-3">
