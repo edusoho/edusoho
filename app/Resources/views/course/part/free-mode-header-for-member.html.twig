@@ -38,7 +38,7 @@
                 {% elseif course.expiryMode == 'date' %}
                   {{ course.expiryEndDate|date('Y-m-d ') }}剩余{{ course.expiryEndDate|time_diff }} 天
                 {% else %}
-                {{ member.createdTime|date_modify("+#{course.expiryDays} days") }}
+                {{ member.createdTime|date_modify("+#{course.expiryDays} days")|date('Y-m-d ') }}
                 {{ member.createdTime|time_diff(course.expiryDays) }} 天
               </span>
             {% endif %}
