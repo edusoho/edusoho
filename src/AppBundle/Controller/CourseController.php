@@ -77,14 +77,15 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function detailNavsPartAction(Request $request, $id)
+    public function detailNavsPartAction(Request $request, $id, $nav=null)
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
 
         return $this->render('course/part/detail-navs.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course,
-            'member'    => $member
+            'member'    => $member,
+            'nav'       => $nav
         ));
     }
 
