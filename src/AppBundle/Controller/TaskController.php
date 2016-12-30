@@ -30,8 +30,8 @@ class TaskController extends BaseController
         ));
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
-        if($taskResult['status'] != 'finish') {
-            list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($id);
+        if($taskResult['status'] == 'finish') {
+            list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
         }
 
         return $this->render('task/show.html.twig', array(
@@ -115,7 +115,7 @@ class TaskController extends BaseController
     {
         $result   = $this->getTaskService()->finishTask($id);
         $task     = $this->getTaskService()->getTask($id);
-        list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($id);
+        list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
         return $this->render('task/finish-result.html.twig', array(
             'result'   => $result,
@@ -126,20 +126,20 @@ class TaskController extends BaseController
         ));
     }
 
-    protected function getNextTaskAndFinishedRate($id)
+    protected function getNextTaskAndFinishedRate($task)
     {
-        $nextTask = $this->getTaskService()->getNextTask($id);
-        $course   = $this->getCourseService()->getCourse($nextTask['courseId']);
+        $nextTask = $this->getTaskService()->getNextTask($task['id']);
+        $course   = $this->getCourseService()->getCourse($task['courseId']);
         $user = $this->getUser();
         $conditions = array(
-            'courseId' => $nextTask['courseId'],
+            'courseId' => $task['courseId'],
             'userId' => $user['id'],
             'status' => 'finish'
         );
 
         $finishedCount = $this->getTaskResultService()->countTaskResult($conditions);
 
-        $finishedRate = empty($course['taskCount'])? 0 : intval($finishedCount/$course['taskCount']*100);
+        $finishedRate = empty($course['taskNum'])? 0 : intval($finishedCount/$course['taskNum']*100);
         return array($course, $nextTask, $finishedRate);
     }
 

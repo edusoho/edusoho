@@ -1,7 +1,7 @@
 <script>
 var script = function (scripts, fn, target) {
+  if (!scripts.length) return;
   target = !target ? document.getElementsByTagName('body')[0] : target;
-
   (function callback(s) {
     s = scripts.shift();
     !scripts.length ? loadJs(s, fn, target) : loadJs(s, callback, target);
@@ -23,7 +23,6 @@ var loadJs = function (path, fn, target) {
   target.appendChild(elem);
 }
 
-//will be called in vendor.js
 window.seajsBoot = function() {
 
   if (typeof seajs !== 'undefined') {

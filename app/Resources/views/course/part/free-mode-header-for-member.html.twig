@@ -23,10 +23,8 @@
               <p class="mb15 color-gray">
                 <i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>已完成
               </p>
-              <span class="color-primary">{{ taskResultCount }}</span>
-              ／
-              <span class="mrl">{{ taskCount }}</span>
-              课时</spn>
+              <span class="text-16"><span class="color-primary">{{ taskResultCount }}</span> / <span class="mrl">{{ taskCount }}</span>
+              课时</span>
             </li>
             <li>
               <p class="mb15 color-gray">
@@ -34,12 +32,13 @@
               </p>
               <span class="text-16">
                 {% if course.expiryMode == 'days' and course.expiryDays == 0 %}
-                  <span class="progress-learn-time">不限</span>
+                  不限
                 {% elseif course.expiryMode == 'date' %}
-                  {{ course.expiryEndDate|date('Y-m-d ') }}剩余{{ course.expiryEndDate|time_diff }} 天
+                  {{ course.expiryEndDate|date('Y-m-d ') }}
+                  <span class="mls color-warning text-12">剩余 {{ course.expiryEndDate|time_diff }} 天</span>
                 {% else %}
-                {{ member.createdTime|date_modify("+#{course.expiryDays} days")|date('Y-m-d ') }}
-                {{ member.createdTime|time_diff(course.expiryDays) }} 天
+                  {{ member.createdTime|date_modify("+#{course.expiryDays} days")|date('Y-m-d ') }}
+                  <span class="mls color-warning text-12">剩余 {{ member.createdTime|time_diff(course.expiryDays) }} 天</span>
               </span>
             {% endif %}
             </li>
@@ -57,10 +56,10 @@
             </li>
           </ul>
         </div>
-        <div class="col-sm-2 text-center">
+        <div class="col-sm-2">
           {% for toLearnTask in toLearnTasks %}
-            <a class="btn btn-primary btn-lg hidden-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
-            <a class="btn btn-primary btn-block visible-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+            <a class="btn btn-primary btn-lg hidden-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}" style="margin-top: 1.5px">继续学习</a>
+            <a class="btn btn-primary btn-block visible-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}" style="margin-top: 1.5px">继续学习</a>
           {% endfor %}
         </div>
       </div>

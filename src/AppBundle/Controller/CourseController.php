@@ -10,6 +10,7 @@ use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseController extends CourseBaseController
 {
@@ -40,7 +41,7 @@ class CourseController extends CourseBaseController
             $user = $this->getUser();
 
             //学习记录
-            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish', 'userId'=>$user['id']));
+            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish', 'userId' => $user['id']));
 
             //学习进度
             $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
@@ -73,6 +74,18 @@ class CourseController extends CourseBaseController
             'taskPerDay'           => $taskPerDay,
             'planStudyTaskCount'   => $planStudyTaskCount,
             'planProgressProgress' => $planProgressProgress
+        ));
+    }
+
+    public function detailNavsPartAction(Request $request, $id, $nav = null)
+    {
+        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
+
+        return $this->render('course/part/detail-navs.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course,
+            'member'    => $member,
+            'nav'       => $nav
         ));
     }
 
@@ -137,8 +150,7 @@ class CourseController extends CourseBaseController
 
     public function reviewListAction(Request $request, $id)
     {
-        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($course['id']);
+        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
 
         $conditions = array(
             'courseId' => $course['id'],
@@ -304,10 +316,12 @@ class CourseController extends CourseBaseController
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
 
-        $user = $this->getCurrentUser();
-
-        $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
-        $canManage      = $this->getCourseService()->hasCourseManagerRole($course['id']);
+        $user           = $this->getCurrentUser();
+        $isUserFavorite = $canManage = false;
+        if ($user->isLogin()) {
+            $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
+            $canManage      = $this->getCourseService()->hasCourseManagerRole($course['id']);
+        }
 
         return $this->render('course/part/header-top.html.twig', array(
             'course'         => $course,
@@ -337,6 +351,23 @@ class CourseController extends CourseBaseController
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
         );
         return $this->createJsonResponse($response);
+    }
+
+    public function exitAction(Request $request, $id)
+    {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+        $user = $this->getCurrentUser();
+        if (empty($member)) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程的学员。'));
+        }
+
+        if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
+        }
+
+        $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
+
+        return $this->createJsonResponse(true);
     }
 
     // TODO old
@@ -380,6 +411,11 @@ class CourseController extends CourseBaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 
     /**
