@@ -6,6 +6,7 @@ use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
 use Topxia\Common\ArrayToolkit;
+use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Biz\Course\Dao\CourseMemberDao;
@@ -68,9 +69,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
         }
         //临时注释
-        // if (!$this->hasAdminRole()) {
-        //     throw $this->createAccessDeniedException('You have no access to Course Management');
-        // }
+        if (!$this->hasCourseManagerRole()) {
+            throw $this->createAccessDeniedException('You have no access to Course Management');
+        }
 
         if (!isset($course['isDefault'])) {
             $course['isDefault'] = 0;
@@ -88,7 +89,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->validateExpiryMode($course);
 
-        $course['status'] = 'draft';
+        $course['status']  = 'draft';
+        $course['creator'] = $this->getCurrentUser()->getId();
         try {
             $this->beginTransaction();
 
@@ -731,7 +733,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
-    public function hasCourseManagerRole($courseId = 0)
+    protected function hasCourseManagerRole($courseId = 0, $courseSetId = 0)
     {
         $user = $this->getCurrentUser();
         //未登录，无权限管理
@@ -739,16 +741,23 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        $course = $this->getCourse($courseId);
-        //课程不存在，无权限管理
-        if (empty($course)) {
-            return false;
-        }
-
-        $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
-        //不是课程教师，无权限管理
-        if ($teacher) {
-            return true;
+        if ($courseId > 0) {
+            $course = $this->getCourse($courseId);
+            //课程不存在，无权限管理
+            if (empty($course)) {
+                return false;
+            }
+            $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
+            //不是课程教师，无权限管理
+            if ($teacher) {
+                return true;
+            }
+        } else {
+            $courseSet = $this->getCourseSetDao()->getCourseSet($courseSetId);
+            if (empty($courseSet)) {
+                return false;
+            }
+            return $courseSet['creator'] == $user->getId();
         }
 
         //不是管理员，无权限管理
@@ -756,9 +765,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
-        //TODO
-        //1. courseId为空，判断是否有创建教学计划的权限
-        //2. courseId不为空，判断是否有该教学计划的管理权限
         return true;
     }
 
@@ -943,6 +949,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
+    }
+
+    /**
+     * @return CourseSetDao
+     */
+    protected function getCourseSetDao()
+    {
+        return $this->createDao('Course:CourseSetDao');
     }
 
     /**

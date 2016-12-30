@@ -1,25 +1,22 @@
 <?php
 
-
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Classroom\Service\ClassroomService;
+use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\UserService;
 use Biz\Course\Dao\CourseMemberDao;
+use Biz\Order\Service\OrderService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use Biz\Note\Dao\CourseNoteDao;
 use Biz\Note\Service\CourseNoteService;
-use Biz\Order\Service\OrderService;
 use Biz\Taxonomy\Service\CategoryService;
-use Biz\User\Service\UserService;
-use Symfony\Component\EventDispatcher\GenericEvent;
-use Topxia\Common\ArrayToolkit;
+use Biz\Classroom\Service\ClassroomService;
 
 /**
  * Class MemberServiceImpl
- * @package Biz\Course\Service\Impl
  * 所有api 均迁移自 courseService 中的对member操作的api
+ * @package Biz\Course\Service\Impl
  */
 class MemberServiceImpl extends BaseService implements MemberService
 {
@@ -129,7 +126,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('用户未登录');
         }
 
-        $condition     = array(
+        $condition = array(
             'userId'              => $currentUser["id"],
             'role'                => 'student',
             'deadlineNotified'    => 0,
@@ -175,7 +172,6 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         return $this->getMemberDao()->searchMemberIds($conditions, $orderBy, $start, $limit);
     }
-
 
     public function findMemberUserIdsByCourseId($courseId)
     {
@@ -357,7 +353,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('课程学员不存在，备注失败!');
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
+        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
         return $this->getMemberDao()->update($member['id'], $fields);
     }
 
@@ -504,7 +500,6 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $member = $this->getMemberDao()->create($fields);
 
-
         $this->refreshMemberNoteNumber(
             $courseId, $userId
         );
@@ -614,7 +609,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
     {
-        $fields   = array(
+        $fields = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
             'orderId'     => empty($info["orderId"]) ? 0 : $info["orderId"],
@@ -739,7 +734,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $number = $this->getCourseNoteService()->countNotesByUserIdAndCourseId($userId, $courseId);
 
         $this->getMemberDao()->update($member['id'], array(
-            'noteNum'            => (int)$number,
+            'noteNum'            => (int) $number,
             'noteLastUpdateTime' => time()
         ));
 
@@ -752,15 +747,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findStudentMemberByUserId($userId)
     {
         return $this->getMemberDao()->findByUserIdAndRole($userId, 'student');
     }
-
 
     /**
      * @return CourseMemberDao
@@ -813,7 +806,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         return $this->createService('System:SettingService');
     }
-
 
     protected function getVipService()
     {
