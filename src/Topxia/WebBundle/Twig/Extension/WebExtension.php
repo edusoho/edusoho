@@ -686,11 +686,12 @@ class WebExtension extends \Twig_Extension
         return $range;
     }
 
-    public function timeDiffFilter($endTime, $diffDay = '', $start = '')
+    public function timeDiffFilter($endTime, $diffDay = 0, $start = '')
     {
-        $endSecond   = $endTime + empty($diffDay) ? 0 : $diffDay * 86400;
+        $endSecond = $endTime + intval($diffDay) * 86400;
+
         $startSecond = empty($start) ? time() : $start;
-        $diffDay     = ceil($endSecond - $startSecond) / 86400;
+        $diffDay     = round(ceil($endSecond - $startSecond) / 86400);
         return $diffDay > 0 ? $diffDay : 0;
     }
 

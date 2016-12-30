@@ -30,7 +30,7 @@ class CourseController extends CourseBaseController
 
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
 
-        $courses = $this->getCourseService()->findCoursesPublishedByCourseSetId($course['courseSetId']);
+        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
         $taskCount = $this->getTaskService()->countTasksByCourseId($id);
 

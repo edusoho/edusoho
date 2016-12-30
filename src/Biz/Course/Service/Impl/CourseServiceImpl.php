@@ -30,9 +30,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->findCoursesByIds($ids);
     }
 
-    public function findCoursesPublishedByCourseSetId($courseSetId)
+    public function findCoursesByCourseSetId($courseSetId)
     {
-        return $this->getCourseDao()->findCoursesPublishedByCourseSetId($courseSetId);
+        return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, null);
+    }
+
+    public function findPublishedCoursesByCourseSetId($courseSetId)
+    {
+        return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, 'published');
     }
 
     public function getDefaultCourseByCourseSetId($courseSetId)
@@ -45,7 +50,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courses = $this->searchCourses(
             array(
                 'courseSetId' => $courseSetId,
-                'status' => 'published'
+                'status'      => 'published'
             ),
             array('createdTime' => 'ASC'),
             0,
@@ -707,7 +712,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     public function findLearnCoursesByUserId($userId)
     {
-        $members = $this->getMemberService()->findStudentMemberByUserId($userId);
+        $members   = $this->getMemberService()->findStudentMemberByUserId($userId);
         $courseIds = ArrayToolkit::index($members, 'courseId');
         $courses   = $this->findPublicCoursesByIds($courseIds);
         return $courses;
@@ -715,7 +720,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findPublicCoursesByIds(array $ids)
     {
-        if(empty($ids)){
+        if (empty($ids)) {
             return array();
         }
 
@@ -723,7 +728,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count = $this->searchCourseCount($conditions);
+        $count      = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 

@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CourseDao extends GeneralDaoInterface
 {
-    public function findCoursesPublishedByCourseSetId($courseSetId);
+    public function findCoursesByCourseSetIdAndStatus($courseSetId, $status);
 
     public function getDefaultCourseByCourseSetId($courseSetId);
 
