@@ -272,6 +272,23 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    public function orderInfoAction(Request $request, $sn)
+    {
+        $order = $this->getOrderService()->getOrderBySn($sn);
+
+        if (empty($order)) {
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('订单不存在!'));
+        }
+
+        $course = $this->getCourseService()->getCourse($order['targetId']);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('课程不存在，或已删除。'));
+        }
+
+        return $this->render('TopxiaWebBundle:Course:course-order.html.twig', array('order' => $order, 'course' => $course));
+    }
+
     public function headerTopPartAction(Request $request, $id)
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
@@ -344,6 +361,11 @@ class CourseController extends CourseBaseController
     protected function getReviewService()
     {
         return $this->createService('Course:ReviewService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 
     /**

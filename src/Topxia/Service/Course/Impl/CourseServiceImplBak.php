@@ -1,0 +1,2463 @@
+<?php
+namespace Topxia\Service\Course\Impl;
+
+use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\CourseLessonReplayDao;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\FavoriteDao;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\BaseService;
+use Codeages\Biz\Framework\Event\Event;
+use Topxia\Service\Course\CourseService;
+use Topxia\Service\Util\EdusohoLiveClient;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Topxia\Common\Exception\ResourceNotFoundException;
+
+class CourseServiceImpl extends BaseService implements CourseService
+{
+    public function findCoursesByParentIdAndLocked($parentId, $locked)
+    {
+        return $this->getCourseDao()->findByParentIdAndLocked($parentId, $locked);
+    }
+
+    public function findCoursesByLikeTitle($title)
+    {
+        $courses = $this->getCourseDao()->findByLikeTitle($title);
+        return ArrayToolkit::index($courses, 'id');
+    }
+
+    public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
+    {
+        $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'course');
+        $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+
+        $conditions = array(
+            'courseIds' => $courseIds,
+            'status' => $status
+        );
+
+        $orderBy = array($orderBy[0]=>$orderBy[1]);
+
+        $courses = $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
+        return ArrayToolkit::index($courses, 'id');
+    }
+
+    // TODO 只在Command中用到
+    public function findMinStartTimeByCourseId($courseId)
+    {
+        return $this->getLessonDao()->findMinStartTimeByCourseId($courseId);
+    }
+
+    public function findCoursesCountByLessThanCreatedTime($endTime)
+    {   
+        $conditions = array(
+            'endTime' => $endTime
+        );
+        return $this->getCourseDao()->count($conditions);
+    }
+
+    public function analysisCourseSumByTime($endTime)
+    {
+        return $this->getCourseDao()->countCreatedCoursesLessThanEndTimeByGroupDate($endTime);
+    }
+
+    public function searchCount($conditions)
+    {
+        return $this->searchCourseCount($conditions);
+    }
+
+    public function findRandomCourses($conditions, $num)
+    {
+        $count = $this->searchCourseCount($conditions);
+        $max   = $count - $num - 1;
+        if ($max < 0) {
+            $max = 0;
+        }
+        $offset = rand(0, $max);
+        return $this->searchCourses($conditions, 'default', $offset, $num);
+    }
+
+    // TODO searchCoursesCount
+    public function findUserLearnCourses($userId, $start, $limit, $onlyPublished = true)
+    {
+        $conditions = array(
+            'userId' => $userId,
+            'role' => 'student'
+        );
+
+        $members = $this->getMemberDao()->search($conditions, array('createdTime'=>'DESC'), $start, $limit);
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+        $members = ArrayToolkit::index($members, 'courseId');
+
+        foreach ($courses as &$course) {
+            if($onlyPublished && $course['status'] != 'published') {
+                unset($course);
+                continue;
+            }
+
+            if($members[$course['id']]) {
+                $member = $members[$course['id']];
+                $course['memberIsLearned']  = $member['isLearned'];
+                $course['memberLearnedNum'] = $member['learnedNum'];
+            }
+        }
+
+        return $courses;
+    }
+
+    // TODO searchCourse
+    public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true)
+    {
+        $conditions = array(
+            'userId' => $userId,
+            'role' => 'student'
+        );
+
+        $members = $this->getMemberDao()->search($conditions, array('createdTime'=>'DESC'), $start, $limit);
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+        $members = ArrayToolkit::index($members, 'courseId');
+
+        foreach ($courses as &$course) {
+            if($onlyPublished && $course['status'] != 'published') {
+                unset($course);
+                continue;
+            }
+
+            if($course['parentId'] != 0) {
+                unset($course);
+                continue;
+            }
+
+            if($members[$course['id']]) {
+                $member = $members[$course['id']];
+                $course['memberIsLearned']  = $member['isLearned'];
+                $course['memberLearnedNum'] = $member['learnedNum'];
+            }
+        }
+
+        return $courses;
+    }
+
+    // TODO 和findUserLearnCourseCountNotInClassroom合并
+    public function findUserLearnCourseCount($userId, $onlyPublished = true)
+    {
+        $members   = $this->getMemberDao()->findByUserIdAndRole($userId, 'student');
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+
+        $conditions = array(
+            'courseIds' => $courseIds,
+            'status'    => 'published'
+        );
+        if (!$onlyPublished) {
+            unset($conditions['status']);
+        }
+        return $this->getCourseDao()->count($conditions);
+    }
+
+    public function findUserLearnCourseCountNotInClassroom($userId, $onlyPublished = true)
+    {
+        $members   = $this->getMemberDao()->findByUserIdAndRole($userId, 'student');
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+
+        $conditions = array(
+            'courseIds' => $courseIds,
+            'parentId'  => 0,
+            'status'    => 'published'
+        );
+        if (!$onlyPublished) {
+            unset($conditions['status']);
+        }
+        return $this->getCourseDao()->count($conditions);
+    }
+
+
+    // TODO
+    public function findUserLeanedCourses($userId, $start, $limit, $filters = array())
+    {
+        $conditions = array(
+            'userId'    => $userId,
+            'role'      => 'student',
+            'isLearned' => 1
+        );
+        $members = $this->getMemberDao()->search($conditions, array('createdTime' => 'DESC'), $start, $limit);
+
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+        $sortedCourses = array();
+
+        foreach ($members as $member) {
+            if (empty($courses[$member['courseId']])) {
+                continue;
+            }
+
+            $course                     = $courses[$member['courseId']];
+            $course['memberIsLearned']  = 1;
+            $course['memberLearnedNum'] = $member['learnedNum'];
+            $sortedCourses[]            = $course;
+        }
+
+        return $sortedCourses;
+    }
+
+    public function findUserTeachCourseCount($conditions, $onlyPublished = true)
+    {
+        $members = $this->getMemberDao()->findByUserIdAndRole($conditions['userId'], 'teacher');
+        unset($conditions['userId']);
+
+        $courseIds               = ArrayToolkit::column($members, 'courseId');
+        $conditions["courseIds"] = $courseIds;
+
+        if (count($courseIds) == 0) {
+            return 0;
+        }
+
+        if ($onlyPublished) {
+            $conditions["status"] = 'published';
+        }
+
+        return $this->searchCourseCount($conditions);
+    }
+
+    public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true)
+    {
+
+        $members = $this->getMemberDao()->findByUserIdAndRole($conditions['userId'], 'teacher');
+        unset($conditions['userId']);
+
+        $courseIds               = ArrayToolkit::column($members, 'courseId');
+        $conditions["courseIds"] = $courseIds;
+
+        if (count($courseIds) == 0) {
+            return array();
+        }
+
+        if ($onlyPublished) {
+            $conditions["status"] = 'published';
+        }
+
+        $courses = $this->searchCourses($conditions, 'latest', $start, $limit);
+
+        return $courses;
+    }
+
+    public function findUserFavoritedCourseCount($userId)
+    {
+        return $this->getFavoriteDao()->countByUserId($userId);
+    }
+
+    public function findUserFavoritedCourses($userId, $start, $limit)
+    {
+        $courseFavorites = $this->getFavoriteDao()->findByUserId($userId, $start, $limit);
+        $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
+        return CourseSerialize::unserializes($favoriteCourses);
+    }
+
+    public function findFavoritesCountByCourseId($courseId)
+    {
+        return $this->getFavoriteDao()->countByUserId($courseId);
+    }
+
+    public function createCourse($course)
+    {
+        if (!ArrayToolkit::requireds($course, array('title'))) {
+            throw $this->createServiceException($this->getKernel()->trans('缺少必要字段，创建课程失败！'));
+        }
+
+        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'price', 'startTime', 'endTime', 'locationId', 'address', 'orgCode'));
+        $course['status']      = 'draft';
+        $course['about']       = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
+        $course['userId']      = $this->getCurrentUser()->id;
+        $course['createdTime'] = time();
+        $course['teacherIds']  = array($course['userId']);
+        $course                = $this->fillOrgId($course);
+        $course                = $this->getCourseDao()->addCourse(CourseSerialize::serialize($course));
+
+        $member = array(
+            'courseId'    => $course['id'],
+            'userId'      => $course['userId'],
+            'role'        => 'teacher',
+            'createdTime' => time()
+        );
+
+        $this->getMemberDao()->addMember($member);
+
+        $course = $this->getCourse($course['id']);
+
+        $this->dispatchEvent("course.create", $course);
+        $this->getLogService()->info('course', 'create', "创建课程《{$course['title']}》(#{$course['id']})");
+
+        return $course;
+    }
+
+    public function updateCourse($id, $fields)
+    {
+        $user = $this->getCurrentUser();
+
+        $argument = $fields;
+
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+
+        $course = $this->getCourseDao()->getCourse($id);
+
+        if (empty($course)) {
+            throw $this->createServiceException($this->getKernel()->trans('课程不存在，更新失败！'));
+        }
+        $fields = $this->_filterCourseFields($fields);
+
+        //非法提交直接报错,service应该有反馈
+        if (!empty($fields['expiryMode']) &&
+            $course['status'] == 'published' &&
+            $fields['expiryMode'] != $course['expiryMode']
+        ) {
+            throw $this->createServiceException('已发布的课程不允许修改学员有效期');
+        }
+
+        $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
+
+        $fields = $this->fillOrgId($fields);
+        $fields = CourseSerialize::serialize($fields);
+
+        $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
+
+        $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'tagIds' => $tagIds, 'userId' => $user['id']));
+
+        return CourseSerialize::unserialize($updatedCourse);
+    }
+
+    public function batchUpdateOrg($courseIds, $orgCode)
+    {
+        if (!is_array($courseIds)) {
+            $courseIds = array($courseIds);
+        }
+
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
+        foreach ($courseIds as $courseId) {
+            $user = $this->getCourseDao()->updateCourse($courseId, $fields);
+        }
+    }
+
+    // TODO refactor
+    public function updateCourseCounter($id, $counter)
+    {
+        $fields = ArrayToolkit::parts($counter, array('rating', 'ratingNum', 'lessonNum', 'giveCredit'));
+
+        if (empty($fields)) {
+            throw $this->createServiceException($this->getKernel()->trans('参数不正确，更新计数器失败！'));
+        }
+
+        $this->getCourseDao()->updateCourse($id, $fields);
+    }
+
+    protected function _filterCourseFields($fields)
+    {
+        if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
+            $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
+        }
+
+        $fields = ArrayToolkit::filter($fields, array(
+            'title'          => '',
+            'subtitle'       => '',
+            'about'          => '',
+            'buyExpiryTime'  => 0,
+            'expiryMode'     => 'none',
+            'expiryDay'      => 0,
+            'serializeMode'  => 'none',
+            'categoryId'     => 0,
+            'vipLevelId'     => 0,
+            'goals'          => array(),
+            'audiences'      => array(),
+            'startTime'      => 0,
+            'endTime'        => 0,
+            'locationId'     => 0,
+            'address'        => '',
+            'maxStudentNum'  => 0,
+            'watchLimit'     => 0,
+            'approval'       => 0,
+            'maxRate'        => 0,
+            'locked'         => 0,
+            'tryLookable'    => 0,
+            'tryLookTime'    => 0,
+            'buyable'        => 0,
+            'conversationId' => '',
+            'orgCode'        => '',
+            'orgId'          => ''
+        ));
+
+        if (!empty($fields['tags'])) {
+            $fields['tags'] = explode(',', $fields['tags']);
+            $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
+            array_walk($fields['tags'], function (&$item, $key) {
+                $item = (int)$item['id'];
+            });
+        }
+
+        return $fields;
+    }
+
+    public function changeCoursePicture($courseId, $data)
+    {
+        $course = $this->getCourseDao()->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException($this->getKernel()->trans('课程不存在，图标更新失败！'));
+        }
+
+        $fileIds = ArrayToolkit::column($data, "id");
+        $files   = $this->getFileService()->getFilesByIds($fileIds);
+
+        $files   = ArrayToolkit::index($files, "id");
+        $fileIds = ArrayToolkit::index($data, "type");
+
+        $fields = array(
+            'smallPicture'  => $files[$fileIds["small"]["id"]]["uri"],
+            'middlePicture' => $files[$fileIds["middle"]["id"]]["uri"],
+            'largePicture'  => $files[$fileIds["large"]["id"]]["uri"]
+        );
+
+        $this->deleteNotUsedPictures($course);
+
+        $this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
+
+        $update_picture = $this->getCourseDao()->updateCourse($courseId, $fields);
+
+        $this->dispatchEvent("course.picture.update", array('argument' => $data, 'course' => $update_picture));
+
+        return $update_picture;
+    }
+
+    protected function deleteNotUsedPictures($course)
+    {
+        $oldPictures = array(
+            'smallPicture'  => $course['smallPicture'] ? $course['smallPicture'] : null,
+            'middlePicture' => $course['middlePicture'] ? $course['middlePicture'] : null,
+            'largePicture'  => $course['largePicture'] ? $course['largePicture'] : null
+        );
+
+        $courseCount = $this->searchCourseCount(array('smallPicture' => $course['smallPicture']));
+
+        if ($courseCount <= 1) {
+            $fileService = $this->getFileService();
+            array_map(function ($oldPicture) use ($fileService) {
+                if (!empty($oldPicture)) {
+                    $fileService->deleteFileByUri($oldPicture);
+                }
+            }, $oldPictures);
+        }
+    }
+
+    public function recommendCourse($id, $number)
+    {
+        $course = $this->tryAdminCourse($id);
+
+        if (!is_numeric($number)) {
+            throw $this->createAccessDeniedException($this->getKernel()->trans('推荐课程序号只能为数字！'));
+        }
+
+        $course = $this->getCourseDao()->updateCourse($id, array(
+            'recommended'     => 1,
+            'recommendedSeq'  => (int)$number,
+            'recommendedTime' => time()
+        ));
+
+        $this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
+
+        return $course;
+    }
+
+    // TODO hitCourse 和 waveCourse合并
+    public function hitCourse($id)
+    {
+        $checkCourse = $this->getCourse($id);
+
+        if (empty($checkCourse)) {
+            throw $this->createServiceException($this->getKernel()->trans('课程不存在，操作失败。'));
+        }
+
+        $this->getCourseDao()->waveCourse($id, 'hitNum', +1);
+    }
+
+    public function waveCourse($id, $field, $diff)
+    {
+        return $this->getCourseDao()->waveCourse($id, $field, $diff);
+    }
+
+    public function cancelRecommendCourse($id)
+    {
+        $course = $this->tryAdminCourse($id);
+
+        $this->getCourseDao()->updateCourse($id, array(
+            'recommended'     => 0,
+            'recommendedTime' => 0,
+            'recommendedSeq'  => 0
+        ));
+
+        $this->getLogService()->info('course', 'cancel_recommend', "取消推荐课程《{$course['title']}》(#{$course['id']})");
+    }
+
+    public function deleteCourse($id)
+    {
+        $course  = $this->tryAdminCourse($id, 'admin_course_delete');
+        $lessons = $this->getCourseLessons($course['id']);
+
+        // Delete course related data
+        $this->getMemberDao()->deleteMembersByCourseId($id);
+        $this->getLessonDao()->deleteLessonsByCourseId($id);
+        $this->getLessonExtendDao()->deleteLessonsByCourseId($id);
+        $this->deleteCrontabs($lessons);
+        $this->getChapterDao()->deleteChaptersByCourseId($id);
+
+        $this->getCourseDao()->deleteCourse($id);
+
+        if ($course["type"] == "live") {
+            $this->getCourseLessonReplayDao()->deleteByCourseId($id);
+        }
+
+        $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
+
+        $this->dispatchEvent("course.delete", $course);
+
+        return true;
+    }
+
+    public function publishCourse($id, $source = 'course')
+    {
+        if ($source == 'course') {
+            $course = $this->tryManageCourse($id, 'admin_course_publish');
+        } elseif ($source == 'classroom') {
+            $course = $this->getCourseDao()->getCourse($id);
+
+            if (empty($course)) {
+                throw $this->createNotFoundException();
+            }
+        }
+
+        $course = $this->getCourseDao()->updateCourse($id, array('status' => 'published'));
+        $this->getLogService()->info('course', 'publish', "发布课程《{$course['title']}》(#{$course['id']})");
+        $this->dispatchEvent('course.publish', $course);
+    }
+
+    public function closeCourse($id, $source = 'course')
+    {
+        if ($source == 'course') {
+            $course = $this->tryManageCourse($id, 'admin_course_close');
+        } elseif ($source == 'classroom') {
+            $course = $this->getCourseDao()->getCourse($id);
+
+            if (empty($course)) {
+                throw $this->createNotFoundException();
+            }
+        }
+
+        $course = $this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
+        $this->getLogService()->info('course', 'close', "关闭课程《{$course['title']}》(#{$course['id']})");
+        $this->dispatchEvent('course.close', $course);
+    }
+
+    public function favoriteCourse($courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (empty($user['id'])) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $course = $this->getCourse($courseId);
+
+        if ($course['status'] != 'published') {
+            throw $this->createServiceException($this->getKernel()->trans('不能收藏未发布课程'));
+        }
+
+        if (empty($course)) {
+            throw $this->createServiceException($this->getKernel()->trans('该课程不存在,收藏失败!'));
+        }
+
+        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'course');
+
+        if ($favorite) {
+            throw $this->createServiceException($this->getKernel()->trans('该收藏已经存在，请不要重复收藏!'));
+        }
+
+        //添加动态
+        $this->dispatchEvent(
+            'course.favorite',
+            new Event($course)
+        );
+
+        $this->getFavoriteDao()->create(array(
+            'courseId'    => $course['id'],
+            'userId'      => $user['id'],
+            'createdTime' => time()
+        ));
+
+        return true;
+    }
+
+    public function unFavoriteCourse($courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (empty($user['id'])) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException($this->getKernel()->trans('该课程不存在,收藏失败!'));
+        }
+
+        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'course');
+
+        if (empty($favorite)) {
+            throw $this->createServiceException($this->getKernel()->trans('你未收藏本课程，取消收藏失败!'));
+        }
+
+        $this->getFavoriteDao()->delete($favorite['id']);
+
+        return true;
+    }
+
+    public function hasFavoritedCourse($courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (empty($user['id'])) {
+            return false;
+        }
+
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException($this->getKernel()->trans('课程%courseId%不存在', array('%courseId%' => $courseId)));
+        }
+
+        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $course['id'], 'course');
+
+        return $favorite ? true : false;
+    }
+
+    public function searchCourseFavoriteCount($conditions)
+    {
+        return $this->getFavoriteDao()->count($conditions);
+    }
+
+    public function searchCourseFavorites($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getFavoriteDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function analysisCourseDataByTime($startTime, $endTime)
+    {
+        return $this->getCourseDao()->analysisCourseDataByTime($startTime, $endTime);
+    }
+
+    public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId)
+    {
+        return $this->getMemberDao()->findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
+    }
+
+    public function waveLearningTime($userId, $lessonId, $time)
+    {
+        $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+
+        if ($time <= 200) {
+            $this->getLessonLearnDao()->updateLearn($learn['id'], array(
+                'learnTime' => $learn['learnTime'] + intval($time)
+            ));
+        }
+    }
+
+    public function waveWatchingTime($userId, $lessonId, $time)
+    {
+        $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+
+        if ($time <= 200) {
+            $learn = $this->getLessonLearnDao()->updateLearn($learn['id'], array(
+                'watchTime'  => $learn['watchTime'] + intval($time),
+                'updateTime' => time()
+            ));
+        }
+
+        return $learn;
+    }
+
+    public function checkWatchNum($userId, $lessonId)
+    {
+        $lesson = $this->getLessonDao()->getLesson($lessonId);
+        $course = $this->getCourse($lesson['courseId']);
+
+        //只有视频课程才限制观看时长
+        if (empty($course['watchLimit']) || $lesson['type'] != 'video') {
+            return array('status' => 'ignore');
+        }
+
+        $learn          = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+        $watchLimitTime = $lesson['length'] * $course['watchLimit'];
+
+        if (empty($learn)) {
+            return array('status' => 'ok', 'watchedTime' => 0, 'watchLimitTime' => $watchLimitTime);
+        }
+
+        if ($learn['watchTime'] < $watchLimitTime) {
+            return array('status' => 'ok', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
+        }
+
+        return array('status' => 'error', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
+    }
+
+    public function setCoursePrice($courseId, $currency, $price)
+    {
+        if (!in_array($currency, array('coin', 'default'))) {
+            throw $this->createServiceException($this->getKernel()->trans('货币类型不正确'));
+        }
+
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException($this->getKernel()->trans('课程不存在'));
+        }
+
+        $fields = array();
+
+        if (($course['discountId'] > 0) && (intval($course['discount'] * 100) < 1000)) {
+            $discount = $course['discount'];
+        } else {
+            $discount    = 10;
+            $discountApp = $this->getAppService()->findInstallApp('Discount');
+
+            if ($price > 0 && $discountApp) {
+                $nowDiscount = $this->getDiscountService()->getNowGlobalDiscount();
+
+                if ($nowDiscount) {
+                    $fields['discountId'] = $nowDiscount['id'];
+                    $fields['discount']   = $nowDiscount['globalDiscount'];
+                    $discount             = $nowDiscount['globalDiscount'];
+                }
+            }
+        }
+
+        $fields['originPrice'] = $price ?: 0;
+        $fields['price']       = $price * ($discount / 10) ?: 0;
+
+        $course = $this->getCourseDao()->updateCourse($course['id'], $fields);
+        $this->dispatchEvent("course.price.update", array('currency' => $currency, 'course' => $course));
+        return $course;
+    }
+
+    public function setCoursesPriceWithDiscount($discountId)
+    {
+        $setting = $this->getSettingService()->get('coin');
+
+        if (!empty($setting['coin_enabled']) && !empty($setting['price_type']) && strtolower($setting['price_type']) == 'coin') {
+            $currency = 'coin';
+        } else {
+            $currency = 'default';
+        }
+
+        $discount = $this->getDiscountService()->getDiscount($discountId);
+
+        if (empty($discount)) {
+            throw $this->createServiceException($this->getKernel()->trans('折扣活动#%discountId%不存在！', array('%discountId%' => $discountId)));
+        }
+
+        if ($discount['type'] == 'global') {
+            $conditions = array('originPrice_GT' => '0.00');
+
+            $count   = $this->searchCourseCount($conditions);
+            $courses = $this->searchCourses($conditions, 'latest', 0, $count);
+
+            foreach ($courses as $course) {
+                $fields = array();
+
+                $fields = array(
+                    'price' => $course['originPrice'] * $discount['globalDiscount'] / 10
+                );
+
+                $fields['discountId'] = $discount['id'];
+                $fields['discount']   = $discount['globalDiscount'];
+
+                $this->getCourseDao()->updateCourse($course['id'], $fields);
+            }
+        } else {
+            $count     = $this->getDiscountService()->findItemsCountByDiscountId($discountId);
+            $items     = $this->getDiscountService()->findItemsByDiscountId($discountId, 0, $count);
+            $courseIds = ArrayToolkit::column($items, 'targetId');
+            $courses   = $this->findCoursesByIds($courseIds);
+
+            foreach ($items as $item) {
+                if (empty($courses[$item['targetId']])) {
+                    continue;
+                }
+
+                $course = $courses[$item['targetId']];
+
+                $fields = array(
+                    'price' => $course['originPrice'] * $item['discount'] / 10
+                );
+
+                $fields['discountId'] = $discount['id'];
+                $fields['discount']   = $item['discount'];
+
+                $this->getCourseDao()->updateCourse($course['id'], $fields);
+            }
+        }
+    }
+
+    public function revertCoursesPriceWithDiscount($discountId)
+    {
+        $discount = $this->getDiscountService()->getDiscount($discountId);
+
+        if (empty($discount)) {
+            throw $this->createServiceException($this->getKernel()->trans('折扣活动#%discountId%不存在！', array('%discountId%' => $discountId)));
+        }
+
+        $this->getCourseDao()->clearCourseDiscountPrice($discountId);
+    }
+
+    /**
+     * Lesslon API
+     */
+
+    public function getCourseLesson($courseId, $lessonId)
+    {
+        $lesson = $this->getLesson($lessonId);
+
+        if (empty($lesson) || ($lesson['courseId'] != $courseId)) {
+            return array();
+        }
+
+        return LessonSerialize::unserialize($lesson);
+    }
+
+    public function setCourseLessonMaxOnlineNum($lessonId, $num)
+    {
+        return $this->getLessonDao()->updateLesson($lessonId, array('maxOnlineNum' => $num));
+    }
+
+    public function findCourseDraft($courseId, $lessonId, $userId)
+    {
+        $draft = $this->getCourseDraftDao()->findCourseDraft($courseId, $lessonId, $userId);
+
+        if (empty($draft) || ($draft['userId'] != $userId)) {
+            return null;
+        }
+
+        return LessonSerialize::unserialize($draft);
+    }
+
+    public function getCourseLessons($courseId)
+    {
+        $lessons = $this->getLessonDao()->findLessonsByCourseId($courseId);
+        return ArrayToolkit::index(LessonSerialize::unserializes($lessons), 'id');
+    }
+
+    public function deleteCourseDrafts($courseId, $lessonId, $userId)
+    {
+        return $this->getCourseDraftDao()->deleteCourseDrafts($courseId, $lessonId, $userId);
+    }
+
+    public function findLessonsByTypeAndMediaId($type, $mediaId)
+    {
+        $lessons = $this->getLessonDao()->findLessonsByTypeAndMediaId($type, $mediaId);
+        return LessonSerialize::unserializes($lessons);
+    }
+
+    public function searchLessons($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getLessonDao()->searchLessons($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchLessonCount($conditions)
+    {
+        return $this->getLessonDao()->searchLessonCount($conditions);
+    }
+
+    public function getCourseDraft($id)
+    {
+        return $this->getCourseDraftDao()->getCourseDraft($id);
+    }
+
+    public function createCourseDraft($draft)
+    {
+        $draft                = ArrayToolkit::parts($draft, array('userId', 'title', 'courseId', 'summary', 'content', 'lessonId', 'createdTime'));
+        $draft['userId']      = $this->getCurrentUser()->id;
+        $draft['createdTime'] = time();
+        $draft                = $this->getCourseDraftDao()->addCourseDraft($draft);
+        return $draft;
+    }
+
+    public function createLesson($lesson)
+    {
+        $argument = $lesson;
+        $lesson   = ArrayToolkit::filter($lesson, array(
+            'courseId'      => 0,
+            'chapterId'     => 0,
+            'free'          => 0,
+            'title'         => '',
+            'summary'       => '',
+            'type'          => 'text',
+            'content'       => '',
+            'media'         => array(),
+            'mediaId'       => 0,
+            'length'        => 0,
+            'startTime'     => 0,
+            'giveCredit'    => 0,
+            'requireCredit' => 0,
+            'liveProvider'  => 'none',
+            'copyId'        => 0,
+            'testMode'      => 'normal',
+            'testStartTime' => 0
+        ));
+
+        if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
+            throw $this->createServiceException($this->getKernel()->trans('参数缺失，创建课时失败！'));
+        }
+
+        if (empty($lesson['courseId'])) {
+            throw $this->createServiceException($this->getKernel()->trans('添加课时失败，课程ID为空。'));
+        }
+
+        $course = $this->getCourse($lesson['courseId'], true);
+
+        if (empty($course)) {
+            throw $this->createServiceException($this->getKernel()->trans('添加课时失败，课程不存在。'));
+        }
+
+        if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt', 'document', 'flash', 'open', 'liveOpen'))) {
+            throw $this->createServiceException($this->getKernel()->trans('课时类型不正确，添加失败！'));
+        }
+
+        $this->fillLessonMediaFields($lesson);
+
+//课程内容的过滤 @todo
+
+// if(isset($lesson['content'])){
+
+//     $lesson['content'] = $this->purifyHtml($lesson['content']);
+
+// }
+
+        if (isset($fields['title'])) {
+            $fields['title'] = $this->purifyHtml($fields['title']);
+        }
+
+        // 课程处于发布状态时，新增课时，课时默认的状态为“未发布"
+        $lesson['status']      = $course['status'] == 'published' ? 'unpublished' : 'published';
+        $lesson['free']        = empty($lesson['free']) ? 0 : 1;
+        $lesson['number']      = $this->getNextLessonNumber($lesson['courseId']);
+        $lesson['seq']         = $this->getNextCourseItemSeq($lesson['courseId']);
+        $lesson['userId']      = $this->getCurrentUser()->id;
+        $lesson['createdTime'] = time();
+
+        $lastChapter         = $this->getChapterDao()->getLastChapterByCourseId($lesson['courseId']);
+        $lesson['chapterId'] = empty($lastChapter) ? 0 : $lastChapter['id'];
+
+        if ($lesson['type'] == 'live') {
+            $lesson['endTime'] = $lesson['startTime'] + $lesson['length'] * 60;
+        }
+
+        $lesson = $this->getLessonDao()->addLesson(
+            LessonSerialize::serialize($lesson)
+        );
+
+        $argument['id'] = $lesson['id'];
+        $lessonExtend   = $this->getLessonExtendDao()->addLesson($argument);
+        $lesson         = array_merge($lesson, $lessonExtend);
+
+        $this->updateCourseCounter($course['id'], array(
+            'lessonNum'  => $this->getLessonDao()->getLessonCountByCourseId($course['id']),
+            'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
+        ));
+
+        $this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
+        $this->dispatchEvent("course.lesson.create", array('argument' => $argument, 'lesson' => $lesson));
+
+        return $lesson;
+    }
+
+    public function createLessonByFileId($courseId, $fileId)
+    {
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createServiceException($this->getKernel()->trans('文件不存在，添加/编辑课时失败！'));
+        }
+
+        $lessonFileds = array(
+            'courseId' => $courseId,
+            'title'    => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
+            'type'     => $file['type'],
+            'media'    => array('source' => 'self', 'id' => $fileId, 'name' => $file['filename']),
+            'mediaId'  => $fileId,
+            'length'   => $file['length']
+        );
+
+        return $this->createLesson($lessonFileds);
+    }
+
+    public function analysisLessonDataByTime($startTime, $endTime)
+    {
+        return $this->getLessonDao()->analysisLessonDataByTime($startTime, $endTime);
+    }
+
+    public function findFutureLiveDates($courseIds, $limit)
+    {
+        return $this->getLessonDao()->findFutureLiveDates($courseIds, $limit);
+    }
+
+    public function findFutureLiveCourseIds()
+    {
+        return $this->getLessonDao()->findFutureLiveCourseIds();
+    }
+
+    public function findPastLiveCourseIds()
+    {
+        return $this->getLessonDao()->findPastLiveCourseIds();
+    }
+
+    protected function fillLessonMediaFields(&$lesson)
+    {
+        if (in_array($lesson['type'], array('video', 'audio', 'ppt', 'document', 'flash'))) {
+            $media = empty($lesson['media']) ? null : $lesson['media'];
+
+            if (empty($media) || empty($media['source']) || empty($media['name'])) {
+                throw $this->createServiceException($this->getKernel()->trans('media参数不正确，添加课时失败！'));
+            }
+
+            if ($media['source'] == 'self') {
+                $media['id'] = intval($media['id']);
+
+                if (empty($media['id'])) {
+                    throw $this->createServiceException($this->getKernel()->trans('media id参数不正确，添加/编辑课时失败！'));
+                }
+
+                $file = $this->getUploadFileService()->getFile($media['id']);
+
+                if (empty($file)) {
+                    throw $this->createServiceException($this->getKernel()->trans('文件不存在，添加/编辑课时失败！'));
+                }
+
+                $lesson['mediaId']     = $file['id'];
+                $lesson['mediaName']   = $file['filename'];
+                $lesson['mediaSource'] = 'self';
+                $lesson['mediaUri']    = '';
+            } else {
+                if (empty($media['uri'])) {
+                    throw $this->createServiceException($this->getKernel()->trans('media uri参数不正确，添加/编辑课时失败！'));
+                }
+
+                $lesson['mediaId']     = 0;
+                $lesson['mediaName']   = $media['name'];
+                $lesson['mediaSource'] = $media['source'];
+                $lesson['mediaUri']    = $media['uri'];
+            }
+        } elseif ($lesson['type'] == 'testpaper' || $lesson['type'] == 'live') {
+            unset($lesson['media']);
+            return $lesson;
+        } else {
+            $lesson['mediaId']     = 0;
+            $lesson['mediaName']   = '';
+            $lesson['mediaSource'] = '';
+            $lesson['mediaUri']    = '';
+        }
+
+        unset($lesson['media']);
+
+        return $lesson;
+    }
+
+    public function updateCourseDraft($courseId, $lessonId, $userId, $fields)
+    {
+        $draft = $this->findCourseDraft($courseId, $lessonId, $userId);
+
+        if (empty($draft)) {
+            throw $this->createServiceException($this->getKernel()->trans('草稿不存在，更新失败！'));
+        }
+
+        $fields = $this->_filterDraftFields($fields);
+
+        $this->getLogService()->info('course', 'update_draft', "更新草稿《{$draft['title']}》(#{$draft['id']})的信息", $fields);
+
+        $fields = LessonSerialize::serialize($fields);
+
+        return LessonSerialize::unserialize(
+            $this->getCourseDraftDao()->updateCourseDraft($courseId, $lessonId, $userId, $fields)
+        );
+    }
+
+    protected function _filterDraftFields($fields)
+    {
+        $fields = ArrayToolkit::filter($fields, array(
+            'title'       => '',
+            'summary'     => '',
+            'content'     => '',
+            'createdTime' => 0
+        ));
+        return $fields;
+    }
+
+    public function updateLesson($courseId, $lessonId, $fields)
+    {
+        $argument = $fields;
+        $course   = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException($this->getKernel()->trans('课程(#%courseId%)不存在！', array('%courseId%' => $courseId)));
+        }
+
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException($this->getKernel()->trans('课时(#%lessonId%)不存在！', array('%lessonId%' => $lessonId)));
+        }
+
+        $fields = ArrayToolkit::filter($fields, array(
+            'title'         => '',
+            'summary'       => '',
+            'content'       => '',
+            'media'         => array(),
+            'mediaId'       => 0,
+            'number'        => 0,
+            'seq'           => 0,
+            'chapterId'     => 0,
+            'free'          => 0,
+            'length'        => 0,
+            'startTime'     => 0,
+            'giveCredit'    => 0,
+            'requireCredit' => 0,
+            'homeworkId'    => 0,
+            'exerciseId'    => 0,
+            'testMode'      => 'normal',
+            'testStartTime' => 0,
+            'replayStatus'  => 'ungenerated'
+        ));
+
+        if (isset($fields['title'])) {
+            $fields['title'] = $this->purifyHtml($fields['title']);
+        }
+
+        $fields['type'] = $lesson['type'];
+
+        if ($fields['type'] == 'live' && isset($fields['startTime'])) {
+            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
+        }
+
+        if (array_key_exists('media', $fields)) {
+            $this->fillLessonMediaFields($fields);
+        }
+
+        $updatedLesson = LessonSerialize::unserialize(
+            $this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($fields))
+        );
+
+        $lessonExtend = $this->updateLessonExtend($updatedLesson, $argument);
+        $updateLesson = array_merge($updatedLesson, $lessonExtend);
+
+        $this->updateCourseCounter($course['id'], array(
+            'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
+        ));
+
+        $this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
+
+        $updatedLesson['fields'] = $lesson;
+        $this->dispatchEvent("course.lesson.update", array('argument' => $argument, 'lesson' => $updatedLesson, 'sourceLesson' => $lesson));
+
+        return $updatedLesson;
+    }
+
+    public function deleteLesson($courseId, $lessonId)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException($this->getKernel()->trans('课程(#%courseId%)不存在！', array('%courseId%' => $courseId)));
+        }
+
+        $lesson = $this->getCourseLesson($courseId, $lessonId, true);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException($this->getKernel()->trans('课时(#%lessonId%)不存在！', array('%lessonId%' => $lessonId)));
+        }
+
+        // 更新已学该课时学员的计数器
+        $learnCount = $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
+
+        if ($learnCount > 0) {
+            $learns = $this->getLessonLearnDao()->findLearnsByLessonId($lessonId, 0, $learnCount);
+
+            foreach ($learns as $learn) {
+                if ($learn['status'] == 'finished') {
+                    $member = $this->getCourseMember($learn['courseId'], $learn['userId']);
+
+                    if ($member) {
+                        $memberFields               = array();
+                        $memberFields['learnedNum'] = $this->getLessonLearnDao()->getLearnCountByUserIdAndCourseIdAndStatus($learn['userId'], $learn['courseId'], 'finished') - 1;
+                        $memberFields['isLearned']  = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+                        $this->getMemberDao()->updateMember($member['id'], $memberFields);
+                    }
+                }
+            }
+        }
+
+        $this->getLessonLearnDao()->deleteLearnsByLessonId($lessonId);
+
+        $this->getLessonDao()->deleteLesson($lessonId);
+        $this->getLessonExtendDao()->deleteLesson($lessonId);
+
+        // 更新课时序号
+        $this->updateCourseCounter($course['id'], array(
+            'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
+        ));
+
+        $this->getLogService()->info('course', 'delete_lesson', "删除课程《{$course['title']}》(#{$course['id']})的课时 {$lesson['title']}");
+
+        $this->dispatchEvent("course.lesson.delete", array(
+            "courseId" => $courseId,
+            "lesson"   => $lesson
+        ));
+    }
+
+    public function sumLessonGiveCreditByLessonIds($lessonIds)
+    {
+        return $this->getLessonDao()->sumLessonGiveCreditByLessonIds($lessonIds);
+    }
+
+    public function findLearnsCountByLessonId($lessonId)
+    {
+        return $this->getLessonLearnDao()->findLearnsCountByLessonId($lessonId);
+    }
+
+    public function analysisLessonFinishedDataByTime($startTime, $endTime)
+    {
+        return $this->getLessonLearnDao()->analysisLessonFinishedDataByTime($startTime, $endTime);
+    }
+
+    public function searchAnalysisLessonViewCount($conditions)
+    {
+        return $this->getLessonViewDao()->searchLessonViewCount($conditions);
+    }
+
+    public function getAnalysisLessonMinTime($type)
+    {
+        if (!in_array($type, array('all', 'cloud', 'net', 'local'))) {
+            throw $this->createServiceException("error");
+        }
+
+        return $this->getLessonViewDao()->getAnalysisLessonMinTime($type);
+    }
+
+    public function searchAnalysisLessonView($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getLessonViewDao()->searchLessonView($conditions, $orderBy, $start, $limit);
+    }
+
+    public function analysisLessonViewDataByTime($startTime, $endTime, $conditions)
+    {
+        return $this->getLessonViewDao()->searchLessonViewGroupByTime($startTime, $endTime, $conditions);
+    }
+
+    public function publishLesson($courseId, $lessonId)
+    {
+        $course = $this->tryManageCourse($courseId);
+
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%不存在', array('%lessonId%' => $lessonId)));
+        }
+
+        $publishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
+
+        $this->dispatchEvent("course.lesson.publish", $publishLesson);
+    }
+
+    public function unpublishLesson($courseId, $lessonId)
+    {
+        $course = $this->tryManageCourse($courseId);
+
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%不存在', array('%lessonId%' => $lessonId)));
+        }
+
+        $unpublishLesson = $this->getLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
+
+        $this->dispatchEvent("course.lesson.unpublish", $unpublishLesson);
+    }
+
+    public function resetLessonMediaId($lessonId)
+    {
+        $lesson = $this->getLesson($lessonId);
+        if ($lesson) {
+            $this->getLessonDao()->updateLesson($lesson['id'], array('mediaId' => 0));
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getNextLessonNumber($courseId)
+    {
+        return $this->getLessonDao()->getLessonCountByCourseId($courseId) + 1;
+    }
+
+    public function liveLessonTimeCheck($courseId, $lessonId, $startTime, $length)
+    {
+        $course = $this->getCourseDao()->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException($this->getKernel()->trans('此课程不存在！'));
+        }
+
+        $thisStartTime = $thisEndTime = 0;
+
+        if ($lessonId) {
+            $liveLesson    = $this->getCourseLesson($course['id'], $lessonId);
+            $thisStartTime = empty($liveLesson['startTime']) ? 0 : $liveLesson['startTime'];
+            $thisEndTime   = empty($liveLesson['endTime']) ? 0 : $liveLesson['endTime'];
+        } else {
+            $lessonId = "";
+        }
+
+        $startTime = is_numeric($startTime) ? $startTime : strtotime($startTime);
+        $endTime   = $startTime + $length * 60;
+
+        $thisLessons = $this->getLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $lessonId);
+
+        if (($length / 60) > 8) {
+            return array('error_timeout', $this->getKernel()->trans('时长不能超过8小时！'));
+        }
+
+        if ($thisLessons) {
+            return array('error_occupied', $this->getKernel()->trans('该时段内已有直播课时存在，请调整直播开始时间'));
+        }
+
+        return array('success', '');
+    }
+
+    public function calculateLiveCourseLeftCapacityInTimeRange($startTime, $endTime, $excludeLessonId)
+    {
+        $client              = new EdusohoLiveClient();
+        $liveStudentCapacity = $client->getCapacity();
+        $liveStudentCapacity = empty($liveStudentCapacity['capacity']) ? 0 : $liveStudentCapacity['capacity'];
+
+        $lessons = $this->getLessonDao()->findTimeSlotOccupiedLessons($startTime, $endTime, $excludeLessonId);
+
+        $courseIds               = ArrayToolkit::column($lessons, 'courseId');
+        $courseIds               = array_unique($courseIds);
+        $courseIds               = array_values($courseIds);
+        $courses                 = $this->getCourseDao()->findCoursesByIds($courseIds);
+        $maxStudentNum           = ArrayToolkit::column($courses, 'maxStudentNum');
+        $timeSlotOccupiedStuNums = array_sum($maxStudentNum);
+
+        return $liveStudentCapacity - $timeSlotOccupiedStuNums;
+    }
+
+    public function canLearnLesson($courseId, $lessonId)
+    {
+        list($course, $member) = $this->tryTakeCourse($courseId);
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson) || $lesson['courseId'] != $courseId) {
+            throw $this->createNotFoundException();
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (empty($lesson['requireCredit'])) {
+            return array('status' => 'yes');
+        }
+
+        if ($member['credit'] >= $lesson['requireCredit']) {
+            return array('status' => 'yes');
+        }
+
+        return array('status' => 'no', 'message' => sprintf($this->getKernel()->trans('本课时需要%s学分才能学习，您当前学分为%s分。'), $lesson['requireCredit'], $member['credit']));
+    }
+
+    public function startLearnLesson($courseId, $lessonId)
+    {
+        list($course, $member) = $this->tryTakeCourse($courseId);
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (!empty($lesson)) {
+            if ($lesson['type'] == 'video') {
+                $createLessonView['courseId'] = $courseId;
+                $createLessonView['lessonId'] = $lessonId;
+                $createLessonView['fileId']   = $lesson['mediaId'];
+
+                $file = array();
+
+                if (!empty($createLessonView['fileId'])) {
+                    $file = $this->getUploadFileService()->getFile($createLessonView['fileId']);
+                }
+
+                $createLessonView['fileStorage'] = empty($file) ? "net" : $file['storage'];
+                $createLessonView['fileType']    = $lesson['type'];
+                $createLessonView['fileSource']  = $lesson['mediaSource'];
+
+                $this->createLessonView($createLessonView);
+            }
+
+            $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
+
+            if ($learn) {
+                return false;
+            }
+
+            $learn = $this->getLessonLearnDao()->addLearn(array(
+                'userId'       => $user['id'],
+                'courseId'     => $courseId,
+                'lessonId'     => $lessonId,
+                'status'       => 'learning',
+                'startTime'    => time(),
+                'finishedTime' => 0
+            ));
+
+            $this->dispatchEvent(
+                'course.lesson_start',
+                new Event($lesson, array('course' => $course, 'learn' => $learn))
+            );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function createLessonView($createLessonView)
+    {
+        $createLessonView                = ArrayToolkit::parts($createLessonView, array('courseId', 'lessonId', 'fileId', 'fileType', 'fileStorage', 'fileSource'));
+        $createLessonView['userId']      = $this->getCurrentUser()->id;
+        $createLessonView['createdTime'] = time();
+
+        $lessonView = $this->getLessonViewDao()->addLessonView($createLessonView);
+
+        $lesson = $this->getCourseLesson($createLessonView['courseId'], $createLessonView['lessonId']);
+
+        $this->getLogService()->info('course', 'create', "{$this->getCurrentUser()->nickname}观看课时《{$lesson['title']}》");
+
+        return $lessonView;
+    }
+
+    public function finishLearnLesson($courseId, $lessonId)
+    {
+        list($course, $member) = $this->tryLearnCourse($courseId);
+
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%不存在！', array('%lessonId%' => $lessonId)));
+        }
+
+        $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId);
+
+        if ($learn) {
+            $learn = $this->getLessonLearnDao()->updateLearn($learn['id'], array(
+                'status'       => 'finished',
+                'finishedTime' => time()
+            ));
+        } else {
+            $learn = $this->getLessonLearnDao()->addLearn(array(
+                'userId'       => $member['userId'],
+                'courseId'     => $courseId,
+                'lessonId'     => $lessonId,
+                'status'       => 'finished',
+                'startTime'    => time(),
+                'finishedTime' => time()
+            ));
+        }
+
+        $this->dispatchEvent(
+            'course.lesson_finish',
+            new Event($lesson, array('course' => $course, 'learn' => $learn))
+        );
+    }
+
+    public function searchLearnCount($conditions)
+    {
+        return $this->getLessonLearnDao()->searchLearnCount($conditions);
+    }
+
+    public function searchLearns($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getLessonLearnDao()->searchLearns($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchLearnTime($conditions)
+    {
+        return $this->getLessonLearnDao()->searchLearnTime($conditions);
+    }
+
+    public function searchWatchTime($conditions)
+    {
+        return $this->getLessonLearnDao()->searchWatchTime($conditions);
+    }
+
+    public function findLatestFinishedLearns($start, $limit)
+    {
+        return $this->getLessonLearnDao()->findLatestFinishedLearns($start, $limit);
+    }
+
+    public function cancelLearnLesson($courseId, $lessonId)
+    {
+        list($course, $member) = $this->tryLearnCourse($courseId);
+
+        $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId);
+
+        if (empty($learn)) {
+            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%尚未学习，取消学习失败。', array('%lessonId%' => $lessonId)));
+        }
+
+        if ($learn['status'] != 'finished') {
+            throw $this->createServiceException($this->getKernel()->trans('课时#%lessonId%尚未学完，取消学习失败。', array('%lessonId%' => $lessonId)));
+        }
+
+        $this->getLessonLearnDao()->updateLearn($learn['id'], array(
+            'status'       => 'learning',
+            'finishedTime' => 0
+        ));
+
+        $learns       = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
+        $totalCredits = $this->getLessonDao()->sumLessonGiveCreditByLessonIds(ArrayToolkit::column($learns, 'lessonId'));
+
+        $memberFields               = array();
+        $memberFields['learnedNum'] = count($learns);
+        $memberFields['isLearned']  = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+        $memberFields['credit']     = $totalCredits;
+
+        $this->getMemberDao()->updateMember($member['id'], $memberFields);
+    }
+
+    public function getUserLearnLessonStatus($userId, $courseId, $lessonId)
+    {
+        $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+
+        if (empty($learn)) {
+            return null;
+        }
+
+        return $learn['status'];
+    }
+
+    public function getUserLearnLessonStatuses($userId, $courseId)
+    {
+        $learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseId($userId, $courseId) ?: array();
+
+        $statuses = array();
+
+        foreach ($learns as $learn) {
+            $statuses[$learn['lessonId']] = $learn['status'];
+        }
+
+        return $statuses;
+    }
+
+    public function getLearnByUserIdAndLessonId($userId, $lessonId)
+    {
+        return $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($userId, $lessonId);
+    }
+
+    public function findUserLearnedLessons($userId, $courseId)
+    {
+        return ArrayToolkit::index($this->getLessonLearnDao()->findLearnsByUserIdAndCourseId($userId, $courseId) ?: array(), 'lessonId');
+    }
+
+    public function getUserNextLearnLesson($userId, $courseId)
+    {
+        $lessonIds = $this->getLessonDao()->findLessonIdsByCourseId($courseId);
+
+        $learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($userId, $courseId, 'finished');
+
+        $learnedLessonIds = ArrayToolkit::column($learns, 'lessonId');
+
+        $unlearnedLessonIds = array_diff($lessonIds, $learnedLessonIds);
+        $nextLearnLessonId  = array_shift($unlearnedLessonIds);
+
+        if (empty($nextLearnLessonId)) {
+            return null;
+        }
+
+        return $this->getLessonDao()->getLesson($nextLearnLessonId);
+    }
+
+    public function getChapter($courseId, $chapterId)
+    {
+        $chapter = $this->getChapterDao()->getChapter($chapterId);
+
+        if (empty($chapter) || $chapter['courseId'] != $courseId) {
+            return null;
+        }
+
+        return $chapter;
+    }
+
+    public function getCourseChapters($courseId)
+    {
+        return $this->getChapterDao()->findChaptersByCourseId($courseId);
+    }
+
+    public function createChapter($chapter)
+    {
+        $argument = $chapter;
+
+        if (!in_array($chapter['type'], array('chapter', 'unit'))) {
+            throw $this->createServiceException($this->getKernel()->trans('章节类型不正确，添加失败！'));
+        }
+
+        if ($chapter['type'] == 'unit') {
+            list($chapter['number'], $chapter['parentId']) = $this->getNextUnitNumberAndParentId($chapter['courseId']);
+        } else {
+            $chapter['number']   = $this->getNextChapterNumber($chapter['courseId']);
+            $chapter['parentId'] = 0;
+        }
+
+        $chapter['seq']         = $this->getNextCourseItemSeq($chapter['courseId']);
+        $chapter['createdTime'] = time();
+        $chapter                = $this->getChapterDao()->addChapter($chapter);
+        $this->dispatchEvent("chapter.create", array('argument' => $argument, 'chapter' => $chapter));
+        return $chapter;
+    }
+
+    public function updateChapter($courseId, $chapterId, $fields)
+    {
+        $argument = $fields;
+        $chapter  = $this->getChapter($courseId, $chapterId);
+
+        if (empty($chapter)) {
+            throw $this->createServiceException($this->getKernel()->trans('章节#%chapterId%不存在！', array('%chapterId%' => $chapterId)));
+        }
+
+        $fields  = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
+        $chapter = $this->getChapterDao()->updateChapter($chapterId, $fields);
+
+        $this->dispatchEvent("chapter.update", array('argument' => $argument, 'chapter' => $chapter));
+        return $chapter;
+    }
+
+    public function deleteChapter($courseId, $chapterId)
+    {
+        $course = $this->tryManageCourse($courseId);
+
+        $deletedChapter = $this->getChapter($course['id'], $chapterId);
+
+        if (empty($deletedChapter)) {
+            throw $this->createServiceException(sprintf($this->getKernel()->trans('章节(ID:%s)不存在，删除失败！'), $chapterId));
+        }
+
+        $this->getChapterDao()->deleteChapter($deletedChapter['id']);
+
+        $prevChapter = array('id' => 0);
+
+        foreach ($this->getCourseChapters($course['id']) as $chapter) {
+            if ($chapter['number'] < $deletedChapter['number']) {
+                $prevChapter = $chapter;
+            }
+        }
+
+        $lessons = $this->getLessonDao()->findLessonsByChapterId($deletedChapter['id']);
+
+        foreach ($lessons as $lesson) {
+            $this->getLessonDao()->updateLesson($lesson['id'], array('chapterId' => $prevChapter['id']));
+        }
+
+        $this->dispatchEvent("chapter.delete", $deletedChapter);
+    }
+
+    public function getNextChapterNumber($courseId)
+    {
+        $counter = $this->getChapterDao()->getChapterCountByCourseIdAndType($courseId, 'chapter');
+        return $counter + 1;
+    }
+
+    public function findChaptersByCopyIdAndLockedCourseIds($copyId, $courseIds)
+    {
+        return $this->getChapterDao()->findChaptersByCopyIdAndLockedCourseIds($copyId, $courseIds);
+    }
+
+    public function getNextUnitNumberAndParentId($courseId)
+    {
+        $lastChapter = $this->getChapterDao()->getLastChapterByCourseIdAndType($courseId, 'chapter');
+
+        $parentId = empty($lastChapter) ? 0 : $lastChapter['id'];
+
+        $unitNum = 1 + $this->getChapterDao()->getChapterCountByCourseIdAndTypeAndParentId($courseId, 'unit', $parentId);
+
+        return array($unitNum, $parentId);
+    }
+
+    public function getCourseItems($courseId)
+    {
+        $lessons = LessonSerialize::unserializes(
+            $this->getLessonDao()->findLessonsByCourseId($courseId)
+        );
+
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+
+        $items = array();
+
+        foreach ($lessons as $lesson) {
+            $lesson['itemType']              = 'lesson';
+            $items["lesson-{$lesson['id']}"] = $lesson;
+        }
+
+        foreach ($chapters as $chapter) {
+            $chapter['itemType']               = 'chapter';
+            $items["chapter-{$chapter['id']}"] = $chapter;
+        }
+
+        uasort($items, function ($item1, $item2) {
+            return $item1['seq'] > $item2['seq'];
+        }
+
+        );
+        return $items;
+    }
+
+    public function sortCourseItems($courseId, array $itemIds)
+    {
+        $items          = $this->getCourseItems($courseId);
+        $existedItemIds = array_keys($items);
+
+        if (count($itemIds) != count($existedItemIds)) {
+            throw $this->createServiceException($this->getKernel()->trans('itemdIds参数不正确'));
+        }
+
+        $diffItemIds = array_diff($itemIds, array_keys($items));
+
+        if (!empty($diffItemIds)) {
+            throw $this->createServiceException($this->getKernel()->trans('itemdIds参数不正确'));
+        }
+
+        $lessonNum      = $chapterNum = $unitNum = $seq = 0;
+        $currentChapter = $rootChapter = array('id' => 0);
+
+        foreach ($itemIds as $itemId) {
+            $seq++;
+            list($type) = explode('-', $itemId);
+
+            switch ($type) {
+                case 'lesson':
+                    $lessonNum++;
+                    $item   = $items[$itemId];
+                    $fields = array('number' => $lessonNum, 'seq' => $seq, 'chapterId' => $currentChapter['id']);
+
+                    if ($fields['number'] != $item['number'] || $fields['seq'] != $item['seq'] || $fields['chapterId'] != $item['chapterId']) {
+                        $this->updateLesson($courseId, $item['id'], $fields);
+                    }
+
+                    break;
+                case 'chapter':
+                    $item    = $currentChapter = $items[$itemId];
+                    $chapter = $this->getChapter($courseId, $item['id']);
+
+                    if ($item['type'] == 'unit') {
+                        $unitNum++;
+                        $fields = array('number' => $unitNum, 'seq' => $seq, 'parentId' => $rootChapter['id'], 'title' => $chapter['title']);
+                    } else {
+                        $chapterNum++;
+                        $unitNum     = 0;
+                        $rootChapter = $item;
+                        $fields      = array('number' => $chapterNum, 'seq' => $seq, 'parentId' => 0, 'title' => $chapter['title']);
+                    }
+
+                    if ($fields['parentId'] != $item['parentId'] || $fields['number'] != $item['number'] || $fields['seq'] != $item['seq']) {
+                        $argument = $fields;
+                        $this->updateChapter($courseId, $item['id'], $fields);
+                    }
+
+                    break;
+            }
+        }
+    }
+
+    protected function getNextCourseItemSeq($courseId)
+    {
+        $chapterMaxSeq = $this->getChapterDao()->getChapterMaxSeqByCourseId($courseId);
+        $lessonMaxSeq  = $this->getLessonDao()->getLessonMaxSeqByCourseId($courseId);
+        return ($chapterMaxSeq > $lessonMaxSeq ? $chapterMaxSeq : $lessonMaxSeq) + 1;
+    }
+
+    public function addMemberExpiryDays($courseId, $userId, $day)
+    {
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+
+        if ($member['deadline'] > 0) {
+            $deadline = $day * 24 * 60 * 60 + $member['deadline'];
+        } else {
+            $deadline = $day * 24 * 60 * 60 + time();
+        }
+
+        return $this->getMemberDao()->updateMember($member['id'], array(
+            'deadline' => $deadline
+        ));
+    }
+
+    /**
+     * Member API
+     */
+
+    protected function getWelcomeMessageBody($user, $course)
+    {
+        $setting            = $this->getSettingService()->get('course', array());
+        $valuesToBeReplace  = array('{{nickname}}', '{{course}}');
+        $valuesToReplace    = array($user['nickname'], $course['title']);
+        $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
+        return $welcomeMessageBody;
+    }
+
+    public function increaseLessonQuizCount($lessonId)
+    {
+        $lesson = $this->getLessonDao()->getLesson($lessonId);
+        $lesson['quizNum'] += 1;
+        $this->getLessonDao()->updateLesson($lesson['id'], $lesson);
+    }
+
+    public function resetLessonQuizCount($lessonId, $count)
+    {
+        $lesson            = $this->getLessonDao()->getLesson($lessonId);
+        $lesson['quizNum'] = $count;
+        $this->getLessonDao()->updateLesson($lesson['id'], $lesson);
+    }
+
+    public function increaseLessonMaterialCount($lessonId)
+    {
+        $lesson = $this->getLessonDao()->getLesson($lessonId);
+        $lesson['materialNum'] += 1;
+        $this->getLessonDao()->updateLesson($lesson['id'], $lesson);
+    }
+
+    public function resetLessonMaterialCount($lessonId, $count)
+    {
+        $lesson                = $this->getLessonDao()->getLesson($lessonId);
+        $lesson['materialNum'] = $count;
+        $this->getLessonDao()->updateLesson($lesson['id'], $lesson);
+    }
+
+
+    /**
+     * @todo refactor it.
+     * @param  int|string $courseId
+     * @param  null|string $otherPermission
+     * @param  int|string $courseId
+     * @param  null|string $otherPermission
+     * @throws NotFoundException|AccessDeniedException
+     * @return array
+     * @return array
+     */
+    public function tryManageCourse($courseId, $otherPermission = null)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException($this->getKernel()->trans('未登录用户，无权操作！'));
+        }
+
+        $course = $this->getCourseDao()->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$this->hasCourseManagerRole($courseId, $user['id']) && !$user->hasPermission($otherPermission)) {
+            throw $this->createAccessDeniedException($this->getKernel()->trans('您不是课程的教师或管理员，无权操作！'));
+        }
+
+        return CourseSerialize::unserialize($course);
+    }
+
+    /**
+     * @param  int|string $courseId
+     * @param  null|string $actionPermission
+     * @param  int|string $courseId
+     * @param  null|string $actionPermission
+     * @throws NotFoundException|AccessDeniedException
+     * @return array
+     * @return array
+     */
+    public function tryAdminCourse($courseId, $actionPermission = null)
+    {
+        $course = $this->getCourseDao()->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (empty($user->id)) {
+            throw $this->createAccessDeniedException($this->getKernel()->trans('未登录用户，无权操作！'));
+        }
+
+        if (!$this->hasAdminRole() && !$user->hasPermission($actionPermission)) {
+            throw $this->createAccessDeniedException($this->getKernel()->trans('您不是管理员，无权操作！'));
+        }
+
+        return CourseSerialize::unserialize($course);
+    }
+
+    public function canManageCourse($courseId, $actionPermission = null)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if ($this->hasAdminRole() || $user->hasPermission($actionPermission)) {
+            return true;
+        }
+
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            return $user->isAdmin();
+        }
+
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $user->id);
+
+        if ($member && ($member['role'] == 'teacher')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function tryTakeCourse($courseId)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw new ResourceNotFoundException('course', $courseId);
+        }
+
+        if (!$this->canTakeCourse($course)) {
+            throw $this->createAccessDeniedException($this->getKernel()->trans('您不是课程学员，不能查看课程内容，请先购买课程！'));
+        }
+
+        $user   = $this->getCurrentUser();
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
+
+        return array($course, $member);
+    }
+
+
+    public function canTakeCourse($course)
+    {
+        $course = !is_array($course) ? $this->getCourse(intval($course)) : $course;
+
+        if (empty($course)) {
+            return false;
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if ($user->hasPermission('admin_course')) {
+            return true;
+        }
+
+        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
+            return true;
+        }
+
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
+
+        if ($member && in_array($member['role'], array('teacher', 'student'))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function tryLearnCourse($courseId)
+    {
+        $course = $this->getCourseDao()->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (empty($user)) {
+            throw $this->createAccessDeniedException($this->getKernel()->trans('未登录用户，无权操作！'));
+        }
+
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $user['id']);
+
+        if (empty($member) || !in_array($member['role'], array('admin', 'teacher', 'student'))) {
+            throw $this->createAccessDeniedException($this->getKernel()->trans('您不是课程学员，不能学习！'));
+        }
+
+        return array($course, $member);
+    }
+
+    public function generateLessonReplay($courseId, $lessonId)
+    {
+        $courseReplay = array('courseId' => $courseId, 'lessonId' => $lessonId);
+        $course       = $this->tryManageCourse($courseId);
+        $lesson       = $this->getLessonDao()->getLesson($lessonId);
+
+        $client     = new EdusohoLiveClient();
+        $replayList = $client->createReplayList($lesson['mediaId'], '课时回放-'.$lesson['title'], $lesson['liveProvider']);
+
+        if (isset($replayList['error'])) {
+            return $replayList;
+        }
+
+        $this->deleteLessonReplayByLessonId($lessonId);
+
+        if (isset($replayList['data'])) {
+            $replayList = json_decode($replayList['data'], true);
+        }
+
+        $index = 1;
+        foreach ($replayList as $key => $replay) {
+            $fields                = array();
+            $fields['courseId']    = $courseId;
+            $fields['lessonId']    = $lessonId;
+            $fields['title']       = '录播回放'.$index;
+            $fields['replayId']    = $replay['id'];
+            $fields['globalId']    = empty($replay['resourceNo']) ? '' : $replay['resourceNo'];
+            $fields['userId']      = $this->getCurrentUser()->id;
+            $fields['createdTime'] = time();
+            $this->addCourseLessonReplay($fields);
+            $index++;
+        }
+
+        $fields = array(
+            'replayStatus' => 'generated'
+        );
+
+        $lesson = $this->updateLesson($courseId, $lessonId, $fields);
+
+        return $replayList;
+    }
+
+    public function generateLessonVideoReplay($courseId, $lessonId, $fileId)
+    {
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException("课时(#{$lessonId})不存在！");
+        }
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+        if (!$file) {
+            throw $this->createServiceException("文件不存在");
+        }
+
+        $lessonFields = array(
+            'mediaId'      => $file['id'],
+            'mediaName'    => $file['filename'],
+            'mediaSource'  => 'self',
+            'replayStatus' => 'videoGenerated'
+        );
+
+        $updatedLesson = LessonSerialize::unserialize(
+            $this->getLessonDao()->updateLesson($lessonId, LessonSerialize::serialize($lessonFields))
+        );
+
+        $this->dispatchEvent("course.lesson.generate.video.replay", array('lesson' => $updatedLesson));
+
+        return $lesson;
+    }
+
+    public function updateReplayShow($showReplayIds, $lessonId)
+    {
+        $replayLessons = $this->getCourseLessonReplayByLessonId($lessonId);
+
+        if (!$replayLessons) {
+            return false;
+        }
+
+        foreach ($replayLessons as $replay) {
+            if (empty($showReplayIds) || (!$replay['hidden'] && !in_array($replay['id'], $showReplayIds))) {
+                $this->updateCourseLessonReplay($replay['id'], array('hidden' => 1));
+            } elseif ($replay['hidden'] && in_array($replay['id'], $showReplayIds)) {
+                $this->updateCourseLessonReplay($replay['id'], array('hidden' => 0));
+            }
+        }
+
+        return true;
+    }
+
+    public function entryReplay($lessonId, $courseLessonReplayId)
+    {
+        $lesson = $this->getLessonDao()->getLesson($lessonId);
+        list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
+
+        $courseLessonReplay = $this->getCourseLessonReplayDao()->get($courseLessonReplayId);
+        $user               = $this->getCurrentUser();
+
+        $args = array(
+            'liveId'   => $lesson["mediaId"],
+            'replayId' => $courseLessonReplay["replayId"],
+            'provider' => $lesson["liveProvider"],
+            'user'     => $user['email'],
+            'nickname' => $user['nickname']
+        );
+
+        $client = new EdusohoLiveClient();
+        $result = $client->entryReplay($args);
+        return $result;
+    }
+
+    public function getCourseLessonReplayByLessonId($lessonId, $lessonType = 'live')
+    {
+        return $this->getCourseLessonReplayDao()->findByLessonId($lessonId, $lessonType);
+    }
+
+    public function deleteCourseLessonReplayByLessonId($lessonId)
+    {
+        $this->getCourseLessonReplayDao()->deleteByLessonId($lessonId);
+    }
+
+    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live')
+    {
+        return $this->getCourseLessonReplayDao()->getByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
+    }
+
+    public function getCourseLessonReplay($id)
+    {
+        return $this->getCourseLessonReplayDao()->get($id);
+    }
+
+
+    public function updateCourseLessonReplay($id, $fields)
+    {
+        $lessonReplay = $this->getCourseLessonReplayDao()->get($id);
+
+        if (empty($lessonReplay)) {
+            throw $this->createServiceException($this->getKernel()->trans('录播回放不存在，更新失败！'));
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('hidden', 'title'));
+
+        $lessonReplay = $this->getCourseLessonReplayDao()->update($id, $fields);
+
+        $this->dispatchEvent("course.lesson.replay.update", array('replay' => $lessonReplay));
+
+        return $lessonReplay;
+    }
+
+    public function updateCourseLessonReplayByLessonId($lessonId, $fields, $lessonType = 'live')
+    {
+        $fields = ArrayToolkit::parts($fields, array('hidden'));
+
+        return $this->getCourseLessonReplayDao()->updateByLessonId($lessonId, $fields, $lessonType);
+    }
+
+    public function searchCourseLessonReplayCount($conditions)
+    {
+        return $this->getCourseLessonReplayDao()->count($conditions);
+    }
+
+    public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getCourseLessonReplayDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live')
+    {
+        return $this->getCourseLessonReplayDao()->findByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
+    }
+
+    protected function isClassroomMember($course, $userId)
+    {
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+
+        if ($classroom['classroomId']) {
+            $member = $this->getClassroomService()->getClassroomMember($classroom['classroomId'], $userId);
+
+            if (!empty($member) && array_intersect(array('student', 'teacher', 'headTeacher', 'assistant'), $member['role'])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return CourseLessonReplayDao
+     */
+    protected function getCourseLessonReplayDao()
+    {
+        return $this->createDao('Course:CourseLessonReplayDao');
+    }
+
+    protected function hasAdminRole()
+    {
+        $user = $this->getCurrentUser();
+        return $user->hasPermission('admin_course_content_manage');
+    }
+
+    public function hasTeacherRole($courseId, $userId)
+    {
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+        return !empty($member) && $member['role'] == 'teacher';
+    }
+
+    protected function hasCourseManagerRole($courseId, $userId)
+    {
+        return $this->hasTeacherRole($courseId, $userId) || $this->hasAdminRole();
+    }
+
+    protected function deleteCrontabs($lessons)
+    {
+        if (!$lessons) {
+            return false;
+        }
+
+        foreach ($lessons as $key => $lesson) {
+            $this->getCrontabService()->deleteJobs($lesson['id'], 'lesson');
+        }
+
+        return true;
+    }
+
+    protected function updateLessonExtend($lesson, $fields)
+    {
+        $lessonExtend = $this->getLessonExtendDao()->getLesson($lesson['id']);
+        if ($lessonExtend) {
+            return $this->getLessonExtendDao()->updateLesson($lesson['id'], $fields);
+        } else {
+            $fields['id']       = $lesson['id'];
+            $fields['courseId'] = $lesson['courseId'];
+            return $this->getLessonExtendDao()->addLesson($fields);
+        }
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
+
+    protected function getTagOwnerDao()
+    {
+        return $this->createDao('Taxonomy:TagOwnerDao');
+    }
+
+    /**
+     * @return CourseDao
+     */
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
+    }
+
+    /**
+     * @return FavoriteDao
+     */
+    protected function getFavoriteDao()
+    {
+        return $this->createDao('Course:FavoriteDao');
+    }
+
+    /**
+     * @return CourseMemberDao
+     */
+    protected function getMemberDao()
+    {
+        return $this->createDao('Course:CourseMemberDao');
+    }
+
+    protected function getLessonDao()
+    {
+        return $this->createDao('Course:LessonDao');
+    }
+
+    protected function getLessonExtendDao()
+    {
+        return $this->createDao('Course:LessonExtendDao');
+    }
+
+    protected function getCourseDraftDao()
+    {
+        return $this->createDao('Course:CourseDraftDao');
+    }
+
+    protected function getLessonLearnDao()
+    {
+        return $this->createDao('Course:LessonLearnDao');
+    }
+
+    protected function getLessonViewDao()
+    {
+        return $this->createDao('Course:LessonViewDao');
+    }
+
+    protected function getChapterDao()
+    {
+        return $this->createDao('Course:CourseChapterDao');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->createService('Vip:Vip.VipService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
+    }
+
+    protected function getMessageService()
+    {
+        return $this->createService('User:MessageService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy:TagService');
+    }
+
+    protected function getNoteDao()
+    {
+        return $this->createDao('Course:CourseNoteDao');
+    }
+
+    protected function getCourseMaterialService()
+    {
+        return $this->createService('Course:MaterialService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
+    }
+
+    protected function getDiscountService()
+    {
+        return $this->createService('Discount:Discount.DiscountService');
+    }
+
+    protected function getCrontabService()
+    {
+        return $this->createService('Crontab:CrontabService');
+    }
+}
+
+class CourseSerialize
+{
+    public static function serialize(array &$course)
+    {
+        if (isset($course['goals'])) {
+            if (is_array($course['goals']) && !empty($course['goals'])) {
+                $course['goals'] = '|'.implode('|', $course['goals']).'|';
+            } else {
+                $course['goals'] = '';
+            }
+        }
+
+        if (isset($course['audiences'])) {
+            if (is_array($course['audiences']) && !empty($course['audiences'])) {
+                $course['audiences'] = '|'.implode('|', $course['audiences']).'|';
+            } else {
+                $course['audiences'] = '';
+            }
+        }
+
+        if (isset($course['teacherIds'])) {
+            if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
+                $course['teacherIds'] = '|'.implode('|', $course['teacherIds']).'|';
+            } else {
+                $course['teacherIds'] = null;
+            }
+        }
+
+        return $course;
+    }
+
+    public static function unserialize(array $course = null)
+    {
+        if (empty($course)) {
+            return $course;
+        }
+
+        if (empty($course['goals'])) {
+            $course['goals'] = array();
+        } else {
+            $course['goals'] = explode('|', trim($course['goals'], '|'));
+        }
+
+        if (empty($course['audiences'])) {
+            $course['audiences'] = array();
+        } else {
+            $course['audiences'] = explode('|', trim($course['audiences'], '|'));
+        }
+
+        if (empty($course['teacherIds'])) {
+            $course['teacherIds'] = array();
+        } else {
+            $course['teacherIds'] = explode('|', trim($course['teacherIds'], '|'));
+        }
+
+        return $course;
+    }
+
+    public static function unserializes(array $courses)
+    {
+        return array_map(function ($course) {
+            return CourseSerialize::unserialize($course);
+        }, $courses);
+    }
+}
+
+class LessonSerialize
+{
+    public static function serialize(array $lesson)
+    {
+        return $lesson;
+    }
+
+    public static function unserialize(array $lesson = null)
+    {
+        return $lesson;
+    }
+
+    public static function unserializes(array $lessons)
+    {
+        return array_map(function ($lesson) {
+            return LessonSerialize::unserialize($lesson);
+        }, $lessons);
+    }
+}
