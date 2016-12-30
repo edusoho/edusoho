@@ -6,40 +6,35 @@
   <div class="es-piece">
     <div class="piece-header">课程介绍</div>
     <div class="piece-body p-lg clearfix">
-      <p>Google Analytics是一个运行在Google主机上的免费网站分析工具，她可以告诉你访问者是如何找到并使用你的网站，</p>
-      <p>到并使用你的网站，这样，你就可以：</p>
-      <p>对网站的设计和内容作出更明智的决定。</p>
-      <p>改进网站使更多的访问者转化为客户。</p>
-      <p>追踪你的关键字，Banner广告，EDM，及其他营销活动的效果。</p>
-      <p>追踪数据，诸如收益，平均订单价值和电子商务转化率。</p>
+      {{ course.summary|raw }}
     </div>
   </div>
-  <div class="es-piece">
+  <div class="es-piece {% if course.goals is empty  %} hidden {% endif  %}">
     <div class="piece-header">课程目标</div>
     <div class="piece-body">
       <ul class="piece-body-list">
-        <li><i class="es-icon es-icon-dot mrm"></i>
-          学习使用Google Analytics追踪网校数据
-        </li>
-        <li><i class="es-icon es-icon-dot mrm"></i>
-          学习分析网校数据，改进网校内容
-        </li>
+        {% for  goal in course.goals %}
+          <li><i class="es-icon es-icon-dot mrm"></i>
+            {{ goal }}
+          </li>
+        {% else %}
+          <span class="empty">为设置目标</span>
+        {% endfor %}
       </ul>
     </div>
   </div>
-  <div class="es-piece">
+  <div class="es-piece {% if course.audiences is empty  %} hidden {% endif  %}">
     <div class="piece-header">适合人群</div>
     <div class="piece-body">
       <ul class="piece-body-list">
-        <li><i class="es-icon es-icon-dot mrm"></i>
-          网校运营人员
-        </li>
-        <li><i class="es-icon es-icon-dot mrm"></i>
-          网校开发人员
-        </li>
+        {% for  audience in course.audiences %}
+          <li><i class="es-icon es-icon-dot mrm"></i>
+            {{ audience }}
+          </li>
+        {% else %}
+          <span class="empty">为设置目标</span>
+        {% endfor %}
       </ul>
     </div>
   </div>
-
-  {#{% include 'course-set/task-list/index.html.twig' %}#}
 {% endblock %}

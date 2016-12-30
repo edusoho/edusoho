@@ -53,14 +53,20 @@ interface CourseMemberDao extends GeneralDaoInterface
     /**
      * @param $userId
      * @param $role
+     * @return mixed
+     * @before findMembersByUserIdAndRole
+     */
+    public function findByUserIdAndRole($userId, $role);
+
+    /**
+     * @param $userId
+     * @param $role
      * @param $start
      * @param $limit
      * @param bool $onlyPublished
      * @return mixed
      * @before findMembersByUserIdAndRole
      */
-    public function findByUserIdAndRole($userId, $role);
-
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true); //
 
     public function findByCourseIdAndRole($courseId, $role);

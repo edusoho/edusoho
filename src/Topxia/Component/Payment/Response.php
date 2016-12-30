@@ -37,7 +37,6 @@ abstract class Response
 
         $url = $url . '?' . http_build_query($params);
         curl_setopt($curl, CURLOPT_URL, $url );
-
         $response = curl_exec($curl);
 
         curl_close($curl);

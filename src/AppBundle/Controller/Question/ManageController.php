@@ -43,7 +43,10 @@ class ManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
 
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseSet['id']);
+        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseIds($courseIds);
         $courseTasks = ArrayToolkit::index($courseTasks, 'id');
 
         return $this->render('question-manage/index.html.twig', array(
@@ -207,16 +210,6 @@ class ManageController extends BaseController
 
         $conditions['parentId'] = 0;
 
-        if (empty($conditions['excludeIds'])) {
-            unset($conditions['excludeIds']);
-        } else {
-            $conditions['excludeIds'] = $conditions['excludeIds'];
-        }
-
-        if (!empty($conditions['keyword'])) {
-            $conditions['stem'] = trim($conditions['keyword']);
-        }
-
         $paginator = new Paginator(
             $request,
             $this->getQuestionService()->searchCount($conditions),
@@ -248,26 +241,23 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
-        $question = $this->getQuestionService()->get($questionId);
+        $questionIds = $request->query->get('questionIds', array(0));
+        $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        if (empty($question)) {
-            throw $this->ResourceNotFoundException('question', $questionId);
-        }
-
-        $subQuestions = array();
-        if ($question['subCount'] > 0) {
-            $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+        foreach ($questions as &$question) {
+            if ($question['subCount'] > 0) {
+                $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+            }
         }
 
         //$targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
 
         return $this->render('question-manage/question-picked.html.twig', array(
-            'courseSet'    => $courseSet,
-            'question'     => $question,
-            'subQuestions' => $subQuestions,
+            'courseSet' => $courseSet,
+            'questions' => $questions,
             //'targets'      => $targets,
-            'type'         => $question['type'],
-            'target'       => $request->query->get('target', 'testpaper')
+            'type'      => $question['type'],
+            'target'    => $request->query->get('target', 'testpaper')
         ));
     }
 

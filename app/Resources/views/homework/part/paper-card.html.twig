@@ -1,0 +1,30 @@
+<div class="testpaper-card affix">
+  {% if paperResult.status|default(null) == 'finished' %}
+    <div class="mbl">
+      <a class="btn btn-primary btn-block btn-lg  border-radius-none">再次尝试</a>
+      <!-- @TODO : 链接 -->
+    </div>
+  {% endif %}
+  <div class="panel panel-gray border-radius-none">
+    <div class="panel-heading">
+      {{'答题卡'|trans}} 
+      <a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">2题</span>，总分<span class="color-primary">8.0分</span>，及格为<span class="color-primary">5.0</span>分。请在<span class="color-primary">50分钟</span>内作答。</div>'><i class="es-icon es-icon-info"></i></a>
+      <!-- @TODO 说明 -->
+    </div>
+    <div class="panel-body">
+      {% for question in questions %}
+        <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbmpull-left {% if question.testResult|default(null) %}active{% endif %}">{{ question.seq }}</a>
+      {% endfor %}
+    </div>
+    {% if paperResult.status|default(null) != 'finished' %}
+    <div class="panel-footer text-right">
+      {% if paperResult.status|default(null) == 'reviewing' %}
+        <a class="btn btn-success" data-toggle="modal" data-target="#modal" data-url"" data-role="check-submit" data-return-url="">{{'完成批改'|trans}}</a>
+      {% elseif paperResult.status|default(null) == 'doing' %}
+        <a class="btn btn-default" id="homework-next-do" data-url="" data-return-url="">{{'下次再做'|trans}}</a>
+        <a id="paper-finish" class="btn btn-success" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交作业'|trans}}</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>

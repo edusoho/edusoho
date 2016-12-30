@@ -10,7 +10,16 @@ use Symfony\Component\HttpFoundation\Request;
 
 class NoteController extends BaseController
 {
-    public function createCourseNoteAction(Request $request, $courseId, $taskId)
+    /**
+     * create note or update note
+     *
+     * @param Request $request
+     * @param         $courseId
+     * @param         $taskId
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function saveCourseNoteAction(Request $request, $courseId, $taskId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 

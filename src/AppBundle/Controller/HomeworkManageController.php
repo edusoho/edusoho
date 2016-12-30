@@ -40,27 +40,24 @@ class HomeworkManageController extends BaseController
         ));
     }
 
-    public function pickedQuestionAction(Request $request, $courseSetId, $questionId)
+    public function pickedQuestionAction(Request $request, $courseSetId)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
-        $question = $this->getQuestionService()->get($questionId);
+        $questionIds = $request->query->get('questionIds', array(0));
+        $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        if (empty($question)) {
-            throw $this->createResourceNotFoundException('question', $questionId);
-        }
-
-        $subQuestions = array();
-        if ($question['subCount'] > 0) {
-            $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+        foreach ($questions as &$question) {
+            if ($question['subCount'] > 0) {
+                $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+            }
         }
 
         return $this->render('homework/manage/question-picked.html.twig', array(
-            'courseSet'    => $courseSet,
-            'question'     => $question,
-            'subQuestions' => $subQuestions,
-            'type'         => $question['type'],
-            'target'       => $request->query->get('target', 'testpaper')
+            'courseSet' => $courseSet,
+            'questions' => $questions,
+            'type'      => $question['type'],
+            'target'    => $request->query->get('target', 'testpaper')
         ));
     }
 

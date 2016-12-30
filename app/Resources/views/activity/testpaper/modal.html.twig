@@ -1,17 +1,18 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 
-{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-range.js','app/js/activity-manage/testpaper/index.js'], 300) %}
+{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-nouislider.js','app/js/activity-manage/testpaper/index.js'], 300) %}
 
 {% block activity_content %}
   <div class="form-group">
     <div class="col-sm-2 control-label">
-      <label for="lesson-mediaId-field">{{'试卷'|trans}}</label>
+      <label for="testpaper-media">{{'试卷'|trans}}</label>
     </div>
     <div class="col-sm-10 controls">
-      <select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:courseSetId}) }}">
-        <option value="">{{ '请选择试卷'|trans }}</option>>
+      <select id="testpaper-media" class="form-control" name="mediaId"  data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
+      {#<select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">#}
+        <option value="">{{ '请选择试卷'|trans }}</option>
         {% for testpaper in testpapers if testpaper %}
-          <option value="{{ testpaper.id }}" {% if testpaper.id == activity.testpaperMediaId|default('') %}selected{% endif %} data-score="{{ testpaper.score }}">{{ testpaper.name }}</option>>
+          <option value="{{ testpaper.id }}" {% if testpaper.id == activity.testpaperMediaId|default('') %}selected{% endif %} data-score="{{ testpaper.score }}">{{ testpaper.name }}</option>
         {% endfor %}
       </select>
       <div class="help-block">{{'如果找不到试卷，请先确定该试卷已经发布'|trans}}</div>
@@ -24,9 +25,9 @@
   </div>
 
   <div class="form-group">
-    <div class="col-sm-2 control-label"><label>{{'时间限制'|trans}}</label></div>
+    <div class="col-sm-2 control-label"><label for="limitedTime">{{'时间限制'|trans}}</label></div>
     <div class="col-sm-10 controls radios">
-      <input id="test" class="form-control inline-block width-150" type="text" name="limitedTime" value="{{ activity.limitedTime|default(0) }}"> {{'分'|trans}}
+      <input id="limitedTime" class="form-control inline-block width-150" type="text" name="limitedTime" value="{{ activity.limitedTime|default(0) }}"> {{'分'|trans}}
       <div class="help-block">{{'0分钟，表示无限制。'|trans}}</div>
     </div>
   </div>
@@ -34,7 +35,10 @@
   <div class="form-group">
     <div class="col-sm-2 control-label"><label>{{'考试次数'|trans}}</label></div>
     <div class="col-sm-10 controls radios">
-      {{ radios('doTimes', {0:'不限'|trans, 1:'单次'|trans}, activity.doTimes|default('0')) }}
+      <label><input type="radio" name="doTimes" value="0" {% if not activity.doTimes|default('0') %}checked{% endif %}> 不限</label>
+      {% if course.learnMode != 'lockMode' %}
+        <label><input type="radio" name="doTimes" value="1" {% if activity.doTimes|default('0') %}checked{% endif %}> 单次</label>
+      {% endif %}
     </div>
   </div>
 
@@ -49,13 +53,13 @@
 
   <div class="form-group starttime-check-div" {% if activity.doTimes|default('0') == 0 %}style="display:none;" {% endif %}>
     <div class="col-sm-2 control-label">
-      <label>{{'考试开始时间'|trans}}</label>
+      <label for="startTime">{{'考试开始时间'|trans}}</label>
     </div>
     <div class="col-sm-10 controls radios">
       {{ radios('testMode', {'normal':'不限'|trans, 'realTime':'指定'|trans}, activity.testMode|default('normal')) }}
     </div>
     <div class="col-sm-10 mtm starttime-input {% if activity.testMode|default('normal') == 'normal' %} hidden {% endif %}">
-    <input class="form-control width-input width-input-large mr0" type="text" name="startTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}" ><span class="endtime-input {% if activity.testMode|default('normal') == 'normal' or not activity.limitedTime|default(0) %} hidden {% endif %}"><span class="mhs">－</span><input  class="form-control width-input width-input-large" name="endTime" id="starttime-show"  value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% else %} 0 {% endif %}" /><input type="hidden" name="endTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% else %} 0 {% endif %}" disabled>
+    <input class="form-control width-input width-input-large mr0" id="startTime" type="text" name="startTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}" ><span class="endtime-input {% if activity.testMode|default('normal') == 'normal' or not activity.limitedTime|default(0) %} hidden {% endif %}"><span class="mhs">－</span><input  class="form-control width-input width-input-large" name="endTime" id="starttime-show"  value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% else %} 0 {% endif %}" /><input type="hidden" name="endTime" value="{% if activity|default(null) and activity.startTime != 0 %}{{ activity.endTime|date('Y-m-d H:i') }}{% else %} 0 {% endif %}" disabled>
       </span>
     </div>
   </div>
@@ -98,9 +102,7 @@
   <div class="form-group js-score-form-group">
     <div class="col-sm-offset-2 col-sm-8 color-gray">
       <span>0</span>
-      <div class="js-slider-content inline-block vertical-middle mlm mrl">
-        <input class="single-slider" id="score-single-input" type="hidden"  value="6" date-score-total=''/>
-        <span class="slider-remask" data-toggle="tooltip" data-placement="top" title="达标分数:<span class='js-slider-remask'>4</span>" html="true"></span>   
+      <div class="js-slider-content inline-block vertical-middle mlm mrl" id="score-slider">
       </div>
       <span class="js-score-total"></span>分
     </div>

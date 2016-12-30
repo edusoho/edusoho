@@ -23,6 +23,15 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         ));
     }
 
+    public function findByTaskIdsAndUserId($taskIds, $userId)
+    {
+        $marks = str_repeat('?,', count($taskIds) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE courseTaskId IN ({$marks}) and userId = ? ;";
+
+        $parameters = array_merge($taskIds, array($userId));
+        return $this->db()->fetchAll($sql, $parameters) ?: array();
+    }
+
     public function findByActivityIdAndUserId($activityId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE activityId = ? and userId = ? ";
@@ -32,12 +41,16 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime'),
+            'orderbys'   => array('createdTime', 'updatedTime'),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
+                'id = :id',
+                'id IN ( :ids )',
                 'status =:status',
                 'userId =:userId',
-                'activityId =:activityId'
+                'courseId =:courseId',
+                'activityId =:activityId',
+                'courseTaskId =: courseTaskId'
             )
         );
     }

@@ -1,11 +1,10 @@
-{% if type == 'course' %}
-  {% set title = course.title %}
-  {% set summary = "大神" %}
-  {#{% set summary = course.summary|plain_text(50) %}#}
-  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('我正在学习《%course%》，收获巨大哦，一起来学习吧！')|trans({'%course%':course.title}) %}
-  {% set url = url('course_show', {id:course.id}) %}
-  {% set picture = filepath(course.largePicture, 'course.png') %}
-  {% set id = course.id%}
+{% if type == 'courseSet' %}
+  {% set title = courseSet.title %}
+  {% set summary = courseSet.summary|plain_text(50) %}
+  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('我正在学习《%course%》，收获巨大哦，一起来学习吧！')|trans({'%course%':courseSet.title}) %}
+  {% set url = url('course_set_show', {id:courseSet.id}) %}
+  {% set picture = filepath(courseSet.cover.large|default(null), 'course.png') %}
+  {% set id = courseSet.id%}
 {% elseif type == 'classroom' %}
   {% set title = classroom.title %}
   {% set summary = classroom.description|plain_text(50) %}

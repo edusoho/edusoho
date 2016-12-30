@@ -28,6 +28,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             $that->getTaskDao()->delete($task['id']);
             $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
         });
+
         return true;
     }
 
@@ -84,8 +85,8 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             'unit'    => array(),
             'chapter' => array()
         );
-        $taskNumber     = 0;
-        $chapterTypes   = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+        $taskNumber   = 0;
+        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
         foreach ($itemIds as $key => $id) {
             if (strpos($id, 'chapter') === 0) {
                 $id      = str_replace('chapter-', '', $id);

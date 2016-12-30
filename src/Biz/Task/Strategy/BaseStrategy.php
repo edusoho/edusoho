@@ -26,7 +26,14 @@ class BaseStrategy
 
     public function baseCreateTask($fields)
     {
-        $fields = array_filter($fields);
+        $fields = array_filter($fields, function ($value) {
+            if (is_array($value) || ctype_digit((string) $value)) {
+                return true;
+            }
+
+            return !empty($value);
+        });
+
         if ($this->invalidTask($fields)) {
             throw new InvalidArgumentException('task is invalid');
         }
@@ -40,6 +47,7 @@ class BaseStrategy
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
+        $fields['type']          = $fields['mediaType'];
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
@@ -48,6 +56,7 @@ class BaseStrategy
             'categoryId',
             'activityId',
             'title',
+            'type',
             'isFree',
             'isOptional',
             'startTime',

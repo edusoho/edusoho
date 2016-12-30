@@ -6,11 +6,13 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <a class="a-hover" href="{{path('course_set_manage_courses', {courseSetId: courseSet.id})}}">{{'教学计划列表'|trans}}</a> | {{course.title}}
+    {% if active == 'tasks' %}
       {% if course.status == 'published' %}
         <button class="btn btn-link btn-sm pull-right js-close-course" data-url="{{path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id})}}">{{'关闭计划'|trans}}</button>
       {% else %}
         <button class="btn btn-success btn-sm pull-right js-publish-course" data-url="{{path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id})}}">{{'发布计划'|trans}}</button>  
       {% endif %}
+    {% endif %}
     </div>
     <div class="panel-body">
       <!-- @TODO 还是将要此处删除，移动到左边的菜单 -->
