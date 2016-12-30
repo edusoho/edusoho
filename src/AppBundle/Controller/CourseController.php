@@ -137,8 +137,7 @@ class CourseController extends CourseBaseController
 
     public function reviewListAction(Request $request, $id)
     {
-        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($course['id']);
+        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
 
         $conditions = array(
             'courseId' => $course['id'],
