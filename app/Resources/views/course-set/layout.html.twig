@@ -16,7 +16,7 @@
         {% include 'course-set/announcement/block.html.twig' with { courseSetId:courseSet.id, courseId:course.id } %}
         <!-- 课程详情页中部内容 -->
         <section class="es-section">
-          {{ render(controller('AppBundle:Course:detailNavsPart', {id: course.id})) }}
+          {{ render(controller('AppBundle:Course:detailNavsPart', {id: course.id, nav: nav|default(null)})) }}
           <div class="course-detail-content">
             {% block detail_content %}
             {% endblock %}
