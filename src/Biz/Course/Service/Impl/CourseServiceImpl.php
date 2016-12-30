@@ -760,7 +760,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         //TODO
         //1. courseId为空，判断是否有创建教学计划的权限
         //2. courseId不为空，判断是否有该教学计划的管理权限
-        return true;
+        return false;
     }
 
     protected function fillMembersWithUserInfo($members)
