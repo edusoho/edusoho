@@ -188,7 +188,6 @@ class CourseThreadController extends CourseBaseController
                         'threadId' => $thread['id']
                     )));
                 } catch (\Exception $e) {
-                    var_dump($e->getMessage());exit;
                     return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
                 }
             }
