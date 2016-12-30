@@ -753,7 +753,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 return true;
             }
         } else {
-            $courseSet = $this->getCourseSetDao()->getCourseSet($courseSetId);
+            $courseSet = $this->getCourseSetDao()->get($courseSetId);
             if (empty($courseSet)) {
                 return false;
             }
