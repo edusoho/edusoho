@@ -1,7 +1,5 @@
-image: codeages/php-testing:5.3
-
-services:
-  - mysql:5.5
+stages:
+- test
 
 variables:
   MYSQL_DATABASE: edusoho_test
@@ -15,5 +13,17 @@ before_script:
   - touch app/config/routing_plugins.yml
 
 unittest:5.3:
+  stage: test
+  image: codeages/php-testing:5.3
+  services:
+  - mysql:5.5
+  script:
+  - phpunit -c app/phpunit.xml.ci
+
+unittest:5.5:
+  stage: test
+  image: codeages/php-testing:5.5
+  services:
+  - mysql:5.5
   script:
   - phpunit -c app/phpunit.xml.ci
