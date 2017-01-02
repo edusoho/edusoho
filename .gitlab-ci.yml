@@ -1,0 +1,17 @@
+image: codeages/php-testing:5.3
+
+services:
+  - mysql:latest
+
+variables:
+  MYSQL_DATABASE: edusoho_test
+  # MYSQL_ROOT_PASSWORD: 
+
+before_script:
+  - cp app/config/parameters_test.yml.dist app/config/parameters_test.yml
+  - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - mkdir web/files
+  - touch app/config/routing_plugins.yml
+
+script:
+  - phpunit -c app/
