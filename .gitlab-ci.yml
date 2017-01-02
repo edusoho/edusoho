@@ -13,5 +13,6 @@ before_script:
   - mkdir web/files
   - touch app/config/routing_plugins.yml
 
-script:
+unittest:5.3:
+  script:
   - phpunit -c app/
