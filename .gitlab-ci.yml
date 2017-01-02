@@ -16,4 +16,4 @@ before_script:
 
 unittest:5.3:
   script:
-  - phpunit -c app/
+  - phpunit -c app/phpunit.xml.ci

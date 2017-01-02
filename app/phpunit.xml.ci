@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit
+    backupGlobals               = "false"
+    backupStaticAttributes      = "false"
+    colors                      = "true"
+    convertErrorsToExceptions   = "true"
+    convertNoticesToExceptions  = "true"
+    convertWarningsToExceptions = "true"
+    processIsolation            = "false"
+    stopOnFailure               = "false"
+    syntaxCheck                 = "false"
+    bootstrap                   = "../bootstrap/bootstrap_test.php" >
+
+    <testsuites>
+        <testsuite name="Project Test Suite">
+            <directory>../src/Classroom/Service/Classroom/Tests</directory>
+            <directory>../src/Topxia/Common/Tests</directory>
+            <directory>../src/Topxia/Component/*/Tests</directory>
+            <directory>../src/Topxia/Service/*/Tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <php>
+        <ini name="error_reporting" value="24567"/> <!-- E_ALL & ~E_NOTICE & ~E_DEPRECATED -->
+    </php>
+
+    <filter>
+        <whitelist>
+            <directory>../src/Classroom/Service/</directory>
+            <exclude>
+                <directory>../src/Classroom/Service/Classroom/Tests</directory>
+                <file>../src/Classroom/Service/*/*Service.php</file>
+                <file>../src/Classroom/Service/*/Dao/*Dao.php</file>
+                <file>../src/Topxia/Service/**/module_config.php</file>
+                <directory>../src/Topxia/Service/Util/Phpsec</directory>
+                <directory>../src/Topxia/Component/Payment</directory>
+            </exclude>
+
+            <directory>../src/Topxia/Common</directory>
+            <exclude>
+                <directory>../src/Topxia/Common/Tests</directory>
+            </exclude>
+
+            <directory>../src/Topxia/Component</directory>
+            <exclude>
+                <directory>../src/Topxia/Component/*/Tests</directory>
+            </exclude>
+
+            <directory>../src/Topxia/Service</directory>
+            <exclude>
+                <directory>../src/Topxia/Service/*/Tests</directory>
+                <file>../src/Topxia/Service/*/*Service.php</file>
+                <file>../src/Topxia/Service/*/Dao/*Dao.php</file>
+            </exclude>
+
+<!--
+            <exclude>
+                <directory>../src/*/*Bundle/Resources</directory>
+                <directory>../src/*/*Bundle/Tests</directory>
+                <directory>../src/*/Bundle/*Bundle/Resources</directory>
+                <directory>../src/*/Bundle/*Bundle/Tests</directory>
+            </exclude>
+-->
+        </whitelist>
+    </filter>
+
+</phpunit>

@@ -1,7 +1,5 @@
 <?php
 
-ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
-
 use Symfony\Component\HttpFoundation\Request;
 
 use Codeages\Biz\Framework\UnitTests\UnitTestsBootstrap;
