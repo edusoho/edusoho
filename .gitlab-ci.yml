@@ -1,7 +1,7 @@
 image: codeages/php-testing:5.3
 
 services:
-  - mysql:latest
+  - mysql:5.5
 
 variables:
   MYSQL_DATABASE: edusoho_test
@@ -11,6 +11,7 @@ before_script:
   - cp app/config/parameters_test.yml.gitlabci app/config/parameters_test.yml
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - mkdir web/files
+  - mkdir app/data/private_files
   - touch app/config/routing_plugins.yml
 
 unittest:5.3:
