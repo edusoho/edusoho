@@ -16,4 +16,4 @@ before_script:
 
 unittest:5.3:
   script:
-  - phpunit -c app/phpunit.xml.ci src/Topxia/Component/MediaParser/Tests/NeteaseOpenCourseItemParserTest.php
+  - phpunit -c app/phpunit.xml.ci
