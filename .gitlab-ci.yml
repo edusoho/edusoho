@@ -8,7 +8,7 @@ variables:
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
 before_script:
-  - cp app/config/parameters_test.yml.dist app/config/parameters_test.yml
+  - cp app/config/parameters_test.yml.gitlabci app/config/parameters_test.yml
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - mkdir web/files
   - touch app/config/routing_plugins.yml
