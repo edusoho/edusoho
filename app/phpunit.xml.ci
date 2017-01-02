@@ -23,7 +23,7 @@
     </testsuites>
 
     <php>
-        <ini name="error_reporting" value="24567"/> <!-- E_ALL & ~E_NOTICE & ~E_DEPRECATED -->
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
     </php>
 
     <filter>
