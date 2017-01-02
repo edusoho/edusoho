@@ -5,7 +5,7 @@ services:
 
 variables:
   MYSQL_DATABASE: edusoho_test
-  MYSQL_ALLOW_EMPTY_PASSWORD: yes
+  MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
 before_script:
   - cp app/config/parameters_test.yml.dist app/config/parameters_test.yml
