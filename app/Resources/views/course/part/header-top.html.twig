@@ -50,7 +50,7 @@
     </a>
     {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
   </li>
-
+  {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
   {% if canManage %}
     <li class="pull-left">
       <a class="btn btn-default btn-xs " href="{{ path('course_set_manage', {'id': course.courseSetId }) }}"

@@ -9,7 +9,6 @@ class Text {
     this._inItStep2form();
     this._inItStep3form();
     initEditor($('[name="content"]'));
-    console.log($('body').height());
   }
 
   _inItStep2form() {
