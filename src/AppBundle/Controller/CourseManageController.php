@@ -16,7 +16,7 @@ class CourseManageController extends BaseController
             $data = $request->request->all();
             $this->getCourseService()->createCourse($data);
 
-            return $this->listAction($request, $courseSetId);
+            return $this->redirect($this->generateUrl('course_set_manage_courses', array('courseSetId' => $courseSetId)));
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
