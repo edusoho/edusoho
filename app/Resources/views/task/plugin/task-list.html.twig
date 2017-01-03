@@ -3,7 +3,7 @@
 {% block content %}
   <ul class="task-list task-show">
     {% for task in tasks %}
-      {% set task_lock =  (course.learnMode  == 'lockMode')  and ( not task.lock)  and task.number != 1 %} {# not course.isDefault) and #}
+      {% set task_lock =  (course.learnMode  == 'lockMode')  and ( not task.lock)  and task.number != 1 %}
       <li class="task-item task-content {% if task.activityId == activity.id %} active {% endif %} mouse-control">
         <i class="es-icon
           {% if task_lock %}
