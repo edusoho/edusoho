@@ -86,10 +86,10 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         $declares = $this->declares();
         foreach ($orderbys ?: array() as $field => $direction) {
             if (!in_array($field, $declares['orderbys'])) {
-                throw $this->createDaoException(sprintf("SQL order by field is only allowed '%s', but you give `{$field}`.", implode(',', $declares['orderbys'])));
+                throw $this->createDaoException(sprintf("{$this->table()} SQL order by field is only allowed '%s', but you give `{$field}`.", implode(',', $declares['orderbys'])));
             }
             if (!in_array(strtoupper($direction), array('ASC', 'DESC'))) {
-                throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$direction}`.");
+                throw $this->createDaoException("{$this->table()} SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$direction}`.");
             }
             $builder->addOrderBy($field, $direction);
         }
