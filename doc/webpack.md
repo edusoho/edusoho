@@ -6,7 +6,7 @@
 npm install
 ```
 ```
-# 为提高下载速度，可添加淘宝镜像
+# 为提高下载速度，可添加淘宝镜像(安装4.4.0以上版本)
 npm install -g cnpm --registry=https://registry.npm.taobao.org
 cnpm install
 ```
@@ -44,10 +44,10 @@ npm run compile:debug  #不压缩
 * devDependencies
 
 ```
-放入开发工具的依赖，即不会出现在编译后的文件中，版本默认用 ^ 开头
+放入开发工具的依赖，即不会出现在编译后的文件中，限定具体版本
 
 使用下面命令新增
-npm install xxx --save-dev 
+npm install xxx@x.x.x --save-dev 
 ```
 
 * dependencies
@@ -120,6 +120,14 @@ pluginDir/
   {% do script(['libs/vendor.js', 'app/js/common.js', 'app/js/main.js']) %}
   更多代码示例可参考：https://github.com/ketuzhong/biz-symfony-starter
 ```
+
+### 其它
+- 模块组件样式（不希望单独打包出css文件的）以下面形式引入
+
+```
+import '!style!css!less!./xxx.less';
+```
+
 
 ### 待改进
 * dev模式下scanPath的新文件无法监听的问题
