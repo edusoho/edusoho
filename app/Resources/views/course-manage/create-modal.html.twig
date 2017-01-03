@@ -28,36 +28,42 @@
         <div class="form-group">
           <label for="learnMode" class="col-sm-2 control-label">{{'学习模式'|trans}}</label>
           <div class="col-sm-8 radios">
-            <label for="learnFreeMode">
+            {# <label for="learnFreeMode">
               <input type="radio" id="learnFreeMode" name="learnMode" value="freeMode" {% if course.learnMode|default('freeMode') == 'freeMode' %}checked{% endif %} data-role="tab" data-tab-content="#learnFreeModeHelp">{{'自由式学习'|trans}}
             </label>
             <label for="learnLockOrder">
               <input type="radio" id="learnLockOrder" name="learnMode" value="lockMode" {% if course.learnMode|default('freeMode') == 'lockMode' %}checked{% endif %} data-role="tab" data-tab-content="#learnLockOrderHelp">
               解锁式学习
-            </label>
+            </label> #}
+
+            {{ radios('learnMode', { 'freeMode': '自由式学习'|trans, 'lockMode': '解锁式学习'|trans }, course.learnMode|default('freeMode')) }}
+
             <p class="help-block" id="learnFreeModeHelp" data-role="tab-content">{{'学员自由安排学习过程'|trans}}</p>
-            <p class="help-block hidden" id="learnLockOrderHelp" data-role="tab-content" >{{'根据既定顺序逐个解锁学习'|trans}}</p>
+            <p class="help-block hidden" id="learnLockModeHelp" data-role="tab-content" >{{'根据既定顺序逐个解锁学习'|trans}}</p>
             <div class="color-warning">{{'确定创建后“学习模式”将不能修改'|trans}}</div>
           </div>
         </div>
         <div class="form-group">
          <label class="col-sm-2 control-label">{{'学习有效期模式'|trans}}</label>
          <div class="col-sm-8 radios">
-            <label for="expiryByDays">
+           {#  <label for="expiryByDays">
               <input  type="radio" id="expiryByDays" name="expiryMode" value="days" {% if course.expiryMode|default('days') == 'days' %}checked{% endif %} data-role="tab" data-tab-content="#expiryByDaysHelp">
               {{'随到随学'|trans}}
             </label>
             <label for="expiryByDate">
               <input type="radio" id="expiryByDate" name="expiryMode" value="date" {% if course.expiryMode|default('days') == 'date' %}checked{% endif %} data-role="tab" data-tab-content="#expiryByDateHelp">
               {{'指定日期学习'|trans}}
-            </label>
-            <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiryByDaysHelp" data-role="tab-content">
+            </label> #}
+
+            {{ radios('expiryMode', { 'days': '随到随学'|trans, 'date': '指定日期学习'|trans }, course.expiryMode|default('days')) }}
+
+            <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days">
             {{'学习有效期'|trans}}
               <input class="form-control width-150 mhs" type="text" name="expiryDays" value="{{course.expiryDays|default('0')}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
               {{'天'|trans}}
               <span class="color-gray mll">{{'设置为0天则无限制'|trans}}</span>
             </div>
-            <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiryByDateHelp" data-role="tab-content">
+            <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date">
              {{'开始日期'|trans}}
               <input class="form-control width-150 mls mrl" type="text" id="expiryStartDate" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
              {{'结束日期'|trans}}

@@ -36,7 +36,7 @@
     <div class="form-group">
      <label class="col-sm-2 control-label">{{'学习有效期模式'|trans}}</label>
      <div class="col-sm-8 radios">
-        <label>
+        {# <label>
           <input data-role="tab" data-tab-content="#expiry-days" type="radio" id="expiryModeDays" name="expiryMode" value="days" 
           {% if course.expiryMode|default('days') == 'days' %}checked{% endif %}
           {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
@@ -47,12 +47,14 @@
           {% if course.expiryMode|default('days') == 'date' %}checked{% endif %}
           {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
           {{'指定日期学习'|trans}}
-        </label>
-        <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days" data-role="tab-content">
+        </label> #}
+        {{ radios('expiryMode', { 'days': '随到随学'|trans, 'date': '指定日期学习'|trans }, course.expiryMode|default('days'), course.status|default('draft') == 'published'? 'disabled': '') }}
+
+        <div class="mbm mtm {% if course.expiryMode|default('days') == 'date' %}hidden{% endif %}" id="expiry-days">
           {{'学习有效期'|trans}}<input class="form-control mhs" type="text" id="expiryDays" name="expiryDays" style="display:inline-block;width:150px" value="{{course.expiryDays|default('0')}}" {% if course.status|default('draft') == 'published' %}disabled{% endif %}>{{'天'|trans}}
           <span class="color-gray mll">{{'设置为0天则无限制'|trans}}</span>
         </div>
-        <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date" data-role="tab-content">
+        <div class="mbm mtm {% if course.expiryMode|default('days') == 'days' %}hidden{% endif %}" id="expiry-date">
           {{'开始日期'|trans}}<input class="form-control mls mrl" id="expiryStartDate" type="text" name="expiryStartDate" value="{{course.expiryStartDate|default('now'|date('Y-m-d'))}}" style="display:inline-block;width:150px" 
           {% if course.status|default('draft') == 'published' %}disabled{% endif %}>
          {{'结束日期'|trans}}<input class="form-control mls" type="text" id="expiryEndDate" name="expiryEndDate" value="{{course.expiryEndDate|default('')}}" style="display:inline-block;width:150px"
