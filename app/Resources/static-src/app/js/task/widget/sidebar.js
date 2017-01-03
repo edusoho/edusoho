@@ -39,7 +39,7 @@ export default class TaskSidebar extends Emitter{
 
   renderPane() {
     let html = this.plugins.reduce((html, plugin) => {
-      return html += `<div data-pane="${plugin.code}" class="${plugin.code}-pane"></div>`;
+      return html += `<div data-pane="${plugin.code}" class="js-sidebar-pane ${plugin.code}-pane"></div>`;
     }, '');
 
     this.element.append(html);
@@ -103,13 +103,12 @@ export default class TaskSidebar extends Emitter{
     }, time)
   }
 
-  destroy(){
-    this.element.undelegate();
-    this.element.html('');
-  }
-
   reload(){
-    this.destroy();
-    this.init();
+    const $currentPane = this.element.find('.js-sidebar-pane:visible');
+    const pluginCode = $currentPane.data('pane');
+    $currentPane.undelegate();
+    this.element.find('#dashboard-toolbar-nav').children(`[data-plugin="${pluginCode}"]`)
+        .data('loaded', false)
+        .click();
   }
 }
