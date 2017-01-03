@@ -90,7 +90,7 @@ class TaskShow extends Emitter {
     .on('fold', (px, time) => {
       this.element.find('#dashboard-content').animate({
         right: px,
-      }, time)
+      }, time);
     })
   }
 }

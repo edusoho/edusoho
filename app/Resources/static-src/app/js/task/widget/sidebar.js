@@ -83,7 +83,7 @@ export default class TaskSidebar extends Emitter{
     }
   }
 
-  popupContent(time=0) {
+  popupContent(time=1) {
     let side_right = '0px';
     let content_right = '379px';
 
@@ -93,7 +93,7 @@ export default class TaskSidebar extends Emitter{
     }, time);
   }
 
-  foldContent(time=0){
+  foldContent(time=1){
     let side_right = '-' + this.element.width() + 'px';
     let content_right = '26px';
 
@@ -101,5 +101,15 @@ export default class TaskSidebar extends Emitter{
     this.element.animate({
       right: side_right
     }, time)
+  }
+
+  destroy(){
+    this.element.undelegate();
+    this.element.html('');
+  }
+
+  reload(){
+    this.destroy();
+    this.init();
   }
 }

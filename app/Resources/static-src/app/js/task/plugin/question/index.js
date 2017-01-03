@@ -35,7 +35,7 @@ class QuestionPlugin {
   }
 
   onBackList(){
-    this.question.destroy();
+    this.question && this.question.destroy();
     this.$list.show();
     this.$detail.hide();
   }
