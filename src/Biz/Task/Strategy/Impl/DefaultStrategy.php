@@ -48,6 +48,8 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $chapter          = $this->getChapterDao()->get($task['categoryId']);
         $tasks            = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
         $chapter['tasks'] = $tasks;
+        $task['mode']     = $field['mode'];
+
         return $chapter;
     }
 
