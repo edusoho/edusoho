@@ -290,4 +290,9 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
     {
         return $this->createService('System:SettingService');
     }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
+    }
 }
