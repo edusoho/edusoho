@@ -3,7 +3,7 @@
 {% do script(['app/js/task/download/index.js']) %}
 
 {% block body %}
-<div class="task-content-view download-activity-show">
+<div class="iframe-parent-content">
   <ul class="download-activity-list">
     {% for file in activity.ext.materials|default(null) %}
     <li>
