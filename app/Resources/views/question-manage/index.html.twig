@@ -24,7 +24,7 @@
         <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
         <ul class="dropdown-menu pull-right">
           {% for type,name in questionTypes %}
-            {% if loop.index > 3 %}
+            {% if loop.index > 3 and ((type == 'material' and not parentQuestion) or type != 'material') %}
               <li><a href="{{ path('course_set_manage_question_create',{id:courseSet.id,type:type,parentId:parentId, goto:app.request.server.get('REQUEST_URI')}) }}"><span class="es-icon es-icon-anonymous-iconfont"></span> {{ name }}</a></li>
             {% endif %}
           {% endfor %}
