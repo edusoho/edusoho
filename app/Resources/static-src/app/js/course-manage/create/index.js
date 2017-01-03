@@ -12,7 +12,6 @@ class Creator {
     TabChange();
 
     $('input[name="expiryMode"]').on('change', function(event){
-      console.log('expiryMode change...');
       if($('input[name="expiryMode"]:checked').val() == 'date'){
         $('#expiry-days').removeClass('hidden').addClass('hidden');
         $('#expiry-date').removeClass('hidden');
@@ -23,7 +22,6 @@ class Creator {
     }); 
 
     $('input[name="learnMode"]').on('change', function(event){
-      console.log('learnMode change...');
       if($('input[name="learnMode"]:checked').val() == 'freeMode'){
         $('#learnLockModeHelp').removeClass('hidden').addClass('hidden');
         $('#learnFreeModeHelp').removeClass('hidden');
