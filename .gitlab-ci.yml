@@ -31,7 +31,7 @@ unittest:5.5:
 
 unittest:7.0:
   stage: test
-  image: codeages/php-testing:5.5
+  image: codeages/php-testing:7.0
   services:
   - mysql:5.5
   script:
