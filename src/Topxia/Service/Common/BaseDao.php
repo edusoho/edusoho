@@ -117,7 +117,7 @@ abstract class BaseDao
                 return $data;
             }
         }
-        if (getenv('RUN_ENV') && getenv('RUN_ENV') == 'command' ){
+        if ($this->isRunByCommand()){
             return call_user_func_array($callback, $args);
         }else{
             $this->dataCached[$key] = call_user_func_array($callback, $args);
@@ -128,6 +128,11 @@ abstract class BaseDao
             return $this->dataCached[$key];
         }
         
+    }
+
+    private function  isRunByCommand()
+    {
+       return  getenv('IS_RUN_BY_COMMAND') && getenv('ISRUNBYCOMMAND') === 'true';
     }
 
     protected function getCacheVersion($key)
