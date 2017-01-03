@@ -1,7 +1,10 @@
-<form id="question-search-form" class="form-inline well well-sm" action="{{ path('course_set_manage_question_picker', {id:courseSet.id}) }}" novalidate>
+<form id="question-search-form" class="form-inline well well-sm" action="{{ path('course_set_manage_question_picker', {id:courseSet.id,targetType:'testpaper',replace:replace}) }}" novalidate>
   <div class="form-group">
     <select class="form-control" name="target" style="width:200px;height:32px;">
-      {{ select_options(targetChoices, app.request.query.get('target'), '--按从属--') }}
+      <option value="">{{'按课程'|trans}}</option>
+      {% for task in targetChoices %}
+        <option value="{{ task.id }}">{{ task.title }}</option>
+      {% endfor %}
     </select>
   </div>
 
