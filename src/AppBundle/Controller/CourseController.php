@@ -37,8 +37,8 @@ class CourseController extends CourseBaseController
 
         $progress = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
+        $user = $this->getUser();
         if ($member && $taskCount) {
-            $user = $this->getUser();
 
             //学习记录
             $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish', 'userId' => $user['id']));
@@ -62,6 +62,11 @@ class CourseController extends CourseBaseController
             $previewTaks = $this->getTaskService()->search(array('courseId' => $id, 'isFree' => '1'), array('seq' => 'ASC'), 0, 1);
         }
 
+        $isUserFavorite = false;
+        if ($user->isLogin()) {
+            $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
+        }
+
         return $this->render('course/header.html.twig', array(
             'courseSet'            => $courseSet,
             'courses'              => $courses,
@@ -73,7 +78,8 @@ class CourseController extends CourseBaseController
             'toLearnTasks'         => $toLearnTasks,
             'taskPerDay'           => $taskPerDay,
             'planStudyTaskCount'   => $planStudyTaskCount,
-            'planProgressProgress' => $planProgressProgress
+            'planProgressProgress' => $planProgressProgress,
+            'isUserFavorite'       => $isUserFavorite
         ));
     }
 
@@ -310,24 +316,6 @@ class CourseController extends CourseBaseController
         }
 
         return $this->render('TopxiaWebBundle:Course:course-order.html.twig', array('order' => $order, 'course' => $course));
-    }
-
-    public function headerTopPartAction(Request $request, $id)
-    {
-        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
-
-        $user           = $this->getCurrentUser();
-        $isUserFavorite = false;
-        if ($user->isLogin()) {
-            $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
-        }
-
-        return $this->render('course/part/header-top.html.twig', array(
-            'course'         => $course,
-            'courseSet'      => $courseSet,
-            'isUserFavorite' => $isUserFavorite,
-            'member'         => $member
-        ));
     }
 
     public function qrcodeAction(Request $request, $id)

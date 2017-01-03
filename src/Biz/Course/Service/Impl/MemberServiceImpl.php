@@ -79,7 +79,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'becomeUseMember' => isset($data['becomeUseMember']) ? $data['becomeUseMember'] : false
         );
 
-        $this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info);
+        $this->becomeStudent($order['targetId'], $order['userId'], $info);
 
         $member = $this->getCourseMember($course['id'], $user['id']);
 
@@ -244,7 +244,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function isCourseStudent($courseId, $userId)
     {
-        $member = $this->isCourseMember($courseId, $userId);
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (!$member) {
             return false;

@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Component\Payment;
 
+use Topxia\Service\Common\ServiceKernel;
+
 abstract class Response
 {
 
@@ -13,6 +15,11 @@ abstract class Response
     public function __construct(array $options)
     {
         $this->options = $options;
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 
     public function setParams(array $params)
