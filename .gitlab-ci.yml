@@ -6,8 +6,9 @@ variables:
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
 before_script:
-  - cp app/config/parameters_test.yml.gitlabci app/config/parameters_test.yml
+  - cp app/config/parameters_test.yml.dist app/config/parameters_test.yml
   - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - sed -i 's/\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml
   - mkdir web/files
   - mkdir app/data/private_files
   - touch app/config/routing_plugins.yml
@@ -18,7 +19,7 @@ unittest:5.3:
   services:
   - mysql:5.5
   script:
-  - phpunit -c app/phpunit.xml.ci
+  - phpunit -c app/
 
 unittest:5.5:
   stage: test
@@ -26,7 +27,7 @@ unittest:5.5:
   services:
   - mysql:5.5
   script:
-  - phpunit -c app/phpunit.xml.ci
+  - phpunit -c app/
 
 unittest:7.0:
   stage: test
@@ -34,4 +35,4 @@ unittest:7.0:
   services:
   - mysql:5.5
   script:
-  - phpunit -c app/phpunit.xml.ci
+  - phpunit -c app/

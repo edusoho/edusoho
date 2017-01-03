@@ -22,6 +22,10 @@
         </testsuite>
     </testsuites>
 
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
+    </php>
+
     <filter>
         <whitelist>
             <directory>../src/Classroom/Service/</directory>
