@@ -7,7 +7,8 @@
         action="{{ path('course_task_note_save', {courseId: task.courseId, taskId: task.id}) }}">
     <div class="form-group note-content">
       <div class="controls">
-        <textarea class="form-control type-hidden" id="note-content-field" name="content" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">
+        <textarea class="form-control type-hidden" id="note-content-field" name="content"
+          data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">
           {{ note.content|default('') }}
         </textarea>
       </div>
