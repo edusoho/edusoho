@@ -17,7 +17,7 @@
       {% endfor %}
     </div>
     {% if paperResult.status|default(null) != 'finished' %}
-    <div class="panel-footer text-right">
+    <div class="panel-text-right mt20">
       {% if paperResult.status|default(null) == 'reviewing' %}
         <a class="btn btn-success" data-toggle="modal" data-target="#modal" data-url"" data-role="check-submit" data-return-url="">{{'完成批改'|trans}}</a>
       {% elseif paperResult.status|default(null) == 'doing' %}
