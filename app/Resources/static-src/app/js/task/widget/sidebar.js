@@ -39,7 +39,7 @@ export default class TaskSidebar extends Emitter{
 
   renderPane() {
     let html = this.plugins.reduce((html, plugin) => {
-      return html += `<div data-pane="${plugin.code}" class="task-pane"></div>`
+      return html += `<div data-pane="${plugin.code}" class="${plugin.code}-pane"></div>`;
     }, '');
 
     this.element.append(html);

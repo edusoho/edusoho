@@ -1548,6 +1548,10 @@ course_task_plugin_note:
   path: /course/{courseId}/task/{taskId}/plugin/note
   defaults: { _controller: AppBundle:TaskPlugin:note }
 
+course_task_plugin_threads:
+  path: /course/{courseId}/task/{taskId}/plugin/threads
+  defaults: { _controller: AppBundle:TaskPlugin:threads }
+
 #course_chapter
 course_manage_chapter_create:
     path:  /course/{id}/manage/chapter/create

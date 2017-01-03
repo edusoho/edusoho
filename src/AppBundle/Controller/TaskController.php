@@ -90,13 +90,16 @@ class TaskController extends BaseController
                     'courseId' => $courseId,
                     'taskId'   => $taskId
                 ))
+            ),
+            array(
+                'code' => 'question',
+                'name' => '问答',
+                'icon' => 'es-icon-help',
+                'url' => $this->generateUrl('course_task_plugin_threads', array(
+                    'courseId' => $courseId,
+                    'taskId'   => $taskId
+                ))
             )
-//            array(
-            //                'code' => 'question',
-            //                'name' => '问答',
-            //                'icon' => 'es-icon-help',
-            //                'url' => 'TaskPluginQuestionController'
-            //            )
         ));
     }
 

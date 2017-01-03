@@ -1,0 +1,8 @@
+{% extends 'task/plugin/base.html.twig' %}
+
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'app/js/task/plugin/question/index.js']) %}
+
+{% block content %}
+  {% include 'task/plugin/question/form.html.twig' %}
+  {% include 'task/plugin/question/list.html.twig' %}
+{% endblock %}

@@ -6,9 +6,11 @@ namespace AppBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\ThreadService;
 use Biz\Note\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 
 class TaskPluginController extends BaseController
 {
@@ -51,6 +53,53 @@ class TaskPluginController extends BaseController
         ));
     }
 
+    public function threadsAction(Request $request, $courseId, $taskId)
+    {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+
+        $task = $this->getTaskService()->getTask($taskId);
+
+        if (empty($task)) {
+            throw $this->createNotFoundException('task not found');
+        }
+
+        $threads = $this->getThreadService()->searchThreads(
+            array(
+                'taskId' => $task['id'],
+                'type'   => 'question'
+            ),
+            array(
+                'createdTime' => 'DESC'
+            ),
+            0, 20
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
+
+        $form = $this->createQuestionForm(array(
+            'courseId' => $course['id'],
+            'taskId'   => $taskId
+        ));
+
+        return $this->render('task/plugin/questions.html.twig', array(
+            'threads' => $threads,
+            'task'    => $task,
+            'form'    => $form->createView(),
+            'users'   => $users
+        ));
+    }
+
+    private function createQuestionForm(array $data)
+    {
+        $form = $this->get('form.factory')->createNamedBuilder('question', 'form', $data, array());
+        return $form
+            ->add('title', 'Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('content', 'Symfony\Component\Form\Extension\Core\Type\TextareaType')
+            ->add('courseId', 'Symfony\Component\Form\Extension\Core\Type\HiddenType')
+            ->add('taskId', 'Symfony\Component\Form\Extension\Core\Type\HiddenType')
+            ->getForm();
+    }
+
     /**
      * @return ActivityService
      */
@@ -83,5 +132,12 @@ class TaskPluginController extends BaseController
         return $this->createService('Note:CourseNoteService');
     }
 
+    /**
+     * @return ThreadService
+     */
+    protected function getThreadService()
+    {
+        return $this->createService('Course:ThreadService');
+    }
 }
 
