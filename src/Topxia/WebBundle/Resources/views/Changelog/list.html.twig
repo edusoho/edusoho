@@ -1,0 +1,13 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %}{{'EduSoho更新日志'|trans}} - {{ parent() }}{% endblock %}
+{% set nav = 'index' %}
+{% set bodyClass = 'index' %}
+{% block content %}
+
+  <div class="row">
+    <p>
+      {{ logs }}
+    </p>
+  </div>
+
+{% endblock %}
