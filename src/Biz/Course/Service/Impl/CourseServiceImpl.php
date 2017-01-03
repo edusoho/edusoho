@@ -3,20 +3,21 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\ThreadDao;
+use Biz\Course\Service\ReviewService;
+use Topxia\Common\ArrayToolkit;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Note\Service\CourseNoteService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Taxonomy\Service\CategoryService;
-use Biz\User\Service\UserService;
-use Topxia\Common\ArrayToolkit;
-
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -62,9 +63,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createCourse($course)
     {
-        if (!$this->hasCourseManagerRole()) {
+        if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
+            throw $this->createInvalidArgumentException("Lack of required fields");
+        }
+        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
+            throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
+        }
+        //临时注释
+        if (!$this->hasCourseManagerRole($course['courseSetId'])) {
             throw $this->createAccessDeniedException('You have no access to Course Management');
         }
+
         if (!isset($course['isDefault'])) {
             $course['isDefault'] = 0;
         }
@@ -79,16 +88,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'isDefault'
         ));
 
-        if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
-            throw $this->createInvalidArgumentException("Lack of required fields");
-        }
-        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
-            throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
-        }
-
         $course = $this->validateExpiryMode($course);
 
-        $course['status'] = 'draft';
+        $course['status']  = 'draft';
+        $course['creator'] = $this->getCurrentUser()->getId();
         try {
             $this->beginTransaction();
 
@@ -192,7 +195,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $fields = array('teacherIds' => $visibleTeacherIds);
-        $course = $this->getCourseDao()->update($courseId, $fields);
+        return $this->getCourseDao()->update($courseId, $fields);
     }
 
     public function updateCourseMarketing($id, $fields)
@@ -706,8 +709,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -728,11 +730,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count      = $this->searchCourseCount($conditions);
+        $count = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
-    public function hasCourseManagerRole($courseId = 0)
+    public function hasCourseManagerRole($courseId = 0, $courseSetId = 0)
     {
         $user = $this->getCurrentUser();
         //未登录，无权限管理
@@ -740,27 +742,31 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        $course = $this->getCourse($courseId);
-        //课程不存在，无权限管理
-        if (empty($course)) {
-            return false;
+        if ($courseId > 0) {
+            $course = $this->getCourse($courseId);
+            //课程不存在，无权限管理
+            if (empty($course)) {
+                return false;
+            }
+            $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
+            //不是课程教师，无权限管理
+            if ($teacher) {
+                return true;
+            }
+        } else {
+            $courseSet = $this->getCourseSetDao()->get($courseSetId);
+            if (empty($courseSet)) {
+                return false;
+            }
+            return $courseSet['creator'] == $user->getId();
         }
 
-        $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
-        //不是课程教师，无权限管理
-        if ($teacher) {
-            return true;
-        }
-        
         //不是管理员，无权限管理
         if ($this->hasAdminRole()) {
             return true;
         }
 
-        //TODO
-        //1. courseId为空，判断是否有创建教学计划的权限
-        //2. courseId不为空，判断是否有该教学计划的管理权限
-        return true;
+        return false;
     }
 
     protected function fillMembersWithUserInfo($members)
@@ -947,6 +953,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
+     * @return CourseSetDao
+     */
+    protected function getCourseSetDao()
+    {
+        return $this->createDao('Course:CourseSetDao');
+    }
+
+    /**
      * @return ThreadDao
      */
     protected function getThreadDao()
@@ -978,6 +992,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->biz->service('Taxonomy:CategoryService');
     }
 
+    /**
+     * @return ReviewService
+     */
     protected function getReviewService()
     {
         return $this->biz->service('Course:ReviewService');

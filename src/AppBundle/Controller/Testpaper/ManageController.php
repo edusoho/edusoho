@@ -267,7 +267,7 @@ class ManageController extends BaseController
 
         $ids = $request->request->get('ids');
 
-        $this->getTestpaperService()->deleteTestpapers($id);
+        $this->getTestpaperService()->deleteTestpapers($ids);
 
         return $this->createJsonResponse(true);
     }
