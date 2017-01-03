@@ -10,7 +10,6 @@
     <meta content="black" name="apple-mobile-web-app-status-bar-style" />
     <meta content="telephone=no" name="format-detection" />
     <meta content="{{ csrf_token('site') }}" name="csrf-token" /></head>
-
     {% include 'player/stylesheet.html.twig' %}
   </head>
   <body style="overflow:hidden;border:0px;">
@@ -57,17 +56,16 @@
             style="height:100%"
           ></div>
         </div>
-
-          {# webpack #}
-          {% do script(['libs/vendor.js', 'web.js'], 1000) %}
-          {% include 'script_boot.html.twig' %}
-
-        {% if setting("developer.cloud_sdk_cdn") %} {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %} {% else %} {% set cdnUrl = 'http://cdn.qiqiuyun.net'  %} {% endif %}
+        {% do script(['libs/vendor.js', 'app/js/main.js'], 1000) %}
+        {% include 'script_boot.html.twig' %}
+        {% if setting("developer.cloud_sdk_cdn") %}
+          {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
+        {% else %}
+          {% set cdnUrl = 'http://cdn.qiqiuyun.net'  %}
+        {% endif %}
         <script src="{{ cdnUrl }}/js-sdk/video-player/v1/sdk.js"></script>
-
-       {% do script(['app/js/player/index.js']) %}
-
-    {% endif %}
+        {% do script(['app/js/player/index.js']) %}
+      {% endif %}
     {% else %}
       <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'该浏览器不支持云视频播放，请前往'|trans}}<a href="{{path('mobile')}}" target="parent">{{'下载App'|trans}}</a>。</div>
     {% endif %}
