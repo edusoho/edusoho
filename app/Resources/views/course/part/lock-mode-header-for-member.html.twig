@@ -43,7 +43,7 @@
     <ul class="task-list task-list-md task-list-hover task-list-gray">
       {% for task in toLearnTasks %}
         {% set meta = activity_meta(task.activity.mediaType|default(null)) %}
-        {% set task_lock =  (not  task.result|default(null)) and (not course.isDefault) and course.learnMode  == 'lockMode' %}
+        {% set task_lock =  (course.learnMode  == 'lockMode')  and ( not task.lock)  and task.number != 1 %} {# not course.isDefault) and #}
         <li class="task-item task-content mouse-control">
           <i class="es-icon
           {% if task_lock %}

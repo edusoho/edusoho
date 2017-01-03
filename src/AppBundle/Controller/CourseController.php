@@ -49,6 +49,7 @@ class CourseController extends CourseBaseController
             //待学习任务
             $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($id);
 
+
             //任务式课程每日建议学习任务数
             $taskPerDay = $this->getFinishedTaskPerDay($course, $taskCount);
 
@@ -59,6 +60,7 @@ class CourseController extends CourseBaseController
             //计划进度
             $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
 
+            //TODO预览的任务
             $previewTaks = $this->getTaskService()->search(array('courseId' => $id, 'isFree' => '1'), array('seq' => 'ASC'), 0, 1);
         }
 

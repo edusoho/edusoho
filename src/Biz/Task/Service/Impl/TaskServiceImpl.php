@@ -33,7 +33,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task     = $this->getTask($id);
         $strategy = $this->createCourseStrategy($task['courseId']);
-        $task = $strategy->updateTask($id, $fields);
+        $task     = $strategy->updateTask($id, $fields);
         return $task;
     }
 
@@ -130,6 +130,10 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $task['result'] = $result;
             }
         });
+        //设置任务是否解锁
+        foreach ($tasks as &$task) {
+            $task['lock'] = !(empty($task['result']) && empty($task['isOptional']) && $task['type'] != 'live');
+        }
         return $tasks;
     }
 
@@ -341,6 +345,10 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $task['result'] = $result;
             }
         });
+        //设置任务是否解锁
+        foreach ($toLearnTasks as &$task) {
+            $task['lock'] = !(empty($task['result']) && empty($task['isOptional']) && $task['type'] != 'live');
+        }
         return $toLearnTasks;
     }
 
