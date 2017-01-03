@@ -7,90 +7,12 @@
   margin: 0px!important;//用于隐藏又需要验证的的控件
 }
 
-.tab-content {
-  padding-bottom: 0.1px;
-}
-
-.multi-group {
-  position: relative;
-  .options {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    top: 50px;
-    z-index: 1000;
-    background-color: #fff;
-    border: 1px solid @border-color;
-  }
-}
-
-//临时
-.animated.alert {
-  width: 100%;
-  padding: 10px;
-  text-align: center;
-  .close {
-    top: 13px;
-  }
-}
-
 // html,body {
 //   height: 100%;//导致任务创建的iframe样式问题
 // }
 
 .border-radius-none {
   border-radius: 0!important;
-}
-
-.iframe-parent-content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top:0;
-  overflow: auto;
-  background-color: #fff;
-  &.iframe-parent-full {
-    overflow: hidden;
-  }
-}
-
-
-
-
-
-.task-content-view {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top:0;
-  overflow: auto;
-  background-color: #fff;
-}
-
-.video-activity-show {
-  overflow: hidden;
-}
-
-.text-activity-show {
-  padding: 15px;
-  background-color: #fff;
-  word-spacing: normal;
-  img {
-    max-width: 100%;
-  }
-}
-
-.testpaper-activity-show {
-  overflow: hidden;
-  height: 100%;
-}
-
-
-.testpaper-activity-show-body {
-  min-height: 100%;
-  background-color: #111;
 }
 
 .view-toggle {
@@ -110,32 +32,6 @@
   }
 }
 
-.download-activity-show {
-  background-color: #fff;
-  .download-activity-list {
-    padding-left: 0;
-    list-style: none;
-    >li {
-      &:nth-of-type(odd) {
-        background-color: @bg-color;
-      }
-      >a {
-        display: block;
-        padding: 20px;
-        .download-icon {
-          float: right;
-          color: @gray-medium;
-        }
-        &:hover {
-          .download-icon {
-            color: @brand-primary;
-          }
-          color: @brand-primary;
-        }
-      }
-    }
-  }
-}
 
 
 //before 2.0
