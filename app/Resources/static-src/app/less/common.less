@@ -34,12 +34,6 @@
   }
 }
 
-.input-with-suffix {
-  display: inline-block;
-  width: 200px;
-  margin-right: 10px;
-}
-
 // html,body {
 //   height: 100%;//导致任务创建的iframe样式问题
 // }
@@ -47,6 +41,21 @@
 .border-radius-none {
   border-radius: 0!important;
 }
+
+.iframe-parent-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top:0;
+  overflow: auto;
+  background-color: #fff;
+  &.iframe-parent-full {
+    overflow: hidden;
+  }
+}
+
+
 
 
 
