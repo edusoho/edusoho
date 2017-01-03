@@ -203,7 +203,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->tryManageCourse($id);
         $fields = ArrayToolkit::parts($fields, array(
             'isFree',
-            'price',
+            'originPrice',
             'vipLevelId',
             'buyable',
             'tryLookable',
@@ -213,6 +213,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             'services',
             'approval'
         ));
+
+        $fields['price'] = $this->calculatePrice($id, $fields['originPrice']);
+
         if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
@@ -233,6 +236,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         // }
 
         return $this->getCourseDao()->update($id, $fields);
+    }
+
+    protected function calculatePrice($id, $originPrice)
+    {
+        return $originPrice;
     }
 
     public function updateCourseStatistics($id, $fields)
@@ -821,7 +829,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
         $orderBy    = $this->_prepareCourseOrderBy($sort);
-
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
 
