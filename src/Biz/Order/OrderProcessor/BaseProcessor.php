@@ -74,7 +74,7 @@ class BaseProcessor
         $user = $this->getUserService()->getCurrentUser();
 
         $account     = $this->getCashAccountService()->getAccountByUserId($user["id"]);
-        $accountCash = $account["cash"];
+        $accountCash = empty($account["cash"]) ? 0 : $account["cash"];
 
         $coinPayAmount = 0;
 
