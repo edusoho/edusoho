@@ -5,6 +5,7 @@ use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Activity\Service\ActivityService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Exception\InvalidArgumentException;
 
@@ -24,6 +25,9 @@ class TaskManageController extends BaseController
             $task                    = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
             $tasksRenderPage = $this->createCourseStrategy($course)->getTaskItemRenderPage();
+            if ($course['isDefault'] && isset($task['mode']) && $task['mode'] == 'lesson') {
+                return $this->createJsonpResponse(array('append' => false));
+            }
             return $this->render($tasksRenderPage, array(
                 'course' => $course,
                 'task'   => $task
@@ -52,7 +56,7 @@ class TaskManageController extends BaseController
             $task              = $request->request->all();
             $task['_base_url'] = $request->getSchemeAndHttpHost();
             $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
-            return $this->createJsonResponse(true);
+            return $this->createJsonResponse(array('append' => false));
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);

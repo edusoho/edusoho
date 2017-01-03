@@ -308,13 +308,13 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             return new Ppt($that->getBiz());
         };
         $container['activity_type.testpaper'] = function () use ($that) {
-            return new Testpaper($that->biz);
+            return new Testpaper($that->getBiz());
         };
         $container['activity_type.homework'] = function () use ($that) {
-            return new Homework($that->biz);
+            return new Homework($that->getBiz());
         };
         $container['activity_type.exercise'] = function () use ($that) {
-            return new Exercise($that->biz);
+            return new Exercise($that->getBiz());
         };
     }
 

@@ -85,6 +85,10 @@ class ManageController extends BaseController
 
     public function checkListAction(Request $request, $targetId, $type, $testpaperIds = array())
     {
+        if (empty($testpaperIds)) {
+            $testpaperIds = array(0);
+        }
+
         $conditions = array(
             'status' => 'open',
             'type'   => $type,
@@ -267,7 +271,7 @@ class ManageController extends BaseController
 
         $ids = $request->request->get('ids');
 
-        $this->getTestpaperService()->deleteTestpapers($id);
+        $this->getTestpaperService()->deleteTestpapers($ids);
 
         return $this->createJsonResponse(true);
     }

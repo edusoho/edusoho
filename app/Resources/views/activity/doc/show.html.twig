@@ -8,7 +8,7 @@
       {{ error.message|raw }}
     </div>
   {% else %}
-    <div class="content" id="document-content" data-swf="{{ docMedia.swf }}" data-pdf="{{ docMedia.pdf }}"
+    <div class="iframe-parent-content iframe-parent-full" id="document-content" data-swf="{{ docMedia.swf }}" data-pdf="{{ docMedia.pdf }}"
          data-finish-type="{{ doc.finishType }}" data-finish-detail="{{ doc.finishDetail }}"
          {% if setting('magic.doc_watermark') %}data-watermark-url="{{ path('cloud_doc_watermark') }}"{% endif %}>
     </div>

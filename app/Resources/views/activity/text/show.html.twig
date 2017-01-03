@@ -3,7 +3,7 @@
 {% do script(['app/js/activity/text/index.js']) %}
 
 {% block body %} 
-  <div class="task-content-view text-activity-show" id="text-activity" data-finish-time="{{ text.finishDetail }}">
+  <div class="iframe-parent-content ph20 pv20" id="text-activity" data-finish-time="{{ text.finishDetail }}">
     {{activity.content|raw}}
   </div>
 {% endblock %}
