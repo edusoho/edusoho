@@ -17,6 +17,7 @@ renderMultiGroupComponent('intended-students','audiences');
 
 _initDatePicker('#expiryStartDate');
 _initDatePicker('#expiryEndDate');
+
 TabChange();
 
 CKEDITOR.replace('summary', {
@@ -28,6 +29,7 @@ CKEDITOR.replace('summary', {
 let $form = $('#course-info-form');
 let validator = $form.validate({
   onkeyup: false,
+  currentDom: '#course-submit',
   groups: {
     date: 'expiryStartDate expiryEndDate'
   },
@@ -67,10 +69,11 @@ let validator = $form.validate({
 $.validator.addMethod(
   "before",
   function(value, element, params) {
+    console.log($('input[name="expiryMode"]:checked').val());
     if ($('input[name="expiryMode"]:checked').val() !== 'date') {
       return true;
     }
-    return !!value || $(params).val() > value;
+    return !value || $(params).val() > value;
   },
   Translator.trans('开始日期应早于结束日期')
 );
@@ -78,18 +81,17 @@ $.validator.addMethod(
 $.validator.addMethod(
   "after",
   function(value, element, params) {
+    console.log($('input[name="expiryMode"]:checked').val());
     if ($('input[name="expiryMode"]:checked').val() !== 'date') {
       return true;
     }
-    return !!value || $(params).val() < value;
+    return !value || $(params).val() < value;
   },
   Translator.trans('结束日期应晚于开始日期')
 );
 
 $('#course-submit').click(function(evt) {
   if (validator.form()) {
-    $(evt.currentTarget).button('loading');
-    console.log('ok');
     $form.submit();
   }
 });
