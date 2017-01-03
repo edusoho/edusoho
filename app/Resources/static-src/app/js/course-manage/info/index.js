@@ -26,6 +26,16 @@ CKEDITOR.replace('summary', {
   filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
 });
 
+$('input[name="expiryMode"]').on('change', function(event){
+  if($('input[name="expiryMode"]:checked').val() == 'date'){
+    $('#expiry-days').removeClass('hidden').addClass('hidden');
+    $('#expiry-date').removeClass('hidden');
+  }else{
+    $('#expiry-date').removeClass('hidden').addClass('hidden');
+    $('#expiry-days').removeClass('hidden');
+  }
+}); 
+
 let $form = $('#course-info-form');
 let validator = $form.validate({
   onkeyup: false,
