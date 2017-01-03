@@ -317,17 +317,15 @@ class CourseController extends CourseBaseController
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
 
         $user           = $this->getCurrentUser();
-        $isUserFavorite = $canManage = false;
+        $isUserFavorite = false;
         if ($user->isLogin()) {
             $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
-            $canManage      = $this->getCourseService()->tryManageCourse($course['id']);
         }
 
         return $this->render('course/part/header-top.html.twig', array(
             'course'         => $course,
             'courseSet'      => $courseSet,
             'isUserFavorite' => $isUserFavorite,
-            'canManage'      => $canManage,
             'member'         => $member
         ));
     }
