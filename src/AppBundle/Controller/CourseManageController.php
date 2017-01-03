@@ -229,7 +229,7 @@ class CourseManageController extends BaseController
 
     public function removeCourseStudentAction(Request $request, $courseSetId, $courseId, $userId)
     {
-        $this->getCourseService()->removeCourseStudent($courseId, $userId);
+        $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
         return $this->createJsonResponse(array('success' => true));
     }
 

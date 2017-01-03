@@ -13,10 +13,30 @@
     height: 20px;
     line-height: 20px;
     font-size: 12px;
-    color: #fff;
+  }
+  &.lump-md {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
   }
   &.lump-xs {
     width: 10px;
     height: 10px;
+  }
+  &.lump-card {
+    background-color: @gray-lighter;
+    color: @gray;
+    border: 1px solid #d6d6d6;
+    &.done {
+      background-color: #d2f2df;
+      border: 1px solid @brand-primary;
+      color: @brand-primary;
+    }
+    &.doing {
+      background-color: @brand-primary;
+      border: 1px solid #34a263;
+      color: #fff;
+    }
   }
 }

@@ -35,15 +35,15 @@
       <div class="modal-content">
         <div class="modal-body task-state-modal">
           <div class="title font-blod">
-            <i class="es-icon es-icon-zanting color-warning"></i>
+            <i class="es-icon es-icon-zanting1 color-warning"></i>
             {{'确认提交'|trans}}
           </div>
           <div class="content">
-            <div class="content-title mbl">
+            <div class="text-16">
               {{'您真的要提交吗？'|trans}}
             </div>
           </div>
-          <div class="footer text-right">
+          <div class="text-right mt20">
             <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</a>
             <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在提交, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('testpaper_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}">
             {{'确认提交'|trans}}</button>

@@ -68,22 +68,6 @@ interface CourseService
      */
     public function findPublicCoursesByIds(array $ids);
 
-    /**
-     * @before becomeStudent
-     * @param  $courseId
-     * @param  $fields
-     * @return mixed
-     */
-    public function createCourseStudent($courseId, $fields);
-
-    /**
-     * @before removeStudent
-     * @param  $courseId
-     * @param  $userId
-     * @return mixed
-     */
-    public function removeCourseStudent($courseId, $userId);
-
     //---start 前两个已经重构了，后面的四个也需要重构，目前还没有用到，用到的时候在重构
     public function findUserLeaningCourseCount($userId, $filters = array());
 

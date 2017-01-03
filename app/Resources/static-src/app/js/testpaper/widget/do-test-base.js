@@ -15,10 +15,6 @@ class DoTestBase
   }
 
   _initEvent() {
-    /*if ($(".testpaper-activity-show").length > 0) {
-      $(this).perfectScrollbar();
-    }*/
-    
     this.$container.on('focusin','textarea',event=>this._showEssayInputEditor(event));
     this.$container.on('click','[data-role="test-suspend"],[data-role="paper-submit"]',event=>this._btnSubmit(event));
     this.$container.on('click','.js-testpaper-question-list li',event=>this._choiceList(event));
@@ -65,19 +61,20 @@ class DoTestBase
   }
 
   _choiceLable(event) {
-    let $inputParents = $(event.delegateTarget);
-
-    $inputParents.find('label').each(function(){
-      $(this).find('input').prop("checked") ? $(this).addClass('lump-primary-light') : $(this).removeClass('lump-primary-light');
-    });
-    let $choices = $inputParents.find('label.active');
-    this._renderBtnIndex($choices.find('input').attr('name'),$choices.length);
+    let $inputParents = $(event.currentTarget);
+    let $btn = $(`[data-anchor="#question${$inputParents.attr('name')}"]`);
+    let $doingBtn = $btn.siblings('.doing');
+    this._renderBtnIndex($btn,$doingBtn);
   }
 
-  _renderBtnIndex(id,num) {
-    num > 0 ? $showLight.addClass('lump-primary-light') : $showLight.removeClass('lump-primary-light');
+  _renderBtnIndex($btn,$doingBtn) {
+    if($btn) {
+      $btn.addClass('doing');
+      $doingBtn.removeClass('doing').addClass('done');
+    }else {
+      $btn.removeClass('doing');
+    }
   }
-
   _showEssayInputEditor(event) {
     let $shortTextarea = $(event.currentTarget);
 
