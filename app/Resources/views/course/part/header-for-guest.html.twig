@@ -1,91 +1,79 @@
-{% import "macro.html.twig" as web_macro %}
-{#<!-- 1、加入前 -->#}
+{% extends 'course/part/header-layout.html.twig' %}
 
-<div class="container">
-  <ol class="breadcrumb breadcrumb-o">
-    <li>
-      <a href="{{ path('homepage') }}">首页</a>
-    </li>
-    <li class="active">{{ courseSet.title }}</li>
-  </ol>
-  <div class="es-section course-detail-section clearfix">
-    <div class="course-detail-top clearfix">
-      {{ render(controller('AppBundle:Course:headerTopPart', {id: course.id})) }}
+{% block heard_content %}
+<div class="course-detail-bottom">
+  <div class="course-detail-img">
+    {# 需要设置是否可以预览 #}
+    {#<a href="#modal" data-toggle="modal" data-url="/course/2/lessons/preview?lessonId=1" class="course-img-cover">#}
+      {#<i class="es-icon es-icon-playcircleoutline"></i>#}
+    {#</a>#}
+    {# end 需要设置是否可以预览 #}
+    <img class="img-responsive"
+         src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(courseSet.cover.large) }} {% endif %}"
+         alt="{{ course.title }} ">
+    <div class="course-detail-remask">
+      <i class="es-icon es-icon-people"></i><span class="mhs">{{ course.studentNum }}</span>人加入学习
+      <div class="score pull-right">
+        {{ web_macro.star(course.rating) }}
+        <span class="vertical-middle">{{ course.ratingNum }}</span>
+      </div>
     </div>
-    <div class="course-detail-bottom">
-      <div class="course-detail-img">
-        {# 需要设置是否可以预览 #}
-        {#<a href="#modal" data-toggle="modal" data-url="/course/2/lessons/preview?lessonId=1" class="course-img-cover">#}
-          {#<i class="es-icon es-icon-playcircleoutline"></i>#}
-        {#</a>#}
-        {# end 需要设置是否可以预览 #}
-        <img class="img-responsive"
-             src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(courseSet.cover.large) }} {% endif %}"
-             alt="{{ course.title }} ">
-        <div class="course-detail-remask">
-          <i class="es-icon es-icon-people"></i><span class="mhs">{{ course.studentNum }}</span>人加入学习
-          <div class="score pull-right">
-            {{ web_macro.star(course.rating) }}
-            <span class="vertical-middle">{{ course.ratingNum }}</span>
-          </div>
-        </div>
 
+  </div>
+  <div class="course-detail-info text-12 color-gray">
+    <div class="mb10">
+      <span class="course-detail-title inline-block">价格</span>
+      <!-- 折扣价 -->
+      {#<span class="gray-darker mrm">¥<b class="text-24">75.00</b></span>#}
+      <span class="gray-darker mrm">¥<b class="text-24">{{ course.price }}</b></span>
+      <!-- 原价 -->
+      {#<span class="original-price">¥<span class="price">{{ course.price }}</span></span>#}
+      {#<span class="tag-discount"><span class="discount-font">8折</span></span>#}
+    </div>
+    <!-- 有活动显示  -->
+    {#<div class="mb10">#}
+      {#<span class="course-detail-title inline-block">活动</span>#}
+      {#<span class="color-warning ">#}
+      {#<b class="mrl">双十二活动</b>#}
+      {#<i class="es-icon es-icon-alarmon mrm"></i>#}
+      {#22 时 53 分 44.12 秒</span>#}
+    {#</div>#}
+    <div class="pv20 bg-color course-detail-gray">
+      <div class="course-detail-nav mb10">
+        <span class="course-detail-title inline-block">教学计划</span>
+        <ul class="nav nav-pills nav-pills-sm nav-pills-transparent inline-block ml5">
+          {% set current_course = course %}
+          {% for course in  courses %}
+            <li {% if current_course.id == course.id %}class="mb10 mr10 active" {% endif %}>
+              <a href="{{ path('course_show',{id: course.id}) }}">{{ course.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
       </div>
-      <div class="course-detail-info text-12 color-gray">
-        <div class="mb10">
-          <span class="course-detail-title inline-block">价格</span>
-          <!-- 折扣价 -->
-          {#<span class="gray-darker mrm">¥<b class="text-24">75.00</b></span>#}
-          <span class="gray-darker mrm">¥<b class="text-24">{{ course.price }}</b></span>
-          <!-- 原价 -->
-          {#<span class="original-price">¥<span class="price">{{ course.price }}</span></span>#}
-          {#<span class="tag-discount"><span class="discount-font">8折</span></span>#}
-        </div>
-        <!-- 有活动显示  -->
-        {#<div class="mb10">#}
-          {#<span class="course-detail-title inline-block">活动</span>#}
-          {#<span class="color-warning ">#}
-          {#<b class="mrl">双十二活动</b>#}
-          {#<i class="es-icon es-icon-alarmon mrm"></i>#}
-          {#22 时 53 分 44.12 秒</span>#}
-        {#</div>#}
-        <div class="pv20 bg-color course-detail-gray">
-          <div class="course-detail-nav mb10">
-            <span class="course-detail-title inline-block">教学计划</span>
-            <ul class="nav nav-pills nav-pills-sm nav-pills-transparent inline-block ml5">
-              {% set current_course = course %}
-              {% for course in  courses %}
-                <li {% if current_course.id == course.id %}class="mb10 mr10 active" {% endif %}>
-                  <a href="{{ path('course_show',{id: course.id}) }}">{{ course.title }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="mbl">
-            <span class="course-detail-title inline-block">学习方式</span>
-            {% if course.expiryMode == 'days' %}
-              <span class="gray-dark mrl">随到随学</span>
-              <span
-                  class="gray-dark">{% if course.expiryDays %} {{ course.expiryDays }}天 {% else %}不限 {% endif %}</span>
-            {% elseif course.expiryMode == 'date' %}
-              <span class="gray-dark mrl">周期开班</span>
-              <span class="gray-dark">{{ course.expiryStartDate|date('Y-m-d ') }}
-                ~ {{ course.expiryEndDate|date('Y-m-d ') }}</span>
-            {% endif %}
-          </div>
-          <span class="course-detail-title inline-block">承诺服务</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-container="body"  data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
-          <span class="lump-sm color-lump bg-primary mr5" data-container="body"  data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
-          <span class="lump-sm color-lump mr5" data-container="body" ddata-trigger="hover" ata-placement="top" data-toggle="popover" title="title" data-container="body" data-content="content. ">疑</span>
-          <span class="lump-sm color-lump mr5" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">业</span>
-        </div>
-        <div class="text-right">
-          <a class="btn btn-default btn-lg mrm"><i class="es-icon es-icon-crown mr10"></i>会员</a>
-          <a class="btn btn-primary btn-lg" href="{{ path('order_show', {targetId: course.id, targetType:'course'}) }}">购买课程</a>
-        </div>
+      <div class="mbl">
+        <span class="course-detail-title inline-block">学习方式</span>
+        {% if course.expiryMode == 'days' %}
+          <span class="gray-dark mrl">随到随学</span>
+          <span
+              class="gray-dark">{% if course.expiryDays %} {{ course.expiryDays }}天 {% else %}不限 {% endif %}</span>
+        {% elseif course.expiryMode == 'date' %}
+          <span class="gray-dark mrl">周期开班</span>
+          <span class="gray-dark">{{ course.expiryStartDate|date('Y-m-d ') }}
+            ~ {{ course.expiryEndDate|date('Y-m-d ') }}</span>
+        {% endif %}
       </div>
+      <span class="course-detail-title inline-block">承诺服务</span>
+      <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">练</span>
+      <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">试</span>
+      <span class="lump-sm color-lump bg-primary mr5" data-container="body"  data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">问</span>
+      <span class="lump-sm color-lump bg-primary mr5" data-container="body"  data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">动</span>
+      <span class="lump-sm color-lump mr5" data-container="body" ddata-trigger="hover" ata-placement="top" data-toggle="popover" title="title" data-container="body" data-content="content. ">疑</span>
+      <span class="lump-sm color-lump mr5" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" title="title" data-content="content.">业</span>
+    </div>
+    <div class="text-right">
+      <a class="btn btn-default btn-lg mrm"><i class="es-icon es-icon-crown mr10"></i>会员</a>
+      <a class="btn btn-primary btn-lg" href="{{ path('order_show', {targetId: course.id, targetType:'course'}) }}">购买课程</a>
     </div>
   </div>
 </div>
+{% endblock %}
