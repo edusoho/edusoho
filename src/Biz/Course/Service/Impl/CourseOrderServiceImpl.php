@@ -187,7 +187,6 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         }
 
         $this->getOrderService()->cancelRefundOrder($id);
-
         if ($this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
             $this->getCourseMemberService()->unlockStudent($order['targetId'], $order['userId']);
         }

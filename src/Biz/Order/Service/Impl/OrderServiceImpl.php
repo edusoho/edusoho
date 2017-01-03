@@ -415,7 +415,6 @@ class OrderServiceImpl extends BaseService implements OrderService
             'createdTime'    => time(),
             'operator'       => empty($reason['operator']) ? 0 : $reason['operator']
         ));
-
         $this->getOrderDao()->update($order['id'], array(
             'status'   => ($refund['status'] == 'success') ? 'paid' : 'refunding',
             'refundId' => $refund['id']

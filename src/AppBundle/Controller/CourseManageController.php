@@ -217,7 +217,7 @@ class CourseManageController extends BaseController
             $data           = $request->request->all();
             $user           = $this->getUserService()->getUserByLoginField($data['queryfield']);
             $data['userId'] = $user['id'];
-            $this->getCourseService()->createCourseStudent($courseId, $data);
+            $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
             return $this->redirect($this->generateUrl('course_set_manage_course_students', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);

@@ -44,7 +44,7 @@ $(".cancel-refund").on('click', function(){
         return false;
     }
 
-    $.post($(this).data('url'), function(){
+    $.post($(this).data('url'), function(data){
         window.location.reload();
     });
 });
