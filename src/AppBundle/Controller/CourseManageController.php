@@ -16,7 +16,7 @@ class CourseManageController extends BaseController
             $data = $request->request->all();
             $this->getCourseService()->createCourse($data);
 
-            return $this->listAction($request, $courseSetId);
+            return $this->redirect($this->generateUrl('course_set_manage_courses', array('courseSetId' => $courseSetId)));
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
@@ -217,7 +217,7 @@ class CourseManageController extends BaseController
             $data           = $request->request->all();
             $user           = $this->getUserService()->getUserByLoginField($data['queryfield']);
             $data['userId'] = $user['id'];
-            $this->getCourseService()->createCourseStudent($courseId, $data);
+            $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
             return $this->redirect($this->generateUrl('course_set_manage_course_students', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
@@ -229,7 +229,7 @@ class CourseManageController extends BaseController
 
     public function removeCourseStudentAction(Request $request, $courseSetId, $courseId, $userId)
     {
-        $this->getCourseService()->removeCourseStudent($courseId, $userId);
+        $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
         return $this->createJsonResponse(array('success' => true));
     }
 

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -34,7 +35,7 @@ class HomeworkManageController extends BaseController
             'questions'     => $questions,
             'replace'       => empty($conditions['replace']) ? '' : $conditions['replace'],
             'paginator'     => $paginator,
-            'targetChoices' => $this->getQuestionRanges($courseSet),
+            'targetChoices' => $this->getQuestionRanges($courseSet['id']),
             'conditions'    => $conditions,
             'target'        => $request->query->get('target', 'testpaper')
         ));
@@ -122,11 +123,13 @@ class HomeworkManageController extends BaseController
         return $essayQuestions;
     }
 
-    protected function getQuestionRanges($course, $includeCourse = false)
+    protected function getQuestionRanges($courseSetId)
     {
-        $ranges = array('本课程');
+        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courseIds = ArrayToolkit::column($courses, 'id');
 
-        return $ranges;
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseIds($courseIds);
+        return ArrayToolkit::index($courseTasks, 'id');
     }
 
     protected function sortType($types)
@@ -161,6 +164,11 @@ class HomeworkManageController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     protected function getUserService()

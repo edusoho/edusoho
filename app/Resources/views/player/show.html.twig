@@ -10,7 +10,6 @@
     <meta content="black" name="apple-mobile-web-app-status-bar-style" />
     <meta content="telephone=no" name="format-detection" />
     <meta content="{{ csrf_token('site') }}" name="csrf-token" /></head>
-
     {% include 'player/stylesheet.html.twig' %}
   </head>
   <body style="overflow:hidden;border:0px;">
@@ -22,52 +21,51 @@
       {% else %}
         <div style="position:absolute;top:0;bottom:0;left:0;right:0;text-align:center;">
           <div id="lesson-video-content"
-          data-user-id="{{app.user.id|default(0)}}"
-          data-user-name="{{app.user.username|default('')}}"
-          data-file-global-id="{{file.globalId}}"
-          data-file-id="{{file.id}}"
-          data-file-type="{{file.type}}"
-          data-url="{{url}}"
-          data-video-header-length="{{ context.videoHeaderLength|default(0) }}"
-          data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(false) }}"
-          data-player="{{player}}"
-          data-agentInWhiteList="{{agentInWhiteList}}"
-          {% if not file.convertParams.hasVideoWatermark|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
-            data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null) }}"
-          {% endif %}
-          {% if setting('storage.cloud_access_key') %}
-            data-access-key="{{ setting('storage.cloud_access_key') }}"
-          {% endif %}
-          {% if setting('storage.video_fingerprint') and app.user %}
-            data-fingerprint="{{ finger_print() }}"
-            data-fingerprint-src="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
-            data-fingerprint-time="{{ setting('storage.video_fingerprint_time')|default(0.5) * 1000 }}"
-          {% endif %}
-          {% if player == 'balloon-cloud-video-player' %}
-            class="ballon-video-player"
-          {% else %}
-            class="{{ player }}"
-          {% endif %}
-          {% if context.hideQuestion|default(0) == 0 %}
-            data-markerurl="{#{{ path('course_lesson_question_markers_show', {mediaId: file.id}) }}#}"
-          {% endif %}
+            data-user-id="{{app.user.id|default(0)}}"
+            data-user-name="{{app.user.username|default('')}}"
+            data-file-global-id="{{file.globalId}}"
+            data-file-id="{{file.id}}"
+            data-file-type="{{file.type}}"
+            data-url="{{url}}"
+            data-video-header-length="{{ context.videoHeaderLength|default(0) }}"
+            data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(false) }}"
+            data-player="{{player}}"
+            data-agentInWhiteList="{{agentInWhiteList}}"
+            {% if not file.convertParams.hasVideoWatermark|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
+              data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null) }}"
+            {% endif %}
+            {% if setting('storage.cloud_access_key') %}
+              data-access-key="{{ setting('storage.cloud_access_key') }}"
+            {% endif %}
+            {% if setting('storage.video_fingerprint') and app.user %}
+              data-fingerprint="{{ finger_print() }}"
+              data-fingerprint-src="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+              data-fingerprint-time="{{ setting('storage.video_fingerprint_time')|default(0.5) * 1000 }}"
+            {% endif %}
+            {% if player == 'balloon-cloud-video-player' %}
+              class="ballon-video-player"
+            {% else %}
+              class="{{ player }}"
+            {% endif %}
+            {% if context.hideQuestion|default(0) == 0 %}
+              data-markerurl="{#{{ path('course_lesson_question_markers_show', {mediaId: file.id}) }}#}"
+            {% endif %}
             data-timelimit="{{ context.watchTimeLimit|default('')}}"
             data-starttime="{{ context.starttime|default('')}}"
             data-lesson-id="{{ context.lessonId|default(0)}}"
             style="height:100%"
           ></div>
         </div>
-
-          {# webpack #}
-          {% do script(['libs/vendor.js', 'web.js'], 1000) %}
-          {% include 'script_boot.html.twig' %}
-
-        {% if setting("developer.cloud_sdk_cdn") %} {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %} {% else %} {% set cdnUrl = 'http://cdn.qiqiuyun.net'  %} {% endif %}
+        {% do script(['libs/vendor.js', 'app/js/main.js'], 1000) %}
+        {% include 'script_boot.html.twig' %}
+        {% if setting("developer.cloud_sdk_cdn") %}
+          {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
+        {% else %}
+          {% set cdnUrl = 'http://cdn.qiqiuyun.net'  %}
+        {% endif %}
         <script src="{{ cdnUrl }}/js-sdk/video-player/v1/sdk.js"></script>
-
-       {% do script(['app/js/player/index.js']) %}
-
-    {% endif %}
+        {% do script(['app/js/player/index.js']) %}
+      {% endif %}
     {% else %}
       <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'该浏览器不支持云视频播放，请前往'|trans}}<a href="{{path('mobile')}}" target="parent">{{'下载App'|trans}}</a>。</div>
     {% endif %}

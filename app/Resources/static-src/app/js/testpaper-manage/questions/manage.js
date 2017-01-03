@@ -18,7 +18,7 @@ export default class QuestionManage{
 
   _showPickerModal(event) {
     let excludeIds = [];
-    $('[data-type="'+this.currentType+'"]').find('[name="questionId[]"]').each(function(){
+    $('[data-type="'+this.currentType+'"]').find('[name="questionIds[]"]').each(function(){
         excludeIds.push($(this).val());
     });
 

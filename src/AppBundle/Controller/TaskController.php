@@ -27,10 +27,10 @@ class TaskController extends BaseController
                 $backUrl = $referer;
             }
         } else {
-            if ($this->getCourseMemberService()->isCourseStudent($courseId, $this->getUser()->getId())) {
-                $backUrl = $this->generateUrl('course_set_show', array('id' => $activity['fromCourseSetId']));
-            } else {
+            if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->getId())) {
                 $backUrl = $this->generateUrl('course_set_manage_course_tasks', array('courseSetId' => $activity['fromCourseSetId'], 'courseId' => $activity['fromCourseId']));
+            } else {
+                $backUrl = $this->generateUrl('course_set_show', array('id' => $activity['fromCourseSetId']));
             }
         }
 
@@ -90,13 +90,16 @@ class TaskController extends BaseController
                     'courseId' => $courseId,
                     'taskId'   => $taskId
                 ))
+            ),
+            array(
+                'code' => 'question',
+                'name' => '问答',
+                'icon' => 'es-icon-help',
+                'url' => $this->generateUrl('course_task_plugin_threads', array(
+                    'courseId' => $courseId,
+                    'taskId'   => $taskId
+                ))
             )
-//            array(
-            //                'code' => 'question',
-            //                'name' => '问答',
-            //                'icon' => 'es-icon-help',
-            //                'url' => 'TaskPluginQuestionController'
-            //            )
         ));
     }
 

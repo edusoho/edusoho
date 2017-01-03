@@ -22,16 +22,18 @@ function _inItStep2form() {
         required: true,
         maxlength: 50,
       },
-      minute: 'required unsigned_integer',
+      minute: 'required second_range',
       second: 'required second_range',
       'ext[mediaSource]': 'required'
     },
     messages: {
       minute: {
         required: '请输入时长',
+        second_range: '分钟只能在0-59之间'
       },
       second: {
         required: '请输入时长',
+        second_range: '秒数只能在0-59之间'
       },
       'ext[mediaSource]': "请上传或选择%display%"
     }
