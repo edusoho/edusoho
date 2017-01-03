@@ -8,7 +8,7 @@ variables:
 before_script:
   - cp app/config/parameters_test.yml.dist app/config/parameters_test.yml
   - cp app/config/parameters.yml.dist app/config/parameters.yml
-  - sed -i 's/\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml
+  - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
   - mkdir web/files
   - mkdir app/data/private_files
   - touch app/config/routing_plugins.yml
