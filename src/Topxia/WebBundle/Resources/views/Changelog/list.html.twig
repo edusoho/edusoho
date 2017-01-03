@@ -3,11 +3,13 @@
 {% set nav = 'index' %}
 {% set bodyClass = 'index' %}
 {% block content %}
-
-  <div class="row">
-    <p>
-      {{ logs }}
-    </p>
+  <div>
+    <h2 class="text-center mbl color-primary ">EduSoho更新日志</h2>
+    {% if logs %}
+      {% for log in logs %}
+        {{ log }} <br>
+      {% endfor %}
+    {% endif %}
   </div>
 
 {% endblock %}

@@ -8,10 +8,18 @@ class ChangelogController extends BaseController
     public function listAction(Request $request)
     {
         $rootDir = $this->getServiceKernel()->getParameter('kernel.root_dir');
-        $logs = file_get_contents($rootDir."/../CHANGELOG");
+        $changelogUrl = $rootDir."/../CHANGELOG";
+        $changelogFile = fopen("{$changelogUrl}", "r");
+
+        $changelogRows = array();
+        while(!feof($changelogFile)) {
+            $changelogRows[] = fgets($changelogFile);
+        }
+
+        fclose($changelogFile);
 
         return $this->render('TopxiaWebBundle:Changelog:list.html.twig',array(
-            'logs' => $logs
+            'logs' => $changelogRows
         ));
     }
 }
