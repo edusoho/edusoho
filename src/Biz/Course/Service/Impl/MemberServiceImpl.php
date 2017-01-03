@@ -26,6 +26,8 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('parameter is invalid!');
         }
 
+        $this->getCourseService()->tryManageCourse($courseId);
+
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
@@ -93,6 +95,26 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
 
         return array($course, $member, $order);
+    }
+
+    public function removeCourseStudent($courseId, $userId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $user = $this->getUserService()->getUser($userId);
+        if (empty($user)) {
+            throw $this->createNotFoundException("User#{$user['id']} Not Found");
+        }
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+        if (empty($member)) {
+            throw $this->createNotFoundException("User#{$user['id']} Not in Course#{$courseId}");
+        }
+        if ($member['role'] !== 'student') {
+            throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
+        }
+        $result = $this->getMemberDao()->delete($member['id']);
+
+        $this->dispatchEvent("course.student.delete", $member);
+        return $result;
     }
 
     public function searchMembers($conditions, $orderBy, $start, $limit)
