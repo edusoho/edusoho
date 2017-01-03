@@ -369,7 +369,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         if ($order['status'] != 'paid') {
-            throw $this->createServiceException(printf('订单#%u，不能退款', $order['id']));
+            throw $this->createServiceException("订单#{$order['id']}，不能退款");
         }
 
         // 订单金额为０时，不能退款
