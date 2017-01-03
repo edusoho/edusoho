@@ -1,4 +1,4 @@
-<form class="lesson-question-plugin-form" id="task-question-plugin-form" method="post" action="">
+<form class="task-question-plugin-form" id="task-question-plugin-form" method="post" action="{{ path('course_task_plugin_thread_create', {courseId: task.courseId, taskId: task.id}) }}">
   <div class="form-group mb0">
     <div class="controls">
       {{ form_widget(form.title, {attr:{class:'form-control expand-form-trigger', placeholder:'我要提问'|trans, 'data-display':'标题'|trans}}) }}

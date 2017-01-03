@@ -1552,6 +1552,21 @@ course_task_plugin_threads:
   path: /course/{courseId}/task/{taskId}/plugin/threads
   defaults: { _controller: AppBundle:TaskPlugin:threads }
 
+course_task_plugin_thread_create:
+  path: /course/{courseId}/task/{taskId}/plugin/thread/create
+  defaults: { _controller: AppBundle:TaskPlugin:createThread }
+  methods: [POST]
+
+course_task_plugin_thread_show:
+  path: /course/{courseId}/task/{taskId}/plugin/thread/{threadId}
+  defaults: { _controller: AppBundle:TaskPlugin:thread }
+  methods: [GET]
+
+course_task_plugin_thread_answer:
+  path: /course/{courseId}/task/{taskId}/plugin/thread/{threadId}/answer
+  defaults: { _controller: AppBundle:TaskPlugin:answerQuestion }
+  methods: [POST]
+
 #course_chapter
 course_manage_chapter_create:
     path:  /course/{id}/manage/chapter/create

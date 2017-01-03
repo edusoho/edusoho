@@ -3,6 +3,12 @@
 {% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'app/js/task/plugin/question/index.js']) %}
 
 {% block content %}
-  {% include 'task/plugin/question/form.html.twig' %}
-  {% include 'task/plugin/question/list.html.twig' %}
+  <div class="question-list-block">
+    {% include 'task/plugin/question/form.html.twig' %}
+    {% include 'task/plugin/question/list.html.twig' %}
+  </div>
+
+  <div class="question-detail-block" style="display: none">
+  </div>
+
 {% endblock %}
