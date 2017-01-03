@@ -569,7 +569,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($deletedChapter) || $deletedChapter['courseId'] != $courseId) {
             throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
         }
-
         $this->getChapterDao()->delete($deletedChapter['id']);
 
         $prevChapter = array('id' => 0);
@@ -583,7 +582,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $tasks = $this->getTaskService()->findTasksByChapterId($deletedChapter['id']);
 
         foreach ($tasks as $task) {
-            $this->getTaskService()->updateTask($task['id'], array('categoryId' => $prevChapter['id']));
+            $this->getTaskService()->updateSeq($task['id'], array('categoryId' => $prevChapter['id']));
         }
     }
 
