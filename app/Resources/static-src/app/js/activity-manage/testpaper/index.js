@@ -160,6 +160,7 @@ class Testpaper {
         $('.noUi-tooltip').text(`${(values[handle]/score*100).toFixed(0)}%`);
         $('.js-score-tooltip').css('left',`${(values[handle]/score*100).toFixed(0)}%`);
         $('.js-passScore').text(parseInt(values[handle]));
+        $('input[name="finishScore"]').val(parseInt(values[handle]));
       });
     }
     let html = `<div class="score-tooltip js-score-tooltip"><div class="tooltip top" role="tooltip" style="">
