@@ -31,6 +31,8 @@ class Course extends BaseResource
         $res['tags'] = TagUtil::buildTags('course', $res['id']);
         $res['tags'] = ArrayToolkit::column($res['tags'], 'name');
 
+
+
         return $res;
     }
 

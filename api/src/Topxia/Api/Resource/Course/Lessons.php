@@ -19,6 +19,7 @@ class Lessons extends BaseResource
             $conditions['updatedTime_GE'] = $conditions['cursor'];
             $lessons                      = $this->getCourseService()->searchLessons($conditions, array('updatedTime', 'ASC'), $start, $limit);
             $next                         = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $lessons);
+
             return $this->wrap($this->simplify($this->filter($lessons)), $next);
         } else {
             $total   = $this->getCourseService()->searchLessonCount($conditions);
