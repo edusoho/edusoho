@@ -20,8 +20,7 @@ const config = {
     "es-webuploader":['libs/js/es-webuploader.js'],
     "es-image-crop":['libs/js/es-image-crop.js'],
     "easy-pie-chart":['libs/js/easy-pie-chart.js'],
-    'jquery-timer':['libs/js/jquery-timer.js'],
-    'jquery-range':['libs/js/jquery-range.js']
+    'jquery-timer':['libs/js/jquery-timer.js']
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',

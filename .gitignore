@@ -62,5 +62,4 @@ web/assets/img/default/video.png
 web/php-performance.php
 chunk-manifest.json
 .npminstall.done
-!/web/static-dist/dev.lock
 /web/static-dist/*
