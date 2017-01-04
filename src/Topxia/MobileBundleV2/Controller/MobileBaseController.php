@@ -461,6 +461,8 @@ class MobileBaseController extends BaseController
                 $tempCourses[$key]["liveStartTime"]   = "";
                 $tempCourses[$key]["liveEndTime"]     = "";
             }
+
+            $tempCourses[$key]['tags'] = TagUtil::buildTags('course', $tempCourses[$key]['id']);
         }
 
         return $tempCourses;
