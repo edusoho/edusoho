@@ -13,11 +13,17 @@
     </div>
     <div class="panel-body">
       {% for question in questions %}
-        <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbmpull-left {% if question.testResult|default(null) %}active{% endif %}">{{ question.seq }}</a>
+        <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm
+        {% if question.testResult|default(null) %}
+          bg-primary
+        {% else %}
+          lump-card
+        {% endif %}
+      ">{{ question.seq }}</a>
       {% endfor %}
     </div>
     {% if paperResult.status|default(null) != 'finished' %}
-    <div class="panel-text-right mt20">
+    <div class="panel-footer text-right mt20">
       {% if paperResult.status|default(null) == 'reviewing' %}
         <a class="btn btn-success" data-toggle="modal" data-target="#modal" data-url"" data-role="check-submit" data-return-url="">{{'完成批改'|trans}}</a>
       {% elseif paperResult.status|default(null) == 'doing' %}
