@@ -295,6 +295,8 @@ interface CourseService
 
     public function quitCourseByDeadlineReach($userId, $courseId);
 
+    public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);
+
     /**
      * 成为学员，即加入课程的学习
      */
