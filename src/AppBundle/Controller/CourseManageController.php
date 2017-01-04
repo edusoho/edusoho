@@ -3,6 +3,7 @@ namespace AppBundle\Controller;
 
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;
@@ -240,9 +241,20 @@ class CourseManageController extends BaseController
         if (empty($student)) {
             throw $this->createNotFoundException('Student#{$userId} Not Found');
         }
+        $user = $this->getUserService()->getUser($student['userId']);
+        //TODO 获取学习进度相关信息
+        $questionCount   = $this->getCourseMemberService()->countQuestionsByCourseIdAndUserId($courseId, $userId);
+        $activityCount   = $this->getCourseMemberService()->countActivitiesByCourseIdAndUserId($courseId, $userId);
+        $discussionCount = $this->getCourseMemberService()->countDiscussionsByCourseIdAndUserId($courseId, $userId);
+        $postCount       = $this->getCourseMemberService()->countPostsByCourseIdAndUserId($courseId, $userId);
 
         return $this->render('course-manage/student-process-modal.html.twig', array(
-            'student' => $student
+            'student'         => $student,
+            'user'            => $user,
+            'questionCount'   => $questionCount,
+            'activityCount'   => $activityCount,
+            'discussionCount' => $discussionCount,
+            'postCount'       => $postCount
         ));
     }
 
@@ -351,6 +363,9 @@ class CourseManageController extends BaseController
         return $this->container->get('topxia.twig.web_extension');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');

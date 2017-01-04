@@ -2,7 +2,7 @@
 {% set modal_class= "modal-lg" %}
 
 {% block title %}
-    {{ student.nickname|default('nickname...') }}{{ '的学习情况'|trans }}
+    {{ user.nickname|default('') }}{{ '的学习情况'|trans }}
 {% endblock %}
 
 {% block body %}
@@ -107,31 +107,32 @@
 	  <div class="col-md-3 col-sm-6">
 	    <div class="well">
 	      <p>发起提问</p>
-	      <p class="number">0</p>
+	      <p class="number">{{questionCount}}</p>
 	      <i class="es-icon es-icon-comment1"></i>
 	    </div>
 	  </div>
 	  <div class="col-md-3 col-sm-6">
 	    <div class="well">
+	      <p>参加活动</p>
+	      <p class="number">{{activityCount}}</p>
+	      <i class="es-icon es-icon-activity"></i>
+	    </div>
+	  </div>
+	  <div class="col-md-3 col-sm-6">
+	    <div class="well">
 	      <p>发起话题</p>
-	      <p class="number">0</p>
+	      <p class="number">{{discussionCount}}</p>
 	      <i class="es-icon es-icon-topic"></i>
 	    </div>
 	  </div>
 	  <div class="col-md-3 col-sm-6">
 	    <div class="well">
 	      <p>回复话题</p>
-	      <p class="number">0</p>
+	      <p class="number">{{postCount}}</p>
 	      <i class="es-icon es-icon-answer"></i>
 	    </div>
 	  </div>
-	  <div class="col-md-3 col-sm-6">
-	    <div class="well">
-	      <p>参与活动</p>
-	      <p class="number">0</p>
-	      <i class="es-icon es-icon-activity"></i>
-	    </div>
-	  </div>
+	 
 	</div>
   </div>
 </div>

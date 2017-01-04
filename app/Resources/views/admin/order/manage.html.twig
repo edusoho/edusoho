@@ -69,7 +69,7 @@
   </form>
 
   <table class="table table-striped table-hover" id="order-table">
-    {% include 'TopxiaWebBundle:Order:order-table.html.twig' with {mode:'admin'} %}
+    {% include 'order/order-table.html.twig' with {mode:'admin'} %}
   </table>
   <div class="paginator">
     {{ admin_macro.paginator(paginator) }} 
