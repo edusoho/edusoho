@@ -132,7 +132,7 @@ abstract class BaseDao
 
     private function  isRunByCommand()
     {
-       return  getenv('IS_RUN_BY_COMMAND') && getenv('ISRUNBYCOMMAND') === 'true';
+       return  getenv('IS_RUN_BY_COMMAND') && getenv('IS_RUN_BY_COMMAND') === 'true';
     }
 
     protected function getCacheVersion($key)
