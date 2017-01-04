@@ -144,13 +144,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             }
 
             $materials = empty($fields['materials']) ? array() : json_decode($fields['materials'], true);
+
             if (!empty($materials)) {
                 $this->syncActivityMaterials($savedActivity, $materials, 'update');
             }
 
             $media          = array();
             $activityConfig = $this->getActivityConfig($savedActivity['mediaType']);
-
             if (!empty($savedActivity['mediaId'])) {
                 $media = $activityConfig->update($savedActivity['mediaId'], $fields);
             }
@@ -251,7 +251,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'courseSetId' => $activity['fromCourseSetId'],
             'lessonId'    => $activity['id'],
             'title'       => $material['name'],
-            'description' => $material['summary'],
+            'description' => empty($material['summary'])?: $material['summary'],
             'userId'      => $this->getCurrentUser()->offsetGet('id'),
             'type'        => 'course',
             'source'      => 'courseactivity',

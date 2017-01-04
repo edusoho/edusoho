@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UploadFileController extends BaseController
 {
+
     public function uploadAction(Request $request)
     {
         if ($request->isMethod('OPTIONS')) {
