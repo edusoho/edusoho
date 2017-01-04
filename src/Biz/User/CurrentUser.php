@@ -27,11 +27,8 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function __set($name, $value)
     {
-        if (array_key_exists($name, $this->data)) {
-            $this->data[$name] = $value;
-        }
-
-        throw new \RuntimeException("{$name} is not exist in CurrentUser.");
+        $this->data[$name] = $value;
+        return $this;
     }
 
     public function __get($name)

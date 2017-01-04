@@ -5,7 +5,7 @@
 整个webpack方案已经上传到[npm](https://www.npmjs.com/)里,
 随着项目的需要，会不断迭代
 ```
-npm install es-webpack-engine
+npm install es-webpack-engine --save-dev
 ```
 
 ### webpack配置文件说明
@@ -13,10 +13,10 @@ npm install es-webpack-engine
 ```
 目录：/app/Resources/webpack/
 
-> 本项目中的优化配置文件:
+> 本项目中的打包资源配置文件:
 settings.js 
 
-> 资源依赖配置文件
+> 开发模式优化配置文件
 webpack.config.js
 
 > 开发环境下的入口文件 --- 不推荐修改
@@ -75,10 +75,10 @@ npm run compile:debug  #不压缩
 * devDependencies
 
 ```
-放入开发工具的依赖，即不会出现在编译后的文件中，限定具体版本
+放入开发工具的依赖，即不会出现在编译后的文件中，版本默认用 ^ 开头
 
 使用下面命令新增
-npm install xxx@x.x.x --save-dev 
+npm install xxx --save-dev 
 ```
 
 * dependencies
@@ -171,7 +171,6 @@ import '!style!css!less!xxx.less';
 * webpack编译报错通知
 * 分app、libs、plugins输出
 * 字体图标、图像、swf等纳入编译流
-
 
 ### 待改进
 * dev模式下scanPath的新文件无法监听的问题

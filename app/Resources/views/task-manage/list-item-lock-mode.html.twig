@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+{% set file =  files[task.activityId]|default(null) %}
+>>>>>>> feature/x8-migrate
 <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}">
   <div class="item-line"></div>
   <div class="item-content  js-item-content text-overflow">
@@ -5,6 +9,13 @@
     {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
     {{ task.title }}
     {% if task.status != 'published' %}<span class="color-warning">(未发布)</span> {% endif %}
+
+    {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
+      <span class="label label-danger ml5">转码失败</span>
+    {% elseif file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
+      <span class="label label-warning ml5">转码中</span>
+    {% endif %}
+
     {% if task.activity.mediaType is same as('live') %}
       {% if task.result.status|default('') == 'finished' %}
         <span class="color-gray mls">已结束</span>

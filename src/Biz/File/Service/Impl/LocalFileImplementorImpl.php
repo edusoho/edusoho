@@ -168,7 +168,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     {
     }
 
-    public function getDownloadFile($file)
+    public function getDownloadFile($file, $ssl = false)
     {
         return $file;
     }
@@ -290,12 +290,14 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     }
 
     /**
-     * only support for cloud file
-     * @param $globalId
      *
+     * @param $globalId
+     * @param bool $ssl
+     *
+     * @deprecated only support for cloud file use CloudFileImplementorImpl
      * @return array
      */
-    public function player($globalId)
+    public function player($globalId, $ssl=false)
     {
         return array();
     }

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\CloudPlatform\Service\AppService;
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
 use Topxia\Common\Paginator;
@@ -94,7 +95,12 @@ class EduCloudController extends BaseController
         if (!isset($overview['error'])) {
             $paidService = array();
             $unPaidService = array();
-            $this->getSettingService()->set('cloud_status', array('enabled' => $overview['enabled'], 'locked' => $overview['locked'], 'accessCloud' => $overview['accessCloud']));
+            $this->getSettingService()->set('cloud_status', array(
+                'enabled' => $overview['enabled'],
+                'locked' => $overview['locked'],
+                'accessCloud' => $overview['accessCloud']
+            ));
+
             foreach ($overview['services'] as $key => $value) {
                 if ($value == true) {
                     $paidService[] = $key;
@@ -102,23 +108,14 @@ class EduCloudController extends BaseController
                     $unPaidService[] = $key;
                 }
             }
-                //暂时去掉email
-            foreach ($paidService as $key => $value) {
-                if ($value == 'email') {
-                    unset($paidService[$key]);
-                }
-            }
-            foreach ($unPaidService as $key => $value) {
-                if ($value == 'email') {
-                    unset($unPaidService[$key]);
-                }
 
+            foreach ($unPaidService as $key => $value) {
                 if ($value == 'search') {
                     unset($unPaidService[$key]);
                 }
             }
         }
-        
+
         return $this->render('admin/edu-cloud/overview/index.html.twig', array(
             'isBinded'    => $isBinded,
             'overview'    => $overview,
@@ -1445,6 +1442,9 @@ class EduCloudController extends BaseController
         return $this->createService('CloudPlatform:EduCloudService');
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
         return $this->createService('CloudPlatform:AppService');

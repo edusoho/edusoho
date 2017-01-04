@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use Topxia\Common\ArrayToolkit;
 use Biz\File\Service\UploadFileService;
-use Topxia\WebBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Topxia\Common\ArrayToolkit;
+use Topxia\WebBundle\Util\UploaderToken;
 
 class UploaderController extends BaseController
 {
@@ -20,28 +20,48 @@ class UploaderController extends BaseController
         }
 
         $callback = $request->query->get('callback');
-        $isJsonp = !empty($callback);
-        if($isJsonp){
+        $isJsonp  = !empty($callback);
+
+        if ($isJsonp) {
             $params = array_merge($request->query->all(), $params);
-            $result                    = $this->getUploadFileService()->initUpload($params);
-            return $this->createJsonpResponse($result, $callback);
-        }else{
+        } else {
             $params = array_merge($request->request->all(), $params);
+        }
 
-            $params['uploadCallback']  = $this->generateUrl('uploader_upload_callback', array(), UrlGeneratorInterface::ABSOLUTE_URL);
-            $params['processCallback'] = $this->generateUrl('uploader_process_callback', array(), UrlGeneratorInterface::ABSOLUTE_URL);
-            $result                    = $this->getUploadFileService()->initUpload($params);
+        $params['uploadCallback']  = $this->generateUrl('uploader_upload_callback', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        $params['processCallback'] = $this->generateUrl('uploader_process_callback', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
-            $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry');
+        $result = $this->getUploadFileService()->initUpload($params);
+
+        $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        $result['authUrl']        = $this->generateUrl('uploader_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+
+        if ($isJsonp) {
+            return $this->createJsonpResponse($result, $callback);
+        } else {
             return $this->createJsonResponse($result);
         }
     }
 
     public function uploadAuthAction(Request $request)
     {
-        $params = $request->request->all();
-        $auth   = $this->getUploadFileService()->getUploadAuth($params);
-        return $this->createJsonResponse($auth);
+        $callback = $request->query->get('callback');
+        $isJsonp  = !empty($callback);
+
+        if ($isJsonp) {
+            $params = $request->query->all();
+        } else {
+            $params = $request->request->all();
+        }
+
+        $auth = $this->getUploadFileService()->getUploadAuth($params);
+
+        if ($isJsonp) {
+            return $this->createJsonpResponse($auth, $callback);
+        } else {
+            return $this->createJsonResponse($auth);
+        }
+
     }
 
     public function finishedAction(Request $request)
@@ -53,11 +73,11 @@ class UploaderController extends BaseController
         }
 
         $callback = $request->query->get('callback');
-        $isJsonp = !empty($callback);
-        if($isJsonp){
+        $isJsonp  = !empty($callback);
+        if ($isJsonp) {
             $params = array_merge($request->query->all(), $params);
 
-        }else{
+        } else {
             $params = array_merge($request->request->all(), $params);
         }
 
@@ -66,9 +86,9 @@ class UploaderController extends BaseController
         ));
 
         $file = $this->getUploadFileService()->finishedUpload($params);
-        if($isJsonp){
+        if ($isJsonp) {
             return $this->createJsonpResponse($file, $callback);
-        }else{
+        } else {
             return $this->createJsonResponse($file);
         }
     }
@@ -112,12 +132,12 @@ class UploaderController extends BaseController
     public function chunksStartAction(Request $request)
     {
         $headers = array(
-            'Upload-Token: '.$request->headers->get('Upload-Token')
+            'Upload-Token: ' . $request->headers->get('Upload-Token')
         );
 
         $params = $request->request->all();
 
-        $url = $this->setting('developer.cloud_file_server', '').'/chunks/start';
+        $url = $this->setting('developer.cloud_file_server', '') . '/chunks/start';
 
         $result = $this->_post($url, $params, $headers);
 
@@ -127,12 +147,12 @@ class UploaderController extends BaseController
     public function chunksFinishAction(Request $request)
     {
         $headers = array(
-            'Upload-Token: '.$request->headers->get('Upload-Token')
+            'Upload-Token: ' . $request->headers->get('Upload-Token')
         );
 
         $params = $request->request->all();
 
-        $url = $this->setting('developer.cloud_file_server', '').'/chunks/finish';
+        $url = $this->setting('developer.cloud_file_server', '') . '/chunks/finish';
 
         $result = $this->_post($url, $params, $headers);
 

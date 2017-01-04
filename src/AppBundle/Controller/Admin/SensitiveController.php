@@ -22,7 +22,7 @@ class SensitiveController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
         $paginator  = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount($conditions), 20);
-        $keywords   = $this->getSensitiveService()->searchKeywords($conditions, array('id', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $keywords   = $this->getSensitiveService()->searchKeywords($conditions, array('id' => 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         return $this->render('admin/sensitive/index.html.twig', array(
             'keywords'  => $keywords,
@@ -99,7 +99,7 @@ class SensitiveController extends BaseController
             $userName = $conditions['keyword'];
             $userTemp = $this->getUserService()->searchUsers(
                 array('nickname' => $userName),
-                array('createdTime', 'DESC'),
+                array('createdTime' => 'DESC'),
                 0,
                 1000
             );
@@ -122,16 +122,14 @@ class SensitiveController extends BaseController
             }
             $paginator = new Paginator($this->get('request'), $count, 20);
             $banlogs   = $this->getSensitiveService()->searchBanlogsByUserIds($userIds, array(
-                'id',
-                'DESC'
+                'id' => 'DESC'
             ), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         } else {
             $count     = $this->getSensitiveService()->searchBanlogsCount($conditions);
             $paginator = new Paginator($this->get('request'), $count, 20);
 
             $banlogs = $this->getSensitiveService()->searchBanlogs($conditions, array(
-                'id',
-                'DESC'
+                'id' => 'DESC'
             ), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         }
 

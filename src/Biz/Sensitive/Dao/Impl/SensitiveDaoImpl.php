@@ -27,7 +27,7 @@ class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
     public function declares()
     {
         $declares['orderbys'] = array(
-            'createdTime'
+            'createdTime', 'id'
         );
 
         $declares['conditions'] = array(
@@ -63,10 +63,6 @@ class SensitiveDaoImpl extends GeneralDaoImpl implements SensitiveDao
             }
         }
 
-        return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'keyword')
-            ->andWhere('id = :id')
-            ->andWhere('state = :state')
-            ->andWhere('UPPER(name) LIKE :name');
+        return parent::_createQueryBuilder($conditions);
     }
 }
