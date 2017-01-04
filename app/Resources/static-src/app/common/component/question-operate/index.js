@@ -31,7 +31,7 @@ export default class QuestionOperate {
                 $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
             });
         }
-        this.refreshSeqs(this.$form.find("tbody:visible"));
+        this.refreshSeqs();
       }
     });
   }
@@ -57,7 +57,7 @@ export default class QuestionOperate {
     let $tbody =  $target.closest('tbody');
     $tbody.find('[data-parent-id="'+id+'"]').remove();
     $target.closest('tr').remove();
-    this.refreshSeqs($tbody);
+    this.refreshSeqs();
   }
 
   batchDelete(event) {
@@ -76,7 +76,7 @@ export default class QuestionOperate {
       
     })
 
-    this.refreshSeqs(this.$form.find("tbody:visible"));
+    this.refreshSeqs();
   }
 
   previewQuestion(event) {
@@ -84,12 +84,15 @@ export default class QuestionOperate {
     window.open($(event.currentTarget).data('url'), '_blank', "directories=0,height=580,width=820,scrollbars=1,toolbar=0,status=0,menubar=0,location=0");
   }
 
-  refreshSeqs($tbody) {
-    let $tr = $tbody.find('tr');
-    $tr.each(function(index,item) {
-      let $tr = $(item);
-      $tr.find('td.seq').html(index+1);
-    });
-    this.$form.find('[name="questionLength"]').val($tr.length > 0 ? $tr.length : null );
+  refreshSeqs() {
+    var seq = 1;
+    this.$form.find("tbody tr").each(function(){
+      var $tr = $(this);
+                  
+      if (!$tr.hasClass('have-sub-questions')) { 
+        $tr.find('td.seq').html(seq);
+          seq ++;
+      }
+    });         
   }
 }

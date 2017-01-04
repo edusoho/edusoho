@@ -59,12 +59,12 @@ class LessonLessonPluginController extends BaseController
     {
         return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
-
+    //TODO
     protected function getHomeworkService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
     } 
-
+    //TODO
     protected function getExerciseService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');

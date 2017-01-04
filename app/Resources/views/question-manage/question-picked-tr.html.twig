@@ -1,6 +1,6 @@
- {% set questionTypesDict = getQuestionTypes() %}
+{% set questionTypesDict = getQuestionTypes() %}
 
- <tr id="testpaper-item-{{ question.id }}" data-id="{{ question.id }}" data-type="{{ question.type }}" {% if question.parentId >0 %}data-parent-id="{{ question.parentId }}"{% endif %} class="{% if question.subCount > 0 %} have-sub-questions{% endif %}{% if question.parentId > 0 %} is-sub-question{% else %} is-question{% endif %}">
+<tr id="testpaper-item-{{ question.id }}" data-id="{{ question.id }}" data-type="{{ question.type }}" {% if question.parentId >0 %}data-parent-id="{{ question.parentId }}"{% endif %} class="{% if question.subCount > 0 %} have-sub-questions{% endif %}{% if question.parentId > 0 %} is-sub-question{% else %} is-question{% endif %}">
   <td>{% if not question.parentId %}<span class="glyphicon glyphicon-resize-vertical sort-handle"></span>{% endif %}</td>
   <td>
     <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
@@ -12,14 +12,14 @@
     {{question['stem']|plain_text(40) }}
     <div class="text-muted text-sm">
       {{'从属：'|trans}}
-      {% if question.target == 'course-' ~ courseSet.id %}
-        {{'本课程'|trans}}
+      {% if question.lessonId %}
+        {{ targetChoices[question.lessonId].title|default('--') }}
       {% else %}
-        {{ targets[question.target].simple_name|default('--') }}
+        {{ '本课程'|trans }}
       {% endif %}
     </div>
   </td>
-  <td>{{ questionTypesDict[question.type] }}</td>
+  <td>{{ questionTypesDict[question.type]|default('--') }}</td>
   <td>{{ dict_text('difficulty', question.difficulty)}}</td>
   <td>
     <input name="scores[]" class="notMoveHandle form-control input-sm"
