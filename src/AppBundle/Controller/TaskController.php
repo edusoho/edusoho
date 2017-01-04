@@ -12,7 +12,7 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview');
-        $task    = $this->tryLearnTask($courseId, $id, (bool) $preview);
+        $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         if (empty($activity)) {
@@ -95,7 +95,7 @@ class TaskController extends BaseController
                 'code' => 'question',
                 'name' => '问答',
                 'icon' => 'es-icon-help',
-                'url' => $this->generateUrl('course_task_plugin_threads', array(
+                'url'  => $this->generateUrl('course_task_plugin_threads', array(
                     'courseId' => $courseId,
                     'taskId'   => $taskId
                 ))
@@ -124,8 +124,8 @@ class TaskController extends BaseController
 
     public function finishAction(Request $request, $courseId, $id)
     {
-        $result                                 = $this->getTaskService()->finishTask($id);
-        $task                                   = $this->getTaskService()->getTask($id);
+        $result = $this->getTaskService()->finishTask($id);
+        $task   = $this->getTaskService()->getTask($id);
         list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
         return $this->render('task/finish-result.html.twig', array(
@@ -159,9 +159,9 @@ class TaskController extends BaseController
         if ($preview) {
             list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
             //TODO先注释掉这段代码，学员的逻辑现在有问题，无法判断是否老师，完善后在开发
-            /*if ($member['role'] != 'teacher' || $course['status'] != 'published') {
-            throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
-            }*/
+            if ($member['role'] != 'teacher' || $course['status'] != 'published') {
+                throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
+            }
             $task = $this->getTaskService()->getTask($taskId);
         } else {
             $this->getCourseService()->tryTakeCourse($courseId);
