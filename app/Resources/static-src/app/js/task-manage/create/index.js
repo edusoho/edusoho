@@ -133,6 +133,7 @@ class Editor {
           msg = errorResponse.error.message;
         }
         notify('warning', '保存出错: ' + msg);
+        $("#course-tasks-submit").attr('disabled', null);
       });
   }
 
