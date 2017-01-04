@@ -1,15 +1,16 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
+use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\CourseSetService;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\ActivityLearnLogService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Topxia\Common\ArrayToolkit;
 
 class CourseManageController extends BaseController
 {
@@ -52,7 +53,6 @@ class CourseManageController extends BaseController
     {
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-
 
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
@@ -201,6 +201,7 @@ class CourseManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $students  = $this->getCourseService()->findStudentsByCourseId($courseId);
+        //TODO find students的学习进度（已完成任务数/总任务数）
         return $this->render('course-manage/students.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course,
@@ -255,13 +256,18 @@ class CourseManageController extends BaseController
         $discussionCount = $this->getCourseMemberService()->countDiscussionsByCourseIdAndUserId($courseId, $userId);
         $postCount       = $this->getCourseMemberService()->countPostsByCourseIdAndUserId($courseId, $userId);
 
+        list($daysCount, $learnedTime, $learnedTimePerDay) = $this->getActivityLearnLogService()->calcLearnProcessByCourseIdAndUserId($courseId, $userId);
+
         return $this->render('course-manage/student-process-modal.html.twig', array(
-            'student'         => $student,
-            'user'            => $user,
-            'questionCount'   => $questionCount,
-            'activityCount'   => $activityCount,
-            'discussionCount' => $discussionCount,
-            'postCount'       => $postCount
+            'student'           => $student,
+            'user'              => $user,
+            'questionCount'     => $questionCount,
+            'activityCount'     => $activityCount,
+            'discussionCount'   => $discussionCount,
+            'postCount'         => $postCount,
+            'daysCount'         => $daysCount,
+            'learnedTime'       => round($learnedTime / 60, 2),
+            'learnedTimePerDay' => round($learnedTimePerDay / 60, 2)
         ));
     }
 
@@ -326,6 +332,26 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(array('result' => true));
     }
 
+    /**
+     * @param  $tasks
+     * @return array
+     */
+    public function prepareTaskActivityFiles($tasks)
+    {
+        $tasks       = ArrayToolkit::index($tasks, 'id');
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+
+        $activities = $this->getActivityService()->findActivitiesFetchMedia($activityIds);
+
+        $files = array();
+        array_walk($activities, function ($activity) use (&$files) {
+            if (in_array($activity['mediaType'], array('video', 'audio', 'doc'))) {
+                $files[$activity['id']] = empty($activity['ext']['file']) ? null : $activity['ext']['file'];
+            }
+        });
+        return $files;
+    }
+
     protected function formatCourseDate($course)
     {
         if (isset($course['expiryStartDate'])) {
@@ -387,22 +413,10 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @param $tasks
-     * @return array
+     * @return ActivityLearnLogService
      */
-    public function prepareTaskActivityFiles($tasks)
+    protected function getActivityLearnLogService()
     {
-        $tasks       = ArrayToolkit::index($tasks, 'id');
-        $activityIds = ArrayToolkit::column($tasks, 'activityId');
-
-        $activities = $this->getActivityService()->findActivitiesFetchMedia($activityIds);
-
-        $files      = array();
-        array_walk($activities, function ($activity) use (&$files) {
-            if (in_array($activity['mediaType'], array('video', 'audio', 'doc'))) {
-                $files[$activity['id']] = empty($activity['ext']['file']) ? null : $activity['ext']['file'];
-            }
-        });
-        return $files;
+        return $this->createService('Activity:ActivityLearnLogService');
     }
 }
