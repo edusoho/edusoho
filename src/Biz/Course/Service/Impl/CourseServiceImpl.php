@@ -662,7 +662,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findTeachingCoursesByUserId($userId)
     {
         $members   = $this->getMemberService()->findTeacherMembersByUserId($userId);
-        $courseIds = ArrayToolkit::index($members, 'courseId');
+        $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses   = $this->findPublicCoursesByIds($courseIds);
         return $courses;
     }
@@ -674,7 +674,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findLearnCoursesByUserId($userId)
     {
         $members   = $this->getMemberService()->findStudentMemberByUserId($userId);
-        $courseIds = ArrayToolkit::index($members, 'courseId');
+        $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses   = $this->findPublicCoursesByIds($courseIds);
         return $courses;
     }
