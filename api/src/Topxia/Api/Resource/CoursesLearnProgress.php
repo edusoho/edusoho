@@ -11,7 +11,8 @@ class CoursesLearnProgress extends BaseResource
         $courseIds = $request->query->get('courseIds', 0);
         $currentUser = $this->getCurrentUser();
         $courseIds = explode(',', $courseIds);
-        return $this->getCourseService()->calculateLearnProgressByUserIdAndCourseIds($currentUser['id'], $courseIds);
+        $progressData =  $this->getCourseService()->calculateLearnProgressByUserIdAndCourseIds($currentUser['id'], $courseIds);
+        return $this->wrap($progressData, count($progressData));
     }
 
     public function filter($res)
