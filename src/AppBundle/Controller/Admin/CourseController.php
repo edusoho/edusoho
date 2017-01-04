@@ -6,7 +6,6 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
-use Topxia\Service\Common\ServiceKernel;
 
 class CourseController extends BaseController
 {

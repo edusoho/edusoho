@@ -7,7 +7,6 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Topxia\Service\Common\ServiceKernel;
 
 class ArticleController extends BaseController
 {
