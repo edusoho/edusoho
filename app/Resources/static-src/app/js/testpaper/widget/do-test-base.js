@@ -56,18 +56,20 @@ class DoTestBase
 
 
   _clickBtnIndex(event) {
-    let $current = $($(event.currentTarget).data('anchor'));
-    $(".testpaper-activity-show").scrollTop($current.offset().top);
+    let $btn = $(event.currentTarget).addClass('doing').removeClass('done');
+    $btn.siblings('.doing').removeClass('doing');
+    let $current = $($btn.data('anchor'));
+    $(".js-testpaper-content").scrollTop($current.offset().top);
   }
 
   _choiceLable(event) {
     let $inputParents = $(event.currentTarget);
-    let $btn = $(`[data-anchor="#question${$inputParents.attr('name')}"]`);
-    let $doingBtn = $btn.siblings('.doing');
-    this._renderBtnIndex($btn,$doingBtn);
+    this._renderBtnIndex($inputParents.attr('name'));
   }
 
-  _renderBtnIndex($btn,$doingBtn) {
+  _renderBtnIndex(idNum) {
+    let $btn = $(`[data-anchor="#question${idNum}"]`);
+    let $doingBtn = $btn.siblings('.doing');
     if($btn) {
       $btn.addClass('doing');
       $doingBtn.removeClass('doing').addClass('done');
@@ -95,11 +97,12 @@ class DoTestBase
         filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
       });
 
-      editor.on('blur', function(e) {
+      editor.on('blur', e => {
         editor.updateElement();
-        setTimeout(function() {
+        setTimeout(()=>{
           $longTextarea.val(editor.getData());
           $longTextarea.change();
+          this._renderBtnIndex($longTextarea.attr('name'));
         }, 1);
       });
 

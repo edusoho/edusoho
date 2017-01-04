@@ -84,10 +84,24 @@ class UpgradeOrdersCommand extends BaseCommand
     {
         $settings = $this->getSettingService()->get('payment');
 
-        $options = array(
-            'key'    => $settings["{$payment}_key"],
-            'secret' => $settings["{$payment}_secret"],
-        );
+        if ($payment == 'alipay') {
+            $options = array(
+                'key'    => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"],
+                'type'   => $settings["{$payment}_type"]
+            );
+        } elseif ($payment == 'quickpay') {
+            $options = array(
+                'key'    => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"],
+                'aes'    => $settings["{$payment}_aes"]
+            );
+        } else {
+            $options = array(
+                'key'    => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"]
+            );
+        }
 
         return $options;
     }

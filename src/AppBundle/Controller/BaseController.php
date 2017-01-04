@@ -287,4 +287,9 @@ class BaseController extends Controller
     {
         return $this->getBiz()->service('User:UserService');
     }
+
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
+    }
 }

@@ -15,7 +15,7 @@
         </li>
       {% elseif  item.type == 'lesson' %}
         {% for task in item.tasks %}
-          {% set task_lock =  (not  task.result|default(null)) and (not course.isDefault) and course.learnMode  == 'lockMode' %}
+          {% set task_lock =  false %}
           <li class="task-item task-content mouse-control">
             <i class="es-icon
               {% if task_lock %}
