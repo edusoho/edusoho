@@ -15,7 +15,7 @@ class TagUtil
         ));
 
         $formalTags = array();
-        foreach ($tags as $tag) {
+        foreach ($originalTags as $tag) {
             $formalTags[] = array(
                 'id'   => $tag['id'],
                 'name' => $tag['name'],

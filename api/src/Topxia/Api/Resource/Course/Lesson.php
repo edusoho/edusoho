@@ -294,8 +294,7 @@ class Lesson extends BaseResource
         $lesson['seq'] = $res['seq'];
         $lesson['free'] = $res['free'];
         $lesson['title'] = $res['title'];
-        $lesson['summary'] = $res['summary'];
-        $lesson['tags'] = $res['tags'];
+        $lesson['summary'] = $res['summary']; 
         $lesson['type'] = $res['type'];
         $lesson['giveCredit'] = $res['giveCredit'];
         $lesson['requireCredit'] = $res['requireCredit'];
