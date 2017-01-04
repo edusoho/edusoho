@@ -14,35 +14,29 @@
 	    <div class="study-process-item well">
 	      <div class="title">累计学习天数</div>
 	      <div class="content">
-	        <span class="current">1</span>
-	        /
-	        <span class="total">计划 7 天</span>
+	        <span class="current">{{daysCount}}天</span>
 	      </div> <i class="es-icon es-icon-column"></i>
 	    </div>
 	  </div>
 	  <div class="col-md-4 col-sm-4">
 	    <div class="study-process-item well">
-	      <div class="title">目标学习速率</div>
+	      <div class="title">学习时长</div>
 	      <div class="content">
-	        <span class="current">2小时</span>
-	        /
-	        <span class="total">天</span>
+	        <span class="current">{{learnedTime}}小时</span>
 	      </div> <i class="es-icon es-icon-target"></i>
 	    </div>
 	  </div>
 	  <div class="col-md-4 col-sm-4">
 	    <div class="study-process-item well bg-success">
-	      <div class="title">当前学习速率</div>
+	      <div class="title">日均学习时长</div>
 	      <div class="content">
-	        <span class="current">2小时</span>
-	        /
-	        <span class="total">天</span>
+	        <span class="current">{{learnedTimePerDay}}小时</span>
 	      </div>
 	      <i class="es-icon es-icon-speed" style="font-size:90px"></i>
 	    </div>
 	  </div>
 	</div>
-	<div class="well process-table">
+	<div class="well process-table hidden">
 	  <div class="reference">
 	    <span class="reference-item item-one">
 	      <i class="color-lump lump-xs"></i>

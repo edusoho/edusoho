@@ -9,4 +9,6 @@ interface ActivityLearnLogService
     public function sumLearnedTimeByActivityId($activityId);
 
     public function findMyLearnLogsByActivityIdAndEvent($activityId, $event);
+
+    public function calcLearnProcessByCourseIdAndUserId($courseId, $userId);
 }

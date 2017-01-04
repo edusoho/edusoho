@@ -1,4 +1,5 @@
 import notify from 'common/notify';
+import { passedDivShow } from '../question-passed'
 
 export default class QuestionOperate {
   constructor($form, $modal) {
@@ -52,11 +53,13 @@ export default class QuestionOperate {
   }
 
   deleteQuestion(event) {
+    event.preventDefault();
     let $target = $(event.currentTarget);
     let id = $target.closest('tr').data('id');
     let $tbody =  $target.closest('tbody');
     $tbody.find('[data-parent-id="'+id+'"]').remove();
     $target.closest('tr').remove();
+    passedDivShow(this.$form);
     this.refreshSeqs();
   }
 
@@ -75,8 +78,7 @@ export default class QuestionOperate {
       $(this).closest('tr').remove();
       
     })
-
-    this.refreshSeqs();
+    passedDivShow(this.$form);
   }
 
   previewQuestion(event) {
@@ -85,14 +87,16 @@ export default class QuestionOperate {
   }
 
   refreshSeqs() {
-    var seq = 1;
+    let seq = 1;
     this.$form.find("tbody tr").each(function(){
-      var $tr = $(this);
+      let $tr = $(this);
                   
       if (!$tr.hasClass('have-sub-questions')) { 
         $tr.find('td.seq').html(seq);
-          seq ++;
+        seq ++;
       }
-    });         
+    });  
+
+    this.$form.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1 ) : null );       
   }
 }

@@ -20,7 +20,7 @@ class InviteController extends BaseController
 
         $users = $this->getUserService()->searchUsers(
             $conditions,
-            array('id', 'ASC'),
+            array('id' => 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -191,13 +191,13 @@ class InviteController extends BaseController
     {
         $paginator = new Paginator(
             $request,
-            $this->getInviteRecordService()->searchRecordCount($conditions),
+            $this->getInviteRecordService()->countRecords($conditions),
             20
         );
 
         $cardInformations = $this->getInviteRecordService()->searchRecords(
             $conditions,
-            array('inviteTime', 'DESC'),
+            array('inviteTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

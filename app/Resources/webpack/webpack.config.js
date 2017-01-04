@@ -5,20 +5,21 @@ const config = {
     publicPath: '/static-dist/',    // 用于开发环境下的输出目录
   },
   libs: {
+
     vendor: ['libs/vendor.js'], //可以是一个js文件
     "fix-ie": ['console-polyfill','html5shiv', 'respond-js'], //也可以是一个npm依赖包
-    "jquery-validation": ['libs/js/jquery-validation.js'],
     "jquery-insertAtCaret": ['libs/js/jquery-insertAtCaret.js'],
     "jquery-form": ['jquery-form'],
-    'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
+    "jquery-nouislider":['nouislider'],
     "perfect-scrollbar":['perfect-scrollbar'],
     "jquery-sortable":['jquery-sortable'],
+    "jquery-validation": ['libs/js/jquery-validation.js'],
+    'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
     "iframe-resizer":['libs/js/iframe-resizer.js'],
     "iframe-resizer-contentWindow":['libs/js/iframe-resizer-contentWindow.js'],
     "es-webuploader":['libs/js/es-webuploader.js'],
     "es-image-crop":['libs/js/es-image-crop.js'],
     "easy-pie-chart":['libs/js/easy-pie-chart.js'],
-    "jquery-nouislider":['nouislider'],
     'jquery-timer':['libs/js/jquery-timer.js'],
     'jquery-range':['libs/js/jquery-range.js']
   },

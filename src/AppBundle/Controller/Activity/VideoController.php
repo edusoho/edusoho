@@ -7,7 +7,6 @@ use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class VideoController extends BaseController implements ActivityActionInterface
 {
