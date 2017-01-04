@@ -29,7 +29,7 @@ class MessageController extends BaseController
         }else{
             $paginator = new Paginator(
                 $request,
-                $this->getMessageService()->searchMessagesCount($conditions),
+                $this->getMessageService()->countMessages($conditions),
                 20
             );
 

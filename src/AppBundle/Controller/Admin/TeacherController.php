@@ -21,7 +21,7 @@ class TeacherController extends BaseController
 
         $users = $this->getUserService()->searchUsers(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -76,7 +76,7 @@ class TeacherController extends BaseController
 
         $users = $this->getUserService()->searchUsers(
             $conditions,
-            array('promotedSeq', 'ASC', 'promotedTime', 'DESC'),
+            array('promotedSeq' => 'ASC', 'promotedTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
