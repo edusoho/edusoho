@@ -279,7 +279,7 @@ class UserController extends MobileController
     public function fillUserInfoAction()
     {
         $auth = $this->getSettingService()->get('auth');
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $userFields = ArrayToolkit::index($userFields,'fieldName');
         $userInfo = $this->getUserService()->getUserProfile($user['id']);
 
