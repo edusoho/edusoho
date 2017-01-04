@@ -15564,6 +15564,7 @@ textarea {
   right: 0;
   height: 49px;
   background-color: #F5F5F5;
+  z-index: 2;
 }
 .es-mobile .course-detail-header .course-header-bottom,
 .es-mobile .buy {
@@ -15761,6 +15762,7 @@ textarea {
 .es-mobile body.homepage.has-app .es-wrap,
 .es-mobile body.course-list-page.has-app .es-wrap,
 .es-mobile body.open-course-list.has-app .es-wrap,
+.es-mobile body.course-dashboard-page.has-app .es-wrap,
 .es-mobile body.login.has-app .es-wrap,
 .es-mobile body.register.has-app .es-wrap,
 .es-mobile body.my-course.has-app .es-wrap {
@@ -15769,6 +15771,7 @@ textarea {
 .es-mobile body.homepage .es-wrap,
 .es-mobile body.course-list-page .es-wrap,
 .es-mobile body.open-course-list .es-wrap,
+.es-mobile body.course-dashboard-page .es-wrap,
 .es-mobile body.login .es-wrap,
 .es-mobile body.register .es-wrap,
 .es-mobile body.my-course .es-wrap {
@@ -15778,6 +15781,7 @@ textarea {
 .es-mobile body.homepage .es-header,
 .es-mobile body.course-list-page .es-header,
 .es-mobile body.open-course-list .es-header,
+.es-mobile body.course-dashboard-page .es-header,
 .es-mobile body.login .es-header,
 .es-mobile body.register .es-header,
 .es-mobile body.my-course .es-header {
@@ -15786,15 +15790,35 @@ textarea {
   left: 0;
   right: 0;
 }
+.es-mobile body.homepage .es-header .navbar-mobile,
+.es-mobile body.course-list-page .es-header .navbar-mobile,
+.es-mobile body.open-course-list .es-header .navbar-mobile,
+.es-mobile body.course-dashboard-page .es-header .navbar-mobile,
+.es-mobile body.login .es-header .navbar-mobile,
+.es-mobile body.register .es-header .navbar-mobile,
+.es-mobile body.my-course .es-header .navbar-mobile {
+  display: none !important;
+}
+.es-mobile body.homepage .es-header .M_header-back,
+.es-mobile body.course-list-page .es-header .M_header-back,
+.es-mobile body.open-course-list .es-header .M_header-back,
+.es-mobile body.course-dashboard-page .es-header .M_header-back,
+.es-mobile body.login .es-header .M_header-back,
+.es-mobile body.register .es-header .M_header-back,
+.es-mobile body.my-course .es-header .M_header-back {
+  display: block;
+}
 .es-mobile body.homepage .footer-tool-bar,
 .es-mobile body.course-list-page .footer-tool-bar,
 .es-mobile body.open-course-list .footer-tool-bar,
+.es-mobile body.course-dashboard-page .footer-tool-bar,
 .es-mobile body.login .footer-tool-bar,
 .es-mobile body.register .footer-tool-bar,
 .es-mobile body.my-course .footer-tool-bar,
 .es-mobile body.homepage .es-footer-mobile,
 .es-mobile body.course-list-page .es-footer-mobile,
 .es-mobile body.open-course-list .es-footer-mobile,
+.es-mobile body.course-dashboard-page .es-footer-mobile,
 .es-mobile body.login .es-footer-mobile,
 .es-mobile body.register .es-footer-mobile,
 .es-mobile body.my-course .es-footer-mobile {
@@ -15803,24 +15827,28 @@ textarea {
 .es-mobile body.homepage .course-list-section .course-filter,
 .es-mobile body.course-list-page .course-list-section .course-filter,
 .es-mobile body.open-course-list .course-list-section .course-filter,
+.es-mobile body.course-dashboard-page .course-list-section .course-filter,
 .es-mobile body.login .course-list-section .course-filter,
 .es-mobile body.register .course-list-section .course-filter,
 .es-mobile body.my-course .course-list-section .course-filter,
 .es-mobile body.homepage .dynamic-section,
 .es-mobile body.course-list-page .dynamic-section,
 .es-mobile body.open-course-list .dynamic-section,
+.es-mobile body.course-dashboard-page .dynamic-section,
 .es-mobile body.login .dynamic-section,
 .es-mobile body.register .dynamic-section,
 .es-mobile body.my-course .dynamic-section,
 .es-mobile body.homepage .es-footer-link,
 .es-mobile body.course-list-page .es-footer-link,
 .es-mobile body.open-course-list .es-footer-link,
+.es-mobile body.course-dashboard-page .es-footer-link,
 .es-mobile body.login .es-footer-link,
 .es-mobile body.register .es-footer-link,
 .es-mobile body.my-course .es-footer-link,
 .es-mobile body.homepage .es-footer,
 .es-mobile body.course-list-page .es-footer,
 .es-mobile body.open-course-list .es-footer,
+.es-mobile body.course-dashboard-page .es-footer,
 .es-mobile body.login .es-footer,
 .es-mobile body.register .es-footer,
 .es-mobile body.my-course .es-footer {
@@ -15868,15 +15896,14 @@ textarea {
   margin-top: 0;
   margin-bottom: 0;
 }
-.es-mobile body.login .es-footer-mobile,
-.es-mobile body.register .es-footer-mobile {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.es-mobile body.homepage .M_header-back {
+  display: none !important;
 }
 .es-mobile body.homepage .app-download {
   display: block;
+}
+.es-mobile body.course-dashboard-page .es-footer-mobile {
+  display: none;
 }
 .es-mobile .navbar-user .user-avatar-li ul li {
   display: none;
@@ -15888,11 +15915,28 @@ textarea {
 .es-mobile .navbar-user .user-avatar-li ul li.user-nav-li-register {
   display: block;
 }
+.M_header-back {
+  display: none;
+  position: absolute;
+  height: 100%;
+  width: 40px;
+  text-align: center;
+  left: 0;
+  top: 0;
+}
+.M_header-back a {
+  color: white;
+}
+.M_header-back a i {
+  font-size: 30px;
+  line-height: 60px;
+}
 .footer-tool-bar {
   display: none;
   position: fixed;
+  border-top: 1px solid #ECECEC;
   height: 50px;
-  padding-top: 7px;
+  padding-top: 8px;
   width: 100%;
   bottom: 0px;
   background-color: #f5f5f5;
@@ -16005,7 +16049,11 @@ textarea {
 .mobile-search .search-input {
   height: 40px;
   background-color: #f5f5f5;
-  font-size: 10px;
+  font-size: 12px;
+  color: #C1C1C1;
+  box-shadow: none;
+  outline: none;
+  -webkit-appearance: none;
 }
 .mobile-search button {
   position: absolute;

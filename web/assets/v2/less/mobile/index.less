@@ -2,6 +2,7 @@
   body.homepage,
   body.course-list-page,
   body.open-course-list,
+  body.course-dashboard-page,
   body.login,
   body.register,
   body.my-course {
@@ -17,6 +18,12 @@
       top: 0;
       left: 0;
       right: 0;
+      .navbar-mobile {
+        display: none !important;
+      }
+      .M_header-back {
+        display: block;
+      }
     }
     .footer-tool-bar,
     .es-footer-mobile,
@@ -31,74 +38,67 @@
       display: none;
     }
   }
-
-  body.course-list-page{
+  body.course-list-page {
     background-color: white;
-    .es-banner{
+    .es-banner {
       display: none;
     }
-    #content-container{
+    #content-container {
       margin-top: 0px;
       margin-bottom: 0px;
       padding-left: 0px;
       padding-right: 0px;
       .tabs-wrapper,
-      .es-filter{
+      .es-filter {
         display: none;
       }
-      .panel.panel-default{
+      .panel.panel-default {
         border: none;
         margin-top: -15px;
         margin-bottom: -15px;
       }
     }
   }
-
-  body.my-course{
+  body.my-course {
     background-color: white;
-    #content-container{
+    #content-container {
       margin-top: 0px;
       margin-bottom: 0px;
-      .my-layout{
+      .my-layout {
         display: none;
       }
-      .my-course-section{
-        .title{
+      .my-course-section {
+        .title {
           margin-top: 15px;
           margin-bottom: 15px;
         }
       }
     }
   }
-
-  body.open-course-list{
-    .es-banner{
+  body.open-course-list {
+    .es-banner {
       display: none;
     }
-    #content-container{
+    #content-container {
       margin-top: 0;
       margin-bottom: 0;
     }
   }
-  //注册登录页面因为页面较短，所以让footer-mobile固定在底部
-  body.login,
-  body.register{
-    .es-footer-mobile
-    {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+  body.homepage {
+    .M_header-back{
+      display: none !important;
     }
-  }
-  body.homepage{
-    .app-download{
+    .app-download {
       display: block;
     }
   }
-
+  body.course-dashboard-page {
+    .es-footer-mobile {
+      display: none;
+    }
+  }
   .navbar-user {
-    .user-avatar-li{
+    .user-avatar-li {
       ul li {
         display: none;
         &.user-nav-li-my,
@@ -110,6 +110,23 @@
           display: block;
         }
       }
+    }
+  }
+}
+
+.M_header-back {
+  display: none;
+  position: absolute;
+  height: 100%;
+  width: 40px;
+  text-align: center;
+  left: 0;
+  top: 0;
+  a {
+    color: white;
+    i {
+      font-size: 30px;
+      line-height: 60px;
     }
   }
 }
