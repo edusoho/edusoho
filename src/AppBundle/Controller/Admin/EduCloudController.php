@@ -116,7 +116,7 @@ class EduCloudController extends BaseController
             }
         }
 
-        return $this->render('admin/edu-cloud/overview:index.html.twig', array(
+        return $this->render('admin/edu-cloud/overview/index.html.twig', array(
             'isBinded'    => $isBinded,
             'overview'    => $overview,
             'paidService' => isset($paidService) ? $paidService : false,
