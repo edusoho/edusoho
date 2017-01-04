@@ -188,6 +188,7 @@ class EsBarController extends BaseController
         return $this->getBiz()->service('User:NotificationService');
     }
 
+    // @TODO
     protected function getHomeworkService()
     {
         return $this->getBiz()->service('Homework:Homework.HomeworkService');

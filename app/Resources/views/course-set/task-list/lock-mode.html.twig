@@ -3,19 +3,19 @@
     {% for key, item in courseItems %}
       {% if item.itemType == 'chapter' and item.type == 'chapter' %}
         <li class="task-item bg-gray-lighter"><i class="es-icon es-icon-menu left-menu"></i>
-          <span class="text-overflow title" >第{{ item.number }}
+          <span class="text-overflow title">第{{ item.number }}
             章：{{ item.title }}</span>
           <i class="right-menu es-icon es-icon es-icon-anonymous-iconfont"></i>
         </li>
       {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
         <li class="task-item color-gray bg-gray-lighter">
-          <span class="text-overflow title" >第{{ item.number }}
+          <span class="text-overflow title">第{{ item.number }}
             节：{{ item.title }}</span>
           <i class="right-menu es-icon es-icon es-icon-anonymous-iconfont"></i>
         </li>
       {% elseif  item.itemType == 'task' %}
         {% set task = item %}
-        {% set task_lock =  (not  task.result|default(null)) and (not course.isDefault) and course.learnMode  == 'lockMode' %}
+        {% set task_lock =  (course.learnMode  == 'lockMode')  and ( not task.lock)  and task.number != 1 %}
         <li class="task-item task-content mouse-control">
           <i class="es-icon
               {% if task_lock %}

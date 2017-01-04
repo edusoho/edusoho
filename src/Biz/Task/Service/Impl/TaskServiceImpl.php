@@ -33,7 +33,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task     = $this->getTask($id);
         $strategy = $this->createCourseStrategy($task['courseId']);
-        $task = $strategy->updateTask($id, $fields);
+        $task     = $strategy->updateTask($id, $fields);
         return $task;
     }
 
@@ -130,6 +130,10 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $task['result'] = $result;
             }
         });
+        //设置任务是否解锁
+        foreach ($tasks as &$task) {
+            $task['lock'] = !(empty($task['result']) && empty($task['isOptional']) && $task['type'] != 'live');
+        }
         return $tasks;
     }
 
@@ -236,7 +240,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function tryTakeTask($taskId)
     {
         if (!$this->canLearnTask($taskId)) {
-            // throw $this->createAccessDeniedException("the Task is Locked");
+             throw $this->createAccessDeniedException("the Task is Locked");
         }
         $task = $this->getTask($taskId);
 
@@ -274,7 +278,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function canLearnTask($taskId)
     {
         $task = $this->getTask($taskId);
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($task['courseId']);
+        list($course, ) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
         return $canLearnTask;
@@ -341,6 +345,10 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $task['result'] = $result;
             }
         });
+        //设置任务是否解锁
+        foreach ($toLearnTasks as &$task) {
+            $task['lock'] = !(empty($task['result']) && empty($task['isOptional']) && $task['type'] != 'live');
+        }
         return $toLearnTasks;
     }
 
