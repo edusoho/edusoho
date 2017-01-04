@@ -566,7 +566,7 @@ class MobileBaseController extends BaseController
 
     public function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     public function getUserService()

@@ -4,7 +4,7 @@
 
 {% block title %}上传文件{% endblock %}
 
-{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'app/js/attachment/index.js']) %}
+{% do script(['//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js', 'app/js/attachment/index.js']) %}
 
 {% block body %}
 
@@ -12,16 +12,47 @@
   <input type="hidden" name="media" id="media">
   <div class="file-chooser-bar {% if not  file|default(null) %}hidden {% endif %}">
     <span data-role="placeholder">{{ file.filename|default(null) }}</span>
-    <button class="btn btn-link btn-sm js-choose-trigger" type="button"><i class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
-    
-    <div class="alert alert-warning" data-role="waiting-tip" style="display:none;">{{ '正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。'|trans }}<br/>{{ '转换完成后将以站内消息通知您。'|trans }}
+    <button class="btn btn-link btn-sm js-choose-trigger" type="button"><i
+          class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
+    <div class="alert alert-warning" data-role="waiting-tip"
+         style="display:none;">{{ '正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。'|trans }}<br/>{{ '转换完成后将以站内消息通知您。'|trans }}
     </div>
   </div>
 
   <div class="row" id="chooser-upload-panel">
-    {% include 'file/attachment/upload-file.html.twig' %}
-
-    <input type="hidden" data-role="metas" data-ids-class="{{idsClass}}" data-list-class="{{listClass}}" data-file-single-size-limit="{{ single_file_size == 0  ? 2048 * 1024 * 1024 : single_file_size * 1024 * 1024  }}" data-url=""/>
+    {% set targetType = targetType|default('attachment') %}
+    {% set token = uploader_token(targetType, targetId, 'private') %}
+    {% set fileSize = fileSize|default(500) %}
+    <div class="uploader-content">
+      <div class="uploader-container" id="uploader-container"
+           data-init-url="{{ url('uploader_init_v2', {token: token}, true) }}"
+           data-finish-url="{{ url('uploader_finished_v2', {token: token}, true) }}"
+           data-accept="{{ uploader_accept(targetType, fileType|default(''))|json_encode }}"
+           data-process="{{ uploader_process(targetType) }}"
+           data-file-single-size-limit="{{ single_file_size == 0  ? 2048 * 1024 * 1024 : single_file_size * 1024 * 1024 }}">
+      </div>
+      <div class="uploader-bottom">
+        <div class="row">
+          <ul>
+            <li>支持PPT/PPTX,DOC/DOCX,XLS/XLSX、MP3/MP4/FLV、PDF、RAR格式的文件上传，单个文件大小不能超过
+              <strong>
+                {% if fileSize > 1024 %}
+                  {{ fileSize / 1024 }}GB
+                {% else %}
+                  {{ fileSize }}MB
+                {% endif %}
+              </strong>。
+            </li>
+            <li>支持断点续传（仅在Chrome、IE9及以上等支持HTML5的浏览器中可用）。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" data-role="metas" data-ids-class="{{ idsClass }}" data-list-class="{{ listClass }}"
+           data-url=""/>
+    <input type="hidden" data-role="metas" data-ids-class="{{ idsClass }}" data-list-class="{{ listClass }}"
+           data-file-single-size-limit="{{ single_file_size == 0  ? 2048 * 1024 * 1024 : single_file_size * 1024 * 1024 }}"
+           data-url=""/>
   </div>
 
 

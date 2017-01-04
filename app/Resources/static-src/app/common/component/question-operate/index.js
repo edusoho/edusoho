@@ -16,6 +16,7 @@ export default class QuestionOperate {
   }
 
   initSortList() {
+    console.log(this.$form);
     this.$form.find('table').sortable({
       containerSelector: 'table',
       itemPath: '> tbody',

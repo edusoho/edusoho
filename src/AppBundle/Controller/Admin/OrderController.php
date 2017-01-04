@@ -61,7 +61,7 @@ class OrderController extends BaseController
 
     public function detailAction(Request $request, $id)
     {
-        return $this->forward('TopxiaWebBundle:Order:detail', array(
+        return $this->forward('AppBundle:Order:detail', array(
             'id' => $id
         ));
     }

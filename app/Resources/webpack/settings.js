@@ -8,7 +8,8 @@
 
 const settings = {
   imglimit: 1024,
-  fontlimit: 1024
+  fontlimit: 1024,
+  devtool: 'source-map', // 可设置为 'source-map'，方便错误排查 
 }
 
 export default settings;
