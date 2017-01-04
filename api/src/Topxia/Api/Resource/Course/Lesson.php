@@ -296,6 +296,10 @@ class Lesson extends BaseResource
         $lesson['title'] = $res['title'];
         $lesson['summary'] = $res['summary']; 
         $lesson['type'] = $res['type'];
+        $lesson['content'] = $res['content'];
+        $lesson['mediaId'] = $res['mediaId'];
+        $lesson['learnedNum'] = $res['learnedNum'];
+        $lesson['viewedNum'] = $res['viewedNum'];
         $lesson['giveCredit'] = $res['giveCredit'];
         $lesson['requireCredit'] = $res['requireCredit'];
         $lesson['length'] = $res['length'];
