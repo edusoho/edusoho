@@ -3,12 +3,17 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Dao\CourseDao;
 use Topxia\Common\ArrayToolkit;
+use Vip\Service\Vip\VipService;
 use Biz\User\Service\UserService;
+use Biz\System\Service\LogService;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Order\Service\OrderService;
+use Biz\User\Service\MessageService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\System\Service\SettingService;
 use Biz\Note\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
@@ -777,6 +782,26 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByUserIdAndRole($userId, 'student');
     }
 
+    public function countQuestionsByCourseIdAndUserId($courseId, $userId)
+    {
+        return $this->getMemberDao()->countThreadsByCourseIdAndUserId($courseId, $userId, 'question');
+    }
+
+    public function countActivitiesByCourseIdAndUserId($courseId, $userId)
+    {
+        return $this->getMemberDao()->countActivitiesByCourseIdAndUserId($courseId, $userId);
+    }
+
+    public function countDiscussionsByCourseIdAndUserId($courseId, $userId)
+    {
+        return $this->getMemberDao()->countThreadsByCourseIdAndUserId($courseId, $userId, 'discussion');
+    }
+
+    public function countPostsByCourseIdAndUserId($courseId, $userId)
+    {
+        return $this->getMemberDao()->countPostsByCourseIdAndUserId($courseId, $userId);
+    }
+
     /**
      * @return CourseMemberDao
      */
@@ -793,16 +818,25 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return CourseDao
+     */
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
     }
 
+    /**
+     * @return MessageService
+     */
     protected function getMessageService()
     {
         return $this->createService('User:MessageService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->createService('System:LogService');
@@ -824,11 +858,17 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->createService('Order:OrderService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return VipService
+     */
     protected function getVipService()
     {
         return $this->createService('Vip:Vip.VipService');
