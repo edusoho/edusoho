@@ -24,7 +24,6 @@ class OpenCourse extends BaseResource
         }
 
         $res['tags']   = TagUtil::buildTags('openCourse', $res['id']);
-
         return $res;
     }
 

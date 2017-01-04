@@ -207,8 +207,10 @@ class CourseEventSubscriber implements EventSubscriberInterface
             }
         }
 
-        $tagOwnerManager = new TagOwnerManager('course', $course['id'], $tagIds, $userId);
-        $tagOwnerManager->update();
+        if (!empty($tagIds)) {
+            $tagOwnerManager = new TagOwnerManager('course', $course['id'], $tagIds, $userId);
+            $tagOwnerManager->update();
+        }
     }
 
     public function onCoursePriceUpdate(ServiceEvent $event)
