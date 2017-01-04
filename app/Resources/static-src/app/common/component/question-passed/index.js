@@ -1,4 +1,5 @@
 export let passedDivShow = ($element) => {
+  console.log('ok');
   let hasEssay = false;
   $element.find('tbody tr').each(function() {
     console.log($(this));
