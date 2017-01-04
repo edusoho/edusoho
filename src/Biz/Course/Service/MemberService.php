@@ -10,6 +10,8 @@ interface MemberService
 
     public function becomeStudentAndCreateOrder($userId, $courseId, $data);
 
+    public function removeCourseStudent($courseId, $userId);
+
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
     public function searchMember($conditions, $start, $limit);

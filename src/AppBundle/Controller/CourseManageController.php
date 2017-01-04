@@ -229,8 +229,21 @@ class CourseManageController extends BaseController
 
     public function removeCourseStudentAction(Request $request, $courseSetId, $courseId, $userId)
     {
-        $this->getCourseService()->removeCourseStudent($courseId, $userId);
+        $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
         return $this->createJsonResponse(array('success' => true));
+    }
+
+    public function studyProcessAction(Request $request, $courseSetId, $courseId, $userId)
+    {
+        //FIXME getCourseMember ：用户可能在courseId下既是学员又是老师
+        $student = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
+        if (empty($student)) {
+            throw $this->createNotFoundException('Student#{$userId} Not Found');
+        }
+
+        return $this->render('course-manage/student-process-modal.html.twig', array(
+            'student' => $student
+        ));
     }
 
     public function checkStudentAction(Request $request, $courseSetId, $courseId)

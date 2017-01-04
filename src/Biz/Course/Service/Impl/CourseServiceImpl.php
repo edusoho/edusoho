@@ -203,7 +203,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->tryManageCourse($id);
         $fields = ArrayToolkit::parts($fields, array(
             'isFree',
-            'price',
+            'originPrice',
             'vipLevelId',
             'buyable',
             'tryLookable',
@@ -213,6 +213,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             'services',
             'approval'
         ));
+
+        $fields['price'] = $this->calculatePrice($id, $fields['originPrice']);
+
         if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
@@ -233,6 +236,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         // }
 
         return $this->getCourseDao()->update($id, $fields);
+    }
+
+    protected function calculatePrice($id, $originPrice)
+    {
+        return $originPrice;
     }
 
     public function updateCourseStatistics($id, $fields)
@@ -327,18 +335,20 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
-        $tasks = $this->findTasksByCourseId($courseId);
+        $tasks = $this->findTasksByCourseId($course);
         return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks);
     }
 
-    protected function findTasksByCourseId($courseId)
+    protected function findTasksByCourseId($course)
     {
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
-            return $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($courseId);
+            $tasks = $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($course['id']);
         } else {
-            return $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+            $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
         }
+
+        return $tasks;
     }
 
     public function tryManageCourse($courseId, $courseSetId = 0)
@@ -390,54 +400,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getThreadDao()->count(array(
             'courseId' => $courseId
         ));
-    }
-
-    public function createCourseStudent($courseId, $fields)
-    {
-        $this->tryManageCourse($courseId);
-        if (!ArrayToolkit::requireds($fields, array('userId', 'price'))) {
-            throw $this->createInvalidArgumentException("Lack of required fields");
-        }
-        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $fields['userId']);
-        if (!empty($member)) {
-            throw $this->createInvalidArgumentException("User#{$fields['userId']} is already in Course#{$courseId}");
-        }
-        $fields = ArrayToolkit::parts($fields, array(
-            'userId',
-            // 'price', // create order ...
-            'remark'
-        ));
-
-        $fields['role']        = 'student';
-        $fields['joinedType']  = 'course';
-        $fields['classroomId'] = 0;
-        $fields['courseId']    = $courseId;
-
-        //TODO create order
-
-        $result = $this->getMemberDao()->create($fields);
-        $this->biz['dispatcher']->dispatch("course.student.create", new Event($result));
-        return $result;
-    }
-
-    public function removeCourseStudent($courseId, $userId)
-    {
-        $this->tryManageCourse($courseId);
-        $user = $this->getUserService()->getUser($userId);
-        if (empty($user)) {
-            throw $this->createNotFoundException("User#{$user['id']} Not Found");
-        }
-        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
-        if (empty($member)) {
-            throw $this->createNotFoundException("User#{$user['id']} Not in Course#{$courseId}");
-        }
-        if ($member['role'] !== 'student') {
-            throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
-        }
-        $result = $this->getMemberDao()->delete($member['id']);
-
-        $this->biz['dispatcher']->dispatch("course.student.delete", new Event($member));
-        return $result;
     }
 
     public function getUserRoleInCourse($courseId, $userId)
@@ -702,19 +664,19 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findTeachingCoursesByUserId($userId)
     {
         $members   = $this->getMemberService()->findTeacherMembersByUserId($userId);
-        $courseIds = ArrayToolkit::index($members, 'courseId');
+        $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses   = $this->findPublicCoursesByIds($courseIds);
         return $courses;
     }
 
     /**
-     * @param  int     $userId
+     * @param  int $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
     {
         $members   = $this->getMemberService()->findStudentMemberByUserId($userId);
-        $courseIds = ArrayToolkit::index($members, 'courseId');
+        $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses   = $this->findPublicCoursesByIds($courseIds);
         return $courses;
     }
@@ -729,7 +691,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count = $this->searchCourseCount($conditions);
+        $count      = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
@@ -869,7 +831,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
         $orderBy    = $this->_prepareCourseOrderBy($sort);
-
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
 

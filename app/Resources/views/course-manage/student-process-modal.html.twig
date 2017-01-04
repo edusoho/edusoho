@@ -1,0 +1,141 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+
+{% block title %}
+    {{ student.nickname|default('nickname...') }}{{ '的学习情况'|trans }}
+{% endblock %}
+
+{% block body %}
+<div class="class-detail-content">
+  <div class="es-piece">
+	<div class="piece-header">学习进度</div>
+	<div class="study-process-list row">
+	  <div class="col-md-4 col-sm-4">
+	    <div class="study-process-item well">
+	      <div class="title">累计学习天数</div>
+	      <div class="content">
+	        <span class="current">1</span>
+	        /
+	        <span class="total">计划 7 天</span>
+	      </div> <i class="es-icon es-icon-column"></i>
+	    </div>
+	  </div>
+	  <div class="col-md-4 col-sm-4">
+	    <div class="study-process-item well">
+	      <div class="title">目标学习速率</div>
+	      <div class="content">
+	        <span class="current">2小时</span>
+	        /
+	        <span class="total">天</span>
+	      </div> <i class="es-icon es-icon-target"></i>
+	    </div>
+	  </div>
+	  <div class="col-md-4 col-sm-4">
+	    <div class="study-process-item well bg-success">
+	      <div class="title">当前学习速率</div>
+	      <div class="content">
+	        <span class="current">2小时</span>
+	        /
+	        <span class="total">天</span>
+	      </div>
+	      <i class="es-icon es-icon-speed" style="font-size:90px"></i>
+	    </div>
+	  </div>
+	</div>
+	<div class="well process-table">
+	  <div class="reference">
+	    <span class="reference-item item-one">
+	      <i class="color-lump lump-xs"></i>
+	      未完成
+	    </span>
+	    <span class="reference-item item-two">
+	      <i class="color-lump lump-xs lump-success"></i>
+	      准时完成
+	    </span>
+	    <span class="reference-item item-three">
+	      <i class="color-lump lump-xs lump-warning"></i>
+	      逾期
+	    </span>
+	    <span class="reference-item item-four">
+	      <i class="color-lump lump-xs lump-danger"></i>
+	      严重逾期
+	    </span>
+	  </div>
+	  <div class="lump-list">
+	    <a class="color-lump lump-danger" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content='<div class="process-popover">
+	      <div class="process-popover-title bg-danger"> <i class="es-icon es-icon-lesson mrs"></i>
+	        课时 :都睡觉
+	      </div>
+	      <div class="process-popover-score">1 天</div>
+	      <div class="process-popover-date">计划完成日期：2016-03-08</div>
+	      <div class="process-popover-date">实际完成日期：2016-11-29</div>
+	    </div>'>
+	    </a>
+	  </div>
+	</div>
+	</div>
+	<div class="es-piece" style="margin-bottom:0">
+	<div class="piece-header">成绩单</div>
+	<div class="report-card">
+	  <div class="report-card-header">
+	    <i class="es-icon es-icon-chevronright mrs"></i>
+	    初级阶段
+	    <span class="include">作业：1/2&nbsp;&nbsp;&nbsp;考试：0/3</span>
+	  </div>
+	  <div class="report-card-main">
+	    <div class="card-main-title open">
+	      <i class="es-icon es-icon-homework mrs"></i>
+	      作业：课时＂2016＂的作业
+	      <span class="score hidden-xs">
+	        <span>不合格</span>
+	      </span>
+	      <span class="reviews hidden-xs" data-toggle="tooltip" data-placement="top" title="" data-original-title="暂无评语">评语</span>
+	    </div>
+	    <ul class="score-list" style="display: block;">
+	      <li>
+	        <span class="name">第 1 次作业</span>
+	        <span class="date">2016/11/29</span>
+	        <span class="score">不合格</span>
+	      </li>
+	    </ul>
+	  </div>
+	</div>
+	</div>
+	<div class="es-piece" style="margin-bottom:-20px">
+	<div class="piece-header">学习数据</div>
+	<div class="study-data row">
+	  <div class="col-md-3 col-sm-6">
+	    <div class="well">
+	      <p>发起提问</p>
+	      <p class="number">0</p>
+	      <i class="es-icon es-icon-comment1"></i>
+	    </div>
+	  </div>
+	  <div class="col-md-3 col-sm-6">
+	    <div class="well">
+	      <p>发起话题</p>
+	      <p class="number">0</p>
+	      <i class="es-icon es-icon-topic"></i>
+	    </div>
+	  </div>
+	  <div class="col-md-3 col-sm-6">
+	    <div class="well">
+	      <p>回复话题</p>
+	      <p class="number">0</p>
+	      <i class="es-icon es-icon-answer"></i>
+	    </div>
+	  </div>
+	  <div class="col-md-3 col-sm-6">
+	    <div class="well">
+	      <p>参与活动</p>
+	      <p class="number">0</p>
+	      <i class="es-icon es-icon-activity"></i>
+	    </div>
+	  </div>
+	</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

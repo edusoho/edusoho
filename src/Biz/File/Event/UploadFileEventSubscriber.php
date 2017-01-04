@@ -47,6 +47,10 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         }
         $argument = $event->getArgument('argument');
 
+        if (empty($argument['attachment'])) {
+            return;
+        }
+
         $attachment = $argument['attachment'];
 
         $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);

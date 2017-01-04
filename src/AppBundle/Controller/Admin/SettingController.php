@@ -569,7 +569,7 @@ class SettingController extends BaseController
 
         $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         if ($courseSetting['userinfoFieldNameArray']) {
             foreach ($userFields as $key => $fieldValue) {
