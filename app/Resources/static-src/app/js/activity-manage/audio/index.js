@@ -5,10 +5,15 @@ jQuery.validator.addMethod("unsigned_integer", function (value, element) {
   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "必须为非负整数");
 
-jQuery.validator.addMethod("second_range", function (value, element) {
+jQuery.validator.addMethod("time_range", function (value, element) {
   console.log(value, this.optional(element), /^([0-9]|[012345][0-9]|59)$/.test(value));
   return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
 }, "只能在0-59之间");
+
+jQuery.validator.addMethod("time_length", function (value, element) {
+  return parseInt($("#minute").val()) + parseInt($("#second").val()) > 0
+}, "时长不能等于0");
+
 
 showChooserType($('[name="ext[mediaId]"]'));
 
@@ -27,18 +32,19 @@ function _inItStep2form() {
         maxlength: 50,
       },
       content: 'required',
-      minute: 'required second_range',
-      second: 'required second_range',
+      minute: 'required unsigned_integer time_length',
+      second: 'required time_range time_length',
       'ext[mediaId]': 'required'
     },
     messages: {
       minute: {
         required: '请输入时长',
-        second_range: '分钟只能在0-59之间'
+        time_length: '时长必须大于0'
       },
       second: {
         required: '请输入时长',
-        second_range: '秒只能在0-59之间'
+        time_range: '秒只能在0-59之间',
+        time_length: '时长必须大于0'
       },
       'ext[mediaId]': '请上传或选择%display%'
     }
