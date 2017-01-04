@@ -170,8 +170,8 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function countPostsByCourseIdAndUserId($courseId, $userId)
     {
-        $sql = "select count(id) from course_thread_post where threadId in (select id from course_thread where courseId = ? and $userId = ? and type='discussion')";
-        return $this->db()->fetchColumn($sql, array($courseId, $userId));
+        $sql = "SELECT count(id) FROM course_thread_post WHERE userId = ? and threadId IN (SELECT id FROM course_thread WHERE courseId = ? AND type='discussion')";
+        return $this->db()->fetchColumn($sql, array($userId, $courseId));
     }
 
     protected function _buildQueryBuilder($conditions, $join)
