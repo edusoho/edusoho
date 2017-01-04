@@ -55,10 +55,11 @@ class HomeworkManageController extends BaseController
         }
 
         return $this->render('homework/manage/question-picked.html.twig', array(
-            'courseSet' => $courseSet,
-            'questions' => $questions,
-            'type'      => $question['type'],
-            'target'    => $request->query->get('target', 'testpaper')
+            'courseSet'     => $courseSet,
+            'questions'     => $questions,
+            'type'          => $question['type'],
+            'target'        => $request->query->get('target', 'testpaper'),
+            'targetChoices' => $this->getQuestionRanges($courseSet['id'])
         ));
     }
 

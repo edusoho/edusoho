@@ -21,7 +21,7 @@ class OrderRefundController extends BaseController
             $targets = $processor->findByLikeTitle(trim($conditions['title']));
             $conditions['targetIds'] = ArrayToolkit::column($targets, 'id');
             if (count($conditions['targetIds']) == 0){
-                return $this->render('admin/order-refund/:refunds.html.twig', array(
+                return $this->render('admin/order-refund/refunds.html.twig', array(
 		                'refunds' => array(),
 		                'users' => array(),
 		                'orders' => array(),
@@ -49,7 +49,7 @@ class OrderRefundController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($refunds, 'orderId'));
 
-        return $this->render('admin/order-refund/:refunds.html.twig', array(
+        return $this->render('admin/order-refund/refunds.html.twig', array(
             'refunds' => $refunds,
             'users' => $users,
             'orders' => $orders,
@@ -111,7 +111,7 @@ class OrderRefundController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('admin/order-refund/:refund-confirm-modal.html.twig', array(
+        return $this->render('admin/order-refund/refund-confirm-modal.html.twig', array(
             'order' => $order,
         ));
 

@@ -66,11 +66,14 @@ export default class QuestionPicker {
   }
 
   _refreshSeqs() {
-    let seq = 0;
+    let seq = 1;
     this.$questionAppendForm.find('tbody tr').each(function(index,item) {
       let $tr = $(item);
-      $tr.find('td.seq').html(seq+1);
-      seq++;
+      
+      if (!$tr.hasClass('have-sub-questions')) { 
+        $tr.find('td.seq').html(seq);
+          seq ++;
+      }
     });
     this.$questionAppendForm.find('[name="questionLength"]').val(seq > 0 ? seq : null );
   }
