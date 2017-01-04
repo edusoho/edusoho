@@ -60,7 +60,7 @@ class Audio extends Activity
     public function get($id)
     {
         $audioActivity         = $this->getAudioActivityDao()->get($id);
-        $audioActivity['file'] = $this->getUploadFileService()->getFile($audioActivity['mediaId']);
+        $audioActivity['file'] = $this->getUploadFileService()->getFullFile($audioActivity['mediaId']);
         return $audioActivity;
     }
 

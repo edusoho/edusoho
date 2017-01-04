@@ -161,7 +161,7 @@ admin:
                                     blank: true
                                 admin_course_add:
                                     name: 创建课程
-                                    router_name: course_create
+                                    router_name: course_set_manage_create
                                     group: topBtn
                                     blank: 1
                                 admin_course_recommend:

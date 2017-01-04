@@ -40,7 +40,7 @@ class AnalysisController extends BaseController
 
         $registerDetail = $this->getUserService()->searchUsers(
             $timeRange,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -52,7 +52,7 @@ class AnalysisController extends BaseController
             $data         = $this->fillAnalysisData($condition, $registerData);
         }
 
-        $registerStartData = $this->getUserService()->searchUsers(array(), array('createdTime', 'ASC'), 0, 1);
+        $registerStartData = $this->getUserService()->searchUsers(array(), array('createdTime' => 'ASC'), 0, 1);
 
         if ($registerStartData) {
             $registerStartDate = date("Y-m-d", $registerStartData[0]['createdTime']);
@@ -736,7 +736,7 @@ class AnalysisController extends BaseController
 
         $videoViewedDetail = $this->getCourseService()->searchAnalysisLessonView(
             $searchCondition,
-            array("createdTime", "DESC"),
+            array("createdTime" => "DESC"),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -848,8 +848,8 @@ class AnalysisController extends BaseController
         $searchCondition = array(
             "fileType"    => 'video',
             "fileStorage" => 'local',
-            "startTime"   => $timeRange['startTime']
-            , "endTime" => $timeRange['endTime']
+            "startTime"   => $timeRange['startTime'], 
+            "endTime" => $timeRange['endTime']
         );
 
         if (!$timeRange) {
@@ -868,7 +868,7 @@ class AnalysisController extends BaseController
 
         $videoViewedDetail = $this->getCourseService()->searchAnalysisLessonView(
             $searchCondition,
-            array("createdTime", "DESC"),
+            array("createdTime" => "DESC"),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

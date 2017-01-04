@@ -6,7 +6,6 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Common\ServiceKernel;
 
 class OrderController extends BaseController
 {
@@ -93,7 +92,7 @@ class OrderController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('admin/course-order/:refund-confirm-modal.html.twig', array(
+        return $this->render('admin/course-order/refund-confirm-modal.html.twig', array(
             'order' => $order
         ));
     }

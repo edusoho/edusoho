@@ -10,6 +10,7 @@ const settings = {
   imglimit: 1024,
   fontlimit: 1024,
   devtool: 'source-map', // 可设置为 'source-map'，方便错误排查 
+  openModule: ['lib','app','admin','plugin','copy'], // 可以选择监听哪几种资源文件
 }
 
 export default settings;

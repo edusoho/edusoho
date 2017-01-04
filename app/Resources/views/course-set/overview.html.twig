@@ -6,14 +6,14 @@
   <div class="es-piece">
     <div class="piece-header">课程介绍</div>
     <div class="piece-body p-lg clearfix">
-      {{ course.summary|raw }}
+      {{ course.summary|default(courseSet.summary)|raw }}
     </div>
   </div>
-  <div class="es-piece {% if course.goals is empty  %} hidden {% endif  %}">
+  <div class="es-piece {% if course.goals|default(courseSet.goals) is empty  %} hidden {% endif  %}">
     <div class="piece-header">课程目标</div>
     <div class="piece-body">
       <ul class="piece-body-list">
-        {% for  goal in course.goals %}
+        {% for  goal in course.goals|default(courseSet.goals) %}
           <li><i class="es-icon es-icon-dot mrm"></i>
             {{ goal }}
           </li>
@@ -23,11 +23,11 @@
       </ul>
     </div>
   </div>
-  <div class="es-piece {% if course.audiences is empty  %} hidden {% endif  %}">
+  <div class="es-piece {% if course.audiences|default(courseSet.audiences) is empty  %} hidden {% endif  %}">
     <div class="piece-header">适合人群</div>
     <div class="piece-body">
       <ul class="piece-body-list">
-        {% for  audience in course.audiences %}
+        {% for  audience in course.audiences|default(courseSet.audiences) %}
           <li><i class="es-icon es-icon-dot mrm"></i>
             {{ audience }}
           </li>

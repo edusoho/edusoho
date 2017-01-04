@@ -21,8 +21,8 @@
         <li class="mb10">
           <i class="es-icon es-icon-dot color-warning"></i>
           计划完成<span class="mhs">{{ planStudyTaskCount }}</span>个任务
-          {% if progress -planProgressProgress > 0 %}
-          ，<span class="mlm">落后计划(progress- planProgressProgress)%</span>
+          {% if planProgressProgress- progress  > 0 %}
+          ，<span class="mlm">落后计划{{ progress- planProgressProgress }}%</span>
           {% endif %}
         </li>
       {% endif %}

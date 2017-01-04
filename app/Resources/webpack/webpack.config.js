@@ -8,20 +8,18 @@ const config = {
   libs: {
     vendor: ['libs/vendor.js'], //can be a js file
     "fix-ie": ['html5shiv', 'respond-js'],
-    "jquery-validation": ['libs/js/jquery-validation.js'],
     "jquery-form": ['jquery-form'],
-    'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
+    "jquery-nouislider":['nouislider'],
     "perfect-scrollbar":['perfect-scrollbar'],
     "jquery-sortable":['jquery-sortable'],
+    "jquery-validation": ['libs/js/jquery-validation.js'],
+    'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
     "iframe-resizer":['libs/js/iframe-resizer.js'],
     "iframe-resizer-contentWindow":['libs/js/iframe-resizer-contentWindow.js'],
     "es-webuploader":['libs/js/es-webuploader.js'],
     "es-image-crop":['libs/js/es-image-crop.js'],
     "easy-pie-chart":['libs/js/easy-pie-chart.js'],
-    "jquery-nouislider":['nouislider'],
     'jquery-timer':['libs/js/jquery-timer.js'],
-    'jquery-range':['libs/js/jquery-range.js'],
-
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',

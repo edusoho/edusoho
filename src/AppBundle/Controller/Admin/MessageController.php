@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Admin;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class MessageController extends BaseController
 {
@@ -29,7 +28,7 @@ class MessageController extends BaseController
         }else{
             $paginator = new Paginator(
                 $request,
-                $this->getMessageService()->searchMessagesCount($conditions),
+                $this->getMessageService()->countMessages($conditions),
                 20
             );
 
