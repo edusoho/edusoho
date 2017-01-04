@@ -1,11 +1,11 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
-
+{% set bodyClass = 'task-testpaper-body' %}
 {% block body %}
   {% block header %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
-  <div class="iframe-parent-content task-testpaper-content js-testpaper-content">
+  <div class="task-testpaper-content js-testpaper-content">
     <div class="container">
       {% block paper_content %}
         <div class="row">

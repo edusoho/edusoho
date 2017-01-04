@@ -577,7 +577,7 @@ class ClassroomController extends BaseController
         $amount = $this->getOrderService()->analysisAmount(array('userId' => $user->id, 'status' => 'paid'));
         $amount += $this->getCashOrdersService()->analysisAmount(array('userId' => $user->id, 'status' => 'paid'));
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         //判断用户是否为VIP
         $vipStatus = $classroomVip = null;

@@ -1,5 +1,31 @@
 ## webpack前端方案初始化（需安装nodejs环境）
 
+### 前言
+
+整个webpack方案已经上传到[npm](https://www.npmjs.com/)里,
+随着项目的需要，会不断迭代
+```
+npm install es-webpack-engine
+```
+
+### webpack配置文件说明
+
+```
+目录：/app/Resources/webpack/
+
+> 本项目中的优化配置文件:
+settings.js 
+
+> 资源依赖配置文件
+webpack.config.js
+
+> 开发环境下的入口文件 --- 不推荐修改
+webpack.dev.js
+
+> 生产环境下的入口文件 --- 不推荐修改
+webpack.js
+```
+
 ### 依赖安装
 
 ```
@@ -11,6 +37,18 @@ npm install -g cnpm --registry=https://registry.npm.taobao.org
 cnpm install
 ```
 
+### nginx添加配置项
+```
+location ~ ^/static-dist {
+  if (-f $document_root/static-dist/dev.lock)
+  {
+    rewrite ^(.*)$ http://127.0.0.1:3030$1 last;
+  }
+}
+
+其中3030可修改，static-dist为settings.js文件中config.output.publicPath的值
+```
+
 ### 开发模式
 
 ```
@@ -19,15 +57,8 @@ npm start port:3038 #改变端口
 ```
 
 ```
-# 此命令默认会绑定到3030端口，但不会生成真实文件，但可以通过http://127.0.0.1:3030/static-dist 浏览到文件目录
-
-# 本项目中的打包配置文件位于app/Resources/webpack/options.js，
-其中output.publicPath指定为'/static-dist/'，
-所以开发模式下打包后的前端文件可以通过http://127.0.0.1:3030/static-dist/xxx/xxx.js访问
-
-# 开发模式下，需在symfony的配置文件app/config/parameters.yml中配置以下字段:
-  parameters:
-      webpack_base_url: 'http://127.0.0.1:3030'
+# 此命令默认会绑定到3030端口，但不会生成真实文件，但可以通过http://127.0.0.1:3030/static-dist 浏览到文件目录，
+其中static-dist为settings.js文件中config.output.publicPath的值
 ```
 
 ### 最终编译
@@ -115,18 +146,31 @@ pluginDir/
 
 # 其它说明
 - 每个具有main.js的目录，编译时都会在同目录下生成common.js
+
 - 以app的layout.html.twig为例：
   {% do css(['libs/vendor.css', 'app/css/main.css']) %}
   {% do script(['libs/vendor.js', 'app/js/common.js', 'app/js/main.js']) %}
   更多代码示例可参考：https://github.com/ketuzhong/biz-symfony-starter
+
+- 约定index.js 为每个页面的打包入口文件，其它文件名仅作为片段、模块被其它js文件引入（import）
 ```
 
 ### 其它
 - 模块组件样式（不希望单独打包出css文件的）以下面形式引入
 
 ```
-import '!style!css!less!./xxx.less';
+import '!style!css!less!xxx.less';
 ```
+- 在服务启动后，新增的index.js如果要在页面运用，需要先中断服务(<code>ctrl + c</code>)，并重启服务（<code>npm start</code>）才生效
+
+### 已实现功能
+总：可处理所有前端资源
+
+* 文件纯拷贝功能
+* 支持主题可配色
+* webpack编译报错通知
+* 分app、libs、plugins输出
+* 字体图标、图像、swf等纳入编译流
 
 
 ### 待改进

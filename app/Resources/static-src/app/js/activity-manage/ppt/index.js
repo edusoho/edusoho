@@ -1,3 +1,4 @@
+
 import FileChooser from '../../file-chooser/file-choose';
 import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/chooser-ui.js';
 let $mediaId = $('[name="mediaId"]');

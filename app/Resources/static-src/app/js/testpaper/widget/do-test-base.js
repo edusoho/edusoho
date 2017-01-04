@@ -54,26 +54,27 @@ class DoTestBase
     }, 1000);
   }
 
-
   _clickBtnIndex(event) {
-    let $current = $($(event.currentTarget).data('anchor'));
-    $(".testpaper-activity-show").scrollTop($current.offset().top);
+    let $btn = $(event.currentTarget).addClass('doing');
+    $btn.siblings('.doing').removeClass('doing');
+    let $current = $($btn.data('anchor'));
+    $(".js-testpaper-content").scrollTop($current.offset().top);
   }
 
   _choiceLable(event) {
     let $inputParents = $(event.currentTarget);
-    let $btn = $(`[data-anchor="#question${$inputParents.attr('name')}"]`);
-    let $doingBtn = $btn.siblings('.doing');
-    this._renderBtnIndex($btn,$doingBtn);
+    this._renderBtnIndex($inputParents.attr('name'));
   }
 
-  _renderBtnIndex($btn,$doingBtn) {
-    if($btn) {
-      $btn.addClass('doing');
-      $doingBtn.removeClass('doing').addClass('done');
-    }else {
-      $btn.removeClass('doing');
+  _renderBtnIndex(idNum,isChecked = true) {
+    let $btn = $(`[data-anchor="#question${idNum}"]`);
+    if(!isChecked) {
+      $btn.removeClass('done').removeClass('doing');
+      return;
     }
+    let $doingBtn = $btn.siblings('.doing');
+    $btn.addClass('doing').addClass('done');
+    $doingBtn.removeClass('doing');
   }
   _showEssayInputEditor(event) {
     let $shortTextarea = $(event.currentTarget);
@@ -95,11 +96,12 @@ class DoTestBase
         filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
       });
 
-      editor.on('blur', function(e) {
+      editor.on('blur', e => {
         editor.updateElement();
-        setTimeout(function() {
+        setTimeout(()=>{
           $longTextarea.val(editor.getData());
           $longTextarea.change();
+          $longTextarea.val() ? this._renderBtnIndex($longTextarea.attr('name'),true) : this._renderBtnIndex($longTextarea.attr('name'),false);
         }, 1);
       });
 
@@ -144,7 +146,7 @@ class DoTestBase
 
     isChecked = $input.prop('checked');
     let questionId = $input.attr('name');
-    isChecked ? $('a[data-anchor="#question' + questionId + '"]').addClass('lump-primary-light') : $('a[data-anchor="#question' + questionId + '"]').removeClass('lump-primary-light');
+    this._renderBtnIndex(questionId,isChecked)
   }
 
   _quick2Question(event) {

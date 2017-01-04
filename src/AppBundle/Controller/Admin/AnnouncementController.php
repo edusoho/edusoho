@@ -87,6 +87,6 @@ class AnnouncementController extends BaseController
      */
     protected function getAnnouncementService()
     {
-        return $this->get('biz')->service('admin/announcement/AnnouncementService');
+        return $this->get('biz')->service('Announcement:AnnouncementService');
     }
 }

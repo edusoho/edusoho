@@ -349,7 +349,7 @@ class UserController extends BaseController
 
     protected function getFields()
     {
-        $fields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         for ($i = 0; $i < count($fields); $i++) {
             if (strstr($fields[$i]['fieldName'], "textField")) {

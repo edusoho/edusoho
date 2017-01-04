@@ -707,7 +707,7 @@ class UserImporter extends Importer
     {
         $userFieldArray = array();
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $fieldArray = array(
             "nickname"    => '用户名',
             "email"       => '邮箱',
