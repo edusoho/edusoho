@@ -156,6 +156,24 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return true;
     }
 
+    public function countThreadsByCourseIdAndUserId($courseId, $userId, $type = 'discuss')
+    {
+        $sql = "SELECT count(id) FROM course_thread WHERE type='{$type}' AND courseId = ? AND userId = ?";
+        return $this->db()->fetchColumn($sql, array($courseId, $userId));
+    }
+
+    public function countActivitiesByCourseIdAndUserId($courseId, $userId)
+    {
+        $sql = "SELECT count(distinct(activityId)) FROM course_task_result WHERE courseId = ? AND userId = ?";
+        return $this->db()->fetchColumn($sql, array($courseId, $userId));
+    }
+
+    public function countPostsByCourseIdAndUserId($courseId, $userId)
+    {
+        $sql = "select count(id) from course_thread_post where threadId in (select id from course_thread where courseId = ? and $userId = ? and type='discussion')";
+        return $this->db()->fetchColumn($sql, array($courseId, $userId));
+    }
+
     protected function _buildQueryBuilder($conditions, $join)
     {
         $conditions = array_filter($conditions, function ($value) {
