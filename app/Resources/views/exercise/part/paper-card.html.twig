@@ -13,12 +13,19 @@
     </div>
     <div class="panel-body">
       {% for question in questions %}
-        <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbmpull-left {% if question.testResult.status|default('noAnswer') in ['partRight','wrong'] %}lump-danger{% elseif question.testResult.status|default('noAnswer')  == 'right' %}lump-success{% endif %}">{{ question.seq }}</a>
+        <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump lump-card mrm mbm
+          {% if question.testResult.status|default('noAnswer') in ['partRight','wrong'] %}
+            bg-danger
+          {% elseif question.testResult.status|default('noAnswer')  == 'right' %}
+            bg-success
+          {% endif %}">
+          {{ question.seq }}
+        </a>
       {% endfor %}
     </div>
     {% if paperResult.status|default(null) != 'finished' %}
-      <div class="panel-text-right mt20">
-        <a id="paper-finish" class="btn btn-success" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交练习'|trans}}</a>
+      <div class="panel-footer text-right mt20">
+        <a id="paper-finish" class="btn btn-primary" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交练习'|trans}}</a>
       </div>
     {% endif %}
   </div>

@@ -1,11 +1,13 @@
 <?php
 namespace AppBundle\Controller;
 
+use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\CourseSetService;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
@@ -49,15 +51,20 @@ class CourseManageController extends BaseController
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
-        $course          = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $courseSet       = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $tasks           = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
+        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
+
+        $files = $this->prepareTaskActivityFiles($tasks);
+
         $courseItems     = $this->getCourseService()->findCourseItems($courseId);
         $tasksRenderPage = $this->createCourseStrategy($course)->getTasksRenderPage();
         $taskPerDay      = $this->getFinishedTaskPerDay($course, $tasks);
 
         return $this->render($tasksRenderPage, array(
-            'tasks'      => $tasks,
+            'taskNum'    => count($tasks),
+            'files'      => $files,
             'courseSet'  => $courseSet,
             'course'     => $course,
             'items'      => $courseItems,
@@ -85,7 +92,6 @@ class CourseManageController extends BaseController
     public function infoAction(Request $request, $courseSetId, $courseId)
     {
         if ($request->isMethod('POST')) {
-            $data = $request->request->all();
             $data = $request->request->all();
             if (!empty($data['goals'])) {
                 $data['goals'] = json_decode($data['goals'], true);
@@ -326,6 +332,26 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(array('result' => true));
     }
 
+    /**
+     * @param  $tasks
+     * @return array
+     */
+    public function prepareTaskActivityFiles($tasks)
+    {
+        $tasks       = ArrayToolkit::index($tasks, 'id');
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+
+        $activities = $this->getActivityService()->findActivitiesFetchMedia($activityIds);
+
+        $files = array();
+        array_walk($activities, function ($activity) use (&$files) {
+            if (in_array($activity['mediaType'], array('video', 'audio', 'doc'))) {
+                $files[$activity['id']] = empty($activity['ext']['file']) ? null : $activity['ext']['file'];
+            }
+        });
+        return $files;
+    }
+
     protected function formatCourseDate($course)
     {
         if (isset($course['expiryStartDate'])) {
@@ -352,6 +378,14 @@ class CourseManageController extends BaseController
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 
     /**

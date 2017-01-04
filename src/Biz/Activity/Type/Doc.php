@@ -83,7 +83,10 @@ class Doc extends Activity
 
     public function get($targetId)
     {
-        return $this->getDocActivityDao()->get($targetId);
+        $activity =  $this->getDocActivityDao()->get($targetId);
+
+        $activity['file'] = $this->getUploadFileService()->getFullFile($activity['mediaId']);
+        return $activity;
     }
 
     protected function getDocActivityDao()
@@ -99,6 +102,10 @@ class Doc extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service("Activity:ActivityService");
+    }
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
     }
     
 }

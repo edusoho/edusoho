@@ -57,7 +57,7 @@ class Video extends Activity
     public function get($id)
     {
         $videoActivity         = $this->getVideoActivityDao()->get($id);
-        $videoActivity['file'] = $this->getUploadFileService()->getFile($videoActivity['mediaId']);
+        $videoActivity['file'] = $this->getUploadFileService()->getFullFile($videoActivity['mediaId']);
         return $videoActivity;
     }
 

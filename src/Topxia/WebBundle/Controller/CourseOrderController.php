@@ -215,7 +215,7 @@ class CourseOrderController extends OrderController
 
         $this->getCourseService()->tryManageCourse($order["targetId"]);
 
-        return $this->forward('TopxiaWebBundle:Order:detail', array(
+        return $this->forward('AppBundle:Order:detail', array(
             'id' => $id
         ));
     }

@@ -3,7 +3,6 @@ namespace AppBundle\Controller\Admin;
 
 use Biz\System\Service\SettingService;
 use Biz\CloudPlatform\Client\EduSohoAppClient;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
