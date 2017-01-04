@@ -13,12 +13,12 @@ class BatchNotificationController extends BaseController
     	$conditions = array();
     	$paginator = new Paginator(
             $this->get('request'),
-            $this->getBatchNotificationService()->searchBatchNotificationsCount($conditions),
+            $this->getBatchNotificationService()->countBatchNotifications($conditions),
             10
             );
     	$batchnotifications = $this->getBatchNotificationService()->searchBatchNotifications(
     		$conditions, 
-    		array('createdTime','DESC'), 
+    		array('createdTime'=>'DESC'), 
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
             );

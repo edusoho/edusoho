@@ -23,7 +23,7 @@ class KeywordBanlogDaoImpl extends GeneralDaoImpl implements KeywordBanlogDao
     public function declares()
     {
         $declares['orderbys'] = array(
-            'createdTime'
+            'createdTime', 'id'
         );
 
         $declares['conditions'] = array(
@@ -57,12 +57,6 @@ class KeywordBanlogDaoImpl extends GeneralDaoImpl implements KeywordBanlogDao
             }
         }
 
-        return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'keyword_banlog')
-            ->andWhere('id = :id')
-            ->andWhere('userId = :userId')
-            ->andWhere('state = :state')
-            ->andWhere('keywordId = :keywordId')
-            ->andWhere('UPPER(keywordName) LIKE :keywordName');
+        return parent::_createQueryBuilder($conditions);
     }
 }
