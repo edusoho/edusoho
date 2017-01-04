@@ -26,7 +26,7 @@ class KernelRequestListener
             return;
         }
 
-        $settingService = ServiceKernel::instance()->createService('System.SettingService');
+        $settingService = $this->getSettingService();
 
         $blacklistIps = $settingService->get('blacklist_ip');
         $whitelistIps = $settingService->get('whitelist_ip');
