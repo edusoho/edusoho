@@ -203,7 +203,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->tryManageCourse($id);
         $fields = ArrayToolkit::parts($fields, array(
             'isFree',
-            'price',
+            'originPrice',
             'vipLevelId',
             'buyable',
             'tryLookable',
@@ -213,6 +213,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             'services',
             'approval'
         ));
+
+        $fields['price'] = $this->calculatePrice($id, $fields['originPrice']);
+
         if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
@@ -233,6 +236,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         // }
 
         return $this->getCourseDao()->update($id, $fields);
+    }
+
+    protected function calculatePrice($id, $originPrice)
+    {
+        return $originPrice;
     }
 
     public function updateCourseStatistics($id, $fields)
@@ -392,54 +400,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         ));
     }
 
-    public function createCourseStudent($courseId, $fields)
-    {
-        $this->tryManageCourse($courseId);
-        if (!ArrayToolkit::requireds($fields, array('userId', 'price'))) {
-            throw $this->createInvalidArgumentException("Lack of required fields");
-        }
-        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $fields['userId']);
-        if (!empty($member)) {
-            throw $this->createInvalidArgumentException("User#{$fields['userId']} is already in Course#{$courseId}");
-        }
-        $fields = ArrayToolkit::parts($fields, array(
-            'userId',
-            // 'price', // create order ...
-            'remark'
-        ));
-
-        $fields['role']        = 'student';
-        $fields['joinedType']  = 'course';
-        $fields['classroomId'] = 0;
-        $fields['courseId']    = $courseId;
-
-        //TODO create order
-
-        $result = $this->getMemberDao()->create($fields);
-        $this->biz['dispatcher']->dispatch("course.student.create", new Event($result));
-        return $result;
-    }
-
-    public function removeCourseStudent($courseId, $userId)
-    {
-        $this->tryManageCourse($courseId);
-        $user = $this->getUserService()->getUser($userId);
-        if (empty($user)) {
-            throw $this->createNotFoundException("User#{$user['id']} Not Found");
-        }
-        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
-        if (empty($member)) {
-            throw $this->createNotFoundException("User#{$user['id']} Not in Course#{$courseId}");
-        }
-        if ($member['role'] !== 'student') {
-            throw $this->createInvalidArgumentException("User#{$user['id']} is Not a Student of Course#{$courseId}");
-        }
-        $result = $this->getMemberDao()->delete($member['id']);
-
-        $this->biz['dispatcher']->dispatch("course.student.delete", new Event($member));
-        return $result;
-    }
-
     public function getUserRoleInCourse($courseId, $userId)
     {
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
@@ -569,7 +529,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($deletedChapter) || $deletedChapter['courseId'] != $courseId) {
             throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
         }
-
         $this->getChapterDao()->delete($deletedChapter['id']);
 
         $prevChapter = array('id' => 0);
@@ -583,7 +542,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $tasks = $this->getTaskService()->findTasksByChapterId($deletedChapter['id']);
 
         foreach ($tasks as $task) {
-            $this->getTaskService()->updateTask($task['id'], array('categoryId' => $prevChapter['id']));
+            $this->getTaskService()->updateSeq($task['id'], array('categoryId' => $prevChapter['id']));
         }
     }
 
@@ -870,7 +829,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
         $orderBy    = $this->_prepareCourseOrderBy($sort);
-
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
 

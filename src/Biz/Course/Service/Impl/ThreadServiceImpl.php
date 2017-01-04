@@ -3,6 +3,7 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\ThreadDao;
+use Biz\Course\Service\MemberService;
 use Topxia\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
@@ -119,7 +120,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $thread['userId'] = $this->getCurrentUser()->id;
         $thread['title']  = $this->biz['html_helper']->purify(empty($thread['title']) ? '' : $thread['title']);
-
+        $thread['courseSetId'] = $course['courseSetId'];
         //创建thread过滤html
         $thread['content']          = $this->biz['html_helper']->purify($thread['content']);
         $thread['createdTime']      = time();
@@ -327,7 +328,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         list($course, $member) = $this->getCourseService()->tryTakeCourse($post['courseId']);
 
         $post['userId']      = $this->getCurrentUser()->id;
-        $post['isElite']     = $this->getCourseService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
+        $post['isElite']     = $this->getMemberService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
         $post['createdTime'] = time();
 
         //创建post过滤html
@@ -510,5 +511,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

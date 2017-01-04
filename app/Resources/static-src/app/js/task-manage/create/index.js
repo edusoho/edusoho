@@ -127,7 +127,12 @@ class Editor {
 
       })
       .fail((response) => {
-        this.$element.modal('hide');
+        var msg = '';
+        var errorResponse = JSON.parse(response.responseText);
+        if (errorResponse.error && errorResponse.error.message) {
+          msg = errorResponse.error.message;
+        }
+        notify('warning', '保存出错: ' + msg);
       });
   }
 

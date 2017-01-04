@@ -31,4 +31,12 @@
     </li>
     {#<li class="highlight" style="left: 585px; width: 92px; overflow: hidden;"></li>#}
   </ul>
+  {% if (course.parentId == 0 or course.locked == 0) and (app.user.admin|default(false) or member.role|default('') == "teacher") %}
+    <div class="btnbar hidden-xs">
+      <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}" class="btn btn-link">
+        <i class="es-icon es-icon-anonymous-iconfont"></i>
+        {{'公告'|trans}}
+      </a>
+    </div>
+  {% endif %}
 </div>

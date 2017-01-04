@@ -17,7 +17,7 @@
       {% endfor %}
     </div>
     {% if paperResult.status|default(null) != 'finished' %}
-      <div class="panel-footer text-right">
+      <div class="panel-text-right mt20">
         <a id="paper-finish" class="btn btn-success" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交练习'|trans}}</a>
       </div>
     {% endif %}

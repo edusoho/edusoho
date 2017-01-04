@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import List from './list';
 import InputGroup from './input-group';
-import './style.less'
+import '!style!css!less!./style.less'
 
 
 function initItem(dataSourceUi,value,index) {

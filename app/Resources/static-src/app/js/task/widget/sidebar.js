@@ -39,7 +39,7 @@ export default class TaskSidebar extends Emitter{
 
   renderPane() {
     let html = this.plugins.reduce((html, plugin) => {
-      return html += `<div data-pane="${plugin.code}" class="task-pane"></div>`
+      return html += `<div data-pane="${plugin.code}" class="js-sidebar-pane ${plugin.code}-pane"></div>`;
     }, '');
 
     this.element.append(html);
@@ -83,7 +83,7 @@ export default class TaskSidebar extends Emitter{
     }
   }
 
-  popupContent(time=0) {
+  popupContent(time=1) {
     let side_right = '0px';
     let content_right = '379px';
 
@@ -93,7 +93,7 @@ export default class TaskSidebar extends Emitter{
     }, time);
   }
 
-  foldContent(time=0){
+  foldContent(time=1){
     let side_right = '-' + this.element.width() + 'px';
     let content_right = '26px';
 
@@ -101,5 +101,14 @@ export default class TaskSidebar extends Emitter{
     this.element.animate({
       right: side_right
     }, time)
+  }
+
+  reload(){
+    const $currentPane = this.element.find('.js-sidebar-pane:visible');
+    const pluginCode = $currentPane.data('pane');
+    $currentPane.undelegate();
+    this.element.find('#dashboard-toolbar-nav').children(`[data-plugin="${pluginCode}"]`)
+        .data('loaded', false)
+        .click();
   }
 }
