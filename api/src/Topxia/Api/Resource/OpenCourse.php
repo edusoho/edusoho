@@ -3,6 +3,7 @@
 
 namespace Topxia\Api\Resource;
 
+use Topxia\Api\Util\TagUtil;
 
 class OpenCourse extends BaseResource
 {
@@ -21,6 +22,8 @@ class OpenCourse extends BaseResource
         foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key) {
             $res[$key] = $this->getFileUrl($res[$key]);
         }
+
+        $res['tags']   = TagUtil::buildTags('openCourse', $res['id']);
 
         return $res;
     }
