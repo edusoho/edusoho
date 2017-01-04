@@ -440,7 +440,7 @@ class CourseController extends BaseController
         }
 
         foreach ($courses as $key => $course) {
-            $isLearnedNum = $this->getCourseService()->searchMemberCount(array('isLearned' => 1, 'courseId' => $course['id']));
+            $isLearnedNum = $this->getCourseMemberService()->countMembers(array('isLearned' => 1, 'courseId' => $course['id']));
 
             $learnTime = $this->getCourseService()->searchLearnTime(array('courseId' => $course['id']));
 
@@ -648,5 +648,10 @@ class CourseController extends BaseController
     protected function getVipLevelService()
     {
         return $this->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }
