@@ -2521,9 +2521,9 @@ org_tree:
 #todo:只为展示页面
 course_explore:
    path:  /course/explore/{category}
-   defaults: { _controller: TopxiaWebBundle:Explore:course, category:'' }
+   defaults: { _controller: AppBundle:Explore:course, category:'' }
 
 coupon_check:
     path:  /{type}/{id}/coupon/check
-    defaults: { _controller: TopxiaWebBundle:Order:couponCheck }
+    defaults: { _controller: AppBundle:Order:couponCheck }
 
