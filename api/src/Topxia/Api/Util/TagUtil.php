@@ -3,15 +3,26 @@
 namespace Topxia\Api\Util;
 
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\ArrayToolkit;
 
 class TagUtil
 {
     public static function buildTags($ownerType, $ownerId)
     {
-        return self::getTagService()->findTagsByOwner(array(
+        $tags = self::getTagService()->findTagsByOwner(array(
             'ownerType' => $ownerType,
             'ownerId'   => $ownerId
         ));
+
+        $newTags = array();
+        foreach ($tags as $tag) {
+            $newTags[] = array(
+                'id'   => $tag['id'],
+                'name' => $tag['name'],
+            );
+        }
+
+        return $newTags;
     }
 
     protected static function getTagService()
