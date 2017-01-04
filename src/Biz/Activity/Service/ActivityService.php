@@ -12,6 +12,8 @@ interface ActivityService
 
     public function findActivities($ids);
 
+    public function findActivitiesFetchMedia($ids);
+
     public function findActivitiesByCourseIdAndType($courseId, $type);
 
     public function createActivity($activity);

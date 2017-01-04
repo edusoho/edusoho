@@ -31,7 +31,7 @@ interface TaskService
     public function count($conditions);
 
     /**
-     * @param  array   $ids
+     * @param  array $ids
      * @return array
      */
     public function findTasksByIds(array $ids);
