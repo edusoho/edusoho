@@ -7,6 +7,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\ActivityLearnLogService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CourseManageController extends BaseController
@@ -194,6 +195,7 @@ class CourseManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $students  = $this->getCourseService()->findStudentsByCourseId($courseId);
+        //TODO find students的学习进度（已完成任务数/总任务数）
         return $this->render('course-manage/students.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course,
@@ -248,13 +250,18 @@ class CourseManageController extends BaseController
         $discussionCount = $this->getCourseMemberService()->countDiscussionsByCourseIdAndUserId($courseId, $userId);
         $postCount       = $this->getCourseMemberService()->countPostsByCourseIdAndUserId($courseId, $userId);
 
+        list($daysCount, $learnedTime, $learnedTimePerDay) = $this->getActivityLearnLogService()->calcLearnProcessByCourseIdAndUserId($courseId, $userId);
+
         return $this->render('course-manage/student-process-modal.html.twig', array(
-            'student'         => $student,
-            'user'            => $user,
-            'questionCount'   => $questionCount,
-            'activityCount'   => $activityCount,
-            'discussionCount' => $discussionCount,
-            'postCount'       => $postCount
+            'student'           => $student,
+            'user'              => $user,
+            'questionCount'     => $questionCount,
+            'activityCount'     => $activityCount,
+            'discussionCount'   => $discussionCount,
+            'postCount'         => $postCount,
+            'daysCount'         => $daysCount,
+            'learnedTime'       => round($learnedTime / 60, 2),
+            'learnedTimePerDay' => round($learnedTimePerDay / 60, 2)
         ));
     }
 
@@ -369,5 +376,13 @@ class CourseManageController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return ActivityLearnLogService
+     */
+    protected function getActivityLearnLogService()
+    {
+        return $this->createService('Activity:ActivityLearnLogService');
     }
 }
