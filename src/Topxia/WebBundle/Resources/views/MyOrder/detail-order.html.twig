@@ -25,6 +25,25 @@
           <strong>{{ admin_macro.user_link(user) }}</strong>
         </td>
       </tr>
+      <tr> <th width="25%">{{'购买者绑定手机号'|trans}}</th>
+        <td width="75%">
+        {% if user.verifiedMobile == '' %}
+          {{'暂无'|trans}}
+        {% else %}
+          {{ user.verifiedMobile }}
+        {% endif %}
+        </td>
+      </tr>
+      <tr> <th width="25%">{{'购买者邮箱'|trans}}</th>
+        <td width="75%">
+          {% set emailArr = user.email|split('@') %}
+          {% if emailArr[1] != 'edusoho.net' %}
+            {{ user.email }}
+          {% else %}
+            {{'暂无'|trans}}
+          {% endif %}
+        </td>
+      </tr>
       <tr> <th width="25%">{{'订单价格'|trans}}</th>
         <td width="75%">
           <span class="money-text">{{ order.totalPrice }}</span>

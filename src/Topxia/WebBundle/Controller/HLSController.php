@@ -188,6 +188,10 @@ class HLSController extends BaseController
             $params['line'] = $line;
         }
 
+        if ($request->isSecure()) {
+            $params['protocol'] = 'https';
+        }
+
         $api = CloudAPIFactory::create('leaf');
 
         $stream = $api->get('/hls/stream', $params);

@@ -478,8 +478,10 @@ class LiveCourseController extends BaseController
 
     public function getReplayUrlAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
     {
+        $ssl = $request->isSecure() ? true : false;
+
         $course = $this->getCourseService()->tryTakeCourse($courseId);
-        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId, $ssl);
 
         return $this->createJsonResponse(array(
             'url'   => $result['url'],

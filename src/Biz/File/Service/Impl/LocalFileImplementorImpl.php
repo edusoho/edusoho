@@ -169,7 +169,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     {
     }
 
-    public function getDownloadFile($file)
+    public function getDownloadFile($file, $ssl = false)
     {
         return $file;
     }

@@ -52,20 +52,22 @@ define(function(require, exports, module) {
                     exportStudents(response.start, response.fileName);
                 } else {
                     $('#export-students-btn').button('reset');
-                    location.href=$('#export-students-btn').data('url')+'&fileName='+response.fileName;
+                    location.href = $('#export-students-btn').data('url')+'&fileName='+response.fileName;
                 }
             });
         });
-
     }
 
-    function exportStudents(start = 0, fileName = '') {
+    function exportStudents(start, fileName) {
+        var start = start || 0,
+            fileName = fileName || '';
+
         $.get($('#export-students-btn').data('datasUrl'), {start:start, fileName:fileName}, function(response) {
             if (response.status === 'getData') {
                 exportStudents(response.start, response.fileName);
             } else {
                 $('#export-students-btn').button('reset');
-                location.href=$('#export-students-btn').data('url')+'&fileName='+response.fileName;
+                location.href = $('#export-students-btn').data('url')+'&fileName='+response.fileName;
             }
         });
     }

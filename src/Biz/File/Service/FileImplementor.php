@@ -42,7 +42,7 @@ interface FileImplementor
 
     public function updateFile($file, $fields);
 
-    public function getDownloadFile($id);
+    public function getDownloadFile($id, $ssl = false);
 
     public function findFiles($files, $conditions);
 

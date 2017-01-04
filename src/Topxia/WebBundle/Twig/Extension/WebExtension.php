@@ -14,7 +14,6 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\ShareSdk\WeixinShare;
 use Topxia\WebBundle\Util\CategoryBuilder;
 use Topxia\Service\Util\HTMLPurifierFactory;
-use Topxia\Service\CloudPlatform\Impl\AppServiceImpl;
 
 class WebExtension extends \Twig_Extension
 {
@@ -125,7 +124,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('wx_js_sdk_config', array($this, 'weixinConfig')),
             new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
             new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
-            new \Twig_SimpleFunction('array_index', array($this, 'arrayIndex'))
+            new \Twig_SimpleFunction('array_index', array($this, 'arrayIndex')),
+            new \Twig_SimpleFunction('cdn', array($this, 'getCdn'))
         );
     }
 
@@ -164,6 +164,13 @@ class WebExtension extends \Twig_Extension
     public function getAdminRoles()
     {
         return ServiceKernel::instance()->createService('Permission:Role.RoleService')->searchRoles(array(), 'created', 0, 1000);
+    }
+
+    public function getCdn($type='default')
+    {
+        $cdn    = new CdnUrl();
+        $cdnUrl = $cdn->get($type);
+        return $cdnUrl;
     }
 
     public function cdn($content)
@@ -241,7 +248,7 @@ class WebExtension extends \Twig_Extension
     public function isWithoutNetwork()
     {
         $network = $this->getSetting('developer.without_network', $default = false);
-        return (bool)$network;
+        return (bool) $network;
     }
 
     public function getUserVipLevel($userId)
@@ -333,7 +340,7 @@ class WebExtension extends \Twig_Extension
     {
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, $start, $length, 'UTF-8');
@@ -428,21 +435,7 @@ class WebExtension extends \Twig_Extension
 
     public function isPluginInstalled($name)
     {
-        $plugins = $this->container->get('kernel')->getPlugins();
-
-        foreach ($plugins as $plugin) {
-            if (is_array($plugin)) {
-                if (strtolower($name) == strtolower($plugin['code'])) {
-                    return true;
-                }
-            } else {
-                if (strtolower($name) == strtolower($plugin)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($name);
     }
 
     public function getPluginVersion($name)
@@ -465,7 +458,14 @@ class WebExtension extends \Twig_Extension
 
     public function getJsPaths()
     {
-        $basePath = $this->container->get('request')->getBasePath();
+
+        $cdnUrl = new CdnUrl();
+        $basePath = $cdnUrl->get();
+
+        if(empty($basePath)) {
+            $basePath = $this->container->get('request')->getBasePath();
+        }
+
         $theme    = $this->getSetting('theme.uri', 'default');
 
         $plugins = $this->container->get('kernel')->getPlugins();
@@ -492,7 +492,6 @@ class WebExtension extends \Twig_Extension
         $names[] = 'sensitiveword';
         $names[] = 'permission';
         $names[] = 'org';
-        $names[] = 'web';
 
         $paths = array(
             'common' => 'common',
@@ -705,7 +704,7 @@ class WebExtension extends \Twig_Extension
 
     public function navigationUrlFilter($url)
     {
-        $url = (string)$url;
+        $url = (string) $url;
 
         if (strpos($url, '://')) {
             return $url;
@@ -723,7 +722,7 @@ class WebExtension extends \Twig_Extension
      *                            C -> 城市全称,    c -> 城市简称
      *                            D -> 区全称,     d -> 区简称
      * @param  [type] $districeId     [description]
-     * @param  string $format 格式，默认格式'P C D'。
+     * @param  string $format         格式，默认格式'P C D'。
      * @return [type] [description]
      */
     public function locationTextFilter($districeId, $format = 'P C D')
@@ -964,7 +963,7 @@ class WebExtension extends \Twig_Extension
             $defaultSetting = $this->getSetting("default", array());
 
             if ((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture', $defaultSetting) && $defaultSetting['defaultCoursePicture'] == 1)
-                    || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar', $defaultSetting) && $defaultSetting['defaultAvatar'] == 1))
+                || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar', $defaultSetting) && $defaultSetting['defaultAvatar'] == 1))
                 && (array_key_exists($defaultKey, $defaultSetting)
                     && $defaultSetting[$defaultKey])
             ) {
@@ -1059,7 +1058,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1077,7 +1076,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text, 'utf-8') > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1148,7 +1147,7 @@ class WebExtension extends \Twig_Extension
         $text = number_format($text, 1, '.', '');
 
         if (intval($text) == $text) {
-            return (string)intval($text);
+            return (string) intval($text);
         }
 
         return $text;
@@ -1278,7 +1277,7 @@ class WebExtension extends \Twig_Extension
                 $default = '余额支付';
             } else {
                 $dictExtension = $this->container->get('codeages_plugin.dict_twig_extension');
-                $default       = $dictExtension->getDictText('payment', $order['payment']);
+                $default = $dictExtension->getDictText('payment', $order['payment']);
             }
         }
 
@@ -1407,8 +1406,8 @@ class WebExtension extends \Twig_Extension
             $charlist
         );
 
-        $workHorse = '['.$charClassInner.']+';
-        $ltrim && $leftPattern = '^'.$workHorse;
+        $workHorse              = '['.$charClassInner.']+';
+        $ltrim && $leftPattern  = '^'.$workHorse;
         $rtrim && $rightPattern = $workHorse.'$';
 
         if ($bothEnds) {
