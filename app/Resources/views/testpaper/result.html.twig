@@ -68,7 +68,7 @@
           {% for question in questions[type] %}
             {% if question.type == 'material' %}
               {% for questionSub in question.subs|default([]) %}
-                <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm 
+                <span href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm 
                   {% if paperResult.status == 'reviewing' and questionSub.type == 'essay' %}
                     bg-warning 
                   {% elseif questionSub.testResult.status|default('noAnswer') == 'right' %}
@@ -78,10 +78,10 @@
                   {% else %}
                     bg-danger 
                   {% endif %}">{{ question.seq }}
-                </a>
+                </span>
               {% endfor %}
             {% else %}
-              <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm 
+              <span href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm 
                 {% if paperResult.status == 'reviewing' and question.type == 'essay' %}
                   bg-warning
                 {% elseif question.testResult.status|default('noAnswer') in ['partRight','wrong'] %}
@@ -91,7 +91,7 @@
                 {% else %}
                   bg-success
                 {% endif %}">{{ question.seq }}
-              </a>
+              </span>
             {% endif %}
           {% endfor %}
         {% endfor %}
