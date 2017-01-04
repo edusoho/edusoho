@@ -2,7 +2,9 @@
 
 namespace Biz\Subtitle\Dao;
 
-interface SubtitleDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface SubtitleDao extends GeneralDaoInterface
 {
     public function findSubtitlesByMediaId($mediaId);
 }

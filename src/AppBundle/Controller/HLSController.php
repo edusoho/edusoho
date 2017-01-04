@@ -81,6 +81,10 @@ class HLSController extends BaseController
                 $params['line'] = $line;
             }
 
+            if ($request->isSecure()) {
+                $params['protocol'] = 'https';
+            }
+
             $streams[$level] = $this->generateUrl('hls_stream', $params, true);
         }
 

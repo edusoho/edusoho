@@ -15,7 +15,7 @@ interface FileImplementor
 
     public function getStatistics($options);
 
-    public function player($globalId);
+    public function player($globalId, $ssl=false);
 
     public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null);
 

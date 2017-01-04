@@ -8,6 +8,7 @@ use Biz\Cash\Dao\CashOrdersLogDao;
 use Biz\Cash\Service\CashOrdersService;
 use Biz\Cash\Service\CashService;
 use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 
 class CashOrdersServiceImpl extends BaseService implements CashOrdersService
@@ -149,12 +150,16 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
     {
         $this->closeOrders();
 
-        return $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
+        $conditions = $this->_prepareSearchConditions($conditions);
+
+        return $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
     }
 
     public function searchOrdersCount($conditions)
     {
-        return $this->getOrderDao()->count($conditions);
+        $conditions = $this->_prepareSearchConditions($conditions);
+
+        return $this->getOrderDao()->searchOrdersCount($conditions);
     }
 
     public function closeOrders()
@@ -217,6 +222,21 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         return in_array($order['status'], array('created'));
     }
 
+    protected function _prepareSearchConditions($conditions)
+    {
+        if (isset($conditions['mobile'])) {
+            $user                 = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
+        if (isset($conditions['email'])) {
+            $user                 = $this->getUserService()->getUserByEmail($conditions['email']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
+
+        return $conditions;
+    }
+
+
     /**
      * @return CashOrdersDao
      */
@@ -247,5 +267,13 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
     protected function getCashService()
     {
         return $this->createService('Cash:CashService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }

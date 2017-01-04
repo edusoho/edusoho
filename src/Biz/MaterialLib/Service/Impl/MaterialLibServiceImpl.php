@@ -3,6 +3,7 @@
 namespace Biz\MaterialLib\Service\Impl;
 
 use Biz\BaseService;
+use Biz\CloudFile\Service\CloudFileService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -19,9 +20,9 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return $this->getUploadFileService()->getFileByGlobalId($globalId);
     }
 
-    public function player($globalId)
+    public function player($globalId, $ssl = false)
     {
-        return $this->getCloudFileService()->player($globalId);
+        return $this->getCloudFileService()->player($globalId, $ssl);
     }
 
     public function edit($fileId, $fields)
@@ -147,6 +148,9 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
+    /**
+     * @return CloudFileService
+     */
     protected function getCloudFileService()
     {
         return $this->biz->service('CloudFile:CloudFileService');
