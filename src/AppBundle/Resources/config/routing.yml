@@ -2523,3 +2523,7 @@ course_explore:
    path:  /course/explore/{category}
    defaults: { _controller: TopxiaWebBundle:Explore:course, category:'' }
 
+coupon_check:
+    path:  /{type}/{id}/coupon/check
+    defaults: { _controller: TopxiaWebBundle:Order:couponCheck }
+
