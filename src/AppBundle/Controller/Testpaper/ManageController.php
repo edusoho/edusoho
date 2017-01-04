@@ -323,6 +323,10 @@ class ManageController extends BaseController
                 return $this->createMessageResponse('error', $this->getServiceKernel()->trans('试卷题目不能为空！'));
             }
 
+            if (!empty($fields['passedCondition'])) {
+                $fields['passedCondition'] = array($fields['passedCondition']);
+            }
+
             $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $fields);
 
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('试卷题目保存成功！'));
@@ -335,16 +339,17 @@ class ManageController extends BaseController
         $items     = $this->getTestpaperService()->findItemsByTestId($testpaper['id']);
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
 
-        $hasEssay   = $this->getQuestionService()->hasEssay(ArrayToolkit::column($items, 'questionId'));
-        $scoreTotal = 0;
+        $hasEssay = $this->getQuestionService()->hasEssay(ArrayToolkit::column($items, 'questionId'));
 
-        $passedScoreDefault = ceil($scoreTotal * 0.6);
+        $passedScoreDefault = empty($testpaper['passedCondition']) ? ceil($testpaper['score'] * 0.6) : $testpaper['passedCondition'][0];
+
         return $this->render('testpaper/manage/question.html.twig', array(
             'courseSet'          => $courseSet,
             'testpaper'          => $testpaper,
             'questions'          => $questions,
             'hasEssay'           => $hasEssay,
-            'passedScoreDefault' => $passedScoreDefault
+            'passedScoreDefault' => $passedScoreDefault,
+            'targetChoices'      => $this->getQuestionRanges($courseSet['id'])
         ));
     }
 
@@ -450,6 +455,15 @@ class ManageController extends BaseController
         return $types;
     }
 
+    protected function getQuestionRanges($courseSetId)
+    {
+        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseIds($courseIds);
+        return ArrayToolkit::index($courseTasks, 'id');
+    }
+
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
@@ -458,6 +472,11 @@ class ManageController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    protected function getCourseTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     protected function getUserService()
