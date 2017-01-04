@@ -45,17 +45,12 @@
         <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
         <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn"  data-name="题目">删除</button>
       </div>
-      {#<div id="homework_items_help" class="help-block" style="display:none;">
-        请选择题目
-      </div>
-      <div class="form-group">
-        <div class="col-xs-12 controls correctPercentDiv"></div>
-        <div class="help-block col-xs-12 correct_percent_help"></div>
-      </div>#}
     {% endif %}
 
     <div class="form-group">
       <div class="col-sm-10 controls">
+        <p class="js-passedScoreDiv">
+        </p>
         <p class="help-block color-warning">{{'提示：作业保存以后将会添加到课时中去，作业一旦保存将不能修改。'|trans}}</p>
       </div>
       <div class="col-xs-4 controls"></div>

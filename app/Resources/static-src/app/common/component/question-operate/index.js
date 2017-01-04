@@ -1,4 +1,5 @@
 import notify from 'common/notify';
+import { passedDivShow } from '../question-passed'
 
 export default class QuestionOperate {
   constructor($form, $modal) {
@@ -52,12 +53,14 @@ export default class QuestionOperate {
   }
 
   deleteQuestion(event) {
+    event.preventDefault();
     let $target = $(event.currentTarget);
     let id = $target.closest('tr').data('id');
     let $tbody =  $target.closest('tbody');
     $tbody.find('[data-parent-id="'+id+'"]').remove();
     $target.closest('tr').remove();
     this.refreshSeqs($tbody);
+    passedDivShow(this.$form);
   }
 
   batchDelete(event) {
@@ -77,6 +80,7 @@ export default class QuestionOperate {
     })
 
     this.refreshSeqs(this.$form.find("tbody:visible"));
+    passedDivShow(this.$form);
   }
 
   previewQuestion(event) {
