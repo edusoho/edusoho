@@ -89,7 +89,9 @@ class UserLoginTokenListener
         }
   
         if ($userLoginToken != $user['loginSessionId']) {
-            if ($request->isXmlHttpRequest()) {
+            $magic = ServiceKernel::instance()->createService('System.SettingService')->get('magic');
+
+            if ((!empty($magic['login_limit'])) && ($request->isXmlHttpRequest())) {
                 $response = new Response('LoginLimit', 403);
                 $response->headers->clearCookie('REMEMBERME');
                 $response->send(); 

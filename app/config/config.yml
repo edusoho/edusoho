@@ -26,8 +26,7 @@ framework:
     fragments:       ~
     http_method_override: true
     assets:
-        version: '7.3.6'
-
+        version: '7.3.8'
 
 # Twig Configuration
 twig:
@@ -70,11 +69,14 @@ parameters:
     topxia.upload.public_directory: "%kernel.root_dir%/../web/files"
     topxia.upload.public_url_path: "/files"
     topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
-    templating.asset.path_package.class: Topxia\WebBundle\Twig\Asset\PathPackage
     permission.path_regular_expression: ['/^\/admin/']
     router.options.matcher_dumper_class: AppBundle\SfExtend\PhpMatcherDumper
 
 services:
+
+    assets.path_package:
+        class: Topxia\WebBundle\Twig\Asset\PathPackage
+        arguments: ["", "", "@assets.context"]
 
     app.locale_listener:
         class: Topxia\WebBundle\Listener\LocaleListener

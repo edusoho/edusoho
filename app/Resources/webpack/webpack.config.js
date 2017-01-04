@@ -1,14 +1,14 @@
 // webpack配置文件
-
 const config = {
   output: {
     path: 'web/static-dist/',       // 用于生产环境下的输出目录
     publicPath: '/static-dist/',    // 用于开发环境下的输出目录
   },
   libs: {
-    vendor: ['libs/vendor.js'], //can be a js file
-    "fix-ie": ['html5shiv', 'respond-js'],
+    vendor: ['libs/vendor.js'], //可以是一个js文件
+    "fix-ie": ['console-polyfill','html5shiv', 'respond-js'], //也可以是一个npm依赖包
     "jquery-validation": ['libs/js/jquery-validation.js'],
+    "jquery-insertAtCaret": ['libs/js/jquery-insertAtCaret.js'],
     "jquery-form": ['jquery-form'],
     'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
     "perfect-scrollbar":['perfect-scrollbar'],
@@ -20,8 +20,7 @@ const config = {
     "easy-pie-chart":['libs/js/easy-pie-chart.js'],
     "jquery-nouislider":['nouislider'],
     'jquery-timer':['libs/js/jquery-timer.js'],
-    'jquery-range':['libs/js/jquery-range.js'],
-
+    'jquery-range':['libs/js/jquery-range.js']
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
@@ -32,13 +31,18 @@ const config = {
     'jquery-form/jquery.form.js',
     'bootstrap-notify/bootstrap-notify.js',
     'store/store.js',
-    // The `.` will auto be replaced to `-` for compatibility 
+    // The `.` will auto be replaced to `-` for compatibility
     'respond.js/dest/respond.src.js',
+    'fetch-ie8/fetch.js',
+    'console-polyfill/index.js',
+    'html5shiv/dist/html5shiv.js',
+    'bootstrap-daterangepicker/daterangepicker.js',
+    'moment/moment.js',
     'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
     'jquery-sortable/source/js/jquery-sortable.js',
-    'nouislider/distribute/nouislider.js',
+    'nouislider/distribute/nouislider.js'
   ],
-  onlyCopys: [
+  onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
       name: 'es-ckeditor',
       ignore: [

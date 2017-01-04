@@ -40,6 +40,7 @@ src/Topxia/Service/Util/DirectCloudClient.php
 src/Topxia/WebBundle/Controller/TestController.php
 src/Topxia/WebBundle/Resources/views/Test/*
 /web/themes/*
+/web/build/*
 !/web/themes/autumn
 !/web/themes/default
 !/web/themes/default-b
@@ -60,7 +61,6 @@ web/assets/img/default/video.png
 *.codekit
 web/php-performance.php
 chunk-manifest.json
-.ac-php-conf.json
 .npminstall.done
-/web/static-dist/dev.lock
-/web/static-dist
+!/web/static-dist/dev.lock
+/web/static-dist/*

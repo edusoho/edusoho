@@ -90,6 +90,18 @@ class FileToolkit
         return $file instanceof UploadedFile ? $file->getClientOriginalExtension() : $file->getExtension();
     }
 
+    public static function getSecureFileMimeTypes()
+    {
+        $extensions = self::getSecureFileExtensions();
+        $extensions = explode(' ', $extensions);
+        $mimeTypes = array();
+        foreach ($extensions as $key => $extension) {
+            $mimeTypes[] = self::getMimeTypeByExtension($extension);
+        }
+
+        return $mimeTypes;
+    }
+
     public static function getSecureFileExtensions()
     {
         return 'jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ods odp mp4 mp3 avi flv wmv wma mov zip rar gz tar 7z swf ico';
@@ -870,7 +882,11 @@ class FileToolkit
             'smv'         => 'video/x-smv',
             'ice'         => 'x-conference/x-cooltalk',
             'mpg'         => 'video/mpeg',
-            'mp3'         => 'audio/mpeg'
+            'mp3'         => 'audio/mpeg',
+            'gz'          => 'application/x-gzip',
+            'jpg'         => 'image/jpeg',
+            'pps'         => 'application/vnd.ms-powerpoint',
+            'mov'         => 'video/quicktime'
         );
         return empty($mimes[$extension]) ? null : $mimes[$extension];
     }

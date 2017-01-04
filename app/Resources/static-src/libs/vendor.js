@@ -1,5 +1,4 @@
-import './vendor.less'; //先用es原来的全局样式，因为要考虑主题等
-
+import 'babel-polyfill';
 import 'jquery';
 import 'bootstrap';
 import 'bootstrap-notify';
@@ -14,6 +13,7 @@ $('[data-toggle="popover"]').popover({
 $('[data-toggle="tooltip"]').tooltip({
   html:true,
 });
+
 
 $(document).ajaxSend(function(a, b, c) {
   if (c.type == 'POST') {
