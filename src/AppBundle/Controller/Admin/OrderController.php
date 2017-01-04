@@ -92,7 +92,7 @@ class OrderController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('admin/course-order/:refund-confirm-modal.html.twig', array(
+        return $this->render('admin/course-order/refund-confirm-modal.html.twig', array(
             'order' => $order
         ));
     }
