@@ -40,7 +40,7 @@ class CdnSettingController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->createService('admin/system/SettingService');
+        return $this->createService('System:SettingService');
     }
 
 }

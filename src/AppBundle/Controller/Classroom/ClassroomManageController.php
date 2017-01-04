@@ -466,7 +466,7 @@ class ClassroomManageController extends BaseController
             $limit
         );
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         $fields['weibo'] = $this->getServiceKernel()->trans('微博');
 

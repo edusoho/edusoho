@@ -48,7 +48,7 @@ class CourseOrderController extends OrderController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         if ($course['approval'] == 1 && ($userInfo['approvalStatus'] != 'approved')) {
             return $this->render('TopxiaWebBundle:CourseOrder:approve-modal.html.twig', array(
