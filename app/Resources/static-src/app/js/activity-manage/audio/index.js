@@ -31,7 +31,6 @@ function _inItStep2form() {
         required: true,
         maxlength: 50,
       },
-      content: 'required',
       minute: 'required unsigned_integer time_length',
       second: 'required time_range time_length',
       'ext[mediaId]': 'required'

@@ -1,6 +1,7 @@
 <?php
 namespace Biz\Activity\Type;
 
+use Biz\Activity\Dao\DownloadFileDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 
@@ -124,6 +125,9 @@ class Download extends Activity
         return $this->getBiz()->dao('Activity:DownloadActivityDao');
     }
 
+    /**
+     * @return DownloadFileDao
+     */
     public function getDownloadFileDao()
     {
         return $this->getBiz()->dao('Activity:DownloadFileDao');

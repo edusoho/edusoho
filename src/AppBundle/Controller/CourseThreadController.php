@@ -48,7 +48,7 @@ class CourseThreadController extends CourseBaseController
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render("course-set/thread/index.html.twig", array(
+        return $this->render("course/thread/index.html.twig", array(
             'courseSet' => $courseSet,
             'course'    => $course,
             'member'    => $this->getCourseMember($request, $course),
@@ -122,7 +122,7 @@ class CourseThreadController extends CourseBaseController
         $isManager = $this->getCourseService()->hasCourseManagerRole($course['id']);
 
         $task = $this->getTaskService()->getTask($thread['taskId']);
-        return $this->render("course-set/thread/show.html.twig", array(
+        return $this->render("course/thread/show.html.twig", array(
             'courseSet'          => $courseSet,
             'course'             => $course,
             'member'             => $member,
@@ -193,7 +193,7 @@ class CourseThreadController extends CourseBaseController
             }
         }
 
-        return $this->render("course-set/thread/form.html.twig", array(
+        return $this->render("course/thread/form.html.twig", array(
             'courseSet' => $courseSet,
             'course'    => $course,
             'member'    => $member,
@@ -265,7 +265,7 @@ class CourseThreadController extends CourseBaseController
             }
         }
 
-        return $this->render("course-set/thread/form.html.twig", array(
+        return $this->render("course/thread/form.html.twig", array(
             'form'      => $form->createView(),
             'courseSet' => $courseSet,
             'course'    => $course,
@@ -461,7 +461,7 @@ class CourseThreadController extends CourseBaseController
                     }
                 }
 
-                return $this->render('course-set/thread/post-list-item.html.twig', array(
+                return $this->render('course/thread/post-list-item.html.twig', array(
                     'course'    => $course,
                     'thread'    => $thread,
                     'post'      => $post,
@@ -473,7 +473,7 @@ class CourseThreadController extends CourseBaseController
             }
         }
 
-        return $this->render('course-set/thread/post.html.twig', array(
+        return $this->render('course/thread/post.html.twig', array(
             'course' => $course,
             'member' => $member,
             'thread' => $thread,
@@ -567,7 +567,7 @@ class CourseThreadController extends CourseBaseController
             }
         }
 
-        return $this->render('course-set/thread/post-form.html.twig', array(
+        return $this->render('course/thread/post-form.html.twig', array(
             'course' => $course,
             'member' => $member,
             'form'   => $form->createView(),

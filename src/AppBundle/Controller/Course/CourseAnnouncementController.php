@@ -14,7 +14,7 @@ class CourseAnnouncementController extends BaseController
         //TODO:这里需要根据用户所拥有的计划的权限展示
         $plans = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
-        return $this->render('course-set/announcement/write-modal.html.twig', array(
+        return $this->render('course/announcement/write-modal.html.twig', array(
             'announcement' => array('id' => '', 'content' => ''),
             'targetObject' => $course,
             'targetType'   => 'course',
@@ -37,7 +37,7 @@ class CourseAnnouncementController extends BaseController
 
         $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10);
 
-        return $this->render('course-set/announcement/list-modal.html.twig', array(
+        return $this->render('course/announcement/list-modal.html.twig', array(
             'announcements' => $announcements,
             'targetType'    => 'course',
             'targetId'      => $course['id'],
@@ -55,7 +55,7 @@ class CourseAnnouncementController extends BaseController
 
         $announcement = $this->getAnnouncementService()->getAnnouncement($announcementId);
 
-        return $this->render('course-set/announcement/write-modal.html.twig', array(
+        return $this->render('course/announcement/write-modal.html.twig', array(
             'announcement' => $announcement,
             'targetObject' => $course,
             'targetType'   => 'course',

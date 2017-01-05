@@ -28,10 +28,17 @@
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu"></i>
-          <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+          {% if task.status == 'published' %}
+            <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+              {% if task.isFree %}  <span class="label label-warning mr10">免费</span> {% endif %}
+              课时{{ task.number }}：{{ task.title }}
+            </a>
+          {% else %}
+            <span class="text-overflow title">
             {% if task.isFree %}  <span class="label label-warning mr10">免费</span> {% endif %}
             课时{{ task.number }}：{{ task.title }}
-          </a>
+            </span>
+          {% endif %}
           <span class="right-menu mouse-leave">
               {{ task.activity.length|default(0)|activity_length_format }}
             {% set meta =  activity_meta(task.activity.mediaType) %}
@@ -39,9 +46,13 @@
                data-original-title="{{ meta.name }}任务"></i>
             </span>
           <span class="right-menu mouse-enter">
-                <a href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"
-                   class="btn btn-primary btn-sm btn-learn">继续学习</a>
-              </span>
+            {% if task.status == 'published' %}
+              <a href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"
+                 class="btn btn-primary btn-sm btn-learn">继续学习</a>
+            {% else %}
+              敬请期待
+            {% endif %}
+          </span>
         </li>
       {% endif %}
     {% endfor %}
