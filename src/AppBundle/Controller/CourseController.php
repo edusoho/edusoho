@@ -243,7 +243,7 @@ class CourseController extends CourseBaseController
             throw $this->createNotFoundException($this->getServiceKernel()->trans('课程不存在，或已删除。'));
         }
 
-        return $this->render('TopxiaWebBundle:Course:course-order.html.twig', array('order' => $order, 'course' => $course));
+        return $this->render('course/course-order.html.twig', array('order' => $order, 'course' => $course));
     }
 
     public function qrcodeAction(Request $request, $id)

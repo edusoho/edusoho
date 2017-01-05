@@ -50,9 +50,11 @@ class Editor {
   }
 
   _onPrev() {
-    if (this.step === 1 || !this._validator(this.step)) {
+    // 第二页可以上一步
+    if (this.step === 1 || (this.step == 3 && !this._validator(this.step))) {
       return;
     }
+
     this.step -= 1;
     this._switchPage();
   }
@@ -78,10 +80,9 @@ class Editor {
       .concat(this.$iframe_body.find('#step2-form').serializeArray())
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
     $.post(this.$task_manage_type.data('saveUrl'), postData)
-      .done((html) => {
+      .done((response) => {
         this.$element.modal('hide');
-
-        if (html && html.append && html.append == false) {
+        if (response && response.append !== undefined && response.append === false) {
           let data = $('#sortable-list').sortable("serialize").get();
           $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
             if (response) {
@@ -89,6 +90,8 @@ class Editor {
             }
           });
         }
+
+        let html = response;
         let chapterId = postData.find(function (input) {
           return input.name == 'chapterId';
         })
@@ -102,7 +105,6 @@ class Editor {
               $(this).before(html);
               add = 1;
               return false;
-
             }
             if ($parent.hasClass('task-manage-unit') && $(this).hasClass('task-manage-unit')) {
               $(this).before(html);
@@ -119,16 +121,11 @@ class Editor {
         }
 
         let data = $('#sortable-list').sortable("serialize").get();
-        $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
-          if (response) {
-            document.location.reload();
-          }
-        });
-
+        $.post($('#sortable-list').data('sortUrl'), {ids: data});
       })
       .fail((response) => {
-        var msg = '';
-        var errorResponse = JSON.parse(response.responseText);
+        let msg = '';
+        let errorResponse = JSON.parse(response.responseText);
         if (errorResponse.error && errorResponse.error.message) {
           msg = errorResponse.error.message;
         }

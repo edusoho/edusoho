@@ -73,7 +73,7 @@ class AttachmentController extends BaseController
             ));
         }
 
-        return $this->render('MaterialLibBundle:Web:preview.html.twig', array(
+        return $this->render('material-lib/Web/preview.html.twig', array(
             'file' => $file
         ));
     }

@@ -43,20 +43,21 @@ export default class InputGroup extends Component {
     });
 
     if(this.searchable && value.length > 0 && this.state.searched) {
-      console.log('seach start..');
-      send(this.searchableUrl+value,searchResult=>{
-        console.log({'seach url':this.searchableUrl+value});
-
-        if(this.state.itemName.length>0) {
-          console.log({'searchResult': searchResult});
-          this.setState({
-            // searchResult:[{avatar:"/files/user/2016/11-22/17385936ebcd728942.jpg?7.3.4",id:"1526",isVisible:1,nickname:"wuli"}],
-            searchResult: searchResult,
-            resultful:true,
-          });
-          console.log({'searchResult':this.state.searchResult});
-        }
-      });
+      setTimeout(()=>{
+        console.log('seach start..');
+        send(this.searchableUrl+value,searchResult=>{
+          console.log({'seach url':this.searchableUrl+value});
+          if(this.state.itemName.length>0) {
+            console.log({'searchResult': searchResult});
+            this.setState({
+              // searchResult:[{avatar:"/files/user/2016/11-22/17385936ebcd728942.jpg?7.3.4",id:"1526",isVisible:1,nickname:"wuli"}],
+              searchResult: searchResult,
+              resultful:true,
+            });
+            console.log({'searchResult':this.state.searchResult});
+          }
+        });
+      },100)
     }
   }
 

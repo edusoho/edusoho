@@ -24,7 +24,7 @@ class Testpaper extends Activity
         return $this->getTestpaperActivityService()->createActivity($fields);
     }
 
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
         $activity = $this->get($targetId);
 

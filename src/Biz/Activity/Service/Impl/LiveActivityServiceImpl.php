@@ -3,10 +3,10 @@
 namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
-use Biz\System\Service\SettingService;
-use Biz\User\Service\UserService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\EdusohoLiveClient;
+use Biz\User\Service\UserService;
+use Biz\System\Service\SettingService;
+use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\LiveActivityService;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
@@ -64,7 +64,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->create($liveActivity);
     }
 
-    public function updateLiveActivity($id, $fields)
+    public function updateLiveActivity($id, &$fields, $activity)
     {
         $liveActivity = $this->getLiveActivityDao()->get($id);
         $liveParams   = array(
@@ -75,19 +75,17 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'authUrl'  => $fields['_base_url'].'/live/auth',
             'jumpUrl'  => $fields['_base_url'].'/live/jump?id='.$fields['fromCourseId']
         );
-
-        if (array_key_exists('startTime', $fields)) {
-            $liveParams['startTime'] = $fields['startTime'];
+        //直播开始后，开始时间不允许修改
+        if (empty($fields['startTime']) || $fields['startTime'] <= time()) {
+            $fields['startTime'] = $activity['startTime'];
+            $fields['length']    = $activity['length'];
         }
-
-        if (array_key_exists('startTime', $fields) && array_key_exists('length', $fields)) {
-            $liveParams['endTime'] = ($fields['startTime'] + $fields['length'] * 60).'';
-        }
+        $liveParams['startTime'] = $fields['startTime'];
+        $liveParams['endTime']   = ($fields['startTime'] + $fields['length'] * 60).'';
 
         $this->getEdusohoLiveClient()->updateLive($liveParams);
-        //live activity自身没有需要更新的信息
-        $fields['id'] = $id;
-        return $fields;
+
+        return $liveActivity;
     }
 
     public function deleteLiveActivity($id)

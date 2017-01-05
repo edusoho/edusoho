@@ -25,8 +25,9 @@ class TaskManageController extends BaseController
             $task                    = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
             $tasksRenderPage = $this->createCourseStrategy($course)->getTaskItemRenderPage();
-            if ($course['isDefault'] && isset($task['mode']) && $task['mode'] == 'lesson') {
-                return $this->createJsonpResponse(array('append' => false));
+
+            if ($course['isDefault'] && isset($task['mode']) && $task['mode'] != 'lesson') {
+                return $this->createJsonResponse(array('append' => false));
             }
             return $this->render($tasksRenderPage, array(
                 'course' => $course,
@@ -49,7 +50,7 @@ class TaskManageController extends BaseController
         $task     = $this->getTaskService()->getTask($id);
         $taskMode = $request->query->get('type');
         if ($task['courseId'] != $courseId) {
-            throw new InvalidArgumentException('任务不在课程中');
+            throw new InvalidArgumentException('任务不在计划中');
         }
 
         if ($request->getMethod() == 'POST') {
