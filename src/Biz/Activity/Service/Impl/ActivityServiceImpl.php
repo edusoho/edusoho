@@ -12,50 +12,60 @@ use Biz\Activity\Listener\ActivityLearnLogListener;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
-    public function getActivity($id)
+    public function getActivity($id, $fetchMedia = false)
     {
-        return $this->getActivityDao()->get($id);
-    }
+        $activity = $this->getActivityDao()->get($id);
 
-    public function getActivityFetchMedia($id)
-    {
-        $activity = $this->getActivity($id);
-        if (!empty($activity['mediaId'])) {
-            $activityConfig  = $this->getActivityConfig($activity['mediaType']);
-            $media           = $activityConfig->get($activity['mediaId']);
-            $activity['ext'] = $media;
+        if ($fetchMedia) {
+            $activity = $this->fetchMedia($activity);
         }
         return $activity;
     }
 
-    public function findActivities($ids)
+    public function findActivities($ids, $fetchMedia = false)
     {
-        return $this->getActivityDao()->findByIds($ids);
-    }
+        $activities = $this->getActivityDao()->findByIds($ids);
 
-    public function findActivitiesFetchMedia($ids)
-    {
-        $activities = $this->findActivities($ids);
-
-        foreach ($activities as $key => $activity) {
-            if (!empty($activity['mediaId'])) {
-                $activityConfig          = $this->getActivityConfig($activity['mediaType']);
-                $media                   = $activityConfig->get($activity['mediaId']);
-                $activities[$key]['ext'] = $media;
+        if ($fetchMedia) {
+            foreach ($activities as  &$activity) {
+                $activity = $this->fetchMedia($activity);
             }
         }
         return $activities;
     }
 
-
-    public function findActivitiesByCourseIdAndType($courseId, $type)
+    public function findActivitiesByCourseIdAndType($courseId, $type, $fetchMedia = false)
     {
         $conditions = array(
             'fromCourseId' => $courseId,
             'mediaType'    => $type
         );
-        return $this->getActivityDao()->search($conditions, null, 0, 1000);
+        $activities  = $this->getActivityDao()->search($conditions, null, 0, 1000);
+
+        if ($fetchMedia) {
+            foreach ($activities as  &$activity) {
+                $activity = $this->fetchMedia($activity);
+            }
+        }
+         return $activities;
     }
+
+    public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia = false)
+    {
+        $conditions = array(
+            'fromCourseSetId' => $courseSetId,
+            'mediaType'       => $type
+        );
+        $activities =  $this->getActivityDao()->search($conditions, null, 0, 1000);
+
+        if ($fetchMedia) {
+            foreach ($activities as  &$activity) {
+                $activity = $this->fetchMedia($activity);
+            }
+        }
+        return $activities;
+    }
+
 
     public function trigger($id, $eventName, $data = array())
     {
@@ -251,7 +261,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'courseSetId' => $activity['fromCourseSetId'],
             'lessonId'    => $activity['id'],
             'title'       => $material['name'],
-            'description' => empty($material['summary'])?: $material['summary'],
+            'description' => empty($material['summary']) ?: $material['summary'],
             'userId'      => $this->getCurrentUser()->offsetGet('id'),
             'type'        => 'course',
             'source'      => 'courseactivity',
@@ -329,5 +339,20 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     public function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];
+    }
+
+    /**
+     * @param $activity
+     * @return mixed
+     */
+    public function fetchMedia($activity)
+    {
+        if (!empty($activity['mediaId'])) {
+            $activityConfig  = $this->getActivityConfig($activity['mediaType']);
+            $media           = $activityConfig->get($activity['mediaId']);
+            $activity['ext'] = $media;
+            return $activity;
+        }
+        return $activity;
     }
 }

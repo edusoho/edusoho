@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -10,7 +12,6 @@ use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
-use Topxia\Service\Common\ServiceKernel;
 
 class CourseController extends CourseBaseController
 {
@@ -88,7 +89,13 @@ class CourseController extends CourseBaseController
     public function detailNavsPartAction(Request $request, $id, $nav = null)
     {
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
-
+        $conditions            = array(
+            'courseId'        => $id,
+            'excludeLessonId' => 0,
+            'source'          => 'courseactivity',
+            'type'            => 'course'
+        );
+        $course['materialNum'] = $this->getMaterialService()->searchMaterialCount($conditions);
         return $this->render('course/part/detail-navs.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course,
@@ -308,13 +315,13 @@ class CourseController extends CourseBaseController
         $order = $this->getOrderService()->getOrderBySn($sn);
 
         if (empty($order)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('订单不存在!'));
+            throw $this->createNotFoundException('订单不存在!');
         }
 
         $course = $this->getCourseService()->getCourse($order['targetId']);
 
         if (empty($course)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('课程不存在，或已删除。'));
+            throw $this->createNotFoundException('课程不存在，或已删除。');
         }
 
         return $this->render('course/course-order.html.twig', array('order' => $order, 'course' => $course));
@@ -346,11 +353,11 @@ class CourseController extends CourseBaseController
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         $user = $this->getCurrentUser();
         if (empty($member)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程的学员。'));
+            throw $this->createAccessDeniedException('您不是课程的学员。');
         }
 
         if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
+            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
         }
 
         $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
@@ -381,6 +388,14 @@ class CourseController extends CourseBaseController
     }
 
     /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
+    /**
      * @return TaskResultService
      */
     protected function getTaskResultService()
@@ -401,9 +416,12 @@ class CourseController extends CourseBaseController
         return $this->createService('Order:OrderService');
     }
 
-    protected function getServiceKernel()
+    /**
+     * @return MaterialService
+     */
+    protected function getMaterialService()
     {
-        return ServiceKernel::instance();
+        return $this->createService('Course:MaterialService');
     }
 
     /**

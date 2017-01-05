@@ -341,7 +341,7 @@ class CourseManageController extends BaseController
         $tasks       = ArrayToolkit::index($tasks, 'id');
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
 
-        $activities = $this->getActivityService()->findActivitiesFetchMedia($activityIds);
+        $activities = $this->getActivityService()->findActivities($activityIds, $fetchMedia = true);
 
         $files = array();
         array_walk($activities, function ($activity) use (&$files) {
