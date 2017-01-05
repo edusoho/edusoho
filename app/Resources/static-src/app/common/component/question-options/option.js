@@ -35,7 +35,9 @@ export default class Options extends Component {
       let self = this;
       this.editor.on('change', function( event ) {   
         let data = this.getData();//内容
-        self.updateInputValue(data);
+        setTimeout(()=>{
+          self.updateInputValue(data);
+        },100)
       });
     }else {
       this.editor.setData(datas.inputValue);
