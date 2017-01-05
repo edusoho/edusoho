@@ -4,7 +4,6 @@ namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
 
-
 class Video extends Activity
 {
     protected function registerListeners()
@@ -30,8 +29,7 @@ class Video extends Activity
         return $videoActivity;
     }
 
-
-    public function update($activityId, $fields)
+    public function update($activityId, &$fields, $activity)
     {
         $videoActivityFields = $fields['ext'];
 
@@ -48,10 +46,10 @@ class Video extends Activity
      */
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
-        return !empty($result) 
-                && $result > $activity['length'];
+        return !empty($result)
+        && $result > $activity['length'];
     }
 
     public function get($id)

@@ -2,15 +2,15 @@
 
 namespace Biz\Activity\Service\Impl;
 
-use Biz\Activity\Dao\ActivityDao;
-use Biz\Activity\Listener\ActivityLearnLogListener;
-use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
+use Topxia\Common\ArrayToolkit;
+use Biz\Activity\Dao\ActivityDao;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Common\ArrayToolkit;
+use Biz\Course\Service\CourseSetService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Listener\ActivityLearnLogListener;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
 {
@@ -49,7 +49,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activities;
     }
 
-
     public function findActivitiesByCourseIdAndType($courseId, $type)
     {
         $conditions = array(
@@ -74,7 +73,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $logListener = new ActivityLearnLogListener($this->biz);
 
         $logData          = $data;
-        $logData['event'] = $activity['mediaType'] . '.' . $eventName;
+        $logData['event'] = $activity['mediaType'].'.'.$eventName;
         $logListener->handle($activity, $logData);
 
         $activityListener = $this->getActivityConfig($activity['mediaType'])->getListener($eventName);
@@ -118,7 +117,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         return $activity;
-
     }
 
     public function updateActivity($id, $fields)
@@ -133,17 +131,16 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->syncActivityMaterials($savedActivity, $materials, 'update');
         }
 
-        $media        = array();
         $realActivity = $this->getActivityConfig($savedActivity['mediaType']);
         if (!empty($savedActivity['mediaId'])) {
-            $media = $realActivity->update($savedActivity['mediaId'], $fields);
+            $media = $realActivity->update($savedActivity['mediaId'], $fields, $savedActivity);
+
+            if (!empty($media)) {
+                $fields['mediaId'] = $media['id'];
+            }
         }
 
-        if ($media) {
-            $fields['mediaId'] = $media['id'];
-        }
-
-        $fields                = $this->filterFields($fields);
+        $fields = $this->filterFields($fields);
         return $this->getActivityDao()->update($id, $fields);
     }
 
@@ -254,7 +251,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
         }
 
-        if(empty($fields['mediaType'])){
+        if (empty($fields['mediaType'])) {
             unset($fields['mediaType']);
         }
 
