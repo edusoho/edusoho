@@ -18,7 +18,7 @@ class CourseController extends CourseBaseController
     public function summaryAction($course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        return $this->render('course/overview.html.twig', array(
+        return $this->render('course/summary.html.twig', array(
             'courseSet'   => $courseSet,
             'course'      => $course,
         ));
