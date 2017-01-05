@@ -1,4 +1,4 @@
-{% extends 'course-set/layout.html.twig' %}
+{% extends 'course/layout.html.twig' %}
 
 {% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
 
@@ -66,7 +66,7 @@
       <ul class="thread-post-list media-list">
         {% for post in elitePosts %}
           {% set author = users[post.userId] %}
-          {% include 'course-set/thread/post-list-item.html.twig' %}
+          {% include 'course/thread/post-list-item.html.twig' %}
         {% endfor %}
       </ul>
     {% endif %}
@@ -79,7 +79,7 @@
     <ul class="thread-post-list media-list">
       {% for post in posts %}
         {% set author = users[post.userId] %}
-        {% include 'course-set/thread/post-list-item.html.twig' %}
+        {% include 'course/thread/post-list-item.html.twig' %}
       {% else %}
         <li class="empty">{{'还没有'|trans}}{% if thread.type == 'question' %}{{'答案'|trans}}{% else %}{{'回复'|trans}}{% endif %}，{{'赶快添加一个吧！'|trans}}</li>
       {% endfor %}

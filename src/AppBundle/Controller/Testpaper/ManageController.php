@@ -49,7 +49,7 @@ class ManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            //$fields['ranges']      = empty($fields['ranges']) ? array() : explode(',', $fields['ranges']);
+
             $fields['courseSetId'] = $courseSet['id'];
             $fields['courseId']    = 0;
             $fields['pattern']     = 'questionType';

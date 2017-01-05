@@ -68,17 +68,14 @@ function addFile(addToList) {
     $("#media").val(JSON.stringify(data));
   }
 
+
   let media = isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
   let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
-
-  if (isEmpty(media.id)) {
-    notify('danger', '请先选择资料');
-    return;
-  }
 
   if (!isEmpty(items) && items[media.id]) {
     notify('danger', '选择重复');
     $("#media").val(null);
+    media = null;
     return;
   }
 
@@ -86,11 +83,11 @@ function addFile(addToList) {
     return;
   }
 
-  if (!isEmpty(items) && items[media.id]) {
-    notify('danger', '选择重复');
-    $("#media").val(null);
+  if (addToList && isEmpty(media)) {
+    notify('danger', '请先选择资料');
     return;
   }
+
 
   $('.js-current-file').text('无');
 

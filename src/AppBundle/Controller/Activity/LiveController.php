@@ -11,7 +11,7 @@ class LiveController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($id);
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
         $format   = 'Y-m-d H:i';
         if (isset($activity['startTime'])) {
             $activity['startTimeFormat'] = date($format, $activity['startTime']);
@@ -75,7 +75,7 @@ class LiveController extends BaseController implements ActivityActionInterface
 
         $params = array();
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
-            $teachers = $this->getCourseService()->findCourseTeachers($courseId);
+            $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
             $teacher  = array_shift($teachers);
 
             if ($teacher['userId'] == $user['id']) {
@@ -91,7 +91,7 @@ class LiveController extends BaseController implements ActivityActionInterface
 
         $params['id']       = $user['id'];
         $params['nickname'] = $user['nickname'];
-        return $this->forward('WebBundle:Liveroom:_entry', array(
+        return $this->forward('AppBundle:Liveroom:_entry', array(
             'roomId'     => $activity['ext']['liveId'],
             'courseId'   => $courseId,
             'activityId' => $activityId
@@ -153,6 +153,9 @@ class LiveController extends BaseController implements ActivityActionInterface
     {
         $format = 'Y-m-d H:i';
         if (isset($fields['startTime'])) {
+            if ($fields['startTime'] <= time()) {
+                $fields['timeDisabled'] = 1;
+            }
             $fields['startTime'] = date($format, $fields['startTime']);
         }
         if (isset($fields['endTime'])) {

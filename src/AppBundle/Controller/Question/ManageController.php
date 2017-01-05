@@ -205,6 +205,7 @@ class ManageController extends BaseController
         $conditions = $request->query->all();
 
         $conditions['parentId'] = 0;
+        $conditions['courseId'] = $courseSet['id'];
 
         $paginator = new Paginator(
             $request,
