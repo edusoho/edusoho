@@ -163,6 +163,37 @@ import '!style!css!less!xxx.less';
 ```
 - 在服务启动后，新增的index.js如果要在页面运用，需要先中断服务(<code>ctrl + c</code>)，并重启服务（<code>npm start</code>）才生效
 
+### 最佳实践
+
+1. 在js引入资源的时候，建议用全局root目录(app/Resources/static-src)下的目录取代较长的相对路径
+如app/Resources/static-src/app/js/testpaper-manage/questions/index.js
+
+```
+import BatchSelect from '../../../common/widget/batch-select';
+import QuestionOperate from '../../../common/component/question-operate';
+```
+
+修改为：
+
+```
+import BatchSelect from 'app/common/widget/batch-select';
+import QuestionOperate from 'app/common/component/question-operate';
+```
+
+亦可使用alias别名来简化路径：
+
+```
+{
+  nodeModulesDir: '/node_modules',
+  xxxplugin: '/plugins/xxxPlugin/Resources/static-src'
+}
+
+使用方式：
+@import '~nodeModulesDir/xx/xxx.less'; //引入less、css时前面需加'~'来让loader识别alias别名
+import xxx from 'xxxplugin/xx/xxx.js';
+```
+
+
 ### 已实现功能
 总：可处理所有前端资源
 

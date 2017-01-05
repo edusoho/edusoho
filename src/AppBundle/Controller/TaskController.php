@@ -156,16 +156,14 @@ class TaskController extends BaseController
 
     protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         if ($preview) {
-            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-
             //TODO先注释掉这段代码，学员的逻辑现在有问题，无法判断是否老师，完善后在开发
-            if ($member['role'] != 'teacher' || $course['status'] != 'published') {
-                throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
-            }
+//            if ($member['role'] != 'teacher' || $course['status'] != 'published') {
+//                throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
+//            }
             $task = $this->getTaskService()->getTask($taskId);
         } else {
-            $this->getCourseService()->tryTakeCourse($courseId);
             $task = $this->getTaskService()->tryTakeTask($taskId);
         }
 
@@ -174,7 +172,6 @@ class TaskController extends BaseController
         }
 
         if ($task['courseId'] != $courseId) {
-            var_dump('wtf!');exit;
             throw $this->createAccessDeniedException();
         }
         return $task;
