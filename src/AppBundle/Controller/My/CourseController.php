@@ -34,33 +34,28 @@ class CourseController extends CourseBaseController
     }
 
 
-    public function headerForMemberAction(Request $request, $id)
+    public function headerForMemberAction(Request $request, $course, $member)
     {
-
-        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
-
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
-
-        $taskCount = $this->getTaskService()->countTasksByCourseId($id);
-
+        $taskCount = $this->getTaskService()->countTasksByCourseId($course['id']);
         $progress = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
         $user = $this->getUser();
-        if ($member && $taskCount) {
+        if ($taskCount) {
 
             //学习记录
-            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $id, 'status' => 'finish', 'userId' => $user['id']));
+            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id']));
 
             //学习进度
             $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
 
             //待学习任务
-            $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($id);
+            $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
 
 
             //任务式课程每日建议学习任务数
             $taskPerDay = $this->getFinishedTaskPerDay($course, $taskCount);
-
 
             //计划应学数量
             $planStudyTaskCount = $this->getPlanStudyTaskCount($course, $member, $taskCount, $taskPerDay);
@@ -69,7 +64,7 @@ class CourseController extends CourseBaseController
             $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
 
             //TODO预览的任务
-            $previewTaks = $this->getTaskService()->search(array('courseId' => $id, 'isFree' => '1'), array('seq' => 'ASC'), 0, 1);
+            $previewTaks = $this->getTaskService()->search(array('courseId' => $course['id'], 'isFree' => '1'), array('seq' => 'ASC'), 0, 1);
         }
 
         $isUserFavorite = false;
@@ -93,15 +88,19 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function showAction($id, $tab = 'tasks')
+    public function showAction(Request $request, $id, $tab = 'tasks')
     {
         $metas = CourseShowMetas::getMemberCourseShowMetas();
         $currentTab = $metas['tabs'][$tab];
 
+        $course    = $this->getCourseService()->getCourse($id);
+        $member = $this->getCourseMember($request, $course);
+
         return $this->render('course/course-show.html.twig', array(
             'metas'      => $metas,
             'currentTab' => $currentTab,
-            'forMember'  => true
+            'forMember'  => true,
+            'course'     => $course
         ));
     }
 

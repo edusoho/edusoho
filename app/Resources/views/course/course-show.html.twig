@@ -2,9 +2,8 @@
 {% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','app/js/courseset/show/index.js']) %}
 
 {% block full_content %}
-	{% set course = data('Course', {courseId: app.request.attributes.get('_route_params').id}) %}
 
-	{{ render(controller(metas.header,{id: course.id})) }}
+	{{ render(controller(metas.header,{course: course, member: member|default(null)})) }}
 
 	<div class="container">
 	  <div class="row">

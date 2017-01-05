@@ -8,13 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseMaterialController extends CourseBaseController
 {
-    public function indexAction(Request $request, $course)
+    public function indexAction(Request $request, $course, $member = array())
     {
-        list($courseSet, $course, $member, $response) = $this->tryBuildCourseLayoutData($request, $course['id']);
-
-        if ($response) {
-            return $response;
-        }
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         $conditions = array(
             'courseId'        => $course['id'],

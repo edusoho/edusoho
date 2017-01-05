@@ -53,7 +53,7 @@ class CourseShowMetas
 				),
 				'tasks' => array(
 					'name' => '课程目录', 
-					'content'	=> 'AppBundle:Course:taskList'
+					'content'	=> 'AppBundle:Course:tasks'
 				),
 				'threads' => array(
 					'name' 		=> '话题', 
@@ -69,6 +69,11 @@ class CourseShowMetas
 					'name' => '笔记',
 					'number'	=> 'noteNum',
 					'content'  => 'AppBundle:Course:notes'
+				),
+				'material' => array(
+					'name' => '资料区',
+					'number'	=> 'materialNum',
+					'content'  => 'AppBundle:Course/CourseMaterial:index'
 				),
 			),
 			'widgets' => array(

@@ -28,15 +28,17 @@ class CourseController extends CourseBaseController
     {
         $metas = CourseShowMetas::getGuestCourseShowMetas();
         $currentTab = $metas['tabs'][$tab];
+        $course    = $this->getCourseService()->getCourse($id);
+
         return $this->render('course/course-show.html.twig', array(
             'metas'        => $metas,
-            'currentTab'   => $currentTab
+            'currentTab'   => $currentTab,
+            'course'       => $course
         ));
     }
 
-    public function headerAction(Request $request, $id)
+    public function headerAction(Request $request, $course)
     {
-        $course    = $this->getCourseService()->getCourse($id);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 

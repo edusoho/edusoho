@@ -32,38 +32,6 @@ abstract class CourseBaseController extends BaseController
         return $this->previewAsMember($previewAs, $member, $course);
     }
 
-    protected function buildCourseLayoutData(Request $request, $courseId)
-    {
-        $course    = $this->getCourseService()->getCourse($courseId);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
-        if (empty($course)) {
-            throw $this->createNotFoundException('Course Not Found');
-        }
-
-        $member = $this->getCourseMember($request, $course);
-
-        return array($courseSet, $course, $member);
-    }
-
-    protected function tryBuildCourseLayoutData($request, $courseId)
-    {
-        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $courseId);
-        $response                          = null;
-
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            $response = $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            $response = $this->createMessageResponse('info', '您还不是课程《'.$course['title'].'》的学员，请先购买或加入学习。', null, 3000, $this->generateUrl('course_set_show', array('id' => $courseId)));
-        }
-
-        return array($courseSet, $course, $member, $response);
-    }
-
     protected function previewAsMember($as, $member, $course)
     {
         $user = $this->getCurrentUser();
