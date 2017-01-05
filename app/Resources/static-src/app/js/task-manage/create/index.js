@@ -78,10 +78,10 @@ class Editor {
       .concat(this.$iframe_body.find('#step2-form').serializeArray())
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
     $.post(this.$task_manage_type.data('saveUrl'), postData)
-      .done((html) => {
+      .done((response) => {
         this.$element.modal('hide');
 
-        if (html && html.append && html.append == false) {
+        if (response && response.append !== undefined && response.append === false) {
           let data = $('#sortable-list').sortable("serialize").get();
           $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
             if (response) {
@@ -89,6 +89,7 @@ class Editor {
             }
           });
         }
+        let html = response;
         let chapterId = postData.find(function (input) {
           return input.name == 'chapterId';
         })
@@ -120,9 +121,9 @@ class Editor {
 
         let data = $('#sortable-list').sortable("serialize").get();
         $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
-          if (response) {
-            document.location.reload();
-          }
+          // if (response) {
+          //  // document.location.reload();
+          // }
         });
 
       })
