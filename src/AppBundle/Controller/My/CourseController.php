@@ -8,6 +8,7 @@ use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use AppBundle\Controller\CourseBaseController;
+use AppBundle\Controller\Course\CourseShowMetas;
 
 class CourseController extends CourseBaseController
 {
@@ -92,15 +93,14 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function showAction($id)
+    public function showAction($id, $tab = 'tasks')
     {
-        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
+        $metas = CourseShowMetas::getMemberCourseShowMetas();
+        $currentTab = $metas['tabs'][$tab];
 
-        return $this->render('course/overview-for-member.html.twig', array(
-            'courseSet'   => $courseSet,
-            'course'      => $course,
-            'courseItems' => $courseItems
+        return $this->render('course/my-course-show.html.twig', array(
+            'metas' => $metas,
+            'currentTab'=>$currentTab
         ));
     }
 

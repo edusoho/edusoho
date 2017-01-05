@@ -15,9 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseThreadController extends CourseBaseController
 {
-    public function indexAction(Request $request, $id)
+    public function indexAction(Request $request, $course)
     {
-        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         $filters    = $this->getThreadSearchFilters($request);
         $conditions = $this->convertFiltersToConditions($course, $filters);

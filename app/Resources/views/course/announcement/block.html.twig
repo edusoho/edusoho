@@ -1,5 +1,5 @@
-{% cache 'course-announcements-block/courseSetId/' ~ courseSetId ~ '/course/' ~ courseId 600 %}
-  {% set announcements = data('CourseAnnouncements',{courseSetId:courseSetId,courseId:courseId, count:10}) %}
+{% cache 'course-announcements-block/course/' ~ courseId 600 %}
+  {% set announcements = data('CourseAnnouncements',{courseId:courseId, count:10}) %}
   {% if announcements %}
     <div class="alert alert-warning announcements aside-notice" role="alert">
       <div class="swiper-container">
