@@ -467,7 +467,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $argument = $fields;
 
-        $tagIds   = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+        if (isset($fields['tagIds'])) {
+            $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+        }
 
         $course   = $this->getCourseDao()->getCourse($id);
 
@@ -490,7 +492,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
-        $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'tagIds' => $tagIds, 'userId' => $user['id']));
+        if (!isset($tagIds)) {
+            $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'userId' => $user['id']));
+        } else {
+            $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'tagIds' => $tagIds, 'userId' => $user['id']));
+        }
 
         return CourseSerialize::unserialize($updatedCourse);
     }
@@ -554,14 +560,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'orgCode'        => '',
             'orgId'          => ''
         ));
-
-        if (!empty($fields['tags'])) {
-            $fields['tags'] = explode(',', $fields['tags']);
-            $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
-            array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int) $item['id'];
-            });
-        }
 
         return $fields;
     }

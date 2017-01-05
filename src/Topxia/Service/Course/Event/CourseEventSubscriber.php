@@ -196,7 +196,6 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
         $argument  = $context['argument'];
         $course    = $context['course'];
-        $tagIds    = $context['tagIds'];
         $userId    = $context['userId'];
 
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
@@ -207,8 +206,8 @@ class CourseEventSubscriber implements EventSubscriberInterface
             }
         }
 
-        if (!empty($tagIds)) {
-            $tagOwnerManager = new TagOwnerManager('course', $course['id'], $tagIds, $userId);
+        if (isset($context['tagIds'])) {
+            $tagOwnerManager = new TagOwnerManager('course', $course['id'], $context['tagIds'], $userId);
             $tagOwnerManager->update();
         }
     }
