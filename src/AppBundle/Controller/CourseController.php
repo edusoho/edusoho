@@ -19,7 +19,7 @@ class CourseController extends CourseBaseController
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
-        return $this->render('course-set/overview.html.twig', array(
+        return $this->render('course/overview.html.twig', array(
             'courseSet'   => $courseSet,
             'course'      => $course,
             'courseItems' => $courseItems
@@ -72,7 +72,7 @@ class CourseController extends CourseBaseController
         $currentUser = $this->getCurrentUser();
         $likes       = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
         $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
-        return $this->render('course-set/note/notes.html.twig', array(
+        return $this->render('course/note/notes.html.twig', array(
             'course'      => $course,
             'courseSet'   => $courseSet,
             'notes'       => $notes,
@@ -109,7 +109,7 @@ class CourseController extends CourseBaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
 
-        return $this->render('course-set/review/list.html.twig', array(
+        return $this->render('course/review/list.html.twig', array(
             'courseSet'  => $courseSet,
             'course'     => $course,
             'reviews'    => $reviews,
@@ -152,7 +152,7 @@ class CourseController extends CourseBaseController
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
         $courseItems = $this->getCourseService()->findCourseItems($id);
 
-        return $this->render('course-set/task-list.html.twig', array(
+        return $this->render('course/task-list.html.twig', array(
             'course'      => $course,
             'courseSet'   => $courseSet,
             'courseItems' => $courseItems

@@ -22,7 +22,7 @@ class CourseSetManageController extends BaseController
         $user        = $this->getUser();
         $userProfile = $this->getUserService()->getUserProfile($user->getId());
         $user        = $this->getUserService()->getUser($user->getId());
-        return $this->render('course-set/create.html.twig', array(
+        return $this->render('course/create.html.twig', array(
             'user'        => $user,
             'userProfile' => $userProfile
         ));

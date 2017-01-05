@@ -76,7 +76,7 @@ class CourseController extends CourseBaseController
             $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
         }
 
-        return $this->render('course/header.html.twig', array(
+        return $this->render('course/part/header-for-member.html.twig', array(
             'courseSet'            => $courseSet,
             'courses'              => $courses,
             'course'               => $course,
@@ -97,7 +97,7 @@ class CourseController extends CourseBaseController
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
-        return $this->render('course-set/overview-for-member.html.twig', array(
+        return $this->render('course/overview-for-member.html.twig', array(
             'courseSet'   => $courseSet,
             'course'      => $course,
             'courseItems' => $courseItems
