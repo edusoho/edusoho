@@ -37,7 +37,7 @@
         <span>{{ course.ratingNum|default(0) }}人评价({{ course.studentNum|default(0) }}{{ '人学习'|trans }})</span>
       {% endif %}
     </div>
-    <div class="content">{{ course.about|raw|default('') }}</div>
+    <div class="content">{{ course.about|default('')|raw }}</div>
     {% if not is_open_course and course.lessons|default(null) %}
       <ul class="ul-lesson">
         {% for lesson in course.lessons|slice(0, 3) %}
