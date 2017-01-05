@@ -17,12 +17,12 @@ export default class QuestionOperate {
   }
 
   initSortList() {
-    console.log(this.$form);
-    this.$form.find('table').sortable({
-      containerSelector: 'table',
-      itemPath: '> tbody',
-      itemSelector: 'tr',
+    this.$form.find('tbody').sortable({
+      containerPath: '> tr',
+      containerSelector:'tbody',
+      itemSelector: 'tr.is-question',
       placeholder: '<tr class="placeholder"/>',
+      exclude: '.notMoveHandle',
       onDrop: (item, container, _super) => {
         _super(item, container);
         if (item.hasClass('have-sub-questions')) {
