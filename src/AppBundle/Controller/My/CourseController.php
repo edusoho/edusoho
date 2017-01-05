@@ -93,7 +93,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function showAction($id, $tab = 'summary')
+    public function showAction($id, $tab = 'tasks')
     {
         $metas = CourseShowMetas::getMemberCourseShowMetas();
         $currentTab = $metas['tabs'][$tab];

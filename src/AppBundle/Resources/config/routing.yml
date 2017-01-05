@@ -2521,4 +2521,4 @@ coupon_check:
 
 my_course_show:
     path:  /my/course/{id}/{tab}
-    defaults: { _controller: AppBundle:My/Course:show, tab: 'summary' }
+    defaults: { _controller: AppBundle:My/Course:show, tab: 'tasks' }
