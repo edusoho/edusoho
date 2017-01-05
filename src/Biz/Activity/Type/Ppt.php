@@ -1,11 +1,9 @@
 <?php
 
-
 namespace Biz\Activity\Type;
 
-
-use Biz\Activity\Config\Activity;
 use Topxia\Common\ArrayToolkit;
+use Biz\Activity\Config\Activity;
 
 class Ppt extends Activity
 {
@@ -20,7 +18,6 @@ class Ppt extends Activity
 
     protected function registerListeners()
     {
-
     }
 
     public function getMetas()
@@ -34,14 +31,14 @@ class Ppt extends Activity
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
-        $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
-        
-        if($ppt['finishType'] == 'time') {
+        $ppt      = $this->getPptActivityDao()->get($activity['mediaId']);
+
+        if ($ppt['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
             return !empty($result) && $result > $ppt['finishDetail'];
         }
 
-        if($ppt['finishType'] == 'end') {
+        if ($ppt['finishType'] == 'end') {
             $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finished');
             return !empty($result);
         }
@@ -64,12 +61,12 @@ class Ppt extends Activity
         return $ppt;
     }
 
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail',
+            'finishDetail'
         ));
 
         $updateFields['updatedTime'] = time();
@@ -100,5 +97,4 @@ class Ppt extends Activity
     {
         return $this->getBiz()->service("Activity:ActivityService");
     }
-
 }
