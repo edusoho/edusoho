@@ -50,9 +50,11 @@ class Editor {
   }
 
   _onPrev() {
-    if (this.step === 1 || !this._validator(this.step)) {
+    // 第二页可以上一步
+    if (this.step === 1 || (this.step == 3 && !this._validator(this.step))) {
       return;
     }
+
     this.step -= 1;
     this._switchPage();
   }
