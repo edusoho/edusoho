@@ -6,6 +6,5 @@
             data-url="{{ path('attachment_delete',{id:attachment.file.id, type:'file'}) }}" type="button"
             style="margin-top:13px" data-role="delte-item">{{'删除'|trans}}
     </button>
-    <a class="btn btn-link pull-right" style="margin-top:13px" href="#modal" data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.file.id}) }}">预览</a>
   {% endif %}
 </div>

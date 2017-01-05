@@ -3,11 +3,9 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
-use Topxia\Service\Common\ServiceKernel;
 
 class Audio extends Activity
 {
-
     /**
      * @inheritdoc
      */
@@ -23,7 +21,7 @@ class Audio extends Activity
     /**
      * @inheritdoc
      */
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
         $audioActivityFields = $fields['ext'];
 
@@ -43,7 +41,7 @@ class Audio extends Activity
         $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
         return !empty($result)
-            && $result > $activity['length'];
+        && $result > $activity['length'];
     }
 
     /**
