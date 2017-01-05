@@ -98,9 +98,10 @@ class CourseController extends CourseBaseController
         $metas = CourseShowMetas::getMemberCourseShowMetas();
         $currentTab = $metas['tabs'][$tab];
 
-        return $this->render('course/my-course-show.html.twig', array(
-            'metas' => $metas,
-            'currentTab'=>$currentTab
+        return $this->render('course/course-show.html.twig', array(
+            'metas'      => $metas,
+            'currentTab' => $currentTab,
+            'forMember'  => true
         ));
     }
 

@@ -17,7 +17,13 @@
 					  <ul class="nav nav-tabs" role="tablist">
 					  	{% for key, tab in metas.tabs %}
 						    <li role="presentation" class="{% if app.request.attributes.get('_route_params').tab|default('') == key %}active{% endif %}">
-						      <a href="{{ path('course_show', {'id': course.id, 'tab': key}) }}">
+						      <a 
+						      	{% if forMember|default(false) %}
+						      		href="{{ path('my_course_show', {'id': course.id, 'tab': key}) }}"
+						      	{% else %}
+						      		href="{{ path('course_show', {'id': course.id, 'tab': key}) }}"
+						      	{% endif %}
+						      >
 						      	{{tab.name}}
 						      	{% if tab.number|default(false) %}
 						      	<small class="text-muted">({{ course[tab.number]|default(0) }})</small>
