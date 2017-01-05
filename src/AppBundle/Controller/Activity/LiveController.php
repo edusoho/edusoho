@@ -153,6 +153,9 @@ class LiveController extends BaseController implements ActivityActionInterface
     {
         $format = 'Y-m-d H:i';
         if (isset($fields['startTime'])) {
+            if ($fields['startTime'] <= time()) {
+                $fields['timeDisabled'] = 1;
+            }
             $fields['startTime'] = date($format, $fields['startTime']);
         }
         if (isset($fields['endTime'])) {

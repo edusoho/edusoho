@@ -26,7 +26,6 @@ class Download extends Activity
             //2. created file
             $files = $that->parseDownloadFiles($downloadActivity['id'], $materials);
 
-            var_dump($files);
             foreach ($files as $file) {
                 $that->getDownloadFileDao()->create($file);
             }
@@ -38,9 +37,8 @@ class Download extends Activity
     /**
      * @inheritdoc
      */
-    public function update($id, $fields)
+    public function update($id, &$fields, $activity)
     {
-
         $materials = json_decode($fields['materials'], true);
 
         $existMaterials = $this->getDownloadFileDao()->findByDownloadActivityId($id);
@@ -48,7 +46,7 @@ class Download extends Activity
 
         $downloadActivity = $this->getDownloadActivityDao()->get($id);
 
-        $that = $this;
+        $that  = $this;
         $files = $this->parseDownloadFiles($id, $materials);
 
         $dropMaterials   = array_diff_key($existMaterials, $files);
@@ -111,7 +109,7 @@ class Download extends Activity
                 //FIXME undefined index: size
                 // 'fileSize'           => $material['size'],
                 'indicate'           => intval($material['id']),
-                'summary'            => empty($material['summary'])? null : $material['summary']
+                'summary'            => empty($material['summary']) ? null : $material['summary']
             );
             if (intval($material['id']) == 0) {
                 $file['link']     = $material['link'];

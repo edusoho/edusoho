@@ -38,7 +38,8 @@ class Live {
         length: {
           required: true,
           digits: true,
-          max: 300
+          max: 300,
+          min: 1
         },
         remark: {
           maxlength: 1000

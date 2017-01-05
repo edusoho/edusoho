@@ -107,6 +107,16 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function createItem($fields)
     {
+        $fields = ArrayToolkit::parts($fields, array(
+            'testId',
+            'seq',
+            'questionId',
+            'questionType',
+            'parentId',
+            'score',
+            'missScore'
+        ));
+
         return $this->getItemDao()->create($fields);
     }
 

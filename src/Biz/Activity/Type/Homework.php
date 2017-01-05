@@ -25,7 +25,7 @@ class Homework extends Activity
         return $this->getTestpaperService()->buildTestpaper($fields, 'homework');
     }
 
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
         $homework = $this->get($targetId);
 

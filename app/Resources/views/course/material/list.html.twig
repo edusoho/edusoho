@@ -1,4 +1,4 @@
-{% extends 'course-set/layout.html.twig' %}
+{% extends 'course/layout.html.twig' %}
 
 {% set nav = 'material' %}
 
@@ -6,11 +6,12 @@
 
   <ul class="media-list">
     {% for material in materials %}
-      {% set lesson = lessons[material.lessonId]|default(null) %}
+      {% set task = tasks[material.lessonId]|default(null) %}
+
       <li class="media">
         <div class="media-body">
           <div class="mbs">
-            {% if lesson and lesson.status != 'published' %}
+            {% if task and task.status != 'published' %}
               {{ material.title }} <span class="text-muted text-sm">({{'课时未发布，不能下载该资料'|trans}})</span>
             {% else %}
               {% if material.link %}
@@ -33,8 +34,8 @@
               <span class="text-muted">{{ material.fileSize|file_size }}</span>
               <span class="bullet">•</span>
             {% endif %}
-            {% if lesson %}
-              <a class="link-muted" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{lesson.id}}" title="{{ lesson.title }}">{{'课时%number%'|trans({'%number%': lesson.number })}}</a>
+            {% if task %}
+              <a class="link-muted" href="{{ path('course_task_show', {courseId:course.id, id:task.id }) }}" title="{{ task.title }}">{{'任务%number%'|trans({'%number%': task.number })}}</a>
               <span class="bullet">•</span>
             {% endif %}
             <span class="text-muted">{{'上传于'|trans}}{{ material.createdTime|smart_time }}</span>

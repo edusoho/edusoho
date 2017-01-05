@@ -4,9 +4,8 @@ namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class CloudFileController extends BaseController
 {
@@ -168,7 +167,7 @@ class CloudFileController extends BaseController
             $materials = $this->getCourseMaterialService()->findUsedCourseMaterials($fileIds, $courseId = 0);
         }
 
-        return $this->render('MaterialLibBundle:Web:delete-file-modal.html.twig', array(
+        return $this->render('material-lib/Web/delete-file-modal.html.twig', array(
             'materials'     => $materials,
             'files'         => $files,
             'ids'           => $globalIds,

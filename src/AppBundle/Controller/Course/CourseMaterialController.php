@@ -19,7 +19,7 @@ class CourseMaterialController extends CourseBaseController
         $conditions = array(
             'courseId'        => $id,
             'excludeLessonId' => 0,
-            'source'          => 'courseactivity',
+            'source'          => 'coursematerial',
             'type'            => 'course'
         );
 
@@ -37,7 +37,7 @@ class CourseMaterialController extends CourseBaseController
         );
 
         $tasks = $this->getTaskService()->search(array('courseId' => $id, 'type' => 'download'), array(), 0, 100);
-        $tasks = ArrayToolkit::index($tasks, 'id');
+        $tasks = ArrayToolkit::index($tasks, 'activityId');
 
         return $this->render("course/material/list.html.twig", array(
             'courseSet' => $courseSet,
