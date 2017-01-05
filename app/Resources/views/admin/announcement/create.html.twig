@@ -9,7 +9,8 @@
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="title">{{'公告内容'|trans}}</label>
+      <label for="title">{{'公告内容'|trans}}<i class="color-danger ml5">*</i></label>
+      
     </div>
     <div class="col-md-8 controls">
       <input type="text" id="title"  name="content" class="form-control" value="{% if announcement|default(null) %}{{announcement.content}}{% endif %}">
