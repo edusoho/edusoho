@@ -14,7 +14,6 @@
       [{{ dict('courseType')[courseSet.type] }}]
     {% endif %}
     <a class="link-dark" href="{{basepath}}">{{ courseSet.title }}</a>
-    {{dump(courseSet.status)}}
     {% if courseSet.status=='closed' %}
       <span class="label label-danger ">{{'已关闭'|trans}}</span>
     {% elseif courseSet.status=='draft' %}
