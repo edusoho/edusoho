@@ -75,7 +75,7 @@ class LiveController extends BaseController implements ActivityActionInterface
 
         $params = array();
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
-            $teachers = $this->getCourseService()->findCourseTeachers($courseId);
+            $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
             $teacher  = array_shift($teachers);
 
             if ($teacher['userId'] == $user['id']) {
@@ -91,7 +91,7 @@ class LiveController extends BaseController implements ActivityActionInterface
 
         $params['id']       = $user['id'];
         $params['nickname'] = $user['nickname'];
-        return $this->forward('WebBundle:Liveroom:_entry', array(
+        return $this->forward('AppBundle:Liveroom:_entry', array(
             'roomId'     => $activity['ext']['liveId'],
             'courseId'   => $courseId,
             'activityId' => $activityId
