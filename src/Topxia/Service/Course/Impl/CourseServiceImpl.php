@@ -492,10 +492,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
-        if (!isset($tagIds)) {
-            $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'userId' => $user['id']));
+        if (isset($tagIds)) {
+            $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'tagIds' => $tagIds,'userId' => $user['id']));
         } else {
-            $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'tagIds' => $tagIds, 'userId' => $user['id']));
+            $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'userId' => $user['id']));
         }
 
         return CourseSerialize::unserialize($updatedCourse);

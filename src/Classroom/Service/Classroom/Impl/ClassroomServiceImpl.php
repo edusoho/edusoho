@@ -204,10 +204,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields    = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
 
-        if (!isset($tagIds)) {
-            $this->dispatchEvent('classroom.update', new ServiceEvent(array('userId' => $user['id'], 'classroomId' => $id)));
-        } else {
+        if (isset($tagIds)) {
             $this->dispatchEvent('classroom.update', new ServiceEvent(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds)));
+        } else {
+            $this->dispatchEvent('classroom.update', new ServiceEvent(array('userId' => $user['id'], 'classroomId' => $id)));
         }
 
         return $classroom;
