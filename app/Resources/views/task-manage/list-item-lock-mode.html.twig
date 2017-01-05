@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 {% set file =  files[task.activityId]|default(null) %}
+>>>>>>> feature/x8-migrate
 <li class="task-manage-item js-task-manage-item drag clearfix " id="task-{{ task.id }}">
   <div class="item-line"></div>
   <div class="item-content  js-item-content text-overflow">
@@ -40,26 +43,26 @@
           aria-labelledby="dLabel" style="display:none;">
          {% if task.status|default('create') != 'published' %}
            <li>
-          <a class='publish-item' href="javascript:;" data-type="task"
-             data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
-             <i class="es-icon es-icon--check-circle mrs"></i>发布
-           </a>
-        </li>
+              <a class='publish-item' href="javascript:;" data-type="task"
+                 data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
+                 <i class="es-icon es-icon--check-circle mrs"></i>发布
+               </a>
+            </li>
+           <li>
+            <a class='delete-item' href="javascript:;" data-type="task"
+               data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
+              <i class="es-icon es-icon-delete mrs"></i>
+              删除
+            </a>
+          </li>
         {% else %}
            <li>
-          <a class='unpublish-item' href="javascript:;" data-type="task"
-             data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">
-             <i class="es-icon es-icon-close01 mrm"></i>取消发布
-           </a>
-        </li>
+              <a class='unpublish-item' href="javascript:;" data-type="task"
+                 data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">
+                 <i class="es-icon es-icon-close01 mrm"></i>取消发布
+               </a>
+            </li>
          {% endif %}
-        <li>
-          <a class='delete-item' href="javascript:;" data-type="task"
-             data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
-            <i class="es-icon es-icon-delete mrs"></i>
-            删除
-          </a>
-        </li>
       </ul>
     </span>
   </div>

@@ -11,6 +11,10 @@ class LiveroomController extends BaseController
         $user           = $request->query->all();
         $user['device'] = $this->getDevice($request);
 
+        if ($request->isSecure()) {
+            $user['protocol'] = 'https';
+        }
+
         $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $user);
 
         return $this->render("activity/live/entry.html.twig", array(

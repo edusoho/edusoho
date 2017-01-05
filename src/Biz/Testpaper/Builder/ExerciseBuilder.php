@@ -72,7 +72,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
                 $conditions,
                 array('createdTime' => 'DESC'),
                 0,
-                $exercise['itemCount']
+                $count
             );
             shuffle($questions);
 

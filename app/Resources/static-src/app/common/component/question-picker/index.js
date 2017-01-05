@@ -75,6 +75,6 @@ export default class QuestionPicker {
           seq ++;
       }
     });
-    this.$questionAppendForm.find('[name="questionLength"]').val(seq > 0 ? seq : null );
+    this.$questionAppendForm.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1) : null );
   }
 }

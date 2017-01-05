@@ -57,19 +57,19 @@
         validator.addItem({
             element: '[name="profile[weibo]"]',
             rule: 'url',
-            errormessageUrl: Translator.trans(Translator.trans('微博地址不正确，须以http://开头。'))
+            errormessageUrl: Translator.trans(Translator.trans('微博地址不正确，须以http://或者https://开头。'))
         });
 
         validator.addItem({
             element: '[name="profile[blog]"]',
             rule: 'url',
-            errormessageUrl: Translator.trans('博客地址不正确，须以http://开头。')
+            errormessageUrl: Translator.trans('博客地址不正确，须以http://或者https://开头。')
         });
 
         validator.addItem({
             element: '[name="profile[site]"]',
             rule: 'url',
-            errormessageUrl: Translator.trans('个人空间地址不正确，须以http://开头。')
+            errormessageUrl: Translator.trans('个人空间地址不正确，须以http://或者https://开头。')
         });
 
         validator.addItem({

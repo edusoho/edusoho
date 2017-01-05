@@ -87,14 +87,16 @@ export default class QuestionOperate {
   }
 
   refreshSeqs() {
-    var seq = 1;
+    let seq = 1;
     this.$form.find("tbody tr").each(function(){
-      var $tr = $(this);
+      let $tr = $(this);
                   
       if (!$tr.hasClass('have-sub-questions')) { 
         $tr.find('td.seq').html(seq);
-          seq ++;
+        seq ++;
       }
-    });         
+    });  
+
+    this.$form.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1 ) : null );       
   }
 }

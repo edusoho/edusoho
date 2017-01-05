@@ -1918,10 +1918,10 @@ admin_edu_cloud_sms_no_message:
     defaults: { _controller: AppBundle:Admin/EduCloud:smsNoMessage }
     permissions: [admin_edu_cloud_sms_overview]
 
-#admin_edu_cloud_email:
-#    path: /edu_cloud/email/overview
-#    defaults: { _controller: AppBundle:Admin/EduCloud:emailOverview }
-#    permissions: [admin_edu_cloud_email_overview]
+admin_edu_cloud_email:
+    path: /edu_cloud/email/overview
+    defaults: { _controller: AppBundle:Admin/EduCloud:emailOverview }
+    permissions: [admin_edu_cloud_email_overview]
 
 #admin_edu_cloud_email_setting:
 #    path: /edu_cloud/email/setting

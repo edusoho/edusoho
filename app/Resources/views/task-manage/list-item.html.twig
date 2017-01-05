@@ -44,13 +44,12 @@
                <i class="es-icon es-icon--check-circle mrm"></i>发布
              </a>
           </li>
-        {% endif %}
-
-        <li>
+          <li>
           <a class='delete-item' href="javascript:;" data-type="task"data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
             <i class="es-icon es-icon-delete mrm"></i>删除
           </a>
         </li>
+        {% endif %}
       </ul>
     </span>
   </div>

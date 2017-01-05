@@ -103,7 +103,7 @@ class CloudController extends BaseController
     public function buyAction(Request $request, $type)
     {
         $params = array('type' => $type);
-        return $this->redirectUrl('edu_cloud_buy', $params);
+        return $this->redirectUrl('edu_cloud_buy_custom', $params);
     }
 
     public function videoDetailAction()
