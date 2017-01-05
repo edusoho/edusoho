@@ -108,9 +108,14 @@ export const unpublishTask = () => {
 
 export const showSettings = () => {
   $("#sortable-list").on('click', '.js-item-content', event => {
-    var $this = $(event.currentTarget).closest('.js-task-manage-item');
-    $this.siblings(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').slideToggle();
-    $this.addClass('active').find('.js-settings-list').slideToggle();
+    let $list = $(event.delegateTarget);
+    let $this = $(event.currentTarget).closest('.js-task-manage-item');
+    if($this.hasClass('active')) {
+      $this.removeClass('active').find('.js-settings-list').slideUp();
+    }else {
+      $list.find(".js-task-manage-item.active").removeClass('active').find('.js-settings-list').slideUp();
+      $this.addClass('active').find('.js-settings-list').slideDown();
+    }
   });
 }
 

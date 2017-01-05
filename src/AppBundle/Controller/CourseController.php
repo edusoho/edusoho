@@ -19,7 +19,7 @@ class CourseController extends CourseBaseController
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
-        return $this->render('course-set/overview.html.twig', array(
+        return $this->render('course/overview.html.twig', array(
             'courseSet'   => $courseSet,
             'course'      => $course,
             'courseItems' => $courseItems
@@ -183,7 +183,7 @@ class CourseController extends CourseBaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
 
-        return $this->render('course-set/review/list.html.twig', array(
+        return $this->render('course/review/list.html.twig', array(
             'courseSet'  => $courseSet,
             'course'     => $course,
             'reviews'    => $reviews,
@@ -226,7 +226,7 @@ class CourseController extends CourseBaseController
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
         $courseItems = $this->getCourseService()->findCourseItems($id);
 
-        return $this->render('course-set/task-list.html.twig', array(
+        return $this->render('course/task-list.html.twig', array(
             'course'      => $course,
             'courseSet'   => $courseSet,
             'courseItems' => $courseItems
@@ -317,7 +317,7 @@ class CourseController extends CourseBaseController
             throw $this->createNotFoundException($this->getServiceKernel()->trans('课程不存在，或已删除。'));
         }
 
-        return $this->render('TopxiaWebBundle:Course:course-order.html.twig', array('order' => $order, 'course' => $course));
+        return $this->render('course/course-order.html.twig', array('order' => $order, 'course' => $course));
     }
 
     public function qrcodeAction(Request $request, $id)
