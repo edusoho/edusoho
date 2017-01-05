@@ -67,12 +67,15 @@ tr.placeholder:before {
         {% for type,count in testpaper['metas']['counts'] if count > 0 %}
           <tbody data-type="{{ type }}" id="testpaper-items-{{ type }}" class="testpaper-table-tbody {% if loop.index != 1 %}hide{% endif %}" data-role="question-body">
             {% for question in questions[type]|default(null) if question %}
-              {% include 'question-manage/question-picked-tr.html.twig' %}
-              {% if question.subs|default(null) %}
-                {% for question in question.subs %}
-                  {% include 'question-manage/question-picked-tr.html.twig' %}
-                {% endfor %}
+              {% if not question.isDeleted|default(null) %}
+                {% include 'question-manage/question-picked-tr.html.twig' %}
+                {% if question.subs|default(null) %}
+                  {% for question in question.subs %}
+                    {% include 'question-manage/question-picked-tr.html.twig' %}
+                  {% endfor %}
+                {% endif %}
               {% endif %}
+              
             {% endfor %}
           </tbody>
         {% endfor %}

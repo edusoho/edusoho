@@ -33,7 +33,6 @@ class TestpaperForm{
       }
     }
     if(this.scoreSlider) {
-      console.log('test');
       this.scoreSlider.updateOptions(option);
     }else {
       this.scoreSlider = noUiSlider.create(scoreSlider,option);
@@ -178,7 +177,7 @@ class TestpaperForm{
       element:'#testpaper-question-options',
       itemSelector:'.testpaper-question-option-item',
       handle: '.question-type-sort-handler',
-      isAjax:false
+      ajax:false
     });
   }
 
