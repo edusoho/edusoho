@@ -32,7 +32,7 @@
 
     <li role="presentation" class="{% if nav|default('') == 'material' %}active{% endif %}">
       <a href="{{ path('course_materials', { id: course.id }) }}">
-        下载区
+        资料区
         <small class="text-muted">({{ course.materialNum|default(0) }})</small>
       </a>
     </li>
