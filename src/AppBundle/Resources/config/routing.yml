@@ -2527,6 +2527,6 @@ coupon_check:
     path:  /{type}/{id}/coupon/check
     defaults: { _controller: AppBundle:Order:couponCheck }
 
-my_course:
+my_course_show:
     path:  /my/course/{id}
     defaults: { _controller: AppBundle:My/Course:show }
