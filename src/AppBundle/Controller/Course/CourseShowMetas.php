@@ -5,19 +5,35 @@ class CourseShowMetas
 {
 	public static function getMemberCourseShowMetas()
 	{
+		$metas = CourseShowMetas::getGuestCourseShowMetas();
 		return array(
 			'header' => 'AppBundle:My/Course:headerForMember',
 			'tabs'	=> array(
-				'courseSummary' => array(
-					'name' => '课程介绍', 
-					'path' => 'course_show'
+				'courseItems' => array(
+					'name' => '课程目录', 
+					'path' => 'course_task_list'
+				),
+				'courseThreads' => array(
+					'name' 		=> '话题', 
+					'path' 		=> 'course_threads',
+					'number'	=> 'threadNum'
+				),
+				'courseReviews' => array(
+					'name' => '评价', 
+					'path' => 'course_review',
+					'number'	=> 'reviewNum'
+				),
+				'courseNotes' => array(
+					'name' => '笔记',
+					'path' => 'course_notes',
+					'number'	=> 'noteNum'
 				),
 				'courseSummary' => array(
 					'name' => '课程介绍', 
 					'path' => 'course_show'
-				)
+				),
 			),
-			'widgets' => CourseShowMetas::getGuestCourseShowMetas(),
+			'widgets' => $metas['widgets'],
 		);
 	}
 
