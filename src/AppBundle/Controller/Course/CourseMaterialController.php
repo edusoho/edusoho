@@ -1,16 +1,16 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller\Course;
 
+use AppBundle\Controller\CourseBaseController;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class CourseMaterialController extends CourseBaseController
 {
     public function indexAction(Request $request, $id)
     {
-        list($course, $member, $response) = $this->buildLayoutDataWithTakenAccess($request, $id);
+        list($courseSet, $course, $member, $response) = $this->tryBuildCourseLayoutData($request, $id);
 
         if ($response) {
             return $response;
@@ -31,18 +31,19 @@ class CourseMaterialController extends CourseBaseController
 
         $materials = $this->getMaterialService()->searchMaterials(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime'=> 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $lessons = $this->getCourseService()->getCourseLessons($course['id']);
-        $lessons = ArrayToolkit::index($lessons, 'id');
+        $tasks = $this->getTaskService()->search(array('courseId' => $id, 'type' => 'download'), array(), 0, 100);
+        $tasks = ArrayToolkit::index($tasks, 'activityId');
 
-        return $this->render("TopxiaWebBundle:CourseMaterial:index.html.twig", array(
+        return $this->render("course/material/list.html.twig", array(
+            'courseSet' => $courseSet,
             'course'    => $course,
             'member'    => $member,
-            'lessons'   => $lessons,
+            'tasks'     => $tasks,
             'materials' => $materials,
             'paginator' => $paginator
         ));
@@ -57,17 +58,19 @@ class CourseMaterialController extends CourseBaseController
         }
 
         if ($member && $member['levelId'] > 0) {
-            if(empty($course['vipLevelId'])) {
+            if (empty($course['vipLevelId'])) {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
-            } elseif (empty($course['parentId']) 
+            } elseif (empty($course['parentId'])
                 && $this->isVipPluginEnabled()
-                && $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
+                && $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok'
+            ) {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
             } elseif (!empty($course['parentId'])) {
-                $classroom        = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-                if(!empty($classroom) 
+                $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+                if (!empty($classroom)
                     && $this->isVipPluginEnabled()
-                    && $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']) != 'ok') {
+                    && $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']) != 'ok'
+                ) {
                     return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
                 }
             }
@@ -83,7 +86,7 @@ class CourseMaterialController extends CourseBaseController
             return $this->createMessageResponse('error', $this->trans('无权下载该资料'));
         }
 
-        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
+        return $this->forward('AppBundle:UploadFile:download', array('fileId' => $material['fileId']));
     }
 
     public function deleteAction(Request $request, $id, $materialId)
@@ -101,26 +104,31 @@ class CourseMaterialController extends CourseBaseController
 
     protected function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course:MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+        return $this->createService('Vip:Vip.VipService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getCourseMemberService()
     {
-        return ServiceKernel::instance()->createService('Course:MemberService');
+        return $this->createService('Course:MemberService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }

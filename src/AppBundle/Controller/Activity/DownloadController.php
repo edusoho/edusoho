@@ -12,7 +12,7 @@ class DownloadController extends BaseController implements ActivityActionInterfa
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity             = $this->getActivityService()->getActivityFetchMedia($id);
+        $activity             = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
         $activity['courseId'] = $courseId;
 
         return $this->render('activity/download/show.html.twig', array(
@@ -23,7 +23,7 @@ class DownloadController extends BaseController implements ActivityActionInterfa
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity  = $this->getActivityService()->getActivityFetchMedia($id);
+        $activity  = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
         $materials = array();
 
         foreach ($activity['ext']['materials'] as $media) {
