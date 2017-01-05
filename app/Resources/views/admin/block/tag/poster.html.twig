@@ -78,7 +78,7 @@
 
         <div class="col-sm-10">
           <input type="text" class="form-control width-input-large" name="data[{{ code }}][{{ dataId }}][href]"
-                 id="data[{{ code }}][{{ dataId }}][href]" placeholder="http://" value="{{ data.href }}">
+                 id="data[{{ code }}][{{ dataId }}][href]" placeholder="{{ app.request.getScheme() }}://" value="{{ data.href }}">
         </div>
       </div>
     </div>

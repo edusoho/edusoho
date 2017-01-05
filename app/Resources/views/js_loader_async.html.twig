@@ -3,8 +3,8 @@
   (function() {
     var paths = [
       {% for path in script() %}
-        {% if path starts with 'http' %}
-          {% if 'js-sdk/uploader' in path %}
+        {% if '//' in path %}
+          {% if 'js-sdk' in path %}
             "{{ path ~ '?' ~ random(date().timestamp / 1000) }}",
           {% else %}
             "{{ path ~ '?' ~ asset_version('')}}",

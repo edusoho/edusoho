@@ -40,4 +40,13 @@ interface AppClient
      */
     public function getLoginToken();
 
+    /**
+     * 获取应用状态
+     *
+     * @param $code
+     *
+     * @return mixed
+     */
+    public function getAppStatusByCode($code);
+
 }

@@ -1,4 +1,5 @@
 import notify from 'common/notify';
+import { passedDivShow } from '../question-passed'
 
 export default class QuestionOperate {
   constructor($form, $modal) {
@@ -16,6 +17,7 @@ export default class QuestionOperate {
   }
 
   initSortList() {
+    console.log(this.$form);
     this.$form.find('table').sortable({
       containerSelector: 'table',
       itemPath: '> tbody',
@@ -30,7 +32,7 @@ export default class QuestionOperate {
                 $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
             });
         }
-        this.refreshSeqs(this.$form.find("tbody:visible"));
+        this.refreshSeqs();
       }
     });
   }
@@ -51,12 +53,14 @@ export default class QuestionOperate {
   }
 
   deleteQuestion(event) {
+    event.preventDefault();
     let $target = $(event.currentTarget);
     let id = $target.closest('tr').data('id');
     let $tbody =  $target.closest('tbody');
     $tbody.find('[data-parent-id="'+id+'"]').remove();
     $target.closest('tr').remove();
-    this.refreshSeqs($tbody);
+    passedDivShow(this.$form);
+    this.refreshSeqs();
   }
 
   batchDelete(event) {
@@ -74,8 +78,7 @@ export default class QuestionOperate {
       $(this).closest('tr').remove();
       
     })
-
-    this.refreshSeqs(this.$form.find("tbody:visible"));
+    passedDivShow(this.$form);
   }
 
   previewQuestion(event) {
@@ -83,12 +86,17 @@ export default class QuestionOperate {
     window.open($(event.currentTarget).data('url'), '_blank', "directories=0,height=580,width=820,scrollbars=1,toolbar=0,status=0,menubar=0,location=0");
   }
 
-  refreshSeqs($tbody) {
-    let $tr = $tbody.find('tr');
-    $tr.each(function(index,item) {
-      let $tr = $(item);
-      $tr.find('td.seq').html(index+1);
-    });
-    this.$form.find('[name="questionLength"]').val($tr.length > 0 ? $tr.length : null );
+  refreshSeqs() {
+    let seq = 1;
+    this.$form.find("tbody tr").each(function(){
+      let $tr = $(this);
+                  
+      if (!$tr.hasClass('have-sub-questions')) { 
+        $tr.find('td.seq').html(seq);
+        seq ++;
+      }
+    });  
+
+    this.$form.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1 ) : null );       
   }
 }

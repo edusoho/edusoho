@@ -57,7 +57,7 @@ class BaseController extends Controller
         return $user;
     }
 
-    protected function authenticateUser($user)
+    protected function authenticateUser(array $user)
     {
         $user['currentIp'] = $this->container->get('request_stack')->getCurrentRequest()->getClientIp();
         $currentUser       = new CurrentUser();

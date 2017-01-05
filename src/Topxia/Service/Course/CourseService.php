@@ -297,7 +297,7 @@ interface CourseService
 
     public function generateLessonVideoReplay($courseId, $lessonId, $fileId);
 
-    public function entryReplay($lessonId, $courseLessonReplayId);
+    public function entryReplay($lessonId, $courseLessonReplayId, $ssl = false);
 
     public function getCourseLessonReplayByLessonId($lessonId, $lessonType);
 

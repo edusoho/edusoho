@@ -186,7 +186,7 @@ uploader_init:
 uploader_auth:
     path:  /uploader/auth
     defaults: { _controller: AppBundle:Uploader:uploadAuth }
-    methods: [POST]
+    methods: [GET, POST, OPTIONS]
 
 uploader_batch_uplod:
     path:  /uploader/batch_upload

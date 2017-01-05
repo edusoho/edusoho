@@ -7,7 +7,7 @@
 {% block course %}
   {% do script(['libs/jquery-sortable.js','app/js/course-manage/index.js']) %}
   <div class="task-list-header clearfix">
-    任务总数：<span class="color-warning space">{{ tasks|length }}</span>  {% if taskPerDay|default(false) %}日均约需完成：<span class="color-warning">{{ taskPerDay }}</span> 个任务{% endif %}
+    任务总数：<span class="color-warning space">{{ taskNum }}</span>  {% if taskPerDay|default(false) %}日均约需完成：<span class="color-warning">{{ taskPerDay }}</span> 个任务{% endif %}
     <div class="pull-right">
       <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
         <i class="es-icon es-icon-anonymous-iconfont"></i>
