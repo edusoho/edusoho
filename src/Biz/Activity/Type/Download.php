@@ -25,7 +25,6 @@ class Download extends Activity
             //2. created file
             $files = $that->parseDownloadFiles($downloadActivity['id'], $materials);
 
-            var_dump($files);
             foreach ($files as $file) {
                 $that->getDownloadFileDao()->create($file);
             }

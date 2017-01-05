@@ -21,20 +21,32 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function createTask($fields)
     {
-        $strategy = $this->createCourseStrategy($fields['fromCourseId']);
-
-        $task = $strategy->createTask($fields);
-
-        $this->biz['dispatcher']->dispatch("course.task.create", new Event($task));
-        return $task;
+        $this->beginTransaction();
+        try{
+            $strategy = $this->createCourseStrategy($fields['fromCourseId']);
+            $task = $strategy->createTask($fields);
+            $this->dispatchEvent("course.task.create", new Event($task));
+            $this->commit();
+            return $task;
+        }catch (\Exception $exception){
+            $this->rollback();
+            throw $exception;
+        }
     }
 
     public function updateTask($id, $fields)
     {
-        $task     = $this->getTask($id);
-        $strategy = $this->createCourseStrategy($task['courseId']);
-        $task     = $strategy->updateTask($id, $fields);
-        return $task;
+        $this->beginTransaction();
+        try{
+            $task     = $this->getTask($id);
+            $strategy = $this->createCourseStrategy($task['courseId']);
+            $task     = $strategy->updateTask($id, $fields);
+            $this->commit();
+            return $task;
+        } catch (\Exception $exception){
+            $this->rollback();
+            throw $exception;
+        }
     }
 
     public function publishTask($id)
