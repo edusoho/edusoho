@@ -11,6 +11,9 @@ use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class StrategyContext
 {
+    const DEFAULT_STRATEGY = 1;
+    const PLAN_STRATEGY = 0;
+
     private $strategy = null;
 
     private static $_instance = NULL;
@@ -37,10 +40,10 @@ class StrategyContext
     public function createStrategy($strategyType, $biz)
     {
         switch ($strategyType) {
-            case 0:
+            case self::PLAN_STRATEGY:
                 $this->strategy = new PlanStrategy($biz);
                 break;
-            case 1:
+            case self::DEFAULT_STRATEGY :
                 $this->strategy = new DefaultStrategy($biz);
                 break;
             default:

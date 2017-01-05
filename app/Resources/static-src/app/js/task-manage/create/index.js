@@ -88,6 +88,7 @@ class Editor {
             }
           });
         }
+
         let html = response;
         let chapterId = postData.find(function (input) {
           return input.name == 'chapterId';
@@ -102,7 +103,6 @@ class Editor {
               $(this).before(html);
               add = 1;
               return false;
-
             }
             if ($parent.hasClass('task-manage-unit') && $(this).hasClass('task-manage-unit')) {
               $(this).before(html);
@@ -119,16 +119,11 @@ class Editor {
         }
 
         let data = $('#sortable-list').sortable("serialize").get();
-        $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
-          // if (response) {
-          //  // document.location.reload();
-          // }
-        });
-
+        $.post($('#sortable-list').data('sortUrl'), {ids: data});
       })
       .fail((response) => {
-        var msg = '';
-        var errorResponse = JSON.parse(response.responseText);
+        let msg = '';
+        let errorResponse = JSON.parse(response.responseText);
         if (errorResponse.error && errorResponse.error.message) {
           msg = errorResponse.error.message;
         }

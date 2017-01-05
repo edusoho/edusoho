@@ -517,6 +517,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $fields  = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
+
         $chapter = $this->getChapterDao()->update($chapterId, $fields);
 
         return $chapter;
