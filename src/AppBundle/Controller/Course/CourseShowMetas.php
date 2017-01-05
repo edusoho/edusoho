@@ -68,11 +68,11 @@ class CourseShowMetas
 			),
 			'widgets' => array(
 				'characteristic' => array(
-					'uri' => 'AppBundle:Course:characteristicPart',
+					'uri' => 'AppBundle:Course:characteristic',
 					'type' => 'render'
 				),
 				'otherCourse' => array(
-					'uri' => 'AppBundle:Course:otherCoursePart',
+					'uri' => 'AppBundle:Course:otherCourse',
 					'type' => 'render'
 				),
 				'recommendClassroom' => array(
@@ -80,11 +80,11 @@ class CourseShowMetas
 					'type' => 'include'
 				),
         		'teachers' => array(
-        			'uri' => 'AppBundle:Course:teachersPart',
+        			'uri' => 'AppBundle:Course:teachers',
 					'type' => 'render'
         		),
 				'newestStudents' => array(
-					'uri' => 'AppBundle:Course:newestStudentsPart',
+					'uri' => 'AppBundle:Course:newestStudents',
 					'type' => 'render'
 				),
 				'studentActivity' => array(

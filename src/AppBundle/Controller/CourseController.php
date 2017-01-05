@@ -152,7 +152,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function characteristicPartAction(Request $request, $id)
+    public function characteristicAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
 
@@ -180,7 +180,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function otherCoursePartAction(Request $request, $id)
+    public function otherCourseAction(Request $request, $id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
 
@@ -192,7 +192,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function teachersPartAction(Request $request, $id)
+    public function teachersAction(Request $request, $id)
     {
         list(, $course) = $this->tryGetCourseSetAndCourse($id);
 
@@ -203,7 +203,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function newestStudentsPartAction(Request $request, $id)
+    public function newestStudentsAction(Request $request, $id)
     {
         list(, $course) = $this->tryGetCourseSetAndCourse($id);
 
