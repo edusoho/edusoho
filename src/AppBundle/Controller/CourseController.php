@@ -239,7 +239,7 @@ class CourseController extends CourseBaseController
             throw $this->createNotFoundException('课程不存在，或已删除。');
         }
 
-        return $this->render('course/course-order.html.twig', array('order' => $order, 'course' => $course));
+        return $this->render('course/widget/course-order.html.twig', array('order' => $order, 'course' => $course));
     }
 
     public function qrcodeAction(Request $request, $id)
