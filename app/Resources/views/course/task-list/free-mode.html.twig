@@ -9,7 +9,7 @@
         </li>
       {% elseif item.type == 'unit' %}
         <li class="task-item color-gray bg-gray-lighter">
-          <span class="text-overflow title" >第{{ item.number }}
+          <span class="text-overflow title">第{{ item.number }}
             节：{{ item.title }}</span>
           <i class="right-menu es-icon es-icon es-icon-remove"></i>
         </li>
@@ -28,18 +28,34 @@
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu"></i>
-            <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
-              {% if task.isFree %}  <span class="label label-warning mr10">免费</span> {% endif %}
-              课时{{task.number }}：{{ task.title }}
-            </a>
+            {% if task.status == 'published' %}
+              <a class="text-overflow title"
+                 href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+                {% if task.isFree %}  <span class="label label-warning mr10">免费</span> {% endif %}
+                课时{{ task.number }}：{{ task.title }}
+              </a>
+            {% else %}
+              <span class="text-overflow title">
+            {% if task.isFree %}
+              <span class="label label-warning mr10">免费</span> {% endif %}
+                课时{{ task.number }}：{{ task.title }}
+              </span>
+            {% endif %}
+
             <span class="right-menu mouse-leave">
               {{ task.activity.length|default(0)|activity_length_format }}
               {% set meta =  activity_meta(task.activity.mediaType) %}
-              <i class="es-icon es-icon {{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ meta.name }}任务"></i>
+              <i class="es-icon es-icon {{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title=""
+                 data-original-title="{{ meta.name }}任务"></i>
             </span>
             <span class="right-menu mouse-enter">
-                <a href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}" class="btn btn-primary btn-sm btn-learn">继续学习</a>
-              </span>
+              {% if task.status == 'published' %}
+                <a href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"
+                   class="btn btn-primary btn-sm btn-learn">继续学习</a>
+              {% else %}
+                敬请期待
+              {% endif %}
+            </span>
           </li>
         {% endfor %}
       {% endif %}
