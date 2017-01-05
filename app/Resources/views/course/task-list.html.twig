@@ -4,9 +4,9 @@
 
 {% block detail_content %}
   {% if course.isDefault %}
-    {% include 'course-set/task-list/free-mode.html.twig' %}
+    {% include 'course/task-list/free-mode.html.twig' %}
   {% else %}
-    {% include 'course-set/task-list/lock-mode.html.twig' %}
+    {% include 'course/task-list/lock-mode.html.twig' %}
   {% endif %}
 
 
