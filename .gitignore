@@ -3,6 +3,7 @@ Gruntfile.js
 **/node_modules/
 npm-debug.log
 **/release/
+node_modules/
 /.idea
 /web/bundles/
 /app/cache/*
