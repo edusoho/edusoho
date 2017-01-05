@@ -4,14 +4,11 @@ import React from 'react';
 import MultiInput from '../../../common/component/multi-input';
 import sortList from 'common/sortable';
 
-function renderMultiGroupComponent(elementId, name) {
-  let datas = $('#' + elementId).data('init-value');
-  ReactDOM.render( < MultiInput
-  dataSource = {datas}
-  outputDataElement = {name} / >,
+function renderMultiGroupComponent(elementId,name){
+  let datas = $('#'+elementId).data('init-value');
+  ReactDOM.render( <MultiInput dataSource= {datas} outputDataElement={name} />,
     document.getElementById(elementId)
-)
-  ;
+);
 }
 
 renderMultiGroupComponent('course-goals', 'goals');
