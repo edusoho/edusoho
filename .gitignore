@@ -1,7 +1,6 @@
 *.py
 Gruntfile.js
 **/node_modules/
-**/node_modules/*
 npm-debug.log
 **/release/
 /.idea
@@ -56,7 +55,6 @@ web/assets/img/default/video.png
 .phpintel*
 /src/Tests/*
 .crunch
-/app/config/parameters_test.yml
 *.css.map
 *.codekit
 web/php-performance.php
