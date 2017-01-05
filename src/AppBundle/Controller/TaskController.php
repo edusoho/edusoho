@@ -12,26 +12,11 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview');
-        $task    = $this->tryLearnTask($courseId, $id, (bool) $preview);
+        $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         if (empty($activity)) {
             throw $this->createNotFoundException("activity not found");
-        }
-
-        $backUrl = '';
-        $referer = $request->headers->get('referer', '');
-        if (!empty($referer)) {
-            $url = parse_url($referer);
-            if ($url && $url['scheme'].'://'.$url['host'].(!empty($url['port']) ? ':'.$url['port'] : '') == $request->getSchemeAndHttpHost()) {
-                $backUrl = $referer;
-            }
-        } else {
-            if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->getId())) {
-                $backUrl = $this->generateUrl('course_set_manage_course_tasks', array('courseSetId' => $activity['fromCourseSetId'], 'courseId' => $activity['fromCourseId']));
-            } else {
-                $backUrl = $this->generateUrl('course_set_show', array('id' => $activity['fromCourseSetId']));
-            }
         }
 
         $this->getActivityService()->trigger($activity['id'], 'start', array(
@@ -49,7 +34,6 @@ class TaskController extends BaseController
             'taskResult'   => $taskResult,
             'activity'     => $activity,
             'preview'      => $preview,
-            'backUrl'      => $backUrl,
             'nextTask'     => empty($nextTask) ? array() : $nextTask,
             'finishedRate' => empty($finishedRate) ? 0 : $finishedRate
         ));
@@ -60,6 +44,9 @@ class TaskController extends BaseController
         $preview = $request->query->get('preview');
         $task    = $this->tryLearnTask($courseId, $id, $preview);
 
+        if (empty($preview) && $task['status'] != 'published') {
+            return $this->render('activity/show.html.twig');
+        }
         return $this->forward('AppBundle:Activity/Activity:show', array(
             'id'       => $task['activityId'],
             'courseId' => $courseId
@@ -124,8 +111,8 @@ class TaskController extends BaseController
 
     public function finishAction(Request $request, $courseId, $id)
     {
-        $result                                 = $this->getTaskService()->finishTask($id);
-        $task                                   = $this->getTaskService()->getTask($id);
+        $result = $this->getTaskService()->finishTask($id);
+        $task   = $this->getTaskService()->getTask($id);
         list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
         return $this->render('task/finish-result.html.twig', array(

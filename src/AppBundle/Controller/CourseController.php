@@ -2,7 +2,8 @@
 
 namespace AppBundle\Controller;
 
-
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -10,7 +11,6 @@ use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
-use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Controller\Course\CourseShowMetas;
 
 class CourseController extends CourseBaseController
@@ -35,21 +35,21 @@ class CourseController extends CourseBaseController
     }
 
     public function headerAction(Request $request, $id)
-    {   
-        $course = $this->getCourseService()->getCourse($id);
+    {
+        $course    = $this->getCourseService()->getCourse($id);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
+        $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
-        $user      = $this->getCurrentUser();
-        $member    = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
+        $user           = $this->getCurrentUser();
+        $member         = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
         $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']) : false;
 
         return $this->render('course/part/header-for-guest.html.twig', array(
-            'isUserFavorite'    => $isUserFavorite,
-            'member'            => $member,
-            'courseSet'         => $courseSet,
-            'courses'           => $courses,
-            'course'            => $course,
+            'isUserFavorite' => $isUserFavorite,
+            'member'         => $member,
+            'courseSet'      => $courseSet,
+            'courses'        => $courses,
+            'course'         => $course
         ));
     }
 
@@ -99,7 +99,10 @@ class CourseController extends CourseBaseController
         );
 
         $user       = $this->getCurrentUser();
-        $userReview = $this->getReviewService()->getUserCourseReview($user['id'], $course['id']);
+        $userReview = array();
+        if ($user->isLogin()) {
+            $userReview = $this->getReviewService()->getUserCourseReview($user['id'], $course['id']);
+        }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
 
@@ -227,13 +230,13 @@ class CourseController extends CourseBaseController
         $order = $this->getOrderService()->getOrderBySn($sn);
 
         if (empty($order)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('订单不存在!'));
+            throw $this->createNotFoundException('订单不存在!');
         }
 
         $course = $this->getCourseService()->getCourse($order['targetId']);
 
         if (empty($course)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('课程不存在，或已删除。'));
+            throw $this->createNotFoundException('课程不存在，或已删除。');
         }
 
         return $this->render('course/course-order.html.twig', array('order' => $order, 'course' => $course));
@@ -252,7 +255,7 @@ class CourseController extends CourseBaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -263,13 +266,13 @@ class CourseController extends CourseBaseController
     public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user = $this->getCurrentUser();
+        $user                  = $this->getCurrentUser();
         if (empty($member)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程的学员。'));
+            throw $this->createAccessDeniedException('您不是课程的学员。');
         }
 
         if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
+            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
         }
 
         $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
@@ -300,6 +303,14 @@ class CourseController extends CourseBaseController
     }
 
     /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
+    /**
      * @return TaskResultService
      */
     protected function getTaskResultService()
@@ -320,9 +331,12 @@ class CourseController extends CourseBaseController
         return $this->createService('Order:OrderService');
     }
 
-    protected function getServiceKernel()
+    /**
+     * @return MaterialService
+     */
+    protected function getMaterialService()
     {
-        return ServiceKernel::instance();
+        return $this->createService('Course:MaterialService');
     }
 
     /**

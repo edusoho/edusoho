@@ -1848,6 +1848,16 @@ course_review_delete:
   path:  /course/{courseId}/review/{reviewId}/delete
   defaults: { _controller: AppBundle:Course/Review:delete }
 
+course_material_download:
+    path:  /course/{courseId}/material/{materialId}/download
+    defaults: { _controller: AppBundle:Course/CourseMaterial:download }
+
+course_material_delete:
+    path:  /course/{id}/material/{materialId}/delete
+    defaults: { _controller: AppBundle:Course/CourseMaterial:delete }
+    methods: [POST]
+
+
 #file chooser
 media_materiallib_choose:
   path: /media/materiallib/choose

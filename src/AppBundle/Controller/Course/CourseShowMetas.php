@@ -28,6 +28,11 @@ class CourseShowMetas
 					'number'	=> 'noteNum',
 					'content'  => 'AppBundle:Course:notes'
 				),
+				'material' => array(
+					'name' => '资料区',
+					'number'	=> 'materialNum',
+					'content'  => 'AppBundle:Course/CourseMaterial:index'
+				),
 				'summary' => array(
 					'name' => '课程介绍', 
 					'content' => 'AppBundle:Course:summary'

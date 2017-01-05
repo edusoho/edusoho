@@ -27,7 +27,7 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
 
     public function downloadActivityFile($activityId, $downloadFileId)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
 
         $materials = empty($activity['ext']['materials']) ? array() : $activity['ext']['materials'];
         if (empty($materials)) {
