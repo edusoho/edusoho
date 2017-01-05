@@ -40,26 +40,26 @@
           aria-labelledby="dLabel" style="display:none;">
          {% if task.status|default('create') != 'published' %}
            <li>
-          <a class='publish-item' href="javascript:;" data-type="task"
-             data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
-             <i class="es-icon es-icon--check-circle mrs"></i>发布
-           </a>
-        </li>
+              <a class='publish-item' href="javascript:;" data-type="task"
+                 data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
+                 <i class="es-icon es-icon--check-circle mrs"></i>发布
+               </a>
+            </li>
+           <li>
+            <a class='delete-item' href="javascript:;" data-type="task"
+               data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
+              <i class="es-icon es-icon-delete mrs"></i>
+              删除
+            </a>
+          </li>
         {% else %}
            <li>
-          <a class='unpublish-item' href="javascript:;" data-type="task"
-             data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">
-             <i class="es-icon es-icon-close01 mrm"></i>取消发布
-           </a>
-        </li>
+              <a class='unpublish-item' href="javascript:;" data-type="task"
+                 data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">
+                 <i class="es-icon es-icon-close01 mrm"></i>取消发布
+               </a>
+            </li>
          {% endif %}
-        <li>
-          <a class='delete-item' href="javascript:;" data-type="task"
-             data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
-            <i class="es-icon es-icon-delete mrs"></i>
-            删除
-          </a>
-        </li>
       </ul>
     </span>
   </div>
