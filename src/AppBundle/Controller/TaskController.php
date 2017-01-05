@@ -12,7 +12,7 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview');
-        $task    = $this->tryLearnTask($courseId, $id, (bool) $preview);
+        $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         if (empty($activity)) {
@@ -44,6 +44,9 @@ class TaskController extends BaseController
         $preview = $request->query->get('preview');
         $task    = $this->tryLearnTask($courseId, $id, $preview);
 
+        if (empty($preview) && $task['status'] != 'published') {
+            return $this->render('activity/show.html.twig');
+        }
         return $this->forward('AppBundle:Activity/Activity:show', array(
             'id'       => $task['activityId'],
             'courseId' => $courseId
@@ -108,8 +111,8 @@ class TaskController extends BaseController
 
     public function finishAction(Request $request, $courseId, $id)
     {
-        $result                                 = $this->getTaskService()->finishTask($id);
-        $task                                   = $this->getTaskService()->getTask($id);
+        $result = $this->getTaskService()->finishTask($id);
+        $task   = $this->getTaskService()->getTask($id);
         list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
         return $this->render('task/finish-result.html.twig', array(

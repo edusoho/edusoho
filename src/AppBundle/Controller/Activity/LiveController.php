@@ -52,7 +52,7 @@ class LiveController extends BaseController implements ActivityActionInterface
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
         }
 
-        $activity = $this->getActivityService()->getActivityFetchMedia($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
 
         if (empty($activity)) {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播任务不存在！'));
