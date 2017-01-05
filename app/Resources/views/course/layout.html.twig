@@ -11,7 +11,11 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-9 col-md-8 course-detail-main">
+
+
         {% include 'course/announcement/block.html.twig' with { courseSetId:courseSet.id, courseId:course.id } %}
+
+        
         <!-- 课程详情页中部内容 -->
         <section class="es-section">
           {{ render(controller('AppBundle:Course:detailNavsPart', {id: course.id, nav: nav|default(null)})) }}
@@ -41,7 +45,7 @@
         {{ render(controller('AppBundle:Course:newestStudentsPart', {id: course.id})) }}
 
         <!-- 学员动态 -->
-        {% include 'course/part/student-activity.html.twig' with {course: course} %}
+        {% include 'course/part/student-activity.html.twig' with {id: course.id} %}
       </div>
     </div>
   </div>

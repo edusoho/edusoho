@@ -11,10 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Controller\Course\CourseShowMetas;
 
 class CourseController extends CourseBaseController
 {
-    public function showAction($id)
+    public function _showAction($id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
@@ -23,6 +24,17 @@ class CourseController extends CourseBaseController
             'courseSet'   => $courseSet,
             'course'      => $course,
             'courseItems' => $courseItems
+        ));
+    }
+
+    public function showAction($id)
+    {
+        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
+        $metas = CourseShowMetas::getGuestCourseShowMetas();
+        return $this->render('course/_overview.html.twig', array(
+            'course'      => $course,
+            'courseSet'   => $courseSet,
+            'metas' => $metas
         ));
     }
 
