@@ -15902,6 +15902,11 @@ textarea {
 .es-mobile body.homepage .app-download {
   display: block;
 }
+.es-mobile body.homepage .feature-banner,
+.es-mobile body.homepage .class-section,
+.es-mobile body.homepage .recommend-teacher {
+  display: none;
+}
 .es-mobile body.course-dashboard-page .es-footer-mobile {
   display: none;
 }
