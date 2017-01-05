@@ -572,19 +572,6 @@
 #    defaults: { _controller: TopxiaWebBundle:Course:unfavorite }
 #    methods: [POST]
 #
-#course_materials:
-#    path:  /course/{id}/material/
-#    defaults: { _controller: TopxiaWebBundle:CourseMaterial:index }
-#
-#course_material_download:
-#    path:  /course/{courseId}/material/{materialId}/download
-#    defaults: { _controller: TopxiaWebBundle:CourseMaterial:download }
-#
-#course_material_delete:
-#    path:  /course/{id}/material/{materialId}/delete
-#    defaults: { _controller: TopxiaWebBundle:CourseMaterial:delete }
-#    methods: [POST]
-#
 #course_threads:
 #    path:  /course/{id}/thread
 #    defaults: { _controller: TopxiaWebBundle:CourseThread:index }

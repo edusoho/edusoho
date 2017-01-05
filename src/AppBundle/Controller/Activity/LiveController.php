@@ -11,7 +11,7 @@ class LiveController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($id);
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
         $format   = 'Y-m-d H:i';
         if (isset($activity['startTime'])) {
             $activity['startTimeFormat'] = date($format, $activity['startTime']);

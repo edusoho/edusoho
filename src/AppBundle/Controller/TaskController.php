@@ -19,21 +19,6 @@ class TaskController extends BaseController
             throw $this->createNotFoundException("activity not found");
         }
 
-        $backUrl = '';
-        $referer = $request->headers->get('referer', '');
-        if (!empty($referer)) {
-            $url = parse_url($referer);
-            if ($url && $url['scheme'].'://'.$url['host'].(!empty($url['port']) ? ':'.$url['port'] : '') == $request->getSchemeAndHttpHost()) {
-                $backUrl = $referer;
-            }
-        } else {
-            if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->getId())) {
-                $backUrl = $this->generateUrl('course_set_manage_course_tasks', array('courseSetId' => $activity['fromCourseSetId'], 'courseId' => $activity['fromCourseId']));
-            } else {
-                $backUrl = $this->generateUrl('course_set_show', array('id' => $activity['fromCourseSetId']));
-            }
-        }
-
         $this->getActivityService()->trigger($activity['id'], 'start', array(
             'task' => $task
         ));
@@ -49,7 +34,6 @@ class TaskController extends BaseController
             'taskResult'   => $taskResult,
             'activity'     => $activity,
             'preview'      => $preview,
-            'backUrl'      => $backUrl,
             'nextTask'     => empty($nextTask) ? array() : $nextTask,
             'finishedRate' => empty($finishedRate) ? 0 : $finishedRate
         ));
