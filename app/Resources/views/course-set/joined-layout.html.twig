@@ -1,0 +1,5 @@
+{% extends 'course-set/layout.html.twig' %}
+
+{% block course_header %}
+	{{ render(controller('AppBundle:My/Course:joinedHeader',{id: course.id})) }}
+{% endblock %}

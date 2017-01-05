@@ -7,7 +7,9 @@
 
 {% block full_content %}
 
-  {{ render(controller('AppBundle:Course:header',{id: course.id})) }}
+  {% block course_header %}
+    {{ render(controller('AppBundle:Course:header',{id: course.id})) }}
+  {% endblock %}
 
   <!-- 中部 -->
   <div class="container">
