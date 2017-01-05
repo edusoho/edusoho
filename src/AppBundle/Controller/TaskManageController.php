@@ -49,7 +49,7 @@ class TaskManageController extends BaseController
         $task     = $this->getTaskService()->getTask($id);
         $taskMode = $request->query->get('type');
         if ($task['courseId'] != $courseId) {
-            throw new InvalidArgumentException('任务不在课程中');
+            throw new InvalidArgumentException('任务不在计划中');
         }
 
         if ($request->getMethod() == 'POST') {

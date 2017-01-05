@@ -57,6 +57,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         $this->validateTaskMode($fields);
         $task = $this->baseUpdateTask($id, $fields);
+
         if ($task['mode'] == 'lesson') {
             $this->getCourseService()->updateChapter($task['courseId'], $task['categoryId'], array('title' => $task['title']));
         }
@@ -69,7 +70,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $that   = $this;
         $result = $this->biz['db']->transactional(function () use ($task, $that) {
             if ($task['mode'] == 'lesson') {
-                $that->getTaskDao()->deleteByCategoryId($task['categoryId']); //删除该课时下的所有课程，
+                $that->getTaskDao()->deleteByCategoryId($task['categoryId']); //删除该课时下的所有任务，
                 $that->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
                 $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
             } else {

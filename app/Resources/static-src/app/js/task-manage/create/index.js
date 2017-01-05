@@ -89,6 +89,7 @@ class Editor {
             }
           });
         }
+
         let chapterId = postData.find(function (input) {
           return input.name == 'chapterId';
         })
@@ -102,7 +103,6 @@ class Editor {
               $(this).before(html);
               add = 1;
               return false;
-
             }
             if ($parent.hasClass('task-manage-unit') && $(this).hasClass('task-manage-unit')) {
               $(this).before(html);
@@ -127,8 +127,8 @@ class Editor {
 
       })
       .fail((response) => {
-        var msg = '';
-        var errorResponse = JSON.parse(response.responseText);
+        let msg = '';
+        let errorResponse = JSON.parse(response.responseText);
         if (errorResponse.error && errorResponse.error.message) {
           msg = errorResponse.error.message;
         }
