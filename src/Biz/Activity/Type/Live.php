@@ -17,9 +17,9 @@ class Live extends Activity
         return $this->getLiveActivityService()->createLiveActivity($fields);
     }
 
-    public function update($id, $fields)
+    public function update($id, &$fields, $activity)
     {
-        return $this->getLiveActivityService()->updateLiveActivity($id, $fields);
+        return $this->getLiveActivityService()->updateLiveActivity($id, $fields, $activity);
     }
 
     public function get($targetId)

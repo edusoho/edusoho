@@ -47,7 +47,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activities;
     }
 
-
     public function findActivitiesByCourseIdAndType($courseId, $type)
     {
         $conditions = array(
@@ -149,14 +148,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $this->syncActivityMaterials($savedActivity, $materials, 'update');
             }
 
-            $media          = array();
             $activityConfig = $this->getActivityConfig($savedActivity['mediaType']);
             if (!empty($savedActivity['mediaId'])) {
-                $media = $activityConfig->update($savedActivity['mediaId'], $fields);
-            }
+                $media = $activityConfig->update($savedActivity['mediaId'], $fields, $savedActivity);
 
-            if ($media) {
-                $fields['mediaId'] = $media['id'];
+                if (!empty($media)) {
+                    $fields['mediaId'] = $media['id'];
+                }
             }
 
             $fields                = $this->filterFields($fields);
@@ -251,7 +249,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'courseSetId' => $activity['fromCourseSetId'],
             'lessonId'    => $activity['id'],
             'title'       => $material['name'],
-            'description' => empty($material['summary'])?: $material['summary'],
+            'description' => empty($material['summary']) ?: $material['summary'],
             'userId'      => $this->getCurrentUser()->offsetGet('id'),
             'type'        => 'course',
             'source'      => 'courseactivity',
