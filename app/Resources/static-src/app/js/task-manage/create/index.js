@@ -80,7 +80,6 @@ class Editor {
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
         this.$element.modal('hide');
-
         if (response && response.append !== undefined && response.append === false) {
           let data = $('#sortable-list').sortable("serialize").get();
           $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
