@@ -2,22 +2,21 @@
 
 namespace AppBundle\Controller;
 
-
-use Biz\Course\Service\ReviewService;
-use Biz\Task\Service\TaskResultService;
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use Biz\Course\Service\ReviewService;
+use Biz\Task\Service\TaskResultService;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
 {
     public function showAction($id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
+        $courseItems              = $this->getCourseService()->findCourseItems($course['id']);
 
         return $this->render('course/overview.html.twig', array(
             'courseSet'   => $courseSet,
@@ -27,21 +26,21 @@ class CourseController extends CourseBaseController
     }
 
     public function headerAction(Request $request, $id)
-    {   
-        $course = $this->getCourseService()->getCourse($id);
+    {
+        $course    = $this->getCourseService()->getCourse($id);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
+        $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
-        $user      = $this->getCurrentUser();
-        $member    = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
+        $user           = $this->getCurrentUser();
+        $member         = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
         $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']) : false;
 
         return $this->render('course/part/header-for-guest.html.twig', array(
-            'isUserFavorite'    => $isUserFavorite,
-            'member'            => $member,
-            'courseSet'         => $courseSet,
-            'courses'           => $courses,
-            'course'            => $course,
+            'isUserFavorite' => $isUserFavorite,
+            'member'         => $member,
+            'courseSet'      => $courseSet,
+            'courses'        => $courses,
+            'course'         => $course
         ));
     }
 
@@ -105,7 +104,10 @@ class CourseController extends CourseBaseController
         );
 
         $user       = $this->getCurrentUser();
-        $userReview = $this->getReviewService()->getUserCourseReview($user['id'], $course['id']);
+        $userReview = array();
+        if ($user->isLogin()) {
+            $userReview = $this->getReviewService()->getUserCourseReview($user['id'], $course['id']);
+        }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
 
@@ -150,7 +152,7 @@ class CourseController extends CourseBaseController
     public function taskListAction(Request $request, $id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems = $this->getCourseService()->findCourseItems($id);
+        $courseItems              = $this->getCourseService()->findCourseItems($id);
 
         return $this->render('course/task-list/task-list.html.twig', array(
             'course'      => $course,
@@ -259,7 +261,7 @@ class CourseController extends CourseBaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -270,7 +272,7 @@ class CourseController extends CourseBaseController
     public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user = $this->getCurrentUser();
+        $user                  = $this->getCurrentUser();
         if (empty($member)) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程的学员。'));
         }
