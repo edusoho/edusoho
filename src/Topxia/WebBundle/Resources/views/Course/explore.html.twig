@@ -1,5 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
+{% set mobile = is_show_mobile_page() %}
 {% set bodyClass = 'course-list-page' %}
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'course/explore' %}
@@ -95,7 +96,9 @@
           {% endif %}
         </div>
       </div>
-      <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+      {% if not mobile %}
+        <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

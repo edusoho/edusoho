@@ -15,4 +15,8 @@ define(function(require, exports, module){
       window.location.reload();
     })
   }
+
+  $('.js-back').click(function(){
+    history.back();
+  })
 })

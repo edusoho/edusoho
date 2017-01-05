@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% set bodyClass = 'bg-blank open-course-list' %}
-
+{% set mobile = is_show_mobile_page() %}
 {% set siteNav = 'open/course/explore' %}
 {% set script_controller = 'open-course/open-course-explore' %}
 
@@ -70,7 +70,9 @@
         <div class="empty">{{ '暂无公开课'|trans }}</div>
       {% endfor %}
     </div>
-    {{ web_macro.paginator(paginator) }}
+    {% if not mobile %}
+      {{ web_macro.paginator(paginator) }}
+    {% endif %}
   </div>
 {% endblock %}
 
