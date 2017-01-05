@@ -34,7 +34,6 @@ const notify = (level, message,icon=null) => {
     timer: 100,
     template: '<div data-notify="container" class="notify-content">'+
       '<div class="notify notify-{0}">' +
-        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">&times;</button>'+
         '<span data-notify="icon"></span>'+
         '<span data-notify="title">{1}</span>'+
         '<span data-notify="message">{2}</span>'+
