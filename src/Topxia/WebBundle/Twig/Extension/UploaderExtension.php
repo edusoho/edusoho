@@ -24,7 +24,7 @@ class UploaderExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('uploader_token', array($this, 'makeUpoaderToken')),
             new \Twig_SimpleFunction('uploader_process', array($this, 'getProcessMode')),
-            new \Twig_SimpleFunction('uploader_accept', array($this, 'getUploadFileAccept')),
+            new \Twig_SimpleFunction('uploader_accept', array($this, 'getUploadFileAccept'))
         );
     }
 
@@ -37,9 +37,9 @@ class UploaderExtension extends \Twig_Extension
     public function getProcessMode($targetType)
     {
         $modes = array(
-            'courselesson'   => 'auto',
-            'coursematerial' => 'auto',
-            'materiallib'    => 'auto',
+            'courselesson'    => 'auto',
+            'coursematerial'  => 'auto',
+            'materiallib'     => 'auto',
             'course-activity' => 'auto'
         );
 
@@ -53,24 +53,24 @@ class UploaderExtension extends \Twig_Extension
     public function getUploadFileAccept($targetType, $only = '')
     {
         $targetAcceptTypes = array(
-            'courselesson'   => array('video', 'audio', 'flash', 'ppt', 'cloud_document'),
+            'courselesson'    => array('video', 'audio', 'flash', 'ppt', 'cloud_document'),
             'course-activity' => array('video', 'audio', 'flash', 'ppt', 'document', 'all'),
-            'coursematerial' => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
-            'materiallib'    => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
-            'attachment'     => array('video', 'audio', 'ppt', 'document', 'zip')
+            'coursematerial'  => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
+            'materiallib'     => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
+            'attachment'      => array('video', 'audio', 'ppt', 'document', 'zip')
         );
-        $availableAccepts  = array(
+        $availableAccepts = array(
             'video'          => array(
                 'extensions' => array('mp4', 'avi', 'flv', 'f4v', 'mpg', 'wmv', 'mov', 'vob', 'rmvb', 'mkv', 'm4v'),
-                'mimeTypes'  => array('video/*')
+                'mimeTypes'  => array('video/mp4', 'video/mpeg', 'video/x-la-asf', 'video/x-ms-asf', 'video/x-msvideo', 'video/x-sgi-movie', 'video/quicktime', 'video/3gpp')
             ),
             'local_video'    => array(
                 'extensions' => array('mp4'),
-                'mimeTypes'  => array('video/*')
+                'mimeTypes'  => array('video/mp4', 'video/mpeg', 'video/x-la-asf', 'video/x-ms-asf', 'video/x-msvideo', 'video/x-sgi-movie', 'video/quicktime', 'video/3gpp')
             ),
             'audio'          => array(
                 'extensions' => array('mp3'),
-                'mimeTypes'  => array('audio/*')
+                'mimeTypes'  => array('audio/mp4', 'audio/mpeg', 'audio/basic', 'audio/ac3', 'audio/ogg', 'audio/3gpp')
             ),
             'flash'          => array(
                 'extensions' => array('swf'),
@@ -86,15 +86,15 @@ class UploaderExtension extends \Twig_Extension
             ),
             'document'       => array(
                 'extensions' => array('doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt'),
-                'mimeTypes'  => array('application/vnd.ms-*', 'application/msword', 'application/pdf', 'application/vnd.openxmlformats-officedocument.*')
+                'mimeTypes'  => array('application/vnd.ms-excel', 'application/vnd.ms-outlook', 'application/vnd.ms-pkicertstore', 'application/vnd.ms-pkiseccat', 'application/vnd.ms-pkistl', 'application/vnd.ms-powerpoint', 'application/vnd.ms-project', 'application/vnd.ms-works', 'application/msword', 'application/pdf', 'application/vnd.openxmlformats-officedocument.*')
             ),
             'zip'            => array(
                 'extensions' => array('zip', 'rar', 'gz', 'tar', '7z'),
-                'mimeTypes'  => array('application/zip', 'application/x-rar*', 'application/x-tar', 'application/x-gz*', 'application/x-7z*')
+                'mimeTypes'  => array('application/zip', 'application/x-zip-compressed', 'application/x-rar-compressed', 'application/x-tar', 'application/x-gzip', 'application/x-7zip')
             ),
             'image'          => array(
                 'extensions' => array('jpg', 'jpeg', 'png', 'gif', 'bmp'),
-                'mimeTypes'  => array('image/*')
+                'mimeTypes'  => array('image/jpg,image/jpeg,image/png,image/gif,image/bmp')
             ),
             'text'           => array(
                 'extensions' => array('txt', 'html', 'js', 'css'),
