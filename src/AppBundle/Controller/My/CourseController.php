@@ -77,7 +77,7 @@ class CourseController extends CourseBaseController
             $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
         }
 
-        return $this->render('course/part/header-for-member.html.twig', array(
+        return $this->render('course/header/header-for-member.html.twig', array(
             'courseSet'            => $courseSet,
             'courses'              => $courses,
             'course'               => $course,

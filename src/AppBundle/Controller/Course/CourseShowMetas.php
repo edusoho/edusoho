@@ -11,7 +11,7 @@ class CourseShowMetas
 			'tabs'	=> array(
 				'tasks' => array(
 					'name' => '课程目录', 
-					'content'	=> 'AppBundle:Course:taskList'
+					'content'	=> 'AppBundle:Course:tasks'
 				),
 				'threads' => array(
 					'name' 		=> '话题', 
@@ -21,7 +21,7 @@ class CourseShowMetas
 				'reviews' => array(
 					'name' => '评价', 
 					'number'	=> 'reviewNum',
-					'content'	=> 'AppBundle:Course:reviewList'
+					'content'	=> 'AppBundle:Course:reviews'
 				),
 				'notes' => array(
 					'name' => '笔记',
@@ -63,7 +63,7 @@ class CourseShowMetas
 				'reviews' => array(
 					'name' => '评价', 
 					'number'	=> 'reviewNum',
-					'content'	=> 'AppBundle:Course:reviewList'
+					'content'	=> 'AppBundle:Course:reviews'
 				),
 				'notes' => array(
 					'name' => '笔记',
@@ -81,7 +81,7 @@ class CourseShowMetas
 					'type' => 'render'
 				),
 				'recommendClassroom' => array(
-					'uri' => 'course/part/recommend-classroom.html.twig',
+					'uri' => 'course/widgets/recommend-classroom.html.twig',
 					'type' => 'include'
 				),
         		'teachers' => array(
@@ -93,7 +93,7 @@ class CourseShowMetas
 					'type' => 'render'
 				),
 				'studentActivity' => array(
-					'uri' => 'course/part/student-activity.html.twig',
+					'uri' => 'course/widgets/student-activity.html.twig',
 					'type' => 'include'
 				)
 			),

@@ -39,7 +39,7 @@ class CourseMaterialController extends CourseBaseController
         $tasks = $this->getTaskService()->search(array('courseId' => $course['id'], 'type' => 'download'), array(), 0, 100);
         $tasks = ArrayToolkit::index($tasks, 'activityId');
 
-        return $this->render("course/material/list.html.twig", array(
+        return $this->render("course/tabs/material.html.twig", array(
             'courseSet' => $courseSet,
             'course'    => $course,
             'member'    => $member,

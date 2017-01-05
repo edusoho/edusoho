@@ -48,7 +48,7 @@ class CourseThreadController extends CourseBaseController
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render("course/thread/index.html.twig", array(
+        return $this->render("course/tabs/threads.html.twig", array(
             'courseSet' => $courseSet,
             'course'    => $course,
             'member'    => $this->getCourseMember($request, $course),

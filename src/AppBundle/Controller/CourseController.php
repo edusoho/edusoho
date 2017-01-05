@@ -18,7 +18,7 @@ class CourseController extends CourseBaseController
     public function summaryAction($course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        return $this->render('course/summary.html.twig', array(
+        return $this->render('course/tabs/summary.html.twig', array(
             'courseSet'   => $courseSet,
             'course'      => $course,
         ));
@@ -44,7 +44,7 @@ class CourseController extends CourseBaseController
         $member         = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
         $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']) : false;
 
-        return $this->render('course/part/header-for-guest.html.twig', array(
+        return $this->render('course/header/header-for-guest.html.twig', array(
             'isUserFavorite' => $isUserFavorite,
             'member'         => $member,
             'courseSet'      => $courseSet,
@@ -67,7 +67,7 @@ class CourseController extends CourseBaseController
         $currentUser = $this->getCurrentUser();
         $likes       = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
         $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
-        return $this->render('course/note/notes.html.twig', array(
+        return $this->render('course/tabs/notes.html.twig', array(
             'course'      => $course,
             'courseSet'   => $courseSet,
             'notes'       => $notes,
@@ -77,7 +77,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function reviewListAction(Request $request, $course)
+    public function reviewsAction(Request $request, $course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $conditions = array(
@@ -106,7 +106,7 @@ class CourseController extends CourseBaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
 
-        return $this->render('course/review/list.html.twig', array(
+        return $this->render('course/tabs/reviews.html.twig', array(
             'courseSet'  => $courseSet,
             'course'     => $course,
             'reviews'    => $reviews,
@@ -143,12 +143,12 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function taskListAction($course)
+    public function tasksAction($course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
-        return $this->render('course/task-list/task-list.html.twig', array(
+        return $this->render('course/tabs/tasks.html.twig', array(
             'course'      => $course,
             'courseSet'   => $courseSet,
             'courseItems' => $courseItems
@@ -177,7 +177,7 @@ class CourseController extends CourseBaseController
             }
         }
 
-        return $this->render('course/part/characteristic.html.twig', array(
+        return $this->render('course/widgets/characteristic.html.twig', array(
             'course'             => $course,
             'characteristicData' => $characteristicData
         ));
@@ -189,7 +189,7 @@ class CourseController extends CourseBaseController
 
         $otherCourse = $course; // $this->getCourseService()->getOtherCourses($course['id']);
 
-        return $this->render('course/part/other-course.html.twig', array(
+        return $this->render('course/widgets/other-course.html.twig', array(
             'otherCourse' => $otherCourse,
             'courseSet'   => $courseSet
         ));
@@ -201,7 +201,7 @@ class CourseController extends CourseBaseController
 
         $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
-        return $this->render('course/part/teachers.html.twig', array(
+        return $this->render('course/widgets/teachers.html.twig', array(
             'teachers' => $teachers
         ));
     }
@@ -220,7 +220,7 @@ class CourseController extends CourseBaseController
         $studentIds = ArrayToolkit::column($members, 'userId');
         $students   = $this->getUserService()->findUsersByIds($studentIds);
 
-        return $this->render('course/part/newest-students.html.twig', array(
+        return $this->render('course/widgets/newest-students.html.twig', array(
             'students' => $students
         ));
     }
@@ -239,7 +239,7 @@ class CourseController extends CourseBaseController
             throw $this->createNotFoundException('课程不存在，或已删除。');
         }
 
-        return $this->render('course/widget/course-order.html.twig', array('order' => $order, 'course' => $course));
+        return $this->render('course/widgets/course-order.html.twig', array('order' => $order, 'course' => $course));
     }
 
     public function qrcodeAction(Request $request, $id)
