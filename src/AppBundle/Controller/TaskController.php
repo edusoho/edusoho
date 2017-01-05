@@ -57,12 +57,13 @@ class TaskController extends BaseController
 
     public function taskActivityAction(Request $request, $courseId, $id)
     {
-        $preview = $request->query->get('preview');
+        $preview = $request->query->get('preview', 0);
         $task    = $this->tryLearnTask($courseId, $id, $preview);
 
         return $this->forward('AppBundle:Activity/Activity:show', array(
             'id'       => $task['activityId'],
-            'courseId' => $courseId
+            'courseId' => $courseId,
+            'preview'  => $preview
         ));
     }
 
@@ -159,9 +160,9 @@ class TaskController extends BaseController
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         if ($preview) {
             //TODO先注释掉这段代码，学员的逻辑现在有问题，无法判断是否老师，完善后在开发
-//            if ($member['role'] != 'teacher' || $course['status'] != 'published') {
-//                throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
-//            }
+            //            if ($member['role'] != 'teacher' || $course['status'] != 'published') {
+            //                throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
+            //            }
             $task = $this->getTaskService()->getTask($taskId);
         } else {
             $task = $this->getTaskService()->tryTakeTask($taskId);

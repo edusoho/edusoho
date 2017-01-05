@@ -11,7 +11,9 @@
 {% endblock %}
 
 {% block paper_sidebar %}
-  <div class="testpaper-card affix" >
-    {% include 'testpaper/testpaper-card.html.twig' %}
-  </div>
+  {% if showCard|default(1) %}
+    <div class="testpaper-card affix" >
+      {% include 'testpaper/testpaper-card.html.twig' %}
+    </div>
+  {% endif %}
 {% endblock %}
