@@ -9,28 +9,28 @@ class CourseShowMetas
 		return array(
 			'header' => 'AppBundle:My/Course:headerForMember',
 			'tabs'	=> array(
-				'courseItems' => array(
+				'tasks' => array(
 					'name' => '课程目录', 
-					'route' => 'course_task_list'
+					'content'	=> 'AppBundle:Course:taskList'
 				),
-				'courseThreads' => array(
+				'threads' => array(
 					'name' 		=> '话题', 
-					'route' 		=> 'course_threads',
-					'number'	=> 'threadNum'
+					'number'	=> 'threadNum',
+					'content'	=> 'AppBundle:CourseThread:index'
 				),
-				'courseReviews' => array(
+				'reviews' => array(
 					'name' => '评价', 
-					'route' => 'course_review',
-					'number'	=> 'reviewNum'
+					'number'	=> 'reviewNum',
+					'content'	=> 'AppBundle:Course:reviewList'
 				),
-				'courseNotes' => array(
+				'notes' => array(
 					'name' => '笔记',
-					'route' => 'course_notes',
-					'number'	=> 'noteNum'
+					'number'	=> 'noteNum',
+					'content'  => 'AppBundle:Course:notes'
 				),
-				'courseSummary' => array(
+				'summary' => array(
 					'name' => '课程介绍', 
-					'route' => 'course_show'
+					'content' => 'AppBundle:Course:summary'
 				),
 			),
 			'widgets' => $metas['widgets'],
@@ -42,28 +42,28 @@ class CourseShowMetas
 		return array(
 			'header' => 'AppBundle:Course:header',
 			'tabs'	=> array(
-				'courseSummary' => array(
+				'summary' => array(
 					'name' => '课程介绍', 
-					'route' => 'course_show'
+					'content' => 'AppBundle:Course:summary'
 				),
-				'courseItems' => array(
+				'tasks' => array(
 					'name' => '课程目录', 
-					'route' => 'course_task_list'
+					'content'	=> 'AppBundle:Course:taskList'
 				),
-				'courseThreads' => array(
+				'threads' => array(
 					'name' 		=> '话题', 
-					'route' 		=> 'course_threads',
-					'number'	=> 'threadNum'
+					'number'	=> 'threadNum',
+					'content'	=> 'AppBundle:CourseThread:index'
 				),
-				'courseReviews' => array(
+				'reviews' => array(
 					'name' => '评价', 
-					'route' => 'course_review',
-					'number'	=> 'reviewNum'
+					'number'	=> 'reviewNum',
+					'content'	=> 'AppBundle:Course:reviewList'
 				),
-				'courseNotes' => array(
+				'notes' => array(
 					'name' => '笔记',
-					'route' => 'course_notes',
-					'number'	=> 'noteNum'
+					'number'	=> 'noteNum',
+					'content'  => 'AppBundle:Course:notes'
 				),
 			),
 			'widgets' => array(

@@ -2,6 +2,7 @@
 {% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','app/js/courseset/show/index.js']) %}
 
 {% block full_content %}
+	{% set course = data('Course', {courseId: app.request.attributes.get('_route_params').id}) %}
 
 	{{ render(controller(metas.header,{id: course.id})) }}
 
@@ -9,14 +10,14 @@
 	  <div class="row">
 	  	<div class="col-lg-9 col-md-8 course-detail-main">
 
-	      {% include 'course/announcement/block.html.twig' with { courseSetId:courseSet.id, courseId:course.id } %}
+	      {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
 
 	      <section class="es-section">
 					<div class="nav-btn-tab">
 					  <ul class="nav nav-tabs" role="tablist">
 					  	{% for key, tab in metas.tabs %}
-						    <li role="presentation" class="{% if nav|default('') == key %}active{% endif %}">
-						      <a href="{{ path(tab.route, {'id': course.id}) }}">
+						    <li role="presentation" class="{% if app.request.attributes.get('_route_params').tab|default('') == key %}active{% endif %}">
+						      <a href="{{ path('my_course_show', {'id': course.id, 'tab': key}) }}">
 						      	{{tab.name}}
 						      	{% if tab.number|default(false) %}
 						      	<small class="text-muted">({{ course[tab.number]|default(0) }})</small>
@@ -38,7 +39,9 @@
 					</div>
 					<div class="course-detail-content">
 
-						{% block detail_content %}{% endblock %}
+						{% block detail_content %}
+							{{ render(controller(currentTab.content, {course: course})) }}
+						{% endblock %}
 
 					</div>
 	      </section>

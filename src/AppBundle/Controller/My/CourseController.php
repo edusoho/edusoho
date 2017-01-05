@@ -105,15 +105,14 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function showAction($id)
+    public function showAction($id, $tab = 'summary')
     {
-        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
         $metas = CourseShowMetas::getMemberCourseShowMetas();
+        $currentTab = $metas['tabs'][$tab];
 
-        return $this->render('course/_overview.html.twig', array(
-            'courseSet'   => $courseSet,
-            'course'      => $course,
-            'metas'       => $metas
+        return $this->render('course/my-course-show.html.twig', array(
+            'metas' => $metas,
+            'currentTab'=>$currentTab
         ));
     }
 

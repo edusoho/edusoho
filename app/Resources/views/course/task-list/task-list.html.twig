@@ -1,11 +1,5 @@
-{% extends 'course/layout.html.twig' %}
-
-{% set nav = 'directory' %}
-
-{% block detail_content %}
-  {% if course.isDefault %}
-    {% include 'course/task-list/free-mode.html.twig' %}
-  {% else %}
-    {% include 'course/task-list/lock-mode.html.twig' %}
-  {% endif %}
-{% endblock %}
+{% if course.isDefault %}
+	{% include 'course/task-list/free-mode.html.twig' %}
+{% else %}
+	{% include 'course/task-list/lock-mode.html.twig' %}
+{% endif %}
