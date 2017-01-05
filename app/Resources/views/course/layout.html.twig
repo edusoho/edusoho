@@ -36,7 +36,7 @@
         {{ render(controller('AppBundle:Course:otherCoursePart', {id: course.id})) }}
 
         <!-- 推荐班级 -->
-        {% include 'course/recommend-classroom.html.twig' %}
+        {% include 'course/part/recommend-classroom.html.twig' %}
 
         <!-- 授课教师 -->
         {{ render(controller('AppBundle:Course:teachersPart', {id: course.id})) }}
@@ -45,7 +45,7 @@
         {{ render(controller('AppBundle:Course:newestStudentsPart', {id: course.id})) }}
 
         <!-- 学员动态 -->
-        {% include 'course/student-activity.html.twig' with {course: course} %}
+        {% include 'course/part/student-activity.html.twig' with {course: course} %}
       </div>
     </div>
   </div>

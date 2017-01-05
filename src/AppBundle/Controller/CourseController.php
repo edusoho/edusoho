@@ -152,7 +152,7 @@ class CourseController extends CourseBaseController
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
         $courseItems = $this->getCourseService()->findCourseItems($id);
 
-        return $this->render('course/task-list.html.twig', array(
+        return $this->render('course/task-list/task-list.html.twig', array(
             'course'      => $course,
             'courseSet'   => $courseSet,
             'courseItems' => $courseItems
