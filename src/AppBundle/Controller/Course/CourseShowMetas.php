@@ -11,26 +11,26 @@ class CourseShowMetas
 			'tabs'	=> array(
 				'courseItems' => array(
 					'name' => '课程目录', 
-					'path' => 'course_task_list'
+					'route' => 'course_task_list'
 				),
 				'courseThreads' => array(
 					'name' 		=> '话题', 
-					'path' 		=> 'course_threads',
+					'route' 		=> 'course_threads',
 					'number'	=> 'threadNum'
 				),
 				'courseReviews' => array(
 					'name' => '评价', 
-					'path' => 'course_review',
+					'route' => 'course_review',
 					'number'	=> 'reviewNum'
 				),
 				'courseNotes' => array(
 					'name' => '笔记',
-					'path' => 'course_notes',
+					'route' => 'course_notes',
 					'number'	=> 'noteNum'
 				),
 				'courseSummary' => array(
 					'name' => '课程介绍', 
-					'path' => 'course_show'
+					'route' => 'course_show'
 				),
 			),
 			'widgets' => $metas['widgets'],
@@ -44,25 +44,25 @@ class CourseShowMetas
 			'tabs'	=> array(
 				'courseSummary' => array(
 					'name' => '课程介绍', 
-					'path' => 'course_show'
+					'route' => 'course_show'
 				),
 				'courseItems' => array(
 					'name' => '课程目录', 
-					'path' => 'course_task_list'
+					'route' => 'course_task_list'
 				),
 				'courseThreads' => array(
 					'name' 		=> '话题', 
-					'path' 		=> 'course_threads',
+					'route' 		=> 'course_threads',
 					'number'	=> 'threadNum'
 				),
 				'courseReviews' => array(
 					'name' => '评价', 
-					'path' => 'course_review',
+					'route' => 'course_review',
 					'number'	=> 'reviewNum'
 				),
 				'courseNotes' => array(
 					'name' => '笔记',
-					'path' => 'course_notes',
+					'route' => 'course_notes',
 					'number'	=> 'noteNum'
 				),
 			),
