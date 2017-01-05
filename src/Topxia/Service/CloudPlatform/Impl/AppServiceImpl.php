@@ -670,8 +670,12 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
-        $meta = json_decode(file_get_contents($packageDir . '/plugin.json'), true);
-        $protocol = !empty($meta['protocol']) ? intval($meta['protocol']) : 2;
+        $protocol = 2;
+        $pluginJsonFile = $packageDir . '/plugin.json';
+        if(file_exists($pluginJsonFile)){
+            $meta = json_decode(file_get_contents($pluginJsonFile), true);
+            $protocol = !empty($meta['protocol']) ? intval($meta['protocol']) : 2;
+        }
 
         if (!file_exists($packageDir . '/Upgrade.php')) {
             return;
