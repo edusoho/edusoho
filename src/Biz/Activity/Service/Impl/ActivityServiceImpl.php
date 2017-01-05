@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
+use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
@@ -92,7 +93,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
 
-        $materials = empty($fields['materials']) ? array() : json_decode($fields['materials'], true);
+        $materials = $this->getFileDataFromActivity($fields);
 
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
         $media          = $activityConfig->create($fields);
@@ -125,8 +126,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
 
-        $materials = empty($fields['materials']) ? array() : json_decode($fields['materials'], true);
-
+        $materials = $this->getFileDataFromActivity($fields);
         if (!empty($materials)) {
             $this->syncActivityMaterials($savedActivity, $materials, 'update');
         }
@@ -226,7 +226,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'description' => empty($material['summary']) ?: $material['summary'],
             'userId'      => $this->getCurrentUser()->offsetGet('id'),
             'type'        => 'course',
-            'source'      => 'courseactivity',
+            'source'      => $activity['mediaType'] == 'download' ? 'coursematerial' : 'courseactivity',
             'copyId'      => 0 //$fields
         );
     }
@@ -306,10 +306,45 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     }
 
     /**
+     * @param  $fields
+     * @return array
+     */
+    public function getFileDataFromActivity($fields)
+    {
+        $materials = array();
+        if (!empty($fields['materials'])) {
+            $materials = json_decode($fields['materials'], true);
+        }
+        if (empty($materials) && !empty($fields['media'])) {
+            $materials[] = json_decode($fields['media'], true);
+        }
+        if (empty($materials) && !empty($fields['ext'])) {
+            $ext = $fields['ext'];
+            if (!empty($ext['mediaId'])) {
+                $file        = $this->getUploadFileService()->getFile($ext['mediaId']);
+                $materials[] = array(
+                    'id'   => $file['id'],
+                    'name' => $file['filename']
+                );
+            }
+        }
+
+        return $materials;
+    }
+
+    /**
      * @return CourseSetService
      */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 }
