@@ -1,0 +1,40 @@
+{% extends 'course-set/layout-for-member.html.twig' %}
+
+{% set nav = 'overview' %}
+
+{% block detail_content %}
+  <div class="es-piece">
+    <div class="piece-header">课程介绍</div>
+    <div class="piece-body p-lg clearfix">
+      {{ course.summary|default(courseSet.summary)|raw }}
+    </div>
+  </div>
+  <div class="es-piece {% if course.goals|default(courseSet.goals) is empty  %} hidden {% endif  %}">
+    <div class="piece-header">课程目标</div>
+    <div class="piece-body">
+      <ul class="piece-body-list">
+        {% for  goal in course.goals|default(courseSet.goals) %}
+          <li><i class="es-icon es-icon-dot mrm"></i>
+            {{ goal }}
+          </li>
+        {% else %}
+          <span class="empty">为设置目标</span>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="es-piece {% if course.audiences|default(courseSet.audiences) is empty  %} hidden {% endif  %}">
+    <div class="piece-header">适合人群</div>
+    <div class="piece-body">
+      <ul class="piece-body-list">
+        {% for  audience in course.audiences|default(courseSet.audiences) %}
+          <li><i class="es-icon es-icon-dot mrm"></i>
+            {{ audience }}
+          </li>
+        {% else %}
+          <span class="empty">为设置目标</span>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}

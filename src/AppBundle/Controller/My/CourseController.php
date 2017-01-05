@@ -33,7 +33,7 @@ class CourseController extends CourseBaseController
     }
 
 
-    public function joinedHeaderAction(Request $request, $id)
+    public function headerForMemberAction(Request $request, $id)
     {
 
         list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
@@ -92,14 +92,55 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function showAction(Request $request)
+    public function showAction($id)
     {
+        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
+        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
+        return $this->render('course-set/overview-for-member.html.twig', array(
+            'courseSet'   => $courseSet,
+            'course'      => $course,
+            'courseItems' => $courseItems
+        ));
     }
 
     public function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    protected function getFinishedTaskPerDay($course, $taskNum)
+    {
+        //自由式不需要展示每日计划的学习任务数
+        if ($course['learnMode'] == 'freeMode') {
+            return false;
+        }
+        if ($course['expiryMode'] == 'days') {
+            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
+        } else {
+            $diffDay            = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
+            $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
+        }
+        return round($finishedTaskPerDay);
+    }
+
+    protected function getPlanStudyTaskCount($course, $member, $taskNum, $taskPerDay)
+    {
+        //自由式不需要展示应学任务数, 未设置学习有效期不需要展示应学任务数
+        if ($course['learnMode'] == 'freeMode' || empty($taskPerDay)) {
+            return false;
+        }
+        //当前时间减去课程
+        //按天计算有效期， 当前的时间- 加入课程的时间 获得天数* 每天应学任务
+        if ($course['expiryMode'] == 'days') {
+            $joinDays = (time() - $member['createdTime']) / (24 * 60 * 60);
+        } else {
+            //当前时间-减去课程有效期开始时间  获得天数 *应学任务数量
+            $joinDays = (time() - $course['expiryStartDate']) / (24 * 60 * 60);
+        }
+
+        return $taskPerDay * $joinDays >= $taskNum ? $taskNum : round($taskPerDay * $joinDays);
+
     }
 
     protected function getTaskService()
