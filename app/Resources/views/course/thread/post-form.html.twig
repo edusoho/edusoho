@@ -11,7 +11,7 @@
 {% block detail_content %}
 
 <ul class="breadcrumb">
-  <li><a href="{{ path('course_threads', {courseId: course.id}) }}">{{'讨论区'|trans}}</a></li>
+  <li><a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}">{{'讨论区'|trans}}</a></li>
   <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}">{{ thread.title|plain_text(10) }}</a></li>
   <li class="active">{{'编辑帖子'|trans}}</li>
 </ul>
@@ -55,7 +55,7 @@
     <div class="controls clearfix">
       {{ form_rest(form) }}
       <button type="submit" class="btn btn-primary pull-right">{{'发表'|trans}}</button>
-      <a href="{{ path('course_threads', {courseId: course.id}) }}" class="btn btn-link pull-right">{{'取消'|trans}}</a>
+      <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link pull-right">{{'取消'|trans}}</a>
     </div>
   </div>
 
