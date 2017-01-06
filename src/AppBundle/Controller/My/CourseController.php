@@ -1,14 +1,10 @@
 <?php
 
-
 namespace AppBundle\Controller\My;
 
-
-use AppBundle\Controller\BaseController;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
+use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\CourseBaseController;
-use AppBundle\Controller\Course\CourseShowMetas;
 
 class CourseController extends CourseBaseController
 {
@@ -33,17 +29,15 @@ class CourseController extends CourseBaseController
         ));
     }
 
-
     public function headerForMemberAction(Request $request, $course, $member)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
+        $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
         $taskCount = $this->getTaskService()->countTasksByCourseId($course['id']);
-        $progress = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
+        $progress  = $taskResultCount  = $toLearnTasks  = $taskPerDay  = $planStudyTaskCount  = $planProgressProgress  = 0;
 
         $user = $this->getUser();
         if ($taskCount) {
-
             //学习记录
             $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id']));
 
@@ -52,7 +46,6 @@ class CourseController extends CourseBaseController
 
             //待学习任务
             $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
-
 
             //任务式课程每日建议学习任务数
             $taskPerDay = $this->getFinishedTaskPerDay($course, $taskCount);
@@ -93,16 +86,16 @@ class CourseController extends CourseBaseController
         $course = $this->getCourseService()->getCourse($id);
         $member = $this->getCourseMember($request, $course);
 
-        if(empty($member)) {
+        if (empty($member)) {
             return $this->redirect($this->generateUrl('course_show', array(
-                'id'     => $id,
+                'id'  => $id,
                 'tab' => $tab
             )));
         }
 
         return $this->render('course/course-show.html.twig', array(
-            'tab' => $tab,
-            'member'     => $member
+            'tab'    => $tab,
+            'member' => $member
         ));
     }
 
@@ -142,7 +135,6 @@ class CourseController extends CourseBaseController
         }
 
         return $taskPerDay * $joinDays >= $taskNum ? $taskNum : round($taskPerDay * $joinDays);
-
     }
 
     protected function getTaskService()
