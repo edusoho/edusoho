@@ -1,13 +1,8 @@
-{% extends 'course/part/header-layout.html.twig' %}
+{% extends 'course/header/header-layout.html.twig' %}
 
 {% block course_heard_content %}
 <div class="course-detail-bottom">
   <div class="course-detail-img">
-    {# 需要设置是否可以预览 #}
-    {#<a href="#modal" data-toggle="modal" data-url="/course/2/lessons/preview?lessonId=1" class="course-img-cover">#}
-      {#<i class="es-icon es-icon-playcircleoutline"></i>#}
-    {#</a>#}
-    {# end 需要设置是否可以预览 #}
     <img class="img-responsive"
          src=" {% if not  course.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(course.cover.large) }} {% endif %}"
          alt="{{ course.title }} ">

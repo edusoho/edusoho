@@ -1,4 +1,4 @@
-{% extends 'course/layout.html.twig' %}
+{% extends 'course/course-show.html.twig' %}
 
 {% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
 
@@ -9,7 +9,7 @@
 {% block detail_content %}
 
   <ul class="breadcrumb">
-    <li><a href="{{ path('course_threads', {id:course.id}) }}">{{'讨论区'|trans}}</a></li>
+    <li><a href="{{ path('my_course_show', {id: course.id, 'tab': 'threads'}) }}">{{'讨论区'|trans}}</a></li>
     <li class="active">{% if thread.type == 'question' %}{{'问答'|trans}}{% else %}{{'话题'|trans}}{% endif %}</li>
   </ul>
 
@@ -43,7 +43,7 @@
       <div class="thread-footer" >
         <a href="{{ path('course_thread_edit', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> {{'编辑'|trans}}</a>
         {% if isManager %}
-          <a href="javascript:;" class="btn btn-link" data-url="{{ path('course_thread_delete', {courseId:course.id, threadId:thread.id}) }}" data-after-url="{{ path('course_threads', {id:course.id}) }}" data-role="confirm-btn" data-confirm-message="{{'您真的要删除该帖吗？'|trans}}"><span class="glyphicon glyphicon-remove-sign"></span> {{'删除'|trans}}</a>
+          <a href="javascript:;" class="btn btn-link" data-url="{{ path('course_thread_delete', {courseId:course.id, threadId:thread.id}) }}" data-after-url="{{ path('my_course_show', {id:course.id, tab: 'threads'}) }}" data-role="confirm-btn" data-confirm-message="{{'您真的要删除该帖吗？'|trans}}"><span class="glyphicon glyphicon-remove-sign"></span> {{'删除'|trans}}</a>
           {% if thread.isStick %}
             <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unstick', { courseId:course.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'您真的要取消置顶该帖吗？'|trans}}"><span class="glyphicon glyphicon-minus-sign"></span> {{'取消置顶'|trans}}</a>
           {% else %}

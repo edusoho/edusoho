@@ -8,16 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseMaterialController extends CourseBaseController
 {
-    public function indexAction(Request $request, $id)
+    public function indexAction(Request $request, $course, $member = array())
     {
-        list($courseSet, $course, $member, $response) = $this->tryBuildCourseLayoutData($request, $id);
-
-        if ($response) {
-            return $response;
-        }
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         $conditions = array(
-            'courseId'        => $id,
+            'courseId'        => $course['id'],
             'excludeLessonId' => 0,
             'source'          => 'coursematerial',
             'type'            => 'course'
@@ -36,10 +32,10 @@ class CourseMaterialController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        $tasks = $this->getTaskService()->search(array('courseId' => $id, 'type' => 'download'), array(), 0, 100);
+        $tasks = $this->getTaskService()->search(array('courseId' => $course['id'], 'type' => 'download'), array(), 0, 100);
         $tasks = ArrayToolkit::index($tasks, 'activityId');
 
-        return $this->render("course/material/list.html.twig", array(
+        return $this->render("course/tabs/material.html.twig", array(
             'courseSet' => $courseSet,
             'course'    => $course,
             'member'    => $member,

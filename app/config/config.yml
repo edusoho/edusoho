@@ -187,6 +187,13 @@ services:
         tags:
             - { name: twig.extension }
 
+    topxia.twig.course_extension:
+        class: Topxia\WebBundle\Twig\Extension\CourseExtension
+        arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }
+
+
     topxia.twig.file_cache:
         class: Biz\Common\FilesystemCache
         arguments:    ['@service_container']

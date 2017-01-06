@@ -1,4 +1,4 @@
-{% extends 'course/layout.html.twig' %}
+{% extends 'course/course-show.html.twig' %}
 
 {% set thread = thread|default(null) %}
 
@@ -11,7 +11,7 @@
 {% block detail_content %}
 
 <ul class="breadcrumb">
-  <li><a href="{{ path('course_threads', {id:course.id}) }}">{{'讨论区'|trans}}</a></li>
+  <li><a href="{{ path('my_course_show', {id:course.id, tab: 'threads'}) }}">{{'讨论区'|trans}}</a></li>
   {% if thread %}
     <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|plain_text(10) }}</a></li>
     <li class="active">{% if type == 'question' %}{{'编辑问题'|trans}}{% else %}{{'编辑话题'|trans}}{% endif %}</li>
@@ -69,12 +69,12 @@
         <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link">{{'取消'|trans}}</a>
         <button type="submit" class="btn btn-primary btn-fat">{{'保存'|trans}}</button>
       {% else %}
-        <a href="{{ path('course_threads', {id: course.id}) }}" class="btn btn-link">{{'取消'|trans}}</a>
+        <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link">{{'取消'|trans}}</a>
         <button type="submit" class="btn btn-primary">{{'发表'|trans}}</button>
       {% endif  %}
     </div>
   </div>
-  <input type="hidden" name="courseSetId" value="{{ courseSet.id }}">
+  <input type="hidden" name="courseSetId" value="{{ course.courseSetId }}">
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 

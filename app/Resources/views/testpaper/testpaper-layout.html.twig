@@ -1,6 +1,10 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
+
+{% if showBodyColor|default(1) %}
 {% set bodyClass = 'task-testpaper-body' %}
+{% endif %}
+
 {% block body %}
   {% block header %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
