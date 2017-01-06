@@ -284,6 +284,7 @@ class MobileBaseController extends BaseController
             unset($course['teacherIds']);
             
             $course['tags'] = TagUtil::buildTags('course', $course['id']);
+            $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
 
             $course["priceType"] = $coinSetting["priceType"];
             $course['coinName']  = $coinSetting["name"];
@@ -461,6 +462,9 @@ class MobileBaseController extends BaseController
                 $tempCourses[$key]["liveStartTime"]   = "";
                 $tempCourses[$key]["liveEndTime"]     = "";
             }
+
+            $tempCourses[$key]['tags'] = TagUtil::buildTags('course', $tempCourses[$key]['id']);
+            $tempCourses[$key]['tags'] = ArrayToolkit::column($tempCourses[$key]['tags'], 'name');
         }
 
         return $tempCourses;
