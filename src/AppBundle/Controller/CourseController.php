@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Service\TaskResultService;
@@ -11,7 +12,6 @@ use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
-use AppBundle\Controller\Course\CourseShowMetas;
 
 class CourseController extends CourseBaseController
 {
@@ -49,7 +49,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function notesAction($course)
+    public function notesAction($course, $member=array())
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
@@ -63,13 +63,15 @@ class CourseController extends CourseBaseController
         $currentUser = $this->getCurrentUser();
         $likes       = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
         $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
+
         return $this->render('course/tabs/notes.html.twig', array(
             'course'      => $course,
             'courseSet'   => $courseSet,
             'notes'       => $notes,
             'users'       => $users,
             'tasks'       => $tasks,
-            'likeNoteIds' => $likeNoteIds
+            'likeNoteIds' => $likeNoteIds,
+            'member'      => $member
         ));
     }
 
