@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseThreadController extends CourseBaseController
 {
-    public function indexAction(Request $request, $course)
+    public function indexAction(Request $request, $course, $member = array())
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
@@ -51,7 +51,7 @@ class CourseThreadController extends CourseBaseController
         return $this->render("course/tabs/threads.html.twig", array(
             'courseSet' => $courseSet,
             'course'    => $course,
-            'member'    => $this->getCourseMember($request, $course),
+            'member'    => $member,
             'threads'   => $threads,
             'users'     => $users,
             'paginator' => $paginator,

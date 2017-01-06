@@ -90,17 +90,19 @@ class CourseController extends CourseBaseController
 
     public function showAction(Request $request, $id, $tab = 'tasks')
     {
-        $metas = CourseShowMetas::getMemberCourseShowMetas();
-        $currentTab = $metas['tabs'][$tab];
-
-        $course    = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->getCourse($id);
         $member = $this->getCourseMember($request, $course);
 
+        if(empty($member)) {
+            return $this->redirect($this->generateUrl('course_show', array(
+                'id'     => $id,
+                'tab' => $tab
+            )));
+        }
+
         return $this->render('course/course-show.html.twig', array(
-            'metas'      => $metas,
-            'currentTab' => $currentTab,
-            'forMember'  => true,
-            'course'     => $course
+            'tab' => $tab,
+            'member'     => $member
         ));
     }
 

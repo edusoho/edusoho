@@ -26,14 +26,8 @@ class CourseController extends CourseBaseController
 
     public function showAction(Request $request, $id, $tab = 'summary')
     {
-        $metas = CourseShowMetas::getGuestCourseShowMetas();
-        $currentTab = $metas['tabs'][$tab];
-        $course    = $this->getCourseService()->getCourse($id);
-
         return $this->render('course/course-show.html.twig', array(
-            'metas'        => $metas,
-            'currentTab'   => $currentTab,
-            'course'       => $course
+            'tab'   => $tab,
         ));
     }
 
@@ -79,7 +73,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function reviewsAction(Request $request, $course)
+    public function reviewsAction(Request $request, $course, $member = array())
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $conditions = array(
@@ -100,10 +94,9 @@ class CourseController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        $user       = $this->getCurrentUser();
-        $userReview = array();
-        if ($user->isLogin()) {
-            $userReview = $this->getReviewService()->getUserCourseReview($user['id'], $course['id']);
+
+        if (!empty($member)) {
+            $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $course['id']);
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
@@ -112,7 +105,7 @@ class CourseController extends CourseBaseController
             'courseSet'  => $courseSet,
             'course'     => $course,
             'reviews'    => $reviews,
-            'userReview' => $userReview,
+            'userReview' => empty($userReview) ? array() : $userReview ,
             'users'      => $users,
         ));
     }
@@ -145,15 +138,14 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function tasksAction($course)
+    public function tasksAction($course, $member = array())
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
         return $this->render('course/tabs/tasks.html.twig', array(
             'course'      => $course,
-            'courseSet'   => $courseSet,
-            'courseItems' => $courseItems
+            'courseItems' => $courseItems,
+            'member'      => $member
         ));
     }
 

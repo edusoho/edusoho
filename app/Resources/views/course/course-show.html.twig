@@ -3,6 +3,9 @@
 
 {% block full_content %}
 
+	{% set metas = course_show_metas() %}
+	{% set course = data('Course', {courseId: app.request.attributes.get('_route_params').id}) %}
+
 	{{ render(controller(metas.header,{course: course, member: member|default(null)})) }}
 
 	<div class="container">
@@ -17,7 +20,7 @@
 					  	{% for key, tab in metas.tabs %}
 						    <li role="presentation" class="{% if app.request.attributes.get('_route_params').tab|default('') == key %}active{% endif %}">
 						      <a 
-						      	{% if forMember|default(false) %}
+						      	{% if member|default(false) %}
 						      		href="{{ path('my_course_show', {'id': course.id, 'tab': key}) }}"
 						      	{% else %}
 						      		href="{{ path('course_show', {'id': course.id, 'tab': key}) }}"
@@ -45,7 +48,7 @@
 					<div class="course-detail-content">
 
 						{% block detail_content %}
-							{{ render(controller(currentTab.content, {course: course})) }}
+							{{ render(controller(metas.tabs[tab].content, {course: course, member: member|default(null)})) }}
 						{% endblock %}
 
 					</div>
