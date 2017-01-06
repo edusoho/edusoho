@@ -3,7 +3,7 @@
 
 {% block full_content %}
 
-	{% set metas = course_show_metas() %}
+	{% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
 	{% set course = data('Course', {courseId: app.request.attributes.get('_route_params').id}) %}
 
 	{{ render(controller(metas.header,{course: course, member: member|default(null)})) }}
