@@ -55,11 +55,6 @@ class CourseShowMetas
 					'name' => '课程目录', 
 					'content'	=> 'AppBundle:Course:tasks'
 				),
-				'threads' => array(
-					'name' 		=> '话题', 
-					'number'	=> 'threadNum',
-					'content'	=> 'AppBundle:CourseThread:index'
-				),
 				'reviews' => array(
 					'name' => '评价', 
 					'number'	=> 'reviewNum',
