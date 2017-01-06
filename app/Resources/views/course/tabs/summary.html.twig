@@ -1,6 +1,16 @@
 
 
 {% set courseSet = data('CourseSet', {id: course.courseSetId}) %}
+
+{% if member|default(null) %}
+<div class="es-piece">
+	<div class="piece-body">
+		想查看更多教学计划？<a href="{{path('course_show', {id: course.id})}}">返回课程宣传页</a>
+	</div>
+</div>
+{% endif %}
+
+
 <div class="es-piece">
 	<div class="piece-header">课程介绍</div>
 	<div class="piece-body p-lg clearfix">
