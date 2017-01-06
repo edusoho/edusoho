@@ -59,9 +59,9 @@
 	    <div class="col-lg-3 col-md-4 course-sidebar">
 	    	{% for key, widget in metas.widgets %}
 	    		{% if widget.type == 'render' %}
-	    			{{ render(controller(widget.uri, {id: course.id})) }}
+	    			{{ render(controller(widget.uri, {course: course})) }}
 	    		{% elseif widget.type == 'include' %}
-	    			{% include widget.uri with {id: course.id} %}
+	    			{% include widget.uri with {course: course} %}
 	    		{% endif %}
 	    	{% endfor %}
 	    </div>
