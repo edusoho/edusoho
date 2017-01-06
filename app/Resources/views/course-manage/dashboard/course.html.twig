@@ -1,9 +1,8 @@
-{% extends 'TopxiaWebBundle:CourseManage/Dashboard:layout.html.twig' %}
+{% extends 'course-manage/dashboard/layout.html.twig' %}
 
 {% set submenu = 'course_dashboard' %}
 {% do load_script('course-manage/dashboard/course') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-
+{# {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %} #}
 
 {% block dashboard %}
   <ul class="course-dashboard-header course-dashboard-ul">

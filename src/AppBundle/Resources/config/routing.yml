@@ -1643,10 +1643,14 @@ course_set_manage_course_orders_export_csv:
   path: /course_set/{courseSetId}/manage/course/{courseId}/orders/export
   defaults: { _controller: AppBundle:CourseManage:ordersExportCsv }
 
-
 course_set_manage_course_dashboard:
   path: /course_set/{courseSetId}/manage/course/{courseId}/dashboard
   defaults: {_controller: AppBundle:CourseManage:dashboard}
+
+course_lesson_detail_data:
+  path:  /course/lesson/detail/data/{courseId}/{lessonId}
+  defaults: { _controller: TopxiaWebBundle:CourseLesson:detailData }
+
 
 course_set_manage_course_close:
   path: /course_set/{courseSetId}/course/{courseId}/close

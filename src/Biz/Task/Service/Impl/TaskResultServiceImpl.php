@@ -1,13 +1,11 @@
 <?php
 
-
 namespace Biz\Task\Service\Impl;
-
 
 use Biz\BaseService;
 use Biz\Task\Dao\TaskResultDao;
-use Biz\Task\Service\TaskResultService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskResultService;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService
 {
@@ -43,7 +41,6 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
         return $this->getTaskResultDao()->deleteByTaskIdAndUserId($taskId, $user['id']);
     }
-
 
     public function createTaskResult($taskResult)
     {
@@ -113,7 +110,6 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->search($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
-
     public function countTaskResult($conditions)
     {
         return $this->getTaskResultDao()->count($conditions);
@@ -126,7 +122,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException('unlogin');
         }
-        $conditions  = array(
+        $conditions = array(
             'userId'   => $user->getId(),
             'status'   => 'finish',
             'courseId' => $courseId
@@ -146,6 +142,18 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->findByTaskIdsAndUserId($taskIds, $user->getId());
     }
 
+    public function countUsersByTaskIdAndLearnStatus($taskId, $status)
+    {
+        return $this->getTaskResultDao()->countUsersByTaskIdAndLearnStatus($taskId, $status);
+    }
+
+    /**
+     * 统计某个任务的学习次数，学习的定义为task_result的status为start、finish，不对用户去重；
+     */
+    public function countLearnNumByTaskId($taskId)
+    {
+        return $this->getTaskResultDao()->countLearnNumByTaskId($taskId);
+    }
 
     /**
      * @return TaskResultDao

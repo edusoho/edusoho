@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Task\Service;
-
 
 interface TaskResultService
 {
@@ -27,4 +25,11 @@ interface TaskResultService
     public function getUserLatestFinishedTaskResultByCourseId($courseId);
 
     public function findUserTaskResultsByTaskIds($taskIds);
+
+    public function countUsersByTaskIdAndLearnStatus($taskId, $status);
+
+    /**
+     * 统计某个任务的学习次数，学习的定义为task_result的status为start、finish，不对用户去重；
+     */
+    public function countLearnNumByTaskId($taskId);
 }

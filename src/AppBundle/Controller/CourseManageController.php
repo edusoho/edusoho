@@ -10,6 +10,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
 use Biz\Task\Strategy\StrategyContext;
+use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
@@ -425,7 +426,7 @@ class CourseManageController extends BaseController
         $courseSetting = $this->setting("course");
 
         if (!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) || $courseSetting["teacher_search_order"] != 1)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('查询订单已关闭，请联系管理员'));
+            throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
 
         $status = array(
@@ -466,7 +467,7 @@ class CourseManageController extends BaseController
             PHP_INT_MAX
         );
 
-        $userinfoFields = array('sn', 'createdTime', 'status', 'targetType', 'amount', 'payment', 'paidTime');
+//        $userinfoFields = array('sn', 'createdTime', 'status', 'targetType', 'amount', 'payment', 'paidTime');
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
@@ -538,27 +539,28 @@ class CourseManageController extends BaseController
     {
         $tab = $request->query->get('tab', 'course');
 
-//        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
         switch ($tab) {
             case 'course':
-                return $this->renderDashboardForCourse($course);
+                return $this->renderDashboardForCourse($course, $courseSet);
             case 'task':
-                return $this->renderDashboardForTasks($course);
+                return $this->renderDashboardForTasks($course, $courseSet);
             case 'task-detail':
-                return $this->renderDashboardForTaskDetails($course);
+                return $this->renderDashboardForTaskDetails($course, $courseSet);
             default:
                 throw new InvalidArgumentException("Unknown tab#{$tab}");
         }
     }
 
-    protected function renderDashboardForCourse($course)
+    protected function renderDashboardForCourse($course, $courseSet)
     {
         $summary             = $this->getReportService()->summary($course['id']);
         $lateMonthLearndData = $this->getReportService()->getLateMonthLearndData($course['id']);
 
         return $this->render('course-manage/dashboard/course.html.twig', array(
+            'courseSet'     => $courseSet,
             'course'        => $course,
             'summary'       => $summary,
             'studentNum'    => ArrayToolkit::column($lateMonthLearndData, 'studentNum'),
@@ -571,10 +573,11 @@ class CourseManageController extends BaseController
         ));
     }
 
-    protected function renderDashboardForTasks($course)
+    protected function renderDashboardForTasks($course, $courseSet)
     {
         $lessonStat = $this->getReportService()->getCourseLessonLearnStat($course['id']);
         return $this->render('course-manage/dashboard/lesson.html.twig', array(
+            'courseSet'    => $courseSet,
             'course'       => $course,
             'lessonTitles' => ArrayToolkit::column($lessonStat, 'alias'),
             'finishedRate' => ArrayToolkit::column($lessonStat, 'finishedRate'),
@@ -583,11 +586,11 @@ class CourseManageController extends BaseController
         ));
     }
 
-    protected function renderDashboardForTaskDetails($course)
+    protected function renderDashboardForTaskDetails($course, $courseSet)
     {
         $isLearnedNum = $this->getCourseMemberService()->countMembers(array('isLearned' => 1, 'courseId' => $course['id']));
 
-        $learnTime = $this->getCourseService()->searchLearnTime(array('courseId' => $course['id']));
+        $learnTime = $this->getActivityLearnLogService()->sumLearnTime(array('courseId' => $course['id']));
         $learnTime = $course["studentNum"] == 0 ? 0 : intval($learnTime / $course["studentNum"]);
 
         $noteCount = $this->getNoteService()->countCourseNotes(array('courseId' => $course['id']));
@@ -595,21 +598,22 @@ class CourseManageController extends BaseController
         $questionCount = $this->getThreadService()->countThreads(array('courseId' => $course['id'], 'type' => 'question'));
 
 //        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $course['id']), array('seq', 'ASC'), 0, 1000);
-        $lessons = $this->getTaskService()->findTasksByCourseId($course['id']);
+        $lessons = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
         foreach ($lessons as $key => $value) {
-            $lessonLearnedNum = $this->getCourseService()->findLearnsCountByLessonId($value['id']);
+            $lessonLearnedNum = $this->getTaskResultService()->countLearnNumByTaskId($value['id']);
 
-            $finishedNum = $this->getCourseService()->searchLearnCount(array('status' => 'finished', 'lessonId' => $value['id']));
+            $finishedNum = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($value['id'], 'finished');
 
-            $lessonLearnTime = $this->getCourseService()->searchLearnTime(array('lessonId' => $value['id']));
+            $lessonLearnTime = $this->getActivityLearnLogService()->sumLearnTime(array('taskId' => $value['id']));
             $lessonLearnTime = $lessonLearnedNum == 0 ? 0 : intval($lessonLearnTime / $lessonLearnedNum);
 
-            $lessonWatchTime = $this->getCourseService()->searchWatchTime(array('lessonId' => $value['id']));
-            $lessonWatchTime = $lessonWatchTime == 0 ? 0 : intval($lessonWatchTime / $lessonLearnedNum);
+            $lessonWatchTime = $this->getActivityLearnLogService()->sumLearnTime(array('taskId' => $value['id']));
+            $lessonWatchTime = $lessonLearnedNum == 0 ? 0 : intval($lessonWatchTime / $lessonLearnedNum);
 
             $lessons[$key]['LearnedNum']  = $lessonLearnedNum;
-            $lessons[$key]['length']      = intval($lessons[$key]['length'] / 60);
+            $lessons[$key]['length']      = intval($lessons[$key]['activity']['length']);
+            $lessons[$key]['type']        = $lessons[$key]['activity']['mediaType'];
             $lessons[$key]['finishedNum'] = $finishedNum;
             $lessons[$key]['learnTime']   = $lessonLearnTime;
             $lessons[$key]['watchTime']   = $lessonWatchTime;
@@ -624,6 +628,7 @@ class CourseManageController extends BaseController
         }
 
         return $this->render('course-manage/dashboard/lesson-learn.html.twig', array(
+            'courseSet'     => $courseSet,
             'course'        => $course,
             'isLearnedNum'  => $isLearnedNum,
             'learnTime'     => $learnTime,
@@ -739,5 +744,13 @@ class CourseManageController extends BaseController
     protected function getTestpaperService()
     {
         return $this->createService('Course:TestpaperService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 }
