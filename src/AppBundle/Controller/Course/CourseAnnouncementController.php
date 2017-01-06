@@ -14,12 +14,16 @@ class CourseAnnouncementController extends BaseController
         //TODO:这里需要根据用户所拥有的计划的权限展示
         $plans = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
+        $user   = $this->getUser();
+        $member = $user['id'] ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : null;
+
         return $this->render('course/announcement/write-modal.html.twig', array(
             'announcement' => array('id' => '', 'content' => ''),
             'targetObject' => $course,
             'targetType'   => 'course',
             'targetId'     => $targetId,
-            'plans'        => $plans
+            'plans'        => $plans,
+            'member'       => $member
         ));
     }
 
@@ -67,6 +71,11 @@ class CourseAnnouncementController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 
     protected function getCourseSetService()
