@@ -67,7 +67,7 @@
     </div>
 
     <div class="text-right">
-      {% if member|default(false) %}
+      {% if member.id|default(false) %}
         <a class="btn btn-primary btn-lg" href="{{ path('my_course_show', {id: course.id}) }}">去学习</a>
       {% else %}
         <a class="btn btn-default btn-lg mrm"><i class="es-icon es-icon-crown mr10"></i>会员</a>
