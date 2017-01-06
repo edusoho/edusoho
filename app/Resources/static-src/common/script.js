@@ -23,6 +23,8 @@ const loadJs = (path, fn, target) => {
   }
   elem.async = 1;
   elem.src = path;
+  console.log(target);
+  console.log(path);
   target.appendChild(elem);
 }
 
