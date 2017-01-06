@@ -17,7 +17,7 @@ class CourseController extends CourseBaseController
     public function showAction($id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems              = $this->getCourseService()->findCourseItems($course['id']);
+        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
         return $this->render('course/overview.html.twig', array(
             'courseSet'   => $courseSet,
@@ -158,12 +158,13 @@ class CourseController extends CourseBaseController
 
     public function taskListAction(Request $request, $id)
     {
-        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems              = $this->getCourseService()->findCourseItems($id);
+        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
+        $courseItems = $this->getCourseService()->findCourseItems($id);
 
         return $this->render('course/task-list/task-list.html.twig', array(
             'course'      => $course,
             'courseSet'   => $courseSet,
+            'member'      => $member,
             'courseItems' => $courseItems
         ));
     }
@@ -268,7 +269,7 @@ class CourseController extends CourseBaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -279,7 +280,7 @@ class CourseController extends CourseBaseController
     public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user                  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是课程的学员。');
         }

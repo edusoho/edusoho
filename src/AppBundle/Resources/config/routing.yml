@@ -1483,6 +1483,10 @@ course_task_show:
     path:  /course/{courseId}/task/{id}/show
     defaults: { _controller: AppBundle:Task:show }
 
+course_task_preview:
+    path:  /course/{courseId}/task/{id}/preview
+    defaults: { _controller: AppBundle:Task:preview }
+
 course_task_activity_show:
     path:  /course/{courseId}/task/{id}/activity_show
     defaults: { _controller: AppBundle:Task:taskActivity }
