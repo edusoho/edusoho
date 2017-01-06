@@ -12,7 +12,7 @@
         <div class="media-left">
           <a class=" js-user-card" href="{{ path('user_show', {'id': author.id }) }}"
              data-card-url="{{ path('user_card_show', {'userId': author.id}) }}" data-user-id="{{ author.id }}">
-            <img class="avatar-sm" src="{{ filepath(author.smallAvatar) }}">
+            <img class="avatar-sm" src="{{ filepath(author.smallAvatar, 'avatar.png') }}">
           </a>
         </div>
         <div class="media-body">
@@ -26,11 +26,13 @@
             {% if task %}
               · {% if member %}
                   <a href="{{ path('course_task_show', {'courseId': course.id, 'id': note.taskId}) }}" class="period" target="_blank">
+                    {{ task.title }}
+                  </a>
                 {% else %}
-                  <a href="javascript:;" class="period" target="_blank">
+                  <a href="javascript:;" class="period">
+                    {{ task.title }}
+                  </a>
                 {% endif %}
-                {{ task.title }}
-              </a>
             {% else %}
               · 该任务已被删除
             {% endif %}
