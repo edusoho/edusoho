@@ -4,7 +4,7 @@
 {% block activity_content %}
   <div class="form-group expiry-day-js">
     <div class="col-sm-2 control-label">
-      <label for="startTime">{{ '直播开始时间'|trans }}<i class="color-danger ml5">*</i></label>
+      <label for="startTime" class="control-label-required">{{ '直播开始时间'|trans }}</label>
     </div>
     <div class="col-sm-10">
       <input id="startTime" class="form-control inline-block width-150" type="text" name="startTime" value="{{ activity.startTime|default('') }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %}></div>

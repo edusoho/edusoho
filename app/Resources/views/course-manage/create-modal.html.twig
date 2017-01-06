@@ -16,7 +16,7 @@
       <form class="form-horizontal" id="course-create-form" action="{{path('course_set_manage_course_create', {courseSetId: courseSet.id})}}" method="post">
         <div class="form-group">
           <div class="col-sm-2 control-label">
-            <label for="title">{{'新计划名称'|trans}}<i class="color-danger ml5">*</i></label>
+            <label for="title" class="control-label-required">{{'新计划名称'|trans}}</label>
             
           </div>
           <div class="col-sm-8">
