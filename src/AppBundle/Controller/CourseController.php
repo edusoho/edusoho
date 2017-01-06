@@ -15,12 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
 {
-    public function summaryAction($course)
+    public function summaryAction($course, $member = array())
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         return $this->render('course/tabs/summary.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course
+            'course' => $course,
+            'member' => $member
         ));
     }
 
