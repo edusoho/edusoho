@@ -112,7 +112,7 @@ class TaskController extends BaseController
 
     public function finishAction(Request $request, $courseId, $id)
     {
-        $result = $this->getTaskService()->finishTask($id);
+        $result = $this->getTaskService()->finishTaskResult($id);
         $task   = $this->getTaskService()->getTask($id);
         list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
