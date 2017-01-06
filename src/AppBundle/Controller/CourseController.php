@@ -2,31 +2,31 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\MaterialService;
-use Biz\Course\Service\ReviewService;
-use Biz\Task\Service\TaskResultService;
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
+use Biz\Course\Service\ReviewService;
+use Biz\Course\Service\MaterialService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseNoteService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
 
 class CourseController extends CourseBaseController
 {
     public function summaryAction($course, $member = array())
     {
         return $this->render('course/tabs/summary.html.twig', array(
-            'course'      => $course,
-            'member'      => $member
+            'course' => $course,
+            'member' => $member
         ));
     }
 
     public function showAction(Request $request, $id, $tab = 'summary')
     {
         return $this->render('course/course-show.html.twig', array(
-            'tab'   => $tab,
+            'tab' => $tab
         ));
     }
 
@@ -48,10 +48,10 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function notesAction($course, $member=array())
+    public function notesAction($course, $member = array())
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+        $notes     = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $users = ArrayToolkit::index($users, 'id');
@@ -76,7 +76,7 @@ class CourseController extends CourseBaseController
 
     public function reviewsAction(Request $request, $course, $member = array())
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $courseSet  = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $conditions = array(
             'courseId' => $course['id'],
             'parentId' => 0
@@ -95,7 +95,7 @@ class CourseController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-
+        $userReview = array();
         if (!empty($member)) {
             $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $course['id']);
         }
@@ -106,8 +106,9 @@ class CourseController extends CourseBaseController
             'courseSet'  => $courseSet,
             'course'     => $course,
             'reviews'    => $reviews,
-            'userReview' => empty($userReview) ? array() : $userReview ,
+            'userReview' => $userReview,
             'users'      => $users,
+            'member'     => $member
         ));
     }
 

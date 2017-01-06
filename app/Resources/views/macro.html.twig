@@ -21,9 +21,10 @@
 
 {# options 可以传card(显示卡片), _blank(新开窗口), null_link(空链接) #}
 {%- macro user_avatar_link(user, size, options = []) -%}
+  {% set size = size|default('small') %}
   {% if user %}
     <a
-      class="avatar-link-{size} {% if 'card' in options %}js-user-card{% endif %}"
+      class="avatar-link-{{ size }} {% if 'card' in options %}js-user-card{% endif %}"
       {% if '_blank' in options %}
         target="_blank"
       {% endif %}
@@ -33,7 +34,7 @@
       {{ _self.user_avater_img(user, size) }}
     </a>
   {% else %}
-    <a class="avatar-link-{size}" href="javascript:;">
+    <a class="avatar-link-{{ size }}" href="javascript:;">
       {{ _self.user_avater_img(user, size) }}
     </a>
   {% endif %}
@@ -41,7 +42,7 @@
 
 {%- macro user_avater_img(user, size) -%}
   {% set userAvatar = user[size~'Avatar']|default('') %}
-  <img class="avatar-{size}"  src="{{ filepath(userAvatar, 'avatar.png', 'user') }}">
+  <img class="avatar-{{ size }}"  src="{{ filepath(userAvatar, 'avatar.png', 'user') }}">
 {%- endmacro -%}
 
 
