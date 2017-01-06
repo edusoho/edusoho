@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class CourseThreadController extends CourseBaseController
 {
@@ -70,7 +70,7 @@ class CourseThreadController extends CourseBaseController
             $classroom        = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomSettingname%，如有需要请联系客服', array('%classroomSettingname%' =>$classroomSetting['name'] )), '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomSettingname%，如有需要请联系客服', array('%classroomSettingname%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
             }
         }
 
@@ -143,15 +143,15 @@ class CourseThreadController extends CourseBaseController
         }
 
         if ($member && $member['levelId'] > 0) {
-            if(empty($course['vipLevelId'])){
+            if (empty($course['vipLevelId'])) {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
-            } elseif (empty($course['parentId']) 
+            } elseif (empty($course['parentId'])
                 && $this->isVipPluginEnabled()
                 && $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok') {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
             } elseif (!empty($course['parentId'])) {
-                $classroom        = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-                if(!empty($classroom) 
+                $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+                if (!empty($classroom)
                     && $this->isVipPluginEnabled()
                     && $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']) != 'ok') {
                     return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
@@ -386,7 +386,7 @@ class CourseThreadController extends CourseBaseController
             $classroom        = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
-                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomSettingname%，如有需要请联系客服', array('%classroomSettingname%' =>$classroomSetting['name'] )), '', 3, $this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomSettingname%，如有需要请联系客服', array('%classroomSettingname%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
             }
         }
 
@@ -413,7 +413,7 @@ class CourseThreadController extends CourseBaseController
                 $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
 
                 $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $id), true);
-                $threadUrl .= "#post-".$post['id'];
+                $threadUrl .= "?#post-".$post['id'];
 
                 if ($thread['userId'] != $currentUser->id) {
                     $message = array(

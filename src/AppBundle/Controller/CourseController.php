@@ -2,66 +2,56 @@
 
 namespace AppBundle\Controller;
 
-
-use Biz\Course\Service\ReviewService;
-use Biz\Task\Service\TaskResultService;
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
+use Biz\Course\Service\ReviewService;
+use Biz\Course\Service\MaterialService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseNoteService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
-use Topxia\Service\Common\ServiceKernel;
 
 class CourseController extends CourseBaseController
 {
-    public function showAction($id)
+    public function summaryAction($course, $member = array())
     {
-        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
-
-        return $this->render('course/overview.html.twig', array(
-            'courseSet'   => $courseSet,
-            'course'      => $course,
-            'courseItems' => $courseItems
+        return $this->render('course/tabs/summary.html.twig', array(
+            'course' => $course,
+            'member' => $member
         ));
     }
 
-    public function headerAction(Request $request, $id)
-    {   
-        $course = $this->getCourseService()->getCourse($id);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
+    public function showAction(Request $request, $id, $tab = 'summary')
+    {
+        return $this->render('course/course-show.html.twig', array(
+            'tab' => $tab
+        ));
+    }
 
-        $user      = $this->getCurrentUser();
-        $member    = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
+    public function headerAction(Request $request, $course)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
+
+        $user           = $this->getCurrentUser();
+        $member         = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
         $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']) : false;
 
-        return $this->render('course/part/header-for-guest.html.twig', array(
-            'isUserFavorite'    => $isUserFavorite,
-            'member'            => $member,
-            'courseSet'         => $courseSet,
-            'courses'           => $courses,
-            'course'            => $course,
+        return $this->render('course/header/header-for-guest.html.twig', array(
+            'isUserFavorite' => $isUserFavorite,
+            'member'         => $member,
+            'courseSet'      => $courseSet,
+            'courses'        => $courses,
+            'course'         => $course
         ));
     }
 
-    public function detailNavsPartAction(Request $request, $id, $nav = null)
+    public function notesAction($course, $member = array())
     {
-        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
-
-        return $this->render('course/part/detail-navs.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course,
-            'member'    => $member,
-            'nav'       => $nav
-        ));
-    }
-
-    public function notesAction($id)
-    {
-        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-
-        $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $notes     = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $users = ArrayToolkit::index($users, 'id');
@@ -72,20 +62,21 @@ class CourseController extends CourseBaseController
         $currentUser = $this->getCurrentUser();
         $likes       = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
         $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
-        return $this->render('course/note/notes.html.twig', array(
+
+        return $this->render('course/tabs/notes.html.twig', array(
             'course'      => $course,
             'courseSet'   => $courseSet,
             'notes'       => $notes,
             'users'       => $users,
             'tasks'       => $tasks,
-            'likeNoteIds' => $likeNoteIds
+            'likeNoteIds' => $likeNoteIds,
+            'member'      => $member
         ));
     }
 
-    public function reviewListAction(Request $request, $id)
+    public function reviewsAction(Request $request, $course, $member = array())
     {
-        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $id);
-
+        $courseSet  = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $conditions = array(
             'courseId' => $course['id'],
             'parentId' => 0
@@ -104,12 +95,14 @@ class CourseController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        $user       = $this->getCurrentUser();
-        $userReview = $this->getReviewService()->getUserCourseReview($user['id'], $course['id']);
+        $userReview = array();
+        if (!empty($member)) {
+            $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $course['id']);
+        }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
 
-        return $this->render('course/review/list.html.twig', array(
+        return $this->render('course/tabs/reviews.html.twig', array(
             'courseSet'  => $courseSet,
             'course'     => $course,
             'reviews'    => $reviews,
@@ -147,19 +140,18 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function taskListAction(Request $request, $id)
+    public function tasksAction($course, $member = array())
     {
-        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
-        $courseItems = $this->getCourseService()->findCourseItems($id);
+        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
-        return $this->render('course/task-list/task-list.html.twig', array(
+        return $this->render('course/tabs/tasks.html.twig', array(
             'course'      => $course,
-            'courseSet'   => $courseSet,
-            'courseItems' => $courseItems
+            'courseItems' => $courseItems,
+            'member'      => $member
         ));
     }
 
-    public function characteristicPartAction(Request $request, $id)
+    public function characteristicAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
 
@@ -181,36 +173,36 @@ class CourseController extends CourseBaseController
             }
         }
 
-        return $this->render('course/part/characteristic.html.twig', array(
+        return $this->render('course/widgets/characteristic.html.twig', array(
             'course'             => $course,
             'characteristicData' => $characteristicData
         ));
     }
 
-    public function otherCoursePartAction(Request $request, $id)
+    public function otherCourseAction(Request $request, $id)
     {
         list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
 
         $otherCourse = $course; // $this->getCourseService()->getOtherCourses($course['id']);
 
-        return $this->render('course/part/other-course.html.twig', array(
+        return $this->render('course/widgets/other-course.html.twig', array(
             'otherCourse' => $otherCourse,
             'courseSet'   => $courseSet
         ));
     }
 
-    public function teachersPartAction(Request $request, $id)
+    public function teachersAction(Request $request, $id)
     {
         list(, $course) = $this->tryGetCourseSetAndCourse($id);
 
         $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
-        return $this->render('course/part/teachers.html.twig', array(
+        return $this->render('course/widgets/teachers.html.twig', array(
             'teachers' => $teachers
         ));
     }
 
-    public function newestStudentsPartAction(Request $request, $id)
+    public function newestStudentsAction(Request $request, $id)
     {
         list(, $course) = $this->tryGetCourseSetAndCourse($id);
 
@@ -224,7 +216,7 @@ class CourseController extends CourseBaseController
         $studentIds = ArrayToolkit::column($members, 'userId');
         $students   = $this->getUserService()->findUsersByIds($studentIds);
 
-        return $this->render('course/part/newest-students.html.twig', array(
+        return $this->render('course/widgets/newest-students.html.twig', array(
             'students' => $students
         ));
     }
@@ -234,16 +226,16 @@ class CourseController extends CourseBaseController
         $order = $this->getOrderService()->getOrderBySn($sn);
 
         if (empty($order)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('订单不存在!'));
+            throw $this->createNotFoundException('订单不存在!');
         }
 
         $course = $this->getCourseService()->getCourse($order['targetId']);
 
         if (empty($course)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('课程不存在，或已删除。'));
+            throw $this->createNotFoundException('课程不存在，或已删除。');
         }
 
-        return $this->render('course/course-order.html.twig', array('order' => $order, 'course' => $course));
+        return $this->render('course/widgets/course-order.html.twig', array('order' => $order, 'course' => $course));
     }
 
     public function qrcodeAction(Request $request, $id)
@@ -259,7 +251,7 @@ class CourseController extends CourseBaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -270,13 +262,13 @@ class CourseController extends CourseBaseController
     public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user = $this->getCurrentUser();
+        $user                  = $this->getCurrentUser();
         if (empty($member)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程的学员。'));
+            throw $this->createAccessDeniedException('您不是课程的学员。');
         }
 
         if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
+            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
         }
 
         $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
@@ -307,6 +299,14 @@ class CourseController extends CourseBaseController
     }
 
     /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
+    /**
      * @return TaskResultService
      */
     protected function getTaskResultService()
@@ -327,9 +327,12 @@ class CourseController extends CourseBaseController
         return $this->createService('Order:OrderService');
     }
 
-    protected function getServiceKernel()
+    /**
+     * @return MaterialService
+     */
+    protected function getMaterialService()
     {
-        return ServiceKernel::instance();
+        return $this->createService('Course:MaterialService');
     }
 
     /**

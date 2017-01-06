@@ -6,7 +6,7 @@
     <div class="course-item">
       <div class="course-img">
         <a href="{{ path('course_show', {id: otherCourse.id }) }}" target="_blank">
-          <img src="{{ filepath(courseSet.cover[1]|default(''), 'course.png') }}" alt="{{ otherCourse.title }}"
+          <img src="{{ filepath(course.cover.middle|default(''), 'course.png') }}" alt="{{ otherCourse.title }}"
                class="img-responsive"></a>
       </div>
       <div class="course-info">

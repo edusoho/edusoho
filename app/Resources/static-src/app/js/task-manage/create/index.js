@@ -79,6 +79,14 @@ class Editor {
     let postData = $('#step1-form').serializeArray()
       .concat(this.$iframe_body.find('#step2-form').serializeArray())
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
+
+    if($('#task-create-type').data('editor-mode') == 'create' 
+      && $('#courseExpiryMode').val() == 'days' 
+      && $('#mediaType').val() == 'live' 
+      && !confirm('本课程的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。确定要添加吗？')){
+      return;
+    }
+
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
         this.$element.modal('hide');

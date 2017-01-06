@@ -2,8 +2,9 @@
 
 namespace Biz\Activity\Type;
 
-use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Topxia\Common\ArrayToolkit;
 
 class Text extends Activity
 {
@@ -34,9 +35,10 @@ class Text extends Activity
         $result       = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity     = $this->getActivityService()->getActivity($activityId);
         $textActivity = $this->getTextActivityDao()->get($activity['mediaId']);
+
         return !empty($result)
-        && $textActivity['finishType'] == 'time'
-        && $result > $textActivity['finishDetail'];
+            && $textActivity['finishType'] == 'time'
+            && $result >= $textActivity['finishDetail'];
     }
 
     public function delete($targetId)
@@ -60,6 +62,9 @@ class Text extends Activity
         return $this->getBiz()->dao('Activity:TextActivityDao');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service('Activity:ActivityLearnLogService');

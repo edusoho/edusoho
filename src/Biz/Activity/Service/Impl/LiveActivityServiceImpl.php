@@ -20,10 +20,17 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
     public function createLiveActivity($activity)
     {
+        if (empty($activity['startTime'])
+            || $activity['startTime'] <= time()
+            || empty($activity['length'])
+            || $activity['length'] <= 0) {
+            throw $this->createInvalidArgumentException('参数有误');
+        }
+
         //创建直播室
         $speaker = $this->getUserService()->getUser($activity['fromUserId']);
         if (empty($speaker)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('教师不存在！'));
+            throw $this->createNotFoundException('教师不存在！');
         }
 
         $speaker = $speaker['nickname'];
@@ -47,7 +54,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         ));
 
         if (empty($live)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('云直播创建失败，请重试！'));
+            throw $this->createNotFoundException('云直播创建失败，请重试！');
         }
 
         if (isset($live['error'])) {

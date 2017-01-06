@@ -12,7 +12,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
     {
         $task = $this->baseCreateTask($field);
 
-        $task['activity'] = $this->getActivityService()->getActivityFetchMedia($task['activityId']);
+        $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
         return $task;
     }
 

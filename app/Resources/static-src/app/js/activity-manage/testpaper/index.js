@@ -202,17 +202,19 @@ class Testpaper {
       this.showEndTime(date);
     });
     $starttime.datetimepicker('setStartDate',data);
+    this.showEndTime(Date.parse($starttime.val()));
   }
 
   showEndTime(date) {
     let limitedTime = $('input[name="limitedTime"]').val();
-    
     if (limitedTime != 0) {
       let endTime = new Date(date + limitedTime * 60 * 1000);
       let endDate = endTime.Format("yyyy-MM-dd hh:mm");
       $('#starttime-show').html(endDate);
       $('.endtime-input').removeClass('hidden');
       $('input[name="endTime"]').val(endDate);
+    }else {
+      $('.endtime-input').addClass('hidden');
     }
   }
 }
