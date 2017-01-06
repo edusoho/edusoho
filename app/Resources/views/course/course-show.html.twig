@@ -36,7 +36,7 @@
 					  	{% endfor %}
 					  </ul>
 
-					  {% if (course.parentId == 0 or course.locked == 0) and (app.user.admin|default(false) or member.role|default('') == "teacher") %}
+					  {% if member|default(false) and (course.parentId == 0 or course.locked == 0) and (app.user.admin|default(false) or member.role|default('') == "teacher") %}
 					    <div class="btnbar hidden-xs">
 					      <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}" class="btn btn-link">
 					        <i class="es-icon es-icon-anonymous-iconfont"></i>
