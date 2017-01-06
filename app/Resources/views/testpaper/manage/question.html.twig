@@ -86,7 +86,7 @@ tr.placeholder:before {
             <input type="checkbox" data-role="batch-select">{{'全选'|trans}}</label>
           <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn"  data-name="{{'题目'|trans}}">{{'删除'|trans}}</button>
         </p>
-        <p class="passedScoreDiv" {% if hasEssay %}style="display:none"{% endif %}>{{'这是一份纯客观题的试卷, 达到'|trans}}
+        <p class="js-passedScoreDiv {% if hasEssay %} hidden {% endif %}">{{'这是一份纯客观题的试卷, 达到'|trans}}
           <input type="text" name="passedScore" class="form-control width-150 mhs" value="{{ passedScoreDefault }}" data-score-total="0" />{{'分（含）可以自动审阅通过考试。'|trans}}</div>
         </p>
         <button type="button" class="btn btn-primary request-save">{{'保存'|trans}}</button>
