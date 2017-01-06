@@ -243,10 +243,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function isFinished($taskId)
     {
         $task   = $this->getTask($taskId);
-        $course = $this->getCourseService()->getCourse($task['courseId']);
-        // TODO
-        return true;
-        return $course[''] && $this->getActivityService()->isFinished($task['activityId']);
+        return $this->getActivityService()->isFinished($task['activityId']);
     }
 
     public function tryTakeTask($taskId)
