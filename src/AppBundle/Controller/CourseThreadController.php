@@ -63,7 +63,7 @@ class CourseThreadController extends CourseBaseController
 
     public function showAction(Request $request, $courseId, $threadId)
     {
-        list($courseSet, $course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);
+        list($course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);
 
         if (!empty($response)) {
             return $response;
@@ -79,13 +79,12 @@ class CourseThreadController extends CourseBaseController
 
         $user = $this->getCurrentUser();
 
-        //TODO 会员过期？
         $isMemberNonExpired = true;
-        // if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
-        //     $isMemberNonExpired = false;
-        // } else {
-        //     $isMemberNonExpired = true;
-        // }
+        if ($member && !$this->getMemberService()->isMemberNonExpired($course, $member)) {
+            $isMemberNonExpired = false;
+        } else {
+            $isMemberNonExpired = true;
+        }
 
         $thread = $this->getThreadService()->getThread($course['id'], $threadId);
 
@@ -123,7 +122,6 @@ class CourseThreadController extends CourseBaseController
 
         $task = $this->getTaskService()->getTask($thread['taskId']);
         return $this->render("course/thread/show.html.twig", array(
-            'courseSet'          => $courseSet,
             'course'             => $course,
             'member'             => $member,
             'task'               => $task,
@@ -140,15 +138,15 @@ class CourseThreadController extends CourseBaseController
 
     public function createAction(Request $request, $courseId)
     {
-        list($courseSet, $course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);
+        list($course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);
 
         if ($response) {
             return $response;
         }
 
-        // if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
-        //     return $this->redirect($this->generateUrl('course_threads', array('id' => $id)));
-        // }
+        if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+            return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
+        }
 
         if ($member && $member['levelId'] > 0) {
             if (empty($course['vipLevelId'])) {
@@ -171,7 +169,7 @@ class CourseThreadController extends CourseBaseController
         $form = $this->createThreadForm(array(
             'type'        => $type,
             'courseId'    => $course['id'],
-            'courseSetId' => $courseSet['id']
+            'courseSetId' => $course['courseSetId']
         ));
 
         if ($request->getMethod() == 'POST') {
@@ -194,11 +192,10 @@ class CourseThreadController extends CourseBaseController
         }
 
         return $this->render("course/thread/form.html.twig", array(
-            'courseSet' => $courseSet,
-            'course'    => $course,
-            'member'    => $member,
-            'form'      => $form->createView(),
-            'type'      => $type
+            'course' => $course,
+            'member' => $member,
+            'form'   => $form->createView(),
+            'type'   => $type
         ));
     }
 
@@ -209,7 +206,7 @@ class CourseThreadController extends CourseBaseController
 
     public function editAction(Request $request, $courseId, $threadId)
     {
-        list($courseSet, $course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);
+        list($course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);
 
         if ($response) {
             return $response;
@@ -266,12 +263,11 @@ class CourseThreadController extends CourseBaseController
         }
 
         return $this->render("course/thread/form.html.twig", array(
-            'form'      => $form->createView(),
-            'courseSet' => $courseSet,
-            'course'    => $course,
-            'member'    => $member,
-            'thread'    => $thread,
-            'type'      => $thread['type']
+            'form'   => $form->createView(),
+            'course' => $course,
+            'member' => $member,
+            'thread' => $thread,
+            'type'   => $thread['type']
         ));
     }
 
@@ -424,9 +420,6 @@ class CourseThreadController extends CourseBaseController
                 $attachment = $request->request->get('attachment');
                 $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
 
-                $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
-                $threadUrl .= "#post-".$post['id'];
-
                 if ($thread['userId'] != $currentUser->id) {
                     $message = array(
                         'userId'     => $currentUser['id'],
@@ -461,13 +454,10 @@ class CourseThreadController extends CourseBaseController
                     }
                 }
 
-                return $this->render('course/thread/post-list-item.html.twig', array(
-                    'course'    => $course,
-                    'thread'    => $thread,
-                    'post'      => $post,
-                    'author'    => $this->getUserService()->getUser($post['userId']),
-                    'isManager' => $this->getCourseService()->hasCourseManagerRole($course['id'])
-                ));
+                $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
+                $threadUrl .= "?#post-".$post['id']; // add ? to fix chrome bug
+
+                return $this->redirect($threadUrl);
             } else {
                 return $this->createJsonResponse(false);
             }
@@ -560,10 +550,10 @@ class CourseThreadController extends CourseBaseController
                     $this->getNotificationService()->notify($post['userId'], 'course-thread', $message);
                 }
 
-                return $this->redirect($this->generateUrl('course_thread_show', array(
-                    'courseId' => $post['courseId'],
-                    'threadId' => $post['threadId']
-                )));
+                $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $post['courseId'], 'threadId' => $post['threadId']), true);
+                $threadUrl .= "?#post-".$post['id']; // add ? to fix chrome bug
+
+                return $this->redirect($threadUrl);
             }
         }
 

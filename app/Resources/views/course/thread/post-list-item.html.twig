@@ -1,5 +1,5 @@
 {% import "macro.html.twig" as web_macro %}
-<li id="post-{{ post.id }}" class="thread-post media clearfix">
+<li id="post-{{ post.id }}" name="post-{{ post.id }}" class="thread-post media clearfix">
   {{ web_macro.user_avatar(author, 'pull-left media-object') }}
 
   {% if isManager or app.user.id == author.id %}

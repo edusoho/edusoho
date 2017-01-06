@@ -27,7 +27,7 @@
           </div>
         {% endif %}
 
-        {% if task.status != 'publish' %}
+        {% if task.status != 'published' %}
           <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mlm"></i>
           </span>

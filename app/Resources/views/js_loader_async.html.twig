@@ -1,6 +1,7 @@
 <script id="script-loader-async" type="text/javascript">
   "use strict";
   (function() {
+    // 应该传入的trget
     var paths = [
       {% for path in script() %}
         {% if '//' in path %}
