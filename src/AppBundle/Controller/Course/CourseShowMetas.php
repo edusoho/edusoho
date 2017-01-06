@@ -64,7 +64,7 @@ class CourseShowMetas
 					'name' => '笔记',
 					'number'	=> 'noteNum',
 					'content'  => 'AppBundle:Course:notes'
-				),
+				)
 			),
 			'widgets' => array(
 				'characteristic' => array(

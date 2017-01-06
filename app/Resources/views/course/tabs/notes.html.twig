@@ -24,8 +24,11 @@
             <a class="link-dark name" href="{{ path('user_show', {'id': author.id }) }}">{{ author.nickname }}</a>
             · <span>{{ note.createdTime|smart_time }}</span>
             {% if task %}
-              · <a href="{{ path('course_task_show', {'courseId': course.id, 'id': note.taskId}) }}"
-                 class="period" target="_blank">
+              · {% if member %}
+                  <a href="{{ path('course_task_show', {'courseId': course.id, 'id': note.taskId}) }}" class="period" target="_blank">
+                {% else %}
+                  <a href="javascript:;" class="period" target="_blank">
+                {% endif %}
                 {{ task.title }}
               </a>
             {% else %}
