@@ -1,7 +1,5 @@
 <script id="script-loader-async" type="text/javascript">
   "use strict";
-
-
   (function() {
     // 应该传入的trget
     var paths = [
@@ -17,12 +15,9 @@
         {% endif %}
       {% endfor %}
     ];
-    console.log(paths);
-    console.log( document.getElementById('modal'));
 
     script(paths, function() {
       var node = document.getElementById('script-loader-async');
-      console.log(node);
       if(node) {
         node.parentNode.removeChild(node);
       }
