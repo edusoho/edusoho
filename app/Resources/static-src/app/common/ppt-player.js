@@ -2,22 +2,20 @@ import Emitter from "common/es-event-emitter";
 import screenfull from "screenfull";
 
 export default class PPT extends Emitter {
-  constructor({ element, slides, watermark }) {
+  constructor({element, slides, watermark}) {
     super();
-
     this.element = $(element);
     this.slides = slides || [];
     this.watermark = watermark || '';
     this._KEY_ACTION_MAP = {
-      37: this._onPrev,
-      39: this._onNext,
-      35: this._onLast,
-      36: this._onFirst
+      37: this._onPrev,  // ←
+      39: this._onNext,  // →
+      38: this._onLast,  // ↑
+      40: this._onFirst  // ↓
     };
-    this.total = 0;
+    this.total = this.slides.length;
     this._page = 0;
     this.placeholder = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC";
-    this._bindEvents();
     this._init();
   }
 
@@ -69,23 +67,55 @@ export default class PPT extends Emitter {
     });
   }
 
-  _init() {
-    this.total = this.slides.length;
+  _render() {
+    let html = `
+      <div class="slide-player">
+        <div class="slide-player-body loading-background"></div>
+        <div class="slide-notice">
+          <div class="header">{{ '已经到最后一张图片了哦'|trans }}
+            <button type="button" class="close">×</button>
+          </div>
+        </div>
+      
+        <div class="slide-player-control clearfix">
+          <a href="javascript:" class="goto-first">
+            <span class="glyphicon glyphicon-step-backward"></span>
+          </a>
+          <a href="javascript:" class="goto-prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </a>
+          <a href="javascript:" class="goto-next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </a>
+          <a href="javascript:" class="goto-last">
+            <span class="glyphicon glyphicon-step-forward"></span>
+          </a>
+          <a href="javascript:" class="fullscreen">
+            <span class="glyphicon glyphicon-fullscreen"></span>
+          </a>
+          <div class="goto-page-input">
+            <input type="text" class="goto-page form-control input-sm" value="1">&nbsp;/&nbsp;
+              <span class="total"></span>
+          </div>
+        </div>
+      </div>`;
+
+    this.element.html(html);
+
     this.element.find('.total').text(this.total);
 
-    let html = this.slides.reduce((html, src, index) => {
+    let slidesHTML = this.slides.reduce((html, src, index) => {
       html += `<img data-src="${src}" class="slide" data-page="${index + 1}">`;
       return html;
     }, '');
 
-    this.element.find('.slide-player-body').html(html);
-
+    this.element.find('.slide-player-body').html(slidesHTML);
     this.watermark && this.element.append(`<div class="slide-player-watermark">${this.watermark}</div>`);
+  }
 
-    $(document).on('keydown', (event) => {
-      this._KEY_ACTION_MAP[event.keyCode] && this._KEY_ACTION_MAP[event.keyCode].call(this);
-    });
-
+  _init() {
+    this._render();
+    this._bindEvents();
     this._onFirst();
   }
 
@@ -106,14 +136,18 @@ export default class PPT extends Emitter {
   }
 
   _bindEvents() {
-    this.element.on('click', '.goto-next', this._onNext.bind(this));
-    this.element.on('click', '.goto-prev', this._onPrev.bind(this));
-    this.element.on('click', '.goto-first', this._onFirst.bind(this));
-    this.element.on('click', '.goto-last', this._onLast.bind(this));
-    this.element.on('click', '.fullscreen', this._onFullScreen.bind(this));
-    this.element.on('change', '.goto-page', this._onChangePage.bind(this));
+    $(document).on('keydown', (event) => {
+      this._KEY_ACTION_MAP[event.keyCode] && this._KEY_ACTION_MAP[event.keyCode].call(this);
+    });
+
+    this.element.on('click', '.goto-next', event => this._onNext(event));
+    this.element.on('click', '.goto-prev', event => this._onPrev(event));
+    this.element.on('click', '.goto-first', event => this._onFirst(event));
+    this.element.on('click', '.goto-last', event => this._onLast(event));
+    this.element.on('click', '.fullscreen', event => this._onFullScreen(event));
+    this.element.on('change', '.goto-page', event => this._onChangePage(event));
     let self = this;
-    this.on('change', ({ current, before }) => {
+    this.on('change', ({current, before}) => {
       if (current == self.total) {
         self.trigger('end');
       }
@@ -145,7 +179,7 @@ export default class PPT extends Emitter {
     this.page = this.total
   }
 
-  _onFullScreen(event) {
+  _onFullScreen() {
     if (!screenfull.enabled) {
       return;
     }
