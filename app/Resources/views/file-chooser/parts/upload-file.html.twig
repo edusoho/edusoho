@@ -57,20 +57,10 @@
     </div>
   {% endif %}
 
-  {% if mediaType|default(null) == 'document' and setting('storage.upload_mode', 'local') != 'local'  %}
-    <div class="uploader-bottom text-right">
-      <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="支持pdf,doc,docx,xls,xlsx格式的文档上传，且文件大小不能超过 100 MB。<br/>文档将上传到云服务器">上传说明</a>
-    </div>
-  {% endif %}
-
   {% if mediaType|default(null) == 'ppt' and setting('storage.upload_mode', 'local') != 'local'  %}
     <div class="uploader-bottom text-right">
       <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="支持ppt, pptx格式的PPT文件上传，且文件大小不能超过100 MB。<br/>PPT将上传到云服务器">上传说明</a>
     </div>
   {% endif %}
-
-
-  
-  
 
 </div>
