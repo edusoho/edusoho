@@ -9,9 +9,12 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 {
     protected $table = 'c2_course';
 
-    public function findCoursesByCourseSetId($courseSetId)
+    public function findCoursesByCourseSetIdAndStatus($courseSetId, $status)
     {
-        return $this->findInField('courseSetId', array($courseSetId));
+        if (empty($status)) {
+            return $this->findByFields(array('courseSetId' => $courseSetId));
+        }
+        return $this->findByFields(array('courseSetId' => $courseSetId, 'status' => $status));
     }
 
     public function getDefaultCourseByCourseSetId($courseSetId)
@@ -19,18 +22,21 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->getByFields(array('courseSetId' => $courseSetId, 'isDefault' => 1));
     }
 
-    public function getFirstPublishedByCourseSetId($courseSetId)
-    {
-        $records = $this->search(array('courseSetId' => $courseSetId, 'status' => 'published'), array('createdTime' => 'ASC'), 0, 1);
-        if (!empty($records)) {
-            return $records[0];
-        }
-        return null;
-    }
-
     public function findCoursesByIds($ids)
     {
         return $this->findInField('id', $ids);
+    }
+
+    // rename: analysisCourseSumByTime
+    public function countCreatedCoursesLessThanEndTimeByGroupDate($endTime)
+    {
+        $sql
+            = "SELECT date , max(a.Count) as count from (
+                    SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,(
+                        SELECT count(id) as count FROM  `{$this->getTable()}` i WHERE i.createdTime<=o.createdTime and i.parentId = 0
+                    )  as Count from `{$this->getTable()}`  o  where o.createdTime<={$endTime} order by 1,2
+                ) as a group by date ";
+        return $this->getConnection()->fetchAll($sql);
     }
 
     public function declares()

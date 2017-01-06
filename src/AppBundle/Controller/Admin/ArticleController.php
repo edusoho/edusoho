@@ -7,7 +7,6 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Topxia\Service\Common\ServiceKernel;
 
 class ArticleController extends BaseController
 {
@@ -195,7 +194,7 @@ class ArticleController extends BaseController
 
     protected function getArticleService()
     {
-        return $this->createService('admin/article/ArticleService');
+        return $this->createService('Article:ArticleService');
     }
 
     protected function getTagService()
@@ -205,7 +204,7 @@ class ArticleController extends BaseController
 
     protected function getCategoryService()
     {
-        return $this->createService('admin/article/CategoryService');
+        return $this->createService('Article:CategoryService');
     }
 
     protected function getFileService()

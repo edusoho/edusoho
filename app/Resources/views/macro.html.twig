@@ -121,18 +121,41 @@
 
   {% if floorScore > 0 %}
     {% for i in range(1, floorScore) %}
-      <i class="es-icon es-icon-star color-warning"></i>
+      <i class="es-icon es-icon-star"></i>
     {% endfor %}
   {% endif %}
 
   {% if (score - floorScore) >= 0.5 %}
     {% set emptyNum = emptyNum - 1 %}
-    <i class="es-icon es-icon-starhalf color-warning"></i>
+    <i class="es-icon es-icon-starhalf"></i>
   {% endif %}
 
   {% if emptyNum > 0 %}
     {% for i in range(1, emptyNum) %}
-      <i class="es-icon es-icon-star"></i>
+      <i class="es-icon es-icon-staroutline"></i>
     {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% macro ajax_paginator(paginator)  %}
+  <input class="js-page" type="hidden" name="page" value="{{ paginator.currentPage|default(1) }}">
+
+  {% if paginator.lastPage > 1 %}
+    <nav class=" {{ class|default('text-center') }}">
+      <ul class="pagination">
+        {% if paginator.currentPage != paginator.firstPage %}
+          <li data-url="{{ paginator.getPageUrl(paginator.firstPage) }}"><a href="javascript:;">{{'首页'|trans}}</a></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.previousPage) }}"><a  href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a></li>
+        {% endif %}
+        {% for page in paginator.pages %}
+          <li {% if page == paginator.currentPage %}class="active"{% endif %} data-url="{{ paginator.getPageUrl(page) }}"><a href="javascript:;">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if paginator.currentPage != paginator.lastPage %}
+          <li data-url="{{ paginator.getPageUrl(paginator.nextPage) }}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.getLastPage) }}"><a  href="javascript:;">{{'尾页'|trans}}</a></li>
+        {% endif %}
+      </ul>
+    </nav>
   {% endif %}
 {% endmacro %}

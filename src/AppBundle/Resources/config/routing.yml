@@ -186,7 +186,7 @@ uploader_init:
 uploader_auth:
     path:  /uploader/auth
     defaults: { _controller: AppBundle:Uploader:uploadAuth }
-    methods: [POST]
+    methods: [GET, POST, OPTIONS]
 
 uploader_batch_uplod:
     path:  /uploader/batch_upload
@@ -1532,9 +1532,9 @@ task_live_trigger:
     defaults: {_controller:  AppBundle:Activity/Live:trigger}
 
 #task_plugin
-course_task_note_create:
-  path: /course/{courseId}/task/{taskId}/note/create
-  defaults: { _controller: AppBundle:Note:createCourseNote}
+course_task_note_save:
+  path: /course/{courseId}/task/{taskId}/note/save
+  defaults: { _controller: AppBundle:Note:saveCourseNote}
 
 course_task_show_plugins:
   path: /course/{courseId}/task/{taskId}/show/plugins
@@ -1547,6 +1547,25 @@ course_task_show_plugin_task_list:
 course_task_plugin_note:
   path: /course/{courseId}/task/{taskId}/plugin/note
   defaults: { _controller: AppBundle:TaskPlugin:note }
+
+course_task_plugin_threads:
+  path: /course/{courseId}/task/{taskId}/plugin/threads
+  defaults: { _controller: AppBundle:TaskPlugin:threads }
+
+course_task_plugin_thread_create:
+  path: /course/{courseId}/task/{taskId}/plugin/thread/create
+  defaults: { _controller: AppBundle:TaskPlugin:createThread }
+  methods: [POST]
+
+course_task_plugin_thread_show:
+  path: /course/{courseId}/task/{taskId}/plugin/thread/{threadId}
+  defaults: { _controller: AppBundle:TaskPlugin:thread }
+  methods: [GET]
+
+course_task_plugin_thread_answer:
+  path: /course/{courseId}/task/{taskId}/plugin/thread/{threadId}/answer
+  defaults: { _controller: AppBundle:TaskPlugin:answerQuestion }
+  methods: [POST]
 
 #course_chapter
 course_manage_chapter_create:
@@ -1607,6 +1626,10 @@ course_set_manage_course_students_remove:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/remove
   defaults: {_controller: AppBundle:CourseManage:removeCourseStudent}
   methods: [POST]
+
+course_set_manage_course_students_process:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/process
+  defaults: {_controller: AppBundle:CourseManage:studyProcess}
 
 course_set_manage_course_students_check:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/check
@@ -1683,17 +1706,28 @@ course_set_show:
   path: /course_set/{id}
   defaults: {_controller: AppBundle:CourseSet:show}
 
+course_qrcode:
+  path: /course/{id}/qrcode
+  defaults: { _controller: AppBundle:Course:qrcode }
+  methods: [POST]
+
+course_set_favorite:
+  path: /course_set/{id}/favorite
+  defaults: { _controller: AppBundle:CourseSet:favorite }
+  methods: [POST]
+
+course_set_unfavorite:
+  path: /course_set/{id}/unfavorite
+  defaults: { _controller: AppBundle:CourseSet:unfavorite }
+  methods: [POST]
+
 course_show:
-  path: /course/{id}
-  defaults: {_controller: AppBundle:Course:show}
+  path: /course/{id}/{tab}
+  defaults: {_controller: AppBundle:Course:show, tab: 'summary'}
 
-course_notes:
-  path: /course/{id}/notes
-  defaults: { _controller: AppBundle:Course:notes }
-
-course_threads:
-  path: /course/{id}/threads
-  defaults: {_controller: AppBundle:CourseThread:index}
+course_exit:
+  path: /course/{id}/exit
+  defaults: {_controller: AppBundle:Course:exit}
 
 course_thread_create:
    path:  /course/{courseId}/thread/create
@@ -1765,6 +1799,34 @@ course_set_manage_cover_crop:
   path: /course_set/{id}/manage/cover_crop
   defaults: {_controller: AppBundle:CourseSetManage:coverCrop}
 
+course_set_manage_files:
+  path: /course_set/{id}/manage/files
+  defaults: {_controller: AppBundle:CourseSetFileManage:index}
+
+course_set_manage_file_show:
+   path:  /course_set/{id}/manage/file/{fileId}
+   defaults: { _controller: AppBundle:CourseSetFileManage:show }
+
+course_set_manage_file_convert:
+   path:  /course_set/{id}/manage/file/{fileId}/convert
+   defaults: { _controller: AppBundle:CourseSetFileManage:convert }
+   methods: [POST]
+
+course_set_manage_file_status:
+   path:  /course_set/manage/file/status
+   defaults: { _controller: AppBundle:CourseSetFileManage:fileStatus }
+
+course_set_manage_delete_materials_show:
+   path:  /course_set/{id}/manage/show/delete/materials
+   defaults: { _controller: AppBundle:CourseSetFileManage:deleteMaterialShow }
+   methods: [POST]
+
+course_set_manage_delete_materials:
+   path:  /course/{id}/manage/delete/materials
+   defaults: { _controller: AppBundle:CourseSetFileManage:deleteCourseFiles }
+   methods: [POST]
+
+
 course_set_manage_publish:
   path: /course_set/{id}/manage/publish
   defaults: {_controller: AppBundle:CourseSetManage:publish}
@@ -1772,16 +1834,6 @@ course_set_manage_publish:
 course_set_manage_close:
   path: /course_set/{id}/manage/close
   defaults: {_controller: AppBundle:CourseSetManage:close}
-
-#course
-course_task_list:
-    path:  /course/{id}/task/list
-    defaults: { _controller: AppBundle:Course:taskList }
-
-#course review
-course_review:
-  path: /course/{id}/review
-  defaults: {_controller: AppBundle:Course:reviewList}
 
 course_review_create:
    path:  /course/{id}/review/create
@@ -1795,6 +1847,16 @@ course_review_post:
 course_review_delete:
   path:  /course/{courseId}/review/{reviewId}/delete
   defaults: { _controller: AppBundle:Course/Review:delete }
+
+course_material_download:
+    path:  /course/{courseId}/material/{materialId}/download
+    defaults: { _controller: AppBundle:Course/CourseMaterial:download }
+
+course_material_delete:
+    path:  /course/{id}/material/{materialId}/delete
+    defaults: { _controller: AppBundle:Course/CourseMaterial:delete }
+    methods: [POST]
+
 
 #file chooser
 media_materiallib_choose:
@@ -1861,7 +1923,7 @@ course_set_manage_question_picker:
   defaults: { _controller: AppBundle:Question/Manage:questionPicker }
 
 course_set_manage_question_picked:
-  path:  /course_set/{courseSetId}/manage/question/{questionId}/picked
+  path:  /course_set/{courseSetId}/manage/question/picked
   defaults: { _controller: AppBundle:Question/Manage:pickedQuestion }
 
 course_set_manage_question_check:
@@ -1966,7 +2028,7 @@ course_set_manage_homework_question_picker:
   defaults: { _controller: AppBundle:HomeworkManage:questionPicker }
 
 course_set_manage_homework_question_picked:
-  path:  /course_set/{courseSetId}/manage/homework/question/{questionId}/picked
+  path:  /course_set/{courseSetId}/manage/homework/question/picked
   defaults: { _controller: AppBundle:HomeworkManage:pickedQuestion }
 
 course_manage_homework_check_list:
@@ -2451,5 +2513,12 @@ org_tree:
 #todo:只为展示页面
 course_explore:
    path:  /course/explore/{category}
-   defaults: { _controller: TopxiaWebBundle:Explore:course, category:'' }
+   defaults: { _controller: AppBundle:Explore:course, category:'' }
 
+coupon_check:
+    path:  /{type}/{id}/coupon/check
+    defaults: { _controller: AppBundle:Order:couponCheck }
+
+my_course_show:
+    path:  /my/course/{id}/{tab}
+    defaults: { _controller: AppBundle:My/Course:show, tab: 'tasks' }

@@ -369,7 +369,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         if ($order['status'] != 'paid') {
-            throw $this->createServiceException('订单#%id%，不能退款', array('%id%' => $order['id']));
+            throw $this->createServiceException("订单#{$order['id']}，不能退款");
         }
 
         // 订单金额为０时，不能退款
@@ -415,7 +415,6 @@ class OrderServiceImpl extends BaseService implements OrderService
             'createdTime'    => time(),
             'operator'       => empty($reason['operator']) ? 0 : $reason['operator']
         ));
-
         $this->getOrderDao()->update($order['id'], array(
             'status'   => ($refund['status'] == 'success') ? 'paid' : 'refunding',
             'refundId' => $refund['id']
@@ -666,6 +665,14 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         if (isset($conditions['buyer'])) {
             $user                 = $this->getUserService()->getUserByNickname($conditions['buyer']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
+        if (isset($conditions['mobile'])) {
+            $user                 = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+        }
+        if (isset($conditions['email'])) {
+            $user                 = $this->getUserService()->getUserByEmail($conditions['email']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
 

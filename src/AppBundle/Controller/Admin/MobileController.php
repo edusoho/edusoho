@@ -7,9 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\CloudClientFactory;
 use Biz\CloudPlatform\CloudAPIFactory;
 
 class MobileController extends BaseController

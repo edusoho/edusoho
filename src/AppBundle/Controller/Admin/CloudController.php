@@ -3,8 +3,7 @@ namespace AppBundle\Controller\Admin;
 
 use Biz\System\Service\SettingService;
 use Biz\CloudPlatform\Client\EduSohoAppClient;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class CloudController extends BaseController
@@ -104,7 +103,7 @@ class CloudController extends BaseController
     public function buyAction(Request $request, $type)
     {
         $params = array('type' => $type);
-        return $this->redirectUrl('edu_cloud_buy', $params);
+        return $this->redirectUrl('edu_cloud_buy_custom', $params);
     }
 
     public function videoDetailAction()

@@ -6,7 +6,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Common\JsonToolkit;
 use Biz\Common\Mail\MailFactory;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -471,27 +471,62 @@ class SettingController extends BaseController
 
     public function ipBlacklistAction(Request $request)
     {
-        $ips = $this->getSettingService()->get('blacklist_ip', array());
-
-        if (!empty($ips)) {
-            $default['ips'] = join("\n", $ips['ips']);
-            $ips            = array_merge($ips, $default);
-        }
+        $settingService = $this->getSettingService();
 
         if ($request->getMethod() == 'POST') {
-            $data       = $request->request->all();
-            $ips['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r"), " ", $data['ips'])));
-            $this->getSettingService()->set('blacklist_ip', $ips);
-            $this->getLogService()->info('system', 'update_settings', '更新IP黑名单', $ips);
+            $data = $request->request->all();
 
-            $ips        = $this->getSettingService()->get('blacklist_ip', array());
-            $ips['ips'] = join("\n", $ips['ips']);
+            $purifiedBlackIps = trim(str_replace(array("\r\n", "\n", "\r"), " ", $data['blackListIps']));
+            $purifiedWhiteIps = isset($data['whiteListIps']) ? $data['whiteListIps'] : null;
+            $purifiedWhiteIps = trim(str_replace(array("\r\n", "\n", "\r"), " ", $purifiedWhiteIps));
+
+            $logService = $this->getLogService();
+
+            if (empty($purifiedBlackIps)) {
+                $settingService->delete('blacklist_ip');
+
+                $blackListIps['ips'] = array();
+            } else {
+                $blackListIps['ips'] = array_filter(explode(' ', $purifiedBlackIps));
+                $settingService->set('blacklist_ip', $blackListIps);
+            }
+
+            if (empty($purifiedWhiteIps)) {
+                $settingService->delete('whitelist_ip');
+
+                $whiteListIps['ips'] = array();
+            } else {
+                $whiteListIps['ips'] = array_filter(explode(' ', $purifiedWhiteIps));
+                $settingService->set('whitelist_ip', $whiteListIps);
+            }
+
+            $logService->info('system', 'update_settings', '更新IP黑名单/白名单',
+                array('blacklist_ip' => $blackListIps['ips'],
+                      'whitelist_ip' => $whiteListIps['ips']));
 
             $this->setFlashMessage('success', '保存成功！');
         }
 
+        $blackListIps = $settingService->get('blacklist_ip', array());
+        $whiteListIps = $settingService->get('whitelist_ip', array());
+
+        if (!empty($blackListIps)) {
+            $default['ips'] = join("\n", $blackListIps['ips']);
+            $blackListIps = array_merge($blackListIps, $default);
+        } else {
+            $blackListIps = array();
+        }
+
+        if (!empty($whiteListIps)) {
+            $default['ips'] = join("\n", $whiteListIps['ips']);
+            $whiteListIps = array_merge($whiteListIps, $default);
+        } else {
+            $whiteListIps = array();
+        }
+
         return $this->render('admin/system/ip-blacklist.html.twig', array(
-            'ips' => $ips
+            'blackListIps' => $blackListIps,
+            'whiteListIps' => $whiteListIps
         ));
     }
 
@@ -569,7 +604,7 @@ class SettingController extends BaseController
 
         $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         if ($courseSetting['userinfoFieldNameArray']) {
             foreach ($userFields as $key => $fieldValue) {

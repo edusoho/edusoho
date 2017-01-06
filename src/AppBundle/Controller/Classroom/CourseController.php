@@ -110,18 +110,27 @@ class CourseController extends BaseController
         $conditions             = array("title" => $key);
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
-        $courses                = $this->getCourseService()->searchCourses(
-            $conditions,
-            'latest',
-            0,
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchCourseCount($conditions),
             5
         );
 
-       $users = $this->getUsers($courses);
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            'latest',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        return $this->render('course/course-select-list.html.twig', array(
+        $users = $this->getUsers($courses);
+
+        return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
             'users'   => $users,
-            'courses' => $courses
+            'courses' => $courses,
+            'paginator' => $paginator,
+            'classroomId' => $classroomId,
+            'type' => 'ajax_pagination'
         ));
     }
 

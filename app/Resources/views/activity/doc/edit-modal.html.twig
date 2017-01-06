@@ -1,5 +1,5 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
-{% do script(['http://cdn.qiqiuyun.net/js-sdk/uploader/v1/sdk.js', 'app/js/activity-manage/doc/index.js']) %}
+{% do script(['//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js', 'app/js/activity-manage/doc/index.js']) %}
 
 {% block activity_content %}
   <div class="form-group">
@@ -26,7 +26,7 @@
     <div class="col-xs-4 controls">
       <select class="form-control" id="condition-select" name="finishType">
         <option value="click" {% if doc.finishType|default('click') == 'click'%}selected{% endif %}>点击看过了</option>
-        <option value="time" {% if doc.finishType|default('click') == 'time' %}selected{% endif %}>至少观看X分钟</option>
+        <option value="time" {% if doc.finishType|default('click') == 'time' %}selected{% endif %}>观看时长</option>
       </select>
     </div>
   </div>

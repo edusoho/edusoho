@@ -1,12 +1,9 @@
 <?php
 
-
 namespace Biz\Activity\Type;
 
-
-use Biz\Activity\Config\Activity;
 use Topxia\Common\ArrayToolkit;
-
+use Biz\Activity\Config\Activity;
 
 class Doc extends Activity
 {
@@ -17,7 +14,7 @@ class Doc extends Activity
             'icon' => 'es-icon es-icon-description'
         );
     }
-    
+
     public function registerActions()
     {
         return array(
@@ -51,25 +48,25 @@ class Doc extends Activity
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
-        $doc = $this->getFlashActivityDao()->get($activity['mediaId']);
-        if($doc['finishType'] == 'time') {
+        $doc      = $this->getFlashActivityDao()->get($activity['mediaId']);
+        if ($doc['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
             return $result > $doc['finishDetail'];
         }
 
-        if($doc['finishType'] == 'click') {
+        if ($doc['finishType'] == 'click') {
             $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'doc.finish');
             return !empty($result);
         }
         return false;
     }
 
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail',
+            'finishDetail'
         ));
 
         $updateFields['updatedTime'] = time();
@@ -83,7 +80,10 @@ class Doc extends Activity
 
     public function get($targetId)
     {
-        return $this->getDocActivityDao()->get($targetId);
+        $activity = $this->getDocActivityDao()->get($targetId);
+
+        $activity['file'] = $this->getUploadFileService()->getFullFile($activity['mediaId']);
+        return $activity;
     }
 
     protected function getDocActivityDao()
@@ -93,12 +93,16 @@ class Doc extends Activity
 
     protected function getActivityLearnLogService()
     {
-        return $this->createService("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
     protected function getActivityService()
     {
-        return $this->createService("Activity:ActivityService");
+        return $this->getBiz()->service("Activity:ActivityService");
     }
-    
+
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
+    }
 }

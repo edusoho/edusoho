@@ -432,7 +432,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findUserFavoritedCourses($userId, $start, $limit)
     {
-        $courseFavorites = $this->getFavoriteDao()->findByUserId($userId, $start, $limit);
+        $courseFavorites = $this->getFavoriteDao()->searchByUserId($userId, $start, $limit);
         $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($courseFavorites, 'courseId'));
         return CourseSerialize::unserializes($favoriteCourses);
     }
@@ -2279,7 +2279,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return true;
     }
 
-    public function entryReplay($lessonId, $courseLessonReplayId)
+    public function entryReplay($lessonId, $courseLessonReplayId, $ssl = false)
     {
         $lesson = $this->getLessonDao()->getLesson($lessonId);
         list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
@@ -2294,6 +2294,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'user'     => $user['email'],
             'nickname' => $user['nickname']
         );
+
+        if ($ssl) {
+            $args['protocol'] = 'https';
+        }
 
         $client = new EdusohoLiveClient();
         $result = $client->entryReplay($args);

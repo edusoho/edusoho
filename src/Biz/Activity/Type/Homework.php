@@ -25,7 +25,7 @@ class Homework extends Activity
         return $this->getTestpaperService()->buildTestpaper($fields, 'homework');
     }
 
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
         $homework = $this->get($targetId);
 
@@ -83,6 +83,6 @@ class Homework extends Activity
 
     protected function getTestpaperService()
     {
-        return $this->createService('Testpaper:TestpaperService');
+        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 }

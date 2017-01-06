@@ -50,9 +50,11 @@ class Editor {
   }
 
   _onPrev() {
-    if (this.step === 1 || !this._validator(this.step)) {
+    // 第二页可以上一步
+    if (this.step === 1 || (this.step == 3 && !this._validator(this.step))) {
       return;
     }
+
     this.step -= 1;
     this._switchPage();
   }
@@ -77,11 +79,28 @@ class Editor {
     let postData = $('#step1-form').serializeArray()
       .concat(this.$iframe_body.find('#step2-form').serializeArray())
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
-    $.post(this.$task_manage_type.data('saveUrl'), postData)
-      .done((html) => {
-        this.$element.modal('hide');
 
-        let chapterId = postData.find(function(input) {
+    if($('#task-create-type').data('editor-mode') == 'create' 
+      && $('#courseExpiryMode').val() == 'days' 
+      && $('#mediaType').val() == 'live' 
+      && !confirm('本课程的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。确定要添加吗？')){
+      return;
+    }
+
+    $.post(this.$task_manage_type.data('saveUrl'), postData)
+      .done((response) => {
+        this.$element.modal('hide');
+        if (response && response.append !== undefined && response.append === false) {
+          let data = $('#sortable-list').sortable("serialize").get();
+          $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
+            if (response) {
+              document.location.reload();
+            }
+          });
+        }
+
+        let html = response;
+        let chapterId = postData.find(function (input) {
           return input.name == 'chapterId';
         })
 
@@ -89,12 +108,11 @@ class Editor {
         let $parent = $('#' + chapterId.value);
 
         if ($parent.length) {
-          $parent.nextAll().each(function() {
+          $parent.nextAll().each(function () {
             if ($(this).hasClass('task-manage-chapter')) {
               $(this).before(html);
               add = 1;
               return false;
-
             }
             if ($parent.hasClass('task-manage-unit') && $(this).hasClass('task-manage-unit')) {
               $(this).before(html);
@@ -111,15 +129,16 @@ class Editor {
         }
 
         let data = $('#sortable-list').sortable("serialize").get();
-        $.post($('#sortable-list').data('sortUrl'), { ids: data }, (response) => {
-          if (response) {
-            //document.location.reload();
-          }
-        });
-
+        $.post($('#sortable-list').data('sortUrl'), {ids: data});
       })
       .fail((response) => {
-        this.$element.modal('hide');
+        let msg = '';
+        let errorResponse = JSON.parse(response.responseText);
+        if (errorResponse.error && errorResponse.error.message) {
+          msg = errorResponse.error.message;
+        }
+        notify('warning', '保存出错: ' + msg);
+        $("#course-tasks-submit").attr('disabled', null);
       });
   }
 
@@ -131,14 +150,14 @@ class Editor {
     }
 
     $.post(url)
-        .then((response) => {
-          notify('success', '删除成功');
-          this.$element.modal('hide');
-          document.location.reload();
-        })
-        .fail(error => {
-          notify('warning', '删除失败~~');
-        })
+      .then((response) => {
+        notify('success', '删除成功');
+        this.$element.modal('hide');
+        document.location.reload();
+      })
+      .fail(error => {
+        notify('warning', '删除失败~~');
+      })
   }
 
   _switchPage() {
@@ -225,8 +244,8 @@ class Editor {
     if (!this.loaded) {
       return;
     }
-    (step === 2) ? this.$iframe_body.find(".js-step2-view").addClass('active'): this.$iframe_body.find(".js-step2-view").removeClass('active');
-    (step === 3) ? this.$iframe_body.find(".js-step3-view").addClass('active'): this.$iframe_body.find(".js-step3-view").removeClass('active');
+    (step === 2) ? this.$iframe_body.find(".js-step2-view").addClass('active') : this.$iframe_body.find(".js-step2-view").removeClass('active');
+    (step === 3) ? this.$iframe_body.find(".js-step3-view").addClass('active') : this.$iframe_body.find(".js-step3-view").removeClass('active');
   }
 
   _renderStep(step) {
@@ -235,8 +254,8 @@ class Editor {
   }
 
   _renderContent(step) {
-    (step === 1) ? this.$task_manage_type.removeClass('hidden'): this.$task_manage_type.addClass('hidden');
-    (step !== 1) ? this.$task_manage_content.removeClass('hidden'): this.$task_manage_content.addClass('hidden');
+    (step === 1) ? this.$task_manage_type.removeClass('hidden') : this.$task_manage_type.addClass('hidden');
+    (step !== 1) ? this.$task_manage_content.removeClass('hidden') : this.$task_manage_content.addClass('hidden');
   }
 
   _renderNext(show) {

@@ -14,8 +14,8 @@ use Biz\User\Service\UserService;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\MySQLDumper;
-use Topxia\Service\Util\PluginUtil;
+use Biz\Util\MySQLDumper;
+use Biz\Util\PluginUtil;
 use Topxia\System;
 
 class AppServiceImpl extends BaseService implements AppService
@@ -652,6 +652,11 @@ class AppServiceImpl extends BaseService implements AppService
         $appClient = $this->createAppClient();
         $result    = $appClient->getTokenLoginUrl($routingName, $params);
         return $result;
+    }
+
+    public function getAppStatusByCode($code)
+    {
+        return $this->createAppClient()->getAppStatusByCode($code);
     }
 
     protected function _replaceFileForPackageUpdate($package, $packageDir)

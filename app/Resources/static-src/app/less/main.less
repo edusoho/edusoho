@@ -1,23 +1,19 @@
 /*
-** 目前仍处于新老版本更替阶段
-** 老的样式或者即将弃用的样式不要在使用
+*1、注释编译阶段会忽略，写注释！
+*2、多用组合，减少业务less,业务less需要注视清楚业务目录，并且业务之间less不要产生依赖;
+*3、目前仍处于新老版本更替阶段
+*4、注视为老的样式或者即将弃用的样式不要在使用
 */
 
-@img-src: "../../img/";
-@img-course-set-src: "../../img-course-set/";
+@img-src: "/static-dist/app/img/";
 
 // 变量
-@import '../../libs/less/variable.less';
-
-@import 'module/task-list.less';
-@import 'module/course-students.less';
-
-@import 'task-manage/task-create.less';
-@import 'task-manage/task-list.less';
-@import 'task-show/show.less';
+@import '~libs/less/variable.less';
 
 // 临时文件，存放老的样式，随时会删除
 @import "temp.less";
+
+@import "old-common.less";
 
 // 共通
 @import "common.less";
@@ -83,7 +79,9 @@
 @import "component/tabs-wrapper.less";;
 
 @import 'component/load-animation.less';
+@import 'component/color-lump.less';
 @import 'component/drag.less';
+@import 'component/notify.less';
 
 
 // 模块---------------------------------------------------------------//
@@ -99,6 +97,7 @@
 @import "module/nav-flow.less";       // 流程导航
 @import "module/es-filter.less";      // 删选条
 @import "module/card-pack.less";      // 卡包
+@import 'module/task-list.less';      // 任务列表
 
 
 // 页面---------------------------------------------------------------//
@@ -136,13 +135,16 @@
 // @import "page/message.less";              //私信
 // @import "page/notification.less";         //通知  
 
-
 @import "page/live-course.less";             //直播页面            
 @import "page/open-course.less";             //公开课页面            
-@import "page/create-course.less";             //创建课程页            
+@import "page/create-course.less";           //创建课程页            
 @import "page/material.less";         
 @import "page/media-preview.less";         
-@import "page/course-function-modal.less";          //课程功能升级模态框
+
+@import "page/course-manage/index.less";      //课程管理
+@import "page/course-learn/index.less";       //课程学习
+@import "page/course-detail/index.less";       //课程学习
+
 
 html {
   height: 100%;

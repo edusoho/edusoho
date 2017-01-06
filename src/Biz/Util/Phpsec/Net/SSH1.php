@@ -10,7 +10,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $ssh = new \Topxia\Service\Util\Phpsec\Net\SSH1('www.domain.tld');
+ *    $ssh = new \Biz\Util\Phpsec\Net\SSH1('www.domain.tld');
  *    if (!$ssh->login('username', 'password')) {
  *        exit('Login Failed');
  *    }
@@ -24,7 +24,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $ssh = new \Topxia\Service\Util\Phpsec\Net\SSH1('www.domain.tld');
+ *    $ssh = new \Biz\Util\Phpsec\Net\SSH1('www.domain.tld');
  *    if (!$ssh->login('username', 'password')) {
  *        exit('Login Failed');
  *    }
@@ -48,12 +48,12 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Net;
+namespace Biz\Util\Phpsec\Net;
 
-use Topxia\Service\Util\Phpsec\Crypt\DES;
-use Topxia\Service\Util\Phpsec\Crypt\Random;
-use Topxia\Service\Util\Phpsec\Crypt\TripleDES;
-use Topxia\Service\Util\Phpsec\Math\BigInteger;
+use Biz\Util\Phpsec\Crypt\DES;
+use Biz\Util\Phpsec\Crypt\Random;
+use Biz\Util\Phpsec\Crypt\TripleDES;
+use Biz\Util\Phpsec\Math\BigInteger;
 
 /**
  * Pure-PHP implementation of SSHv1.
@@ -68,7 +68,7 @@ class SSH1
     /**#@+
      * Encryption Methods
      *
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getSupportedCiphers()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getSupportedCiphers()
      * @access public
      */
     /**
@@ -128,7 +128,7 @@ class SSH1
     /**#@+
      * Authentication Methods
      *
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getSupportedAuthentications()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getSupportedAuthentications()
      * @access public
      */
     /**
@@ -164,7 +164,7 @@ class SSH1
      * The Response Type
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_get_binary_packet()
      */
     const RESPONSE_TYPE = 1;
 
@@ -172,14 +172,14 @@ class SSH1
      * The Response Data
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_get_binary_packet()
      */
     const RESPONSE_DATA = 2;
 
     /**#@+
      * Execution Bitmap Masks
      *
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::bitmap
+     * @see \Biz\Util\Phpsec\Net\SSH1::bitmap
      * @access private
      */
     const MASK_CONSTRUCTOR = 0x00000001;
@@ -190,7 +190,7 @@ class SSH1
 
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getLog()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getLog()
      */
     /**
      * Returns the message numbers
@@ -212,7 +212,7 @@ class SSH1
 
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::read()
+     * @see \Biz\Util\Phpsec\Net\SSH1::read()
      */
     /**
      * Returns when a string matching $expect exactly is found
@@ -266,7 +266,7 @@ class SSH1
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getServerKeyPublicExponent()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getServerKeyPublicExponent()
      */
     public $server_key_public_exponent;
 
@@ -277,7 +277,7 @@ class SSH1
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getServerKeyPublicModulus()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getServerKeyPublicModulus()
      */
     public $server_key_public_modulus;
 
@@ -288,7 +288,7 @@ class SSH1
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getHostKeyPublicExponent()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getHostKeyPublicExponent()
      */
     public $host_key_public_exponent;
 
@@ -299,7 +299,7 @@ class SSH1
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getHostKeyPublicModulus()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getHostKeyPublicModulus()
      */
     public $host_key_public_modulus;
 
@@ -310,7 +310,7 @@ class SSH1
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getSupportedCiphers()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getSupportedCiphers()
      */
     public $supported_ciphers = array(
         self::CIPHER_NONE       => 'No encryption',
@@ -329,7 +329,7 @@ class SSH1
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getSupportedAuthentications()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getSupportedAuthentications()
      */
     public $supported_authentications = array(
         self::AUTH_RHOSTS     => '.rhosts or /etc/hosts.equiv',
@@ -343,7 +343,7 @@ class SSH1
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getServerIdentification()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getServerIdentification()
      */
     public $server_identification = '';
 
@@ -352,7 +352,7 @@ class SSH1
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH1::__construct()
      */
     public $protocol_flags = array();
 
@@ -361,7 +361,7 @@ class SSH1
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getLog()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getLog()
      */
     public $protocol_flag_log = array();
 
@@ -370,7 +370,7 @@ class SSH1
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::getLog()
+     * @see \Biz\Util\Phpsec\Net\SSH1::getLog()
      */
     public $message_log = array();
 
@@ -379,7 +379,7 @@ class SSH1
      *
      * @var Resource
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_append_log()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_append_log()
      */
     public $realtime_log_file;
 
@@ -388,7 +388,7 @@ class SSH1
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_append_log()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_append_log()
      */
     public $realtime_log_size;
 
@@ -397,7 +397,7 @@ class SSH1
      *
      * @var Boolean
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_append_log()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_append_log()
      */
     public $realtime_log_wrap;
 
@@ -406,7 +406,7 @@ class SSH1
      *
      * @var Array
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::read()
+     * @see \Biz\Util\Phpsec\Net\SSH1::read()
      */
     public $interactiveBuffer = '';
 
@@ -414,7 +414,7 @@ class SSH1
      * Timeout
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::setTimeout()
+     * @see \Biz\Util\Phpsec\Net\SSH1::setTimeout()
      */
     public $timeout;
 
@@ -422,7 +422,7 @@ class SSH1
      * Current Timeout
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_get_channel_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_get_channel_packet()
      */
     public $curTimeout;
 
@@ -430,7 +430,7 @@ class SSH1
      * Log Boundary
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_format_log
+     * @see \Biz\Util\Phpsec\Net\SSH1::_format_log
      */
     public $log_boundary = ':';
 
@@ -438,7 +438,7 @@ class SSH1
      * Log Long Width
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_format_log
+     * @see \Biz\Util\Phpsec\Net\SSH1::_format_log
      */
     public $log_long_width = 65;
 
@@ -446,7 +446,7 @@ class SSH1
      * Log Short Width
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_format_log
+     * @see \Biz\Util\Phpsec\Net\SSH1::_format_log
      */
     public $log_short_width = 16;
 
@@ -455,8 +455,8 @@ class SSH1
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::__construct()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_connect()
+     * @see \Biz\Util\Phpsec\Net\SSH1::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_connect()
      */
     public $host;
 
@@ -465,8 +465,8 @@ class SSH1
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::__construct()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_connect()
+     * @see \Biz\Util\Phpsec\Net\SSH1::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_connect()
      */
     public $port;
 
@@ -480,8 +480,8 @@ class SSH1
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::__construct()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_connect()
+     * @see \Biz\Util\Phpsec\Net\SSH1::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_connect()
      */
     public $connectionTimeout;
 
@@ -490,8 +490,8 @@ class SSH1
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::__construct()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_connect()
+     * @see \Biz\Util\Phpsec\Net\SSH1::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_connect()
      */
     public $cipher;
 
@@ -505,7 +505,7 @@ class SSH1
      * @param  optional                               Integer $port
      * @param  optional                               Integer $timeout
      * @param  optional                               Integer $cipher
-     * @return \Topxia\Service\Util\Phpsec\Net\SSH1
+     * @return \Biz\Util\Phpsec\Net\SSH1
      */
     public function __construct($host, $port = 22, $timeout = 10, $cipher = self::CIPHER_3DES)
     {
@@ -666,7 +666,7 @@ class SSH1
 
         switch ($cipher) {
             //case self::CIPHER_NONE:
-            //    $this->crypto = new \Topxia\Service\Util\Phpsec\Crypt\Null();
+            //    $this->crypto = new \Biz\Util\Phpsec\Crypt\Null();
             //    break;
             case self::CIPHER_DES:
                 $this->crypto = new DES();
@@ -796,13 +796,13 @@ class SSH1
      * {@link http://www.faqs.org/docs/bashman/bashref_65.html http://www.faqs.org/docs/bashman/bashref_65.html}
      * {@link http://www.faqs.org/docs/bashman/bashref_62.html http://www.faqs.org/docs/bashman/bashref_62.html}
      *
-     * To execute further commands, a new \Topxia\Service\Util\Phpsec\Net\SSH1 object will need to be created.
+     * To execute further commands, a new \Biz\Util\Phpsec\Net\SSH1 object will need to be created.
      *
      * Returns false on failure and the output, otherwise.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::interactiveRead()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::interactiveWrite()
+     * @see \Biz\Util\Phpsec\Net\SSH1::interactiveRead()
+     * @see \Biz\Util\Phpsec\Net\SSH1::interactiveWrite()
      *
      * @param  String   $cmd
      * @return mixed
@@ -843,7 +843,7 @@ class SSH1
 
         fclose($this->fsock);
 
-        // reset the execution bitmap - a new \Topxia\Service\Util\Phpsec\Net\SSH1 object needs to be created.
+        // reset the execution bitmap - a new \Biz\Util\Phpsec\Net\SSH1 object needs to be created.
         $this->bitmap = 0;
 
         return $output;
@@ -853,8 +853,8 @@ class SSH1
      * Creates an interactive shell
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::interactiveRead()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::interactiveWrite()
+     * @see \Biz\Util\Phpsec\Net\SSH1::interactiveRead()
+     * @see \Biz\Util\Phpsec\Net\SSH1::interactiveWrite()
      *
      * @return Boolean
      */
@@ -899,7 +899,7 @@ class SSH1
      * Inputs a command into an interactive shell.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::interactiveWrite()
+     * @see \Biz\Util\Phpsec\Net\SSH1::interactiveWrite()
      *
      * @param  String    $cmd
      * @return Boolean
@@ -916,7 +916,7 @@ class SSH1
      * a regular expression.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::write()
+     * @see \Biz\Util\Phpsec\Net\SSH1::write()
      *
      * @param  String    $expect
      * @param  Integer   $mode
@@ -962,7 +962,7 @@ class SSH1
      * Inputs a command into an interactive shell.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::interactiveRead()
+     * @see \Biz\Util\Phpsec\Net\SSH1::interactiveRead()
      *
      * @param  String    $cmd
      * @return Boolean
@@ -999,7 +999,7 @@ class SSH1
      * there's not going to be much recourse.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::interactiveRead()
+     * @see \Biz\Util\Phpsec\Net\SSH1::interactiveRead()
      *
      * @return String
      */
@@ -1090,7 +1090,7 @@ class SSH1
      * http://www.securiteam.com/securitynews/5LP042K3FY.html
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_send_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_send_binary_packet()
      *
      * @return Array
      */
@@ -1169,7 +1169,7 @@ class SSH1
      * Returns true on success, false on failure.
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_get_binary_packet()
      *
      * @param  String    $data
      * @return Boolean
@@ -1216,8 +1216,8 @@ class SSH1
      * $crc_lookup_table's initialization.
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_get_binary_packet()
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::_send_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_get_binary_packet()
+     * @see \Biz\Util\Phpsec\Net\SSH1::_send_binary_packet()
      *
      * @param  String    $data
      * @return Integer
@@ -1334,7 +1334,7 @@ class SSH1
      * calls this call modexp, instead, but I think this makes things clearer, maybe...
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SSH1::__construct()
+     * @see \Biz\Util\Phpsec\Net\SSH1::__construct()
      *
      * @param  BigInteger   $m
      * @param  Array        $key

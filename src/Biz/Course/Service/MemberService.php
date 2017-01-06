@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Course\Service;
-
 
 interface MemberService
 {
@@ -10,14 +8,16 @@ interface MemberService
 
     public function becomeStudentAndCreateOrder($userId, $courseId, $data);
 
+    public function removeCourseStudent($courseId, $userId);
+
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
     public function searchMember($conditions, $start, $limit);
 
     /**
-     * @param $conditions
-     * @return mixed
      * @before searchMemberCount
+     * @param  $conditions
+     * @return mixed
      */
     public function countMembers($conditions);
 
@@ -89,5 +89,25 @@ interface MemberService
 
     public function becomeStudentByClassroomJoined($courseId, $userId);
 
-    public function setMemberNoteNumber($courseId, $userId, $number);
+    public function refreshMemberNoteNumber($courseId, $userId);
+
+    /**
+     * @param  integer   $userId
+     * @return array[]
+     */
+    public function findTeacherMembersByUserId($userId);
+
+    /**
+     * @param  integer   $userId
+     * @return array[]
+     */
+    public function findStudentMemberByUserId($userId);
+
+    public function countQuestionsByCourseIdAndUserId($courseId, $userId);
+
+    public function countActivitiesByCourseIdAndUserId($courseId, $userId);
+
+    public function countDiscussionsByCourseIdAndUserId($courseId, $userId);
+
+    public function countPostsByCourseIdAndUserId($courseId, $userId);
 }

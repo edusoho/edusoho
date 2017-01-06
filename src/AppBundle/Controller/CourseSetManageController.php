@@ -22,7 +22,7 @@ class CourseSetManageController extends BaseController
         $user        = $this->getUser();
         $userProfile = $this->getUserService()->getUserProfile($user->getId());
         $user        = $this->getUserService()->getUser($user->getId());
-        return $this->render('course-set/create.html.twig', array(
+        return $this->render('courseset-manage/create.html.twig', array(
             'user'        => $user,
             'userProfile' => $userProfile
         ));
@@ -38,12 +38,13 @@ class CourseSetManageController extends BaseController
         ));
     }
 
-    public function headerAction($courseSet)
+    public function headerAction($courseSet, $course = null)
     {
         $users = empty($courseSet['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($courseSet['teacherIds']);
 
         return $this->render('courseset-manage/header.html.twig', array(
             'courseSet' => $courseSet,
+            'course'    => $course,
             'users'     => $users
         ));
     }
@@ -80,6 +81,13 @@ class CourseSetManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+            if (!empty($data['goals'])) {
+                $data['goals'] = json_decode($data['goals'], true);
+            }
+            if (!empty($data['audiences'])) {
+                $data['audiences'] = json_decode($data['audiences'], true);
+            }
+
             $this->getCourseSetService()->updateCourseSetDetail($id, $data);
             return $this->redirect($this->generateUrl('course_set_manage_detail', array('id' => $id)));
         }

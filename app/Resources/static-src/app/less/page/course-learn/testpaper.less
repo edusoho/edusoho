@@ -1,0 +1,41 @@
+.task-testpaper-body {
+  min-height: 100%;
+  background-color: #111;
+  .task-testpaper-content {
+    height: 100%;
+  }
+}
+
+.testpaper-timer {
+  background-color: #fff;
+  padding: 15px 44px 15px 20px;
+  margin-bottom: 20px;
+  line-height: 1;
+  .btn-pause {
+    position: absolute;
+    right: 0;
+    top:0;
+    height: 44px;
+    width: 44px;
+    text-align: center;
+    background-color: @brand-primary;
+    color: #fff;
+    i {
+      line-height: 44px;
+    }
+    .pause {
+      display: block;
+    }
+    .play {
+      display: none;
+    }
+    &.open {
+      .pause {
+        display: none;
+      }
+      .play {
+        display: block;
+      }
+    }
+  }
+}

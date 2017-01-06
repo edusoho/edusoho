@@ -24,7 +24,7 @@ class Testpaper extends Activity
         return $this->getTestpaperActivityService()->createActivity($fields);
     }
 
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
         $activity = $this->get($targetId);
 
@@ -67,7 +67,7 @@ class Testpaper extends Activity
             $finishCondition['type'] = $fields['finishCondition'];
         }
 
-        if (!empty($fields['finishScore'])) {
+        if (isset($fields['finishScore'])) {
             $finishCondition['finishScore'] = $fields['finishScore'];
             unset($fields['finishScore']);
         }
@@ -79,6 +79,6 @@ class Testpaper extends Activity
 
     protected function getTestpaperActivityService()
     {
-        return $this->createService('Activity:TestpaperActivityService');
+        return $this->getBiz()->service('Activity:TestpaperActivityService');
     }
 }

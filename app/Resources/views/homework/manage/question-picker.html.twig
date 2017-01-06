@@ -11,7 +11,7 @@
 {% block body %}
 <div id="question-picker-body">
   
-  {% include 'question-manage/picker-search-form.html.twig' %}
+  {% include 'homework/manage/picker-search-form.html.twig' with {targetType:'homework'} %}
 
   <table class="table table-condensed" id="item-picker-table">
     <thead>
@@ -29,7 +29,7 @@
         {% include 'homework/manage/question-picker-tr.html.twig' %}
       {% else %}
         <tr>
-          <td colspan="20"><div class="empty">无题目记录,请先去<a href="{{ path('course_manage_question',{courseId:courseSet.id}) }}">创建题目</a></div>
+          <td colspan="20"><div class="empty">无题目记录,请先去<a href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">创建题目</a></div>
           </td>
         </tr>
       {% endfor %}
@@ -48,7 +48,8 @@
 {% endblock %}
 
 {% block footer %}
-    <button type="button" class="btn btn-primary" type="button" class="btn btn-primary pull-right" data-role="batch-select-save" data-toggle="form-submit" data-target="#block-form" >确定</button>
+    <button type="button" class="btn btn-primary" type="button" class="btn btn-primary pull-right" data-role="batch-select-save" data-toggle="form-submit" data-target="#block-form" data-url="{{ path('course_set_manage_homework_question_picked', {courseSetId:courseSet.id }) }}">确定
+    </button>
 
     <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
 {% endblock %}

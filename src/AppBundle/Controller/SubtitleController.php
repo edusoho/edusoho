@@ -15,7 +15,8 @@ class SubtitleController extends BaseController
             throw $this->createAccessDeniedException('没有权限管理资源');
         }
 
-        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+        $ssl = $request->isSecure() ? true : false;
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId, $ssl);
 
         $media = $this->getUploadFileService()->getFile($mediaId);
         if (empty($media) || !in_array($media['type'], array('video', 'audio'))) {
@@ -32,13 +33,14 @@ class SubtitleController extends BaseController
     /**
      * 获取某一视频下所有的字幕
      */
-    public function listAction($mediaId)
+    public function listAction(Request $request, $mediaId)
     {
         if (!$this->getUploadFileService()->canManageFile($mediaId)) {
             throw $this->createAccessDeniedException('没有权限管理资源');
         }
 
-        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+        $ssl = $request->isSecure() ? true : false;
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId, $ssl);
 
         return $this->createJsonResponse(array(
             'subtitles' => $subtitles
@@ -87,7 +89,9 @@ class SubtitleController extends BaseController
             throw $this->createAccessDeniedException('没有权限管理资源');
         }
 
-        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId);
+        $ssl = $request->isSecure() ? true : false;
+        $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId, $ssl);
+
         $media     = $this->getUploadFileService()->getFile($mediaId);
         return $this->render('media-manage/subtitle/dialog.html.twig', array(
             'subtitles' => $subtitles,

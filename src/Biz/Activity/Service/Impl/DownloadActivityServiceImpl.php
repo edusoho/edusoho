@@ -2,9 +2,8 @@
 
 namespace Biz\Activity\Service\Impl;
 
+use Biz\Activity\Service\DownloadActivityService;
 use Biz\BaseService;
-use Biz\DownloadActivity\Dao\DownloadFileRecordDao;
-use Biz\DownloadActivity\Service\DownloadActivityService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 
@@ -28,7 +27,7 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
 
     public function downloadActivityFile($activityId, $downloadFileId)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
 
         $materials = empty($activity['ext']['materials']) ? array() : $activity['ext']['materials'];
         if (empty($materials)) {

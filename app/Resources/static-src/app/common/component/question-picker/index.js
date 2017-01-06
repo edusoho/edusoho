@@ -1,3 +1,4 @@
+import { passedDivShow } from '../question-passed'
 export default class QuestionPicker {
   constructor($questionPickerBody, $questionAppendForm) {
     this.$questionPickerBody = $questionPickerBody;
@@ -26,14 +27,23 @@ export default class QuestionPicker {
   pickItem(event) {
     let $target = $(event.currentTarget);
     let replace = parseInt($target.data('replace'));
-    $.get($target.data('url'), html=> {
+    let questionId = $target.data('questionId');
+    let questionIds = [];
+    questionIds.push(questionId);
+    
+    this.pickItemGet($target.data('url'),questionIds,replace);
+  }
+
+  pickItemGet(url, questionIds, replace=null) {
+    $.get(url, {questionIds:questionIds}, html=> {
       if (replace) {
         this.$questionAppendForm.find('tr[data-id="'+replace+'"]').replaceWith(html);
+        this.$questionAppendForm.find('tr[data-parent-id="'+replace+'"]').remove();
       } else {
         this.$questionAppendForm.find('tbody:visible').append(html).removeClass('hide');
       }
       this._refreshSeqs();
-      this._refreshPassedDivShow();
+      passedDivShow(this.$questionAppendForm);
       this.$questionPickerModal.modal('hide');
     });
   }
@@ -42,37 +52,29 @@ export default class QuestionPicker {
     window.open($(event.currentTarget).data('url'), '_blank',"directories=0,height=580,width=820,scrollbars=1,toolbar=0,status=0,menubar=0,location=0");
   }
 
-  batchSelectSave() {
-    console.log('批量添加');
+  batchSelectSave(event) {
+    let $target = $(event.currentTarget);
+    let questionIds = [];
+    let url = $target.data('url');
+
+    this.$questionPickerBody.find('[data-role="batch-item"]:checked').each(function(index,item){
+      let questionId = $(this).data('questionId');
+      questionIds.push(questionId);
+    })
+
+    this.pickItemGet(url, questionIds,null);
   }
 
   _refreshSeqs() {
-    let seq = 0;
+    let seq = 1;
     this.$questionAppendForm.find('tbody tr').each(function(index,item) {
       let $tr = $(item);
-      $tr.find('td.seq').html(seq+1);
-      seq++;
-    });
-    this.$questionAppendForm.find('[name="questionLength"]').val(seq > 0 ? seq : null );
-  }
-
-  _refreshPassedDivShow() {
-    let hasEssay = false;
-    this.$questionAppendForm.find('tbody tr').each(function() {
-      if ($(this).data('type') == 'essay' || $(this).data('type') == 'material') {
-        hasEssay = true;
+      
+      if (!$tr.hasClass('have-sub-questions')) { 
+        $tr.find('td.seq').html(seq);
+          seq ++;
       }
     });
-
-    if (hasEssay) {
-      $(".correctPercentDiv").html('');
-    } else {
-      var html = '这是一份纯客观题的作业，正确率达到为' +
-        '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini correctPercent1" value="60" />％合格，'+
-        '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini correctPercent2" value="80" />％良好，'+
-        '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini correctPercent3" value="100" />％优秀';
-
-      $(".correctPercentDiv").html(html);
-    }
+    this.$questionAppendForm.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1) : null );
   }
 }

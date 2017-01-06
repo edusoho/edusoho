@@ -6,14 +6,13 @@ namespace AppBundle\Controller\Activity;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
-use Biz\DownloadActivity\Service\DownloadActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class DownloadController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity             = $this->getActivityService()->getActivityFetchMedia($id);
+        $activity             = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
         $activity['courseId'] = $courseId;
 
         return $this->render('activity/download/show.html.twig', array(
@@ -24,7 +23,7 @@ class DownloadController extends BaseController implements ActivityActionInterfa
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity  = $this->getActivityService()->getActivityFetchMedia($id);
+        $activity  = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
         $materials = array();
 
         foreach ($activity['ext']['materials'] as $media) {
@@ -49,7 +48,7 @@ class DownloadController extends BaseController implements ActivityActionInterfa
         if (!empty($downloadFile['link'])) {
             return $this->redirect($downloadFile['link']);
         } else {
-            return $this->forward("MaterialLibBundle:MaterialLib:download", array('fileId' => $downloadFile['fileId']));
+            return $this->forward("AppBundle:MaterialLib/MaterialLib:download", array('fileId' => $downloadFile['fileId']));
         }
     }
 

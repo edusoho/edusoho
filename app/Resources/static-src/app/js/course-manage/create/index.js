@@ -11,6 +11,25 @@ class Creator {
     this._initDatePicker('#expiryEndDate');
     TabChange();
 
+    $('input[name="expiryMode"]').on('change', function(event){
+      if($('input[name="expiryMode"]:checked').val() == 'date'){
+        $('#expiry-days').removeClass('hidden').addClass('hidden');
+        $('#expiry-date').removeClass('hidden');
+      }else{
+        $('#expiry-date').removeClass('hidden').addClass('hidden');
+        $('#expiry-days').removeClass('hidden');
+      }
+    }); 
+
+    $('input[name="learnMode"]').on('change', function(event){
+      if($('input[name="learnMode"]:checked').val() == 'freeMode'){
+        $('#learnLockModeHelp').removeClass('hidden').addClass('hidden');
+        $('#learnFreeModeHelp').removeClass('hidden');
+      }else{
+        $('#learnFreeModeHelp').removeClass('hidden').addClass('hidden');
+        $('#learnLockModeHelp').removeClass('hidden');
+      }
+    }); 
 
     let $form = $("#course-create-form");
     //init validator

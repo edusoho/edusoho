@@ -7,13 +7,12 @@ use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class VideoController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($id);
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
         if ($this->getMediaSource($activity) == 'self') {
 
 
@@ -40,7 +39,7 @@ class VideoController extends BaseController implements ActivityActionInterface
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($id);
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
         $activity = $this->fillMinuteAndSecond($activity);
         return $this->render('activity/video/modal.html.twig', array(
             'activity' => $activity,

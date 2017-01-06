@@ -4,7 +4,7 @@ namespace Biz\Subtitle\Service;
 
 interface SubtitleService
 {
-    public function findSubtitlesByMediaId($mediaId);
+    public function findSubtitlesByMediaId($mediaId, $ssl=false);
 
     public function getSubtitle($id);
 

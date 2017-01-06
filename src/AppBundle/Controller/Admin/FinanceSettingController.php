@@ -4,8 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Topxia\Service\Common\ServiceKernel;
 
 class FinanceSettingController extends BaseController
 {
@@ -132,5 +130,10 @@ class FinanceSettingController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');    
     }
 }

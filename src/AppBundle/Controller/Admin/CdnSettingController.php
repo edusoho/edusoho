@@ -2,12 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\File;
-use Topxia\Service\Common\ServiceKernel;
-
 
 class CdnSettingController extends BaseController
 {
@@ -40,7 +35,7 @@ class CdnSettingController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->createService('admin/system/SettingService');
+        return $this->createService('System:SettingService');
     }
 
 }

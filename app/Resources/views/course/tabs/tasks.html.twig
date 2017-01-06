@@ -1,0 +1,5 @@
+{% if course.isDefault %}
+	{% include 'course/task-list/free-mode.html.twig' %}
+{% else %}
+	{% include 'course/task-list/lock-mode.html.twig' %}
+{% endif %}

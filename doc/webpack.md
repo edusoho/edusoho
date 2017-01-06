@@ -1,14 +1,52 @@
 ## webpack前端方案初始化（需安装nodejs环境）
 
+### 前言
+
+整个webpack方案已经上传到[npm](https://www.npmjs.com/)里,
+随着项目的需要，会不断迭代
+```
+npm install es-webpack-engine --save-dev
+```
+
+### webpack配置文件说明
+
+```
+目录：/app/Resources/webpack/
+
+> 本项目中的打包资源配置文件:
+settings.js 
+
+> 开发模式优化配置文件
+webpack.config.js
+
+> 开发环境下的入口文件 --- 不推荐修改
+webpack.dev.js
+
+> 生产环境下的入口文件 --- 不推荐修改
+webpack.js
+```
+
 ### 依赖安装
 
 ```
 npm install
 ```
 ```
-# 为提高下载速度，可添加淘宝镜像
+# 为提高下载速度，可添加淘宝镜像(安装4.4.0以上版本)
 npm install -g cnpm --registry=https://registry.npm.taobao.org
 cnpm install
+```
+
+### nginx添加配置项
+```
+location ~ ^/static-dist {
+  if (-f $document_root/static-dist/dev.lock)
+  {
+    rewrite ^(.*)$ http://127.0.0.1:3030$1 last;
+  }
+}
+
+其中3030可修改，static-dist为settings.js文件中config.output.publicPath的值
 ```
 
 ### 开发模式
@@ -19,15 +57,8 @@ npm start port:3038 #改变端口
 ```
 
 ```
-# 此命令默认会绑定到3030端口，但不会生成真实文件，但可以通过http://127.0.0.1:3030/static-dist 浏览到文件目录
-
-# 本项目中的打包配置文件位于app/Resources/webpack/options.js，
-其中output.publicPath指定为'/static-dist/'，
-所以开发模式下打包后的前端文件可以通过http://127.0.0.1:3030/static-dist/xxx/xxx.js访问
-
-# 开发模式下，需在symfony的配置文件app/config/parameters.yml中配置以下字段:
-  parameters:
-      webpack_base_url: 'http://127.0.0.1:3030'
+# 此命令默认会绑定到3030端口，但不会生成真实文件，但可以通过http://127.0.0.1:3030/static-dist 浏览到文件目录，
+其中static-dist为settings.js文件中config.output.publicPath的值
 ```
 
 ### 最终编译
@@ -115,11 +146,62 @@ pluginDir/
 
 # 其它说明
 - 每个具有main.js的目录，编译时都会在同目录下生成common.js
+
 - 以app的layout.html.twig为例：
   {% do css(['libs/vendor.css', 'app/css/main.css']) %}
   {% do script(['libs/vendor.js', 'app/js/common.js', 'app/js/main.js']) %}
   更多代码示例可参考：https://github.com/ketuzhong/biz-symfony-starter
+
+- 约定index.js 为每个页面的打包入口文件，其它文件名仅作为片段、模块被其它js文件引入（import）
 ```
+
+### 其它
+- 模块组件样式（不希望单独打包出css文件的）以下面形式引入
+
+```
+import '!style!css!less!xxx.less';
+```
+- 在服务启动后，新增的index.js如果要在页面运用，需要先中断服务(<code>ctrl + c</code>)，并重启服务（<code>npm start</code>）才生效
+
+### 最佳实践
+
+1. 在js引入资源的时候，建议用全局root目录(app/Resources/static-src)下的目录取代较长的相对路径
+如app/Resources/static-src/app/js/testpaper-manage/questions/index.js
+
+```
+import BatchSelect from '../../../common/widget/batch-select';
+import QuestionOperate from '../../../common/component/question-operate';
+```
+
+修改为：
+
+```
+import BatchSelect from 'app/common/widget/batch-select';
+import QuestionOperate from 'app/common/component/question-operate';
+```
+
+亦可使用alias别名来简化路径：
+
+```
+{
+  nodeModulesDir: '/node_modules',
+  xxxplugin: '/plugins/xxxPlugin/Resources/static-src'
+}
+
+使用方式：
+@import '~nodeModulesDir/xx/xxx.less'; //引入less、css时前面需加'~'来让loader识别alias别名
+import xxx from 'xxxplugin/xx/xxx.js';
+```
+
+
+### 已实现功能
+总：可处理所有前端资源
+
+* 文件纯拷贝功能
+* 支持主题可配色
+* webpack编译报错通知
+* 分app、libs、plugins输出
+* 字体图标、图像、swf等纳入编译流
 
 ### 待改进
 * dev模式下scanPath的新文件无法监听的问题

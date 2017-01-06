@@ -9,8 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $id, $courseId, $preview = 0)
     {
+        if ($preview) {
+            return $this->forward('AppBundle:Activity/Exercise:preview', array(
+                'id'       => $id,
+                'courseId' => $courseId
+            ));
+        }
+
         $user = $this->getUser();
 
         $activity       = $this->getActivityService()->getActivity($id);
@@ -32,19 +39,43 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         ));
     }
 
-    public function editAction(Request $request, $id, $courseId)
+    public function previewAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
+        if (!$exercise) {
+            return $this->createMessageResponse('error', 'exercise not found');
+        }
+
+        $questions   = $this->getTestpaperService()->showTestpaperItems($exercise['id']);
+        $attachments = $this->getTestpaperService()->findAttachments($exercise['id']);
+
+        return $this->render('activity/exercise/preview.html.twig', array(
+            'paper'       => $exercise,
+            'questions'   => $questions,
+            'paperResult' => array(),
+            'activity'    => $activity
+        ));
+    }
+
+    public function editAction(Request $request, $id, $courseId)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
+        $course   = $this->getCourseService()->getCourse($courseId);
+        $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+
         $activity = array_merge($activity, $exercise);
 
-        $questionTypes = $this->get('codeages_plugin.dict_twig_extension')->getDict('questionType');
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes(array('courseId' => $course['courseSetId']));
+        $questionNums = ArrayToolkit::index($questionNums, 'type');
+
+        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseId' => $course['courseSetId']));
 
         return $this->render('activity/exercise/modal.html.twig', array(
-            'questionTypes' => $questionTypes,
-            'activity'      => $activity,
-            'courseId'      => $activity['fromCourseId']
+            'questionNums' => $questionNums,
+            'activity'     => $activity,
+            'courseSetId'  => $activity['courseSetId']
         ));
     }
 

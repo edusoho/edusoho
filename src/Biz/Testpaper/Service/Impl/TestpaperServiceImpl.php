@@ -107,6 +107,16 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function createItem($fields)
     {
+        $fields = ArrayToolkit::parts($fields, array(
+            'testId',
+            'seq',
+            'questionId',
+            'questionType',
+            'parentId',
+            'score',
+            'missScore'
+        ));
+
         return $this->getItemDao()->create($fields);
     }
 
@@ -400,7 +410,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $accuracy;
     }
 
-    //new
     public function checkFinish($resultId, $fields)
     {
         $paperResult = $this->getTestpaperResult($resultId);
@@ -446,7 +455,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $paperResult;
     }
 
-    //new
     public function submitAnswers($id, $answers)
     {
         if (empty($answers)) {
@@ -621,7 +629,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
-    //new
     protected function countItemResultStatus($resultStatus, $item, $questionResult)
     {
         $resultStatus = array(

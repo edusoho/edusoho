@@ -43,8 +43,8 @@ class PlayerController extends BaseController
             if (!empty($file['convertParams']['hasVideoWatermark'])) {
                 $file['videoWatermarkEmbedded'] = 1;
             }
-
-            $result = $this->getMaterialLibService()->player($file['globalId']);
+            $ssl = $request->isSecure() ? true : false;
+            $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
             if (isset($result['subtitles'])) {
                 $this->filterSubtitles($result['subtitles']);

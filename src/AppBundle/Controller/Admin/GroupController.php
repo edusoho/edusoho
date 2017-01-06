@@ -4,7 +4,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class GroupController extends BaseController
 {
@@ -31,7 +30,7 @@ class GroupController extends BaseController
 
 		$groupinfo=$this->getGroupService()->searchGroups(
                 $conditions,
-                array('createdTime','desc'),
+                array('createdTime' => 'desc'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
         );
@@ -297,26 +296,26 @@ class GroupController extends BaseController
         switch ($sort) {
             case 'byPostNum':
                 $orderBys=array(
-                    array('isStick','DESC'),
-                    array('postNum','DESC'),
-                    array('createdTime','DESC'),
+                    'isStick' => 'DESC',
+                    'postNum' => 'DESC',
+                    'createdTime' => 'DESC',
                 );
                 break;
             case 'byStick':
                 $orderBys=array(
-                    array('isStick','DESC'),
-                    array('createdTime','DESC'),
+                    'isStick' => 'DESC',
+                    'createdTime' => 'DESC',
                 );
                 break;
             case 'byCreatedTime':
                 $orderBys=array(
-                    array('createdTime','DESC'),
+                    'createdTime' => 'DESC',
                 );
                 break;
             case 'byLastPostTime':
                 $orderBys=array(
-                    array('isStick','DESC'),
-                    array('lastPostTime','DESC'),
+                    'isStick' => 'DESC',
+                    'lastPostTime' => 'DESC',
                 );
                 break;
             default:

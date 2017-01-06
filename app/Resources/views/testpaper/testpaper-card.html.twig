@@ -1,5 +1,4 @@
 {% set questionTypeDict = getQuestionTypes() %}
-
 {% if limitedTime > 0 %}
 	<div class="testpaper-timer">
 		<span class="pull-left">{{'倒计时'|trans}}：</span><span class="timer js-testpaper-timer" data-time="{{ limitedTime * 60 }}">00:00:00</span>
@@ -16,7 +15,7 @@
 		{% if target|default(null) and target.doTimes|default('0') %}
 			<span class="color-danger">{{'本次考试仅一次机会'|trans}}</span>
 		{% endif %}
-		<a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">{{ paper.itemCount }}题</span>，总分<span class="color-primary">{{ paper.score }}分</span>{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore|default(0) }}</span>分{% endif %}。{% if paper.limitedTime > 0 %}请在<span class="color-primary">{{ limitedTime }}分钟</span>内作答。{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
+		<a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">{{ paper.itemCount }}题</span>，总分<span class="color-primary">{{ paper.score }}分</span>{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore|default(0) }}</span>分{% endif %}。{% if limitedTime > 0 %}请在<span class="color-primary">{{ limitedTime }}分钟</span>内作答。{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
 	</div>
 	<div class="panel-body">
 		{% for type in questionTypes|default([]) %}
@@ -24,16 +23,16 @@
 			{% for question in questions[type]|default(null) %}
 				{% if question.type == 'material' %}
 					{% for subQuestion in question.subs|default([]) %}
-						<a href="javascript:;" data-anchor="#question{{ subQuestion.id }}" class="js-btn-index color-lump mrm mbm 
+						<a href="javascript:;" data-anchor="#question{{ subQuestion.id }}" class="js-btn-index mrm mbm lump-card color-lump 
 							{% if subQuestion.testResult.answer[0]|default(null) is not empty %}
 								{% if paperResult.status|default('doing') == 'finish' %}lump-success
 								{% else %}lump-primary-light
 								{% endif %}
 							{% endif %}
-						">{{ question.seq + loop.index }}</a>
+						">{{ question.seq + loop.index - 1 }}</a>
 					{% endfor %}
 				{% else %}
-					<a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm 
+					<a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index mrm mbm lump-card color-lump 
 						{% if question.testResult.answer[0]|default(null) is not empty %}
 							{% if paperResult.status|default('doing') == 'finish' %}lump-success
 							{% else %}lump-primary-light
@@ -44,19 +43,19 @@
 			{% endfor %}
 		{% endfor %}
 	</div>
-	<div class="panel-footer">
+	<div class="panel-footer text-right">
 		{% if limitedTime > 0 %}
 			{% if target.testMode|default('normal') != 'realTime' %}
-				<button class="btn btn-default"{% if paperResult.id|default(0) > 0 %} id="suspend" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-goto="{{ path('my_quiz') }}"{% else %} disabled="disabled"{% endif %}>{{'稍后再做'|trans}}</button>
+				<button class="btn btn-default"{% if paperResult.id|default(0) > 0 %} id="suspend" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-goto=""{% else %} disabled="disabled"{% endif %}>{{'稍后再做'|trans}}</button>
 		  {% endif %}
 		{% else %}
-			<button class="btn btn-default"{% if paperResult.testId|default(0) > 0 %} id="suspend" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-goto="{{ path('my_quiz') }}"{% else %} disabled="disabled"{% endif %} data-role="test-suspend">{{'稍后再做'|trans}}</button>
+			<button class="btn btn-default"{% if paperResult.testId|default(0) > 0 %} id="suspend" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-goto=""{% else %} disabled="disabled"{% endif %} data-role="test-suspend">{{'稍后再做'|trans}}</button>
 		{% endif %}
 
 		{% if paperResult.id|default(0) > 0 %}
-			<button class="btn btn-success do-test" id="finishPaper" data-ajax="{{ path('testpaper_result_submit', { resultId: paperResult.id|default(0) }) }}"  data-toggle="modal" data-target="#testpaper-finished-dialog">{{'我要交卷'|trans}}</button>
+			<button class="btn btn-primary do-test" id="finishPaper" data-ajax="{{ path('testpaper_result_submit', { resultId: paperResult.id|default(0) }) }}"  data-toggle="modal" data-target="#testpaper-finished-dialog">{{'马上交卷'|trans}}</button>
 		{% else %}
-			<button class="btn btn-success" disabled="disabled">{{'我要交卷'|trans}}</button>
+			<button class="btn btn-primary" disabled="disabled">{{'马上交卷'|trans}}</button>
 		{% endif %}
 	</div>
 </div>

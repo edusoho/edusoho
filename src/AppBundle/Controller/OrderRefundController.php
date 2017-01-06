@@ -41,9 +41,7 @@ class OrderRefundController extends BaseController
             $amount = empty($data['applyRefund']) ? 0 : null;
 
             $reason['operator'] = $user['id'];
-
             $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
-
             return $this->createJsonResponse(true);
         }
 
@@ -85,7 +83,6 @@ class OrderRefundController extends BaseController
         if (empty($member) || empty($member['orderId'])) {
             throw $this->createAccessDeniedException('您不是学员或尚未购买，不能取消退款。');
         }
-
         $processor->cancelRefundOrder($member['orderId']);
 
         return $this->createJsonResponse(true);

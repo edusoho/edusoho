@@ -5,10 +5,10 @@
  *
  * PHP version 5
  *
- * If you call read() in \Topxia\Service\Util\Phpsec\Net\SSH2 you may get {@link http://en.wikipedia.org/wiki/ANSI_escape_code ANSI escape codes} back.
+ * If you call read() in \Biz\Util\Phpsec\Net\SSH2 you may get {@link http://en.wikipedia.org/wiki/ANSI_escape_code ANSI escape codes} back.
  * They'd look like chr(0x1B) . '[00m' or whatever (0x1B = ESC).  They tell a
  * {@link http://en.wikipedia.org/wiki/Terminal_emulator terminal emulator} how to format the characters, what
- * color to display them in, etc. \Topxia\Service\Util\Phpsec\File\ANSI is a {@link http://en.wikipedia.org/wiki/VT100 VT100} terminal emulator.
+ * color to display them in, etc. \Biz\Util\Phpsec\File\ANSI is a {@link http://en.wikipedia.org/wiki/VT100 VT100} terminal emulator.
  *
  * @category  File
  * @package   ANSI
@@ -20,7 +20,7 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\File;
+namespace Biz\Util\Phpsec\File;
 
 /**
  * Pure-PHP ANSI Decoder
@@ -164,7 +164,7 @@ class ANSI
      * Default Constructor.
      *
      * @access public
-     * @return \Topxia\Service\Util\Phpsec\File\ANSI
+     * @return \Biz\Util\Phpsec\File\ANSI
      */
     public function __construct()
     {

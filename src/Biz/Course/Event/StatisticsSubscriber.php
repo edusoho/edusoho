@@ -27,9 +27,8 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
 
     public function onTaskNumberChange(Event $event)
     {
-        $task     = $event->getSubject();
-        $courseId = $task['courseId'];
-        $this->getCourseService()->updateCourseStatistics($courseId, array(
+        $task = $event->getSubject();
+        $this->getCourseService()->updateCourseStatistics($task['courseId'], array(
             'taskNum'
         ));
     }
@@ -41,8 +40,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             return;
         }
 
-        $courseId = $member['courseId'];
-        $this->getCourseService()->updateCourseStatistics($courseId, array(
+        $this->getCourseService()->updateCourseStatistics($member['courseId'], array(
             'studentNum'
         ));
     }

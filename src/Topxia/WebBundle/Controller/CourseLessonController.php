@@ -5,7 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\CloudPlatform\CloudAPIFactory;
 
@@ -197,6 +197,7 @@ class CourseLessonController extends BaseController
 
     public function showAction(Request $request, $courseId, $lessonId)
     {
+        $ssl = $request->isSecure() ? true : false;
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
         $lesson         = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
@@ -287,7 +288,12 @@ class CourseLessonController extends BaseController
                         ));
                     } elseif (!in_array($file['type'], array('video', 'audio'))) {
                         $api              = CloudAPIFactory::create("leaf");
-                        $result           = $api->get("/resources/{$file['globalId']}/player");
+
+                        $params = array();
+                        if ($ssl) {
+                            $params['protocol'] = 'https';
+                        }
+                        $result           = $api->get("/resources/{$file['globalId']}/player", $params);
                         $json['mediaUri'] = $result['url'];
                     }
                 } else {
@@ -466,7 +472,9 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $result = $this->getMaterialLibService()->player($file['globalId']);
+        $ssl = $request->isSecure() ? true : false;
+
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
         return $this->createJsonResponse($result['images']);
     }
 
@@ -481,6 +489,7 @@ class CourseLessonController extends BaseController
         if (!$lesson['free']) {
             $this->getCourseService()->tryTakeCourse($courseId);
         }
+
 
         if ($lesson['type'] != 'document' || empty($lesson['mediaId'])) {
             throw $this->createNotFoundException();
@@ -511,7 +520,9 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $result = $this->getMaterialLibService()->player($file['globalId']);
+        $ssl = $request->isSecure() ? true : false;
+
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
         return $this->createJsonResponse($result);
     }
 
@@ -537,8 +548,10 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        $ssl = $request->isSecure() ? true : false;
+
         if ($file['storage'] == 'cloud') {
-            $result             = $this->getMaterialLibService()->player($file['globalId']);
+            $result             = $this->getMaterialLibService()->player($file['globalId'], $ssl);
             $result['mediaUri'] = $result['url'];
         }
 

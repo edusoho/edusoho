@@ -15,8 +15,9 @@ class ChoiceQuestionController extends BaseController
 
     public function editAction(Request $request, $courseSetId, $questionId)
     {
+        $user        = $this->getUser();
         $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseSet['id']);
+        $courseTasks = $this->getCourseTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
         $question    = $this->getQuestionService()->get($questionId);
 
         $parentQuestion = array();
@@ -35,8 +36,9 @@ class ChoiceQuestionController extends BaseController
 
     public function createAction(Request $request, $courseSetId, $type)
     {
+        $user        = $this->getUser();
         $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseSet['id']);
+        $courseTasks = $this->getCourseTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
 
         $parentId       = $request->query->get('parentId', 0);
         $parentQuestion = $this->getQuestionService()->get($parentId);

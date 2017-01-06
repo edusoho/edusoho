@@ -9,6 +9,7 @@ export default class TaskSidebar extends Emitter{
   }
 
   init() {
+    this.fixIconInChrome();
     this.fetchPlugins()
     .then((plugins) => {
       this.plugins = plugins;
@@ -23,6 +24,12 @@ export default class TaskSidebar extends Emitter{
 
   fetchPlugins() {
     return $.post(this.url);
+  }
+  
+  // 修复字体图标在chrome下，加载两次从而不能显示的问题
+  fixIconInChrome() {
+    let html = `<i class="es-icon es-icon-chevronleft"></i>`;
+    this.element.html(html);
   }
 
   renderToolbar() {
@@ -39,7 +46,7 @@ export default class TaskSidebar extends Emitter{
 
   renderPane() {
     let html = this.plugins.reduce((html, plugin) => {
-      return html += `<div data-pane="${plugin.code}" class="task-pane"></div>`
+      return html += `<div data-pane="${plugin.code}" class="js-sidebar-pane ${plugin.code}-pane"></div>`;
     }, '');
 
     this.element.append(html);
@@ -83,7 +90,7 @@ export default class TaskSidebar extends Emitter{
     }
   }
 
-  popupContent(time=0) {
+  popupContent(time=1) {
     let side_right = '0px';
     let content_right = '379px';
 
@@ -93,7 +100,7 @@ export default class TaskSidebar extends Emitter{
     }, time);
   }
 
-  foldContent(time=0){
+  foldContent(time=1){
     let side_right = '-' + this.element.width() + 'px';
     let content_right = '26px';
 
@@ -101,5 +108,14 @@ export default class TaskSidebar extends Emitter{
     this.element.animate({
       right: side_right
     }, time)
+  }
+
+  reload(){
+    const $currentPane = this.element.find('.js-sidebar-pane:visible');
+    const pluginCode = $currentPane.data('pane');
+    $currentPane.undelegate();
+    this.element.find('#dashboard-toolbar-nav').children(`[data-plugin="${pluginCode}"]`)
+        .data('loaded', false)
+        .click();
   }
 }

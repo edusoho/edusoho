@@ -17,9 +17,9 @@ class Live extends Activity
         return $this->getLiveActivityService()->createLiveActivity($fields);
     }
 
-    public function update($id, $fields)
+    public function update($id, &$fields, $activity)
     {
-        return $this->getLiveActivityService()->updateLiveActivity($id, $fields);
+        return $this->getLiveActivityService()->updateLiveActivity($id, $fields, $activity);
     }
 
     public function get($targetId)
@@ -40,11 +40,11 @@ class Live extends Activity
 
     protected function getLiveActivityService()
     {
-        return $this->createService('Activity:LiveActivityService');
+        return $this->getBiz()->service('Activity:LiveActivityService');
     }
 
     protected function getActivityLearnLogService()
     {
-        return $this->createService("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 }

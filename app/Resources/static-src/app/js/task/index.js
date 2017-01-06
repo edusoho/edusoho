@@ -38,7 +38,7 @@ class TaskShow extends Emitter {
   bindEvent() {
     let learnedTime = 0;
     let minute = 60 * 1000;
-    let timeStep = 2; // 分钟
+    let timeStep = 1; // 分钟
     this.delay('doing', (timeStep) => {
       learnedTime = parseInt(timeStep) + parseInt(learnedTime);
       this.eventEmitter.emit('doing', {
@@ -90,7 +90,7 @@ class TaskShow extends Emitter {
     .on('fold', (px, time) => {
       this.element.find('#dashboard-content').animate({
         right: px,
-      }, time)
+      }, time);
     })
   }
 }

@@ -76,7 +76,7 @@
     </thead>
     <tbody>
     {% for course in courses %}
-      {% set user = users[course.userId]|default(null) %}
+      {% set user = users[course.creator]|default(null) %}
       {% set category = categories[course.categoryId]|default(null) %}
       {% include 'admin/course/tr.html.twig' %}
     {% else %}

@@ -1,12 +1,12 @@
-{% extends 'blank-layout.html.twig' %}
+{% extends "activity/content-layout.html.twig" %}
 
-{% block content %} 
-	<div style="margin-left: 30px; margin-top: 30px;">
-		<span style="font-weight: bold; font-size:1.5em;">讨论主题：</span><br/>
-		<pre style="padding-left: 30px; font-size: 1.2em;">{{activity.content|raw}}</pre>
-		<div style="margin-top: 30px;">
+{% block body %}
+	<div class="iframe-parent-content ph20 pv20">
+		<h1>讨论主题：</h1>
+		{{activity.content|raw}}
+		<div class="pt10">
 			{# 如果任务未完成： #}
-			<a href="{{path('course_thread_create', {id: activity.fromCourseId, type: 'discussion'})}}" style="text-decoration: none;" target="_blank">前往课程讨论区</a>发表或回复话题吧
+			<a class="mr5" href="{{path('course_thread_create', {courseId: activity.fromCourseId, type: 'discussion'})}}" target="_blank">前往课程讨论区</a>发表或回复话题吧
 		</div>
 	</div>
 {% endblock %}

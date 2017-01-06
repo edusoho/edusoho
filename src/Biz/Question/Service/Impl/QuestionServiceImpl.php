@@ -37,7 +37,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->waveCount($question['parentId'], array('subCount' => '1'));
         }
 
-        // $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
+        $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
 
         return $question;
     }
@@ -224,7 +224,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         if (!empty($conditions['keyword'])) {
-            $conditions['stem'] = $conditions['keyword'];
+            $conditions['stem'] = '%'.trim($conditions['keyword']).'%';
             unset($conditions['keyword']);
         }
 

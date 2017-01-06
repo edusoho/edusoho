@@ -1,10 +1,9 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
-
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -13,17 +12,17 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.join'            => 'onCourseJoin',
-            'course.favorite'        => 'onCourseFavorite',
-            'course.update'          => 'onCourseUpdate',
-            'course.teacher.update'  => 'onCourseTeacherUpdate',
-            'course.price.update'    => 'onCoursePriceUpdate',
-            'course.picture.update'  => 'onCoursePictureUpdate',
-            'user.role.change'       => 'onRoleChange',
-            'announcement.create'    => 'onAnnouncementCreate',
-            'announcement.update'    => 'onAnnouncementUpdate',
-            'announcement.delete'    => 'onAnnouncementDelete',
-            'courseReview.add'       => 'onCourseReviewCreate'
+            // 'course.join'            => 'onCourseJoin',
+            // 'course.favorite'        => 'onCourseFavorite',
+            // 'course.update'          => 'onCourseUpdate',
+            // 'course.teacher.update'  => 'onCourseTeacherUpdate',
+            // 'course.price.update'    => 'onCoursePriceUpdate',
+            // 'course.picture.update'  => 'onCoursePictureUpdate',
+            // 'user.role.change'       => 'onRoleChange',
+            // 'announcement.create'    => 'onAnnouncementCreate',
+            // 'announcement.update'    => 'onAnnouncementUpdate',
+            // 'announcement.delete'    => 'onAnnouncementDelete',
+            // 'courseReview.add'       => 'onCourseReviewCreate'
         );
     }
 
@@ -181,18 +180,18 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
 
         //@TODO course2.0后 应改为教学计划的复制
-/*        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+        /*        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds) {
-            $fields           = ArrayToolkit::parts($announcement, array('userId', 'targetType', 'url', 'startTime', 'endTime', 'content'));
-            $fields['copyId'] = $announcement['id'];
+        $fields           = ArrayToolkit::parts($announcement, array('userId', 'targetType', 'url', 'startTime', 'endTime', 'content'));
+        $fields['copyId'] = $announcement['id'];
 
-            foreach ($courseIds as $courseId) {
-                $fields['targetId']    = $courseId;
-                $fields['createdTime'] = time();
+        foreach ($courseIds as $courseId) {
+        $fields['targetId']    = $courseId;
+        $fields['createdTime'] = time();
 
-                $this->getAnnouncementService()->createAnnouncement($fields);
-            }
+        $this->getAnnouncementService()->createAnnouncement($fields);
+        }
         }*/
 
         return true;
@@ -212,27 +211,27 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
 
         //@TODO course2.0后 应改为教学计划的复制
-/*
+        /*
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds) {
-            $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
-                array(
-                    'targetType' => 'course',
-                    'targetIds'  => $courseIds,
-                    'copyId'     => $announcement['id']
-                ),
-                array('createdTime' => 'DESC'),
-                0, PHP_INT_MAX
-            );
+        $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
+        array(
+        'targetType' => 'course',
+        'targetIds'  => $courseIds,
+        'copyId'     => $announcement['id']
+        ),
+        array('createdTime' => 'DESC'),
+        0, PHP_INT_MAX
+        );
 
-            $fields = ArrayToolkit::parts($announcement, array('url', 'startTime', 'endTime', 'content'));
+        $fields = ArrayToolkit::parts($announcement, array('url', 'startTime', 'endTime', 'content'));
 
-            foreach ($copyAnnouncements as $copyAnnouncement) {
-                $fields['updatedTime'] = time();
+        foreach ($copyAnnouncements as $copyAnnouncement) {
+        $fields['updatedTime'] = time();
 
-                $this->getAnnouncementService()->updateAnnouncement($copyAnnouncement['id'], $fields);
-            }
+        $this->getAnnouncementService()->updateAnnouncement($copyAnnouncement['id'], $fields);
+        }
         }*/
 
         return true;
@@ -255,19 +254,19 @@ class CourseEventSubscriber implements EventSubscriberInterface
         /*$courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds) {
-            $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
-                array(
-                    'targetType' => 'course',
-                    'targetIds'  => $courseIds,
-                    'copyId'     => $announcement['id']
-                ),
-                array('createdTime' => 'DESC'),
-                0, PHP_INT_MAX
-            );
+        $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
+        array(
+        'targetType' => 'course',
+        'targetIds'  => $courseIds,
+        'copyId'     => $announcement['id']
+        ),
+        array('createdTime' => 'DESC'),
+        0, PHP_INT_MAX
+        );
 
-            foreach ($copyAnnouncements as $copyAnnouncement) {
-                $this->getAnnouncementService()->deleteAnnouncement($copyAnnouncement['id']);
-            }
+        foreach ($copyAnnouncements as $copyAnnouncement) {
+        $this->getAnnouncementService()->deleteAnnouncement($copyAnnouncement['id']);
+        }
         }*/
 
         return true;
@@ -300,13 +299,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
     protected function simplifyCousrse($course)
     {
         return array(
-            'id'      => $course['id'],
-            'title'   => $course['title'],
-            'picture' => $course['middlePicture'],
-            'type'    => $course['type'],
-            'rating'  => $course['rating'],
-            'about'   => StringToolkit::plain($course['about'], 100),
-            'price'   => $course['price']
+            'id'     => $course['id'],
+            'title'  => $course['title'],
+            'type'   => $course['type'],
+            'rating' => $course['rating'],
+            'price'  => $course['price']
         );
     }
 

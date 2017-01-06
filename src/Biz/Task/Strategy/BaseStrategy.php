@@ -3,6 +3,8 @@
 namespace Biz\Task\Strategy;
 
 use Biz\Task\Dao\TaskDao;
+use Biz\Task\Dao\TaskResultDao;
+use Biz\Task\Service\TaskResultService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Dao\CourseChapterDao;
@@ -26,7 +28,14 @@ class BaseStrategy
 
     public function baseCreateTask($fields)
     {
-        $fields = array_filter($fields);
+        $fields = array_filter($fields, function ($value) {
+            if (is_array($value) || ctype_digit((string)$value)) {
+                return true;
+            }
+
+            return !empty($value);
+        });
+
         if ($this->invalidTask($fields)) {
             throw new InvalidArgumentException('task is invalid');
         }
@@ -40,6 +49,7 @@ class BaseStrategy
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
+        $fields['type']          = $fields['mediaType'];
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
@@ -48,6 +58,7 @@ class BaseStrategy
             'categoryId',
             'activityId',
             'title',
+            'type',
             'isFree',
             'isOptional',
             'startTime',
@@ -79,10 +90,9 @@ class BaseStrategy
         return $this->getTaskDao()->update($id, $fields);
     }
 
-    public function baseFindCourseItems($courseId)
+    public function baseFindCourseItems($courseId, $tasks)
     {
         $items = array();
-        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
             $items["task-{$task['id']}"] = $task;
@@ -136,6 +146,14 @@ class BaseStrategy
     public function getTaskDao()
     {
         return $this->biz->dao('Task:TaskDao');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    public function getTaskResultService()
+    {
+        return $this->biz->service('Task:TaskResultService');
     }
 
     /**

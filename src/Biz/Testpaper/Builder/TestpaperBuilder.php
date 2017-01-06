@@ -32,7 +32,8 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             throw new \RuntimeException("Build testpaper #{$result['id']} items error.");
         }
 
-        $this->createQuestionItems($result['items']);
+        $items = $this->createQuestionItems($result['items']);
+        $this->updateTestpaperByItems($testpaper['id'], $items);
 
         return $testpaper;
     }
@@ -190,6 +191,28 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         }
 
         return $testpaperItems;
+    }
+
+    protected function updateTestpaperByItems($testpaperId, $items)
+    {
+        $count = 0;
+        $score = 0;
+        array_walk($items, function ($item) use (&$count, &$score) {
+            if (!$item['parentId']) {
+                $count += 1;
+            }
+
+            if ($item['questionType'] != 'material') {
+                $score += $item['score'];
+            }
+        });
+
+        $fields = array(
+            'itemCount' => $count,
+            'score'     => $score
+        );
+
+        return $this->getTestpaperService()->updateTestpaper($testpaperId, $fields);
     }
 
     protected function getQuestions($options)

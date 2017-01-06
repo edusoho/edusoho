@@ -233,7 +233,7 @@ class CourseStudentManageController extends BaseController
             $limit = $courseMemberCount - $start;
         }
         $courseMembers = $this->getCourseMemberService()->searchMembers($condition, array('createdTime', 'DESC'), $start, $limit);
-        $userFields    = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields    = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         $fields['weibo'] = $this->getServiceKernel()->trans('微博');
 
@@ -353,7 +353,7 @@ class CourseStudentManageController extends BaseController
         $profile          = $this->getUserService()->getUserProfile($userId);
         $profile['title'] = $user['title'];
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         for ($i = 0; $i < count($userFields); $i++) {
             if (strstr($userFields[$i]['fieldName'], "textField")) {
@@ -388,7 +388,7 @@ class CourseStudentManageController extends BaseController
     {
         $profile = $this->getUserService()->getUserProfile($userId);
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         for ($i = 0; $i < count($userFields); $i++) {
             if (strstr($userFields[$i]['fieldName'], "textField")) {

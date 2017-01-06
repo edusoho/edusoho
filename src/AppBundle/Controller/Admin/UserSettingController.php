@@ -92,7 +92,7 @@ class UserSettingController extends BaseController
             $this->setFlashMessage('success', '注册设置已保存！');
         }
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         return $this->render('admin/system/auth.html.twig', array(
             'auth'            => $auth,
@@ -276,7 +276,7 @@ class UserSettingController extends BaseController
         }
 
         $userPartner = $this->getSettingService()->get('user_partner', array());
-        $userFields  = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields  = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $userFields  = ArrayToolkit::index($userFields, 'fieldName');
 
         if ($request->getMethod() == 'POST') {

@@ -3,8 +3,7 @@ namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveCourseController extends BaseController

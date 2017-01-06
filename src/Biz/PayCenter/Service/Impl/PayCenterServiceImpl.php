@@ -4,7 +4,7 @@ namespace Biz\PayCenter\Service\Impl;
 
 use Biz\Order\Service\OrderService;
 use Topxia\Component\Payment\Payment;
-use Topxia\Service\Common\BaseService;
+use Biz\BaseService;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\PayCenter\Service\PayCenterService;
@@ -284,5 +284,15 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
     protected function getCouponService()
     {
         return $this->createService('Coupon:CouponService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

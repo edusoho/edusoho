@@ -2,10 +2,8 @@
 
 {% block content %}
   <ul class="task-list task-show">
-  <li class="task-item"><i class="es-icon es-icon-viewlist left-menu"></i><span class="text-overflow title color-gray">第一章</span></li>
-  <li class="task-item color-gray"><span class="text-overflow title color-gray">第一节</span></li>
     {% for task in tasks %}
-      {% set task_lock =  (not  task.result|default(null)) and (not course.isDefault) and course.learnMode  == 'lockMode' %}
+      {% set task_lock =  (course.learnMode  == 'lockMode')  and ( not task.lock)  and task.number != 1 %}
       <li class="task-item task-content {% if task.activityId == activity.id %} active {% endif %} mouse-control">
         <i class="es-icon
           {% if task_lock %}
@@ -18,21 +16,31 @@
           es-icon-iccheckcircleblack24px
           {% endif %}
           left-menu"></i>
-        <a class="text-overflow title"
-          {% if task_lock and not preview %} data-url{% else %}href{% endif %} ="{{ path('course_task_show', {id:task.id,courseId:task.courseId, preview: preview}) }}">
-          {% if task.isOptional %}
-            <span class="label label-success mrm">选修</span>
-          {% endif %}
-          {{ task.title }}
-        </a>
-        {% if task_lock %}
+
+        {% if not task_lock  and   task.status == 'published' %}
+          <a class="text-overflow title" href= "{{ path('course_task_show', {id:task.id,courseId:task.courseId, preview: preview}) }}">
+          {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}{{ task.title }}
+          </a>
+        {% else %}
+          <div class="text-overflow title" data-url= "{{ path('course_task_show', {id:task.id,courseId:task.courseId, preview: preview}) }}">
+          {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}{{ task.title }}
+          </div>
+        {% endif %}
+
+        {% if task.status != 'publish' %}
+          <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
+            <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mlm"></i>
+          </span>
+          <span class="right-menu mouse-enter color-primary">敬请期待</span>
+        {% elseif task_lock %}
           <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mlm"></i>
           </span>
           <span class="right-menu mouse-enter color-primary">任务未解锁</span>
         {% else %}
           <span class="right-menu">{{ task.activity.length|activity_length_format }}
-            <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mlm" data-toggle="tooltip" data-placement="top" title="{{ activity_metas(task.activity.mediaType).name }}任务"></i></span>
+            <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mlm" data-toggle="tooltip"
+               data-placement="top" title="{{ activity_metas(task.activity.mediaType).name }}任务"></i></span>
         {% endif %}
       </li>
     {% endfor %}

@@ -1,8 +1,9 @@
 <?php
 namespace Biz\Activity\Type;
 
-use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\DownloadFileDao;
 use Topxia\Common\ArrayToolkit;
+use Biz\Activity\Config\Activity;
 
 class Download extends Activity
 {
@@ -24,6 +25,7 @@ class Download extends Activity
             $downloadActivity = $that->getDownloadActivityDao()->create($downloadActivity);
             //2. created file
             $files = $that->parseDownloadFiles($downloadActivity['id'], $materials);
+
             foreach ($files as $file) {
                 $that->getDownloadFileDao()->create($file);
             }
@@ -35,7 +37,7 @@ class Download extends Activity
     /**
      * @inheritdoc
      */
-    public function update($id, $fields)
+    public function update($id, &$fields, $activity)
     {
         $materials = json_decode($fields['materials'], true);
 
@@ -44,17 +46,14 @@ class Download extends Activity
 
         $downloadActivity = $this->getDownloadActivityDao()->get($id);
 
-        $that = $this;
-
+        $that  = $this;
         $files = $this->parseDownloadFiles($id, $materials);
 
         $dropMaterials   = array_diff_key($existMaterials, $files);
         $addMaterials    = array_diff_key($files, $existMaterials);
         $updateMaterials = array_intersect_key($existMaterials, $files);
 
-
         $this->getConnection()->transactional(function () use ($id, $dropMaterials, $addMaterials, $updateMaterials, $that) {
-
             foreach ($dropMaterials as $material) {
                 $that->getDownloadFileDao()->delete($material['id']);
             }
@@ -69,7 +68,6 @@ class Download extends Activity
         });
         return $downloadActivity;
     }
-
 
     /**
      * @inheritdoc
@@ -90,7 +88,6 @@ class Download extends Activity
         // TODO: Implement getListeners() method.
     }
 
-
     /**
      * @inheritdoc
      */
@@ -105,14 +102,14 @@ class Download extends Activity
     {
         $files = array();
         array_walk($materials, function ($material) use ($downloadActivityId, &$files) {
-
             $file = array(
                 'downloadActivityId' => $downloadActivityId,
                 'title'              => $material['name'],
                 'fileId'             => intval($material['id']),
-                'fileSize'           => $material['size'],
+                //FIXME undefined index: size
+                // 'fileSize'           => $material['size'],
                 'indicate'           => intval($material['id']),
-                'summary'            => $material['summary']
+                'summary'            => empty($material['summary']) ? null : $material['summary']
             );
             if (intval($material['id']) == 0) {
                 $file['link']     = $material['link'];
@@ -128,6 +125,9 @@ class Download extends Activity
         return $this->getBiz()->dao('Activity:DownloadActivityDao');
     }
 
+    /**
+     * @return DownloadFileDao
+     */
     public function getDownloadFileDao()
     {
         return $this->getBiz()->dao('Activity:DownloadFileDao');
@@ -135,13 +135,11 @@ class Download extends Activity
 
     protected function getActivityLearnLogService()
     {
-        return $this->createService("Activity:ActivityLearnLogService");
+        return $$this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
     protected function getConnection()
     {
         return $this->getBiz()->offsetGet('db');
     }
-
-
 }

@@ -212,7 +212,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             'doc'       => array(
                 'meta'    => array(
                     'name' => '文档',
-                    'icon' => 'es-icon es-icon-docclass'
+                    'icon' => 'es-icon es-icon-description'
                 ),
                 'actions' => array(
                     'create' => 'AppBundle:Activity/Doc:create',
@@ -222,7 +222,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             ),
             'ppt'       => array(
                 'meta'    => array(
-                    'name' => 'Ppt',
+                    'name' => 'PPT',
                     'icon' => 'es-icon es-icon-pptclass'
                 ),
                 'actions' => array(
@@ -308,13 +308,13 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             return new Ppt($that->getBiz());
         };
         $container['activity_type.testpaper'] = function () use ($that) {
-            return new Testpaper($that->biz);
+            return new Testpaper($that->getBiz());
         };
         $container['activity_type.homework'] = function () use ($that) {
-            return new Homework($that->biz);
+            return new Homework($that->getBiz());
         };
         $container['activity_type.exercise'] = function () use ($that) {
-            return new Exercise($that->biz);
+            return new Exercise($that->getBiz());
         };
     }
 

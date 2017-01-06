@@ -12,11 +12,11 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $ssh = new \Topxia\Service\Util\Phpsec\Net\SSH2('www.domain.tld');
+ *    $ssh = new \Biz\Util\Phpsec\Net\SSH2('www.domain.tld');
  *    if (!$ssh->login('username', 'password')) {
  *        exit('bad login');
  *    }
- *    $scp = new \Topxia\Service\Util\Phpsec\Net\SCP($ssh);
+ *    $scp = new \Biz\Util\Phpsec\Net\SCP($ssh);
  *
  *    $scp->put('abcd', str_repeat('x', 1024*1024));
  * ?>
@@ -32,10 +32,10 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Net;
+namespace Biz\Util\Phpsec\Net;
 
-use Topxia\Service\Util\Phpsec\Net\SSH1;
-use Topxia\Service\Util\Phpsec\Net\SSH2;
+use Biz\Util\Phpsec\Net\SSH1;
+use Biz\Util\Phpsec\Net\SSH2;
 
 /**
  * Pure-PHP implementations of SCP.
@@ -49,7 +49,7 @@ class SCP
 {
     /**#@+
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Net\SCP::put()
+     * @see \Biz\Util\Phpsec\Net\SCP::put()
      */
     /**
      * Reads data from a local file.
@@ -63,8 +63,8 @@ class SCP
 
     /**#@+
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Net\SCP::_send()
-     * @see \Topxia\Service\Util\Phpsec\Net\SCP::_receive()
+     * @see \Biz\Util\Phpsec\Net\SCP::_send()
+     * @see \Biz\Util\Phpsec\Net\SCP::_receive()
      */
     /**
      * SSH1 is being used.
@@ -109,7 +109,7 @@ class SCP
      * @param  String                                $host
      * @param  optional                              Integer $port
      * @param  optional                              Integer $timeout
-     * @return \Topxia\Service\Util\Phpsec\Net\SCP
+     * @return \Biz\Util\Phpsec\Net\SCP
      */
     public function __construct($ssh)
     {
@@ -128,8 +128,8 @@ class SCP
     /**
      * Uploads a file to the SCP server.
      *
-     * By default, \Topxia\Service\Util\Phpsec\Net\SCP::put() does not read from the local filesystem.  $data is dumped directly into $remote_file.
-     * So, for example, if you set $data to 'filename.ext' and then do \Topxia\Service\Util\Phpsec\Net\SCP::get(), you will get a file, twelve bytes
+     * By default, \Biz\Util\Phpsec\Net\SCP::put() does not read from the local filesystem.  $data is dumped directly into $remote_file.
+     * So, for example, if you set $data to 'filename.ext' and then do \Biz\Util\Phpsec\Net\SCP::get(), you will get a file, twelve bytes
      * long, containing 'filename.ext' as its contents.
      *
      * Setting $mode to self::SOURCE_LOCAL_FILE will change the above behavior.  With self::SOURCE_LOCAL_FILE, $remote_file will

@@ -2,12 +2,14 @@
 namespace Biz\Subtitle\Service\Impl;
 
 use Biz\BaseService;
+use Biz\File\Service\UploadFileService;
+use Biz\Subtitle\Dao\SubtitleDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Subtitle\Service\SubtitleService;
 
 class SubtitleServiceImpl extends BaseService implements SubtitleService
 {
-    public function findSubtitlesByMediaId($mediaId)
+    public function findSubtitlesByMediaId($mediaId, $ssl = false)
     {
         $subtitles = $this->getSubtitleDao()->findSubtitlesByMediaId($mediaId);
 
@@ -15,7 +17,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
             return array();
         }
 
-        $subtitles = $this->fillMetas($subtitles);
+        $subtitles = $this->fillMetas($subtitles, $ssl);
 
         return array_values($subtitles);
     }
@@ -70,6 +72,24 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         return true;
     }
 
+    protected function fillMetas($subtitles, $ssl = false)
+    {
+        $subtitles = ArrayToolkit::index($subtitles, 'subtitleId');
+
+        $fileIds = ArrayToolkit::column($subtitles, 'subtitleId');
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds, true, array('resType' => 'sub'));
+        foreach ($files as $file) {
+            if (!($file["type"] == "subtitle" || $file["targetType"] == "subtitle")) {
+                continue;
+            }
+            $downloadFile = $this->getUploadFileService()->getDownloadMetas($file['id'], $ssl);
+            $subtitles[$file['id']]['url'] = $downloadFile['url'];
+            $subtitles[$file['id']]['convertStatus'] = $file['convertStatus'];
+        }
+
+        return $subtitles;
+    }
+
     protected function filterSubtitleFields($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('name', 'subtitleId', 'mediaId'))) {
@@ -90,29 +110,17 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         return $subtitle;
     }
 
-    protected function fillMetas($subtitles)
-    {
-        $subtitles = ArrayToolkit::index($subtitles, 'subtitleId');
-
-        $fileIds = ArrayToolkit::column($subtitles, 'subtitleId');
-        $files   = $this->getUploadFileService()->findFilesByIds($fileIds, true, array('resType' => 'sub'));
-        foreach ($files as $file) {
-            if (!($file["type"] == "subtitle" || $file["targetType"] == "subtitle")) {
-                continue;
-            }
-            $downloadFile                            = $this->getUploadFileService()->getDownloadMetas($file['id']);
-            $subtitles[$file['id']]['url']           = $downloadFile['url'];
-            $subtitles[$file['id']]['convertStatus'] = $file['convertStatus'];
-        }
-
-        return $subtitles;
-    }
-
+    /**
+     * @return SubtitleDao
+     */
     protected function getSubtitleDao()
     {
         return $this->createDao('Subtitle:SubtitleDao');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');

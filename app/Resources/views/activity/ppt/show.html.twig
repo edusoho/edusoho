@@ -1,14 +1,14 @@
 {% extends 'activity/content-layout.html.twig' %}
 
-{% if error is empty %}
   {% do script(['app/js/activity/ppt/index.js']) %}
+{% if error is empty %}
 {% endif %}
 
 {% block body %}
-  <div id="activity-ppt-content"
-       data-finish-type="{{ ppt.finishType }}"
-       data-finish-detail="{{ ppt.finishDetail }}"
-       data-slides="{{ slides|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
+  <div class="iframe-parent-content" id="activity-ppt-content"
+      data-finish-type="{{ ppt.finishType }}"
+      data-finish-detail="{{ ppt.finishDetail }}"
+      data-slides="{{ slides|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
     {% if not error is empty %}
       {{ error.message|raw }}
     {% else %}

@@ -1,0 +1,65 @@
+{% extends 'course/header/header-for-member-layout.html.twig' %}
+
+{% block course_heard_content %}
+  <section class="course-freelearn-section">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="course-progress">
+          <div class="cricle-progress" id="freeprogress" data-percent="{{ progress }}">
+            <span class="percent"></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-7">
+        <ul class="clearfix text-12 course-learn-list hidden-xs">
+          <li>
+            <p class="mb15 color-gray">
+              <i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>已完成
+            </p>
+            <span class="text-16"><span class="color-primary">{{ taskResultCount }}</span> / <span class="mrl">{{ taskCount }}</span>
+            课时</span>
+          </li>
+          <li>
+            <p class="mb15 color-gray">
+              <i class="es-icon es-icon-today mrm"></i>学习有效期
+            </p>
+            <span class="text-16">
+              {% if course.expiryMode == 'days' and course.expiryDays == 0 %}
+                不限
+              {% elseif course.expiryMode == 'date' %}
+                {{ course.expiryEndDate|date('Y-m-d ') }}
+                <span class="mls color-warning text-12">剩余 {{ course.expiryEndDate|time_diff }} 天</span>
+              {% else %}
+                {{ member.createdTime|date_modify("+#{course.expiryDays} days")|date('Y-m-d ') }}
+                <span class="mls color-warning text-12">剩余 {{ member.createdTime|time_diff(course.expiryDays) }} 天</span>
+            </span>
+          {% endif %}
+          </li>
+          <li>
+            <p class="mb15 color-gray">
+              <i class="es-icon es-icon-book mrm"></i>下一课
+            </p>
+            <span class="text-16">
+              {% for toLearnTask in toLearnTasks %}
+              {{ toLearnTask.title }}
+              {% else %}
+              暂无任务
+              {% endfor %}
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-sm-2 hidden-xs">
+        {% for toLearnTask in toLearnTasks %}
+          <a class="btn btn-primary btn-lg hidden-sm mts" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+          <a class="btn btn-primary btn-block visible-sm" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+        {% endfor %}
+      </div>
+      <div class="col-sm-2 visible-xs text-center">
+        {% for toLearnTask in toLearnTasks %}
+          <a class="btn btn-primary btn-lg" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">继续学习</a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

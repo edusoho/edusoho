@@ -1,7 +1,7 @@
 import FileChooser from '../../file-chooser/file-choose';
 import notify from 'common/notify';
-import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/chooser-ui.js';
-jQuery.validator.addMethod("url", function(value, element) {
+import {chooserUiOpen, chooserUiClose, showChooserType} from '../widget/chooser-ui.js';
+jQuery.validator.addMethod("url", function (value, element) {
   return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value);
 }, "URL的格式不正确");
 
@@ -29,7 +29,7 @@ function _inItStep2form() {
   $form.data('validator', validator);
 }
 
-$('#step2-form').on('click', '.js-btn-delete', function() {
+$('#step2-form').on('click', '.js-btn-delete', function () {
   let $parent = $(this).parents('li');
   let mediaId = $parent.data('id');
   let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
@@ -51,46 +51,43 @@ $('#step2-form').on('click', '.js-add-file-list', function () {
   addFile(true);
 })
 
-function addFile(addlist) {
+function addFile(addToList) {
   if (isEmpty($("#media").val()) && $("#step2-form").data('validator') && $("#step2-form").data('validator').valid() && $("#link").val().length > 0) {
-    console.log("ok");
-
+    if (!addToList) {
+      $("#verifyLink").val($("#link").val());
+    }
     let data = {
       source: 'link',
-      id: $("#link").val(),
-      name: $("#link").val(),
-      link: $("#link").val(),
+      id: $("#verifyLink").val(),
+      name: $("#verifyLink").val(),
+      link: $("#verifyLink").val(),
       summary: $("#file-summary").val(),
       size: 0
     };
-    $('.js-current-file').text($("#link").val());
+    $('.js-current-file').text($("#verifyLink").val());
     $("#media").val(JSON.stringify(data));
   }
 
+
   let media = isEmpty($("#media").val()) ? {} : JSON.parse($("#media").val());
   let items = isEmpty($("#materials").val()) ? {} : JSON.parse($("#materials").val());
-  console.log(isEmpty(media));
 
-  if (isEmpty(media)) {
+  if (!isEmpty(items) && items[media.id]) {
+    notify('danger', '选择重复');
+    $("#media").val(null);
+    media = null;
+    return;
+  }
+
+  if (!addToList) {
+    return;
+  }
+
+  if (addToList && isEmpty(media)) {
     notify('danger', '请先选择资料');
     return;
   }
 
-  if (!isEmpty(items) && items[media.id]) {
-    notify('danger', '选择重复');
-    $("#media").val(null);
-    return;
-  }
-
-  if(!addlist) {
-    return;
-  }
-
-  if (!isEmpty(items) && items[media.id]) {
-    notify('danger', '选择重复');
-    $("#media").val(null);
-    return;
-  }
 
   $('.js-current-file').text('无');
 
@@ -102,7 +99,6 @@ function addFile(addlist) {
   $('#link').val(null);
   $("#file-summary").val(null);
 
-  
 
   let item_tpl = '';
   if (media.link) {
@@ -122,7 +118,7 @@ function addFile(addlist) {
   `;
   }
   $("#material-list").append(item_tpl);
-  if($('.jq-validate-error:visible').length>0) {
+  if ($('.jq-validate-error:visible').length > 0) {
     $("#step2-form").data('validator').form();
   }
 }

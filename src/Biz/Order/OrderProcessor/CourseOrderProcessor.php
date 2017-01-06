@@ -61,7 +61,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
                 'totalPrice' => $totalPrice,
                 'targetId'   => $targetId,
                 'targetType' => "course",
-
                 'course'     => empty($course) ? null : $course,
                 'users'      => $users
             );
@@ -241,7 +240,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderInfoTemplate()
     {
-        return "TopxiaWebBundle:Course:orderInfo";
+        return "AppBundle:Course:orderInfo";
     }
 
     public function isTargetExist($targetId)

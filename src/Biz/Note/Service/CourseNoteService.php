@@ -20,6 +20,13 @@ interface CourseNoteService
     public function getNote($id);
 
     /**
+     * @param $courseId
+     *
+     * @return integer
+     */
+    public function countCourseNoteByCourseId($courseId);
+
+    /**
      * return note by user id and task id
      *
      * @param integer $userId
@@ -172,4 +179,12 @@ interface CourseNoteService
      * @return array[]
      */
     public function findNoteLikesByNoteIdsAndUserId(array $noteIds, $userId);
+
+    /**
+     * @param integer $userId
+     * @param integer $courseId
+     *
+     * @return integer
+     */
+    public function countNotesByUserIdAndCourseId($userId, $courseId);
 }

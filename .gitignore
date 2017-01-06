@@ -1,9 +1,9 @@
 *.py
 Gruntfile.js
 **/node_modules/
-**/node_modules/*
 npm-debug.log
 **/release/
+node_modules/
 /.idea
 /web/bundles/
 /app/cache/*
@@ -40,6 +40,7 @@ src/Topxia/Service/Util/DirectCloudClient.php
 src/Topxia/WebBundle/Controller/TestController.php
 src/Topxia/WebBundle/Resources/views/Test/*
 /web/themes/*
+/web/build/*
 !/web/themes/autumn
 !/web/themes/default
 !/web/themes/default-b
@@ -55,11 +56,9 @@ web/assets/img/default/video.png
 .phpintel*
 /src/Tests/*
 .crunch
-/app/config/parameters_test.yml
 *.css.map
 *.codekit
 web/php-performance.php
 chunk-manifest.json
-.ac-php-conf.json
 .npminstall.done
-/web/static-dist/dev.lock
+/web/static-dist/*

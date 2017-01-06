@@ -30,7 +30,7 @@ interface CourseStrategy
     public function getTaskItemRenderPage();
 
     //课时的api
-    public function findCourseItems($courseId);
+    public function prepareCourseItems($course, $tasks);
 
     public function sortCourseItems($courseId, array $itemIds);
 

@@ -23,10 +23,10 @@ class TeacherController extends BaseController
         $teachers      = $this->getUserService()->searchUsers(
             $conditions,
             array(
-                'promoted', 'DESC',
-                'promotedSeq', 'ASC',
-                'promotedTime', 'DESC',
-                'createdTime', 'DESC'
+                'promoted' => 'DESC',
+                'promotedSeq' => 'ASC',
+                'promotedTime' => 'DESC',
+                'createdTime' => 'DESC'
             ),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -56,8 +56,7 @@ class TeacherController extends BaseController
         }
 
         $teachers = $this->getUserService()->searchUsers($conditions, array(
-            'nickname',
-            'ASC'
+            'nickname' => 'ASC'
         ), 0, 1000);
 
         return $this->createJsonResponse($teachers);

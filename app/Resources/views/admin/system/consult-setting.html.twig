@@ -80,7 +80,7 @@
         <div style="width:250px;">
           <span style="color:blue;">{{'如何获取在线咨询链接？'|trans}}</span><br>
           1，{{'登录'|trans}} <a target="_blank" href="https://id.b.qq.com/login/index">https://id.b.qq.com/login/index</a>。 <br>
-          2，{{'登录后，找到【营销QQ】-【在线代码生成】，选择【在论坛/微博发布在线咨询链接】。（包含“http://”）'|trans}}<br>
+          2，{{'登录后，找到【营销QQ】-【在线代码生成】，选择【在论坛/微博发布在线咨询链接】。（包含“%http%://”）'|trans({'%http%':app.request.getScheme()})}}<br>
         </div>
       </div>
     </legend>

@@ -6,16 +6,16 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 /**
  * Interface CourseMemberDao
- * @package Biz\Course\Dao
  * TODO course2.0 所有的api 需要重构，很多的api可以合并，还有名字不规范
+ * @package Biz\Course\Dao
  */
 interface CourseMemberDao extends GeneralDaoInterface
 {
     /**
-     * @param $courseId
-     * @param $userId
-     * @return mixed
      * @before getMemberByCourseIdAndUserId
+     * @param  $courseId
+     * @param  $userId
+     * @return mixed
      */
     public function getByCourseIdAndUserId($courseId, $userId);
 
@@ -41,26 +41,31 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
 
-
     /**
-     * @param $courseIds
-     * @return mixed
      * @before getMembersByCourseIds
      * @before findMembersByCourseIds
+     * @param  $courseIds
+     * @return mixed
      */
     public function findByCourseIds($courseIds);
 
     /**
-     * @param $userId
-     * @param $role
-     * @param $start
-     * @param $limit
-     * @param bool $onlyPublished
-     * @return mixed
      * @before findMembersByUserIdAndRole
+     * @param  $userId
+     * @param  $role
+     * @return mixed
      */
     public function findByUserIdAndRole($userId, $role);
 
+    /**
+     * @before findMembersByUserIdAndRole
+     * @param  $userId
+     * @param  $role
+     * @param  $start
+     * @param  $limit
+     * @param  bool      $onlyPublished
+     * @return mixed
+     */
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true); //
 
     public function findByCourseIdAndRole($courseId, $role);
@@ -80,4 +85,10 @@ interface CourseMemberDao extends GeneralDaoInterface
     public function findByCourseId($courseId);
 
     public function findByUserId($userId);
+
+    public function countThreadsByCourseIdAndUserId($courseId, $userId, $type = 'discussion');
+
+    public function countActivitiesByCourseIdAndUserId($courseId, $userId);
+
+    public function countPostsByCourseIdAndUserId($courseId, $userId);
 }

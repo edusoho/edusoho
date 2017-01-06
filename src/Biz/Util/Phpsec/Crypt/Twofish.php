@@ -16,7 +16,7 @@
  * <?php
  *    include 'vendor/autoload.php';
  *
- *    $twofish = new \Topxia\Service\Util\Phpsec\Crypt\Twofish();
+ *    $twofish = new \Biz\Util\Phpsec\Crypt\Twofish();
  *
  *    $twofish->setKey('12345678901234567890123456789012');
  *
@@ -37,9 +37,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace Topxia\Service\Util\Phpsec\Crypt;
+namespace Biz\Util\Phpsec\Crypt;
 
-use Topxia\Service\Util\Phpsec\Crypt\Base;
+use Biz\Util\Phpsec\Crypt\Base;
 
 /**
  * Pure-PHP implementation of Twofish.
@@ -57,7 +57,7 @@ class Twofish extends Base
      *
      * @var String
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
+     * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
      */
     public $cipher_name_mcrypt = 'twofish';
 
@@ -66,7 +66,7 @@ class Twofish extends Base
      *
      * @var Integer
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::cfb_init_len
+     * @see \Biz\Util\Phpsec\Crypt\Base::cfb_init_len
      */
     public $cfb_init_len = 800;
 
@@ -374,7 +374,7 @@ class Twofish extends Base
      * If the key is not explicitly set, it'll be assumed a 128 bits key to be all null bytes.
      *
      * @access public
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::setKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::setKey()
      *
      * @param String $key
      */
@@ -403,7 +403,7 @@ class Twofish extends Base
      * Setup the key (expansion)
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupKey()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
     public function _setupKey()
     {
@@ -684,7 +684,7 @@ class Twofish extends Base
      * Setup the performance-optimized function for de/encrypt()
      *
      * @access private
-     * @see \Topxia\Service\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
+     * @see \Biz\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
      */
     public function _setupInlineCrypt()
     {

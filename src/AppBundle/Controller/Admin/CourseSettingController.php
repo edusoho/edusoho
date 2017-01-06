@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -74,7 +74,7 @@ class CourseSettingController extends BaseController
             $this->setFlashMessage('success', '课程设置已保存！');
         }
 
-        return $this->render('admin/system/:course-setting.html.twig', array(
+        return $this->render('admin/system/course-setting.html.twig', array(
             'courseSetting'   => $courseSetting,
             'defaultSetting'  => $defaultSetting,
             'hasOwnCopyright' => false
@@ -101,7 +101,7 @@ class CourseSettingController extends BaseController
             $this->setFlashMessage('success', '课程默认图片设置已保存！');
         }
 
-        return $this->render('admin/system/:course-avatar.html.twig', array(
+        return $this->render('admin/system/course-avatar.html.twig', array(
             'defaultSetting'  => $defaultSetting,
             'hasOwnCopyright' => false
         ));
@@ -146,7 +146,7 @@ class CourseSettingController extends BaseController
         }
 
         $setting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
-        return $this->render('admin/system/:live-course-setting.html.twig', array(
+        return $this->render('admin/system/live-course-setting.html.twig', array(
             'courseSetting' => $setting,
             'capacity'      => $capacity
         ));
@@ -170,7 +170,7 @@ class CourseSettingController extends BaseController
             $this->setFlashMessage('success', '题库设置已保存！');
         }
 
-        return $this->render('admin/system/:questions-setting.html.twig');
+        return $this->render('admin/system/questions-setting.html.twig');
     }
 
     protected function getCourseDefaultSet()
@@ -201,7 +201,7 @@ class CourseSettingController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->createService('admin/system/:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getUserFieldService()

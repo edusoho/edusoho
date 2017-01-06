@@ -1,0 +1,74 @@
+{% import "macro.html.twig" as web_macro %}
+{% do script('app/js/course/header-top/index.js') %}
+
+<!-- 3、加入后：任务式学习 -->
+<div class="container">
+  <ol class="breadcrumb breadcrumb-o">
+    <li>
+      <a href="{{path('homepage')}}">首页</a>
+    </li>
+    <li class="active">{{ courseSet.title }} </li>
+  </ol>
+
+  {% block course_header_info %}{% endblock %}
+
+  <div class="es-section course-detail-section clearfix">
+    <div class="course-detail-top">
+
+      <span class="tags mrm">
+        <span class="tag-serialing"></span>
+      </span>
+
+      <span class="text-overflow vertical-top inline-block gray-darker text-24 course-detail-heading">{{ course.title }}</span>
+      <span class="es-qrcode top" data-url="{{ path('course_qrcode', { id: course.id }) }}">
+        <i class="es-icon es-icon-qrcode"></i>
+        <span class="qrcode-popover">
+          <img src="" alt="">
+          扫二维码继续学习二维码时效为半小时
+        </span>
+      </span>
+
+      <p class="mt10 mb20 text-overflow">{{ courseSet.subtitle }}</p>
+      <ul class="course-operation hidden-xs hidden-sm clearfix">
+        <li>
+          <span class="btn btn-xs">
+            <i class="es-icon es-icon-people text-16"></i>
+            <span class="mls">{{ course.studentNum }}人</span>
+          </span>
+        </li>
+
+        {% block course_member_exit %}{% endblock %}
+
+        <li id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
+            {% if not isUserFavorite %}style="display: none" {% endif %}>
+          <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="已收藏" data-trigger="hover"> <i class="es-icon es-icon-bookmark"></i>
+          </a>
+        </li>
+
+        <li id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
+            {% if isUserFavorite %}style="display: none"{% endif %}>
+          <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="收藏" data-trigger="hover"> <i class="es-icon es-icon-bookmarkoutline" ></i>
+          </a>
+        </li>
+
+        <li class="es-share top">
+          <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+            <i class="es-icon es-icon-share"></i>
+          </a>
+          {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
+        </li>
+        {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
+        {% if canManage %}
+          <li class="pull-left">
+            <a class="btn btn-default btn-xs " href="{{ path('course_set_manage_course_tasks', {courseSetId: course.courseSetId, courseId: course.id }) }}"
+               title="课程管理">
+              <i class="es-icon es-icon-setting"></i>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+    {% block course_heard_content %}{% endblock %}
+  </div>
+</div>
+

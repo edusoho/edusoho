@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class CourseBaseController extends BaseController
 {
@@ -11,7 +12,7 @@ abstract class CourseBaseController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
-            throw $this->createNotFoundException('Course#{$id} Not Found');
+            throw $this->createNotFoundException("Course#{$id} Not Found");
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
@@ -23,44 +24,12 @@ abstract class CourseBaseController extends BaseController
         return array($courseSet, $course);
     }
 
-    protected function getCourseMember($request, $course)
+    protected function getCourseMember(Request $request, $course)
     {
         $previewAs = $request->query->get('previewAs');
         $user      = $this->getCurrentUser();
         $member    = $user['id'] ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : null;
         return $this->previewAsMember($previewAs, $member, $course);
-    }
-
-    protected function buildCourseLayoutData($request, $courseId)
-    {
-        $course    = $this->getCourseService()->getCourse($courseId);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
-        if (empty($course)) {
-            throw $this->createNotFoundException('Course Not Found');
-        }
-
-        $member = $this->getCourseMember($request, $course);
-
-        return array($courseSet, $course, $member);
-    }
-
-    protected function tryBuildCourseLayoutData($request, $courseId)
-    {
-        list($courseSet, $course, $member) = $this->buildCourseLayoutData($request, $courseId);
-        $response                          = null;
-
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            $response = $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($course)) {
-            $response = $this->createMessageResponse('info', '您还不是课程《'.$course['title'].'》的学员，请先购买或加入学习。', null, 3000, $this->generateUrl('course_set_show', array('id' => $id)));
-        }
-
-        return array($courseSet, $course, $member, $response);
     }
 
     protected function previewAsMember($as, $member, $course)

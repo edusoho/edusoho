@@ -1,12 +1,9 @@
 <?php
 
-
 namespace Biz\Activity\Type;
 
-
-use Biz\Activity\Config\Activity;
 use Topxia\Common\ArrayToolkit;
-
+use Biz\Activity\Config\Activity;
 
 class Flash extends Activity
 {
@@ -17,7 +14,7 @@ class Flash extends Activity
             'icon' => 'es-icon es-icon-flashclass'
         );
     }
-    
+
     public function registerActions()
     {
         return array(
@@ -30,13 +27,13 @@ class Flash extends Activity
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
-        $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
-        if($flash['finishType'] == 'time') {
+        $flash    = $this->getFlashActivityDao()->get($activity['mediaId']);
+        if ($flash['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
             return $result > $flash['finishDetail'];
         }
 
-        if($flash['finishType'] == 'click') {
+        if ($flash['finishType'] == 'click') {
             $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'flash.finish');
             return !empty($result);
         }
@@ -56,19 +53,19 @@ class Flash extends Activity
             'finishDetail'
         ));
 
-        $biz                  = $this->getBiz();
+        $biz                    = $this->getBiz();
         $flash['createdUserId'] = $biz['user']['id'];
 
         $flash = $this->getFlashActivityDao()->create($flash);
         return $flash;
     }
 
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail',
+            'finishDetail'
         ));
 
         return $this->getFlashActivityDao()->update($targetId, $updateFields);
@@ -91,12 +88,11 @@ class Flash extends Activity
 
     protected function getActivityLearnLogService()
     {
-        return $this->createService("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
     protected function getActivityService()
     {
-        return $this->createService("Activity:ActivityService");
+        return $this->getBiz()->service("Activity:ActivityService");
     }
-    
 }

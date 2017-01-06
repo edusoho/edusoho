@@ -1,8 +1,16 @@
-import FileAllChoose from '../file-chooser/file-all-choose';
+const $uploader = $('#uploader-container');
 
-const fileChoose = new FileAllChoose($('#chooser-upload-panel'));
+let uploader = new UploaderSDK({
+  id: $uploader.attr('id'),
+  initUrl: $uploader.data('initUrl'),
+  finishUrl: $uploader.data('finishUrl'),
+  accept: $uploader.data('accept'),
+  process: $uploader.data('process'),
+  fileSingleSizeLimit: $uploader.data('fileSingleSizeLimit'),
+  ui: 'single'
+});
 
-const onSelectFile = file => {
+uploader.on('file.finish', (file) => {
   if (file.length && file.length > 0) {
     let minute = parseInt(file.length / 60);
     let second = Math.round(file.length % 60);
@@ -11,21 +19,20 @@ const onSelectFile = file => {
     $("#length").val(minute * 60 + second);
   }
 
-  let $metas = $('[data-role="metas"]');
-  let idEle = $metas.data('idsClass');
-  let listEle = $metas.data('listClass');
+  const $metas = $('[data-role="metas"]');
+  const $ids = $('.' + $metas.data('idsClass'));
+  const $list = $('.' + $metas.data('listClass'));
 
-  $.get('/attachment/file/'+ file.id +'/show', function(html){
-
-    $('.'+listEle).append(html);
-    $('.'+idEle).val(file.id);
-    $('.modal').modal('hide');
-    
-    $('.'+listEle).siblings('.js-upload-file').hide();
+  $.get('/attachment/file/' + file.id + '/show', function (html) {
+    $list.append(html);
+    $ids.val(file.id);
+    $('#attachment-modal').modal('hide');
+    $list.siblings('.js-upload-file').hide();
   })
+});
 
-
-};
-
-fileChoose.on('select', onSelectFile);
-
+//只执行一次
+$('#attachment-modal').one('hide.bs.modal', (event) => {
+  uploader.destroy();
+  uploader = null;
+});

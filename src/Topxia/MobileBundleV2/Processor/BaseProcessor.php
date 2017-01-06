@@ -4,7 +4,6 @@ namespace Topxia\MobileBundleV2\Processor;
 
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\Impl\TokenServiceImpl;
 
 class BaseProcessor
 {
@@ -178,9 +177,6 @@ class BaseProcessor
         return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
-    /**
-     * @return TokenServiceImpl
-     */
     protected function getTokenService()
     {
         return ServiceKernel::instance()->createService('User:TokenService');
