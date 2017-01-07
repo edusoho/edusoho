@@ -2,12 +2,12 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
+use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseNoteService;
 
 class ReportServiceImpl extends BaseService implements ReportService
@@ -39,7 +39,7 @@ class ReportServiceImpl extends BaseService implements ReportService
     public function getLateMonthLearndData($courseId)
     {
         $now              = time();
-        $lateMonthData    = $this->getLateMonthData($courseId, $now);
+        $lateMonthData    = $this->getLatestMonthData($courseId, $now);
         $before30DaysData = $this->getAMonthAgoStatCount($courseId, $now);
         $late30DaysStat   = array();
         for ($i = 29; $i >= 0; $i--) {
@@ -62,30 +62,27 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $late30DaysStat;
     }
 
-    public function getCourseLessonLearnStat($courseId)
+    public function getCourseTaskLearnStat($courseId)
     {
-        $lessons = $this->getTaskService()->findTasksByCourseId($courseId);
-        usort($lessons, function ($lesson1, $lesson2) {
-            return $lesson1['number'] < $lesson2['number'];
-        });
+        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
         //XXX ignore
-//        $teachers       = $this->getCourseService()->findTeachersByCourseId($courseId);
-//        $excludeUserIds = ArrayToolkit::column($teachers, 'userId');
-        foreach ($lessons as &$lesson) {
-            $lesson['alias']       = '课时'.$lesson['number'];
+        //        $teachers       = $this->getCourseService()->findTeachersByCourseId($courseId);
+        //        $excludeUserIds = ArrayToolkit::column($teachers, 'userId');
+        foreach ($tasks as &$task) {
+            $task['alias'] = '任务'.$task['seq'];
 //            $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'finished'));
-//            $lesson['learnNum']    = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'learning'));
-            $lesson['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($lesson['id'], 'finished');
-            $lesson['learnNum']    = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($lesson['id'], 'start');
+            //            $lesson['learnNum']    = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'learning'));
+            $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
+            $task['learnNum']    = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
 
-            if ($lesson['learnNum']) {
-                $lesson['finishedRate'] = round($lesson['finishedNum'] / $lesson['learnNum'], 3) * 100;
+            if ($task['learnNum']) {
+                $task['finishedRate'] = round($task['finishedNum'] / $task['learnNum'], 3) * 100;
             } else {
-                $lesson['finishedRate'] = 0;
+                $task['finishedRate'] = 0;
             }
         }
 
-        return $lessons;
+        return $tasks;
     }
 
     /**
@@ -204,9 +201,9 @@ class ReportServiceImpl extends BaseService implements ReportService
     }
 
     /**
-     * [getLateMonthData 获取最近一个月的数据]
+     * [getLatestMonthData 获取最近一个月的数据]
      */
-    private function getLateMonthData($courseId, $now)
+    private function getLatestMonthData($courseId, $now)
     {
         $startTimeGreaterThan = strtotime('- 29 days', $now);
         $role                 = 'student';

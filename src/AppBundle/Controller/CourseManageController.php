@@ -575,14 +575,14 @@ class CourseManageController extends BaseController
 
     protected function renderDashboardForTasks($course, $courseSet)
     {
-        $lessonStat = $this->getReportService()->getCourseLessonLearnStat($course['id']);
-        return $this->render('course-manage/dashboard/lesson.html.twig', array(
+        $taskStat = $this->getReportService()->getCourseTaskLearnStat($course['id']);
+        return $this->render('course-manage/dashboard/task.html.twig', array(
             'courseSet'    => $courseSet,
             'course'       => $course,
-            'lessonTitles' => ArrayToolkit::column($lessonStat, 'alias'),
-            'finishedRate' => ArrayToolkit::column($lessonStat, 'finishedRate'),
-            'finishedNum'  => ArrayToolkit::column($lessonStat, 'finishedNum'),
-            'learnNum'     => ArrayToolkit::column($lessonStat, 'learnNum')
+            'taskTitles'   => ArrayToolkit::column($taskStat, 'alias'),
+            'finishedRate' => ArrayToolkit::column($taskStat, 'finishedRate'),
+            'finishedNum'  => ArrayToolkit::column($taskStat, 'finishedNum'),
+            'learnNum'     => ArrayToolkit::column($taskStat, 'learnNum')
         ));
     }
 
@@ -597,44 +597,43 @@ class CourseManageController extends BaseController
 
         $questionCount = $this->getThreadService()->countThreads(array('courseId' => $course['id'], 'type' => 'question'));
 
-//        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $course['id']), array('seq', 'ASC'), 0, 1000);
-        $lessons = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
-        foreach ($lessons as $key => $value) {
-            $lessonLearnedNum = $this->getTaskResultService()->countLearnNumByTaskId($value['id']);
+        foreach ($tasks as $key => $value) {
+            $taskLearnedNum = $this->getTaskResultService()->countLearnNumByTaskId($value['id']);
 
-            $finishedNum = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($value['id'], 'finished');
+            $finishedNum = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($value['id'], 'finish');
 
-            $lessonLearnTime = $this->getActivityLearnLogService()->sumLearnTime(array('taskId' => $value['id']));
-            $lessonLearnTime = $lessonLearnedNum == 0 ? 0 : intval($lessonLearnTime / $lessonLearnedNum);
+            $taskLearnTime = $this->getActivityLearnLogService()->sumLearnTime(array('taskId' => $value['id']));
+            $taskLearnTime = $taskLearnedNum == 0 ? 0 : intval($taskLearnTime / $taskLearnedNum);
 
-            $lessonWatchTime = $this->getActivityLearnLogService()->sumLearnTime(array('taskId' => $value['id']));
-            $lessonWatchTime = $lessonLearnedNum == 0 ? 0 : intval($lessonWatchTime / $lessonLearnedNum);
+            $taskWatchTime = $this->getActivityLearnLogService()->sumLearnTime(array('taskId' => $value['id']));
+            $taskWatchTime = $taskLearnedNum == 0 ? 0 : intval($taskWatchTime / $taskLearnedNum);
 
-            $lessons[$key]['LearnedNum']  = $lessonLearnedNum;
-            $lessons[$key]['length']      = intval($lessons[$key]['activity']['length']);
-            $lessons[$key]['type']        = $lessons[$key]['activity']['mediaType'];
-            $lessons[$key]['finishedNum'] = $finishedNum;
-            $lessons[$key]['learnTime']   = $lessonLearnTime;
-            $lessons[$key]['watchTime']   = $lessonWatchTime;
+            $tasks[$key]['LearnedNum']  = $taskLearnedNum;
+            $tasks[$key]['length']      = intval($tasks[$key]['activity']['length']);
+            $tasks[$key]['type']        = $tasks[$key]['activity']['mediaType'];
+            $tasks[$key]['finishedNum'] = $finishedNum;
+            $tasks[$key]['learnTime']   = $taskLearnTime;
+            $tasks[$key]['watchTime']   = $taskWatchTime;
 
             if ($value['type'] == 'testpaper') {
                 $paperId  = $value['mediaId'];
                 $score    = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $paperId));
                 $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(array('testId' => $paperId));
 
-                $lessons[$key]['score'] = ($finishedNum == 0 || $paperNum == 0) ? 0 : intval($score / $paperNum);
+                $tasks[$key]['score'] = ($finishedNum == 0 || $paperNum == 0) ? 0 : intval($score / $paperNum);
             }
         }
 
-        return $this->render('course-manage/dashboard/lesson-learn.html.twig', array(
+        return $this->render('course-manage/dashboard/task-learn.html.twig', array(
             'courseSet'     => $courseSet,
             'course'        => $course,
             'isLearnedNum'  => $isLearnedNum,
             'learnTime'     => $learnTime,
             'noteCount'     => $noteCount,
             'questionCount' => $questionCount,
-            'lessons'       => $lessons
+            'tasks'         => $tasks
         ));
     }
 

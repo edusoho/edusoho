@@ -16,12 +16,12 @@
           </a>
         </li>
 
-        <li class="{% if submenu|default() == 'lesson_dashboard' %}active{% endif %}">
+        <li class="{% if submenu|default() == 'task_dashboard' %}active{% endif %}">
           <a href="{{ path('course_set_manage_course_dashboard',{courseSetId: course.courseSetId, courseId:course.id, tab: 'task'}) }}">{{ '任务完成率'|trans }}
           </a>
         </li>
 
-        <li class="{% if submenu|default() == 'lesson_learn_dashboard' %}active{% endif %}">
+        <li class="{% if submenu|default() == 'task_learn_dashboard' %}active{% endif %}">
           <a href="{{ path('course_set_manage_course_dashboard',{courseSetId: course.courseSetId, courseId:course.id, tab: 'task-detail'}) }}">{{ '任务学习详情'|trans }}
           </a>
         </li>
