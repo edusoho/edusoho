@@ -16,6 +16,14 @@
       </div>
     </div>
     <div class="form-group">
+      <label for="" class="col-sm-2 control-label">{{'可以强制任务完成'|trans}}</label>
+      <div class="col-sm-8 radios"> 
+        {{ radios('enableFinish', { '1': '可以'|trans, '0': '不可以'|trans }, course.enableFinish|default('1')) }}
+
+        <p class="help-block" id="learnFreeModeHelp" data-role="tab-content">{{'该设置项可以控制学习页面中的【完成了】按钮，允许学员自己强制完成任务'|trans}}</p>
+      </div>
+    </div>
+    <div class="form-group">
       <label for="" class="col-sm-2 control-label">{{'学习模式'|trans}}</label>
       <div class="col-sm-8 radios"> 
         {% if course.learnMode|default('freeMode') == 'freeMode' %}

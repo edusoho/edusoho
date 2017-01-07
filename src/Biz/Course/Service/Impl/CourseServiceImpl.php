@@ -123,7 +123,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'expiryEndDate',
             'summary',
             'goals',
-            'audiences'
+            'audiences',
+            'enableFinish'
         ));
 
         if ($course['status'] == 'published') {
