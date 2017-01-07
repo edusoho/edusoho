@@ -62,23 +62,27 @@
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
             </span>
         </div>
-        <a type="button" 
-          href="javascript:;" 
-        {% if taskResult.status != 'finish' %}
-          class="btn btn-transparent btn-learn js-btn-learn" 
-          id = 'learn-btn'
-          data-url='{{path("course_task_finish",{courseId: task.courseId, id: task.id})}}'
-        {% else %}
-          class="btn btn-transparent btn-learn js-btn-learn active" 
-        {% endif %}
-        >
-          {% if taskResult.status == 'finish' %}
-          <i class="es-icon es-icon--check-circle done"></i>
+
+        {% if course.enableFinish|default(1)%}
+          <a type="button" 
+            href="javascript:;" 
+          {% if taskResult.status != 'finish' %}
+            class="btn btn-transparent btn-learn js-btn-learn" 
+            id = 'learn-btn'
+            data-url='{{path("course_task_finish",{courseId: task.courseId, id: task.id})}}'
           {% else %}
-          <i class="es-icon es-icon-undone-check doing"></i>
+            class="btn btn-transparent btn-learn js-btn-learn active" 
           {% endif %}
-          学过了
-        </a>
+          >
+            {% if taskResult.status == 'finish' %}
+            <i class="es-icon es-icon--check-circle done"></i>
+            {% else %}
+            <i class="es-icon es-icon-undone-check doing"></i>
+            {% endif %}
+            学过了
+          </a>
+        {% endif %}
+        
       </div>
     </div>
     <div class="dashboard-sidebar" id="dashboard-sidebar">
