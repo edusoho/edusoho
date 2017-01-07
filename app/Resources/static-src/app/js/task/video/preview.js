@@ -1,1 +1,0 @@
-$(".modal-footer").prepend($('.js-buy-text').html());

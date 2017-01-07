@@ -1,59 +1,24 @@
-{% do script(['app/js/task/video/index.js', 'app/js/task/video/preview.js']) %}
+{% do script(['app/js/task/video/preview/index.js']) %}
 
 {% if activity.ext.mediaSource|default('self') == 'self' %}
-  <div class="modal-video-content">
+  <div class="modal-video-content" id="task-preview-player">
     <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="task-content">
       {#如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx#}
-      {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId})) }}
+      {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId, context:context})) }}
     </div>
   </div>
-{% else %}
+{% elseif task.mediaSource == 'iframe' %}
   <div class="modal-video-content">
     <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="task-content"
          data-media-source="{{ activity.ext.mediaSource }}">
       <div id="swf-player" data-url="{{ activity.ext.mediaUri }}"></div>
     </div>
   </div>
+{% else %}
+  <div id="task-preview-iframe">
+    <iframe src="{{ task.mediaUri }}" style="height:360px; width:100%; border:0px;" scrolling="no"></iframe>
+  </div>
 {% endif %}
-
- {% if task.mediaSource == 'iframe' %}
-   <div id="task-preview-iframe" data-url="{{ task.mediaUri }}" style="display:none;">
-   </div>
- {% elseif task.type == 'video' %}
-   {% if task.mediaSource == 'self' %}
-     <div id="task-preview-player"
-          style="height:300px;overflow:hidden"
-          data-balloon-player="1"
-         {% if not task.isFree %}
-           data-timelimit="{{ course.tryLookLength }}"
-         {% endif %}
-          data-player-url="{{ path('course_task_player', {courseId:task.courseId, taskId:task.id, isPreview:1, hideQuestion: 1}) }}"
-         {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
-           data-watermark="{{ file_url(setting('storage.video_watermark_image'), null) }}"
-         {% endif %}
-         {% if setting('storage.video_fingerprint') and app.user %}
-           data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
-         {% endif %}
-     ></div>
-     <div class="js-time-limit-dev hidden">
-       <div style="height:360px;background-color:black;" class="text-center">
-         <br><br><br><br>
-         <br><br><br><br>
-         <div style="font-size:20px;color:#fff;">
-           {{ '立刻购买本课程，即可获得全部完整学习内容。'|trans }}
-         </div>
-       </div>
-       <div class="js-buy-text">
-            <span class="text-success">
-              {{ '您可以免费试看前%trylookTime%分钟,购买后可完整观看。'|trans({'%trylookTime%': course.tryLookTime }) }}
-            </span>
-       </div>
-     </div>
-     <input type="hidden" id="videoWatermarkEmbedded" value="{{ hasVideoWatermarkEmbedded }}">
-   {% else %}
-     <div id="task-preview-swf-player" data-url="{{ task.mediaUri }}"></div>
-   {% endif %}
- {% endif %}
 
 <div class="js-time-limit-dev hidden">
   <div style="height:360px;background-color:black;" class="text-center">

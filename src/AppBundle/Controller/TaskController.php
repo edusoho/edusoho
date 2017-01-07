@@ -288,14 +288,6 @@ class TaskController extends BaseController
     }
 
     /**
-     * @return UploadFileService
-     */
-    protected function getUploadFileService()
-    {
-        return $this->createService('File:UploadFileService');
-    }
-
-    /**
      * @return TokenService
      */
     protected function getTokenService()

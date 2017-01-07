@@ -5,7 +5,7 @@
 
 {% block title %}<span class="text-muted">{{ '任务预览'|trans }}:</span> {{ task.title }}{% endblock %}
 
-{% do script(['app/js/activity/activity-preivew.js']) %}
+{% do script(['app/js/task/preview/index.js']) %}
 
 {% block body %}
   {{ render(controller('AppBundle:Activity/Activity:preview',{task:task })) }}
