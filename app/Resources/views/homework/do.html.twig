@@ -4,7 +4,29 @@
 
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-timer.js','libs/perfect-scrollbar.js','app/js/testpaper/do-test/index.js']) %}
 
+{% if action|default('') is not empty %}
+  {% set showHeader = 1 %}
+  {% set showBodyColor = 0 %}
+{% else %}
+  {% set showHeader = 0 %}
+{% endif %}
+
 {% block paper_body %}
+  {% block paper_warning %}
+    {% if app.user and app.user.id == paperResult.userId %}
+      {% if paperResult.status == 'reviewing' %}
+        <div class="alert alert-warning">{{'老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。'|trans}}</div>
+      {% elseif paperResult.status == 'finished' %}
+        {% if paperResult.teacherSay %}
+          <div class="alert alert-success">
+            <div class=""><strong>{{'评语：'|trans}}</strong></div>
+            <div class="mtm">{{ paperResult.teacherSay|bbCode2Html|raw }}</div>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endblock %}
+
   <div class="panel panel-default border-radius-none">
     <div class="panel-heading">
       {{ '作业'|trans }}{{'题目'|trans}} <small class="text-muted">{{ '共%itemCount%题'|trans({'%itemCount%':paper.itemCount}) }}</small>
@@ -45,7 +67,7 @@
           </div>
           <div class="text-right mt20">
             <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</a>
-            <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在提交, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('testpaper_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}">
+            <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在提交, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('homework_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}">
               {{'确认提交'|trans}}</button>
           </div>
         </div>

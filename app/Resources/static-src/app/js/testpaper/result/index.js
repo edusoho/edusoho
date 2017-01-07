@@ -7,4 +7,4 @@ class ShowResult extends DoTestBase {
   }
 }
 
-new ShowResult($('.testpaper-activity-show'));
+new ShowResult($('.container'));

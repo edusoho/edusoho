@@ -19,6 +19,7 @@ class DoTestpaper extends DoTestBase {
   _initTimer() {
     let self = this;
     if (this.$timer != undefined) {
+
       this.$timer.timer({
         countdown:true,
         duration: this.$timer.data('time'),
