@@ -12,20 +12,23 @@ class VideoController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
-        if ($this->getMediaSource($activity) == 'self') {
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
 
-
-            return $this->render('activity/video/show.html.twig', array(
-                'activity' => $activity,
-                'courseId' => $courseId
-            ));
-        } else {
-            return $this->render('activity/video/swf-show.html.twig', array(
-                'activity' => $activity,
-            ));
-        }
+        return $this->render('activity/video/show.html.twig', array(
+            'activity' => $activity,
+            'courseId' => $courseId
+        ));
     }
+
+    public function previewAction(Request $request, $id, $courseId)
+    {
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
+        return $this->render('activity/video/preview.html.twig', array(
+            'activity' => $activity,
+            'courseId' => $courseId
+        ));
+    }
+
 
     /**
      * 获取当前视频活动的文件来源
@@ -39,7 +42,7 @@ class VideoController extends BaseController implements ActivityActionInterface
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
         $activity = $this->fillMinuteAndSecond($activity);
         return $this->render('activity/video/modal.html.twig', array(
             'activity' => $activity,

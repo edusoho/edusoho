@@ -2,10 +2,19 @@
 
 {% do script(['app/js/task/video/index.js']) %}
 
-
 {% block body %}
-  <div class="task-content-view video-activity-show" id="video-content" data-role="lesson-content">
-    {#  如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx #}
-    {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId})) }}
-  </div>
+  {% if activity.ext.mediaSource|default('self') == 'self' %}
+    <div class="task-content-view video-activity-show" id="video-content" data-role="lesson-content">
+      {#  如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx #}
+      {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId})) }}
+    </div>
+  {% else %}
+    <div class="dashboard-body">
+      <div class="task-content-view" id="video-content" data-role="lesson-content"
+           data-media-source="{{ activity.ext.mediaSource }}">
+        <div id="swf-player" data-url="{{ activity.ext.mediaUri }}"></div>
+      </div>
+    </div>
+  {% endif %}
+
 {% endblock %}

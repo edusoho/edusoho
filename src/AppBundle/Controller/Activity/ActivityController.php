@@ -5,10 +5,11 @@ use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 class ActivityController extends BaseController
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction($id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
 
@@ -23,7 +24,22 @@ class ActivityController extends BaseController
         ));
     }
 
-    public function updateAction(Request $request, $id, $courseId)
+    public function previewAction(Request $request, $id, $courseId)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
+
+        if (empty($activity)) {
+            throw $this->createNotFoundException('activity not found');
+        }
+        $actionConfig   = $this->getActivityActionConfig($activity['mediaType']);
+        $showController = $actionConfig['preview'];
+        return $this->forward($showController, array(
+            'id'       => $id,
+            'courseId' => $courseId,
+        ));
+    }
+
+    public function updateAction($id, $courseId)
     {
         $activity       = $this->getActivityService()->getActivity($id);
         $actionConfig   = $this->getActivityActionConfig($activity['mediaType']);
@@ -34,7 +50,7 @@ class ActivityController extends BaseController
         ));
     }
 
-    public function createAction(Request $request, $type, $courseId)
+    public function createAction($type, $courseId)
     {
         $actionConfig     = $this->getActivityActionConfig($type);
         $createController = $actionConfig['create'];

@@ -1499,6 +1499,10 @@ course_task_finish:
     path:  /course/{courseId}/task/{id}/finish
     defaults: { _controller: AppBundle:Task:finish }
 
+course_task_qrcode:
+    path:  /course/{courseId}/task/{id}/qrcode
+    defaults: { _controller: AppBundle:Task:qrcode }
+
 course_manage_task_create:
     path:  /course/{courseId}/task
     defaults: { _controller: AppBundle:TaskManage:create}
