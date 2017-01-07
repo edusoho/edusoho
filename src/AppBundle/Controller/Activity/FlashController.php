@@ -28,6 +28,24 @@ class FlashController extends BaseController implements ActivityActionInterface
         ));
     }
 
+    public function previewAction(Request $request, $task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
+
+        $flash    = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
+
+        $file = $this->getUploadFileService()->getFullFile($flash['mediaId']);
+
+        $apiClient              = CloudAPIFactory::create('leaf');
+        $result                 = $apiClient->get(sprintf('/resources/%s/player', $file['globalId']));
+        $flashMedia['uri'] = $result['url'];
+
+        return $this->render('activity/flash/preview.html.twig', array(
+            'flash'      => $flash,
+            'flashMedia' => $flashMedia
+        ));
+    }
+
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);

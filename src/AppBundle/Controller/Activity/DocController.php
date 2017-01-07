@@ -56,6 +56,55 @@ class DocController extends BaseController implements ActivityActionInterface
         ));
     }
 
+
+    public function previewAction(Request $request, $task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+
+        if (empty($activity)) {
+            throw $this->createNotFoundException('activity not found');
+        }
+
+        $doc      = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
+
+        $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (empty($file['globalId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['type'] != 'document') {
+            throw $this->createAccessDeniedException('file type error, expect document');
+        }
+
+        $result = $this->getMaterialLibService()->player($file['globalId']);
+
+        $isConvertNotSuccess = isset($file['convertStatus']) && $file['convertStatus'] != 'success';
+        $isPrivate = !isset($result['pdf']) && !isset($result['swf']);
+
+        if ($isConvertNotSuccess || $isPrivate) {
+            if ($file['convertStatus'] == 'error' || $isPrivate) {
+                $url     = $this->generateUrl('course_manage_files', array('id' => $task['courseId']));
+                $message = sprintf('文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+                $error = array('code' => 'error', 'message' => $message);
+            } else {
+                $error = array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。');
+            }
+        } else {
+            $error = array();
+        }
+
+        return $this->render('activity/doc/preview.html.twig', array(
+            'doc'      => $doc,
+            'error'    => $error,
+            'docMedia' => $result
+        ));
+    }
+
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);

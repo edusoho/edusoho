@@ -33,6 +33,10 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
         ));
     }
 
+    public function previewAction(Request $request, $task)
+    {
+        return $this->render('activity/text/preview.html.twig');
+    }
     public function editAction(Request $request, $id, $courseId)
     {
         $course   = $this->getCourseService()->getCourse($courseId);
