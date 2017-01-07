@@ -14,7 +14,7 @@ use Biz\User\Service\MessageService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
-use Biz\Note\Service\CourseNoteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 
@@ -836,7 +836,7 @@ class MemberServiceImpl extends BaseService implements MemberService
      */
     protected function getCourseNoteService()
     {
-        return $this->createService('Note:CourseNoteService');
+        return $this->createService('Course:CourseNoteService');
     }
 
     /**

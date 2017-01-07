@@ -606,7 +606,7 @@ class MobileBaseController extends BaseController
 
     public function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Note:CourseNoteService');
+        return $this->getServiceKernel()->createService('Course:CourseNoteService');
     }
 
     public function getEduCloudService()
