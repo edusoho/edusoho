@@ -1,10 +1,10 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Task\Service\TaskService;
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends BaseController
@@ -100,8 +100,9 @@ class TaskController extends BaseController
             throw $this->createNotFoundException('task event is empty');
         }
 
-        $data   = $request->request->get('data', array());
-        $result = $this->getTaskService()->trigger($id, $eventName, $data);
+        $data           = $request->request->get('data', array());
+        $data['taskId'] = $id;
+        $result         = $this->getTaskService()->trigger($id, $eventName, $data);
 
         return $this->createJsonResponse(array(
             'event'  => $eventName,

@@ -1,22 +1,49 @@
-import Messenger from 'es-messenger';
+import postal from 'postal';
+require('postal.federation');
+require('postal.xframe');
 
 export default class ActivityEmitter {
 
   constructor() {
-    this.emitMessenger = new Messenger('task-content-iframe', 'ActivityEvent');
-    this.emitMessenger.addTarget(window.parent, 'parent');
 
     this.eventMap = {
       receives: {}
     };
 
-    this.receiveMessenger = new Messenger('task-content-iframe', 'TaskEvent');
-    this.receiveMessenger.addTarget(window.parent, 'parent');
-    this.receiveMessenger.listen(message => {
-      let { event, data } = JSON.parse(message);
-      let listeners = this.eventMap.receives[event];
-      if (typeof listeners !== 'undefined') {
-        listeners.forEach(callback => callback(data));
+    this._registerIframeEvents();
+  }
+
+  _registerIframeEvents(){
+
+    postal.instanceId('activity');
+    postal.fedx.addFilter([
+      {
+        channel: 'activity-events', //发送事件到task parent
+        topic: '#',
+        direction: 'out'
+      },
+      {
+        channel: 'task-events',  //接收 task parent 的事件
+        topic: '#',
+        direction: 'in'
+      }
+    ]);
+
+    this._registerReceiveTaskParentEvents();
+
+    postal.fedx.signalReady();
+    return this;
+  }
+
+  _registerReceiveTaskParentEvents() {
+    postal.subscribe({
+      channel: 'task-events',
+      topic: '#',
+      callback: ({event, data}) => {
+        let listeners = this.eventMap.receives[event];
+        if (typeof listeners !== 'undefined') {
+          listeners.forEach(callback => callback(data));
+        }
       }
     });
   }
@@ -24,22 +51,27 @@ export default class ActivityEmitter {
   //发送事件到task
   emit(event, data) {
     return new Promise((resolve, reject) => {
-      let message = JSON.stringify({
+      let message = {
         event: event,
         data: data
+      };
+
+      postal.publish({
+        channel: 'activity-events',
+        topic: '#',
+        data: message
       });
 
-      this.emitMessenger.send(message);
-
-      this.emitMessenger.listen((message) => {
-        message = JSON.parse(message);
-        let listenEvent = message.event;
+      let channel = postal.channel('task-events');
+      let subscriber = channel.subscribe('#', (data) => {
+        const listenEvent = data.event;
         if (listenEvent === event) {
-          if (message.error) {
-            reject(message.error);
+          if (data.error) {
+            reject(data.error);
           } else {
-            resolve(message.data);
+            resolve(data);
           }
+          subscriber.unsubscribe();
         }
       });
     });
