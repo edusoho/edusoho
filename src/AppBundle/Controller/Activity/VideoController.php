@@ -23,6 +23,7 @@ class VideoController extends BaseController implements ActivityActionInterface
     public function previewAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
+        $course = $this->
         return $this->render('activity/video/preview.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId

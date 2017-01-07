@@ -1,4 +1,4 @@
-{% do script(['app/js/task/video/index.js']) %}
+{% do script(['app/js/task/video/preview.js']) %}
 
 {% if activity.ext.mediaSource|default('self') == 'self' %}
   <div class="task-content-view video-activity-show" id="video-content" data-role="lesson-content">
@@ -14,3 +14,18 @@
   </div>
 {% endif %}
 
+
+<div class="js-time-limit-dev hidden">
+  <div style="height:360px;background-color:black;" class="text-center">
+    <br><br><br><br>
+    <br><br><br><br>
+    <div style="font-size:20px;color:#fff;">
+      {{ '立刻购买本课程，即可获得全部完整学习内容。'|trans }}
+    </div>
+  </div>
+  <div class="js-buy-text">
+    <span class="text-success">
+      {{ '您可以免费试看前%trylookTime%分钟,购买后可完整观看。'|trans({'%trylookTime%': course.tryLookTime }) }}
+    </span>
+  </div>
+</div>

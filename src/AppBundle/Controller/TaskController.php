@@ -56,7 +56,7 @@ class TaskController extends BaseController
             return $this->createNotFoundException('task is not exist');
         }
 
-        //课程不可购买，且课时不免费
+        //课程不可购买，且任务不免费
         if (empty($task['isFree']) && empty($course['buyable']) && empty($course['tryLookable'])) {
             return $this->render('task/preview-notice-modal.html.twig', array('course' => $course));
         }
@@ -79,6 +79,15 @@ class TaskController extends BaseController
             return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $task['id']));
         }
 
+        //在可预览情况下查看网站设置是否可匿名预览
+        $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
+
+        if (empty($allowAnonymousPreview) && !$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        //TODO vip 插件改造 判断用户是否为VIP
+
         return $this->render('task/preview.html.twig', array(
             'course' => $course,
             'task'   => $task,
@@ -90,12 +99,7 @@ class TaskController extends BaseController
             'courseId' => $courseId
         ));
 
-        //在可预览情况下查看网站设置是否可匿名预览
-        $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
 
-        if (empty($allowAnonymousPreview) && !$user->isLogin()) {
-            throw $this->createAccessDeniedException();
-        }
 
         $hasVideoWatermarkEmbedded = 0;
         $tryLookTime               = 0;
