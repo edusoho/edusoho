@@ -44,6 +44,11 @@ class TextController extends BaseController implements ActivityActionInterface
         return $this->render('activity/text/modal.html.twig');
     }
 
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/text/finish-condition.html.twig');
+    }
+
     /**
      * @return ActivityService
      */

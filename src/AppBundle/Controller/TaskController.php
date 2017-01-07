@@ -14,12 +14,7 @@ class TaskController extends BaseController
         $preview = $request->query->get('preview');
         $task    = $this->tryLearnTask($courseId, $id, (bool) $preview);
 
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
-        if (empty($activity)) {
-            throw $this->createNotFoundException("activity not found");
-        }
-
-        $this->getActivityService()->trigger($activity['id'], 'start', array(
+        $this->getActivityService()->trigger($task['activityId'], 'start', array(
             'task' => $task
         ));
 
@@ -32,7 +27,6 @@ class TaskController extends BaseController
             'course'       => $this->getCourseService()->getCourse($task['courseId']),
             'task'         => $task,
             'taskResult'   => $taskResult,
-            'activity'     => $activity,
             'preview'      => $preview,
             'nextTask'     => empty($nextTask) ? array() : $nextTask,
             'finishedRate' => empty($finishedRate) ? 0 : $finishedRate
@@ -150,6 +144,13 @@ class TaskController extends BaseController
         ));
     }
 
+    public function finishConditionAction($task)
+    {
+        $config = $this->getActivityConfig();
+        $action = $config[$task['type']]['actions']['finishCondition'];
+        return $this->forward($action, array('task' => $task));
+    }
+
     protected function getNextTaskAndFinishedRate($task)
     {
         $nextTask   = $this->getTaskService()->getNextTask($task['id']);
@@ -225,5 +226,10 @@ class TaskController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    protected function getActivityConfig()
+    {
+        return $this->get('extension.default')->getActivities();
     }
 }
