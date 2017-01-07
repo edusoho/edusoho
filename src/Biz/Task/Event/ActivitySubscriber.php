@@ -1,6 +1,7 @@
 <?php
 namespace Biz\Task\Event;
 
+use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -21,9 +22,10 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         if(!$event->hasArgument('taskId')) {
             return;
         }
+
         $taskId = $event->getArgument('taskId');
 
-        if(!empty($taskId) && $this->getTaskService()->isFinished($taskId)) {
+        if($this->getTaskService()->isFinished($taskId)) {
             $this->getTaskService()->finishTaskResult($taskId);
         }
     }
