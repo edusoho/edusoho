@@ -151,10 +151,8 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function characteristicAction(Request $request, $id)
+    public function characteristicAction(Request $request, $course)
     {
-        $course = $this->getCourseService()->getCourse($id);
-
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
         $characteristicData = array();
@@ -179,22 +177,18 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function otherCourseAction(Request $request, $id)
+    public function otherCourseAction(Request $request, $course)
     {
-        list($courseSet, $course) = $this->tryGetCourseSetAndCourse($id);
 
-        $otherCourse = $course; // $this->getCourseService()->getOtherCourses($course['id']);
+        // $this->getCourseService()->getOtherCourses($course['id']);
 
         return $this->render('course/widgets/other-course.html.twig', array(
-            'otherCourse' => $otherCourse,
-            'courseSet'   => $courseSet
+            'otherCourse' => $course,
         ));
     }
 
-    public function teachersAction(Request $request, $id)
+    public function teachersAction(Request $request, $course)
     {
-        list(, $course) = $this->tryGetCourseSetAndCourse($id);
-
         $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
         return $this->render('course/widgets/teachers.html.twig', array(
@@ -202,10 +196,8 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function newestStudentsAction(Request $request, $id)
+    public function newestStudentsAction(Request $request, $course)
     {
-        list(, $course) = $this->tryGetCourseSetAndCourse($id);
-
         $conditions = array(
             'courseId' => $course['id'],
             'role'     => 'student',
