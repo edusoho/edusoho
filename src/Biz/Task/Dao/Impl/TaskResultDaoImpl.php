@@ -45,7 +45,12 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
     public function countUsersByTaskIdAndLearnStatus($taskId, $status)
     {
-        $sql = "SELECT count(userId) FROM {$this->table()} WHERE courseTaskId = ? and status = ?";
+        $sql = "SELECT count(userId) FROM {$this->table()} WHERE courseTaskId = ? ";
+
+        if ('all' == $status) {
+            return $this->db()->fetchColumn($sql, array($taskId));
+        }
+        $sql .= " AND status = ?";
         return $this->db()->fetchColumn($sql, array($taskId, $status));
     }
 

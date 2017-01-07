@@ -554,6 +554,43 @@ class CourseManageController extends BaseController
         }
     }
 
+    public function taskLearnDetailAction(Request $request, $courseSetId, $courseId, $taskId)
+    {
+        $students = array();
+        $task     = $this->getTaskService()->getTask($taskId);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+
+        // $count     = $this->getCourseService()->searchLearnCount(array('courseId' => $courseId, 'lessonId' => $lessonId));
+        $count     = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($taskId, 'all');
+        $paginator = new Paginator($request, $count, 20);
+
+        $results = $this->getTaskResultService()->searchTaskResults(array('courseId' => $courseId, 'activityId' => $task['activityId']), array('createdTime' => 'ASC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        foreach ($results as $key => $result) {
+            $user                           = $this->getUserService()->getUser($result['userId']);
+            $students[$key]['nickname']     = $user['nickname'];
+            $students[$key]['startTime']    = $result['createdTime'];
+            $students[$key]['finishedTime'] = $result['finishedTime'];
+            $students[$key]['learnTime']    = $result['time'];
+            $students[$key]['watchTime']    = $result['time'];
+
+            if ($activity['mediaType'] == 'testpaper') {
+                $paperId     = $activity['mediaId'];
+                $paperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $paperId, $courseId, $activity['id'], 'testpaper');
+
+                $students[$key]['result'] = empty($paperResult) ? 0 : $paperResult['score'];
+            }
+        }
+
+        $task['length'] = intval($activity['length']);
+
+        return $this->render('course-manage/dashboard/task-detail-modal.html.twig', array(
+            'task'      => $task,
+            'paginator' => $paginator,
+            'students'  => $students
+        ));
+    }
+
     protected function renderDashboardForCourse($course, $courseSet)
     {
         $summary             = $this->getReportService()->summary($course['id']);

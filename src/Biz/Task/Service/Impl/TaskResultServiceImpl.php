@@ -144,6 +144,10 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
     public function countUsersByTaskIdAndLearnStatus($taskId, $status)
     {
+        if (!in_array($status, array('start', 'finish', 'all'))) {
+            throw $this->createInvalidArgumentException("Invalid Status#{$status}");
+        }
+
         return $this->getTaskResultDao()->countUsersByTaskIdAndLearnStatus($taskId, $status);
     }
 
@@ -153,6 +157,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     public function countLearnNumByTaskId($taskId)
     {
         return $this->getTaskResultDao()->countLearnNumByTaskId($taskId);
+    }
+
+    public function searchTaskResults($conditions, $orderbys, $start, $limit)
+    {
+        return $this->getTaskResultDao()->search($conditions, $orderbys, $start, $limit);
     }
 
     /**
