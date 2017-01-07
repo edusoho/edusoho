@@ -144,7 +144,7 @@ class CourseThreadController extends CourseBaseController
             return $response;
         }
 
-        if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+        if ($member && !$this->getMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
         }
 
