@@ -51,13 +51,7 @@ class TaskShow extends Emitter {
       };
       this.eventEmitter.emit('doing', eventData)
           .then(response => {
-            if (response.result.status == 'finish'
-                && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
-              this.ui.learnedWeakPrompt();
-              this.ui.learned();
-              this.sidebar.reload();
-              $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
-            }
+            this.receiveFinish(response);
           })
           .catch(() => {
             //
@@ -80,14 +74,21 @@ class TaskShow extends Emitter {
 
     // 接收活动的finish事件
     this.eventEmitter.receive('finish', response => {
-      if (response.result.status == 'finish'
-          && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
+      this.receiveFinish(response);
+    });
+  }
+
+  receiveFinish(response) {
+    if (response.result.status == 'finish'
+        && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
+      $.get($(".js-learned-prompt").data('url'), html => {
+        $(".js-learned-prompt").attr('data-content', html);
         this.ui.learnedWeakPrompt();
         this.ui.learned();
+        this.sidebar.reload();
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
-      }
-    });
-
+      })
+    }
   }
 
   initSidebar() {

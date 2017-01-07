@@ -12,16 +12,12 @@ interface MemberService
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
-    public function searchMember($conditions, $start, $limit);
-
     /**
      * @before searchMemberCount
      * @param  $conditions
      * @return mixed
      */
     public function countMembers($conditions);
-
-    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
 
     public function findWillOverdueCourses();
 
