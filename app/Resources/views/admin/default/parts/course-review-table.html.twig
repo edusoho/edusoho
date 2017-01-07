@@ -13,11 +13,11 @@
     {% set course = courses[review.courseId]|default(null) %}
     <tr>
       <td>
-        <a class="link-primary" target="_blank" href="{{ path('course_review',{id:review.courseId}) }}">  {{ review.content|plain_text(60) }}</a>
+        <a class="link-primary" target="_blank" href="{{ path('course_show',{id:review.courseId, tab: 'review'}) }}">  {{ review.content|plain_text(60) }}</a>
       </td>
       <td class="pull-right prl">{{ review.rating }}{{'星'|trans}}</td>
       <td>
-        <a target="_blank" href="{{ path('course_review',{id:review.courseId}) }}" class="btn btn-default btn-xs">查看</a>
+        <a target="_blank" href="{{ path('course_show',{id:review.courseId, tab: 'review'}) }}" class="btn btn-default btn-xs">查看</a>
       </td>
     </tr>
   {% else %}

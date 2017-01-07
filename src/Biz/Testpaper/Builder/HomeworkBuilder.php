@@ -182,32 +182,26 @@ class HomeworkBuilder implements TestpaperBuilderInterface
     protected function createQuestionItems($homeworkId, $questionIds)
     {
         $homeworkItems = array();
-        $index         = 1;
+        $index         = 0;
 
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        foreach ($questions as $key => $question) {
-            $questionSubs = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+        foreach ($questionIds as $questionId) {
+            $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
+            if (empty($question)) {
+                continue;
+            }
 
-            $items['seq']          = $index++;
+            if ($question['type'] != 'material') {
+                $index++;
+            }
+
+            $items['seq']          = $index;
             $items['questionId']   = $question['id'];
             $items['questionType'] = $question['type'];
             $items['testId']       = $homeworkId;
-            $items['parentId']     = 0;
+            $items['parentId']     = $question['parentId'];
             $homeworkItems[]       = $this->getTestpaperService()->createItem($items);
-
-            if (!empty($questionSubs)) {
-                $i = 1;
-
-                foreach ($questionSubs as $key => $questionSub) {
-                    $items['seq']          = $i++;
-                    $items['questionId']   = $questionSub['id'];
-                    $items['questionType'] = $questionSub['type'];
-                    $items['testId']       = $homeworkId;
-                    $items['parentId']     = $questionSub['parentId'];
-                    $homeworkItems[]       = $this->getTestpaperService()->createItem($items);
-                }
-            }
         }
 
         return $homeworkItems;

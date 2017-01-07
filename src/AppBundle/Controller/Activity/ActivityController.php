@@ -1,15 +1,16 @@
 <?php
 namespace AppBundle\Controller\Activity;
 
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 class ActivityController extends BaseController
 {
-    public function showAction($id, $courseId)
+
+    public function showAction(Request $request, $id, $courseId, $preview)
     {
         $activity = $this->getActivityService()->getActivity($id);
 
@@ -20,6 +21,7 @@ class ActivityController extends BaseController
         return $this->forward($actionConfig['show'], array(
             'id'       => $id,
             'courseId' => $courseId,
+            'preview'  => $preview
         ));
     }
 
@@ -59,7 +61,6 @@ class ActivityController extends BaseController
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
-
         $activity = $this->getActivityService()->getActivity($activityId);
 
         if (empty($activity)) {
@@ -81,7 +82,6 @@ class ActivityController extends BaseController
             'data'  => $data
         ));
     }
-
 
     protected function getActivityConfig()
     {

@@ -1,6 +1,8 @@
 {% do load_script('review/list') %}
 {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-{% if member and canReview|default(1) %}
+{% import "macro.html.twig" as web_macro %}
+
+{% if member|default(false) %}
   <div class="clearfix">
     <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview %}style="display:none;"{% endif %}>{{'重新评价'|trans}}</button>
   </div>
@@ -17,7 +19,7 @@
   <div class="js-reviews">
     <div class="media media-evaluate">
       <div class="media-left">
-        {{ web_macro.user_avatar(user, '', 'avatar-sm') }}
+        {{ web_macro.user_avatar_link(user,'small', ['card']) }}
       </div>
       <div class="media-body thread-post">
         <div class="title">{{ web_macro.user_link(user) }} 

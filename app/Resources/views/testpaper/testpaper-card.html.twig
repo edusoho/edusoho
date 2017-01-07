@@ -15,9 +15,10 @@
 		{% if target|default(null) and target.doTimes|default('0') %}
 			<span class="color-danger">{{'本次考试仅一次机会'|trans}}</span>
 		{% endif %}
-		<a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">{{ paper.itemCount }}题</span>，总分<span class="color-primary">{{ paper.score }}分</span>{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore|default(0) }}</span>分{% endif %}。{% if paper.limitedTime > 0 %}请在<span class="color-primary">{{ limitedTime }}分钟</span>内作答。{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
+		<a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">{{ paper.itemCount }}题</span>，总分<span class="color-primary">{{ paper.score }}分</span>{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore|default(0) }}</span>分{% endif %}。{% if limitedTime > 0 %}请在<span class="color-primary">{{ limitedTime }}分钟</span>内作答。{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
 	</div>
 	<div class="panel-body">
+		<div class="js-panel-card panel-card">
 		{% for type in questionTypes|default([]) %}
 			<p>{{ questionTypeDict[type] }}</p>
 			{% for question in questions[type]|default(null) %}
@@ -29,7 +30,7 @@
 								{% else %}lump-primary-light
 								{% endif %}
 							{% endif %}
-						">{{ question.seq + loop.index }}</a>
+						">{{ question.seq + loop.index - 1 }}</a>
 					{% endfor %}
 				{% else %}
 					<a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index mrm mbm lump-card color-lump 
@@ -42,6 +43,7 @@
 				{% endif %}
 			{% endfor %}
 		{% endfor %}
+		</div>
 	</div>
 	<div class="panel-footer text-right">
 		{% if limitedTime > 0 %}

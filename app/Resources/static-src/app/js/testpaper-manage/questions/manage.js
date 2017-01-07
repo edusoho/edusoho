@@ -1,3 +1,4 @@
+import notify from 'common/notify';
 export default class QuestionManage{
   constructor($element) {
     this.$element = $element;

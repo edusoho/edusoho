@@ -10,8 +10,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $id, $courseId, $preview = 0)
     {
+        if ($preview) {
+            return $this->forward('AppBundle:Activity/Homework:preview', array(
+                'id'       => $id,
+                'courseId' => $courseId
+            ));
+        }
+
         $user = $this->getUser();
 
         $activity       = $this->getActivityService()->getActivity($id);
@@ -33,10 +40,32 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
         ));
     }
 
-    public function previewAction(Request $request, $task)
+    public function tryLookAction(Request $request, $task)
     {
-        return $this->render('activity/text/preview.html.twig');
+        return $this->render('activity/homework/try-look.html.twig');
     }
+
+
+    public function previewAction(Request $request, $id, $courseId)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
+        $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+
+        if (!$homework) {
+            return $this->createMessageResponse('error', 'homework not found');
+        }
+
+        $questions   = $this->getTestpaperService()->showTestpaperItems($homework['id']);
+        $attachments = $this->getTestpaperService()->findAttachments($homework['id']);
+
+        return $this->render('activity/homework/preview.html.twig', array(
+            'paper'       => $homework,
+            'questions'   => $questions,
+            'paperResult' => array(),
+            'activity'    => $activity
+        ));
+    }
+
     public function editAction(Request $request, $id, $courseId)
     {
         $course   = $this->getCourseService()->getCourse($courseId);

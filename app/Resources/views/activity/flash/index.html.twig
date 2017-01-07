@@ -3,9 +3,10 @@
 {% do script(['app/js/activity/flash/index.js']) %}
 
 {% block body %}
-
-  <div class="iframe-parent-content" id="flash-player" data-uri="{{ flashMedia.uri }}" data-finish-type="{{ flash.finishType }}"
+  <div class="iframe-parent-content iframe-parent-full">
+  <div  id="flash-player" data-uri="{{ flashMedia.uri }}" data-finish-type="{{ flash.finishType }}"
        data-finish-detail="{{ flash.finishDetail }}">
+  </div>
   </div>
 
 {% endblock %}

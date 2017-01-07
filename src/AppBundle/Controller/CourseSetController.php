@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Note\Service\CourseNoteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;

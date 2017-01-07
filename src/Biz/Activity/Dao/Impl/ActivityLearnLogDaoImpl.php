@@ -24,7 +24,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
     public function findByActivityIdAndUserIdAndEvent($activityId, $userId, $event)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE activityId = ? and userId = ? and event = ?";
-        return $this->db()->fetchColumn($sql, array($activityId, $userId, $event)) ?: 0;
+        return $this->db()->fetchAssoc($sql, array($activityId, $userId, $event)) ?: array();
     }
 
     public function countLearnedDaysByCourseIdAndUserId($courseId, $userId)
@@ -33,13 +33,34 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
         return $this->db()->fetchColumn($sql, array($userId, $courseId)) ?: 0;
     }
 
+    public function sumLearnTime($conditions)
+    {
+        if (!empty($conditions['taskId'])) {
+            $sql        = "SELECT activityId FROM course_task where id = ? limit 1";
+            $activityId = $this->db()->fetchColumn($sql, array($conditions['taskId']));
+
+            if (empty($activityId) || $activityId <= 0) {
+                return 0;
+            }
+            unset($conditions['taskId']);
+            $conditions['activityId'] = $activityId;
+        }
+        $builder = $this->_createQueryBuilder($conditions)
+            ->select('sum(learnedTime)');
+
+        return $builder->execute()->fetchColumn();
+    }
+
     public function declares()
     {
         return array(
             'serializes' => array(
                 'data' => 'json'
+            ),
+            'conditions' => array(
+                'activityId = :activityId',
+                'userId = :userId'
             )
         );
     }
-
 }

@@ -11,18 +11,22 @@
     {% endif %}
   >
 
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label for="startTime">{{'选择计划'|trans}}</label>
+    {% if member|default(null) %}
+      <input type="hidden" name="targetId" value="{{ targetId }}">
+    {% else %}
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="startTime">{{'选择计划'|trans}}</label>
+        </div>
+        <div class="col-md-9 controls" style="z-index:2000;">
+          <select class="form-control" name="targetId">
+            {% for plan in plans if plan %}
+              <option value="{{ plan.id }}" {% if plan.id == course.id|default(0) or plan.id == announcement.targetId|default(0) %}selected{% endif %}>{{ plan.title }}</option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
-      <div class="col-md-9 controls" style="z-index:2000;">
-        <select class="form-control" name="targetId">
-          {% for plan in plans if plan %}
-            <option value="{{ plan.id }}" {% if plan.id == course.id|default(0) or plan.id == announcement.targetId|default(0) %}selected{% endif %}>{{ plan.title }}</option>
-          {% endfor %}
-        </select>
-      </div>
-    </div>
+    {% endif %}
 
     <div class="row form-group">
       <div class="col-md-2 control-label">

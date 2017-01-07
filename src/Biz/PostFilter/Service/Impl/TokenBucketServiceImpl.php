@@ -5,6 +5,7 @@ namespace Biz\PostFilter\Service\Impl;
 use Biz\BaseService;
 use Biz\PostFilter\Dao\RecentPostNumDao;
 use Biz\PostFilter\Service\TokenBucketService;
+use Biz\System\Service\SettingService;
 
 class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 {
@@ -116,5 +117,13 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
     protected function getRecentPostNumDao()
     {
         return $this->createDao('PostFilter:RecentPostNumDao');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

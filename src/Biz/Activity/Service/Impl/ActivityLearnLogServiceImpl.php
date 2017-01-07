@@ -43,6 +43,18 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
         return array($daysCount, $learnedTime, $learnedTimePerDay);
     }
 
+    public function sumLearnTime($conditions)
+    {
+        return $this->getActivityLearnLogDao()->sumLearnTime($conditions);
+    }
+
+    public function sumWatchTime($conditions)
+    {
+        //1. 视为所有的任务均统计观看时长，
+        //2. 对于无法统计观看时长的，不会尤其learnTime，所以暂时统计learnTime
+        return $this->sumLearnTime($conditions);
+    }
+
     /**
      * @return ActivityLearnLogDaoImpl
      */
@@ -50,5 +62,4 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
     {
         return $this->createDao('Activity:ActivityLearnLogDao');
     }
-
 }

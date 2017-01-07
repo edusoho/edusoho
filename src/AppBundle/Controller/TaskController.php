@@ -1,13 +1,10 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Activity\Service\ActivityService;
-use Biz\User\Service\TokenService;
-use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends BaseController
@@ -17,12 +14,7 @@ class TaskController extends BaseController
         $preview = $request->query->get('preview');
         $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
 
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
-        if (empty($activity)) {
-            throw $this->createNotFoundException("activity not found");
-        }
-
-        $this->getActivityService()->trigger($activity['id'], 'start', array(
+        $this->getActivityService()->trigger($task['activityId'], 'start', array(
             'task' => $task
         ));
 
@@ -37,7 +29,6 @@ class TaskController extends BaseController
             'course'       => $course,
             'task'         => $task,
             'taskResult'   => $taskResult,
-            'activity'     => $activity,
             'preview'      => $preview,
             'nextTask'     => empty($nextTask) ? array() : $nextTask,
             'finishedRate' => empty($finishedRate) ? 0 : $finishedRate
@@ -127,7 +118,7 @@ class TaskController extends BaseController
 
     public function taskActivityAction(Request $request, $courseId, $id)
     {
-        $preview = $request->query->get('preview');
+        $preview = $request->query->get('preview', 0);
         $task    = $this->tryLearnTask($courseId, $id, $preview);
 
         if (empty($preview) && $task['status'] != 'published') {
@@ -135,7 +126,8 @@ class TaskController extends BaseController
         }
         return $this->forward('AppBundle:Activity/Activity:show', array(
             'id'       => $task['activityId'],
-            'courseId' => $courseId
+            'courseId' => $courseId,
+            'preview'  => $preview
         ));
     }
 
@@ -185,8 +177,9 @@ class TaskController extends BaseController
             throw $this->createNotFoundException('task event is empty');
         }
 
-        $data   = $request->request->get('data', array());
-        $result = $this->getTaskService()->trigger($id, $eventName, $data);
+        $data           = $request->request->get('data', array());
+        $data['taskId'] = $id;
+        $result         = $this->getTaskService()->trigger($id, $eventName, $data);
 
         return $this->createJsonResponse(array(
             'event'  => $eventName,
@@ -197,8 +190,15 @@ class TaskController extends BaseController
 
     public function finishAction(Request $request, $courseId, $id)
     {
-        $result = $this->getTaskService()->finishTask($id);
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if (!$course['enableFinish']) {
+            throw $this->createAccessDeniedException('task can not finished.');
+        }
+
+        $result = $this->getTaskService()->finishTaskResult($id);
         $task   = $this->getTaskService()->getTask($id);
+
         list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
         return $this->render('task/finish-result.html.twig', array(
@@ -208,6 +208,31 @@ class TaskController extends BaseController
             'course'       => $course,
             'finishedRate' => $finishedRate
         ));
+    }
+
+    public function taskFinishedPromptAction(Request $request, $courseId, $id)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $result = $this->getTaskService()->finishTaskResult($id);
+        $task   = $this->getTaskService()->getTask($id);
+
+        list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
+
+        return $this->render('task/task-finished-prompt.html.twig', array(
+            'result'       => $result,
+            'task'         => $task,
+            'nextTask'     => $nextTask,
+            'course'       => $course,
+            'finishedRate' => $finishedRate
+        ));
+    }
+
+    public function finishConditionAction($task)
+    {
+        $config   = $this->getActivityConfig();
+        $action   = $config[$task['type']]['actions']['finishCondition'];
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        return $this->forward($action, array('activity' => $activity));
     }
 
     protected function getNextTaskAndFinishedRate($task)
@@ -232,9 +257,9 @@ class TaskController extends BaseController
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         if ($preview) {
             //TODO先注释掉这段代码，学员的逻辑现在有问题，无法判断是否老师，完善后在开发
-//            if ($member['role'] != 'teacher' || $course['status'] != 'published') {
-//                throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
-//            }
+            //            if ($member['role'] != 'teacher' || $course['status'] != 'published') {
+            //                throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
+            //            }
             $task = $this->getTaskService()->getTask($taskId);
         } else {
             $task = $this->getTaskService()->tryTakeTask($taskId);
@@ -293,5 +318,10 @@ class TaskController extends BaseController
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    protected function getActivityConfig()
+    {
+        return $this->get('extension.default')->getActivities();
     }
 }

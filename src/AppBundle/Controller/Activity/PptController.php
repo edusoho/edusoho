@@ -7,9 +7,8 @@ namespace AppBundle\Controller\Activity;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
-use MaterialLib\Service\MaterialLib\MaterialLibService;
+use Biz\MaterialLib\Service\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class PptController extends BaseController implements ActivityActionInterface
 {

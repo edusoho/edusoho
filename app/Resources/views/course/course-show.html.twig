@@ -1,0 +1,71 @@
+{% extends 'layout.html.twig' %}
+{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','app/js/courseset/show/index.js']) %}
+
+{% block full_content %}
+
+	{% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
+	{% set route_params = app.request.attributes.get('_route_params') %}
+	{% set course = data('Course', {courseId: course.id|default(route_params.id|default(0))}) %}
+  {% set course_set = data('CourseSet', {id: course.courseSetId}) %}
+
+	{{ render(controller(metas.header,{course: course, member: member|default(null)})) }}
+
+	<div class="container">
+	  <div class="row">
+	  	<div class="col-lg-9 col-md-8 course-detail-main">
+
+	      {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
+
+	      <section class="es-section">
+					<div class="nav-btn-tab">
+					  <ul class="nav nav-tabs" role="tablist">
+					  	{% for key, tab in metas.tabs %}
+						    <li role="presentation" class="{% if app.request.attributes.get('_route_params').tab|default('') == key %}active{% endif %}">
+						      <a 
+						      	{% if member|default(false) %}
+						      		href="{{ path('my_course_show', {'id': course.id, 'tab': key}) }}"
+						      	{% else %}
+						      		href="{{ path('course_show', {'id': course.id, 'tab': key}) }}"
+						      	{% endif %}
+						      >
+						      	{{tab.name}}
+						      	{% if tab.number|default(false) %}
+						      	<small class="text-muted">({{ course_set[tab.number]|default(0) }})</small>
+						      	{% endif %}
+						      </a>
+						    </li>
+					  	{% endfor %}
+					  </ul>
+
+					  {% if member|default(false) and (course.parentId == 0 or course.locked == 0) and (app.user.admin|default(false) or member.role|default('') == "teacher") %}
+					    <div class="btnbar hidden-xs">
+					      <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}" class="btn btn-link">
+					        <i class="es-icon es-icon-anonymous-iconfont"></i>
+					        {{'公告'|trans}}
+					      </a>
+					    </div>
+					  {% endif %}
+
+					</div>
+					<div class="course-detail-content">
+
+						{% block detail_content %}
+							{{ render(controller(metas.tabs[tab].content, {course: course, member: member|default(null)})) }}
+						{% endblock %}
+
+					</div>
+	      </section>
+	      
+			</div>
+	    <div class="col-lg-3 col-md-4 course-sidebar">
+	    	{% for key, widget in metas.widgets %}
+	    		{% if widget.type == 'render' %}
+	    			{{ render(controller(widget.uri, {course: course})) }}
+	    		{% elseif widget.type == 'include' %}
+	    			{% include widget.uri with {course: course} %}
+	    		{% endif %}
+	    	{% endfor %}
+	    </div>
+		</div>
+	</div>
+{% endblock %}

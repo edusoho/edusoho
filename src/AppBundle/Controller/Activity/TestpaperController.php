@@ -8,8 +8,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $id, $courseId, $preview = 0)
     {
+        if ($preview) {
+            return $this->forward('AppBundle:Activity/Testpaper:preview', array(
+                'id'       => $id,
+                'courseId' => $courseId
+            ));
+        }
+
         $user              = $this->getUser();
         $activity          = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
@@ -33,10 +40,36 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         ));
     }
 
-    public function previewAction(Request $request, $task)
+    public function tryLookAction(Request $request, $task)
     {
+        return $this->render('activity/testpaper/try-look.html.twig');
+    }
 
-        return $this->render('activity/text/preview.html.twig');
+    public function previewAction(Request $request, $id, $courseId)
+    {
+        $activity          = $this->getActivityService()->getActivity($id);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $testpaper         = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+
+        if (!$testpaper) {
+            return $this->createMessageResponse('error', 'testpaper not found');
+        }
+
+        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
+
+        $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
+
+        $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
+
+        return $this->render('activity/testpaper/preview.html.twig', array(
+            'questions'     => $questions,
+            'limitedTime'   => $testpaperActivity['limitedTime'],
+            'paper'         => $testpaper,
+            'paperResult'   => array(),
+            'total'         => $total,
+            'attachments'   => $attachments,
+            'questionTypes' => $this->getCheckedQuestionType($testpaper)
+        ));
     }
 
     public function editAction(Request $request, $id, $courseId)
@@ -95,6 +128,18 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         );
 
         return $testpapers;
+    }
+
+    protected function getCheckedQuestionType($testpaper)
+    {
+        $questionTypes = array();
+        foreach ($testpaper['metas']['counts'] as $type => $count) {
+            if ($count > 0) {
+                $questionTypes[] = $type;
+            }
+        }
+
+        return $questionTypes;
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace Topxia\Api\Resource\Course;
 
 use Biz\Course\Service\CourseService;
-use Biz\Note\Service\CourseNoteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,7 +54,7 @@ class Note extends BaseResource
      */
     protected function getCourseNoteService()
     {
-        return $this->getServiceKernel()->createService('Note:CourseNoteService');
+        return $this->getServiceKernel()->createService('Course:CourseNoteService');
     }
 
     /**

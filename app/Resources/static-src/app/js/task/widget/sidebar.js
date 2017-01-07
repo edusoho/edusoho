@@ -9,6 +9,7 @@ export default class TaskSidebar extends Emitter{
   }
 
   init() {
+    this.fixIconInChrome();
     this.fetchPlugins()
     .then((plugins) => {
       this.plugins = plugins;
@@ -23,6 +24,12 @@ export default class TaskSidebar extends Emitter{
 
   fetchPlugins() {
     return $.post(this.url);
+  }
+  
+  // 修复字体图标在chrome下，加载两次从而不能显示的问题
+  fixIconInChrome() {
+    let html = `<i class="es-icon es-icon-chevronleft"></i>`;
+    this.element.html(html);
   }
 
   renderToolbar() {
@@ -41,7 +48,6 @@ export default class TaskSidebar extends Emitter{
     let html = this.plugins.reduce((html, plugin) => {
       return html += `<div data-pane="${plugin.code}" class="js-sidebar-pane ${plugin.code}-pane"></div>`;
     }, '');
-
     this.element.append(html);
   }
 
@@ -64,6 +70,7 @@ export default class TaskSidebar extends Emitter{
       $.get(url)
           .then(html => {
             $pane.html(html);
+            $pane.perfectScrollbar();
             $btn.data('loaded', true);
             this.operationContent($btn);
           })

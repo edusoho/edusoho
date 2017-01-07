@@ -9,8 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $id, $courseId, $preview = 0)
     {
+        if ($preview) {
+            return $this->forward('AppBundle:Activity/Exercise:preview', array(
+                'id'       => $id,
+                'courseId' => $courseId
+            ));
+        }
+
         $user = $this->getUser();
 
         $activity       = $this->getActivityService()->getActivity($id);
@@ -32,11 +39,32 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         ));
     }
 
-
-    public function previewAction(Request $request, $task)
+    public function tryLookAction(Request $request, $task)
     {
-        return $this->render('activity/exercise/preview.html.twig');
+        return $this->render('activity/exercise/try-look.html.twig');
     }
+
+
+    public function previewAction(Request $request, $id, $courseId)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
+        $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+
+        if (!$exercise) {
+            return $this->createMessageResponse('error', 'exercise not found');
+        }
+
+        $questions   = $this->getTestpaperService()->showTestpaperItems($exercise['id']);
+        $attachments = $this->getTestpaperService()->findAttachments($exercise['id']);
+
+        return $this->render('activity/exercise/preview.html.twig', array(
+            'paper'       => $exercise,
+            'questions'   => $questions,
+            'paperResult' => array(),
+            'activity'    => $activity
+        ));
+    }
+
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);

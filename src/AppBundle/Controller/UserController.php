@@ -7,7 +7,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
 use Biz\Group\Service\GroupService;
-use Biz\Note\Service\CourseNoteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\AuthService;
@@ -664,7 +664,7 @@ class UserController extends BaseController
      */
     protected function getNoteService()
     {
-        return $this->getBiz()->service('Note:CourseNoteService');
+        return $this->getBiz()->service('Course:CourseNoteService');
     }
 
     /**

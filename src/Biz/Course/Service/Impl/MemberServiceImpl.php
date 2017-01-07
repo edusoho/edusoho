@@ -14,7 +14,7 @@ use Biz\User\Service\MessageService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
-use Biz\Note\Service\CourseNoteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 
@@ -128,21 +128,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchMember($conditions, $start, $limit)
-    {
-        $conditions = $this->_prepareConditions($conditions);
-        // return $this->getMemberDao()->search($conditions, $orderBy = array(), $start, $limit);
-    }
-
     public function countMembers($conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
         return $this->getMemberDao()->count($conditions);
-    }
-
-    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
-    {
-        //return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
     public function findWillOverdueCourses()
@@ -847,7 +836,7 @@ class MemberServiceImpl extends BaseService implements MemberService
      */
     protected function getCourseNoteService()
     {
-        return $this->createService('Note:CourseNoteService');
+        return $this->createService('Course:CourseNoteService');
     }
 
     /**
