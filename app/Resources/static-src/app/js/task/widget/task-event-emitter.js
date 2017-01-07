@@ -1,4 +1,6 @@
-import Messenger from "es-messenger";
+import postal from 'postal';
+require('postal.federation');
+require('postal.xframe');
 
 export default class TaskEventEmitter {
   constructor(element) {
@@ -12,30 +14,56 @@ export default class TaskEventEmitter {
       receives: {}
     };
 
-    this.receiveMessenger = new Messenger('TaskMessenger', 'ActivityEvent');
-    this.receiveMessenger.addTarget(this.element.get(0).contentWindow, 'task-content-iframe');
+    this._registerIframeEvents();
+  }
 
-    this.receiveMessenger.listen(message => {
-      let { event, data } = JSON.parse(message);
-      console.log("event, data", event, data);
-      let listeners = this.eventMap.receives[event];
+  _registerIframeEvents(){
+    postal.instanceId('task');
 
-      $.post(this.element.data('eventUrl'), {eventName: event, data: data})
-        .done(response => {
-          if (typeof listeners !== 'undefined') {
-            listeners.forEach(callback => callback(response));
-          }
-          
-          this.receiveMessenger.send(JSON.stringify(response));
-        })
-        .fail((error) => {
-          this.receiveMessenger.send(JSON.stringify({ event: event, error: error }));
-        })
+    postal.fedx.addFilter([
+      {
+        channel: 'activity-events', //接收 activity iframe的事件
+        topic: '#',
+        direction: 'in'
+      },
+      {
+        channel: 'task-events',  // 发送事件到activity iframe
+        topic: '#',
+        direction: 'out'
+      }
+    ]);
+    this._registerReceiveActivityIframeEvents();
+    return this;
+  }
+
+  _registerReceiveActivityIframeEvents(){
+    postal.subscribe({
+      channel: 'activity-events',
+      topic: '#',
+      callback: ({event, data}) => {
+        let listeners = this.eventMap.receives[event];
+        $.post(this.eventUrl, {eventName: event, data: data})
+            .done(response => {
+              if (typeof listeners !== 'undefined') {
+                listeners.forEach(callback => callback(response));
+              }
+              postal.publish({
+                channel: 'task-events',
+                topic: '#',
+                data: response
+              });
+            })
+            .fail((error) => {
+              postal.publish({
+                channel: 'task-events',
+                topic: '#',
+                data: { event: event, error: error }
+              });
+            });
+      }
     });
 
-    this.emitMessenger = new Messenger('TaskMessenger', 'TaskEvent');
-    this.emitMessenger.addTarget(this.element.get(0).contentWindow, 'task-content-iframe');
-
+    return this;
   }
 
   //发送事件到activity
@@ -43,7 +71,11 @@ export default class TaskEventEmitter {
     return new Promise((resolve, reject) => {
       $.post(this.eventUrl, {eventName: event, data: data})
       .done((response) => {
-        this.emitMessenger.send(JSON.stringify({event: response.event, data: response.data}));
+        postal.publish({
+          channel: 'task-events',
+          topic: '#',
+          data: { event: response.event, data: response.data }
+        });
         resolve(response);
       })
       .fail((error) => {

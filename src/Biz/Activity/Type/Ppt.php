@@ -38,13 +38,14 @@ class Ppt extends Activity
 
         if ($ppt['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
-            return !empty($result) && $result > $ppt['finishDetail'];
+            return !empty($result) && $result >= $ppt['finishDetail'];
         }
 
-        if ($ppt['finishType'] == 'end') {
-            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finished');
-            return !empty($result);
+        if($ppt['finishType'] == 'end'){
+            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finish');
+            return !empty($logs);
         }
+
         return false;
     }
 

@@ -44,6 +44,15 @@ class TextController extends BaseController implements ActivityActionInterface
         return $this->render('activity/text/modal.html.twig');
     }
 
+    public function finishConditionAction($activity)
+    {
+        $media = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
+
+        return $this->render('activity/text/finish-condition.html.twig', array(
+            'media' => $media
+        ));
+    }
+
     /**
      * @return ActivityService
      */

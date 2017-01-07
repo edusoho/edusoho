@@ -2,47 +2,28 @@
 
 namespace Biz\Activity\Type;
 
+use Biz\Activity\Dao\FlashActivityDao;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Activity\Service\ActivityService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 
 class Flash extends Activity
 {
-    public function getMetas()
-    {
-        return array(
-            'name' => 'Flash',
-            'icon' => 'es-icon es-icon-flashclass'
-        );
-    }
-
-    public function registerActions()
-    {
-        return array(
-            'create' => 'AppBundle:Flash:create',
-            'edit'   => 'AppBundle:Flash:edit',
-            'show'   => 'AppBundle:Flash:show'
-        );
-    }
-
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
         $flash    = $this->getFlashActivityDao()->get($activity['mediaId']);
         if ($flash['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
-            return $result > $flash['finishDetail'];
+            return $result >= $flash['finishDetail'];
         }
 
-        if ($flash['finishType'] == 'click') {
-            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'flash.finish');
-            return !empty($result);
-        }
         return false;
     }
 
     protected function registerListeners()
     {
-        // TODO: Implement registerListeners() method.
     }
 
     public function create($fields)
@@ -81,16 +62,25 @@ class Flash extends Activity
         return $this->getFlashActivityDao()->get($targetId);
     }
 
+    /**
+     * @return FlashActivityDao
+     */
     protected function getFlashActivityDao()
     {
         return $this->getBiz()->dao('Activity:FlashActivityDao');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service("Activity:ActivityService");

@@ -1,5 +1,4 @@
 import swfobject from "es-swfobject";
-import ActivityEmitter from '../activity-emitter';
 
 let $el = $('#flash-player');
 
@@ -19,17 +18,4 @@ if (!swfobject.hasFlashPlayerVersion('11')) {
       wmode: 'opaque',
       allowFullScreen: 'true'
     });
-}
-
-let activityEmitter = new ActivityEmitter();
-
-let finishType = $el.data('finishType');
-
-if (finishType == 'time') {
-  let finishDetail = $el.data('finishDetail');
-  activityEmitter.receive('doing', (data) => {
-    if (finishDetail <= data.learnedTime) {
-      activityEmitter.emit('finish');
-    }
-  });
 }
