@@ -6,6 +6,7 @@
 	{% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
 	{% set route_params = app.request.attributes.get('_route_params') %}
 	{% set course = data('Course', {courseId: course.id|default(route_params.id|default(0))}) %}
+  {% set course_set = data('CourseSet', {id: course.courseSetId}) %}
 
 	{{ render(controller(metas.header,{course: course, member: member|default(null)})) }}
 
@@ -29,7 +30,7 @@
 						      >
 						      	{{tab.name}}
 						      	{% if tab.number|default(false) %}
-						      	<small class="text-muted">({{ course[tab.number]|default(0) }})</small>
+						      	<small class="text-muted">({{ course_set[tab.number]|default(0) }})</small>
 						      	{% endif %}
 						      </a>
 						    </li>

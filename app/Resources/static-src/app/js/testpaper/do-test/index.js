@@ -10,6 +10,8 @@ class DoTestpaper extends DoTestBase {
   }
 
   _init() {
+    this.$container.perfectScrollbar();
+    this.$container.find('.js-panel-card').perfectScrollbar();
     this.$container.on('click','.js-btn-pause',event=>this._clickBtnPause(event));
     this.$container.on('click','.js-btn-resume',event => this._clickBtnReume(event));
   }
@@ -55,7 +57,6 @@ class DoTestpaper extends DoTestBase {
     this.$container.find('.js-btn-pause').removeClass('active');
     this.$timePauseDialog.modal('hide');
   }
-
 }
 
-new DoTestpaper($('.js-testpaper-content'));
+new DoTestpaper($('.js-task-testpaper-body'));

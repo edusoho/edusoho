@@ -2,7 +2,7 @@
 {% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
 
 {% if showBodyColor|default(1) %}
-{% set bodyClass = 'task-testpaper-body' %}
+{% set bodyClass = 'task-testpaper-body js-task-testpaper-body' %}
 {% endif %}
 
 {% block body %}

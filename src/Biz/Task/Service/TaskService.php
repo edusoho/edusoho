@@ -105,5 +105,4 @@ interface TaskService
     public function findToLearnTasksByCourseId($courseId);
 
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
-
 }

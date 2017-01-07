@@ -217,7 +217,7 @@ class CourseDeleteServiceTest extends BaseTestCase
 
     protected function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Note:CourseNoteService');
+        return $this->getServiceKernel()->createService('Course:CourseNoteService');
     }
 
     protected function getQuestionDao()

@@ -7,7 +7,7 @@ namespace AppBundle\Controller;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\ThreadService;
-use Biz\Note\Service\CourseNoteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
@@ -224,7 +224,7 @@ class TaskPluginController extends BaseController
      */
     protected function getNoteService()
     {
-        return $this->createService('Note:CourseNoteService');
+        return $this->createService('Course:CourseNoteService');
     }
 
     /**

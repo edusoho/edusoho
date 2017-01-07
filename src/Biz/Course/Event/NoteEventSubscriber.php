@@ -5,8 +5,9 @@ namespace Biz\Course\Event;
 
 
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Biz\Note\Service\CourseNoteService;
+use Biz\Course\Service\CourseNoteService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -37,12 +38,14 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
         $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
         $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
+        $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], array('noteNum'));
     }
 
     public function onCourseNoteUpdate(Event $event)
     {
         $note      = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
+        $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], array('noteNum'));
         $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
 
         // @TODO 班级功能改造完后完善
@@ -66,6 +69,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         }*/
 
         $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
+        $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], array('noteNum'));
         $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
     }
 
@@ -94,7 +98,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
      */
     protected function getCourseNoteService()
     {
-        return $this->getBiz()->service('Note:CourseNoteService');
+        return $this->getBiz()->service('Course:CourseNoteService');
     }
 
     /**
@@ -103,5 +107,13 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 }
