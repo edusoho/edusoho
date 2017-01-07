@@ -16,6 +16,7 @@
       {% elseif  item.type == 'lesson' %}
         {% for task in item.tasks %}
           {% set task_lock =  false %}
+          {% set file = files[task.activity.mediaId]|default(null) %}
           <li class="task-item task-content mouse-control">
             <i class="es-icon
               {% if task_lock %}
@@ -36,7 +37,7 @@
                  data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
               {% endif %}
                 {% if task.isFree %}
-                  <span class="label label-warning mr10">免费</span>
+                  <span class="label label-success mr10">免费</span>
                 {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
                   <span class="label label-warning mrm">{{ '试看'|trans }}</span>
                 {% endif %}课时{{ task.number }}：{{ task.title }}

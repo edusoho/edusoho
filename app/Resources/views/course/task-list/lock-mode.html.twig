@@ -16,6 +16,7 @@
       {% elseif  item.itemType == 'task' %}
         {% set task = item %}
         {% set task_lock =  (course.learnMode  == 'lockMode')  and ( not task.lock)  and task.number != 1 %}
+        {% set file = files[task.activity.mediaId]|default(null) %}
         <li class="task-item task-content mouse-control">
           <i class="es-icon
               {% if task_lock %}
@@ -36,7 +37,7 @@
                  >
             {% endif %}
                 {% if task.isFree %}
-                  <span class="label label-warning mr10">免费</span>
+                  <span class="label label-success mr10">免费</span>
                 {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
                   <span class="label label-warning mrm">{{'试看'|trans}}</span>
                 {% endif %}
