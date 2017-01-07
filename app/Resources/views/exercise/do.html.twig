@@ -18,7 +18,7 @@
           {% else %}
             {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
             {% if questionTemplate %}
-              {% include questionTemplate with {showScore:0} %}
+              {% include questionTemplate with {showScore:0,seq:loop.index} %}
             {% endif %}
           {% endif %}
 

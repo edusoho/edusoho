@@ -3,7 +3,6 @@ import DoTestBase from '../widget/do-test-base';
 class DoTestpaper extends DoTestBase {
   constructor($container) {
     super($container);
-    console.log($.fn);
     this.$timePauseDialog = this.$container.find('#time-pause-dialog');
     this.$timer = $container.find('.js-testpaper-timer');
     this._initTimer();
@@ -18,8 +17,6 @@ class DoTestpaper extends DoTestBase {
   _initTimer() {
     let self = this;
     if (this.$timer != undefined) {
-      console.log(this.$timer.data('time'));
-      console.log(this.$timer)
 
       this.$timer.timer({
         countdown:true,
@@ -36,7 +33,6 @@ class DoTestpaper extends DoTestBase {
           self.usedTime = 0;
         }
       });
-      console.log("timer");
     }
   }
 

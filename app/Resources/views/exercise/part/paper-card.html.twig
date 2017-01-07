@@ -20,7 +20,7 @@
               {% elseif subQuestion.testResult.status|default('noAnswer')  == 'right' %}
                 bg-success
               {% endif %}">
-              {{ loopIndex + loop.index - 1 }}
+              {{ subQuestion.seq }}
             </a>
           {% endfor %}
         {% else %}
