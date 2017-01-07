@@ -8,8 +8,7 @@
 {% do script(['app/js/activity/activity-preivew.js']) %}
 
 {% block body %}
-  {{ render(controller('AppBundle:Activity/Activity:preview',{id:task.activityId, courseid:course.id })) }}
-
+  {{ render(controller('AppBundle:Activity/Activity:preview',{task:task })) }}
 {% endblock %}
 
 {% block footer %}

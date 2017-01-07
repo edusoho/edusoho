@@ -16,35 +16,31 @@ class ActivityController extends BaseController
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
-        $actionConfig   = $this->getActivityActionConfig($activity['mediaType']);
-        $showController = $actionConfig['show'];
-        return $this->forward($showController, array(
+        $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
+        return $this->forward($actionConfig['show'], array(
             'id'       => $id,
             'courseId' => $courseId,
         ));
     }
 
-    public function previewAction(Request $request, $id, $courseId)
+    public function previewAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
-        $actionConfig   = $this->getActivityActionConfig($activity['mediaType']);
-        $showController = $actionConfig['preview'];
-        return $this->forward($showController, array(
-            'id'       => $id,
-            'courseId' => $courseId,
+        $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
+        return $this->forward($actionConfig['preview'], array(
+            'task' => $task
         ));
     }
 
     public function updateAction($id, $courseId)
     {
-        $activity       = $this->getActivityService()->getActivity($id);
-        $actionConfig   = $this->getActivityActionConfig($activity['mediaType']);
-        $editController = $actionConfig['edit'];
-        return $this->forward($editController, array(
+        $activity     = $this->getActivityService()->getActivity($id);
+        $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
+        return $this->forward($actionConfig['edit'], array(
             'id'       => $activity['id'],
             'courseId' => $courseId
         ));
