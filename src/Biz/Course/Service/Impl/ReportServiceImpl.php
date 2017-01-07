@@ -2,8 +2,13 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
+use Biz\Course\Service\ThreadService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Course\Service\CourseNoteService;
 
 class ReportServiceImpl extends BaseService implements ReportService
 {
@@ -17,11 +22,11 @@ class ReportServiceImpl extends BaseService implements ReportService
             'finishedNum'   => 0 //完成人数
         );
 
-        $summary['studentNum']    = $this->getCourseService()->searchMemberCount(array('courseId' => $courseId, 'role' => 'student'));
+        $summary['studentNum']    = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'role' => 'student'));
         $summary['noteNum']       = $this->getCourseNoteService()->countCourseNotes(array('courseId' => $courseId));
-        $summary['askNum']        = $this->getThreadService()->searchThreadCount(array('courseId' => $courseId, 'type' => 'question'));
-        $summary['discussionNum'] = $this->getThreadService()->searchThreadCount(array('courseId' => $courseId, 'type' => 'discussion'));
-        $summary['finishedNum']   = $this->getCourseService()->searchMemberCount(array('courseId' => $courseId, 'isLearned' => 1, 'role' => 'student'));
+        $summary['askNum']        = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'question'));
+        $summary['discussionNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'discussion'));
+        $summary['finishedNum']   = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'isLearned' => 1, 'role' => 'student'));
 
         if ($summary['studentNum']) {
             $summary['finishedRate'] = round($summary['finishedNum'] / $summary['studentNum'], 3) * 100;
@@ -34,7 +39,7 @@ class ReportServiceImpl extends BaseService implements ReportService
     public function getLateMonthLearndData($courseId)
     {
         $now              = time();
-        $lateMonthData    = $this->getLateMonthData($courseId, $now);
+        $lateMonthData    = $this->getLatestMonthData($courseId, $now);
         $before30DaysData = $this->getAMonthAgoStatCount($courseId, $now);
         $late30DaysStat   = array();
         for ($i = 29; $i >= 0; $i--) {
@@ -57,27 +62,27 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $late30DaysStat;
     }
 
-    public function getCourseLessonLearnStat($courseId)
+    public function getCourseTaskLearnStat($courseId)
     {
-        $lessons = $this->getCourseService()->getCourseLessons($courseId);
-        usort($lessons, function ($lesson1, $lesson2) {
-            return $lesson1['number'] < $lesson2['number'];
-        });
-        $teachers       = $this->getCourseService()->findCourseTeachers($courseId);
-        $excludeUserIds = ArrayToolkit::column($teachers, 'userId');
-        foreach ($lessons as &$lesson) {
-            $lesson['alias']       = '课时'.$lesson['number'];
-            $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'finished'));
-            $lesson['learnNum']    = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'learning'));
+        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
+        //XXX ignore
+        //        $teachers       = $this->getCourseService()->findTeachersByCourseId($courseId);
+        //        $excludeUserIds = ArrayToolkit::column($teachers, 'userId');
+        foreach ($tasks as &$task) {
+            $task['alias'] = '任务'.$task['seq'];
+//            $lesson['finishedNum'] = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'finished'));
+            //            $lesson['learnNum']    = $this->getCourseService()->searchLearnCount(array('lessonId' => $lesson['id'], 'excludeUserIds' => $excludeUserIds, 'status' => 'learning'));
+            $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
+            $task['learnNum']    = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
 
-            if ($lesson['learnNum']) {
-                $lesson['finishedRate'] = round($lesson['finishedNum'] / $lesson['learnNum'], 3) * 100;
+            if ($task['learnNum']) {
+                $task['finishedRate'] = round($task['finishedNum'] / $task['learnNum'], 3) * 100;
             } else {
-                $lesson['finishedRate'] = 0;
+                $task['finishedRate'] = 0;
             }
         }
 
-        return $lessons;
+        return $tasks;
     }
 
     /**
@@ -89,12 +94,12 @@ class ReportServiceImpl extends BaseService implements ReportService
         $startTimeLessThan = strtotime('- 29 days', $now);
         $result            = array();
         //学员数
-        $result['studentNum'] = $this->getCourseService()->searchMemberCount(array('courseId' => $courseId,
-            'role'                                                                                => $role,
-            'startTimeLessThan'                                                                   => $startTimeLessThan
+        $result['studentNum'] = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId,
+            'role'                                                                                 => $role,
+            'startTimeLessThan'                                                                    => $startTimeLessThan
         ));
         //完课数
-        $result['finishedNum'] = $this->getCourseService()->searchMemberCount(array(
+        $result['finishedNum'] = $this->getCourseMemberService()->countMembers(array(
             'courseId'          => $courseId,
             'role'              => $role,
             'isLearned'         => 1,
@@ -114,14 +119,14 @@ class ReportServiceImpl extends BaseService implements ReportService
         ));
 
         //问题数
-        $result['askNum'] = $this->getThreadService()->searchThreadCount(array(
+        $result['askNum'] = $this->getThreadService()->countThreads(array(
             'courseId'          => $courseId,
             'type'              => 'question',
             'startTimeLessThan' => $startTimeLessThan
         ));
 
         //讨论数
-        $result['discussionNum'] = $this->getThreadService()->searchThreadCount(array(
+        $result['discussionNum'] = $this->getThreadService()->countThreads(array(
             'courseId'          => $courseId,
             'type'              => 'discussion',
             'startTimeLessThan' => $startTimeLessThan
@@ -196,9 +201,9 @@ class ReportServiceImpl extends BaseService implements ReportService
     }
 
     /**
-     * [getLateMonthData 获取最近一个月的数据]
+     * [getLatestMonthData 获取最近一个月的数据]
      */
-    private function getLateMonthData($courseId, $now)
+    private function getLatestMonthData($courseId, $now)
     {
         $startTimeGreaterThan = strtotime('- 29 days', $now);
         $role                 = 'student';
@@ -209,7 +214,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                 'role'                 => $role,
                 'startTimeGreaterThan' => $startTimeGreaterThan
             ),
-            array('createdTime', 'ASC'),
+            array('createdTime' => 'ASC'),
             0,
             PHP_INT_MAX
         );
@@ -249,23 +254,51 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $result;
     }
 
+    /**
+     * @return CourseNoteService
+     */
     protected function getCourseNoteService()
     {
         return $this->createService('Note:CourseNoteService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->createService('Course:ThreadService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 }

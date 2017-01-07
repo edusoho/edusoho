@@ -12,7 +12,7 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview');
-        $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
+        $task    = $this->tryLearnTask($courseId, $id, (bool) $preview);
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         if (empty($activity)) {

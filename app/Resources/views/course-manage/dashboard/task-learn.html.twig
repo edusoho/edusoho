@@ -1,6 +1,8 @@
-{% extends 'TopxiaWebBundle:CourseManage/Dashboard:layout.html.twig' %}
+{% extends 'course-manage/dashboard/layout.html.twig' %}
+
 {% do load_script('course-manage/dashboard/lesson-detail.js') %}
-{% set submenu = 'lesson_learn_dashboard' %}
+{% set submenu = 'task_learn_dashboard' %}
+
 {% block dashboard %}
 
 <div class="table-responsive">
@@ -48,21 +50,53 @@
         </div>
       </td>
 
-      <td></td>
+      <td>{{'学员学习详情'|trans}}</td>
    {# <td>直播同时在线人数峰值</td> #}
     </tr>
-    {% if lessons %}
-      {% for lesson in lessons %}
+    {% if tasks %}
+      {% for task in tasks %}
         <tr>
           <td>
-            {{lesson.title}}{% if lesson.type == "text" %}{{'（图文）'|trans}}{% elseif lesson.type == 'video' %}{{'（视频）'|trans}}{% elseif lesson.type == 'audio' %}{{'（音频）'|trans}}{% elseif lesson.type == 'testpaper' %}{{'（试卷）'|trans}}{% elseif lesson.type == 'ppt' %}（ppt）{% endif %}
+            {{task.title}}
+            {% if task.type == "text" %}
+              {{'（图文）'|trans}}
+            {% elseif task.type == 'video' %}
+              {{'（视频）'|trans}}
+            {% elseif task.type == 'audio' %}
+              {{'（音频）'|trans}}
+            {% elseif task.type == 'testpaper' %}
+              {{'（试卷）'|trans}}
+            {% elseif task.type == 'ppt' %}
+              （ppt）
+            {% endif %}
           </td>
-          <td>{{(lesson.learnTime/60)|round(0, 'floor')}}</td>
-          <td>{% if lesson.type =='audio' or lesson.type =='video' %}{{lesson.length}}{% else %}----{% endif %}</td>
-          <td>{% if lesson.mediaSource != 'self' and lesson.type == 'video' %}{{'无'|trans}}{% elseif lesson.type =='audio' or lesson.type =='video'%}{{(lesson.watchTime/60)|round(0, 'floor')}}{% else %}----{% endif %}</td>
-          <td>{% if lesson.type =='testpaper' %}{{lesson.score}}{% else %}----{% endif %}</td>
+          <td>{{(task.learnTime)|round(0, 'floor')}}</td>
           <td>
-          <a data-toggle="modal" data-target="#modal" data-url="{{path('course_lesson_detail_data',{courseId:lesson.courseId,lessonId:lesson.id})}}" href="javascript:">学员学习详情</a>
+            {% if task.type =='audio' or task.type =='video' %}
+              {{task.length}}
+            {% else %}
+              ----
+            {% endif %}
+          </td>
+          <td>
+            {# TODO mediaSource ? #}
+            {% if task.mediaSource|default('') != 'self' and task.type == 'video' %}
+              {{'无'|trans}}
+            {% elseif task.type =='audio' or task.type =='video'%}
+              {{(task.watchTime)|round(0, 'floor')}}
+            {% else %}
+              ----
+            {% endif %}
+          </td>
+          <td>
+            {% if task.type =='testpaper' %}
+              {{task.score|default(0)}}{# FIXME score ? #}
+            {% else %}
+              ----
+            {% endif %}
+          </td>
+          <td>
+          <a data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_dashboard_task_detail',{courseSetId: courseSet.id, courseId:task.courseId,taskId:task.id})}}" href="javascript:">查看</a>
           </td>
         </tr>
       {% endfor %}
