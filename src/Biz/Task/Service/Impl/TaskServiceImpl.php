@@ -3,10 +3,10 @@
 namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Service\CourseService;
 use Biz\Task\Dao\TaskDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
+use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
@@ -22,13 +22,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function createTask($fields)
     {
         $this->beginTransaction();
-        try{
+        try {
             $strategy = $this->createCourseStrategy($fields['fromCourseId']);
-            $task = $strategy->createTask($fields);
+            $task     = $strategy->createTask($fields);
             $this->dispatchEvent("course.task.create", new Event($task));
             $this->commit();
             return $task;
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
         }
@@ -37,13 +37,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function updateTask($id, $fields)
     {
         $this->beginTransaction();
-        try{
+        try {
             $task     = $this->getTask($id);
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task     = $strategy->updateTask($id, $fields);
             $this->commit();
             return $task;
-        } catch (\Exception $exception){
+        } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
         }
@@ -151,7 +151,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId)
     {
-        $conditions     = array(
+        $conditions = array(
             'userId' => $userId
         );
         $myTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions, 0, PHP_INT_MAX, true);
@@ -160,7 +160,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'courseIds'   => ArrayToolkit::column($myTeachCourses, 'courseId'),
             'courseSetId' => $courseSetId
         );
-        $courses    = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
         return $this->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
     }
@@ -242,14 +242,14 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function isFinished($taskId)
     {
-        $task   = $this->getTask($taskId);
+        $task = $this->getTask($taskId);
         return $this->getActivityService()->isFinished($task['activityId']);
     }
 
     public function tryTakeTask($taskId)
     {
         if (!$this->canLearnTask($taskId)) {
-             throw $this->createAccessDeniedException("the Task is Locked");
+            throw $this->createAccessDeniedException("the Task is Locked");
         }
         $task = $this->getTask($taskId);
 
@@ -286,8 +286,8 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function canLearnTask($taskId)
     {
-        $task = $this->getTask($taskId);
-        list($course, ) = $this->getCourseService()->tryTakeCourse($task['courseId']);
+        $task         = $this->getTask($taskId);
+        list($course) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
         return $canLearnTask;
@@ -303,6 +303,11 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function getMaxSeqByCourseId($courseId)
     {
         return $this->getTaskDao()->getMaxSeqByCourseId($courseId);
+    }
+
+    public function getTaskByCourseIdAndActivityId($courseId, $activityId)
+    {
+        return $this->getTaskDao()->getTaskByCourseIdAndActivityId($courseId, $activityId);
     }
 
     public function findTasksByChapterId($chapterId)
@@ -327,7 +332,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findToLearnTasksByCourseId($courseId)
     {
-        list($course,) = $this->getCourseService()->tryTakeCourse($courseId);
+        list($course) = $this->getCourseService()->tryTakeCourse($courseId);
         $toLearnTasks = array();
         if ($course['learnMode'] == 'freeMode') {
             $toLearnTasks[] = $this->getToLearnTaskWithFreeMode($courseId);
@@ -371,10 +376,9 @@ class TaskServiceImpl extends BaseService implements TaskService
      * 2.如果不为空，则取关联的三个。
      *
      * 自由式和任务式的逻辑由任务策略完成
-     * @param $courseId
-     * @return array tasks
+     * @param  $courseId
+     * @return array       tasks
      */
-
 
     protected function getToLearnTaskWithFreeMode($courseId)
     {
@@ -386,11 +390,10 @@ class TaskServiceImpl extends BaseService implements TaskService
             $latestTaskResult = array_shift($taskResults);
             $latestLearnTask  = $this->getTask($latestTaskResult['courseTaskId']); //获取最新学习未学完的课程
             $tasks            = $this->getTaskDao()->search(array('seq_GE' => $latestLearnTask['seq'], 'courseId' => $courseId), array('seq' => 'ASC'), 0, 2);
-            $toLearnTask      = array_pop($tasks);//如果当正在学习的是最后一个，则取当前在学的任务
+            $toLearnTask      = array_pop($tasks); //如果当正在学习的是最后一个，则取当前在学的任务
         }
         return $toLearnTask;
     }
-
 
     protected function getToLearnTasksWithLockMode($courseId)
     {
@@ -418,7 +421,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $toLearnTasks[] = $task;
                 $previousTask   = $task;
             }
-            if ($previousTask && $task['seq'] > $previousTask['seq'] and count($toLearnTasks) < $toLearnTaskCount) {
+            if ($previousTask && $task['seq'] > $previousTask['seq'] && count($toLearnTasks) < $toLearnTaskCount) {
                 array_push($toLearnTasks, $task);
                 $previousTask = $task;
             }
@@ -431,16 +434,14 @@ class TaskServiceImpl extends BaseService implements TaskService
                 if ($task['id'] == $taskResult['courseTaskId']) {
                     $previousTask = $task;
                 }
-                if ($previousTask && $task['seq'] < $previousTask['seq'] and count($toLearnTasks) < $toLearnTaskCount) {
+                if ($previousTask && $task['seq'] < $previousTask['seq'] && count($toLearnTasks) < $toLearnTaskCount) {
                     array_unshift($toLearnTasks, $task);
                     $previousTask = $task;
                 }
             }
         }
         return $toLearnTasks;
-
     }
-
 
     public function trigger($id, $eventName, $data = array())
     {

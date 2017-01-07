@@ -102,7 +102,8 @@ class HomeworkManageController extends BaseController
             'source'        => $source,
             'targetId'      => $targetId,
             'isTeacher'     => true,
-            'total'         => array()
+            'total'         => array(),
+            'action'        => $request->query->get('action', '')
         ));
     }
 

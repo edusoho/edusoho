@@ -22,6 +22,7 @@
               {% endif %}">
               {{ subQuestion.seq }}
             </a>
+            {#{% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:subQuestion,seq:subQuestion.seq} %}#}
           {% endfor %}
         {% else %}
           <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump lump-card mrm mbm
@@ -32,14 +33,26 @@
             {% endif %}">
             {{ question.seq }}
           </a>
+          {#{% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}#}
         {% endif %}
         
       {% endfor %}
+
+      {% if paperResult.status|default(null) in ['reviewing','finished'] %}
+        <div class="testpaper-card-explain clearfix">
+          <a href="javascript:;" class="color-lump lump-xs bg-success"></a><small class="color-gray mls">{{'正确'|trans}}</small>
+          <a href="javascript:;" class="color-lump lump-xs bg-danger"></a><small class="color-gray mls">{{'错误'|trans}}</small>
+          <a href="javascript:;" class="color-lump lump-xs bg-warning"></a><small class="color-gray mls">{{'待批阅'|trans}}</small>
+          <a href="javascript:;" class="color-lump lump-xs lump-card"></a><small class="color-gray mls">{{'未做'|trans}}</small>
+        </div>
+      {% endif %}
     </div>
     
     <div class="panel-footer text-right mt20">
       {% if paperResult.id|default(0) > 0 %}
-        <a id="paper-finish" class="btn btn-primary" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交练习'|trans}}</a>
+        {% if paperResult.status == 'doing' %}
+          <a id="paper-finish" class="btn btn-primary" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交练习'|trans}}</a>
+        {% endif %}
       {% else %}
         <a id="paper-finish" class="btn btn-primary" disabled="disabled">{{'提交练习'|trans}}</a>
       {% endif %}

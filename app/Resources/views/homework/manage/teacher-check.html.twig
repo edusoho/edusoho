@@ -6,45 +6,40 @@
 {% set showHeader = 1 %}
 {% set showBodyColor = 0 %}
 
-{% block paper_result_bar %}
-  {% include 'testpaper/part/paper-result-objective.html.twig' %}
-{% endblock %}
+{% block paper_header %}{% endblock %}
 
-{% block paper_warning %}
-  <div class="alert alert-warning">{{'请完成以下题目的批阅。'|trans}}</div>
+{% block paper_body %}
+  <form id='teacherCheckForm' autocomplete="off">
+    <div class="panel panel-default border-radius-none">
+      <div class="panel-heading">
+        {{'待批阅题目'|trans}} <small class="text-muted">{{ '共%itemCount%题'|trans({'%itemCount%':questions|length}) }}</small>
+      </div>
+
+      <div class="panel-body">
+        <div class="question-set-items">
+          {% for question in questions %}
+            {% if question.isDelete|default(false) %}
+              {% include 'question/part/question-delete.html.twig' with {showScore:0,question:question}%}
+            {% else %}
+              {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+              {% if questionTemplate %}
+                {% include questionTemplate with {showScore:0} %}
+              {% endif %}
+            {% endif %}
+
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </form>
 {% endblock %}
 
 {% block paper_sidebar %}
-
-{% if ( paperResult.status in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' ) or ( setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' ) and paperResult.status|default(null) == 'finished' %}
-
-  <div class="testpaper-card" data-spy="affix" data-offset-top="200">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        {% for type in questionTypes|default([]) if questions[type] is defined %}
-
-          {% for question in questions[type] %}
-            {% if question.type == 'material' %}
-              {% for questionSub in question.subs|default([]) %}
-                <a href="javascript:;" data-anchor="#question{{ questionSub.id }}" class="js-btn-index color-lump mrm mbmpull-left">{{ question.seq }}</a>
-              {% endfor %}
-            {% else %}
-              <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbmpull-left">{{ question.seq }}</a>
-            {% endif %}
-          {% endfor %}
-
-          <div class="clearfix mtm mbm"></div>
-        {% endfor %}
-        
-      </div>
-      <div class="panel-footer">
-        <button class="btn btn-success btn-block" data-role="check-submit">{{'完成批阅'|trans}}</button>
-      </div>
-    </div>
-  </div>
-{% endif %}
-
+  {% include 'homework/part/paper-card.html.twig' %}
 {% endblock %}
+
+
 
 {% block testpaper_checked_dialog %}
   <div id="testpaper-checked-dialog" class="modal in" aria-hidden="false" style="display: none;">
@@ -74,12 +69,7 @@
             </div>
           </div>
           <div class="form-group">
-            <div class="col-md-4 controls">
-              {% if paperResult|default(null) %}
-                <input type="hidden" value="{{ paperResult.objectiveScore }}" name="objectiveScore" />
-                {{'试卷得分'|trans}}:<span id="totalScore">{{ paperResult.objectiveScore }}</span>
-              {% endif %}
-            </div>
+            <div class="col-md-4 controls"></div>
             <div class="col-md-8 controls radios">
               {{ radios('passedStatus', dict('passedStatus'), 'passed' ) }}
             </div>
@@ -90,7 +80,7 @@
             {% set postUrl = path('classroom_manage_testpaper_check', {classroomId:targetId,resultId:paperResult.id}) %}
             {% set gotUrl = path('classroom_manage_testpaper_result_list',{id:targetId,testpaperId:paperResult.testId})%}
           {% else %}
-            {% set postUrl = path('course_manage_testpaper_check', {id:targetId,resultId:paperResult.id}) %}
+            {% set postUrl = path('course_manage_homework_check', {id:targetId,resultId:paperResult.id}) %}
             {% set gotUrl = path('course_manage_testpaper_result_list',{id:targetId,testpaperId:paperResult.testId})%}
           {% endif %}
           <a href="javascript:;" class="btn btn-default" data-dismiss="modal">{{'取消'|trans}}</a>
