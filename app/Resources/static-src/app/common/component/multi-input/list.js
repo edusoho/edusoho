@@ -31,10 +31,10 @@ export default class List extends Component {
         dataSourceUi.map( (item,i) => {
           return (
             <li className="list-group-item" id={item.itemId} key={item.itemId} data-seq={item.seq}>
-              { this.props.sortable && <i className="es-icon es-icon-yidong mrl color-gray"></i> }
-              <span className="label-name text-overflow">{ item.label }</span>
-              <a className="btn-close link-gray" onClick={event=>this.props.removeItem(event)} id={item.itemId}>
-                <i className = "es-icon es-icon-close01 text-sm"></i>
+              { this.props.sortable && <i className="es-icon es-icon-yidong mrl color-gray inline-block vertical-middle"></i> }
+              <span className="label-name text-overflow inline-block vertical-middle">{ item.label }</span>
+              <a className="link-gray mts pull-right" onClick={event=>this.props.removeItem(event)} id={item.itemId}>
+                <i className = "es-icon es-icon-close01 inline-block vertical-top text-12"></i>
               </a>
             </li>
           )

@@ -46,24 +46,26 @@ interface CourseService
 
     public function findStudentsByCourseId($courseId);
 
+    public function findTeachersByCourseId($courseId);
+
     public function countStudentsByCourseId($courseId);
 
     public function getUserRoleInCourse($courseId, $userId);
 
     /**
-     * @param  integer $userId
+     * @param  integer   $userId
      * @return array[]
      */
     public function findTeachingCoursesByUserId($userId);
 
     /**
-     * @param  integer $userId
+     * @param  integer   $userId
      * @return array[]
      */
     public function findLearnCoursesByUserId($userId);
 
     /**
-     * @param  array $ids
+     * @param  array     $ids
      * @return array[]
      */
     public function findPublicCoursesByIds(array $ids);
