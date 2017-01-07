@@ -1635,6 +1635,19 @@ course_set_manage_course_students_check:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/check
   defaults: {_controller: AppBundle:CourseManage:checkStudent}
 
+course_set_manage_course_orders:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/orders
+  defaults: {_controller: AppBundle:CourseManage:orders}
+
+course_set_manage_course_orders_export_csv:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/orders/export
+  defaults: { _controller: AppBundle:CourseManage:ordersExportCsv }
+
+
+course_set_manage_course_dashboard:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/dashboard
+  defaults: {_controller: AppBundle:CourseManage:dashboard}
+
 course_set_manage_course_close:
   path: /course_set/{courseSetId}/course/{courseId}/close
   defaults: {_controller: AppBundle:CourseManage:close}

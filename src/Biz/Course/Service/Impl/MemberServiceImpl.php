@@ -128,21 +128,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchMember($conditions, $start, $limit)
-    {
-        $conditions = $this->_prepareConditions($conditions);
-        // return $this->getMemberDao()->search($conditions, $orderBy = array(), $start, $limit);
-    }
-
     public function countMembers($conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
         return $this->getMemberDao()->count($conditions);
-    }
-
-    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
-    {
-        //return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
     public function findWillOverdueCourses()

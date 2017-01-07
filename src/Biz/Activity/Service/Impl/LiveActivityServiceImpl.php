@@ -43,7 +43,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         $live = $this->getEdusohoLiveClient()->createLive(array(
-            'summary'     => $activity['remark'],
+            'summary'     => empty($activity['remark']) ? '' : $activity['remark'],
             'title'       => $activity['title'],
             'speaker'     => $speaker,
             'startTime'   => $activity['startTime'].'',
@@ -77,7 +77,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $liveParams   = array(
             'liveId'   => $liveActivity['liveId'],
             'provider' => $liveActivity['liveProvider'],
-            'summary'  => $fields['remark'],
+            'summary'  => empty($fields['remark']) ? '' : $fields['remark'],
             'title'    => $fields['title'],
             'authUrl'  => $fields['_base_url'].'/live/auth',
             'jumpUrl'  => $fields['_base_url'].'/live/jump?id='.$fields['fromCourseId']
