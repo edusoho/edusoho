@@ -1,1 +1,5 @@
-<p class="gray-darker mbs">满足以下条件:</p>点击“学过了”
+{% if media.finishType == 'click' %}
+	<p class="gray-darker mbs">满足以下条件:</p>点击“学过了”
+{% elseif media.finishType == 'time' %}
+	<p class="gray-darker mbs">满足以下条件:</p>至少观看{{media.finishDetail|default(0)}}分钟。
+{% endif %}

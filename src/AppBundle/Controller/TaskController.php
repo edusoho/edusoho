@@ -148,7 +148,8 @@ class TaskController extends BaseController
     {
         $config = $this->getActivityConfig();
         $action = $config[$task['type']]['actions']['finishCondition'];
-        return $this->forward($action, array('task' => $task));
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        return $this->forward($action, array('activity' => $activity));
     }
 
     protected function getNextTaskAndFinishedRate($task)
