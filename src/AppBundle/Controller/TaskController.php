@@ -132,6 +132,23 @@ class TaskController extends BaseController
         ));
     }
 
+    public function taskFinishedPromptAction(Request $request, $courseId, $id)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $result = $this->getTaskService()->finishTaskResult($id);
+        $task   = $this->getTaskService()->getTask($id);
+
+        list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
+
+        return $this->render('task/task-finished-prompt.html.twig', array(
+            'result'       => $result,
+            'task'         => $task,
+            'nextTask'     => $nextTask,
+            'course'       => $course,
+            'finishedRate' => $finishedRate
+        ));
+    }
+
     protected function getNextTaskAndFinishedRate($task)
     {
         $nextTask   = $this->getTaskService()->getNextTask($task['id']);

@@ -1495,6 +1495,10 @@ course_task_finish:
     path:  /course/{courseId}/task/{id}/finish
     defaults: { _controller: AppBundle:Task:finish }
 
+course_task_finished_prompt:
+    path:  /course/{courseId}/task/{id}/finished_prompt
+    defaults: { _controller: AppBundle:Task:taskFinishedPrompt }
+
 course_manage_task_create:
     path:  /course/{courseId}/task
     defaults: { _controller: AppBundle:TaskManage:create}
