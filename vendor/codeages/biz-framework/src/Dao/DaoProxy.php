@@ -25,6 +25,10 @@ class DaoProxy
         if ((strpos($method, 'find') === 0) or (strpos($method, 'search') === 0)) {
             $rows = $this->_callRealDao($method, $arguments);
 
+            if(empty($rows)){
+                return $rows;
+            }
+            
             return $this->_unserializes($rows);
         }
 
