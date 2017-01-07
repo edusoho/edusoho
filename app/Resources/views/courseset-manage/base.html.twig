@@ -12,7 +12,9 @@
       <form class="form-horizontal" id="courseset-form" action="{{path('course_set_manage_base', {id: courseSet.id})}}" method="post">
         {{ web_macro.flash_messages() }}
         <div class="form-group">
-          <label class="col-md-2 control-label" for="title">{{ '标题'|trans }}</label>
+          <div class="col-sm-2 control-label">
+          <label class="control-label-required" for="title">{{ '标题'|trans }}</label>
+          </div>
           <div class="col-md-8">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
             <input type="hidden" name="id" value="{{courseSet.id}}">

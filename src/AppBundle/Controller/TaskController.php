@@ -12,7 +12,7 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview');
-        $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
+        $task    = $this->tryLearnTask($courseId, $id, (bool) $preview);
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         if (empty($activity)) {
@@ -113,11 +113,35 @@ class TaskController extends BaseController
 
     public function finishAction(Request $request, $courseId, $id)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if(!$course['enableFinish']) {
+            throw $this->createAccessDeniedException('task can not finished.');
+        }
+
         $result = $this->getTaskService()->finishTaskResult($id);
         $task   = $this->getTaskService()->getTask($id);
+
         list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
         return $this->render('task/finish-result.html.twig', array(
+            'result'       => $result,
+            'task'         => $task,
+            'nextTask'     => $nextTask,
+            'course'       => $course,
+            'finishedRate' => $finishedRate
+        ));
+    }
+
+    public function taskFinishedPromptAction(Request $request, $courseId, $id)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $result = $this->getTaskService()->finishTaskResult($id);
+        $task   = $this->getTaskService()->getTask($id);
+
+        list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
+
+        return $this->render('task/task-finished-prompt.html.twig', array(
             'result'       => $result,
             'task'         => $task,
             'nextTask'     => $nextTask,

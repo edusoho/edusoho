@@ -38,6 +38,12 @@
         <li class="{% if active == 'homework-check' %}active{% endif %}">
           <a href="{{path('course_manage_homework_check_list', {id: course.id})}}">{{'作业批阅'|trans}}</a>
         </li>
+        <li class="{% if active == 'dashboard' %}active{% endif %}">
+          <a href="{{path('course_set_manage_course_dashboard', {courseSetId: courseSet.id, courseId: course.id})}}">{{'学习数据'|trans}}</a>
+        </li>
+        <li class="{% if active == 'orders' %}active{% endif %}">
+          <a href="{{path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: course.id})}}">{{'订单查询'|trans}}</a>
+        </li>
       </ul>
       {% block course %}
 

@@ -5,7 +5,7 @@
 
 	{% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
 	{% set route_params = app.request.attributes.get('_route_params') %}
-	{% set course = data('Course', {courseId: course.id|default(route_params.id|default(0)), fetchCourseSet: true}) %}
+	{% set course = data('Course', {courseId: course.id|default(route_params.id|default(0))}) %}
 
 	{{ render(controller(metas.header,{course: course, member: member|default(null)})) }}
 
@@ -59,9 +59,9 @@
 	    <div class="col-lg-3 col-md-4 course-sidebar">
 	    	{% for key, widget in metas.widgets %}
 	    		{% if widget.type == 'render' %}
-	    			{{ render(controller(widget.uri, {id: course.id})) }}
+	    			{{ render(controller(widget.uri, {course: course})) }}
 	    		{% elseif widget.type == 'include' %}
-	    			{% include widget.uri with {id: course.id} %}
+	    			{% include widget.uri with {course: course} %}
 	    		{% endif %}
 	    	{% endfor %}
 	    </div>
