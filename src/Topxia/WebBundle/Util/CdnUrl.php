@@ -5,26 +5,24 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CdnUrl
 {
-   	public function get($package = 'default')
+    public function get($package = 'default')
     {
-        //@fixme 为能跑单元测试，只能这么干了，请在8.0发布之前修复这个问题。
-        try {
+        try{
             $cdn     = ServiceKernel::instance()->createService('System.SettingService')->get('cdn', array());
+            $cdnUrls = (empty($cdn['enabled'])) ? array() : array(
+                'defaultUrl' => $this->url($cdn['defaultUrl']), 
+                'userUrl' => $this->url($cdn['userUrl']), 
+                'contentUrl' => $this->url($cdn['contentUrl'])
+            );
+
+            if ($cdnUrls) {
+                return $cdnUrls[$package.'Url'] ?: $cdnUrls['defaultUrl'];
+            }
+            return '';
         } catch (\Exception $e) {
-            $cdn = array();
+            // TODO 删除缓存后的第一次访问时，由于container还未初始化，会报错
+            return '';
         }
-
-        $cdnUrls = (empty($cdn['enabled'])) ? array() : array(
-        	'defaultUrl' => $this->url($cdn['defaultUrl']), 
-        	'userUrl' => $this->url($cdn['userUrl']), 
-        	'contentUrl' => $this->url($cdn['contentUrl'])
-        );
-
-        if ($cdnUrls) {
-            return $cdnUrls[$package.'Url'] ?: $cdnUrls['defaultUrl'];
-        }
-
-        return '';
     }
 
     private function url($url)

@@ -42,6 +42,7 @@ class BuildCommand extends BaseCommand
             ->addArgument('user', InputArgument::REQUIRED, '演示站点数据库用户')
             ->addArgument('password', InputArgument::REQUIRED, '数据库密码')
             ->addArgument('database', InputArgument::REQUIRED, '演示站数据库')
+            ->addArgument('projectPath', InputArgument::OPTIONAL, '演示站项目路径')
         ;
     }
 
@@ -115,7 +116,8 @@ class BuildCommand extends BaseCommand
             'domain'  => $this->input->getArgument('domain'),
             'user'    => $this->input->getArgument('user'),
             'password'=> $this->input->getArgument('password'),
-            'database'=> $this->input->getArgument('database')
+            'database'=> $this->input->getArgument('database'),
+            'projectPath' => $this->input->getArgument('projectPath')
         ));
 
         $returnCode = $dumpCommand->run($input, $this->output);
@@ -155,6 +157,12 @@ class BuildCommand extends BaseCommand
     private function clean()
     {
         $this->output->writeln('cleaning...');
+        $command = "rm -rf {$this->rootDirectory}/web/install/edusoho_init.sql";
+        exec($command);
+        $command = "rm -rf {$this->distDirectory}/web/install/edusoho_init.sql";
+        exec($command);
+        $command = "rm -rf {$this->rootDirectory}/web/install/edusoho_init_*.sql";
+        exec($command);
     }
 
     private function buildRootDirectory()
@@ -252,8 +260,7 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/ThemeRegisterCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/ThemeRegisterCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/ResetPasswordCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/Fixtures/PluginAppUpgradeTemplate.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/Fixtures/PluginAppUpgradeTemplate.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/InitAutoOpenSaasCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/InitAutoOpenSaasCommand.php");
-
+        $this->filesystem->copy("{$this->rootDirectory}/src/Topxia/WebBundle/Command/InitWebsiteCommand.php", "{$this->distDirectory}/src/Topxia/WebBundle/Command/InitWebsiteCommand.php");
         $finder = new Finder();
         $finder->directories()->in("{$this->distDirectory}/src/");
 
@@ -273,7 +280,7 @@ class BuildCommand extends BaseCommand
     public function buildVendorDirectory()
     {
         $this->output->writeln('build vendor/ .');
-        $buildVendorCommand = $this->getApplication()->find('app:build-mini-vendor');
+        $buildVendorCommand = $this->getApplication()->find('build:vendor');
         $input = new ArrayInput(array());
         $returnCode = $buildVendorCommand->run($input, new NullOutput());
         $this->filesystem->mirror("{$this->buildDirectory}/vendor", "{$this->distDirectory}/vendor");
