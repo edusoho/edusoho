@@ -212,13 +212,19 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function newestStudentsAction(Request $request, $course)
+    public function newestStudentsAction(Request $request, $course, $member = array())
     {
         $conditions = array(
-            'courseId' => $course['id'],
-            'role'     => 'student',
-            'locked'   => 0
+            'role'   => 'student',
+            'locked' => 0
         );
+
+        if (empty($member)) {
+            $courses                 = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+        } else {
+            $conditions['courseId'] = $course['id'];
+        }
 
         $members    = $this->getMemberService()->searchMembers($conditions, array('createdTime' => 'DESC'), 0, 20);
         $studentIds = ArrayToolkit::column($members, 'userId');
