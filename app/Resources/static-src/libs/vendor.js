@@ -10,6 +10,10 @@ import 'common/script';
 
 $('[data-toggle="popover"]').popover({
   html:true,
+  trigger: 'hover',
+  content: function() {
+	return $(this).siblings('.popover-content').html();
+  }
 });
 
 $('[data-toggle="tooltip"]').tooltip({
