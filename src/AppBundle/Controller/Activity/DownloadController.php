@@ -14,7 +14,6 @@ class DownloadController extends BaseController implements ActivityActionInterfa
     {
         $activity             = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
         $activity['courseId'] = $courseId;
-
         return $this->render('activity/download/show.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId
@@ -44,11 +43,13 @@ class DownloadController extends BaseController implements ActivityActionInterfa
 
         $downloadFileId = $request->query->get('fileId');
         $downloadFile = $this->getDownloadActivityService()->downloadActivityFile($activityId, $downloadFileId);
-
         if (!empty($downloadFile['link'])) {
             return $this->redirect($downloadFile['link']);
         } else {
-            return $this->forward("AppBundle:MaterialLib/MaterialLib:download", array('fileId' => $downloadFile['fileId']));
+            return $this->forward('AppBundle:UploadFile:download', array(
+                'request' => $request,
+                'fileId'  => $downloadFile['fileId']
+            ));
         }
     }
 
