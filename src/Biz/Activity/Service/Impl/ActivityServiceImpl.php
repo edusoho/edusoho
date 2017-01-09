@@ -234,7 +234,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'courseSetId' => $activity['fromCourseSetId'],
             'lessonId'    => $activity['id'],
             'title'       => $material['name'],
-            'link'        => empty($material['link']) ? null : $material['link'],
             'description' => empty($material['summary']) ? null : $material['summary'],
             'userId'      => $this->getCurrentUser()->offsetGet('id'),
             'type'        => 'course',
