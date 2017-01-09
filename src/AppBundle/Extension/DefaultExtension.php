@@ -152,7 +152,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Video:create',
                     'edit'   => 'AppBundle:Activity/Video:edit',
                     'show'   => 'AppBundle:Activity/Video:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Video:finishCondition'
                 )
             ),
             'audio'     => array(
@@ -164,7 +164,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Audio:create',
                     'edit'   => 'AppBundle:Activity/Audio:edit',
                     'show'   => 'AppBundle:Activity/Audio:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Audio:finishCondition'
                 )
             ),
             'download'  => array(
@@ -176,7 +176,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Download:create',
                     'edit'   => 'AppBundle:Activity/Download:edit',
                     'show'   => 'AppBundle:Activity/Download:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Download:finishCondition'
                 )
             ),
             'live'      => array(
@@ -188,7 +188,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Live:create',
                     'edit'   => 'AppBundle:Activity/Live:edit',
                     'show'   => 'AppBundle:Activity/Live:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Live:finishCondition'
                 )
             ),
             'discuss'   => array(
@@ -200,7 +200,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Discuss:create',
                     'edit'   => 'AppBundle:Activity/Discuss:edit',
                     'show'   => 'AppBundle:Activity/Discuss:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Discuss:finishCondition'
                 )
             ),
 
@@ -213,7 +213,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Flash:create',
                     'edit'   => 'AppBundle:Activity/Flash:edit',
                     'show'   => 'AppBundle:Activity/Flash:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Flash:finishCondition'
                 )
             ),
             'doc'       => array(
@@ -225,7 +225,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Doc:create',
                     'edit'   => 'AppBundle:Activity/Doc:edit',
                     'show'   => 'AppBundle:Activity/Doc:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Doc:finishCondition'
                 )
             ),
             'ppt'       => array(
@@ -237,7 +237,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Ppt:create',
                     'edit'   => 'AppBundle:Activity/Ppt:edit',
                     'show'   => 'AppBundle:Activity/Ppt:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Ppt:finishCondition'
                 )
             ),
             'testpaper' => array(
@@ -249,7 +249,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Testpaper:create',
                     'edit'   => 'AppBundle:Activity/Testpaper:edit',
                     'show'   => 'AppBundle:Activity/Testpaper:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Testpaper:finishCondition'
                 )
             ),
             'homework'  => array(
@@ -261,7 +261,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Homework:create',
                     'edit'   => 'AppBundle:Activity/Homework:edit',
                     'show'   => 'AppBundle:Activity/Homework:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Homewok:finishCondition'
                 )
             ),
             'exercise'  => array(
@@ -273,7 +273,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create' => 'AppBundle:Activity/Exercise:create',
                     'edit'   => 'AppBundle:Activity/Exercise:edit',
                     'show'   => 'AppBundle:Activity/Exercise:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Exercise:finishCondition'
                 )
             )
         );

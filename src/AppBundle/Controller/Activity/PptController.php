@@ -80,6 +80,15 @@ class PptController extends BaseController implements ActivityActionInterface
         ));
     }
 
+    public function finishConditionAction($activity)
+    {
+        $media = $this->getActivityService()->getActivityConfig('ppt')->get($activity['mediaId']);
+
+        return $this->render('activity/ppt/finish-condition.html.twig', array(
+            'media' => $media
+        ));
+    }
+
     /**
      * @return ActivityService
      */
