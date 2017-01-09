@@ -1740,7 +1740,7 @@ course_set_show:
 
 course_qrcode:
   path: /course/{id}/qrcode
-  defaults: { _controller: AppBundle:Course:qrcode }
+  defaults: { _controller: AppBundle:Course/Course:qrcode }
   methods: [POST]
 
 course_set_favorite:
@@ -1755,11 +1755,11 @@ course_set_unfavorite:
 
 course_show:
   path: /course/{id}/{tab}
-  defaults: {_controller: AppBundle:Course:show, tab: 'summary'}
+  defaults: {_controller: AppBundle:Course/Course:show, tab: 'summary'}
 
 course_exit:
   path: /course/{id}/exit
-  defaults: {_controller: AppBundle:Course:exit}
+  defaults: {_controller: AppBundle:Course/Course:exit}
 
 course_thread_create:
    path:  /course/{courseId}/thread/create
