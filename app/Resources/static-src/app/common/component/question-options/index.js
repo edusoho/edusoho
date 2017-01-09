@@ -31,18 +31,17 @@ function deleteOption(dataSource,validatorDatas,optionId) {
   }
 }
 
-function changeOptionChecked(dataSource,validatorDatas,value,isRadio,checkedId) {
-  let objValue = JSON.parse(value);
+function changeOptionChecked(dataSource,validatorDatas,id,checked,isRadio) {
   let checkedNum = 0;
   dataSource.map((item,index)=> {
-    if(item.optionId == objValue.id) {
+    if(item.optionId == id) {
       //如果是单选，
-      if(isRadio && objValue.checked){
+      if(isRadio && checked){
         return;
       }
       console.log(isRadio);
-      dataSource[index].checked= !objValue.checked;
-    }else if(isRadio && !objValue.checked){
+      dataSource[index].checked= !checked;
+    }else if(isRadio && !checked){
       //如果是单选;
       dataSource[index].checked = false;
     }
@@ -149,8 +148,8 @@ export default class QuestionOptions extends Component {
     console.log({'dataSource':this.state.dataSource});
   }
 
-  changeOptionChecked(value) {
-    changeOptionChecked(this.state.dataSource,this.validatorDatas,value,this.props.isRadio);
+  changeOptionChecked(id,checked) {
+    changeOptionChecked(this.state.dataSource,this.validatorDatas,id,checked,this.props.isRadio);
     this.setState({
       dataSource:this.state.dataSource,
     });
@@ -161,7 +160,7 @@ export default class QuestionOptions extends Component {
 
   deleteOption(id) {
     if(this.state.dataSource.length <= this.props.minNum) {
-      notify('danger', `选项最少${this.props.maxNum}个!`);
+      notify('danger', `选项最少${this.props.minNum}个!`);
       return;
     }
     deleteOption(this.state.dataSource,this.validatorDatas,id);
@@ -177,7 +176,7 @@ export default class QuestionOptions extends Component {
         {
           this.state.dataSource.map((item,index)=>{
             return (
-              <Option isRadio = {this.props.isRadio} publishMessage= {(isValidator)=>this.publishMessage(isValidator)} validatorDatas = {this.validatorDatas} isValidator= {this.state.isValidator} datas = {item} key = {index} index = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id)=>this.changeOptionChecked(id)}></Option>
+              <Option isRadio = {this.props.isRadio} publishMessage= {(isValidator)=>this.publishMessage(isValidator)} validatorDatas = {this.validatorDatas} isValidator= {this.state.isValidator} datas = {item} key = {index} index = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id,checked)=>this.changeOptionChecked(id,checked)}></Option>
             )
           })
         }
