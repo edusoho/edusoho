@@ -12,7 +12,7 @@
         {% for media in activity.ext.materials|default(null) %}
           <li class="download-item" data-id="{{ media.link|default(media.id) }}">
             {% if media.link|default(null) %}
-              <a href="{{ media.id }}" target="_blank">{{ media.name }}</a>
+              <a href="{{ media.link }}" target="_blank">{{ media.name }}</a>
               <span class="glyphicon glyphicon-new-window text-muted text-sm" title="{{ '网络链接资料'|trans }}"></span>
             {% else %}
               <a class="gray-primary" href="{{ path('material_download',{fileId:media.id}) }}" target="_blank">{{ media.name }}</a>

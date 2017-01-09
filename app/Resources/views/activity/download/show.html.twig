@@ -7,7 +7,7 @@
   <ul class="download-activity-list">
     {% for material in materials %}
     <li>
-      <a class="link-darker" href="{{ path('course_activity_download', {courseId:courseId, activityId:material.lessonId , fileId:material.fileId }) }}" target="_blank">{{ material.title }}
+      <a class="link-darker" href="{{ path('course_activity_download', {courseId:courseId, activityId:material.lessonId , materialId:material.id }) }}" target="_blank">{{ material.title }}
         {% if material.link|default(null) %}
         (link)
         {% else %}
