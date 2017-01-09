@@ -557,7 +557,7 @@ admin_live_get_max_online:
     permissions: [admin_live_course_manage]
 
 admin_order_detail:
-    path: /order/{id}/detail
+    path: /order/{id}/detail_admin
     defaults: { _controller: AppBundle:Admin/Order:detail }
 
 admin_order_refunds:

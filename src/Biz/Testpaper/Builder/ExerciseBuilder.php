@@ -147,15 +147,17 @@ class ExerciseBuilder implements TestpaperBuilderInterface
 
             if ($question['subCount'] > 0) {
                 $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-
+                array_walk($subQuestions, function (&$sub) use (&$index) {
+                    $sub['seq'] = $index;
+                    $index++;
+                });
                 $question['subs'] = $subQuestions;
+            } else {
+                $index++;
             }
 
             $formatQuestions[$question['id']] = $question;
-
-            $index++;
         }
-
         return $formatQuestions;
     }
 

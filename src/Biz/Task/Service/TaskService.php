@@ -103,4 +103,6 @@ interface TaskService
      * @return array       tasks
      */
     public function findToLearnTasksByCourseId($courseId);
+
+    public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 }

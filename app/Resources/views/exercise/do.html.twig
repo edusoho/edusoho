@@ -4,6 +4,13 @@
 
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-timer.js','libs/perfect-scrollbar.js','app/js/testpaper/do-test/index.js']) %}
 
+{% if action|default('') is not empty %}
+  {% set showHeader = 1 %}
+  {% set showBodyColor = 0 %}
+{% else %}
+  {% set showHeader = 0 %}
+{% endif %}
+
 {% block paper_body %}
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -45,7 +52,7 @@
           </div>
           <div class="text-right mt20">
             <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</a>
-            <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在提交, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('testpaper_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}">
+            <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在提交, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('exercise_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('exercise_result_show', { resultId: paperResult.id|default(0) }) }}">
             {{'确认提交'|trans}}</button>
           </div>
         </div>

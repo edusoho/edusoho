@@ -5,10 +5,11 @@ namespace Biz\Course\Service\Impl;
 
 
 use Biz\BaseService;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Dao\CourseNoteDao;
 use Biz\Course\Dao\CourseNoteLikeDao;
 use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -21,6 +22,20 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     {
         return $this->getNoteDao()->get($id);
     }
+
+    /**
+     * @param $courseId
+     *
+     * @return mixed
+     */
+    public function countCourseNoteByCourseId($courseId)
+    {
+        return $this->countCourseNotes(array(
+            'courseId' => $courseId,
+            'status'   => CourseNoteService::PUBLIC_STATUS
+        ));
+    }
+
 
     public function getCourseNoteByUserIdAndTaskId($userId, $taskId)
     {
@@ -52,7 +67,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     {
         $conditions = array(
             'courseId' => $courseId,
-            'status'      => 1
+            'status'   => 1
         );
         return $this->searchNotes(
             $conditions,
@@ -105,7 +120,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         if (empty($course)) {
-            throw $this->createNotFoundException('course not found. #'.$task['courseId']);
+            throw $this->createNotFoundException('course not found. #' . $task['courseId']);
         } else {
             $note['courseSetId'] = $course['courseSetId'];
         }
@@ -132,12 +147,6 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
             $this->dispatchEvent('course.note.update', new Event($note, array('preStatus' => $existNote['status'])));
         }
 
-        $this->getCourseMemberService()->setMemberNoteNumber(
-            $note['courseId'],
-            $note['userId'],
-            $this->getNoteDao()->countByUserIdAndCourseId($note['userId'], $note['courseId'])
-        );
-
         return $note;
     }
 
@@ -158,12 +167,6 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $this->getNoteDao()->delete($id);
 
         $this->dispatchEvent('course.note.delete', $note);
-
-        $this->getCourseMemberService()->setMemberNoteNumber(
-            $note['courseId'],
-            $note['userId'],
-            $this->getNoteDao()->countByUserIdAndCourseId($note['userId'], $note['courseId'])
-        );
 
         if ($note['userId'] != $currentUser['id']) {
             $this->getLogService()->info('course', 'delete_note', "删除笔记#{$id}");
@@ -257,6 +260,24 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return ArrayToolkit::index($this->getNoteLikeDao()->findByNoteIdsAndUserId($noteIds, $userId), 'noteId');
     }
 
+    public function countNotesByUserIdAndCourseId($userId, $courseId)
+    {
+        return $this->getNoteDao()->countByUserIdAndCourseId($userId, $courseId);
+    }
+
+    /**
+     * @param $courseSetId
+     *
+     * @return integer
+     */
+    public function countCourseNoteByCourseSetId($courseSetId)
+    {
+        return $this->countCourseNotes(array(
+            'courseSetId' => $courseSetId,
+            'status'      => CourseNoteService::PUBLIC_STATUS
+        ));
+    }
+
     protected function calculateContentLength($content)
     {
         $content = strip_tags(trim(str_replace(array("\\t", "\\r\\n", "\\r", "\\n"), '', $content)));
@@ -305,7 +326,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
      */
     protected function getNoteDao()
     {
-        return $this->biz->dao('Note:CourseNoteDao');
+        return $this->biz->dao('Course:CourseNoteDao');
     }
 
     /**
@@ -329,7 +350,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
      */
     protected function getNoteLikeDao()
     {
-        return $this->biz->dao('Note:CourseNoteLikeDao');
+        return $this->biz->dao('Course:CourseNoteLikeDao');
     }
 
     /**
@@ -340,6 +361,9 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         return $this->biz->service('System:LogService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');

@@ -10,7 +10,7 @@ class DoTestpaper extends DoTestBase {
   }
 
   _init() {
-    this.$container.perfectScrollbar();
+    this.$container.find('.js-testpaper-content').perfectScrollbar();
     this.$container.find('.js-panel-card').perfectScrollbar();
     this.$container.on('click','.js-btn-pause',event=>this._clickBtnPause(event));
     this.$container.on('click','.js-btn-resume',event => this._clickBtnReume(event));
@@ -19,6 +19,7 @@ class DoTestpaper extends DoTestBase {
   _initTimer() {
     let self = this;
     if (this.$timer != undefined) {
+
       this.$timer.timer({
         countdown:true,
         duration: this.$timer.data('time'),

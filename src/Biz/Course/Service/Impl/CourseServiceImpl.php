@@ -15,7 +15,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Strategy\StrategyContext;
-use Biz\Note\Service\CourseNoteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 
 class CourseServiceImpl extends BaseService implements CourseService
@@ -863,13 +863,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
-    public function waveNoteNum($courseId, $num)
-    {
-        return $this->getCourseDao()->wave(array($courseId), array(
-            'noteNum' => $num
-        ));
-    }
-
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
@@ -966,6 +959,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getNoteService()
     {
-        return $this->biz->service('Note:CourseNoteService');
+        return $this->biz->service('Course:CourseNoteService');
     }
 }

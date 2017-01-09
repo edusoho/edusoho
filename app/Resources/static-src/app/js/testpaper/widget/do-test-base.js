@@ -177,16 +177,17 @@ class DoTestBase
       if (response.result) {
         emitter.emit('finish');
       }
+      window.location.href = response.goto;
     })
   }
 
 }
 
 //临时方案，libs/vendor.js这个方法没有起作用
-$(document).ajaxSend(function(a, b, c) {
+/*$(document).ajaxSend(function(a, b, c) {
   if (c.type == 'POST') {
     b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
   }
-});
+});*/
 
 export default DoTestBase;

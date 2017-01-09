@@ -48,7 +48,6 @@ export default class TaskSidebar extends Emitter{
     let html = this.plugins.reduce((html, plugin) => {
       return html += `<div data-pane="${plugin.code}" class="js-sidebar-pane ${plugin.code}-pane"></div>`;
     }, '');
-
     this.element.append(html);
   }
 
@@ -71,6 +70,7 @@ export default class TaskSidebar extends Emitter{
       $.get(url)
           .then(html => {
             $pane.html(html);
+            $pane.perfectScrollbar();
             $btn.data('loaded', true);
             this.operationContent($btn);
           })

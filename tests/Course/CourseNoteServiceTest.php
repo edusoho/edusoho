@@ -1,9 +1,9 @@
 <?php
-namespace Topxia\Service\Course\Tests;
+namespace Tests\Course;
 
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
-use Biz\Note\Service\CourseNoteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\BaseTestCase;
 use Biz\Course\Service\CourseSetService;
 
@@ -236,7 +236,7 @@ class NoteServiceTest extends BaseTestCase
      */
     protected function getNoteService()
     {
-        return $this->getBiz()->service('Note:CourseNoteService');
+        return $this->getBiz()->service('Course:CourseNoteService');
     }
 
     /**

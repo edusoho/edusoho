@@ -32,7 +32,7 @@ class CheckTest
     this.$container.on('focusin','textarea',event=>this._showEssayInputEditor(event));
     this.$container.on('click','[data-role="check-submit"]',event=>this._submitValidate(event));
     this.$container.on('click','*[data-anchor]',event=>this._quick2Question(event));
-    this.$dialog.on('click','[type="button"]',event=>this._submit(event));
+    this.$dialog.on('click','[data-role="finish-check"]',event=>this._submit(event));
     this.$dialog.on('change','select',event=>this._teacherSayFill(event));
   }
 
@@ -173,4 +173,4 @@ class CheckTest
   }
 }
 
-new CheckTest($('.testpaper-activity-show'));
+new CheckTest($('.container'));
