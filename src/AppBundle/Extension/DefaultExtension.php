@@ -166,7 +166,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Audio:create',
                     'edit'            => 'AppBundle:Activity/Audio:edit',
                     'show'            => 'AppBundle:Activity/Audio:show',
-                    'preview'         => 'AppBundle:Activity/Video:preview',
+                    'preview'         => 'AppBundle:Activity/Audio:preview',
                     'finishCondition' => 'AppBundle:Activity/Audio:finishCondition'
                 )
             ),
