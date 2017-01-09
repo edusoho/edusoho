@@ -67,10 +67,10 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         return $material;
     }
 
-    public function deleteMaterial($courseId, $materialId)
+    public function deleteMaterial($courseSetId, $materialId)
     {
         $material = $this->getMaterialDao()->get($materialId);
-        if (empty($material) || $material['courseId'] != $courseId) {
+        if (empty($material) || $material['courseSetId'] != $courseSetId) {
             throw $this->createNotFoundException('课程资料不存在，删除失败。');
         }
 
@@ -82,6 +82,11 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
     {
         return $this->getMaterialDao()->findByCopyIdAndLockedCourseIds($copyId, $courseIds);
+    }
+
+    public function findMaterialsByLessonIdAndSource($lessonId, $source)
+    {
+        return $this->getMaterialDao()->findMaterialsByLessonIdAndSource($lessonId, $source);
     }
 
     public function deleteMaterialByMaterialId($materialId)
@@ -104,13 +109,13 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         return $this->getMaterialDao()->deleteByCourseSetId($courseSetId, $courseType);
     }
 
-    public function deleteMaterials($courseId, $fileIds, $courseType = 'course')
+    public function deleteMaterials($courseSetId, $fileIds, $courseType = 'course')
     {
         $materials = $this->searchMaterials(
             array(
-                'courseId' => $courseId,
-                'fileIds'  => $fileIds,
-                'type'     => $courseType
+                'courseSetId' => $courseSetId,
+                'fileIds'     => $fileIds,
+                'type'        => $courseType
             ),
             array('createdTime' => 'DESC'),
             0,
@@ -122,7 +127,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         }
 
         foreach ($materials as $key => $material) {
-            $this->deleteMaterial($courseId, $material['id']);
+            $this->deleteMaterial($courseSetId, $material['id']);
         }
 
         return true;

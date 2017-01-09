@@ -1850,11 +1850,11 @@ course_set_manage_file_status:
 
 course_set_manage_delete_materials_show:
    path:  /course_set/{id}/manage/show/delete/materials
-   defaults: { _controller: AppBundle:Course/CourseSetFileManage:deleteMaterialShow }
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:deleteMaterials }
    methods: [POST]
 
 course_set_manage_delete_materials:
-   path:  /course/{id}/manage/delete/materials
+   path:  /course_set/{id}/manage/delete/materials
    defaults: { _controller: AppBundle:Course/CourseSetFileManage:deleteCourseFiles }
    methods: [POST]
 

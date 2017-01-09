@@ -4,7 +4,7 @@
 
 {% block title %}{% if thread %}{{'编辑话题'|trans}}{% else %}{{'发表话题'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'course/thread-form' %}
+{% do load_script('course/thread-form') %}
 
 {% set nav = 'thread' %}
 
