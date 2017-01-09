@@ -8,6 +8,7 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
 
 class CourseSetController extends BaseController
 {

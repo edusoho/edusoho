@@ -1,7 +1,6 @@
 <?php
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Controller\CourseBaseController;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;

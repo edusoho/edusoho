@@ -5,6 +5,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Controller\BaseController;
 
 abstract class CourseBaseController extends BaseController
 {

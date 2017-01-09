@@ -10,6 +10,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use AppBundle\Controller\BaseController;
 
 class CourseSetFileManageController extends BaseController
 {

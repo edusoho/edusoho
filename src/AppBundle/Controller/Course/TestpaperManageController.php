@@ -9,6 +9,7 @@ use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Controller\BaseController;
 
 class TestpaperManageController extends BaseController
 {
