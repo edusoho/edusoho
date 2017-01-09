@@ -40,8 +40,10 @@ class CourseSetManageController extends BaseController
 
     public function headerAction($courseSet, $course = null)
     {
-        $users = empty($courseSet['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($courseSet['teacherIds']);
-
+        // $users = empty($courseSet['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($courseSet['teacherIds']);
+        //暂时显示课程的创建者
+        $courseSet['teacherIds'] = array($courseSet['creator']);
+        $users                   = $this->getUserService()->findUsersByIds($courseSet['teacherIds']);
         return $this->render('courseset-manage/header.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course,
