@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller;
 
+use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
@@ -256,11 +257,12 @@ class TaskController extends BaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         if ($preview) {
-            //TODO先注释掉这段代码，学员的逻辑现在有问题，无法判断是否老师，完善后在开发
-            //            if ($member['role'] != 'teacher' || $course['status'] != 'published') {
-            //                throw $this->createAccessDeniedException('you are  not allowed to learn the task ');
-            //            }
-            $task = $this->getTaskService()->getTask($taskId);
+            if ($this->canPreview($course, $member)) {
+
+                $task = $this->getTaskService()->getTask($taskId);
+            } else {
+                throw $this->createNotFoundException('you can not preview this task ');
+            }
         } else {
             $task = $this->getTaskService()->tryTakeTask($taskId);
         }
@@ -275,12 +277,37 @@ class TaskController extends BaseController
         return $task;
     }
 
+    private function canPreview($course, $member)
+    {
+        $user      = $this->getCurrentUser();
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        if ($user->isSuperAdmin()) {
+            return true;
+        } else if ($user['id'] == $courseSet['creator']) {
+            return true;
+        } else if (in_array($user->getId(), $course['teacherIds'])) {
+            return true;
+        } else if ($member['role'] == 'teacher') {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @return CourseService
      */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
