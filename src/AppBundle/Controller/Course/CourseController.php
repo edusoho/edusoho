@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Course;
 
 use Biz\File\Service\UploadFileService;
 use Topxia\Common\Paginator;

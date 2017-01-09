@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Course;
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -8,6 +8,7 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
 
 class CourseSetController extends BaseController
 {
