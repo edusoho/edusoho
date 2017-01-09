@@ -2,7 +2,7 @@
 
 {% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'course/thread-show' %}
+{% do load_script('course/thread-show') %}
 
 {% set nav = 'thread' %}
 
