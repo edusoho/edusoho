@@ -16,7 +16,7 @@
   <form  class="well well-sm form-inline" action="{{url("admin_operation_analysis_rount",{tab:tab})}}" method="get" id="operation-form"  role="form" >
           <div class="form-group">
     <select class="form-control" name="analysisDateType">
-        {{ select_options(dict('analysisDateType'), dataInfo.analysisDateType, '--选择数据类型--'|trans) }}
+        {{ select_options(dict('analysisDateType'), dataInfo.analysisDateType) }}
     </select>
   </div>
         <div class="form-group">
@@ -47,7 +47,11 @@
         <div class="help-block">{{'视频观看数，将从数据统计功能更新启用之日起开始记录'|trans}}</div>
       {% endif %}
   </div>
-  <div class="col-md-12"><br>
+  <div class="col-md-12">
+    {% if tab == "trend" and dataInfo.analysisDateType != 'courseSum' and dataInfo.analysisDateType != 'userSum' %}
+      <p class="text-muted">
+      <span class="mrl">{{ '总数：'|trans }}<strong class="inflow-num">{{count|default(0)}}</strong></span>
+    {% endif %}
   </div>
   <div class="col-md-12">
       <ul class="nav nav-tabs" role="tablist">

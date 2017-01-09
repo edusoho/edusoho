@@ -27,7 +27,7 @@
       <span class="btn btn-consult-{{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="{{'电子邮箱'|trans}}" data-content-element="#consult-email-content"><span class="icon icon-email"></span></span>
     {% endif %}
 
-    {% if consult.supplier is not empty %}
+    {% if consult.supplier|default() is not empty %}
       {{ consult.supplier | raw }}
     {% endif %}
   </div>

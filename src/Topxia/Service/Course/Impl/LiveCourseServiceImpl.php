@@ -46,7 +46,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $result;
     }
 
-    public function entryReplay($lessonReplayId)
+    public function entryReplay($lessonReplayId, $ssl = false)
     {
         $lessonReplay = $this->getCourseService('course')->getCourseLessonReplay($lessonReplayId);
         $user         = $this->getCurrentUser();
@@ -60,6 +60,10 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             'user'     => $user->isLogin() ? $user['email'] : '',
             'nickname' => $user->isLogin() ? $user['nickname'] : 'guest'
         );
+
+        if ($ssl) {
+            $args['protocol'] = 'https';
+        }
 
         $client = new EdusohoLiveClient();
         $result = $client->entryReplay($args);

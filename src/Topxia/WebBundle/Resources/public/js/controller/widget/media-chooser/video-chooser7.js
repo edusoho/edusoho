@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 
     	attrs: {
     		uploaderSettings: {
-                file_types : "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v;*.mpg",
+                file_types : "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v;*.mpg;",
                 file_size_limit : "2048 MB",
                 file_types_description: Translator.trans('视频文件')
     		},
