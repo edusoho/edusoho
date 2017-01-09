@@ -1,9 +1,0 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
-{% block title %}{{'提示'|trans}}{% endblock %}
-{% block body %}
-	<span class="text-muted">
-		{% if course.buyable|default(true) == false %} {{'抱歉，该课程为限制课程，请联系客服。'|trans}}{% else %} {{'抱歉，课程%title%已关闭！'|trans({'%title%': course.title })}}
-		{% endif %}
-	<span>
-{% endblock %}
-{% block footer %}{% endblock %}

@@ -3,6 +3,7 @@
 namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\SimpleValidator;
 use Topxia\Common\ArrayToolkit;
@@ -278,7 +279,7 @@ class UserController extends MobileController
     public function fillUserInfoAction()
     {
         $auth = $this->getSettingService()->get('auth');
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $userFields = ArrayToolkit::index($userFields,'fieldName');
         $userInfo = $this->getUserService()->getUserProfile($user['id']);
 
@@ -320,17 +321,17 @@ class UserController extends MobileController
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->createService('User:AuthService');
     }
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
 }

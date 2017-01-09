@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Command;
 
 use Topxia\Common\BlockToolkit;
-use Topxia\Service\Util\PluginUtil;
+use Biz\Util\PluginUtil;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -100,12 +100,12 @@ class ThemeRegisterCommand extends BaseCommand
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getBlockService()
     {
-        return $this->getServiceKernel()->createService('Content.BlockService');
+        return $this->getServiceKernel()->createService('Content:BlockService');
     }
 
 }

@@ -47,6 +47,10 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         }
         $argument = $event->getArgument('argument');
 
+        if (empty($argument['attachment'])) {
+            return;
+        }
+
         $attachment = $argument['attachment'];
 
         $this->getUploadFileService()->createUseFiles($attachment['stem']['fileIds'], $question['id'], $attachment['stem']['targetType'], $attachment['stem']['type']);
@@ -264,7 +268,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
      */
     protected function getUploadFileService()
     {
-        return $this->getBiz()->service('File:UploadFileService');
+        return $this->getServiceKernel()->createService('File:UploadFileService');
     }
 
     /**
@@ -272,11 +276,16 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getOpenCourseService()
     {
-        return ServiceKernel::instance()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

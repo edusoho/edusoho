@@ -1,7 +1,8 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\ReviewService;
 use Topxia\Service\User\UserService;
 use Topxia\Common\ArrayToolkit;
@@ -216,16 +217,16 @@ class ReviewServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
+        return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 }

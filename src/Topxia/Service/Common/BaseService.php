@@ -2,10 +2,11 @@
 namespace Topxia\Service\Common;
 
 use Monolog\Logger;
-use Topxia\Service\Common\Lock;
+use Biz\Common\Lock;
 use Monolog\Handler\StreamHandler;
-use Topxia\Service\Common\ServiceException;
-use Topxia\Service\Util\HTMLPurifierFactory;
+use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Event\Event;
+use Biz\Util\HTMLPurifierFactory;
 use Topxia\Common\Exception\AccessDeniedException;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
@@ -46,10 +47,10 @@ abstract class BaseService
 
     protected function dispatchEvent($eventName, $subject)
     {
-        if ($subject instanceof ServiceEvent) {
+        if ($subject instanceof Event) {
             $event = $subject;
         } else {
-            $event = new ServiceEvent($subject);
+            $event = new Event($subject);
         }
 
         return $this->getDispatcher()->dispatch($eventName, $event);
@@ -97,11 +98,11 @@ abstract class BaseService
 
     protected function fillOrgId($fields)
     {
-        $magic = $this->createService('System.SettingService')->get('magic');
+        $magic = $this->getSettingService()->get('magic');
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             if (!empty($fields['orgCode'])) {
-                $org = $this->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
+                $org = $this->createService('Org:OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
                     throw new ResourceNotFoundException('org', $fields['orgCode'], $this->getKernel()->trans('组织机构不存在,更新失败'));
                 }
@@ -151,8 +152,8 @@ abstract class BaseService
     public function isPluginInstalled($code)
     {
         $appService = $this->createService('CloudPlatform.AppService');
-        $plugin = $appService->getAppByCode($code);
-        if(empty($plugin)) {
+        $plugin     = $appService->getAppByCode($code);
+        if (empty($plugin)) {
             return false;
         }
 
@@ -161,14 +162,13 @@ abstract class BaseService
 
     public function setting($name, $default)
     {
-        $names = explode('.', $name);
-        $setting = $this->createService('System.SettingService')->get($names[0]);
-        if(empty($names[1])) {
+        $names   = explode('.', $name);
+        $setting = $this->getSettingService()->get($names[0]);
+        if (empty($names[1])) {
             return empty($setting) ? $default : $setting;
-        } 
+        }
 
         return empty($setting[$names[1]]) ? $default : $setting[$names[1]];
-
     }
 
     protected function getLock()
@@ -178,5 +178,13 @@ abstract class BaseService
         }
 
         return $this->lock;
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

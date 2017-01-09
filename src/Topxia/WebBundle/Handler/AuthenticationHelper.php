@@ -43,12 +43,12 @@ class AuthenticationHelper
 
     private static function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     private static function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected static function getServiceKernel()

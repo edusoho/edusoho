@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Topxia\Common\BlockToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\PluginUtil;
+use Biz\Util\PluginUtil;
 use Topxia\System;
 
 class OldPluginRegisterCommand extends BaseCommand
@@ -143,6 +143,6 @@ class OldPluginRegisterCommand extends BaseCommand
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 }

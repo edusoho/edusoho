@@ -3,7 +3,7 @@ namespace Biz\Testpaper\Service\Impl;
 
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Common\Exception\ResourceNotFoundException;
@@ -107,6 +107,16 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function createItem($fields)
     {
+        $fields = ArrayToolkit::parts($fields, array(
+            'testId',
+            'seq',
+            'questionId',
+            'questionType',
+            'parentId',
+            'score',
+            'missScore'
+        ));
+
         return $this->getItemDao()->create($fields);
     }
 
@@ -144,6 +154,44 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function searchItemCount($conditions)
     {
         return $this->getItemDao()->count($conditions);
+    }
+
+    public function publishTestpaper($id)
+    {
+        $testpaper = $this->getTestpaper($id);
+
+        if (empty($testpaper)) {
+            throw new ResourceNotFoundException('testpaper', $id);
+        }
+
+        if (!in_array($testpaper['status'], array('closed', 'draft'))) {
+            throw $this->createServiceException($this->getKernel()->trans('试卷状态不合法!'));
+        }
+
+        $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'open'));
+
+        $this->dispatchEvent('testpaper.publish', new Event($testpaper));
+
+        return $testpaper;
+    }
+
+    public function closeTestpaper($id)
+    {
+        $testpaper = $this->getTestpaper($id);
+
+        if (empty($testpaper)) {
+            throw new ResourceNotFoundException('testpaper', $id);
+        }
+
+        if (!in_array($testpaper['status'], array('open'))) {
+            throw $this->createAccessDeniedException($this->getKernel()->trans('试卷状态不合法!'));
+        }
+
+        $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
+
+        $this->dispatchEvent('testpaper.close', new Event($testpaper));
+
+        return $testpaper;
     }
 
     /**
@@ -223,7 +271,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function searchTestpapersScore($conditions)
     {
-        return $this->getTestpaperResultDao()->searchTestpapersScore($conditions);
+        return $this->getTestpaperResultDao()->sumScoreByParames($conditions);
     }
 
     public function buildTestpaper($fields, $type)
@@ -253,47 +301,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult($result['id'], $formData['usedTime']);
 
-        $this->dispatchEvent('testpaper.finish', new ServiceEvent($paperResult));
+        $this->dispatchEvent('testpaper.finish', new Event($paperResult));
 
         return $paperResult;
-    }
-
-    public function publishTestpaper($id)
-    {
-        $testpaper = $this->getTestpaper($id);
-
-        if (empty($testpaper)) {
-            throw new ResourceNotFoundException('testpaper', $id);
-        }
-
-        if (!in_array($testpaper['status'], array('closed', 'draft'))) {
-            throw $this->createServiceException($this->getKernel()->trans('试卷状态不合法!'));
-        }
-
-        $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'open'));
-
-        $this->dispatchEvent('testpaper.publish', new ServiceEvent($testpaper));
-
-        return $testpaper;
-    }
-
-    public function closeTestpaper($id)
-    {
-        $testpaper = $this->getTestpaper($id);
-
-        if (empty($testpaper)) {
-            throw new ResourceNotFoundException('testpaper', $id);
-        }
-
-        if (!in_array($testpaper['status'], array('open'))) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('试卷状态不合法!'));
-        }
-
-        $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
-
-        $this->dispatchEvent('testpaper.close', new ServiceEvent($testpaper));
-
-        return $testpaper;
     }
 
     public function countQuestionTypes($testpaper, $items)
@@ -400,7 +410,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $accuracy;
     }
 
-    //new
     public function checkFinish($resultId, $fields)
     {
         $paperResult = $this->getTestpaperResult($resultId);
@@ -441,12 +450,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $paperResult = $this->updateTestpaperResult($paperResult['id'], $fields);
 
-        $this->dispatchEvent('testpaper.reviewed', new ServiceEvent($paperResult));
+        $this->dispatchEvent('testpaper.reviewed', new Event($paperResult));
 
         return $paperResult;
     }
 
-    //new
     public function submitAnswers($id, $answers)
     {
         if (empty($answers)) {
@@ -574,7 +582,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 continue;
             }
 
-            $filter['seq']          = $index++;
+            $filter['seq'] = $index;
+
+            if ($question['type'] != 'material') {
+                $index++;
+            }
+
             $filter['questionId']   = $question['id'];
             $filter['questionType'] = $question['type'];
             $filter['testId']       = $testpaperId;
@@ -621,7 +634,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
-    //new
     protected function countItemResultStatus($resultStatus, $item, $questionResult)
     {
         $resultStatus = array(
@@ -742,7 +754,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     protected function getUploadFileService()
     {
-        return $this->getKernel()->createService('File.UploadFileService');
+        return $this->getKernel()->createService('File:UploadFileService');
     }
 
     protected function getKernel()

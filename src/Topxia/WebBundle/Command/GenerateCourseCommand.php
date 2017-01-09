@@ -5,7 +5,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Input\InputArgument;
@@ -62,21 +62,16 @@ class GenerateCourseCommand extends BaseCommand
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
-    private function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     private function getCourseDao ()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseDao');
+        return $this->getServiceKernel()->createDao('Course:CourseDao');
     }
 
     private function getMemberDao ()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
+        return $this->getServiceKernel()->createDao('Course:CourseMemberDao');
     }
 }

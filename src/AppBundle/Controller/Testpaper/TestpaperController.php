@@ -113,6 +113,9 @@ class TestpaperController extends BaseController
 
         $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
 
+        $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
+        $task     = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+
         return $this->render('testpaper/result.html.twig', array(
             'questions'     => $questions,
             'accuracy'      => $accuracy,
@@ -124,7 +127,9 @@ class TestpaperController extends BaseController
             'source'        => $request->query->get('source', 'course'),
             'attachments'   => $attachments,
             'questionTypes' => $this->getCheckedQuestionType($testpaper),
-            'limitedTime'   => 0
+            'limitedTime'   => 0,
+            'task'          => $task,
+            'action'        => $request->query->get('action', '')
         ));
     }
 
@@ -225,10 +230,10 @@ class TestpaperController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $data     = $request->request->all();
-            $answers  = array_key_exists('data', $data) ? $data['data'] : array();
+            $answers  = !empty($data['data']) ? $data['data'] : array();
             $usedTime = $data['usedTime'];
 
-            $results = $this->getTestpaperService()->submitTestpaperAnswer($id, $answers);
+            $results = $this->getTestpaperService()->submitAnswers($$resultId, $answers);
 
             $this->getTestpaperService()->updateTestpaperResult($resultId, $usedTime);
 
@@ -256,12 +261,14 @@ class TestpaperController extends BaseController
 
             $paperResult = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
+            $goto = $this->generateUrl('testpaper_result_show', array('resultId' => $paperResult['id']));
+
             if ($testpaperActivity['finishCondition']['type'] == 'submit') {
-                $response = array('result' => true, 'message' => '');
+                $response = array('result' => true, 'message' => '', 'goto' => $goto);
             } elseif ($testpaperActivity['finishCondition']['type'] == 'score' && $paperResult['status'] == 'finished' && $paperResult['score'] > $testpaperActivity['finishCondition']['finishScore']) {
-                $response = array('result' => true, 'message' => '');
+                $response = array('result' => true, 'message' => '', 'goto' => $goto);
             } else {
-                $response = array('result' => false, 'message' => '');
+                $response = array('result' => false, 'message' => '', 'goto' => $goto);
             }
 
             return $this->createJsonResponse($response);
@@ -299,7 +306,7 @@ class TestpaperController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getTestpaperService()
@@ -317,6 +324,11 @@ class TestpaperController extends BaseController
         return $this->createService('Activity:ActivityService');
     }
 
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
@@ -324,12 +336,12 @@ class TestpaperController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getServiceKernel()

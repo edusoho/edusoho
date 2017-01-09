@@ -48,8 +48,8 @@ class ManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         if ($request->getMethod() == 'POST') {
-            $fields                = $request->request->all();
-            $fields['ranges']      = empty($fields['ranges']) ? array() : explode(',', $fields['ranges']);
+            $fields = $request->request->all();
+
             $fields['courseSetId'] = $courseSet['id'];
             $fields['courseId']    = 0;
             $fields['pattern']     = 'questionType';
@@ -72,9 +72,12 @@ class ManageController extends BaseController
         $conditions['subCount']                  = 0;
         $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount($conditions);
 
+        $user   = $this->getUser();
+        $ranges = $this->getTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
+
         return $this->render('testpaper/manage/create.html.twig', array(
             'courseSet'    => $courseSet,
-            'ranges'       => $this->getQuestionRanges($courseSet),
+            'ranges'       => $ranges,
             'types'        => $types,
             'questionNums' => $questionNums
         ));
@@ -82,6 +85,10 @@ class ManageController extends BaseController
 
     public function checkListAction(Request $request, $targetId, $type, $testpaperIds = array())
     {
+        if (empty($testpaperIds)) {
+            $testpaperIds = array(0);
+        }
+
         $conditions = array(
             'status' => 'open',
             'type'   => $type,
@@ -154,7 +161,8 @@ class ManageController extends BaseController
             'total'         => $total,
             'source'        => $source,
             'targetId'      => $targetId,
-            'isTeacher'     => true
+            'isTeacher'     => true,
+            'action'        => $request->query->get('action', '')
         ));
     }
 
@@ -221,7 +229,7 @@ class ManageController extends BaseController
 
         $data           = $request->request->all();
         $data['ranges'] = empty($data['ranges']) ? array() : explode(',', $data['ranges']);
-        $result         = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
+        $result         = $this->getTestpaperService()->canBuildTestpaper('testpaper', $data);
         return $this->createJsonResponse($result);
     }
 
@@ -232,7 +240,7 @@ class ManageController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
+            return $this->createMessageResponse('error', 'testpaper not found');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -264,7 +272,7 @@ class ManageController extends BaseController
 
         $ids = $request->request->get('ids');
 
-        $this->getTestpaperService()->deleteTestpapers($id);
+        $this->getTestpaperService()->deleteTestpapers($ids);
 
         return $this->createJsonResponse(true);
     }
@@ -306,7 +314,7 @@ class ManageController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
         if (!$testpaper) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('试卷不存在'));
+            return $this->createMessageResponse('error', 'testpaper not found');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -314,6 +322,10 @@ class ManageController extends BaseController
 
             if (empty($fields['questions'])) {
                 return $this->createMessageResponse('error', $this->getServiceKernel()->trans('试卷题目不能为空！'));
+            }
+
+            if (!empty($fields['passedCondition'])) {
+                $fields['passedCondition'] = array($fields['passedCondition']);
             }
 
             $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $fields);
@@ -328,16 +340,17 @@ class ManageController extends BaseController
         $items     = $this->getTestpaperService()->findItemsByTestId($testpaper['id']);
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
 
-        $hasEssay   = $this->getQuestionService()->hasEssay(ArrayToolkit::column($items, 'questionId'));
-        $scoreTotal = 0;
+        $hasEssay = $this->getQuestionService()->hasEssay(ArrayToolkit::column($items, 'questionId'));
 
-        $passedScoreDefault = ceil($scoreTotal * 0.6);
+        $passedScoreDefault = empty($testpaper['passedCondition']) ? ceil($testpaper['score'] * 0.6) : $testpaper['passedCondition'][0];
+
         return $this->render('testpaper/manage/question.html.twig', array(
             'courseSet'          => $courseSet,
             'testpaper'          => $testpaper,
             'questions'          => $questions,
             'hasEssay'           => $hasEssay,
-            'passedScoreDefault' => $passedScoreDefault
+            'passedScoreDefault' => $passedScoreDefault,
+            'targetChoices'      => $this->getQuestionRanges($courseSet['id'])
         ));
     }
 
@@ -350,7 +363,7 @@ class ManageController extends BaseController
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
         if (empty($testpaper)) {
-            throw $this->createNotFoundException();
+            return $this->createMessageResponse('error', 'testpaper not found');
         }
 
         $items    = $this->getTestpaperService()->getItemsCountByParams(array('testId' => $testpaperId, 'parentIdDefault' => 0), $gourpBy = 'questionType');
@@ -371,11 +384,11 @@ class ManageController extends BaseController
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (!$testpaper) {
-            throw $this->createNotFoundException();
+            return $this->createMessageResponse('error', 'testpaper not found');
         }
 
         if ($testpaper['status'] == 'closed') {
-            return $this->createMessageResponse('warning', '试卷已关闭，不能查看！');
+            return $this->createMessageResponse('warning', 'testpaper already closed');
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
@@ -386,20 +399,13 @@ class ManageController extends BaseController
 
         return $this->render('testpaper/manage/preview.html.twig', array(
             'questions'     => $questions,
-            'limitedTime'   => $testpaper['limitedTime'] * 60,
+            'limitedTime'   => $testpaper['limitedTime'],
             'paper'         => $testpaper,
             'paperResult'   => array(),
             'total'         => $total,
             'attachments'   => $attachments,
             'questionTypes' => $this->getCheckedQuestionType($testpaper)
         ));
-    }
-
-    protected function getQuestionRanges($course, $includeCourse = false)
-    {
-        $ranges = array('本课程');
-
-        return $ranges;
     }
 
     protected function getCheckedEssayQuestions($questions)
@@ -450,6 +456,15 @@ class ManageController extends BaseController
         return $types;
     }
 
+    protected function getQuestionRanges($courseSetId)
+    {
+        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseIds($courseIds);
+        return ArrayToolkit::index($courseTasks, 'id');
+    }
+
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
@@ -460,9 +475,14 @@ class ManageController extends BaseController
         return $this->createService('Course:CourseSetService');
     }
 
+    protected function getCourseTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getTestpaperService()
@@ -473,6 +493,11 @@ class ManageController extends BaseController
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    public function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     protected function getServiceKernel()

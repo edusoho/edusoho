@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\TagsCoursesDataTag;
 
 class TagsCoursesDataTagTest extends BaseTestCase
@@ -42,11 +42,11 @@ class TagsCoursesDataTagTest extends BaseTestCase
     }
     public function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
     public function getCourseService()
     {
-    	return $this->getServiceKernel()->createService('Course.CourseService');
+    	return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
 }

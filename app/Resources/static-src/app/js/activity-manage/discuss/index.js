@@ -19,7 +19,7 @@ class Discuss {
           required: true,
           maxlength: 50,
         },
-        media: 'required',
+        content: 'required',
       },
     });
   }

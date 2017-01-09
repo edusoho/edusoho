@@ -6,27 +6,67 @@ namespace AppBundle\Controller\Activity;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
+use Biz\User\Service\TokenService;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class VideoController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($id);
-        if ($this->getMediaSource($activity) == 'self') {
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
 
-
-            return $this->render('activity/video/show.html.twig', array(
-                'activity' => $activity,
-                'courseId' => $courseId
-            ));
-        } else {
-            return $this->render('activity/video/swf-show.html.twig', array(
-                'activity' => $activity,
-            ));
-        }
+        return $this->render('activity/video/show.html.twig', array(
+            'activity' => $activity,
+            'courseId' => $courseId
+        ));
     }
+
+    public function previewAction(Request $request, $task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
+
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $user   = $this->getCurrentUser();
+
+        if ($task['mediaSource'] != 'self') {
+            if ($task['mediaSource'] == 'youku') {
+                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
+
+                if ($matched) {
+                    $task['mediaUri']    = "http://player.youku.com/embed/{$matches[1]}";
+                    $task['mediaSource'] = 'iframe';
+                }
+            } elseif ($task['mediaSource'] == 'tudou') {
+                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
+
+                if ($matched) {
+                    $task['mediaUri']    = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                    $task['mediaSource'] = 'iframe';
+                }
+            }
+        } else {
+            $context = array();
+
+            $context['hideQuestion'] = 1;
+            $context['hideSubtitle'] = 0;
+
+            if (!$task["isFree"] && !empty($course['tryLookable'])) {
+                $context['starttime']      = $request->query->get('starttime');
+                $context['hideBeginning']  = $request->query->get('hideBeginning', false);
+                $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
+            }
+        }
+
+        return $this->render('activity/video/preview.html.twig', array(
+            'activity' => $activity,
+            'course'   => $course,
+            'task'     => $task,
+            'user'     => $user,
+            'context'  => $context
+        ));
+    }
+
 
     /**
      * 获取当前视频活动的文件来源
@@ -40,7 +80,7 @@ class VideoController extends BaseController implements ActivityActionInterface
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($id);
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
         $activity = $this->fillMinuteAndSecond($activity);
         return $this->render('activity/video/modal.html.twig', array(
             'activity' => $activity,
@@ -64,25 +104,22 @@ class VideoController extends BaseController implements ActivityActionInterface
         return $activity;
     }
 
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/video/finish-condition.html.twig', array());
+    }
+
     /**
      * @return ActivityService
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
-    }
-
-    /**
-     * @return UploadFileService
-     */
-    protected function getUploadFileService()
-    {
-        return $this->createService('File:UploadFileService');
+        return $this->createService('Course:CourseService');
     }
 
 }

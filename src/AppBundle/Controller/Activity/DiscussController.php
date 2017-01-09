@@ -16,6 +16,12 @@ class DiscussController extends BaseController implements ActivityActionInterfac
         ));
     }
 
+    public function previewAction(Request $request, $task)
+    {
+        return $this->render('activity/discuss/preview.html.twig');
+    }
+
+
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
@@ -32,11 +38,16 @@ class DiscussController extends BaseController implements ActivityActionInterfac
         ));
     }
 
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/discuss/finish-condition.html.twig', array());
+    }
+
     /**
      * @return ActivityService
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 }

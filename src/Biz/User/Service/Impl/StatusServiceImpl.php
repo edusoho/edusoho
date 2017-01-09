@@ -2,6 +2,7 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
+use Biz\User\Dao\StatusDao;
 use Biz\User\Service\StatusService;
 
 class StatusServiceImpl extends BaseService implements StatusService
@@ -30,14 +31,14 @@ class StatusServiceImpl extends BaseService implements StatusService
     protected function deleteOldStatus($status)
     {
         if (!empty($status['userId']) && !empty($status['type']) && !empty($status['objectType']) && !empty($status['objectId'])) {
-            return $this->getStatusDao()->deleteStatusesByUserIdAndTypeAndObject($status['userId'], $status['type'], $status['objectType'], $status['objectId']);
+            return $this->getStatusDao()->deleteByUserIdAndTypeAndObject($status['userId'], $status['type'], $status['objectType'], $status['objectId']);
         }
         return array();
     }
 
     public function searchStatuses($conditions, $sort, $start, $limit)
     {
-        return $this->getStatusDao()->searchStatuses($conditions, $sort, $start, $limit);
+        return $this->getStatusDao()->search($conditions, $sort, $start, $limit);
     }
 
     public function countStatuses($conditions)
@@ -47,9 +48,19 @@ class StatusServiceImpl extends BaseService implements StatusService
 
     public function searchStatusesByUserIds($userIds, $start, $limit)
     {
-        return $this->getStatusDao()->findStatusesByUserIds($userIds, $start, $limit);
+        return $this->getStatusDao()->search(
+            array(
+                'userIds' => $userIds
+            ),
+            array('createdTime' => 'DESC'),
+            $start,
+            $limit
+        );
     }
 
+    /**
+     * @return StatusDao
+     */
     protected function getStatusDao()
     {
         return $this->createDao('User:StatusDao');

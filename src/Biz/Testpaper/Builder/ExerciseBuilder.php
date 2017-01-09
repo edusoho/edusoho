@@ -72,7 +72,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
                 $conditions,
                 array('createdTime' => 'DESC'),
                 0,
-                $exercise['itemCount']
+                $count
             );
             shuffle($questions);
 
@@ -85,15 +85,15 @@ class ExerciseBuilder implements TestpaperBuilderInterface
     public function filterFields($fields, $mode = 'create')
     {
         if (!empty($fields['questionTypes'])) {
-            $filtedFields['metas']['questionTypes'] = $fields['questionTypes'];
+            $fields['metas']['questionTypes'] = $fields['questionTypes'];
         }
 
         if (!empty($fields['difficulty'])) {
-            $filtedFields['metas']['difficulty'] = $fields['difficulty'];
+            $fields['metas']['difficulty'] = $fields['difficulty'];
         }
 
         if (!empty($fields['range'])) {
-            $filtedFields['metas']['range'] = $fields['range'];
+            $fields['metas']['range'] = $fields['range'];
         }
 
         $fields = ArrayToolkit::parts($fields, array(
@@ -147,16 +147,41 @@ class ExerciseBuilder implements TestpaperBuilderInterface
 
             if ($question['subCount'] > 0) {
                 $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-
+                array_walk($subQuestions, function (&$sub) use (&$index) {
+                    $sub['seq'] = $index;
+                    $index++;
+                });
                 $question['subs'] = $subQuestions;
+            } else {
+                $index++;
             }
 
             $formatQuestions[$question['id']] = $question;
+        }
+        return $formatQuestions;
+    }
 
-            $index++;
+    protected function getQuestions($options)
+    {
+        $conditions = array();
+
+        if (!empty($options['range']) && $options['range'] != 'course') {
+            $conditions['lessonIds'] = $options['range'];
         }
 
-        return $formatQuestions;
+        if (!empty($options['questionTypes'])) {
+            $conditions['types'] = $options['questionTypes'];
+        }
+
+        if (!empty($options['difficulty'])) {
+            $conditions['difficulty'] = $options['difficulty'];
+        }
+        $conditions['courseId'] = $options['courseId'];
+        $conditions['parentId'] = 0;
+
+        $total = $this->getQuestionService()->searchCount($conditions);
+
+        return $this->getQuestionService()->search($conditions, array('createdTime' => 'DESC'), 0, $total);
     }
 
     protected function getQuestionService()

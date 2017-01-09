@@ -33,7 +33,7 @@ class MobileAlipayConfig
 
 	protected static function initAlipayConfig($name)
 	{
-		$payment = ServiceKernel::instance()->createService('System.SettingService')->get('payment', array());
+		$payment = ServiceKernel::instance()->createService('System:SettingService')->get('payment', array());
 
 		$alipay_config = array();
 

@@ -6,6 +6,7 @@ class Testpaper {
     this.$step2_form  = this.$element.find('#step2-form');
     this.$step3_form  = this.$element.find('#step3-form');
     this.$parentiframe = $(window.parent.document).find('#task-create-content-iframe');
+    this.scoreSlider = null;
     this._init();
   }
 
@@ -14,7 +15,6 @@ class Testpaper {
     this.setValidateRule();
     this.initEvent();
     this.initStepForm2();
-    this.initSelectTestpaper($('#testpaper-media').find('option:selected'),$('[name="finishScore"]').val());
   }
 
   initEvent() {
@@ -23,6 +23,7 @@ class Testpaper {
   	this.$element.find('input[name="testMode"]').on('change',event=>this.startTimeCheck(event))
     this.$element.find('input[name="limitedTime"]').on('blur',event=>this.changeEndTime(event));
     this.$element.find('#condition-select').on('change',event=>this.changeCondition(event));
+    this.initSelectTestpaper(this.$element.find('#testpaper-media').find('option:selected'),$('[name="finishScore"]').val());
   }
 
   setValidateRule() {
@@ -65,25 +66,19 @@ class Testpaper {
             },
             redoInterval:{
               required:function(){
-                return $('[name="doTimes"]:checked').val() == 1;
+                return $('[name="doTimes"]:checked').val() == 0;
               },
               arithmeticFloat:true,
               max:1000000000
             }
         },
         messages: {
-            title:{
-              required:"请填写标题"
-            },
-            mediaId: {
-              required:"请选择试卷"
-            },
-            startTime: {
-              required:"请选择考试的开始时间"
-            },
-            redoInterval: {
-              max: "最大值不能超过1000000000"
-            },
+          mediaId: {
+            required:'请选择%display%',
+          },
+          redoInterval: {
+            max: "最大值不能超过1000000000"
+          },
         }
     });
     this.$step2_form.data('validator',validator);
@@ -97,10 +92,9 @@ class Testpaper {
       if (passScore == '') {
         passScore = Math.ceil(score * 0.6);
       }
-      console.log(passScore);
       $('#score-single-input').val(passScore);
       $('.js-score-total').text(score);
-      this.initSlider(passScore,score);
+      this.initScoreSlider(parseInt(passScore),parseInt(score));
     } else {
       $('#questionItemShowDiv').hide();
     }
@@ -133,16 +127,11 @@ class Testpaper {
     }
   }
 
-  changeEndTime() {
-    let $this = $(event.currentTarget);
-    let limitedTime = $this.val();
+  changeEndTime(event) {
     let startTime = $('input[name="startTime"]:visible').val();
-    console.log(startTime);
-    if (startTime) {
-      let endTime = new Date(Date.parse(startTime) + limitedTime * 60 * 1000);
-      let endDate = endTime.Format("yyyy-MM-dd hh:mm");
-      $('input[name="endTime"]').val(endDate);
-    }
+    // if (startTime) {
+    //   this.showEndTime(Date.parse(startTime));
+    // }
   }
 
   changeCondition(event) {
@@ -151,32 +140,38 @@ class Testpaper {
     value!='score' ? $('.js-score-form-group').addClass('hidden') : $('.js-score-form-group').removeClass('hidden');
   }
 
-  initSlider(passScore,score) {
-    console.log(passScore);
-    console.log(score);
-    let $sliderRemask = null;
-    let scoreTotal = $('#score-single-input').data('score-total');
-    let silder = null;
-    console.log($('.single-slider'));
-    $('')
-    silder = $('.single-slider').jRange({
-      from: 0,
-      to: score,
+  initScoreSlider(passScore,score) {
+    let scoreSlider = document.getElementById('score-slider');
+    let option = {
+      start: passScore,
+      connect: [true, false],
+      tooltips: [true],
       step: 1,
-      format: function(value,type) {
-        let  v= (parseInt(value) / parseInt(score)).toFixed(2)*100;
-        return `${v}%`;
-      },
-      width: 300,
-      showLabels: true,
-      showScale: false,
-      onstatechange: function (argument,data) {
-        $sliderRemask.text(argument);
+      range: {
+        'min': 0,
+        'max': score
       }
-    });
-    console.log(silder);
-    console.log($.fn);
-    $sliderRemask = $('.js-slider-remask').text(passScore);
+    }
+    if(this.scoreSlider) {
+      this.scoreSlider.updateOptions(option);
+    }else {
+      this.scoreSlider = noUiSlider.create(scoreSlider,option);
+      scoreSlider.noUiSlider.on('update', function( values, handle ){
+        $('.noUi-tooltip').text(`${(values[handle]/score*100).toFixed(0)}%`);
+        $('.js-score-tooltip').css('left',`${(values[handle]/score*100).toFixed(0)}%`);
+        $('.js-passScore').text(parseInt(values[handle]));
+        $('input[name="finishScore"]').val(parseInt(values[handle]));
+      });
+    }
+    let html = `<div class="score-tooltip js-score-tooltip"><div class="tooltip top" role="tooltip" style="">
+      <div class="tooltip-arrow"></div>
+      <div class="tooltip-inner ">
+      达标分数：<span class="js-passScore">${passScore}</span>分
+      </div>
+      </div></div>`;
+    $('.noUi-handle').append(html);
+    $('.noUi-tooltip').text(`${(passScore/score*100).toFixed(0)}%`);
+    $('.js-score-tooltip').css('left',`${(passScore/score*100).toFixed(0)}%`);
   }
 
   getItemsTable(url, testpaperId) {
@@ -202,19 +197,26 @@ class Testpaper {
       this.$step2_form.data('validator').form();
       this.$parentiframe.height($('body').height());
     })
-    .on('changeDate', function(ev){
-      let date = ev.date.valueOf();
-      let limitedTime = $('input[name="limitedTime"]').val();
-      if (limitedTime != 0) {
-        let endTime = new Date(date + limitedTime * 60 * 1000);
-        let endDate = endTime.Format("yyyy-MM-dd hh:mm");
-        $('#starttime-show').html(endDate);
-        $('.endtime-input').removeClass('hidden');
-        $('input[name="endTime"]').val(endDate);
-      }
+    .on('changeDate',event =>{
+      let date = event.date.valueOf();
+      // this.showEndTime(date);
     });
     $starttime.datetimepicker('setStartDate',data);
+    // this.showEndTime(Date.parse($starttime.val()));
   }
+
+  // showEndTime(date) {
+  //   let limitedTime = $('input[name="limitedTime"]').val();
+  //   if (limitedTime != 0) {
+  //     let endTime = new Date(date + limitedTime * 60 * 1000);
+  //     let endDate = endTime.Format("yyyy-MM-dd hh:mm");
+  //     $('#starttime-show').html(endDate);
+  //     $('.endtime-input').removeClass('hidden');
+  //     $('input[name="endTime"]').val(endDate);
+  //   }else {
+  //     $('.endtime-input').addClass('hidden');
+  //   }
+  // }
 }
 
 new Testpaper($('#iframe-content'));

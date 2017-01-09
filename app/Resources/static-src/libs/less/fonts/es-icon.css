@@ -1,10 +1,10 @@
 
 @font-face {font-family: "es-icon";
-  src: url('es-icon.eot'); /* IE9*/
-  src: url('es-icon.eot#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('es-icon.woff') format('woff'), /* chrome, firefox */
-  url('es-icon.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('es-icon.svg#es-icon') format('svg'); /* iOS 4.1- */
+  src: url('es-icon.eot?t=1483074663683'); /* IE9*/
+  src: url('es-icon.eot?t=1483074663683#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('es-icon.woff?t=1483074663683') format('woff'), /* chrome, firefox */
+  url('es-icon.ttf?t=1483074663683') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('es-icon.svg?t=1483074663683#es-icon') format('svg'); /* iOS 4.1- */
 }
 
 .es-icon {

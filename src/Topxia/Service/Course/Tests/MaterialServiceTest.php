@@ -1,7 +1,8 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
+use Topxia\Service\Common\ServiceKernel;
 
 class MaterialServiceTest extends BaseTestCase
 {
@@ -652,16 +653,16 @@ class MaterialServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course.MaterialService');
+        return $this->getServiceKernel()->createService('Course:MaterialService');
     }
 }

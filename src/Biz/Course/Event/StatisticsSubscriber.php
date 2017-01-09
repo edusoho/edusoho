@@ -13,35 +13,58 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         return array(
             'course.task.create'    => 'onTaskNumberChange',
             'course.task.delete'    => 'onTaskNumberChange',
-            'course.student.create' => 'onStudentNumberChange',
-            'course.student.delete' => 'onStudentNumberChange'
+
+            'course.thread.create'  => 'onCourseThreadChange',
+            'course.thread.delete'  => 'onCourseThreadChange',
+
+            'course.review.add'     => 'onReviewNumberChange',
+            'course.review.update'  => 'onReviewNumberChange',
+            'course.review.delete'  => 'onReviewNumberChange'
         );
     }
 
     public function onTaskNumberChange(Event $event)
     {
-        $task     = $event->getSubject();
-        $courseId = $task['courseId'];
-        $this->getCourseService()->updateCourseStatistics($courseId, array(
-            'taskCount'
+        $task = $event->getSubject();
+        $this->getCourseService()->updateCourseStatistics($task['courseId'], array(
+            'taskNum'
         ));
     }
 
-    public function onStudentNumberChange(Event $event)
+    public function onCourseThreadChange(Event $event)
     {
-        $member = $event->getSubject();
-        if ($member['role'] != 'student') {
-            return;
-        }
-
-        $courseId = $member['courseId'];
-        $this->getCourseService()->updateCourseStatistics($courseId, array(
-            'studentCount'
+        $thread = $event->getSubject();
+        $this->getCourseService()->updateCourseStatistics($thread['courseId'], array(
+            'threadNum'
         ));
+    }
+
+    public function onReviewNumberChange(Event $event)
+    {
+        $review = $event->getSubject();
+
+        $this->getCourseService()->updateCourseStatistics($review['courseId'], array(
+            'ratingNum'
+        ));
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+    protected function getReviewService()
+    {
+        return $this->getBiz()->service('Course:ReviewService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\PersonDynamicDataTag;
 
 class PersonDynamicDataTagTest extends BaseTestCase
@@ -43,9 +43,9 @@ class PersonDynamicDataTagTest extends BaseTestCase
         $this->getCourseService()->publishCourse($course1['id']);
         $this->getCourseService()->publishCourse($course2['id']);
         $this->getCourseService()->publishCourse($course3['id']);
-        $this->getCourseService()->becomeStudent($course1['id'],$user1['id']);
-    	$this->getCourseService()->becomeStudent($course2['id'],$user1['id']);
-    	$this->getCourseService()->becomeStudent($course3['id'],$user2['id']);
+        $this->getCourseMemberService()->becomeStudent($course1['id'],$user1['id']);
+    	$this->getCourseMemberService()->becomeStudent($course2['id'],$user1['id']);
+    	$this->getCourseMemberService()->becomeStudent($course3['id'],$user2['id']);
         $datatag = new PersonDynamicDataTag();
         $status = $datatag->getData(array('count' => 5));
         $this->assertEquals(3,count($status));
@@ -54,15 +54,17 @@ class PersonDynamicDataTagTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
-    private function getStatusService() 
-    {
-        return $this->getServiceKernel()->createService('User.StatusService');
-    }
+
     public function getCourseService()
     {
-    	return $this->getServiceKernel()->createService('Course.CourseService');
+    	return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 
 }

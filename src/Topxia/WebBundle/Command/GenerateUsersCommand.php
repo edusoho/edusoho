@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class GenerateUsersCommand extends BaseCommand
 {
@@ -32,6 +33,6 @@ class GenerateUsersCommand extends BaseCommand
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

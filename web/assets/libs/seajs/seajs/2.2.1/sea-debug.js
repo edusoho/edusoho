@@ -675,6 +675,11 @@ Module.prototype.exec = function () {
   var uri = mod.uri
 
   function require(id) {
+    var emitData = {id: id}
+    emit("require", emitData)
+    if (typeof emitData.exec === 'function') {
+      return emitData.exec();
+    }
     return Module.get(require.resolve(id)).exec()
   }
 

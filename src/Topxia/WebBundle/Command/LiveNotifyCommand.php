@@ -5,7 +5,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Common\ArrayToolkit;
 
 class LiveNotifyCommand extends BaseCommand
@@ -42,7 +42,7 @@ class LiveNotifyCommand extends BaseCommand
 	    
 	    if ($courseIds) {
 
-	    	$courseMembers = $this->getCourseService()->findCourseStudentsByCourseIds($courseIds);
+	    	$courseMembers = $this->getCourseMemberService()->findCourseStudentsByCourseIds($courseIds);
 
 		    foreach ($courseMembers as $key => $value) {
 		      $minStartTime = $this->getCourseService()->findMinStartTimeByCourseId($value['courseId']);
@@ -71,12 +71,17 @@ class LiveNotifyCommand extends BaseCommand
 	
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     protected function getKernel()
@@ -92,7 +97,7 @@ class LiveNotifyCommand extends BaseCommand
 
 	protected function getUserService()
 	{
-		return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
 	}
 
 }

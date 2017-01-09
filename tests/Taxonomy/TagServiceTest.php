@@ -3,7 +3,7 @@ namespace  Tests\Taxonomy;
 
 
 use Biz\Taxonomy\Service\TagService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class TagServiceTest extends BaseTestCase
 {

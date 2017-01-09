@@ -4,7 +4,7 @@ namespace Topxia\Component\Payment\Quickpay;
 use Topxia\Component\Payment\Payment;
 use Topxia\Component\Payment\Response;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\Phpsec\Crypt\Rijndael;
+use Biz\Util\Phpsec\Crypt\Rijndael;
 
 class QuickpayResponse extends Response
 {
@@ -205,21 +205,21 @@ class QuickpayResponse extends Response
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
     }
 }

@@ -5,7 +5,7 @@ namespace Tests\Taxonomy;
 
 
 use Biz\Taxonomy\Service\CategoryService;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class CategoryServiceTest extends BaseTestCase
 {

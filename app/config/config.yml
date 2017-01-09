@@ -1,9 +1,9 @@
 imports:
+    - { resource: biz.yml }
     - { resource: parameters_default.yml }
     - { resource: parameters_service.yml, ignore_errors: true }
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: biz.yml }
     - { resource: services.xml }
     - { resource: "@AppBundle/Resources/config/services.yml" }
 
@@ -69,6 +69,8 @@ parameters:
     topxia.upload.public_directory: "%kernel.root_dir%/../web/files"
     topxia.upload.public_url_path: "/files"
     topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
+    permission.path_regular_expression: ['/^\/admin/']
+    router.options.matcher_dumper_class: AppBundle\SfExtend\PhpMatcherDumper
 
 services:
 
@@ -101,10 +103,9 @@ services:
         arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage']
 
     session.handler.redis.factory:
-        class: Topxia\Service\Common\Redis\RedisFactory
-        factory: ['Topxia\Service\Common\Redis\RedisFactory', instance]
-        arguments:
-            - "@service_container"
+        class: Biz\Common\Redis\RedisFactory
+        factory: 'Biz\Common\Redis\RedisFactory:instance'
+        arguments: ['@service_container']
 
     session.handler.redis:
         class:     Topxia\WebBundle\Handler\RedisSessionHandler
@@ -112,7 +113,7 @@ services:
 
     session.handler.factory:
         class: SessionHandlerInterface
-        factory: ['Topxia\Service\Common\SessionHandlerFactory', getSessionHandler]
+        factory: ['Biz\Common\SessionHandlerFactory', getSessionHandler]
         arguments:
             - "@service_container"
 
@@ -186,8 +187,15 @@ services:
         tags:
             - { name: twig.extension }
 
+    topxia.twig.course_extension:
+        class: Topxia\WebBundle\Twig\Extension\CourseExtension
+        arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }
+
+
     topxia.twig.file_cache:
-        class: Topxia\Service\Common\FilesystemCache
+        class: Biz\Common\FilesystemCache
         arguments:    ['@service_container']
 
     topxia.twig.cache_provider:
@@ -195,8 +203,8 @@ services:
         arguments:    ['@topxia.twig.file_cache']
 
     topxia.twig.cache_strategy:
-        class: Topxia\Service\Common\LifetimeCacheStrategy
-        arguments:    ['@topxia.twig.cache_provider']
+        class: Biz\Common\LifetimeCacheStrategy
+        arguments:    ['@biz', '@topxia.twig.cache_provider']
 
     topxia.twig.cache_extension:
         class: Asm89\Twig\CacheExtension\Extension
@@ -209,3 +217,34 @@ services:
         arguments:    ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onGetUserLoginListener}
+
+    ### permission
+    permission.admin_voter:
+        class: AppBundle\SfExtend\AdminVoter
+        tags:
+            - { name: security.voter }
+        public: false
+
+    permission.twig.permission_extension:
+        class: AppBundle\Twig\PermissionExtension
+        arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }
+
+    kernel.controller.permission_listener:
+        class: AppBundle\Listener\PermissionKernelControllerListener
+        arguments:    ['@service_container', '%permission.path_regular_expression%']
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority:255 }
+
+    kernel.response.permission_listener:
+        class: AppBundle\Listener\PermissionKernelResponseListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
+
+    routing.loader.yml:
+        class: AppBundle\SfExtend\YamlFileLoader
+        arguments: ['@file_locator']
+        tags:
+            - {name: routing.loader}

@@ -3,7 +3,7 @@
 namespace Topxia\WebBundle\Command;
 
 
-use Permission\Service\Role\RoleService;
+use Biz\Role\RoleService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Topxia\Service\Common\ServiceKernel;
@@ -35,6 +35,6 @@ class RoleRefreshCommand extends BaseCommand
      */
     protected function getRoleService()
     {
-        return ServiceKernel::instance()->createService('Permission:Role.RoleService');
+        return ServiceKernel::instance()->createService('Role:RoleService');
     }
 }

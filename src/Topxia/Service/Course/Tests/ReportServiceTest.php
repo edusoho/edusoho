@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Course\ReviewService;
 use Topxia\Service\User\UserService;
 use Topxia\Common\ArrayToolkit;
@@ -27,7 +27,7 @@ class ReportServiceTest extends BaseTestCase
         ));
 
         $this->mock('Course.NoteService', array(
-            array('functionName' => 'searchNoteCount', 'runTimes' => 1, 'returnValue' => 10)
+            array('functionName' => 'countCourseNotes', 'runTimes' => 1, 'returnValue' => 10)
         ));
 
         $summary = $this->getReportService()->summary(1);
@@ -64,7 +64,7 @@ class ReportServiceTest extends BaseTestCase
             array('createdTime' => strtotime(date('- 1 days'))),
         );
         $this->mock('Course.NoteService', array(
-            array('functionName' => 'searchNoteCount', 'runTimes' => 1, 'returnValue' => 20),
+            array('functionName' => 'countCourseNotes', 'runTimes' => 1, 'returnValue' => 20),
             array('functionName' => 'searchNotes', 'runTimes' => 1, 'returnValue' => $fakeNotes)
         ));
 
@@ -96,6 +96,6 @@ class ReportServiceTest extends BaseTestCase
 
     protected function getReportService()
     {
-        return $this->getServiceKernel()->createService('Course.ReportService');
+        return $this->getServiceKernel()->createService('Course:ReportService');
     }
 }

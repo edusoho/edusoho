@@ -19,6 +19,10 @@ interface TestpaperService
 
     public function searchTestpaperCount($conditions);
 
+    public function publishTestpaper($id);
+
+    public function closeTestpaper($id);
+
     /**
      * testpaper_item
      */
@@ -75,11 +79,7 @@ interface TestpaperService
 
     public function buildTestpaper($fields, $type);
 
-    public function publishTestpaper($id);
-
-    public function closeTestpaper($id);
-
-    public function canBuildTestpaper($builder, $options);
+    public function canBuildTestpaper($type, $options);
 
     /**
      * 开始做试卷
@@ -90,6 +90,20 @@ interface TestpaperService
     public function startTestpaper($id, $lessonId);
 
     public function finishTest($resultId, $formData);
+
+    public function showTestpaperItems($testId, $resultId = 0);
+
+    public function makeAccuracy($resultId);
+
+    public function checkFinish($resultId, $fields);
+
+    public function submitAnswers($id, $answers);
+
+    public function sumScore($itemResults);
+
+    public function findAttachments($testId);
+
+    public function canLookTestpaper($resultId);
 
     public function updateTestpaperItems($testpaperId, $items);
 

@@ -4,10 +4,10 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Common\ServiceEvent;
-use Topxia\Service\Util\CloudClientFactory;
+use Codeages\Biz\Framework\Event\Event;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class CourseLessonController extends BaseController
 {
@@ -183,7 +183,7 @@ class CourseLessonController extends BaseController
         }
         $this->dispatchEvent(
             'course.preview',
-            new ServiceEvent($course, array('userId' => $user['id']))
+            new Event($course, array('userId' => $user['id']))
         );
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user'                      => $user,
@@ -261,7 +261,7 @@ class CourseLessonController extends BaseController
             $json['homeworkOrExerciseNum'] = 0;
         }
 
-        $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
+        $json['isTeacher'] = $this->getCourseMemberService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
 
         if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
             $json['replays'] = $this->getLiveReplays($lesson);
@@ -585,7 +585,7 @@ class CourseLessonController extends BaseController
 
         $this->getCourseService()->finishLearnLesson($courseId, $lessonId);
 
-        $member = $this->getCourseService()->getCourseMember($courseId, $user['id']);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
 
         $response = array(
             'learnedNum' => empty($member['learnedNum']) ? 0 : $member['learnedNum'],
@@ -813,22 +813,22 @@ class CourseLessonController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
     }
 
     //Homework plugins(contains Exercise)
@@ -844,12 +844,12 @@ class CourseLessonController extends BaseController
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
     protected function getVipService()
@@ -864,11 +864,11 @@ class CourseLessonController extends BaseController
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getMaterialLibService()
     {
-        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLibService');
     }
 }

@@ -2,34 +2,36 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
-class PersonDynamicDataTag extends BaseDataTag implements DataTag  
+class PersonDynamicDataTag extends BaseDataTag implements DataTag
 {
     /**
      * 获取个人动态
      *
-     *   count    必需 
+     *   count    必需
+     *
      * @param  array $arguments 参数
+     *
      * @return array 个人动态
      */
     public function getData(array $arguments)
-    {   
-        $personDynamics=$this->getStatusService()->searchStatuses(
-            array('private' => 0), 
-            array('createdTime','DESC'), 
-            0, 
+    {
+        $personDynamics = $this->getStatusService()->searchStatuses(
+            array('private' => 0),
+            array('createdTime', 'DESC'),
+            0,
             $arguments['count']
         );
 
         $ownerIds = ArrayToolkit::column($personDynamics, 'userId');
 
-        $owners=$this->getUserService()->findUsersByIds($ownerIds);
+        $owners = $this->getUserService()->findUsersByIds($ownerIds);
 
         foreach ($personDynamics as $key => $personDynamic) {
 
-                $personDynamics[$key]['user'] = $owners[$personDynamic['userId']];
+            $personDynamics[$key]['user'] = $owners[$personDynamic['userId']];
         }
 
         return $personDynamics;
@@ -37,11 +39,12 @@ class PersonDynamicDataTag extends BaseDataTag implements DataTag
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
-    private function getStatusService() 
+
+    private function getStatusService()
     {
-        return $this->getServiceKernel()->createService('User.StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Biz\User;
 
-use Permission\Common\PermissionBuilder;
+use Biz\Role\Util\PermissionBuilder;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
@@ -27,11 +27,8 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function __set($name, $value)
     {
-        if (array_key_exists($name, $this->data)) {
-            $this->data[$name] = $value;
-        }
-
-        throw new \RuntimeException("{$name} is not exist in CurrentUser.");
+        $this->data[$name] = $value;
+        return $this;
     }
 
     public function __get($name)

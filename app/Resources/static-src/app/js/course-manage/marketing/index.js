@@ -36,13 +36,9 @@ class Marketing {
 			}
 		});
 
-		$.validator.addMethod(
-            "currency",
-            function(value, element, params) {
-                return this.optional(element) || /^\d{0,8}(\.\d{0,2})?$/.test(value);
-            },
-            Translator.trans('请输入价格，最多两位小数')
-        );
+		$.validator.addMethod("currency",function(value, element, params) {
+        return this.optional(element) || /^\d{0,8}(\.\d{0,2})?$/.test(value);
+    },Translator.trans('请输入价格，最多两位小数'));
 
 		$('input[name="isFree"]').on('change', function(event){
 			if($('input[name="isFree"]:checked').val() == 0){
@@ -50,24 +46,57 @@ class Marketing {
 			}else{
 				$('.js-is-free').addClass('hidden');
 			}
-        });
-        $('input[name="tryLookable"]').on('change', function(event){
-        	if($('input[name="tryLookable"]:checked').val() == 1){
-				$('.js-enable-try-look').removeClass('hidden');
+    });
+
+		$('input[name="enableBuyExpiryTime"]').on('change', function(event){
+			if($('input[name="enableBuyExpiryTime"]:checked').val() == 0){
+				$('#buyExpiryTime').addClass('hidden');
 			}else{
-				$('.js-enable-try-look').addClass('hidden');
+				$('#buyExpiryTime').removeClass('hidden');
 			}
-            // $('.js-enable-try-look').toggle($('input[name="tryLookable"]:checked').val() == 0 ? 'show' : 'hide');
-      });
+    });
+
+		$('input[name="buyExpiryTime"]').datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: "zh",
+			minView: 2, //month
+			autoclose: true
+		});
+
+    $('input[name="tryLookable"]').on('change', function(event){
+      if($('input[name="tryLookable"]:checked').val() == 1){
+				$('.js-enable-try-look').removeClass('hidden');
+		  }else{
+			 $('.js-enable-try-look').addClass('hidden');
+		  }
+    });	
+
+    $('.js-service-item').click(function(event){
+    	let $item = $(event.currentTarget);
+    	let $values = $('#course_services').val();
+    	if(!$values){
+    		values = [];
+    	}
+    	$values = JSON.parse($values);
+    	if($item.hasClass('label-primary')){
+    		$item.removeClass('label-primary');
+    		$item.addClass('label-default');
+    		$values.splice($values.indexOf($item.text()), 1);
+    	}else{
+    		$item.removeClass('label-default');
+    		$item.addClass('label-primary');
+    		$values.push($item.text());
+    	}
+    	$('#course_services').val(JSON.stringify($values));
+    });
 
 		$('#course-submit').click(function(evt){
       if(validator.form()){
         $(evt.currentTarget).button('loading');
         $form.submit();
       }
-    });
+	  });
 	}
 }
-
 
 new Marketing();

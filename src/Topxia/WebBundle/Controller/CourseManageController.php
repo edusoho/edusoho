@@ -3,10 +3,10 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Topxia\Service\Common\ServiceKernel;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Course\Impl\CourseServiceImpl;
 
 class CourseManageController extends BaseController
 {
@@ -82,7 +82,7 @@ class CourseManageController extends BaseController
             $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户还不存在！'));
         } else {
             $user            = $this->getUserService()->getUserByNickname($nickname);
-            $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
+            $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
 
             if ($isCourseStudent) {
                 $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户已是本课程的学员了！'));
@@ -90,7 +90,7 @@ class CourseManageController extends BaseController
                 $response = array('success' => true, 'message' => '');
             }
 
-            $isCourseTeacher = $this->getCourseService()->isCourseTeacher($courseId, $user['id']);
+            $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($courseId, $user['id']);
 
             if ($isCourseTeacher) {
                 $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户是本课程的教师，不能添加!'));
@@ -245,7 +245,7 @@ class CourseManageController extends BaseController
         $learnTime = $this->getCourseService()->searchLearnTime(array('courseId' => $id));
         $learnTime = $course["studentNum"] == 0 ? 0 : intval($learnTime / $course["studentNum"]);
 
-        $noteCount = $this->getNoteService()->searchNoteCount(array('courseId' => $id));
+        $noteCount = $this->getNoteService()->countCourseNotes(array('courseId' => $id));
 
         $questionCount = $this->getThreadService()->searchThreadCount(array('courseId' => $id, 'type' => 'question'));
 
@@ -315,7 +315,7 @@ class CourseManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getOrderService()->searchOrderCount($conditions),
+            $this->getOrderService()->countOrders($conditions),
             10
         );
 
@@ -492,7 +492,7 @@ class CourseManageController extends BaseController
                 );
             }
 
-            $this->getCourseService()->setCourseTeachers($id, $teachers);
+            $this->getCourseMemberService()->setCourseTeachers($id, $teachers);
 
             $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($id);
 
@@ -699,17 +699,14 @@ class CourseManageController extends BaseController
         unset($fields['enableBuyExpiryTime']);
     }
 
-    /**
-     * @return CourseServiceImpl
-     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getCourseReportService()
     {
-        return $this->getServiceKernel()->createService('Course.ReportService');
+        return $this->getServiceKernel()->createService('Course:ReportService');
     }
 
     protected function getLevelService()
@@ -719,7 +716,7 @@ class CourseManageController extends BaseController
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content.FileService');
+        return $this->getServiceKernel()->createService('Content:FileService');
     }
 
     protected function getWebExtension()
@@ -734,32 +731,32 @@ class CourseManageController extends BaseController
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course.NoteService');
+        return $this->getServiceKernel()->createService('Course:CourseNoteService');
     }
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getDiscountService()
@@ -769,11 +766,16 @@ class CourseManageController extends BaseController
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return ServiceKernel::instance()->createService('User:UserFieldService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

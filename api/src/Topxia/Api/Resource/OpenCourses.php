@@ -30,7 +30,7 @@ class OpenCourses extends BaseResource
 
             return $this->wrap($this->filter($openCourses), $next);
         } else {
-            $total       = $this->getOpenCourseService()->searchCourseCount($conditions);
+            $total       = $this->getOpenCourseService()->countCourses($conditions);
             $openCourses = $this->getOpenCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), $start, $limit);
 
             return $this->wrap($this->filter($openCourses), $total);
@@ -97,7 +97,7 @@ class OpenCourses extends BaseResource
      */
     protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
     }
 
     /**
@@ -105,7 +105,7 @@ class OpenCourses extends BaseResource
      */
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     /**
@@ -113,6 +113,6 @@ class OpenCourses extends BaseResource
      */
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 }

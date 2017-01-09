@@ -2,9 +2,9 @@
 namespace Topxia\WebBundle\Command;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -89,11 +89,11 @@ class HlsConvertCommand extends BaseCommand
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 }

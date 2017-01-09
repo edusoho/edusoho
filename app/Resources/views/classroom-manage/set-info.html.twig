@@ -1,0 +1,106 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+
+{% set side_nav = 'base' %}
+{% set script_controller = 'classroombundle/controller/classroom/set-info' %}
+{% do load_script('classroombundle/controller/classroom-admin/classroom-create') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+{% set script_arguments = {
+tagMatchUrl: path('tag_match'),
+} %}
+
+{% block title %}{{'基本信息'|trans}} - {{ parent() }}{% endblock %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">{{'基本信息'|trans}}</div>
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
+    <form class="form-horizontal" method="post" id="classroom-set-form" novalidate>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="title">{{'名称'|trans}}</label>
+        </div>
+        <div class="controls col-md-8">
+          <input name="title" type="text"  id="title" class="form-control" value="{{classroom.title}}"/>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label >{{'简介'|trans}}</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea name="about" class="form-control" rows="6" 
+          data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+          data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}" id="about">{{ classroom.about|raw }}</textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{ '标签'|trans }}</label>
+        <div class="col-md-8 controls">
+          <input type="text" id="classroom_tags" name="tags" required="required" class="width-full select2-offscreen"
+                 tabindex="-1" value="{{ tags|join(',') }}"
+                 data-explain="{{ '用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理'|trans }}">
+          <div class="help-block">{{ '用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理'|trans }}</div>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label >{{'%name%展示'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</label>
+        </div>
+        <div class="col-md-8 controls radios">
+          <label>
+          <input id="showable-open" type="radio" name="showable" value="1" data-showable="{{classroom.showable}}"> {{'开启'|trans}}
+          </label>
+          <label>
+            <input id="showable-close" type="radio" name="showable" value="0"> {{'关闭'|trans}}
+          </label>
+          <div class="help-block">{{'关闭后，%name%将彻底隐藏，无法在前台查看到。'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
+        </div>
+
+      </div>
+      <div class="row form-group">
+      <div id='buyable'>
+        <div class="col-md-2 control-label">
+          <label >{{setting("classroom.name")|default("班级")}}{{'购买'|trans}}</label>
+        </div>
+        <div class="col-md-8 controls radios">
+          <label>
+          <input id="buyable-open" type="radio" name="buyable" value="1" data-buyable="{{classroom.buyable}}" > {{'开启'|trans}}
+          </label>
+          <label>
+            <input id="buyable-close" type="radio" name="buyable" value="0"> {{'关闭'|trans}}
+          </label>
+          <div class="help-block">{{'关闭后%name%将无法在线购买加入。'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
+        </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{'分类'|trans}}</label>
+        <div class="col-md-8 controls">
+          <select id="course_categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
+            {{ select_options(category_choices('classroom'), classroom.categoryId, {'0':'分类'|trans}) }}
+          </select>
+          <div class="help-block" style="display:none;"></div>
+        </div>
+      </div>
+
+     {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: classroom.orgCode, inputClass: 'width-input width-input-large'} %}
+    
+      <div class="row form-group">
+        <div class="col-md-2 control-label"></div>
+        <div class="controls col-md-8">
+          <button type="submit" class="btn btn-primary" id="classroom-save">{{'提交'|trans}}</button>  
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+</div>
+
+{% endblock %}

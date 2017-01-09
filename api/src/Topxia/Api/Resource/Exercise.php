@@ -309,16 +309,16 @@ class Exercise extends BaseResource
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getServiceKernel()->createService('Question:QuestionService');
     }
 
     protected function getCorrseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 }

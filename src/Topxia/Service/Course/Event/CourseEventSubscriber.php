@@ -1,35 +1,28 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Service\Taxonomy\TagOwnerManager;
 
 class CourseEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'course.join'            => 'onCourseJoin',
-            'course.favorite'        => 'onCourseFavorite',
-            'course.note.create'     => 'onCourseNoteCreate',
-            'course.note.update'     => 'onCourseNoteUpdate',
-            'course.note.delete'     => 'onCourseNoteDelete',
-            'course.note.liked'      => 'onCourseNoteLike',
-            'course.note.cancelLike' => 'onCourseNoteCancelLike',
-            'course.update'          => 'onCourseUpdate',
-            'course.teacher.update'  => 'onCourseTeacherUpdate',
-            'course.price.update'    => 'onCoursePriceUpdate',
-            'course.picture.update'  => 'onCoursePictureUpdate',
-            'user.role.change'       => 'onRoleChange',
-            'announcement.create'    => 'onAnnouncementCreate',
-            'announcement.update'    => 'onAnnouncementUpdate',
-            'announcement.delete'    => 'onAnnouncementDelete',
-            'courseReview.add'       => 'onCourseReviewCreate'
+            // 'course.join'            => 'onCourseJoin',
+            // 'course.favorite'        => 'onCourseFavorite',
+            // 'course.update'          => 'onCourseUpdate',
+            // 'course.teacher.update'  => 'onCourseTeacherUpdate',
+            // 'course.price.update'    => 'onCoursePriceUpdate',
+            // 'course.picture.update'  => 'onCoursePictureUpdate',
+            // 'user.role.change'       => 'onRoleChange',
+            // 'announcement.create'    => 'onAnnouncementCreate',
+            // 'announcement.update'    => 'onAnnouncementUpdate',
+            // 'announcement.delete'    => 'onAnnouncementDelete',
+            // 'courseReview.add'       => 'onCourseReviewCreate'
         );
     }
 
@@ -37,7 +30,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     {
         $user = $event->getSubject();
         if (!in_array('ROLE_TEACHER', $user['roles'])) {
-            $this->getCourseService()->cancelTeacherInAllCourses($user['id']);
+            $this->getCourseMemberService()->cancelTeacherInAllCourses($user['id']);
         }
     }
 
@@ -47,7 +40,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $private = $course['status'] == 'published' ? 0 : 1;
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
             if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
@@ -77,7 +70,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $private = $course['status'] == 'published' ? 0 : 1;
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
             if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
@@ -97,73 +90,6 @@ class CourseEventSubscriber implements EventSubscriberInterface
                 'course' => $this->simplifyCousrse($course)
             )
         ));
-    }
-
-    public function onCourseNoteCreate(Event $event)
-    {
-        $note      = $event->getSubject();
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
-        $course    = $this->getCourseService()->getCourse($note['courseId']);
-
-        if ($classroom && $note['status']) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
-        }
-
-        if ($course && $note['status']) {
-            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', +1);
-        }
-    }
-
-    public function onCourseNoteUpdate(Event $event)
-    {
-        $note      = $event->getSubject();
-        $preStatus = $event->getArgument('preStatus');
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
-        $course    = $this->getCourseService()->getCourse($note['courseId']);
-
-        if ($classroom && $note['status'] && !$preStatus) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', +1);
-        }
-
-        if ($classroom && !$note['status'] && $preStatus) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
-        }
-
-        if ($course && $note['status'] && !$preStatus) {
-            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', +1);
-        }
-
-        if ($course && !$note['status'] && $preStatus) {
-            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', -1);
-        }
-    }
-
-    public function onCourseNoteDelete(Event $event)
-    {
-        $note      = $event->getSubject();
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($note['courseId']);
-
-        if ($classroom) {
-            $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
-        }
-
-        $course = $this->getCourseService()->getCourse($note['courseId']);
-
-        if ($course) {
-            $this->getCourseService()->waveCourse($note['courseId'], 'noteNum', -1);
-        }
-    }
-
-    public function onCourseNoteLike(Event $event)
-    {
-        $note = $event->getSubject();
-        $this->getNoteService()->count($note['id'], 'likeNum', +1);
-    }
-
-    public function onCourseNoteCancelLike(Event $event)
-    {
-        $note = $event->getSubject();
-        $this->getNoteService()->count($note['id'], 'likeNum', -1);
     }
 
     public function onCourseTeacherUpdate(Event $event)
@@ -186,7 +112,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
             $teachers = $context['teachers'];
 
             foreach ($courseIds as $courseId) {
-                $this->getCourseService()->setCourseTeachers($courseId, $teachers);
+                $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
             }
         }
     }
@@ -195,10 +121,10 @@ class CourseEventSubscriber implements EventSubscriberInterface
     {
         $context = $event->getSubject();
 
-        $argument  = $context['argument'];
-        $course    = $context['course'];
-        $tagIds    = $context['tagIds'];
-        $userId    = $context['userId'];
+        $argument = $context['argument'];
+        $course   = $context['course'];
+        $tagIds   = $context['tagIds'];
+        $userId   = $context['userId'];
 
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
@@ -253,19 +179,20 @@ class CourseEventSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+        //@TODO course2.0后 应改为教学计划的复制
+        /*        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds) {
-            $fields           = ArrayToolkit::parts($announcement, array('userId', 'targetType', 'url', 'startTime', 'endTime', 'content'));
-            $fields['copyId'] = $announcement['id'];
+        $fields           = ArrayToolkit::parts($announcement, array('userId', 'targetType', 'url', 'startTime', 'endTime', 'content'));
+        $fields['copyId'] = $announcement['id'];
 
-            foreach ($courseIds as $courseId) {
-                $fields['targetId']    = $courseId;
-                $fields['createdTime'] = time();
+        foreach ($courseIds as $courseId) {
+        $fields['targetId']    = $courseId;
+        $fields['createdTime'] = time();
 
-                $this->getAnnouncementService()->createAnnouncement($fields);
-            }
+        $this->getAnnouncementService()->createAnnouncement($fields);
         }
+        }*/
 
         return true;
     }
@@ -283,27 +210,29 @@ class CourseEventSubscriber implements EventSubscriberInterface
             return false;
         }
 
+        //@TODO course2.0后 应改为教学计划的复制
+        /*
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds) {
-            $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
-                array(
-                    'targetType' => 'course',
-                    'targetIds'  => $courseIds,
-                    'copyId'     => $announcement['id']
-                ),
-                array('createdTime', 'DESC'),
-                0, PHP_INT_MAX
-            );
+        $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
+        array(
+        'targetType' => 'course',
+        'targetIds'  => $courseIds,
+        'copyId'     => $announcement['id']
+        ),
+        array('createdTime' => 'DESC'),
+        0, PHP_INT_MAX
+        );
 
-            $fields = ArrayToolkit::parts($announcement, array('url', 'startTime', 'endTime', 'content'));
+        $fields = ArrayToolkit::parts($announcement, array('url', 'startTime', 'endTime', 'content'));
 
-            foreach ($copyAnnouncements as $copyAnnouncement) {
-                $fields['updatedTime'] = time();
+        foreach ($copyAnnouncements as $copyAnnouncement) {
+        $fields['updatedTime'] = time();
 
-                $this->getAnnouncementService()->updateAnnouncement($copyAnnouncement['id'], $fields);
-            }
+        $this->getAnnouncementService()->updateAnnouncement($copyAnnouncement['id'], $fields);
         }
+        }*/
 
         return true;
     }
@@ -321,23 +250,24 @@ class CourseEventSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+        //@TODO course2.0后 应改为教学计划的复制
+        /*$courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds) {
-            $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
-                array(
-                    'targetType' => 'course',
-                    'targetIds'  => $courseIds,
-                    'copyId'     => $announcement['id']
-                ),
-                array('createdTime', 'DESC'),
-                0, PHP_INT_MAX
-            );
+        $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
+        array(
+        'targetType' => 'course',
+        'targetIds'  => $courseIds,
+        'copyId'     => $announcement['id']
+        ),
+        array('createdTime' => 'DESC'),
+        0, PHP_INT_MAX
+        );
 
-            foreach ($copyAnnouncements as $copyAnnouncement) {
-                $this->getAnnouncementService()->deleteAnnouncement($copyAnnouncement['id']);
-            }
+        foreach ($copyAnnouncements as $copyAnnouncement) {
+        $this->getAnnouncementService()->deleteAnnouncement($copyAnnouncement['id']);
         }
+        }*/
 
         return true;
     }
@@ -361,7 +291,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
                 'targetType' => 'course',
                 'userId'     => $review['userId']
             );
-            $this->getNotifiactionService()->notify($parentReview['userId'], 'comment-post',
+            $this->getNotificationService()->notify($parentReview['userId'], 'comment-post',
                 $message);
         }
     }
@@ -369,13 +299,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
     protected function simplifyCousrse($course)
     {
         return array(
-            'id'      => $course['id'],
-            'title'   => $course['title'],
-            'picture' => $course['middlePicture'],
-            'type'    => $course['type'],
-            'rating'  => $course['rating'],
-            'about'   => StringToolkit::plain($course['about'], 100),
-            'price'   => $course['price']
+            'id'     => $course['id'],
+            'title'  => $course['title'],
+            'type'   => $course['type'],
+            'rating' => $course['rating'],
+            'price'  => $course['price']
         );
     }
 
@@ -392,41 +320,41 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->createService('User.StatusService');
-    }
-
-    protected function getNoteService()
-    {
-        return ServiceKernel::instance()->createService('Course.NoteService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getAnnouncementService()
     {
-        return ServiceKernel::instance()->createService('Announcement.AnnouncementService');
+        return ServiceKernel::instance()->createService('Announcement:AnnouncementService');
     }
 
     protected function getReviewService()
     {
-        return ServiceKernel::instance()->createService('Course.ReviewService');
+        return ServiceKernel::instance()->createService('Course:ReviewService');
     }
 
-    protected function getNotifiactionService()
+    protected function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User.NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

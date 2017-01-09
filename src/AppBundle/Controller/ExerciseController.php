@@ -89,7 +89,8 @@ class ExerciseController extends BaseController
             'paper'       => $exercise,
             'paperResult' => $exerciseResult,
             'student'     => $student,
-            'attachments' => $attachments
+            'attachments' => $attachments,
+            'action'      => $request->query->get('action', '')
         ));
     }
 
@@ -106,7 +107,9 @@ class ExerciseController extends BaseController
 
             $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
 
-            return $this->createJsonResponse(array('result' => true, 'message' => ''));
+            $goto = $this->generateUrl('exercise_result_show', array('resultId' => $paperResult['id']));
+
+            return $this->createJsonResponse(array('result' => true, 'message' => '', 'goto' => $goto));
         }
     }
 
@@ -127,7 +130,7 @@ class ExerciseController extends BaseController
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getCourseService()

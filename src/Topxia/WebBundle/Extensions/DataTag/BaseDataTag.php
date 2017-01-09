@@ -34,12 +34,12 @@ abstract class BaseDataTag
 
     protected function getCurrentUser()
     {
-        return $this->getServiceKernel()->createService('User.UserService')->getCurrentUser();
+        return ServiceKernel::instance()->getCurrentUser();
     }
 
-    protected function setting($name, $default = null)
+    protected function setting($name, $default = array())
     {
-        return $this->getServiceKernel()->createService('System.SettingService')->get($name);
+        return ServiceKernel::instance()->createService('System:SettingService')->get($name, $default);
     }
 
 }

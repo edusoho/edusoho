@@ -52,11 +52,6 @@ class ClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 }

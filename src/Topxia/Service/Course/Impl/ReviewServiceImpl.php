@@ -3,7 +3,7 @@ namespace Topxia\Service\Course\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\ReviewService;
 
@@ -110,7 +110,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
                 'createdTime' => time(),
                 'meta'        => $meta
             ));
-            $this->dispatchEvent('courseReview.add', new ServiceEvent($review));
+            $this->dispatchEvent('courseReview.add', new Event($review));
         } else {
             $review = $this->getReviewDao()->updateReview($review['id'], array(
                 'rating'      => $fields['rating'],
@@ -177,21 +177,21 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
     protected function getReviewDao()
     {
-        return $this->createDao('Course.ReviewDao');
+        return $this->createDao('Course:ReviewDao');
     }
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 }

@@ -11,7 +11,7 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
 
     public function findByCourseId($courseId)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table()} WHERE fromCourseId = ? LIMIT 1";
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 

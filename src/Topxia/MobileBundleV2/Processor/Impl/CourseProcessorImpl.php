@@ -2,8 +2,8 @@
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\EdusohoLiveClient;
-use Topxia\Service\Common\ServiceException;
+use Biz\Util\EdusohoLiveClient;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\CourseProcessor;
@@ -30,7 +30,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'targetId'   => $courseId
         );
 
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime', 'DESC'), $start, $limit);
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), $start, $limit);
         $announcements = array_values($announcements);
         return $this->filterAnnouncements($announcements);
     }
@@ -70,7 +70,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return null;
         }
 
-        $member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($courseId, $user['id']) : null;
+        $member = $user->isLogin() ? $this->controller->getCourseMemberService()->getCourseMember($courseId, $user['id']) : null;
         $member = $this->previewAsMember($member, $courseId, $user);
 
         if ($member && $member['locked']) {
@@ -447,7 +447,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'userId' => $user['id']
         );
 
-        $total     = $this->controller->getNoteService()->searchNoteCount($conditions);
+        $total     = $this->controller->getNoteService()->countCourseNotes($conditions);
         $noteInfos = $this->controller->getNoteService()->searchNotes($conditions, array("updatedTime" => "DESC"), $start, $limit);
         $lessonIds = ArrayToolkit::column($noteInfos, "lessonId");
         $lessons   = $this->getCourseService()->findLessonsByIds($lessonIds);
@@ -516,7 +516,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $noteInfo['content'] = $this->uploadImage($content);
 
-        $result            = $this->controller->getNoteService()->saveNote($noteInfo);
+        $result            = $this->controller->getNoteService()->createCourseNote($noteInfo);
         $result['content'] = $this->controller->convertAbsoluteUrl($this->request, $result['content']);
 
         if ($result['updatedTime'] == 0) {
@@ -878,7 +878,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         try {
-            $this->controller->getCourseService()->becomeStudent($courseId, $user['id'], array(
+            $this->controller->getCourseMemberService()->becomeStudent($courseId, $user['id'], array(
                 'becomeUseMember' => true
             ));
         } catch (ServiceException $e) {
@@ -949,7 +949,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         try {
-            $this->getCourseService()->removeStudent($course['id'], $user['id']);
+            $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
         } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
@@ -967,7 +967,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return $this->createErrorResponse('not_found', "课程不存在");
         }
 
-        $member = $user->isLogin() ? $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $member = $user->isLogin() ? $this->controller->getCourseMemberService()->getCourseMember($course['id'], $user['id']) : null;
         $member = $this->previewAsMember($member, $courseId, $user);
 
         if ($member && $member['locked']) {
@@ -992,7 +992,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         if (empty($member)) {
-            $member = $this->getCourseService()->becomeStudentByClassroomJoined($courseId, $user["id"]);
+            $member = $this->getCourseMemberService()->becomeStudentByClassroomJoined($courseId, $user["id"]);
 
             if (empty($member)) {
                 $member = null;
@@ -1020,7 +1020,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     private function setCourseTarget($courseId)
     {
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($courseId);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
         return empty($classroom) ? null : 'classroom';
     }
@@ -1312,7 +1312,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $learnStatus = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
 
         if (!empty($course)) {
-            $member   = $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']);
+            $member   = $this->controller->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
             $progress = $this->calculateUserLearnProgress($course, $member);
         } else {
             $course   = array();
@@ -1645,6 +1645,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     private function getClassroomService()
     {
-        return $this->controller->getService('Classroom:Classroom.ClassroomService');
+        return $this->controller->getService('Classroom:ClassroomService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

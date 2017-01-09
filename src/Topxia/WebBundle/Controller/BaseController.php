@@ -1,14 +1,14 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Biz\User\CurrentUser;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\ServiceEvent;
+use Biz\User\Service\UserService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Topxia\Common\Exception\InvalidArgumentException;
-//use Topxia\Common\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -24,8 +24,6 @@ abstract class BaseController extends Controller
      * 不能通过empty($this->getCurrentUser())的方式来判断用户是否登录。
      * @return CurrentUser
      */
-    protected $biz;
-
     protected function getCurrentUser()
     {
         return $this->getUserService()->getCurrentUser();
@@ -92,7 +90,7 @@ abstract class BaseController extends Controller
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
 
-        return ServiceKernel::instance()->getBiz()->service('System:LogService')->info('user', 'login_success', $this->getServiceKernel()->trans('登录成功'));
+        return ServiceKernel::instance()->createService('System:LogService')->info('user', 'login_success', $this->getServiceKernel()->trans('登录成功'));
 
         $loginBind = $this->setting('login_bind', array());
 
@@ -270,16 +268,16 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @return UserServiceImpl
+     * @return UserService
      */
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function fillOrgCode($conditions)
@@ -312,10 +310,10 @@ abstract class BaseController extends Controller
 
     protected function dispatchEvent($eventName, $subject)
     {
-        if ($subject instanceof ServiceEvent) {
+        if ($subject instanceof Event) {
             $event = $subject;
         } else {
-            $event = new ServiceEvent($subject);
+            $event = new Event($subject);
         }
         return ServiceKernel::dispatcher()->dispatch($eventName, $event);
     }

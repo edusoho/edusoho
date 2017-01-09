@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\UserandProfilesDataTag;
 
 class UserandProfilesDataTagTest extends BaseTestCase
@@ -27,7 +27,7 @@ class UserandProfilesDataTagTest extends BaseTestCase
 
     public function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 
 }

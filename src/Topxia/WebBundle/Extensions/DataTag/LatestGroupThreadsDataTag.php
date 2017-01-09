@@ -2,6 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
@@ -49,16 +50,16 @@ class LatestGroupThreadsDataTag extends BaseDataTag implements DataTag
 
     private function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Group.ThreadService');
+        return $this->getServiceKernel()->createService('Group:ThreadService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     private function getGroupService() 
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Group:GroupService');
     }
 }

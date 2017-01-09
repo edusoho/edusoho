@@ -5,8 +5,8 @@ namespace Biz\Activity\Config;
 use Biz\Activity\Listener\Listener;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Common\Exception\UnexpectedValueException;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 abstract class Activity
@@ -21,9 +21,11 @@ abstract class Activity
     }
 
     /**
-     * @inheritdoc
+     * @param $targetId
+     * @param $fields     fields  to update
+     * @param $activity   existed activity
      */
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
     }
 
@@ -36,7 +38,7 @@ abstract class Activity
 
     public function isFinished($id)
     {
-        return true;
+        return false;
     }
 
     /**
@@ -57,7 +59,7 @@ abstract class Activity
     abstract protected function registerListeners();
 
     /**
-     * @param  string $eventName
+     * @param  string     $eventName
      * @return Listener
      */
     final public function getListener($eventName)
@@ -94,7 +96,7 @@ abstract class Activity
     /**
      * @return Biz
      */
-    protected final function getBiz()
+    final protected function getBiz()
     {
         return $this->biz;
     }

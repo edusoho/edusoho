@@ -4,7 +4,7 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class LessonLiveTickets extends BaseResource
 {
@@ -57,7 +57,7 @@ class LessonLiveTickets extends BaseResource
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function filter($res)

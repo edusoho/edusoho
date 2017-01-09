@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class ThreadServiceTest extends BaseTestCase
 {
@@ -363,16 +363,11 @@ class ThreadServiceTest extends BaseTestCase
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
-
-    private function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 }

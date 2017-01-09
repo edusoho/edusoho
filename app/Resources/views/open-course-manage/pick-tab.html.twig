@@ -1,0 +1,11 @@
+<ul class="nav nav-tabs mbm">
+  <li  {% if filter  == 'openCourse' %} class="active" {% endif %}>
+    <a href="javascript:;" data-role="pick-modal"  data-url="{{path('open_course_manage_course_pick',{id:courseId,filter:'openCourse'})}}">我的公开课</a>
+  </li>
+  <li {% if filter == 'otherCourse' %} class="active" {% endif %}>
+  	<a href="javascript:;" data-role="pick-modal"  data-url="{{path('open_course_manage_course_pick',{id:courseId,filter:'otherCourse'})}}">我的其它课程</a>
+  </li>
+  <li {% if filter == 'normal' %} class="active"{% endif %}>
+ 	 <a href= "javascript:;" data-role="pick-modal" data-url="{{path('open_course_manage_course_pick',{id:courseId,filter:'normal'})}}">所有课程</a>
+  </li>
+</ul>

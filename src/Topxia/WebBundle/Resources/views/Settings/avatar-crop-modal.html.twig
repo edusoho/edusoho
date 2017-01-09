@@ -1,6 +1,9 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
 {% block title %}{{ '头像图片'|trans }}{% endblock %}
- {% set modal_class= 'modal-lg' %}
+  
+
+{% set modal_class= 'modal-lg' %}
 {% block body %}
   <form id="avatar-crop-form" method="post">
     <div class="form-group clearfix">
@@ -20,5 +23,6 @@
           data-url="{{ path('settings_avatar_crop_modal') }}" data-toggle="form-submit"
           data-target="#avatar-crop-form">{{ '保存'|trans }}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ '取消'|trans }}</button>
-  <script>app.load('settings/avatar-crop-modal')</script>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('settings/avatar-crop-modal') };</script>
 {% endblock %}

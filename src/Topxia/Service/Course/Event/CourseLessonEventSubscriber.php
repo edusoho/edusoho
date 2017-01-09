@@ -1,10 +1,8 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -165,7 +163,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $private = $course['status'] == 'published' ? 0 : 1;
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
             if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
@@ -195,7 +193,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $private = $course['status'] == 'published' ? 0 : 1;
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
             if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
@@ -430,16 +428,16 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     protected function dealESReplay($replay)
     {
         $lessonId = $replay['lessonId'];
-        $lesson = $this->getCourseService()->getLesson($lessonId);
+        $lesson   = $this->getCourseService()->getLesson($lessonId);
         if ($lesson['liveProvider'] == 5) {
-            $globalId = $replay['globalId'];
-            $cloudFile = $this->getCloudFileService()->getByGlobalId($globalId);
-            $currentUser = $this->getCurrentUser();
-            $cloudFile['status'] = 'ok';
-            $cloudFile['targetId'] = $replay['id'];
-            $cloudFile['targetType'] = 'repaly';
-            $cloudFile['convertHash'] = $cloudFile['hashId'];
-            $cloudFile['etag'] = $cloudFile['hashId'];
+            $globalId                   = $replay['globalId'];
+            $cloudFile                  = $this->getCloudFileService()->getByGlobalId($globalId);
+            $currentUser                = $this->getCurrentUser();
+            $cloudFile['status']        = 'ok';
+            $cloudFile['targetId']      = $replay['id'];
+            $cloudFile['targetType']    = 'repaly';
+            $cloudFile['convertHash']   = $cloudFile['hashId'];
+            $cloudFile['etag']          = $cloudFile['hashId'];
             $cloudFile['createdUserId'] = $currentUser['id'];
             $cloudFile['updatedUserId'] = $currentUser['id'];
             $this->getUploadFileService()->syncToLocalFromCloud($cloudFile);
@@ -564,41 +562,41 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     protected function getStatusService()
     {
-        return ServiceKernel::instance()->createService('User.StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     private function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getTestpaperService()
     {
-        return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
+        return ServiceKernel::instance()->createService('Testpaper:TestpaperService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getCloudFileService()
     {
-        return ServiceKernel::instance()->createService('CloudFile.CloudFileService');
+        return ServiceKernel::instance()->createService('CloudFile:CloudFileService');
     }
 
     protected function getCrontabJobService()
     {
-        return ServiceKernel::instance()->createService('Crontab.CrontabService');
+        return ServiceKernel::instance()->createService('Crontab:CrontabService');
     }
 
     protected function getMaterialService()
     {
-        return ServiceKernel::instance()->createService('Course.MaterialService');
+        return ServiceKernel::instance()->createService('Course:MaterialService');
     }
 }

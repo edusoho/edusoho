@@ -1,40 +1,49 @@
 import FileChooser from '../../file-chooser/file-choose';
-import { chooserUiOpen, chooserUiClose, showChooserType } from '../widget/chooser-ui.js';
+import {chooserUiOpen, chooserUiClose, showChooserType} from '../widget/chooser-ui.js';
 
-jQuery.validator.addMethod("unsigned_integer", function(value, element) {
+jQuery.validator.addMethod("unsigned_integer", function (value, element) {
   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "必须为非负整数");
 
-jQuery.validator.addMethod("second_range", function(value, element) {
+jQuery.validator.addMethod("time_range", function (value, element) {
+  console.log(value, this.optional(element), /^([0-9]|[012345][0-9]|59)$/.test(value));
   return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
-}, "秒数只能在0-59之间");
+}, "只能在0-59之间");
+
+jQuery.validator.addMethod("time_length", function (value, element) {
+  return parseInt($("#minute").val()) + parseInt($("#second").val()) > 0
+}, "时长不能等于0");
+
 
 showChooserType($('[name="ext[mediaId]"]'));
 
 
 function _inItStep2form() {
-  var $step1_form = $('#step2-form');
-  var validator = $step1_form.data('validator', validator);
-  validator = $step1_form.validate({
+  var $step2_form = $('#step2-form');
+  var validator = $step2_form.data('validator');
+
+  $step2_form.validate({
     groups: {
-      date: 'minute second'
+      nameGroup: 'minute second'
     },
     rules: {
       title: {
         required: true,
         maxlength: 50,
       },
-      content: 'required',
-      minute: 'required unsigned_integer',
-      second: 'required second_range',
+      minute: 'required unsigned_integer time_length',
+      second: 'required time_range time_length',
       'ext[mediaId]': 'required'
     },
     messages: {
       minute: {
         required: '请输入时长',
+        time_length: '时长必须大于0'
       },
       second: {
         required: '请输入时长',
+        time_range: '秒只能在0-59之间',
+        time_length: '时长必须大于0'
       },
       'ext[mediaId]': '请上传或选择%display%'
     }

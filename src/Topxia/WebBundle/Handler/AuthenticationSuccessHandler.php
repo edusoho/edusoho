@@ -40,12 +40,12 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 
     private function getAuthService()
     {
-        return ServiceKernel::instance()->createService('User.AuthService');
+        return ServiceKernel::instance()->createService('User:AuthService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
     protected function getServiceKernel()
     {

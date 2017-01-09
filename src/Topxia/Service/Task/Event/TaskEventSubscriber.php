@@ -2,7 +2,6 @@
 namespace Topxia\Service\Task\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -79,11 +78,11 @@ class TaskEventSubscriber implements EventSubscriberInterface
 
     protected function getTaskService()
     {
-        return ServiceKernel::instance()->createService('Task.TaskService');
+        return ServiceKernel::instance()->createService('Task:TaskService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 }

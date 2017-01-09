@@ -1,0 +1,42 @@
+.color-lump {
+  display: inline-block;
+  .border-radius;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #fff;
+  background-color: @gray-light;
+  //其他不同的颜色使用 bg-primary ...
+  &.lump-sm {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+  }
+  &.lump-md {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+  }
+  &.lump-xs {
+    width: 10px;
+    height: 10px;
+  }
+  &.lump-card {
+    background-color: @gray-lighter;
+    color: @gray;
+    border: 1px solid #d6d6d6;
+    &.done {
+      background-color: #d2f2df;
+      border: 1px solid @brand-primary;
+      color: @brand-primary;
+    }
+    &.doing {
+      background-color: @brand-primary;
+      border: 1px solid #34a263;
+      color: #fff;
+    }
+  }
+}

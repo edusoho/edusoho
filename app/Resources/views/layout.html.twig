@@ -1,30 +1,38 @@
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+{% import "macro.html.twig" as web_macro %}
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+<!--[if lt IE 7]>
+<html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html> <!--<![endif]-->
 {# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
 <html lang="{{ app.request.getLocale() }}">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
   <meta name="renderer" content="webkit">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <title>
     {%- block title -%}
       {{ setting('site.name', 'EduSoho') }}{% if setting('site.slogan') %} - {{ setting('site.slogan') }}{% endif %}{% if  setting('copyright.owned','0') != '1' or setting('copyright.thirdCopyright')|default(0) == 2 %} - Powered By EduSoho{% endif %}
     {%- endblock -%}
   </title>
-  <meta name="keywords" content="{% spaceless %}{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}{% endspaceless %}" />
-  <meta name="description" content="{% spaceless %}{% block description %}{{ setting('site.seo_description') }}{% endblock %}{% endspaceless %}" />
-  <meta content="{{ csrf_token('site') }}" name="csrf-token" />
-  <meta content="{{ app.user.isLogin()|default(0) }}" name="is-login" />
-  <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open" />
+  <meta name="keywords"
+        content="
+{% spaceless %}{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}{% endspaceless %}"/>
+  <meta name="description"
+        content="{% spaceless %}{% block description %}{{ setting('site.seo_description') }}{% endblock %}{% endspaceless %}"/>
+  <meta content="{{ csrf_token('site') }}" name="csrf-token"/>
+  <meta content="{{ app.user.isLogin()|default(0) }}" name="is-login"/>
+  <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open"/>
   {{ setting('login_bind.verify_code', '')|raw }}
   {% if setting('site.favicon') %}
-  <link rel="icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" />
-  <link rel="shortcut icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" media="screen"/>
+    <link rel="icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon"/>
+    <link rel="shortcut icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" media="screen"/>
   {% endif %}
 
   {% block stylesheets %}
@@ -42,8 +50,8 @@
   <div class="es-wrap">
 
     {% block header %}
-      {% include 'TopxiaWebBundle::site-hint.html.twig' %}
-      {% include 'TopxiaWebBundle:Default:header.html.twig' %}
+      {% include 'site-hint.html.twig' %}
+      {% include 'default/header.html.twig' %}
     {% endblock %}
 
     {% block full_content %}
@@ -57,7 +65,7 @@
     {% endblock %}
 
     {% block footer %}
-      {% include 'TopxiaWebBundle:Default:footer.html.twig' %}
+      {% include 'default/footer.html.twig' %}
     {% endblock %}
 
     {% block bottom %}{% endblock %}
@@ -65,14 +73,14 @@
 
   {% block esBar %}
     {% if setting('esBar.enabled', 0) %}
-        {% include 'TopxiaWebBundle:EsBar:index.html.twig' %}
+      {% include 'es-bar/index.html.twig' %}
     {% endif %}
   {% endblock %}
 
   {% block floatConsult %}
     {% if setting('consult.enabled', 0) and (consultDisplay|default(false) or siteNav|default() == '/' ) %}
       {% if not setting('esBar.enabled',0) %}
-        {% include 'TopxiaWebBundle::float-consult.html.twig' %}
+        {% include 'float-consult.html.twig' %}
       {% endif %}
     {% endif %}
   {% endblock %}

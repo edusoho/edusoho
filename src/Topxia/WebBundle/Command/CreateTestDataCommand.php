@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,7 +45,7 @@ class CreateTestDataCommand extends BaseCommand
 
             $this->getCourseService()->publishCourse($course['id']);
 
-            $this->getCourseService()->becomeStudent($course['id'], $user['id']);
+            $this->getCourseMemberService()->becomeStudent($course['id'], $user['id']);
 
             for ($j = 0; $j < 5; $j++) {
                 $lesson = array(
@@ -64,17 +64,22 @@ class CreateTestDataCommand extends BaseCommand
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getAuthService()
     {
-        return ServiceKernel::instance()->createService('User.AuthService');
+        return ServiceKernel::instance()->createService('User:AuthService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 
     protected function authenticateUser($user)

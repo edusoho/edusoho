@@ -15,10 +15,6 @@ class DoTestBase
   }
 
   _initEvent() {
-    /*if ($(".testpaper-activity-show").length > 0) {
-      $(this).perfectScrollbar();
-    }*/
-    
     this.$container.on('focusin','textarea',event=>this._showEssayInputEditor(event));
     this.$container.on('click','[data-role="test-suspend"],[data-role="paper-submit"]',event=>this._btnSubmit(event));
     this.$container.on('click','.js-testpaper-question-list li',event=>this._choiceList(event));
@@ -58,26 +54,28 @@ class DoTestBase
     }, 1000);
   }
 
-
   _clickBtnIndex(event) {
-    let $current = $($(event.currentTarget).data('anchor'));
-    $(".testpaper-activity-show").scrollTop($current.offset().top);
+    let $btn = $(event.currentTarget).addClass('doing');
+    $btn.siblings('.doing').removeClass('doing');
+    let $current = $($btn.data('anchor'));
+    $(".js-testpaper-content").scrollTop($current.offset().top);
   }
 
   _choiceLable(event) {
-    let $inputParents = $(event.delegateTarget);
-
-    $inputParents.find('label').each(function(){
-      $(this).find('input').prop("checked") ? $(this).addClass('lump-primary-light') : $(this).removeClass('lump-primary-light');
-    });
-    let $choices = $inputParents.find('label.active');
-    this._renderBtnIndex($choices.find('input').attr('name'),$choices.length);
+    let $inputParents = $(event.currentTarget);
+    this._renderBtnIndex($inputParents.attr('name'));
   }
 
-  _renderBtnIndex(id,num) {
-    num > 0 ? $showLight.addClass('lump-primary-light') : $showLight.removeClass('lump-primary-light');
+  _renderBtnIndex(idNum,isChecked = true) {
+    let $btn = $(`[data-anchor="#question${idNum}"]`);
+    if(!isChecked) {
+      $btn.removeClass('done').removeClass('doing');
+      return;
+    }
+    let $doingBtn = $btn.siblings('.doing');
+    $btn.addClass('doing').addClass('done');
+    $doingBtn.removeClass('doing');
   }
-
   _showEssayInputEditor(event) {
     let $shortTextarea = $(event.currentTarget);
 
@@ -98,11 +96,12 @@ class DoTestBase
         filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
       });
 
-      editor.on('blur', function(e) {
+      editor.on('blur', e => {
         editor.updateElement();
-        setTimeout(function() {
+        setTimeout(()=>{
           $longTextarea.val(editor.getData());
           $longTextarea.change();
+          $longTextarea.val() ? this._renderBtnIndex($longTextarea.attr('name'),true) : this._renderBtnIndex($longTextarea.attr('name'),false);
         }, 1);
       });
 
@@ -147,7 +146,7 @@ class DoTestBase
 
     isChecked = $input.prop('checked');
     let questionId = $input.attr('name');
-    isChecked ? $('a[data-anchor="#question' + questionId + '"]').addClass('lump-primary-light') : $('a[data-anchor="#question' + questionId + '"]').removeClass('lump-primary-light');
+    this._renderBtnIndex(questionId,isChecked)
   }
 
   _quick2Question(event) {
@@ -178,9 +177,17 @@ class DoTestBase
       if (response.result) {
         emitter.emit('finish');
       }
+      window.location.href = response.goto;
     })
   }
 
 }
+
+//临时方案，libs/vendor.js这个方法没有起作用
+/*$(document).ajaxSend(function(a, b, c) {
+  if (c.type == 'POST') {
+    b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+  }
+});*/
 
 export default DoTestBase;

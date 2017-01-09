@@ -5,7 +5,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\OrderProcessor;
 use Topxia\MobileBundleV2\Alipay\MobileAlipayConfig;
-use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
 class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 {
@@ -880,7 +880,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
     private function getClassroomService()
     {
-        return $this->controller->getService('Classroom:Classroom.ClassroomService');
+        return $this->controller->getService('Classroom:ClassroomService');
     }
 
     private function getLevelService()

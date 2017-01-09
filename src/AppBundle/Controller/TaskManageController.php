@@ -2,9 +2,10 @@
 namespace AppBundle\Controller;
 
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\StrategyContext;
-use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Exception\InvalidArgumentException;
 
@@ -21,9 +22,14 @@ class TaskManageController extends BaseController
             $task['_base_url']       = $request->getSchemeAndHttpHost();
             $task['fromUserId']      = $this->getUser()->getId();
             $task['fromCourseSetId'] = $course['courseSetId'];
-            $task                    = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
+            $task                    = $this->getTaskService()->createTask($this->parseTimeFields($task));
             $tasksRenderPage = $this->createCourseStrategy($course)->getTaskItemRenderPage();
+
+            if ($course['isDefault'] && isset($task['mode']) && $task['mode'] != 'lesson') {
+                return $this->createJsonResponse(array('append' => false));
+            }
+
             return $this->render($tasksRenderPage, array(
                 'course' => $course,
                 'task'   => $task
@@ -45,14 +51,14 @@ class TaskManageController extends BaseController
         $task     = $this->getTaskService()->getTask($id);
         $taskMode = $request->query->get('type');
         if ($task['courseId'] != $courseId) {
-            throw new InvalidArgumentException('任务不在课程中');
+            throw new InvalidArgumentException('任务不在计划中');
         }
 
         if ($request->getMethod() == 'POST') {
             $task              = $request->request->all();
             $task['_base_url'] = $request->getSchemeAndHttpHost();
             $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
-            return $this->createJsonResponse(true);
+            return $this->createJsonResponse(array('append' => false));
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
@@ -74,7 +80,7 @@ class TaskManageController extends BaseController
 
     public function publishAction(Request $request, $courseId, $id)
     {
-        $this->tryManageCourse($courseId, $id);
+        $this->tryManageCourse($courseId);
         $this->getTaskService()->publishTask($id);
 
         return $this->createJsonResponse(array('success' => true));
@@ -82,8 +88,8 @@ class TaskManageController extends BaseController
 
     public function unPublishAction(Request $request, $courseId, $id)
     {
-        $this->tryManageCourse($courseId, $id);
-        $this->getTaskService()->unPublishTask($id);
+        $this->tryManageCourse($courseId);
+        $this->getTaskService()->unpublishTask($id);
 
         return $this->createJsonResponse(array('success' => true));
     }
@@ -149,6 +155,10 @@ class TaskManageController extends BaseController
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @param  $course
+     * @return BaseStrategy
+     */
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
@@ -159,6 +169,10 @@ class TaskManageController extends BaseController
         return $this->get('extension.default')->getActivities();
     }
 
+    /**
+     * @param  $type
+     * @return mixed
+     */
     protected function getActivityActionConfig($type)
     {
         $config = $this->getActivityConfig();

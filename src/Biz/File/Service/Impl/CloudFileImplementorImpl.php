@@ -7,13 +7,14 @@ use Biz\File\Convertor\BaseConvertor;
 use Biz\File\Convertor\ConvertorFactory;
 use Biz\File\Dao\UploadFileDao;
 use Biz\File\Service\FileImplementor;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 
 class CloudFileImplementorImpl extends BaseService implements FileImplementor
 {
@@ -802,10 +803,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     }
 
     /**
-     * @TODO 需要改为Biz的Setting Service
+     * @return SettingService
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return $this->biz->service('System:SettingService');
     }
 }

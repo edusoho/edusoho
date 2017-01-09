@@ -10,8 +10,7 @@ use Biz\Course\Service\ThreadService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\UserService;
+use Biz\User\Service\UserService;
 
 class ThreadController extends BaseController
 {
@@ -94,7 +93,7 @@ class ThreadController extends BaseController
      */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
     /**

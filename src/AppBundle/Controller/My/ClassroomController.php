@@ -7,6 +7,7 @@ namespace AppBundle\Controller\My;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Thread\Service\ThreadService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
@@ -139,9 +140,12 @@ class ClassroomController extends BaseController
         return $this->createService('Thread:ThreadService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
 }

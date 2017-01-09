@@ -52,19 +52,19 @@ class LessonLessonPluginController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
-
+    //TODO
     protected function getHomeworkService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
     } 
-
+    //TODO
     protected function getExerciseService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
@@ -72,6 +72,6 @@ class LessonLessonPluginController extends BaseController
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
     }
 }

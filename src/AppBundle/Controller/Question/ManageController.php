@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Question;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\UserService;
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,8 +43,7 @@ class ManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
 
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($courseSet['id']);
-        $courseTasks = ArrayToolkit::index($courseTasks, 'id');
+        $courseTasks = $this->getQuestionRanges($courseSet['id']);
 
         return $this->render('question-manage/index.html.twig', array(
             'courseSet'      => $courseSet,
@@ -205,16 +205,7 @@ class ManageController extends BaseController
         $conditions = $request->query->all();
 
         $conditions['parentId'] = 0;
-
-        if (empty($conditions['excludeIds'])) {
-            unset($conditions['excludeIds']);
-        } else {
-            $conditions['excludeIds'] = $conditions['excludeIds'];
-        }
-
-        if (!empty($conditions['keyword'])) {
-            $conditions['stem'] = trim($conditions['keyword']);
-        }
+        $conditions['courseId'] = $courseSet['id'];
 
         $paginator = new Paginator(
             $request,
@@ -229,17 +220,14 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        /*$targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));*/
-
         return $this->render('question-manage/question-picker.html.twig', array(
             'courseSet'     => $courseSet,
             'questions'     => $questions,
             'replace'       => empty($conditions['replace']) ? '' : $conditions['replace'],
             'paginator'     => $paginator,
-            'targetChoices' => $this->getQuestionRanges($courseSet),
-            //'targets'       => $targets,
+            'targetChoices' => $this->getQuestionRanges($courseSet['id']),
             'conditions'    => $conditions,
-            'target'        => $request->query->get('target', 'testpaper')
+            'targetType'    => $request->query->get('targetType', 'testpaper')
         ));
     }
 
@@ -247,26 +235,20 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
-        $question = $this->getQuestionService()->get($questionId);
+        $questionIds = $request->query->get('questionIds', array(0));
+        $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
-        if (empty($question)) {
-            throw $this->ResourceNotFoundException('question', $questionId);
+        foreach ($questions as &$question) {
+            if ($question['subCount'] > 0) {
+                $question['subs'] = $this->getQuestionService()->findQuestionsByParentId($question['id']);
+            }
         }
-
-        $subQuestions = array();
-        if ($question['subCount'] > 0) {
-            $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-        }
-
-        //$targets = $this->get('topxia.target_helper')->getTargets(array($question['target']));
 
         return $this->render('question-manage/question-picked.html.twig', array(
-            'courseSet'    => $courseSet,
-            'question'     => $question,
-            'subQuestions' => $subQuestions,
-            //'targets'      => $targets,
-            'type'         => $question['type'],
-            'target'       => $request->query->get('target', 'testpaper')
+            'courseSet' => $courseSet,
+            'questions' => $questions,
+            'type'      => $question['type'],
+            'target'    => $request->query->get('target', 'testpaper')
         ));
     }
 
@@ -275,11 +257,13 @@ class ManageController extends BaseController
         return $this->get('extension.default')->getQuestionTypes();
     }
 
-    protected function getQuestionRanges($course)
+    protected function getQuestionRanges($courseSetId)
     {
-        $ranges = array('本课程');
+        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courseIds = ArrayToolkit::column($courses, 'id');
 
-        return $ranges;
+        $courseTasks = $this->getCourseTaskService()->findTasksByCourseIds($courseIds);
+        return ArrayToolkit::index($courseTasks, 'id');
     }
 
     protected function getCourseService()
@@ -297,9 +281,12 @@ class ManageController extends BaseController
         return $this->createService('Question:QuestionService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getCourseTaskService()

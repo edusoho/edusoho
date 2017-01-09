@@ -5,6 +5,7 @@ namespace Topxia\Api\Resource;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class Users extends BaseResource
 {
@@ -52,7 +53,7 @@ class Users extends BaseResource
         $ip = $request->getClientIp();
         $fields['createdIp'] = $ip;
 
-        $authSettings = $this->getServiceKernel()->createService('System.SettingService')->get('auth', array());
+        $authSettings = ServiceKernel::instance()->createService('System:SettingService')->get('auth', array());
 
         if (isset($authSettings['register_protective'])) {
             $type = $authSettings['register_protective'];
@@ -124,7 +125,7 @@ class Users extends BaseResource
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     /**

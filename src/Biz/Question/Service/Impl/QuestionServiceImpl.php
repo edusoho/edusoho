@@ -4,7 +4,6 @@ namespace Biz\Question\Service\Impl;
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
@@ -73,8 +72,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             return false;
         }
 
-        $questionConfig = $this->getQuestionConfig($question['type']);
-        $questionConfig->delete($question['metas']['mediaId']);
+        if (!empty($question['metas']['mediaId'])) {
+            $questionConfig = $this->getQuestionConfig($question['type']);
+            $questionConfig->delete($question['metas']['mediaId']);
+        }
 
         $result = $this->getQuestionDao()->delete($id);
 
@@ -176,14 +177,15 @@ class QuestionServiceImpl extends BaseService implements QuestionService
      * question_favorite
      */
 
-    public function createFavoriteQuestion($fields)
+    public function getFavoriteQuestion($favoriteId)
     {
-        return $this->getQuestionFavoriteDao()->create($fields);
+        return $this->getQuestionFavoriteDao()->get($favoriteId);
     }
 
-    public function updateFavoriteQuestion($id, $fields)
+    public function createFavoriteQuestion($fields)
     {
-        return $this->getQuestionFavoriteDao()->update($id, $fields);
+        $fields['createdTime'] = time();
+        return $this->getQuestionFavoriteDao()->create($fields);
     }
 
     public function deleteFavoriteQuestion($id)
@@ -222,7 +224,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         }
 
         if (!empty($conditions['keyword'])) {
-            $conditions['stem'] = $conditions['keyword'];
+            $conditions['stem'] = '%'.trim($conditions['keyword']).'%';
             unset($conditions['keyword']);
         }
 
@@ -277,11 +279,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
+        return $this->createService('File:UploadFileService');
     }
 }

@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class MyCourseController extends BaseController
 {
@@ -75,16 +76,16 @@ class MyCourseController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 }

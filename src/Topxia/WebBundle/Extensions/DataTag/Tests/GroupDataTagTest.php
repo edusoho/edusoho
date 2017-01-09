@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\GroupDataTag;
 
 class GroupDataTagTest extends BaseTestCase
@@ -26,7 +26,7 @@ class GroupDataTagTest extends BaseTestCase
 
     private function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Group:GroupService');
     }
 
 }

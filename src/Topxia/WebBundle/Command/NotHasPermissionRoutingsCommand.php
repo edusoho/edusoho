@@ -3,15 +3,8 @@ namespace Topxia\WebBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
-use Topxia\Service\CloudPlatform\Client\FailoverCloudAPI;
-
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Symfony\Component\Yaml\Yaml;
 
 

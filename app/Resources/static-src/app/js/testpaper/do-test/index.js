@@ -3,14 +3,15 @@ import DoTestBase from '../widget/do-test-base';
 class DoTestpaper extends DoTestBase {
   constructor($container) {
     super($container);
-
     this.$timePauseDialog = this.$container.find('#time-pause-dialog');
     this.$timer = $container.find('.js-testpaper-timer');
-    this._init();
     this._initTimer();
+    this._init();
   }
 
   _init() {
+    this.$container.find('.js-testpaper-content').perfectScrollbar();
+    this.$container.find('.js-panel-card').perfectScrollbar();
     this.$container.on('click','.js-btn-pause',event=>this._clickBtnPause(event));
     this.$container.on('click','.js-btn-resume',event => this._clickBtnReume(event));
   }
@@ -18,6 +19,7 @@ class DoTestpaper extends DoTestBase {
   _initTimer() {
     let self = this;
     if (this.$timer != undefined) {
+
       this.$timer.timer({
         countdown:true,
         duration: this.$timer.data('time'),
@@ -55,7 +57,6 @@ class DoTestpaper extends DoTestBase {
     this.$container.find('.js-btn-pause').removeClass('active');
     this.$timePauseDialog.modal('hide');
   }
-
 }
 
-new DoTestpaper($('.testpaper-activity-show'));
+new DoTestpaper($('.js-task-testpaper-body'));

@@ -1,6 +1,7 @@
 <?php
 
 namespace Topxia\Api\Util;
+use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -37,7 +38,7 @@ class UserUtil
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8') . substr($randString, 6, 3);
 
             foreach ($nicknames as $name) {
-                if (ServiceKernel::instance()->createService('User.UserService')->isNicknameAvaliable($name)) {
+                if (ServiceKernel::instance()->createService('User:UserService')->isNicknameAvaliable($name)) {
                     $registration['nickname'] = $name;
                     break;
                 }
@@ -53,19 +54,19 @@ class UserUtil
         $registration['token'] = $token;
         $registration['createdIp'] = $oauthUser['createdIp'];
 
-        if(ServiceKernel::instance()->createService('System.SettingService')->get("auth.register_mode", "email") == "email_or_mobile") {
+        if($this->getSettingService()->get("auth.register_mode", "email") == "email_or_mobile") {
             $registration['emailOrMobile'] = $registration['email'];
             unset($registration['email']);
         }
 
-        $user = ServiceKernel::instance()->createService('User.AuthService')->register($registration, $type);
+        $user = ServiceKernel::instance()->createService('User:AuthService')->register($registration, $type);
         return $user;
     }
 
 
     public function fillUserAttr($userId, $userInfo)
     {
-        $user = ServiceKernel::instance()->createService('User.UserService')->getUser($userId);
+        $user = ServiceKernel::instance()->createService('User:UserService')->getUser($userId);
         if (!empty($userInfo['avatar'])) {
             $curl = curl_init($userInfo['avatar']);
             
@@ -90,25 +91,33 @@ class UserUtil
             fwrite($tp, $imageData);
             fclose($tp);
 
-            $file = ServiceKernel::instance()->createService('Content.FileService')->uploadFile('user', new File($smallPath));
+            $file = ServiceKernel::instance()->createService('Content:FileService')->uploadFile('user', new File($smallPath));
             $fields[] = array(
                 'type' => 'large',
                 'id' => $file['id']
             );
             
-            $file = ServiceKernel::instance()->createService('Content.FileService')->uploadFile('user', new File($mediumPath));
+            $file = ServiceKernel::instance()->createService('Content:FileService')->uploadFile('user', new File($mediumPath));
             $fields[] = array(
                 'type' => 'medium',
                 'id' => $file['id']
             );
 
-            $file = ServiceKernel::instance()->createService('Content.FileService')->uploadFile('user', new File($largePath));
+            $file = ServiceKernel::instance()->createService('Content:FileService')->uploadFile('user', new File($largePath));
             $fields[] = array(
                 'type' => 'small',
                 'id' => $file['id']
             );
-            $user = ServiceKernel::instance()->createService('User.UserService')->changeAvatar($userId, $fields);
+            $user = ServiceKernel::instance()->createService('User:UserService')->changeAvatar($userId, $fields);
         }
         return $user;
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

@@ -187,22 +187,22 @@ class CourseFileManageController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course.MaterialService');
+        return $this->getServiceKernel()->createService('Course:MaterialService');
     }
 
     protected function createPrivateFileDownloadResponse(Request $request, $file)

@@ -4,16 +4,17 @@ namespace Topxia\MobileBundleV2\Processor;
 
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\Impl\TokenServiceImpl;
 
-class BaseProcessor {
+class BaseProcessor
+{
 
     const API_VERSIN_RANGE = '3.6.0';
 
-    public $formData;
-    public $controller;
-    public $request;
+    public    $formData;
+    public    $controller;
+    public    $request;
     protected $delegator;
+
     private function __construct($controller)
     {
         $this->controller = $controller;
@@ -46,14 +47,15 @@ class BaseProcessor {
         return array_map(function ($user) use ($container) {
             foreach ($user as $key => $value) {
                 if (!in_array($key, array(
-                    "id", "email", "smallAvatar", "mediumAvatar", "largeAvatar", "nickname", "roles", "locked", "about", "title"))) {
+                    "id", "email", "smallAvatar", "mediumAvatar", "largeAvatar", "nickname", "roles", "locked", "about", "title"))
+                ) {
                     unset($user[$key]);
                 }
             }
 
-            $user['smallAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['smallAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
             $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
-            $user['largeAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+            $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
 
             return $user;
         }, $users);
@@ -82,10 +84,10 @@ class BaseProcessor {
             unset($announcement["userId"]);
             unset($announcement["courseId"]);
             unset($announcement["updatedTime"]);
-            $announcement["content"] = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
+            $announcement["content"]     = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
             $announcement["createdTime"] = date('c', $announcement['createdTime']);
-            $announcement["startTime"] = date('c', $announcement['startTime']);
-            $announcement["endTime"] = date('c', $announcement['endTime']);
+            $announcement["startTime"]   = date('c', $announcement['startTime']);
+            $announcement["endTime"]     = date('c', $announcement['endTime']);
             return $announcement;
         }, $announcements);
     }
@@ -127,7 +129,7 @@ class BaseProcessor {
 
     protected function getCashAccountService()
     {
-        return $this->controller->getService('Cash.CashAccountService');
+        return ServiceKernel::instance()->createService('Cash:CashAccountService');
     }
 
     protected function getAppService()
@@ -137,7 +139,7 @@ class BaseProcessor {
 
     protected function getCashOrdersService()
     {
-        return $this->controller->getService('Cash.CashOrdersService');
+        return ServiceKernel::instance()->createService('Cash:CashOrdersService');
     }
 
     protected function getBlockService()
@@ -147,17 +149,17 @@ class BaseProcessor {
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getUserService()
     {
-        return $this->controller->getService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getMessageService()
     {
-        return $this->controller->getService('User.MessageService');
+        return ServiceKernel::instance()->createService('User:MessageService');
     }
 
     protected function getCouponService()
@@ -172,15 +174,12 @@ class BaseProcessor {
 
     protected function getNotificationService()
     {
-        return $this->controller->getService('User.NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
-    /**
-     * @return TokenServiceImpl
-     */
     protected function getTokenService()
     {
-        return $this->controller->getService('User.TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getCourseOrderService()
@@ -195,7 +194,7 @@ class BaseProcessor {
 
     protected function getArticleService()
     {
-        return $this->controller->getService('Article.ArticleService');
+        return ServiceKernel::instance()->createService('Article:ArticleService');
     }
 
     protected function getOrderService()
@@ -215,12 +214,17 @@ class BaseProcessor {
 
     protected function getSettingService()
     {
-        return $this->controller->getService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getCourseService()
     {
         return $this->controller->getService('Course.CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->controller->getService('Course:MemberService');
     }
 
     protected function getPayCenterService()
@@ -235,7 +239,7 @@ class BaseProcessor {
 
     protected function getAnnouncementService()
     {
-        return $this->controller->getService('Announcement.AnnouncementService');
+        return ServiceKernel::instance()->createService('Announcement:AnnouncementService');
     }
 
     public function getEduCloudService()
@@ -245,12 +249,12 @@ class BaseProcessor {
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function getUserFieldService()
     {
-        return $this->controller->getService('User.UserFieldService');
+        return ServiceKernel::instance()->createService('User:UserFieldService');
     }
 
     public function createErrorResponse($name, $message)
@@ -270,12 +274,12 @@ class BaseProcessor {
             return null;
         }
 
-        $userIsTeacher = $this->controller->getCourseService()->isCourseTeacher($courseId, $user['id']);
+        $userIsTeacher = $this->controller->getCourseMemberService()->isCourseTeacher($courseId, $user['id']);
 
         if ($userIsTeacher) {
             $member['role'] = 'teacher';
         } else {
-            $userIsStudent  = $this->controller->getCourseService()->isCourseStudent($courseId, $user['id']);
+            $userIsStudent  = $this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
             $member['role'] = $userIsStudent ? "student" : null;
         }
 

@@ -4,7 +4,8 @@
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Extensions\DataTag\RecentLiveLessonsDataTag;
 
 class RecentLiveLessonsDataTagTest extends BaseTestCase {
@@ -71,7 +72,7 @@ class RecentLiveLessonsDataTagTest extends BaseTestCase {
         $this->getCourseService()->publishLesson($course2['id'],$lesson2['id']);
         $this->getCourseService()->publishLesson($course3['id'],$lesson3['id']);
 
-        $this->getCourseService()->becomeStudent($course1['id'],$user1['id']);
+        $this->getCourseMemberService()->becomeStudent($course1['id'],$user1['id']);
 
         $datatag = new RecentLiveLessonsDataTag();
         $lessons = $datatag->getData(array('count' => 2 , 'userId' => $user1['id']));
@@ -83,16 +84,21 @@ class RecentLiveLessonsDataTagTest extends BaseTestCase {
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

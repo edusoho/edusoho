@@ -1,8 +1,5 @@
 <?php
-
-
 namespace Biz\Group\Dao;
-
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
@@ -12,4 +9,5 @@ interface ThreadPostDao extends GeneralDaoInterface
 
     public function countPostsThreadIds($conditions);
 
+    public function deleteByThreadId($threadId);
 }

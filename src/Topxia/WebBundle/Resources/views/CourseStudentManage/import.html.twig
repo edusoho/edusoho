@@ -1,5 +1,4 @@
-
-{% extends 'TopxiaWebBundle:Importer:importer-layout.html.twig' %}
+{% extends 'importer/importer-layout.html.twig' %}
 
 {% block title %}批量添加学员{% endblock %}
 
@@ -48,7 +47,7 @@
 {% endblock %}
 
 {% block load_import_js %}
-  app.load('topxiawebbundle/controller/course-manage/student-import');
+  app.lazyLoad = function() { app.load('topxiawebbundle/controller/course-manage/student-import'); };
 {% endblock %}
 
 {% block stylesheet %}

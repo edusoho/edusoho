@@ -2,6 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 
 class UserFriendCountDataTag extends BaseDataTag implements DataTag  
@@ -31,7 +32,7 @@ class UserFriendCountDataTag extends BaseDataTag implements DataTag
 
     private function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
 }

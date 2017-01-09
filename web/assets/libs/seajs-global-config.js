@@ -95,6 +95,8 @@ seajs.config({
     // 预加载项
     preload: [this.JSON ? '' : 'json'],
 
+    base: '/assets/libs',
+
     // 路径配置
     paths: app.jsPaths,
 
@@ -142,5 +144,14 @@ seajs.on('fetch', function(data) {
 seajs.on('define', function(data) {
     if (data.uri.lastIndexOf(__SEAJS_FILE_VERSION) > 0) {
         data.uri = data.uri.replace(__SEAJS_FILE_VERSION, '');
+    }
+});
+
+seajs.on('require', function(data) {
+    if ((data.id == '$' || data.id == 'jquery' || data.id == '$-debug') && (typeof window.jQuery !== 'undefined' || typeof window.$ !== 'undefined'))
+    {
+        data.exec = function () {
+            return window.$;
+        }
     }
 });

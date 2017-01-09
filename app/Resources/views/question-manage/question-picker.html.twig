@@ -21,7 +21,9 @@
       {% endif %}
       <th width="45%">{{'题干'|trans}}</th>
       <th>{{'类型'|trans}}</th>
-      <th>{{'分值'|trans}}</th>
+      {% if targetType|default('testpaper') == 'testpaper' %}
+        <th>{{'分值'|trans}}</th>
+      {% endif %}
       <th>{{'操作'|trans}}</th>
     </tr>
     </thead>
@@ -30,7 +32,7 @@
         {% include 'question-manage/question-pick-tr.html.twig' %}
       {% else %}
         <tr>
-          <td colspan="20"><div class="empty">无题目记录,请先去<a href="{{ path('course_manage_question',{courseId:courseSet.id}) }}">创建题目</a></div>
+          <td colspan="20"><div class="empty">无题目记录,请先去<a href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">创建题目</a></div>
           </td>
         </tr>
       {% endfor %}
@@ -49,7 +51,7 @@
 {% endblock %}
 
 {% block footer %}
-    <button type="button" class="btn btn-primary" type="button" class="btn btn-primary pull-right" data-role="batch-select-save" data-toggle="form-submit" data-target="#block-form" >确定</button>
+    <button type="button" class="btn btn-primary" type="button" class="btn btn-primary pull-right" data-role="batch-select-save" data-toggle="form-submit" data-target="#block-form" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id }) }}">确定</button>
 
     <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
 {% endblock %}

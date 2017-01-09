@@ -5,13 +5,13 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CdnUrl
 {
-   	public function get($package = 'default')
+    public function get($package = 'default')
     {
-        $cdn     = ServiceKernel::instance()->createService('System.SettingService')->get('cdn', array());
+        $cdn     = ServiceKernel::instance()->createService('System:SettingService')->get('cdn', array());
         $cdnUrls = (empty($cdn['enabled'])) ? array() : array(
-        	'defaultUrl' => $this->url($cdn['defaultUrl']), 
-        	'userUrl' => $this->url($cdn['userUrl']), 
-        	'contentUrl' => $this->url($cdn['contentUrl'])
+            'defaultUrl' => $this->url($cdn['defaultUrl']),
+            'userUrl' => $this->url($cdn['userUrl']),
+            'contentUrl' => $this->url($cdn['contentUrl'])
         );
 
         if ($cdnUrls) {

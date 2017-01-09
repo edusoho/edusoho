@@ -3,30 +3,30 @@
 namespace Biz\File\Service\Impl;
 
 use Biz\BaseService;
-
-use Biz\File\Service\UploadFileService;
-use Biz\Course\Service\CourseService;
 use Biz\File\Dao\FileUsedDao;
-use Biz\File\Dao\UploadFileCollectDao;
 use Biz\File\Dao\UploadFileDao;
+use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\UserService;
+use Biz\File\Dao\UploadFileTagDao;
+use Biz\System\Service\LogService;
 use Biz\File\Dao\UploadFileInitDao;
 use Biz\File\Dao\UploadFileShareDao;
-use Biz\File\Dao\UploadFileTagDao;
-use Biz\File\FireWall\FireWallFactory;
+use Biz\Course\Service\CourseService;
 use Biz\File\Service\FileImplementor;
-use Biz\System\Service\LogService;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Topxia\Common\ArrayToolkit;
+use Biz\File\Dao\UploadFileCollectDao;
+use Biz\File\FireWall\FireWallFactory;
+use Biz\System\Service\SettingService;
+use Biz\File\Service\UploadFileService;
 use Topxia\Service\Common\ServiceKernel;
-
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
     static $implementor
-        = array(
-            'local' => 'File:LocalFileImplementor',
-            'cloud' => 'File:CloudFileImplementor'
-        );
+    = array(
+        'local' => 'File:LocalFileImplementor',
+        'cloud' => 'File:CloudFileImplementor'
+    );
 
     public function getFile($id)
     {
@@ -230,9 +230,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $file = $this->getUploadFileInitDao()->update($params['id'], array('status' => 'ok'));
 
-            $file   = array_merge($file, $fields);
+            $file = array_merge($file, $fields);
 
-            $file   = $this->getUploadFileDao()->create($file);
+            $file = $this->getUploadFileDao()->create($file);
 
             $result = $implementor->finishedUpload($file, $params);
 
@@ -413,15 +413,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $result;
         /*$subTarget = $this->getCourseService()->findLessonsByTypeAndMediaId('video', $file['id']) ?: array();
 
-        if (!empty($subTarget)) {
-            $subTarget = $subTarget[0];
-        }
+    if (!empty($subTarget)) {
+    $subTarget = $subTarget[0];
+    }
 
-        return array(
-            'convertHash' => $convertHash,
-            'courseId'    => empty($subTarget['courseId']) ? $target['targetId'] : $subTarget['courseId'],
-            'lessonId'    => empty($subTarget['id']) ? 0 : $subTarget['id']
-        );*/
+    return array(
+    'convertHash' => $convertHash,
+    'courseId'    => empty($subTarget['courseId']) ? $target['targetId'] : $subTarget['courseId'],
+    'lessonId'    => empty($subTarget['id']) ? 0 : $subTarget['id']
+    );*/
     }
 
     public function collectFile($userId, $fileId)
@@ -578,8 +578,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $cloudFileConditions = array(
             'processStatus' => $conditions['processStatus']
         );
-        $globalArray         = array_chunk($globalIds, 20);
-        $count               = 0;
+        $globalArray = array_chunk($globalIds, 20);
+        $count       = 0;
 
         foreach ($globalArray as $key => $globals) {
             $cloudFileConditions['nos'] = implode(',', $globals);
@@ -1149,7 +1149,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     protected function findCreatedFileIds($fileIds, $targetType, $targetId)
     {
-        $conditions    = array(
+        $conditions = array(
             'targetType' => $targetType,
             'targetId'   => $targetId
         );
@@ -1236,17 +1236,18 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->createDao('File:UploadFileCollectDao');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 
-
     /**
-     * @param $key
-     *
-     * @return FileImplementor
+     * @param  $key
      * @throws \Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @return FileImplementor
      */
     protected function getFileImplementor($key)
     {
@@ -1266,11 +1267,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }
 
     /**
-     * @TODO SettingService 迁移后再改动
+     * @return SettingService
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
     /**
@@ -1278,7 +1279,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
      */
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
+        return ServiceKernel::instance()->createService('Taxonomy:TagService');
     }
 
     /**
@@ -1320,7 +1321,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         return $this->biz['file_fire_wall_factory'];
     }
-
 }
 
 class FileFilter

@@ -6,13 +6,13 @@ use Biz\Activity\Config\Activity;
 
 interface ActivityService
 {
-    public function getActivity($id);
+    public function getActivity($id,$fetchMedia =false);
 
-    public function getActivityFetchMedia($id);
+    public function findActivities($ids, $fetchMedia =false);
 
-    public function findActivities($ids);
+    public function findActivitiesByCourseIdAndType($courseId, $type, $fetchMedia =false);
 
-    public function findActivitiesByCourseIdAndType($courseId, $type);
+    public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia =false);
 
     public function createActivity($activity);
 

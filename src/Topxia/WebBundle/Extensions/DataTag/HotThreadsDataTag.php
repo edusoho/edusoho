@@ -2,64 +2,65 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
-class HotThreadsDataTag extends BaseDataTag implements DataTag  
-{   
-        /**
+class HotThreadsDataTag extends BaseDataTag implements DataTag
+{
+    /**
      * 获取最热话题
-     * 
+     *
      * 可传入的参数：
      *
      *   count 必需 话题数量，取值不能超过100
-     * 
+     *
      * @param  array $arguments 参数
+     *
      * @return array 最热话题
      */
 
     public function getData(array $arguments)
-    {   
-        $groupSetting=$this->getSettingService()->get('group', array());
-        $time=7*24*60*60;
-        if(isset($groupSetting['threadTime_range'])){
-            $time=$groupSetting['threadTime_range']*24*60*60;   
+    {
+        $groupSetting = $this->getSettingService()->get('group', array());
+        $time         = 7 * 24 * 60 * 60;
+        if (isset($groupSetting['threadTime_range'])) {
+            $time = $groupSetting['threadTime_range'] * 24 * 60 * 60;
         }
-     
+
         $hotThreads = $this->getThreadService()->searchThreads(
             array(
-                'createdTime'=>time()-$time,
-                'status'=>'open'
-                ),
+                'createdTime' => time() - $time,
+                'status'      => 'open'
+            ),
             array(
-                    array('isStick','DESC'),
-                    array('postNum','DESC'),
-                    array('createdTime','DESC'),
-                ),0, $arguments['count']
+                array('isStick', 'DESC'),
+                array('postNum', 'DESC'),
+                array('createdTime', 'DESC'),
+            ), 0, $arguments['count']
         );
 
         $ownerIds = ArrayToolkit::column($hotThreads, 'userId');
         $groupIds = ArrayToolkit::column($hotThreads, 'groupId');
-        $userIds =  ArrayToolkit::column($hotThreads, 'lastPostMemberId');
+        $userIds  = ArrayToolkit::column($hotThreads, 'lastPostMemberId');
 
-        $lastPostMembers=$this->getUserService()->findUsersByIds($userIds);
+        $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
 
-        $owners=$this->getUserService()->findUsersByIds($ownerIds);
+        $owners = $this->getUserService()->findUsersByIds($ownerIds);
 
-        $groups=$this->getGroupService()->getGroupsByids($groupIds);
+        $groups = $this->getGroupService()->getGroupsByids($groupIds);
 
 
         foreach ($hotThreads as $key => $thread) {
 
-            if ($thread['userId'] == $owners[$thread['userId']]['id'] ) {
+            if ($thread['userId'] == $owners[$thread['userId']]['id']) {
                 $hotThreads[$key]['user'] = $owners[$thread['userId']];
             }
 
-            if ($thread['lastPostMemberId']>0 && $thread['lastPostMemberId'] == $lastPostMembers[$thread['lastPostMemberId']]['id'] ) {
+            if ($thread['lastPostMemberId'] > 0 && $thread['lastPostMemberId'] == $lastPostMembers[$thread['lastPostMemberId']]['id']) {
                 $hotThreads[$key]['lastPostMember'] = $lastPostMembers[$thread['lastPostMemberId']];
             }
 
-            if ($thread['groupId'] == $groups[$thread['groupId']]['id'] ) {
+            if ($thread['groupId'] == $groups[$thread['groupId']]['id']) {
                 $hotThreads[$key]['group'] = $groups[$thread['groupId']];
             }
         }
@@ -68,20 +69,22 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
 
     private function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Group.ThreadService');
+        return $this->getServiceKernel()->createService('Group:ThreadService');
     }
+
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
-    private function getGroupService() 
+
+    private function getGroupService()
     {
-        return $this->getServiceKernel()->createService('Group.GroupService');
+        return $this->getServiceKernel()->createService('Group:GroupService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
 }

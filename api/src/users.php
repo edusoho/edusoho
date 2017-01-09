@@ -35,8 +35,8 @@ datalist
 $api->get('/pages', function (Request $request) {
     $start = $request->query->get('start', 0);
     $limit = $request->query->get('limit', 10);
-    $count = ServiceKernel::instance()->createService('User.UserService')->searchUserCount(array());
-    $users = ServiceKernel::instance()->createService('User.UserService')->searchUsers(array(), array('createdTime', 'DESC'), $start, $limit);
+    $count = ServiceKernel::instance()->createService('User:UserService')->searchUserCount(array());
+    $users = ServiceKernel::instance()->createService('User:UserService')->searchUsers(array(), array('createdTime', 'DESC'), $start, $limit);
     return array(
         'data'  => filters($users, 'user'),
         'total' => $count
@@ -69,18 +69,18 @@ POST /users/login
  */
 $api->post('/login', function (Request $request) {
     $fields = $request->request->all();
-    $user = ServiceKernel::instance()->createService('User.UserService')->getUserByLoginField($fields['nickname']);
+    $user = ServiceKernel::instance()->createService('User:UserService')->getUserByLoginField($fields['nickname']);
 
     if (empty($user)) {
         throw new ResourceNotFoundException('User', $fields['nickname']);
     }
 
-    if (!ServiceKernel::instance()->createService('User.UserService')->verifyPassword($user['id'], $fields['password'])) {
+    if (!ServiceKernel::instance()->createService('User:UserService')->verifyPassword($user['id'], $fields['password'])) {
 
         throw new RuntimeException('password error');
     }
 
-    $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('mobile_login', $user['id']);
+    $token = ServiceKernel::instance()->createService('User:UserService')->makeToken('mobile_login', $user['id']);
     setCurrentUser($user);
     return array(
         'user'  => filter($user, 'user'),
@@ -127,7 +127,7 @@ $api->post('/bind_login', function (Request $request) {
         throw new InvalidArgumentException('type parameter error');
     }
 
-    $userBind = ServiceKernel::instance()->createService('User.UserService')->getUserBindByTypeAndFromId($type, $id);
+    $userBind = ServiceKernel::instance()->createService('User:UserService')->getUserBindByTypeAndFromId($type, $id);
 
     if (empty($userBind)) {
         $oauthUser = array(
@@ -142,7 +142,7 @@ $api->post('/bind_login', function (Request $request) {
             throw new InvalidArgumentException("获取用户信息失败，请重试。");
         }
 
-        if (!ServiceKernel::instance()->createService('User.AuthService')->isRegisterEnabled()) {
+        if (!ServiceKernel::instance()->createService('User:AuthService')->isRegisterEnabled()) {
             throw new RuntimeException("注册功能未开启，请联系管理员！");
         }
 
@@ -153,12 +153,12 @@ $api->post('/bind_login', function (Request $request) {
             throw new RuntimeException("登录失败，请重试！");
         }
 
-        $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
+        $token = ServiceKernel::instance()->createService('User:UserService')->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
         setCurrentUser($user);
         $user = $userUtil->fillUserAttr($user['id'], $oauthUser);
     } else {
-        $user = ServiceKernel::instance()->createService('User.UserService')->getUser($userBind['toId']);
-        $token = ServiceKernel::instance()->createService('User.UserService')->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
+        $user = ServiceKernel::instance()->createService('User:UserService')->getUser($userBind['toId']);
+        $token = ServiceKernel::instance()->createService('User:UserService')->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
         setCurrentUser($user);
     }
 
@@ -185,7 +185,7 @@ POST /users/logout
  */
 $api->post('/logout', function (Request $request) {
     $token = $request->request->get('token');
-    $result = ServiceKernel::instance()->createService('User.UserService')->deleteToken('login', $token);
+    $result = ServiceKernel::instance()->createService('User:UserService')->deleteToken('login', $token);
     return array(
         'success' => $result ? $result : false
     );
@@ -216,9 +216,9 @@ $api->post('/{id}/followers', function (Request $request, $id) {
     $fromUser = getCurrentUser();
 
     if (!empty($method) && $method == 'delete') {
-        $result = ServiceKernel::instance()->createService('User.UserService')->unFollow($fromUser['id'], $id);
+        $result = ServiceKernel::instance()->createService('User:UserService')->unFollow($fromUser['id'], $id);
     } else {
-        $result = ServiceKernel::instance()->createService('User.UserService')->follow($fromUser['id'], $id);
+        $result = ServiceKernel::instance()->createService('User:UserService')->follow($fromUser['id'], $id);
     }
 
     return array(
@@ -270,7 +270,7 @@ $api->get('/{id}/friendship', function (Request $request, $id) {
     }
 
     foreach ($toIds as $toId) {
-        $toUser = ServiceKernel::instance()->createService('User.UserService')->getUser($toId);
+        $toUser = ServiceKernel::instance()->createService('User:UserService')->getUser($toId);
 
         if (empty($toUser)) {
             $result[] = 'no-user';
@@ -278,9 +278,9 @@ $api->get('/{id}/friendship', function (Request $request, $id) {
         }
 
         //关注id的人
-        $follwers = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollower($user['id']);
+        $follwers = ServiceKernel::instance()->createService('User:UserService')->findAllUserFollower($user['id']);
         //id关注的人
-        $follwings = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollowing($user['id']);
+        $follwings = ServiceKernel::instance()->createService('User:UserService')->findAllUserFollowing($user['id']);
 
         $toId = $toUser['id'];
 

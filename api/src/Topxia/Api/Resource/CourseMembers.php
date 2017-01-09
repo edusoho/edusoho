@@ -6,6 +6,7 @@ use Topxia\Api\Resource\BaseResource;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class CourseMembers extends BaseResource
 {
@@ -18,7 +19,7 @@ class CourseMembers extends BaseResource
         if ($request->query->has('cursor')) {
             $cursor = $request->query->get('cursor', 0);
             $conditions['createdTime_GE'] = $cursor;
-            $members = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'ASC'), $start, $limit);
+            $members = $this->getCourseMemberService()->searchMembers($conditions, array('createdTime', 'ASC'), $start, $limit);
             $members = $this->assemblyMembers($members);
             $next = $this->nextCursorPaging($cursor, $start, $limit, $members);
             return $this->wrap($this->filter($members), $next);
@@ -51,11 +52,16 @@ class CourseMembers extends BaseResource
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

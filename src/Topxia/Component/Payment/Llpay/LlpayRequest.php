@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Component\Payment\Llpay;
 
+use Biz\System\Service\SettingService;
 use Topxia\Component\Payment\Request;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -108,11 +109,14 @@ class LlpayRequest extends Request
 
     protected function geUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
+    /**
+     * @return SettingService
+     */
     private function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

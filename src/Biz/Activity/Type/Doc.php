@@ -1,12 +1,13 @@
 <?php
 
-
 namespace Biz\Activity\Type;
 
-
-use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\DocActivityDao;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Activity\Service\ActivityService;
+use Biz\File\Service\UploadFileService;
 use Topxia\Common\ArrayToolkit;
-
+use Biz\Activity\Config\Activity;
 
 class Doc extends Activity
 {
@@ -17,7 +18,7 @@ class Doc extends Activity
             'icon' => 'es-icon es-icon-description'
         );
     }
-    
+
     public function registerActions()
     {
         return array(
@@ -51,25 +52,20 @@ class Doc extends Activity
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
-        $doc = $this->getFlashActivityDao()->get($activity['mediaId']);
-        if($doc['finishType'] == 'time') {
+        $doc      = $this->getDocActivityDao()->get($activity['mediaId']);
+        if ($doc['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
-            return $result > $doc['finishDetail'];
-        }
-
-        if($doc['finishType'] == 'click') {
-            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'doc.finish');
-            return !empty($result);
+            return $result >= $doc['finishDetail'];
         }
         return false;
     }
 
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail',
+            'finishDetail'
         ));
 
         $updateFields['updatedTime'] = time();
@@ -83,22 +79,41 @@ class Doc extends Activity
 
     public function get($targetId)
     {
-        return $this->getDocActivityDao()->get($targetId);
+        $activity = $this->getDocActivityDao()->get($targetId);
+
+        $activity['file'] = $this->getUploadFileService()->getFullFile($activity['mediaId']);
+        return $activity;
     }
 
+    /**
+     * @return DocActivityDao
+     */
     protected function getDocActivityDao()
     {
         return $this->getBiz()->dao('Activity:DocActivityDao');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service("Activity:ActivityService");
     }
-    
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
+    }
 }

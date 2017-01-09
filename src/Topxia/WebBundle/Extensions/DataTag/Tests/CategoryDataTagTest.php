@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\CategoryDataTag;
 
 class CategoryDataTagTest extends BaseTestCase
@@ -27,7 +27,7 @@ class CategoryDataTagTest extends BaseTestCase
 
     private function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
 }

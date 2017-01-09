@@ -77,7 +77,7 @@ class UserFieldServiceImpl extends BaseService implements UserFieldService
 
         return $fields;
     }
-
+    
     public function updateField($id, $fields)
     {
         $fields = ArrayToolkit::filter($fields, array(

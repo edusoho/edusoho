@@ -2,10 +2,10 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
@@ -114,7 +114,7 @@ class CourseController extends CourseBaseController
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
@@ -132,7 +132,7 @@ class CourseController extends CourseBaseController
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
         if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
@@ -155,7 +155,7 @@ class CourseController extends CourseBaseController
             6
         );
 
-        $students = $this->getCourseService()->findCourseStudents(
+        $students = $this->getCourseMemberService()->findCourseStudents(
             $course['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -194,14 +194,14 @@ class CourseController extends CourseBaseController
         }     
 
         if ($course['parentId'] && empty($member)) {
-            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
             if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该班级，如有需要请联系客服'), '', 3, $this->generateUrl('homepage'));
             }
 
             $user   = $this->getCurrentUser();
-            $member = $this->getCourseService()->becomeStudentByClassroomJoined($id, $user->id);
+            $member = $this->getCourseMemberService()->becomeStudentByClassroomJoined($id, $user->id);
 
             if (isset($member["id"])) {
                 $course['studentNum']++;
@@ -215,7 +215,7 @@ class CourseController extends CourseBaseController
 
         if ('normal' == $course['type']){
             $this->dispatchEvent('course.view',
-                new ServiceEvent($course, array('userId' => $user['id'])));
+                new Event($course, array('userId' => $user['id'])));
         }
         $allTags = $this->getTagService()->findTagsByOwner(array(
             'ownerType' => 'classroom',
@@ -312,7 +312,7 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
         
-        $this->getCourseService()->removeStudent($course['id'], $user['id']);
+        $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
     }
@@ -329,7 +329,7 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException();
         }
 
-        $this->getCourseService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
+        $this->getCourseMemberService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
 
         return $this->createJsonResponse(true);
     }
@@ -362,7 +362,7 @@ class CourseController extends CourseBaseController
         try {
             list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
-            if ($member && !$this->getCourseService()->isMemberNonExpired($course, $member)) {
+            if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
             }
 
@@ -406,7 +406,7 @@ class CourseController extends CourseBaseController
         $count     = $this->getCourseService()->getCourseStudentCount($id);
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $students = $this->getCourseService()->findCourseStudents($id, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $students = $this->getCourseMemberService()->findCourseStudents($id, $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         foreach ($students as $key => $student) {
             $user                       = $this->getUserService()->getUser($student['userId']);
@@ -524,7 +524,7 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
-        $member          = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+        $member          = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
         $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']);
 
         $progress = $this->calculateUserLearnProgress($course, $member);
@@ -539,7 +539,7 @@ class CourseController extends CourseBaseController
 
     public function latestMembersBlockAction($course, $count = 10)
     {
-        $students = $this->getCourseService()->findCourseStudents($course['id'], 0, 12);
+        $students = $this->getCourseMemberService()->findCourseStudents($course['id'], 0, 12);
         $users    = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
 
         return $this->render('TopxiaWebBundle:Course:latest-members-block.html.twig', array(
@@ -679,7 +679,7 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
         }
 
-        $this->getCourseService()->quitCourseByDeadlineReach($user['id'], $courseId);
+        $this->getCourseMemberService()->quitCourseByDeadlineReach($user['id'], $courseId);
 
         return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
     }
@@ -693,7 +693,7 @@ class CourseController extends CourseBaseController
 
     public function memberIdsAction(Request $request, $id)
     {
-        $ids = $this->getCourseService()->findMemberUserIdsByCourseId($id);
+        $ids = $this->getCourseMemberService()->findMemberUserIdsByCourseId($id);
 
         return $this->createJsonResponse($ids);
     }
@@ -763,12 +763,7 @@ class CourseController extends CourseBaseController
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     protected function getVipService()
@@ -778,32 +773,32 @@ class CourseController extends CourseBaseController
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getDiscountService()
@@ -813,7 +808,7 @@ class CourseController extends CourseBaseController
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     public function getLevelService()
@@ -823,6 +818,11 @@ class CourseController extends CourseBaseController
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

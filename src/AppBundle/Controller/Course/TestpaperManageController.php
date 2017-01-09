@@ -1,0 +1,119 @@
+<?php
+namespace AppBundle\Controller\Course;
+
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Testpaper\Service\TestpaperService;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Controller\BaseController;
+
+class TestpaperManageController extends BaseController
+{
+    public function checkAction(Request $request, $id, $resultId)
+    {
+        $course = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
+        $course = $this->getCourseService()->tryManageCourse($course['id']);
+
+        return $this->forward('AppBundle:Testpaper/Manage:check', array(
+            'request'  => $request,
+            'resultId' => $resultId,
+            'source'   => 'course',
+            'targetId' => $course['id']
+        ));
+    }
+
+    public function checkListAction(Request $request, $id)
+    {
+        $course    = $this->getCourseService()->getCourse($id);
+        $course    = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $user      = $this->getUser();
+        $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
+
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'testpaper');
+
+        $testpaperActivityIds = ArrayToolkit::column($activities, 'mediaId');
+
+        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
+
+        return $this->render('course-manage/testpaper-check/check-list.html.twig', array(
+            'courseSet'    => $courseSet,
+            'course'       => $course,
+            'isTeacher'    => $isTeacher,
+            'testpaperIds' => ArrayToolkit::column($testpaperActivities, 'mediaId')
+        ));
+    }
+
+    public function resultListAction(Request $request, $id, $testpaperId)
+    {
+        $course    = $this->getCourseService()->getCourse($id);
+        $course    = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $user      = $this->getUser();
+
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+
+        if (!$testpaper) {
+            throw $this->createResourceNotFoundException('testpaper', $testpaperId);
+        }
+
+        $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
+
+        return $this->render('course-manage/testpaper-check/result-list.html.twig', array(
+            'course'    => $course,
+            'courseSet' => $courseSet,
+            'testpaper' => $testpaper,
+            'isTeacher' => $isTeacher
+        ));
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return TestpaperService
+     */
+    protected function getTestpaperService()
+    {
+        return $this->createService('Testpaper:TestpaperService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
+    }
+}

@@ -78,6 +78,7 @@ define(function(require, exports, module) {
             if (error) {
                 return;
             }
+            
             $.post($form.attr('action'), $form.serialize(), function(json) {
                 window.location.reload();
             }, 'json');

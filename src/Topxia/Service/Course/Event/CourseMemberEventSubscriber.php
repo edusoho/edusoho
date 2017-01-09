@@ -1,9 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -31,13 +29,13 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
                     'courseId'  => $course['id'],
                     'isLearned' => 1
                 );
-                $this->getCourseService()->updateMembers($conditions, array('isLearned' => 0));
+                $this->getCourseMemberService()->updateMembers($conditions, array('isLearned' => 0));
             } elseif ($sourceCourse['serializeMode'] == 'serialize' && $course['serializeMode'] != 'serialize') {
                 $conditions = array(
                     'courseId'              => $course['id'],
                     'learnedNumGreaterThan' => $course['lessonNum']
                 );
-                $this->getCourseService()->updateMembers($conditions, array('isLearned' => 1));
+                $this->getCourseMemberService()->updateMembers($conditions, array('isLearned' => 1));
             }
         }
     }
@@ -56,7 +54,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
                 'isLearned'          => 1,
                 'learnedNumLessThan' => $course['lessonNum']
             );
-            $this->getCourseService()->updateMembers($conditions, array('isLearned' => 0));
+            $this->getCourseMemberService()->updateMembers($conditions, array('isLearned' => 0));
         }
     }
 
@@ -78,7 +76,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
                 'learnedNum' => $course['lessonNum']
             );
 
-            $this->getCourseService()->updateMembers($conditions, $updateFields);
+            $this->getCourseMemberService()->updateMembers($conditions, $updateFields);
         }
     }
 
@@ -110,17 +108,17 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         $memberFields['learnedNum'] = $userLearnCount;
 
         if ($course['serializeMode'] != 'serialize') {
-            $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
+            $memberFields['isLearned']    = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
             $memberFields['finishedTime'] = $memberFields['isLearned'] ? time() : 0;
         }
 
-        $memberFields['credit'] = $totalCredits;
+        $memberFields['credit']        = $totalCredits;
         $memberFields['lastLearnTime'] = time();
 
-        $courseMember = $this->getCourseService()->getCourseMember($course['id'], $learn['userId']);
-        $this->getCourseService()->updateCourseMember($courseMember['id'], $memberFields);
+        $courseMember = $this->getCourseMemberService()->getCourseMember($course['id'], $learn['userId']);
+        $this->getCourseMemberService()->updateCourseMember($courseMember['id'], $memberFields);
 
-        $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
         if (!empty($classroom)) {
             $this->getClassroomService()->updateLearndNumByClassroomIdAndUserId($classroom['classroomId'], $learn['userId']);
@@ -129,11 +127,16 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

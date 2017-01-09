@@ -1,6 +1,6 @@
 services:
     topxia.user_provider:
-        class: Topxia\Service\User\UserProvider
+        class: Biz\User\UserProvider
         arguments:    ['@service_container']
 
     topxia.authentication.failure_handler:
@@ -26,7 +26,7 @@ services:
 
 security:
     encoders:
-        Topxia\Service\User\CurrentUser: sha256
+        Biz\User\CurrentUser: sha256
 
     providers:
         custom_provider:

@@ -2,11 +2,13 @@
 
 namespace Biz;
 
-
-use Biz\User\CurrentUser;
-use Codeages\Biz\Framework\Event\Event;
 use Monolog\Logger;
+use Biz\User\CurrentUser;
+use Biz\Util\HTMLPurifierFactory;
+use Codeages\Biz\Framework\Event\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Topxia\Service\Common\ServiceKernel;
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -14,6 +16,12 @@ use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
+    private $lock = null;
+
+    /**
+     * @param  $alias
+     * @return GeneralDaoInterface
+     */
     protected function createDao($alias)
     {
         return $this->biz->dao($alias);
@@ -22,27 +30,40 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     /**
      * @return CurrentUser
      */
-    protected function getCurrentUser()
+    public function getCurrentUser()
     {
         return $this->biz['user'];
     }
 
+    /**
+     * @param  $alias
+     * @return BaseService
+     */
     protected function createService($alias)
     {
         return $this->biz->service($alias);
     }
 
-    protected function getDispatcher()
+    /**
+     * @return EventDispatcherInterface
+     */
+    private function getDispatcher()
     {
         return $this->biz['dispatcher'];
     }
 
-    protected function dispatchEvent($eventName, $subject)
+    /**
+     * @param string      $eventName
+     * @param Event|mixed $subject
+     *
+     * @return Event
+     */
+    protected function dispatchEvent($eventName, $subject, $arguments=array())
     {
         if ($subject instanceof Event) {
             $event = $subject;
         } else {
-            $event = new Event($subject);
+            $event = new Event($subject, $arguments);
         }
 
         return $this->getDispatcher()->dispatch($eventName, $event);
@@ -72,8 +93,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string                  $message
      * @return AccessDeniedException
      */
     protected function createAccessDeniedException($message = '')
@@ -82,8 +102,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string                     $message
      * @return InvalidArgumentException
      */
     protected function createInvalidArgumentException($message = '')
@@ -92,8 +111,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string              $message
      * @return NotFoundException
      */
     protected function createNotFoundException($message = '')
@@ -102,8 +120,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string $message
-     *
+     * @param  string             $message
      * @return ServiceException
      */
     protected function createServiceException($message = '')
@@ -117,7 +134,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             if (!empty($fields['orgCode'])) {
-                $org = ServiceKernel::instance()->createService('Org:Org.OrgService')->getOrgByOrgCode($fields['orgCode']);
+                $org = ServiceKernel::instance()->createService('Org:OrgService')->getOrgByOrgCode($fields['orgCode']);
                 if (empty($org)) {
                     throw $this->createNotFoundException('组织机构不存在,更新失败');
                 }
@@ -130,5 +147,30 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
             unset($fields['orgCode']);
         }
         return $fields;
+    }
+
+    protected function purifyHtml($html, $trusted = false)
+    {
+        if (empty($html)) {
+            return '';
+        }
+
+        $config = array(
+            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier'
+        );
+
+        $factory  = new HTMLPurifierFactory($config);
+        $purifier = $factory->create($trusted);
+
+        return $purifier->purify($html);
+    }
+
+    protected function getLock()
+    {
+        if (!$this->lock) {
+            $this->lock = new Lock($this->biz);
+        }
+
+        return $this->lock;
     }
 }

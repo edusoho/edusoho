@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Question\Type\QuestionTypeFactory;
+use Biz\Question\Type\QuestionTypeFactory;
 
 class CourseTestpaperManageController extends BaseController
 {
@@ -479,16 +479,16 @@ class CourseTestpaperManageController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
     }
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getServiceKernel()->createService('Question:QuestionService');
     }
 }

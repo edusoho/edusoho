@@ -3,7 +3,7 @@
 namespace Tests\User;
 
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class MessageServiceTest extends BaseTestCase
 {

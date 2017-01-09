@@ -8,8 +8,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $id, $courseId, $preview = 0)
     {
+        if ($preview) {
+            return $this->forward('AppBundle:Activity/Testpaper:preview', array(
+                'id'       => $id,
+                'courseId' => $courseId
+            ));
+        }
+
         $user              = $this->getUser();
         $activity          = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
@@ -33,6 +40,38 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         ));
     }
 
+    public function tryLookAction(Request $request, $task)
+    {
+        return $this->render('activity/testpaper/try-look.html.twig');
+    }
+
+    public function previewAction(Request $request, $id, $courseId)
+    {
+        $activity          = $this->getActivityService()->getActivity($id);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $testpaper         = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
+
+        if (!$testpaper) {
+            return $this->createMessageResponse('error', 'testpaper not found');
+        }
+
+        $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
+
+        $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
+
+        $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
+
+        return $this->render('activity/testpaper/preview.html.twig', array(
+            'questions'     => $questions,
+            'limitedTime'   => $testpaperActivity['limitedTime'],
+            'paper'         => $testpaper,
+            'paperResult'   => array(),
+            'total'         => $total,
+            'attachments'   => $attachments,
+            'questionTypes' => $this->getCheckedQuestionType($testpaper)
+        ));
+    }
+
     public function editAction(Request $request, $id, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
@@ -51,11 +90,11 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
         return $this->render('activity/testpaper/modal.html.twig', array(
-            'activity'    => $activity,
-            'testpapers'  => $testpapers,
-            'features'    => $features,
-            'courseId'    => $activity['fromCourseId'],
-            'courseSetId' => $course['courseSetId']
+            'activity'   => $activity,
+            'testpapers' => $testpapers,
+            'features'   => $features,
+            'courseId'   => $activity['fromCourseId'],
+            'course'     => $course
         ));
     }
 
@@ -67,10 +106,15 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
         return $this->render('activity/testpaper/modal.html.twig', array(
-            'testpapers'  => $testpapers,
-            'features'    => $features,
-            'courseSetId' => $course['courseSetId']
+            'testpapers' => $testpapers,
+            'features'   => $features,
+            'course'     => $course
         ));
+    }
+
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/testpaper/finish-condition.html.twig', array());
     }
 
     protected function findCourseTestpapers($courseId)
@@ -89,6 +133,18 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         );
 
         return $testpapers;
+    }
+
+    protected function getCheckedQuestionType($testpaper)
+    {
+        $questionTypes = array();
+        foreach ($testpaper['metas']['counts'] as $type => $count) {
+            if ($count > 0) {
+                $questionTypes[] = $type;
+            }
+        }
+
+        return $questionTypes;
     }
 
     /**

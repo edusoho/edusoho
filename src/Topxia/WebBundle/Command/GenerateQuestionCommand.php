@@ -6,7 +6,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 
 class GenerateQuestionCommand extends BaseCommand
 {
@@ -177,7 +177,7 @@ class GenerateQuestionCommand extends BaseCommand
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getServiceKernel()->createService('Question:QuestionService');
     }
 
 }

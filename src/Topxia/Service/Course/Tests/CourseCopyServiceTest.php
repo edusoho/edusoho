@@ -1,8 +1,8 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\User\CurrentUser;
+use Biz\BaseTestCase;;
 
 class CourseCopyServiceTest extends BaseTestCase
 {
@@ -89,12 +89,12 @@ class CourseCopyServiceTest extends BaseTestCase
 
 	protected function getCourseCopyService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseCopyService');
+        return $this->getServiceKernel()->createService('Course:CourseCopyService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
 }

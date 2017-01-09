@@ -176,16 +176,16 @@ class Lesson extends BaseResource
      */
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 }

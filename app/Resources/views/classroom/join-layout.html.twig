@@ -1,0 +1,19 @@
+{% extends 'old-layout.html.twig' %}
+
+{% block title %}{{classroom.title}} - {{ parent() }}{% endblock %}
+
+{% do load_script('classroombundle/controller/classroom/classroom-join') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
+{% block top_content %}
+
+{{ render(controller('AppBundle:Classroom/Classroom:header',{classroomId:classroom.id,previewAs:app.request.get('previewAs')|default("")})) }}
+
+{% endblock %}
+
+
+{% block content %}
+  <div class="class-detail row">
+    {% block main %} {% endblock %}
+  </div>
+{% endblock %}

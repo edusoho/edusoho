@@ -39,7 +39,7 @@ class GenerateNotificationHandler
 		
 		$user = ServiceKernel::instance()->getCurrentUser();
 		
-		list($courses, $courseMembers) = $this->getCourseService()->findWillOverdueCourses();
+		list($courses, $courseMembers) = $this->getCourseMemberService()->findWillOverdueCourses();
 		$courseMembers = ArrayToolkit::index($courseMembers, "courseId");
 
 		foreach ($courses as $key => $course) {
@@ -50,7 +50,7 @@ class GenerateNotificationHandler
 				'endtime' => date("Y-m-d",$courseMembers[$course["id"]]["deadline"]) );
 			$this->getNotificationService()->notify($user["id"], "course-deadline",$message);
 			$courseMemberId = $courseMembers[$course["id"]]["id"];
-			$this->getCourseService()->updateCourseMember($courseMemberId, array("deadlineNotified"=>1));
+			$this->getCourseMemberService()->updateCourseMember($courseMemberId, array("deadlineNotified"=>1));
 		}
 
 		$vipApp = $this->getAppService()->findInstallApp('Vip');
@@ -78,29 +78,35 @@ class GenerateNotificationHandler
 
 	private function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     private function getNotificationService()
     {
-    	return ServiceKernel::instance()->createService('User.NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     private function getAppService()
     {
-    	return ServiceKernel::instance()->createService('CloudPlatform.AppService');
+    	return ServiceKernel::instance()->createService('CloudPlatform:AppService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getVipService()
     {
         return ServiceKernel::instance()->createService('Vip:Vip.VipService');
     }
-     protected function getServiceKernel()
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
+    }
+
+    protected function getServiceKernel()
     {
         return ServiceKernel::instance();
     }

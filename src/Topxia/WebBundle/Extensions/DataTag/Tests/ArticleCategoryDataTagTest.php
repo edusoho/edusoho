@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Extensions\DataTag\ArticleCategoryDataTag;
 
@@ -65,7 +65,7 @@ class ArticleCategoryDataTagTest extends BaseTestCase
 
     private function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Article.CategoryService');
+        return $this->getServiceKernel()->createService('Article:CategoryService');
     }
 
 }

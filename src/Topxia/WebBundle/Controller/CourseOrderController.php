@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Util\AvatarAlert;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,7 +24,7 @@ class CourseOrderController extends OrderController
 
         $previewAs = $request->query->get('previewAs');
 
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
+        $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
         $member = $this->previewAsMember($previewAs, $member, $course);
 
         $courseSetting = $this->getSettingService()->get('course', array());
@@ -47,7 +48,7 @@ class CourseOrderController extends OrderController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         if ($course['approval'] == 1 && ($userInfo['approvalStatus'] != 'approved')) {
             return $this->render('TopxiaWebBundle:CourseOrder:approve-modal.html.twig', array(
@@ -214,7 +215,7 @@ class CourseOrderController extends OrderController
 
         $this->getCourseService()->tryManageCourse($order["targetId"]);
 
-        return $this->forward('TopxiaWebBundle:Order:detail', array(
+        return $this->forward('AppBundle:Order:detail', array(
             'id' => $id
         ));
     }
@@ -320,7 +321,7 @@ class CourseOrderController extends OrderController
             if ($course['price'] <= 0) {
                 $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'];
             } else {
-                $createdOrdersCount = $this->getOrderService()->searchOrderCount(array(
+                $createdOrdersCount = $this->getOrderService()->countOrders(array(
                     'targetType'             => 'course',
                     'targetId'               => $course['id'],
                     'status'                 => 'created',
@@ -375,37 +376,37 @@ class CourseOrderController extends OrderController
 
     public function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseOrderService');
+        return $this->getServiceKernel()->createService('Course:CourseOrderService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->createService('User:AuthService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashAccountService');
+        return $this->getServiceKernel()->createService('Cash:CashAccountService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
     }
 
     protected function getAppService()
@@ -415,12 +416,12 @@ class CourseOrderController extends OrderController
 
     protected function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon.CouponService');
+        return $this->getServiceKernel()->createService('Coupon:CouponService');
     }
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->createService('User.UserFieldService');
+        return ServiceKernel::instance()->createService('User:UserFieldService');
     }
 
     protected function getLevelService()
@@ -435,6 +436,6 @@ class CourseOrderController extends OrderController
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

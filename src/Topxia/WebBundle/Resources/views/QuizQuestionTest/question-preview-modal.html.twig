@@ -1,9 +1,10 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-{% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% import "admin/macro.html.twig" as admin_macro %}
 
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'题目预览'|trans}}{% endblock %}
+
 
 {% set modal_class = 'modal-lg' %}
 
@@ -14,5 +15,6 @@
 {% endblock %}
 {% block footer %}
   <button type="button" class="btn btn-default" data-dismiss="modal">{{'关闭'|trans}}</button>
-  <script>app.load('quiz-question/preview');</script>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('quiz-question/preview'); };</script>
 {% endblock %}

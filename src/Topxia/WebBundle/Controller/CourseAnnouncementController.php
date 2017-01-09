@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 
 class CourseAnnouncementController extends BaseController
@@ -41,7 +42,7 @@ class CourseAnnouncementController extends BaseController
         	if ($request->request->get('notify') == 'notify'){
 	        	$count = $this->getCourseService()->getCourseStudentCount($courseId);
 
-	        	$members = $this->getCourseService()->findCourseStudents($courseId, 0, $count);
+	        	$members = $this->getCourseMemberService()->findCourseStudents($courseId, 0, $count);
 
 	        	$message = array(
 	        		'title'=> $course['title'],
@@ -101,17 +102,17 @@ class CourseAnnouncementController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
 }

@@ -4,7 +4,7 @@
 namespace Biz\File\Convertor;
 
 
-use Topxia\Service\Util\CloudClient;
+use Biz\Util\CloudClient;
 
 abstract class BaseConvertor
 {

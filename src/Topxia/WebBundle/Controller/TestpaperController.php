@@ -708,37 +708,32 @@ class TestpaperController extends BaseController
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
     }
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getServiceKernel()->createService('Question:QuestionService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     protected function geUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getTaskProcessor($taskType)

@@ -1,11 +1,11 @@
 <?php
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
+use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\ClassRoomProcessor;
-use Topxia\Service\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 
 class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 {
@@ -87,7 +87,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
         $day = date('d', time());
 
-        $signDay = $this->getSignService()->getSignRecordsByPeriod($user['id'], 'classroom_sign', $classroom['id'], date('Y-m', time()), date('Y-m-d', time()+3600));
+        $signDay = $this->getSignService()->findSignRecordsByPeriod($user['id'], 'classroom_sign', $classroom['id'], date('Y-m', time()), date('Y-m-d', time()+3600));
         $notSign = $day-count($signDay);
 
         if (!empty($userSignStatistics)) {
@@ -115,7 +115,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             'targetId' => $classRoomId
         );
 
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime','DESC'), $start, $limit);
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' =>'DESC'), $start, $limit);
         $announcements = array_values($announcements);
         return $this->filterAnnouncements($announcements);
     }
@@ -184,7 +184,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     		$member = $this->getClassroomService()->getClassroomMember($classRoomId, $user["id"]);
 
     		if (empty($member)) {
-        		throw $this->createErrorResponse('error', '您不是班级的学员。');
+        		return  $this->createErrorResponse('error', '您不是班级的学员。');
     		}
 
     		if (!in_array($member["role"], array("auditor", "student"))) {
@@ -210,7 +210,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 		$targetType = $this->getParam("targetType");
 
         if(!in_array($targetType, array("course", "classroom"))) {
-            throw $this->createErrorResponse('error', '退出学习失败');
+            return  $this->createErrorResponse('error', '退出学习失败');
         }
         $processor = OrderRefundProcessorFactory::create($targetType);
 
@@ -503,7 +503,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $user = $this->controller->getUserByToken($this->request);
 
 		foreach ($courses as $key => $course) {
-       	    $courseMember = $this->getCourseService()->getCourseMember($course['id'], $user["id"]);
+       	    $courseMember = $this->getCourseMemberService()->getCourseMember($course['id'], $user["id"]);
 
             $lessonNum = (float)$course['lessonNum'];
             $progress = $lessonNum == 0 ? 0 : (float)$courseMember['learnedNum'] / $lessonNum;
@@ -686,16 +686,21 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
     private function getClassroomService() 
     {
-    	return $this->controller->getService('Classroom:Classroom.ClassroomService');
+    	return $this->controller->getService('Classroom:ClassroomService');
     }
 
     protected function getClassroomOrderService()
     {
-        return $this->controller->getService('Classroom:Classroom.ClassroomOrderService'); 
+        return $this->controller->getService('Classroom:ClassroomOrderService'); 
     }
 
     protected function getClassroomReviewService()
     {
         return $this->controller->getService('Classroom:Classroom.ClassroomReviewService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->controller->getService('Course:MemberService');
     }
 }

@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs">
+	<li class="{% if threadType == 'course' %}active{% endif %}"><a href="{{path('my_teaching_threads', {type:'discussion'}) }}">{{'课程%user_name%话题'|trans({'%user_name%':setting('default.user_name')|default('学员'|trans)})}}</a></li>
+	<li class="{% if threadType == 'classroom' %}active{% endif %}"><a href="{{path('my_teaching_classroom_threads', {type:'discussion'}) }}">{{'%classroom.name%%user_name%话题'|trans({'%classroom.name%':setting('classroom.name')|default('班级'|trans),'%user_name%':setting('default.user_name')|default('学员'|trans)})}}</a></li>
+</ul>
+<br>

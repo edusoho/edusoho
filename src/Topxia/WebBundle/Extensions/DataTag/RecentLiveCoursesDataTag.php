@@ -2,6 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
@@ -74,7 +75,7 @@ class RecentLiveCoursesDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
 }

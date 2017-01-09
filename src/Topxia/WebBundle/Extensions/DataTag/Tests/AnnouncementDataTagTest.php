@@ -2,7 +2,8 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\Announcement\Service\AnnouncementService;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\AnnouncementDataTag;
 
 class AnnouncementDataTagTest extends BaseTestCase
@@ -55,8 +56,11 @@ class AnnouncementDataTagTest extends BaseTestCase
         $this->assertEquals(5, count($announcement));
     }
 
+    /**
+     * @return AnnouncementService
+     */
     private function getAnnouncementService()
     {
-        return $this->getServiceKernel()->createService('Announcement.AnnouncementService');
+        return $this->getServiceKernel()->createService('Announcement:AnnouncementService');
     }
 }

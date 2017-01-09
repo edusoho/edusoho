@@ -5,6 +5,7 @@ namespace Topxia\Api\Resource;
 use Silex\Application;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class Courses extends BaseResource
 {
@@ -140,21 +141,21 @@ class Courses extends BaseResource
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

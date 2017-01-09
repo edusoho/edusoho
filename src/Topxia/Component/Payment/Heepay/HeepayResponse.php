@@ -148,11 +148,11 @@ class HeepayResponse extends Response
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getCashOrdersService()
     {
-        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+        return $this->getServiceKernel()->createService('Cash:CashOrdersService');
     }
 }

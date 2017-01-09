@@ -1,8 +1,8 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
-use Topxia\Service\Util\PluginUtil;
-use Topxia\Service\User\CurrentUser;
+use Biz\Util\PluginUtil;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
@@ -83,16 +83,16 @@ class UpgradeScriptCommand extends BaseCommand
 
     protected function getAppDao()
     {
-        return $this->getServiceKernel()->createDao('CloudPlatform.CloudAppDao');
+        return $this->getServiceKernel()->createDao('CloudPlatform:CloudAppDao');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 }

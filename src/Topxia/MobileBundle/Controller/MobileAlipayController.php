@@ -156,26 +156,26 @@ class MobileAlipayController extends MobileController
 
     public function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     public function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getPayCenterService()
     {
-        return $this->getServiceKernel()->createService('PayCenter.PayCenterService');
+        return $this->getServiceKernel()->createService('PayCenter:PayCenterService');
     }
 
     protected function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseOrderService');
+        return $this->getServiceKernel()->createService('Course:CourseOrderService');
     }
 }

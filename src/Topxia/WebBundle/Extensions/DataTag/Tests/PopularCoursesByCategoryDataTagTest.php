@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\PopularCoursesByCategoryDataTag;
 
 class PopularCoursesByCategoryDataTagTest extends BaseTestCase
@@ -61,9 +61,9 @@ class PopularCoursesByCategoryDataTagTest extends BaseTestCase
         $this->getCourseService()->updateCourse($course2['id'],array('categoryId' => $category1['id']));
         $this->getCourseService()->updateCourse($course3['id'],array('categoryId' => $category1['id']));
 
-        $this->getCourseService()->becomeStudent($course1['id'],$user1['id']);
-    	$this->getCourseService()->becomeStudent($course1['id'],$user2['id']);
-    	$this->getCourseService()->becomeStudent($course2['id'],$user3['id']);
+        $this->getCourseMemberService()->becomeStudent($course1['id'],$user1['id']);
+    	$this->getCourseMemberService()->becomeStudent($course1['id'],$user2['id']);
+    	$this->getCourseMemberService()->becomeStudent($course2['id'],$user3['id']);
         $datatag = new PopularCoursesByCategoryDataTag();
         $courses = $datatag->getData(array('categoryId' => 1, 'count' => 5));
         $this->assertEquals(3,count($courses));
@@ -75,16 +75,21 @@ class PopularCoursesByCategoryDataTagTest extends BaseTestCase
 
     public function getCourseService()
     {
-    	return $this->getServiceKernel()->createService('Course.CourseService');
+    	return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 
     public function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

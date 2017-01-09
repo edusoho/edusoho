@@ -1,6 +1,7 @@
 <?php 
 namespace Biz\Taxonomy;
 
+use Biz\Taxonomy\Service\TagService;
 use Topxia\Service\Common\ServiceKernel;
 
 class TagOwnerManager
@@ -43,8 +44,11 @@ class TagOwnerManager
         $this->getTagService()->deleteTagOwnerRelationsByOwner(array('ownerType' => $this->ownerType, 'ownerId' => $this->ownerId));
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
-        return ServiceKernel::instance()->createService('Taxonomy.TagService');
+        return ServiceKernel::instance()->getBiz()->service('Taxonomy:TagService');
     }
 }

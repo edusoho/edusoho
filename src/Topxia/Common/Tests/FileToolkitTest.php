@@ -3,7 +3,7 @@
 namespace Topxia\Common\Tests;
 
 use Topxia\Common\FileToolkit;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class FileTookitTest extends BaseTestCase
 {

@@ -2,46 +2,46 @@
 
 namespace Biz\Activity\Service\Impl;
 
+use Biz\Activity\Service\DownloadActivityService;
 use Biz\BaseService;
-use Biz\DownloadActivity\Dao\DownloadFileRecordDao;
-use Biz\DownloadActivity\Service\DownloadActivityService;
+use Biz\Course\Service\MaterialService;
+use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 
 class DownloadActivityServiceImpl extends BaseService implements DownloadActivityService
 {
-    public function createDownloadFileRecord($downloadFile)
+    protected function createDownloadFileRecord($activity, $material)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             throw new AccessDeniedException();
         }
         $record = array(
-            'downloadActivityId' => $downloadFile['downloadActivityId'],
-            'downloadFileId'     => $downloadFile['id'],
-            'fileIndicate'       => $downloadFile['indicate'],
+            'downloadActivityId' => $activity['id'],
+            'materialId'         => $material['id'],
+            'fileId'             => $material['fileId'],
+            'link'               => $material['link'],
             'userId'             => $user->getId()
         );
 
         return $this->getDownloadFileRecordDao()->create($record);
     }
 
-    public function downloadActivityFile($activityId, $downloadFileId)
+    public function downloadActivityFile($activityId, $materialId)
     {
-        $activity = $this->getActivityService()->getActivityFetchMedia($activityId);
-
-        $materials = empty($activity['ext']['materials']) ? array() : $activity['ext']['materials'];
-        if (empty($materials)) {
+        $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
+        if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
-        $downloadFiles = ArrayToolkit::index($materials, 'id');
-        $downloadFile  = $downloadFiles[$downloadFileId];
-        if (empty($downloadFile)) {
+        $material = $this->getMaterialService()->getMaterial($activity['fromCourseId'], $materialId);
+
+        if (empty($material)) {
             throw $this->createNotFoundException('file not found');
         }
-        $this->createDownloadFileRecord($downloadFile);
+        $this->createDownloadFileRecord($activity, $material);
 
-        return $downloadFile;
+        return $material;
     }
 
 
@@ -56,6 +56,14 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return MaterialService
+     */
+    protected function getMaterialService()
+    {
+        return $this->biz->service('Course:MaterialService');
     }
 
 }

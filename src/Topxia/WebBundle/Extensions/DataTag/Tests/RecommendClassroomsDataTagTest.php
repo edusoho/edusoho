@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\RecommendClassroomsDataTag;
 
 class RecommendClassroomsDataTagTest extends BaseTestCase
@@ -68,16 +68,16 @@ class RecommendClassroomsDataTagTest extends BaseTestCase
     }
     public function getCourseService()
     {
-    	return $this->getServiceKernel()->createService('Course.CourseService');
+    	return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 }

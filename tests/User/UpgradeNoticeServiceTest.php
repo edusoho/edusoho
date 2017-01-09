@@ -2,7 +2,7 @@
 
 namespace Tests\User;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class UpgradeNoticeServiceTest extends BaseTestCase
 {

@@ -1,44 +1,102 @@
-export const deleteQuestion = ($form) =>{
+import notify from 'common/notify';
+import { passedDivShow } from '../question-passed'
 
-  $form.on('click','[data-role="item-delete-btn"]',event => {
-    let $target = $(event.currentTarget);
-    console.log('delete');
-    let id = $target.closest('tr').data('id');
-    $target.closest('tbody').find('[data-parent-id="'+id+'"]').remove();
-    $target.closest('tr').remove();
-    let num  = 0;
-    $('tbody:visible tr').each(function(index,item) {
-      console.log($(item));
-      let $tr = $(item);
-      $tr.find('td.seq').html(index+1);
-      num++;
+export default class QuestionOperate {
+  constructor($form, $modal) {
+    this.$form = $form;
+    this.$modal = $modal;
+    this.initEvent();
+  }
+
+  initEvent() { 
+    this.$form.on('click','[data-role="item-delete-btn"]',event=>this.deleteQuestion(event));
+    this.$form.on('click','[data-role="replace-item"]',event=>this.replaceQuestion(event));
+    this.$form.on('click','[data-role="preview-btn"]',event=>this.previewQuestion(event));
+    this.$form.on('click','[data-role="batch-delete-btn"]',event=>this.batchDelete(event));
+    this.initSortList();
+  }
+
+  initSortList() {
+    this.$form.find('tbody').sortable({
+      containerPath: '> tr',
+      containerSelector:'tbody',
+      itemSelector: 'tr.is-question',
+      placeholder: '<tr class="placeholder"/>',
+      exclude: '.notMoveHandle',
+      onDrop: (item, container, _super) => {
+        _super(item, container);
+        if (item.hasClass('have-sub-questions')) {
+            let $tbody = item.parents('tbody');
+            $tbody.find('tr.is-question').each(function() {
+                let $tr = $(this);
+                $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
+            });
+        }
+        this.refreshSeqs();
+      }
     });
-    $('[name="questionLength"]').val(num > 0 ? num : null );
-  })
-}
+  }
 
-export const replaceQuestion = ($form,$modal) => {
-  $form.on('click','[data-role="replace-item"]',event => {
+  replaceQuestion(event) {
     let $target = $(event.currentTarget);
     let excludeIds = [];
-    let type = $("tbody:visible").data('type');
+    let $tbody = this.$form.find("tbody:visible");
 
-    $("tbody:visible").find('[name="questionIds[]"]').each(function(){
+    $tbody.find('[name="questionIds[]"]').each(function(){
       excludeIds.push($(this).val());
     })
 
-    console.log(type);
-
-    $modal.data('manager', this).modal();
-    $.get($target.data('url'), {excludeIds: excludeIds.join(','), type: type}, function(html) {
-      $modal.html(html);
+    this.$modal.data('manager', this).modal();
+    $.get($target.data('url'), {excludeIds: excludeIds.join(','), type: $tbody.data('type')}, html => {
+      this.$modal.html(html);
     });
-  });
-}
+  }
 
-export const previewQuestion = ($form) => {
-  $form.on('click','[data-role="preview-btn"]',event => {
+  deleteQuestion(event) {
     event.preventDefault();
-    window.open($(event.currentTarget).data('url'), '_blank', "directories=0,height=580,width=820,scrollbars=1,toolbar=0,status=0,menubar=0,location=0");  
-  });
+    let $target = $(event.currentTarget);
+    let id = $target.closest('tr').data('id');
+    let $tbody =  $target.closest('tbody');
+    $tbody.find('[data-parent-id="'+id+'"]').remove();
+    $target.closest('tr').remove();
+    passedDivShow(this.$form);
+    this.refreshSeqs();
+  }
+
+  batchDelete(event) {
+    if (this.$form.find('[data-role="batch-item"]:checked').length == 0) {
+      notify('danger', '请选择题目');
+    }
+    let self = this;
+
+    this.$form.find('[data-role="batch-item"]:checked').each(function(index,item){
+      let questionId = $(this).val();
+
+      if ($(this).closest('tr').data('type') == 'material') {
+        self.$form.find('[data-parent-id="'+questionId+'"]').remove();
+      }
+      $(this).closest('tr').remove();
+      
+    })
+    passedDivShow(this.$form);
+  }
+
+  previewQuestion(event) {
+    event.preventDefault();
+    window.open($(event.currentTarget).data('url'), '_blank', "directories=0,height=580,width=820,scrollbars=1,toolbar=0,status=0,menubar=0,location=0");
+  }
+
+  refreshSeqs() {
+    let seq = 1;
+    this.$form.find("tbody tr").each(function(){
+      let $tr = $(this);
+                  
+      if (!$tr.hasClass('have-sub-questions')) { 
+        $tr.find('td.seq').html(seq);
+        seq ++;
+      }
+    });  
+
+    this.$form.find('[name="questionLength"]').val((seq - 1) > 0 ? (seq - 1 ) : null );       
+  }
 }

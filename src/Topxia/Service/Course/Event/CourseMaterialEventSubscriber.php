@@ -1,35 +1,34 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Taxonomy\TagOwnerManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CourseMaterialEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'course.delete'                            => 'onCourseDelete',
-            'course.lesson.create'                     => 'onCourseLessonCreate',
-            'course.lesson.delete'                     => 'onCourseLessonDelete',
-            'course.lesson.update'                     => 'onCourseLessonUpdate',
-            'upload.file.delete'                       => 'onUploadFileDelete',
-            'upload.file.finish'                       => 'onUploadFileFinish',
-            'course.material.create'                   => 'onMaterialCreate',
-            'course.material.update'                   => 'onMaterialUpdate',
-            'course.material.delete'                   => 'onMaterialDelete',
+            // 'course.delete'                            => 'onCourseDelete',
+            // 'course.lesson.create'                     => 'onCourseLessonCreate',
+            // 'course.lesson.delete'                     => 'onCourseLessonDelete',
+            // 'course.lesson.update'                     => 'onCourseLessonUpdate',
+            // 'upload.file.delete'                       => 'onUploadFileDelete',
+            // 'upload.file.finish'                       => 'onUploadFileFinish',
+            // 'course.material.create'                   => 'onMaterialCreate',
+            // 'course.material.update'                   => 'onMaterialUpdate',
+            // 'course.material.delete'                   => 'onMaterialDelete',
 
-            'open.course.delete'                       => 'onOpenCourseDelete',
-            'open.course.lesson.create'                => 'onOpenCourseLessonCreate',
-            'open.course.lesson.update'                => 'onOpenCourseLessonUpdate',
-            'open.course.lesson.delete'                => 'onOpenCourseLessonDelete',
+            // 'open.course.delete'                       => 'onOpenCourseDelete',
+            // 'open.course.lesson.create'                => 'onOpenCourseLessonCreate',
+            // 'open.course.lesson.update'                => 'onOpenCourseLessonUpdate',
+            // 'open.course.lesson.delete'                => 'onOpenCourseLessonDelete',
 
-            'course.lesson.generate.video.replay'      => 'onLiveFileReplay',
-            'open.course.lesson.generate.video.replay' => 'onLiveOpenFileReplay'
+            // 'course.lesson.generate.video.replay'      => 'onLiveFileReplay',
+            // 'open.course.lesson.generate.video.replay' => 'onLiveOpenFileReplay'
         );
     }
 
@@ -159,7 +158,7 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
         $materials = $this->getMaterialService()->searchMaterials(
             array('fileId' => $file['id'], 'copyId' => 0),
-            array('createdTime', 'DESC'), 0, PHP_INT_MAX
+            array('createdTime' => 'DESC'), 0, PHP_INT_MAX
         );
 
         if (!$materials) {
@@ -455,16 +454,16 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return ServiceKernel::instance()->createService('Course:CourseService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getMaterialService()
     {
-        return ServiceKernel::instance()->createService('Course.MaterialService');
+        return ServiceKernel::instance()->createService('Course:MaterialService');
     }
 }

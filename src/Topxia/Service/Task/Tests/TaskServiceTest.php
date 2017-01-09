@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Task\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Service\Task\TaskService;
 use Topxia\Common\ArrayToolkit;
 
@@ -252,7 +252,7 @@ class TaskServiceTest extends BaseTestCase
 
     protected function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Task.TaskService');
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 
 }

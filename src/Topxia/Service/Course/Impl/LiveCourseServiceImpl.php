@@ -176,7 +176,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $lessons = $this->getLessonDao()->findBeginningLiveCoures($afterSecond, 10);
 
         foreach ($lessons as $key => $lesson) {
-            $member = $this->getCourseService()->getCourseMember($lesson['courseId'], $currentUser['id']);
+            $member = $this->getCourseMemberService()->getCourseMember($lesson['courseId'], $currentUser['id']);
             if (!empty($member)) {
                 $lesson['course']   = $this->getCourseService()->getCourse($lesson['courseId']);
                 $teacherMembers     = $this->getCourseService()->findCourseTeachers($lesson['courseId']);
@@ -242,20 +242,20 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     protected function getCourseService($courseType = 'live')
     {
         if ($courseType == 'liveOpen') {
-            return $this->createService('OpenCourse.OpenCourseService');
+            return $this->createService('OpenCourse:OpenCourseService');
         } else {
-            return $this->createService('Course.CourseService');
+            return $this->createService('Course:CourseService');
         }
     }
 
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function getLessonDao()
@@ -263,8 +263,8 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $this->createDao('Course.LessonDao');
     }
 
-    protected function getSettingService()
+    protected function getCourseMemberService()
     {
-        return $this->createService('System.SettingService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

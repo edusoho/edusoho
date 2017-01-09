@@ -4,7 +4,7 @@ import TaskEventEmitter from "./widget/task-event-emitter";
 import Emitter from "common/es-event-emitter";
 
 class TaskShow extends Emitter {
-  constructor({ element, courseId, taskId, mode }) {
+  constructor({element, courseId, taskId, mode}) {
     super();
     this.element = $(element);
     this.courseId = courseId;
@@ -38,24 +38,31 @@ class TaskShow extends Emitter {
   bindEvent() {
     let learnedTime = 0;
     let minute = 60 * 1000;
-    let timeStep = 2; // 分钟
+    let timeStep = 1; // 分钟
+
+
+    //注册doing延时监听
     this.delay('doing', (timeStep) => {
       learnedTime = parseInt(timeStep) + parseInt(learnedTime);
-      this.eventEmitter.emit('doing', {
+      let eventData = {
         timeStep: timeStep,
         learnedTime: learnedTime,
         taskId: this.taskId
-      }).then(response => {
-        this.trigger('doing', timeStep);
-        if(response.result.status == 'finish'
-          && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
-          this.ui.learnedWeakPrompt();
-          this.ui.learned();
-          $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
-        }
-      })
+      };
+      this.eventEmitter.emit('doing', eventData)
+          .then(response => {
+            this.receiveFinish(response);
+          })
+          .catch(() => {
+            //
+          })
+          .then(() => { //always
+            this.trigger('doing', timeStep);
+          })
     }, timeStep * minute);
+
     this.trigger('doing', timeStep);
+
     this.element.on('click', '#learn-btn', event => {
       $.post($('#learn-btn').data('url'), response => {
         $('#modal').modal('show');
@@ -65,15 +72,23 @@ class TaskShow extends Emitter {
       })
     });
 
+    // 接收活动的finish事件
     this.eventEmitter.receive('finish', response => {
-      if(response.result.status == 'finish' 
+      this.receiveFinish(response);
+    });
+  }
+
+  receiveFinish(response) {
+    if (response.result.status == 'finish'
         && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
+      $.get($(".js-learned-prompt").data('url'), html => {
+        $(".js-learned-prompt").attr('data-content', html);
         this.ui.learnedWeakPrompt();
         this.ui.learned();
+        this.sidebar.reload();
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
-      }
-    });
-
+      })
+    }
   }
 
   initSidebar() {
@@ -82,16 +97,16 @@ class TaskShow extends Emitter {
       url: this.element.find('#js-hidden-data [name="plugins_url"]').val()
     });
     this.sidebar
-    .on('popup', (px, time) => {
-      this.element.find('#dashboard-content').animate({
-        right: px,
-      }, time);
-    })
-    .on('fold', (px, time) => {
-      this.element.find('#dashboard-content').animate({
-        right: px,
-      }, time)
-    })
+        .on('popup', (px, time) => {
+          this.element.find('#dashboard-content').animate({
+            right: px,
+          }, time);
+        })
+        .on('fold', (px, time) => {
+          this.element.find('#dashboard-content').animate({
+            right: px,
+          }, time);
+        })
   }
 }
 

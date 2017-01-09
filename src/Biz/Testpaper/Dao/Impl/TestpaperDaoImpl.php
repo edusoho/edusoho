@@ -8,10 +8,6 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
 {
     protected $table = 'testpaper';
 
-    private $serializeFields = array(
-        'metas' => 'json'
-    );
-
     public function findTestpapersByIds(array $ids)
     {
         return $this->findInField('id', $ids);

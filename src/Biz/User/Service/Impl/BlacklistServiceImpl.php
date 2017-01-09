@@ -2,6 +2,7 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
+use Biz\User\Dao\BlacklistDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\User\Service\BlacklistService;
 
@@ -81,6 +82,9 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
         return $this->biz->service('User:UserService');
     }
 
+    /**
+     * @return BlacklistDao
+     */
     protected function getBlacklistDao()
     {
         return $this->createDao('User:BlacklistDao');

@@ -1,11 +1,12 @@
 <?php
 
-
 namespace Biz\Activity\Type;
 
-
-use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\PptActivityDao;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Activity\Service\ActivityService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Activity\Config\Activity;
 
 class Ppt extends Activity
 {
@@ -20,7 +21,6 @@ class Ppt extends Activity
 
     protected function registerListeners()
     {
-
     }
 
     public function getMetas()
@@ -34,17 +34,18 @@ class Ppt extends Activity
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
-        $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
-        
-        if($ppt['finishType'] == 'time') {
+        $ppt      = $this->getPptActivityDao()->get($activity['mediaId']);
+
+        if ($ppt['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
-            return !empty($result) && $result > $ppt['finishDetail'];
+            return !empty($result) && $result >= $ppt['finishDetail'];
         }
 
-        if($ppt['finishType'] == 'end') {
-            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finished');
-            return !empty($result);
+        if($ppt['finishType'] == 'end'){
+            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finish');
+            return !empty($logs);
         }
+
         return false;
     }
 
@@ -64,12 +65,12 @@ class Ppt extends Activity
         return $ppt;
     }
 
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail',
+            'finishDetail'
         ));
 
         $updateFields['updatedTime'] = time();
@@ -86,19 +87,27 @@ class Ppt extends Activity
         return $this->getPptActivityDao()->get($targetId);
     }
 
+    /**
+     * @return PptActivityDao
+     */
     protected function getPptActivityDao()
     {
         return $this->getBiz()->dao('Activity:PptActivityDao');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service("Activity:ActivityService");
     }
-
 }

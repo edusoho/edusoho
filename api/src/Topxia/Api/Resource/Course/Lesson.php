@@ -29,7 +29,7 @@ class Lesson extends BaseResource
                 return $this->error('not_login', "您尚未登录，不能查看该课时");
             }
         } else {
-            if (!$this->getCourseService()->isCourseMember($lesson['courseId'], $currentUser['id'])) {
+            if (!$this->getCourseMemberService()->isCourseMember($lesson['courseId'], $currentUser['id'])) {
                 if (!$lesson['free']) {
                     return $this->error('not_student', "你不是该课程学员，请加入学习");
                 }
@@ -309,26 +309,31 @@ class Lesson extends BaseResource
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

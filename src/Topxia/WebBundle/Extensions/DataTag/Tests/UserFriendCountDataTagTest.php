@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Extensions\DataTag\UserFriendCountDataTag;
 
@@ -51,7 +51,7 @@ class UserFriendCountDataTagTest extends BaseTestCase
 
     public function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 
 }

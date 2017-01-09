@@ -3,8 +3,10 @@
 namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Util\EdusohoLiveClient;
+use Biz\User\Service\UserService;
+use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
 use Biz\Activity\Service\LiveActivityService;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
@@ -18,10 +20,17 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
     public function createLiveActivity($activity)
     {
+        if (empty($activity['startTime'])
+            || $activity['startTime'] <= time()
+            || empty($activity['length'])
+            || $activity['length'] <= 0) {
+            throw $this->createInvalidArgumentException('参数有误');
+        }
+
         //创建直播室
         $speaker = $this->getUserService()->getUser($activity['fromUserId']);
         if (empty($speaker)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('教师不存在！'));
+            throw $this->createNotFoundException('教师不存在！');
         }
 
         $speaker = $speaker['nickname'];
@@ -34,7 +43,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         $live = $this->getEdusohoLiveClient()->createLive(array(
-            'summary'     => $activity['remark'],
+            'summary'     => empty($activity['remark']) ? '' : $activity['remark'],
             'title'       => $activity['title'],
             'speaker'     => $speaker,
             'startTime'   => $activity['startTime'].'',
@@ -45,7 +54,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         ));
 
         if (empty($live)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('云直播创建失败，请重试！'));
+            throw $this->createNotFoundException('云直播创建失败，请重试！');
         }
 
         if (isset($live['error'])) {
@@ -62,30 +71,28 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->create($liveActivity);
     }
 
-    public function updateLiveActivity($id, $fields)
+    public function updateLiveActivity($id, &$fields, $activity)
     {
         $liveActivity = $this->getLiveActivityDao()->get($id);
         $liveParams   = array(
             'liveId'   => $liveActivity['liveId'],
             'provider' => $liveActivity['liveProvider'],
-            'summary'  => $fields['remark'],
+            'summary'  => empty($fields['remark']) ? '' : $fields['remark'],
             'title'    => $fields['title'],
             'authUrl'  => $fields['_base_url'].'/live/auth',
             'jumpUrl'  => $fields['_base_url'].'/live/jump?id='.$fields['fromCourseId']
         );
-
-        if (array_key_exists('startTime', $fields)) {
-            $liveParams['startTime'] = $fields['startTime'];
+        //直播开始后，开始时间不允许修改
+        if (empty($fields['startTime']) || $fields['startTime'] <= time()) {
+            $fields['startTime'] = $activity['startTime'];
+            $fields['length']    = $activity['length'];
         }
-
-        if (array_key_exists('startTime', $fields) && array_key_exists('length', $fields)) {
-            $liveParams['endTime'] = ($fields['startTime'] + $fields['length'] * 60).'';
-        }
+        $liveParams['startTime'] = $fields['startTime'];
+        $liveParams['endTime']   = ($fields['startTime'] + $fields['length'] * 60).'';
 
         $this->getEdusohoLiveClient()->updateLive($liveParams);
-        //live activity自身没有需要更新的信息
-        $fields['id'] = $id;
-        return $fields;
+
+        return $liveActivity;
     }
 
     public function deleteLiveActivity($id)
@@ -110,14 +117,20 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return ServiceKernel::instance();
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->biz->service('User:UserService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
     public function getEdusohoLiveClient()

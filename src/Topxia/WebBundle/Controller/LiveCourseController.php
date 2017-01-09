@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveCourseController extends BaseController
@@ -305,9 +305,9 @@ class LiveCourseController extends BaseController
             'nickname' => $user['nickname']
         );
 
-        if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
             $params['role'] = 'teacher';
-        } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是课程学员，不能参加直播！'));
@@ -354,7 +354,7 @@ class LiveCourseController extends BaseController
 
         $params = array();
 
-        if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
             $teachers = $this->getCourseService()->findCourseTeachers($courseId);
             $teacher  = array_shift($teachers);
 
@@ -363,7 +363,7 @@ class LiveCourseController extends BaseController
             } else {
                 $params['role'] = 'speaker';
             }
-        } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您不是课程学员，不能参加直播！'));
@@ -631,17 +631,17 @@ class LiveCourseController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     public function getLevelService()
@@ -651,6 +651,11 @@ class LiveCourseController extends BaseController
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

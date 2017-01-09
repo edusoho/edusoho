@@ -5,12 +5,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Input\InputArgument;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
+use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
 class GenerateCourseMemberCommand extends BaseCommand
 {
@@ -65,16 +65,16 @@ class GenerateCourseMemberCommand extends BaseCommand
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseMemberService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
 }

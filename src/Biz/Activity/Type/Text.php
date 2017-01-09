@@ -2,8 +2,8 @@
 
 namespace Biz\Activity\Type;
 
-
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Service\ActivityLearnLogService;
 use Topxia\Common\ArrayToolkit;
 
 class Text extends Activity
@@ -18,7 +18,7 @@ class Text extends Activity
         return $this->getTextActivityDao()->get($targetId);
     }
 
-    public function update($targetId, $fields)
+    public function update($targetId, &$fields, $activity)
     {
         $text = ArrayToolkit::parts($fields, array(
             'finishType',
@@ -32,12 +32,13 @@ class Text extends Activity
 
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
-        $activity = $this->getActivityService()->getActivity($activityId);
+        $result       = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $activity     = $this->getActivityService()->getActivity($activityId);
         $textActivity = $this->getTextActivityDao()->get($activity['mediaId']);
-        return !empty($result) 
-                && $textActivity['finishType'] == 'time' 
-                && $result > $textActivity['finishDetail'];
+
+        return !empty($result)
+            && $textActivity['finishType'] == 'time'
+            && $result >= $textActivity['finishDetail'];
     }
 
     public function delete($targetId)
@@ -47,7 +48,7 @@ class Text extends Activity
 
     public function create($fields)
     {
-        $text                  = ArrayToolkit::parts($fields, array(
+        $text = ArrayToolkit::parts($fields, array(
             'finishType',
             'finishDetail'
         ));
@@ -61,6 +62,9 @@ class Text extends Activity
         return $this->getBiz()->dao('Activity:TextActivityDao');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service('Activity:ActivityLearnLogService');

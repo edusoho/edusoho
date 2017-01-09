@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\UserProcessor;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
+use Topxia\Service\Common\ServiceKernel;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor
 {
@@ -270,7 +271,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         if (!empty($courses)) {
             foreach ($courses as $course) {
-                $member = $this->controller->getCourseService()->getCourseMember($course['id'], $user['id']);
+                $member = $this->controller->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
             }
 
             $progress = $this->calculateUserLearnProgress($course, $member);
@@ -912,7 +913,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $total = $this->controller->getCourseService()->searchMemberCount($conditions);
 
-        $courseMembers = $this->controller->getCourseService()->searchMember($conditions, 0, $total);
+        $courseMembers = $this->controller->getCourseMemberService()->searchMember($conditions, 0, $total);
 
         $noteSum = 0;
         foreach ($courseMembers as $member) {
@@ -1154,6 +1155,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     protected function getAuthService()
     {
-        return $this->controller->getService('User.AuthService');
+        return ServiceKernel::instance()->createService('User:AuthService');
     }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
+    }
+
 }

@@ -1,34 +1,35 @@
 {% extends 'layout.html.twig' %}
-
 {% block body %}
-   <div  class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:block">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-body task-state-modal">
-		        <div class="title font-blod">
-		          <i class="es-icon es-icon-iccheckcircleblack24px text-success"></i>
-		          {{'考试说明'|trans}}
-		        </div>
-		        <div class="content">
-		          <div class="content-title">
-		          	本次考试共<span class="text-success">{{ testpaper.itemCount }}题</span>，总分<span class="text-success">{{ testpaper.score }}分</span>
-	          		{% if testpaperActivity.finishCondition.type == 'score' %}
-	          			，及格为<span class="text-success">{{ testpaperActivity.finishCondition.finishScore}}分</span>
-	          		{% endif %}；<br/>
-
-		          	{% if testpaperActivity.limitedTime %}
-		          		请在<span class="text-success">{{ testpaperActivity.limitedTime }}分钟</span>内作答。
-		          	{% endif %}
-		          </div>
-		          
-		        </div>
-		        <div class="footer text-right">
-		          <a class="btn btn-primary" href="{{ path('testpaper_do',{lessonId:activity.id,testId:testpaperActivity.mediaId})}}">{{'开始考试'|trans}}</a>
-		        </div>
-		      </div>
-		    </div>
-		  </div>
-		</div>
+<div class="iframe-parent-content">
+  <div  class="modal show">
+	  <div class="modal-dialog ">
+	    <div class="modal-content">
+	      <div class="modal-body task-state-modal">
+	        <div class="title font-blod">
+	          <i class="es-icon es-icon-xinxi color-info"></i>{{'考试说明'|trans}}
+	        </div>
+	        <div class="content">
+	          <div class="text-16 ">
+	          	本次考试共<span class="color-primary">{{ testpaper.itemCount }}题</span>，总分<span class="color-primary">{{ testpaper.score }}分</span>
+          		{% if testpaperActivity.finishCondition.type == 'score' %}
+          			，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore}}分</span>
+          		{% endif %}；
+								
+	          	{% if testpaperActivity.limitedTime %}
+	          		<div class="mt5">请在<span class="color-primary">{{ testpaperActivity.limitedTime }}分钟</span>内作答。</div>
+	          	{% endif %}
+	          </div>
+	          
+	        </div>
+	        <div class="text-right mtl">
+	          <a class="btn btn-primary" href="{{ path('testpaper_do',{lessonId:activity.id,testId:testpaperActivity.mediaId})}}">{{'开始考试'|trans}}</a>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+<div class="modal-backdrop in"></div>
 {% endblock %}
 
 

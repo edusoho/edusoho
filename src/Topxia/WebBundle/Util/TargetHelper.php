@@ -89,7 +89,7 @@ class CourseTargetFinder extends AbstractTargetFinder
 {
     public function find(array $ids)
     {
-        $courses = ServiceKernel::instance()->createService('Course.CourseService')->findCoursesByIds($ids);
+        $courses = ServiceKernel::instance()->createService('Course:CourseService')->findCoursesByIds($ids);
         $targets = array();
         foreach ($courses as $id => $course) {
             $targets[$id] = array(
@@ -110,7 +110,7 @@ class LessonTargetFinder extends AbstractTargetFinder
 {
     public function find(array $ids)
     {
-        $lessons = ServiceKernel::instance()->createService('Course.CourseService')->findLessonsByIds($ids);
+        $lessons = ServiceKernel::instance()->createService('Course:CourseService')->findLessonsByIds($ids);
 
         $targets = array();
         foreach ($lessons as $id => $lesson) {
@@ -131,7 +131,7 @@ class TestpaperTargetFinder extends AbstractTargetFinder
 {
     public function find(array $ids)
     {
-        $testpapers = ServiceKernel::instance()->createService('Testpaper.TestpaperService')->findTestpapersByIds($ids);
+        $testpapers = ServiceKernel::instance()->createService('Testpaper:TestpaperService')->findTestpapersByIds($ids);
 
         $targets = array();
         foreach ($testpapers as $id => $testpaper) {

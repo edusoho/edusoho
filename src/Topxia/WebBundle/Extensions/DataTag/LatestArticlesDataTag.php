@@ -64,11 +64,11 @@ class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
 
     private function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->createService('Article:ArticleService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Article.CategoryService');
+        return $this->getServiceKernel()->createService('Article:CategoryService');
     }
 }

@@ -6,9 +6,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\PluginUtil;
+use Biz\Util\PluginUtil;
 
 class OldPluginRemoveCommand extends BaseCommand
 {
@@ -91,7 +91,7 @@ class OldPluginRemoveCommand extends BaseCommand
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
 }

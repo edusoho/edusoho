@@ -5,6 +5,7 @@ namespace Topxia\Api\Resource;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class ThreadManager extends BaseResource
 {
@@ -19,7 +20,7 @@ class ThreadManager extends BaseResource
             return $this->error('error', '课程信息不存在!');
         }
 
-        if (!$this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
+        if (!$this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
             return $this->error('error', '您不是老师，不能查看此页面！!');
         }
 
@@ -112,16 +113,21 @@ class ThreadManager extends BaseResource
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCourseThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

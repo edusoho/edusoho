@@ -50,11 +50,11 @@ class CourseFileFireWall extends BaseFireWall implements FireWallInterface
 
     protected function getThreadService()
     {
-        return $this->getKernel()->createService('Course.ThreadService');
+        return $this->getKernel()->createService('Course:ThreadService');
     }
 
     protected function getCourseService()
     {
-        return $this->getKernel()->createService('Course.CourseService');
+        return $this->getKernel()->createService('Course:CourseService');
     }
 }

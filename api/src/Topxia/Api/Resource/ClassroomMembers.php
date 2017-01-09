@@ -6,6 +6,7 @@ use Topxia\Api\Resource\BaseResource;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomMembers extends BaseResource
 {
@@ -51,11 +52,11 @@ class ClassroomMembers extends BaseResource
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 }

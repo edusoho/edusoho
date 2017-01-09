@@ -13,7 +13,7 @@ abstract class CourseBaseController extends BaseController
 
         $previewAs = $request->query->get('previewAs');
         $user      = $this->getCurrentUser();
-        $member    = $user['id'] ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $member    = $user['id'] ? $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']) : null;
 
         $member = $this->previewAsMember($previewAs, $member, $course);
 
@@ -83,6 +83,11 @@ abstract class CourseBaseController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

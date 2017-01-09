@@ -48,7 +48,7 @@ class MeChatroomes extends BaseResource
     {
         $conditions = array('userId' => $userId);
         $total      = $this->getCourseService()->searchMemberCount($conditions);
-        $members    = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, $total);
+        $members    = $this->getCourseMemberService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, $total);
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
@@ -75,11 +75,16 @@ class MeChatroomes extends BaseResource
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

@@ -1,4 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+
 
 {% set billable = true %}
 {% if (
@@ -105,7 +107,8 @@
 
   {% endif %}
 
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>
-    app.load('course/buy-modal');
+    app.lazyLoad = function() { app.load('course/buy-modal'); };
   </script>
 {% endblock %}

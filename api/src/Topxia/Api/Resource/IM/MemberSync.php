@@ -6,6 +6,7 @@ use Silex\Application;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class MemberSync extends BaseResource
 {
@@ -54,7 +55,7 @@ class MemberSync extends BaseResource
 
     protected function syncCourseConversations($user)
     {
-        $courseIds = $this->getCourseService()->findMembersByUserIdAndJoinType($user['id']);
+        $courseIds = $this->getCourseMemberService()->findMembersByUserIdAndJoinType($user['id']);
 
         $this->syncTargetConversations($user, $courseIds, 'course');
         $this->syncCourseConversationMembers($user, $courseIds);
@@ -169,21 +170,26 @@ class MemberSync extends BaseResource
 
     protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM.ConversationService');
+        return $this->getServiceKernel()->createService('IM:ConversationService');
     }
 
     private function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

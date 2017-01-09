@@ -1,0 +1,71 @@
+{% import "admin/macro.html.twig" as admin_macro %}
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% set target = ''~filter~'_index' %}
+<tr id="course-tr-{{ course.id }}">
+  {% include 'org/parts/table-body-checkbox.html.twig' %}
+  <td>{{ course.id }}</td>
+  <td>
+    <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
+    
+    {% if course.type == 'live' or course.type == 'liveOpen' %}
+      <span class="label label-success live-label mls">{{'直播'|trans}}</span>
+    {% endif %}
+
+    {% if filter == 'classroom' %}
+      {% set classroom = classrooms[course.id]|default(null) %}
+      {% if not classroom %}
+        <span class="label label-danger live-label mls">{{'已移除'|trans}}</span>
+      {% endif %}
+    {% endif %}
+    <br>
+    <span class="text-muted text-sm">{{'分类：'|trans}}{{ category.name|default('--') }}</span>
+    {% if course.recommended %}
+      <span class="label label-default">{{'荐:'|trans}}{{ course.recommendedTime|date('Y-m-d') }} / {{'序号:'|trans}}{{ course.recommendedSeq }}</span>
+    {% endif %}
+
+  </td>
+  <td>{{ course.originPrice }}</td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: course.orgCode}%}
+  {% if filter != 'open' and filter != 'liveOpen' %}
+    <td>
+      {% if  course.serializeMode =="none" %}
+      <span class="text-info">{{'非连载课程'|trans}}</span>
+      {% elseif course.serializeMode =="serialize" %}
+      <span class="text-info">{{'连载中'|trans}}</span>
+      {% elseif course.serializeMode =="finished" %}
+      <span class="text-info">{{'已完结'|trans}}</span>
+      {% endif %}
+    </td>
+    {% if filter == 'classroom' %}
+    <td>
+      {% set classroom = classrooms[course.id]|default(null) %}
+      {% if classroom %}
+        <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+      {% endif %}
+    </td>
+    {% else %}
+      <td>{{ course.studentNum }}</td>
+    {% endif %}
+    {% if filter == 'vip' %}
+        {% set vip = vips[course.vipLevelId]|default(null) %}
+        <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
+   
+    {% endif %}
+  {% endif %}
+
+  <td> {{ dict_macro.courseStatus( course.status) }}</td>
+  <td>
+    {{ admin_macro.user_link(user) }}
+    <br>
+    <span class="text-muted text-sm">{{ course.createdTime|date('Y-n-d H:i') }}</span>
+  </td>
+  <td>
+    <div class="btn-group">
+      {% if has_permission('admin_course_content_manage') %}
+        <a class="btn btn-default btn-sm" href="{{ path('course_set_manage_course_tasks', {courseSetId:course.courseSetId, courseId: course.id}) }}" target="_blank">{{'管理'|trans}}</a>
+      {% endif %}
+
+      {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', course: course} %}
+    </div>
+  </td>
+</tr>

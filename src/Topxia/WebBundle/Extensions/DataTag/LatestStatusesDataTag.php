@@ -2,7 +2,8 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
+use Biz\Course\Service\CourseService;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
 
@@ -32,9 +33,11 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
         if (isset($arguments['objectType']) && isset($arguments['objectId'])) {
             if ($arguments['objectType'] == 'course') {
                 $conditions['courseIds'] = array($arguments['objectId']);
+            } else if($arguments['objectType'] == 'courseSet') {
+                $courses = $this->getCourseService()->findCoursesByCourseSetId($arguments['objectId']);
+                $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
             } else {
-                $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-
+                $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($arguments['objectId']);
                 if ($courses) {
                     $courseIds = ArrayToolkit::column($courses, 'id');
                     $conditions['classroomCourseIds'] = $courseIds;
@@ -47,7 +50,7 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
         }
 
         
-        $statuses = $this->getStatusService()->searchStatuses($conditions, array('createdTime', 'DESC'), 0, $arguments['count']);
+        $statuses = $this->getStatusService()->searchStatuses($conditions, array('createdTime'=>'DESC'), 0, $arguments['count']);
 
         if ($statuses) {
             $userIds = ArrayToolkit::column($statuses, 'userId');
@@ -68,17 +71,25 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
 
     protected function getStatusService()
     {
-        return $this->getServiceKernel()->createService('User.StatusService');
+        return ServiceKernel::instance()->createService('User:StatusService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     private function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
 }

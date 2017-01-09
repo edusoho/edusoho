@@ -8,9 +8,13 @@ interface CourseService
 
     public function findCoursesByIds($ids);
 
+    public function findPublishedCoursesByCourseSetId($courseSetId);
+
     public function findCoursesByCourseSetId($courseSetId);
 
     public function getDefaultCourseByCourseSetId($courseSetId);
+
+    public function getFirstPublishedCourseByCourseSetId($courseSetId);
 
     public function createCourse($course);
 
@@ -32,34 +36,63 @@ interface CourseService
 
     public function findCourseItems($courseId);
 
-    public function tryManageCourse($courseId);
+    public function tryManageCourse($courseId, $courseSetId = 0);
 
     public function getNextNumberAndParentId($courseId);
 
     public function tryTakeCourse($courseId);
 
+    public function canTakeCourse($course);
+
     public function findStudentsByCourseId($courseId);
+
+    public function findTeachersByCourseId($courseId);
 
     public function countStudentsByCourseId($courseId);
 
-    public function isCourseTeacher($courseId, $userId);
+    public function getUserRoleInCourse($courseId, $userId);
 
-    public function isCourseStudent($courseId, $userId);
+    /**
+     * @param  integer   $userId
+     * @return array[]
+     */
+    public function findTeachingCoursesByUserId($userId);
 
-    public function createCourseStudent($courseId, $fields);
+    /**
+     * @param  integer   $userId
+     * @return array[]
+     */
+    public function findLearnCoursesByUserId($userId);
 
-    public function removeCourseStudent($courseId, $userId);
+    /**
+     * @param  array     $ids
+     * @return array[]
+     */
+    public function findPublicCoursesByIds(array $ids);
 
-    public function setMemberNoteNumber($courseId, $userId, $num);
+    //---start 前两个已经重构了，后面的四个也需要重构，目前还没有用到，用到的时候在重构
+    public function findUserLeaningCourseCount($userId, $filters = array());
 
-    public function countLeaningCourseByUserId($userId, $filters = array());
+    public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
 
-    public function findLearningCourseByUserId($userId, $start, $limit, $filters = array());
+    public function findUserLeanedCourseCount($userId, $filters = array());
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
-    public function countMembers($conditions);
+    // public function findUserLearnCourses($userId, $start, $limit);
 
-    public function searchMembers($conditions, $orderBy, $start, $limit);
+    //public function findUserLearnCourseCount($userId);
 
+    public function findUserTeachCourseCount($conditions, $onlyPublished = true);
+
+    public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
+
+    //---end
+    public function searchCourses($conditions, $sort, $start, $limit);
+
+    public function searchCourseCount($conditions);
+
+    public function sortCourseItems($courseId, $ids);
+
+    public function deleteChapter($courseId, $chapterId);
 }

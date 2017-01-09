@@ -10,8 +10,8 @@
 
 namespace Topxia\WebBundle\Handler;
 
+use Biz\Common\Redis\RedisFactory;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
 /**
@@ -36,22 +36,21 @@ class RedisSessionHandler implements \SessionHandlerInterface
     private $prefix;
 
     /**
-     * @var SecurityContext
+     * @var TokenStorage
      */
     private $storage;
 
     /**
-     * Constructor.
-     *
+     * RedisSessionHandler constructor.
      * List of available options:
-     *  * prefix: The prefix to use for the redis keys in order to avoid collision
-     *  * expiretime: The time to live in seconds
+     *  prefix: The prefix to use for the redis keys in order to avoid collision
+     *  expiretime: The time to live in seconds
      *
-     * @param  \Redis                    $redis   A \Redis instance
-     * @param  array                     $options An associative array of Redis options
-     * @throws \InvalidArgumentException When unsupported options are passed
+     * @param              $redisFactory
+     * @param TokenStorage $storage
+     * @param array        $options
      */
-    public function __construct($redisFactory, TokenStorage $storage, array $options = array())
+    public function __construct(RedisFactory $redisFactory, TokenStorage $storage, array $options = array())
     {
         if ($diff = array_diff(array_keys($options), array('prefix', 'expiretime'))) {
             throw new \InvalidArgumentException(sprintf(

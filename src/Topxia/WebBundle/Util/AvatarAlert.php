@@ -38,6 +38,6 @@ class AvatarAlert
 
     protected static function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

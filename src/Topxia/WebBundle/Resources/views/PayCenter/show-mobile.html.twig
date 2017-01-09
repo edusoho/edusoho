@@ -1,4 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+
 
 {% block title %}{{'核实银行预留手机'|trans}}{% endblock %}
 {% block body %}
@@ -43,5 +45,6 @@
 {% block footer %}
   <button id="unbind-btn" data-submiting-text="{{'正在提交'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#unbind-form">{{'确定'|trans}}</button>
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
-  <script>app.load('pay/show-mobile-modal')</script>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() { app.load('pay/show-mobile-modal') };</script>
 {% endblock %}

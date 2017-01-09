@@ -2,7 +2,7 @@
 
 <tr data-type="{{ question.type }}">
   {% if not replace|default(null) %}
-    <th><input type="checkbox" data-role="batch-item" data-replace="{{ replace|default('') }}" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id,questionId:question.id }) }}"></th>
+    <th><input type="checkbox" data-role="batch-item" data-replace="{{ replace|default('') }}" data-question-id="{{ question.id }}" ></th>
   {% endif %}
   <td>
     {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
@@ -12,17 +12,19 @@
     {% endif %}
     <br>
     <small class="text-muted">{{'从属'|trans}}：
-      {% if question.target == 'course-' ~ courseSet.id %}
-        {{'本课程'|trans}}
+      {% if question.lessonId %}
+        {{ targetChoices[question.lessonId].title|default('--') }}
       {% else %}
-        {{ targets[question.target].simple_name|default('--') }}
+        {{ '本课程'|trans }}
       {% endif %}
     </small>
   </td>
   <td>{{ questionTypesDict[question.type] }}</td>
-  <td>{{ question.score }}</td>
+  {% if targetType|default('testpaper') == 'testpaper' %}
+    <td>{{ question.score }}</td>
+  {% endif %}
   <td>
     <button data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id, questionId:question.id, isNew:true }) }}" class="btn btn-default btn-sm question-preview" data-role="preview-btn">{{'预览'|trans}}</button>
-    <button type="button" class="btn btn-primary btn-sm" data-role="picked-item" data-replace="{{ app.request.query.get('replace')|default(null) }}" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id,questionId:question.id }) }}">{% if replace|default(null) %}{{'替换'|trans}}{% else %}{{'选择'|trans}}{% endif %}</button>
+    <button type="button" class="btn btn-primary btn-sm" data-role="picked-item" data-replace="{{ app.request.query.get('replace')|default(null) }}" data-question-id="{{ question.id }}" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id }) }}">{% if replace|default(null) %}{{'替换'|trans}}{% else %}{{'选择'|trans}}{% endif %}</button>
   </td>
 </tr>

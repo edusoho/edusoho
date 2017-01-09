@@ -3,7 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\EdusohoLiveClient;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Util\UploaderToken;
 
@@ -545,47 +545,47 @@ class CourseLessonManageController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
     }
 
     protected function getCourseMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course.MaterialService');
+        return $this->getServiceKernel()->createService('Course:MaterialService');
     }
 
     protected function getDiskService()
     {
-        return $this->getServiceKernel()->createService('User.DiskService');
+        return $this->getServiceKernel()->createService('User:DiskService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->getServiceKernel()->createService('Question:QuestionService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getHomeworkService()
@@ -600,6 +600,6 @@ class CourseLessonManageController extends BaseController
 
     protected function getCourseDeleteService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseDeleteService');
+        return $this->getServiceKernel()->createService('Course:CourseDeleteService');
     }
 }

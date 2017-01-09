@@ -2,6 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 
 class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
@@ -27,7 +28,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array('recommendedSeq', 'ASC'),
+            array('recommendedSeq' => 'ASC'),
             0,
             $arguments['count']
         );
@@ -38,7 +39,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
             $classroomTemp = $this->getClassroomService()->searchClassrooms(
                 $conditions,
-                array('createdTime', 'DESC'),
+                array('createdTime' => 'DESC'),
                 0,
                 $arguments['count'] - $classroomCount
             );
@@ -63,16 +64,16 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 }

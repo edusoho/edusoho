@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Tests\Course;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;
 
 class CourseSetServiceTest extends BaseTestCase
 {
@@ -79,6 +79,20 @@ class CourseSetServiceTest extends BaseTestCase
         $this->getCourseSetService()->deleteCourseSet($created['id']);
         $deleted = $this->getCourseSetService()->getCourseSet($created['id']);
         $this->assertEmpty($deleted);
+    }
+
+    public function testUpdateCourseSetStatistics()
+    {
+        $courseSet = array(
+            'title' => '新课程开始！',
+            'type'  => 'normal'
+        );
+        $created = $this->getCourseSetService()->createCourseSet($courseSet);
+        $this->assertNotEmpty($created);
+
+        $result = $this->getCourseSetService()->updateCourseSetStatistics($created['id'], array('ratingNum'));
+
+        $this->assertEquals(0, $result['ratingNum']);
     }
 
     protected function getCourseSetService()

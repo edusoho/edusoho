@@ -2,17 +2,31 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
+use Biz\User\Dao\UserDao;
+use Biz\User\Dao\TokenDao;
+use Biz\User\Dao\FriendDao;
+use Biz\User\Dao\UserBindDao;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
+use Biz\User\Dao\UserProfileDao;
 use Topxia\Common\StringToolkit;
+use Biz\Role\Service\RoleService;
+use Biz\User\Dao\UserApprovalDao;
 use Biz\User\Service\UserService;
-use Biz\User\Dao\Impl\UserDaoImpl;
+use Biz\System\Service\LogService;
 use Topxia\Common\SimpleValidator;
-use Topxia\Service\Common\ServiceEvent;
+use Biz\User\Dao\UserPayAgreementDao;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\BlacklistService;
+use Biz\User\Dao\UserSecureQuestionDao;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\User\Service\InviteRecordService;
+use Biz\User\Service\NotificationService;
+use Biz\System\Service\IpBlacklistService;
 use Symfony\Component\HttpFoundation\File\File;
-use Permission\Service\Role\Impl\RoleServiceImpl;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class UserServiceImpl extends BaseService implements UserService
@@ -23,9 +37,98 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
+    public function searchUserCount(array $conditions)
+    {
+        return $this->getUserDao()->count($conditions);
+    }
+
+    public function getUserSecureQuestionsByUserId($userId)
+    {
+        return $this->getUserSecureQuestionDao()->findByUserId($userId);
+    }
+
+    public function changeRawPassword($id, $rawPassword)
+    {
+        if (empty($rawPassword)) {
+            throw $this->createInvalidArgumentException('参数不正确，更改密码失败');
+        }
+
+        $user = $this->getUser($id);
+
+        if (empty($user)) {
+            throw $this->createNotFoundException("user #{$id} not found");
+        }
+
+        $this->getUserDao()->update($id, $rawPassword);
+
+        $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
+
+        $this->getLogService()->info('user', 'password-changed', sprintf('用户%s(ID:%u)重置密码成功', $user['email'], $user['id']));
+
+        return true;
+    }
+
+    public function searchUserProfileCount(array $conditions)
+    {
+        return $this->getProfileDao()->count($conditions);
+    }
+
+    public function searchApprovalsCount(array $conditions)
+    {
+        return $this->getUserApprovalDao()->count($conditions);
+    }
+
+    public function searchTokenCount($conditions)
+    {
+        return $this->getUserTokenDao()->count($conditions);
+    }
+
+    public function findUserFollowing($userId, $start, $limit)
+    {
+        $friends = $this->getFriendDao()->searchByFromId($userId, $start, $limit);
+        $ids     = ArrayToolkit::column($friends, 'toId');
+        return $this->findUsersByIds($ids);
+    }
+
+    public function findAllUserFollowing($userId)
+    {
+        $friends = $this->getFriendDao()->findFollowingsByFromId($userId);
+        $ids     = ArrayToolkit::column($friends, 'toId');
+        return $this->findUsersByIds($ids);
+    }
+
+    public function findUserFollowingCount($userId)
+    {
+        return $this->getFriendDao()->countByFromId($userId);
+    }
+
+    public function findUserFollowers($userId, $start, $limit)
+    {
+        $friends = $this->getFriendDao()->searchByToId($userId, $start, $limit);
+        $ids     = ArrayToolkit::column($friends, 'fromId');
+        return $this->findUsersByIds($ids);
+    }
+
+    public function findUserFollowerCount($userId)
+    {
+        return $this->getFriendDao()->countByToId($userId);
+    }
+
+    public function findAllUserFollower($userId)
+    {
+        $friends = $this->getFriendDao()->findFollowersByToId($userId);
+        $ids     = ArrayToolkit::column($friends, 'fromId');
+        return $this->findUsersByIds($ids);
+    }
+
+    public function findFriendCount($userId)
+    {
+        return $this->getFriendDao()->countByFromId($userId);
+    }
+
     public function getSimpleUser($id)
     {
-        $user = $this->get($id);
+        $user = $this->getUser($id);
 
         $simple = array();
 
@@ -79,12 +182,12 @@ class UserServiceImpl extends BaseService implements UserService
     public function countUserHasMobile($needVerified = false)
     {
         if ($needVerified) {
-            $count = $this->count(array(
+            $count = $this->searchUserCount(array(
                 'locked'            => 0,
                 'hasVerifiedMobile' => true
             ));
         } else {
-            $count = $this->countUserByMobileNotEmpty();
+            $count = $this->countUsersByMobileNotEmpty();
         }
 
         return $count;
@@ -95,14 +198,14 @@ class UserServiceImpl extends BaseService implements UserService
         $conditions = array(
             'locked' => 0
         );
-        $orderBy = array('createdTime', 'ASC');
+        $orderBy = array('createdTime' => 'ASC');
         if ($needVerified) {
             $conditions['hasVerifiedMobile'] = true;
-            $users                           = $this->search($conditions, $orderBy, $start, $limit);
+            $users                           = $this->searchUsers($conditions, $orderBy, $start, $limit);
         } else {
             $profiles              = $this->getProfileDao()->findDistinctMobileProfiles($start, $limit);
             $conditions['userIds'] = ArrayToolkit::column($profiles, 'id');
-            $users                 = $this->search($conditions, $orderBy, 0, PHP_INT_MAX);
+            $users                 = $this->searchUsers($conditions, $orderBy, 0, PHP_INT_MAX);
             $profiles              = ArrayToolkit::index($profiles, 'id');
             $users                 = ArrayToolkit::index($users, 'id');
             $users                 = array_intersect_key($users, $profiles);
@@ -142,6 +245,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $users = $this->getUserDao()->search($conditions, $orderBy, $start, $limit);
+
         return UserSerialize::unserializes($users);
     }
 
@@ -159,27 +263,17 @@ class UserServiceImpl extends BaseService implements UserService
         return $profiles;
     }
 
-    public function countUserProfiles(array $conditions)
-    {
-        return $this->getProfileDao()->count($conditions);
-    }
-
     public function searchApprovals(array $conditions, array $orderBy, $start, $limit)
     {
         $approvals = $this->getUserApprovalDao()->search($conditions, $orderBy, $start, $limit);
         return $approvals;
     }
 
-    public function countApprovals(array $conditions)
-    {
-        return $this->getUserApprovalDao()->count($conditions);
-    }
-
     public function setEmailVerified($userId)
     {
         $this->getUserDao()->update($userId, array('emailVerified' => 1));
         $user = $this->getUser($userId);
-        $this->dispatchEvent('email.verify', new ServiceEvent($user));
+        $this->dispatchEvent('email.verify', new Event($user));
     }
 
     public function changeNickname($userId, $nickname)
@@ -201,7 +295,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $updatedUser = $this->getUserDao()->update($userId, array('nickname' => $nickname));
-        $this->dispatchEvent('user.change_nickname', new ServiceEvent($updatedUser));
+        $this->dispatchEvent('user.change_nickname', new Event($updatedUser));
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
     }
 
@@ -252,7 +346,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $updatedUser = $this->getUserDao()->update($userId, array('email' => $email));
-        $this->dispatchEvent('user.change_email', new ServiceEvent($updatedUser));
+        $this->dispatchEvent('user.change_email', new Event($updatedUser));
         return $updatedUser;
     }
 
@@ -291,6 +385,11 @@ class UserServiceImpl extends BaseService implements UserService
 
         $user = $this->getUserDao()->update($userId, $fields);
         return UserSerialize::unserialize($user);
+    }
+
+    public function updateUserUpdatedTime($id)
+    {
+        return $this->getUserDao()->update($id, array());
     }
 
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = array())
@@ -464,16 +563,11 @@ class UserServiceImpl extends BaseService implements UserService
         $this->updateUserProfile($id, array(
             'mobile' => $mobile
         ));
-        $this->dispatchEvent('mobile.change', new ServiceEvent($user));
+        $this->dispatchEvent('mobile.change', new Event($user));
 
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
         return true;
-    }
-
-    public function findUserSecureQuestionsByUserId($userId)
-    {
-        return $this->getUserSecureQuestionDao()->findByUserId($userId);
     }
 
     public function addUserSecureQuestionsWithUnHashedAnswers($userId, $fieldsWithQuestionTypesAndUnHashedAnswers)
@@ -656,7 +750,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($inviteUser)) {
-            $this->getInviteRecordService()->create($inviteUser['id'], $user['id']);
+            $this->getInviteRecordService()->createInviteRecord($inviteUser['id'], $user['id']);
             $invitedCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
 
             if (!empty($invitedCoupon)) {
@@ -666,7 +760,7 @@ class UserServiceImpl extends BaseService implements UserService
 
             $this->dispatchEvent(
                 'user.register',
-                new ServiceEvent(array('userId' => $user['id'], 'inviteUserId' => $inviteUser['id']))
+                new Event(array('userId' => $user['id'], 'inviteUserId' => $inviteUser['id']))
             );
         }
 
@@ -712,7 +806,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->bindUser($type, $registration['token']['userId'], $user['id'], $registration['token']);
         }
 
-        $this->getDispatcher()->dispatch('user.registered', new ServiceEvent($user));
+        $this->dispatchEvent('user.registered', new Event($user));
 
         return $user;
     }
@@ -745,18 +839,18 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function importUpdateEmail($users)
     {
-        $this->getUserDao()->getConnection()->beginTransaction();
+        $this->beginTransaction();
         try {
             for ($i = 0; $i < count($users); $i++) {
-                $member = $this->getUserDao()->findUserByEmail($users[$i]["email"]);
+                $member = $this->getUserDao()->getByEmail($users[$i]["email"]);
                 $member = UserSerialize::unserialize($member);
                 $this->changePassword($member["id"], $users[$i]["password"]);
                 $this->updateUserProfile($member["id"], $users[$i]);
             }
 
-            $this->getUserDao()->getConnection()->commit();
+            $this->commit();
         } catch (\Exception $e) {
-            $this->getUserDao()->getConnection()->rollback();
+            $this->rollback();
             throw $e;
         }
     }
@@ -849,7 +943,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (isset($fields['title'])) {
             $this->getUserDao()->update($id, array('title' => $fields['title']));
-            $this->dispatchEvent('user.update', new ServiceEvent(array('user' => $user, 'fields' => $fields)));
+            $this->dispatchEvent('user.update', new Event(array('user' => $user, 'fields' => $fields)));
         }
 
         unset($fields['title']);
@@ -871,7 +965,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about']);
+            $fields['about'] = $this->biz['html_helper']->purify($fields['about']);
         }
 
         if (empty($fields['isWeiboPublic'])) {
@@ -894,7 +988,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $userProfile = $this->getProfileDao()->update($id, $fields);
 
-        $this->dispatchEvent('profile.update', new ServiceEvent(array('user' => $user, 'fields' => $fields)));
+        $this->dispatchEvent('profile.update', new Event(array('user' => $user, 'fields' => $fields)));
 
         return $userProfile;
     }
@@ -925,8 +1019,9 @@ class UserServiceImpl extends BaseService implements UserService
 
         $user = $this->getUserDao()->update($id, UserSerialize::serialize(array('roles' => $roles)));
 
-        $this->dispatchEvent('user.role.change', new ServiceEvent(UserSerialize::unserialize($user)));
+        $this->dispatchEvent('user.role.change', new Event(UserSerialize::unserialize($user)));
         $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
+
         return UserSerialize::unserialize($user);
     }
 
@@ -1198,7 +1293,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getUserDao()->update($user['id'], array('locked' => 1));
-        $this->dispatchEvent("user.lock", new ServiceEvent($user));
+        $this->dispatchEvent("user.lock", new Event($user));
 
         $this->getLogService()->info('user', 'lock', sprintf('封禁用户%s(#%u)', $user['nickname'], $user['id']));
 
@@ -1215,7 +1310,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->update($user['id'], array('locked' => 0));
 
-        $this->dispatchEvent("user.unlock", new ServiceEvent($user));
+        $this->dispatchEvent("user.unlock", new Event($user));
 
         $this->getLogService()->info('user', 'unlock', "解禁用户{$user['nickname']}(#{$user['id']})");
 
@@ -1306,7 +1401,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findAllUserFollowers($userId)
     {
-        $friends = $this->getFriendDao()->findUserFollowersByToId($userId);
+        $friends = $this->getFriendDao()->findFollowersByToId($userId);
         $ids     = ArrayToolkit::column($friends, 'fromId');
         return $this->findUsersByIds($ids);
     }
@@ -1318,14 +1413,14 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findFriends($userId, $start, $limit)
     {
-        $friends = $this->getFriendDao()->findByUserId($userId, $start, $limit);
+        $friends = $this->getFriendDao()->searchByUserId($userId, $start, $limit);
         $ids     = ArrayToolkit::column($friends, 'toId');
         return $this->findUsersByIds($ids);
     }
 
     public function countFriends($userId)
     {
-        return $this->getFriendDao()->countByUserId($userId);
+        return $this->getFriendDao()->countByFromId($userId);
     }
 
     public function follow($fromId, $toId)
@@ -1357,7 +1452,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createAccessDeniedException('You have Followed User#{$toId}.');
         }
 
-        $isFollowed = $this->isFollowed($toId, $fromId);
+        $isFollowed = $this->isFollowed($fromId, $toId);
         $pair       = $isFollowed ? 1 : 0;
         $friend     = $this->getFriendDao()->create(array(
             'fromId'      => $fromId,
@@ -1365,8 +1460,8 @@ class UserServiceImpl extends BaseService implements UserService
             'createdTime' => time(),
             'pair'        => $pair
         ));
-        $this->getFriendDao()->updateByFromIdAndToId($toId, $fromId, array('pair' => $pair));
-        $this->getDispatcher()->dispatch('user.follow', new ServiceEvent($friend));
+        $this->getFriendDao()->updateByFromIdAndToId($fromId, $toId, array('pair' => $pair));
+        $this->dispatchEvent('user.follow', new Event($friend));
         return $friend;
     }
 
@@ -1396,7 +1491,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->getFriendDao()->updateByFromIdAndToId($toId, $fromId, array('pair' => 0));
         }
 
-        $this->getDispatcher()->dispatch('user.unfollow', new ServiceEvent($friend));
+        $this->dispatchEvent('user.unfollow', new Event($friend));
         return $result;
     }
 
@@ -1447,7 +1542,7 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserApprovalDao()->findByUserIds($userIds);
     }
 
-    public function applyUserApproval($userId, $approval, $faceImg, $backImg, $directory)
+    public function applyUserApproval($userId, $approval, UploadedFile $faceImg, UploadedFile $backImg, $directory)
     {
         $user = $this->getUser($userId);
 
@@ -1492,7 +1587,8 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getProfileDao()->update($userId, array(
             'truename' => $lastestApproval['truename'],
-            'idcard'   => $lastestApproval['idcard'])
+            'idcard'   => $lastestApproval['idcard']
+        )
         );
 
         $currentUser = $this->getCurrentUser();
@@ -1501,14 +1597,16 @@ class UserServiceImpl extends BaseService implements UserService
                 'userId'     => $user['id'],
                 'note'       => $note,
                 //'status' => 'approved',
-                'operatorId' => $currentUser['id'])
+                'operatorId' => $currentUser['id']
+            )
         );
 
         $this->getLogService()->info('user', 'approved', sprintf('用户%s实名认证成功，操作人:%s !', $user['nickname'], $currentUser['nickname']));
 
         $message = array(
             'note' => $note ? $note : '',
-            'type' => 'through');
+            'type' => 'through'
+        );
         $this->getNotificationService()->notify($user['id'], 'truename-authenticate', $message);
         return true;
     }
@@ -1533,13 +1631,15 @@ class UserServiceImpl extends BaseService implements UserService
                 'userId'     => $user['id'],
                 'note'       => $note,
                 'status'     => 'approve_fail',
-                'operatorId' => $currentUser['id'])
+                'operatorId' => $currentUser['id']
+            )
         );
 
         $this->getLogService()->info('user', 'approval_fail', sprintf('用户%s实名认证失败，操作人:%s !', $user['nickname'], $currentUser['nickname']));
         $message = array(
             'note' => $note ? $note : '',
-            'type' => 'reject');
+            'type' => 'reject'
+        );
         $this->getNotificationService()->notify($user['id'], 'truename-authenticate', $message);
         return true;
     }
@@ -1612,7 +1712,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function findUserIdsByInviteCode($inviteCode)
     {
         $inviteUser = $this->getUserDao()->getByInviteCode($inviteCode);
-        $record     = $this->getInviteRecordService()->findByInviteUserId($inviteUser['id']);
+        $record     = $this->getInviteRecordService()->findRecordsByInviteUserId($inviteUser['id']);
         $userIds    = ArrayToolkit::column($record, 'invitedUserId');
         return $userIds;
     }
@@ -1646,7 +1746,7 @@ class UserServiceImpl extends BaseService implements UserService
             $mobiles                         = ArrayToolkit::column($users, 'verifiedMobile');
             return $mobiles;
         } else {
-            $profiles       = $this->searchUserProfiles(array('mobileNotEqual' => '', 'ids' => $userIds), array('id', 'ASC'), 0, PHP_INT_MAX);
+            $profiles       = $this->searchUserProfiles(array('mobileNotEqual' => '', 'ids' => $userIds), array('id' => 'ASC'), 0, PHP_INT_MAX);
             $profileMobiles = ArrayToolkit::column($profiles, 'mobile');
 
             return array_unique($profileMobiles);
@@ -1694,11 +1794,17 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserPayAgreementDao()->delete($id);
     }
 
+    /**
+     * @return UserApprovalDao
+     */
     protected function getUserApprovalDao()
     {
         return $this->createDao("User:UserApprovalDao");
     }
 
+    /**
+     * @return FriendDao
+     */
     protected function getFriendDao()
     {
         return $this->createDao("User:FriendDao");
@@ -1710,28 +1816,40 @@ class UserServiceImpl extends BaseService implements UserService
     }
 
     /**
-     * @return UserDaoImpl
+     * @return UserDao
      */
     protected function getUserDao()
     {
         return $this->createDao('User:UserDao');
     }
 
+    /**
+     * @return UserProfileDao
+     */
     protected function getProfileDao()
     {
         return $this->createDao('User:UserProfileDao');
     }
 
+    /**
+     * @return UserSecureQuestionDao
+     */
     protected function getUserSecureQuestionDao()
     {
         return $this->createDao('User:UserSecureQuestionDao');
     }
 
+    /**
+     * @return UserBindDao
+     */
     protected function getUserBindDao()
     {
         return $this->createDao('User:UserBindDao');
     }
 
+    /**
+     * @return TokenDao
+     */
     protected function getUserTokenDao()
     {
         return $this->createDao('User:TokenDao');
@@ -1752,6 +1870,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getKernel()->createService('Coupon:CouponService');
     }
 
+    /**
+     * @return UserPayAgreementDao
+     */
     protected function getUserPayAgreementDao()
     {
         return $this->createDao('User:UserPayAgreementDao');
@@ -1762,21 +1883,33 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getKernel()->createService('Content:FileService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
         return $this->biz->service('User:NotificationService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->biz->service('System:LogService');
     }
 
+    /**
+     * @return IpBlacklistService
+     */
     protected function getIpBlacklistService()
     {
         return $this->biz->service('System:IpBlacklistService');
@@ -1787,27 +1920,33 @@ class UserServiceImpl extends BaseService implements UserService
         return new MessageDigestPasswordEncoder('sha256');
     }
 
+    /**
+     * @return BlacklistService
+     */
     protected function getBlacklistService()
     {
         return $this->biz->service('User:BlacklistService');
     }
 
+    /**
+     * @return InviteRecordService
+     */
     protected function getInviteRecordService()
     {
         return $this->biz->service('User:InviteRecordService');
     }
 
     /**
-     * @return RoleServiceImpl
+     * @return RoleService
      */
     protected function getRoleService()
     {
-        return $this->getKernel()->createService('Permission:Role.RoleService');
+        return $this->getKernel()->createService('Role:RoleService');
     }
 
     protected function getOrgService()
     {
-        return $this->getKernel()->createService('Org:Org.OrgService');
+        return $this->getKernel()->createService('Org:OrgService');
     }
 
     public function getKernel()

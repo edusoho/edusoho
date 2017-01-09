@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Command;
 
 use Topxia\Common\BlockToolkit;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\StringInput;
@@ -26,41 +26,35 @@ class WarmupCommand extends BaseCommand
         $time = time();
         ServiceKernel::instance()->getConnection()->update('user', array('updatedTime' => $time), array(1=>1));
 
-        $this->getUserDao()->updateUser(1, array('updatedTime'=>$time));
         foreach ($users as $user) {
 			$this->getUserService()->getUser($user['id']);
 			$this->getUserService()->getUserByNickname($user['nickname']);
             $this->getUserService()->getUserByEmail($user['email']);
 
-            $this->getServiceKernel()->createDao('Course.CourseMemberDao')->getMemberByCourseIdAndUserId(1, $user['id']);
+            $this->getServiceKernel()->createDao('Course:CourseMemberDao')->getByCourseIdAndUserId(1, $user['id']);
 
-            $this->getServiceKernel()->createDao('Course.LessonLearnDao')->getLearnByUserIdAndLessonId($user['id'], 1);
+            $this->getServiceKernel()->createDao('Course:LessonLearnDao')->getLearnByUserIdAndLessonId($user['id'], 1);
         }
 
 
         $this->getCacheService()->get('settings');
 
-        $this->getServiceKernel()->createService('Content.NavigationService')->getOpenedNavigationsTreeByType('friendlyLink');
+        $this->getServiceKernel()->createService('Content:NavigationService')->getOpenedNavigationsTreeByType('friendlyLink');
 
-        $this->getServiceKernel()->createService('Theme.ThemeService')->getCurrentThemeConfig();
+        $this->getServiceKernel()->createService('Theme:ThemeService')->getCurrentThemeConfig();
 
-        $this->getServiceKernel()->createService('Content.BlockService')->getBlockByCode('jianmo:home_top_banner');
+        $this->getServiceKernel()->createService('Content:BlockService')->getBlockByCode('jianmo:home_top_banner');
 
-        $this->getServiceKernel()->createDao('Classroom:Classroom.ClassroomCourseDao')->findClassroomByCourseId(1);
+        $this->getServiceKernel()->createDao('Classroom:Classroom.ClassroomCourseDao')->getClassroomByCourseId(1);
     }
 
     protected function getCacheService()
     {
-        return $this->getServiceKernel()->createService('System.CacheService');
+        return $this->getContainer()->get('biz')->createService('System:CacheService');
     }
 
     protected function getUserService()
     {
-    	return ServiceKernel::instance()->createService('User.UserService');
-    }
-
-    protected function getUserDao()
-    {
-        return ServiceKernel::instance()->createDao('User.UserDao');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

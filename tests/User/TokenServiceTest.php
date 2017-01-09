@@ -1,7 +1,7 @@
 <?php
 namespace Tests\User;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 class TokenServiceTest extends BaseTestCase
 {

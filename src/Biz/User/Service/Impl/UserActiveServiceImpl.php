@@ -37,7 +37,7 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
             $user   = $this->getCurrentUser();
             $userId = $user->getId();
         }
-        $activeUser = $this->getByUserId($userId);
+        $activeUser = $this->getActiveUser($userId);
         return !empty($activeUser);
     }
 

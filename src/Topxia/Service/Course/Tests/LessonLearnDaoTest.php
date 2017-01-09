@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Common\ArrayToolkit;
 
 class LessonLearnDaoTest extends BaseTestCase
@@ -13,6 +13,6 @@ class LessonLearnDaoTest extends BaseTestCase
 
     protected function getLessonLearnDao()
     {
-        return $this->getServiceKernel()->createDao('Course.LessonLearnDao'); 
+        return $this->getServiceKernel()->createDao('Course:LessonLearnDao'); 
     }
 }

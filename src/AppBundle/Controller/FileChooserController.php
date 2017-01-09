@@ -7,21 +7,20 @@
 
 namespace AppBundle\Controller;
 
-use Biz\File\Service\UploadFileService;
 use Topxia\Common\Paginator;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\ArrayToolkit;
+use Biz\File\Service\UploadFileService;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Component\MediaParser\ParserProxy;
 
 /**
  * Class MediaProccessController
- * @package AppBundle\Controller
  * 用来处理活动中文件选取(上传，从资料库选择，从课程文件选择，导入网络文件)逻辑
+ * @package AppBundle\Controller
  */
 class FileChooserController extends BaseController
 {
-
     public function materialChooseAction(Request $request)
     {
         $currentUser = $this->getUser();
@@ -36,7 +35,7 @@ class FileChooserController extends BaseController
             $this->getUploadFileService()->searchFileCount($conditions),
             10
         );
-        $files      = $this->getUploadFileService()->searchFiles(
+        $files = $this->getUploadFileService()->searchFiles(
             $conditions,
             array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
@@ -65,13 +64,12 @@ class FileChooserController extends BaseController
         return $this->createJsonResponse($mySharingContacts);
     }
 
-
     public function courseFileChooseAction(Request $request, $courseId)
     {
         $currentUser = $this->getUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
+            throw $this->createAccessDeniedException('您无权访问此页面');
         }
 
         $query           = $request->query->all();
@@ -104,7 +102,6 @@ class FileChooserController extends BaseController
         ));
     }
 
-
     public function importAction(Request $request)
     {
         $url = $request->query->get('url');
@@ -118,7 +115,7 @@ class FileChooserController extends BaseController
     protected function filterMaterialConditions($conditions, $currentUser)
     {
         $conditions['status']        = 'ok';
-        $conditions['currentUserId'] = $currentUser['id'];;
+        $conditions['currentUserId'] = $currentUser['id'];
 
         $conditions['noTargetType'] = 'attachment';
         if (!empty($conditions['keyword'])) {
@@ -137,9 +134,11 @@ class FileChooserController extends BaseController
             'courseId' => $courseId
         );
 
-        $courseMaterials = $this->getMaterialService()->searchMaterialsGroupByFileId(
+        //FIXME 同一个courseId下文件可能存在重复，所以需考虑去重，但没法直接根据groupbyFileId去重（sql_mode）
+        // $courseMaterials = $this->getMaterialService()->searchMaterialsGroupByFileId(
+        $courseMaterials = $this->getMaterialService()->searchMaterials(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             0,
             PHP_INT_MAX
         );
@@ -151,22 +150,21 @@ class FileChooserController extends BaseController
      */
     protected function getUploadFileService()
     {
-        return $this->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getMaterialService()
     {
-        return ServiceKernel::instance()->createService('Course.MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
     }
-
 }

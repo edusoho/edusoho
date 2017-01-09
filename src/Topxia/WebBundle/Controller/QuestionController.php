@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionController extends BaseController
@@ -41,6 +41,6 @@ class QuestionController extends BaseController
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 }

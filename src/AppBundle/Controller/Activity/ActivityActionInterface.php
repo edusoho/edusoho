@@ -8,6 +8,8 @@ interface ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId);
 
+    //public function previewAction(Request $request, $id, $courseId);
+
     public function editAction(Request $request, $id, $courseId);
 
     public function createAction(Request $request, $courseId);

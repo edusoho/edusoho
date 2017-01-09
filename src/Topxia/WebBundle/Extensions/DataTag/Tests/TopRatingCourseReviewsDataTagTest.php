@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\TopRatingCourseReviewsDataTag;
 
 class TopRatingCourseReviewsDataTagTest extends BaseTestCase
@@ -35,8 +35,8 @@ class TopRatingCourseReviewsDataTagTest extends BaseTestCase
             'createdIp' => '127.0.0.1'
         ));
 
-    	$this->getCourseService()->becomeStudent($course1['id'],$user1['id']);
-    	$this->getCourseService()->becomeStudent($course1['id'],$user2['id']);
+    	$this->getCourseMemberService()->becomeStudent($course1['id'],$user1['id']);
+    	$this->getCourseMemberService()->becomeStudent($course1['id'],$user2['id']);
 
 		$review1 = $this->getReviewService()->saveReview(array(
 			'courseId' => $course1['id'],
@@ -61,17 +61,22 @@ class TopRatingCourseReviewsDataTagTest extends BaseTestCase
 
     public function getReviewService()
     {
-    	return $this->getServiceKernel()->createService('Course.ReviewService');
+    	return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 
 	public function getCourseService()
     {
-    	return $this->getServiceKernel()->createService('Course.CourseService');
+    	return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getUserService()
     {
-    	return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 
 }

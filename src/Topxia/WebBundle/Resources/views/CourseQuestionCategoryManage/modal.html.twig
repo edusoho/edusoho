@@ -1,4 +1,7 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+
+
 {% set category = category | default(null)%}
 {% block title %}{% if category %}{{'编辑题目类别'|trans}}{% else %}{{'添加题目类别'|trans}}{% endif %}{% endblock %}
 
@@ -24,7 +27,7 @@
 
   </div>
 
-  <script type="text/javascript"> app.load('quiz-question/category-creator') </script>
+  <script type="text/javascript"> app.lazyLoad = function() { app.load('quiz-question/category-creator') }; </script>
 {% endblock %}
 
 {% block footer %}

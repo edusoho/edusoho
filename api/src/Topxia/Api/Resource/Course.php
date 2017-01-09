@@ -3,6 +3,7 @@
 namespace Topxia\Api\Resource;
 
 use Topxia\Api\Util\TagUtil;
+use Topxia\Service\Common\ServiceKernel;
 
 class Course extends BaseResource
 {
@@ -56,11 +57,11 @@ class Course extends BaseResource
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM.ConversationService');
+        return $this->getServiceKernel()->createService('IM:ConversationService');
     }
 }

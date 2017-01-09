@@ -1,13 +1,13 @@
 <?php
 namespace Topxia\Service\Common;
 
+use Biz\User\CurrentUser;
+use Biz\Common\Redis\RedisFactory;
+use Symfony\Component\Finder\Finder;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Dao\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Finder\Finder;
-use Topxia\Service\Common\Redis\RedisFactory;
-use Topxia\Service\User\CurrentUser;
 
 class ServiceKernel
 {
@@ -93,9 +93,9 @@ class ServiceKernel
         }
 
         //@ TODO 新的事件机制通过Symfony Tag形式注入，但是APP接口并没有使用Symfony, 重构接口时去掉判断
-        if(defined('RUNTIME_ENV') && RUNTIME_ENV === 'API'){
+        if (defined('RUNTIME_ENV') && RUNTIME_ENV === 'API') {
             self::$_dispatcher = new EventDispatcher();
-        }else{
+        } else {
             self::$_dispatcher = self::instance()->biz['dispatcher'];
         }
 
@@ -140,12 +140,11 @@ class ServiceKernel
 
         $subscribers = empty($this->_moduleConfig['event_subscriber']) ? array() : $this->_moduleConfig['event_subscriber'];
 
-
         foreach ($subscribers as $subscriber) {
             //@ TODO 新的事件机制通过Symfony Tag形式注入，但是APP接口并没有使用Symfony, 重构接口时去掉判断
-            if(defined('RUNTIME_ENV') && RUNTIME_ENV === 'API'){
+            if (defined('RUNTIME_ENV') && RUNTIME_ENV === 'API') {
                 $this->dispatcher()->addSubscriber(new $subscriber());
-            }else{
+            } else {
                 $this->biz['subscribers'][] = $subscriber;
             }
         }
@@ -203,7 +202,7 @@ class ServiceKernel
 
     public function setCurrentUser($currentUser)
     {
-        $biz = $this->getBiz();
+        $biz         = $this->getBiz();
         $biz['user'] = $currentUser;
         return $this;
     }
@@ -251,8 +250,14 @@ class ServiceKernel
     public function createService($name)
     {
         if (empty($this->pool[$name])) {
-            $class = $this->getClassName('service', $name);
-            $this->pool[$name] = new $class();
+            $this->pool[$name] = $this->biz->service($name);
+
+            // $class = $this->getClassName('service', $name);
+            // if (class_exists($class)) {
+            //     $this->pool[$name] = new $class();
+            // } else {
+            //     $this->pool[$name] = $this->biz->service($name);
+            // }
         }
 
         return $this->pool[$name];
@@ -325,22 +330,32 @@ class ServiceKernel
             return $classMap[$name];
         }
 
-        if (strpos($name, ':') > 0) {
-            list($namespace, $name) = explode(':', $name, 2);
+        return $this->getServiceClassName($type, $name);
+    }
+
+    protected function getServiceClassName($type, $name)
+    {
+        $type                   = strtolower($type);
+        list($namespace, $name) = explode(':', $name, 2);
+
+        if (strpos($name, '.') > 0) {
             $namespace .= '\\Service';
+            list($module, $className) = explode('.', $name);
+
+            if ($type == 'dao') {
+                return $namespace.'\\'.$module.'\\Dao\\Impl\\'.$className.'Impl';
+            }
+
+            return $namespace.'\\'.$module.'\\Impl\\'.$className.'Impl';
         } else {
-            $namespace = substr(__NAMESPACE__, 0, -strlen('Common') - 1);
+            $namespace = substr(__NAMESPACE__, 0, -strlen('Common') - 1).'\\'.$namespace;
         }
-
-        list($module, $className) = explode('.', $name);
-
-        $type = strtolower($type);
 
         if ($type == 'dao') {
-            return $namespace.'\\'.$module.'\\Dao\\Impl\\'.$className.'Impl';
+            return $namespace.'\\Dao\\Impl\\'.$name.'Impl';
         }
 
-        return $namespace.'\\'.$module.'\\Impl\\'.$className.'Impl';
+        return $namespace.'\\Impl\\'.$name.'Impl';
     }
 
     public function setBiz(Biz $biz)

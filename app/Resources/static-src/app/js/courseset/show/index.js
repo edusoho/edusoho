@@ -3,7 +3,7 @@ $('#freeprogress').easyPieChart({
   trackColor: '#ebebeb',
   barColor: '#46c37b',
   scaleColor: false,
-  lineWidth: 10,
+  lineWidth: 14,
   size: 145,
   onStep: function(from, to, percent) {
     if (Math.round(percent) == 100) {
@@ -18,16 +18,18 @@ $('#orderprogress-plan').easyPieChart({
   trackColor: '#ebebeb',
   barColor: '#fd890c',
   scaleColor: false,
-  lineWidth: 10,
+  lineWidth: 14,
   size: 145,
 });
 
+let bg = $('#orderprogress-plan').length > 0 ? 'transparent' : '#ebebeb';
+
 $('#orderprogress').easyPieChart({
   easing: 'easeOutBounce',
-  trackColor: 'transparent',
+  trackColor: bg,
   barColor: '#46c37b',
   scaleColor: false,
-  lineWidth: 10,
+  lineWidth: 14,
   size: 145,
   onStep: function(from, to, percent) {
     if (Math.round(percent) == 100) {

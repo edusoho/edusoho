@@ -3,19 +3,19 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class ThreadPosts extends BaseResource
 {
-	public function get(Application $app, Request $request, $threadId)
+    public function get(Application $app, Request $request, $threadId)
     {
-        $type = $request->query->get('type', 'course');
+        $type     = $request->query->get('type', 'course');
         $courseId = $request->query->get('courseId', 0);
-        $posts = array();
+        $posts    = array();
         if ($type == "course") {
             if ($courseId == 0) {
-                $thread = $this->getCourseThreadService()->getThread($courseId, $threadId);
+                $thread   = $this->getCourseThreadService()->getThread($courseId, $threadId);
                 $courseId = $thread['courseId'];
             }
 
@@ -36,7 +36,7 @@ class ThreadPosts extends BaseResource
         }
 
         $userIds = ArrayToolkit::column($posts, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users   = $this->getUserService()->findUsersByIds($userIds);
 
         foreach ($posts as $key => $value) {
             $posts[$key]['user'] = $this->simpleUser($users[$value['userId']]);
@@ -52,16 +52,16 @@ class ThreadPosts extends BaseResource
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread.ThreadService');
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 
     protected function getCourseThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 }

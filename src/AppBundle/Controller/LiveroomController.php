@@ -2,7 +2,7 @@
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class LiveroomController extends BaseController
 {
@@ -10,6 +10,10 @@ class LiveroomController extends BaseController
     {
         $user           = $request->query->all();
         $user['device'] = $this->getDevice($request);
+
+        if ($request->isSecure()) {
+            $user['protocol'] = 'https';
+        }
 
         $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $user);
 

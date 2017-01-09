@@ -30,15 +30,15 @@ class ReviewPostsDataTag extends BaseDataTag implements DataTag
         $limit      = empty($arguments['limit']) ? 5 : intval($arguments['limit']);
 
         if ($targetType == 'classroom') {
-            return $this->getClassroomReviewService()->searchReviews(array('parentId' => $arguments['reviewId']), array('createdTime', 'ASC'), $start, $limit);
+            return $this->getClassroomReviewService()->searchReviews(array('parentId' => $arguments['reviewId']), array('createdTime' => 'ASC'), $start, $limit);
         } else {
-            return $this->getCourseReviewService()->searchReviews(array('parentId' => $arguments['reviewId']), array('createdTime', 'ASC'), $start, $limit);
+            return $this->getCourseReviewService()->searchReviews(array('parentId' => $arguments['reviewId']), array('createdTime' => 'ASC'), $start, $limit);
         }
     }
 
     protected function getCourseReviewService()
     {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
+        return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 
     private function getClassroomReviewService()

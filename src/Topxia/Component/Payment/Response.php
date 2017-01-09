@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\Component\Payment;
 
+use Topxia\Service\Common\ServiceKernel;
+
 abstract class Response
 {
 
@@ -13,6 +15,11 @@ abstract class Response
     public function __construct(array $options)
     {
         $this->options = $options;
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 
     public function setParams(array $params)
@@ -37,7 +44,6 @@ abstract class Response
 
         $url = $url . '?' . http_build_query($params);
         curl_setopt($curl, CURLOPT_URL, $url );
-
         $response = curl_exec($curl);
 
         curl_close($curl);

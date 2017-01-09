@@ -84,12 +84,18 @@ class HomeworkController extends BaseController
         $student = $this->getUserService()->getUser($homeworkResult['userId']);
 
         $attachments = $this->getTestpaperService()->findAttachments($homework['id']);
+
+        $activity = $this->getActivityService()->getActivity($homeworkResult['lessonId']);
+        $task     = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+
         return $this->render('homework/do.html.twig', array(
             'questions'   => $questions,
             'paper'       => $homework,
             'paperResult' => $homeworkResult,
             'student'     => $student,
-            'attachments' => $attachments
+            'attachments' => $attachments,
+            'task'        => $task,
+            'action'      => $request->query->get('action', '')
         ));
     }
 
@@ -106,7 +112,9 @@ class HomeworkController extends BaseController
 
             $paperResult = $this->getTestpaperService()->finishTest($result['id'], $formData);
 
-            return $this->createJsonResponse(array('result' => true, 'message' => ''));
+            $goto = $this->generateUrl('homework_result_show', array('resultId' => $paperResult['id']));
+
+            return $this->createJsonResponse(array('result' => true, 'message' => '', 'goto' => $goto));
         }
     }
 
@@ -125,6 +133,11 @@ class HomeworkController extends BaseController
         return $this->createService('Activity:ActivityService');
     }
 
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
@@ -132,7 +145,7 @@ class HomeworkController extends BaseController
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getServiceKernel()

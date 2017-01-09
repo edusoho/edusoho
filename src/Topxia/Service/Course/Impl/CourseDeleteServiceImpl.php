@@ -1,10 +1,11 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
+use Biz\Course\Dao\CourseLessonReplayDao;
+use Biz\Course\Dao\FavoriteDao;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\CourseDeleteService;
-use Topxia\Service\Common\ServiceEvent;
 
 class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 {
@@ -195,14 +196,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteLessonReplays($course)
     {
-        $lessonReplayCount = $this->getCourseLessonReplayDao()->searchCourseLessonReplayCount(array('courseId' => $course['id']));
+        $lessonReplayCount = $this->getCourseLessonReplayDao()->count(array('courseId' => $course['id']));
         $count             = 0;
 
         if ($lessonReplayCount > 0) {
-            $LessonReplays = $this->getCourseLessonReplayDao()->searchCourseLessonReplays(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
+            $LessonReplays = $this->getCourseLessonReplayDao()->search(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
 
             foreach ($LessonReplays as $LessonReplay) {
-                $result = $this->getCourseLessonReplayDao()->deleteCourseLessonReplay($LessonReplay['id']);
+                $result = $this->getCourseLessonReplayDao()->delete($LessonReplay['id']);
                 $count += $result;
             }
 
@@ -301,14 +302,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteFavorites($course)
     {
-        $favoriteCount = $this->getFavoriteDao()->searchCourseFavoriteCount(array('courseId' => $course['id']));
+        $favoriteCount = $this->getFavoriteDao()->count(array('courseId' => $course['id']));
         $count         = 0;
 
         if ($favoriteCount > 0) {
-            $favorites = $this->getFavoriteDao()->searchCourseFavorites(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
+            $favorites = $this->getFavoriteDao()->search(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
 
             foreach ($favorites as $favorite) {
-                $result = $this->getFavoriteDao()->deleteFavorite($favorite['id']);
+                $result = $this->getFavoriteDao()->delete($favorite['id']);
                 $count += $result;
             }
 
@@ -387,7 +388,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $count             = 0;
 
         if ($announcementCount > 0) {
-            $announcements = $this->getAnnouncementDao()->searchAnnouncements(array('targetType' => 'course', 'targetId' => $course['id']), array('createdTime', 'DESC'), 0, 500);
+            $announcements = $this->getAnnouncementDao()->searchAnnouncements(array('targetType' => 'course', 'targetId' => $course['id']), array('createdTime' => 'DESC'), 0, 500);
 
             foreach ($announcements as $announcement) {
                 $result = $this->getAnnouncementDao()->deleteAnnouncement($announcement['id']);
@@ -464,77 +465,80 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function getCourseService()
     {
-        return $this->createService('Course.CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->createService('Testpaper.TestpaperService');
+        return $this->createService('Testpaper:TestpaperService');
     }
 
     protected function getAppService()
     {
-        return $this->createService('CloudPlatform.AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     protected function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     protected function getCrontabService()
     {
-        return $this->createService('Crontab.CrontabService');
+        return $this->createService('Crontab:CrontabService');
     }
 
     protected function getMaterialService()
     {
-        return $this->createService('Course.MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     protected function getConversationService()
     {
-        return $this->createService('IM.ConversationService');
+        return $this->createService('IM:ConversationService');
     }
 
     protected function getCourseChapterDao()
     {
-        return $this->createDao('Course.CourseChapterDao');
+        return $this->createDao('Course:CourseChapterDao');
     }
 
     protected function getDraftDao()
     {
-        return $this->createDao('Course.CourseDraftDao');
+        return $this->createDao('Course:CourseDraftDao');
     }
 
     protected function getLessonDao()
     {
-        return $this->createDao('Course.LessonDao');
+        return $this->createDao('Course:LessonDao');
     }
 
     protected function getLessonExtendDao()
     {
-        return $this->createDao('Course.LessonExtendDao');
+        return $this->createDao('Course:LessonExtendDao');
     }
 
     protected function getLessonLearnDao()
     {
-        return $this->createDao('Course.LessonLearnDao');
+        return $this->createDao('Course:LessonLearnDao');
     }
 
+    /**
+     * @return CourseLessonReplayDao
+     */
     protected function getCourseLessonReplayDao()
     {
-        return $this->createDao('Course.CourseLessonReplayDao');
+        return $this->createDao('Course:CourseLessonReplayDao');
     }
 
     protected function getLessonViewDao()
     {
-        return $this->createDao('Course.LessonViewDao');
+        return $this->createDao('Course:LessonViewDao');
     }
 
     protected function getClassroomDao()
@@ -544,37 +548,37 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function getQuestionDao()
     {
-        return $this->createDao('Question.QuestionDao');
+        return $this->createDao('Question:QuestionDao');
     }
 
     protected function getQuestionFavoriteDao()
     {
-        return $this->createDao('Question.QuestionFavoriteDao');
+        return $this->createDao('Question:QuestionFavoriteDao');
     }
 
     protected function getTestpaperResultDao()
     {
-        return $this->createDao('Testpaper.TestpaperResultDao');
+        return $this->createDao('Testpaper:TestpaperResultDao');
     }
 
     protected function getTestpaperItemResultDao()
     {
-        return $this->createDao('Testpaper.TestpaperItemResultDao');
+        return $this->createDao('Testpaper:TestpaperItemResultDao');
     }
 
     protected function getTestpaperItemDao()
     {
-        return $this->createDao('Testpaper.TestpaperItemDao');
+        return $this->createDao('Testpaper:TestpaperItemDao');
     }
 
     protected function getTestpaperDao()
     {
-        return $this->createDao('Testpaper.TestpaperDao');
+        return $this->createDao('Testpaper:TestpaperDao');
     }
 
     protected function getCourseDao()
     {
-        return $this->createDao('Course.CourseDao');
+        return $this->createDao('Course:CourseDao');
     }
 
     protected function getHomeworkDao()
@@ -617,48 +621,51 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         return $this->createDao('Homework:Homework.ExerciseResultDao');
     }
 
+    /**
+     * @return FavoriteDao
+     */
     protected function getFavoriteDao()
     {
-        return $this->createDao('Course.FavoriteDao');
+        return $this->createDao('Course:FavoriteDao');
     }
 
     protected function getCourseNoteDao()
     {
-        return $this->createDao('Course.CourseNoteDao');
+        return $this->createDao('Course:CourseNoteDao');
     }
 
     protected function getCourseNoteLikeDao()
     {
-        return $this->createDao('Course.CourseNoteLikeDao');
+        return $this->createDao('Course:CourseNoteLikeDao');
     }
 
     protected function getThreadDao()
     {
-        return $this->createDao('Course.ThreadDao');
+        return $this->createDao('Course:ThreadDao');
     }
 
     protected function getThreadPostDao()
     {
-        return $this->createDao('Course.ThreadPostDao');
+        return $this->createDao('Course:ThreadPostDao');
     }
 
     protected function getReviewDao()
     {
-        return $this->createDao('Course.ReviewDao');
+        return $this->createDao('Course:ReviewDao');
     }
 
     protected function getAnnouncementDao()
     {
-        return $this->createDao('Announcement.AnnouncementDao');
+        return $this->createDao('Announcement:AnnouncementDao');
     }
 
     protected function getStatusDao()
     {
-        return $this->createDao('User.StatusDao');
+        return ServiceKernel::instance()->getBiz()->dao('User:StatusDao');
     }
 
     protected function getCourseMemberDao()
     {
-        return $this->createDao('Course.CourseMemberDao');
+        return $this->createDao('Course:CourseMemberDao');
     }
 }

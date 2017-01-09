@@ -1,0 +1,21 @@
+.iframe-parent-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top:0;
+  background-color: @bg-color;
+  overflow: auto;
+  img {
+    max-width: 100%;
+  }
+  &.iframe-parent-full {
+    //全屏
+    overflow: hidden;
+  }
+}
+
+.modal-video-content {
+  position: relative;
+  height: 300px;
+}

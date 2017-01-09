@@ -2,8 +2,8 @@
 
 namespace Tests\Activity;
 
-use Topxia\Service\Common\BaseTestCase;
-use Biz\LiveActivity\Service\LiveActivityService;
+use Biz\BaseTestCase;;
+use Biz\Activity\Service\LiveActivityService;
 
 class LiveActivityServiceTest extends BaseTestCase
 {
@@ -75,7 +75,7 @@ class LiveActivityServiceTest extends BaseTestCase
      */
     protected function getLiveActivityService()
     {
-        $service = $this->getBiz()->service('LiveActivity:LiveActivityService');
+        $service = $this->getBiz()->service('Activity:LiveActivityService');
         //mock client
         $class      = new \ReflectionClass(get_class($service));
         $clientProp = $class->getProperty('client');

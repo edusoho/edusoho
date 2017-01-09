@@ -1,0 +1,71 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'announcement/index' %}
+
+{% set menu = 'admin_announcement_manage' %}
+
+{% block main %}
+{% if  setting('magic.enable_org','0') %}  
+  <form id="announcement-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+  </form>
+{% endif %}
+
+  <table id="announcement-table" class="table table-striped">
+    <thead>
+    <tr>
+      <th width="25%">{{'公告内容'|trans}}</th>
+      {% include 'org/parts/table-thead-tr.html.twig' %}
+      <th>{{'发布时间'|trans}}</th>
+      <th>{{'结束时间'|trans}}</th>
+      <th>{{'状态'|trans}}</th>
+      <th>{{'发布人'|trans}}</th>
+      <th>{{'操作'|trans}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if announcements %}
+      {% for announcement in announcements %}
+        <tr announcement-table-tr-{{ announcement.id }}>
+          {% include 'org/parts/table-body-checkbox.html.twig' %}
+          <td><a href="{{ announcement.url }}" target="_content">{{ announcement.content }}</td>
+          {% include 'org/parts/table-body-td.html.twig' with {orgCode: announcement.orgCode}%}
+          <td>{{ announcement.startTime|date('Y-m-d H:i') }}</td>
+          <td>{{ announcement.endTime|date('Y-m-d H:i') }}</td>
+          <td>
+            {% if now < announcement.startTime %}
+              {{'即将开始'|trans}}
+            {% elseif now > announcement.endTime %}
+              {{'已结束'|trans}}
+            {% else %}
+              {{'显示中'|trans}}
+            {% endif %}
+          </td>
+          <td>{{ users[announcement.userId].nickname }}</td>
+          <td>
+            <div class="btn-group">
+              <a data-url="{{ path('admin_announcement_edit',{id:announcement.id}) }}" class="btn btn-default btn-sm"
+                 data-toggle="modal" data-target="#modal">{{'编辑'|trans}}</a>
+              <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="javascript:;" data-url="{{ path('admin_announcement_delete',{id:announcement.id}) }}"
+                       class="delete-btn"><span class="glyphicon glyphicon-trash"></span> {{'删除'|trans}}</a>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    {% endif %}
+    </tbody>
+  </table>
+  {% include 'org/batch-update-org-btn.html.twig' with {module:'announcement', formId:'announcement-table'} %}
+  {% if not announcements %}
+    <div class="empty">{{'暂无公告'|trans}}</div>
+  {% endif %}
+  {{ admin_macro.paginator(paginator) }}
+{% endblock %}

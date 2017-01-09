@@ -3,7 +3,6 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
-use Topxia\Service\Common\ServiceKernel;
 
 class Video extends Activity
 {
@@ -30,8 +29,7 @@ class Video extends Activity
         return $videoActivity;
     }
 
-
-    public function update($activityId, $fields)
+    public function update($activityId, &$fields, $activity)
     {
         $videoActivityFields = $fields['ext'];
 
@@ -48,16 +46,16 @@ class Video extends Activity
      */
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
-        return !empty($result) 
-                && $result > $activity['length'];
+        return !empty($result)
+        && $result > $activity['length'];
     }
 
     public function get($id)
     {
         $videoActivity         = $this->getVideoActivityDao()->get($id);
-        $videoActivity['file'] = $this->getUploadFileService()->getFile($videoActivity['mediaId']);
+        $videoActivity['file'] = $this->getUploadFileService()->getFullFile($videoActivity['mediaId']);
         return $videoActivity;
     }
 

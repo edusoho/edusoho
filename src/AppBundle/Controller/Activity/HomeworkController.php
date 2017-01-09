@@ -10,8 +10,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $id, $courseId, $preview = 0)
     {
+        if ($preview) {
+            return $this->forward('AppBundle:Activity/Homework:preview', array(
+                'id'       => $id,
+                'courseId' => $courseId
+            ));
+        }
+
         $user = $this->getUser();
 
         $activity       = $this->getActivityService()->getActivity($id);
@@ -30,6 +37,32 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
         return $this->forward('AppBundle:Homework:startDo', array(
             'lessonId'   => $activity['id'],
             'homeworkId' => $activity['mediaId']
+        ));
+    }
+
+    public function tryLookAction(Request $request, $task)
+    {
+        return $this->render('activity/homework/try-look.html.twig');
+    }
+
+
+    public function previewAction(Request $request, $id, $courseId)
+    {
+        $activity = $this->getActivityService()->getActivity($id);
+        $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+
+        if (!$homework) {
+            return $this->createMessageResponse('error', 'homework not found');
+        }
+
+        $questions   = $this->getTestpaperService()->showTestpaperItems($homework['id']);
+        $attachments = $this->getTestpaperService()->findAttachments($homework['id']);
+
+        return $this->render('activity/homework/preview.html.twig', array(
+            'paper'       => $homework,
+            'questions'   => $questions,
+            'paperResult' => array(),
+            'activity'    => $activity
         ));
     }
 
@@ -66,6 +99,11 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
             'courseId'    => $courseId,
             'courseSetId' => $course['courseSetId']
         ));
+    }
+
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/homework/finish-condition.html.twig', array());
     }
 
     protected function findCourseTestpapers($courseId)
@@ -105,7 +143,7 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question.QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 
     protected function getServiceKernel()

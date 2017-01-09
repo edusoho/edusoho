@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Command;
 use Topxia\System;
 use Topxia\Common\BlockToolkit;
 use Topxia\Component\Payment\Payment;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 
 use Symfony\Component\Finder\Finder;
@@ -84,21 +84,35 @@ class UpgradeOrdersCommand extends BaseCommand
     {
         $settings = $this->getSettingService()->get('payment');
 
-        $options = array(
-            'key'    => $settings["{$payment}_key"],
-            'secret' => $settings["{$payment}_secret"],
-        );
+        if ($payment == 'alipay') {
+            $options = array(
+                'key'    => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"],
+                'type'   => $settings["{$payment}_type"]
+            );
+        } elseif ($payment == 'quickpay') {
+            $options = array(
+                'key'    => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"],
+                'aes'    => $settings["{$payment}_aes"]
+            );
+        } else {
+            $options = array(
+                'key'    => $settings["{$payment}_key"],
+                'secret' => $settings["{$payment}_secret"]
+            );
+        }
 
         return $options;
     }
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

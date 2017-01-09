@@ -2,7 +2,8 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
+use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Extensions\DataTag\LatestCourseMembersDataTag;
 
 class LatestCourseMembersDataTagTest extends BaseTestCase
@@ -60,8 +61,8 @@ class LatestCourseMembersDataTagTest extends BaseTestCase
             'confirmPassword' => '123456',
             'createdIp' => '127.0.0.1'
         ));
-    	$this->getCourseService()->becomeStudent($course1['id'],$user1['id']);
-    	$this->getCourseService()->becomeStudent($course2['id'],$user2['id']);
+    	$this->getCourseMemberService()->becomeStudent($course1['id'],$user1['id']);
+    	$this->getCourseMemberService()->becomeStudent($course2['id'],$user2['id']);
 
         $datatag = new LatestCourseMembersDataTag();
         $members1 = $datatag->getData(array('count' => 5,'categoryId' => $category1['id']));
@@ -73,16 +74,16 @@ class LatestCourseMembersDataTagTest extends BaseTestCase
     
     public function getCourseService()
     {
-    	return $this->getServiceKernel()->createService('Course.CourseService');
+    	return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     public function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 }

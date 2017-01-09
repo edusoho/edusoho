@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Listener;
 
+use Biz\User\Service\UserActiveService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -161,20 +162,20 @@ class KernelResponseListener
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     /**
-     * @return UserActiveServiceImpl
+     * @return UserActiveService
      */
     private function getUserActiveLogService()
     {
-        return $this->getServiceKernel()->createService('User.UserActiveService');
+        return ServiceKernel::instance()->createService('User:UserActiveService');
     }
 
 }

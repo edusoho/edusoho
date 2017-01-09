@@ -1,7 +1,7 @@
 <?php
 
 use Topxia\Common\ExtensionManager;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Symfony\Component\HttpKernel\Kernel;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,7 +80,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new MaterialLib\MaterialLibBundle\MaterialLibBundle(),
             new SensitiveWord\SensitiveWordBundle\SensitiveWordBundle(),
             new Org\OrgBundle\OrgBundle(),
-            new Permission\PermissionBundle\PermissionBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),

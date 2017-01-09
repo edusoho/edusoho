@@ -3,7 +3,7 @@
 namespace Tests\User;
 
 use Topxia\Common\SimpleValidator;
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 
 // TODO
 

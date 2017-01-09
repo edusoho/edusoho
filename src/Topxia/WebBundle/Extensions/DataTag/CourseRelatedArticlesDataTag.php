@@ -2,6 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 // use Topxia\Service\Article\ArticleService;
 
@@ -38,11 +39,11 @@ class CourseRelatedArticlesDataTag extends CourseBaseDataTag implements DataTag
 
     private function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article.ArticleService');
+        return $this->getServiceKernel()->createService('Article:ArticleService');
     }
 
-    private function getArticleService()
+    private function getTagService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+        return $this->getServiceKernel()->createService('Taxonomy:TagService');
     }
 }

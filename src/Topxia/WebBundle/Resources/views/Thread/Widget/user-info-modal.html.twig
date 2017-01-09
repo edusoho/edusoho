@@ -1,4 +1,6 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+
 
 {% block title %}{{'加入活动'|trans}}{% endblock %}
 {% block body %}
@@ -30,7 +32,8 @@
   <button class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
   <button id="join-event-btn" class="btn btn-primary" data-loading-text="{{'正在提交'|trans}}" type="submit" data-toggle="form-submit" data-target="#join-event-form">{{'提交'|trans}}</button>
 
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>
-    app.load('thread/user-info-modal');
+    app.lazyLoad = function() { app.load('thread/user-info-modal'); };
   </script>
 {% endblock %}

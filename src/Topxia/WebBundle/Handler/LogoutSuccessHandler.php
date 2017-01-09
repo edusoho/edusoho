@@ -49,7 +49,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 
     private function getAuthService()
     {
-        return ServiceKernel::instance()->createService('User.AuthService');
+        return ServiceKernel::instance()->createService('User:AuthService');
     }
 
     public function isMicroMessenger($request)
@@ -59,6 +59,6 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

@@ -1,7 +1,8 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Service\Util\EdusohoLiveClient;
+use Topxia\Service\Common\ServiceKernel;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveCourseLessonManageController extends BaseController
@@ -196,11 +197,11 @@ class LiveCourseLessonManageController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

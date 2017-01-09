@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\RecommendTeachersDataTag;
 
 class RecommendTeachersDataTagTest extends BaseTestCase
@@ -45,7 +45,7 @@ class RecommendTeachersDataTagTest extends BaseTestCase
 
     public function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 
 }

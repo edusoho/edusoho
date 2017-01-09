@@ -1,0 +1,28 @@
+<div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
+	<div class="question-heading editor-text">
+		{{'填空题'|trans}}
+		<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a>
+	</div>
+	<div class="question-body clearfix">
+		<div class="gray-darker mbl">{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}</div>
+		{% if itemResult.answer[0]|default(null) %}
+		{% set fileItemResultAnswer = itemResult.answer[0] %}
+		{% endif %}
+		<div class="homework-question-fill question-fill-inputs">
+			{% for index,answer in question.answer %}
+				<input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="{{'填空(%index%)答案，请填在这里'|trans({'%index%':loop.index})}}" value="" />
+			{% endfor %}
+		</div>
+	</div>
+	<div class="question-footer">
+		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" data-show-questionanswer="{{ path('course_lesson_question_marker_answer_show',{markerId:markerId,questionId:question.id}) }}"data-lessonid="{{lessonId}}" hidden="hidden">
+		<div class="row">
+			<div class="col-xs-10 text-right">
+				<div class="pvm text-danger"></div>
+			</div>
+			<div class="col-xs-2">
+				<button id="submitQuestion" class="btn btn-primary btn-lg pull-right">{{'提 交'|trans}}</button>
+			</div>
+		</div>
+	</div>
+</div>

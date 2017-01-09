@@ -1,5 +1,6 @@
 {% if courses %}
 {% do load_script('course/related-courses-block') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title"><i class="es-icon es-icon-explore"></i>{{'相关课程'|trans}}</h3>

@@ -1,12 +1,11 @@
 <?php
 namespace Topxia\WebBundle\Listener;
 
-
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class KernelRequestListener
 {
@@ -27,7 +26,7 @@ class KernelRequestListener
             return;
         }
 
-        $settingService = ServiceKernel::instance()->createService('System.SettingService');
+        $settingService = $this->getSettingService();
 
         $blacklistIps = $settingService->get('blacklist_ip');
         $whitelistIps = $settingService->get('whitelist_ip');
@@ -74,11 +73,11 @@ class KernelRequestListener
                 // @todo 需要区分ajax的response
                 if ($request->getPathInfo() == '/admin') {
                     $token  = $request->request->get('token');
-                    $result = ServiceKernel::instance()->createService('CloudPlatform.AppService')->repairProblem($token);
+                    $result = ServiceKernel::instance()->createService('CloudPlatform:AppService')->repairProblem($token);
 
                     $this->container->set('Topxia.RepairProblem', $result);
                 } else {
-                    $response = $this->container->get('templating')->renderResponse('TopxiaWebBundle:Default:message.html.twig', array(
+                    $response = $this->container->get('templating')->renderResponse('default/message.html.twig', array(
                         'type'     => 'error',
                         'message'  => $this->getServiceKernel()->trans('页面已过期，请重新提交数据！'),
                         'goto'     => '',
@@ -124,6 +123,6 @@ class KernelRequestListener
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

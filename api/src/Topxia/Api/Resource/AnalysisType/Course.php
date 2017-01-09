@@ -5,6 +5,7 @@ namespace Topxia\Api\Resource\AnalysisType;
 use Silex\Application;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class Course extends BaseAnalysisType
 {
@@ -102,7 +103,7 @@ class Course extends BaseAnalysisType
             return $this->error('error', '请登录后查看!'); 
         }
 
-        if (!$this->getCourseService()->isCourseTeacher($courseId, $user["id"])) {
+        if (!$this->getCourseMemberService()->isCourseTeacher($courseId, $user["id"])) {
             return $this->error('error', '没有权限查看!'); 
         }
 
@@ -114,11 +115,16 @@ class Course extends BaseAnalysisType
 
 	private function getCourseService()
 	{
-		return $this->getServiceKernel()->createService('Course.CourseService');
+		return $this->getServiceKernel()->createService('Course:CourseService');
 	}
 
 	private function getUserService()
 	{
-		return $this->getServiceKernel()->createService('User.UserService');
+		return ServiceKernel::instance()->createService('User:UserService');
 	}
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
+    }
 }

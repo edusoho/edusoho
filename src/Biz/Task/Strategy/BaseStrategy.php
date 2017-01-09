@@ -3,6 +3,8 @@
 namespace Biz\Task\Strategy;
 
 use Biz\Task\Dao\TaskDao;
+use Biz\Task\Dao\TaskResultDao;
+use Biz\Task\Service\TaskResultService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Dao\CourseChapterDao;
@@ -26,7 +28,14 @@ class BaseStrategy
 
     public function baseCreateTask($fields)
     {
-        $fields = array_filter($fields);
+        $fields = array_filter($fields, function ($value) {
+            if (is_array($value) || ctype_digit((string)$value)) {
+                return true;
+            }
+
+            return !empty($value);
+        });
+
         if ($this->invalidTask($fields)) {
             throw new InvalidArgumentException('task is invalid');
         }
@@ -36,10 +45,15 @@ class BaseStrategy
         }
         $activity = $this->getActivityService()->createActivity($fields);
 
+
         $fields['activityId']    = $activity['id'];
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
+        $fields['type']          = $fields['mediaType'];
+        if ($activity['mediaType'] == 'video') {
+            $fields['mediaSource'] = $fields['ext']['mediaSource'];
+        }
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
@@ -48,6 +62,8 @@ class BaseStrategy
             'categoryId',
             'activityId',
             'title',
+            'type',
+            'mediaSource',
             'isFree',
             'isOptional',
             'startTime',
@@ -65,24 +81,27 @@ class BaseStrategy
         if (!$this->getCourseService()->tryManageCourse($savedTask['courseId'])) {
             throw new AccessDeniedException('无权更新任务');
         }
-        $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
+        $activity = $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
 
+        if ($activity['mediaType'] == 'video') {
+            $fields['mediaSource'] = $fields['ext']['mediaSource'];
+        }
         $fields = ArrayToolkit::parts($fields, array(
             'title',
             'isFree',
             'isOptional',
             'startTime',
             'endTime',
-            'status'
+            'status',
+            'mediaSource'
         ));
 
         return $this->getTaskDao()->update($id, $fields);
     }
 
-    public function baseFindCourseItems($courseId)
+    public function baseFindCourseItems($courseId, $tasks)
     {
         $items = array();
-        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         foreach ($tasks as $task) {
             $task['itemType']            = 'task';
             $items["task-{$task['id']}"] = $task;
@@ -136,6 +155,14 @@ class BaseStrategy
     public function getTaskDao()
     {
         return $this->biz->dao('Task:TaskDao');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    public function getTaskResultService()
+    {
+        return $this->biz->service('Task:TaskResultService');
     }
 
     /**

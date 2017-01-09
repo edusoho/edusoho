@@ -4,7 +4,7 @@ namespace Topxia\MobileBundleV2\Controller;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -526,57 +526,57 @@ class MobileBaseController extends BaseController
 
     public function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course.MaterialService');
+        return $this->getServiceKernel()->createService('Course:MaterialService');
     }
 
     public function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
+        return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 
     public function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
     public function getMemberDao()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
+        return $this->getServiceKernel()->createDao('Course:CourseMemberDao');
     }
 
     public function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->createService('User:AuthService');
     }
 
     public function getNotificationService()
     {
-        return $this->getServiceKernel()->createService('User.NotificationService');
+        return ServiceKernel::instance()->createService('User:NotificationService');
     }
 
     public function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     public function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     public function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     public function getLogService()
     {
-        return ServiceKernel::instance()->getBiz()->service('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     public function getVipService()
@@ -591,31 +591,31 @@ class MobileBaseController extends BaseController
 
     public function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     public function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseOrderService');
+        return $this->getServiceKernel()->createService('Course:CourseOrderService');
     }
 
     public function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     public function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course.NoteService');
+        return $this->getServiceKernel()->createService('Course:CourseNoteService');
     }
 
     public function getEduCloudService()
     {
-        return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
+        return $this->getServiceKernel()->createService('EduCloud:EduCloudService');
     }
 
     public function getMaterialLibService()
     {
-        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLibService');
     }
 }

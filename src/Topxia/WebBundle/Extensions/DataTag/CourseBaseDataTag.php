@@ -2,33 +2,55 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\User\Service\UserService;
+use Topxia\Service\Common\ServiceKernel;
 
 abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 {
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->getServiceKernel()->getBiz()->service('Course:CourseSetService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
+    }
+
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return ServiceKernel::instance()->getBiz()->service('User:UserService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
+        return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
     protected function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
+        return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 
     protected function checkUserId(array $arguments)

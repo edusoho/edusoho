@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Command;
 use Topxia\System;
 use Topxia\Common\BlockToolkit;
 use Topxia\Component\Payment\Payment;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 
 use Symfony\Component\Finder\Finder;
@@ -39,7 +39,7 @@ class CheckOrderCommand extends BaseCommand
             file_put_contents($logFile, '订单类型：'.$order['targetType'].PHP_EOL, FILE_APPEND);
             file_put_contents($logFile, '订单信息：'.json_encode($order).PHP_EOL, FILE_APPEND);
             if($order['targetType'] == 'course') {
-                $member = $this->getCourseService()->getCourseMember($order['targetId'], $order['userId']);
+                $member = $this->getCourseMemberService()->getCourseMember($order['targetId'], $order['userId']);
                 if(empty($member)) {
                     file_put_contents($logFile, '学员没加入课程'.PHP_EOL, FILE_APPEND);
                 } else {
@@ -54,11 +54,16 @@ class CheckOrderCommand extends BaseCommand
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

@@ -8,10 +8,6 @@ use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Group\GroupService;
-use Topxia\Service\Group\ThreadService;
-use Topxia\Service\User\UserService;
 
 class GroupController extends BaseController
 {
@@ -238,6 +234,6 @@ class GroupController extends BaseController
      */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 }

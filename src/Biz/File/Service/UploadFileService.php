@@ -3,6 +3,7 @@ namespace Biz\File\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+// TODO refactor.
 interface UploadFileService
 {
     public function getFile($id);
@@ -65,6 +66,8 @@ interface UploadFileService
 
     public function saveConvertResult($id, array $result = array());
 
+    public function saveConvertResult3($id, array $result = array());
+
     public function setFileConverting($id, $convertHash);
 
     public function makeUploadParams($params);
@@ -102,10 +105,11 @@ interface UploadFileService
     public function searchShareHistories($conditions, $orderBy, $start, $limit);
 
     /**
-     * @param $id
-     * @param $field
-     * @param $diff
      * @deprecated This method only wave usedCount, please call waveUsedCount
+     *
+     * @param  $id
+     * @param  $field
+     * @param  $diff
      * @return mixed
      */
     public function waveUploadFile($id, $field, $diff);

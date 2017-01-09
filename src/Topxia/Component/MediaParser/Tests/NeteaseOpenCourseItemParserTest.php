@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Component\MediaParser\Tests;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\Component\MediaParser\ItemParser\NeteaseOpenCourseItemParser;
 
 class NeteaseOpenCourseItemParserTest extends BaseTestCase

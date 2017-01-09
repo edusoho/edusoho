@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\LatestCourseThreadsByTypeDataTag;
 
 class LatestCourseThreadsByTypeDataTagTest extends BaseTestCase
@@ -54,12 +54,12 @@ class LatestCourseThreadsByTypeDataTagTest extends BaseTestCase
 
     public function getThreadService()
     {
-    	return $this->getServiceKernel()->createService('Course.ThreadService');
+    	return $this->getServiceKernel()->createService('Course:ThreadService');
     }
 
 	public function getCourseService()
     {
-    	return $this->getServiceKernel()->createService('Course.CourseService');
+    	return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
 

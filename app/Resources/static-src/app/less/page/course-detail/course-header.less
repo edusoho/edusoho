@@ -1,0 +1,230 @@
+//加入前
+.course-detail-section {
+  position: relative;
+  line-height: 1;
+  padding: 20px;
+  .course-detail-top {
+    .course-detail-heading {
+      max-width: 60%;
+    }
+    .tags {
+      float: left;
+      .tag-serialing,
+      .tag-finished {
+        display: inline-block;
+        width: 40px;
+        height: 50px;
+      }
+      .tag-live {
+        background: url("@{img-src}tag_live.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}tag_live.png") 1x,url("@{img-src}tag_live@2x.png") 2x);
+      }
+      .tag-serialing {
+        background: url("@{img-src}tag_serialing.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}tag_serialing.png") 1x,url("@{img-src}tag_serialing@2x.png") 2x);
+      }
+      .tag-finished {
+        background: url("@{img-src}tag_finished.png") no-repeat;
+        background-image: -webkit-image-set(url("@{img-src}tag_finished.png") 1x,url("@{img-src}tag_finished@2x.png") 2x);
+      }
+    }
+    .course-operation {
+      position: absolute;
+      list-style-type: none;
+      right: 10px;
+      top: 20px;
+      li {
+        float: left;
+        margin-right: 10px;
+        >.btn {
+          font-size: 14px;
+          color: @gray;
+        }
+      }
+    }
+  }
+  .course-detail-bottom {
+    .course-detail-img {
+      position: relative;
+      float: left;
+      width: 480px;
+      .course-img-cover {
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: #000;
+        .opacity(0.4);
+        .es-transition;
+        &:hover {
+          .opacity(0.7);
+          .es-transition;
+        }
+        .es-icon {
+          color: white;
+          font-size: 100px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-left: -50px;
+          margin-top: -50px;
+        }
+      }
+      .course-detail-remask {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        color: #fff;
+        padding:10px;
+        .opacity(.8);
+        .score {
+          float: right;
+          i {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+    .course-detail-info {
+      padding-left: 60px;
+      margin-left: 480px;
+      .course-detail-title {
+        width: 70px;
+      }
+      .course-detail-gray {
+        padding-left: 60px;
+        margin: 0px -20px 15px -60px;
+        .course-detail-nav {
+          position: relative;
+          padding-left: 70px;
+          .course-detail-title {
+            position: absolute;
+            left: 0;
+            top: 8px;
+          }
+        }
+      }
+      .original-price {
+        position: relative;
+        margin-left: 4px;
+        &:after {
+         content: '';
+         position: absolute;
+         left: -2px;
+         top:50%;
+         right: -2px;
+         height: 1px;
+         background-color: @gray;
+        }
+      }
+      .tag-discount{
+        background: url("@{img-src}tag_discount.png") no-repeat;
+        display: inline-block;
+        width: 62px;
+        margin-left: 11px;
+        height: 24px;
+        color: #fff;
+        line-height: 24px;
+        .discount-font{
+          margin-left:25px;
+        }
+      } 
+    }
+  }
+}
+
+// 自由式学习头部
+.course-freelearn-section {
+  background-color: @bg-color;
+  margin: 65px -20px 20px;
+  padding: 38px 15px;
+  @media (max-width: @screen-xs-max) {
+    padding-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 0;
+  }
+  .course-learn-list {
+    list-style: none;
+    @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max){ 
+      padding-left: 20px;
+    }
+    >li {
+      float: left;
+      width: 33.33%;
+    }
+  }
+  .course-progress{
+    top: -55px;
+    left: 75px;
+    @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max){
+      left: 15px;
+    }
+    @media (max-width: @screen-xs-max) {
+     left: 0;
+     top: -20px;
+    }
+  }
+}
+
+// 任务式学习头部
+.course-orderlearn-section {
+  min-height: 230px;
+  padding-top: 40px;
+  .progress-info {
+    list-style: none;
+    margin-left: 190px;
+    margin-top: 25px;
+    font-size: 12px;
+    padding-left: 0;
+    .progress-learn-time{
+      margin-left: 20px;
+    }
+  }
+  .task-list-detail{
+    margin-left: -48px;
+  }
+}
+
+//课程进度条
+.course-progress {
+  position: absolute;
+  top:0;
+  left: 15px;
+  width: 160px;
+  height: 160px;
+  .border-radius(50%);
+  background-color: #fff;
+  .box-shadow(0 0 18px 8px rgba(41,94,64,0.1));
+  @media (max-width: @screen-xs-max) {
+    position: relative;
+    margin: 0 auto;
+  }
+  .cricle-progress {
+    position: absolute;
+    left: 7.5px;
+    top:7.5px;
+    width: 145px;
+    height: 145px;
+    .percent {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: @gray;
+      .num {
+        display: inline-block;
+        margin-top: 10px;
+        font-size: 30px;
+        line-height: 1;
+        font-weight: bold;
+        color: @brand-primary;
+      }
+    }
+  }
+}

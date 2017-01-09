@@ -132,7 +132,7 @@ class WxpayResponse extends Response
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getServiceKernel()

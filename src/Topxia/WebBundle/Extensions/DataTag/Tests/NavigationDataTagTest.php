@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Topxia\Service\Common\BaseTestCase;
+use Biz\BaseTestCase;;
 use Topxia\WebBundle\Extensions\DataTag\NavigationDataTag;
 
 class NavigationDataTagTest extends BaseTestCase
@@ -44,7 +44,7 @@ class NavigationDataTagTest extends BaseTestCase
 
     protected function getNavigationService()
     {
-        return $this->getServiceKernel()->createService('Content.NavigationService');
+        return $this->getServiceKernel()->createService('Content:NavigationService');
     }
 
 }

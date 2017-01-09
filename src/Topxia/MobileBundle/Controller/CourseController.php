@@ -3,7 +3,7 @@
 namespace Topxia\MobileBundle\Controller;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends MobileController
@@ -55,7 +55,7 @@ class CourseController extends MobileController
         $items         = $this->getCourseService()->getCourseItems($courseId);
         $reviews       = $this->getReviewService()->findCourseReviews($courseId, 0, 100);
         $learnStatuses = $user->isLogin() ? $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']) : array();
-        $member        = $user->isLogin() ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $member        = $user->isLogin() ? $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']) : null;
 
         if ($member) {
             $member['createdTime'] = date('c', $member['createdTime']);
@@ -65,7 +65,7 @@ class CourseController extends MobileController
         $result['course']        = $this->filterCourse($course);
         $result['reviews']       = $this->filterReviews($reviews);
         $result['member']        = $member;
-        $result['userIsStudent'] = $user->isLogin() ? $this->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
+        $result['userIsStudent'] = $user->isLogin() ? $this->getCourseMemberService()->isCourseStudent($courseId, $user['id']) : false;
 
         if (!$result['userIsStudent']) {
             $learnStatuses = array();
@@ -294,7 +294,7 @@ class CourseController extends MobileController
             goto response;
         }
 
-        if (!$this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+        if (!$this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $result = array('status' => 'fail', 'message' => '您不是课程学员，不能学习');
             goto response;
         }
@@ -513,33 +513,28 @@ class CourseController extends MobileController
         return $html;
     }
 
-    private function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     private function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course.ReviewService');
+        return $this->getServiceKernel()->createService('Course:ReviewService');
     }
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return ServiceKernel::instance()->createService('User:TokenService');
     }
 
     private function getUploadFileService()
     {
-        return ServiceKernel::instance()->getBiz()->service('File:UploadFileService');
+        return ServiceKernel::instance()->createService('File:UploadFileService');
     }
 
-    private function getMemberDao()
+    protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
+        return ServiceKernel::instance()->createService('Course:MemberService');
     }
 }

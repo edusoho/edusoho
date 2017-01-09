@@ -3,7 +3,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClientFactory;
+use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\LessonProcessor;
@@ -29,7 +29,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         if ($lesson['free'] == 1) {
             if ($user->isLogin()) {
-                if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+                if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
                     $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
                 }
             }
@@ -49,7 +49,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         }
 
         $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
-        $member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
+        $member = $this->controller->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         $member = $this->previewAsMember($member, $courseId, $user);
 
         if ($member && in_array($member['role'], array("teacher", "student"))) {
@@ -123,7 +123,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         list($course, $member) = $this->controller->getCourseService()->tryTakeCourse($courseId);
 
-        if ($member && !$this->controller->getCourseService()->isMemberNonExpired($course, $member)) {
+        if ($member && !$this->controller->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return "course_materials";
         }
 
@@ -309,7 +309,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         if ($lesson['free'] == 1) {
             if ($user->isLogin()) {
-                if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+                if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
                     $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
                 }
             }
@@ -321,11 +321,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
         }
 
-        if ($this->controller->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+        if ($this->controller->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $this->controller->getCourseService()->startLearnLesson($courseId, $lessonId);
         }
 
-        $member = $this->controller->getCourseService()->getCourseMember($courseId, $user['id']);
+        $member = $this->controller->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         $member = $this->previewAsMember($member, $courseId, $user);
 
         if ($member && in_array($member['role'], array("teacher", "student"))) {
@@ -576,7 +576,6 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         if ($file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
-                $url = $this->controller->generateUrl('course_manage_files', array('id' => $courseId));
                 return $this->createErrorResponse('not_ppt', 'PPT文档转换失败，请到课程文件管理中，重新转换!');
             } else {
                 return $this->createErrorResponse('not_ppt', 'PPT文档还在转换中，还不能查看，请稍等。!');
