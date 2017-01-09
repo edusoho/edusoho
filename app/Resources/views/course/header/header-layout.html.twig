@@ -16,7 +16,11 @@
     <div class="course-detail-top clearfix">
 
       <span class="tags mrm">
+        {% if courseSet.serializeMode == 'serialized' %}
         <span class="tag-serialing"></span>
+        {% elseif courseSet.serializeMode == 'finished' %}
+        <span class="tag-finished"></span>
+        {% endif %}
       </span>
 
       <span class="text-overflow vertical-top inline-block gray-darker text-24 course-detail-heading">{{ course.title }}</span>
