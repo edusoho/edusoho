@@ -19,32 +19,31 @@ Unit Test With PHP 5.3:
   services:
     - mysql:5.5
   script:
-    - rm /etc/php5/cli/conf.d/30-xdebug.ini
-    - phpunit -c app/ --coverage-text --colors=never
+    - phpunit -c app/
   only:
     - tags
     - develop
     - master
     - trigger
 
-Unit Test With PHP 5.5:
-  stage: test
-  image: codeages/ci-php:5.5-1
-  services:
-    - mysql:5.5
-  script:
-    - echo "xdebug.profiler_enable = 0" >> /etc/php5/cli/conf.d/30-xdebug.ini
-    - phpunit -c app/ --coverage-text --colors=never
+# Unit Test With PHP 5.5:
+#   stage: test
+#   image: codeages/ci-php:5.5-1
+#   services:
+#     - mysql:5.5
+#   script:
+#     - phpunit -c app/
 
 Unit Test With PHP 7.0:
   stage: test
-  image: codeages/ci-php:7.0-3
+  image: codeages/ci-php:7.0-4
   services:
     - mysql:5.5
   script:
-    - phpunit -c app/ --coverage-text --colors=never
+    -  phpdbg -qrr /usr/bin/phpunit -c app/ --coverage-text --colors=never
   only:
     - tags
     - develop
     - master
     - trigger
+    - /^feature\/.*$/
