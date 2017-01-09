@@ -37,7 +37,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
                     'source'      => $fields['source'],
                     'description' => $fields['description']
                 );
-                $material = $this->updateMaterial($courseMaterials[0]['id'], $updateFields, $argument);
+                $material     = $this->updateMaterial($courseMaterials[0]['id'], $updateFields, $argument);
             } else {
                 $material = $this->addMaterial($fields, $argument);
             }
@@ -82,6 +82,11 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
     {
         return $this->getMaterialDao()->findByCopyIdAndLockedCourseIds($copyId, $courseIds);
+    }
+
+    public function findMaterialsByLessonIdAndSource($lessonId, $source)
+    {
+        return $this->getMaterialDao()->findMaterialsByLessonIdAndSource($lessonId, $source);
     }
 
     public function deleteMaterialByMaterialId($materialId)
@@ -275,7 +280,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             $fields['link']   = $material['link'];
             $fields['title']  = empty($material['description']) ? $material['link'] : $material['description'];
         } else {
-            $fields['fileId'] = (int) $material['fileId'];
+            $fields['fileId'] = (int)$material['fileId'];
             $file             = $this->getUploadFileService()->getFile($material['fileId']);
             if (empty($file)) {
                 throw $this->createServiceException('文件不存在，上传资料失败！');
