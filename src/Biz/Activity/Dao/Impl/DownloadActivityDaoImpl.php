@@ -14,7 +14,7 @@ class DownloadActivityDaoImpl extends GeneralDaoImpl implements DownloadActivity
     {
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
-            'serializes' => array('media' => 'json', 'linkMedias' => 'json', 'fileMediaIds' => 'json'),
+            'serializes' => array('fileIds' => 'json'),
         );
     }
 

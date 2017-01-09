@@ -8,6 +8,8 @@ interface CourseMaterialDao extends GeneralDaoInterface
 {
     public function findByCopyIdAndLockedCourseIds($copyId, $courseIds);
 
+    public function findMaterialsByLessonIdAndSource($lessonId, $source);
+
     public function deleteByLessonId($lessonId, $courseType);
 
     public function deleteByCourseId($courseId, $courseType);

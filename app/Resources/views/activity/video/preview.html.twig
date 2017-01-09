@@ -1,0 +1,36 @@
+{% do script(['app/js/task/video/preview/index.js']) %}
+
+{% if activity.ext.mediaSource|default('self') == 'self' %}
+  <div class="modal-video-content" id="task-preview-player">
+    <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="task-content">
+      {#如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx#}
+      {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId, context:context})) }}
+    </div>
+  </div>
+{% elseif task.mediaSource == 'iframe' %}
+  <div class="modal-video-content">
+    <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="task-content"
+         data-media-source="{{ activity.ext.mediaSource }}">
+      <div id="swf-player" data-url="{{ activity.ext.mediaUri }}"></div>
+    </div>
+  </div>
+{% else %}
+  <div id="task-preview-iframe">
+    <iframe src="{{ task.mediaUri }}" style="height:360px; width:100%; border:0px;" scrolling="no"></iframe>
+  </div>
+{% endif %}
+
+<div class="js-time-limit-dev hidden">
+  <div style="height:360px;background-color:black;" class="text-center">
+    <br><br><br><br>
+    <br><br><br><br>
+    <div style="font-size:20px;color:#fff;">
+      {{ '立刻购买本课程，即可获得全部完整学习内容。'|trans }}
+    </div>
+  </div>
+  <div class="js-buy-text">
+    <span class="text-success">
+      {{ '您可以免费试看前%tryLookLength%分钟,购买后可完整观看。'|trans({'%tryLookLength%': course.tryLookLength }) }}
+    </span>
+  </div>
+</div>
