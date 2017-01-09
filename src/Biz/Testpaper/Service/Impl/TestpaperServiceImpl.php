@@ -410,7 +410,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $accuracy;
     }
 
-    //new
     public function checkFinish($resultId, $fields)
     {
         $paperResult = $this->getTestpaperResult($resultId);
@@ -456,7 +455,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $paperResult;
     }
 
-    //new
     public function submitAnswers($id, $answers)
     {
         if (empty($answers)) {
@@ -584,7 +582,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 continue;
             }
 
-            $filter['seq']          = $index++;
+            $filter['seq'] = $index;
+
+            if ($question['type'] != 'material') {
+                $index++;
+            }
+
             $filter['questionId']   = $question['id'];
             $filter['questionType'] = $question['type'];
             $filter['testId']       = $testpaperId;
@@ -631,7 +634,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $testpaper;
     }
 
-    //new
     protected function countItemResultStatus($resultStatus, $item, $questionResult)
     {
         $resultStatus = array(

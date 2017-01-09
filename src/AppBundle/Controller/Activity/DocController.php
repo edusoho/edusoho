@@ -7,9 +7,8 @@ namespace AppBundle\Controller\Activity;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
-use MaterialLib\Service\MaterialLib\MaterialLibService;
+use Biz\MaterialLib\Service\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class DocController extends BaseController implements ActivityActionInterface
 {
@@ -37,10 +36,9 @@ class DocController extends BaseController implements ActivityActionInterface
         $isConvertNotSuccess = isset($file['convertStatus']) && $file['convertStatus'] != 'success';
         $isPrivate = !isset($result['pdf']) && !isset($result['swf']);
 
-        if ($isConvertNotSuccess || $isPrivate) {
-            if ($file['convertStatus'] == 'error' || $isPrivate) {
-                $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
-                $message = sprintf('文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+        if ($isConvertNotSuccess) {
+            if ($file['convertStatus'] == 'error' && $isPrivate) {
+                $message = sprintf('文档转换失败，请联系老师，重新转换。');
                 $error = array('code' => 'error', 'message' => $message);
             } else {
                 $error = array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。');
@@ -75,6 +73,15 @@ class DocController extends BaseController implements ActivityActionInterface
     {
         return $this->render('activity/doc/edit-modal.html.twig', array(
             'courseId' => $courseId
+        ));
+    }
+
+    public function finishConditionAction($activity)
+    {
+        $media = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
+
+        return $this->render('activity/doc/finish-condition.html.twig', array(
+            'media' => $media
         ));
     }
 

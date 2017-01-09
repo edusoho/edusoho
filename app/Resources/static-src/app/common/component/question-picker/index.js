@@ -11,8 +11,19 @@ export default class QuestionPicker {
     this.$questionPickerBody.find('[data-role="search-btn"]').on('click', event=>this.searchQuestion(event));
     this.$questionPickerBody.find('[data-role="picked-item"]').on('click', event=>this.pickItem(event));
     this.$questionPickerBody.find('[data-role="preview-btn"]').on('click', event=>this.questionPreview(event));
+    this.$questionPickerBody.find('.pagination a').on('click', event=>this.pagination(event));
+
     let $batchSelectSave = $('[data-role="batch-select-save"]',window.parent.document);
     $batchSelectSave.on('click',event=>this.batchSelectSave(event));
+  }
+
+
+  pagination(event) {
+    let $btn  =  $(event.currentTarget);
+    $.get($btn.attr('href'),html=> {
+      this.$questionPickerModal.html(html);
+    });
+    return false;
   }
 
   searchQuestion(event) {
@@ -20,6 +31,7 @@ export default class QuestionPicker {
     let $this = $(event.currentTarget);
     let $form = $this.closest('form');
     $.get($form.attr('action'), $form.serialize(), html => {
+      console.log(html);
       this.$questionPickerModal.html(html);
     });
   }
@@ -40,6 +52,7 @@ export default class QuestionPicker {
         this.$questionAppendForm.find('tr[data-id="'+replace+'"]').replaceWith(html);
         this.$questionAppendForm.find('tr[data-parent-id="'+replace+'"]').remove();
       } else {
+        console.log( this.$questionAppendForm.length);
         this.$questionAppendForm.find('tbody:visible').append(html).removeClass('hide');
       }
       this._refreshSeqs();

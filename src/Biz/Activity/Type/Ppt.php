@@ -2,6 +2,9 @@
 
 namespace Biz\Activity\Type;
 
+use Biz\Activity\Dao\PptActivityDao;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Activity\Service\ActivityService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 
@@ -35,13 +38,14 @@ class Ppt extends Activity
 
         if ($ppt['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
-            return !empty($result) && $result > $ppt['finishDetail'];
+            return !empty($result) && $result >= $ppt['finishDetail'];
         }
 
-        if ($ppt['finishType'] == 'end') {
-            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finished');
-            return !empty($result);
+        if($ppt['finishType'] == 'end'){
+            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finish');
+            return !empty($logs);
         }
+
         return false;
     }
 
@@ -83,16 +87,25 @@ class Ppt extends Activity
         return $this->getPptActivityDao()->get($targetId);
     }
 
+    /**
+     * @return PptActivityDao
+     */
     protected function getPptActivityDao()
     {
         return $this->getBiz()->dao('Activity:PptActivityDao');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service("Activity:ActivityService");

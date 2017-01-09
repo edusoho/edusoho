@@ -282,6 +282,10 @@ liveroom_ticket:
     path:  /liveroom/{id}/ticket
     defaults: { _controller: AppBundle:Liveroom:ticket }
 
+course_order_detail:
+   path:  /order/{id}/detail_course
+   defaults: { _controller: AppBundle:Order:detail }
+
 order_refund:
     path:  /target/{id}/order/refund
     defaults: { _controller: AppBundle:OrderRefund:refund }
@@ -1495,6 +1499,10 @@ course_task_finish:
     path:  /course/{courseId}/task/{id}/finish
     defaults: { _controller: AppBundle:Task:finish }
 
+course_task_finished_prompt:
+    path:  /course/{courseId}/task/{id}/finished_prompt
+    defaults: { _controller: AppBundle:Task:taskFinishedPrompt }
+
 course_manage_task_create:
     path:  /course/{courseId}/task
     defaults: { _controller: AppBundle:TaskManage:create}
@@ -1635,6 +1643,22 @@ course_set_manage_course_students_check:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/check
   defaults: {_controller: AppBundle:CourseManage:checkStudent}
 
+course_set_manage_course_orders:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/orders
+  defaults: {_controller: AppBundle:CourseManage:orders}
+
+course_set_manage_course_orders_export_csv:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/orders/export
+  defaults: { _controller: AppBundle:CourseManage:ordersExportCsv }
+
+course_set_manage_course_dashboard:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/dashboard
+  defaults: {_controller: AppBundle:CourseManage:dashboard}
+
+course_set_manage_course_dashboard_task_detail:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/dashboard/detail/{taskId}
+  defaults: { _controller: AppBundle:CourseManage:taskLearnDetail }
+
 course_set_manage_course_close:
   path: /course_set/{courseSetId}/course/{courseId}/close
   defaults: {_controller: AppBundle:CourseManage:close}
@@ -1722,20 +1746,12 @@ course_set_unfavorite:
   methods: [POST]
 
 course_show:
-  path: /course/{id}
-  defaults: {_controller: AppBundle:Course:show}
+  path: /course/{id}/{tab}
+  defaults: {_controller: AppBundle:Course:show, tab: 'summary'}
 
 course_exit:
   path: /course/{id}/exit
   defaults: {_controller: AppBundle:Course:exit}
-
-course_notes:
-  path: /course/{id}/notes
-  defaults: { _controller: AppBundle:Course:notes }
-
-course_threads:
-  path: /course/{id}/threads
-  defaults: {_controller: AppBundle:CourseThread:index}
 
 course_thread_create:
    path:  /course/{courseId}/thread/create
@@ -1788,7 +1804,7 @@ course_thread_delete:
    methods: [POST]
 
 course_set_manage:
-  path: /course_set/{id}/manage
+  path: /course_set/{id}/manageor
   defaults: {_controller: AppBundle:CourseSetManage:index}
 
 course_set_manage_base:
@@ -1843,16 +1859,6 @@ course_set_manage_close:
   path: /course_set/{id}/manage/close
   defaults: {_controller: AppBundle:CourseSetManage:close}
 
-#course
-course_task_list:
-    path:  /course/{id}/task/list
-    defaults: { _controller: AppBundle:Course:taskList }
-
-#course review
-course_review:
-  path: /course/{id}/review
-  defaults: {_controller: AppBundle:Course:reviewList}
-
 course_review_create:
    path:  /course/{id}/review/create
    defaults: { _controller: AppBundle:Course/Review:create }
@@ -1865,10 +1871,6 @@ course_review_post:
 course_review_delete:
   path:  /course/{courseId}/review/{reviewId}/delete
   defaults: { _controller: AppBundle:Course/Review:delete }
-
-course_materials:
-    path:  /course/{id}/material
-    defaults: { _controller: AppBundle:Course/CourseMaterial:index }
 
 course_material_download:
     path:  /course/{courseId}/material/{materialId}/download
@@ -2542,5 +2544,5 @@ coupon_check:
     defaults: { _controller: AppBundle:Order:couponCheck }
 
 my_course_show:
-    path:  /my/course/{id}
-    defaults: { _controller: AppBundle:My/Course:show }
+    path:  /my/course/{id}/{tab}
+    defaults: { _controller: AppBundle:My/Course:show, tab: 'tasks' }

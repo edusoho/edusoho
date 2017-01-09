@@ -3,15 +3,16 @@
 namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
         $format   = 'Y-m-d H:i';
         if (isset($activity['startTime'])) {
             $activity['startTimeFormat'] = date($format, $activity['startTime']);
@@ -49,28 +50,28 @@ class LiveController extends BaseController implements ActivityActionInterface
     {
         $user = $this->getUser();
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
         $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
 
         if (empty($activity)) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播任务不存在！'));
+            return $this->createMessageResponse('info', '直播任务不存在！');
         }
         if ($activity['fromCourseId'] != $courseId) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('参数非法！'));
+            return $this->createMessageResponse('info', '参数非法！');
         }
 
         if (empty($activity['ext']['liveId'])) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播教室不存在！'));
+            return $this->createMessageResponse('info', '直播教室不存在！');
         }
 
         if ($activity['startTime'] - time() > 7200) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播还没开始!'));
+            return $this->createMessageResponse('info', '直播还没开始!');
         }
 
         if ($activity['endTime'] < time()) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('直播已结束!'));
+            return $this->createMessageResponse('info', '直播已结束!');
         }
 
         $params = array();
@@ -86,7 +87,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('您不是课程学员，不能参加直播！'));
+            return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
         }
 
         $params['id']       = $user['id'];
@@ -125,6 +126,12 @@ class LiveController extends BaseController implements ActivityActionInterface
         return $this->createJsonResponse(array('success' => true, 'status' => 'on_live'));
     }
 
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/live/finish-condition.html.twig', array());
+    }
+
+
     /**
      * @return ActivityService
      */
@@ -133,19 +140,20 @@ class LiveController extends BaseController implements ActivityActionInterface
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 
     //int to datetime

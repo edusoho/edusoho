@@ -2,12 +2,12 @@
 
 namespace Topxia\WebBundle\Listener;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class UserLoginTokenListener
 {
@@ -87,14 +87,14 @@ class UserLoginTokenListener
         if (empty($userLoginToken) && !empty($REMEMBERME)) {
             return;
         }
-  
+
         if ($userLoginToken != $user['loginSessionId']) {
-            $magic = ServiceKernel::instance()->createService('System.SettingService')->get('magic');
+            $magic = $this->getSettingService()->get('magic');
 
             if ((!empty($magic['login_limit'])) && ($request->isXmlHttpRequest())) {
                 $response = new Response('LoginLimit', 403);
                 $response->headers->clearCookie('REMEMBERME');
-                $response->send(); 
+                $response->send();
             }
             $request->getSession()->invalidate();
 
@@ -130,6 +130,7 @@ class UserLoginTokenListener
     {
         return ServiceKernel::instance()->createService('User:AuthService');
     }
+
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();

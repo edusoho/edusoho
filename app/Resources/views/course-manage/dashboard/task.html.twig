@@ -1,0 +1,18 @@
+{% extends 'course-manage/dashboard/layout.html.twig' %}
+
+{% set submenu = 'task_dashboard' %}
+
+{% do load_script('course-manage/dashboard/lesson') %}
+{# {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %} #}
+
+{% block dashboard %}
+  
+  <div id="lesson-dashboard-container" 
+  	data-lesson-num="{{ taskTitles|length }}" 
+  	data-titles="{{ taskTitles|json_encode }}" 
+  	data-learn-num="{{ learnNum|json_encode }}" 
+  	data-finished-num="{{ finishedNum|json_encode }}" 
+  	data-finished-rate="{{ finishedRate|json_encode }}">
+  </div>
+
+{% endblock %}

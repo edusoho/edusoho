@@ -69,7 +69,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activities;
     }
 
-
     public function trigger($id, $eventName, $data = array())
     {
         $activity = $this->getActivity($id);
@@ -238,6 +237,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'userId'      => $this->getCurrentUser()->offsetGet('id'),
             'type'        => 'course',
             'source'      => $activity['mediaType'] == 'download' ? 'coursematerial' : 'courseactivity',
+            'link'        => empty($material['link']) ? '' : $material['link'],
             'copyId'      => 0 //$fields
         );
     }
@@ -309,7 +309,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     }
 
     /**
-     * @param $activity
+     * @param  $activity
      * @return mixed
      */
     public function fetchMedia($activity)

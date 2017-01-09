@@ -2,6 +2,10 @@
 
 namespace Biz\Activity\Type;
 
+use Biz\Activity\Dao\DocActivityDao;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Activity\Service\ActivityService;
+use Biz\File\Service\UploadFileService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 
@@ -48,15 +52,10 @@ class Doc extends Activity
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
-        $doc      = $this->getFlashActivityDao()->get($activity['mediaId']);
+        $doc      = $this->getDocActivityDao()->get($activity['mediaId']);
         if ($doc['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
-            return $result > $doc['finishDetail'];
-        }
-
-        if ($doc['finishType'] == 'click') {
-            $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'doc.finish');
-            return !empty($result);
+            return $result >= $doc['finishDetail'];
         }
         return false;
     }
@@ -86,21 +85,33 @@ class Doc extends Activity
         return $activity;
     }
 
+    /**
+     * @return DocActivityDao
+     */
     protected function getDocActivityDao()
     {
         return $this->getBiz()->dao('Activity:DocActivityDao');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service("Activity:ActivityService");
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');

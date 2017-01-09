@@ -4,6 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\FavoriteDao;
+use Biz\Course\Service\CourseNoteService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
@@ -386,6 +387,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $ratingFields = $this->getReviewService()->countRatingByCourseSetId($id);
                 $updateFields = array_merge($updateFields, $ratingFields);
             }
+
+            if($field === 'noteNum'){
+                $noteNum = $this->getNoteService()->countCourseNoteByCourseSetId($id);
+                $updateFields['noteNum'] = $noteNum;
+            }
         }
 
         if (empty($updateFields)) {
@@ -457,6 +463,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getCourseSetDao()
     {
         return $this->createDao('Course:CourseSetDao');
+    }
+
+    /**
+     * @return CourseNoteService
+     */
+    protected function getNoteService()
+    {
+        return $this->createService('Course:CourseNoteService');
     }
 
     /**

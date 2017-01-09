@@ -32,10 +32,6 @@ class CourseAnnouncementsDataTag extends BaseDataTag implements DataTag
 
         if (!empty($arguments['courseId'])) {
             $conditions['targetId'] = $arguments['courseId'];
-        } else {
-            $courses = $this->getCourseService()->findCoursesByCourseSetId($arguments['courseSetId']);
-
-            $conditions['targetIds'] = ArrayToolkit::column($courses, 'id');
         }
 
         $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, $arguments['count']);
@@ -65,7 +61,7 @@ class CourseAnnouncementsDataTag extends BaseDataTag implements DataTag
             throw new \InvalidArgumentException('invalid arguments');
         }
 
-        if (empty($arguments['courseSetId'])) {
+        if (empty($arguments['courseId'])) {
             throw new \InvalidArgumentException('invalid arguments');
         }
     }

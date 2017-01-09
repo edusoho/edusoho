@@ -31,7 +31,7 @@ interface TaskService
     public function count($conditions);
 
     /**
-     * @param  array $ids
+     * @param  array   $ids
      * @return array
      */
     public function findTasksByIds(array $ids);
@@ -99,9 +99,10 @@ interface TaskService
      * 2.如果不为空，则取关联的三个。
      *
      * 自由式和任务式的逻辑由任务策略完成
-     * @param $courseId
-     * @return array tasks
+     * @param  $courseId
+     * @return array       tasks
      */
     public function findToLearnTasksByCourseId($courseId);
 
+    public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 }

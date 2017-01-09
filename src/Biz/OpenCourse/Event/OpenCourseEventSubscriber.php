@@ -144,7 +144,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
 
     protected function getNoteService()
     {
-        return $this->getBiz()->service('Note:CourseNoteService');
+        return $this->getBiz()->service('Course:CourseNoteService');
     }
 
     protected function getOpenCourseService()

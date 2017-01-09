@@ -161,7 +161,8 @@ class ManageController extends BaseController
             'total'         => $total,
             'source'        => $source,
             'targetId'      => $targetId,
-            'isTeacher'     => true
+            'isTeacher'     => true,
+            'action'        => $request->query->get('action', '')
         ));
     }
 
@@ -387,7 +388,7 @@ class ManageController extends BaseController
         }
 
         if ($testpaper['status'] == 'closed') {
-            return $this->createMessageResponse('warning', '试卷已关闭，不能查看！');
+            return $this->createMessageResponse('warning', 'testpaper already closed');
         }
 
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
@@ -398,7 +399,7 @@ class ManageController extends BaseController
 
         return $this->render('testpaper/manage/preview.html.twig', array(
             'questions'     => $questions,
-            'limitedTime'   => $testpaper['limitedTime'] * 60,
+            'limitedTime'   => $testpaper['limitedTime'],
             'paper'         => $testpaper,
             'paperResult'   => array(),
             'total'         => $total,

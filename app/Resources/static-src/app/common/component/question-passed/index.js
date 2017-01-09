@@ -16,6 +16,8 @@ export let passedDivShow = ($element) => {
     return;
   }
 
+  console.log($passedScoreDiv);
+
   if($passedScoreDiv.data('type') == 'homework') {
     html = '这是一份纯客观题的作业，正确率达到为' +
     '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini correctPercent1" value="60" />％合格，'+

@@ -7,9 +7,8 @@ namespace AppBundle\Controller\Activity;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
-use MaterialLib\Service\MaterialLib\MaterialLibService;
+use Biz\MaterialLib\Service\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class PptController extends BaseController implements ActivityActionInterface
 {
@@ -78,6 +77,15 @@ class PptController extends BaseController implements ActivityActionInterface
     {
         return $this->render('activity/ppt/edit-modal.html.twig', array(
             'courseId' => $courseId
+        ));
+    }
+
+    public function finishConditionAction($activity)
+    {
+        $media = $this->getActivityService()->getActivityConfig('ppt')->get($activity['mediaId']);
+
+        return $this->render('activity/ppt/finish-condition.html.twig', array(
+            'media' => $media
         ));
     }
 

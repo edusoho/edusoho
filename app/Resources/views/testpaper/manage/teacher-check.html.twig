@@ -4,6 +4,7 @@
 
 {% set role = 'teacher' %}
 {% set showHeader = 1 %}
+{% set showBodyColor = 0 %}
 
 {% block paper_result_bar %}
   {% include 'testpaper/part/paper-result-objective.html.twig' %}
@@ -93,7 +94,7 @@
             {% set gotUrl = path('course_manage_testpaper_result_list',{id:targetId,testpaperId:paperResult.testId})%}
           {% endif %}
           <a href="javascript:;" class="btn btn-default" data-dismiss="modal">{{'取消'|trans}}</a>
-          <button type="button" class="btn btn-info" id="testpaper-teacher-say-btn" data-post-url="{{ postUrl }}" data-goto="{{ gotUrl }}">{{'完成批阅'|trans}}</button>
+          <button type="button" class="btn btn-info" id="testpaper-teacher-say-btn" data-post-url="{{ postUrl }}" data-goto="{{ gotUrl }}" data-role="finish-check">{{'完成批阅'|trans}}</button>
         </div>
       </div>
     </div>

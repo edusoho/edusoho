@@ -6,7 +6,7 @@
   <form id="step2-form" class="form-horizontal homework-activity-form" method="post">
 
     <div class="form-group">
-      <div class="col-sm-2 control-label"><label for="homework-about-field">作业说明</label></div>
+      <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">作业说明</label></div>
       <div class="col-sm-10 controls">
         <textarea name="description" rows="10" id="homework-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ activity.description|default('') }}</textarea>
       </div>
@@ -49,7 +49,7 @@
 
     <div class="form-group">
       <div class="col-sm-10 controls">
-        <p class="js-passedScoreDiv">
+        <p class="js-passedScoreDiv" data-type="homework">
         </p>
         <p class="help-block color-warning">{{'提示：作业保存以后将会添加到课时中去，作业一旦保存将不能修改。'|trans}}</p>
       </div>

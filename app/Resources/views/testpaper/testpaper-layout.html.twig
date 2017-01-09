@@ -1,6 +1,10 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{ paper.name }} - {{ parent() }}{% endblock %}
-{% set bodyClass = 'task-testpaper-body' %}
+
+{% if showBodyColor|default(1) %}
+{% set bodyClass = 'task-testpaper-body js-task-testpaper-body' %}
+{% endif %}
+
 {% block body %}
   {% block header %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
@@ -126,6 +130,10 @@
   {% block footer %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
+
+  <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
+  <div id="modal" class="modal"></div>
+  <div id="attachment-modal" class="modal"></div>
 {% endblock %}
 
 

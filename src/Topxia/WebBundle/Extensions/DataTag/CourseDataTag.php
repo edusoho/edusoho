@@ -11,6 +11,7 @@ class CourseDataTag extends CourseBaseDataTag implements DataTag
      *
      * 可传入的参数：
      *   courseId 必需 课程ID
+     *   fetchCourseSet 可选 true | false
      * 
      * @param  array $arguments 参数
      * @return array 课程
@@ -25,6 +26,10 @@ class CourseDataTag extends CourseBaseDataTag implements DataTag
 
         if ($course['categoryId'] != '0') {
             $course['category'] = $this->getCategoryService()->getCategory($course['categoryId']);
+        }
+
+        if(!empty($arguments['fetchCourseSet'])) {
+            $course['courseSet'] = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         }
 
         return $course;

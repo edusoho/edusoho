@@ -14,7 +14,7 @@ use Biz\User\Service\MessageService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
-use Biz\Note\Service\CourseNoteService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 
@@ -49,7 +49,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createNotFoundException('用户已经是学员，不能添加！');
         }
 
-        $orderTitle = "购买课程《{$course['title']}》";
+        $orderTitle = "购买教学计划《{$course['title']}》";
 
         if (isset($data["isAdminAdded"]) && $data["isAdminAdded"] == 1) {
             $orderTitle = $orderTitle.'(管理员添加)';
@@ -97,7 +97,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             ));
         }
 
-        $this->getLogService()->info('course', 'add_student', "课程《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
+        $this->getLogService()->info('course', 'add_student', "教学计划《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
 
         return array($course, $member, $order);
     }
@@ -128,21 +128,10 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchMember($conditions, $start, $limit)
-    {
-        $conditions = $this->_prepareConditions($conditions);
-        // return $this->getMemberDao()->search($conditions, $orderBy = array(), $start, $limit);
-    }
-
     public function countMembers($conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
         return $this->getMemberDao()->count($conditions);
-    }
-
-    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
-    {
-        //return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
     public function findWillOverdueCourses()
@@ -294,13 +283,13 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         foreach (array_values($teachers) as $index => $teacher) {
             if (empty($teacher['id'])) {
-                throw $this->createServiceException("教师ID不能为空，设置课程(#{$courseId})教师失败");
+                throw $this->createServiceException("教师ID不能为空，设置教学计划(#{$courseId})教师失败");
             }
 
             $user = $this->getUserService()->getUser($teacher['id']);
 
             if (empty($user)) {
-                throw $this->createServiceException("用户不存在或没有教师角色，设置课程(#{$courseId})教师失败");
+                throw $this->createServiceException("用户不存在或没有教师角色，设置教学计划(#{$courseId})教师失败");
             }
 
             $teacherMembers[] = array(
@@ -338,9 +327,9 @@ class MemberServiceImpl extends BaseService implements MemberService
             }
         }
 
-        $this->getLogService()->info('course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
+        $this->getLogService()->info('course', 'update_teacher', "更新教学计划#{$courseId}的教师", $teacherMembers);
 
-        // 更新课程的teacherIds，该字段为课程可见教师的ID列表
+        // 更新教学计划的teacherIds，该字段为教学计划可见教师的ID列表
         $fields = array('teacherIds' => $visibleTeacherIds);
         $course = $this->getCourseDao()->update($courseId, $fields);
 
@@ -352,7 +341,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
-     * @todo 当用户拥有大量的课程老师角色时，这个方法效率是有就有问题咯！鉴于短期内用户不会拥有大量的课程老师角色，先这么做着。
+     * @todo 当用户拥有大量的教学计划老师角色时，这个方法效率是有就有问题咯！鉴于短期内用户不会拥有大量的教学计划老师角色，先这么做着。
      */
     public function cancelTeacherInAllCourses($userId)
     {
@@ -369,7 +358,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->getCourseDao()->update($member['courseId'], $fields);
         }
 
-        $this->getLogService()->info('course', 'cancel_teachers_all', "取消用户#{$userId}所有的课程老师角色");
+        $this->getLogService()->info('course', 'cancel_teachers_all', "取消用户#{$userId}所有的教学计划老师角色");
     }
 
     public function remarkStudent($courseId, $userId, $remark)
@@ -377,7 +366,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $member = $this->getCourseMember($courseId, $userId);
 
         if (empty($member)) {
-            throw $this->createServiceException('课程学员不存在，备注失败!');
+            throw $this->createServiceException('教学计划学员不存在，备注失败!');
         }
 
         $fields = array('remark' => empty($remark) ? '' : (string) $remark);
@@ -405,19 +394,19 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程(#{$courseId})不存在，退出课程失败。");
+            throw $this->createNotFoundException("教学计划(#{$courseId})不存在，退出教学计划失败。");
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
-            throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，退出课程失败。");
+            throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，退出教学计划失败。");
         }
 
         $isNonExpired = $this->isMemberNonExpired($course, $member);
 
         if ($isNonExpired) {
-            throw $this->createServiceException("用户(#{$userId})还未达到有效期，不能退出课程。");
+            throw $this->createServiceException("用户(#{$userId})还未达到有效期，不能退出教学计划。");
         }
 
         //查询出订单
@@ -442,7 +431,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'studentNum' => $this->getCourseStudentCount($courseId)
         ));
 
-        $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出课程(#{$member['id']})");
+        $this->getLogService()->info('course', 'remove_student', "教学计划《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$member['id']})");
     }
 
     public function becomeStudent($courseId, $userId, $info = array())
@@ -454,19 +443,19 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         if (!in_array($course['status'], array('published'))) {
-            throw $this->createServiceException('不能加入未发布课程');
+            throw $this->createServiceException('不能加入未发布教学计划');
         }
 
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException("用户(#{$userId})不存在，加入课程失败！");
+            throw $this->createServiceException("用户(#{$userId})不存在，加入教学计划失败！");
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if ($member) {
-            throw $this->createServiceException("用户(#{$userId})已加入该课程！");
+            throw $this->createServiceException("用户(#{$userId})已加入该教学计划！");
         }
 
         $levelChecked = '';
@@ -475,13 +464,13 @@ class MemberServiceImpl extends BaseService implements MemberService
             $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
 
             if ($levelChecked != 'ok') {
-                throw $this->createServiceException("用户(#{$userId})不能以会员身份加入课程！");
+                throw $this->createServiceException("用户(#{$userId})不能以会员身份加入教学计划！");
             }
 
             $userMember = $this->getVipService()->getMemberByUserId($user['id']);
         }
 
-        //按照课程有效期模式计算学员有效期
+        //按照教学计划有效期模式计算学员有效期
         $deadline = 0;
         if ($course['expiryDays'] > 0) {
             if ($course['expiryMode'] == 'days') {
@@ -496,7 +485,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $order = $this->getOrderService()->getOrder($info['orderId']);
 
             if (empty($order)) {
-                throw $this->createServiceException("订单(#{$info['orderId']}})不存在，加入课程失败！");
+                throw $this->createServiceException("订单(#{$info['orderId']}})不存在，加入教学计划失败！");
             }
         } else {
             $order = null;
@@ -568,13 +557,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程(#{$courseId})不存在，退出课程失败。");
+            throw $this->createNotFoundException("教学计划(#{$courseId})不存在，退出教学计划失败。");
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
-            throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，退出课程失败。");
+            throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，退出教学计划失败。");
         }
 
         $this->getMemberDao()->delete($member['id']);
@@ -585,7 +574,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $removeMember = $this->getUserService()->getUser($member['userId']);
 
-        $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})");
+        $this->getLogService()->info('course', 'remove_student', "教学计划《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})");
         $this->dispatchEvent(
             'course.quit',
             $course, array('userId' => $member['userId'], 'member' => $member)
@@ -597,13 +586,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程(#{$courseId})不存在，封锁学员失败。");
+            throw $this->createNotFoundException("教学计划(#{$courseId})不存在，封锁学员失败。");
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
-            throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，封锁学员失败。");
+            throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，封锁学员失败。");
         }
 
         if ($member['locked']) {
@@ -618,13 +607,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createNotFoundException("课程(#{$courseId})不存在，封锁学员失败。");
+            throw $this->createNotFoundException("教学计划(#{$courseId})不存在，封锁学员失败。");
         }
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if (empty($member) || ($member['role'] != 'student')) {
-            throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，解封学员失败。");
+            throw $this->createServiceException("用户(#{$userId})不是教学计划(#{$courseId})的学员，解封学员失败。");
         }
 
         if (empty($member['locked'])) {
@@ -847,7 +836,7 @@ class MemberServiceImpl extends BaseService implements MemberService
      */
     protected function getCourseNoteService()
     {
-        return $this->createService('Note:CourseNoteService');
+        return $this->createService('Course:CourseNoteService');
     }
 
     /**
