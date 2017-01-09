@@ -9,7 +9,8 @@
 
 {% set side_nav = 'files' %}
 {% set tab = 'courseLesson' %}
-{% set script_controller = 'course-manage-file/index' %}
+{# {% set script_controller = 'course-manage-file/index' %} #}
+{% do load_script('course-manage-file/index') %}
 {% block main %}
   <style type="text/css">
   .tooltip-inner{

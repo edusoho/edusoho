@@ -9,7 +9,7 @@ interface MaterialService
 
     public function updateMaterial($id, $fields, $argument);
 
-    public function deleteMaterial($courseId, $materialId);
+    public function deleteMaterial($courseSetId, $materialId);
 
     public function deleteMaterialsByLessonId($lessonId, $courseType = 'course');
 
@@ -17,7 +17,7 @@ interface MaterialService
 
     public function deleteMaterialsByCourseSetId($courseSetId, $courseType = 'course');
 
-    public function deleteMaterials($courseId, $fileIds, $courseType = 'course');
+    public function deleteMaterials($courseSetId, $fileIds, $courseType = 'course');
 
     public function deleteMaterialsByFileId($fileId);
 
