@@ -1,5 +1,5 @@
 stages:
-- test
+  - test
 
 variables:
   MYSQL_DATABASE: edusoho_test
@@ -13,26 +13,36 @@ before_script:
   - mkdir app/data/private_files
   - touch app/config/routing_plugins.yml
 
-unittest:5.3:
+Unit Test With PHP 5.3:
   stage: test
-  image: codeages/php-testing:5.3
+  image: codeages/ci-php:5.3-1
   services:
-  - mysql:5.5
+    - mysql:5.5
   script:
-  - phpunit -c app/
+    - phpunit -c app/ --coverage-text --colors=never
+  only:
+    - tags
+    - develop
+    - master
+    - trigger
 
-unittest:5.5:
+Unit Test With PHP 5.5:
   stage: test
-  image: codeages/php-testing:5.5
+  image: codeages/ci-php:5.5-1
   services:
-  - mysql:5.5
+    - mysql:5.5
   script:
-  - phpunit -c app/
+    - phpunit -c app/ --coverage-text --colors=never
 
-unittest:7.0:
+Unit Test With PHP 7.0:
   stage: test
-  image: codeages/php-testing:7.0
+  image: codeages/ci-php:7.0-3
   services:
-  - mysql:5.5
+    - mysql:5.5
   script:
-  - phpunit -c app/
+    - phpunit -c app/ --coverage-text --colors=never
+  only:
+    - tags
+    - develop
+    - master
+    - trigger
