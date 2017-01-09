@@ -670,12 +670,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
-        $protocol = 2;
-        $pluginJsonFile = $packageDir . '/plugin.json';
-        if(file_exists($pluginJsonFile)){
-            $meta = json_decode(file_get_contents($pluginJsonFile), true);
-            $protocol = !empty($meta['protocol']) ? intval($meta['protocol']) : 2;
-        }
+        $protocol = $this->tryGetProtocolFromFile($packageDir);
 
         if (!file_exists($packageDir . '/Upgrade.php')) {
             return;
@@ -778,6 +773,17 @@ class AppServiceImpl extends BaseService implements AppService
         return realpath($this->getKernel()->getParameter('kernel.root_dir') . '/../' . 'plugins');
     }
 
+    private function tryGetProtocolFromFile($packageDir)
+    {
+        $protocol = 2;
+        $pluginJsonFile = $packageDir . '/plugin.json';
+        if(file_exists($pluginJsonFile)){
+            $meta = json_decode(file_get_contents($pluginJsonFile), true);
+            $protocol = !empty($meta['protocol']) ? intval($meta['protocol']) : 2;
+        }
+        return $protocol ;
+    }
+
     protected function getSystemRootDirectory()
     {
         return dirname($this->getKernel()->getParameter('kernel.root_dir'));
@@ -835,12 +841,8 @@ class AppServiceImpl extends BaseService implements AppService
             $newApp['type'] = 'theme';
         } else {
             $newApp['type'] = 'plugin';
-            $meta = json_decode(file_get_contents($packageDir . '/plugin.json'), true);
-            if (!empty($meta['protocol'])) {
-                $newApp['protocol'] = $meta['protocol'];
-            } else {
-                $newApp['protocol'] = 2;
-            }
+            $protocol = $this->tryGetProtocolFromFile($packageDir);
+            $newApp['protocol'] = $protocol;
         }
 
         $app = $this->getAppDao()->getAppByCode($package['product']['code']);
