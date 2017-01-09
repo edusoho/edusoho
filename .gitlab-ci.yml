@@ -33,7 +33,7 @@ Unit Test With PHP 5.5:
   services:
     - mysql:5.5
   script:
-    - rm /etc/php5/cli/conf.d/30-xdebug.ini
+    - echo "xdebug.profiler_enable = 0" >> /etc/php5/cli/conf.d/30-xdebug.ini
     - phpunit -c app/ --coverage-text --colors=never
 
 Unit Test With PHP 7.0:
