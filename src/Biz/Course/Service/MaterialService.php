@@ -25,6 +25,8 @@ interface MaterialService
 
     public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds);
 
+    public function findMaterialsByLessonIdAndSource($lessonId, $source);
+
     public function searchMaterials($conditions, $orderBy, $start, $limit);
 
     public function searchMaterialCount($conditions);
