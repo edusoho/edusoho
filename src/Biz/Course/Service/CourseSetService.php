@@ -151,7 +151,17 @@ interface CourseSetService
      */
     public function searchUserFavorites($userId, $start, $limit);
 
-    public function updateCourseSetStatistics($id, $fields);
+    /**
+     * 更新课程统计属性
+     *
+     * 如: 学员数、笔记数、评价数量
+     *
+     * @param       $id
+     * @param array $fields
+     *
+     * @return mixed
+     */
+    public function updateCourseSetStatistics($id, array $fields);
 
     public function publishCourseSet($id);
 

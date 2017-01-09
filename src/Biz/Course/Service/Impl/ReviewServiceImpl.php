@@ -2,6 +2,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Dao\ReviewDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\ReviewService;
 use Codeages\Biz\Framework\Event\Event;
@@ -219,6 +220,9 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return $orderBy;
     }
 
+    /**
+     * @return ReviewDao
+     */
     protected function getReviewDao()
     {
         return $this->createDao('Course:ReviewDao');

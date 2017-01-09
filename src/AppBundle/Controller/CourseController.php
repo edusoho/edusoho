@@ -2,16 +2,16 @@
 
 namespace AppBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\TokenService;
-use Biz\Course\Service\ReviewService;
-use Biz\Course\Service\MaterialService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\MaterialService;
+use Biz\Course\Service\ReviewService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class CourseController extends CourseBaseController
 {
@@ -51,7 +51,13 @@ class CourseController extends CourseBaseController
     public function notesAction($course, $member = array())
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $notes     = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+
+        if (empty($member)) {
+            $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+        } else {
+            $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+        }
+
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $users = ArrayToolkit::index($users, 'id');
@@ -78,9 +84,14 @@ class CourseController extends CourseBaseController
     {
         $courseSet  = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $conditions = array(
-            'courseId' => $course['id'],
             'parentId' => 0
         );
+
+        if (empty($member)) {
+            $conditions['courseSetId'] = $courseSet['id'];
+        } else {
+            $conditions['courseId'] = $course['id'];
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -243,7 +254,7 @@ class CourseController extends CourseBaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -254,7 +265,7 @@ class CourseController extends CourseBaseController
     public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user                  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是课程的学员。');
         }
