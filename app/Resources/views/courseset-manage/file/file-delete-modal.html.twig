@@ -4,10 +4,10 @@
 
 {% block body %}
 
-  {% if course.type in ['open','liveOpen'] %}
-    {% set deleteUrl = path('open_course_manage_files_delete', {id:course.id}) %}
+  {% if courseSet.type in ['open','liveOpen'] %}
+    {% set deleteUrl = path('open_course_manage_files_delete', {id:courseSet.id}) %}
   {% else %}
-    {% set deleteUrl = path('course_set_manage_delete_materials', {id:course.id}) %}
+    {% set deleteUrl = path('course_set_manage_delete_materials', {id:courseSet.id}) %}
   {% endif %}
 	<form id="material-delete-form" class="form-horizontal" method="post" action="{{ deleteUrl }}" onsubmit="return false">
 
