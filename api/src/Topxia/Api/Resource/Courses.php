@@ -27,6 +27,7 @@ class Courses extends BaseResource
         } else {
             $total   = $this->getCourseService()->searchCourseCount($conditions);
             $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), $start, $limit);
+            $courses = $this->assemblyCourses($courses);
 
             return $this->wrap($this->filter($courses), $total);
         }
@@ -84,33 +85,8 @@ class Courses extends BaseResource
 
     protected function assemblyCourses(&$courses)
     {
-        $tagIds = array();
-        foreach ($courses as $course) {
-            $tempTagIds = $this->getTagIdsByCourse($course);
-            $tagIds = array_merge($tagIds, $tempTagIds);
-        }
-
-        $tags = $this->getTagService()->findTagsByIds($tagIds);
-
         $categoryIds = ArrayToolkit::column($courses, 'categoryId');
         $categories  = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-
-        foreach ($courses as &$course) {
-            $courseTags = array();
-            if (empty($course['tags'])) {
-                continue;
-            }
-            foreach ($course['tags'] as $tagId) {
-                if (empty($tags[$tagId])) {
-                    continue;
-                }
-                $courseTags[] = array(
-                    'id'   => $tagId,
-                    'name' => $tags[$tagId]['name']
-                );
-            }
-            $course['tags'] = $courseTags;
-        }
 
         foreach ($courses as &$course) {
             if (isset($categories[$course['categoryId']])) {
@@ -126,13 +102,6 @@ class Courses extends BaseResource
         return $courses;
     }
 
-    protected function getTagIdsByCourse($course)
-    {
-        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
-
-        return ArrayToolkit::column($tags, 'id');
-    }
-
     public function filter($res)
     {
         return $this->multicallFilter('Course', $res);
@@ -141,11 +110,6 @@ class Courses extends BaseResource
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getTagService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     protected function getCategoryService()

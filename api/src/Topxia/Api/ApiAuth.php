@@ -4,6 +4,7 @@ namespace Topxia\Api;
 
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
+use Permission\Common\PermissionBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
 class ApiAuth
@@ -174,6 +175,7 @@ class ApiAuth
         }
 
         $currentUser->fromArray($user);
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         ServiceKernel::instance()->setCurrentUser($currentUser);
     }
 }

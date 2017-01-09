@@ -66,21 +66,15 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         $job = array();
         // 开始执行job的时候，设置next_executed_time为0，防止更多的请求进来执行
         $this->setNextExcutedTime(0);
+        $result = $this->syncronizeUpdateExecutingStatus($id);
+        if (!$result) {
+            return;
+        }
         $this->getJobDao()->getConnection()->beginTransaction();
-
         try {
             // 加锁
             $job = $this->getJob($id, true);
 
-// 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
-
-            if (empty($job) || $job['executing']) {
-                $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");
-                $this->getJobDao()->getConnection()->commit();
-                return;
-            }
-
-            $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
             $jobInstance = new $job['jobClass']();
             if (!empty($job['targetType'])) {
                 $job['jobParams']['targetType'] = $job['targetType'];
@@ -93,12 +87,32 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             $jobInstance->execute($job['jobParams']);
         } catch (\Exception $e) {
             $message = $e->getMessage();
+           // $this->getJobDao()->updateJob($job['id'], array('executing' => 0));
             $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}", $job);
         }
 
         $this->afterJonExecute($job);
         $this->getJobDao()->getConnection()->commit();
         $this->refreshNextExecutedTime();
+    }
+
+    private function syncronizeUpdateExecutingStatus($id)
+    {
+        // 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
+        $lockName = "job_{$id}";
+        $lock = $this->getLock();
+        $lock->get($lockName,10);
+
+        $job = $this->getJob($id);
+        if (empty($job) || $job['executing']) {
+            $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");
+            $lock->release($lockName);
+            return false;
+        }
+
+        $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
+        $lock->release($lockName);
+        return true;
     }
 
     protected function afterJonExecute($job)

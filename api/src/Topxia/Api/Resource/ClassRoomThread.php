@@ -26,7 +26,7 @@ class ClassRoomThread extends BaseResource
     {
         $res['lastPostTime'] = date('c', $res['lastPostTime']);
         $res['createdTime'] = date('c', $res['createdTime']);
-        $res['updatedTime'] = date('c', $res['updatedTime']);
+        $res['updatedTime'] = date('c', isset($res['updateTime']) ? $res['updateTime'] : $res['updatedTime']);
         return $res;
     }
 
