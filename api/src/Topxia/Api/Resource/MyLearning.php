@@ -23,82 +23,50 @@ class MyLearning extends BaseResource
             0,
             $membersCount
         );
-        $members = $this->filterDuplicateClassroom($members);
 
-        $groupMembers = ArrayToolkit::group($members, 'joinedType');
-        $classrooms = $this->getSourcesByType($groupMembers, 'classroom');
-        $courses = $this->getSourcesByType($groupMembers, 'course');
-
-        $learningData = array();
-        foreach ($members as $member) {
-            $learningData[] = $this->buildLearningData($member, $courses, $classrooms);
-        }
-
+        $learningData = $this->buildLearningData($members);
         $learningData = $this->filter($learningData);
+
         return  $this->wrap($learningData, count($learningData));
     }
 
     public function filter($learningData)
     {
         foreach ($learningData as &$data) {
-            if ('classroom' == $data['learningType']) {
-                $data = $this->callFilter('Classroom', $data);
-            } else {
-                $data = $this->callFilter('Course', $data);
-            }
+            $data = $this->callFilter('Course', $data);
         }
 
         return $learningData;
     }
 
-    protected function filterDuplicateClassroom(array $members)
+    protected function buildLearningData($members)
     {
+        $learningData = array();
+
         if (empty($members)) {
-            return array();
+            return $learningData;
         }
 
-        $classroomIds = array();
+        $courseIds = ArrayToolkit::column($members, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        foreach ($members as $key => $member) {
-            if (!empty($members[$key]['classroomId'])) {
-                if (empty($classroomIds) || !in_array($members[$key]['classroomId'], $classroomIds)) {
-                    array_push($classroomIds, $members[$key]['classroomId']);
-                } else {
-                    unset($members[$key]);
+        $groupMembers = ArrayToolkit::group($members, 'joinedType');
+        if (!empty($groupMembers['classroom'])) {
+            $classroomIds = ArrayToolkit::column($groupMembers['classroom'], 'classroomId');
+            $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+            $classrooms = ArrayToolkit::index($classrooms, 'id');
+            foreach ($courses as &$course) {
+                if ($course['parentId'] > 0) {
+                    $key = $course['parentId'];
+                    $course['classroomTitle'] = empty($classrooms[$key]) ? '' : $classrooms[$key]['title'];
                 }
             }
         }
-        return $members;
-    }
 
-    protected function getSourcesByType($members, $type)
-    {
-        if (empty($members) ||empty($members[$type])) {
-            return array();
+        foreach ($members as $member) {
+            $learningData[] = $courses[$member['courseId']];
         }
-
-        $data = array();
-
-        if ('course' == $type) {
-            $courseIds = ArrayToolkit::column($members['course'], 'courseId');
-            $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-            $data = ArrayToolkit::index($courses, 'id');
-        }
-
-        if ('classroom' == $type) {
-            $classroomIds = ArrayToolkit::column($members['classroom'], 'classroomId');
-            $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
-            $data = ArrayToolkit::index($classrooms, 'id');
-        }
-
-        return $data;
-    }
-
-    protected function buildLearningData($member, $courses, $classrooms)
-    {
-        $data= !empty($member['classroomId']) ? $classrooms[$member['classroomId']] : $courses[$member['courseId']];
-        $data['learningType'] = !empty($member['classroomId']) ? 'classroom' : 'course';
-        return $data;
+        return $learningData;
     }
 
     protected function findCoursesByIds(array $courseIds)
