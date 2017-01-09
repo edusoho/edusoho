@@ -217,7 +217,7 @@ class CourseController extends CourseBaseController
                 new ServiceEvent($course, array('userId' => $user['id'])));
         }
         $allTags = $this->getTagService()->findTagsByOwner(array(
-            'ownerType' => 'classroom',
+            'ownerType' => 'course',
             'ownerId'   => $id
         ));
 
