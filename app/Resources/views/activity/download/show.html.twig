@@ -5,16 +5,16 @@
 {% block body %}
 <div class="iframe-parent-content">
   <ul class="download-activity-list">
-    {% for file in activity.ext.materials|default(null) %}
+    {% for material in materials %}
     <li>
-      <a class="link-darker" href="{{ path('course_activity_download', {courseId:courseId, activityId:activity.id , fileId:file.id }) }}" target="_blank">{{ file.title }}
-        {% if file.link|default(null) %}
+      <a class="link-darker" href="{{ path('course_activity_download', {courseId:courseId, activityId:material.lessonId , fileId:material.fileId }) }}" target="_blank">{{ material.title }}
+        {% if material.link|default(null) %}
         (link)
         {% else %}
-        ({{ file.fileSize|file_size }})
+        ({{ material.fileSize|file_size }})
         {% endif %}
         <i class="es-icon es-icon-filedownload download-icon"></i>
-      <div class="text-xs color-gray mts">{{ file.summary|default('') }}</div>
+      <div class="text-xs color-gray mts">{{ material.description|default('') }}</div>
       </a>
     </li>
     {% endfor %}

@@ -22,6 +22,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->executeQuery($sql, array($userId))->fetchAll(\PDO::FETCH_COLUMN);
     }
 
+
     public function findByCourseIds($courseIds)
     {
         $marks = str_repeat('?,', count($courseIds) - 1).'?';

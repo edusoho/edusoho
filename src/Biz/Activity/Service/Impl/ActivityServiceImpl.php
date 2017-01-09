@@ -208,8 +208,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 foreach ($materials as $id => $material) {
                     $currents[] = $this->buildMaterial($material, $activity);
                 }
-                $dropMaterials   = array_diff_key($exists, $currents);
-                $addMaterials    = array_diff_key($currents, $exists);
+                $dropMaterials = array_diff_key($exists, $currents);
+                $addMaterials  = array_diff_key($currents, $exists);
                 $updateMaterials = array_intersect_key($exists, $currents);
                 foreach ($dropMaterials as $material) {
                     $this->getMaterialService()->deleteMaterial($activity['fromCourseId'], $material['id']);
@@ -234,7 +234,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'courseSetId' => $activity['fromCourseSetId'],
             'lessonId'    => $activity['id'],
             'title'       => $material['name'],
-            'description' => empty($material['summary']) ?: $material['summary'],
+            'link'        => empty($material['link']) ? null : $material['link'],
+            'description' => empty($material['summary']) ? null : $material['summary'],
             'userId'      => $this->getCurrentUser()->offsetGet('id'),
             'type'        => 'course',
             'source'      => $activity['mediaType'] == 'download' ? 'coursematerial' : 'courseactivity',
