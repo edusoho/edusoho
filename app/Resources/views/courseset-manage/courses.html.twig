@@ -47,7 +47,7 @@
     	      				  </li> #}
                       {% if course.status|default('') == 'published' %}
         				      <li>
-        				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-close-course"><i class="es-icon es-icon-close01 mrm"></i>{{'取消发布'|trans}}</a>
+        				      	<a href="javascript:;" data-url="{{path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id})}}" class="js-close-course"><i class="es-icon es-icon-close01 mrm"></i>{{'关闭'|trans}}</a>
         				      </li>
                       {% else %}
         				      <li>
