@@ -23,7 +23,7 @@ class CourseShowMetas
                 'threads'  => array(
                     'name'    => self::THREADS_NAME,
                     'number'  => 'threadNum',
-                    'content' => 'AppBundle:CourseThread:index'
+                    'content' => 'AppBundle:Course/Thread:index'
                 ),
                 'reviews'  => array(
                     'name'    => self::REVIEWS_NAME,
@@ -38,7 +38,7 @@ class CourseShowMetas
                 'material' => array(
                     'name'    => self::MATERIAL_NAME,
                     'number'  => 'materialNum',
-                    'content' => 'AppBundle:Course/CourseMaterial:index'
+                    'content' => 'AppBundle:Course/Material:index'
                 ),
                 'summary'  => array(
                     'name'    => self::SUMMARY_NAME,

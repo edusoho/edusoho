@@ -4,11 +4,11 @@
 {% set use_webapck_loader = true %}
 
 {% block content %}
-{{ render(controller('AppBundle:CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
+{{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
 
 <div class="row">
   <div class="col-md-3">
-    {{ render(controller('AppBundle:CourseSetManage:sidebar', {courseSetId:courseSet.id, sideNav: side_nav|default(null)})) }}
+    {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, sideNav: side_nav|default(null)})) }}
   </div>
   <div class="col-md-9">
     {% block main %}{% endblock %}

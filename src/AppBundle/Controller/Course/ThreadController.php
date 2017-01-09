@@ -1,6 +1,7 @@
 <?php
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Course;
 
+use AppBundle\Controller\CourseBaseController;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
@@ -13,7 +14,7 @@ use Biz\User\Service\NotificationService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseThreadController extends CourseBaseController
+class ThreadController extends CourseBaseController
 {
     public function indexAction(Request $request, $course, $member = array())
     {

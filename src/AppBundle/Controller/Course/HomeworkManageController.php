@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Course;
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
@@ -10,7 +10,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseHomeworkManageController extends BaseController
+class HomeworkManageController extends BaseController
 {
     public function checkAction(Request $request, $id, $resultId)
     {

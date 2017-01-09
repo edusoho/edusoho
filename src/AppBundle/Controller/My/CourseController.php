@@ -4,7 +4,7 @@ namespace AppBundle\Controller\My;
 
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\CourseBaseController;
+use AppBundle\Controller\Course\CourseBaseController;
 
 class CourseController extends CourseBaseController
 {

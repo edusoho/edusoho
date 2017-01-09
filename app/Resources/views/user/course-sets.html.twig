@@ -7,7 +7,7 @@
 {% block main %}
 
   {% if courseSets %}
-    {{ render(controller('AppBundle:CourseSet:courseSetsBlock', { courseSets:courseSets, view: 'list' })) }}
+    {{ render(controller('AppBundle:Course/CourseSet:courseSetsBlock', { courseSets:courseSets, view: 'list' })) }}
     <nav class="text-center">
       {{ web_macro.paginator(paginator) }}
     </nav>

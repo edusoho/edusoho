@@ -6,7 +6,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseMaterialController extends CourseBaseController
+class MaterialController extends CourseBaseController
 {
     public function indexAction(Request $request, $course, $member = array())
     {

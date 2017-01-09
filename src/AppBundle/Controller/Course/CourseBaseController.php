@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Course;
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;

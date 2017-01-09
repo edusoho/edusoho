@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Course;
 
 use Topxia\Common\ArrayToolkit;
 use Biz\Taxonomy\Service\TagService;
