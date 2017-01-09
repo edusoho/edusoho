@@ -451,7 +451,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     {
         $datas = array();
 
-        if (isset($fields['options']) && !empty($fields['options'])) {
+        if (!empty($fields['options'])) {
             foreach ($fields['options'] as $key => $option) {
                 $datas[$key] = $option;
             }
@@ -540,6 +540,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                                 ), true)
                             );
                         } else {
+                            $factory = new CloudClientFactory();
+                            $client  = $factory->createClient();
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
 
