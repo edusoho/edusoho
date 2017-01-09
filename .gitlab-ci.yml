@@ -40,7 +40,7 @@ Unit Test With PHP 7.0:
   services:
     - mysql:5.5
   script:
-    - sed -i 's/memory_limit.*/memory_limit = 512M/g' /etc/php/7.0/phpdbg/php.ini
+    - sed -i 's/memory_limit.*/memory_limit = 1024M/g' /etc/php/7.0/phpdbg/php.ini
     - cat /etc/php/7.0/phpdbg/php.ini | grep memory_limit
     - phpdbg -qrr /usr/bin/phpunit -c app/ --coverage-text --colors=never
   only:
