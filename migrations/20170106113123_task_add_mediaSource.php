@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class CourseTaskType extends Migration
+class TaskAddMediaSource extends Migration
 {
     /**
      * Do the migration
@@ -12,10 +12,9 @@ class CourseTaskType extends Migration
         $biz = $this->getContainer();
         $db  = $biz['db'];
         $db->exec("
-            ALTER TABLE `course_task` ADD COLUMN  `type` VARCHAR(50) NOT NULL COMMENT '任务类型';
-            ALTER TABLE `course_task` ADD	INDEX  `seq` (`seq`);
+            ALTER TABLE `course_task` ADD COLUMN `mediaSource` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)';
+            UPDATE course_task  SET `mediaSource` = 'self'  WHERE TYPE = 'video';
         ");
-
 
     }
 
@@ -27,7 +26,7 @@ class CourseTaskType extends Migration
         $biz = $this->getContainer();
         $db  = $biz['db'];
         $db->exec("
-            ALTER TABLE `course_task` DROP COLUMN `type`;
+            ALTER TABLE `course_task` DROP COLUMN `mediaSource`;
         ");
     }
 }

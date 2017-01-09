@@ -11,7 +11,7 @@ class AudioController extends BaseController implements ActivityActionInterface
 
     public function showAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
 
         return $this->render('activity/audio/show.html.twig', array(
             'activity' => $activity,
@@ -19,9 +19,20 @@ class AudioController extends BaseController implements ActivityActionInterface
         ));
     }
 
+    public function previewAction(Request $request, $task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
+
+        return $this->render('activity/audio/preview.html.twig', array(
+            'task'     => $task,
+            'activity' => $activity,
+            'courseId' => $task['courseId']
+        ));
+    }
+
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true) ;
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
         $activity = $this->fillMinuteAndSecond($activity);
         return $this->render('activity/audio/modal.html.twig', array(
             'activity' => $activity,

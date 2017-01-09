@@ -2,21 +2,23 @@
 
 namespace AppBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\MaterialService;
-use Biz\Course\Service\ReviewService;
-use Biz\Task\Service\TaskResultService;
+use Biz\File\Service\UploadFileService;
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
+use Biz\Course\Service\ReviewService;
+use Biz\Course\Service\MaterialService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseNoteService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
 
 class CourseController extends CourseBaseController
 {
     public function summaryAction($course, $member = array())
     {
+
         return $this->render('course/tabs/summary.html.twig', array(
             'course' => $course,
             'member' => $member
@@ -155,10 +157,13 @@ class CourseController extends CourseBaseController
     {
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
+        $files = $this->findFiles($courseItems);
+
         return $this->render('course/tabs/tasks.html.twig', array(
             'course'      => $course,
             'courseItems' => $courseItems,
-            'member'      => $member
+            'member'      => $member,
+            'files'       => $files
         ));
     }
 
@@ -344,5 +349,34 @@ class CourseController extends CourseBaseController
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
+    }
+
+    protected function findFiles($courseItems)
+    {
+        $activities = ArrayToolkit::column($courseItems, 'activity');
+
+        //获取视频的源数据
+        $activityIds = array();
+        array_walk($activities, function ($activity) use (&$activityIds) {
+            if ($activity['mediaType'] == 'video') {
+                array_push($activityIds, $activity['id']);
+            }
+        });
+
+        $fullActivities = $this->getActivityService()->findActivities($activityIds, $fetchMedia = true);
+
+        $files = array();
+        array_walk($fullActivities, function ($activity) use (&$files) {
+            $files[$activity['mediaId']] = empty($activity['ext']['file']) ? null : $activity['ext']['file'];
+        });
+        return $files;
     }
 }

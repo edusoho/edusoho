@@ -1,10 +1,10 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends BaseController
@@ -12,11 +12,13 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview');
-        $task    = $this->tryLearnTask($courseId, $id, (bool) $preview);
+        $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
 
         $this->getActivityService()->trigger($task['activityId'], 'start', array(
             'task' => $task
         ));
+
+        $course = $this->getCourseService()->getCourse($courseId);
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
         if ($taskResult['status'] == 'finish') {
@@ -24,7 +26,7 @@ class TaskController extends BaseController
         }
 
         return $this->render('task/show.html.twig', array(
-            'course'       => $this->getCourseService()->getCourse($task['courseId']),
+            'course'       => $course,
             'task'         => $task,
             'taskResult'   => $taskResult,
             'preview'      => $preview,
@@ -33,13 +35,94 @@ class TaskController extends BaseController
         ));
     }
 
+    public function previewAction(Request $request, $courseId, $id)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        $task = $this->getTaskService()->getTask($id);
+
+        $user = $this->getCurrentUser();
+
+        if (empty($task) || $task['courseId'] != $courseId) {
+            return $this->createNotFoundException('task is not exist');
+        }
+
+        //课程不可购买，且任务不免费
+        if (empty($task['isFree']) && empty($course['buyable']) && empty($course['tryLookable'])) {
+            return $this->render('task/preview-notice-modal.html.twig', array('course' => $course));
+        }
+        //课程关闭
+        if (!empty($course['status']) && $course['status'] == 'closed') {
+            return $this->render('task/preview-notice-modal.html.twig', array('course' => $course));
+        }
+
+        //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
+        if (empty($task['isFree']) && !(!empty($course['tryLookable']) && $task['type'] == 'video' && $task['mediaSource'] == 'self')) {
+            if (!$user->isLogin()) {
+                throw $this->createAccessDeniedException();
+            }
+
+            if ($course["parentId"] > 0) {
+                //TODO 复制课程的预览逻辑
+                //return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
+            }
+
+            return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $task['id']));
+        }
+
+        //在可预览情况下查看网站设置是否可匿名预览
+        $allowAnonymousPreview = $this->setting('course.allowAnonymousPreview', 1);
+
+        if (empty($allowAnonymousPreview) && !$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        //TODO vip 插件改造 判断用户是否为VIP
+
+        return $this->render('task/preview.html.twig', array(
+            'course' => $course,
+            'task'   => $task,
+            'user'   => $user
+        ));
+    }
+
+    public function qrcodeAction(Request $request, $courseId, $id)
+    {
+        $user = $this->getCurrentUser();
+        $host = $request->getSchemeAndHttpHost();
+
+        //TODO 移动端学习 api 重构
+        if ($user->isLogin()) {
+            $appUrl = "{$host}/mapi_v2/mobile/main#/lesson/{$courseId}/{$id}";
+        } else {
+            $appUrl = "{$host}/mapi_v2/mobile/main#/course/{$courseId}";
+        }
+
+        $token = $this->getTokenService()->makeToken('qrcode', array(
+            'userId'   => $user['id'],
+            'data'     => array(
+                'url'    => $this->generateUrl('course_task_show', array('courseId' => $courseId, 'id' => $id), true),
+                'appUrl' => $appUrl
+            ),
+            'times'    => 1,
+            'duration' => 3600
+        ));
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
+        );
+        return $this->createJsonResponse($response);
+    }
+
+
     public function taskActivityAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview', 0);
         $task    = $this->tryLearnTask($courseId, $id, $preview);
 
         if (empty($preview) && $task['status'] != 'published') {
-            return $this->render('activity/show.html.twig');
+            return $this->render('task/inform.html.twig');
         }
         return $this->forward('AppBundle:Activity/Activity:show', array(
             'id'       => $task['activityId'],
@@ -109,7 +192,7 @@ class TaskController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        if(!$course['enableFinish']) {
+        if (!$course['enableFinish']) {
             throw $this->createAccessDeniedException('task can not finished.');
         }
 
@@ -146,8 +229,8 @@ class TaskController extends BaseController
 
     public function finishConditionAction($task)
     {
-        $config = $this->getActivityConfig();
-        $action = $config[$task['type']]['actions']['finishCondition'];
+        $config   = $this->getActivityConfig();
+        $action   = $config[$task['type']]['actions']['finishCondition'];
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         return $this->forward($action, array('activity' => $activity));
     }
@@ -227,6 +310,14 @@ class TaskController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 
     protected function getActivityConfig()
