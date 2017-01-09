@@ -71,6 +71,10 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->getByFields(array('courseId' => $courseId, 'seq' => $sql));
     }
 
+    public function getTaskByCourseIdAndActivityId($courseId, $activityId)
+    {
+        return $this->getByFields(array('courseId' => $courseId, 'activityId' => $activityId));
+    }
 
     public function declares()
     {

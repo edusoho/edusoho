@@ -112,6 +112,11 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         ));
     }
 
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/testpaper/finish-condition.html.twig', array());
+    }
+
     protected function findCourseTestpapers($courseId)
     {
         $conditions = array(

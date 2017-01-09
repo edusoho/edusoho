@@ -101,6 +101,11 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         ));
     }
 
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/exercise/finish-condition.html.twig', array());
+    }
+
     protected function findCourseTestpapers($courseId)
     {
         $conditions = array(

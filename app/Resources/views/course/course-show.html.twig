@@ -30,7 +30,11 @@
 						      >
 						      	{{tab.name}}
 						      	{% if tab.number|default(false) %}
-						      	<small class="text-muted">({{ course_set[tab.number]|default(0) }})</small>
+											{% if member|default(false) %}
+												<small class="text-muted">({{ course[tab.number]|default(0) }})</small>
+											{% else %}
+												<small class="text-muted">({{ course_set[tab.number]|default(0) }})</small>
+											{% endif %}
 						      	{% endif %}
 						      </a>
 						    </li>

@@ -130,6 +130,10 @@
   {% block footer %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
+
+  <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
+  <div id="modal" class="modal"></div>
+  <div id="attachment-modal" class="modal"></div>
 {% endblock %}
 
 

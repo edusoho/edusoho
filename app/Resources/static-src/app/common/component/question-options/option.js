@@ -23,6 +23,7 @@ export default class Options extends Component {
   }
 
   onChangeChecked(event) {
+    console.log('event',event.currentTarget.checked,event.currentTarget.id);
     this.props.changeOptionChecked(event.currentTarget.id);
   }
 
@@ -56,7 +57,6 @@ export default class Options extends Component {
   }
 
   render() {
-    let isValidator = this.props.isValidator;
     let showDanger = this.props.isValidator && this.state.datas.inputValue.length <= 0;
     let type = 'checkbox';
     if(this.props.isRadio) {
@@ -68,16 +68,16 @@ export default class Options extends Component {
           <label className="choice-label">{this.state.datas.optionLabel}</label>
         </div>
         <div className="col-sm-8 controls">
-          <textarea className="form-control datas-input col-md-8" id={this.state.datas.optionId}  value={this.state.datas.inputValue} name='choices[]'></textarea>
+          <textarea className="form-control datas-input col-md-8" id={this.state.datas.optionId}  defaultValue={this.state.datas.inputValue} name='choices[]'></textarea>
           <div className="mtm">
             <label>
-              <input type={type} name='answer[]' id={JSON.stringify({id:this.state.datas.optionId,checked:this.state.datas.checked})} value={this.props.index} checked={this.state.datas.checked} className="answer-checkbox" onChange = {(event)=>this.onChangeChecked(event)}/>正确答案 
+              <input type={type} name='answer[]' id={this.state.datas.optionId} value={this.props.index}  checked={this.state.datas.checked} className="answer-checkbox" onChange = {(event)=>this.onChangeChecked(event)}/>正确答案 
             </label>
           </div>
-          { showDanger && <p className="color-danger">请输入选项内容</p>}
+          <p className={showDanger ? 'color-danger' : 'hidden'}>请输入选项内容</p>
         </div>
         <div className="col-sm-2">
-          <a className="btn btn-default btn-sm"  href="javascript:;" id={`${this.state.datas.optionId}`} onClick={(event)=>this.deleteOption(event)}><i className="glyphicon glyphicon-trash"></i></a>
+          <a className="btn btn-default btn-sm"  href="javascript:;" id={this.state.datas.optionId} onClick={(event)=>this.deleteOption(event)}><i className="glyphicon glyphicon-trash"></i></a>
         </div>
       </div>
     )

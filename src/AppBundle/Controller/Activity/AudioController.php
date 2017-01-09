@@ -47,6 +47,11 @@ class AudioController extends BaseController implements ActivityActionInterface
         ));
     }
 
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/audio/finish-condition.html.twig', array());
+    }
+
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {

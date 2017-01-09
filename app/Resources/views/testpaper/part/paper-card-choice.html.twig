@@ -1,0 +1,11 @@
+<a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm
+  {% if paperResult.status == 'reviewing' and question.type == 'essay' %}
+    bg-warning 
+  {% elseif question.testResult.status|default('noAnswer') == 'right' %}
+    bg-success 
+  {% elseif question.testResult.status|default('noAnswer') == 'noAnswer' %}
+    color-card
+  {% else %}
+    bg-danger 
+  {% endif %}
+">{{ seq|default(0) }}</a>

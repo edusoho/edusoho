@@ -13,8 +13,6 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         return array(
             'course.task.create'    => 'onTaskNumberChange',
             'course.task.delete'    => 'onTaskNumberChange',
-            'course.student.create' => 'onStudentNumberChange',
-            'course.student.delete' => 'onStudentNumberChange',
 
             'course.thread.create'  => 'onCourseThreadChange',
             'course.thread.delete'  => 'onCourseThreadChange',
@@ -33,18 +31,6 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         ));
     }
 
-    public function onStudentNumberChange(Event $event)
-    {
-        $member = $event->getSubject();
-        if ($member['role'] != 'student') {
-            return;
-        }
-
-        $this->getCourseService()->updateCourseStatistics($member['courseId'], array(
-            'studentNum'
-        ));
-    }
-
     public function onCourseThreadChange(Event $event)
     {
         $thread = $event->getSubject();
@@ -60,6 +46,11 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $this->getCourseService()->updateCourseStatistics($review['courseId'], array(
             'ratingNum'
         ));
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 
     protected function getCourseService()

@@ -104,6 +104,11 @@ class VideoController extends BaseController implements ActivityActionInterface
         return $activity;
     }
 
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/video/finish-condition.html.twig', array());
+    }
+
     /**
      * @return ActivityService
      */

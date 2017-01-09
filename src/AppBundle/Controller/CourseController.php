@@ -53,7 +53,13 @@ class CourseController extends CourseBaseController
     public function notesAction($course, $member = array())
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $notes     = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+
+        if (empty($member)) {
+            $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+        } else {
+            $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+        }
+
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $users = ArrayToolkit::index($users, 'id');
@@ -80,9 +86,14 @@ class CourseController extends CourseBaseController
     {
         $courseSet  = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $conditions = array(
-            'courseId' => $course['id'],
             'parentId' => 0
         );
+
+        if (empty($member)) {
+            $conditions['courseSetId'] = $courseSet['id'];
+        } else {
+            $conditions['courseId'] = $course['id'];
+        }
 
         $paginator = new Paginator(
             $this->get('request'),

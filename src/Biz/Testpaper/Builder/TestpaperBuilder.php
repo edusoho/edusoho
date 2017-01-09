@@ -183,7 +183,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
             $item['seq'] = $seq;
 
-            if (!$item['parentId']) {
+            if ($item['questionType'] != 'material') {
                 $seq++;
             }
 

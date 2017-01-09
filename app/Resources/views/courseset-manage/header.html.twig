@@ -23,6 +23,8 @@
         <span class="label label-success ">{{'更新中'|trans}}</span>
       {% elseif courseSet.serializeMode=='finished' %}
         <span class="label label-warning ">{{'已完结'|trans}}</span>
+      {% else %}
+        <span class="label label-success ">{{'已发布'|trans}}</span>
       {% endif %}
     {% endif %}
   </h1>

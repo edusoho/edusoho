@@ -161,7 +161,8 @@ class ManageController extends BaseController
             'total'         => $total,
             'source'        => $source,
             'targetId'      => $targetId,
-            'isTeacher'     => true
+            'isTeacher'     => true,
+            'action'        => $request->query->get('action', '')
         ));
     }
 

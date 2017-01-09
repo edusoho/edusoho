@@ -71,6 +71,15 @@ class FlashController extends BaseController implements ActivityActionInterface
         ));
     }
 
+    public function finishConditionAction($activity)
+    {
+        $media = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
+
+        return $this->render('activity/flash/finish-condition.html.twig', array(
+            'media' => $media
+        ));
+    }
+
     /**
      * @return ActivityService
      */

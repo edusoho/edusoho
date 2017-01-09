@@ -582,7 +582,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 continue;
             }
 
-            $filter['seq']          = $index++;
+            $filter['seq'] = $index;
+
+            if ($question['type'] != 'material') {
+                $index++;
+            }
+
             $filter['questionId']   = $question['id'];
             $filter['questionType'] = $question['type'];
             $filter['testId']       = $testpaperId;

@@ -41,13 +41,13 @@
 
         <td>
           {% if paperResult.status == 'finished' %}
-            <a href="{{ path(paperResult.type ~ '_result_show',{resultId:paperResult.id}) }}" id="show_testpaper_result" class="btn btn-default btn-sm" target="_blank">{{'查看结果'|trans}}</a>
+            <a href="{{ path(paperResult.type ~ '_result_show',{resultId:paperResult.id,action:'check'}) }}" id="show_testpaper_result" class="btn btn-default btn-sm" target="_blank">{{'查看结果'|trans}}</a>
           {% elseif paperResult.status == 'reviewing' %}
             {% if isTeacher is defined and isTeacher %}
               {% if source == 'classroom' %}
 
               {% else %}
-                {% set checkUrl = path('course_manage_' ~ paperResult.type ~ '_check', {id:targetId,resultId:paperResult.id}) %}
+                {% set checkUrl = path('course_manage_' ~ paperResult.type ~ '_check', {id:targetId,resultId:paperResult.id,action:'check'}) %}
               {% endif %}
               <a href="{{ checkUrl }}" class="btn btn-default btn-sm " target="_blank">{{'批阅'|trans}}</a>
             {% else %}

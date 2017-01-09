@@ -65,6 +65,11 @@ class DownloadController extends BaseController implements ActivityActionInterfa
         ));
     }
 
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/download/finish-condition.html.twig', array());
+    }
+
     /**
      * @return ActivityService
      */

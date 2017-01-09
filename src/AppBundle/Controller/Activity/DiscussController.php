@@ -38,6 +38,11 @@ class DiscussController extends BaseController implements ActivityActionInterfac
         ));
     }
 
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/discuss/finish-condition.html.twig', array());
+    }
+
     /**
      * @return ActivityService
      */

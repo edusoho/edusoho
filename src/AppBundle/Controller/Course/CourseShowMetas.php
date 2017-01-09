@@ -3,6 +3,13 @@ namespace AppBundle\Controller\Course;
 
 class CourseShowMetas
 {
+    const SUMMARY_NAME  = '介绍';
+    const TASKS_NAME    = '目录';
+    const THREADS_NAME  = '话题';
+    const REVIEWS_NAME  = '评价';
+    const NOTES_NAME    = '笔记';
+    const MATERIAL_NAME = '资料区';
+
     public static function getMemberCourseShowMetas()
     {
         $metas = self::getGuestCourseShowMetas();
@@ -10,31 +17,31 @@ class CourseShowMetas
             'header'  => 'AppBundle:My/Course:headerForMember',
             'tabs'    => array(
                 'tasks'    => array(
-                    'name'    => '课程目录',
+                    'name'    => self::TASKS_NAME,
                     'content' => 'AppBundle:Course:tasks'
                 ),
                 'threads'  => array(
-                    'name'    => '话题',
+                    'name'    => self::THREADS_NAME,
                     'number'  => 'threadNum',
                     'content' => 'AppBundle:CourseThread:index'
                 ),
                 'reviews'  => array(
-                    'name'    => '评价',
+                    'name'    => self::REVIEWS_NAME,
                     'number'  => 'ratingNum',
                     'content' => 'AppBundle:Course:reviews'
                 ),
                 'notes'    => array(
-                    'name'    => '笔记',
+                    'name'    => self::NOTES_NAME,
                     'number'  => 'noteNum',
                     'content' => 'AppBundle:Course:notes'
                 ),
                 'material' => array(
-                    'name'    => '资料区',
+                    'name'    => self::MATERIAL_NAME,
                     'number'  => 'materialNum',
                     'content' => 'AppBundle:Course/CourseMaterial:index'
                 ),
                 'summary'  => array(
-                    'name'    => '课程介绍',
+                    'name'    => self::SUMMARY_NAME,
                     'content' => 'AppBundle:Course:summary'
                 )
             ),
@@ -48,20 +55,20 @@ class CourseShowMetas
             'header'  => 'AppBundle:Course:header',
             'tabs'    => array(
                 'summary' => array(
-                    'name'    => '课程介绍',
+                    'name'    => self::SUMMARY_NAME,
                     'content' => 'AppBundle:Course:summary'
                 ),
                 'tasks'   => array(
-                    'name'    => '课程目录',
+                    'name'    => self::TASKS_NAME,
                     'content' => 'AppBundle:Course:tasks'
                 ),
                 'reviews' => array(
-                    'name'    => '评价',
+                    'name'    => self::REVIEWS_NAME,
                     'number'  => 'ratingNum',
                     'content' => 'AppBundle:Course:reviews'
                 ),
                 'notes'   => array(
-                    'name'    => '笔记',
+                    'name'    => self::NOTES_NAME,
                     'number'  => 'noteNum',
                     'content' => 'AppBundle:Course:notes'
                 )

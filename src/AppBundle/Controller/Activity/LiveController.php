@@ -131,6 +131,12 @@ class LiveController extends BaseController implements ActivityActionInterface
         return $this->createJsonResponse(array('success' => true, 'status' => 'on_live'));
     }
 
+    public function finishConditionAction($activity)
+    {
+        return $this->render('activity/live/finish-condition.html.twig', array());
+    }
+
+
     /**
      * @return ActivityService
      */

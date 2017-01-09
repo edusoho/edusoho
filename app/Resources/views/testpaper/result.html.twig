@@ -7,6 +7,12 @@
 {% endblock %}
 
 {% set questionTypeDict = getQuestionTypes() %}
+{% if action|default('') is not empty %}
+  {% set showHeader = 1 %}
+  {% set showBodyColor = 0 %}
+{% else %}
+  {% set showHeader = 0 %}
+{% endif %}
 
 {% block paper_warning %}
   {% if app.user and app.user.id == paperResult.userId %}
@@ -42,13 +48,11 @@
 {% block paper_sidebar %}
 
 {% if ( paperResult.status in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' ) or ( setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' ) and paperResult.status|default(null) == 'finished' %}
-  
-  
 
   <div class="testpaper-card affix" >
-    {% if not doTimes|default(0) %}
+    {% if not doTimes|default(0) and paperResult.status == 'finished' and (app.user.id|default(0) == paperResult.userId) %}
       <div class="testpaper-timer">
-        <button class="btn btn-success do-test" id="finishPaper" data-ajax="{{ path('testpaper_result_submit', { resultId: paperResult.id|default(0) }) }}"  data-toggle="modal" data-target="#testpaper-finished-dialog">{{'再考一次'|trans}}</button>
+        <a class="btn btn-success do-test" id="finishPaper" href="{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}">{{'再考一次'|trans}}</a>
       </div>
     {% endif %}
 
@@ -68,30 +72,10 @@
           {% for question in questions[type] %}
             {% if question.type == 'material' %}
               {% for questionSub in question.subs|default([]) %}
-                <span href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm 
-                  {% if paperResult.status == 'reviewing' and questionSub.type == 'essay' %}
-                    bg-warning 
-                  {% elseif questionSub.testResult.status|default('noAnswer') == 'right' %}
-                    bg-success 
-                  {% elseif questionSub.testResult.status|default('noAnswer') == 'noAnswer' %}
-                    color-card
-                  {% else %}
-                    bg-danger 
-                  {% endif %}">{{ question.seq }}
-                </span>
+                {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:questionSub,seq:questionSub.seq} %}
               {% endfor %}
             {% else %}
-              <span href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm 
-                {% if paperResult.status == 'reviewing' and question.type == 'essay' %}
-                  bg-warning
-                {% elseif question.testResult.status|default('noAnswer') in ['partRight','wrong'] %}
-                  bg-danger
-                {% elseif question.testResult.status|default('noAnswer') in ['noAnswer','none'] %}
-                  bg-danger
-                {% else %}
-                  bg-success
-                {% endif %}">{{ question.seq }}
-              </span>
+              {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}
             {% endif %}
           {% endfor %}
         {% endfor %}

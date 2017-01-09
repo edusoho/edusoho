@@ -131,82 +131,82 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     public function getActivities()
     {
         return array(
-            'text'      => array(
+            'text'     => array(
                 'meta'    => array(
                     'name' => '图文',
                     'icon' => 'es-icon es-icon-graphicclass'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Text:create',
-                    'edit'   => 'AppBundle:Activity/Text:edit',
-                    'show'   => 'AppBundle:Activity/Text:show',
-                    'preview'=> 'AppBundle:Activity/Text:preview',
+                    'create'          => 'AppBundle:Activity/Text:create',
+                    'edit'            => 'AppBundle:Activity/Text:edit',
+                    'show'            => 'AppBundle:Activity/Text:show',
+                    'preview'         => 'AppBundle:Activity/Text:preview',
                     'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
                 )
             ),
-            'video'     => array(
+            'video'    => array(
                 'meta'    => array(
                     'name' => '视频',
                     'icon' => 'es-icon es-icon-videoclass'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Video:create',
-                    'edit'   => 'AppBundle:Activity/Video:edit',
-                    'show'   => 'AppBundle:Activity/Video:show',
-                    'preview'=> 'AppBundle:Activity/Video:preview',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'create'          => 'AppBundle:Activity/Video:create',
+                    'edit'            => 'AppBundle:Activity/Video:edit',
+                    'show'            => 'AppBundle:Activity/Video:show',
+                    'preview'         => 'AppBundle:Activity/Video:preview',
+                    'finishCondition' => 'AppBundle:Activity/Video:finishCondition'
                 )
             ),
-            'audio'     => array(
+            'audio'    => array(
                 'meta'    => array(
                     'name' => '音频',
                     'icon' => 'es-icon es-icon-audioclass'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Audio:create',
-                    'edit'   => 'AppBundle:Activity/Audio:edit',
-                    'show'   => 'AppBundle:Activity/Audio:show',
-                    'preview'=> 'AppBundle:Activity/Video:preview',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'create'          => 'AppBundle:Activity/Audio:create',
+                    'edit'            => 'AppBundle:Activity/Audio:edit',
+                    'show'            => 'AppBundle:Activity/Audio:show',
+                    'preview'         => 'AppBundle:Activity/Video:preview',
+                    'finishCondition' => 'AppBundle:Activity/Audio:finishCondition'
                 )
             ),
-            'download'  => array(
+            'download' => array(
                 'meta'    => array(
                     'name' => '下载资料',
                     'icon' => 'es-icon es-icon-filedownload'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Download:create',
-                    'edit'   => 'AppBundle:Activity/Download:edit',
-                    'show'   => 'AppBundle:Activity/Download:show',
-                    'preview'=> 'AppBundle:Activity/Download:preview',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'create'          => 'AppBundle:Activity/Download:create',
+                    'edit'            => 'AppBundle:Activity/Download:edit',
+                    'show'            => 'AppBundle:Activity/Download:show',
+                    'preview'         => 'AppBundle:Activity/Download:preview',
+                    'finishCondition' => 'AppBundle:Activity/Download:finishCondition'
                 )
             ),
-            'live'      => array(
+            'live'     => array(
                 'meta'    => array(
                     'name' => '直播',
                     'icon' => 'es-icon es-icon-videocam'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Live:create',
-                    'edit'   => 'AppBundle:Activity/Live:edit',
-                    'show'   => 'AppBundle:Activity/Live:show',
-                    'preview'=> 'AppBundle:Activity/Live:preview',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'create'          => 'AppBundle:Activity/Live:create',
+                    'edit'            => 'AppBundle:Activity/Live:edit',
+                    'show'            => 'AppBundle:Activity/Live:show',
+                    'preview'         => 'AppBundle:Activity/Live:preview',
+                    'finishCondition' => 'AppBundle:Activity/Live:finishCondition'
                 )
             ),
-            'discuss'   => array(
+            'discuss'  => array(
                 'meta'    => array(
                     'name' => '讨论',
                     'icon' => 'es-icon es-icon-comment'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Discuss:create',
-                    'edit'   => 'AppBundle:Activity/Discuss:edit',
-                    'show'   => 'AppBundle:Activity/Discuss:show',
-                    'preview'=> 'AppBundle:Activity/Discuss:preview',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'create'          => 'AppBundle:Activity/Discuss:create',
+                    'edit'            => 'AppBundle:Activity/Discuss:edit',
+                    'show'            => 'AppBundle:Activity/Discuss:show',
+                    'preview'         => 'AppBundle:Activity/Discuss:preview',
+                    'finishCondition' => 'AppBundle:Activity/Discuss:finishCondition'
                 )
             ),
 
@@ -216,11 +216,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-flashclass'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Flash:create',
-                    'edit'   => 'AppBundle:Activity/Flash:edit',
-                    'show'   => 'AppBundle:Activity/Flash:show',
-                    'preview'=> 'AppBundle:Activity/Flash:preview',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'create'          => 'AppBundle:Activity/Flash:create',
+                    'edit'            => 'AppBundle:Activity/Flash:edit',
+                    'show'            => 'AppBundle:Activity/Flash:show',
+                    'preview'         => 'AppBundle:Activity/Flash:preview',
+                    'finishCondition' => 'AppBundle:Activity/Flash:finishCondition'
                 )
             ),
             'doc'       => array(
@@ -229,11 +229,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-description'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Doc:create',
-                    'edit'   => 'AppBundle:Activity/Doc:edit',
-                    'show'   => 'AppBundle:Activity/Doc:show',
-                    'preview'=> 'AppBundle:Activity/Doc:preview',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'create'          => 'AppBundle:Activity/Doc:create',
+                    'edit'            => 'AppBundle:Activity/Doc:edit',
+                    'show'            => 'AppBundle:Activity/Doc:show',
+                    'preview'         => 'AppBundle:Activity/Doc:preview',
+                    'finishCondition' => 'AppBundle:Activity/Doc:finishCondition'
                 )
             ),
             'ppt'       => array(
@@ -242,11 +242,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-pptclass'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Ppt:create',
-                    'edit'   => 'AppBundle:Activity/Ppt:edit',
-                    'show'   => 'AppBundle:Activity/Ppt:show',
-                    'preview'=> 'AppBundle:Activity/Ppt:preview',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'create'          => 'AppBundle:Activity/Ppt:create',
+                    'edit'            => 'AppBundle:Activity/Ppt:edit',
+                    'show'            => 'AppBundle:Activity/Ppt:show',
+                    'preview'         => 'AppBundle:Activity/Ppt:preview',
+                    'finishCondition' => 'AppBundle:Activity/Ppt:finishCondition'
                 )
             ),
             'testpaper' => array(
@@ -255,11 +255,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-lesson'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Testpaper:create',
-                    'edit'   => 'AppBundle:Activity/Testpaper:edit',
-                    'show'   => 'AppBundle:Activity/Testpaper:show',
-                    'preview'=> 'AppBundle:Activity/Testpaper:tryLook',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'create'          => 'AppBundle:Activity/Testpaper:create',
+                    'edit'            => 'AppBundle:Activity/Testpaper:edit',
+                    'show'            => 'AppBundle:Activity/Testpaper:show',
+                    'preview'         => 'AppBundle:Activity/Testpaper:tryLook',
+                    'finishCondition' => 'AppBundle:Activity/Testpaper:finishCondition'
                 )
             ),
             'homework'  => array(
@@ -268,11 +268,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-exam'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Homework:create',
-                    'edit'   => 'AppBundle:Activity/Homework:edit',
-                    'preview'=> 'AppBundle:Activity/Homework:tryLook',
-                    'show'   => 'AppBundle:Activity/Homework:show',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'create'          => 'AppBundle:Activity/Homework:create',
+                    'edit'            => 'AppBundle:Activity/Homework:edit',
+                    'preview'         => 'AppBundle:Activity/Homework:tryLook',
+                    'show'            => 'AppBundle:Activity/Homework:show',
+                    'finishCondition' => 'AppBundle:Activity/Homewok:finishCondition'
                 )
             ),
             'exercise'  => array(
@@ -281,11 +281,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-mylibrarybooks'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Exercise:create',
-                    'edit'   => 'AppBundle:Activity/Exercise:edit',
-                    'show'   => 'AppBundle:Activity/Exercise:show',
-                    'preview'=> 'AppBundle:Activity/Exercise:tryLook',
-                    'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
+                    'create'          => 'AppBundle:Activity/Exercise:create',
+                    'edit'            => 'AppBundle:Activity/Exercise:edit',
+                    'show'            => 'AppBundle:Activity/Exercise:show',
+                    'preview'         => 'AppBundle:Activity/Exercise:tryLook',
+                    'finishCondition' => 'AppBundle:Activity/Exercise:finishCondition'
                 )
             )
         );
@@ -300,23 +300,23 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
 
     protected function registerActivityTypes($container)
     {
-        $that                            = $this;
-        $container['activity_type.text'] = function () use ($that) {
+        $that                                = $this;
+        $container['activity_type.text']     = function () use ($that) {
             return new Text($that->getBiz());
         };
-        $container['activity_type.video'] = function () use ($that) {
+        $container['activity_type.video']    = function () use ($that) {
             return new Video($that->getBiz());
         };
-        $container['activity_type.audio'] = function () use ($that) {
+        $container['activity_type.audio']    = function () use ($that) {
             return new Audio($that->getBiz());
         };
         $container['activity_type.download'] = function () use ($that) {
             return new Download($that->getBiz());
         };
-        $container['activity_type.live'] = function () use ($that) {
+        $container['activity_type.live']     = function () use ($that) {
             return new Live($that->getBiz());
         };
-        $container['activity_type.discuss'] = function () use ($that) {
+        $container['activity_type.discuss']  = function () use ($that) {
             return new Discuss($that->getBiz());
         };
 
@@ -328,41 +328,41 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             return new Doc($that->getBiz());
         };
 
-        $container['activity_type.ppt'] = function () use ($that) {
+        $container['activity_type.ppt']       = function () use ($that) {
             return new Ppt($that->getBiz());
         };
         $container['activity_type.testpaper'] = function () use ($that) {
             return new Testpaper($that->getBiz());
         };
-        $container['activity_type.homework'] = function () use ($that) {
+        $container['activity_type.homework']  = function () use ($that) {
             return new Homework($that->getBiz());
         };
-        $container['activity_type.exercise'] = function () use ($that) {
+        $container['activity_type.exercise']  = function () use ($that) {
             return new Exercise($that->getBiz());
         };
     }
 
     protected function registerQuestionTypes($container)
     {
-        $container['question_type.choice'] = function () {
+        $container['question_type.choice']           = function () {
             return new Choice();
         };
-        $container['question_type.single_choice'] = function () {
+        $container['question_type.single_choice']    = function () {
             return new SingleChoice();
         };
         $container['question_type.uncertain_choice'] = function () {
             return new UncertainChoice();
         };
-        $container['question_type.determine'] = function () {
+        $container['question_type.determine']        = function () {
             return new Determine();
         };
-        $container['question_type.essay'] = function () {
+        $container['question_type.essay']            = function () {
             return new Essay();
         };
-        $container['question_type.fill'] = function () {
+        $container['question_type.fill']             = function () {
             return new Fill();
         };
-        $container['question_type.material'] = function () {
+        $container['question_type.material']         = function () {
             return new Material();
         };
 
