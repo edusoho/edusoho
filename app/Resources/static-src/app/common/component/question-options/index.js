@@ -11,7 +11,6 @@ function InitOptionData(dataSource,inputValue,validatorDatas,seq,checked) {
     inputValue: inputValue,
     checked: checked,
   }
-  console.log(obj);
   validatorDatas.Options[`question-option-${seq}`] = inputValue.length > 0 ? 1 : 0;
   if(checked) {
     validatorDatas.checkedNum += 1;
@@ -39,7 +38,6 @@ function changeOptionChecked(dataSource,validatorDatas,id,checked,isRadio) {
       if(isRadio && checked){
         return;
       }
-      console.log(isRadio);
       dataSource[index].checked= !checked;
     }else if(isRadio && !checked){
       //如果是单选;
@@ -50,8 +48,6 @@ function changeOptionChecked(dataSource,validatorDatas,id,checked,isRadio) {
     }
   });
   validatorDatas.checkedNum = checkedNum;
-  console.log(validatorDatas);
-  console.log(dataSource);
 }
 
 export default class QuestionOptions extends Component {
@@ -188,6 +184,11 @@ export default class QuestionOptions extends Component {
       </div>
     )
   }
+}
+
+QuestionOptions.propTypes = {
+  dataSource: React.PropTypes.array,
+  dataAnswer: React.PropTypes.array,
 }
 
 QuestionOptions.defaultProps = {

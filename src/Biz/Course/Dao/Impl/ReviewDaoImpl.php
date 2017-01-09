@@ -40,6 +40,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
                 'rating = :rating',
                 'content LIKE :content',
                 'courseId IN (:courseIds)',
+                'courseSetId = :courseSetId',
                 'parentId = :parentId',
                 'private = :private'
             )

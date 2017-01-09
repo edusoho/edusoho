@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\File\Service\UploadFileService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
@@ -17,6 +18,7 @@ class CourseController extends CourseBaseController
 {
     public function summaryAction($course, $member = array())
     {
+
         return $this->render('course/tabs/summary.html.twig', array(
             'course' => $course,
             'member' => $member
@@ -51,7 +53,13 @@ class CourseController extends CourseBaseController
     public function notesAction($course, $member = array())
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $notes     = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+
+        if (empty($member)) {
+            $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+        } else {
+            $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+        }
+
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $users = ArrayToolkit::index($users, 'id');
@@ -78,9 +86,14 @@ class CourseController extends CourseBaseController
     {
         $courseSet  = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $conditions = array(
-            'courseId' => $course['id'],
             'parentId' => 0
         );
+
+        if (empty($member)) {
+            $conditions['courseSetId'] = $courseSet['id'];
+        } else {
+            $conditions['courseId'] = $course['id'];
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -144,10 +157,13 @@ class CourseController extends CourseBaseController
     {
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
+        $files = $this->findFiles($courseItems);
+
         return $this->render('course/tabs/tasks.html.twig', array(
             'course'      => $course,
             'courseItems' => $courseItems,
-            'member'      => $member
+            'member'      => $member,
+            'files'       => $files
         ));
     }
 
@@ -196,13 +212,19 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function newestStudentsAction(Request $request, $course)
+    public function newestStudentsAction(Request $request, $course, $member = array())
     {
         $conditions = array(
-            'courseId' => $course['id'],
-            'role'     => 'student',
-            'locked'   => 0
+            'role'   => 'student',
+            'locked' => 0
         );
+
+        if (empty($member)) {
+            $courses                 = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
+            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
+        } else {
+            $conditions['courseId'] = $course['id'];
+        }
 
         $members    = $this->getMemberService()->searchMembers($conditions, array('createdTime' => 'DESC'), 0, 20);
         $studentIds = ArrayToolkit::column($members, 'userId');
@@ -243,7 +265,7 @@ class CourseController extends CourseBaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -254,7 +276,7 @@ class CourseController extends CourseBaseController
     public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user                  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是课程的学员。');
         }
@@ -333,5 +355,34 @@ class CourseController extends CourseBaseController
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
+    }
+
+    protected function findFiles($courseItems)
+    {
+        $activities = ArrayToolkit::column($courseItems, 'activity');
+
+        //获取视频的源数据
+        $activityIds = array();
+        array_walk($activities, function ($activity) use (&$activityIds) {
+            if ($activity['mediaType'] == 'video') {
+                array_push($activityIds, $activity['id']);
+            }
+        });
+
+        $fullActivities = $this->getActivityService()->findActivities($activityIds, $fetchMedia = true);
+
+        $files = array();
+        array_walk($fullActivities, function ($activity) use (&$files) {
+            $files[$activity['mediaId']] = empty($activity['ext']['file']) ? null : $activity['ext']['file'];
+        });
+        return $files;
     }
 }

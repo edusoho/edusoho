@@ -1487,6 +1487,10 @@ course_task_show:
     path:  /course/{courseId}/task/{id}/show
     defaults: { _controller: AppBundle:Task:show }
 
+course_task_preview:
+    path:  /course/{courseId}/task/{id}/preview
+    defaults: { _controller: AppBundle:Task:preview }
+
 course_task_activity_show:
     path:  /course/{courseId}/task/{id}/activity_show
     defaults: { _controller: AppBundle:Task:taskActivity }
@@ -1498,6 +1502,10 @@ course_task_trigger:
 course_task_finish:
     path:  /course/{courseId}/task/{id}/finish
     defaults: { _controller: AppBundle:Task:finish }
+
+course_task_qrcode:
+    path:  /course/{courseId}/task/{id}/qrcode
+    defaults: { _controller: AppBundle:Task:qrcode }
 
 course_task_finished_prompt:
     path:  /course/{courseId}/task/{id}/finished_prompt
@@ -1804,7 +1812,7 @@ course_thread_delete:
    methods: [POST]
 
 course_set_manage:
-  path: /course_set/{id}/manageor
+  path: /course_set/{id}/manage
   defaults: {_controller: AppBundle:CourseSetManage:index}
 
 course_set_manage_base:
@@ -1842,11 +1850,11 @@ course_set_manage_file_status:
 
 course_set_manage_delete_materials_show:
    path:  /course_set/{id}/manage/show/delete/materials
-   defaults: { _controller: AppBundle:CourseSetFileManage:deleteMaterialShow }
+   defaults: { _controller: AppBundle:CourseSetFileManage:deleteMaterials }
    methods: [POST]
 
 course_set_manage_delete_materials:
-   path:  /course/{id}/manage/delete/materials
+   path:  /course_set/{id}/manage/delete/materials
    defaults: { _controller: AppBundle:CourseSetFileManage:deleteCourseFiles }
    methods: [POST]
 
