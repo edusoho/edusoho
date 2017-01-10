@@ -157,13 +157,14 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $optional     = true; //当前选修，下一个可以学习
             } elseif (isset($task['result']) && $task['result'] == 'finish') {
                 $task['lock'] = false;
+                $optional = true;
             } elseif ($task['type'] == 'live') { //直播
-                $task['lock'] = $task['startTime'] >= time(); //直播已经开始
+                $task['lock'] = $task['startTime'] > time(); //直播已经开始
                 if (time() >= $task['activity']['endTime']) { //直播已经结束
                     $optional = true;
                 }
             } elseif ($task['type'] == 'testpaper' and $task['startTime']) {
-                $task['lock'] = $task['startTime'] >= time();
+                $task['lock'] = $task['startTime'] > time();
                 $activity     = $that->getActivityService()->getActivityConfig($task['type'])->get($task['activityId']);
                 $endTime      = $task['startTime'] + $activity['limitedTime'] * 60;
                 if (time() >= $endTime) {//实时考试结束下一个任务可以开始进行
@@ -290,23 +291,27 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->getTask($taskId);
 
-        // if the task is last task, no next test can be return
-        $nextTask = $this->getTaskDao()->getNextTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
-        if (empty($nextTask)) {
+        //取得下一个发布的课时
+        $conditions = array(
+            'courseId' => $task['courseId'],
+            'status'   => 'published',
+            'seq_GT'   => $task['seq']
+        );
+        $nextTasks  = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 1);
+        if (empty($nextTasks)) {
             return array();
         }
+        $nextTask = array_shift($nextTasks);
 
-        if (!$this->canLearnTask($taskId)) {
+        // if the task is last task, no next task can be return
+//        $nextTask = $this->getTaskDao()->getNextTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
+//        if (empty($nextTask)) {
+//            return array();
+//        }
+
+        //判断下一个课时是否课时学习
+        if (!$this->canLearnTask($nextTask['id'])) {
             return array();
-        }
-
-        //if the task is first, when get next task, we need to know if the task if finish, if not  return null;
-        $firstTask = $this->getTaskDao()->getPreTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
-        if (!empty($firstTask)) {
-            $isTaskLearned = $this->isTaskLearned($taskId);
-            if (!$isTaskLearned) {
-                return array();
-            }
         }
         return $nextTask;
     }
