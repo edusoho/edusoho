@@ -3,11 +3,11 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\ThreadDao;
-use Biz\Course\Service\MemberService;
 use Topxia\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\User\Service\NotificationService;
@@ -118,8 +118,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
 
-        $thread['userId'] = $this->getCurrentUser()->id;
-        $thread['title']  = $this->biz['html_helper']->purify(empty($thread['title']) ? '' : $thread['title']);
+        $thread['userId']      = $this->getCurrentUser()->id;
+        $thread['title']       = $this->biz['html_helper']->purify(empty($thread['title']) ? '' : $thread['title']);
         $thread['courseSetId'] = $course['courseSetId'];
         //创建thread过滤html
         $thread['content']          = $this->biz['html_helper']->purify($thread['content']);
