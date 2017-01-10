@@ -36,9 +36,9 @@
               </a>
             </li>
 
-
             <li class="list-group-item {% if side_nav == 'my-teaching-questions' %}active {% endif %}">
-              <a href="{{ path('my_teaching_threads', {type:'question'}) }}">{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}{{ '问答'|trans }}
+              <a href="{{ path('my_teaching_threads', {type:'question'}) }}">
+                {{ setting('default.user_name')|default('学员'|trans) }}{{ '问答'|trans }}
               </a>
             </li>
             <li class="list-group-item {% if side_nav == 'my-teaching-discussions' %} active {% endif %}">
