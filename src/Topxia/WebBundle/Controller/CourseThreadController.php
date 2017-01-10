@@ -45,6 +45,16 @@ class CourseThreadController extends CourseBaseController
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
 
+        $allTags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course',
+            'ownerId'   => $id
+        ));
+
+        $tags = array(
+            'tagIds' => ArrayToolkit::column($allTags, 'id'),
+            'count'  => count($allTags)
+        );
+
         return $this->render("TopxiaWebBundle:CourseThread:index.html.twig", array(
             'course'    => $course,
             'member'    => $member,
@@ -53,7 +63,8 @@ class CourseThreadController extends CourseBaseController
             'paginator' => $paginator,
             'filters'   => $filters,
             'lessons'   => $lessons,
-            'target'    => array('type' => 'course', 'id' => $id)
+            'target'    => array('type' => 'course', 'id' => $id),
+            'tags'      => $tags
         ));
     }
 
@@ -639,6 +650,11 @@ class CourseThreadController extends CourseBaseController
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     protected function getClassroomService()

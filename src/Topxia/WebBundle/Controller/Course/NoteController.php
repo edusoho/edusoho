@@ -52,11 +52,23 @@ class NoteController extends CourseBaseController
             }
         }
         $lessons = $this->getCourseService()->getCourseLessons($courseId);
+
+        $allTags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course',
+            'ownerId'   => $courseId
+        ));
+
+        $tags = array(
+            'tagIds' => ArrayToolkit::column($allTags, 'id'),
+            'count'  => count($allTags)
+        );
+
         return $this->render('TopxiaWebBundle:Course\Note:course-notes-list.html.twig', array(
             'course'  => $course,
             'member'  => $member,
             'filters' => $this->getNoteSearchFilters($request),
-            'lessons' => $lessons
+            'lessons' => $lessons,
+            'tags'    => $tags
         ));
     }
 
@@ -167,5 +179,10 @@ class NoteController extends CourseBaseController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 }

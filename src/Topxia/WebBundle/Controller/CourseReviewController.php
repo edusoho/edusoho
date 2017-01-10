@@ -43,6 +43,16 @@ class CourseReviewController extends CourseBaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
 
+        $allTags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course',
+            'ownerId'   => $id
+        ));
+
+        $tags = array(
+            'tagIds' => ArrayToolkit::column($allTags, 'id'),
+            'count'  => count($allTags)
+        );
+
         return $this->render('TopxiaWebBundle:Course:reviews.html.twig', array(
             'course'        => $course,
             'member'        => $member,
@@ -50,7 +60,8 @@ class CourseReviewController extends CourseBaseController
             'userReview'    => $userReview,
             'reviews'       => $reviews,
             'users'         => $users,
-            'paginator'     => $paginator
+            'paginator'     => $paginator,
+            'tags'          => $tags
         ));
     }
 
@@ -108,4 +119,10 @@ class CourseReviewController extends CourseBaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
 }

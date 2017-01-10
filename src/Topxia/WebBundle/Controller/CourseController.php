@@ -120,9 +120,20 @@ class CourseController extends CourseBaseController
             }
         }
 
+        $allTags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course',
+            'ownerId'   => $id
+        ));
+
+        $tags = array(
+            'tagIds' => ArrayToolkit::column($allTags, 'id'),
+            'count'  => count($allTags)
+        );
+
         return $this->render('TopxiaWebBundle:Course:info.html.twig', array(
             'course'   => $course,
             'member'   => $member,
+            'tags'     => $tags
         ));
     }
 

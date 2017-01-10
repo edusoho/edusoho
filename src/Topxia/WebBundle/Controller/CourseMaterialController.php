@@ -38,12 +38,23 @@ class CourseMaterialController extends CourseBaseController
         $lessons = $this->getCourseService()->getCourseLessons($course['id']);
         $lessons = ArrayToolkit::index($lessons, 'id');
 
+        $allTags = $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course',
+            'ownerId'   => $id
+        ));
+
+        $tags = array(
+            'tagIds' => ArrayToolkit::column($allTags, 'id'),
+            'count'  => count($allTags)
+        );
+
         return $this->render("TopxiaWebBundle:CourseMaterial:index.html.twig", array(
             'course'    => $course,
             'member'    => $member,
             'lessons'   => $lessons,
             'materials' => $materials,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'tags'      => $tags
         ));
     }
 
@@ -116,5 +127,10 @@ class CourseMaterialController extends CourseBaseController
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 }
