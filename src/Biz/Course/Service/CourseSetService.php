@@ -55,19 +55,21 @@ interface CourseSetService
 
     /**
      * @param  integer $userId
+     * @param  array   $conditions
      *
      * @return integer
      */
-    public function countUserTeachingCourseSets($userId);
+    public function countUserTeachingCourseSets($userId, array $conditions);
 
     /**
      * @param integer $userId
+     * @param array   $conditions
      * @param integer $start
      * @param integer $limit
      *
      * @return array[]
      */
-    public function searchUserTeachingCourseSets($userId, $start, $limit);
+    public function searchUserTeachingCourseSets($userId, array $conditions, $start, $limit);
 
     /**
      * @param integer[] $courseIds
@@ -115,10 +117,11 @@ interface CourseSetService
 
     /**
      * @param integer $userId
+     * @param bool    $onlyPublished 是否只需要发布的课程
      *
      * @return array[]
      */
-    public function findTeachingCourseSetsByUserId($userId);
+    public function findTeachingCourseSetsByUserId($userId, $onlyPublished=true);
 
     /**
      * @param integer $userId
