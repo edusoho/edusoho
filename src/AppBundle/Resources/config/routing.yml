@@ -533,9 +533,9 @@ batch_notification_show:
     path: /notification/{id}
     defaults: { _controller:AppBundle:Notification:show }
 
-my_teaching_courses:
-    path: /my/teaching/courses/{filter}
-    defaults: { _controller: AppBundle:MyTeaching:courses, filter:'normal' }
+my_teaching_course_sets:
+    path: /my/teaching/course_sets/{filter}
+    defaults: { _controller: AppBundle:MyTeaching:courseSets, filter: 'normal' }
 
 my_teaching_open_courses:
     path: /my/teaching/open/courses/{filter}
@@ -1186,6 +1186,10 @@ esbar_my_practice:
 esbar_my_study_center:
     path:  /esbar/my/study_center
     defaults: { _controller: AppBundle:EsBar/EsBar:studyCenter }
+
+my:
+    path: /my
+    defaults: { _controller: AppBundle:My/Course:index }
 
 my_cards:
     path:  /my/cards

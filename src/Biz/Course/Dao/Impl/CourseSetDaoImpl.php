@@ -19,7 +19,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
         return array(
             'conditions' => array(
                 'id IN ( :ids )',
-                'status =:status'
+                'status = :status',
+                'type = :type'
             ),
             'serializes' => array(
                 'tags'      => 'delimiter',

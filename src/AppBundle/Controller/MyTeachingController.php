@@ -2,15 +2,18 @@
 namespace AppBundle\Controller;
 
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\ThreadService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\System\Service\SettingService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class MyTeachingController extends BaseController
 {
-    public function coursesAction(Request $request, $filter)
+    public function courseSetsAction(Request $request, $filter='normal')
     {
         $user = $this->getCurrentUser();
 
@@ -19,50 +22,37 @@ class MyTeachingController extends BaseController
         }
 
         $conditions = array(
-            'userId' => $user['id']
+            'type' => 'normal'
         );
 
-        if ($filter == 'normal' || $filter == 'live') {
-            $conditions["parentId"] = 0;
-            $conditions["type"]     = $filter;
-        }
-
-        if ($filter == 'classroom') {
-            $conditions["parentId_GT"] = 0;
+        if($filter == 'live'){
+            $conditions['type'] = 'live';
         }
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserTeachCourseCount($conditions, false),
-            10
+            $this->getCourseSetService()->countUserTeachingCourseSets($user['id'], $conditions),
+            20
         );
 
-        $courses = $this->getCourseService()->findUserTeachCourses(
+        $sets = $this->getCourseSetService()->searchUserTeachingCourseSets(
+            $user['id'],
             $conditions,
             $paginator->getOffsetCount(),
-            $paginator->getPerPageCount(),
-            false
+            $paginator->getPerPageCount()
         );
 
-        $classrooms = array();
-
-        if ($filter == 'classroom') {
-            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
-            $classrooms = ArrayToolkit::index($classrooms, 'courseId');
-
-            foreach ($classrooms as $key => $classroom) {
-                $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
-                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
-            }
-        }
-
-        $this->getSettingService()->get('course', array());
+        $service = $this->getCourseService();
+        $sets = array_map(function ($set) use ($user, $service) {
+            $set['canManage'] = $set['creator'] == $user['id'];
+            $set['courses'] = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
+            return $set;
+        }, $sets);
 
         return $this->render('my-teaching/teaching.html.twig', array(
-            'courses'    => $courses,
-            'classrooms' => $classrooms,
-            'paginator'  => $paginator,
-            'filter'     => $filter
+            'courseSets'=> $sets,
+            'paginator' => $paginator,
+            'filter'    => $filter
         ));
     }
 
@@ -82,15 +72,15 @@ class MyTeachingController extends BaseController
             10
         );
 
-        $OpenCourses = $this->getOpenCourseService()->searchCourses(
+        $openCourses = $this->getOpenCourseService()->searchCourses(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         return $this->render('my-teaching/open-course.html.twig', array(
-            'courses'   => $OpenCourses,
+            'courses'   => $openCourses,
             'paginator' => $paginator,
             'filter'    => $filter
         ));
@@ -165,7 +155,8 @@ class MyTeachingController extends BaseController
 
         $conditions = array(
             'courseIds' => ArrayToolkit::column($myTeachingCourses, 'id'),
-            'type'      => $type);
+            'type'      => $type
+        );
 
         $paginator = new Paginator(
             $request,
@@ -229,7 +220,7 @@ class MyTeachingController extends BaseController
      */
     protected function getCourseThreadService()
     {
-        return $this->getBiz()->createService('Course:ThreadService');
+        return $this->getBiz()->service('Course:ThreadService');
     }
 
     /**
@@ -237,7 +228,7 @@ class MyTeachingController extends BaseController
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     /**
@@ -270,5 +261,13 @@ class MyTeachingController extends BaseController
     protected function getOpenCourseService()
     {
         return $this->getBiz()->service('OpenCourse:OpenCourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 }

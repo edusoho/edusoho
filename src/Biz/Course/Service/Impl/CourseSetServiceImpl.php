@@ -8,6 +8,7 @@ use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 
@@ -186,36 +187,19 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
     }
 
-    /**
-     * @param  int $userId
-     *
-     * @return int
-     */
-    public function countUserTeachingCourseSets($userId)
+    public function countUserTeachingCourseSets($userId, array $conditions)
     {
-        $teachSets = $this->findTeachingCourseSetsByUserId($userId);
-        return count($teachSets);
+        $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
+        $ids = ArrayToolkit::column($members, 'courseSetId');
+        $conditions = array_merge($conditions, array('ids' => $ids));
+        return $this->countCourseSets($conditions);
     }
 
-    /**
-     * @param  int $userId
-     * @param  int $start
-     * @param  int $limit
-     *
-     * @return mixed
-     */
-    public function searchUserTeachingCourseSets($userId, $start, $limit)
+    public function searchUserTeachingCourseSets($userId, array $conditions, $start, $limit)
     {
-        $teachSets = $this->findTeachingCourseSetsByUserId($userId);
-
-        if (empty($teachSets)) {
-            return array();
-        }
-
-        $conditions = array(
-            'ids' => ArrayToolkit::column($teachSets, 'id')
-        );
-
+        $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
+        $ids = ArrayToolkit::column($members, 'courseSetId');
+        $conditions = array_merge($conditions, array('ids' => $ids));
         return $this->searchCourseSets($conditions, array('createdTime' => 'DESC'), $start, $limit);
     }
 
@@ -272,7 +256,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         $course['creator'] = $this->getCurrentUser()->getId();
-
         $this->getCourseService()->createCourse($defaultCourse);
 
         return $created;
@@ -348,11 +331,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->delete($courseSet['id']);
     }
 
-    public function findTeachingCourseSetsByUserId($userId)
+    public function findTeachingCourseSetsByUserId($userId, $onlyPublished=true)
     {
-        $courses = $this->getCourseService()->findTeachingCoursesByUserId($userId);
+        $courses = $this->getCourseService()->findTeachingCoursesByUserId($userId, $onlyPublished);
         $setIds  = ArrayToolkit::column($courses, 'courseSetId');
-        return $this->findPublicCourseSetsByIds($setIds);
+
+        if($onlyPublished){
+            return $this->findPublicCourseSetsByIds($setIds);
+        }else{
+            return $this->findCourseSetsByIds($setIds);
+        }
     }
 
     /**
@@ -494,6 +482,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getNoteService()
     {
         return $this->createService('Course:CourseNoteService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 
     /**
