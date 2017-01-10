@@ -542,14 +542,18 @@ class UserController extends BaseController
 
     protected function _teachAction($user)
     {
+        $conditions = array(
+            'status' => 'published'
+        );
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseSetService()->countUserTeachingCourseSets($user['id']),
+            $this->getCourseSetService()->countUserTeachingCourseSets($user['id'], $conditions),
             20
         );
 
         $sets = $this->getCourseSetService()->searchUserTeachingCourseSets(
             $user['id'],
+            $conditions,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

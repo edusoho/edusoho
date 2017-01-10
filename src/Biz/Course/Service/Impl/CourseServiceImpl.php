@@ -3,20 +3,21 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\ThreadDao;
-use Topxia\Common\ArrayToolkit;
-use Biz\Course\Dao\CourseSetDao;
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\UserService;
-use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseChapterDao;
+use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Dao\ThreadDao;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
+use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
-use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Topxia\Common\ArrayToolkit;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -96,10 +97,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
             $created = $this->getCourseDao()->create($course);
             //set default teacher
-            $this->setCourseTeachers($created['id'], array(array(
-                'id'        => $this->biz['user']['id'],
-                'isVisible' => 1
-            )));
+            $this->setCourseTeachers($created['id'], array(
+                array(
+                    'id'        => $this->biz['user']['id'],
+                    'isVisible' => 1
+                )
+            ));
 
             $this->commit();
 
@@ -408,6 +411,23 @@ class CourseServiceImpl extends BaseService implements CourseService
         return empty($member) ? null : $member['role'];
     }
 
+    public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished=true)
+    {
+        $user = $this->getCurrentUser();
+
+        if(!$user->isLogin()){
+            throw $this->createAccessDeniedException();
+        }
+
+        $members = $this->getMemberService()->findTeacherMembersByUserIdAndCourseSetId($user['id'], $courseSetId);
+        $ids = ArrayToolkit::column($members, 'courseId');
+        if($onlyPublished){
+            return $this->findPublicCoursesByIds($ids);
+        }else{
+            return $this->findCoursesByIds($ids);
+        }
+    }
+
     public function tryTakeCourse($courseId)
     {
         $course = $this->getCourse($courseId);
@@ -662,16 +682,22 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->findLearnedByCourseIdAndUserId($courseId, $userId);
     }
 
-    public function findTeachingCoursesByUserId($userId)
+    public function findTeachingCoursesByUserId($userId, $onlyPublished = true)
     {
         $members   = $this->getMemberService()->findTeacherMembersByUserId($userId);
         $courseIds = ArrayToolkit::column($members, 'courseId');
-        $courses   = $this->findPublicCoursesByIds($courseIds);
+        if ($onlyPublished) {
+            $courses = $this->findPublicCoursesByIds($courseIds);
+        } else {
+            $courses = $this->findCoursesByIds($courseIds);
+        }
+
         return $courses;
     }
 
     /**
-     * @param  int     $userId
+     * @param  int $userId
+     *
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -692,7 +718,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count = $this->searchCourseCount($conditions);
+        $count      = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 

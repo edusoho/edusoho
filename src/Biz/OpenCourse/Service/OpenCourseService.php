@@ -99,7 +99,7 @@ interface OpenCourseService
 
     public function getCourseMemberByMobile($courseId, $mobile);
 
-    public function findByCourseIds($courseIds);
+    public function findMembersByCourseIds($courseIds);
 
     /**
      * @param $conditions
