@@ -16,7 +16,6 @@ use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
 
 class CourseServiceImpl extends BaseService implements CourseService
@@ -95,11 +94,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         try {
             $this->beginTransaction();
 
-            $created = $this->getCourseDao()->create($course);
+            $created     = $this->getCourseDao()->create($course);
+            $currentUser = $this->getCurrentUser();
             //set default teacher
             $this->setCourseTeachers($created['id'], array(
                 array(
-                    'id'        => $this->biz['user']['id'],
+                    'id'        => $currentUser['id'],
                     'isVisible' => 1
                 )
             ));
@@ -154,7 +154,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function setCourseTeachers($courseId, $teachers)
     {
         $teacherMembers = array();
-
+        $course         = $this->getCourse($courseId);
         foreach (array_values($teachers) as $index => $teacher) {
             if (empty($teacher['id'])) {
                 throw $this->createInvalidArgumentException('Teacher ID Required');
@@ -167,11 +167,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
 
             $teacherMembers[] = array(
-                'courseId'  => $courseId,
-                'userId'    => $user['id'],
-                'role'      => 'teacher',
-                'seq'       => $index,
-                'isVisible' => empty($teacher['isVisible']) ? 0 : 1
+                'courseId'    => $courseId,
+                'courseSetId' => $course['courseSetId'],
+                'userId'      => $user['id'],
+                'role'        => 'teacher',
+                'seq'         => $index,
+                'isVisible'   => empty($teacher['isVisible']) ? 0 : 1
             );
         }
 
@@ -411,19 +412,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         return empty($member) ? null : $member['role'];
     }
 
-    public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished=true)
+    public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished = true)
     {
         $user = $this->getCurrentUser();
 
-        if(!$user->isLogin()){
+        if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
 
         $members = $this->getMemberService()->findTeacherMembersByUserIdAndCourseSetId($user['id'], $courseSetId);
-        $ids = ArrayToolkit::column($members, 'courseId');
-        if($onlyPublished){
+        $ids     = ArrayToolkit::column($members, 'courseId');
+        if ($onlyPublished) {
             return $this->findPublicCoursesByIds($ids);
-        }else{
+        } else {
             return $this->findCoursesByIds($ids);
         }
     }

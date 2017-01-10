@@ -256,10 +256,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         $course['creator'] = $this->getCurrentUser()->getId();
-        $currentUser = $this->getCurrentUser();
-
-        $defaultCourse = $this->getCourseService()->createCourse($defaultCourse);
-        $this->getCourseMemberService()->setCourseTeachers($defaultCourse['id'], array($currentUser));
+        $this->getCourseService()->createCourse($defaultCourse);
 
         return $created;
     }
