@@ -1,0 +1,117 @@
+<?php
+
+namespace Tests\Course\Dao;
+
+use Tests\Base\BaseDaoTestCase;
+
+class ThreadPostDaoTest extends BaseDaoTestCase
+{
+    public function testSearchByGroup()
+    {
+        $threads[0] = $this->mockThreadPost(array('courseId' => 1, 'taskId' => 0, 'userId' => 1, 'isElite' => 127));
+        $threads[1] = $this->mockThreadPost(array('courseId' => 1, 'taskId' => 0, 'userId' => 2, 'isElite' => 0));
+        $threads[2] = $this->mockThreadPost(array('courseId' => 2, 'taskId' => 0, 'userId' => 3, 'isElite' => 1));
+
+        $testConditions = array(
+            array(
+                'condition' => array('courseId' => 1),
+                'expectedResults' => array($threads[0], $threads[1]),
+                'expectedCount' => 2
+            ),
+            array(
+                'condition' => array('taskId' => 0),
+                'expectedResults' => array($threads[0], $threads[1], $threads[2]),
+                'expectedCount' => 3
+            ),
+            array(
+                'condition' => array('userId' => 2),
+                'expectedResults' => array($threads[1]),
+                'expectedCount' => 1
+            ),
+            array(
+                'condition' => array('isElite' => 127),
+                'expectedResults' => array($threads[0]),
+                'expectedCount' => 1
+            ),
+            array(
+                'condition' => array('courseIds' => array(1, 2)),
+                'expectedResults' => array($threads[0], $threads[1], $threads[2]),
+                'expectedCount' => 3
+            ),
+            array(
+                'condition' => array('content' => '啥'),
+                'expectedResults' => array(),
+                'expectedCount' => 0
+            )
+        );
+
+        $this->searchByGroupTestUtil($testConditions, $this->getCompareKeys());
+    }
+
+    public function testCountByGroup()
+    {
+        $threads[0] = $this->mockThreadPost(array('courseId' => 1, 'taskId' => 0, 'userId' => 1, 'isElite' => 127));
+        $threads[1] = $this->mockThreadPost(array('courseId' => 1, 'taskId' => 0, 'userId' => 2, 'isElite' => 0));
+        $threads[2] = $this->mockThreadPost(array('courseId' => 2, 'taskId' => 0, 'userId' => 3, 'isElite' => 1));
+
+        $res[0] = $this->getThreadPostDao()->countByGroup(array('courseId' => 1), 'userId');
+        $res[1] = $this->getThreadPostDao()->countByGroup(array('taskId' => 0), 'courseId');
+        $res[2] = $this->getThreadPostDao()->countByGroup(array('content' => '？'));
+
+        $this->assertArrayEquals(array(1, 1), $res[0], array(0));
+        $this->assertArrayEquals(array(2, 1), $res[1], array(0));
+        $this->assertArrayEquals(array(3), $res[2], array(0));
+    }
+
+    public function testDeleteByThreadId()
+    {
+        $res[0] = $this->mockThreadPost(array('threadId' => 1));
+        $res[1] = $this->mockThreadPost(array('threadId' => 1));
+        $res[2] = $this->mockThreadPost(array('threadId' => 2));
+
+        $this->assertGreaterThan(0, $this->getThreadPostDao()->deleteByThreadId(1));
+        $this->assertEquals(0, $this->getThreadPostDao()->deleteByThreadId(1));
+        $this->assertGreaterThan(0, $this->getThreadPostDao()->deleteByThreadId(2));
+        $this->assertEquals(0, $this->getThreadPostDao()->deleteByThreadId(2));
+    }
+
+    private function searchByGroupTestUtil($testConditons, $testFields, $groupBy = null)
+    {
+        foreach ($testConditons as $testConditon) {
+            $count = $this->getThreadPostDao()->count($testConditon['condition']);
+            $this->assertEquals($count, $testConditon['expectedCount']);
+            $orderBy = empty($testConditon['orderBy']) ? array() : $testConditon['orderBy'];
+            $results = $this->getThreadPostDao()->searchByGroup($testConditon['condition'], $orderBy, 0, 10);
+            foreach ($results as $key => $result) {
+                $this->assertArrayEquals($result, $testConditon['expectedResults'][$key], $testFields, $groupBy);
+            }
+        }
+    }
+
+    private function mockThreadPost($fields)
+    {
+        return $this->getThreadPostDao()->create(array_merge($this->getDefaultMockFields(), $fields));
+    }
+
+    private function getCompareKeys()
+    {
+        return array_keys($this->getDefaultMockFields());
+    }
+
+    private function getDefaultMockFields()
+    {
+        return array(
+            'courseId' => rand(0, 1000),
+            'taskId' => rand(0, 1000),
+            'threadId' => rand(0, 1000),
+            'userId' => rand(0, 1000),
+            'isElite' => rand(0, 127),
+            'content' => '哈？'
+        );
+    }
+
+    private function getThreadPostDao()
+    {
+        return $this->getBiz()->dao('Course:ThreadPostDao');
+    }
+}
