@@ -38,6 +38,97 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         return $this->biz;
     }
 
+    public function getCourseShowMetas()
+    {
+        $widgets = array(
+            'characteristic'     => array(
+                'uri'  => 'AppBundle:Course/Course:characteristic',
+                'type' => 'render'
+            ),
+            'otherCourse'        => array(
+                'uri'  => 'AppBundle:Course/Course:otherCourse',
+                'type' => 'render'
+            ),
+            'recommendClassroom' => array(
+                'uri'  => 'course/widgets/recommend-classroom.html.twig',
+                'type' => 'include'
+            ),
+            'teachers'           => array(
+                'uri'  => 'AppBundle:Course/Course:teachers',
+                'type' => 'render'
+            ),
+            'newestStudents'     => array(
+                'uri'  => 'AppBundle:Course/Course:newestStudents',
+                'type' => 'render'
+            ),
+            'studentActivity'    => array(
+                'uri'  => 'course/widgets/student-activity.html.twig',
+                'type' => 'include'
+            )
+        );
+
+        return array(
+            'for_member' => array(
+                'header'  => 'AppBundle:My/Course:headerForMember',
+                'tabs'    => array(
+                    'tasks'    => array(
+                        'name'    => '目录',
+                        'content' => 'AppBundle:Course/Course:tasks'
+                    ),
+                    'threads'  => array(
+                        'name'    => '话题',
+                        'number'  => 'threadNum',
+                        'content' => 'AppBundle:Course/Thread:index'
+                    ),
+                    'reviews'  => array(
+                        'name'    => '评价',
+                        'number'  => 'ratingNum',
+                        'content' => 'AppBundle:Course/Course:reviews'
+                    ),
+                    'notes'    => array(
+                        'name'    => '笔记',
+                        'number'  => 'noteNum',
+                        'content' => 'AppBundle:Course/Course:notes'
+                    ),
+                    'material' => array(
+                        'name'    => '资料区',
+                        'number'  => 'materialNum',
+                        'content' => 'AppBundle:Course/Material:index'
+                    ),
+                    'summary'  => array(
+                        'name'    => '介绍',
+                        'content' => 'AppBundle:Course/Course:summary'
+                    )
+                ),
+                'widgets' => $widgets
+            ),
+            'for_guest' => array(
+                'header'  => 'AppBundle:Course/Course:header',
+                'tabs'    => array(
+                    'summary' => array(
+                        'name'    => '介绍',
+                        'content' => 'AppBundle:Course/Course:summary'
+                    ),
+                    'tasks'   => array(
+                        'name'    => '目录',
+                        'content' => 'AppBundle:Course/Course:tasks'
+                    ),
+                    'reviews' => array(
+                        'name'    => '评价',
+                        'number'  => 'ratingNum',
+                        'content' => 'AppBundle:Course/Course:reviews'
+                    ),
+                    'notes'   => array(
+                        'name'    => '笔记',
+                        'number'  => 'noteNum',
+                        'content' => 'AppBundle:Course/Course:notes'
+                    )
+                ),
+                'widgets' => $widgets
+            )
+        );
+    }
+
     public function getQuestionTypes()
     {
         return array(
