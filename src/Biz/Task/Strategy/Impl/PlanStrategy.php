@@ -54,6 +54,14 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             return true;
         }
 
+        if ($task['type'] == 'live') {
+            return true;
+        }
+
+        if ($task['type'] == 'testpaper' and $task['startTime']) {
+            return true;
+        }
+
         //取得下一个发布的课时
         $conditions = array(
             'courseId' => $task['courseId'],
@@ -66,48 +74,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         if (empty($preTasks)) {
             return true;
         }
-
-        $continue     = true;
-        $canLearnTask = false;
-        foreach ($preTasks as $key => $preTask) {
-            if (empty($continue)) {
-                break;
-            }
-
-            if ($preTask['isOptional']) {
-                $canLearnTask = true;
-            } else if ($preTask['type'] == 'live') {
-                $live = $this->getActivityService()->getActivity($preTask['activityId'], true);
-                if (time() > $live['endTime']) {
-                    $canLearnTask = true;
-                } else {
-                    $canLearnTask = false;
-                    $continue     = false;
-                }
-            } else if ($preTask['type'] == 'testpaper' and $preTask['startTime']) {
-                $testPaper = $this->getActivityService()->getActivity($preTask['activityId']);
-                if (time() > $preTask['startTime'] + $testPaper['ext']['limitedTime'] * 60) {
-                    $canLearnTask = true;
-                } else {
-                    $canLearnTask = false;
-                    $continue     = false;
-                }
-            } else {
-                $isTaskLearned = $this->getTaskService()->isTaskLearned($preTask['id']);
-                if ($isTaskLearned) {
-                    $canLearnTask = true;
-                } else {
-                    $canLearnTask = false;
-                }
-                $continue = false;
-            }
-
-            if ((count($preTasks) - 1) == $key) {
-                break;
-            }
-        }
-
-        return $canLearnTask;
+        return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
     public function getTasksRenderPage()

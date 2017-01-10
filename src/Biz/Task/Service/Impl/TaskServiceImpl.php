@@ -135,46 +135,96 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
-        //如果前一个是选修，则相邻的下一个也是可以直接学的
-        //如果是直播，本身锁定，直播开始后直播可以学习， 如果直播结束后，直播未学习也解锁，保证后续任务可以学习
-        //如果是时事考试，同上。
-
         $optional = false;//标记当前任务是否选修
         $that     = $this;
-        array_walk($tasks, function (&$task) use ($taskResults, &$optional, $that) {
+
+        array_walk($tasks, function (&$task) use ($taskResults, &$optional, $that, $tasks) {
             foreach ($taskResults as $key => $result) {
                 if ($key != $task['id']) {
                     continue;
                 }
                 $task['result'] = $result;
             }
-            //设置任务是否解锁
-            if ($optional) { //任务可选
+            $preTasks = $that->getPreTask($tasks, $task);
+
+            if (empty($preTasks)) {
                 $task['lock'] = false;
-                $optional     = $task['isOptional'] ? true : false;
-            } elseif ($task['isOptional']) {
+            }
+
+            $finish       = $that->isPreTasksIsFinished($preTasks);
+            $task['lock'] = !$finish;
+
+            //选修任务不需要判断解锁条件
+            if ($task['isOptional']) {
                 $task['lock'] = false;
-                $optional     = true; //当前选修，下一个可以学习
-            } elseif (isset($task['result']) && $task['result'] == 'finish') {
+            }
+
+            if ($task['type'] == 'live') {
                 $task['lock'] = false;
-                $optional = true;
-            } elseif ($task['type'] == 'live') { //直播
-                $task['lock'] = $task['startTime'] > time(); //直播已经开始
-                if (time() >= $task['activity']['endTime']) { //直播已经结束
-                    $optional = true;
-                }
-            } elseif ($task['type'] == 'testpaper' and $task['startTime']) {
-                $task['lock'] = $task['startTime'] > time();
-                $activity     = $that->getActivityService()->getActivityConfig($task['type'])->get($task['activityId']);
-                $endTime      = $task['startTime'] + $activity['limitedTime'] * 60;
-                if (time() >= $endTime) {//实时考试结束下一个任务可以开始进行
-                    $optional = true;
-                }
-            } else {
-                $task['lock'] = true;
+            }
+
+            if ($task['type'] == 'testpaper' and $task['startTime']) {
+                $task['lock'] = false;
             }
         });
         return $tasks;
+    }
+
+
+    protected function getPreTask($tasks, $currentTask)
+    {
+        return array_filter(array_reverse($tasks), function ($task) use ($currentTask) {
+            return $currentTask['seq'] > $task['seq'];
+        });
+    }
+
+    /**
+     * 给定一个任务 ，判断前置解锁条件是完成
+     * @param $preTasks
+     * @return bool
+     */
+    public function isPreTasksIsFinished($preTasks)
+    {
+        $continue     = true;
+        $canLearnTask = false;
+        foreach ($preTasks as $key => $preTask) {
+            if (empty($continue)) {
+                break;
+            }
+
+            if ($preTask['isOptional']) {
+                $canLearnTask = true;
+            } else if ($preTask['type'] == 'live') {
+                $live = $this->getActivityService()->getActivity($preTask['activityId'], true);
+                if (time() > $live['endTime']) {
+                    $canLearnTask = true;
+                } else {
+                    $canLearnTask = false;
+                    $continue     = false;
+                }
+            } else if ($preTask['type'] == 'testpaper' and $preTask['startTime']) {
+                $testPaper = $this->getActivityService()->getActivity($preTask['activityId']);
+                if (time() > $preTask['startTime'] + $testPaper['ext']['limitedTime'] * 60) {
+                    $canLearnTask = true;
+                } else {
+                    $canLearnTask = false;
+                    $continue     = false;
+                }
+            } else {
+                $isTaskLearned = $this->isTaskLearned($preTask['id']);
+                if ($isTaskLearned) {
+                    $canLearnTask = true;
+                } else {
+                    $canLearnTask = false;
+                }
+                $continue = false;
+            }
+
+            if ((count($preTasks) - 1) == $key) {
+                break;
+            }
+        }
+        return $canLearnTask;
     }
 
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId)
