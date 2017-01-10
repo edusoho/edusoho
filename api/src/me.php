@@ -2,7 +2,7 @@
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\CloudPlatform\CloudAPIFactory
+use Biz\CloudPlatform\CloudAPIFactory;
 
 $api = $app['controllers_factory'];
 
