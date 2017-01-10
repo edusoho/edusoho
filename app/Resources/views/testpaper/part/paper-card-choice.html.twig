@@ -1,6 +1,8 @@
 <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm
   {% if paperResult.status|default('null') == 'reviewing' and question.type == 'essay' %}
-    bg-warning 
+    bg-warning
+  {% elseif paperResult.status|default('null') == 'doing' and question.testResult|default(null) %}
+    lump-card done
   {% elseif question.testResult.status|default('noAnswer') == 'right' %}
     bg-success 
   {% elseif question.testResult.status|default('noAnswer') == 'noAnswer' %}

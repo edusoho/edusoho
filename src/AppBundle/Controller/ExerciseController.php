@@ -69,7 +69,7 @@ class ExerciseController extends BaseController
         }
 
         if (in_array($exerciseResult['status'], array('doing', 'paused'))) {
-            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $exerciseResult['id'])));
+            return $this->redirect($this->generateUrl('exercise_show', array('resultId' => $exerciseResult['id'])));
         }
 
         $canLookExercise = $this->getTestpaperService()->canLookTestpaper($exerciseResult['id']);

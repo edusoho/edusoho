@@ -11,6 +11,7 @@ use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
+use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
@@ -19,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use AppBundle\Controller\BaseController;
 
 class CourseManageController extends BaseController
 {
