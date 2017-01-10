@@ -55,17 +55,16 @@ class MyLearning extends BaseResource
             $classroomIds = ArrayToolkit::column($groupMembers['classroom'], 'classroomId');
             $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
             $classrooms = ArrayToolkit::index($classrooms, 'id');
-            foreach ($courses as &$course) {
-                if ($course['parentId'] > 0) {
-                    $key = $course['parentId'];
-                    $course['classroomTitle'] = empty($classrooms[$key]) ? '' : $classrooms[$key]['title'];
-                }
+        }
+
+        foreach ($members as $key => $member) {
+            $learningData[$key] = $courses[$member['courseId']];
+            $learningData[$key]['joinedType'] = $member['joinedType'];
+            if ('classroom' == $member['joinedType']) {
+                $learningData[$key]['classroomTitle'] = empty($classrooms[$member['classroomId']]) ? '' : $classrooms[$member['classroomId']]['title'];
             }
         }
 
-        foreach ($members as $member) {
-            $learningData[] = $courses[$member['courseId']];
-        }
         return $learningData;
     }
 
