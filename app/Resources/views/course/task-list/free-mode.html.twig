@@ -36,27 +36,12 @@
                 <a class="text-overflow title" href="#modal" data-toggle="modal"
                  data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
               {% endif %}
-
-                {% if (member is empty) and task.isFree %}
-                  <span class="label label-success mr10">免费</span>
-                {% elseif (member is empty) and course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
-                  <span class="label label-warning mrm">{{ '试看'|trans }}</span>
-                {% elseif member  and task.isOptional == 1 %}
-                  <span class="label label-success mr10">选修</span>
-                {% endif %}
-                课时{{ task.number }}：{{ task.title }}
+                  {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </a>
               {% else %}
-                <span class="text-overflow title">
-                   {% if (member is empty) and task.isFree %}
-                     <span class="label label-success mr10">免费</span>
-                   {% elseif (member is empty) and course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
-                     <span class="label label-warning mrm">{{ '试看'|trans }}</span>
-                   {% elseif member  and task.isOptional == 1 %}
-                     <span class="label label-success mr10">选修</span>
-                   {% endif %}
-                  课时{{ task.number }}：{{ task.title }}
-              </span>
+                 <span class="text-overflow title">
+                  {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                 </span>
               {% endif %}
 
               <span class="right-menu mouse-leave">

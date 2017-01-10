@@ -1,10 +1,10 @@
+
 <div class="course-detail-content">
   <ul class="task-list task-list-md task-list-hover">
     {% for key, item in courseItems %}
       {% if item.itemType == 'chapter' and item.type == 'chapter' %}
         <li class="task-item bg-gray-lighter"><i class="es-icon es-icon-menu left-menu"></i>
-          <span class="text-overflow title">第{{ item.number }}
-            章：{{ item.title }}</span>
+          <span class="text-overflow title">第{{ item.number }} 章：{{ item.title }}</span>
           <i class="right-menu es-icon es-icon es-icon-anonymous-iconfont"></i>
         </li>
       {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
@@ -36,35 +36,26 @@
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu"></i>
-          {% if task.status == 'published' and task_lock is empty %}
-            {% if member %}
-             <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
-            {% else %}
-              <a class="text-overflow title" href="#modal" data-toggle="modal"
-               data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
+          {% if task.status == 'published'  %}
+            {% if member  %}
+                {% if task_lock is empty %}
+                  <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+                    {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                  </a>
+                {% else %}
+                  <span class="text-overflow title">
+                  {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                 </span>
+                {% endif  %}
+             {% else %}
+              <a class="text-overflow title" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
+                {% include 'course/task-list/parts/list-li-title.html.twig' %}
+              </a>
             {% endif %}
-
-            {% if (member is empty) and task.isFree %}
-              <span class="label label-success mr10">免费</span>
-            {% elseif (member is empty) and course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
-              <span class="label label-warning mrm">{{ '试看'|trans }}</span>
-            {% elseif member  and task.isOptional == 1 %}
-              <span class="label label-success mr10">选修</span>
-            {% endif %}
-              课时{{ task.number }}：{{ task.title }}
-            </a>
-
           {% else %}
-              <span class="text-overflow title">
-                {% if (member is empty) and task.isFree %}
-                  <span class="label label-success mr10">免费</span>
-                {% elseif (member is empty) and course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
-                  <span class="label label-warning mrm">{{ '试看'|trans }}</span>
-                {% elseif member  and task.isOptional == 1 %}
-                  <span class="label label-success mr10">选修</span>
-                {% endif %}
-                课时{{ task.number }}：{{ task.title }}
-            </span>
+            <span class="text-overflow title">
+              {% include 'course/task-list/parts/list-li-title.html.twig' %}
+             </span>
           {% endif %}
             <span class="right-menu mouse-leave">
             {% set meta =  activity_meta(task.activity.mediaType) %}
@@ -81,6 +72,3 @@
     {% endfor %}
   </ul>
 </div>
-
-
-

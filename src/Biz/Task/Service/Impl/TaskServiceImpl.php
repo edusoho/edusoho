@@ -164,11 +164,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $continue     = true;
         $canLearnTask = false;
-        foreach ($preTasks as $key => $preTask) {
+        foreach (array_values($preTasks) as $key => $preTask) {
             if (empty($continue)) {
                 break;
             }
-
+            if ($preTask['status'] != 'published') {
+                $continue;
+            }
             if ($preTask['isOptional']) {
                 $canLearnTask = true;
             } else if ($preTask['type'] == 'live') {
@@ -579,7 +581,6 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         if ($task['type'] == 'testpaper' and $task['startTime']) {
             $task['lock'] = false;
-            return $task;
         }
         return $task;
     }
