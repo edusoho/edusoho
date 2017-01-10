@@ -49,6 +49,8 @@ class BaseDaoTestCase extends BaseTestCase
         $testName = $class->getShortName();
         if (strpos($testName, 'Test', strlen($testName) - 4)) {
             $daoName = substr($testName, 0, strlen($testName) - 4);
+        } else {
+            throw new \Exception('classname must be up to standard, which is to end up with \'Test\'');
         }
 
         return $this->getBiz()->dao("{$packageName}:{$daoName}");
