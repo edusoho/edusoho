@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\My;
 
+use Biz\Task\Service\TaskService;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\Course\CourseBaseController;
@@ -146,6 +147,9 @@ class CourseController extends CourseBaseController
         return $taskPerDay * $joinDays >= $taskNum ? $taskNum : round($taskPerDay * $joinDays);
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
