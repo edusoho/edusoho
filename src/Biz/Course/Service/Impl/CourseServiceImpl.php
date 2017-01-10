@@ -69,7 +69,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
         }
         //临时注释
-        if (!$this->hasCourseManagerRole($course['courseSetId'])) {
+        if (!$this->hasCourseManagerRole(0, $course['courseSetId'])) {
             throw $this->createAccessDeniedException('You have no access to Course Management');
         }
 

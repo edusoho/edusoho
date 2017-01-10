@@ -24,7 +24,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->beginTransaction();
         try {
             $strategy = $this->createCourseStrategy($fields['fromCourseId']);
-            $task     = $strategy->createTask($fields);
+
+            $task = $strategy->createTask($fields);
             $this->dispatchEvent("course.task.create", new Event($task));
             $this->commit();
             return $task;
@@ -119,6 +120,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         array_walk($tasks, function (&$task) use ($activities) {
             $activity         = $activities[$task['activityId']];
             $task['activity'] = $activity;
+            //设置任务是否解锁
+            $task['lock'] = !(empty($task['result']) && empty($task['isOptional']) && $task['type'] != 'live');
         });
 
         return $tasks;
@@ -134,24 +137,50 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
-        array_walk($tasks, function (&$task) use ($taskResults) {
+        //如果前一个是选修，则相邻的下一个也是可以直接学的
+        //如果是直播，本身锁定，直播开始后直播可以学习， 如果直播结束后，直播未学习也解锁，保证后续任务可以学习
+        //如果是时事考试，同上。
+
+        $optional = false;//标记当前任务是否选修
+        $that     = $this;
+        array_walk($tasks, function (&$task) use ($taskResults, &$optional, $that) {
             foreach ($taskResults as $key => $result) {
                 if ($key != $task['id']) {
                     continue;
                 }
                 $task['result'] = $result;
             }
+            //设置任务是否解锁
+            if ($optional) { //任务可选
+                $task['lock'] = false;
+                $optional     = $task['isOptional'] ? true : false;
+            } elseif ($task['isOptional']) {
+                $task['lock'] = false;
+                $optional     = true; //当前选修，下一个可以学习
+            } elseif (isset($task['result']) && $task['result'] == 'finish') {
+                $task['lock'] = false;
+            } elseif ($task['type'] == 'live') { //直播
+                $task['lock'] = $task['startTime'] >= time(); //直播已经开始
+                if (time() >= $task['activity']['endTime']) { //直播已经结束
+                    $optional = true;
+                }
+            } elseif ($task['type'] == 'testpaper' and $task['startTime']) {
+                $task['lock'] = $task['startTime'] >= time();
+                $activity     = $that->getActivityService()->getActivityConfig($task['type'])->get($task['activityId']);
+                $endTime      = $task['startTime'] + $activity['limitedTime'] * 60;
+                if (time() >= $endTime) {//实时考试结束下一个任务可以开始进行
+                    $optional = true;
+                }
+            } else {
+                $task['lock'] = true;
+            }
         });
-        //设置任务是否解锁
-        foreach ($tasks as &$task) {
-            $task['lock'] = !(empty($task['result']) && empty($task['isOptional']) && $task['type'] != 'live');
-        }
         return $tasks;
     }
 
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId)
     {
-        $conditions = array(
+        $conditions     = array(
             'userId' => $userId
         );
         $myTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions, 0, PHP_INT_MAX, true);
@@ -160,7 +189,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'courseIds'   => ArrayToolkit::column($myTeachCourses, 'courseId'),
             'courseSetId' => $courseSetId
         );
-        $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $courses    = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
         return $this->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
     }
@@ -286,8 +315,8 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function canLearnTask($taskId)
     {
-        $task         = $this->getTask($taskId);
-        list($course) = $this->getCourseService()->tryTakeCourse($task['courseId']);
+        $task = $this->getTask($taskId);
+        list($course,) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
         return $canLearnTask;

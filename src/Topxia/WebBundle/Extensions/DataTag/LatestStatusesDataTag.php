@@ -2,8 +2,8 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Biz\Course\Service\CourseService;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
 
@@ -33,9 +33,11 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
         if (isset($arguments['objectType']) && isset($arguments['objectId'])) {
             if ($arguments['objectType'] == 'course') {
                 $conditions['courseIds'] = array($arguments['objectId']);
+            } else if($arguments['objectType'] == 'courseSet') {
+                $courses = $this->getCourseService()->findCoursesByCourseSetId($arguments['objectId']);
+                $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
             } else {
-                $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-
+                $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($arguments['objectId']);
                 if ($courses) {
                     $courseIds = ArrayToolkit::column($courses, 'id');
                     $conditions['classroomCourseIds'] = $courseIds;
@@ -80,6 +82,14 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
     private function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
 }

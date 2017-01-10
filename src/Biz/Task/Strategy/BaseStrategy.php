@@ -44,11 +44,15 @@ class BaseStrategy
         }
         $activity = $this->getActivityService()->createActivity($fields);
 
+
         $fields['activityId']    = $activity['id'];
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
         $fields['type']          = $fields['mediaType'];
+        if ($activity['mediaType'] == 'video') {
+            $fields['mediaSource'] = $fields['ext']['mediaSource'];
+        }
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
@@ -58,6 +62,7 @@ class BaseStrategy
             'activityId',
             'title',
             'type',
+            'mediaSource',
             'isFree',
             'isOptional',
             'startTime',
@@ -75,15 +80,19 @@ class BaseStrategy
         if (!$this->getCourseService()->tryManageCourse($savedTask['courseId'])) {
             throw new AccessDeniedException('无权更新任务');
         }
-        $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
+        $activity = $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
 
+        if ($activity['mediaType'] == 'video') {
+            $fields['mediaSource'] = $fields['ext']['mediaSource'];
+        }
         $fields = ArrayToolkit::parts($fields, array(
             'title',
             'isFree',
             'isOptional',
             'startTime',
             'endTime',
-            'status'
+            'status',
+            'mediaSource'
         ));
 
         return $this->getTaskDao()->update($id, $fields);

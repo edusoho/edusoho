@@ -38,7 +38,7 @@ abstract class Activity
 
     public function isFinished($id)
     {
-        return true;
+        return false;
     }
 
     /**

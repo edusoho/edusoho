@@ -15,7 +15,8 @@
         </li>
       {% elseif  item.itemType == 'task' %}
         {% set task = item %}
-        {% set task_lock =  (course.learnMode  == 'lockMode')  and ( not task.lock)  and task.number != 1 %}
+        {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+        {% set file = files[task.activity.mediaId]|default(null) %}
         <li class="task-item task-content mouse-control">
           <i class="es-icon
               {% if task_lock %}
@@ -29,29 +30,36 @@
               {% endif %}
               left-menu"></i>
           {% if task.status == 'published' %}
-            <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
-              {% if task.isFree %}  <span class="label label-warning mr10">免费</span> {% endif %}
+          {% if member %}
+          <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+            {% else %}
+            <a class="text-overflow title" href="#modal" data-toggle="modal"
+               data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+            >
+              {% endif %}
+              {% if task.isFree %}
+                <span class="label label-success mr10">免费</span>
+              {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
+                <span class="label label-warning mrm">{{ '试看'|trans }}</span>
+              {% endif %}
               课时{{ task.number }}：{{ task.title }}
             </a>
-          {% else %}
-            <span class="text-overflow title">
-            {% if task.isFree %}  <span class="label label-warning mr10">免费</span> {% endif %}
-            课时{{ task.number }}：{{ task.title }}
-            </span>
-          {% endif %}
-          <span class="right-menu mouse-leave">
-              {{ task.activity.length|default(0)|activity_length_format }}
-            {% set meta =  activity_meta(task.activity.mediaType) %}
-            <i class="es-icon es-icon {{ meta.icon }}" data-toggle="tooltip" data-placement="top" title=""
-               data-original-title="{{ meta.name }}任务"></i>
-            </span>
-          <span class="right-menu mouse-enter">
-            {% if task.status == 'published' %}
-              <a href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"
-                 class="btn btn-primary btn-sm btn-learn">继续学习</a>
+
             {% else %}
-              敬请期待
+              <span class="text-overflow title">
+            {% if task.isFree %}  <span class="label label-warning mr10">免费</span> {% endif %}
+                课时{{ task.number }}：{{ task.title }}
+            </span>
             {% endif %}
+            <span class="right-menu mouse-leave">
+            {% set meta =  activity_meta(task.activity.mediaType) %}
+              {#{% if task.status != 'published' %}敬请期待{% endif %}#}
+              {{ task.activity.length|default(0)|activity_length_format }}
+              <i class="es-icon es-icon {{ meta.icon }}" data-toggle="tooltip" data-placement="top" title=""
+                 data-original-title="{{ meta.name }}任务"></i>
+            </span>
+            <span class="right-menu mouse-enter">
+             {% if task.status != 'published' %}敬请期待{% endif %}
           </span>
         </li>
       {% endif %}

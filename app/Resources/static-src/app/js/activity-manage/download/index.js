@@ -112,7 +112,7 @@ function addFile(addToList) {
   } else {
     item_tpl = `
     <li class="download-item " data-id="${media.id}">
-      <a class="gray-primary" href="${ media.id }">${ media.name }</a>
+      <a class="gray-primary" href="/materiallib/${ media.id }/download">${ media.name }</a>
       <a class="gray-primary phm  btn-delete js-btn-delete" href="javascript:;" title="{{'删除'|trans}}" data-url=""><i class="es-icon es-icon-cuowu"></i></a>
     </li>
   `;

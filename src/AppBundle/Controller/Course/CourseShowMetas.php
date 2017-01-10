@@ -3,6 +3,13 @@ namespace AppBundle\Controller\Course;
 
 class CourseShowMetas
 {
+    const SUMMARY_NAME  = '介绍';
+    const TASKS_NAME    = '目录';
+    const THREADS_NAME  = '话题';
+    const REVIEWS_NAME  = '评价';
+    const NOTES_NAME    = '笔记';
+    const MATERIAL_NAME = '资料区';
+
     public static function getMemberCourseShowMetas()
     {
         $metas = self::getGuestCourseShowMetas();
@@ -10,32 +17,32 @@ class CourseShowMetas
             'header'  => 'AppBundle:My/Course:headerForMember',
             'tabs'    => array(
                 'tasks'    => array(
-                    'name'    => '课程目录',
-                    'content' => 'AppBundle:Course:tasks'
+                    'name'    => self::TASKS_NAME,
+                    'content' => 'AppBundle:Course/Course:tasks'
                 ),
                 'threads'  => array(
-                    'name'    => '话题',
+                    'name'    => self::THREADS_NAME,
                     'number'  => 'threadNum',
-                    'content' => 'AppBundle:CourseThread:index'
+                    'content' => 'AppBundle:Course/Thread:index'
                 ),
                 'reviews'  => array(
-                    'name'    => '评价',
+                    'name'    => self::REVIEWS_NAME,
                     'number'  => 'ratingNum',
-                    'content' => 'AppBundle:Course:reviews'
+                    'content' => 'AppBundle:Course/Course:reviews'
                 ),
                 'notes'    => array(
-                    'name'    => '笔记',
+                    'name'    => self::NOTES_NAME,
                     'number'  => 'noteNum',
-                    'content' => 'AppBundle:Course:notes'
+                    'content' => 'AppBundle:Course/Course:notes'
                 ),
                 'material' => array(
-                    'name'    => '资料区',
+                    'name'    => self::MATERIAL_NAME,
                     'number'  => 'materialNum',
-                    'content' => 'AppBundle:Course/CourseMaterial:index'
+                    'content' => 'AppBundle:Course/Material:index'
                 ),
                 'summary'  => array(
-                    'name'    => '课程介绍',
-                    'content' => 'AppBundle:Course:summary'
+                    'name'    => self::SUMMARY_NAME,
+                    'content' => 'AppBundle:Course/Course:summary'
                 )
             ),
             'widgets' => $metas['widgets']
@@ -45,34 +52,34 @@ class CourseShowMetas
     public static function getGuestCourseShowMetas()
     {
         return array(
-            'header'  => 'AppBundle:Course:header',
+            'header'  => 'AppBundle:Course/Course:header',
             'tabs'    => array(
                 'summary' => array(
-                    'name'    => '课程介绍',
-                    'content' => 'AppBundle:Course:summary'
+                    'name'    => self::SUMMARY_NAME,
+                    'content' => 'AppBundle:Course/Course:summary'
                 ),
                 'tasks'   => array(
-                    'name'    => '课程目录',
-                    'content' => 'AppBundle:Course:tasks'
+                    'name'    => self::TASKS_NAME,
+                    'content' => 'AppBundle:Course/Course:tasks'
                 ),
                 'reviews' => array(
-                    'name'    => '评价',
+                    'name'    => self::REVIEWS_NAME,
                     'number'  => 'ratingNum',
-                    'content' => 'AppBundle:Course:reviews'
+                    'content' => 'AppBundle:Course/Course:reviews'
                 ),
                 'notes'   => array(
-                    'name'    => '笔记',
+                    'name'    => self::NOTES_NAME,
                     'number'  => 'noteNum',
-                    'content' => 'AppBundle:Course:notes'
+                    'content' => 'AppBundle:Course/Course:notes'
                 )
             ),
             'widgets' => array(
                 'characteristic'     => array(
-                    'uri'  => 'AppBundle:Course:characteristic',
+                    'uri'  => 'AppBundle:Course/Course:characteristic',
                     'type' => 'render'
                 ),
                 'otherCourse'        => array(
-                    'uri'  => 'AppBundle:Course:otherCourse',
+                    'uri'  => 'AppBundle:Course/Course:otherCourse',
                     'type' => 'render'
                 ),
                 'recommendClassroom' => array(
@@ -80,11 +87,11 @@ class CourseShowMetas
                     'type' => 'include'
                 ),
                 'teachers'           => array(
-                    'uri'  => 'AppBundle:Course:teachers',
+                    'uri'  => 'AppBundle:Course/Course:teachers',
                     'type' => 'render'
                 ),
                 'newestStudents'     => array(
-                    'uri'  => 'AppBundle:Course:newestStudents',
+                    'uri'  => 'AppBundle:Course/Course:newestStudents',
                     'type' => 'render'
                 ),
                 'studentActivity'    => array(

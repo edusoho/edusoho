@@ -140,6 +140,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Text:create',
                     'edit'            => 'AppBundle:Activity/Text:edit',
                     'show'            => 'AppBundle:Activity/Text:show',
+                    'preview'         => 'AppBundle:Activity/Text:preview',
                     'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
                 )
             ),
@@ -152,6 +153,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Video:create',
                     'edit'            => 'AppBundle:Activity/Video:edit',
                     'show'            => 'AppBundle:Activity/Video:show',
+                    'preview'         => 'AppBundle:Activity/Video:preview',
                     'finishCondition' => 'AppBundle:Activity/Video:finishCondition'
                 )
             ),
@@ -164,6 +166,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Audio:create',
                     'edit'            => 'AppBundle:Activity/Audio:edit',
                     'show'            => 'AppBundle:Activity/Audio:show',
+                    'preview'         => 'AppBundle:Activity/Audio:preview',
                     'finishCondition' => 'AppBundle:Activity/Audio:finishCondition'
                 )
             ),
@@ -176,6 +179,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Download:create',
                     'edit'            => 'AppBundle:Activity/Download:edit',
                     'show'            => 'AppBundle:Activity/Download:show',
+                    'preview'         => 'AppBundle:Activity/Download:preview',
                     'finishCondition' => 'AppBundle:Activity/Download:finishCondition'
                 )
             ),
@@ -188,6 +192,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Live:create',
                     'edit'            => 'AppBundle:Activity/Live:edit',
                     'show'            => 'AppBundle:Activity/Live:show',
+                    'preview'         => 'AppBundle:Activity/Live:preview',
                     'finishCondition' => 'AppBundle:Activity/Live:finishCondition'
                 )
             ),
@@ -200,6 +205,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Discuss:create',
                     'edit'            => 'AppBundle:Activity/Discuss:edit',
                     'show'            => 'AppBundle:Activity/Discuss:show',
+                    'preview'         => 'AppBundle:Activity/Discuss:preview',
                     'finishCondition' => 'AppBundle:Activity/Discuss:finishCondition'
                 )
             ),
@@ -213,6 +219,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Flash:create',
                     'edit'            => 'AppBundle:Activity/Flash:edit',
                     'show'            => 'AppBundle:Activity/Flash:show',
+                    'preview'         => 'AppBundle:Activity/Flash:preview',
                     'finishCondition' => 'AppBundle:Activity/Flash:finishCondition'
                 )
             ),
@@ -225,6 +232,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Doc:create',
                     'edit'            => 'AppBundle:Activity/Doc:edit',
                     'show'            => 'AppBundle:Activity/Doc:show',
+                    'preview'         => 'AppBundle:Activity/Doc:preview',
                     'finishCondition' => 'AppBundle:Activity/Doc:finishCondition'
                 )
             ),
@@ -237,6 +245,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Ppt:create',
                     'edit'            => 'AppBundle:Activity/Ppt:edit',
                     'show'            => 'AppBundle:Activity/Ppt:show',
+                    'preview'         => 'AppBundle:Activity/Ppt:preview',
                     'finishCondition' => 'AppBundle:Activity/Ppt:finishCondition'
                 )
             ),
@@ -249,6 +258,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Testpaper:create',
                     'edit'            => 'AppBundle:Activity/Testpaper:edit',
                     'show'            => 'AppBundle:Activity/Testpaper:show',
+                    'preview'         => 'AppBundle:Activity/Testpaper:tryLook',
                     'finishCondition' => 'AppBundle:Activity/Testpaper:finishCondition'
                 )
             ),
@@ -260,6 +270,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                 'actions' => array(
                     'create'          => 'AppBundle:Activity/Homework:create',
                     'edit'            => 'AppBundle:Activity/Homework:edit',
+                    'preview'         => 'AppBundle:Activity/Homework:tryLook',
                     'show'            => 'AppBundle:Activity/Homework:show',
                     'finishCondition' => 'AppBundle:Activity/Homework:finishCondition'
                 )
@@ -273,6 +284,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'create'          => 'AppBundle:Activity/Exercise:create',
                     'edit'            => 'AppBundle:Activity/Exercise:edit',
                     'show'            => 'AppBundle:Activity/Exercise:show',
+                    'preview'         => 'AppBundle:Activity/Exercise:tryLook',
                     'finishCondition' => 'AppBundle:Activity/Exercise:finishCondition'
                 )
             )

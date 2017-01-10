@@ -24,6 +24,10 @@ class CourseTaskType extends Migration
      */
     public function down()
     {
-
+        $biz = $this->getContainer();
+        $db  = $biz['db'];
+        $db->exec("
+            ALTER TABLE `course_task` DROP COLUMN `type`;
+        ");
     }
 }

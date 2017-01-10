@@ -118,7 +118,8 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
         $result = $this->getMemberDao()->delete($member['id']);
 
-        $this->dispatchEvent("course.student.delete", $member);
+        $course = $this->getCourseService()->getCourse($courseId);
+        $this->dispatchEvent('course.quit', $course, array('userId' => $userId, 'member' => $member));
         return $result;
     }
 
@@ -423,8 +424,8 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $this->getMemberDao()->delete($member['id']);
         $this->dispatchEvent(
-            'learning.quit',
-            $course, array('userId' => $userId)
+            'course.quit',
+            $course, array('userId' => $userId, 'member' => $member)
         );
 
         $this->getCourseDao()->update($courseId, array(

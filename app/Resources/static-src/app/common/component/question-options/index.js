@@ -11,7 +11,6 @@ function InitOptionData(dataSource,inputValue,validatorDatas,seq,checked) {
     inputValue: inputValue,
     checked: checked,
   }
-  console.log(obj);
   validatorDatas.Options[`question-option-${seq}`] = inputValue.length > 0 ? 1 : 0;
   if(checked) {
     validatorDatas.checkedNum += 1;
@@ -20,29 +19,32 @@ function InitOptionData(dataSource,inputValue,validatorDatas,seq,checked) {
 }
 
 function deleteOption(dataSource,validatorDatas,optionId) {
+  validatorDatas.Options = {};
   for(let i = 0; i< dataSource.length ;i++) {
     if(dataSource[i].optionId==optionId) {
       dataSource.splice(i, 1);
-      delete validatorDatas[optionId];
+      console.log(validatorDatas.Options[optionId]);
+      console.log(dataSource);
+      delete validatorDatas.Options[optionId];
       i--;
     }else {
       dataSource[i].optionLabel = '选项'+ numberConvertLetter(i+1);
+      dataSource[i].optionId = `question-option-${i+1}`;
+      validatorDatas.Options[`question-option-${i+1}`] = dataSource[i].inputValue > 0 ? 1 : 0;
     }
   }
 }
 
-function changeOptionChecked(dataSource,validatorDatas,value,isRadio,checkedId) {
-  let objValue = JSON.parse(value);
+function changeOptionChecked(dataSource,validatorDatas,id,checked,isRadio) {
   let checkedNum = 0;
   dataSource.map((item,index)=> {
-    if(item.optionId == objValue.id) {
+    if(item.optionId == id) {
       //如果是单选，
-      if(isRadio && objValue.checked){
+      if(isRadio && checked){
         return;
       }
-      console.log(isRadio);
-      dataSource[index].checked= !objValue.checked;
-    }else if(isRadio && !objValue.checked){
+      dataSource[index].checked= !checked;
+    }else if(isRadio && !checked){
       //如果是单选;
       dataSource[index].checked = false;
     }
@@ -51,8 +53,6 @@ function changeOptionChecked(dataSource,validatorDatas,value,isRadio,checkedId) 
     }
   });
   validatorDatas.checkedNum = checkedNum;
-  console.log(validatorDatas);
-  console.log(dataSource);
 }
 
 export default class QuestionOptions extends Component {
@@ -147,10 +147,11 @@ export default class QuestionOptions extends Component {
       dataSource:this.state.dataSource,
     });
     console.log({'dataSource':this.state.dataSource});
+    console.log({'validatorDatas':this.validatorDatas});
   }
 
-  changeOptionChecked(value) {
-    changeOptionChecked(this.state.dataSource,this.validatorDatas,value,this.props.isRadio);
+  changeOptionChecked(id,checked) {
+    changeOptionChecked(this.state.dataSource,this.validatorDatas,id,checked,this.props.isRadio);
     this.setState({
       dataSource:this.state.dataSource,
     });
@@ -161,7 +162,7 @@ export default class QuestionOptions extends Component {
 
   deleteOption(id) {
     if(this.state.dataSource.length <= this.props.minNum) {
-      notify('danger', `选项最少${this.props.maxNum}个!`);
+      notify('danger', `选项最少${this.props.minNum}个!`);
       return;
     }
     deleteOption(this.state.dataSource,this.validatorDatas,id);
@@ -171,13 +172,19 @@ export default class QuestionOptions extends Component {
     console.log(this.validatorDatas);
   }
 
+  updateInputValue(id) {
+
+  }
+
   render() {
+    console.log(this.state.dataSource);
+    console.log('rend');
     return(
       <div className="question-options-group">
         {
           this.state.dataSource.map((item,index)=>{
             return (
-              <Option isRadio = {this.props.isRadio} publishMessage= {(isValidator)=>this.publishMessage(isValidator)} validatorDatas = {this.validatorDatas} isValidator= {this.state.isValidator} datas = {item} key = {index} index = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id)=>this.changeOptionChecked(id)}></Option>
+              <Option isRadio = {this.props.isRadio} publishMessage= {(isValidator)=>this.publishMessage(isValidator)} validatorDatas = {this.validatorDatas} isValidator= {this.state.isValidator} datas = {item} key = {index} index = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id,checked)=>this.changeOptionChecked(id,checked)} updateInputValue={ (id)=>updateInputValue(id)}></Option>
             )
           })
         }
@@ -189,6 +196,11 @@ export default class QuestionOptions extends Component {
       </div>
     )
   }
+}
+
+QuestionOptions.propTypes = {
+  dataSource: React.PropTypes.array,
+  dataAnswer: React.PropTypes.array,
 }
 
 QuestionOptions.defaultProps = {

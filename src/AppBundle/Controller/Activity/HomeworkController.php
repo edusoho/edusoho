@@ -40,6 +40,12 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
         ));
     }
 
+    public function tryLookAction(Request $request, $task)
+    {
+        return $this->render('activity/homework/try-look.html.twig');
+    }
+
+
     public function previewAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
