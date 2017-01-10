@@ -26,13 +26,13 @@ Unit Test With PHP 5.3:
     - master
     - trigger
 
-# Unit Test With PHP 5.5:
-#   stage: test
-#   image: codeages/ci-php:5.5-1
-#   services:
-#     - mysql:5.5
-#   script:
-#     - phpunit -c app/
+Unit Test With PHP 5.5:
+  stage: test
+  image: codeages/ci-php:5.5-2
+  services:
+    - mysql:5.5
+  script:
+    - phpunit -c app/
 
 Unit Test With PHP 7.0:
   stage: test
@@ -48,4 +48,3 @@ Unit Test With PHP 7.0:
     - develop
     - master
     - trigger
-    - /^feature\/.*$/
