@@ -25,7 +25,6 @@ export default class Options extends Component {
   }
 
   initCkeditor(dataSourceUi) {
-    console.log(this.props.filebrowserImageUploadUrl);
     if(!this.editor) {
       this.editor = CKEDITOR.replace(this.props.datas.optionId, {
         toolbar: 'Minimal',
@@ -35,13 +34,13 @@ export default class Options extends Component {
       let self = this;
       this.editor.on("instanceReady", function () {  
         self.editorBody = $('#' + [self.props.datas.optionId]).parent().find('iframe').contents().find('body');
-        this.document.on("keyup", function(){
-          setTimeout(function(){
-             console.log('keyupkeyupkeyup.....');
-             self.updateInputValue(self.editor.getData());
-          },100)
-        });  
-      });  
+        //setData两个问题：1、引发事件失效 2、死循环触发；
+      }); 
+      this.editor.on('change',function(){
+        setTimeout(function(){
+          self.updateInputValue(self.editor.getData());
+        },100)
+      });
     }else {
       this.editor.setData(datas.inputValue);
     }
@@ -49,7 +48,6 @@ export default class Options extends Component {
 
   updateInputValue(inputValue) {
     this.editorHtml = inputValue;
-    console.log({editorHtml:this.editorHtml});
     this.props.updateInputValue(this.props.datas.optionId,inputValue);
   }
 
@@ -59,18 +57,8 @@ export default class Options extends Component {
     if(this.props.isRadio) {
       type= 'radio';
     }
-    console.log({editorHtml:this.editorHtml});
-    console.log({inputValue:this.props.datas.inputValue});
-
-    console.log(this.editorHtml != this.props.datas.inputValue);
-    if(this.editorHtml != this.props.datas.inputValue) {
-      console.log('add');
-      console.log(this.editorBody);
-      if(this.editorBody) {
-        console.log(this.editorBody);
-        console.log({'add':this.props.datas.inputValue});
-        this.editorBody.html(this.props.datas.inputValue);
-      }
+    if(this.editorBody && this.editorHtml != this.props.datas.inputValue) {
+      this.editorBody.html(this.props.datas.inputValue);
     }
     return (
       <div className="form-group">

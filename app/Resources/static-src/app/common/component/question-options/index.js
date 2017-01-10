@@ -186,7 +186,7 @@ export default class QuestionOptions extends Component {
     updateOption(this.state.dataSource,this.validatorDatas,id,value);
     this.validatorDatas.Options[id] = value.length > 0 ? 1:0;
     if(value.length <=0 ) {
-      this.props.publishMessage(false);
+      this.publishMessage(false);
     }
     this.setState({
       dataSource: this.state.dataSource,
@@ -194,9 +194,6 @@ export default class QuestionOptions extends Component {
   }
 
   render() {
-    // console.log('dataSource',this.state.dataSource);
-    // console.log('validatorDatas',this.validatorDatas);
-    // console.log('rend');
     return(
       <div className="question-options-group">
         {
@@ -214,11 +211,6 @@ export default class QuestionOptions extends Component {
       </div>
     )
   }
-}
-
-QuestionOptions.propTypes = {
-  dataSource: React.PropTypes.array,
-  dataAnswer: React.PropTypes.array,
 }
 
 QuestionOptions.defaultProps = {
