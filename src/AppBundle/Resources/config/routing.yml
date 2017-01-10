@@ -1632,28 +1632,28 @@ course_set_manage_course_teachers_match:
 
 course_set_manage_course_students:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students
-  defaults: {_controller: AppBundle:Course/CourseManage:students}
+  defaults: {_controller: AppBundle:Course/StudentManage:students}
 
 course_set_manage_course_quit_records:
   path: /course_set/{courseSetId}/manage/course/{courseId}/quit_records
-  defaults: {_controller: AppBundle:Course/CourseManage:studentQuitRecords}
+  defaults: {_controller: AppBundle:Course/StudentManage:studentQuitRecords}
 
 course_set_manage_course_students_add:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/add
-  defaults: {_controller: AppBundle:Course/CourseManage:createCourseStudent}
+  defaults: {_controller: AppBundle:Course/StudentManage:createCourseStudent}
 
 course_set_manage_course_students_remove:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/remove
-  defaults: {_controller: AppBundle:Course/CourseManage:removeCourseStudent}
+  defaults: {_controller: AppBundle:Course/StudentManage:removeCourseStudent}
   methods: [POST]
 
 course_set_manage_course_students_process:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/process
-  defaults: {_controller: AppBundle:Course/CourseManage:studyProcess}
+  defaults: {_controller: AppBundle:Course/StudentManage:studyProcess}
 
 course_set_manage_course_students_check:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/check
-  defaults: {_controller: AppBundle:Course/CourseManage:checkStudent}
+  defaults: {_controller: AppBundle:Course/StudentManage:checkStudent}
 
 course_set_manage_course_orders:
   path: /course_set/{courseSetId}/manage/course/{courseId}/orders
