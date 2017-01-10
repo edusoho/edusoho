@@ -126,6 +126,7 @@ class ManageController extends BaseController
         if (!$result) {
             throw $this->createResourceNotFoundException('testpaperResult', $resultId);
         }
+        //还需要是否是教师的权限判断
 
         $testpaper = $this->getTestpaperService()->getTestpaper($result['testId']);
         if (!$testpaper) {
@@ -157,7 +158,7 @@ class ManageController extends BaseController
             'questions'     => $essayQuestions,
             'student'       => $student,
             'accuracy'      => $accuracy,
-            'questionTypes' => array('essay', 'material'),
+            'questionTypes' => $this->getCheckedQuestionType($testpaper),
             'total'         => $total,
             'source'        => $source,
             'targetId'      => $targetId,

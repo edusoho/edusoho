@@ -32,6 +32,10 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
                 'homework'       => $homework,
                 'courseId'       => $activity['fromCourseId']
             ));
+        } elseif ($homeworkResult['status'] == 'finished') {
+            return $this->forward('AppBundle:Homework:showResult', array(
+                'resultId' => $homeworkResult['id']
+            ));
         }
 
         return $this->forward('AppBundle:Homework:startDo', array(
@@ -44,7 +48,6 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
     {
         return $this->render('activity/homework/try-look.html.twig');
     }
-
 
     public function previewAction(Request $request, $id, $courseId)
     {

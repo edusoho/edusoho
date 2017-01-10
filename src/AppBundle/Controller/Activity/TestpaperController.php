@@ -32,6 +32,10 @@ class TestpaperController extends BaseController implements ActivityActionInterf
                 'testpaper'         => $testpaper,
                 'courseId'          => $activity['fromCourseId']
             ));
+        } elseif ($testpaperResult['status'] == 'finished') {
+            return $this->forward('AppBundle:Testpaper/Testpaper:showResult', array(
+                'resultId' => $testpaperResult['id']
+            ));
         }
 
         return $this->forward('AppBundle:Testpaper/Testpaper:doTestpaper', array(
