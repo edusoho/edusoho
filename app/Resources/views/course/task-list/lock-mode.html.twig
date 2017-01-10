@@ -15,7 +15,11 @@
         </li>
       {% elseif  item.itemType == 'task' %}
         {% set task = item %}
-        {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+        {% if  member is empty %}
+          {% set task_lock = true %}
+        {% else %}
+          {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+        {% endif %}
         {% set file = files[task.activity.mediaId]|default(null) %}
         <li class="task-item task-content mouse-control">
           <i class="es-icon

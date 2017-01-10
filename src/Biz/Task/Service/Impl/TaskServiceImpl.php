@@ -120,8 +120,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         array_walk($tasks, function (&$task) use ($activities) {
             $activity         = $activities[$task['activityId']];
             $task['activity'] = $activity;
-            //设置任务是否解锁
-            $task['lock'] = !(empty($task['result']) && empty($task['isOptional']) && $task['type'] != 'live');
         });
 
         return $tasks;
