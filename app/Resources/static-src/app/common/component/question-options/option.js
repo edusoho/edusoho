@@ -67,7 +67,7 @@ export default class Options extends Component {
     return (
       <div className="form-group">
         <div className="col-sm-2 control-label">
-          <label className="choice-label">{this.props.datas.optionLabel}</label>
+          <label className="choice-label control-label-required">{this.props.datas.optionLabel}</label>
         </div>
         <div className="col-sm-8 controls">
           <textarea className="form-control datas-input col-md-8" id={this.props.datas.optionId}  defaultValue={this.state.inputValue} name='choices[]' value={this.state.inputValue}></textarea>
