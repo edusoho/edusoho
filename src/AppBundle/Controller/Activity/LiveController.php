@@ -6,6 +6,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseController implements ActivityActionInterface
@@ -132,6 +133,14 @@ class LiveController extends BaseController implements ActivityActionInterface
     public function finishConditionAction($activity)
     {
         return $this->render('activity/live/finish-condition.html.twig', array());
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 
     /**
