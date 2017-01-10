@@ -43,6 +43,28 @@ class Homework extends Activity
         return $this->getTestpaperService()->deleteTestpaper($targetId);
     }
 
+    public function isFinished($activityId)
+    {
+        $user = $this->getBiz()['user'];
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'homework');
+
+        if (!$result) {
+            return false;
+        }
+
+        if (!empty($homework['finishCondition']) && $homework['finishCondition']['type'] == 'submit') {
+            return true;
+        } elseif ($result['status'] == 'finished' && $result['score'] > $homework['finishCondition']['finishScore']) {
+            return true;
+        }
+
+        return false;
+    }
+
     protected function getListeners()
     {
         return array();
@@ -61,17 +83,15 @@ class Homework extends Activity
             'title',
             'description',
             'questionIds',
+            'passedCondition',
             'finishCondition',
             'fromCourseId',
             'fromCourseSetId'
         ));
 
-        $finishCondition = array();
         if (!empty($fields['finishCondition'])) {
-            $finishCondition['type'] = $fields['finishCondition'];
+            $fields['passedCondition']['type'] = $fields['finishCondition'];
         }
-
-        $fields['finishCondition'] = $finishCondition;
 
         $fields['courseSetId'] = empty($fields['fromCourseSetId']) ? 0 : $fields['fromCourseSetId'];
         $fields['courseId']    = empty($fields['fromCourseId']) ? 0 : $fields['fromCourseId'];
@@ -84,5 +104,10 @@ class Homework extends Activity
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 }

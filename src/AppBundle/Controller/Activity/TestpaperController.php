@@ -114,7 +114,11 @@ class TestpaperController extends BaseController implements ActivityActionInterf
 
     public function finishConditionAction($activity)
     {
-        return $this->render('activity/testpaper/finish-condition.html.twig', array());
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        return $this->render('activity/testpaper/finish-condition.html.twig', array(
+            'testpaperActivity' => $testpaperActivity
+        ));
     }
 
     protected function findCourseTestpapers($courseId)

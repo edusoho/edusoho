@@ -1,6 +1,7 @@
 import QuestionTypeBuilder from './question-type-builder';
 import CopyDeny from './copy-deny';
 import ActivityEmitter from "../../activity/activity-emitter";
+import notify from "common/notify";
 
 class DoTestBase
 {
@@ -177,8 +178,15 @@ class DoTestBase
       if (response.result) {
         emitter.emit('finish');
       }
-      window.location.href = response.goto;
+      if (response.goto) {
+        window.location.href = response.goto;
+      } else {
+        notify('error', response.message);
+      }
     })
+    .error(function (response) {
+      notify('error', response.error.message);
+    });
   }
 
 }

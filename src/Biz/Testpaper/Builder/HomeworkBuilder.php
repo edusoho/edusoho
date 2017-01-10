@@ -96,10 +96,6 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
     public function filterFields($fields, $mode = 'create')
     {
-        if (!empty($fields['correctPercent'])) {
-            $fields['passedCondition'] = $fields['correctPercent'];
-        }
-
         if (!empty($fields['questionIds'])) {
             $fields['itemCount'] = count($fields['questionIds']);
         }

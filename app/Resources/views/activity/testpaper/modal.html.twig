@@ -25,9 +25,9 @@
   </div>
 
   <div class="form-group">
-    <div class="col-sm-2 control-label"><label for="limitedTime">{{'考试时长'|trans}}</label></div>
+    <div class="col-sm-2 control-label"><label for="length">{{'考试时长'|trans}}</label></div>
     <div class="col-sm-10 controls radios">
-      <input id="limitedTime" class="form-control inline-block width-150" type="text" name="limitedTime" value="{{ activity.limitedTime|default(0) }}"> {{'分'|trans}}
+      <input id="length" class="form-control inline-block width-150" type="text" name="length" value="{{ activity.length|default(0) }}"> {{'分'|trans}}
       <div class="help-block">{{'0分钟，表示无限制。'|trans}}</div>
     </div>
   </div>
@@ -35,10 +35,7 @@
   <div class="form-group">
     <div class="col-sm-2 control-label"><label>{{'考试次数'|trans}}</label></div>
     <div class="col-sm-10 controls radios">
-      <label><input type="radio" name="doTimes" value="0" {% if not activity.doTimes|default('0') %}checked{% endif %}> 不限</label>
-      {% if course.learnMode != 'lockMode' %}
-        <label><input type="radio" name="doTimes" value="1" {% if activity.doTimes|default('0') %}checked{% endif %}> 单次</label>
-      {% endif %}
+      {{ radios('doTimes', {'0':'不限'|trans, '1':'单次'|trans}, activity.doTimes|default('normal')) }}
     </div>
   </div>
 

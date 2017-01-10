@@ -13,7 +13,7 @@
 
 {% block paper_body %}
   {% block paper_warning %}
-    {% if app.user and app.user.id == paperResult.userId %}
+    {% if app.user and app.user.id == paperResult.userId|default(null) %}
       {% if paperResult.status == 'reviewing' %}
         <div class="alert alert-warning">{{'老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。'|trans}}</div>
       {% elseif paperResult.status == 'finished' %}

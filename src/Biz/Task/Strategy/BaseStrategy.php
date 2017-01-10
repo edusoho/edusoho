@@ -3,12 +3,11 @@
 namespace Biz\Task\Strategy;
 
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Dao\TaskResultDao;
-use Biz\Task\Service\TaskResultService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\Activity\Service\ActivityService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -29,7 +28,7 @@ class BaseStrategy
     public function baseCreateTask($fields)
     {
         $fields = array_filter($fields, function ($value) {
-            if (is_array($value) || ctype_digit((string)$value)) {
+            if (is_array($value) || ctype_digit((string) $value)) {
                 return true;
             }
 

@@ -307,7 +307,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'endTime'
         ));
 
-        if (isset($fields['startTime']) && isset($fields['length'])) {
+        if (isset($fields['startTime']) && isset($fields['length']) && $fields['mediaType'] != 'testpaper') {
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
         }
 

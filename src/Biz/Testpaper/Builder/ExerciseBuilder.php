@@ -96,6 +96,10 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             $fields['metas']['range'] = $fields['range'];
         }
 
+        if (!empty($fields['finishCondition'])) {
+            $fields['passedCondition']['type'] = $fields['finishCondition'];
+        }
+
         $fields = ArrayToolkit::parts($fields, array(
             'name',
             'itemCount',
