@@ -174,12 +174,19 @@ class MyTeachingController extends BaseController
 
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        $courses = ArrayToolKit::index($courses, 'id');
+
+        $setIds  = ArrayToolKit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($setIds);
+        $courseSets = ArrayToolKit::index($courseSets, 'id');
+
         $tasks   = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
 
         return $this->render('my-teaching/threads.html.twig', array(
             'paginator'  => $paginator,
             'threads'    => $threads,
             'users'      => $users,
+            'courseSets' => $courseSets,
             'courses'    => $courses,
             'tasks'      => $tasks,
             'type'       => $type,

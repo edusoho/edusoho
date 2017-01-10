@@ -281,7 +281,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         // 过滤数据
         $teacherMembers = array();
-
+        $course = $this->getCourseService()->getCourse($courseId);
         foreach (array_values($teachers) as $index => $teacher) {
             if (empty($teacher['id'])) {
                 throw $this->createServiceException("教师ID不能为空，设置教学计划(#{$courseId})教师失败");
@@ -295,6 +295,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
             $teacherMembers[] = array(
                 'courseId'    => $courseId,
+                'courseSetId' => $course['courseSetId'],
                 'userId'      => $user['id'],
                 'role'        => 'teacher',
                 'seq'         => $index,
@@ -502,6 +503,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $fields = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
+            'courseSetId' => $course['courseSetId'],
             'orderId'     => empty($order) ? 0 : $order['id'],
             'deadline'    => $deadline,
             'levelId'     => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
@@ -626,8 +628,10 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
     {
+        $course = $this->getCourseService()->getCourse($id);
         $fields = array(
             'courseId'    => $courseId,
+            'courseSetId' => $course['courseSetId'],
             'userId'      => $userId,
             'orderId'     => empty($info["orderId"]) ? 0 : $info["orderId"],
             'deadline'    => empty($info['deadline']) ? 0 : $info['deadline'],

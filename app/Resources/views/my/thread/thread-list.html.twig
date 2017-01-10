@@ -27,8 +27,15 @@
           </div>
           <div class="text-muted text-normal">
             {% if course %}
-              <span>{{ '发表于'|trans }}<a href="{{ path('course_show', {id:course.id}) }}"
-                                        class="link-muted">{{ course.title }}</a></span>
+              <span>{{ '发表于'|trans }}
+                <a href="{{ path('course_show', {id:course.id}) }}" class="link-muted">
+                  {{ course.title }}
+                </a>
+                -
+                <a href="{{ path('course_set_show', {id: course.id}) }}" class="link-muted">
+                  {{ courseSets[course.courseSetId].title }}
+                </a>
+              </span>
             {% else %}
               <span>{{ '课程已删除'|trans }}</span>
             {% endif %}
