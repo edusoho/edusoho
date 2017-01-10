@@ -63,7 +63,7 @@
         {% set serviceTags = services(course.services|default([])) %}
         {% for tag in serviceTags %}
         <span class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5" data-container="body" data-trigger="hover" data-placement="top"
-              data-toggle="popover" title="{{tag.full_name ~ (tag.active ? '' : '(暂未提供)')}}" data-content="{{tag.summary}}">{{tag.short_name}}</span>          
+              data-toggle="popover" title="{{tag.full_name}}{% if not tag.active %}<span class='text-12 color-gray'>(暂未提供)</span>{% endif %}" data-content="{{tag.summary}}">{{tag.short_name}}</span>          
         {% endfor %}
 
         {# <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top"
