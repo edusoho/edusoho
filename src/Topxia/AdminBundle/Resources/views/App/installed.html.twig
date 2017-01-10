@@ -51,7 +51,7 @@
               <div class="left-info pull-left">
 
                 <div class="text-muted">{{'作者：'|trans}} {{ app.developerName }}</div>
-                {% if app.name == 'EduSoho主系统' %}
+                {% if app.code == 'MAIN' %}
                   <div class="class-rating mtm">
                     <span class="text-muted">{{ '更新记录：'|trans }}<a href="{{ path('changelog_list') }}" class="default">所有更新日志</a></span>
                   </div>
