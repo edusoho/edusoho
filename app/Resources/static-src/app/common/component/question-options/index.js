@@ -6,12 +6,12 @@ import { numberConvertLetter } from '../../unit';
 
 function InitOptionData(dataSource,inputValue,validatorDatas,seq,checked) {
   var obj = {
-    optionId:`question-option-${seq}`,
+    optionId:Math.random().toString().replace('.',''),
     optionLabel: '选项'+ numberConvertLetter(seq),
     inputValue: inputValue,
     checked: checked,
   }
-  validatorDatas.Options[`question-option-${seq}`] = inputValue.length > 0 ? 1 : 0;
+  validatorDatas.Options[obj.optionId] = inputValue.length > 0 ? 1 : 0;
   if(checked) {
     validatorDatas.checkedNum += 1;
   }
@@ -19,9 +19,11 @@ function InitOptionData(dataSource,inputValue,validatorDatas,seq,checked) {
 }
 
 function deleteOption(dataSource,validatorDatas,optionId) {
-  validatorDatas.Options = {};
   for(let i = 0; i< dataSource.length ;i++) {
     if(dataSource[i].optionId==optionId) {
+      if(dataSource[i].checked) {
+        validatorDatas.checkedNum = 0;
+      }
       dataSource.splice(i, 1);
       console.log(validatorDatas.Options[optionId]);
       console.log(dataSource);
@@ -29,8 +31,6 @@ function deleteOption(dataSource,validatorDatas,optionId) {
       i--;
     }else {
       dataSource[i].optionLabel = '选项'+ numberConvertLetter(i+1);
-      dataSource[i].optionId = `question-option-${i+1}`;
-      validatorDatas.Options[`question-option-${i+1}`] = dataSource[i].inputValue > 0 ? 1 : 0;
     }
   }
 }
@@ -53,6 +53,14 @@ function changeOptionChecked(dataSource,validatorDatas,id,checked,isRadio) {
     }
   });
   validatorDatas.checkedNum = checkedNum;
+}
+
+function updateOption(dataSource,validatorDatas,id,value) {
+  dataSource.map((item,index)=>{
+    if(item.optionId == id) {
+      dataSource[index].inputValue = value;
+    }
+  })
 }
 
 export default class QuestionOptions extends Component {
@@ -85,6 +93,7 @@ export default class QuestionOptions extends Component {
       }
     }
     this.subscriptionMessage();
+    console.log(this.validatorOptions);
   }
 
   subscriptionMessage() {
@@ -125,7 +134,7 @@ export default class QuestionOptions extends Component {
     console.log(validNum);
 
     if(validNum < this.state.dataSource.length ) {
-
+      console.log(' validNum is error ');
       return;
     }
 
@@ -169,22 +178,30 @@ export default class QuestionOptions extends Component {
     this.setState({
       dataSource:this.state.dataSource,
     });
-    console.log(this.validatorDatas);
+    console.log({'validatorDatas':this.validatorDatas});
   }
 
-  updateInputValue(id) {
-
+  updateInputValue(id,value) {
+    updateOption(this.state.dataSource,this.validatorDatas,id,value);
+    this.validatorDatas.Options[id] = value.length > 0 ? 1:0;
+    if(value.length <=0 ) {
+      this.props.publishMessage(false);
+    }
+    this.setState({
+      dataSource: this.state.dataSource,
+    })
   }
 
   render() {
-    console.log(this.state.dataSource);
-    console.log('rend');
+    // console.log('dataSource',this.state.dataSource);
+    // console.log('validatorDatas',this.validatorDatas);
+    // console.log('rend');
     return(
       <div className="question-options-group">
         {
           this.state.dataSource.map((item,index)=>{
             return (
-              <Option isRadio = {this.props.isRadio} publishMessage= {(isValidator)=>this.publishMessage(isValidator)} validatorDatas = {this.validatorDatas} isValidator= {this.state.isValidator} datas = {item} key = {index} index = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id,checked)=>this.changeOptionChecked(id,checked)} updateInputValue={ (id)=>updateInputValue(id)}></Option>
+              <Option isRadio = {this.props.isRadio} publishMessage= {(isValidator)=>this.publishMessage(isValidator)} validatorDatas = {this.validatorDatas} isValidator= {this.state.isValidator} datas = {item} key = {index} index = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id,checked)=>this.changeOptionChecked(id,checked)} updateInputValue={ (id,value)=>this.updateInputValue(id,value)}></Option>
             )
           })
         }

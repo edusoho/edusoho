@@ -21,7 +21,8 @@ class Choice extends QuestionFormBase {
 
   submitForm(event) {
     this.$submit = $(event.currentTarget);
-    
+    console.log(this.validator.form());
+    console.log( this.isSubmit);
     if(this.validator.form() && this.isSubmit ) {
       this.submit();
     }
@@ -31,6 +32,7 @@ class Choice extends QuestionFormBase {
   }
 
   submit() {
+    console.log('submit');
     this.$submit.button('loading');
     this.$form.submit();
   }
@@ -51,6 +53,7 @@ class Choice extends QuestionFormBase {
   }
 
   publishMessage() {
+    console.log('publishMessage');
     postal.publish({
       channel : "manage-question",
       topic : "question-create-form-validator-start",
@@ -61,6 +64,7 @@ class Choice extends QuestionFormBase {
   }
 
   subscriptionMessage() {
+    console.log('subscriptionMessage');
     postal.subscribe({
       channel  : "manage-question",
       topic    : "question-create-form-validator-end",
