@@ -1,7 +1,6 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
@@ -13,7 +12,7 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview');
-        $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
+        $task    = $this->tryLearnTask($courseId, $id, (bool) $preview);
 
         $this->getActivityService()->trigger($task['activityId'], 'start', array(
             'task' => $task
@@ -108,14 +107,13 @@ class TaskController extends BaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
         );
         return $this->createJsonResponse($response);
     }
-
 
     public function taskActivityAction(Request $request, $courseId, $id)
     {
@@ -261,7 +259,6 @@ class TaskController extends BaseController
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         if ($preview) {
             if ($this->canPreview($course, $member)) {
-
                 $task = $this->getTaskService()->getTask($taskId);
             } else {
                 throw $this->createNotFoundException('you can not preview this task ');
@@ -287,11 +284,11 @@ class TaskController extends BaseController
 
         if ($user->isSuperAdmin()) {
             return true;
-        } else if ($user['id'] == $courseSet['creator']) {
+        } elseif ($user['id'] == $courseSet['creator']) {
             return true;
-        } else if (in_array($user->getId(), $course['teacherIds'])) {
+        } elseif (in_array($user->getId(), $course['teacherIds'])) {
             return true;
-        } else if ($member['role'] == 'teacher') {
+        } elseif ($member['role'] == 'teacher') {
             return true;
         }
         return false;

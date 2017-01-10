@@ -27,6 +27,8 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷已关闭，如有疑问请联系老师！'));
         }
 
+        $this->testpaperActivityCheck($lessonId, $testpaper);
+
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $lessonId);
 
         if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
@@ -275,11 +277,6 @@ class TestpaperController extends BaseController
         }
     }
 
-    public function pauseTestAction(Request $request)
-    {
-        return $this->render('TopxiaWebBundle:QuizQuestionTest:do-test-pause-modal.html.twig');
-    }
-
     protected function makeTestpaperTotal($testpaper, $items)
     {
         $total = array();
@@ -302,6 +299,25 @@ class TestpaperController extends BaseController
         }
 
         return $total;
+    }
+
+    protected function testpaperActivityCheck($activityId, $testpaper)
+    {
+        $user = $this->getUser();
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        if ($activity) {
+            $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+            $testpaperResult   = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $activity['fromCourseSetId'], $activityId, $testpaper['type']);
+            if ($testpaperActivity['doTimes'] && $testpaperResult) {
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷只能考一次，不能再考！'));
+            } elseif ($testpaperActivity['redoInterval']) {
+                $nextDoTime = $testpaperResult['checkedTime'] + $testpaperActivity['redoInterval'] * 3600;
+                if ($nextDoTime > time()) {
+                    return $this->createMessageResponse('info', $this->getServiceKernel()->trans('教师设置了重考间隔，请在'.date('Y-m-d H:i:s', $nextDoTime).'之后再考！'));
+                }
+            }
+        }
     }
 
     protected function getSettingService()

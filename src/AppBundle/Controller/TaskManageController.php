@@ -5,7 +5,6 @@ use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Activity\Service\ActivityService;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Exception\InvalidArgumentException;
 

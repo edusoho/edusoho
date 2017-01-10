@@ -19,13 +19,18 @@ function InitOptionData(dataSource,inputValue,validatorDatas,seq,checked) {
 }
 
 function deleteOption(dataSource,validatorDatas,optionId) {
+  validatorDatas.Options = {};
   for(let i = 0; i< dataSource.length ;i++) {
     if(dataSource[i].optionId==optionId) {
       dataSource.splice(i, 1);
-      delete validatorDatas[optionId];
+      console.log(validatorDatas.Options[optionId]);
+      console.log(dataSource);
+      delete validatorDatas.Options[optionId];
       i--;
     }else {
       dataSource[i].optionLabel = '选项'+ numberConvertLetter(i+1);
+      dataSource[i].optionId = `question-option-${i+1}`;
+      validatorDatas.Options[`question-option-${i+1}`] = dataSource[i].inputValue > 0 ? 1 : 0;
     }
   }
 }
@@ -142,6 +147,7 @@ export default class QuestionOptions extends Component {
       dataSource:this.state.dataSource,
     });
     console.log({'dataSource':this.state.dataSource});
+    console.log({'validatorDatas':this.validatorDatas});
   }
 
   changeOptionChecked(id,checked) {
@@ -166,13 +172,19 @@ export default class QuestionOptions extends Component {
     console.log(this.validatorDatas);
   }
 
+  updateInputValue(id) {
+
+  }
+
   render() {
+    console.log(this.state.dataSource);
+    console.log('rend');
     return(
       <div className="question-options-group">
         {
           this.state.dataSource.map((item,index)=>{
             return (
-              <Option isRadio = {this.props.isRadio} publishMessage= {(isValidator)=>this.publishMessage(isValidator)} validatorDatas = {this.validatorDatas} isValidator= {this.state.isValidator} datas = {item} key = {index} index = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id,checked)=>this.changeOptionChecked(id,checked)}></Option>
+              <Option isRadio = {this.props.isRadio} publishMessage= {(isValidator)=>this.publishMessage(isValidator)} validatorDatas = {this.validatorDatas} isValidator= {this.state.isValidator} datas = {item} key = {index} index = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id,checked)=>this.changeOptionChecked(id,checked)} updateInputValue={ (id)=>updateInputValue(id)}></Option>
             )
           })
         }

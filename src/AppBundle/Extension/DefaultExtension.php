@@ -38,6 +38,97 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         return $this->biz;
     }
 
+    public function getCourseShowMetas()
+    {
+        $widgets = array(
+            'characteristic'     => array(
+                'uri'  => 'AppBundle:Course/Course:characteristic',
+                'type' => 'render'
+            ),
+            'otherCourse'        => array(
+                'uri'  => 'AppBundle:Course/Course:otherCourse',
+                'type' => 'render'
+            ),
+            'recommendClassroom' => array(
+                'uri'  => 'course/widgets/recommend-classroom.html.twig',
+                'type' => 'include'
+            ),
+            'teachers'           => array(
+                'uri'  => 'AppBundle:Course/Course:teachers',
+                'type' => 'render'
+            ),
+            'newestStudents'     => array(
+                'uri'  => 'AppBundle:Course/Course:newestStudents',
+                'type' => 'render'
+            ),
+            'studentActivity'    => array(
+                'uri'  => 'course/widgets/student-activity.html.twig',
+                'type' => 'include'
+            )
+        );
+
+        return array(
+            'for_member' => array(
+                'header'  => 'AppBundle:My/Course:headerForMember',
+                'tabs'    => array(
+                    'tasks'    => array(
+                        'name'    => '目录',
+                        'content' => 'AppBundle:Course/Course:tasks'
+                    ),
+                    'threads'  => array(
+                        'name'    => '话题',
+                        'number'  => 'threadNum',
+                        'content' => 'AppBundle:Course/Thread:index'
+                    ),
+                    'reviews'  => array(
+                        'name'    => '评价',
+                        'number'  => 'ratingNum',
+                        'content' => 'AppBundle:Course/Course:reviews'
+                    ),
+                    'notes'    => array(
+                        'name'    => '笔记',
+                        'number'  => 'noteNum',
+                        'content' => 'AppBundle:Course/Course:notes'
+                    ),
+                    'material' => array(
+                        'name'    => '资料区',
+                        'number'  => 'materialNum',
+                        'content' => 'AppBundle:Course/Material:index'
+                    ),
+                    'summary'  => array(
+                        'name'    => '介绍',
+                        'content' => 'AppBundle:Course/Course:summary'
+                    )
+                ),
+                'widgets' => $widgets
+            ),
+            'for_guest' => array(
+                'header'  => 'AppBundle:Course/Course:header',
+                'tabs'    => array(
+                    'summary' => array(
+                        'name'    => '介绍',
+                        'content' => 'AppBundle:Course/Course:summary'
+                    ),
+                    'tasks'   => array(
+                        'name'    => '目录',
+                        'content' => 'AppBundle:Course/Course:tasks'
+                    ),
+                    'reviews' => array(
+                        'name'    => '评价',
+                        'number'  => 'ratingNum',
+                        'content' => 'AppBundle:Course/Course:reviews'
+                    ),
+                    'notes'   => array(
+                        'name'    => '笔记',
+                        'number'  => 'noteNum',
+                        'content' => 'AppBundle:Course/Course:notes'
+                    )
+                ),
+                'widgets' => $widgets
+            )
+        );
+    }
+
     public function getQuestionTypes()
     {
         return array(
@@ -131,7 +222,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     public function getActivities()
     {
         return array(
-            'text'     => array(
+            'text'      => array(
                 'meta'    => array(
                     'name' => '图文',
                     'icon' => 'es-icon es-icon-graphicclass'
@@ -144,7 +235,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
                 )
             ),
-            'video'    => array(
+            'video'     => array(
                 'meta'    => array(
                     'name' => '视频',
                     'icon' => 'es-icon es-icon-videoclass'
@@ -157,7 +248,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'finishCondition' => 'AppBundle:Activity/Video:finishCondition'
                 )
             ),
-            'audio'    => array(
+            'audio'     => array(
                 'meta'    => array(
                     'name' => '音频',
                     'icon' => 'es-icon es-icon-audioclass'
@@ -170,7 +261,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'finishCondition' => 'AppBundle:Activity/Audio:finishCondition'
                 )
             ),
-            'download' => array(
+            'download'  => array(
                 'meta'    => array(
                     'name' => '下载资料',
                     'icon' => 'es-icon es-icon-filedownload'
@@ -183,7 +274,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'finishCondition' => 'AppBundle:Activity/Download:finishCondition'
                 )
             ),
-            'live'     => array(
+            'live'      => array(
                 'meta'    => array(
                     'name' => '直播',
                     'icon' => 'es-icon es-icon-videocam'
@@ -196,7 +287,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'finishCondition' => 'AppBundle:Activity/Live:finishCondition'
                 )
             ),
-            'discuss'  => array(
+            'discuss'   => array(
                 'meta'    => array(
                     'name' => '讨论',
                     'icon' => 'es-icon es-icon-comment'
@@ -300,23 +391,23 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
 
     protected function registerActivityTypes($container)
     {
-        $that                                = $this;
-        $container['activity_type.text']     = function () use ($that) {
+        $that                            = $this;
+        $container['activity_type.text'] = function () use ($that) {
             return new Text($that->getBiz());
         };
-        $container['activity_type.video']    = function () use ($that) {
+        $container['activity_type.video'] = function () use ($that) {
             return new Video($that->getBiz());
         };
-        $container['activity_type.audio']    = function () use ($that) {
+        $container['activity_type.audio'] = function () use ($that) {
             return new Audio($that->getBiz());
         };
         $container['activity_type.download'] = function () use ($that) {
             return new Download($that->getBiz());
         };
-        $container['activity_type.live']     = function () use ($that) {
+        $container['activity_type.live'] = function () use ($that) {
             return new Live($that->getBiz());
         };
-        $container['activity_type.discuss']  = function () use ($that) {
+        $container['activity_type.discuss'] = function () use ($that) {
             return new Discuss($that->getBiz());
         };
 
@@ -328,41 +419,41 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             return new Doc($that->getBiz());
         };
 
-        $container['activity_type.ppt']       = function () use ($that) {
+        $container['activity_type.ppt'] = function () use ($that) {
             return new Ppt($that->getBiz());
         };
         $container['activity_type.testpaper'] = function () use ($that) {
             return new Testpaper($that->getBiz());
         };
-        $container['activity_type.homework']  = function () use ($that) {
+        $container['activity_type.homework'] = function () use ($that) {
             return new Homework($that->getBiz());
         };
-        $container['activity_type.exercise']  = function () use ($that) {
+        $container['activity_type.exercise'] = function () use ($that) {
             return new Exercise($that->getBiz());
         };
     }
 
     protected function registerQuestionTypes($container)
     {
-        $container['question_type.choice']           = function () {
+        $container['question_type.choice'] = function () {
             return new Choice();
         };
-        $container['question_type.single_choice']    = function () {
+        $container['question_type.single_choice'] = function () {
             return new SingleChoice();
         };
         $container['question_type.uncertain_choice'] = function () {
             return new UncertainChoice();
         };
-        $container['question_type.determine']        = function () {
+        $container['question_type.determine'] = function () {
             return new Determine();
         };
-        $container['question_type.essay']            = function () {
+        $container['question_type.essay'] = function () {
             return new Essay();
         };
-        $container['question_type.fill']             = function () {
+        $container['question_type.fill'] = function () {
             return new Fill();
         };
-        $container['question_type.material']         = function () {
+        $container['question_type.material'] = function () {
             return new Material();
         };
 

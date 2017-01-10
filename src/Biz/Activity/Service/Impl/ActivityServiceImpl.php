@@ -212,7 +212,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $addMaterials    = $this->diffMaterials($currents, $exists);
                 $updateMaterials = $this->dirtyMaterials($exists, $currents);
                 foreach ($dropMaterials as $material) {
-                    $this->getMaterialService()->deleteMaterial($activity['fromCourseId'], $material['id']);
+                    $this->getMaterialService()->deleteMaterial($activity['fromCourseSetId'], $material['id']);
                 }
                 foreach ($addMaterials as $material) {
                     $this->getMaterialService()->addMaterial($material, $material);
@@ -307,7 +307,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'endTime'
         ));
 
-        if (isset($fields['startTime']) && isset($fields['length'])) {
+        if (isset($fields['startTime']) && isset($fields['length']) && $fields['mediaType'] != 'testpaper') {
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
         }
 

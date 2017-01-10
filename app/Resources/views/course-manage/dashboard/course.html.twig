@@ -5,7 +5,7 @@
 {% block dashboard %}
   <ul class="course-dashboard-header course-dashboard-ul">
     <li>
-      <div class="title">{{ '课程学员数'|trans }}</div>
+      <div class="title">{{ '学员数'|trans }}</div>
       <span class="number js-student-num">{{ summary.studentNum }}</span>
     </li>
     <li>
@@ -17,7 +17,7 @@
       <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm finisher-lesson-popover" style="z-index: 100"></span>
       <div class="popover-content hidden">
         <div class="popover-item">
-          <div class="content">{{ '学完整个课程的人数 ÷ 课程学员总数'|trans }}</div>
+          <div class="content">{{ '学完整个教学计划的人数 ÷ 该教学计划学员总数'|trans }}</div>
           </div>
         </div>
       </div>
@@ -27,15 +27,15 @@
 
   <ul class="course-dashboard-footer course-dashboard-ul">
     <li>
-      <div class="title">{{ '课程笔记数'|trans }}</div>
+      <div class="title">{{ '笔记数'|trans }}</div>
       <span class="number js-note-num">{{ summary.noteNum }}</span>
     </li>
     <li>
-      <div class="title">{{ '课程提问数'|trans }}</div>
+      <div class="title">{{ '提问数'|trans }}</div>
       <span class="number js-ask-num">{{ summary.askNum }}</span>
     </li>
     <li>
-      <div class="title">{{ '课程话题数'|trans }}</div>
+      <div class="title">{{ '话题数'|trans }}</div>
       <span class="number js-discussion-num">{{ summary.discussionNum }}</span>
     </li>
   </ul>

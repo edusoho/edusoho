@@ -208,7 +208,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId)
     {
-        $conditions     = array(
+        $conditions = array(
             'userId' => $userId
         );
         $myTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions, 0, PHP_INT_MAX, true);
@@ -217,7 +217,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'courseIds'   => ArrayToolkit::column($myTeachCourses, 'courseId'),
             'courseSetId' => $courseSetId
         );
-        $courses    = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
         return $this->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
     }
@@ -274,6 +274,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!$this->isFinished($taskId)) {
             throw $this->createAccessDeniedException("can not finish task #{$taskId}.");
         }
+
+        $this->dispatchEvent('course.task.finish', new Event($task, array('user' => $this->getCurrentUser())));
 
         return $this->finishTaskResult($taskId);
     }
@@ -341,8 +343,8 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function canLearnTask($taskId)
     {
-        $task = $this->getTask($taskId);
-        list($course,) = $this->getCourseService()->tryTakeCourse($task['courseId']);
+        $task         = $this->getTask($taskId);
+        list($course) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
         return $canLearnTask;

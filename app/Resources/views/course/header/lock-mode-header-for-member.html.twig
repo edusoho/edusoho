@@ -53,7 +53,11 @@
           es-icon-iccheckcircleblack24px
           {% endif %}
           left-menu"></i>
-          <a class="text-overflow title" href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>
+          {% if  task_lock is empty%}
+            <a class="text-overflow title" href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>
+          {% else  %}
+            <span class="text-overflow title">{{ task.title }}</span>
+          {% endif %}
           <span class="right-menu mouse-leave">
           {{ task.activity.length|activity_length_format }} <i class="es-icon es-icon {{ meta.icon|default('') }} mlm" data-toggle="tooltip" data-placement="top" title="{{ meta.name|default(null) }}任务"></i>
         </span>

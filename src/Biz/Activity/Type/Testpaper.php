@@ -42,6 +42,28 @@ class Testpaper extends Activity
         return $this->getTestpaperActivityService()->deleteActivity($targetId);
     }
 
+    public function isFinished($activityId)
+    {
+        $user = $this->getBiz()['user'];
+
+        $activity          = $this->getActivityService()->getActivity($activityId);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'testpaper');
+
+        if (!$result) {
+            return false;
+        }
+
+        if (!empty($testpaperActivity['finishCondition']) && $testpaperActivity['finishCondition']['type'] == 'submit') {
+            return true;
+        } elseif ($result['status'] == 'finished' && $result['score'] > $testpaperActivity['finishCondition']['finishScore']) {
+            return true;
+        }
+
+        return false;
+    }
+
     protected function getListeners()
     {
         return array();
@@ -53,6 +75,7 @@ class Testpaper extends Activity
             'mediaId',
             'doTimes',
             'redoInterval',
+            'length',
             'limitedTime',
             'checkType',
             'finishCondition',
@@ -72,6 +95,11 @@ class Testpaper extends Activity
             unset($fields['finishScore']);
         }
 
+        if (isset($fields['length'])) {
+            $fields['limitedTime'] = $fields['length'];
+            unset($fields['length']);
+        }
+
         $fields['finishCondition'] = $finishCondition;
 
         return $fields;
@@ -80,5 +108,20 @@ class Testpaper extends Activity
     protected function getTestpaperActivityService()
     {
         return $this->getBiz()->service('Activity:TestpaperActivityService');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
+    }
+
+    protected function getTestpaperService()
+    {
+        return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 }

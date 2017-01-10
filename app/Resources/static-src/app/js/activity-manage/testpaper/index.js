@@ -21,7 +21,7 @@ class Testpaper {
   	this.$element.find('#testpaper-media').on('change', event=>this.changeTestpaper(event));
   	this.$element.find('input[name=doTimes]').on('change', event=>this.showRedoInterval(event));
   	this.$element.find('input[name="testMode"]').on('change',event=>this.startTimeCheck(event))
-    this.$element.find('input[name="limitedTime"]').on('blur',event=>this.changeEndTime(event));
+    this.$element.find('input[name="length"]').on('blur',event=>this.changeEndTime(event));
     this.$element.find('#condition-select').on('change',event=>this.changeCondition(event));
     this.initSelectTestpaper(this.$element.find('#testpaper-media').find('option:selected'),$('[name="finishScore"]').val());
   }

@@ -103,7 +103,10 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
 
     public function finishConditionAction($activity)
     {
-        return $this->render('activity/exercise/finish-condition.html.twig', array());
+        $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        return $this->render('activity/exercise/finish-condition.html.twig', array(
+            'exercise' => $exercise
+        ));
     }
 
     protected function findCourseTestpapers($courseId)
@@ -144,10 +147,5 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
-    }
-
-    protected function getTestpaperActivityService()
-    {
-        return $this->createService('Activity:TestpaperActivityService');
     }
 }

@@ -2,7 +2,6 @@
 namespace Topxia\WebBundle\Twig\Extension;
 
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Controller\Course\CourseShowMetas;
 
 class CourseExtension extends \Twig_Extension
 {
@@ -27,14 +26,12 @@ class CourseExtension extends \Twig_Extension
     }
 
     public function getCourseShowMetas($mode = 'guest')
-    {
-        switch ($mode) {
-            case 'guest':
-                return CourseShowMetas::getGuestCourseShowMetas();
-            case 'member':
-                return CourseShowMetas::getMemberCourseShowMetas();
-        }
+    {   
+        $metas = $this->container->get('extension.default')->getCourseShowMetas();
+        return $metas["for_{$mode}"];
     }
+
+
 
     public function getName()
     {

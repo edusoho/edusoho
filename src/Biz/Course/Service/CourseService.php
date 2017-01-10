@@ -2,6 +2,8 @@
 
 namespace Biz\Course\Service;
 
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+
 interface CourseService
 {
     public function getCourse($id);
@@ -53,16 +55,32 @@ interface CourseService
     public function getUserRoleInCourse($courseId, $userId);
 
     /**
+     * 获取用户在教的教学计划
+     *
+     * @param integer $courseSetId
+     * @param bool    $onlyPublished
+     * @throws AccessDeniedException
+     *
+     * @return mixed
+     */
+    public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished=true);
+
+    /**
      * @param  integer   $userId
+     * @param  bool      $onlyPublished 是否只需要发布后的教学计划
      * @return array[]
      */
-    public function findTeachingCoursesByUserId($userId);
+    public function findTeachingCoursesByUserId($userId, $onlyPublished=true);
 
     /**
      * @param  integer   $userId
      * @return array[]
      */
     public function findLearnCoursesByUserId($userId);
+
+    public function findUserTeachCourseCount($conditions, $onlyPublished = true);
+
+    public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
 
     /**
      * @param  array     $ids
@@ -82,10 +100,6 @@ interface CourseService
     // public function findUserLearnCourses($userId, $start, $limit);
 
     //public function findUserLearnCourseCount($userId);
-
-    public function findUserTeachCourseCount($conditions, $onlyPublished = true);
-
-    public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
 
     //---end
     public function searchCourses($conditions, $sort, $start, $limit);
