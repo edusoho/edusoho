@@ -42,6 +42,28 @@ class Exercise extends Activity
         return $this->getTestpaperService()->deleteTestpaper($targetId);
     }
 
+    public function isFinished($activityId)
+    {
+        $user = $this->getBiz()['user'];
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+
+        $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'exercise');
+
+        if (!$result) {
+            return false;
+        }
+
+        if (!empty($exercise['finishCondition']) && $exercise['finishCondition']['type'] == 'submit') {
+            return true;
+        } elseif ($result['status'] == 'finished' && $result['score'] > $exercise['finishCondition']['finishScore']) {
+            return true;
+        }
+
+        return false;
+    }
+
     protected function getListeners()
     {
         return array();
@@ -71,5 +93,10 @@ class Exercise extends Activity
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 }

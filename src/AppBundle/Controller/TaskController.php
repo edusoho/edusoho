@@ -1,10 +1,10 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends BaseController
@@ -109,7 +109,7 @@ class TaskController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        if(!$course['enableFinish']) {
+        if (!$course['enableFinish']) {
             throw $this->createAccessDeniedException('task can not finished.');
         }
 
@@ -146,8 +146,8 @@ class TaskController extends BaseController
 
     public function finishConditionAction($task)
     {
-        $config = $this->getActivityConfig();
-        $action = $config[$task['type']]['actions']['finishCondition'];
+        $config   = $this->getActivityConfig();
+        $action   = $config[$task['type']]['actions']['finishCondition'];
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         return $this->forward($action, array('activity' => $activity));
     }

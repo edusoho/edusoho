@@ -137,9 +137,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-graphicclass'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Text:create',
-                    'edit'   => 'AppBundle:Activity/Text:edit',
-                    'show'   => 'AppBundle:Activity/Text:show',
+                    'create'          => 'AppBundle:Activity/Text:create',
+                    'edit'            => 'AppBundle:Activity/Text:edit',
+                    'show'            => 'AppBundle:Activity/Text:show',
                     'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
                 )
             ),
@@ -149,9 +149,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-videoclass'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Video:create',
-                    'edit'   => 'AppBundle:Activity/Video:edit',
-                    'show'   => 'AppBundle:Activity/Video:show',
+                    'create'          => 'AppBundle:Activity/Video:create',
+                    'edit'            => 'AppBundle:Activity/Video:edit',
+                    'show'            => 'AppBundle:Activity/Video:show',
                     'finishCondition' => 'AppBundle:Activity/Video:finishCondition'
                 )
             ),
@@ -161,9 +161,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-audioclass'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Audio:create',
-                    'edit'   => 'AppBundle:Activity/Audio:edit',
-                    'show'   => 'AppBundle:Activity/Audio:show',
+                    'create'          => 'AppBundle:Activity/Audio:create',
+                    'edit'            => 'AppBundle:Activity/Audio:edit',
+                    'show'            => 'AppBundle:Activity/Audio:show',
                     'finishCondition' => 'AppBundle:Activity/Audio:finishCondition'
                 )
             ),
@@ -173,9 +173,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-filedownload'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Download:create',
-                    'edit'   => 'AppBundle:Activity/Download:edit',
-                    'show'   => 'AppBundle:Activity/Download:show',
+                    'create'          => 'AppBundle:Activity/Download:create',
+                    'edit'            => 'AppBundle:Activity/Download:edit',
+                    'show'            => 'AppBundle:Activity/Download:show',
                     'finishCondition' => 'AppBundle:Activity/Download:finishCondition'
                 )
             ),
@@ -185,9 +185,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-videocam'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Live:create',
-                    'edit'   => 'AppBundle:Activity/Live:edit',
-                    'show'   => 'AppBundle:Activity/Live:show',
+                    'create'          => 'AppBundle:Activity/Live:create',
+                    'edit'            => 'AppBundle:Activity/Live:edit',
+                    'show'            => 'AppBundle:Activity/Live:show',
                     'finishCondition' => 'AppBundle:Activity/Live:finishCondition'
                 )
             ),
@@ -197,9 +197,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-comment'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Discuss:create',
-                    'edit'   => 'AppBundle:Activity/Discuss:edit',
-                    'show'   => 'AppBundle:Activity/Discuss:show',
+                    'create'          => 'AppBundle:Activity/Discuss:create',
+                    'edit'            => 'AppBundle:Activity/Discuss:edit',
+                    'show'            => 'AppBundle:Activity/Discuss:show',
                     'finishCondition' => 'AppBundle:Activity/Discuss:finishCondition'
                 )
             ),
@@ -210,9 +210,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-flashclass'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Flash:create',
-                    'edit'   => 'AppBundle:Activity/Flash:edit',
-                    'show'   => 'AppBundle:Activity/Flash:show',
+                    'create'          => 'AppBundle:Activity/Flash:create',
+                    'edit'            => 'AppBundle:Activity/Flash:edit',
+                    'show'            => 'AppBundle:Activity/Flash:show',
                     'finishCondition' => 'AppBundle:Activity/Flash:finishCondition'
                 )
             ),
@@ -222,9 +222,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-description'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Doc:create',
-                    'edit'   => 'AppBundle:Activity/Doc:edit',
-                    'show'   => 'AppBundle:Activity/Doc:show',
+                    'create'          => 'AppBundle:Activity/Doc:create',
+                    'edit'            => 'AppBundle:Activity/Doc:edit',
+                    'show'            => 'AppBundle:Activity/Doc:show',
                     'finishCondition' => 'AppBundle:Activity/Doc:finishCondition'
                 )
             ),
@@ -234,9 +234,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-pptclass'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Ppt:create',
-                    'edit'   => 'AppBundle:Activity/Ppt:edit',
-                    'show'   => 'AppBundle:Activity/Ppt:show',
+                    'create'          => 'AppBundle:Activity/Ppt:create',
+                    'edit'            => 'AppBundle:Activity/Ppt:edit',
+                    'show'            => 'AppBundle:Activity/Ppt:show',
                     'finishCondition' => 'AppBundle:Activity/Ppt:finishCondition'
                 )
             ),
@@ -246,9 +246,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-lesson'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Testpaper:create',
-                    'edit'   => 'AppBundle:Activity/Testpaper:edit',
-                    'show'   => 'AppBundle:Activity/Testpaper:show',
+                    'create'          => 'AppBundle:Activity/Testpaper:create',
+                    'edit'            => 'AppBundle:Activity/Testpaper:edit',
+                    'show'            => 'AppBundle:Activity/Testpaper:show',
                     'finishCondition' => 'AppBundle:Activity/Testpaper:finishCondition'
                 )
             ),
@@ -258,10 +258,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-exam'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Homework:create',
-                    'edit'   => 'AppBundle:Activity/Homework:edit',
-                    'show'   => 'AppBundle:Activity/Homework:show',
-                    'finishCondition' => 'AppBundle:Activity/Homewok:finishCondition'
+                    'create'          => 'AppBundle:Activity/Homework:create',
+                    'edit'            => 'AppBundle:Activity/Homework:edit',
+                    'show'            => 'AppBundle:Activity/Homework:show',
+                    'finishCondition' => 'AppBundle:Activity/Homework:finishCondition'
                 )
             ),
             'exercise'  => array(
@@ -270,9 +270,9 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'icon' => 'es-icon es-icon-mylibrarybooks'
                 ),
                 'actions' => array(
-                    'create' => 'AppBundle:Activity/Exercise:create',
-                    'edit'   => 'AppBundle:Activity/Exercise:edit',
-                    'show'   => 'AppBundle:Activity/Exercise:show',
+                    'create'          => 'AppBundle:Activity/Exercise:create',
+                    'edit'            => 'AppBundle:Activity/Exercise:edit',
+                    'show'            => 'AppBundle:Activity/Exercise:show',
                     'finishCondition' => 'AppBundle:Activity/Exercise:finishCondition'
                 )
             )

@@ -97,7 +97,11 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
 
     public function finishConditionAction($activity)
     {
-        return $this->render('activity/homework/finish-condition.html.twig', array());
+        $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+
+        return $this->render('activity/homework/finish-condition.html.twig', array(
+            'homework' => $homework
+        ));
     }
 
     protected function findCourseTestpapers($courseId)

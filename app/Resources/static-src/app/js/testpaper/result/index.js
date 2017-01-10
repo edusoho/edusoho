@@ -7,4 +7,4 @@ class ShowResult extends DoTestBase {
   }
 }
 
-new ShowResult($('.container'));
+new ShowResult($('.js-task-testpaper-body'));
