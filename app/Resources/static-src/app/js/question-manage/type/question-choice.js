@@ -46,8 +46,9 @@ class Choice extends QuestionFormBase {
     }else {
       dataSource= [];
     }
-
-    ReactDOM.render( <QuestionOptions dataSource={dataSource} dataAnswer={dataAnswer}  minCheckedNum={ 2 } />,
+    let url = $('#question-options').data('image-upload-url');
+    console.log(url);
+    ReactDOM.render( <QuestionOptions filebrowserImageUploadUrl={url} dataSource={dataSource} dataAnswer={dataAnswer}  minCheckedNum={ 2 } />,
       document.getElementById('question-options')
     );
   }

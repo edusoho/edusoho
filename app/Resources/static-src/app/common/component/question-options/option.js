@@ -25,9 +25,11 @@ export default class Options extends Component {
   }
 
   initCkeditor(dataSourceUi) {
+    console.log(this.props.filebrowserImageUploadUrl);
     if(!this.editor) {
       this.editor = CKEDITOR.replace(this.props.datas.optionId, {
         toolbar: 'Minimal',
+        filebrowserImageUploadUrl:this.props.filebrowserImageUploadUrl,
         height: 120
       });
       let self = this;

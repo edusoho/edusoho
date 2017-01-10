@@ -77,6 +77,7 @@ export default class QuestionOptions extends Component {
     };
     const dataSource = this.props.dataSource;
     const dataAnswer = this.props.dataAnswer;
+    console.log(this.props.filebrowserImageUploadUrl);
     if(dataSource.length > 0) {
       dataSource.map((item,index)=>{
         let checked = false;
@@ -201,7 +202,7 @@ export default class QuestionOptions extends Component {
         {
           this.state.dataSource.map((item,index)=>{
             return (
-              <Option isRadio = {this.props.isRadio} publishMessage= {(isValidator)=>this.publishMessage(isValidator)} validatorDatas = {this.validatorDatas} isValidator= {this.state.isValidator} datas = {item} key = {index} index = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id,checked)=>this.changeOptionChecked(id,checked)} updateInputValue={ (id,value)=>this.updateInputValue(id,value)}></Option>
+              <Option filebrowserImageUploadUrl= {this.props.filebrowserImageUploadUrl} isRadio = {this.props.isRadio} publishMessage= {(isValidator)=>this.publishMessage(isValidator)} validatorDatas = {this.validatorDatas} isValidator= {this.state.isValidator} datas = {item} key = {index} index = {index} deleteOption ={(id)=>this.deleteOption(id)} changeOptionChecked= {(id,checked)=>this.changeOptionChecked(id,checked)} updateInputValue={ (id,value)=>this.updateInputValue(id,value)}></Option>
             )
           })
         }
