@@ -10,7 +10,8 @@
   {% elseif orderBy == 'studentNum'%}
     {% set courses = data('PopularCourses',{'count':count, 'categoryId':categoryId,'type':'studentNum'}) %}
   {% endif %}
-  {% set categoriesFirst = data('Categories',{'group':'course'})%}
+  {% set categoriesFirst = data('Categories',{'group':'course', 'parentId':0})%}
+  {% set moreCategories =  categoriesFirst[config.categoryCount|default(4):]%}
   <div class="container">
     <div class="text-line">
       <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
@@ -20,11 +21,23 @@
       <ul class="nav nav-pills hidden-xs" role="tablist">
         <li role="presentation" class="{% if (categoryId|default(0) == 0) %}active {% endif %} js-course-filter" data-url="{{path('homepage_category',{orderBy : orderBy|default('latest')}) }}" data-type="course"><a href="javascript:;">{{'全部课程'|trans}}</a></li>
         {% if categoriesFirst%}
-          {% for category in categoriesFirst  if (category.parentId == 0) %}
+          {% for category in categoriesFirst %}
             {% if ( loop.index0 < config.categoryCount|default(4) ) %}
               <li role="presentation" class="{% if (categoryId|default(0) == category.id) %}active {% endif %} js-course-filter" data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}" data-type="course"><a href="javascript:;">{{ category.name }}</a></li>
             {% endif %}
           {% endfor %}
+          {% if  moreCategories %}
+          <li class="dropdown nav-hover">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              更多
+            </a>
+            <ul class="dropdown-menu">
+              {% for moreCategory in moreCategories %}
+                <li role="presentation" class="{% if (categoryId|default(0) == moreCategory.id) %}active {% endif %} js-course-filter" data-url="{{path('homepage_category',{categoryId : moreCategory.id, orderBy : orderBy|default('latest')}) }}" data-type="course"><a href="javascript:;">{{ moreCategory.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% endif %}
         {% endif %}
       </ul>
       <div class="btn-group visible-xs">
@@ -37,6 +50,9 @@
                 <li role="presentation" class = "js-course-filter {% if (categoryId|default(0) == category.id) %}active {% endif %}" data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}" data-type="course"><a href="javascript:;">{{ category.name }}</a></li>
               {% endif %}
             {% endfor %}
+            {% if  moreCategories %}
+              <li role="presentation" class = "js-course-filteractive" data-type="course"><a href="{{ path('course_explore') }}">更多</a></li>
+            {% endif %}
           {% endif %}
         </ul>
       </div>
