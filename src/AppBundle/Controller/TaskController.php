@@ -195,8 +195,11 @@ class TaskController extends BaseController
             throw $this->createAccessDeniedException('task can not finished.');
         }
 
+        $task = $this->getTaskService()->getTask($id);
+        if ($task['status'] != 'published') {
+            return $this->createMessageResponse('未发布的任务无法完成');
+        }
         $result = $this->getTaskService()->finishTaskResult($id);
-        $task   = $this->getTaskService()->getTask($id);
 
         list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 

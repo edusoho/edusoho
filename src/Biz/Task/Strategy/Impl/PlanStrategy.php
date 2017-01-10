@@ -41,35 +41,40 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
      */
     public function canLearnTask($task)
     {
+
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         //自由式学习 可以学习任意课时
         if ($course['learnMode'] == 'freeMode') {
             return true;
         }
-        //当前任务是可选或者直播，则可以直接学习
-        if ($task['isOptional'] || $task['type'] == 'live') {
+
+        //选修任务不需要判断解锁条件
+        if ($task['isOptional']) {
             return true;
         }
 
-        //第一个任务可以学习
-        $preTask = $this->getTaskDao()->getPreTaskByCourseIdAndSeq($task['courseId'], $task['seq']);
-        if (empty($preTask)) {
+        if ($task['type'] == 'live') {
             return true;
         }
 
-        //前一个任务是可选或者直播，则可以学习
-        if ($preTask['isOptional'] || $preTask['type'] == 'live') {
+        if ($task['type'] == 'testpaper' and $task['startTime']) {
             return true;
         }
 
-        //前一个任务已经学完，则可以学习
-        $isTaskLearned = $this->getTaskService()->isTaskLearned($preTask['id']);
-        if ($isTaskLearned) {
+        //取得下一个发布的课时
+        $conditions = array(
+            'courseId' => $task['courseId'],
+            'seq_LT'   => $task['seq']
+        );
+
+        $count    = $this->getTaskDao()->count($conditions);
+        $preTasks = $this->getTaskDao()->search($conditions, array('seq' => 'DESC'), 0, $count);
+
+        if (empty($preTasks)) {
             return true;
         }
-
-        return false;
+        return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
     public function getTasksRenderPage()
