@@ -7,13 +7,14 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
 class MyTeachingController extends BaseController
 {
-    public function courseSetsAction(Request $request, $filter='normal')
+    public function courseSetsAction(Request $request, $filter = 'normal')
     {
         $user = $this->getCurrentUser();
 
@@ -25,7 +26,7 @@ class MyTeachingController extends BaseController
             'type' => 'normal'
         );
 
-        if($filter == 'live'){
+        if ($filter == 'live') {
             $conditions['type'] = 'live';
         }
 
@@ -43,16 +44,16 @@ class MyTeachingController extends BaseController
         );
 
         $service = $this->getCourseService();
-        $sets = array_map(function ($set) use ($user, $service) {
+        $sets    = array_map(function ($set) use ($user, $service) {
             $set['canManage'] = $set['creator'] == $user['id'];
-            $set['courses'] = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
+            $set['courses']   = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
             return $set;
         }, $sets);
 
         return $this->render('my-teaching/teaching.html.twig', array(
-            'courseSets'=> $sets,
-            'paginator' => $paginator,
-            'filter'    => $filter
+            'courseSets' => $sets,
+            'paginator'  => $paginator,
+            'filter'     => $filter
         ));
     }
 
@@ -173,14 +174,14 @@ class MyTeachingController extends BaseController
 
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
+        $tasks   = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
 
         return $this->render('my-teaching/threads.html.twig', array(
             'paginator'  => $paginator,
             'threads'    => $threads,
             'users'      => $users,
             'courses'    => $courses,
-            'lessons'    => $lessons,
+            'tasks'      => $tasks,
             'type'       => $type,
             'threadType' => 'course'
         ));
@@ -269,5 +270,13 @@ class MyTeachingController extends BaseController
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 }
