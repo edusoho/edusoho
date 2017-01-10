@@ -18,31 +18,31 @@ class CourseShowMetas
             'tabs'    => array(
                 'tasks'    => array(
                     'name'    => self::TASKS_NAME,
-                    'content' => 'AppBundle:Course:tasks'
+                    'content' => 'AppBundle:Course/Course:tasks'
                 ),
                 'threads'  => array(
                     'name'    => self::THREADS_NAME,
                     'number'  => 'threadNum',
-                    'content' => 'AppBundle:CourseThread:index'
+                    'content' => 'AppBundle:Course/Thread:index'
                 ),
                 'reviews'  => array(
                     'name'    => self::REVIEWS_NAME,
                     'number'  => 'ratingNum',
-                    'content' => 'AppBundle:Course:reviews'
+                    'content' => 'AppBundle:Course/Course:reviews'
                 ),
                 'notes'    => array(
                     'name'    => self::NOTES_NAME,
                     'number'  => 'noteNum',
-                    'content' => 'AppBundle:Course:notes'
+                    'content' => 'AppBundle:Course/Course:notes'
                 ),
                 'material' => array(
                     'name'    => self::MATERIAL_NAME,
                     'number'  => 'materialNum',
-                    'content' => 'AppBundle:Course/CourseMaterial:index'
+                    'content' => 'AppBundle:Course/Material:index'
                 ),
                 'summary'  => array(
                     'name'    => self::SUMMARY_NAME,
-                    'content' => 'AppBundle:Course:summary'
+                    'content' => 'AppBundle:Course/Course:summary'
                 )
             ),
             'widgets' => $metas['widgets']
@@ -52,34 +52,34 @@ class CourseShowMetas
     public static function getGuestCourseShowMetas()
     {
         return array(
-            'header'  => 'AppBundle:Course:header',
+            'header'  => 'AppBundle:Course/Course:header',
             'tabs'    => array(
                 'summary' => array(
                     'name'    => self::SUMMARY_NAME,
-                    'content' => 'AppBundle:Course:summary'
+                    'content' => 'AppBundle:Course/Course:summary'
                 ),
                 'tasks'   => array(
                     'name'    => self::TASKS_NAME,
-                    'content' => 'AppBundle:Course:tasks'
+                    'content' => 'AppBundle:Course/Course:tasks'
                 ),
                 'reviews' => array(
                     'name'    => self::REVIEWS_NAME,
                     'number'  => 'ratingNum',
-                    'content' => 'AppBundle:Course:reviews'
+                    'content' => 'AppBundle:Course/Course:reviews'
                 ),
                 'notes'   => array(
                     'name'    => self::NOTES_NAME,
                     'number'  => 'noteNum',
-                    'content' => 'AppBundle:Course:notes'
+                    'content' => 'AppBundle:Course/Course:notes'
                 )
             ),
             'widgets' => array(
                 'characteristic'     => array(
-                    'uri'  => 'AppBundle:Course:characteristic',
+                    'uri'  => 'AppBundle:Course/Course:characteristic',
                     'type' => 'render'
                 ),
                 'otherCourse'        => array(
-                    'uri'  => 'AppBundle:Course:otherCourse',
+                    'uri'  => 'AppBundle:Course/Course:otherCourse',
                     'type' => 'render'
                 ),
                 'recommendClassroom' => array(
@@ -87,11 +87,11 @@ class CourseShowMetas
                     'type' => 'include'
                 ),
                 'teachers'           => array(
-                    'uri'  => 'AppBundle:Course:teachers',
+                    'uri'  => 'AppBundle:Course/Course:teachers',
                     'type' => 'render'
                 ),
                 'newestStudents'     => array(
-                    'uri'  => 'AppBundle:Course:newestStudents',
+                    'uri'  => 'AppBundle:Course/Course:newestStudents',
                     'type' => 'render'
                 ),
                 'studentActivity'    => array(

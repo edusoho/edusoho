@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Course;
 
 use Biz\File\Service\UploadFileService;
 use Topxia\Common\Paginator;
@@ -156,7 +156,7 @@ class CourseController extends CourseBaseController
     public function tasksAction($course, $member = array())
     {
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
-
+   // var_dump($courseItems);
         $files = $this->findFiles($courseItems);
 
         return $this->render('course/tabs/tasks.html.twig', array(

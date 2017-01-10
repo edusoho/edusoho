@@ -1,10 +1,11 @@
 <?php
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Course;
 
 use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Controller\BaseController;
 
-class CourseChapterManageController extends BaseController
+class ChapterManageController extends BaseController
 {
     public function createAction(Request $request, $id)
     {

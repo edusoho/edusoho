@@ -272,7 +272,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'edit'            => 'AppBundle:Activity/Homework:edit',
                     'preview'         => 'AppBundle:Activity/Homework:tryLook',
                     'show'            => 'AppBundle:Activity/Homework:show',
-                    'finishCondition' => 'AppBundle:Activity/Homewok:finishCondition'
+                    'finishCondition' => 'AppBundle:Activity/Homework:finishCondition'
                 )
             ),
             'exercise'  => array(

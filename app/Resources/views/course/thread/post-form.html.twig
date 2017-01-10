@@ -6,7 +6,7 @@
 
 {% block title %}{% if post %}{{'编辑帖子'|trans}}{% else %}{{'回复帖子'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'course/thread-post-form' %}
+{% do load_script('course/thread-post-form') %}
 
 {% block detail_content %}
 

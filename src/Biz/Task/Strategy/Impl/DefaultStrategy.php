@@ -23,8 +23,8 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     public function createTask($field)
     {
         $this->validateTaskMode($field);
-        if ($field['mode'] == 'lesson') {
 
+        if ($field['mode'] == 'lesson') {
             $chapter             = array(
                 'courseId' => $field['fromCourseId'],
                 'title'    => $field['title'],
@@ -33,7 +33,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $chapter             = $this->getCourseService()->createChapter($chapter);
             $field['categoryId'] = $chapter['id'];
             $task                = $this->baseCreateTask($field);
-            return $task;
         } else {
             $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($field['categoryId'], 'lesson');
             if (empty($lessonTask)) {
@@ -46,7 +45,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $tasks            = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
         $chapter['tasks'] = $tasks;
         $chapter['mode']  = $field['mode'];
-
         return $chapter;
     }
 

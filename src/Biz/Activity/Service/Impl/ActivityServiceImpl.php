@@ -207,9 +207,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 foreach ($materials as $id => $material) {
                     $currents[] = $this->buildMaterial($material, $activity);
                 }
-                $dropMaterials = array_diff_key($exists, $currents);
-                $addMaterials  = array_diff_key($currents, $exists);
-                $updateMaterials = array_intersect_key($exists, $currents);
+
+                $dropMaterials   = $this->diffMaterials($exists, $currents);
+                $addMaterials    = $this->diffMaterials($currents, $exists);
+                $updateMaterials = $this->dirtyMaterials($exists, $currents);
                 foreach ($dropMaterials as $material) {
                     $this->getMaterialService()->deleteMaterial($activity['fromCourseId'], $material['id']);
                 }
@@ -233,13 +234,61 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'courseSetId' => $activity['fromCourseSetId'],
             'lessonId'    => $activity['id'],
             'title'       => $material['name'],
-            'description' => empty($material['summary']) ? null : $material['summary'],
+            'description' => empty($material['summary']) ? '' : $material['summary'],
             'userId'      => $this->getCurrentUser()->offsetGet('id'),
             'type'        => 'course',
             'source'      => $activity['mediaType'] == 'download' ? 'coursematerial' : 'courseactivity',
             'link'        => empty($material['link']) ? '' : $material['link'],
             'copyId'      => 0 //$fields
         );
+    }
+
+    protected function diffMaterials($arr1, $arr2)
+    {
+        $diffs = array();
+        if (empty($arr2)) {
+            return $arr1;
+        }
+        foreach ($arr1 as $key1 => $value1) {
+            $contained = false;
+            foreach ($arr2 as $key1 => $value2) {
+                if ($value1['fileId'] == 0) {
+                    $contained = $value1['link'] == $value2['link'];
+                } else {
+                    $contained = $value1['fileId'] == $value2['fileId'];
+                }
+                if ($contained) {
+                    break;
+                }
+            }
+            if (!$contained) {
+                $diffs[] = $value1;
+            }
+        }
+        return $diffs;
+    }
+
+    protected function dirtyMaterials($exists, $currents)
+    {
+        $diffs = array();
+        if (empty($arr2)) {
+            return $diffs;
+        }
+        foreach ($exists as $exist) {
+            foreach ($currents as $current) {
+                //如果fileId存在则匹配fileId，否则匹配link
+                if (($exist['fileId'] != 0 && $exist['fileId'] == $current['fileId'])
+                    || ($exist['fileId'] == 0 && $exist['link'] == $current['link'])) {
+                    $current['id'] = $exist['id'];
+                    if (empty($current['description'])) {
+                        $current['description'] = $exist['description'];
+                    }
+                    $diffs[] = $current;
+                    break;
+                }
+            }
+        }
+        return $diffs;
     }
 
     protected function filterFields($fields)
@@ -269,22 +318,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $fields;
     }
 
-    /**
-     * @return MaterialService
-     */
-    protected function getMaterialService()
-    {
-        return $this->createService('Course:MaterialService');
-    }
-
-    /**
-     * @return ActivityDao
-     */
-    protected function getActivityDao()
-    {
-        return $this->createDao('Activity:ActivityDao');
-    }
-
     protected function invalidActivity($activity)
     {
         if (!ArrayToolkit::requireds($activity, array(
@@ -301,34 +334,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return true;
         }
         return false;
-    }
-
-    public function getActivityConfig($type)
-    {
-        return $this->biz["activity_type.{$type}"];
-    }
-
-    /**
-     * @param  $activity
-     * @return mixed
-     */
-    public function fetchMedia($activity)
-    {
-        if (!empty($activity['mediaId'])) {
-            $activityConfig  = $this->getActivityConfig($activity['mediaType']);
-            $media           = $activityConfig->get($activity['mediaId']);
-            $activity['ext'] = $media;
-            return $activity;
-        }
-        return $activity;
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -356,6 +361,50 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         return $materials;
+    }
+
+    /**
+     * @param  $activity
+     * @return mixed
+     */
+    public function fetchMedia($activity)
+    {
+        if (!empty($activity['mediaId'])) {
+            $activityConfig  = $this->getActivityConfig($activity['mediaType']);
+            $media           = $activityConfig->get($activity['mediaId']);
+            $activity['ext'] = $media;
+            return $activity;
+        }
+        return $activity;
+    }
+
+    public function getActivityConfig($type)
+    {
+        return $this->biz["activity_type.{$type}"];
+    }
+
+    /**
+     * @return MaterialService
+     */
+    protected function getMaterialService()
+    {
+        return $this->createService('Course:MaterialService');
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    protected function getActivityDao()
+    {
+        return $this->createDao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
     /**

@@ -2,7 +2,7 @@
 
 {% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'course/thread-show' %}
+{% do load_script('course/thread-show') %}
 
 {% set nav = 'thread' %}
 
@@ -89,7 +89,7 @@
 
     {% if isMemberNonExpired %}
       <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-plus"></span> {{'添加'|trans}}{% if thread.type == 'question' %}{{'答案'|trans}}{% else %}{{'回复'|trans}}{% endif %}</h3>
-      {{ render(controller('AppBundle:CourseThread:post', {courseId:course.id, threadId:thread.id})) }}
+      {{ render(controller('AppBundle:Course/Thread:post', {courseId:course.id, threadId:thread.id})) }}
     {% endif %}
 
   </div>

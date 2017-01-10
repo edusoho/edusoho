@@ -1586,105 +1586,105 @@ course_task_plugin_thread_answer:
 #course_chapter
 course_manage_chapter_create:
     path:  /course/{id}/manage/chapter/create
-    defaults: { _controller: AppBundle:CourseChapterManage:create }
+    defaults: { _controller: AppBundle:Course/ChapterManage:create }
 
 course_manage_chapter_edit:
     path:  /course/{courseId}/manage/chapter/{chapterId}/edit
-    defaults: { _controller: AppBundle:CourseChapterManage:edit }
+    defaults: { _controller: AppBundle:Course/ChapterManage:edit }
 
 course_manage_chapter_delete:
     path:  /course/{courseId}/manage/chapter/{chapterId}/delete
-    defaults: { _controller: AppBundle:CourseChapterManage:delete }
+    defaults: { _controller: AppBundle:Course/ChapterManage:delete }
     methods: [POST]
 
 #course
 course_set_manage_courses:
   path: /course_set/{courseSetId}/manage/courses
-  defaults: {_controller: AppBundle:CourseManage:list}
+  defaults: {_controller: AppBundle:Course/CourseManage:list}
 
 course_set_manage_course_create:
   path: /course_set/{courseSetId}/manage/course/create
-  defaults: {_controller: AppBundle:CourseManage:create}
+  defaults: {_controller: AppBundle:Course/CourseManage:create}
 
 course_set_manage_course_info:
   path: /course_set/{courseSetId}/manage/course/{courseId}/info
-  defaults: {_controller: AppBundle:CourseManage:info}
+  defaults: {_controller: AppBundle:Course/CourseManage:info}
 
 course_set_manage_course_tasks:
   path: /course_set/{courseSetId}/manage/course/{courseId}/tasks
-  defaults: {_controller: AppBundle:CourseManage:tasks}
+  defaults: {_controller: AppBundle:Course/CourseManage:tasks}
 
 course_set_manage_course_marketing:
   path: /course_set/{courseSetId}/manage/course/{courseId}/marketing
-  defaults: {_controller: AppBundle:CourseManage:marketing}
+  defaults: {_controller: AppBundle:Course/CourseManage:marketing}
 
 course_set_manage_course_teachers:
   path: /course_set/{courseSetId}/manage/course/{courseId}/teachers
-  defaults: {_controller: AppBundle:CourseManage:teachers}
+  defaults: {_controller: AppBundle:Course/CourseManage:teachers}
 
 course_set_manage_course_teachers_match:
   path: /course_set/{courseSetId}/manage/course/{courseId}/teachers_match
-  defaults: {_controller: AppBundle:CourseManage:teachersMatch}
+  defaults: {_controller: AppBundle:Course/CourseManage:teachersMatch}
 
 course_set_manage_course_students:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students
-  defaults: {_controller: AppBundle:CourseManage:students}
+  defaults: {_controller: AppBundle:Course/CourseManage:students}
 
 course_set_manage_course_quit_records:
   path: /course_set/{courseSetId}/manage/course/{courseId}/quit_records
-  defaults: {_controller: AppBundle:CourseManage:studentQuitRecords}
+  defaults: {_controller: AppBundle:Course/CourseManage:studentQuitRecords}
 
 course_set_manage_course_students_add:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/add
-  defaults: {_controller: AppBundle:CourseManage:createCourseStudent}
+  defaults: {_controller: AppBundle:Course/CourseManage:createCourseStudent}
 
 course_set_manage_course_students_remove:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/remove
-  defaults: {_controller: AppBundle:CourseManage:removeCourseStudent}
+  defaults: {_controller: AppBundle:Course/CourseManage:removeCourseStudent}
   methods: [POST]
 
 course_set_manage_course_students_process:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/process
-  defaults: {_controller: AppBundle:CourseManage:studyProcess}
+  defaults: {_controller: AppBundle:Course/CourseManage:studyProcess}
 
 course_set_manage_course_students_check:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/check
-  defaults: {_controller: AppBundle:CourseManage:checkStudent}
+  defaults: {_controller: AppBundle:Course/CourseManage:checkStudent}
 
 course_set_manage_course_orders:
   path: /course_set/{courseSetId}/manage/course/{courseId}/orders
-  defaults: {_controller: AppBundle:CourseManage:orders}
+  defaults: {_controller: AppBundle:Course/CourseManage:orders}
 
 course_set_manage_course_orders_export_csv:
   path: /course_set/{courseSetId}/manage/course/{courseId}/orders/export
-  defaults: { _controller: AppBundle:CourseManage:ordersExportCsv }
+  defaults: { _controller: AppBundle:Course/CourseManage:ordersExportCsv }
 
 course_set_manage_course_dashboard:
   path: /course_set/{courseSetId}/manage/course/{courseId}/dashboard
-  defaults: {_controller: AppBundle:CourseManage:dashboard}
+  defaults: {_controller: AppBundle:Course/CourseManage:dashboard}
 
 course_set_manage_course_dashboard_task_detail:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/dashboard/detail/{taskId}
-  defaults: { _controller: AppBundle:CourseManage:taskLearnDetail }
+  defaults: { _controller: AppBundle:Course/CourseManage:taskLearnDetail }
 
 course_set_manage_course_close:
   path: /course_set/{courseSetId}/course/{courseId}/close
-  defaults: {_controller: AppBundle:CourseManage:close}
+  defaults: {_controller: AppBundle:Course/CourseManage:close}
   methods: [POST]
 
 course_set_manage_course_delete:
   path: /course_set/{courseSetId}/course/{courseId}/delete
-  defaults: {_controller: AppBundle:CourseManage:delete}
+  defaults: {_controller: AppBundle:Course/CourseManage:delete}
   methods: [POST]
 
 course_set_manage_course_publish:
   path: /course_set/{courseSetId}/course/{courseId}/publish
-  defaults: {_controller: AppBundle:CourseManage:publish}
+  defaults: {_controller: AppBundle:Course/CourseManage:publish}
   methods: [POST]
 
 course_manage_items_sort:
   path:  /course/{courseId}/manage/items/sort
-  defaults: { _controller: AppBundle:CourseManage:courseItemsSort }
+  defaults: { _controller: AppBundle:Course/CourseManage:courseItemsSort }
   methods: ['POST']
 
 #my_course
@@ -1732,140 +1732,140 @@ my_group_thread_collecting:
 #course_set
 course_set_manage_create:
   path: /course_set/create
-  defaults: {_controller: AppBundle:CourseSetManage:create}
+  defaults: {_controller: AppBundle:Course/CourseSetManage:create}
 
 course_set_show:
   path: /course_set/{id}
-  defaults: {_controller: AppBundle:CourseSet:show}
+  defaults: {_controller: AppBundle:Course/CourseSet:show}
 
 course_qrcode:
   path: /course/{id}/qrcode
-  defaults: { _controller: AppBundle:Course:qrcode }
+  defaults: { _controller: AppBundle:Course/Course:qrcode }
   methods: [POST]
 
 course_set_favorite:
   path: /course_set/{id}/favorite
-  defaults: { _controller: AppBundle:CourseSet:favorite }
+  defaults: { _controller: AppBundle:Course/CourseSet:favorite }
   methods: [POST]
 
 course_set_unfavorite:
   path: /course_set/{id}/unfavorite
-  defaults: { _controller: AppBundle:CourseSet:unfavorite }
+  defaults: { _controller: AppBundle:Course/CourseSet:unfavorite }
   methods: [POST]
 
 course_show:
   path: /course/{id}/{tab}
-  defaults: {_controller: AppBundle:Course:show, tab: 'summary'}
+  defaults: {_controller: AppBundle:Course/Course:show, tab: 'summary'}
 
 course_exit:
   path: /course/{id}/exit
-  defaults: {_controller: AppBundle:Course:exit}
+  defaults: {_controller: AppBundle:Course/Course:exit}
 
 course_thread_create:
    path:  /course/{courseId}/thread/create
-   defaults: { _controller: AppBundle:CourseThread:create }
+   defaults: { _controller: AppBundle:Course/Thread:create }
 
 course_thread_show:
    path:  /course/{courseId}/thread/{threadId}
-   defaults: { _controller: AppBundle:CourseThread:show }
+   defaults: { _controller: AppBundle:Course/Thread:show }
 
 course_thread_post:
    path:  /course/{courseId}/thread/{threadId}/post
-   defaults: { _controller: AppBundle:CourseThread:post }
+   defaults: { _controller: AppBundle:Course/Thread:post }
 
 course_thread_edit:
    path:  /course/{courseId}/thread/{threadId}/edit
-   defaults: { _controller: AppBundle:CourseThread:edit }
+   defaults: { _controller: AppBundle:Course/Thread:edit }
 
 course_thread_post_delete:
    path:  /course/{courseId}/thread/{threadId}/post/{postId}/delete
-   defaults: { _controller: AppBundle:CourseThread:deletePost }
+   defaults: { _controller: AppBundle:Course/Thread:deletePost }
    methods: [POST]
 
 course_thread_post_edit:
    path:  /course/{courseId}/thread/{threadId}/post/{postId}/edit
-   defaults: { _controller: AppBundle:CourseThread:editPost }
+   defaults: { _controller: AppBundle:Course/Thread:editPost }
 
 course_thread_stick:
    path:  /course/{courseId}/thread/{threadId}/stick
-   defaults: { _controller: AppBundle:CourseThread:stick }
+   defaults: { _controller: AppBundle:Course/Thread:stick }
    methods: [POST]
 
 course_thread_unstick:
    path:  /course/{courseId}/thread/{threadId}/unstick
-   defaults: { _controller: AppBundle:CourseThread:unstick }
+   defaults: { _controller: AppBundle:Course/Thread:unstick }
    methods: [POST]
 
 course_thread_elite:
    path:  /course/{courseId}/thread/{threadId}/elite
-   defaults: { _controller: AppBundle:CourseThread:elite }
+   defaults: { _controller: AppBundle:Course/Thread:elite }
    methods: [POST]
 
 course_thread_unelite:
    path:  /course/{courseId}/thread/{threadId}/unelite
-   defaults: { _controller: AppBundle:CourseThread:unelite }
+   defaults: { _controller: AppBundle:Course/Thread:unelite }
    methods: [POST]
 
 course_thread_delete:
    path:  /course/{courseId}/thread/{threadId}/delete
-   defaults: { _controller: AppBundle:CourseThread:delete }
+   defaults: { _controller: AppBundle:Course/Thread:delete }
    methods: [POST]
 
 course_set_manage:
   path: /course_set/{id}/manage
-  defaults: {_controller: AppBundle:CourseSetManage:index}
+  defaults: {_controller: AppBundle:Course/CourseSetManage:index}
 
 course_set_manage_base:
   path: /course_set/{id}/manage/base
-  defaults: {_controller: AppBundle:CourseSetManage:base}
+  defaults: {_controller: AppBundle:Course/CourseSetManage:base}
 
 course_set_manage_detail:
   path: /course_set/{id}/manage/detail
-  defaults: {_controller: AppBundle:CourseSetManage:detail}
+  defaults: {_controller: AppBundle:Course/CourseSetManage:detail}
 
 course_set_manage_cover:
   path: /course_set/{id}/manage/cover
-  defaults: {_controller: AppBundle:CourseSetManage:cover}
+  defaults: {_controller: AppBundle:Course/CourseSetManage:cover}
 
 course_set_manage_cover_crop:
   path: /course_set/{id}/manage/cover_crop
-  defaults: {_controller: AppBundle:CourseSetManage:coverCrop}
+  defaults: {_controller: AppBundle:Course/CourseSetManage:coverCrop}
 
 course_set_manage_files:
   path: /course_set/{id}/manage/files
-  defaults: {_controller: AppBundle:CourseSetFileManage:index}
+  defaults: {_controller: AppBundle:Course/CourseSetFileManage:index}
 
 course_set_manage_file_show:
    path:  /course_set/{id}/manage/file/{fileId}
-   defaults: { _controller: AppBundle:CourseSetFileManage:show }
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:show }
 
 course_set_manage_file_convert:
    path:  /course_set/{id}/manage/file/{fileId}/convert
-   defaults: { _controller: AppBundle:CourseSetFileManage:convert }
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:convert }
    methods: [POST]
 
 course_set_manage_file_status:
    path:  /course_set/manage/file/status
-   defaults: { _controller: AppBundle:CourseSetFileManage:fileStatus }
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:fileStatus }
 
 course_set_manage_delete_materials_show:
    path:  /course_set/{id}/manage/show/delete/materials
-   defaults: { _controller: AppBundle:CourseSetFileManage:deleteMaterialShow }
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:deleteMaterials }
    methods: [POST]
 
 course_set_manage_delete_materials:
-   path:  /course/{id}/manage/delete/materials
-   defaults: { _controller: AppBundle:CourseSetFileManage:deleteCourseFiles }
+   path:  /course_set/{id}/manage/delete/materials
+   defaults: { _controller: AppBundle:Course/CourseSetFileManage:deleteCourseFiles }
    methods: [POST]
 
 
 course_set_manage_publish:
   path: /course_set/{id}/manage/publish
-  defaults: {_controller: AppBundle:CourseSetManage:publish}
+  defaults: {_controller: AppBundle:Course/CourseSetManage:publish}
 
 course_set_manage_close:
   path: /course_set/{id}/manage/close
-  defaults: {_controller: AppBundle:CourseSetManage:close}
+  defaults: {_controller: AppBundle:Course/CourseSetManage:close}
 
 course_review_create:
    path:  /course/{id}/review/create
@@ -1882,11 +1882,11 @@ course_review_delete:
 
 course_material_download:
     path:  /course/{courseId}/material/{materialId}/download
-    defaults: { _controller: AppBundle:Course/CourseMaterial:download }
+    defaults: { _controller: AppBundle:Course/Material:download }
 
 course_material_delete:
     path:  /course/{id}/material/{materialId}/delete
-    defaults: { _controller: AppBundle:Course/CourseMaterial:delete }
+    defaults: { _controller: AppBundle:Course/Material:delete }
     methods: [POST]
 
 
@@ -2010,15 +2010,15 @@ course_set_manage_testpaper_questions:
 
 course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
-  defaults: { _controller: AppBundle:CourseTestpaperManage:check }
+  defaults: { _controller: AppBundle:Course/TestpaperManage:check }
 
 course_manage_testpaper_check_list:
   path: /course/{id}/manage/testpaper/check
-  defaults: { _controller: AppBundle:CourseTestpaperManage:checkList }
+  defaults: { _controller: AppBundle:Course/TestpaperManage:checkList }
 
 course_manage_testpaper_result_list:
   path: /course/{id}/manage/testpaper/{testpaperId}/result
-  defaults: { _controller: AppBundle:CourseTestpaperManage:resultList }
+  defaults: { _controller: AppBundle:Course/TestpaperManage:resultList }
 
 course_manage_testpaper_questions:
   path: /course/{courseId}/manage/testpaper/{testpaperId}/items
@@ -2065,11 +2065,11 @@ course_set_manage_homework_question_picked:
 
 course_manage_homework_check_list:
   path: /course/{id}/manage/homework/check
-  defaults: { _controller: AppBundle:CourseHomeworkManage:checkList }
+  defaults: { _controller: AppBundle:Course/HomeworkManage:checkList }
 
 course_manage_homework_check:
   path: /course/{id}/manage/homework/{resultId}/check
-  defaults: { _controller: AppBundle:CourseHomeworkManage:check }
+  defaults: { _controller: AppBundle:Course/HomeworkManage:check }
 
 
 homework_start_do:

@@ -13,14 +13,9 @@
   },
   "devDependencies": {
     "babel-cli": "6.5.1",
-    "babel-polyfill": "6.5.0",
     "babel-preset-react": "6.11.1",
     "babel-runtime": "6.20.0",
-    "cors": "2.8.1",
     "es-webpack-engine": "latest",
-    "install": "0.8.1",
-    "npm": "3.10.9",
-    "perfect-scrollbar": "0.6.13",
     "webpack": "1.14.0"
   },
   "dependencies": {
@@ -49,6 +44,7 @@
     "jquery-validation": "1.15.1",
     "moment": "2.16.0",
     "nouislider": "9.1.0",
+    "perfect-scrollbar": "0.6.13",
     "postal": "2.0.5",
     "postal.federation": "0.5.3",
     "postal.xframe": "0.5.0",
