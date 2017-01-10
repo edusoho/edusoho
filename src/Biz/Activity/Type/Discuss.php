@@ -16,5 +16,4 @@ class Discuss extends Activity
     {
         return true;
     }
-
 }
