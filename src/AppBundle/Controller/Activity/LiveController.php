@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller\Activity;
 
-use AppBundle\Controller\BaseController;
-use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use AppBundle\Controller\BaseController;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseController implements ActivityActionInterface
@@ -118,11 +118,9 @@ class LiveController extends BaseController implements ActivityActionInterface
             return $this->createJsonResponse(array('success' => true, 'status' => 'not_start'));
         }
 
-        // $eventName = $request->query->get('eventName', 'doing');
-        // $this->getActivityService()->trigger($activityId, $eventName, array());
-
         //当前业务逻辑：看过即视为完成
-        $this->getActivityService()->trigger($activityId, 'finish', array());
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+        $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
 
         if ($activity['endTime'] < $now) {
             return $this->createJsonResponse(array('success' => true, 'status' => 'live_end'));
@@ -135,7 +133,6 @@ class LiveController extends BaseController implements ActivityActionInterface
     {
         return $this->render('activity/live/finish-condition.html.twig', array());
     }
-
 
     /**
      * @return ActivityService
