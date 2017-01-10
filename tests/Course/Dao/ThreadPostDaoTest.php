@@ -8,9 +8,9 @@ class ThreadPostDaoTest extends BaseDaoTestCase
 {
     public function testSearchByGroup()
     {
-        $threads[0] = $this->mockThreadPost(array('courseId' => 1, 'taskId' => 0, 'userId' => 1, 'isElite' => 127));
-        $threads[1] = $this->mockThreadPost(array('courseId' => 1, 'taskId' => 0, 'userId' => 2, 'isElite' => 0));
-        $threads[2] = $this->mockThreadPost(array('courseId' => 2, 'taskId' => 0, 'userId' => 3, 'isElite' => 1));
+        $threads[0] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 0, 'userId' => 1, 'isElite' => 127));
+        $threads[1] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 0, 'userId' => 2, 'isElite' => 0));
+        $threads[2] = $this->mockDataObject(array('courseId' => 2, 'taskId' => 0, 'userId' => 3, 'isElite' => 1));
 
         $testConditions = array(
             array(
@@ -50,13 +50,13 @@ class ThreadPostDaoTest extends BaseDaoTestCase
 
     public function testCountByGroup()
     {
-        $threads[0] = $this->mockThreadPost(array('courseId' => 1, 'taskId' => 0, 'userId' => 1, 'isElite' => 127));
-        $threads[1] = $this->mockThreadPost(array('courseId' => 1, 'taskId' => 0, 'userId' => 2, 'isElite' => 0));
-        $threads[2] = $this->mockThreadPost(array('courseId' => 2, 'taskId' => 0, 'userId' => 3, 'isElite' => 1));
+        $threads[0] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 0, 'userId' => 1, 'isElite' => 127));
+        $threads[1] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 0, 'userId' => 2, 'isElite' => 0));
+        $threads[2] = $this->mockDataObject(array('courseId' => 2, 'taskId' => 0, 'userId' => 3, 'isElite' => 1));
 
-        $res[0] = $this->getThreadPostDao()->countByGroup(array('courseId' => 1), 'userId');
-        $res[1] = $this->getThreadPostDao()->countByGroup(array('taskId' => 0), 'courseId');
-        $res[2] = $this->getThreadPostDao()->countByGroup(array('content' => '？'));
+        $res[0] = $this->getDao()->countByGroup(array('courseId' => 1), 'userId');
+        $res[1] = $this->getDao()->countByGroup(array('taskId' => 0), 'courseId');
+        $res[2] = $this->getDao()->countByGroup(array('content' => '？'));
 
         $this->assertArrayEquals(array(1, 1), $res[0], array(0));
         $this->assertArrayEquals(array(2, 1), $res[1], array(0));
@@ -65,40 +65,35 @@ class ThreadPostDaoTest extends BaseDaoTestCase
 
     public function testDeleteByThreadId()
     {
-        $res[0] = $this->mockThreadPost(array('threadId' => 1));
-        $res[1] = $this->mockThreadPost(array('threadId' => 1));
-        $res[2] = $this->mockThreadPost(array('threadId' => 2));
+        $res[0] = $this->mockDataObject(array('threadId' => 1));
+        $res[1] = $this->mockDataObject(array('threadId' => 1));
+        $res[2] = $this->mockDataObject(array('threadId' => 2));
 
-        $this->assertGreaterThan(0, $this->getThreadPostDao()->deleteByThreadId(1));
-        $this->assertEquals(0, $this->getThreadPostDao()->deleteByThreadId(1));
-        $this->assertGreaterThan(0, $this->getThreadPostDao()->deleteByThreadId(2));
-        $this->assertEquals(0, $this->getThreadPostDao()->deleteByThreadId(2));
+        $this->assertGreaterThan(0, $this->getDao()->deleteByThreadId(1));
+        $this->assertEquals(0, $this->getDao()->deleteByThreadId(1));
+        $this->assertGreaterThan(0, $this->getDao()->deleteByThreadId(2));
+        $this->assertEquals(0, $this->getDao()->deleteByThreadId(2));
     }
 
-    private function searchByGroupTestUtil($testConditons, $testFields, $groupBy = null)
+    protected function searchByGroupTestUtil($testConditons, $testFields, $groupBy = null)
     {
         foreach ($testConditons as $testConditon) {
-            $count = $this->getThreadPostDao()->count($testConditon['condition']);
+            $count = $this->getDao()->count($testConditon['condition']);
             $this->assertEquals($count, $testConditon['expectedCount']);
             $orderBy = empty($testConditon['orderBy']) ? array() : $testConditon['orderBy'];
-            $results = $this->getThreadPostDao()->searchByGroup($testConditon['condition'], $orderBy, 0, 10);
+            $results = $this->getDao()->searchByGroup($testConditon['condition'], $orderBy, 0, 10);
             foreach ($results as $key => $result) {
                 $this->assertArrayEquals($result, $testConditon['expectedResults'][$key], $testFields, $groupBy);
             }
         }
     }
 
-    private function mockThreadPost($fields)
+    protected function mockDataObject($fields)
     {
-        return $this->getThreadPostDao()->create(array_merge($this->getDefaultMockFields(), $fields));
+        return $this->getDao()->create(array_merge($this->getDefaultMockFields(), $fields));
     }
-
-    private function getCompareKeys()
-    {
-        return array_keys($this->getDefaultMockFields());
-    }
-
-    private function getDefaultMockFields()
+    
+    protected function getDefaultMockFields()
     {
         return array(
             'courseId' => rand(0, 1000),
@@ -108,10 +103,5 @@ class ThreadPostDaoTest extends BaseDaoTestCase
             'isElite' => rand(0, 127),
             'content' => '哈？'
         );
-    }
-
-    private function getThreadPostDao()
-    {
-        return $this->getBiz()->dao('Course:ThreadPostDao');
     }
 }

@@ -8,46 +8,47 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
 {
     public function testSumLearnedTimeByActivityIdAndUserId()
     {
-        $factor0 = $this->mockActivityLearnLog(array('activityId' => 0, 'userId' => 1));
-        $factor1 = $this->mockActivityLearnLog(array('activityId' => 0, 'userId' => 1));
-        $factor2 = $this->mockActivityLearnLog(array('activityId' => 0, 'userId' => 1));
+        $factor0 = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
+        $factor1 = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
+        $factor2 = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
 
-        $res = $this->getActivityLearnLogDao()->sumLearnedTimeByActivityIdAndUserId(0, 1);
+        $res = $this->getDao()->sumLearnedTimeByActivityIdAndUserId(0, 1);
 
         $this->assertEquals($this->getSums(array($factor0, $factor1, $factor2)), $res);
     }
 
+    // Todo 联表查询
     public function testSumLearnedTimeByCourseIdAndUserId()
     {
-        $factor0 = $this->mockActivityLearnLog(array('courseId' => 0, 'userId' => 1));
-        $factor1 = $this->mockActivityLearnLog(array('courseId' => 0, 'userId' => 1));
-        $factor2 = $this->mockActivityLearnLog(array('courseId' => 0, 'userId' => 1));
-
-        $res = $this->getActivityLearnLogDao()->sumLearnedTimeByCourseIdAndUserId(0, 1);
-
-        $this->assertEquals($this->getSums(array($factor0, $factor1, $factor2)), $res);
+        ;
     }
 
-    public function testFindActivityLearnLogsByActivityIdAndUserIdAndEvent()
+    public function testFindByActivityIdAndUserIdAndEvent()
     {
-        $log[0] = $this->mockActivityLearnLog(array('activityId' => 0, 'userId' => 1));
-        $log[1] = $this->mockActivityLearnLog(array('activityId' => 0, 'userId' => 1));
-        $log[2] = $this->mockActivityLearnLog(array('activityId' => 0, 'userId' => 1));
+        $log[0] = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
+        $log[1] = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
+        $log[2] = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
 
-        $res = $this->getActivityLearnLogDao()->findActivityLearnLogsByActivityIdAndUserIdAndEvent(0, 1, 'ffff');
+        $res = $this->getDao()->findByActivityIdAndUserIdAndEvent(0, 1, 'ffff');
 
         foreach ($log as $key => $val) {
             $this->assertArrayEquals($log[$key], $res[$key], $this->getCompareKeys());
         }
     }
 
-    private function getCompareKeys()
+    // Todo 联表查询
+    public function testCountLearnedDaysByCourseIdAndUserId()
     {
-        $default = $this->getDefaultMockFields(null);
-        return array_keys($default);
+        ;
     }
 
-    private function fetchAndAssembleIds(array $rawInput)
+    // Todo 联表查询
+    public function testSumLearnTime()
+    {
+        ;
+    }
+    
+    protected function fetchAndAssembleIds(array $rawInput)
     {
         $res = array();
         foreach ($rawInput as $val) {
@@ -57,7 +58,7 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         return $res;
     }
 
-    private function getSums(array $rawInput)
+    protected function getSums(array $rawInput)
     {
         $sum = 0;
         foreach ($rawInput as $val) {
@@ -78,12 +79,7 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         return $sum;
     }
 
-    private function mockActivityLearnLog($fields = array(), $learnedTime = null)
-    {
-        return $this->getActivityLearnLogDao()->create(array_merge($this->getDefaultMockFields($learnedTime), $fields));
-    }
-
-    private function getDefaultMockFields($learnedTime)
+    protected function getDefaultMockFields($learnedTime)
     {
         if (!$learnedTime) {
             $learnedTime = rand(0, 1000);
@@ -96,10 +92,5 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
             'learnedTime' => $learnedTime,
             'courseTaskId' => rand(0, 1000)
         );
-    }
-
-    private function getActivityLearnLogDao()
-    {
-        return $this->getBiz()->dao('Activity:ActivityLearnLogDao');
     }
 }

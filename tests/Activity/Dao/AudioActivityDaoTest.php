@@ -6,12 +6,7 @@ use Tests\Base\BaseDaoTestCase;
 
 class AudioActivityDaoTest extends BaseDaoTestCase
 {
-    public function testGet()
-    {
-        ;
-    }
-
-    private function getDefaultMockFields()
+    protected function getDefaultMockFields()
     {
         return array(
             

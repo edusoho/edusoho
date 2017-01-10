@@ -8,23 +8,115 @@ class ThreadDaoTest extends BaseDaoTestCase
 {
     public function testSearch()
     {
-        ;
+        $factor = array();
+        for ($i = 0; $i < 10; $i++) {
+            $factor[] = $this->mockDataObject();
+        }
+
+        $testConditions = array(
+            array(
+                'condition' => array(),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('courseId' => 1),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('courseSetId' => 1),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('taskId' => 1),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('userId' => 1),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('type' => 'discussion'),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('types' => array('discussion', 'question')),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('isStick' => 1),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('isElite' => 1),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('postNum' => 1),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('postNumLargerThan' => 0),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('title' => '哼'),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('content' => '爱上地方'),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('courseIds', array(1, 2)),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            ),
+            array(
+                'condition' => array('protected' => 1),
+                'expectedResults' => $factor,
+                'expectedCount' => 10
+            )
+        );
+
+        $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
 
-    private function getDefaultMockFields()
+    protected function mockDataObject($fields = array())
+    {
+        return $this->getDao()->create(array_merge($this->getDefaultMockFields(), $fields));
+    }
+
+    protected function getDefaultMockFields()
     {
         return array(
-            
+            'courseId' => 1,
+            'taskId' => 1,
+            'userId' => 1,
+            'type' => 'discussion',
+            'isStick' => 1,
+            'isElite' => 1,
+            'isClosed' => 1,
+            'protected' => 1,
+            'title' => '嗯哼？',
+            'content' => '爱上地方',
+            'postNum' => 1,
+            'hitNum' => 1,
+            'followNum' => 1,
+            'latestPostTime' => time(),
+            'courseSetId' => 1
         );
-    }
-
-    private function mockThreadDao($fields)
-    {
-        return $this->getThreadDao()->create(array_merge($this->getDefaultMockFields(), $fields));
-    }
-
-    private function getThreadDao()
-    {
-        return $this->getBiz()->dao('Course:ThreadDao');
     }
 }

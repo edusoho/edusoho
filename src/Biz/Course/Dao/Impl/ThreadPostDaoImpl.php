@@ -34,7 +34,9 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
             $builder->addGroupBy($groupBy);
         }
 
-        return $builder->execute()->fetchColumn(0);
+        // return $builder->execute()->fetchColumn(0);
+        // 源代码可能有问题，groupBy没有效果，现修改如下：
+        return array_column($builder->execute()->fetchAll(), 'COUNT(id)');
     }
 
     public function deleteByThreadId($threadId)
