@@ -1,5 +1,1 @@
-{% do script(['app/js/activity/flash/index.js']) %}
-
-<div class="modal-video-content iframe-parent-content" id="flash-player" data-uri="{{ flashMedia.uri }}" data-finish-type="{{ flash.finishType }}"
-     data-finish-detail="{{ flash.finishDetail }}">
-</div>
+{% include 'activity/flash/index.html.twig' %}

@@ -27,7 +27,6 @@ class ActivityController extends BaseController
     public function previewAction(Request $request, $task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }
@@ -100,6 +99,7 @@ class ActivityController extends BaseController
     {
         return $this->createService('Activity:ActivityService');
     }
+
 
     /**
      * @return CourseService

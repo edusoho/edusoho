@@ -98,7 +98,8 @@
       <input type="hidden" name="mediaType" value="testpaper" />
     </div>
   </div>
-  <div class="form-group js-score-form-group">
+
+  <div class="form-group js-score-form-group {% if activity.finishCondition.type|default(null) == 'submit' %}hidden{% endif %}">
     <div class="col-sm-offset-2 col-sm-8 color-gray">
       <span>0</span>
       <div class="js-slider-content inline-block vertical-middle mlm mrl" id="score-slider">

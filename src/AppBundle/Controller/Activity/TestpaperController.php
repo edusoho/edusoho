@@ -44,11 +44,6 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         ));
     }
 
-    public function tryLookAction(Request $request, $task)
-    {
-        return $this->render('activity/testpaper/try-look.html.twig');
-    }
-
     public function previewAction(Request $request, $id, $courseId)
     {
         $activity          = $this->getActivityService()->getActivity($id);

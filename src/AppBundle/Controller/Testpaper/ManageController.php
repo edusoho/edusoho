@@ -61,16 +61,14 @@ class ManageController extends BaseController
 
         $types = $this->getQuestionTypes();
 
-        $conditions['types']    = array_keys($types);
-        $conditions['courseId'] = $courseSet['id'];
+        $conditions = array(
+            'types'    => array_keys($types),
+            'courseId' => $courseSet['id'],
+            'parentId' => 0
+        );
 
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $questionNums = ArrayToolkit::index($questionNums, 'type');
-
-        $conditions                              = array();
-        $conditions['type']                      = 'material';
-        $conditions['subCount']                  = 0;
-        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount($conditions);
 
         $user   = $this->getUser();
         $ranges = $this->getTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);

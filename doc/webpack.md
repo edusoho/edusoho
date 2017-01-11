@@ -54,6 +54,7 @@ location ~ ^/static-dist {
 ```
 npm start
 npm start port:3038 #改变端口
+openModule=lib,app,admin,plugin,copy npm start #可以选择监听哪几个模块
 ```
 
 ```

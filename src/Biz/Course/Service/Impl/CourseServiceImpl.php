@@ -606,7 +606,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $conditions['type'] = $filters["type"];
             $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime' => 'DESC'), $start, $limit);
         } else {
-            $members = $this->getMemberDao()->search($conditions, array(), $start, $limit);
+            $members = $this->getMemberDao()->search($conditions, array('createdTime' => 'DESC'), $start, $limit);
         }
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
