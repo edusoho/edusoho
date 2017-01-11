@@ -140,6 +140,7 @@ class CourseController extends CourseBaseController
         }
 
         return $this->render('TopxiaWebBundle:Course:lesson-list.html.twig', array(
+            'tags'   => ArrayToolkit::column($this->getTagsByOwnerId($id), 'id'),
             'course' => $course,
             'member' => $member
         ));
