@@ -1,8 +1,28 @@
 define(function(require, exports, module) {
+    var Validator = require('bootstrap.validator');
+    require('common/validator-rules').inject(Validator);
 
     var Notify = require('common/bootstrap-notify');
     var WebUploader = require('edusoho.webuploader');
     exports.run = function() {
+
+        var validator = new Validator({
+            element: '#consult-setting-form',
+            rule: 'scriptTag'
+        });
+
+        validator.addItem({
+            element: '[name=supplier]',
+            rule: 'scriptTag',
+            display: '第三方客服代码'
+        });
+
+        Validator.addRule("scriptTag", function(options) {
+            var value = $(options.element).val();
+            value = value.trim();
+            var legalMatch = value.match(/^<script>(.*)?<\/script>$/);
+            return (legalMatch && legalMatch.length >0 )
+        }, "{{display}}开头结尾必须为script标签");
 
         $("#qq-property-tips").popover({
             html: true,
