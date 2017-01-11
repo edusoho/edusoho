@@ -78,7 +78,7 @@ define(function(require, exports, module) {
                         enable : true,
                         source : 'hls',
                         src : self.get('url')
-                        // rates: [1,1.25,1.5,2]
+                        rates: [1,1.25,1.5,2]
                     }
                 });
             }

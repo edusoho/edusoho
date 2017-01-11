@@ -2463,6 +2463,9 @@ importer_index:
     path: /importer/{type}/index
     defaults: { _controller: TopxiaWebBundle:Importer:template}
 
+changelog_list:
+    path: /changelog/list
+    defaults: { _controller: TopxiaWebBundle:Changelog:list }
 #esbar_my_history:
 #    path:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
