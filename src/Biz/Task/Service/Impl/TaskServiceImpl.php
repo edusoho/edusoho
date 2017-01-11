@@ -18,7 +18,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         return $this->getTaskDao()->get($id);
     }
-
+    
     public function createTask($fields)
     {
         $this->beginTransaction();
@@ -178,16 +178,26 @@ class TaskServiceImpl extends BaseService implements TaskService
                 if (time() > $live['endTime']) {
                     $canLearnTask = true;
                 } else {
-                    $canLearnTask = false;
-                    $continue     = false;
+                    $isTaskLearned = $this->isTaskLearned($preTask['id']);
+                    if($isTaskLearned){
+                        $canLearnTask = true;
+                    }else{
+                        $canLearnTask = false;
+                        $continue     = false;
+                    }
                 }
             } else if ($preTask['type'] == 'testpaper' and $preTask['startTime']) {
                 $testPaper = $this->getActivityService()->getActivity($preTask['activityId']);
                 if (time() > $preTask['startTime'] + $testPaper['ext']['limitedTime'] * 60) {
                     $canLearnTask = true;
                 } else {
-                    $canLearnTask = false;
-                    $continue     = false;
+                    $isTaskLearned = $this->isTaskLearned($preTask['id']);
+                    if($isTaskLearned){
+                        $canLearnTask = true;
+                    }else{
+                        $canLearnTask = false;
+                        $continue     = false;
+                    }
                 }
             } else {
                 $isTaskLearned = $this->isTaskLearned($preTask['id']);
