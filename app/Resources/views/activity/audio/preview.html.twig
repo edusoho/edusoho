@@ -1,5 +1,5 @@
 {% do script(['app/js/task/audio/index.js']) %}
 
-<div class="modal-video-content audio-content" id="audio-content" data-role="audio-content" >
+<div class="task-preview-modal-content audio-content" id="audio-content" data-role="audio-content" >
   {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId})) }}
 </div>
