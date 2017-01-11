@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Command;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Topxia\Service\User\CurrentUser;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -86,6 +87,23 @@ class ClassroomDataRepairCommand extends BaseCommand
         return $resutl;
     }
 
+    protected function initServiceKernel()
+    {
+        $serviceKernel = ServiceKernel::create('dev', false);
+        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
+        $serviceKernel->setBiz($this->getContainer()->get('biz'));
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id'        => 1,
+            'nickname'  => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array()
+        ));
+        $serviceKernel->setCurrentUser($currentUser);
+        $currentUser->setPermissions('admin_course_content_manage');
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -94,7 +112,7 @@ class ClassroomDataRepairCommand extends BaseCommand
     private function addLog($message)
     {
         $logger = new Logger('classroomDataSync');
-        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/classroom-data-sync1.log', Logger::DEBUG));
+        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/classroom-data-sync2.log', Logger::DEBUG));
         $logger->addInfo($message);
     }
 
