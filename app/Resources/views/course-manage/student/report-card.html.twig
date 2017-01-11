@@ -1,0 +1,116 @@
+ <div class="es-piece" style="margin-bottom:0">
+  <div class="piece-header">
+    成绩单
+  </div>
+  {% set allHomeworksCount = count(allHomeworks) %}
+  {% set allTestpapersCount = count(allTestpapers) %}
+  {% set finishedHomeworksCount = count(finishedHomeworks) %}
+  {% set finishedTestpapersCount = count(finishedTestpapers) %}
+  {% if finishedHomeworksCount or finishedTestpapersCount %}
+    <div class="report-card">
+        <div class="report-card-header">
+          <i class="es-icon es-icon-chevronright mrs"></i>
+          <span class="include">  作业:{{finishedHomeworksCount}}/{{allHomeworksCount}}&nbsp;&nbsp;&nbsp;考试：{{finishedTestpapersCount}}/{{allTestpapersCount}}</span>
+        </div>
+        {% if allTestpapers %}
+          {% for testpaper in allTestpapers %}
+	          {% set bestTestpaper = bestTestpapers[testpaper.id]|default('') %}
+	          {% set finishedResults = finishedTestpapers[testpaper.id]|default('') %}
+	          {% set reviewingResults = reviewingTestpapers[testpaper.id]|default('') %}
+	          {% if finishedResults %}
+	            <div class="report-card-main">
+	              <div class="card-main-title open"> <i class="es-icon es-icon-exam mrs"></i>
+	                考试：{{testpaper.name}}
+	                <span class="score hidden-xs">
+	                  <span>{{bestTestpaper.score|default(0)}}</span>
+	                  分 / {{testpaper.score|default(0)}}分
+	                </span>
+	                <span class="reviews hidden-xs" data-toggle="tooltip" data-placement="top" title="{% if bestTestpaper.teacherSay|default('') %}{{ bestTestpaper.teacherSay }}{% else %}暂无评语{% endif %}">评语</span>
+	              </div>
+	              <ul class="score-list">
+	              	  {% set _index = loop.index %}
+	                  {% for result in finishedResults %}
+	                      <li>
+	                        <span class="name">第 {{loop.index}} 次考试</span>
+	                        <span class="date">{{result.beginTime|date('Y/m/d')}}</span>
+	                        <span class="score">{{ result.score }}</span>
+	                      </li>
+	                  {% endfor %}
+	                  {% if reviewingResults %}
+	                  {% for result in reviewingResults %}
+		                  <li>
+		                    <span class="name">第 {{loop.index + _index}} 次考试</span>
+		                    <span class="date">{{result.beginTime|date('Y/m/d')}}</span>
+		                    <span class="score">{{ '批阅中'|trans }}</span>
+		                  </li>
+	              	  {% endfor %}
+	                  {% endif %}
+	              </ul>
+	            </div>
+	          {% elseif reviewingResults %}
+	            <div class="report-card-main">
+	              <div class="card-main-title open"> <i class="es-icon es-icon-exam mrs"></i>
+	                考试：{{testpaper.name}}
+	                <span class="score hidden-xs">待批阅</span>
+	            </div>
+	          {% endif %}
+          {% endfor %}
+        {% endif %}  
+
+        {% if allHomeworks %}
+          {% for homework in allHomeworks %}
+            {% set bestHomework = bestHomeworks[homework.id]|default('') %}
+            {% set finishedResults = finishedHomeworks[homework.id]|default('') %}
+            {% set reviewingResults = reviewingHomeworks[homework.id]|default('')%}
+            {% if finishedResults %}
+              <div class="report-card-main">
+                <div class="card-main-title open"> <i class="es-icon es-icon-homework mrs"></i>
+                  作业：{{homework.name}}
+                  <span class="score hidden-xs">
+                    <span>
+                      {{ dict_text('passedStatus', bestHomework.passedStatus|default('unpassed')) }}
+                    </span>
+                  </span>
+                  <span class="reviews hidden-xs" data-toggle="tooltip" data-placement="top" title="{% if bestHomework.teacherSay|default('') %}{{ bestHomework.teacherSay }}{% else %}暂无评语{% endif %}">评语</span>
+                </div>
+                <ul class="score-list">
+                 {% set _index = 0 %}
+                  {% for result in finishedResults  %}
+                  <li>
+                  	{% set _index = loop.index %}
+                    <span class="name">第 {{loop.index}} 次作业</span>
+                    <span class="date">{{result.beginTime|date('Y/m/d')}}</span>
+                    <span class="score">{{ dict_text('passedStatus', result.passedStatus) }}</span>
+                  </li>
+                  {% endfor %}
+                  {% if reviewingResults %}
+                  {% for result in reviewingResults %}
+                  <li>
+                    <span class="name">第 {{loop.index + _index}} 次作业</span>
+                    <span class="date">{{result.beginTime|date('Y/m/d')}}</span>
+                    <span class="score">{{ '批阅中'|trans }}</span>
+                  </li>
+              	  {% endfor %}
+                  {% endif %}
+                </ul>
+              </div>
+            {% elseif reviewingResults %}
+              <div class="report-card-main">
+                <div class="card-main-title open"> <i class="es-icon es-icon-homework mrs"></i>
+                  作业：{{homework.name}}
+                  <span class="score hidden-xs">待批阅</span>
+              </div>
+            {% endif %}
+          {% endfor %}
+       {#  {% else %}
+          <div class="empty">
+            暂无数据
+          </div> #}
+        {% endif %}
+    </div>
+  {% else %}
+    <div class="empty">
+      暂无数据
+    </div>
+  {% endif %}
+</div>

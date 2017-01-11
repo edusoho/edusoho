@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Course;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Topxia\Common\SimpleValidator;
 use Biz\Order\Service\OrderService;
@@ -11,6 +12,8 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\ActivityLearnLogService;
 
@@ -121,6 +124,7 @@ class StudentManageController extends BaseController
 
     public function studyProcessAction(Request $request, $courseSetId, $courseId, $userId)
     {
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         //FIXME getCourseMember ：用户可能在courseId下既是学员又是老师
         $student = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
         if (empty($student)) {
@@ -136,6 +140,7 @@ class StudentManageController extends BaseController
         list($daysCount, $learnedTime, $learnedTimePerDay) = $this->getActivityLearnLogService()->calcLearnProcessByCourseIdAndUserId($courseId, $userId);
 
         return $this->render('course-manage/student/process-modal.html.twig', array(
+            'course'            => $course,
             'student'           => $student,
             'user'              => $user,
             'questionCount'     => $questionCount,
@@ -146,6 +151,170 @@ class StudentManageController extends BaseController
             'learnedTime'       => round($learnedTime / 60, 2),
             'learnedTimePerDay' => round($learnedTimePerDay / 60, 2)
         ));
+    }
+
+    public function reportCardAction(Request $request, $course, $user)
+    {
+        $reportCard = $this->createReportCard($course, $user);
+
+        return $this->render('course-manage/student/report-card.html.twig', $reportCard);
+    }
+
+    private function createReportCard($course, $user)
+    {
+        $reportCard = array();
+
+        //TODO:
+        //1. 查询出所有homeworks、testpapers
+        //2. 根据每个homework、testpaper查询出当前用户的result（testpaper_result: status=finish）
+        //3. 根据每个homework、testpaper查询出当前用户的result（testpaper_result: status=reviewing）
+        //4. 计算出每个homework、testpaper的bestResult（status=finish & max(score)）
+
+        $tasks               = array();
+        $allHomeworks        = array();
+        $finishedHomeworks   = array();
+        $reviewingHomeworks  = array();
+        $bestHomeworks       = array();
+        $allTestpapers       = array();
+        $finishedTestpapers  = array();
+        $reviewingTestpapers = array();
+        $bestTestpapers      = array();
+
+        $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
+
+        if (empty($tasks)) {
+            goto result;
+        }
+        $activitiyIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities   = $this->getActivityService()->findActivities($activitiyIds, true);
+
+        $targetIds = array();
+        foreach ($activities as $activity) {
+            if ($activity['mediaType'] == 'homework') {
+                $targetIds[] = $activity['mediaId'];
+            } elseif ($activity['mediaType'] == 'testpaper') {
+                $targetIds[] = $activity['ext']['mediaId'];
+            }
+        }
+
+        //homeworks&testpapers合并查询
+        $allTargets       = array();
+        $finishedTargets  = array();
+        $reviewingTargets = array();
+        if (!empty($targetIds)) {
+            $allTargets = $this->getTestpaperService()->findTestpapersByIds($targetIds);
+
+            $finishedTargets = $this->getTestpaperService()->searchTestpaperResults(array(
+                'testIds' => $targetIds,
+                'userId'  => $user['id'],
+                'status'  => 'finished',
+                'types'   => array('homework', 'testpaper')
+            ), array('testId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
+
+            $reviewingTargets = $this->getTestpaperService()->searchTestpaperResults(array(
+                'testIds' => $targetIds,
+                'userId'  => $user['id'],
+                'status'  => 'reviewing',
+                'types'   => array('homework', 'testpaper')
+            ), array('testId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
+        }
+
+        if (!empty($allTargets)) {
+            foreach ($allTargets as $target) {
+                if ($target['type'] == 'homework') {
+                    $allHomeworks[] = $target;
+                } else {
+                    $allTestpapers[] = $target;
+                }
+            }
+        }
+
+        if (!empty($finishedTargets)) {
+            $currentTestId = 0;
+            foreach ($finishedTargets as $target) {
+                if ($currentTestId == 0 || $currentTestId != $target['testId']) {
+                    $currentTestId = $target['testId'];
+                    if ($target['type'] == 'homework') {
+                        if (empty($bestHomeworks[$currentTestId])) {
+                            $bestHomeworks[$currentTestId] = array();
+                        }
+                        if ($this->gradeBetterThan($target, $bestHomeworks[$currentTestId])) {
+                            $bestHomeworks[$currentTestId] = $target;
+                        }
+                    } else {
+                        if (empty($bestTestpapers[$currentTestId])) {
+                            $bestTestpapers[$currentTestId] = array();
+                        }
+                        if ($this->gradeBetterThan($target, $bestTestpapers[$currentTestId])) {
+                            $bestTestpapers[$currentTestId] = $target;
+                        }
+                    }
+                }
+
+                if ($target['type'] == 'homework') {
+                    if (empty($finishedHomeworks[$currentTestId])) {
+                        $finishedHomeworks[$currentTestId] = array();
+                    }
+                    $finishedHomeworks[$currentTestId][] = $target;
+                } else {
+                    if (empty($finishedTestpapers[$currentTestId])) {
+                        $finishedTestpapers[$currentTestId] = array();
+                    }
+                    $finishedTestpapers[$currentTestId][] = $target;
+                }
+            }
+        }
+
+        if (!empty($reviewingTargets)) {
+            $currentTestId = 0;
+            foreach ($reviewingTargets as $target) {
+                if ($currentTestId == 0 || $currentTestId != $target['testId']) {
+                    $currentTestId = $target['testId'];
+                }
+                if ($target['type'] == 'homework') {
+                    if (empty($reviewingHomeworks[$currentTestId])) {
+                        $reviewingHomeworks[$currentTestId] = array();
+                    }
+                    $reviewingHomeworks[$currentTestId][] = $target;
+                } else {
+                    if (empty($reviewingTestpapers[$currentTestId])) {
+                        $reviewingTestpapers[$currentTestId] = array();
+                    }
+                    $reviewingTestpapers[$currentTestId][] = $target;
+                }
+            }
+        }
+
+        goto result;
+
+        result:
+        // $reportCard['tasks']                 = $tasks;
+        $reportCard['allHomeworks']          = $allHomeworks;
+        $reportCard['finishedHomeworks']     = $finishedHomeworks;
+        $reportCard['reviewingHomeworks']    = $reviewingHomeworks;
+        $reportCard['bestHomeworks']         = $bestHomeworks;
+        $reportCard['allTestpapers']         = $allTestpapers;
+        $reportCard['finishedTestpapers']    = $finishedTestpapers;
+        $reportCard['reviewingTestpapers']   = $reviewingTestpapers;
+        $reportCard['bestTestpapers']        = $bestTestpapers;
+        $reportCard['allFinishedHomeworks']  = array_sum($finishedHomeworks);
+        $reportCard['allFinishedTestpapers'] = array_sum($finishedTestpapers);
+        // var_dump($allTestpapers);exit;
+        return $reportCard;
+    }
+
+    private function gradeBetterThan($source, $target)
+    {
+        if (empty($target)) {
+            return true;
+        }
+
+        $levels = array('excellent', 'good', 'passed', 'unpassed', 'none');
+        $levels = array_values($levels);
+        if (array_search($source['passedStatus'], $levels) < array_search($target['passedStatus'], $levels)) {
+            return true;
+        }
+        return $source['score'] > $target['score'];
     }
 
     private function getUserIds($keyword)
@@ -218,10 +387,34 @@ class StudentManageController extends BaseController
     }
 
     /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
+    /**
      * @return ActivityLearnLogService
      */
     protected function getActivityLearnLogService()
     {
         return $this->createService('Activity:ActivityLearnLogService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return TestpaperService
+     */
+    protected function getTestpaperService()
+    {
+        return $this->createService('Testpaper:TestpaperService');
     }
 }

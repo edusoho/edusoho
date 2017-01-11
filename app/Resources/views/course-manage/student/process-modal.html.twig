@@ -68,7 +68,9 @@
 	  </div>
 	</div>
 	</div>
-	<div class="es-piece" style="margin-bottom:0">
+
+
+	{# <div class="es-piece" style="margin-bottom:0">
 	<div class="piece-header">成绩单</div>
 	<div class="report-card">
 	  <div class="report-card-header">
@@ -94,7 +96,29 @@
 	    </ul>
 	  </div>
 	</div>
-	</div>
+	</div> #}
+
+	{{ render(controller('AppBundle:Course/StudentManage:reportCard',{course:course,user:user})) }}
+	{# {% include 'course-manage/student/report-card.html.twig' 
+		with 
+		{
+			'course': course,
+			'tasks': tasks,
+			'testpapers': testpapers,
+			'allTestpapersCount': allTestpapersCount,
+			'finishedTestpapersCount': finishedTestpapersCount,
+			'bestTestpaperResults': bestTestpaperResults,
+			'testpaperFinishedResults': testpaperFinishedResults,
+			'testpaperReviewingResults': testpaperReviewingResults,
+			'homeworks': homeworks,
+			'allHomeworksCount': allHomeworksCount, 
+			'finishedHomeworksCount': finishedHomeworksCount,
+			'bestHomeworkResults': bestHomeworkResults,
+			'homeworkFinishedResults': homeworkFinishedResults,
+			'homeworReviewingResults': homeworReviewingResults,
+		} 
+	%} #}
+
 	<div class="es-piece" style="margin-bottom:-20px">
 	<div class="piece-header">学习数据</div>
 	<div class="study-data row">

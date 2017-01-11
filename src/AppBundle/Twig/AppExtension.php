@@ -22,7 +22,8 @@ class AppExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('services', array($this, 'buildServiceTags'))
+            new \Twig_SimpleFunction('services', array($this, 'buildServiceTags')),
+            new \Twig_SimpleFunction('count', array($this, 'count'))
         );
     }
 
@@ -96,6 +97,14 @@ class AppExtension extends \Twig_Extension
             }
         }
         return $tags;
+    }
+
+    public function count($arr)
+    {
+        if (empty($arr)) {
+            return 0;
+        }
+        return count($arr);
     }
 
     public function getName()
