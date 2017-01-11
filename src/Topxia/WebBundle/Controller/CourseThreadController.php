@@ -642,11 +642,6 @@ class CourseThreadController extends CourseBaseController
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 
-    protected function getTagService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
-    }
-
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');

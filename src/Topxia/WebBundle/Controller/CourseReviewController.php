@@ -109,10 +109,4 @@ class CourseReviewController extends CourseBaseController
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-
-    protected function getTagService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
-    }
-
 }
