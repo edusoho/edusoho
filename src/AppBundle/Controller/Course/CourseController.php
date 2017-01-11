@@ -145,7 +145,7 @@ class CourseController extends CourseBaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render("course/courses-block-{$view}.html.twig", array(
+        return $this->render("course/block/courses-block-{$view}.html.twig", array(
             'courses' => $courses,
             'users'   => $users,
             'classroomIds' => $classroomIds,
