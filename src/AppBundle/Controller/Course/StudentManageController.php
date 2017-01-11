@@ -125,7 +125,7 @@ class StudentManageController extends BaseController
     public function studyProcessAction(Request $request, $courseSetId, $courseId, $userId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        //FIXME getCourseMember ：用户可能在courseId下既是学员又是老师
+
         $student = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
         if (empty($student)) {
             throw $this->createNotFoundException('Student#{$userId} Not Found');
