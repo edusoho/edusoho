@@ -1696,6 +1696,14 @@ my_courses_learning:
     path: /my/courses/learning
     defaults: { _controller: AppBundle:My/Course:learning }
 
+my_courses_learned:
+    path: /my/courses/learned
+    defaults: { _controller: AppBundle:My/Course:learned }
+
+my_courses_favorited:
+    path: /my/courses/favorited
+    defaults: { _controller: AppBundle:My/Course:favorited }
+
 my_classrooms:
     path: /my/classrooms
     defaults: { _controller: AppBundle:My/Classroom:classroom }

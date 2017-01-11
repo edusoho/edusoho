@@ -76,7 +76,9 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     {
         $builder = $this->_buildQueryBuilder($conditions)->select('m.*');
         if (!empty($orderBy)) {
-            $builder = $builder->orderBy($orderBy[0], $orderBy[1]);
+            foreach ($orderBy as $sort=> $order){
+                $builder = $builder->orderBy($sort, $order);
+            }
         }
         if ($start && $limit) {
             $builder = $builder->setFirstResult($start)->setMaxResults($limit);
@@ -192,7 +194,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $courseId));
     }
 
-    protected function _buildQueryBuilder($conditions, $join)
+    protected function _buildQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
             if ($value === '' || $value === null) {
