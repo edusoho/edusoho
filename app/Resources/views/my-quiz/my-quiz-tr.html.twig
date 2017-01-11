@@ -21,7 +21,7 @@
 	</td>
 	<td>
 		{% if myTestpaperResult.status in ['doing', 'paused'] %}
-			<a href="{{ path('course_manage_show_test', {id:myTestpaperResult.id}) }}" class="btn btn-default btn-sm">{{'继续考试'|trans}}</a>
+			<a href="{{ path('testpaper_result_show', {resultId:myTestpaperResult.id}) }}" class="btn btn-default btn-sm">{{'继续考试'|trans}}</a>
 		{% elseif myTestpaperResult.status == 'finished' %}
 			
       {% if lesson|default(null) and lesson.redoInterval|default(0) and ("now"|date("U")) < (myTestpaperResult.checkedTime + lesson.redoInterval * 3600)%}

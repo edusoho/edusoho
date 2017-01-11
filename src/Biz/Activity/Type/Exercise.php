@@ -32,9 +32,9 @@ class Exercise extends Activity
             throw $this->createNotFoundException('教学活动不存在');
         }
 
-        $fields = $this->filterFields($fields);
+        $filterFields = $this->filterFields($fields);
 
-        return $this->getTestpaperService()->updateTestpaper($exercise['id'], $fields);
+        return $this->getTestpaperService()->updateTestpaper($exercise['id'], $filterFields);
     }
 
     public function delete($targetId)
@@ -44,20 +44,19 @@ class Exercise extends Activity
 
     public function isFinished($activityId)
     {
-        $user = $this->getBiz()['user'];
+        $biz  = $this->getBiz();
+        $user = $biz['user'];
 
         $activity = $this->getActivityService()->getActivity($activityId);
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'exercise');
 
-        if (!$result) {
+        if (!$result || ($result && $result['status'] != 'finished')) {
             return false;
         }
 
-        if (!empty($exercise['finishCondition']) && $exercise['finishCondition']['type'] == 'submit') {
-            return true;
-        } elseif ($result['status'] == 'finished' && $result['score'] > $exercise['finishCondition']['finishScore']) {
+        if (!empty($exercise['passedCondition']) && $exercise['passedCondition']['type'] == 'submit') {
             return true;
         }
 
@@ -71,7 +70,7 @@ class Exercise extends Activity
 
     protected function filterFields($fields)
     {
-        $fields = ArrayToolkit::parts($fields, array(
+        $filterFields = ArrayToolkit::parts($fields, array(
             'title',
             'range',
             'itemCount',
@@ -82,12 +81,12 @@ class Exercise extends Activity
             'fromCourseSetId'
         ));
 
-        $fields['courseSetId'] = empty($fields['fromCourseSetId']) ? 0 : $fields['fromCourseSetId'];
-        $fields['courseId']    = empty($fields['fromCourseId']) ? 0 : $fields['fromCourseId'];
-        $fields['lessonId']    = 0;
-        $fields['name']        = empty($fields['title']) ? '' : $fields['title'];
+        $filterFields['courseSetId'] = empty($filterFields['fromCourseSetId']) ? 0 : $filterFields['fromCourseSetId'];
+        $filterFields['courseId']    = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
+        $filterFields['lessonId']    = 0;
+        $filterFields['name']        = empty($filterFields['title']) ? '' : $filterFields['title'];
 
-        return $fields;
+        return $filterFields;
     }
 
     protected function getTestpaperService()
@@ -98,5 +97,10 @@ class Exercise extends Activity
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
     }
 }
