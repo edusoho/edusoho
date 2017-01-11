@@ -2,7 +2,7 @@
   {% do script(['app/js/activity/ppt/index.js']) %}
 {% endif %}
 
-<div class="modal-video-content iframe-parent-content" id="activity-ppt-content"
+<div class="task-preview-modal-content" id="activity-ppt-content"
      data-finish-type="{{ ppt.finishType }}"
      data-finish-detail="{{ ppt.finishDetail }}"
      data-slides="{{ slides|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
