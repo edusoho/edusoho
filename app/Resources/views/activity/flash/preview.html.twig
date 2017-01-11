@@ -1,5 +1,1 @@
-{% do script(['app/js/activity/flash/index.js']) %}
-<div class="task-preview-modal-content">
-  <div id="flash-player" data-uri="{{ flashMedia.uri }}" data-finish-type="{{ flash.finishType }}" data-finish-detail="{{ flash.finishDetail }}">
-  </div>
-</div>
+{% include 'activity/flash/index.html.twig' %}

@@ -1,5 +1,1 @@
-{% do script(['app/js/activity/text/index.js']) %}
-
-  <div id="text-activity" data-finish-time="{{ text.finishDetail }}">
-    {{activity.content|raw}}
-  </div>
+{% include 'activity/text/show.html.twig' %}
