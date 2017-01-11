@@ -56,6 +56,8 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
             'subjectiveScore = :subjectiveScore',
             'rightItemCount = :rightItemCount',
             'status = :status',
+            'courseId IN ( :courseIds)',
+            'type = :type',
             'type IN ( :types )'
         );
 

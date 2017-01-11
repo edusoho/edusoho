@@ -32,7 +32,8 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('info', $result['message']);
         }
 
-        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $lessonId);
+        $fields          = $this->getTestpaperFields($lessonId);
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
         if (in_array($testpaperResult['status'], array('doing'))) {
             return $this->redirect($this->generateUrl('testpaper_show', array('resultId' => $testpaperResult['id'])));
@@ -338,6 +339,22 @@ class TestpaperController extends BaseController
         }
 
         return $result;
+    }
+
+    protected function getTestpaperFields($activityId)
+    {
+        $activity          = $this->getActivityService()->getActivity($activityId);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        if (!$activity || !$testpaperActivity) {
+            return array();
+        }
+
+        return array(
+            'lessonId'    => $activityId,
+            'courseId'    => $activity['fromCourseId'],
+            'limitedTime' => $testpaperActivity['limitedTime']
+        );
     }
 
     protected function getSettingService()

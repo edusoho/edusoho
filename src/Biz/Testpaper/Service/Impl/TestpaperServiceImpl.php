@@ -333,25 +333,29 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $builder->canBuild($options);
     }
 
-    public function startTestpaper($id, $lessonId)
+    public function startTestpaper($id, $fields)
     {
+        if (!isset($fields['lessonId'])) {
+            throw $this->createInvalidArgumentException(' Invalid Argument');
+        }
+
         $testpaper = $this->getTestpaper($id);
         $user      = $this->getCurrentuser();
 
-        $testpaperResult = $this->getUserUnfinishResult($testpaper['id'], $testpaper['courseId'], $lessonId, $testpaper['type'], $user['id']);
+        $testpaperResult = $this->getUserUnfinishResult($testpaper['id'], $testpaper['courseId'], $fields['lessonId'], $testpaper['type'], $user['id']);
 
         if (!$testpaperResult) {
             $fields = array(
                 'paperName'   => $testpaper['name'],
                 'testId'      => $id,
                 'userId'      => $user['id'],
-                'limitedTime' => $testpaper['limitedTime'],
+                'limitedTime' => isset($fields['limitedTime']) ? $fields['limitedTime'] : 0,
                 'beginTime'   => time(),
                 'status'      => 'doing',
                 'usedTime'    => 0,
-                'courseId'    => $testpaper['courseId'],
+                'courseId'    => empty($fields['courseId']) ? 0 : $fields['courseId'],
                 'courseSetId' => $testpaper['courseSetId'],
-                'lessonId'    => $lessonId,
+                'lessonId'    => empty($fields['lessonId']) ? 0 : $fields['lessonId'],
                 'type'        => $testpaper['type']
             );
 
