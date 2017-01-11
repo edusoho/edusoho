@@ -39,7 +39,6 @@ $('#orderprogress').easyPieChart({
   }
 });
 
-import TaskShow from '../../../common/widget/task-chapter-show';
+import TaskShowaction from '../../../common/widget/task-chapter-show';
 
-TaskShow ();
-
+TaskShowaction ();

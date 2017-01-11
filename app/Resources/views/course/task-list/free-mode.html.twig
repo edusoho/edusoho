@@ -2,16 +2,15 @@
   <ul class="task-list task-list-md task-list-hover">
     {% for key, item in courseItems %}
       {% if item.type == 'chapter' %}
-        <li class="task-item bg-gray-lighter"><i class="es-icon es-icon-menu left-menu"></i>
-          <span class="text-overflow title">第{{ item.number }}
-            章：{{ item.title }}</span>
-          <i class="right-menu es-icon es-icon es-icon-remove"></i>
+        <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
+          <a href="javascript:void(0);" class="text-overflow title gray-dark">第{{ item.number }}
+            章：{{ item.title }}</a>
+          <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
         </li>
       {% elseif item.type == 'unit' %}
-        <li class="task-item color-gray bg-gray-lighter js-task-chapter">
+        <li class="task-item color-gray bg-gray-lighter">
           <span class="text-overflow title">第{{ item.number }}
             节：{{ item.title }}</span>
-          <i class="right-menu es-icon es-icon es-icon-remove"></i>
         </li>
       {% elseif  item.type == 'lesson' %}
         {% for task in item.tasks %}
@@ -31,41 +30,105 @@
               left-menu"></i>
             {% if task.status == 'published' %}
               {% if member %}
-               <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+                <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
               {% else %}
                 <a class="text-overflow title" href="#modal" data-toggle="modal"
                  data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
               {% endif %}
-                {% if task.isFree %}
-                  <span class="label label-success mr10">免费</span>
+              {% if task.isFree %}
+                <span class="label label-success mr10">免费</span>
                 {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
                   <span class="label label-warning mrm">{{ '试看'|trans }}</span>
                 {% endif %}课时{{ task.number }}：{{ task.title }}
               </a>
               {% else %}
                 <span class="text-overflow title">
-            {% if task.isFree %}  <span class="label label-warning mr10">免费</span> {% endif %}
+                  {% if task.isFree %}  
+                    <span class="label label-warning mr10">免费</span> 
+                  {% endif %}
                   课时{{ task.number }}：{{ task.title }}
-              </span>
+                </span>
               {% endif %}
-
               <span class="right-menu mouse-leave">
               {{ task.activity.length|default(0)|activity_length_format }}
-                {% set meta =  activity_meta(task.activity.mediaType) %}
+                {% set meta = activity_meta(task.activity.mediaType) %}
                 <i class="es-icon es-icon {{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top"
                    title=""
                    data-original-title="{{ meta.name }}任务"></i>
-            </span>
+              </span>
               <span class="right-menu mouse-enter">
-              {% if task.status != 'published' %}
-                敬请期待
-              {% endif %}
-            </span>
+                {% if task.status != 'published' %}
+                  敬请期待
+                {% endif %}
+              </span>
           </li>
         {% endfor %}
       {% endif %}
     {% endfor %}
   </ul>
+
+<ul class="task-list task-chart task-list-md task-list-hover clearfix">
+  {% for key, item in courseItems %}
+    {% if item.type == 'lesson' %}
+      {% for task in item.tasks %}
+        {% set task_lock = false %}
+        {% set file = files[task.activity.mediaId]|default(null) %}
+        <li class="task-item">
+          <i class="es-icon
+            {% if task_lock %}
+            es-icon-lock
+            {% elseif  not task.result|default(null) %}
+            es-icon-undone-check color-gray
+            {% elseif task.result.status == 'start' %}
+            es-icon-doing color-primary
+            {% elseif task.result.status == 'finish' %}
+            es-icon-iccheckcircleblack24px color-primary
+            {% endif %}
+            left-menu"></i>
+          {% if task.status == 'published' %}         
+            {% if member %}
+              <a class="title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+            {% else %}
+              <a class="title" href="#modal" data-toggle="modal"
+               data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
+            {% endif %}
+            <span class="task-overflow ml5">
+            {% if task.isFree %}
+              <span class="label label-success mr5">免费</span>
+            {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
+              <span class="label label-warning mrm">{{ '试看'|trans }}</span>
+            {% endif %}课时{{ task.number }}：{{ task.title }}</span>
+            </a>
+            {% else %}
+            {% if task.isFree %}  <span class="label label-warning mr5">免费</span> {% endif %}
+              课时{{ task.number }}：{{ task.title }}
+            </span>
+            </a>
+          {% endif %}
+          {% set meta = activity_meta(task.activity.mediaType) %}
+          <i class="es-icon es-icon {{ meta.icon }} right-menu" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ meta.name }}任务"></i>
+          <span class="right-menu text-14">
+            {% if task.status != 'published' %}
+              敬请期待
+            {% endif %}
+          </span>
+        </li>
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+</ul>
+
+<ul class="task-list task-chart task-list-md task-list-hover clearfix">
+  <li class="task-item"><i class="es-icon es-icon-iccheckcircleblack24px left-menu color-primary"></i>
+    <a class="title" href="/course/29/task/131/show?preview=1"><span class="task-overflow ml5">1-1移动工具(1′32″)</span></a>
+    <i class="es-icon es-icon-videoclass right-menu"></i>
+  </li>
+  <li class="task-item"><i class="es-icon es-icon-iccheckcircleblack24px left-menu color-primary"></i>
+    <a class="title" href="/course/29/task/131/show?preview=1"><span class="task-overflow ml5">-2矩形选框工具</span></a>
+    <i class="es-icon es-icon-videoclass right-menu"></i>
+  </li>
+</ul>
+
 </div>
 
 
