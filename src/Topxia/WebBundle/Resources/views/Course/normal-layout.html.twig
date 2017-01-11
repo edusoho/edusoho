@@ -3,7 +3,7 @@
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
 {% block keywords %}
-  {% set tags = data('Tags', {tagIds: tags}) %}
+  {% set tags = data('Tags', {tagIds: tags|default('')}) %}
   {% for tag in tags %}{{tag.name}}{% if not loop.last%},{% endif %}{% else %}{{ parent() }}{% endfor %}
 {% endblock %}
 
