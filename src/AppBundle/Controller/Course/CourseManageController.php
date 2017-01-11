@@ -11,6 +11,7 @@ use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
+use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
@@ -19,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use AppBundle\Controller\BaseController;
 
 class CourseManageController extends BaseController
 {
@@ -123,6 +123,7 @@ class CourseManageController extends BaseController
 
     public function marketingAction(Request $request, $courseSetId, $courseId)
     {
+        $freeTasks = $this->getTaskService()->findFreeTasksByCourseId($courseId);
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             if (empty($data['enableBuyExpiryTime'])) {
@@ -132,6 +133,13 @@ class CourseManageController extends BaseController
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
             }
+            if (!empty($data['freeTaskIds'])) {
+                $canFreeTaskIds = $data['freeTaskIds'];
+                $freeTaskIds    = ArrayToolkit::column($freeTasks, 'id');
+                $this->getTaskService()->updateTasks($freeTaskIds, array('isFree' => 0));
+                $this->getTaskService()->updateTasks($canFreeTaskIds, array('isFree' => 1));
+                unset($data['freeTaskIds']);
+            }
 
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
 
@@ -140,9 +148,19 @@ class CourseManageController extends BaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+
+        $conditions       = array(
+            'courseId' => $courseId,
+            'types'    => array('text', 'video', 'audio', 'flash', 'doc', 'ppt')
+        );
+        $canFreeTaskCount = $this->getTaskService()->count($conditions);
+        $canFreeTasks     = $this->getTaskService()->search($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
+
         return $this->render('course-manage/marketing.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course
+            'courseSet'    => $courseSet,
+            'course'       => $course,
+            'canFreeTasks' => $canFreeTasks,
+            'freeTasks'    => $freeTasks
         ));
     }
 
@@ -203,105 +221,6 @@ class CourseManageController extends BaseController
         }
 
         return $this->createJsonResponse($teachers);
-    }
-
-    public function studentsAction(Request $request, $courseSetId, $courseId)
-    {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $students  = $this->getCourseService()->findStudentsByCourseId($courseId);
-        //TODO find students的学习进度（已完成任务数/总任务数）
-        return $this->render('course-manage/students.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course,
-            'students'  => $students
-        ));
-    }
-
-    public function studentQuitRecordsAction(Request $request, $courseSetId, $courseId)
-    {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        return $this->render('course-manage/quit-records.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course,
-            'records'   => array()
-        ));
-    }
-
-    public function createCourseStudentAction(Request $request, $courseSetId, $courseId)
-    {
-        if ($request->isMethod('POST')) {
-            $data           = $request->request->all();
-            $user           = $this->getUserService()->getUserByLoginField($data['queryfield']);
-            $data['userId'] = $user['id'];
-            $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
-            return $this->redirect($this->generateUrl('course_set_manage_course_students', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
-        }
-        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        return $this->render('course-manage/student-add-modal.html.twig', array(
-            'course'      => $course,
-            'courseSetId' => $courseSetId
-        ));
-    }
-
-    public function removeCourseStudentAction(Request $request, $courseSetId, $courseId, $userId)
-    {
-        $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
-        return $this->createJsonResponse(array('success' => true));
-    }
-
-    public function studyProcessAction(Request $request, $courseSetId, $courseId, $userId)
-    {
-        //FIXME getCourseMember ：用户可能在courseId下既是学员又是老师
-        $student = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
-        if (empty($student)) {
-            throw $this->createNotFoundException('Student#{$userId} Not Found');
-        }
-        $user = $this->getUserService()->getUser($student['userId']);
-        //TODO 获取学习进度相关信息
-        $questionCount   = $this->getCourseMemberService()->countQuestionsByCourseIdAndUserId($courseId, $userId);
-        $activityCount   = $this->getCourseMemberService()->countActivitiesByCourseIdAndUserId($courseId, $userId);
-        $discussionCount = $this->getCourseMemberService()->countDiscussionsByCourseIdAndUserId($courseId, $userId);
-        $postCount       = $this->getCourseMemberService()->countPostsByCourseIdAndUserId($courseId, $userId);
-
-        list($daysCount, $learnedTime, $learnedTimePerDay) = $this->getActivityLearnLogService()->calcLearnProcessByCourseIdAndUserId($courseId, $userId);
-
-        return $this->render('course-manage/student-process-modal.html.twig', array(
-            'student'           => $student,
-            'user'              => $user,
-            'questionCount'     => $questionCount,
-            'activityCount'     => $activityCount,
-            'discussionCount'   => $discussionCount,
-            'postCount'         => $postCount,
-            'daysCount'         => $daysCount,
-            'learnedTime'       => round($learnedTime / 60, 2),
-            'learnedTimePerDay' => round($learnedTimePerDay / 60, 2)
-        ));
-    }
-
-    public function checkStudentAction(Request $request, $courseSetId, $courseId)
-    {
-        $keyword = $request->query->get('value');
-        $user    = $this->getUserService()->getUserByLoginField($keyword);
-
-        $response = true;
-        if (!$user) {
-            $response = '该用户不存在';
-        } else {
-            $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
-
-            if ($isCourseStudent) {
-                $response = '该用户已是本课程的学员了';
-            } else {
-                $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($courseId, $user['id']);
-
-                if ($isCourseTeacher) {
-                    $response = '该用户是本课程的教师，不能添加';
-                }
-            }
-        }
-        return $this->createJsonResponse($response);
     }
 
     public function closeAction(Request $request, $courseSetId, $courseId)
@@ -430,7 +349,7 @@ class CourseManageController extends BaseController
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
 
-        $status = array(
+        $status  = array(
             'created'   => '未付款',
             'paid'      => '已付款',
             'refunding' => '退款中',

@@ -1,6 +1,9 @@
 <?php
 namespace Biz\Course\Event;
 
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MaterialService;
+use Biz\File\Service\UploadFileService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Taxonomy\TagOwnerManager;
 use Codeages\Biz\Framework\Event\Event;
@@ -466,16 +469,25 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
         return true;
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return MaterialService
+     */
     protected function getMaterialService()
     {
         return $this->getBiz()->service('Course:MaterialService');

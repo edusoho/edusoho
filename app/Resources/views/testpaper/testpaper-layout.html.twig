@@ -131,6 +131,9 @@
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
 
+  {% if paperResult.id|default(0) > 0  and paperResult.status|default(null) == 'doing' %}
+    <input type="hidden" name="testSuspend" data-url="{{ path('testpaper_do_suspend',{resultId:paperResult.id}) }}" />
+  {% endif %}
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>

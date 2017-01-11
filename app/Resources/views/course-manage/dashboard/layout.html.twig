@@ -8,11 +8,11 @@
 {% block course %}
 
 <div class="panel panel-default panel-col course-data">
-    <div class="panel-heading">{{'课程学习数据'|trans}}</div>
+    <div class="panel-heading">{{'学习数据'|trans}}</div>
     <div class="panel-body dashboard-panel">
       <ul class="nav nav-tabs mbl">
         <li class="{% if submenu|default() == 'course_dashboard' %}active{% endif %}">
-          <a href="{{ path('course_set_manage_course_dashboard',{courseSetId: course.courseSetId, courseId:course.id, tab: 'course'}) }}">{{ '课程数据概览'|trans }}
+          <a href="{{ path('course_set_manage_course_dashboard',{courseSetId: course.courseSetId, courseId:course.id, tab: 'course'}) }}">{{ '数据概览'|trans }}
           </a>
         </li>
 

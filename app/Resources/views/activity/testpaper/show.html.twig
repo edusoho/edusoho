@@ -8,7 +8,7 @@
 	        <div class="title font-blod">
 	          <i class="es-icon es-icon-xinxi color-info"></i>{{'考试说明'|trans}}
 	        </div>
-	        <div class="content">{{ dump("now"|date("U"))}}
+	        <div class="content">
 	        	{% if activity.startTime and activity.startTime > "now"|date("U") %}
 		          <div class="text-16 ">
 		          	考试未开始，请在{{ activity.startTime|date('Y-m-d H:i:s') }}之后再来
@@ -27,7 +27,9 @@
 	          {% endif %}
 	        </div>
 	        <div class="text-right mtl">
-	          <a class="btn btn-primary" href="{{ path('testpaper_do',{lessonId:activity.id,testId:testpaperActivity.mediaId})}}">{{'开始考试'|trans}}</a>
+	        	{% if not activity.startTime or (activity.startTime and activity.startTime <= "now"|date("U")) %}
+	          	<a class="btn btn-primary" href="{{ path('testpaper_do',{lessonId:activity.id,testId:testpaperActivity.mediaId})}}">{{'开始考试'|trans}}</a>
+	          {% endif %}
 	        </div>
 	      </div>
 	    </div>

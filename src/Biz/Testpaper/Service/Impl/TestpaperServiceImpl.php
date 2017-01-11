@@ -396,8 +396,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $accuracy['material'] = empty($accuracy['material']) ? array() : $accuracy['material'];
 
                 $accuracy['material'] = $this->countItemResultStatus($accuracy['material'], $item, $itemResult);
-
-                $accuracy['material'] = $accuracyResult;
             } else {
                 $accuracy[$item['questionType']] = empty($accuracy[$item['questionType']]) ? array() : $accuracy[$item['questionType']];
 
@@ -651,7 +649,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $resultStatus['score'] += $score;
         $resultStatus['totalScore'] += $item['score'];
 
-        $resultStatus['all']++;
+        if (!$item['parentId']) {
+            $resultStatus['all']++;
+        }
+
+        if ($item['questionType'] == 'material') {
+            return $resultStatus;
+        }
 
         if ($status == 'right') {
             $resultStatus['right']++;

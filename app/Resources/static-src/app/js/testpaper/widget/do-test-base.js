@@ -13,6 +13,7 @@ class DoTestBase
     this._initEvent();
     this._initUsedTimer();
     new CopyDeny();
+    this._alwaysSave();
   }
 
   _initEvent() {
@@ -187,6 +188,17 @@ class DoTestBase
     .error(function (response) {
       notify('error', response.error.message);
     });
+  }
+
+  _alwaysSave() {
+    if ($('input[name="testSuspend"]').length > 0) {
+      let self = this;
+      let url = $('input[name="testSuspend"]').data('url');
+      setInterval(function(){
+        self._submitTest(url);
+        notify('success','已保存');
+      }, 5 * 60 * 1000);
+    }
   }
 
 }
