@@ -1,7 +1,15 @@
 <?php
 namespace Biz\Testpaper\Service\Impl;
 
+use Biz\Activity\Type\Testpaper;
 use Biz\BaseService;
+use Biz\Course\Service\CourseService;
+use Biz\File\Service\UploadFileService;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Dao\TestpaperDao;
+use Biz\Testpaper\Dao\TestpaperItemDao;
+use Biz\Testpaper\Dao\TestpaperItemResultDao;
+use Biz\Testpaper\Dao\TestpaperResultDao;
 use Topxia\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
@@ -412,7 +420,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $paperResult = $this->getTestpaperResult($resultId);
 
-        $user = $this->getCurrentuser();
+        $user = $this->getCurrentUser();
 
         $checkData = $fields['result'];
         unset($fields['result']);
@@ -726,41 +734,65 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->biz["testpaper_pattern.{$pattern}"];
     }
 
+    /**
+     * @return TestpaperDao
+     */
     protected function getTestpaperDao()
     {
         return $this->createDao('Testpaper:TestpaperDao');
     }
 
+    /**
+     * @return TestpaperResultDao
+     */
     protected function getTestpaperResultDao()
     {
         return $this->createDao('Testpaper:TestpaperResultDao');
     }
 
+    /**
+     * @return TestpaperItemDao
+     */
     protected function getItemDao()
     {
         return $this->createDao('Testpaper:TestpaperItemDao');
     }
 
+    /**
+     * @return TestpaperItemResultDao
+     */
     protected function getItemResultDao()
     {
         return $this->createDao('Testpaper:TestpaperItemResultDao');
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
-        return $this->getKernel()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
+    /**
+     * @return ServiceKernel
+     */
     protected function getKernel()
     {
         return ServiceKernel::instance();
