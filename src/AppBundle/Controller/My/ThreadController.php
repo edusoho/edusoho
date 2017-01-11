@@ -40,7 +40,7 @@ class ThreadController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
-        return $this->render('TopxiaWebBundle:MyThread:discussions.html.twig',array(
+        return $this->render('my/thread/discussions.html.twig',array(
             'threadType' => 'course',
             'courses'=>$courses,
             'users'=>$users,
@@ -73,7 +73,7 @@ class ThreadController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
-        return $this->render('TopxiaWebBundle:MyThread:questions.html.twig',array(
+        return $this->render('my/thread/questions.html.twig',array(
             'courses'=>$courses,
             'users'=>$users,
             'threads'=>$threads,

@@ -6,6 +6,7 @@ namespace AppBundle\Controller\My;
 
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
@@ -18,12 +19,12 @@ class NotebookController extends BaseController
 
         $conditions = array(
             'userId'             => $user['id'],
-            'noteNumGreaterThan' => 0.1
+            'noteNumGreaterThan' => 0
         );
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->countMembers($conditions),
+            $this->getCourseMemberService()->countMembers($conditions),
             10
         );
 
@@ -31,7 +32,7 @@ class NotebookController extends BaseController
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
 
-        return $this->render('my/notebook/index.html.twig', array(
+        return $this->render('my/learn/notebook/index.html.twig', array(
             'courseMembers' => $courseMembers,
             'paginator'     => $paginator,
             'courses'       => $courses
@@ -46,6 +47,9 @@ class NotebookController extends BaseController
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
