@@ -294,8 +294,6 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createAccessDeniedException("can not finish task #{$taskId}.");
         }
 
-        $this->dispatchEvent('course.task.finish', new Event($task, array('user' => $this->getCurrentUser())));
-
         return $this->finishTaskResult($taskId);
     }
 
@@ -315,6 +313,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         $update['status']       = 'finish';
         $update['finishedTime'] = time();
         $taskResult             = $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
+
+        $this->dispatchEvent('course.task.finish', new Event($taskId, array('user' => $this->getCurrentUser())));
+
         return $taskResult;
     }
 

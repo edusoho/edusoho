@@ -40,10 +40,9 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
 
     public function onTaskFinish(Event $event)
     {
-        $task = $event->getSubject();
-        $user = $event->getArgument('user');
-
-        $nextTask = $this->getTaskService()->getNextTask($task['id']);
+        $taskId   = $event->getSubject();
+        $user     = $event->getArgument('user');
+        $nextTask = $this->getTaskService()->getNextTask($taskId);
         if (!empty($nextTask)) {
             return;
         }
