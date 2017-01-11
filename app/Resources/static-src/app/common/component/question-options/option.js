@@ -21,7 +21,7 @@ export default class Options extends Component {
   }
 
   onChangeChecked(event) {
-    this.props.changeOptionChecked(event.currentTarget.attributes["data-option-id"].value);
+    this.props.changeOptionChecked(event.currentTarget.attributes["data-option-id"].value,this.props.datas.checked);
   }
 
   initCkeditor(dataSourceUi) {
