@@ -4,6 +4,8 @@
   {% set list_class  = (useType == true) ? 'js-attachment-list-'~fileType  : 'js-attachment-list'%}
   {% set reupload = attachments|default(null)|length %}
   
+  {% do load_script('attachment/upload-form') %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <div class="form-group">
     {% if showLabel|default(false) %}
       <label class="col-xs-2 control-label" for="thread_title">{% if targetType == 'question.stem' %}{{ '题干附件'|trans }}{% elseif targetType == 'question.analysis' %}{{ '解析附件'|trans }}{% else %}{{ '附件'|trans }}{% endif %}</label>

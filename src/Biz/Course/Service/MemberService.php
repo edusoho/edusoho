@@ -94,6 +94,14 @@ interface MemberService
     public function findTeacherMembersByUserId($userId);
 
     /**
+     * @param $userId
+     * @param $courseSetId
+     *
+     * @return array
+     */
+    public function findTeacherMembersByUserIdAndCourseSetId($userId, $courseSetId);
+
+    /**
      * @param  integer   $userId
      * @return array[]
      */

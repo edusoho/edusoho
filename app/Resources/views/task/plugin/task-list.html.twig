@@ -3,7 +3,7 @@
 {% block content %}
   <ul class="task-list task-show">
     {% for task in tasks %}
-      {% set task_lock =  (course.learnMode  == 'lockMode')  and ( not task.lock)  and task.number != 1 %}
+      {% set task_lock =  (course.learnMode  == 'lockMode')  and (task.lock  and   task.number != 1) %}
       <li class="task-item task-content {% if task.activityId == activity.id %} active {% endif %} mouse-control">
         <i class="es-icon
           {% if task_lock %}
@@ -18,12 +18,14 @@
           left-menu"></i>
 
         {% if not task_lock  and   task.status == 'published' %}
-          <a class="text-overflow title" href= "{{ path('course_task_show', {id:task.id,courseId:task.courseId, preview: preview}) }}">
-          {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}{{ task.title }}
+          <a class="text-overflow title"
+             href="{{ path('course_task_show', {id:task.id,courseId:task.courseId, preview: preview}) }}">
+            {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}{{ task.title }}
           </a>
         {% else %}
-          <div class="text-overflow title" data-url= "{{ path('course_task_show', {id:task.id,courseId:task.courseId, preview: preview}) }}">
-          {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}{{ task.title }}
+          <div class="text-overflow title"
+               data-url="{{ path('course_task_show', {id:task.id,courseId:task.courseId, preview: preview}) }}">
+            {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}{{ task.title }}
           </div>
         {% endif %}
 

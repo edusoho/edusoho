@@ -44,15 +44,15 @@
           <div id="refund-coin-tips-html" style="display:none;">
             <div style="width:150px;">
               <span style="color:blue;">1.</span>{{'仅显示通过现金购买加入的学员退款记录'|trans}}<br><br>
-              <span style="color:blue;">2.</span>{{'班级课程退款情况请在班级管理中查看'|trans}}<br>
+              <span style="color:blue;">2.</span>{{'班级教学计划退款情况请在班级管理中查看'|trans}}<br>
             </div>
           </div>
         </th>
       </tr>
     </thead>
     <tbody>
-      {% for record in records %}        
-        {% include 'TopxiaWebBundle:CourseStudentManage:quit-record-tr.html.twig' %}
+      {% for refund in refunds %}        
+        {% include 'course-manage/student/quit-record-tr.html.twig' %}
       {% else %}
         <tr class="empty"><td colspan="20">{{'无学员记录'|trans}}</td></tr>
       {% endfor %}

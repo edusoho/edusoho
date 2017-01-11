@@ -15,6 +15,7 @@ class Testpaper {
     this.setValidateRule();
     this.initEvent();
     this.initStepForm2();
+    this.dateTimePicker();
   }
 
   initEvent() {
@@ -114,16 +115,19 @@ class Testpaper {
     } else {
       $('#lesson-redo-interval-field').closest('.form-group').show();
       $('.starttime-check-div').hide();
+      $('input[name="startTime"]').val(0);
     }
   }
 
   startTimeCheck(event) {
     var $this = $(event.currentTarget);
+
     if ($this.val() == 'realTime') {
       $('.starttime-input').removeClass('hidden');
       this.dateTimePicker();
     } else {
       $('.starttime-input').addClass('hidden');
+      $('input[name="startTime"]').val('0');
     }
   }
 
@@ -183,7 +187,12 @@ class Testpaper {
 
   dateTimePicker() {
     let data = new Date();
-    let $starttime = $('input[name="startTime"]').val(data.Format('yyyy-MM-dd hh:mm'));
+    let $starttime = $('input[name="startTime"]');
+
+    if ($starttime.val() == '' || $starttime.val() == '0') {
+      $starttime.val(data.Format('yyyy-MM-dd hh:mm'));
+    }
+   
     $starttime.datetimepicker({
       autoclose: true,
       format: 'yyyy-mm-dd hh:ii',

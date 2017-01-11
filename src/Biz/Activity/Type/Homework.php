@@ -33,9 +33,9 @@ class Homework extends Activity
             throw $this->createNotFoundException('教学活动不存在');
         }
 
-        $fields = $this->filterFields($fields);
+        $filterFields = $this->filterFields($fields);
 
-        return $this->getTestpaperService()->updateTestpaper($homework['id'], $fields);
+        return $this->getTestpaperService()->updateTestpaper($homework['id'], $filterFields);
     }
 
     public function delete($targetId)
@@ -52,13 +52,11 @@ class Homework extends Activity
 
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'homework');
 
-        if (!$result) {
+        if (!$result || ($result && $result['status'] != 'finished')) {
             return false;
         }
 
-        if (!empty($homework['finishCondition']) && $homework['finishCondition']['type'] == 'submit') {
-            return true;
-        } elseif ($result['status'] == 'finished' && $result['score'] > $homework['finishCondition']['finishScore']) {
+        if (!empty($homework['passedCondition']) && $homework['passedCondition']['type'] == 'submit') {
             return true;
         }
 
@@ -79,7 +77,7 @@ class Homework extends Activity
             throw new InvalidArgumentException('homework fields is invalid');
         }
 
-        $fields = ArrayToolkit::parts($fields, array(
+        $filterFields = ArrayToolkit::parts($fields, array(
             'title',
             'description',
             'questionIds',
@@ -89,16 +87,16 @@ class Homework extends Activity
             'fromCourseSetId'
         ));
 
-        if (!empty($fields['finishCondition'])) {
-            $fields['passedCondition']['type'] = $fields['finishCondition'];
+        if (!empty($filterFields['finishCondition'])) {
+            $filterFields['passedCondition']['type'] = $filterFields['finishCondition'];
         }
 
-        $fields['courseSetId'] = empty($fields['fromCourseSetId']) ? 0 : $fields['fromCourseSetId'];
-        $fields['courseId']    = empty($fields['fromCourseId']) ? 0 : $fields['fromCourseId'];
-        $fields['lessonId']    = 0;
-        $fields['name']        = empty($fields['title']) ? '' : $fields['title'];
+        $filterFields['courseSetId'] = empty($filterFields['fromCourseSetId']) ? 0 : $filterFields['fromCourseSetId'];
+        $filterFields['courseId']    = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
+        $filterFields['lessonId']    = 0;
+        $filterFields['name']        = empty($filterFields['title']) ? '' : $filterFields['title'];
 
-        return $fields;
+        return $filterFields;
     }
 
     protected function getTestpaperService()
@@ -109,5 +107,10 @@ class Homework extends Activity
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service("Activity:ActivityLearnLogService");
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service("Activity:ActivityService");
     }
 }

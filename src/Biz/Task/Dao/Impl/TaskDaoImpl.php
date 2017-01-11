@@ -84,6 +84,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'id = :id',
                 'id IN ( :ids )',
                 'courseId = :courseId',
+                'status =:status',
                 'type = :type',
                 'seq >= :seq_GE',
                 'seq > :seq_GT',
