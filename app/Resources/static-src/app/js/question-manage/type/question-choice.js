@@ -21,7 +21,8 @@ class Choice extends QuestionFormBase {
 
   submitForm(event) {
     this.$submit = $(event.currentTarget);
-    
+    console.log(this.validator.form());
+    console.log( this.isSubmit);
     if(this.validator.form() && this.isSubmit ) {
       this.submit();
     }
@@ -31,6 +32,7 @@ class Choice extends QuestionFormBase {
   }
 
   submit() {
+    console.log('submit');
     this.$submit.button('loading');
     this.$form.submit();
   }
@@ -44,13 +46,15 @@ class Choice extends QuestionFormBase {
     }else {
       dataSource= [];
     }
-
-    ReactDOM.render( <QuestionOptions dataSource={dataSource} dataAnswer={dataAnswer}  minCheckedNum={ 2 } />,
+    let url = $('#question-options').data('image-upload-url');
+    console.log(url);
+    ReactDOM.render( <QuestionOptions filebrowserImageUploadUrl={url} dataSource={dataSource} dataAnswer={dataAnswer}  minCheckedNum={ 2 } />,
       document.getElementById('question-options')
     );
   }
 
   publishMessage() {
+    console.log('publishMessage');
     postal.publish({
       channel : "manage-question",
       topic : "question-create-form-validator-start",
@@ -61,6 +65,7 @@ class Choice extends QuestionFormBase {
   }
 
   subscriptionMessage() {
+    console.log('subscriptionMessage');
     postal.subscribe({
       channel  : "manage-question",
       topic    : "question-create-form-validator-end",
