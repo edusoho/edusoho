@@ -38,3 +38,7 @@ $('#orderprogress').easyPieChart({
     $(this.el).find('.percent').html('学习进度' + '<br><span class="num">' + Math.round(percent) + '%</span>');
   }
 });
+
+import TaskShowaction from '../../../common/widget/task-chapter-show';
+
+TaskShowaction ();
