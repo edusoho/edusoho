@@ -45,15 +45,6 @@ class CourseThreadController extends CourseBaseController
         );
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $allTags = $this->getTagService()->findTagsByOwner(array(
-            'ownerType' => 'course',
-            'ownerId'   => $id
-        ));
-
-        $tags = array(
-            'tagIds' => ArrayToolkit::column($allTags, 'id')
-        );
-
         return $this->render("TopxiaWebBundle:CourseThread:index.html.twig", array(
             'course'    => $course,
             'member'    => $member,
@@ -63,7 +54,7 @@ class CourseThreadController extends CourseBaseController
             'filters'   => $filters,
             'lessons'   => $lessons,
             'target'    => array('type' => 'course', 'id' => $id),
-            'tags'      => $tags
+            'tags'      => ArrayToolkit::column($this->getTagsByOwnerId($id), 'id')
         ));
     }
 
