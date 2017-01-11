@@ -12,7 +12,7 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview');
-        $task    = $this->tryLearnTask($courseId, $id, (bool) $preview);
+        $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
 
         $this->getActivityService()->trigger($task['activityId'], 'start', array(
             'task' => $task
@@ -51,6 +51,7 @@ class TaskController extends BaseController
         if (empty($task['isFree']) && empty($course['buyable']) && empty($course['tryLookable'])) {
             return $this->render('task/preview-notice-modal.html.twig', array('course' => $course));
         }
+
         //课程关闭
         if (!empty($course['status']) && $course['status'] == 'closed') {
             return $this->render('task/preview-notice-modal.html.twig', array('course' => $course));
@@ -107,7 +108,7 @@ class TaskController extends BaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
