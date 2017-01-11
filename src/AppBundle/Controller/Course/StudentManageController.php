@@ -12,6 +12,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
+use Biz\Task\Service\TaskResultService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
@@ -27,10 +28,18 @@ class StudentManageController extends BaseController
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $students  = $this->getCourseService()->findStudentsByCourseId($courseId);
         //TODO find students的学习进度（已完成任务数/总任务数）
+        $processes = array();
+        if (!empty($students)) {
+            $taskCount = $this->getTaskService()->countTasksByCourseId($courseId);
+            foreach ($students as $student) {
+                $processes[$student['userId']] = $this->calcStudentLearnProcess($student['userId'], $courseId, $taskCount);
+            }
+        }
         return $this->render('course-manage/student/index.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course,
-            'students'  => $students
+            'students'  => $students,
+            'processes' => $processes
         ));
     }
 
@@ -165,49 +174,6 @@ class StudentManageController extends BaseController
         ));
     }
 
-    public function definedShowAction(Request $request, $courseId, $userId)
-    {
-        $profile = $this->getUserService()->getUserProfile($userId);
-
-        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-
-        for ($i = 0; $i < count($userFields); $i++) {
-            if (strstr($userFields[$i]['fieldName'], "textField")) {
-                $userFields[$i]['type'] = "text";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "varcharField")) {
-                $userFields[$i]['type'] = "varchar";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "intField")) {
-                $userFields[$i]['type'] = "int";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "floatField")) {
-                $userFields[$i]['type'] = "float";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "dateField")) {
-                $userFields[$i]['type'] = "date";
-            }
-        }
-
-        $course = $this->getSettingService()->get('course', array());
-
-        $userinfoFields = array();
-
-        if (isset($course['userinfoFields'])) {
-            $userinfoFields = $course['userinfoFields'];
-        }
-
-        return $this->render('course-manage/student/defined-show-modal.html.twig', array(
-            'profile'        => $profile,
-            'userFields'     => $userFields,
-            'userinfoFields' => $userinfoFields
-        ));
-    }
-
     public function studyProcessAction(Request $request, $courseSetId, $courseId, $userId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
@@ -244,6 +210,12 @@ class StudentManageController extends BaseController
         $reportCard = $this->createReportCard($course, $user);
 
         return $this->render('course-manage/student/report-card.html.twig', $reportCard);
+    }
+
+    private function calcStudentLearnProcess($userId, $courseId, $taskCount)
+    {
+        $learnedCount = $this->getTaskResultService()->countUserLearnedTasksByCourseId($courseId, $userId);
+        return $taskCount <= 0 ? '0' : sprintf('%d', $learnedCount / $taskCount * 100.0);
     }
 
     private function createReportCard($course, $user)
@@ -461,6 +433,14 @@ class StudentManageController extends BaseController
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     /**
