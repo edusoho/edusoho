@@ -31,7 +31,16 @@
       <div class="help-block">{{'设置会员课程后，该会员及更高等级的会员，可免费学习。'|trans}}</div>
     </div>
   </div>
-
+  <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %}hidden{% endif %}">
+    <label class="col-sm-2 control-label">{{'设置免费学习任务'|trans}}</label>
+    <div class="col-sm-8">
+      <ul class="list-group js-task-price-setting task-price-setting-group">
+        <li class="list-group-item"><input type="checkbox" class="mr10"><span class="inline-block vertical-middle text-overflow title">任务1：都是发生的发生地方说的发生的发生的发生地方说的发生的发生地方说的发生的发生的发生地方</span><span class="label label-warning pull-right price">免费</span></li>
+        <li class="list-group-item"><input type="checkbox" class="mr10">任务1：<span class="label label-warning pull-right price">免费</span></li>
+        <li class="list-group-item"><input type="checkbox" class="mr10">任务1：<span class="label label-warning pull-right price">免费</span></li>
+      </ul>
+    </div>
+  </div>
   <div class="form-group">
     <label class="col-sm-2 control-label">购买截止日期</label>
     <div class="col-sm-8 radios">

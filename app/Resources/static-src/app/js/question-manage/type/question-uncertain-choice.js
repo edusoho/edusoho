@@ -13,10 +13,12 @@ class SingleChoice extends QuestionChoice {
     }else {
       dataSource= [];
     }
-
     console.log(dataSource);
     console.log(dataAnswer);
-    ReactDOM.render( <QuestionOptions dataSource={dataSource} dataAnswer={dataAnswer} />,
+    let url = $('#question-options').data('image-upload-url');
+    console.log(url);
+
+    ReactDOM.render( <QuestionOptions filebrowserImageUploadUrl= {url} dataSource={dataSource} dataAnswer={dataAnswer} />,
       document.getElementById('question-options')
     );
   }
