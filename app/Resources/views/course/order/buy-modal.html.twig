@@ -9,7 +9,7 @@
     <div class="form-group">
       <div class="col-sm-3 control-label">{{'课程名称'|trans}}</div>
       <div class="col-sm-9 controls">
-      	<span class="control-text">《{{ course.title }}》</span>
+      	<span class="control-text text-muted">《{{ course.title }}》</span>
       </div>
     </div>
 
@@ -40,9 +40,9 @@
     <input type="hidden" name="targetId" value="{{ course.id }}" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-    {% set userinfo_enable = setting('course.buy_fill_userinfo')|default(false) %}
-    {% set checkedFields = setting('course.userinfoFields')|default([]) %}
-    {% include 'TopxiaWebBundle:User:fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:userinfo_enable, userinfoFieldsSetting:checkedFields, userFields:userFields, user:user, showNavTip:1} %}
+    {% set isBuyFillUserinfo = setting('course.buy_fill_userinfo')|default(false) %}
+    {% set userinfoFieldsSetting = setting('course.userinfoFields')|default([]) %}
+    {% include 'user/fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:isBuyFillUserinfo, userinfoFieldsSetting:userinfoFieldsSetting, userFields:userFields, user:user, showNavTip:1} %}
 
   </form>
 {% endblock %}
