@@ -50,7 +50,6 @@ class CourseReviewController extends CourseBaseController
 
         $tags = array(
             'tagIds' => ArrayToolkit::column($allTags, 'id'),
-            'count'  => count($allTags)
         );
 
         return $this->render('TopxiaWebBundle:Course:reviews.html.twig', array(

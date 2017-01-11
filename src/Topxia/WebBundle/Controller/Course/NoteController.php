@@ -59,8 +59,7 @@ class NoteController extends CourseBaseController
         ));
 
         $tags = array(
-            'tagIds' => ArrayToolkit::column($allTags, 'id'),
-            'count'  => count($allTags)
+            'tagIds' => ArrayToolkit::column($allTags, 'id')
         );
 
         return $this->render('TopxiaWebBundle:Course\Note:course-notes-list.html.twig', array(

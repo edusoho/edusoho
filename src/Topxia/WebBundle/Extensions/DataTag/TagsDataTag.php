@@ -23,9 +23,12 @@ class TagsDataTag extends CourseBaseDataTag implements DataTag
     {
         $tags = array();
 
-        if (isset($arguments['tags']) && !empty($arguments['tags'])) {
-            $this->checkCount($arguments['tags']);
-            $tags = $this->getTagService()->findTagsByIds($arguments['tags']['tagIds']);
+        if (isset($arguments['tagIds']) && !empty($arguments['tagIds'])) {
+            $tagIds = ArrayToolkit::column($arguments['tagIds'], 'id');
+            $tags = $this->getTagService()->findTagsByIds($tagIds);
+        } elseif (isset($arguments['count']) && !empty($arguments['count'])) {
+            $this->checkCount($arguments);
+            $tags = $this->getTagService()->findAllTags(0, $arguments['count']);
         }
 
         return $tags;

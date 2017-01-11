@@ -51,8 +51,7 @@ class CourseThreadController extends CourseBaseController
         ));
 
         $tags = array(
-            'tagIds' => ArrayToolkit::column($allTags, 'id'),
-            'count'  => count($allTags)
+            'tagIds' => ArrayToolkit::column($allTags, 'id')
         );
 
         return $this->render("TopxiaWebBundle:CourseThread:index.html.twig", array(

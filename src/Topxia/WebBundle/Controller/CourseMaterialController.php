@@ -45,7 +45,6 @@ class CourseMaterialController extends CourseBaseController
 
         $tags = array(
             'tagIds' => ArrayToolkit::column($allTags, 'id'),
-            'count'  => count($allTags)
         );
 
         return $this->render("TopxiaWebBundle:CourseMaterial:index.html.twig", array(
