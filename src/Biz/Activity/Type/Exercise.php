@@ -44,7 +44,8 @@ class Exercise extends Activity
 
     public function isFinished($activityId)
     {
-        $user = $this->getBiz()['user'];
+        $biz  = $this->getBiz();
+        $user = $biz['user'];
 
         $activity = $this->getActivityService()->getActivity($activityId);
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
