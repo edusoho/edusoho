@@ -38,21 +38,25 @@ function deleteOption(dataSource,validatorDatas,optionId) {
 function changeOptionChecked(dataSource,validatorDatas,id,checked,isRadio) {
   let checkedNum = 0;
   dataSource.map((item,index)=> {
-    if(item.optionId == id) {
-      //如果是单选，
-      if(isRadio){
-         dataSource[index].checked = true;
-      }else{
-        console.log('true');
+    if(!isRadio) {
+      if(item.optionId == id ) {
         dataSource[index].checked= !checked;
-        console.log(dataSource[index].checked);
+      }
+    }else {
+      //单选
+      if(item.optionId == id && !checked ) { 
+        dataSource[index].checked  = true;
+      }else if(!checked){
+        dataSource[index].checked = false;
       }
     }
+    //计算选择的答案
+    console.log(dataSource[index].checked);
     if(dataSource[index].checked) {
       checkedNum++;
     }
   });
-  console.log(dataSource);
+  console.log(checkedNum);
   validatorDatas.checkedNum = checkedNum;
 }
 
