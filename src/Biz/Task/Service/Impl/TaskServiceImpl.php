@@ -18,7 +18,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         return $this->getTaskDao()->get($id);
     }
-    
+
     public function createTask($fields)
     {
         $this->beginTransaction();
@@ -76,6 +76,16 @@ class TaskServiceImpl extends BaseService implements TaskService
             'number'
         ));
         return $this->getTaskDao()->update($id, $fields);
+    }
+
+    public function updateTasks($ids, $fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array('isFree'));
+
+        foreach ($ids as $id) {
+            $this->getTaskDao()->update($id, $fields);
+        }
+        return true;
     }
 
     public function deleteTask($id)
@@ -179,9 +189,9 @@ class TaskServiceImpl extends BaseService implements TaskService
                     $canLearnTask = true;
                 } else {
                     $isTaskLearned = $this->isTaskLearned($preTask['id']);
-                    if($isTaskLearned){
+                    if ($isTaskLearned) {
                         $canLearnTask = true;
-                    }else{
+                    } else {
                         $canLearnTask = false;
                         $continue     = false;
                     }
@@ -192,9 +202,9 @@ class TaskServiceImpl extends BaseService implements TaskService
                     $canLearnTask = true;
                 } else {
                     $isTaskLearned = $this->isTaskLearned($preTask['id']);
-                    if($isTaskLearned){
+                    if ($isTaskLearned) {
                         $canLearnTask = true;
-                    }else{
+                    } else {
                         $canLearnTask = false;
                         $continue     = false;
                     }
@@ -308,6 +318,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResult             = $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
         return $taskResult;
     }
+
+    public function findFreeTasksByCourseId($courseId)
+    {
+        $tasks = $this->getTaskDao()->findByCourseIdAndIsFree($courseId, $isFree = true);
+        $tasks = ArrayToolkit::index($tasks, 'id');
+        return $tasks;
+    }
+
 
     public function isFinished($taskId)
     {
