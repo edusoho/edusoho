@@ -38,41 +38,48 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $context  = $event->getSubject();
         $argument = $context['argument'];
         $lesson   = $context['lesson'];
+        try {
+            $this->getConnection()->beginTransaction();
 
-        $this->createRealTimeTestCrontab($lesson);
+            $this->createRealTimeTestCrontab($lesson);
 
-        $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($lesson['courseId']);
+            $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($lesson['courseId']);
 
-        foreach ($classroomIds as $classroomId) {
-            $classroom = $this->getClassroomService()->getClassroom($classroomId);
-            $lessonNum = $classroom['lessonNum'] + 1;
-            $this->getClassroomService()->updateClassroom($classroomId, array('lessonNum' => $lessonNum));
-        }
-
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
-
-        if ($courseIds) {
-            $argument['copyId'] = $lesson['id'];
-
-            if (array_key_exists('type', $argument) && $argument['type'] == 'testpaper') {
-                $lockedTarget = '';
-
-                foreach ($courseIds as $courseId) {
-                    $lockedTarget .= "'course-".$courseId."',";
-                }
-
-                $lockedTarget = "(".trim($lockedTarget, ',').")";
-                $testpaperIds = ArrayToolkit::column($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($argument['mediaId'], $lockedTarget), 'id');
+            foreach ($classroomIds as $classroomId) {
+                $classroom = $this->getClassroomService()->getClassroom($classroomId);
+                $lessonNum = $classroom['lessonNum'] + 1;
+                $this->getClassroomService()->updateClassroom($classroomId, array('lessonNum' => $lessonNum));
             }
 
-            foreach ($courseIds as $key => $courseId) {
+            $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
+
+            if ($courseIds) {
+                $argument['copyId'] = $lesson['id'];
+
                 if (array_key_exists('type', $argument) && $argument['type'] == 'testpaper') {
-                    $argument['mediaId'] = $testpaperIds[$key];
+                    $lockedTarget = '';
+
+                    foreach ($courseIds as $courseId) {
+                        $lockedTarget .= "'course-".$courseId."',";
+                    }
+                    $lockedTarget = "(".trim($lockedTarget, ',').")";
+                    $testpaperTargets = ArrayToolkit::index($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($argument['mediaId'], $lockedTarget), 'target');
                 }
 
-                $argument['courseId'] = $courseId;
-                $this->getCourseService()->createLesson($argument);
+                foreach ($courseIds as $key => $courseId) {
+                    if (array_key_exists('type', $argument) && $argument['type'] == 'testpaper') {
+                        $target = 'course-'.$courseId;
+                        $argument['mediaId'] = $testpaperTargets[$target];
+                    }
+
+                    $argument['courseId'] = $courseId;
+                    $this->getCourseService()->createLesson($argument);
+                }
             }
+            $this->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
         }
     }
 
@@ -81,26 +88,33 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $context  = $event->getSubject();
         $lesson   = $context["lesson"];
         $courseId = $context["courseId"];
+        try {
+            $this->getConnection()->beginTransaction();
+            $this->deleteRealTimeTestCrontab($lesson);
 
-        $this->deleteRealTimeTestCrontab($lesson);
+            $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
 
-        $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
-
-        foreach ($classroomIds as $key => $value) {
-            $classroom = $this->getClassroomService()->getClassroom($value);
-            $lessonNum = $classroom['lessonNum'] - 1;
-            $this->getClassroomService()->updateClassroom($value, array("lessonNum" => $lessonNum));
-        }
-
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
-
-        if ($courseIds) {
-            $lesson    = $context["lesson"];
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'], $courseIds), 'id');
-
-            foreach ($lessonIds as $key => $lessonId) {
-                $this->getCourseService()->deleteLesson($courseIds[$key], $lessonId);
+            foreach ($classroomIds as $key => $value) {
+                $classroom = $this->getClassroomService()->getClassroom($value);
+                $lessonNum = $classroom['lessonNum'] - 1;
+                $this->getClassroomService()->updateClassroom($value, array("lessonNum" => $lessonNum));
             }
+
+            $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
+
+            if ($courseIds) {
+                $lesson    = $context["lesson"];
+                $lessons = ArrayToolkit::index($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'], $courseIds), 'courseId');
+
+                foreach ($lessons as $courseId => $lesson) {
+                    $this->getCourseService()->deleteLesson($courseId, $lesson['id']);
+                }
+            }
+            $this->getConnection()->commit();
+
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
         }
     }
 
@@ -113,15 +127,22 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         if (!empty($lesson) && $lesson['type'] == 'testpaper') {
             unset($argument['mediaId']);
         }
+        try {
+            $this->getConnection()->beginTransaction();
+            $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
 
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
+            if ($courseIds) {
+                $lessons = ArrayToolkit::index($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'], $courseIds), 'courseId');
 
-        if ($courseIds) {
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'], $courseIds), 'id');
-
-            foreach ($courseIds as $key => $courseId) {
-                $this->getCourseService()->updateLesson($courseId, $lessonIds[$key], $argument);
+                foreach ($lessons as $courseId => $lesson) {
+                    $this->getCourseService()->updateLesson($courseId, $lesson['id'], $argument);
+                }
             }
+            $this->getConnection()->commit();
+            
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
         }
     }
 
@@ -130,14 +151,22 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $lesson    = $event->getSubject();
         $courseId  = $lesson["courseId"];
         $lessonId  = $lesson["id"];
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
+        try {
+            $this->getConnection()->beginTransaction();
+            $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
 
-        if ($courseIds) {
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId, $courseIds), 'id');
+            if ($courseIds) {
+                $lessons = ArrayToolkit::index($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId, $courseIds), 'courseId');
 
-            foreach ($courseIds as $key => $courseId) {
-                $this->getCourseService()->publishLesson($courseId, $lessonIds[$key]);
+                foreach ($lessons as $courseId => $lesson) {
+                    $this->getCourseService()->publishLesson($courseId, $lesson['id']);
+                }
             }
+            $this->getConnection()->commit();
+            
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
         }
     }
 
@@ -146,14 +175,22 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $lesson    = $event->getSubject();
         $courseId  = $lesson["courseId"];
         $lessonId  = $lesson["id"];
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
+        try {
+            $this->getConnection()->beginTransaction();
+            $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
 
-        if ($courseIds) {
-            $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId, $courseIds), 'id');
+            if ($courseIds) {
+                $lessons = ArrayToolkit::index($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId, $courseIds), 'courseId');
 
-            foreach ($courseIds as $key => $courseId) {
-                $this->getCourseService()->unpublishLesson($courseId, $lessonIds[$key]);
+                foreach ($lessons as $courseId => $lesson) {
+                    $this->getCourseService()->unpublishLesson($courseId, $lesson['id']);
+                }
             }
+            $this->getConnection()->commit();
+            
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
         }
     }
 
@@ -599,5 +636,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     protected function getMaterialService()
     {
         return ServiceKernel::instance()->createService('Course.MaterialService');
+    }
+
+    protected function getConnection()
+    {
+        return ServiceKernel::instance()->getConnection();
     }
 }

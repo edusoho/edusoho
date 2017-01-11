@@ -1107,8 +1107,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 // }
 
-        if (isset($fields['title'])) {
-            $fields['title'] = $this->purifyHtml($fields['title']);
+        if (isset($lesson['title'])) {
+            $lesson['title'] = $this->purifyHtml($lesson['title']);
         }
 
         // 课程处于发布状态时，新增课时，课时默认的状态为“未发布"
