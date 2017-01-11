@@ -140,7 +140,7 @@ export default class QuestionOptions extends Component {
     }
 
     if(this.validatorDatas.checkedNum < this.props.minCheckedNum ) {
-      notify('danger','请选择正确答案!');
+      notify('danger',`至少选择${this.props.minCheckedNum}个答案!`);
     }else {
       console.log('publishMessage');
       this.publishMessage(true);

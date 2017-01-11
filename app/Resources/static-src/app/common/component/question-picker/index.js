@@ -1,4 +1,4 @@
-import { passedDivShow } from '../question-passed'
+import { questionSubjectiveRemask } from '../question-subjective'
 export default class QuestionPicker {
   constructor($questionPickerBody, $questionAppendForm) {
     this.$questionPickerBody = $questionPickerBody;
@@ -56,7 +56,7 @@ export default class QuestionPicker {
         this.$questionAppendForm.find('tbody:visible').append(html).removeClass('hide');
       }
       this._refreshSeqs();
-      passedDivShow(this.$questionAppendForm);
+      questionSubjectiveRemask(this.$questionAppendForm);
       this.$questionPickerModal.modal('hide');
     });
   }

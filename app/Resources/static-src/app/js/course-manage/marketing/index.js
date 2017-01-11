@@ -7,6 +7,7 @@ class Marketing {
 	}
 
 	init(){
+		$('.js-task-price-setting').perfectScrollbar();
 		let $form = $('#course-marketing-form');
 		TabChange();
 
@@ -35,8 +36,6 @@ class Marketing {
 				tryLookLimit: Translator.trans('请输入视频观看时长限制')
 			}
 		});
-
-    console.log('test');
 
 		$.validator.addMethod("currency",function(value, element, params) {
         return this.optional(element) || /^\d{0,8}(\.\d{0,2})?$/.test(value);
