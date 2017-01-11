@@ -10,13 +10,24 @@
       {#卡券内容#}
       {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}
         {% include 'TopxiaWebBundle:Card:coupon-useable.html.twig' %}
+        <div class="modal-action">
+          <a class="btn btn-ghost-white btn-xlg" 
+          {% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}href="{{ path('course_show',{ id : cardDetail.targetId }) }}"
+          {% elseif cardDetail.targetType == "course" and cardDetail.targetId == 0 %}href="{{ path('course_explore') }}"
+          {% elseif cardDetail.targetType == "vip" %}href="{{ path('vip') }}"
+          {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId == 0 %}href="{{ path('classroom_explore') }}"
+          {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId != 0 %}href="{{ path('classroom_show',{ id : cardDetail.targetId }) }}"
+          {% else %}href="{{ path('course_explore') }}"
+          {% endif %}
+          >立即使用</a>
+        </div>
       {% endif %}
       {% if cardId is not null and cardDetail is not null and cardType == "moneyCard" %}
         {% include 'TopxiaWebBundle:Card:moneycard-useable.html.twig' %}
+        <div class="modal-action">
+          <a class="btn btn-ghost-white btn-xlg money-card-use" href="javascript:;" data-url="{{ path('money_card_use_without_password',{ id:cardDetail.id,filter:app.request.query.get('filter') }) }}" data-target-url="{{ path('my_cards', {cardType:'moneyCard', filter:app.request.query.get('filter')}) }}">{{'立即使用'|trans}}</a>
+        </div>
       {% endif %}
-      <div class="modal-action">
-        <a class="btn btn-ghost-white btn-xlg money-card-use" href="javascript:;" data-url="{{ path('money_card_use_without_password',{ id:cardDetail.id,filter:app.request.query.get('filter') }) }}" data-target-url="{{ path('my_cards', {cardType:'moneyCard', filter:app.request.query.get('filter')}) }}">{{'立即使用'|trans}}</a>
-      </div>
     </div>
   </div>
 </div>
