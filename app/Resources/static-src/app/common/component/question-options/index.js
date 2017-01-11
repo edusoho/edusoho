@@ -42,16 +42,17 @@ function changeOptionChecked(dataSource,validatorDatas,id,checked,isRadio) {
       //如果是单选，
       if(isRadio && checked){
         return;
+      }else{
+        console.log('true');
+        dataSource[index].checked= !checked;
+        console.log(dataSource[index].checked);
       }
-      dataSource[index].checked= !checked;
-    }else if(isRadio && !checked){
-      //如果是单选;
-      dataSource[index].checked = false;
     }
     if(dataSource[index].checked) {
       checkedNum++;
     }
   });
+  console.log(dataSource);
   validatorDatas.checkedNum = checkedNum;
 }
 
