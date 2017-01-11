@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\My;
 
+use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;

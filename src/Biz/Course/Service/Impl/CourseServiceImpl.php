@@ -586,7 +586,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'userId'    => $userId,
             'role'      => 'student',
             'isLearned' => 0
-
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
@@ -608,8 +607,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         } else {
             $members = $this->getMemberDao()->search($conditions, array(), $start, $limit);
         }
-
-        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+        $courses       = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+        $courses       = ArrayToolkit::index($courses, 'id');
 
         $sortedCourses = array();
 
