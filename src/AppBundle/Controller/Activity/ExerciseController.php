@@ -39,12 +39,6 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         ));
     }
 
-    public function tryLookAction(Request $request, $task)
-    {
-        return $this->render('activity/exercise/try-look.html.twig');
-    }
-
-
     public function previewAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
