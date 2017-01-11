@@ -58,9 +58,9 @@ class CourseController extends CourseBaseController
         $userIds = array();
         foreach ($courses as $key => $course) {
             $userIds   = array_merge($userIds, $course['teacherIds']);
-            $learnTime = $this->getCourseService()->searchLearnTime(array('courseId' => $course['id'], 'userId' => $currentUser['id']));
+            $learnTime = 0;// $this->getCourseService()->searchLearnTime(array('courseId' => $course['id'], 'userId' => $currentUser['id']));
 
-            $courses[$key]['learnTime'] = intval($learnTime / 60 / 60).$this->trans('小时').($learnTime / 60 % 60).$this->trans('分钟');
+            $courses[$key]['learnTime'] = intval($learnTime / 60 / 60).'小时'.($learnTime / 60 % 60).'分钟';
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -99,13 +99,12 @@ class CourseController extends CourseBaseController
     }
 
 
-
     public function headerForMemberAction(Request $request, $course, $member)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
         $taskCount = $this->getTaskService()->countTasksByCourseId($course['id']);
-        $progress  = $taskResultCount  = $toLearnTasks  = $taskPerDay  = $planStudyTaskCount  = $planProgressProgress  = 0;
+        $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
         $user = $this->getUser();
         if ($taskCount) {
