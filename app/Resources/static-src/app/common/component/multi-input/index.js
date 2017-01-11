@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import List from './list';
 import InputGroup from './input-group';
-import '!style!css!less!./style.less'
+import '!style!css!less!./style.less';
 
 
 function initItem(dataSourceUi,value,index) {
@@ -10,7 +10,7 @@ function initItem(dataSourceUi,value,index) {
     label: value,
     seq: index,
     outputValue: value
-  }
+  };
   dataSourceUi.push(obj);
 }
 

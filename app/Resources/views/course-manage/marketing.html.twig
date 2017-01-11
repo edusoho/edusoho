@@ -3,7 +3,7 @@
 
 {% set side_nav = 'plan' %}
 {% set active = 'marketing' %}
-{% do script(['libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/marketing/index.js']) %}
+{% do script(['libs/jquery-validation.js','libs/perfect-scrollbar.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/marketing/index.js']) %}
 
 {% block course %}
 <form id="course-marketing-form" class="form-horizontal" action="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
@@ -34,18 +34,22 @@
   <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %}hidden{% endif %}">
     <label class="col-sm-2 control-label">{{'设置免费学习任务'|trans}}</label>
     <div class="col-sm-8">
-      <ul class="list-group js-task-price-setting task-price-setting-group">
-        {% for task in canFreeTasks %}
-        <li class="list-group-item {% if freeTasks[task.id]|default(null) %} open {% endif %}">
-          <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}" {% if freeTasks[task.id]|default(null) %}checked {% endif %}>
-          <span class="inline-block vertical-middle text-overflow title">任务{{ loop.index }}：{{ task.title }} </span>
-          <span class="label label-warning pull-right price">免费</span>
-        </li>
-        {% else %}
-          <li class="empty">免费任务仅支持图文、视频、音频、flash、文档、PPT </li>
-        {% endfor %}
-
-      </ul>
+      {% if canFreeTasks %}
+        <ul class="list-group mb0 js-task-price-setting task-price-setting-group">
+          {% for task in canFreeTasks %}
+          <li class="list-group-item {% if freeTasks[task.id]|default(null) %} open {% endif %}">
+            <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}" {% if freeTasks[task.id]|default(null) %}checked {% endif %}>
+            {% set meta = activity_meta(task.type) %}
+            <i class="{{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title=""data-original-title="{{ meta.name }}任务"></i>
+            <span class="inline-block vertical-middle text-overflow title">任务{{ loop.index }}：{{ task.title }} </span>
+            <span class="label label-warning pull-right price">免费</span>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="color-warning mt5">还没有可以设置为免费学习的任务！</p>
+      {% endif %}
+      <p class="color-gray">免费学习的任务仅支持图文、视频、音频、flash、文档、PPT。</p>
     </div>
   </div>
   <div class="form-group">
@@ -72,7 +76,7 @@
   <div class="form-group">
     <label class="col-sm-2 control-label">{{'加入方式'|trans}}</label>
     <div class="col-sm-10 radios">
-      {{ radios('buyable', { '1': '学员自己加入学习，也可以由老师来添加学员'|trans, '0': '只能由老师添加／移除学员，学员自己无法加入。常用于封闭型教学'|trans }, course.buyable|default(1)) }}
+      {{ radios('buyable', { '1': '学员自己加入学习，也可以由老师来添加学员。'|trans, '0': '只能由老师添加／移除学员，学员自己无法加入，常用于封闭型教学。'|trans }, course.buyable|default(1)) }}
     </div>
   </div>
   <div class="form-group">

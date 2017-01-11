@@ -87,6 +87,15 @@ class TaskController extends BaseController
         ));
     }
 
+    public function contentPreviewAction($courseId, $id)
+    {
+        $task = $this->getTaskService()->getTask($id);
+        if (empty($task) || $task['courseId'] != $courseId) {
+            return $this->createNotFoundException('task is not exist');
+        }
+        return $this->forward('AppBundle:Activity/Activity:preview', array('task' => $task));
+    }
+
     public function qrcodeAction(Request $request, $courseId, $id)
     {
         $user = $this->getCurrentUser();

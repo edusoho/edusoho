@@ -66,7 +66,7 @@ class Testpaper extends Activity
 
         if (!empty($testpaperActivity['finishCondition']) && $testpaperActivity['finishCondition']['type'] == 'submit') {
             return true;
-        } elseif ($result['status'] == 'finished' && $result['score'] > $testpaperActivity['finishCondition']['finishScore']) {
+        } elseif ($result['status'] == 'finished' && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
             return true;
         }
 
