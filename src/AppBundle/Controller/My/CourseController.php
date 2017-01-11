@@ -71,32 +71,6 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function favoritedAction(Request $request)
-    {
-        $currentUser = $this->getCurrentUser();
-
-        $conditions = array(
-            'userId' => $currentUser['id']
-        );
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCourseService()->searchCourseFavoriteCount($conditions),
-            12
-        );
-
-        $courseFavorites = $this->getCourseService()->searchCourseFavorites(
-            $conditions,
-            array('createdTime', 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        return $this->render('my/course/favorited.html.twig', array(
-            'courseFavorites' => $courseFavorites,
-            'paginator'       => $paginator
-        ));
-    }
 
 
     public function headerForMemberAction(Request $request, $course, $member)

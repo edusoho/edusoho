@@ -28,7 +28,8 @@
           {% set mode = 'default' %}
           {% if courseFavorite.type == 'course' %}
             {% set course = data('Course',{courseId:courseFavorite.courseId}) %}
-            {% include 'TopxiaWebBundle:Course:Widget/my-course-grid.html.twig' %}
+            {% set courseSet =  data('CourseSet',{id:courseFavorite.courseSetId}) %}
+            {% include 'my/learn/my-course-grid.html.twig' %}
           {% elseif courseFavorite.type == 'openCourse' %}
             {% set course = data('OpenCourse',{courseId:courseFavorite.courseId})|default(null) %}
             {% if course %}
