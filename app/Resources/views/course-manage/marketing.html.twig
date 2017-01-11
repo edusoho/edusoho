@@ -34,8 +34,16 @@
   <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %}hidden{% endif %}">
     <label class="col-sm-2 control-label">{{'设置免费学习任务'|trans}}</label>
     <div class="col-sm-8">
-      <ul class="list-group pb10 task-price-setting-group js-task-price-setting">
-        <li class="list-group-item"><input type="checkbox" class="mr10"><span class="inline-block vertical-middle text-overflow title">任务1：都是发生的发生地方说的发生的发生的发生地方说的发生的发生地方说的发生的发生的发生地方</span><span class="label label-warning pull-right price">免费</span></li>
+      <ul class="list-group pbm js-task-price-setting task-price-setting-group">
+        {% for task in canFreeTasks %}
+        <li class="list-group-item {% if freeTasks[task.id]|default(null) %} open {% endif %}">
+          <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}" {% if freeTasks[task.id]|default(null) %}checked {% endif %}>
+          <span class="inline-block vertical-middle text-overflow title">任务{{ loop.index }}：{{ task.title }} </span>
+          <span class="label label-warning pull-right price">免费</span>
+        </li>
+        {% else %}
+          <li class="empty">免费任务仅支持图文、视频、音频、flash、文档、PPT </li>
+        {% endfor %}
       </ul>
     </div>
   </div>
@@ -51,7 +59,7 @@
       <input type="text" class="form-control width-input width-input-large" name="buyExpiryTime" value="{% if course.buyExpiryTime > 0 %}{{course.buyExpiryTime|date_format('Y-m-d')}}{% endif %}">
     </div>
   </div>
-  
+
   {# <div class="form-group">
     <label class="col-sm-2 control-label">{{'学习有效期'|trans}}</label>
     <div class="col-sm-4">
@@ -86,7 +94,7 @@
       <div class="help-block">{{'0表示无限制'|trans}}</div>
     </div>
   </div>
-  
+
   <div class="form-group">
     <label class="col-sm-2 control-label">实名认证</label>
     <div class="col-sm-8 radios">
@@ -100,11 +108,11 @@
     <div class="col-sm-8 form-control-static">
       {% set serviceTags = services(course.services|default([])) %}
       {% for tag in serviceTags %}
-      <a 
-        class="label label-md js-service-item {% if tag.active %}label-primary{% else %}label-default{% endif %}"data-container="body" 
-        data-toggle="popover" 
-        data-trigger="hover"  
-        data-placement="top" 
+      <a
+        class="label label-md js-service-item {% if tag.active %}label-primary{% else %}label-default{% endif %}"data-container="body"
+        data-toggle="popover"
+        data-trigger="hover"
+        data-placement="top"
         data-content="{{tag.summary}}"
       >{{ tag.full_name }}</a>
       &nbsp;
