@@ -6,6 +6,14 @@ class Students {
   }
 
   init() {
+
+    $("#refund-coin-tips").popover({
+        html: true,
+        trigger: 'hover',//'hover','click'
+        placement: 'left',//'bottom',
+        content: $("#refund-coin-tips-html").html()
+    });
+    
     $('body').on('click', '.js-remove-student', function(evt) {
       if (!confirm(Translator.trans('是否确定删除该学员？'))) {
         return;

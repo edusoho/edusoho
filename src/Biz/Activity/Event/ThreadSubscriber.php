@@ -2,6 +2,7 @@
 
 namespace Biz\Activity\Event;
 
+use Topxia\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -36,14 +37,24 @@ class ThreadSubscriber extends EventSubscriber implements EventSubscriberInterfa
         if (empty($activities)) {
             return;
         }
-        foreach ($activities as $activity) {
-            $this->getActivityService()->trigger($activity['id'], 'finish');
+        $activityIds = ArrayToolkit::column($activities, 'id');
+
+        foreach ($activityIds as $activityId) {
+            $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+            if ($task) {
+                $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
+            }
         }
     }
 
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 
     protected function getLogger($name)

@@ -32,17 +32,16 @@ class TestpaperController extends BaseController implements ActivityActionInterf
                 'testpaper'         => $testpaper,
                 'courseId'          => $activity['fromCourseId']
             ));
+        } elseif ($testpaperResult['status'] == 'finished') {
+            return $this->forward('AppBundle:Testpaper/Testpaper:showResult', array(
+                'resultId' => $testpaperResult['id']
+            ));
         }
 
         return $this->forward('AppBundle:Testpaper/Testpaper:doTestpaper', array(
             'testId'   => $testpaperActivity['mediaId'],
             'lessonId' => $activity['id']
         ));
-    }
-
-    public function tryLookAction(Request $request, $task)
-    {
-        return $this->render('activity/testpaper/try-look.html.twig');
     }
 
     public function previewAction(Request $request, $id, $courseId)

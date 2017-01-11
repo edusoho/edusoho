@@ -44,7 +44,8 @@ class UploadFileShareDaoImpl extends GeneralDaoImpl implements UploadFileShareDa
                 'isActive = :isActive'
             ),
             'orderbys' => array(
-                'createdTime'
+                'createdTime',
+                'updatedTime'
             )
         );
     }

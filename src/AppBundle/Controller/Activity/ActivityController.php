@@ -1,11 +1,10 @@
 <?php
 namespace AppBundle\Controller\Activity;
 
-use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 class ActivityController extends BaseController
 {
@@ -19,9 +18,9 @@ class ActivityController extends BaseController
         }
         $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
         return $this->forward($actionConfig['show'], array(
-            'id'       => $id,
+            'id' => $id,
             'courseId' => $courseId,
-            'preview'  => $preview
+            'preview' => $preview,
         ));
     }
 
@@ -34,26 +33,26 @@ class ActivityController extends BaseController
         }
         $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
         return $this->forward($actionConfig['preview'], array(
-            'task' => $task
+            'task' => $task,
         ));
     }
 
     public function updateAction($id, $courseId)
     {
-        $activity     = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($id);
         $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
         return $this->forward($actionConfig['edit'], array(
-            'id'       => $activity['id'],
-            'courseId' => $courseId
+            'id' => $activity['id'],
+            'courseId' => $courseId,
         ));
     }
 
     public function createAction($type, $courseId)
     {
-        $actionConfig     = $this->getActivityActionConfig($type);
+        $actionConfig = $this->getActivityActionConfig($type);
         $createController = $actionConfig['create'];
         return $this->forward($createController, array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
     }
 
@@ -79,7 +78,7 @@ class ActivityController extends BaseController
 
         return $this->createJsonResponse(array(
             'event' => $eventName,
-            'data'  => $data
+            'data' => $data,
         ));
     }
 

@@ -1,12 +1,12 @@
 
 {% set questionTypeDict = getQuestionTypes() %}
 
-{% if  ((paperResult|default(null) and paperResult.status|default(null) in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'hide') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and paperResult.status|default(null) == 'reviewing' )) and not canHandle %}
+{% if  ((paperResult|default(null) and paperResult.status|default(null) in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'hide') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and paperResult.status|default(null) == 'reviewing' )) %}
 {% else %}
   
   <form id='teacherCheckForm' autocomplete="off">
     
-    {% for type in questionTypes|default([])%}
+    {% for type in questionTypes|default([]) if questions[type]|default(null) %}
       <div class="panel panel-default border-radius-none testpaper-question-block" id="testpaper-questions-{{ type }}">
         <div class="panel-heading">
           <strong class="">{{ questionTypeDict[type] }}</strong>

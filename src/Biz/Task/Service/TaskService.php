@@ -14,6 +14,8 @@ interface TaskService
 
     public function updateSeq($id, $fields);
 
+    public function updateTasks($Ids, $fields);
+
     public function publishTask($id);
 
     public function unpublishTask($id);
@@ -31,7 +33,7 @@ interface TaskService
     public function count($conditions);
 
     /**
-     * @param  array   $ids
+     * @param  array $ids
      * @return array
      */
     public function findTasksByIds(array $ids);
@@ -88,6 +90,8 @@ interface TaskService
     public function findTasksFetchActivityByChapterId($chapterId);
 
     public function finishTaskResult($taskId);
+
+    public function findFreeTasksByCourseId($courseId);
 
     /**
      *

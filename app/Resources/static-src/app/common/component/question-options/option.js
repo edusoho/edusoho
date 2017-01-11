@@ -3,12 +3,12 @@ import React,{ Component } from 'react';
 export default class Options extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.datas);
     this.state = {
-      inputValue: this.props.datas.inputValue,
+      datas: this.props.datas,
     }
     this.editor = null;
-    //value不需传递给付组件的state,因为value是属于自身组件的行为不应该去触发别的组件的Render；
+    this.editorBody = null;
+    this.editorHtml = null;
   }
  
   componentDidMount() {
@@ -16,10 +16,7 @@ export default class Options extends Component {
   }
 
   deleteOption(event) {
-    console.log(this.state.inputValue);
-    this.state.inputValue = "";
-    this.editor.setData("");
-    console.log(this.state.inputValue);
+    this.editorHtml = null;
     this.props.deleteOption(event.currentTarget.attributes["data-option-id"].value);
   }
 
@@ -31,13 +28,17 @@ export default class Options extends Component {
     if(!this.editor) {
       this.editor = CKEDITOR.replace(this.props.datas.optionId, {
         toolbar: 'Minimal',
+        filebrowserImageUploadUrl:this.props.filebrowserImageUploadUrl,
         height: 120
       });
       let self = this;
-      this.editor.on('change', function( event ) {   
-        let data = this.getData();//内容
-        setTimeout(()=>{
-          self.updateInputValue(data);
+      this.editor.on("instanceReady", function () {  
+        self.editorBody = $('#' + [self.props.datas.optionId]).parent().find('iframe').contents().find('body');
+        //setData两个问题：1、引发事件失效 2、死循环触发；
+      }); 
+      this.editor.on('change',function(){
+        setTimeout(function(){
+          self.updateInputValue(self.editor.getData());
         },100)
       });
     }else {
@@ -46,31 +47,26 @@ export default class Options extends Component {
   }
 
   updateInputValue(inputValue) {
-    this.props.validatorDatas.Options[this.props.datas.optionId] = inputValue.length > 0 ? 1 : 0;
-    if(inputValue.length <=0 ) {
-      this.props.publishMessage(false);
-    }
-    this.state.inputValue = inputValue;
-    this.setState({
-      datas: this.state.inputValue,
-    })
+    this.editorHtml = inputValue;
+    this.props.updateInputValue(this.props.datas.optionId,inputValue);
   }
 
   render() {
-    let showDanger = this.props.isValidator && this.state.inputValue.length <= 0;
+    let showDanger = this.props.isValidator && this.props.datas.inputValue.length <= 0;
     let type = 'checkbox';
     if(this.props.isRadio) {
       type= 'radio';
     }
-    console.log("reder childe");
-    console.log(this.state.inputValue);
+    if(this.editorBody && this.editorHtml != this.props.datas.inputValue) {
+      this.editorBody.html(this.props.datas.inputValue);
+    }
     return (
       <div className="form-group">
         <div className="col-sm-2 control-label">
           <label className="choice-label control-label-required">{this.props.datas.optionLabel}</label>
         </div>
         <div className="col-sm-8 controls">
-          <textarea className="form-control datas-input col-md-8" id={this.props.datas.optionId}  defaultValue={this.state.inputValue} name='choices[]' value={this.state.inputValue}></textarea>
+          <textarea className="form-control datas-input col-md-8" id={this.props.datas.optionId}  defaultValue={this.props.datas.inputValue} name='choices[]' value={this.props.datas.inputValue}></textarea>
           <div className="mtm">
             <label>
               <input type={type} name='answer[]' data-option-id={this.props.datas.optionId} value={this.props.index}  checked={this.props.datas.checked} className="answer-checkbox" onChange = {(event)=>this.onChangeChecked(event)}/>正确答案 

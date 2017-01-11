@@ -1,8 +1,8 @@
 export let passedDivShow = ($element) => {
-  console.log('ok');
+  
   let hasEssay = false;
   $element.find('tbody tr').each(function() {
-    console.log($(this));
+    
     if ($(this).data('type') == 'essay' || $(this).data('type') == 'material') {
       hasEssay = true;
     }
@@ -10,7 +10,7 @@ export let passedDivShow = ($element) => {
 
   let $passedScoreDiv = $(".js-passedScoreDiv");
   let html = '';
-  console.log(hasEssay);
+
   if(hasEssay) {
     $passedScoreDiv.html('');
     return;

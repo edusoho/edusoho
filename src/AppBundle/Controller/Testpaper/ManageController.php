@@ -61,16 +61,14 @@ class ManageController extends BaseController
 
         $types = $this->getQuestionTypes();
 
-        $conditions['types']    = array_keys($types);
-        $conditions['courseId'] = $courseSet['id'];
+        $conditions = array(
+            'types'    => array_keys($types),
+            'courseId' => $courseSet['id'],
+            'parentId' => 0
+        );
 
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $questionNums = ArrayToolkit::index($questionNums, 'type');
-
-        $conditions                              = array();
-        $conditions['type']                      = 'material';
-        $conditions['subCount']                  = 0;
-        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount($conditions);
 
         $user   = $this->getUser();
         $ranges = $this->getTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
@@ -126,6 +124,7 @@ class ManageController extends BaseController
         if (!$result) {
             throw $this->createResourceNotFoundException('testpaperResult', $resultId);
         }
+        //还需要是否是教师的权限判断
 
         $testpaper = $this->getTestpaperService()->getTestpaper($result['testId']);
         if (!$testpaper) {
@@ -157,7 +156,7 @@ class ManageController extends BaseController
             'questions'     => $essayQuestions,
             'student'       => $student,
             'accuracy'      => $accuracy,
-            'questionTypes' => array('essay', 'material'),
+            'questionTypes' => $this->getCheckedQuestionType($testpaper),
             'total'         => $total,
             'source'        => $source,
             'targetId'      => $targetId,

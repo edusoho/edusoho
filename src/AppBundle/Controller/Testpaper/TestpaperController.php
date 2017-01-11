@@ -27,11 +27,14 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷已关闭，如有疑问请联系老师！'));
         }
 
-        $this->testpaperActivityCheck($lessonId, $testpaper);
+        $result = $this->testpaperActivityCheck($lessonId, $testpaper);
+        if (!$result['result']) {
+            return $this->createMessageResponse('info', $result['message']);
+        }
 
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $lessonId);
 
-        if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
+        if (in_array($testpaperResult['status'], array('doing'))) {
             return $this->redirect($this->generateUrl('testpaper_show', array('resultId' => $testpaperResult['id'])));
         } else {
             return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testpaperResult['id'])));
@@ -64,7 +67,7 @@ class TestpaperController extends BaseController
         }
 
         $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
-        $limitedTime = $testpaperResult['limitedTime'] ? $testpaperResult['limitedTime'] : $testpaperActivity['limitedTime'];
+        $limitedTime = ($testpaperActivity['limitedTime'] - $testpaperResult['usedTime']) ? $testpaperResult['limitedTime'] : $testpaperActivity['limitedTime'];
 
         return $this->render('testpaper/start-do-show.html.twig', array(
             'questions'         => $questions,
@@ -92,8 +95,8 @@ class TestpaperController extends BaseController
             throw $this->createResourceNotFoundException('testpaper', $testpaperResult['testId']);
         }
 
-        if (in_array($testpaperResult['status'], array('doing', 'paused'))) {
-            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testpaperResult['id'])));
+        if (in_array($testpaperResult['status'], array('doing'))) {
+            return $this->redirect($this->generateUrl('testpaper_show', array('resultId' => $testpaperResult['id'])));
         }
 
         /*$canLookTestpaper = $this->getTestpaperService()->canLookTestpaper($testpaperResult['id']);
@@ -115,8 +118,9 @@ class TestpaperController extends BaseController
 
         $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
 
-        $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
-        $task     = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        $activity          = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        //$task              = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->render('testpaper/result.html.twig', array(
             'questions'     => $questions,
@@ -130,8 +134,9 @@ class TestpaperController extends BaseController
             'attachments'   => $attachments,
             'questionTypes' => $this->getCheckedQuestionType($testpaper),
             'limitedTime'   => 0,
-            'task'          => $task,
-            'action'        => $request->query->get('action', '')
+            //'task'          => $task,
+            'action'        => $request->query->get('action', ''),
+            'target'        => $testpaperActivity
         ));
     }
 
@@ -148,7 +153,7 @@ class TestpaperController extends BaseController
         $testResult = $this->getTestpaperService()->findTestpaperResultsByTestIdAndStatusAndUserId($testId, $userId, array('doing', 'paused'));
 
         if ($testResult) {
-            return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+            return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testResult['id'])));
         }
 
         if ($testpaper['status'] == 'draft') {
@@ -167,7 +172,7 @@ class TestpaperController extends BaseController
 
         $testResult = $this->getTestpaperService()->startTestpaper($testId, array('type' => $targetType, 'id' => $targetId));
 
-        return $this->redirect($this->generateUrl('course_manage_show_test', array('id' => $testResult['id'])));
+        return $this->redirect($this->generateUrl('testpaper_result_show', array('resultId' => $testResult['id'])));
     }
 
     public function realTimeCheckAction(Request $request)
@@ -255,6 +260,10 @@ class TestpaperController extends BaseController
             $activity          = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
             $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
+            if ($activity['startTime'] && $activity['startTime'] > time()) {
+                return $this->createJsonResponse(array('result' => false, 'message' => '考试未开始，不能提交！'));
+            }
+
             if ($activity['endTime'] && time() > $activity['endTime']) {
                 return $this->createJsonResponse(array('result' => false, 'message' => '考试时间已过，不能再提交！'));
             }
@@ -306,18 +315,29 @@ class TestpaperController extends BaseController
         $user = $this->getUser();
 
         $activity = $this->getActivityService()->getActivity($activityId);
-        if ($activity) {
-            $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-            $testpaperResult   = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $activity['fromCourseSetId'], $activityId, $testpaper['type']);
-            if ($testpaperActivity['doTimes'] && $testpaperResult) {
-                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('该试卷只能考一次，不能再考！'));
-            } elseif ($testpaperActivity['redoInterval']) {
-                $nextDoTime = $testpaperResult['checkedTime'] + $testpaperActivity['redoInterval'] * 3600;
-                if ($nextDoTime > time()) {
-                    return $this->createMessageResponse('info', $this->getServiceKernel()->trans('教师设置了重考间隔，请在'.date('Y-m-d H:i:s', $nextDoTime).'之后再考！'));
-                }
+
+        $result = array('result' => true, 'message' => '');
+        if (!$activity) {
+            return $result;
+        }
+
+        if ($activity['startTime'] && $activity['startTime'] > time()) {
+            return array('result' => false, 'message' => $this->getServiceKernel()->trans('考试未开始，请在'.date('Y-m-d H:i:s', $activity['startTime']).'之后再来！'));
+        }
+
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $testpaperResult   = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $activity['fromCourseSetId'], $activityId, $testpaper['type']);
+
+        if ($testpaperActivity['doTimes'] && $testpaperResult && $testpaperResult['status'] == 'finished') {
+            return array('result' => false, 'message' => $this->getServiceKernel()->trans('该试卷只能考一次，不能再考！'));
+        } elseif ($testpaperActivity['redoInterval']) {
+            $nextDoTime = $testpaperResult['checkedTime'] + $testpaperActivity['redoInterval'] * 3600;
+            if ($nextDoTime > time()) {
+                return array('result' => false, 'message' => $this->getServiceKernel()->trans('教师设置了重考间隔，请在'.date('Y-m-d H:i:s', $nextDoTime).'之后再考！'));
             }
         }
+
+        return $result;
     }
 
     protected function getSettingService()

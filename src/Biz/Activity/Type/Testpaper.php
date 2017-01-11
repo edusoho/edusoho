@@ -32,9 +32,9 @@ class Testpaper extends Activity
             throw $this->createNotFoundException('教学活动不存在');
         }
 
-        $fields = $this->filterFields($fields);
+        $filterFields = $this->filterFields($fields);
 
-        return $this->getTestpaperActivityService()->updateActivity($activity['id'], $fields);
+        return $this->getTestpaperActivityService()->updateActivity($activity['id'], $filterFields);
     }
 
     public function delete($targetId)
@@ -44,7 +44,8 @@ class Testpaper extends Activity
 
     public function isFinished($activityId)
     {
-        $user = $this->getBiz()['user'];
+        $biz  = $this->getBiz();
+        $user = $biz['user'];
 
         $activity          = $this->getActivityService()->getActivity($activityId);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
@@ -52,6 +53,14 @@ class Testpaper extends Activity
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'testpaper');
 
         if (!$result) {
+            return false;
+        }
+
+        if ($result['status'] == 'reviewing' && $testpaperActivity['finishCondition']['type'] == 'submit') {
+            return true;
+        }
+
+        if ($result['status'] != 'finished') {
             return false;
         }
 
@@ -71,7 +80,7 @@ class Testpaper extends Activity
 
     protected function filterFields($fields)
     {
-        $fields = ArrayToolkit::parts($fields, array(
+        $filterFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'doTimes',
             'redoInterval',
@@ -86,23 +95,27 @@ class Testpaper extends Activity
 
         $finishCondition = array();
 
-        if (!empty($fields['finishCondition'])) {
-            $finishCondition['type'] = $fields['finishCondition'];
+        if (!empty($filterFields['finishCondition'])) {
+            $finishCondition['type'] = $filterFields['finishCondition'];
         }
 
-        if (isset($fields['finishScore'])) {
-            $finishCondition['finishScore'] = $fields['finishScore'];
-            unset($fields['finishScore']);
+        if (isset($filterFields['finishScore'])) {
+            $finishCondition['finishScore'] = $filterFields['finishScore'];
+            unset($filterFields['finishScore']);
         }
 
-        if (isset($fields['length'])) {
-            $fields['limitedTime'] = $fields['length'];
-            unset($fields['length']);
+        if (isset($filterFields['length'])) {
+            $filterFields['limitedTime'] = $filterFields['length'];
+            unset($filterFields['length']);
         }
 
-        $fields['finishCondition'] = $finishCondition;
+        if (isset($filterFields['doTimes']) && $filterFields['doTimes'] == 0) {
+            $filterFields['testMode'] = 'normal';
+        }
 
-        return $fields;
+        $filterFields['finishCondition'] = $finishCondition;
+
+        return $filterFields;
     }
 
     protected function getTestpaperActivityService()

@@ -37,12 +37,12 @@
   <div class="panel-body">
 
     {% if type == 'discussion' %}
-	    {% include 'my-teaching/tab.html.twig'%}
+	    {% include 'my/teaching/tab.html.twig'%}
     {% endif %}
 
     {% if threads %}
 
-	    {% include 'my-thread/thread-list.html.twig'  with {type: type} %}
+	    {% include 'my/thread/thread-list.html.twig'  with {type: type} %}
 	  {% else %}
 
 	  	{% if type == 'question' %}

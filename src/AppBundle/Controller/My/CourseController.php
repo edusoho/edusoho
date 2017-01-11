@@ -2,12 +2,66 @@
 
 namespace AppBundle\Controller\My;
 
+use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskService;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\Course\CourseBaseController;
 
 class CourseController extends CourseBaseController
 {
+    public function indexAction(Request $request)
+    {
+        if ($this->getCurrentUser()->isTeacher()) {
+            return $this->redirect($this->generateUrl('my_teaching_course_sets'));
+        } else {
+            return $this->redirect($this->generateUrl('my_courses_learning'));
+        }
+    }
+
+    public function teachingCourseSetsAction(Request $request, $filter = 'normal')
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $conditions = array(
+            'type' => 'normal'
+        );
+
+        if ($filter == 'live') {
+            $conditions['type'] = 'live';
+        }
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseSetService()->countUserTeachingCourseSets($user['id'], $conditions),
+            20
+        );
+
+        $sets = $this->getCourseSetService()->searchUserTeachingCourseSets(
+            $user['id'],
+            $conditions,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $service = $this->getCourseService();
+        $sets    = array_map(function ($set) use ($user, $service) {
+            $set['canManage'] = $set['creator'] == $user['id'];
+            $set['courses']   = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
+            return $set;
+        }, $sets);
+
+        return $this->render('my/teaching/teaching.html.twig', array(
+            'courseSets' => $sets,
+            'paginator'  => $paginator,
+            'filter'     => $filter
+        ));
+    }
+
     public function learningAction(Request $request)
     {
         $currentUser = $this->getUser();
@@ -137,6 +191,9 @@ class CourseController extends CourseBaseController
         return $taskPerDay * $joinDays >= $taskNum ? $taskNum : round($taskPerDay * $joinDays);
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');

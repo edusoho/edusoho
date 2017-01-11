@@ -56,9 +56,9 @@
             style="height:100%"
           ></div>
         </div>
-        {% do script(['libs/vendor.js', 'app/js/main.js'], 1000) %}
-        {% include 'script_boot.html.twig' %}
-        {% if setting("developer.cloud_sdk_cdn") %}
+      {% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
+      {% include 'script_boot.html.twig' %}
+      {% if setting("developer.cloud_sdk_cdn") %}
           {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
         {% else %}
           {% set cdnUrl = 'http://cdn.qiqiuyun.net'  %}

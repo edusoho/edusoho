@@ -21,37 +21,27 @@
       {% endfor %}
 
       {% if paperResult.status|default(null) in ['reviewing','finished'] %}
-        <div class="testpaper-card-explain clearfix">
-          <a href="javascript:;" class="color-lump lump-xs bg-success"></a><small class="color-gray mls">{{'正确'|trans}}</small>
-          <a href="javascript:;" class="color-lump lump-xs bg-danger"></a><small class="color-gray mls">{{'错误'|trans}}</small>
-          <a href="javascript:;" class="color-lump lump-xs bg-warning"></a><small class="color-gray mls">{{'待批阅'|trans}}</small>
-          <a href="javascript:;" class="color-lump lump-xs lump-card"></a><small class="color-gray mls">{{'未做'|trans}}</small>
-        </div>
+        {% include 'testpaper/part/card-choice-explain.html.twig' %}
       {% endif %}
     </div>
 
-    <div class="panel-footer">
-      {% if paperResult.status|default(null) == 'reviewing' %}
-        {% if app.user.id|default(0) == paperResult.userId %}
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" id="showWrong" />
-              <span class="text-info">{{'只看错题'|trans}}</span>
-            </label>
-          </div>
-        {% else %}
-          <a class="btn btn-success" data-role="check-submit">{{'完成批改'|trans}}</a>
-        {% endif %}
-      {% elseif paperResult.status|default(null) == 'doing' %}
-        <a class="btn btn-default" id="homework-next-do" data-url="" data-return-url="">{{'下次再做'|trans}}</a>
-        <a id="paper-finish" class="btn btn-success" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交作业'|trans}}</a>
-      {% else %}
+    <div class="panel-footer text-right">
+      {% if paperResult.status|default(null) == 'reviewing' and app.user.id|default(0) != paperResult.userId %}
+        <a class="btn btn-success" data-role="check-submit">{{'完成批改'|trans}}</a>
+      {% elseif paperResult.status|default(null) in ['reviewing','finished'] %}
         <div class="checkbox">
           <label>
             <input type="checkbox" id="showWrong" />
             <span class="text-info">{{'只看错题'|trans}}</span>
           </label>
         </div>
+      {% else %}
+        {% if paperResult.id|default(0) > 0 and paperResult.status|default(null) == 'doing' %}
+          <a id="paper-finish" class="btn btn-success" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交作业'|trans}}</a>
+        {% else %}
+          <a id="paper-finish" class="btn btn-primary" disabled="disabled">{{'提交作业'|trans}}</a>
+        {% endif %}
+        
       {% endif %}
     </div>
   </div>
