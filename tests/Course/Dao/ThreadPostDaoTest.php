@@ -8,9 +8,9 @@ class ThreadPostDaoTest extends BaseDaoTestCase
 {
     public function testSearchByGroup()
     {
-        $threads[0] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 0, 'userId' => 1, 'isElite' => 127));
-        $threads[1] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 0, 'userId' => 2, 'isElite' => 0));
-        $threads[2] = $this->mockDataObject(array('courseId' => 2, 'taskId' => 0, 'userId' => 3, 'isElite' => 1));
+        $threads[0] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 1, 'userId' => 1, 'isElite' => 127));
+        $threads[1] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 1, 'userId' => 2, 'isElite' => 0));
+        $threads[2] = $this->mockDataObject(array('courseId' => 2, 'taskId' => 1, 'userId' => 3, 'isElite' => 1));
 
         $testConditions = array(
             array(
@@ -19,7 +19,7 @@ class ThreadPostDaoTest extends BaseDaoTestCase
                 'expectedCount' => 2
             ),
             array(
-                'condition' => array('taskId' => 0),
+                'condition' => array('taskId' => 1),
                 'expectedResults' => array($threads[0], $threads[1], $threads[2]),
                 'expectedCount' => 3
             ),
@@ -50,17 +50,25 @@ class ThreadPostDaoTest extends BaseDaoTestCase
 
     public function testCountByGroup()
     {
-        $threads[0] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 0, 'userId' => 1, 'isElite' => 127));
-        $threads[1] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 0, 'userId' => 2, 'isElite' => 0));
-        $threads[2] = $this->mockDataObject(array('courseId' => 2, 'taskId' => 0, 'userId' => 3, 'isElite' => 1));
+        $threads[0] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 1, 'userId' => 1, 'isElite' => 127));
+        $threads[1] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 1, 'userId' => 2, 'isElite' => 0));
+        $threads[2] = $this->mockDataObject(array('courseId' => 2, 'taskId' => 1, 'userId' => 3, 'isElite' => 1));
 
         $res[0] = $this->getDao()->countByGroup(array('courseId' => 1), 'userId');
-        $res[1] = $this->getDao()->countByGroup(array('taskId' => 0), 'courseId');
+        $res[1] = $this->getDao()->countByGroup(array('taskId' => 1), 'courseId');
         $res[2] = $this->getDao()->countByGroup(array('content' => '？'));
-
-        $this->assertArrayEquals(array(1, 1), $res[0], array(0));
-        $this->assertArrayEquals(array(2, 1), $res[1], array(0));
-        $this->assertArrayEquals(array(3), $res[2], array(0));
+        
+        $this->assertEquals(array(
+            array('userId' => 1, 'count' => 1),
+            array('userId' => 2, 'count' => 1)
+        ), $res[0]);
+        $this->assertEquals(array(
+            array('courseId' => 1, 'count' => 2),
+            array('courseId' => 2, 'count' => 1)
+        ), $res[1]);
+        $this->assertEquals(array(
+            array('count' => 3)
+        ), $res[2]);
     }
 
     public function testDeleteByThreadId()

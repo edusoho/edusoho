@@ -8,10 +8,8 @@ class TestpaperActivityDaoTest extends BaseDaoTestCase
 {
     public function testSearch()
     {
-        $activity1 = array_merge($this->getDefaultMockFields(), array('id' => 1));
-        $activity2 = array_merge($this->getDefaultMockFields(), array('id' => 2));
-        $expectedActivity1 = $this->getTestpaperActivityDao()->create($activity1);
-        $expectedActivity2 = $this->getTestpaperActivityDao()->create($activity2);
+        $expectedActivity1 = $this->mockDataObject();
+        $expectedActivity2 = $this->mockDataObject();
 
         $testConditons = array(
             array(
@@ -26,21 +24,19 @@ class TestpaperActivityDaoTest extends BaseDaoTestCase
             )
         );
 
-        $this->searchTestUtil($this->getTestpaperActivityDao(), $testConditons, array_keys($activity1));
+        $this->searchTestUtil($this->getDao(), $testConditons, $this->getCompareKeys());
     }
 
     public function testfindActivitiesByIds()
     {
-        $activity1 = array_merge($this->getDefaultMockFields(), array('id' => 1));
-        $activity2 = array_merge($this->getDefaultMockFields(), array('id' => 2));
-        $expectedActivity1 = $this->getTestpaperActivityDao()->create($activity1);
-        $expectedActivity2 = $this->getTestpaperActivityDao()->create($activity2);
+        $expectedActivity1 = $this->mockDataObject();
+        $expectedActivity2 = $this->mockDataObject();
         $expectedResults = array($expectedActivity1,$expectedActivity2);
         $ids = array(1, 2);
 
-        $results = $this->getTestpaperActivityDao()->findActivitiesByIds($ids);
+        $results = $this->getDao()->findActivitiesByIds($ids);
         foreach ($results as $key => $result) {
-            $this->assertArrayEquals($result, $expectedResults[$key], array_keys($activity1));
+            $this->assertArrayEquals($result, $expectedResults[$key], $this->getCompareKeys());
         }
     }
 
@@ -56,10 +52,5 @@ class TestpaperActivityDaoTest extends BaseDaoTestCase
             'requireCredit' => 1,
             'testMode' => 's'
         );
-    }
-
-    protected function getTestpaperActivityDao()
-    {
-        return $this->getBiz()->dao('Activity:TestpaperActivityDao');
     }
 }

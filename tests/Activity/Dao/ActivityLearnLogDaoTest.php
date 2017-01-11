@@ -6,15 +6,54 @@ use Tests\Base\BaseDaoTestCase;
 
 class ActivityLearnLogDaoTest extends BaseDaoTestCase
 {
+    public function testSearch()
+    {
+        $factor = array();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject(array('activityId' => 2));
+        $factor[] = $this->mockDataObject(array('userId' => 2));
+
+        $testConditions = array(
+            array(
+                'condition' => array(),
+                'expectedResults' => $factor,
+                'expectedCount' => 3
+            ),
+            array(
+                'condition' => array('userId' => 1),
+                'expectedResults' => array($factor[0], $factor[1]),
+                'expectedCount' => 2
+            ),
+            array(
+                'condition' => array('activityId' => 1),
+                'expectedResults' => array($factor[0], $factor[2]),
+                'expectedCount' => 2
+            ),
+            array(
+                'condition' => array('userId' => 1, 'activityId' => 1),
+                'expectedResults' => array($factor[0]),
+                'expectedCount' => 1
+            ),
+            array(
+                'condition' => array('userId' => 2, 'activityId' => 2),
+                'expectedResults' => array(),
+                'expectedCount' => 0
+            ),
+        );
+        
+        $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
+    }
+
     public function testSumLearnedTimeByActivityIdAndUserId()
     {
-        $factor0 = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
-        $factor1 = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
-        $factor2 = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
+        $factor = array();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject();
 
-        $res = $this->getDao()->sumLearnedTimeByActivityIdAndUserId(0, 1);
+        $res = $this->getDao()->sumLearnedTimeByActivityIdAndUserId(1, 1);
 
-        $this->assertEquals($this->getSums(array($factor0, $factor1, $factor2)), $res);
+        $this->assertEquals($this->getSums($factor), $res);
     }
 
     // Todo 连表查询
@@ -25,14 +64,15 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
 
     public function testFindByActivityIdAndUserIdAndEvent()
     {
-        $log[0] = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
-        $log[1] = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
-        $log[2] = $this->mockDataObject(array('activityId' => 0, 'userId' => 1));
+        $factor = array();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject();
 
-        $res = $this->getDao()->findByActivityIdAndUserIdAndEvent(0, 1, 'ffff');
+        $res = $this->getDao()->findByActivityIdAndUserIdAndEvent(1, 1, 'ffff');
 
-        foreach ($log as $key => $val) {
-            $this->assertArrayEquals($log[$key], $res[$key], $this->getCompareKeys());
+        foreach ($factor as $key => $val) {
+            $this->assertArrayEquals($val, $res[$key], $this->getCompareKeys());
         }
     }
 
@@ -79,18 +119,15 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         return $sum;
     }
 
-    protected function getDefaultMockFields($learnedTime)
+    protected function getDefaultMockFields()
     {
-        if (!$learnedTime) {
-            $learnedTime = rand(0, 1000);
-        }
         return array(
-            'activityId' => rand(0, 1000),
-            'userId' => rand(0, 1000),
+            'activityId' => 1,
+            'userId' => 1,
             'event' => 'ffff',
             'data' => '啊',
-            'learnedTime' => $learnedTime,
-            'courseTaskId' => rand(0, 1000)
+            'learnedTime' => 1,
+            'courseTaskId' => 1
         );
     }
 }

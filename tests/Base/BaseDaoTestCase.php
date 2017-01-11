@@ -4,7 +4,7 @@ namespace Tests\Base;
 
 use Biz\BaseTestCase;
 
-class BaseDaoTestCase extends BaseTestCase
+abstract class BaseDaoTestCase extends BaseTestCase
 {
     public function searchTestUtil($dao, $testConditons, $testFields)
     {
@@ -20,23 +20,17 @@ class BaseDaoTestCase extends BaseTestCase
         }
     }
 
+    abstract protected function getDefaultMockFields();
+
     protected function mockDataObject($fields = array())
     {
-        if (in_array('getDefaultMockFields', get_class_methods($this))) {
-            $fields = array_merge($this->getDefaultMockFields(), $fields);
-            return $this->getDao()->create($fields);
-        } else {
-            throw new \Exception('method getDefaultMockFields doesn\'t exist!');
-        }
+        $fields = array_merge($this->getDefaultMockFields(), $fields);
+        return $this->getDao()->create($fields);
     }
 
     protected function getCompareKeys()
     {
-        if (in_array('getDefaultMockFields', get_class_methods($this))) {
-            return array_keys($this->getDefaultMockFields());
-        } else {
-            throw new \Exception('method getDefaultMockFields doesn\'t exist!');
-        }
+        return array_keys($this->getDefaultMockFields());
     }
 
     protected function getDao()
