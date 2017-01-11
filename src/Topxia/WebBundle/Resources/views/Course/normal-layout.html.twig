@@ -3,7 +3,8 @@
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
 {% block keywords %}
-  {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {tags: tags|default('')} %}
+  {% set tags = data('Tags', {tagIds: tags}) %}
+  {% for tag in tags %}{{tag.name}}{% if not loop.last%},{% endif %}{% else %}{{ parent() }}{% endfor %}
 {% endblock %}
 
 {% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
