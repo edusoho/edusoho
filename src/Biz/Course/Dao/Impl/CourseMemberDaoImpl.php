@@ -57,13 +57,11 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function deleteByCourseIdAndRole($courseId, $role)
     {
-        // return $this->db()->delete($this->table(), array(array('courseId' => $courseId, 'role' => $role)));
         return $this->db()->delete($this->table(), array('courseId' => $courseId, 'role' => $role));
     }
 
     public function deleteByCourseId($courseId)
     {
-        // return $this->db()->delete($this->table(), array(array('courseId' => $courseId)));
         return $this->db()->delete($this->table(), array('courseId' => $courseId));
     }
 
@@ -164,16 +162,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function updateMembers($conditions, $updateFields)
     {
-        $builder = $this->_createQueryBuilder($conditions)
-            ->update($this->table(), $this->table());
-
-        if ($updateFields) {
-            foreach ($updateFields as $key => $value) {
-                $builder->add('set', $key . ' = ' . $value, true);
-            }
-        }
-        $builder->execute();
-        return true;
+        return $this->db()->update($this->table, $updateFields, $conditions);
     }
 
     public function countThreadsByCourseIdAndUserId($courseId, $userId, $type = 'discuss')

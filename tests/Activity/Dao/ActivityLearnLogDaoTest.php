@@ -17,7 +17,7 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         $this->assertEquals($this->getSums(array($factor0, $factor1, $factor2)), $res);
     }
 
-    // Todo 联表查询
+    // Todo 连表查询
     public function testSumLearnedTimeByCourseIdAndUserId()
     {
         ;
@@ -36,13 +36,13 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         }
     }
 
-    // Todo 联表查询
+    // Todo 连表查询
     public function testCountLearnedDaysByCourseIdAndUserId()
     {
         ;
     }
 
-    // Todo 联表查询
+    // Todo 连表查询
     public function testSumLearnTime()
     {
         ;

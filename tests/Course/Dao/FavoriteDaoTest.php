@@ -15,15 +15,46 @@ class FavoriteDaoTest extends BaseDaoTestCase
         $this->assertEquals($factor, $res);
     }
 
-    // Todo
     // 覆盖searchByUserId
     public function testSearch()
     {
         $factor = array();
         $factor[] = $this->mockDataObject();
         $factor[] = $this->mockDataObject(array('userId' => 2));
-        $factor[] = $this->mockDataObject(array('courseId' => 2));
+        $factor[] = $this->mockDataObject(array('courseId' => 2, 'courseSetId' => 2));
         
+        $testConditions = array(
+            array(
+                'condition' => array('courseId' => 1),
+                'expectedResults' => array($factor[0], $factor[1]),
+                'expectedCount' => 2,
+            ),
+            array(
+                'condition' => array('userId' => 1),
+                'expectedResults' => array($factor[0], $factor[2]),
+                'expectedCount' => 2,
+            ),
+            array(
+                'condition' => array('type' => 'course'),
+                'expectedResults' => $factor,
+                'expectedCount' => 3,
+            ),
+            array(
+                'condition' => array('courseSetId' => 1),
+                'expectedResults' => array($factor[0], $factor[1]),
+                'expectedCount' => 2,
+            ),
+            array(
+                'condition' => array('courseSetIds' => array(1, 2)),
+                'expectedResults' => $factor,
+                'expectedCount' => 3,
+            ),
+            array(
+                'condition' => array('excludeCourseIds' => array(1)),
+                'expectedResults' => array($factor[2]),
+                'expectedCount' => 1,
+            ),
+        );
     }
 
     public function testGetByUserIdAndCourseSetId()
