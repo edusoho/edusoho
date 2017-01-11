@@ -1,118 +1,147 @@
 
 <div class="course-detail-content">
-  <ul class="task-list task-list-md task-list-hover">
-    {% for key, item in courseItems %}
-      {% if item.itemType == 'chapter' and item.type == 'chapter' %}
-        <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
-          <a href="javascript:void(0);" class="text-overflow title gray-dark">第{{ item.number }}
-            章：{{ item.title }}</a>
-          <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
-        </li>
-      {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
-        <li class="task-item color-gray bg-gray-lighter">
-          <span class="text-overflow title">第{{ item.number }}
-            节：{{ item.title }}</span>
-        </li>
-      {% elseif  item.itemType == 'task' %}
-        {% set task = item %}
+  <div class="clearfix mbl">
+    <div class="btn-group pull-right" role="tablist">
+      <a class="btn btn-default" href="#task-list-pane" role="tab" data-toggle="tab"> <i class="es-icon es-icon-menu"></i>
+      </a>
+      <a class="btn btn-default" href="#task-chart-pane" role="tab" data-toggle="tab"> <i class="es-icon es-icon-viewmodule"></i>
+      </a>
+    </div>
+  </div>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="task-list-pane">
+      <ul class="task-list task-list-md task-list-hover">
+        {% for key, item in courseItems %}
+          {% if item.itemType == 'chapter' and item.type == 'chapter' %}
+            <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
+              <a href="javascript:void(0);" class="text-overflow title gray-dark">第{{ item.number }}
+                章：{{ item.title }}</a>
+              <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
+            </li>
+          {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
+            <li class="task-item color-gray bg-gray-lighter">
+              <span class="text-overflow title">第{{ item.number }}
+                节：{{ item.title }}</span>
+            </li>
+          {% elseif  item.itemType == 'task' %}
+            {% set task = item %}
 
-        {% if  member is empty %}
-          {% set task_lock = true %}
-        {% else %}
-          {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
-        {% endif %}
+            {% if  member is empty %}
+              {% set task_lock = true %}
+            {% else %}
+              {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+            {% endif %}
 
-        {% set file = files[task.activity.mediaId]|default(null) %}
+            {% set file = files[task.activity.mediaId]|default(null) %}
 
-        <li class="task-item task-content mouse-control">
-          <i class="es-icon
-              {% if task_lock %}
-              es-icon-lock
-              {% elseif  not task.result|default(null) %}
-              es-icon-undone-check color-gray
-              {% elseif task.result.status == 'start' %}
-              es-icon-doing color-primary
-              {% elseif task.result.status == 'finish' %}
-              es-icon-iccheckcircleblack24px color-primary
-              {% endif %}
-              left-menu"></i>
-          {% if task.status == 'published'  %}
-            {% if member  %}
-                {% if task_lock is empty %}
-                  <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+            <li class="task-item task-content mouse-control">
+              <i class="es-icon
+                  {% if task_lock %}
+                  es-icon-lock
+                  {% elseif  not task.result|default(null) %}
+                  es-icon-undone-check color-gray
+                  {% elseif task.result.status == 'start' %}
+                  es-icon-doing color-primary
+                  {% elseif task.result.status == 'finish' %}
+                  es-icon-iccheckcircleblack24px color-primary
+                  {% endif %}
+                  left-menu"></i>
+              {% if task.status == 'published'  %}
+                {% if member  %}
+                    {% if task_lock is empty %}
+                      <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+                        {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                      </a>
+                    {% else %}
+                      <span class="text-overflow title">
+                      {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                    </span>
+                    {% endif  %}
+                {% else %}
+                  <a class="text-overflow title" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
                     {% include 'course/task-list/parts/list-li-title.html.twig' %}
                   </a>
-                {% else %}
-                  <span class="text-overflow title">
+                {% endif %}
+              {% else %}
+                <span class="text-overflow title">
                   {% include 'course/task-list/parts/list-li-title.html.twig' %}
-                 </span>
-                {% endif  %}
-             {% else %}
-              <a class="text-overflow title" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
-                {% include 'course/task-list/parts/list-li-title.html.twig' %}
-              </a>
-            {% endif %}
-          {% else %}
-            <span class="text-overflow title">
-              {% include 'course/task-list/parts/list-li-title.html.twig' %}
-             </span>
-          {% endif %}
-            <span class="right-menu mouse-leave">
-            {% set meta =  activity_meta(task.activity.mediaType) %}
-              {#{% if task.status != 'published' %}敬请期待{% endif %}#}
-              {{ task.activity.length|default(0)|activity_length_format }}
-              <i class="es-icon es-icon {{ meta.icon }}" data-toggle="tooltip" data-placement="top" title=""
-                 data-original-title="{{ meta.name }}任务"></i>
-            </span>
-            <span class="right-menu mouse-enter">
-             {% if task.status != 'published' %}敬请期待{% endif %}
-          </span>
-        </li>
-      {% endif %}
-    {% endfor %}
-  </ul>
-
-
-<!-- 解锁式要用的方块列表 -->
-<ul class="task-list task-chart task-list-md task-list-hover clearfix hidden">
-    {% for key, item in courseItems %}
-      {% if  item.type == 'lesson' %}
-        {% for task in item.tasks %}
-          {% set task_lock =  false %}
-          {% set file = files[task.activity.mediaId]|default(null) %}
-          <li class="task-item mouse-control">
-            <i class="es-icon
-              {% if task_lock %}
-              es-icon-lock
-              {% elseif  not task.result|default(null) %}
-              es-icon-undone-check color-gray
-              {% elseif task.result.status == 'start' %}
-              es-icon-doing color-primary
-              {% elseif task.result.status == 'finish' %}
-              es-icon-iccheckcircleblack24px color-primary
-              {% endif %}
-              left-menu"></i>
-            {% if task.status == 'published' %}              
-              <a class="text-overflow title" {% if member %} href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"{% else %}data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" {% endif %}>
-                {% include 'course/task-list/parts/list-li-title.html.twig' %}
-              </a>
-            {% else %}
-              <span class="text-overflow title">
-                {% include 'course/task-list/parts/list-li-title.html.twig' %}
-              </span>
-             {% endif %}
-              {% set meta = activity_meta(task.activity.mediaType) %}
-              {% if task.status == 'published' %} 
-                <i class="{{ meta.icon }} right-menu"{% if task.status != 'published' %} class="mouse-leave"{% endif %} data-toggle="tooltip" data-placement="top" title=""data-original-title="{{ meta.name }}任务"></i>
-              {% elseif task.status != 'published' %}
-                <i class="{{ meta.icon }} right-menu mouse-leave" data-toggle="tooltip" data-placement="top" title=""data-original-title="{{ meta.name }}任务"></i>
-                <span class="right-menu mouse-enter text-14 unpublished-place">              
-                  敬请期待               
                 </span>
               {% endif %}
-          </li>
+                <span class="right-menu mouse-leave">
+                {% set meta =  activity_meta(task.activity.mediaType) %}
+                  {#{% if task.status != 'published' %}敬请期待{% endif %}#}
+                  {{ task.activity.length|default(0)|activity_length_format }}
+                  <i class="es-icon es-icon {{ meta.icon }}" data-toggle="tooltip" data-placement="top" title=""
+                    data-original-title="{{ meta.name }}任务"></i>
+                </span>
+                <span class="right-menu mouse-enter">
+                {% if task.status != 'published' %}敬请期待{% endif %}
+              </span>
+            </li>
+          {% endif %}
         {% endfor %}
-      {% endif %}
-    {% endfor %}
-  </ul>  
+      </ul>
+    </div>
+    <div role="tabpanel" class="tab-pane " id="task-chart-pane">
+      <ul class="task-list task-chart task-list-md task-list-hover clearfix">
+        {% for key, item in courseItems %}
+         
+          {% if  item.itemType == 'task' %}
+            {% set task = item %}
+
+            {% if  member is empty %}
+              {% set task_lock = true %}
+            {% else %}
+              {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+            {% endif %}
+
+            {% set file = files[task.activity.mediaId]|default(null) %}
+
+            <li class="task-item task-content mouse-control">
+              <i class="es-icon
+                  {% if task_lock %}
+                  es-icon-lock
+                  {% elseif  not task.result|default(null) %}
+                  es-icon-undone-check color-gray
+                  {% elseif task.result.status == 'start' %}
+                  es-icon-doing color-primary
+                  {% elseif task.result.status == 'finish' %}
+                  es-icon-iccheckcircleblack24px color-primary
+                  {% endif %}
+                  left-menu"></i>
+              {% if task.status == 'published'  %}
+                {% if member  %}
+                    {% if task_lock is empty %}
+                      <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+                        {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                      </a>
+                    {% else %}
+                      <span class="text-overflow title">
+                      {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                    </span>
+                    {% endif  %}
+                {% else %}
+                  <a class="text-overflow title" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
+                    {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                  </a>
+                {% endif %}
+              {% else %}
+                <span class="title">
+                  {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                </span>
+              {% endif %}
+                {% if task.status != 'published' %}
+                  <span class="right-menu mouse-enter">
+                    敬请期待
+                  </span>
+                {% endif %}
+                {% set meta =  activity_meta(task.activity.mediaType) %}
+                {{ task.activity.length|default(0)|activity_length_format }}
+                <span class="es-icon es-icon {{ meta.icon }} right-menu task-type-icon {% if task.status != 'published' %} mouse-leave {% endif %}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ meta.name }}任务"></span>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 </div>
