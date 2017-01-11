@@ -1783,10 +1783,6 @@ course_set_unfavorite:
   defaults: { _controller: AppBundle:Course/CourseSet:unfavorite }
   methods: [POST]
 
-course_show:
-  path: /course/{id}/{tab}
-  defaults: {_controller: AppBundle:Course/Course:show, tab: 'summary'}
-
 course_exit:
   path: /course/{id}/exit
   defaults: {_controller: AppBundle:Course/Course:exit}
@@ -2584,3 +2580,22 @@ coupon_check:
 my_course_show:
     path:  /my/course/{id}/{tab}
     defaults: { _controller: AppBundle:My/Course:show, tab: 'tasks' }
+
+course_buy:
+   path: /course/{id}/buy
+   defaults: { _controller: AppBundle:Course/CourseOrder:buy }
+
+course_buy_modify_user_info:
+   path: /course/buy/modify_user_info
+   defaults: { _controller: AppBundle:Course/CourseOrder:modifyUserInfo }
+
+course_order_repay:
+   path:  /course/order/repay
+   defaults: { _controller: AppBundle:Course/CourseOrder:repay }
+
+
+
+# last route
+course_show:
+  path: /course/{id}/{tab}
+  defaults: {_controller: AppBundle:Course/Course:show, tab: 'summary'}
