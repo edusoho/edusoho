@@ -53,7 +53,9 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
             'objectiveScore = :objectiveScore',
             'subjectiveScore = :subjectiveScore',
             'rightItemCount = :rightItemCount',
-            'status = :status'
+            'status = :status',
+            'courseId IN ( :courseIds)',
+            'type = :type'
         );
 
         return $declares;
