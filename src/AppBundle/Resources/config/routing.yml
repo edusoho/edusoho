@@ -1733,6 +1733,16 @@ my_group_thread_collecting:
     path:  /my/group/collecting
     defaults: { _controller: AppBundle:My/Group:collecting }
 
+my_notebook_show:
+    path: /my/notebook/{courseId}
+    defaults: { _controller: AppBundle:My/Notebook:show }
+
+my_note_delete:
+    path: /my/note/{id}/delete
+    defaults: { _controller: AppBundle:My/Notebook:delete }
+    methods: [POST]
+
+
 #course_set
 course_set_manage_create:
   path: /course_set/create
