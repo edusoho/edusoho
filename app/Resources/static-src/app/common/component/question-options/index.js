@@ -40,8 +40,8 @@ function changeOptionChecked(dataSource,validatorDatas,id,checked,isRadio) {
   dataSource.map((item,index)=> {
     if(item.optionId == id) {
       //如果是单选，
-      if(isRadio && checked){
-        return;
+      if(isRadio){
+         dataSource[index].checked = true;
       }else{
         console.log('true');
         dataSource[index].checked= !checked;
