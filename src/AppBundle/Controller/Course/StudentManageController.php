@@ -170,63 +170,62 @@ class StudentManageController extends BaseController
         //3. 根据每个homework、testpaper查询出当前用户的result（testpaper_result: status=reviewing）
         //4. 计算出每个homework、testpaper的bestResult（status=finish & max(score)）
 
-        $tasks               = array();
-        $allHomeworks        = array();
-        $finishedHomeworks   = array();
-        $reviewingHomeworks  = array();
-        $bestHomeworks       = array();
-        $allTestpapers       = array();
-        $finishedTestpapers  = array();
-        $reviewingTestpapers = array();
-        $bestTestpapers      = array();
+        //homeworks&testpapers合并处理，定义为：test(type=[homework,testpaper])
+        $activities              = array();
+        $allTests                = array();
+        $finishedTests           = array();
+        $reviewingTests          = array();
+        $bestTests               = array();
+        $homeworksCount          = 0;
+        $testpapersCount         = 0;
+        $finishedHomeworksCount  = 0;
+        $finishedTestpapersCount = 0;
+
+        // $finishedHomeworks   = array();
+        // $reviewingHomeworks  = array();
+        // $bestHomeworks       = array();
+        // $finishedTestpapers  = array();
+        // $reviewingTestpapers = array();
+        // $bestTestpapers      = array();
 
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
 
         if (empty($tasks)) {
             goto result;
         }
-        $activitiyIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities   = $this->getActivityService()->findActivities($activitiyIds, true);
+        $activitiyIds       = ArrayToolkit::column($tasks, 'activityId');
+        $activitiesWithMeta = $this->getActivityService()->findActivities($activitiyIds, true);
 
-        $targetIds = array();
-        foreach ($activities as $activity) {
+        foreach ($activitiesWithMeta as $activity) {
             if ($activity['mediaType'] == 'homework') {
-                $targetIds[] = $activity['mediaId'];
+                $homeworksCount += 1;
+                $activities[] = array('activityId' => $activity['id'], 'mediaId' => $activity['mediaId']);
             } elseif ($activity['mediaType'] == 'testpaper') {
-                $targetIds[] = $activity['ext']['mediaId'];
+                $testpapersCount += 1;
+                $activities[] = array('activityId' => $activity['id'], 'mediaId' => $activity['ext']['mediaId']);
             }
         }
 
-        //homeworks&testpapers合并查询
-        $allTargets       = array();
         $finishedTargets  = array();
         $reviewingTargets = array();
-        if (!empty($targetIds)) {
-            $allTargets = $this->getTestpaperService()->findTestpapersByIds($targetIds);
+        if (!empty($activities)) {
+            $testIds = ArrayToolkit::column($activities, 'mediaId');
+
+            $allTests = $this->getTestpaperService()->findTestpapersByIds($testIds);
 
             $finishedTargets = $this->getTestpaperService()->searchTestpaperResults(array(
-                'testIds' => $targetIds,
+                'testIds' => $testIds,
                 'userId'  => $user['id'],
                 'status'  => 'finished',
                 'types'   => array('homework', 'testpaper')
             ), array('testId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
 
             $reviewingTargets = $this->getTestpaperService()->searchTestpaperResults(array(
-                'testIds' => $targetIds,
+                'testIds' => $testIds,
                 'userId'  => $user['id'],
                 'status'  => 'reviewing',
                 'types'   => array('homework', 'testpaper')
             ), array('testId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
-        }
-
-        if (!empty($allTargets)) {
-            foreach ($allTargets as $target) {
-                if ($target['type'] == 'homework') {
-                    $allHomeworks[] = $target;
-                } else {
-                    $allTestpapers[] = $target;
-                }
-            }
         }
 
         if (!empty($finishedTargets)) {
@@ -234,34 +233,23 @@ class StudentManageController extends BaseController
             foreach ($finishedTargets as $target) {
                 if ($currentTestId == 0 || $currentTestId != $target['testId']) {
                     $currentTestId = $target['testId'];
+                    if (empty($bestTests[$currentTestId])) {
+                        $bestTests[$currentTestId] = array();
+                    }
+                    if ($this->gradeBetterThan($target, $bestTests[$currentTestId])) {
+                        $bestTests[$currentTestId] = $target;
+                    }
                     if ($target['type'] == 'homework') {
-                        if (empty($bestHomeworks[$currentTestId])) {
-                            $bestHomeworks[$currentTestId] = array();
-                        }
-                        if ($this->gradeBetterThan($target, $bestHomeworks[$currentTestId])) {
-                            $bestHomeworks[$currentTestId] = $target;
-                        }
+                        $finishedHomeworksCount += 1;
                     } else {
-                        if (empty($bestTestpapers[$currentTestId])) {
-                            $bestTestpapers[$currentTestId] = array();
-                        }
-                        if ($this->gradeBetterThan($target, $bestTestpapers[$currentTestId])) {
-                            $bestTestpapers[$currentTestId] = $target;
-                        }
+                        $finishedTestpapersCount += 1;
                     }
                 }
 
-                if ($target['type'] == 'homework') {
-                    if (empty($finishedHomeworks[$currentTestId])) {
-                        $finishedHomeworks[$currentTestId] = array();
-                    }
-                    $finishedHomeworks[$currentTestId][] = $target;
-                } else {
-                    if (empty($finishedTestpapers[$currentTestId])) {
-                        $finishedTestpapers[$currentTestId] = array();
-                    }
-                    $finishedTestpapers[$currentTestId][] = $target;
+                if (empty($finishedTests[$currentTestId])) {
+                    $finishedTests[$currentTestId] = array();
                 }
+                $finishedTests[$currentTestId][] = $target;
             }
         }
 
@@ -271,35 +259,27 @@ class StudentManageController extends BaseController
                 if ($currentTestId == 0 || $currentTestId != $target['testId']) {
                     $currentTestId = $target['testId'];
                 }
-                if ($target['type'] == 'homework') {
-                    if (empty($reviewingHomeworks[$currentTestId])) {
-                        $reviewingHomeworks[$currentTestId] = array();
-                    }
-                    $reviewingHomeworks[$currentTestId][] = $target;
-                } else {
-                    if (empty($reviewingTestpapers[$currentTestId])) {
-                        $reviewingTestpapers[$currentTestId] = array();
-                    }
-                    $reviewingTestpapers[$currentTestId][] = $target;
+                if (empty($reviewingTests[$currentTestId])) {
+                    $reviewingTests[$currentTestId] = array();
                 }
+                $reviewingTests[$currentTestId][] = $target;
             }
         }
 
         goto result;
 
         result:
-        // $reportCard['tasks']                 = $tasks;
-        $reportCard['allHomeworks']          = $allHomeworks;
-        $reportCard['finishedHomeworks']     = $finishedHomeworks;
-        $reportCard['reviewingHomeworks']    = $reviewingHomeworks;
-        $reportCard['bestHomeworks']         = $bestHomeworks;
-        $reportCard['allTestpapers']         = $allTestpapers;
-        $reportCard['finishedTestpapers']    = $finishedTestpapers;
-        $reportCard['reviewingTestpapers']   = $reviewingTestpapers;
-        $reportCard['bestTestpapers']        = $bestTestpapers;
-        $reportCard['allFinishedHomeworks']  = array_sum($finishedHomeworks);
-        $reportCard['allFinishedTestpapers'] = array_sum($finishedTestpapers);
-        // var_dump($allTestpapers);exit;
+        $reportCard['activities']     = $activities;
+        $reportCard['allTests']       = ArrayToolkit::index($allTests, 'id');
+        $reportCard['finishedTests']  = $finishedTests;
+        $reportCard['reviewingTests'] = $reviewingTests;
+        $reportCard['bestTests']      = $bestTests;
+
+        $reportCard['homeworksCount']          = $homeworksCount;
+        $reportCard['testpapersCount']         = $testpapersCount;
+        $reportCard['finishedHomeworksCount']  = $finishedHomeworksCount;
+        $reportCard['finishedTestpapersCount'] = $finishedTestpapersCount;
+        // var_dump($reportCard);
         return $reportCard;
     }
 
