@@ -164,12 +164,6 @@ class StudentManageController extends BaseController
     {
         $reportCard = array();
 
-        //TODO:
-        //1. 查询出所有homeworks、testpapers
-        //2. 根据每个homework、testpaper查询出当前用户的result（testpaper_result: status=finish）
-        //3. 根据每个homework、testpaper查询出当前用户的result（testpaper_result: status=reviewing）
-        //4. 计算出每个homework、testpaper的bestResult（status=finish & max(score)）
-
         //homeworks&testpapers合并处理，定义为：test(type=[homework,testpaper])
         $activities              = array();
         $allTests                = array();
@@ -180,13 +174,6 @@ class StudentManageController extends BaseController
         $testpapersCount         = 0;
         $finishedHomeworksCount  = 0;
         $finishedTestpapersCount = 0;
-
-        // $finishedHomeworks   = array();
-        // $reviewingHomeworks  = array();
-        // $bestHomeworks       = array();
-        // $finishedTestpapers  = array();
-        // $reviewingTestpapers = array();
-        // $bestTestpapers      = array();
 
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
 
@@ -279,7 +266,7 @@ class StudentManageController extends BaseController
         $reportCard['testpapersCount']         = $testpapersCount;
         $reportCard['finishedHomeworksCount']  = $finishedHomeworksCount;
         $reportCard['finishedTestpapersCount'] = $finishedTestpapersCount;
-        // var_dump($reportCard);
+
         return $reportCard;
     }
 
