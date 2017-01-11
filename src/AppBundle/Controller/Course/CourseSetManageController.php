@@ -20,6 +20,7 @@ class CourseSetManageController extends BaseController
                 'id' => $courseSet['id']
             )));
         }
+
         $user        = $this->getUser();
         $userProfile = $this->getUserService()->getUserProfile($user->getId());
         $user        = $this->getUserService()->getUser($user->getId());

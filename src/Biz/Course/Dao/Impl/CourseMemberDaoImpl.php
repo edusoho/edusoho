@@ -3,8 +3,8 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseMemberDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 {
@@ -25,7 +25,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function findByCourseIds($courseIds)
     {
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
         $sql   = "SELECT * FROM {$this->table()} WHERE courseId IN ({$marks})";
         return $this->db()->fetchAll($sql, $courseIds);
     }
@@ -69,7 +69,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function findByUserIdAndCourseIds($studentId, $courseIds)
     {
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
         $sql   = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
         return $this->db()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
@@ -108,6 +108,23 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
 
+    /**
+     * @param $userId
+     * @param $courseSetId
+     * @param $role
+     *
+     * @return array
+     */
+    public function findByUserIdAndCourseSetIdAndRole($userId, $courseSetId, $role)
+    {
+        return $this->findByFields(array(
+            'userId'      => $userId,
+            'courseSetId' => $courseSetId,
+            'role'        => $role
+        ));
+    }
+
+
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {
         $sql = "SELECT m.* FROM {$this->table} m ";
@@ -130,7 +147,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         if (isset($conditions['unique'])) {
             $builder->select('*');
             $builder->orderBy($orderBy[0], $orderBy[1]);
-            $builder->from('('.$builder->getSQL().')', $this->table());
+            $builder->from('(' . $builder->getSQL() . ')', $this->table());
             $builder->select('DISTINCT userId');
             $builder->resetQueryPart('where');
             $builder->resetQueryPart('orderBy');
@@ -152,7 +169,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         if ($updateFields) {
             foreach ($updateFields as $key => $value) {
-                $builder->add('set', $key.' = '.$value, true);
+                $builder->add('set', $key . ' = ' . $value, true);
             }
         }
         $builder->execute();

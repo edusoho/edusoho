@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+{% extends 'my/layout.html.twig' %}
 {% block title %}
   {% if type == 'question' %}  
     {{'%username%问答'|trans({'%username%':setting('default.user_name')|default('学员'|trans)})}}

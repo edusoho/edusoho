@@ -43,9 +43,9 @@
             <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>{{'个人主页'|trans}}</a></li>
             <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'个人设置'|trans}}</a></li>
             <li class="hidden-lg">
-              {#<a href="{{ path('my') }}">#}
-                {#<i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}{{'我的教学'|trans}}{% else %}{{'我的学习'|trans}}{% endif %}#}
-              {#</a>#}
+              <a href="{{ path('my') }}">
+                <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}{{'我的教学'|trans}}{% else %}{{'我的学习'|trans}}{% endif %}
+              </a>
             </li>
             <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="es-icon es-icon-accountwallet"></i>{{'账户中心'|trans}}</a></li>
 
@@ -58,13 +58,13 @@
           </ul>
         </li>
         <li class="visible-lg">
-          {#<a href="{{ path('my') }}">
+          <a href="{{ path('my') }}">
             {% if 'ROLE_TEACHER' in app.user.roles %}
               {{'我的教学'|trans}}
             {% else %}
               {{'我的学习'|trans}}
             {% endif %}
-          </a>#}
+          </a>
         </li>
         <li class="visible-lg nav-hover">
 

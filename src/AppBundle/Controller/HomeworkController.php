@@ -69,7 +69,7 @@ class HomeworkController extends BaseController
         }
 
         if (in_array($homeworkResult['status'], array('doing', 'paused'))) {
-            return $this->redirect($this->generateUrl('homework_start_do', array('lessonId' => $testpaperResult['lessonId'], 'homeworkId' => $testpaperResult['testId'])));
+            return $this->redirect($this->generateUrl('homework_result_show', array('resultId' => $testpaperResult['id'])));
         }
 
         $canLookHomework = $this->getTestpaperService()->canLookTestpaper($homeworkResult['id']);
