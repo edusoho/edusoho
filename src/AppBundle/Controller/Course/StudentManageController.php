@@ -10,6 +10,8 @@ use Topxia\Common\SimpleValidator;
 use Biz\Order\Service\OrderService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserFieldService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
@@ -120,6 +122,90 @@ class StudentManageController extends BaseController
             }
         }
         return $this->createJsonResponse($response);
+    }
+
+    public function showAction(Request $request, $courseId, $userId)
+    {
+        if (!$this->getCurrentUser()->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权查看学员详细信息！');
+        }
+
+        $user             = $this->getUserService()->getUser($userId);
+        $profile          = $this->getUserService()->getUserProfile($userId);
+        $profile['title'] = $user['title'];
+
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
+
+        for ($i = 0; $i < count($userFields); $i++) {
+            if (strstr($userFields[$i]['fieldName'], "textField")) {
+                $userFields[$i]['type'] = "text";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "varcharField")) {
+                $userFields[$i]['type'] = "varchar";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "intField")) {
+                $userFields[$i]['type'] = "int";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "floatField")) {
+                $userFields[$i]['type'] = "float";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "dateField")) {
+                $userFields[$i]['type'] = "date";
+            }
+        }
+
+        return $this->render('course-manage/student/show-modal.html.twig', array(
+            'user'       => $user,
+            'profile'    => $profile,
+            'userFields' => $userFields
+        ));
+    }
+
+    public function definedShowAction(Request $request, $courseId, $userId)
+    {
+        $profile = $this->getUserService()->getUserProfile($userId);
+
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
+
+        for ($i = 0; $i < count($userFields); $i++) {
+            if (strstr($userFields[$i]['fieldName'], "textField")) {
+                $userFields[$i]['type'] = "text";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "varcharField")) {
+                $userFields[$i]['type'] = "varchar";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "intField")) {
+                $userFields[$i]['type'] = "int";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "floatField")) {
+                $userFields[$i]['type'] = "float";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "dateField")) {
+                $userFields[$i]['type'] = "date";
+            }
+        }
+
+        $course = $this->getSettingService()->get('course', array());
+
+        $userinfoFields = array();
+
+        if (isset($course['userinfoFields'])) {
+            $userinfoFields = $course['userinfoFields'];
+        }
+
+        return $this->render('course-manage/student/defined-show-modal.html.twig', array(
+            'profile'        => $profile,
+            'userFields'     => $userFields,
+            'userinfoFields' => $userinfoFields
+        ));
     }
 
     public function studyProcessAction(Request $request, $courseSetId, $courseId, $userId)
@@ -383,5 +469,21 @@ class StudentManageController extends BaseController
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return UserFieldService
+     */
+    protected function getUserFieldService()
+    {
+        return $this->createService('User:UserFieldService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

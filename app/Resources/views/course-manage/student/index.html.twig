@@ -58,7 +58,7 @@
         </td>
         <td>
           <a class="mrm" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">发私信</a>
-          <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/manage/students/{{student.userId}}/show">查看资料</a>
+          <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">查看资料</a>
           <div class="btn-group">
             <a href="#" class="mrm dropdown-toggle" data-toggle="dropdown">
               更多

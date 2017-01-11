@@ -1659,6 +1659,14 @@ course_set_manage_course_students_check:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/check
   defaults: {_controller: AppBundle:Course/StudentManage:checkStudent}
 
+course_set_manage_course_students_show:
+   path:  /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/show
+   defaults: { _controller: AppBundle:Course/StudentManage:show }
+
+course_set_manage_course_students_defined_show:
+   path:  /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/defined_show
+   defaults: { _controller: AppBundle:Course/StudentManage:definedShow }
+
 course_set_manage_course_orders:
   path: /course_set/{courseSetId}/manage/course/{courseId}/orders
   defaults: {_controller: AppBundle:Course/CourseManage:orders}
