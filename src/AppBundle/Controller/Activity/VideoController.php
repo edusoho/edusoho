@@ -28,6 +28,7 @@ class VideoController extends BaseController implements ActivityActionInterface
 
         $course = $this->getCourseService()->getCourse($task['courseId']);
         $user   = $this->getCurrentUser();
+        $context = array();
 
         if ($task['mediaSource'] != 'self') {
             if ($task['mediaSource'] == 'youku') {
@@ -46,8 +47,6 @@ class VideoController extends BaseController implements ActivityActionInterface
                 }
             }
         } else {
-            $context = array();
-
             $context['hideQuestion'] = 1;
             $context['hideSubtitle'] = 0;
 

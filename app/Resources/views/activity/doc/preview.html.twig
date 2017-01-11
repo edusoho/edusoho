@@ -1,14 +1,1 @@
-{% do script(['app/js/activity/doc/index.js']) %}
-
-{% if not error is empty %}
-  <div class="modal-video-content iframe-parent-content pv20 ph20">
-    <span class="color-danger">{{ error.message|raw }}</span>
-  </div>
-{% else %}
-  <div class="modal-video-content iframe-parent-content iframe-parent-full" id="document-content" data-swf="{{ docMedia.swf }}" data-pdf="{{ docMedia.pdf }}"
-       data-finish-type="{{ doc.finishType }}" data-finish-detail="{{ doc.finishDetail }}"
-      {% if setting('magic.doc_watermark') %}
-    data-watermark-url="{{ path('cloud_doc_watermark') }}"
-      {% endif %}>
-  </div>
-{% endif %}
+{% include "activity/doc/show.html.twig" %}

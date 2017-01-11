@@ -3,15 +3,15 @@
   <ul class="task-list task-list-md task-list-hover">
     {% for key, item in courseItems %}
       {% if item.itemType == 'chapter' and item.type == 'chapter' %}
-        <li class="task-item bg-gray-lighter"><i class="es-icon es-icon-menu left-menu"></i>
-          <span class="text-overflow title">第{{ item.number }} 章：{{ item.title }}</span>
-          <i class="right-menu es-icon es-icon es-icon-anonymous-iconfont"></i>
+        <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
+          <a href="javascript:void(0);" class="text-overflow title gray-dark">第{{ item.number }}
+            章：{{ item.title }}</a>
+          <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
         </li>
       {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
         <li class="task-item color-gray bg-gray-lighter">
           <span class="text-overflow title">第{{ item.number }}
             节：{{ item.title }}</span>
-          <i class="right-menu es-icon es-icon es-icon-anonymous-iconfont"></i>
         </li>
       {% elseif  item.itemType == 'task' %}
         {% set task = item %}
@@ -71,4 +71,48 @@
       {% endif %}
     {% endfor %}
   </ul>
+
+
+<!-- 解锁式要用的方块列表 -->
+<ul class="task-list task-chart task-list-md task-list-hover clearfix hidden">
+    {% for key, item in courseItems %}
+      {% if  item.type == 'lesson' %}
+        {% for task in item.tasks %}
+          {% set task_lock =  false %}
+          {% set file = files[task.activity.mediaId]|default(null) %}
+          <li class="task-item mouse-control">
+            <i class="es-icon
+              {% if task_lock %}
+              es-icon-lock
+              {% elseif  not task.result|default(null) %}
+              es-icon-undone-check color-gray
+              {% elseif task.result.status == 'start' %}
+              es-icon-doing color-primary
+              {% elseif task.result.status == 'finish' %}
+              es-icon-iccheckcircleblack24px color-primary
+              {% endif %}
+              left-menu"></i>
+            {% if task.status == 'published' %}              
+              <a class="text-overflow title" {% if member %} href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"{% else %}data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" {% endif %}>
+                {% include 'course/task-list/parts/list-li-title.html.twig' %}
+              </a>
+            {% else %}
+              <span class="text-overflow title">
+                {% include 'course/task-list/parts/list-li-title.html.twig' %}
+              </span>
+             {% endif %}
+              {% set meta = activity_meta(task.activity.mediaType) %}
+              {% if task.status == 'published' %} 
+                <i class="{{ meta.icon }} right-menu"{% if task.status != 'published' %} class="mouse-leave"{% endif %} data-toggle="tooltip" data-placement="top" title=""data-original-title="{{ meta.name }}任务"></i>
+              {% elseif task.status != 'published' %}
+                <i class="{{ meta.icon }} right-menu mouse-leave" data-toggle="tooltip" data-placement="top" title=""data-original-title="{{ meta.name }}任务"></i>
+                <span class="right-menu mouse-enter text-14 unpublished-place">              
+                  敬请期待               
+                </span>
+              {% endif %}
+          </li>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </ul>  
 </div>

@@ -78,6 +78,16 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->update($id, $fields);
     }
 
+    public function updateTasks($ids, $fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array('isFree'));
+
+        foreach ($ids as $id) {
+            $this->getTaskDao()->update($id, $fields);
+        }
+        return true;
+    }
+
     public function deleteTask($id)
     {
         $task = $this->getTask($id);
@@ -186,7 +196,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                     }
                 }
             } elseif ($preTask['type'] == 'testpaper' && $preTask['startTime']) {
-                $testPaper = $this->getActivityService()->getActivity($preTask['activityId']);
+                $testPaper = $this->getActivityService()->getActivity($preTask['activityId'], true);
                 if (time() > $preTask['startTime'] + $testPaper['ext']['limitedTime'] * 60) {
                     $canLearnTask = true;
                 } else {
@@ -307,6 +317,13 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->dispatchEvent('course.task.finish', new Event($taskId, array('user' => $this->getCurrentUser())));
 
         return $taskResult;
+    }
+
+    public function findFreeTasksByCourseId($courseId)
+    {
+        $tasks = $this->getTaskDao()->findByCourseIdAndIsFree($courseId, $isFree = true);
+        $tasks = ArrayToolkit::index($tasks, 'id');
+        return $tasks;
     }
 
     public function isFinished($taskId)
