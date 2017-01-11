@@ -77,9 +77,17 @@
         {% if member|default(false) %}
           <a class="btn btn-primary btn-lg" href="{{ path('my_course_show', {id: course.id}) }}">去学习</a>
         {% else %}
-          <a class="btn btn-default btn-lg mrm"><i class="es-icon es-icon-crown mr10"></i>会员</a>
-          <a class="btn btn-primary btn-lg"
-             href="{{ path('order_show', {targetId: course.id, targetType:'course'}) }}">购买课程</a>
+          {% if course.buyable|default(true) == false %}
+            {{'该课程为限制课程'|trans}}<br>{{'请联系客服'|trans}}
+          {% else %}
+            <a class="btn btn-default btn-lg mrm"><i class="es-icon es-icon-crown mr10"></i>会员</a>
+            <a class="btn btn-primary btn-lg"
+              {% if course.price > 0 %}
+              href="{{ path('order_show', {targetId: course.id, targetType:'course'}) }}"
+              {% else %}
+              {% endif %}
+            >购买课程</a>
+          {% endif %}
         {% endif %}
       </div>
     </div>

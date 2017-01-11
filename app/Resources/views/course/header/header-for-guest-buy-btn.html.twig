@@ -1,0 +1,28 @@
+{% if course.buyable|default(true) == false and userVipStatus != 'ok' %}
+  {{'该课程为限制课程'|trans}}<br>{{'请联系客服'|trans}}
+{% else %}
+  <a class="btn btn-primary btn-lg"
+    {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') or setting('user_partner.avatar_alert') %}
+      href="#modal"
+      data-toggle="modal"
+      data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+    {% elseif userVipStatus == 'ok' %}
+      id="vip-join-course" data-url="{{ path('course_become_use_member', {id:course.id}) }}"
+    {% else %}
+      href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+    {% endif %}
+    {% if course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
+      disabled="disabled"
+    {% endif %}
+  >
+    {% if userVipStatus == 'ok' %}
+      {{'加入学习'|trans}}
+    {% else %}
+      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        {% if course.price > 0 %}{{'购买课程'|trans}}{% else %}{{'加入学习'|trans}}{% endif %}</a>
+      {% else %}
+        {% if course.price > 0 %}{{'购买课程'|trans}}{% else %}{{'加入学习'|trans}}{% endif %}</a>
+      {% endif %}
+    {% endif %}
+  </a>
+{% endif %}
