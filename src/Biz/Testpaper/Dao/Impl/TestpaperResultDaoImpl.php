@@ -37,6 +37,8 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
     public function declares()
     {
         $declares['orderbys'] = array(
+            'testId',
+            'beginTime',
             'createdTime',
             'endTime',
             'checkedTime'
@@ -55,7 +57,8 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
             'rightItemCount = :rightItemCount',
             'status = :status',
             'courseId IN ( :courseIds)',
-            'type = :type'
+            'type = :type',
+            'type IN ( :types )'
         );
 
         return $declares;
