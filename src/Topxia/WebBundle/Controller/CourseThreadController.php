@@ -53,7 +53,8 @@ class CourseThreadController extends CourseBaseController
             'paginator' => $paginator,
             'filters'   => $filters,
             'lessons'   => $lessons,
-            'target'    => array('type' => 'course', 'id' => $id)
+            'target'    => array('type' => 'course', 'id' => $id),
+            'tags'      => ArrayToolkit::column($this->getTagsByOwnerId($id), 'id')
         ));
     }
 
