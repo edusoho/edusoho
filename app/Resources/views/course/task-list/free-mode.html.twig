@@ -36,7 +36,7 @@
               <span class="text-overflow title">
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </span>
-             {% endif %}
+            {% endif %}
               <span class="right-menu mouse-leave">
               {{ task.activity.length|default(0)|activity_length_format }}
                 {% set meta = activity_meta(task.activity.mediaType) %}
