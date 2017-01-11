@@ -87,7 +87,12 @@
                  {% if app.purchased|default(false) == true or installedApp %}
             
                     {% if installedApp %}
-                      <a href="javascript:;" class="btn btn-default disabled app-btn">{{'已购买'|trans}}</a>
+                      {% if app.ontrial|default(false) %}
+                        <p><a href="javascript:;" class="btn btn-default disabled app-btn">{{'试用中'|trans}}</a></p>
+                        <p><a href="http://open.edusoho.com/app/{{ app.code }}" class="btn btn-warning app-btn" target="_blank">{{'购买'|trans}}</a></p>
+                      {% else %}
+                        <a href="javascript:;" class="btn btn-default disabled app-btn">{{'已购买'|trans}}</a>
+                      {% endif %}
                     {% else %}
                       <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_app_package_update_modal', {id:app.latestPackageId, type:'install'})}}" class="btn btn-primary app-btn" data-keyboard="false" data-backdrop="static">{{'安装'|trans}}</a>
                     {% endif %}
