@@ -1,14 +1,14 @@
 {% do script(['app/js/task/video/preview/index.js']) %}
 
 {% if activity.ext.mediaSource|default('self') == 'self' %}
-  <div class="modal-video-content" id="task-preview-player">
+  <div class="task-preview-modal-content" id="task-preview-player">
     <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="task-content">
       {#如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx#}
       {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId, context:context})) }}
     </div>
   </div>
 {% elseif task.mediaSource == 'iframe' %}
-  <div class="modal-video-content">
+  <div class="task-preview-modal-content">
     <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="task-content"
          data-media-source="{{ activity.ext.mediaSource }}">
       <div id="swf-player" data-url="{{ activity.ext.mediaUri }}"></div>

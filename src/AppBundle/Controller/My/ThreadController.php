@@ -9,10 +9,10 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\ThreadService;
 use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
-use Biz\User\Service\UserService;
 
 class ThreadController extends BaseController
 {
@@ -58,11 +58,11 @@ class ThreadController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
         $courses = ArrayToolKit::index($courses, 'id');
 
-        $setIds  = ArrayToolKit::column($courses, 'courseSetId');
+        $setIds     = ArrayToolKit::column($courses, 'courseSetId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($setIds);
         $courseSets = ArrayToolKit::index($courseSets, 'id');
 
-        $tasks   = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
+        $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
 
         return $this->render('my/teaching/threads.html.twig', array(
             'paginator'  => $paginator,
@@ -81,8 +81,8 @@ class ThreadController extends BaseController
         $user = $this->getUser();
 
         $conditions = array(
-            'userId'=>$user['id'],
-            'type'=>'discussion'
+            'userId' => $user['id'],
+            'type'   => 'discussion'
         );
 
         $paginator = new Paginator(
@@ -99,14 +99,22 @@ class ThreadController extends BaseController
         );
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets   = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets   = ArrayToolkit::index($courseSets, 'id');
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
-        return $this->render('TopxiaWebBundle:MyThread:discussions.html.twig',array(
+        return $this->render('my/thread/discussions.html.twig', array(
             'threadType' => 'course',
-            'courses'=>$courses,
-            'users'=>$users,
-            'threads'=>$threads,
-            'paginator' => $paginator));
+            'courses'    => $courses,
+            'users'      => $users,
+            'threads'    => $threads,
+            'paginator'  => $paginator,
+            'courseSets' => $courseSets
+        ));
     }
 
     public function questionsAction(Request $request)
@@ -115,7 +123,7 @@ class ThreadController extends BaseController
 
         $conditions = array(
             'userId' => $user['id'],
-            'type' => 'question',
+            'type'   => 'question',
         );
 
         $paginator = new Paginator(
@@ -132,13 +140,21 @@ class ThreadController extends BaseController
         );
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets   = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets   = ArrayToolkit::index($courseSets, 'id');
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
-        return $this->render('TopxiaWebBundle:MyThread:questions.html.twig',array(
-            'courses'=>$courses,
-            'users'=>$users,
-            'threads'=>$threads,
-            'paginator' => $paginator));
+        return $this->render('my/thread/questions.html.twig', array(
+            'courses'    => $courses,
+            'users'      => $users,
+            'threads'    => $threads,
+            'paginator'  => $paginator,
+            'courseSets' => $courseSets
+        ));
     }
 
     /**
