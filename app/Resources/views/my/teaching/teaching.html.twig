@@ -37,7 +37,7 @@
         </thead>
         <tbody>
         {% for courseSet in courseSets %}
-          {% set course = courseSet.courses[0] %}
+          {% set course = courseSet.courses|first %}
           <tr>
             <td>
               <a class="pull-left mrm" href="{{ path('course_set_show', {id: courseSet.id}) }}">
