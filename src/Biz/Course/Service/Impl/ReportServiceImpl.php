@@ -166,15 +166,18 @@ class ReportServiceImpl extends BaseService implements ReportService
     private function countStudentsData($students, &$late30DaysStat)
     {
         foreach ($students as $student) {
+            if (empty($student['finished'])) {
+                $student['finished'] = 0;
+            }
             $student['createdDay']  = date('Y-m-d', $student['createdTime']);
-            $student['finishedDay'] = date('Y-m-d', $student['finishedTime']);
+            $student['finishedDay'] = date('Y-m-d', $student['finished']);
 
             foreach ($late30DaysStat as $day => &$stat) {
                 if (strtotime($student['createdDay']) <= strtotime($day)) {
                     $stat['studentNum']++;
                 }
 
-                if (!empty($student['finishedTime']) && (strtotime($student['finishedDay']) <= strtotime($day))) {
+                if (!empty($student['finished']) && (strtotime($student['finishedDay']) <= strtotime($day))) {
                     $stat['finishedNum']++;
                 }
             }
@@ -254,7 +257,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             $userFinishedTimes = ArrayToolkit::index($userFinishedTimes, 'userId');
             foreach ($students as &$student) {
                 if (!empty($userFinishedTimes[$student['userId']])) {
-                    $student['finishedTime'] = $userFinishedTimes[$student['userId']]['finishedTime'];
+                    $student['finished'] = $userFinishedTimes[$student['userId']]['finishedTime'];
                 }
             }
         }
