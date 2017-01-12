@@ -14,12 +14,13 @@
     {% include 'TopxiaWebBundle:Player:stylesheet.html.twig' %}
   </head>
   <body style="overflow:hidden;border:0px;">
-    {% if setting('storage.enable_hls_encryption_plus') and agentInWhiteList  %}
+    {% set file = file|default(null) %}
+    {% if setting('storage.enable_hls_encryption_plus') and agentInWhiteList and file and file.storage == 'cloud' %}
       <div class="alert alert-warning">
         {{'当前浏览器无法播放该视频，请在App中观看。'|trans}} <a href="{{ path('mobile') }}" target="_blank">立即下载</a>
       </div>
     {% else %}
-      {% if file|default(null) %}
+      {% if file %}
         {% if file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
           <div class="alert alert-danger">{{'转码失败，请联系管理员。'|trans}}</div>
         {% elseif file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
