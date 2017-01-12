@@ -989,11 +989,11 @@ class ClassroomManageController extends BaseController
         );
 
         if ($status == 'reviewing') {
-            $orderBy = array('usedTime', 'DESC');
+            $orderBy = array('usedTime'=>'DESC');
         }
 
         if ($status == 'finished') {
-            $orderBy = array('checkedTime', 'DESC');
+            $orderBy = array('checkedTime'=>'DESC');
         }
 
         $homeworksResults = $this->getHomeworkService()->findResultsByCourseIdsAndStatus(
@@ -1092,7 +1092,7 @@ class ClassroomManageController extends BaseController
             return $userIds;
         } elseif (SimpleValidator::mobile($keyword)) {
             $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
-            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id', 'DESC'), 0, PHP_INT_MAX);
+            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id'=>'DESC'), 0, PHP_INT_MAX);
             $mobileNameUser     = $this->getUserService()->getUserByNickname($keyword);
             $userIds            = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
 

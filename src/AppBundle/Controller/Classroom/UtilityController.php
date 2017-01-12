@@ -15,7 +15,7 @@ class UtilityController extends BaseController
             'nickname' => $likeString,
             'roles' => 'ROLE_TEACHER',
             'excludeIds' => array($classroom['headTeacherId']),
-            ), array('createdTime', 'DESC'), 0, 10
+            ), array('createdTime'=>'DESC'), 0, 10
         );
 
         $newUsers = array();
@@ -36,7 +36,7 @@ class UtilityController extends BaseController
         $users = $this->getUserService()->searchUsers(array(
             'nickname' => $likeString,
             'excludeIds' => $this->_getExcludeIds($classroomId),
-            ), array('createdTime', 'DESC'), 0, 10
+            ), array('createdTime'=>'DESC'), 0, 10
         );
 
         $newUsers = array();
