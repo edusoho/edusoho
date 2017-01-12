@@ -79,24 +79,27 @@
       margin-bottom: 20px;
       background-color: #f8f8f8;
       border-right:20px solid #fff;
+      &.half {
+        width: 50%;
+      }
       .title {
         color: #616161;
         padding: 18px 70px 28px 45px;
-      }
-      .task-overflow{
-        display: -webkit-box;
-        overflow: hidden;
-        line-height: 20px;
-        height: 40px;
+        .task-overflow{
+          display: block;
+          overflow: hidden;
+          line-height: 20px;
+          height: 40px;
+        }
       }
       .right-menu {
+        top:20px;
+      }
+      .task-type-icon {
         font-size: 48px;
         margin-right: -5px;
         margin-top: -6px;
         color: #e9eaea;
-      }
-      .unpublished-place {
-        top: 45px;
       }
     }
   }
