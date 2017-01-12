@@ -1,15 +1,17 @@
 <?php
 namespace Topxia\WebBundle\Twig\Extension;
 
-use Topxia\Service\Common\ServiceKernel;
+use Topxia\WebBundle\Util\AvatarAlert;
 
 class CourseExtension extends \Twig_Extension
 {
     protected $container;
+    protected $biz;
 
-    public function __construct($container)
+    public function __construct($container, $biz)
     {
         $this->container = $container;
+        $this->biz       = $biz;
     }
 
     public function getFilters()
@@ -21,7 +23,8 @@ class CourseExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('course_show_metas', array($this, 'getCourseShowMetas'), array('is_safe' => array('html')))
+            new \Twig_SimpleFunction('course_show_metas', array($this, 'getCourseShowMetas')),
+            new \Twig_SimpleFunction('is_buy_course_from_modal', array($this, 'isBuyCourseFromModal'))
         );
     }
 
@@ -31,7 +34,44 @@ class CourseExtension extends \Twig_Extension
         return $metas["for_{$mode}"];
     }
 
+    public function isBuyCourseFromModal($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $user = $this->biz['user'];
 
+        return !$user->isLogin() 
+            || $this->shouldUserinfoFill() 
+            || $this->isUserApproval($course) 
+            || $this->isUserAvatarEmpty();
+    }
+
+    protected function isUserApproval($course)
+    {
+        $user = $this->biz['user'];
+        return $course['approval'] && $user['approvalStatus'] != 'approved';
+    }
+
+    protected function isUserAvatarEmpty()
+    {
+        $user = $this->biz['user'];
+        return AvatarAlert::alertJoinCourse($user);
+    }
+
+    public function shouldUserinfoFill()
+    {
+        $setting = $this->getSettingService()->get('course');
+        return !empty($setting['buy_fill_userinfo']);
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
+    }
 
     public function getName()
     {

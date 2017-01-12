@@ -3,14 +3,14 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\FavoriteDao;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\MemberService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Topxia\Common\ArrayToolkit;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\CourseNoteService;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -18,7 +18,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      * collect course set
      *
      * @param  $id
-     *
      * @throws AccessDeniedException
      * @return bool
      */
@@ -63,7 +62,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      * cancel collected course set
      *
      * @param  $id
-     *
      * @throws AccessDeniedException
      * @return bool
      */
@@ -91,9 +89,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  int $userId
-     * @param  int $courseSetId
-     *
+     * @param  int    $userId
+     * @param  int    $courseSetId
      * @return bool
      */
     public function isUserFavorite($userId, $courseSetId)
@@ -124,11 +121,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  array $conditions
-     * @param  array $orderBys
-     * @param  int   $start
-     * @param  int   $limit
-     *
+     * @param  array   $conditions
+     * @param  array   $orderBys
+     * @param  int     $start
+     * @param  int     $limit
      * @return mixed
      */
     public function searchCourseSets(array $conditions, array $orderBys, $start, $limit)
@@ -137,8 +133,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  array $conditions
-     *
+     * @param  array   $conditions
      * @return mixed
      */
     public function countCourseSets(array $conditions)
@@ -147,8 +142,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  int $userId
-     *
+     * @param  int       $userId
      * @return integer
      */
     public function countUserLearnCourseSets($userId)
@@ -159,10 +153,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  int $userId
-     * @param  int $start
-     * @param  int $limit
-     *
+     * @param  int       $userId
+     * @param  int       $start
+     * @param  int       $limit
      * @return array[]
      */
     public function searchUserLearnCourseSets($userId, $start, $limit)
@@ -189,16 +182,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function countUserTeachingCourseSets($userId, array $conditions)
     {
-        $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
-        $ids = ArrayToolkit::column($members, 'courseSetId');
+        $members    = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
+        $ids        = ArrayToolkit::column($members, 'courseSetId');
         $conditions = array_merge($conditions, array('ids' => $ids));
         return $this->countCourseSets($conditions);
     }
 
     public function searchUserTeachingCourseSets($userId, array $conditions, $start, $limit)
     {
-        $members = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
-        $ids = ArrayToolkit::column($members, 'courseSetId');
+        $members    = $this->getCourseMemberService()->findTeacherMembersByUserId($userId);
+        $ids        = ArrayToolkit::column($members, 'courseSetId');
         $conditions = array_merge($conditions, array('ids' => $ids));
         return $this->searchCourseSets($conditions, array('createdTime' => 'DESC'), $start, $limit);
     }
@@ -213,7 +206,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function findCourseSetsByIds(array $ids)
     {
-        return $this->getCourseSetDao()->findByIds($ids);
+        $courseSets = $this->getCourseSetDao()->findByIds($ids);
+        return ArrayToolkit::index($courseSets, 'id');
     }
 
     public function getCourseSet($id)
@@ -233,7 +227,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $this->createInvalidArgumentException("Invalid Param: type");
         }
 
-        $courseSet            = ArrayToolkit::parts($courseSet, array(
+        $courseSet = ArrayToolkit::parts($courseSet, array(
             'type',
             'title'
         ));
@@ -288,7 +282,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int)$item['id'];
+                $item = (int) $item['id'];
             });
         }
         return $this->getCourseSetDao()->update($courseSet['id'], $fields);
@@ -331,21 +325,20 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->delete($courseSet['id']);
     }
 
-    public function findTeachingCourseSetsByUserId($userId, $onlyPublished=true)
+    public function findTeachingCourseSetsByUserId($userId, $onlyPublished = true)
     {
         $courses = $this->getCourseService()->findTeachingCoursesByUserId($userId, $onlyPublished);
         $setIds  = ArrayToolkit::column($courses, 'courseSetId');
 
-        if($onlyPublished){
+        if ($onlyPublished) {
             return $this->findPublicCourseSetsByIds($setIds);
-        }else{
+        } else {
             return $this->findCourseSetsByIds($setIds);
         }
     }
 
     /**
-     * @param  int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCourseSetsByUserId($userId)
@@ -356,8 +349,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  array $ids
-     *
+     * @param  array   $ids
      * @return mixed
      */
     public function findPublicCourseSetsByIds(array $ids)
@@ -370,7 +362,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'ids'    => $ids,
             'status' => 'published'
         );
-        $count      = $this->countCourseSets($conditions);
+        $count = $this->countCourseSets($conditions);
         return $this->searchCourseSets($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
@@ -418,8 +410,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  int $userId
-     *
+     * @param  int       $userId
      * @return integer
      */
     public function countUserFavorites($userId)
@@ -428,10 +419,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  int $userId
-     * @param  int $start
-     * @param  int $limit
-     *
+     * @param  int       $userId
+     * @param  int       $start
+     * @param  int       $limit
      * @return array[]
      */
     public function searchUserFavorites($userId, $start, $limit)

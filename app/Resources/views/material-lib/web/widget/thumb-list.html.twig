@@ -1,7 +1,7 @@
 {% import 'macro.html.twig' as web_macro %}
 <div class="row">
 {% for uploadFile in files %}
-   {% include 'MaterialLibBundle:Web/Widget:thumb-item.html.twig' with {uploadFile:uploadFile} %}
+   {% include 'material-lib/web/widget/thumb-item.html.twig' with {uploadFile:uploadFile} %}
 {% else %}
    <div class="empty">{{'无文件记录'|trans}}</div>
 {% endfor %}

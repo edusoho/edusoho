@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\My;
 
+use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,49 @@ class CourseController extends CourseBaseController
         } else {
             return $this->redirect($this->generateUrl('my_courses_learning'));
         }
+    }
+
+    public function teachingCourseSetsAction(Request $request, $filter = 'normal')
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
+        }
+
+        $conditions = array(
+            'type' => 'normal'
+        );
+
+        if ($filter == 'live') {
+            $conditions['type'] = 'live';
+        }
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseSetService()->countUserTeachingCourseSets($user['id'], $conditions),
+            20
+        );
+
+        $sets = $this->getCourseSetService()->searchUserTeachingCourseSets(
+            $user['id'],
+            $conditions,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $service = $this->getCourseService();
+        $sets    = array_map(function ($set) use ($user, $service) {
+            $set['canManage'] = $set['creator'] == $user['id'];
+            $set['courses']   = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
+            return $set;
+        }, $sets);
+
+        return $this->render('my/teaching/teaching.html.twig', array(
+            'courseSets' => $sets,
+            'paginator'  => $paginator,
+            'filter'     => $filter
+        ));
     }
 
     public function learningAction(Request $request)
@@ -33,18 +77,51 @@ class CourseController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('my/course/learning.html.twig', array(
+        return $this->render('my/learning/course/learning.html.twig', array(
             'courses'   => $courses,
             'paginator' => $paginator
         ));
     }
+
+    public function learnedAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        $paginator   = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->findUserLeanedCourseCount($currentUser['id']),
+            12
+        );
+
+        $courses = $this->getCourseService()->findUserLeanedCourses(
+            $currentUser['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $userIds = array();
+        foreach ($courses as $key => $course) {
+            $userIds   = array_merge($userIds, $course['teacherIds']);
+            $learnTime = 0;// $this->getCourseService()->searchLearnTime(array('courseId' => $course['id'], 'userId' => $currentUser['id']));
+
+            $courses[$key]['learnTime'] = intval($learnTime / 60 / 60).'小时'.($learnTime / 60 % 60).'分钟';
+        }
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('my/learning/course/learned.html.twig', array(
+            'courses'   => $courses,
+            'users'     => $users,
+            'paginator' => $paginator
+        ));
+    }
+
+
 
     public function headerForMemberAction(Request $request, $course, $member)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
         $taskCount = $this->getTaskService()->countTasksByCourseId($course['id']);
-        $progress  = $taskResultCount  = $toLearnTasks  = $taskPerDay  = $planStudyTaskCount  = $planProgressProgress  = 0;
+        $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
         $user = $this->getUser();
         if ($taskCount) {

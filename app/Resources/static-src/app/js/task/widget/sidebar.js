@@ -1,4 +1,4 @@
-import Emitter from 'es6-event-emitter'
+import Emitter from 'es6-event-emitter';
 
 export default class TaskSidebar extends Emitter{
   constructor({element, url}){
@@ -19,13 +19,13 @@ export default class TaskSidebar extends Emitter{
     })
     .fail(error => {
       console.log(error);
-    })
+    });
   }
 
   fetchPlugins() {
     return $.post(this.url);
   }
-  
+
   // 修复字体图标在chrome下，加载两次从而不能显示的问题
   fixIconInChrome() {
     let html = `<i class="es-icon es-icon-chevronleft"></i>`;
@@ -73,7 +73,7 @@ export default class TaskSidebar extends Emitter{
             $pane.perfectScrollbar();
             $btn.data('loaded', true);
             this.operationContent($btn);
-          })
+          });
     });
   }
 
@@ -96,7 +96,7 @@ export default class TaskSidebar extends Emitter{
 
     this.trigger('popup', content_right, time);
     this.element.animate({
-      right: side_right,
+      right: side_right
     }, time);
   }
 
@@ -107,7 +107,7 @@ export default class TaskSidebar extends Emitter{
     this.trigger('fold', content_right, time);
     this.element.animate({
       right: side_right
-    }, time)
+    }, time);
   }
 
   reload(){

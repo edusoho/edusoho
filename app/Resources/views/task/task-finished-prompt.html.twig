@@ -12,9 +12,10 @@
 
     </div>
   </div>
+
   {% if nextTask %}
   <div class="text-right mt20">
-    <a class="btn btn-primary btn-sm" 
+    <a class="btn btn-primary btn-sm"
     href="{{path('course_task_show', {courseId: task.courseId, id: nextTask.id})}}"
     >下一任务</a>
   </div>

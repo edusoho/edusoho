@@ -27,14 +27,15 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
 
     public function countByGroup($conditions, $groupBy = '')
     {
+        $index = empty($groupBy) ? '' : $groupBy . ',';
         $builder = $this->_createQueryBuilder($conditions)
-            ->select('COUNT(id)');
+            ->select("{$index} COUNT(id) AS count");
 
         if (!empty($groupBy)) {
             $builder->addGroupBy($groupBy);
         }
 
-        return $builder->execute()->fetchColumn(0);
+        return $builder->execute()->fetchAll();
     }
 
     public function deleteByThreadId($threadId)

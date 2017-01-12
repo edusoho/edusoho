@@ -2,6 +2,7 @@
 
 {% block course_heard_content %}
   {% set course_set = data('CourseSet', {id: course.courseSetId}) %}
+    
   <div class="course-detail-bottom">
     <div class="course-detail-img">
       <img class="img-responsive"
@@ -84,9 +85,7 @@
         {% if member|default(false) %}
           <a class="btn btn-primary btn-lg" href="{{ path('my_course_show', {id: course.id}) }}">去学习</a>
         {% else %}
-          <a class="btn btn-default btn-lg mrm"><i class="es-icon es-icon-crown mr10"></i>会员</a>
-          <a class="btn btn-primary btn-lg"
-             href="{{ path('order_show', {targetId: course.id, targetType:'course'}) }}">购买课程</a>
+          {% include 'course/header/header-for-guest-buy-btn.html.twig' %}
         {% endif %}
       </div>
     </div>

@@ -12,7 +12,7 @@ class TaskShow extends Emitter {
     this.mode = mode;
     this.eventEmitter = new TaskEventEmitter(this.element.find('#task-content-iframe'));
     this.ui = new TaskUi({
-      element: '.js-task-dashboard-page',
+      element: '.js-task-dashboard-page'
     });
 
     this.init();
@@ -31,7 +31,7 @@ class TaskShow extends Emitter {
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover({
       html: true,
-      trigger: 'hover',
+      trigger: 'hover'
     });
   }
 
@@ -58,7 +58,7 @@ class TaskShow extends Emitter {
           })
           .then(() => { //always
             this.trigger('doing', timeStep);
-          })
+          });
     }, timeStep * minute);
 
     this.trigger('doing', timeStep);
@@ -69,7 +69,7 @@ class TaskShow extends Emitter {
         $('#modal').html(response);
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
         this.ui.learned();
-      })
+      });
     });
 
     // 接收活动的finish事件
@@ -87,7 +87,7 @@ class TaskShow extends Emitter {
         this.ui.learned();
         this.sidebar.reload();
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
-      })
+      });
     }
   }
 
@@ -99,14 +99,14 @@ class TaskShow extends Emitter {
     this.sidebar
         .on('popup', (px, time) => {
           this.element.find('#dashboard-content').animate({
-            right: px,
+            right: px
           }, time);
         })
         .on('fold', (px, time) => {
           this.element.find('#dashboard-content').animate({
-            right: px,
+            right: px
           }, time);
-        })
+        });
   }
 }
 

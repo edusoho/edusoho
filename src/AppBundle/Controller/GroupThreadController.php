@@ -102,7 +102,7 @@ class GroupThreadController extends BaseController
 
         $thread = $this->getThreadService()->getThread($threadId);
 
-        $attachs = $this->getThreadService()->searchGoods(array("threadId" => $thread['id'], 'type' => 'attachment'), array("createdTime", "DESC"), 0, 1000);
+        $attachs = $this->getThreadService()->searchGoods(array("threadId" => $thread['id'], 'type' => 'attachment'), array('createdTime'=>'DESC'), 0, 1000);
 
         if ($request->getMethod() == "POST") {
             try {
@@ -308,7 +308,7 @@ class GroupThreadController extends BaseController
                 10
             );
 
-            $reply = $this->getThreadService()->searchPosts(array('postId' => $value), array('createdTime', 'asc'),
+            $reply = $this->getThreadService()->searchPosts(array('postId' => $value), array('createdTime'=>'ASC'),
                 $replyPaginator->getOffsetCount(),
                 $replyPaginator->getPerPageCount());
 
@@ -320,7 +320,7 @@ class GroupThreadController extends BaseController
                 $postReplyAll = array_merge($postReplyAll, ArrayToolkit::column($reply, 'userId'));
             }
 
-            $attachs = $this->getThreadService()->searchGoods(array('postId' => $value, 'type' => 'postAttachment'), array("createdTime", "DESC"), 0, 1000);
+            $attachs = $this->getThreadService()->searchGoods(array('postId' => $value, 'type' => 'postAttachment'), array('createdTime'=>'DESC'), 0, 1000);
 
             $postFileIds = ArrayToolkit::column($attachs, 'fileId');
 
@@ -334,16 +334,16 @@ class GroupThreadController extends BaseController
         $postMember       = $this->getUserService()->findUsersByIds($postMemberIds);
 
         $activeMembers = $this->getGroupService()->searchMembers(array('groupId' => $id),
-            array('postNum', 'DESC'), 0, 20);
+            array('postNum'=>'DESC'), 0, 20);
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
         $members   = $this->getUserService()->findUsersByIds($memberIds);
 
-        $isAdopt = $this->getThreadService()->searchPosts(array('adopt' => 1, 'threadId' => $threadId), array('createdTime', 'desc'), 0, 1);
+        $isAdopt = $this->getThreadService()->searchPosts(array('adopt' => 1, 'threadId' => $threadId), array('createdTime'=>'DESC'), 0, 1);
 
         $threadMain = $this->hideThings($threadMain);
 
-        $attachs = $this->getThreadService()->searchGoods(array("threadId" => $threadMain['id'], 'type' => 'attachment'), array("createdTime", "DESC"), 0, 1000);
+        $attachs = $this->getThreadService()->searchGoods(array("threadId" => $threadMain['id'], 'type' => 'attachment'), array('createdTime'=>'DESC'), 0, 1000);
 
         $fileIds = ArrayToolkit::column($attachs, 'fileId');
 
@@ -392,7 +392,7 @@ class GroupThreadController extends BaseController
             10
         );
 
-        $postReply = $this->getThreadService()->searchPosts(array('postId' => $postId), array('createdTime', 'asc'),
+        $postReply = $this->getThreadService()->searchPosts(array('postId' => $postId), array('createdTime'=> 'ASC'),
             $postReplyPaginator->getOffsetCount(),
             $postReplyPaginator->getPerPageCount());
 
@@ -588,7 +588,7 @@ class GroupThreadController extends BaseController
             'status'  => 'open', 'title' => $keyWord,
             'groupId' => $id
         ),
-            array(array('createdTime', 'DESC')),
+            array(array('createdTime'=>'DESC')),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
@@ -1047,35 +1047,6 @@ class GroupThreadController extends BaseController
         }
     }
 
-    protected function filterSort($sort)
-    {
-        switch ($sort) {
-            case 'byPostNum':
-                $orderBys = array(
-                    array('isStick' => 'DESC'),
-                    array('postNum' => 'DESC'),
-                    array('createdTime' => 'DESC')
-                );
-                break;
-            case 'byStick':
-            case 'byCreatedTime':
-                $orderBys = array(
-                    array('isStick' => 'DESC'),
-                    array('createdTime' => 'DESC')
-                );
-                break;
-            case 'byLastPostTime':
-                $orderBys = array(
-                    array('isStick' => 'DESC'),
-                    array('lastPostTime' => 'DESC')
-                );
-                break;
-            default:
-                throw $this->createNotFoundException('参数sort不正确。');
-        }
-
-        return $orderBys;
-    }
 
     protected function getGroupMemberRole($groupId)
     {

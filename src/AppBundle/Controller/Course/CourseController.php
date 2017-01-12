@@ -2,17 +2,17 @@
 
 namespace AppBundle\Controller\Course;
 
-use Biz\File\Service\UploadFileService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\TokenService;
-use Biz\Course\Service\ReviewService;
-use Biz\Course\Service\MaterialService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\MaterialService;
+use Biz\Course\Service\ReviewService;
+use Biz\File\Service\UploadFileService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class CourseController extends CourseBaseController
 {
@@ -40,13 +40,14 @@ class CourseController extends CourseBaseController
         $user           = $this->getCurrentUser();
         $member         = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
         $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']) : false;
-
+        $isPreview      = $request->query->get('previewAs', false);
         return $this->render('course/header/header-for-guest.html.twig', array(
             'isUserFavorite' => $isUserFavorite,
             'member'         => $member,
             'courseSet'      => $courseSet,
             'courses'        => $courses,
-            'course'         => $course
+            'course'         => $course,
+            'isPreview'      => $isPreview
         ));
     }
 
@@ -130,8 +131,8 @@ class CourseController extends CourseBaseController
         $userIds = array();
 
         foreach ($courses as $key => $course) {
-            //TODO
-            // $userIds = array_merge($userIds, $course['teacherIds']);
+
+            $userIds = array_merge($userIds, $course['teacherIds']);
 
             $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
 
@@ -145,18 +146,19 @@ class CourseController extends CourseBaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render("course/courses-block-{$view}.html.twig", array(
-            'courses' => $courses,
-            'users'   => $users,
-            //'classroomIds' => $classroomIds,
-            'mode'    => $mode
+        return $this->render("course/block/courses-block-{$view}.html.twig", array(
+            'courses'      => $courses,
+            'users'        => $users,
+            'classroomIds' => $classroomIds,
+            'mode'         => $mode
         ));
     }
+
 
     public function tasksAction($course, $member = array())
     {
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
-        $files = $this->findFiles($courseItems);
+        $files       = $this->findFiles($courseItems);
         return $this->render('course/tabs/tasks.html.twig', array(
             'course'      => $course,
             'courseItems' => $courseItems,

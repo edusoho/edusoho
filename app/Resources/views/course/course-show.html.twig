@@ -8,7 +8,7 @@
 	{% set course = data('Course', {courseId: course.id|default(route_params.id|default(0))}) %}
   {% set course_set = data('CourseSet', {id: course.courseSetId}) %}
 
-	{{ render(controller(metas.header,{course: course, member: member|default(null)})) }}
+	{{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
 
 	<div class="container">
 	  <div class="row">
@@ -21,7 +21,7 @@
 					  <ul class="nav nav-tabs" role="tablist">
 					  	{% for key, tab in metas.tabs %}
 						    <li role="presentation" class="{% if app.request.attributes.get('_route_params').tab|default('') == key %}active{% endif %}">
-						      <a 
+						      <a
 						      	{% if member|default(false) %}
 						      		href="{{ path('my_course_show', {'id': course.id, 'tab': key}) }}"
 						      	{% else %}

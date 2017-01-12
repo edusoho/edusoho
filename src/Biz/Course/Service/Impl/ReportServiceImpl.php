@@ -26,7 +26,12 @@ class ReportServiceImpl extends BaseService implements ReportService
         $summary['noteNum']       = $this->getCourseNoteService()->countCourseNotes(array('courseId' => $courseId));
         $summary['askNum']        = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'question'));
         $summary['discussionNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'discussion'));
-        $summary['finishedNum']   = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'isLearned' => 1, 'role' => 'student'));
+        /*
+        由于task新增/删除、学员学习task都要更新member的isLearned和finishedTime，逻辑较为复杂，
+        不如从course_task_result中统计；
+         */
+        // $summary['finishedNum']   = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'isLearned' => 1, 'role' => 'student'));
+        $summary['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId);
 
         if ($summary['studentNum']) {
             $summary['finishedRate'] = round($summary['finishedNum'] / $summary['studentNum'], 3) * 100;
@@ -83,6 +88,27 @@ class ReportServiceImpl extends BaseService implements ReportService
         }
 
         return $tasks;
+    }
+
+    private function countMembersFinishedAllTasksByCourseId($courseId)
+    {
+        $totalTaskCount = $this->getTaskService()->count(array('courseId' => $courseId, 'status' => 'published'));
+        if ($totalTaskCount == 0) {
+            return 0;
+        }
+
+        $userTasksCount = $this->getTaskResultService()->countTasksByCourseIdGroupByUserId($courseId);
+        if (empty($userTasksCount)) {
+            return 0;
+        }
+
+        $membersCount = 0;
+        foreach ($userTasksCount as $count) {
+            if ($count['taskCount'] == $totalTaskCount) {
+                $membersCount += 1;
+            }
+        }
+        return $membersCount;
     }
 
     /**

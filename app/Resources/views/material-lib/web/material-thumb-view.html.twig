@@ -1,10 +1,11 @@
 {% extends 'material-lib/web/layout.html.twig' %}
 
-{% set script_controller = 'materiallibbundle/controller/material-lib/index' %}
-
 {% block page_body %}
 
-<form id="material-search-form"  calss="form-inline" action="{{ path('material_lib_browsing') }}" method="get" novalidate>
+  {% do load_script('materiallibbundle/controller/material-lib/index') %}
+  {% include 'seajs_loader_compatible.html.twig' with { topxiawebbundle: true } %}
+
+<form id="material-search-form" action="{{ path('material_lib_browsing') }}" method="get" novalidate>
   <input type="hidden" class="js-page" name="page" value="1">
   <div class="source-btn" role="group" aria-label="...">
     <ul class="nav nav-tabs">

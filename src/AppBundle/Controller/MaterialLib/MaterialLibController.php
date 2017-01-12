@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller\MaterialLib;
 
+use Biz\File\Service\UploadFileService;
+use Biz\File\Service\UploadFileShareHistoryService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
@@ -17,7 +19,7 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('access denied');
         }
 
-        return $this->render('material-lib/Web/material-thumb-view.html.twig', array(
+        return $this->render('material-lib/web/material-thumb-view.html.twig', array(
             'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
         ));
     }
@@ -69,7 +71,7 @@ class MaterialLibController extends BaseController
         );
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime'=>'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -84,7 +86,7 @@ class MaterialLibController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('MaterialLibBundle:Web/Widget:choose-table.html.twig', array(
+        return $this->render('material-lib/web/widget/choose-table.html.twig', array(
             'files'        => $files,
             'collections'  => $collections,
             'createdUsers' => $createdUsers,
@@ -98,7 +100,7 @@ class MaterialLibController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权访问此页面'));
+            throw $this->createAccessDeniedException('您无权访问此页面');
         }
 
         $currentUserId               = $currentUser['id'];
@@ -120,7 +122,7 @@ class MaterialLibController extends BaseController
         );
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -135,7 +137,7 @@ class MaterialLibController extends BaseController
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
         $createdUsers = ArrayToolkit::index($createdUsers, 'id');
 
-        return $this->render('MaterialLibBundle:Web/Widget:thumb-list.html.twig', array(
+        return $this->render('material-lib/web/widget/thumb-list.html.twig', array(
             'files'        => $files,
             'collections'  => $collections,
             'createdUsers' => $createdUsers,
@@ -169,7 +171,7 @@ class MaterialLibController extends BaseController
                 'globalId' => $file['globalId']
             ));
         }
-        return $this->render('material-lib/Web/local-player.html.twig', array());
+        return $this->render('material-lib/web/local-player.html.twig', array());
     }
 
     public function reconvertAction($globalId)
@@ -178,7 +180,7 @@ class MaterialLibController extends BaseController
 
         $uploadFile = $this->getMaterialLibService()->reconvert($globalId);
 
-        return $this->render('MaterialLibBundle:Web/Widget:thumb-item.html.twig', array(
+        return $this->render('material-lib/web/widget/thumb-item.html.twig', array(
             'uploadFile' => $uploadFile
         ));
     }
@@ -225,9 +227,14 @@ class MaterialLibController extends BaseController
 
         $currentUserId = $currentUser['id'];
 
-        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
+        $allTeachers = $this->getUserService()->searchUsers(
+            array('roles' => 'ROLE_TEACHER', 'locked' => 0),
+            array('nickname' => 'ASC'),
+            0,
+            1000
+        );
 
-        return $this->render('MaterialLibBundle:Web/MyShare:share-my-materials.html.twig', array(
+        return $this->render('material-lib/web/my-share/share-my-materials.html.twig', array(
             'allTeachers'   => $allTeachers,
             'currentUserId' => $currentUserId
         ));
@@ -254,7 +261,7 @@ class MaterialLibController extends BaseController
 
         $shareHistories = $this->getUploadFileService()->searchShareHistories(
             $conditions,
-            array('updatedTime', 'DESC'),
+            array('updatedTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -269,8 +276,8 @@ class MaterialLibController extends BaseController
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
         }
 
-        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
-        return $this->render('MaterialLibBundle:Web/MyShare:material-share-history.html.twig', array(
+        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname' => 'ASC'), 0, 1000);
+        return $this->render('material-lib/web/my-share/material-share-history.html.twig', array(
             'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
             'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
             'source'         => 'myShareHistory',
@@ -301,7 +308,7 @@ class MaterialLibController extends BaseController
 
         $shareHistories = $this->getUploadFileService()->searchShareHistories(
             $conditions,
-            array('updatedTime', 'DESC'),
+            array('updatedTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -316,7 +323,7 @@ class MaterialLibController extends BaseController
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
         }
 
-        return $this->render('MaterialLibBundle:Web/MyShare:material-share-history-users.html.twig', array(
+        return $this->render('material-lib/web/my-share/material-share-history-users.html.twig', array(
             'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
             'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
             'source'         => 'myShareHistory',
@@ -345,7 +352,7 @@ class MaterialLibController extends BaseController
 
         $shareHistories = $this->getUploadFileShareHistoryService()->searchShareHistories(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -360,7 +367,7 @@ class MaterialLibController extends BaseController
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
         }
 
-        return $this->render('MaterialLibBundle:Web/MyShare:material-share-history-detail.html.twig', array(
+        return $this->render('material-lib/web/my-share/material-share-history-detail.html.twig', array(
             'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
             'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
             'source'         => 'myShareHistory',
@@ -398,7 +405,7 @@ class MaterialLibController extends BaseController
                 if ($targetUserId != $currentUserId) {
                     $shareHistory = $this->getUploadFileService()->findShareHistoryByUserId($currentUserId, $targetUserId);
 
-                    if (isset($shareHistory)) {
+                    if (!empty($shareHistory)) {
                         $this->getUploadFileService()->updateShare($shareHistory['id']);
                     } else {
                         $this->getUploadFileService()->addShare($currentUserId, $targetUserId);
@@ -409,7 +416,8 @@ class MaterialLibController extends BaseController
                     $targetUser   = $this->getUserService()->getUser($targetUserId);
                     $userUrl      = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
                     $toMyShareUrl = $this->generateUrl('material_lib_browsing', array('type' => 'all', 'viewMode' => 'thumb', 'source' => 'shared'));
-                    $this->getNotificationService()->notify($targetUser['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>".$this->getServiceKernel()->trans('已将资料分享给你，')."<a href='{$toMyShareUrl}'>".$this->getServiceKernel()->trans('点击查看')."</a>");
+                    $message = "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>".$this->get('translator')->trans('已将资料分享给你，')."<a href='{$toMyShareUrl}'>".$this->get('translator')->trans('点击查看')."</a>";
+                    $this->getNotificationService()->notify($targetUser['id'], 'default', $message);
                 }
             }
         }
@@ -487,7 +495,7 @@ class MaterialLibController extends BaseController
         $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
         $files     = ArrayToolkit::index($files, 'id');
 
-        return $this->render('material-lib/Web/delete-file-modal.html.twig', array(
+        return $this->render('material-lib/web/delete-file-modal.html.twig', array(
             'materials'     => $materials,
             'files'         => $files,
             'ids'           => $fileIds,
@@ -579,6 +587,9 @@ class MaterialLibController extends BaseController
         return $this->createService('Taxonomy:TagService');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
@@ -589,6 +600,9 @@ class MaterialLibController extends BaseController
         return $this->createService('File:UploadFileTagService');
     }
 
+    /**
+     * @return UploadFileShareHistoryService
+     */
     protected function getUploadFileShareHistoryService()
     {
         return $this->createService('File:UploadFileShareHistoryService');

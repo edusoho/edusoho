@@ -22,7 +22,7 @@ class OpenCourseManageController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        return $this->forward('open-course-manage/base', array('id' => $id));
+        return $this->forward('AppBundle:OpenCourseManage:base', array('id' => $id));
     }
 
     public function baseAction(Request $request, $id)
@@ -166,7 +166,7 @@ class OpenCourseManageController extends BaseController
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
             $users = $this->getUserService()->searchUsers(
                 array('nickname' => $fields['keyword']),
-                array('createdTime', 'DESC'),
+                array('createdTime'=>'DESC'),
                 0, PHP_INT_MAX
             );
             $userIds              = ArrayToolkit::column($users, 'id');
@@ -181,7 +181,7 @@ class OpenCourseManageController extends BaseController
 
         $students = $this->getOpenCourseService()->searchMembers(
             $condition,
-            array('lastEnterTime', 'DESC'),
+            array('lastEnterTime'=>'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -201,7 +201,7 @@ class OpenCourseManageController extends BaseController
     {
         $liveCourse = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $openLiveLesson = $this->getOpenCourseService()->searchLessons(array('courseId' => $liveCourse['id']), array('startTime', 'DESC'), 0, 1);
+        $openLiveLesson = $this->getOpenCourseService()->searchLessons(array('courseId' => $liveCourse['id']), array('startTime'=>'DESC'), 0, 1);
         $liveLesson     = $openLiveLesson ? $openLiveLesson[0] : array();
 
         if ($request->getMethod() == 'POST') {
@@ -403,7 +403,7 @@ class OpenCourseManageController extends BaseController
         if ($courseMemberCount < ($start + $limit + 1)) {
             $limit = $courseMemberCount - $start;
         }
-        $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
+        $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime'=>'DESC'), $start, $limit);
         $userFields    = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         $fields['weibo'] = "微博";
@@ -512,7 +512,7 @@ class OpenCourseManageController extends BaseController
     {
         $coursesRecommended = $this->getOpenCourseRecommendedService()->searchRecommends(
             array('openCourseId' => $openCourseId),
-            array('createdTime', 'DESC'),
+            array('createdTime'=>'DESC'),
             0, PHP_INT_MAX
         );
 
@@ -568,7 +568,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getOpenCourseService()
     {
-        return $this->getBiz()->createService('OpenCourse:OpenCourseService');
+        return $this->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
     /**
@@ -576,7 +576,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getOpenCourseRecommendedService()
     {
-        return $this->getBiz()->createService('OpenCourse:OpenCourseRecommendedService');
+        return $this->getBiz()->service('OpenCourse:OpenCourseRecommendedService');
     }
 
     /**
@@ -593,7 +593,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getTagService()
     {
-        return $this->getBiz()->createService('Taxonomy:TagService');
+        return $this->getBiz()->service('Taxonomy:TagService');
     }
 
     protected function getWebExtension()
