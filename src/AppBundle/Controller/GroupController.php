@@ -17,8 +17,7 @@ class GroupController extends BaseController
 {
     public function indexAction()
     {
-        $activeGroup = $this->getGroupService()->searchGroups(array('status' => 'open'), array('memberNum', 'DESC'), 0, 12);
-
+        $activeGroup = $this->getGroupService()->searchGroups(array('status' => 'open'), array('memberNum'=>'DESC'), 0, 12);
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
                 'createdTime' => time() - 30 * 24 * 60 * 60,
@@ -129,13 +128,13 @@ class GroupController extends BaseController
             $this->getThreadService()->countThreads($conditions),
             $conditions['num']
         );
-
         $threads = $this->getThreadService()->searchThreads(
             $conditions,
             $this->filterSort($filters['sort']),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        exit;
 
         $ownerIds = ArrayToolkit::column($threads, 'userId');
 
@@ -146,7 +145,7 @@ class GroupController extends BaseController
         $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
 
         $activeMembers = $this->getGroupService()->searchMembers(array('groupId' => $id, 'role' => 'member'),
-            array('postNum', 'DESC'), 0, 15);
+            array('postNum'=>'DESC'), 0, 15);
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
 
@@ -188,7 +187,7 @@ class GroupController extends BaseController
         );
 
         $members = $this->getGroupService()->searchMembers(array('groupId' => $id, 'role' => 'member'),
-            array('createdTime', 'DESC'),
+            array('createdTime'=>'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
@@ -198,7 +197,7 @@ class GroupController extends BaseController
         $owner = $this->getUserService()->getUser($group['ownerId']);
 
         $groupAdmin = $this->getGroupService()->searchMembers(array('groupId' => $id, 'role' => 'admin'),
-            array('createdTime', 'DESC'),
+            array('createdTime'=>'DESC'),
             0,
             1000);
 
@@ -421,7 +420,7 @@ class GroupController extends BaseController
 
     public function hotGroupAction($count = 15, $colNum = 4)
     {
-        $hotGroups = $this->getGroupService()->searchGroups(array('status' => 'open'), array('memberNum', 'DESC'), 0, $count);
+        $hotGroups = $this->getGroupService()->searchGroups(array('status' => 'open'), array('memberNum'=>'DESC'), 0, $count);
 
         return $this->render('group/groups-ul.html.twig', array(
             'groups' => $hotGroups,
@@ -533,29 +532,17 @@ class GroupController extends BaseController
     {
         switch ($sort) {
             case 'byPostNum':
-                $orderBys = array(
-                    array('isStick', 'DESC'),
-                    array('postNum', 'DESC'),
-                    array('createdTime', 'DESC')
-                );
+                $orderBys = array('isStick'=>'DESC','postNum'=>'DESC','createdTime'=>'DESC');
                 break;
             case 'byStick':
             case 'byCreatedTime':
-                $orderBys = array(
-                    array('isStick', 'DESC'),
-                    array('createdTime', 'DESC')
-                );
+                $orderBys = array('isStick'=>'DESC','createdTime'=>'DESC' );
                 break;
             case 'byLastPostTime':
-                $orderBys = array(
-                    array('isStick', 'DESC'),
-                    array('lastPostTime', 'DESC')
-                );
+                $orderBys = array('isStick'=>'DESC','lastPostTime'=>'DESC');
                 break;
             case 'byCreatedTimeOnly':
-                $orderBys = array(
-                    array('createdTime', 'DESC')
-                );
+                $orderBys = array('createdTime'=>'DESC');
                 break;
             default:
 
@@ -619,14 +606,14 @@ class GroupController extends BaseController
 
             $start = $membersCount > 12 ? rand(0, $membersCount - 12) : 0;
 
-            $members = $this->getGroupService()->searchMembers(array('userId' => $user['id']), array('createdTime', "DESC"), $start, 12);
+            $members = $this->getGroupService()->searchMembers(array('userId' => $user['id']), array('createdTime'=>'DESC'), $start, 12);
 
             $groupIds = ArrayToolkit::column($members, 'groupId');
 
             $myJoinGroup = $this->getGroupService()->getGroupsByids($groupIds);
         }
 
-        $newGroups = $this->getGroupService()->searchGroups(array('status' => 'open'), array('createdTime', 'DESC'), 0, 8);
+        $newGroups = $this->getGroupService()->searchGroups(array('status' => 'open'), array('createdTime'=>'DESC'), 0, 8);
 
         return array($user, $myJoinGroup, $newGroups);
     }
@@ -637,7 +624,7 @@ class GroupController extends BaseController
 
         $groupOwner = $this->getUserService()->getUser($group['ownerId']);
 
-        $recentlyJoinMember = $this->getGroupService()->searchMembers(array('groupId' => $group['id']), array('createdTime', 'DESC'), 0, 20);
+        $recentlyJoinMember = $this->getGroupService()->searchMembers(array('groupId' => $group['id']), array('createdTime'=>'DESC'), 0, 20);
 
         $memberIds = ArrayToolkit::column($recentlyJoinMember, 'userId');
 

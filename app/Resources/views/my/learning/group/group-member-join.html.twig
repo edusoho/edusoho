@@ -11,12 +11,12 @@
     {% block body %}
       <div class="row">
         <div class="col-md-12">
-          {% include 'my/group/group-member-nav-pill.html.twig' %}
+          {% include 'my/learning/group/group-member-nav-pill.html.twig' %}
           {% if adminGroups %}
           <div class="page-header">
             <h4> {{'我管理的小组'|trans}}</h4>
           </div>
-          {% include 'my/group/groups-ul.html.twig' with {
+          {% include 'my/learning/group/groups-ul.html.twig' with {
           'groups':adminGroups,  }
           %}
           {% endif %}
@@ -25,7 +25,7 @@
           <div class="page-header">
             <h4> {{'我加入的小组'|trans}}</h4>
           </div>
-          {% include 'my/group/groups-ul.html.twig' with {
+          {% include 'my/learning/group/groups-ul.html.twig' with {
           'groups':groups,  }
           %}
 

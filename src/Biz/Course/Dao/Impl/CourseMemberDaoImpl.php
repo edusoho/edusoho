@@ -25,7 +25,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function findByCourseIds($courseIds)
     {
-        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql   = "SELECT * FROM {$this->table()} WHERE courseId IN ({$marks})";
         return $this->db()->fetchAll($sql, $courseIds);
     }
@@ -67,7 +67,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function findByUserIdAndCourseIds($studentId, $courseIds)
     {
-        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql   = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
         return $this->db()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
@@ -75,9 +75,9 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function searchMemberFetchCourse($conditions, $orderBys, $start, $limit)
     {
         $builder = $this->_buildQueryBuilder($conditions)->select('m.*');
-        if (!empty($orderBys)) {
-            foreach ($orderBys as $field => $direction) {
-                $builder->addOrderBy($field, $direction);
+        if (!empty($orderBy)) {
+            foreach ($orderBy as $sort => $order) {
+                $builder = $builder->orderBy($sort, $order);
             }
         }
         if ($start && $limit) {
@@ -147,7 +147,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         if (isset($conditions['unique'])) {
             $builder->select('*');
             $builder->orderBy($orderBy[0], $orderBy[1]);
-            $builder->from('(' . $builder->getSQL() . ')', $this->table());
+            $builder->from('('.$builder->getSQL().')', $this->table());
             $builder->select('DISTINCT userId');
             $builder->resetQueryPart('where');
             $builder->resetQueryPart('orderBy');
@@ -169,7 +169,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         if ($updateFields) {
             foreach ($updateFields as $key => $value) {
-                $builder->add('set', $key . ' = ' . $value, true);
+                $builder->add('set', $key.' = '.$value, true);
             }
         }
         $builder->execute();

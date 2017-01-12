@@ -75,7 +75,7 @@ class AccountController extends BaseController
 
         $analysisAmounts = $this->getOrderService()->analysisAmountsDataByTitle(
             $conditions,
-            array('count', 'DESC'),
+            array('count'=>'DESC'),
             0,
             10
         );
@@ -110,7 +110,7 @@ class AccountController extends BaseController
 
         $amounts = $this->getOrderService()->analysisAmountsDataByUserId(
             $conditions,
-            array('count', 'DESC'),
+            array('count'=>'DESC'),
             0,
             10
         );
@@ -140,7 +140,7 @@ class AccountController extends BaseController
 
         $series['coinAmounts'] = $this->getOrderService()->analysisAmountsDataByTime(
             $conditions,
-            array('count', 'DESC'),
+            array('count'=>'DESC'),
             0,
             10
         );
@@ -149,7 +149,7 @@ class AccountController extends BaseController
         $conditions['cashPayment'] = 'coin';
         $series['cashAmounts'] = $this->getOrderService()->analysisAmountsDataByTime(
             $conditions,
-            array('count', 'DESC'),
+            array('count'=>'DESC'),
             0,
             10
         );

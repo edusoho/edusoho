@@ -13,7 +13,7 @@
   <div class="panel-body">
 
     {% if threads %}
-	    {% include 'my/thread/thread-list.html.twig'  with {type: 'question'} %}
+	    {% include 'my/learning/thread/thread-list.html.twig'  with {type: 'question'} %}
     {% else %}
       <div class="empty">{{'暂无提问的记录'|trans}}</div>
     {% endif %}
