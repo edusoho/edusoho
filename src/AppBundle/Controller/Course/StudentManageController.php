@@ -31,7 +31,7 @@ class StudentManageController extends BaseController
         $processes = array();
         if (!empty($students)) {
             //分母只包括已发布的任务
-            $taskCount = $this->getTaskService()->count(array('courseId' => $$courseId, 'status' => 'published'));
+            $taskCount = $this->getTaskService()->count(array('courseId' => $courseId, 'status' => 'published'));
             foreach ($students as $student) {
                 $processes[$student['userId']] = $this->calcStudentLearnProcess($student['userId'], $courseId, $taskCount);
             }
