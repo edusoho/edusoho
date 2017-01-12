@@ -3,8 +3,8 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseMemberDao;
-use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 
 class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 {
@@ -22,10 +22,9 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->executeQuery($sql, array($userId))->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-
     public function findByCourseIds($courseIds)
     {
-        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql   = "SELECT * FROM {$this->table()} WHERE courseId IN ({$marks})";
         return $this->db()->fetchAll($sql, $courseIds);
     }
@@ -57,17 +56,17 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function deleteByCourseIdAndRole($courseId, $role)
     {
-        return $this->db()->delete($this->table(), array(array('courseId' => $courseId, 'role' => $role)));
+        return $this->db()->delete($this->table(), array('courseId' => $courseId, 'role' => $role));
     }
 
     public function deleteByCourseId($courseId)
     {
-        return $this->db()->delete($this->table(), array(array('courseId' => $courseId)));
+        return $this->db()->delete($this->table(), array('courseId' => $courseId));
     }
 
     public function findByUserIdAndCourseIds($studentId, $courseIds)
     {
-        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql   = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
         return $this->db()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
@@ -109,10 +108,9 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     }
 
     /**
-     * @param $userId
-     * @param $courseSetId
-     * @param $role
-     *
+     * @param  $userId
+     * @param  $courseSetId
+     * @param  $role
      * @return array
      */
     public function findByUserIdAndCourseSetIdAndRole($userId, $courseSetId, $role)
@@ -123,7 +121,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             'role'        => $role
         ));
     }
-
 
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {
@@ -147,7 +144,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         if (isset($conditions['unique'])) {
             $builder->select('*');
             $builder->orderBy($orderBy[0], $orderBy[1]);
-            $builder->from('(' . $builder->getSQL() . ')', $this->table());
+            $builder->from('('.$builder->getSQL().')', $this->table());
             $builder->select('DISTINCT userId');
             $builder->resetQueryPart('where');
             $builder->resetQueryPart('orderBy');
@@ -169,7 +166,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         if ($updateFields) {
             foreach ($updateFields as $key => $value) {
-                $builder->add('set', $key . ' = ' . $value, true);
+                $builder->add('set', $key.' = '.$value, true);
             }
         }
         $builder->execute();
