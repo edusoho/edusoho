@@ -156,7 +156,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $builder->setFirstResult($start);
         $builder->setMaxResults($limit);
 
-        return array_column($builder->execute()->fetchAll() ?: array(), 'userId');
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     public function updateMembers($conditions, $updateFields)

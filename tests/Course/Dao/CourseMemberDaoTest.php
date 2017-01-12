@@ -297,7 +297,7 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
         $res = $this->getDao()->searchMemberIds(array('unique' => true), array('createdTime', 'ASC'), 0, 10);
         
-        $this->assertEquals(array($factor[0]['userId'], $factor[1]['userId']), $res);
+        $this->assertEquals(array(array('userId' => $factor[0]['userId']), array('userId' =>  $factor[1]['userId'])), $res);
     }
 
     public function testUpdateMembers()
