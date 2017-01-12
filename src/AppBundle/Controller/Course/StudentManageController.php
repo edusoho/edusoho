@@ -32,8 +32,13 @@ class StudentManageController extends BaseController
         if (!empty($students)) {
             //分母只包括已发布的任务
             $taskCount = $this->getTaskService()->count(array('courseId' => $courseId, 'status' => 'published'));
-            foreach ($students as $student) {
-                $processes[$student['userId']] = $this->calcStudentLearnProcess($student['userId'], $courseId, $taskCount);
+            if ($taskCount > 0) {
+                $userFinishedTasks = $this->getTaskResultService()->countFinishedTasksByCourseIdGroupByUserId($courseId);
+                if (!empty($userFinishedTasks)) {
+                    foreach ($userFinishedTasks as $task) {
+                        $processes[$task['userId']] = sprintf('%d', $task['taskCount'] / $taskCount * 100.0);
+                    }
+                }
             }
         }
         return $this->render('course-manage/student/index.html.twig', array(
@@ -211,12 +216,6 @@ class StudentManageController extends BaseController
         $reportCard = $this->createReportCard($course, $user);
 
         return $this->render('course-manage/student/report-card.html.twig', $reportCard);
-    }
-
-    private function calcStudentLearnProcess($userId, $courseId, $taskCount)
-    {
-        $learnedCount = $this->getTaskResultService()->countUserLearnedTasksByCourseId($courseId, $userId);
-        return $taskCount <= 0 ? '0' : sprintf('%d', $learnedCount / $taskCount * 100.0);
     }
 
     private function createReportCard($course, $user)

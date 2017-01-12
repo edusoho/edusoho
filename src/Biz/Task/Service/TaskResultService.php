@@ -37,5 +37,5 @@ interface TaskResultService
 
     public function countUserLearnedTasksByCourseId($courseId, $userId);
 
-    public function countTasksByCourseIdGroupByUserId($courseId);
+    public function countFinishedTasksByCourseIdGroupByUserId($courseId);
 }

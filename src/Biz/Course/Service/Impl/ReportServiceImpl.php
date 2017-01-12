@@ -97,7 +97,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             return 0;
         }
 
-        $userTasksCount = $this->getTaskResultService()->countTasksByCourseIdGroupByUserId($courseId);
+        $userTasksCount = $this->getTaskResultService()->countFinishedTasksByCourseIdGroupByUserId($courseId);
         if (empty($userTasksCount)) {
             return 0;
         }

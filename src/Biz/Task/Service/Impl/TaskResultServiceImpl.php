@@ -169,9 +169,9 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->countUserLearnedByCourseId($courseId, $userId);
     }
 
-    public function countTasksByCourseIdGroupByUserId($courseId)
+    public function countFinishedTasksByCourseIdGroupByUserId($courseId)
     {
-        return $this->getTaskResultDao()->countTasksByCourseIdGroupByUserId($courseId);
+        return $this->getTaskResultDao()->countFinishedTasksByCourseIdGroupByUserId($courseId);
     }
 
     /**
