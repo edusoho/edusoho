@@ -140,12 +140,11 @@ class HLSController extends BaseController
         }
 
         $inWhiteList   = $this->agentInWhiteList($request->headers->get("user-agent"));
-        $keyencryption = ($fromApi || $inWhiteList) ? 0 : 1;
         $tokenFields   = array(
             'data'     => array(
                 'id'            => $file['id'],
                 'level'         => $level,
-                'keyencryption' => $keyencryption
+                'fromApi' => $fromApi,
             ),
             'times'    => $inWhiteList ? 0 : 1,
             'duration' => 3600
@@ -166,7 +165,7 @@ class HLSController extends BaseController
         if (!$inWhiteList && !$this->isHiddenVideoHeader($hideBeginning)) {
             $beginning = $this->getVideoBeginning($request, $level, array(
                 'userId'        => $token['userId'],
-                'keyencryption' => $keyencryption
+                'fromApi' => $fromApi
             ));
 
             if ($beginning['beginningKey']) {
@@ -206,7 +205,8 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        if (!$inWhiteList) {
+        $enabledRatePlayback = $this->setting('storage.enable_playback_rates');
+        if (!$inWhiteList && !$enabledRatePlayback) {
             $needValidateUser = !empty($token['userId']) ? true : false;
             if ($needValidateUser && !$this->getCurrentUser()->isLogin()) {
                 return $this->makeFakeTokenString();
@@ -233,8 +233,12 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        $api = CloudAPIFactory::create('leaf');
-        if ($this->isHlsEncryptionPlusEnabled() || !empty($token['data']['keyencryption'])) {
+        if (!empty($token['data']['fromApi'])) {
+            return $this->responseEnhanced($file['metas2'][$token['data']['level']]['hlsKey']);
+        }
+
+        if ($this->isHlsEncryptionPlusEnabled() || !$inWhiteList ) {
+            $api = CloudAPIFactory::create('leaf');
             $result = $api->get("/hls/clef_plus/{$file['metas2'][$token['data']['level']]['hlsKey']}");
             return $this->responseEnhanced($result['key']);
         }
@@ -307,7 +311,7 @@ class HLSController extends BaseController
                     'data'     => array(
                         'id'            => $file['id'],
                         'level'         => $level,
-                        'keyencryption' => $params['keyencryption']
+                        'fromApi' => $params['fromApi']
                     ),
                     'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                     'duration' => 3600,
