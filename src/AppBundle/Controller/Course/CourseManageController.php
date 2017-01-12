@@ -123,6 +123,7 @@ class CourseManageController extends BaseController
 
     public function marketingAction(Request $request, $courseSetId, $courseId)
     {
+        $freeTasks = $this->getTaskService()->findFreeTasksByCourseId($courseId);
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             if (empty($data['enableBuyExpiryTime'])) {
@@ -132,6 +133,13 @@ class CourseManageController extends BaseController
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
             }
+            if (!empty($data['freeTaskIds'])) {
+                $canFreeTaskIds = $data['freeTaskIds'];
+                $freeTaskIds    = ArrayToolkit::column($freeTasks, 'id');
+                $this->getTaskService()->updateTasks($freeTaskIds, array('isFree' => 0));
+                $this->getTaskService()->updateTasks($canFreeTaskIds, array('isFree' => 1));
+                unset($data['freeTaskIds']);
+            }
 
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
 
@@ -140,9 +148,19 @@ class CourseManageController extends BaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+
+        $conditions       = array(
+            'courseId' => $courseId,
+            'types'    => array('text', 'video', 'audio', 'flash', 'doc', 'ppt')
+        );
+        $canFreeTaskCount = $this->getTaskService()->count($conditions);
+        $canFreeTasks     = $this->getTaskService()->search($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
+
         return $this->render('course-manage/marketing.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course
+            'courseSet'    => $courseSet,
+            'course'       => $course,
+            'canFreeTasks' => $canFreeTasks,
+            'freeTasks'    => $freeTasks
         ));
     }
 
@@ -331,7 +349,7 @@ class CourseManageController extends BaseController
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
 
-        $status = array(
+        $status  = array(
             'created'   => '未付款',
             'paid'      => '已付款',
             'refunding' => '退款中',

@@ -20,7 +20,7 @@ class CourseMemberAddCourseSetId extends Migration
         ");
 
         $db->exec("
-            UPDATE course_member AS cm SET cm.`courseSetId` = (SELECT courseSetId FROM c2_course WHERE id = cm.courseId);
+            UPDATE course_member AS cm INNER JOIN c2_course c ON c.id = cm.courseId SET cm.courseSetId=c.courseSetId;
         ");
     }
 

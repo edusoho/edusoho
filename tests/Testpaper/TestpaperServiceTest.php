@@ -378,7 +378,7 @@ class TestpaperServiceTest extends BaseTestCase
 
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId(1, $testpaper['id'], $testpaper['courseSetId'], 1, $testpaper['type']);
 
-        $this->assertEquals($paperResult1['status'], $result['status']);
+        $this->assertEquals($paperResult2['status'], $result['status']);
     }
 
     public function findPaperResultsStatusNumGroupByStatus($testId)
@@ -571,7 +571,11 @@ class TestpaperServiceTest extends BaseTestCase
     {
         $testpaper = $this->createTestpaper1();
 
-        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], 1);
+        $fields = array(
+            'lessonId' => 1,
+            'courseId' => 1
+        );
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
         $this->assertNotNull($testpaperResult);
         $this->assertEquals($testpaper['id'], $testpaperResult['testId']);
@@ -597,8 +601,12 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern'     => 'questionType',
             'type'        => 'testpaper'
         );
-        $testpaper       = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
-        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], 1);
+        $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $fields    = array(
+            'lessonId' => 1,
+            'courseId' => 1
+        );
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
         $formData = array(
             'usedTime' => 5,
@@ -687,8 +695,12 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern'     => 'questionType',
             'type'        => 'testpaper'
         );
-        $testpaper       = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
-        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], 1);
+        $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $fields    = array(
+            'lessonId' => 1,
+            'courseId' => 1
+        );
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
         $formData = array(
             'usedTime' => 5,
@@ -724,8 +736,12 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern'     => 'questionType',
             'type'        => 'testpaper'
         );
-        $testpaper       = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
-        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], 1);
+        $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $fields    = array(
+            'lessonId' => 1,
+            'courseId' => 1
+        );
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
         $this->assertEquals('doing', $testpaperResult['status']);
 
         $formData = array(
@@ -774,8 +790,12 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern'     => 'questionType',
             'type'        => 'testpaper'
         );
-        $testpaper       = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
-        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], 1);
+        $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $fields    = array(
+            'lessonId' => 1,
+            'courseId' => 1
+        );
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
         $answers = array(
             $choiceQuestions[0]['id'] => array(2, 3),
@@ -806,8 +826,12 @@ class TestpaperServiceTest extends BaseTestCase
             'pattern'     => 'questionType',
             'type'        => 'testpaper'
         );
-        $testpaper       = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
-        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], 1);
+        $testpaper = $this->getTestpaperService()->buildTestpaper($fields1, 'testpaper');
+        $fields    = array(
+            'lessonId' => 1,
+            'courseId' => 1
+        );
+        $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
         $this->assertEquals('doing', $testpaperResult['status']);
 
         $formData = array(

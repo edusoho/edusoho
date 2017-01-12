@@ -1,0 +1,56 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'购买课程'|trans}}{% endblock %}
+
+{% block body %}
+  <form id="course-buy-form" class="form-horizontal" method="post"
+  action="{{ path('course_buy_modify_user_info') }}"
+  >
+    <div class="form-group">
+      <div class="col-sm-3 control-label">{{'课程名称'|trans}}</div>
+      <div class="col-sm-9 controls">
+      	<span class="control-text text-muted">《{{ course.title }}》</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-3 control-label">{{'价格'|trans}}</div>
+      <div class="col-sm-9 controls money-text">
+      	<span class="control-text">
+          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+            <strong class="money">{{ course.price * setting('coin.cash_rate')}}</strong>
+            <span class="text-muted">{{setting('coin.coin_name')}}</span>
+          {% else %}
+            <strong class="money">{{ course.price }}</strong>
+        		<span class="text-muted">{{'元'|trans}}</span>
+          {% endif %}
+      	</span>
+      </div>
+    </div>
+
+    {% if not payments %}
+      <div class="alert alert-info">{{ setting('payment.disabled_message')|default('尚未开启支付模块，无法购买课程。'|trans)|raw }}</div>
+    {% endif %}
+
+
+    {% if avatarAlert %}
+      <div class="alert alert-warning">您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="{{ path('settings_avatar') }}" class="alert-link" target="_blank">点击设置</a></div>
+    {% endif %}
+
+    <input type="hidden" name="targetId" value="{{ course.id }}" />
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    {% set isBuyFillUserinfo = setting('course.buy_fill_userinfo')|default(false) %}
+    {% set userinfoFieldsSetting = setting('course.userinfoFields')|default([]) %}
+    {% include 'user/fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:isBuyFillUserinfo, userinfoFieldsSetting:userinfoFieldsSetting, userFields:userFields, user:user, showNavTip:1} %}
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="{{'正在创建订单'|trans}}..." data-toggle="form-submit" data-target="#course-buy-form">{{'去支付'|trans}}</button>
+
+  <script>
+    app.load('course/buy-modal');
+  </script>
+{% endblock %}
