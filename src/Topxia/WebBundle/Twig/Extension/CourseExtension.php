@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Twig\Extension;
 
-use Topxia\Service\Common\ServiceKernel;
+use Topxia\WebBundle\Util\AvatarAlert;
 
 class CourseExtension extends \Twig_Extension
 {
@@ -52,7 +52,7 @@ class CourseExtension extends \Twig_Extension
     protected function isUserAvatarEmpty()
     {
         $user = $this->biz['user'];
-        return $this->getSettingService()->get('user_partner.avatar_alert', 'close') == 'open' && empty($user['smallAvatar']);
+        return AvatarAlert::alertJoinCourse($user);
     }
 
     protected function shouldUserinfoFill()
