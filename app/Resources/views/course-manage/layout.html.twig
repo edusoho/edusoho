@@ -1,6 +1,5 @@
 {% extends 'courseset-manage/layout.html.twig' %}
 {% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %}
-{% set active = active | default(null) %}
 
 {% do script(['app/js/course-manage/index.js']) %}
 
@@ -16,7 +15,7 @@
     </div>
     <div class="panel-body">
       <!-- @TODO 还是将要此处删除，移动到左边的菜单 -->
-      <ul class="nav nav-pills nav-pills-sm nav-pills-gray mbl">
+      {# <ul class="nav nav-pills nav-pills-sm nav-pills-gray mbl">
         <li class="{% if active == 'tasks' %}active{% endif %}">
         	<a href="{{path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id})}}">{{'计划任务'|trans}}</a>
         </li>
@@ -44,7 +43,7 @@
         <li class="{% if active == 'orders' %}active{% endif %}">
           <a href="{{path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: course.id})}}">{{'订单查询'|trans}}</a>
         </li>
-      </ul>
+      </ul> #}
       {% block course %}
 
       {% endblock %}
