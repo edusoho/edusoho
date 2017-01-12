@@ -149,7 +149,7 @@ class CourseManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $conditions       = array(
+        $conditions = array(
             'courseId' => $courseId,
             'types'    => array('text', 'video', 'audio', 'flash', 'doc', 'ppt')
         );
@@ -349,7 +349,7 @@ class CourseManageController extends BaseController
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
 
-        $status  = array(
+        $status = array(
             'created'   => '未付款',
             'paid'      => '已付款',
             'refunding' => '退款中',
@@ -575,7 +575,7 @@ class CourseManageController extends BaseController
             $tasks[$key]['watchTime']   = $taskWatchTime;
 
             if ($value['type'] == 'testpaper') {
-                $paperId  = $value['mediaId'];
+                $paperId  = $value['activity']['mediaId'];
                 $score    = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $paperId));
                 $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(array('testId' => $paperId));
 
@@ -699,7 +699,7 @@ class CourseManageController extends BaseController
      */
     protected function getTestpaperService()
     {
-        return $this->createService('Course:TestpaperService');
+        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**
