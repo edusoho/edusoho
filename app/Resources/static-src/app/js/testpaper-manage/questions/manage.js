@@ -146,8 +146,11 @@ export default class QuestionManage{
   }
 
   _submitSave(event) {
-    
-    $.post(this.$element.attr('action'),{questions:this.questions},function(result){
+    let passedScore = 0;
+    if ($('input[name="passedScore"]:visible').length > 0) {
+        passedScore = $('input[name="passedScore"]').val();
+    }
+    $.post(this.$element.attr('action'),{questions:this.questions,passedScore:passedScore},function(result){
       if (result.goto) {
         window.location.href = result.goto;
       }
