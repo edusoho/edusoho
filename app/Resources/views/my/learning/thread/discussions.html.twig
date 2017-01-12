@@ -10,9 +10,9 @@
   <div class="panel-heading">{{'我的话题'|trans}}</div>
 
   <div class="panel-body">
-    {% include 'my/thread/tab.html.twig'%}
+    {% include 'my/learning/thread/tab.html.twig'%}
     {% if threads %}
-	    {% include 'my/thread/thread-list.html.twig'  with {type: 'discussion'} %}
+	    {% include 'my/learning/thread/thread-list.html.twig'  with {type: 'discussion'} %}
 	  {% else %}
 	    <div class="empty">{{'你还没有发表过话题'|trans}}</div>
 	  {% endif %}

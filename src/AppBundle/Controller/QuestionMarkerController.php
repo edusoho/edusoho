@@ -259,7 +259,7 @@ class QuestionMarkerController extends BaseController
 
         $conditions['parentId'] = 0;
         $conditions['types']    = array('determine', 'single_choice', 'uncertain_choice', 'fill', 'choice');
-        $orderBy                = array('createdTime', 'DESC');
+        $orderBy                = array('createdTime'=>'DESC');
         $paginator              = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),

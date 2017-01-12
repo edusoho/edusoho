@@ -2,8 +2,7 @@
 
 {% block title %}{{'课程订单查询'|trans}} - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'plan' %}
-{% set active = 'orders' %}
+{% set side_nav = 'orders' %}
 {% do load_script('course-manage/order') %}
 
 {% block course %}

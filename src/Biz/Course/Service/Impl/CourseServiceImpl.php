@@ -3,20 +3,20 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\ThreadDao;
-use Biz\Course\Service\CourseNoteService;
+use Topxia\Common\ArrayToolkit;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
-use Biz\User\Service\UserService;
-use Topxia\Common\ArrayToolkit;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -27,7 +27,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findCoursesByIds($ids)
     {
-        return $this->getCourseDao()->findCoursesByIds($ids);
+        $courses = $this->getCourseDao()->findCoursesByIds($ids);
+        return ArrayToolkit::index($courses, 'id');
     }
 
     public function findCoursesByCourseSetId($courseSetId)
@@ -586,7 +587,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'userId'    => $userId,
             'role'      => 'student',
             'isLearned' => 0
-
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
@@ -608,8 +608,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         } else {
             $members = $this->getMemberDao()->search($conditions, array('createdTime' => 'DESC'), $start, $limit);
         }
-
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+        $courses = ArrayToolkit::index($courses, 'id');
 
         $sortedCourses = array();
 
@@ -641,6 +641,40 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         return $this->getMemberDao()->count($conditions);
     }
+
+    public function findUserLeanedCourses($userId, $start, $limit, $filters = array())
+    {
+        $conditions = array(
+            'userId'    => $userId,
+            'role'      => 'student',
+            'isLearned' => 1
+        );
+        if (isset($filters["type"])) {
+            $conditions['type'] = $filters["type"];
+            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime' => 'DESC'), $start, $limit);
+        } else {
+            $members = $this->getMemberDao()->search($conditions, array(), $start, $limit);
+        }
+
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        $sortedCourses = array();
+
+        foreach ($members as $member) {
+            if (empty($courses[$member['courseId']])) {
+                continue;
+            }
+
+            $course                     = $courses[$member['courseId']];
+            $course['memberIsLearned']  = 1;
+            $course['memberLearnedNum'] = $member['learnedNum'];
+            $sortedCourses[]            = $course;
+        }
+
+        return $sortedCourses;
+    }
+
 
     public function findUserTeachCourseCount($conditions, $onlyPublished = true)
     {
@@ -697,8 +731,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -719,7 +752,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count      = $this->searchCourseCount($conditions);
+        $count = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
