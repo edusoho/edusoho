@@ -134,7 +134,6 @@ class GroupController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        exit;
 
         $ownerIds = ArrayToolkit::column($threads, 'userId');
 
@@ -152,7 +151,7 @@ class GroupController extends BaseController
         $groupAbout = strip_tags($group['about'], '');
 
         $groupAbout = preg_replace("/ /", "", $groupAbout);
-        return $this->render("group:groupindex.html.twig", array(
+        return $this->render("group/groupindex.html.twig", array(
             'groupinfo'          => $group,
             'is_groupmember'     => $this->getGroupMemberRole($id),
             'recentlyJoinMember' => $recentlyJoinMember,
