@@ -1,0 +1,49 @@
+<div class="course-list">
+    <div class="row">
+        {% for courseSet in courseSets %}
+            <div class="col-lg-3 col-md-4 col-xs-6">
+                <div class="course-item">
+                  <div class="course-img">
+                    {% set course = courseSet.course %}
+                    <a href="{{ path('course_set_show', {id: courseSet.id }) }}" target="_blank">
+                      {% if course.discountId > 0 %}
+                        {% if course.discount == 0 %}
+                          <!-- 限免 -->
+                          <span class="tag-discount free"></span>
+                        {% else %}
+                          <!-- 折扣 -->
+                          <span class="tag-discount"></span>
+                        {% endif %}
+                      {% endif %}
+                      {% if courseSet.serializeMode == 'serialize' %}
+                        <span class="tags"><span class="tag-serialing"></span></span>
+                      {% elseif courseSet.serializeMode == 'finished' %}
+                        <span class="tags"><span class="tag-finished"></span></span>
+                      {% endif %}
+                      {% if course.type == 'live' %}
+                        <span class="tags">
+                          <span class="tag-live"></span>
+                        </span>
+                      {% endif %}
+                      {{ lazy_img(filepath(courseSet.cover.large|default(''), 'course.png'), 'img-responsive', courseSet.title) }}
+                    </a>
+                  </div>
+                  <div class="course-info">
+                    <div class="title">
+                      <a class="link-dark" href="{{ path('course_set_show', {id: courseSet.id}) }}" target="_blank">
+                        {{ courseSet.title }}
+                      </a>
+                    </div>
+                    <div class="metas clearfix">
+                      {% if setting('course.show_student_num_enabled', '1') == 1  %}
+                        <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
+                      {% endif %}
+                      <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
+                      {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
