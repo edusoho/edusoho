@@ -1,1 +1,3 @@
-console.log('js for courseset-manage');
+$("#course-select").change(function(){
+	location.href = $(this).val();
+});
