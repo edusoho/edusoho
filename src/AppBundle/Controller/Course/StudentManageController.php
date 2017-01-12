@@ -352,7 +352,7 @@ class StudentManageController extends BaseController
 
         if ($sourceIndex < $targetIndex) {
             return true;
-        } elseif ($sourceIndex < $targetIndex) {
+        } elseif ($sourceIndex == $targetIndex) {
             return $source['score'] >= $target['score'];
         } else {
             return false;
