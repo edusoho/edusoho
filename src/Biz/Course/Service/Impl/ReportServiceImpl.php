@@ -174,7 +174,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                     $stat['studentNum']++;
                 }
 
-                if ($student['isLearned'] && $student['finishedTime'] > 0 && (strtotime($student['finishedDay']) <= strtotime($day))) {
+                if (!empty($student['finishedTime']) && (strtotime($student['finishedDay']) <= strtotime($day))) {
                     $stat['finishedNum']++;
                 }
             }
