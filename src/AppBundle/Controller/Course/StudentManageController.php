@@ -30,7 +30,8 @@ class StudentManageController extends BaseController
         //TODO find students的学习进度（已完成任务数/总任务数）
         $processes = array();
         if (!empty($students)) {
-            $taskCount = $this->getTaskService()->countTasksByCourseId($courseId);
+            //分母只包括已发布的任务
+            $taskCount = $this->getTaskService()->count(array('courseId' => $$courseId, 'status' => 'published'));
             foreach ($students as $student) {
                 $processes[$student['userId']] = $this->calcStudentLearnProcess($student['userId'], $courseId, $taskCount);
             }
@@ -361,7 +362,7 @@ class StudentManageController extends BaseController
             return $userIds;
         } elseif (SimpleValidator::mobile($keyword)) {
             $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
-            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id'=>'DESC'), 0, PHP_INT_MAX);
+            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id' => 'DESC'), 0, PHP_INT_MAX);
             $mobileNameUser     = $this->getUserService()->getUserByNickname($keyword);
             $userIds            = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
 
