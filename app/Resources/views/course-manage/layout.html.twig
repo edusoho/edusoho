@@ -14,36 +14,6 @@
     {% endif %}
     </div>
     <div class="panel-body">
-      <!-- @TODO 还是将要此处删除，移动到左边的菜单 -->
-      {# <ul class="nav nav-pills nav-pills-sm nav-pills-gray mbl">
-        <li class="{% if active == 'tasks' %}active{% endif %}">
-        	<a href="{{path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id})}}">{{'计划任务'|trans}}</a>
-        </li>
-        <li class="{% if active == 'info' %}active{% endif %}">
-          <a href="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}">{{'计划设置'|trans}}</a>
-        </li>
-        <li class="{% if active == 'marketing' %}active{% endif %}">
-        	<a href="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}">{{'营销设置'|trans}}</a>
-        </li>
-        <li class="{% if active == 'teachers' %}active{% endif %}">
-          <a href="{{path('course_set_manage_course_teachers', {courseSetId: courseSet.id, courseId: course.id})}}">{{'教师设置'|trans}}</a>
-        </li>
-        <li class="{% if active == 'students' %}active{% endif %}">
-          <a href="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}">{{'学员管理'|trans}}</a>
-        </li>
-        <li class="{% if active == 'testpaper-check' %}active{% endif %}">
-          <a href="{{path('course_manage_testpaper_check_list', {id: course.id})}}">{{'试卷批阅'|trans}}</a>
-        </li>
-        <li class="{% if active == 'homework-check' %}active{% endif %}">
-          <a href="{{path('course_manage_homework_check_list', {id: course.id})}}">{{'作业批阅'|trans}}</a>
-        </li>
-        <li class="{% if active == 'dashboard' %}active{% endif %}">
-          <a href="{{path('course_set_manage_course_dashboard', {courseSetId: courseSet.id, courseId: course.id})}}">{{'学习数据'|trans}}</a>
-        </li>
-        <li class="{% if active == 'orders' %}active{% endif %}">
-          <a href="{{path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: course.id})}}">{{'订单查询'|trans}}</a>
-        </li>
-      </ul> #}
       {% block course %}
 
       {% endblock %}
