@@ -4,7 +4,7 @@ namespace Biz\File\Service\Impl;
 
 
 use Biz\BaseService;
-use Biz\File\Dao\UploadFileShareDao;
+use Biz\File\Dao\UploadFileShareHistoryDao;
 use Biz\File\Service\UploadFileShareHistoryService;
 
 class UploadFileShareHistoryServiceImpl extends BaseService implements UploadFileShareHistoryService
@@ -44,7 +44,7 @@ class UploadFileShareHistoryServiceImpl extends BaseService implements UploadFil
     }
 
     /**
-     * @return UploadFileShareDao
+     * @return UploadFileShareHistoryDao
      */
 	protected function getUploadFileShareHistoryDao()
     {

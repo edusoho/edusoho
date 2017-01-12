@@ -535,19 +535,19 @@ batch_notification_show:
 
 my_teaching_course_sets:
     path: /my/teaching/course_sets/{filter}
-    defaults: { _controller: AppBundle:MyTeaching:courseSets, filter: 'normal' }
+    defaults: { _controller: AppBundle:My/Course:teachingCourseSets, filter: 'normal' }
 
 my_teaching_open_courses:
     path: /my/teaching/open/courses/{filter}
-    defaults: { _controller: AppBundle:MyTeaching:openCourses, filter:'open'}
+    defaults: { _controller: AppBundle:My/OpenCourse:teaching, filter:'open'}
 
 my_teaching_threads:
     path: /my/teaching/threads/{type}
-    defaults: { _controller: AppBundle:MyTeaching:threads }
+    defaults: { _controller: AppBundle:My/Thread:teaching }
 
 my_teaching_classrooms:
     path: /my/teaching/classrooms
-    defaults: { _controller: AppBundle:MyTeaching:classrooms }
+    defaults: { _controller: AppBundle:My/Classroom:teaching }
 
 my_orders:
     path: /my/orders
@@ -1495,6 +1495,10 @@ course_task_preview:
     path:  /course/{courseId}/task/{id}/preview
     defaults: { _controller: AppBundle:Task:preview }
 
+course_task_content_preview:
+    path:  /course/{courseId}/task/{id}/content/preview
+    defaults: { _controller: AppBundle:Task:contentPreview }
+
 course_task_activity_show:
     path:  /course/{courseId}/task/{id}/activity_show
     defaults: { _controller: AppBundle:Task:taskActivity }
@@ -1750,6 +1754,16 @@ my_group_member_posts:
 my_group_thread_collecting:
     path:  /my/group/collecting
     defaults: { _controller: AppBundle:My/Group:collecting }
+
+my_notebook_show:
+    path: /my/notebook/{courseId}
+    defaults: { _controller: AppBundle:My/Notebook:show }
+
+my_note_delete:
+    path: /my/note/{id}/delete
+    defaults: { _controller: AppBundle:My/Notebook:delete }
+    methods: [POST]
+
 
 #course_set
 course_set_manage_create:

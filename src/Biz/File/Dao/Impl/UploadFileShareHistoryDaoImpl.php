@@ -24,6 +24,9 @@ class UploadFileShareHistoryDaoImpl extends GeneralDaoImpl implements UploadFile
                 'targetUserId = :targetUserId',
                 'id = :id',
                 'isActive = :isActive'
+            ),
+            'orderbys' => array(
+                'createdTime'
             )
         );
     }

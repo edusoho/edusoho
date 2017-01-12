@@ -33,6 +33,7 @@ class NotebookController extends BaseController
         $courseMembers = $this->getCourseMemberService()->searchMembers($conditions, $orderBy = array(), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
+        $courses = ArrayToolkit::index($courses, 'id');
 
         return $this->render('my/learn/notebook/index.html.twig', array(
             'courseMembers' => $courseMembers,
@@ -40,6 +41,7 @@ class NotebookController extends BaseController
             'courses'       => $courses
         ));
     }
+
 
     public function showAction(Request $request, $courseId)
     {
@@ -63,7 +65,7 @@ class NotebookController extends BaseController
         ));
     }
 
-    public function noteDeleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $id)
     {
         $this->getNoteService()->deleteNote($id);
         return $this->createJsonResponse(true);
@@ -94,6 +96,7 @@ class NotebookController extends BaseController
     }
 
     /**
+
      * @return TaskService
      */
     protected function getTaskService()

@@ -45,7 +45,7 @@
             {% if player == 'balloon-cloud-video-player' %}
               class="ballon-video-player"
             {% else %}
-              class="{{ player }}"
+              class="local-video-player"
             {% endif %}
             {% if context.hideQuestion|default(0) == 0 %}
               data-markerurl="{#{{ path('course_lesson_question_markers_show', {mediaId: file.id}) }}#}"

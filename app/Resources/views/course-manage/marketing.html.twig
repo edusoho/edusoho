@@ -3,7 +3,7 @@
 
 {% set side_nav = 'plan' %}
 {% set active = 'marketing' %}
-{% do script(['libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/marketing/index.js']) %}
+{% do script(['libs/jquery-validation.js','libs/perfect-scrollbar.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/marketing/index.js']) %}
 
 {% block course %}
 <form id="course-marketing-form" class="form-horizontal" action="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
@@ -34,10 +34,12 @@
   <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %}hidden{% endif %}">
     <label class="col-sm-2 control-label">{{'设置免费学习任务'|trans}}</label>
     <div class="col-sm-8">
-      <ul class="list-group js-task-price-setting task-price-setting-group">
+      <ul class="list-group pbm js-task-price-setting task-price-setting-group">
         {% for task in canFreeTasks %}
         <li class="list-group-item {% if freeTasks[task.id]|default(null) %} open {% endif %}">
           <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}" {% if freeTasks[task.id]|default(null) %}checked {% endif %}>
+          {% set meta = activity_meta(task.type) %}
+          <i class="{{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title=""data-original-title="{{ meta.name }}任务"></i>
           <span class="inline-block vertical-middle text-overflow title">任务{{ loop.index }}：{{ task.title }} </span>
           <span class="label label-warning pull-right price">免费</span>
         </li>
