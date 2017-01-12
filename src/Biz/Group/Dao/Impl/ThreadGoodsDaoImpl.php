@@ -27,6 +27,7 @@ class ThreadGoodsDaoImpl extends GeneralDaoImpl implements ThreadGoodsDao
             'serializes' => array(
                 'tagIds' => 'json'
             ),
+            'orderbys'   => array('name', 'createdTime', 'id'),
             'conditions' => array(
                 'threadId = :threadId',
                 'fileId = :fileId',
