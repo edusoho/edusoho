@@ -1,3 +1,5 @@
+{% do script(['app/js/share/index.js']) %}
+
 {% if type == 'courseSet' %}
   {% set title = courseSet.title %}
   {% set summary = courseSet.summary|plain_text(50) %}
@@ -33,6 +35,13 @@
   {% set url = url('open_course_show', {courseId:course.id}) %}
   {% set picture = filepath(course.largePicture, 'course.png') %}
   {% set id = course.id%}
+{% elseif type == 'task' %}
+  {% set url = url('course_task_show', {courseId: task.courseId, id: task.id}) %}
+  {% set title = task.title %}
+  {% set summary = '' %}
+  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('我正在学习《%coruse%》，收获巨大哦，一起来学习吧！')|trans({'%course%': task.title}) %}
+  {% set picture = '' %}
+  {% set id = task.id%}
 {% endif %}
 
 <div class="dropdown-menu {% if right|default(false) %}pull-right{% endif %} js-social-share-params" data-title="{{ title }}" data-summary="{{ summary|default('') }}" data-message="{{ message }}" data-url="{{ url }}" data-picture="{{ picture|default('') }}">
@@ -46,6 +55,3 @@
   <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="{{'分享到QQ空间'|trans}}" data-share="qzone"><i class="es-icon es-icon-qzone"></i></a>
 
 </div>
-
-{% do load_script('common/share-dropdown') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}

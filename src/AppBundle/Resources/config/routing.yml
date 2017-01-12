@@ -2616,4 +2616,4 @@ course_order_repay:
 # last route
 course_show:
   path: /course/{id}/{tab}
-  defaults: {_controller: AppBundle:Course/Course:show, tab: 'summary'}
+  defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }

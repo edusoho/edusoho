@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Twig\Extension;
 
-use Topxia\Service\Common\ServiceKernel;
+use Topxia\WebBundle\Util\AvatarAlert;
 
 class CourseExtension extends \Twig_Extension
 {
@@ -37,8 +37,10 @@ class CourseExtension extends \Twig_Extension
     public function isBuyCourseFromModal($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+        $user = $this->biz['user'];
 
-        return $this->shouldUserinfoFill() 
+        return !$user->isLogin() 
+            || $this->shouldUserinfoFill() 
             || $this->isUserApproval($course) 
             || $this->isUserAvatarEmpty();
     }
@@ -52,10 +54,10 @@ class CourseExtension extends \Twig_Extension
     protected function isUserAvatarEmpty()
     {
         $user = $this->biz['user'];
-        return $this->getSettingService()->get('user_partner.avatar_alert', 'close') == 'open' && empty($user['smallAvatar']);
+        return AvatarAlert::alertJoinCourse($user);
     }
 
-    protected function shouldUserinfoFill()
+    public function shouldUserinfoFill()
     {
         $setting = $this->getSettingService()->get('course');
         return !empty($setting['buy_fill_userinfo']);
