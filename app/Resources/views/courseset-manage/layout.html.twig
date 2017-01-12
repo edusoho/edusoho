@@ -3,6 +3,8 @@
 {% block title %}{{'课程管理'|trans}} - {{ parent() }}{% endblock %}
 {% set use_webapck_loader = true %}
 
+{% do script(['app/js/courseset-manage/index.js']) %}
+
 {% block content %}
 {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
 

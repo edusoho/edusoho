@@ -19,7 +19,7 @@ class LoginRecordController extends BaseController
         
         $userConditions = $this->fillOrgCode($userConditions);
 
-        $users   = $this->getUserService()->searchUsers($userConditions, array('createdTime', 'DESC'), 0, 2000);
+        $users   = $this->getUserService()->searchUsers($userConditions, array('createdTime'=>'DESC'), 0, 2000);
         $userIds = ArrayToolkit::column($users, 'id');
 
         if ($userIds) {

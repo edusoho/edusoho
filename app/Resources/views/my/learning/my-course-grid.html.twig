@@ -1,6 +1,6 @@
 <li class="course-grid">
   <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
-    <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
+    <img src="{{ filepath(courseSet.cover.large, 'course.png') }}"  class="img-responsive thumb">
       <span class="course-label">
         {% if course.status == 'draft' %}
           <span class="label  label-warning">{{'未发布'|trans}}</span>

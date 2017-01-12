@@ -94,7 +94,7 @@ class ClassroomController extends BaseController
             $progresses[$classroom['id']] = $this->calculateUserLearnProgress($classroom, $user->id);
         }
 
-        return $this->render("my/classroom/classroom.html.twig", array(
+        return $this->render("my/learning/classroom/classroom.html.twig", array(
             'classrooms' => $classrooms,
             'members'    => $members,
             'progresses' => $progresses
@@ -157,7 +157,7 @@ class ClassroomController extends BaseController
         $users      = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'lastPostUserId'));
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($threads, 'targetId'));
 
-        return $this->render('my/classroom/discussions.html.twig', array(
+        return $this->render('my/learning/classroom/discussions.html.twig', array(
             'threadType' => 'classroom',
             'paginator'  => $paginator,
             'threads'    => $threads,

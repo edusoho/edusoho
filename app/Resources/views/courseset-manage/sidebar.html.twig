@@ -38,7 +38,18 @@
         {% if curCourse %}
         <ul class="list-group">
 
-          <li class="list-group-heading">{{curCourse.title}}</li>
+          <li class="list-group-heading">
+            <select id="course-select" class="form-control">
+              {% for item in courses %}
+              <option 
+                value="{{path('course_set_manage_course_tasks', {courseSetId: id, courseId: item.id})}}"
+                {% if item.id == curCourse.id %}selected{% endif %}
+              >
+                {{item.title}}
+              </option>
+              {% endfor %}
+            </select>
+          </li>
           <li class="list-group-item {% if side_nav == 'tasks' %}active{% endif %}">
             <a href="{{ path('course_set_manage_course_tasks', {courseSetId: id, courseId: curCourse.id}) }}">
               <span></span>{{'计划任务'|trans}}</a>
@@ -81,8 +92,9 @@
         <ul class="list-group">
           <li class="list-group-heading">{{'教学计划'|trans}}</li>
           <li class="list-group-item {% if side_nav == 'plan' %}active{% endif %}">
-           <a href="{{ path('course_set_manage_courses', {courseSetId: id}) }}">
-              <span></span>{{'教学计划管理'|trans}}</a>
+            <a href="{{ path('course_set_manage_courses', {courseSetId: id}) }}">
+              {{'教学计划管理'|trans}}
+            </a>
           </li>
         </ul>
       </div>

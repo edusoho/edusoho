@@ -587,7 +587,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'userId'    => $userId,
             'role'      => 'student',
             'isLearned' => 0
-
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
@@ -609,8 +608,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         } else {
             $members = $this->getMemberDao()->search($conditions, array('createdTime' => 'DESC'), $start, $limit);
         }
-
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+        $courses = ArrayToolkit::index($courses, 'id');
 
         $sortedCourses = array();
 
@@ -642,6 +641,40 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         return $this->getMemberDao()->count($conditions);
     }
+
+    public function findUserLeanedCourses($userId, $start, $limit, $filters = array())
+    {
+        $conditions = array(
+            'userId'    => $userId,
+            'role'      => 'student',
+            'isLearned' => 1
+        );
+        if (isset($filters["type"])) {
+            $conditions['type'] = $filters["type"];
+            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime' => 'DESC'), $start, $limit);
+        } else {
+            $members = $this->getMemberDao()->search($conditions, array(), $start, $limit);
+        }
+
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        $sortedCourses = array();
+
+        foreach ($members as $member) {
+            if (empty($courses[$member['courseId']])) {
+                continue;
+            }
+
+            $course                     = $courses[$member['courseId']];
+            $course['memberIsLearned']  = 1;
+            $course['memberLearnedNum'] = $member['learnedNum'];
+            $sortedCourses[]            = $course;
+        }
+
+        return $sortedCourses;
+    }
+
 
     public function findUserTeachCourseCount($conditions, $onlyPublished = true)
     {
