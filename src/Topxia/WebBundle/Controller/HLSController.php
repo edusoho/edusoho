@@ -206,7 +206,8 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        if (!$inWhiteList) {
+        $enabledRatePlayback = $this->setting('storage.enable_playback_rates');
+        if (!$inWhiteList && !$enabledRatePlayback) {
             $needValidateUser = !empty($token['userId']) ? true : false;
             if ($needValidateUser && !$this->getCurrentUser()->isLogin()) {
                 return $this->makeFakeTokenString();
