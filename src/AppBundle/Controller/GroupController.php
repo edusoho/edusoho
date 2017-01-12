@@ -606,7 +606,7 @@ class GroupController extends BaseController
 
             $start = $membersCount > 12 ? rand(0, $membersCount - 12) : 0;
 
-            $members = $this->getGroupService()->searchMembers(array('userId' => $user['id']), array('createdTime', "DESC"), $start, 12);
+            $members = $this->getGroupService()->searchMembers(array('userId' => $user['id']), array('createdTime'=>'DESC'), $start, 12);
 
             $groupIds = ArrayToolkit::column($members, 'groupId');
 
