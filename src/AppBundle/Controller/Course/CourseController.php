@@ -46,7 +46,8 @@ class CourseController extends CourseBaseController
             'member'         => $member,
             'courseSet'      => $courseSet,
             'courses'        => $courses,
-            'course'         => $course
+            'course'         => $course,
+            'isPreview'   => empty($request->query->get('previewAs')) ? false: $request->query->get('previewAs')
         ));
     }
 

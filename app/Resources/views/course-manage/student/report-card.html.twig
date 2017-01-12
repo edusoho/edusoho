@@ -10,9 +10,9 @@
         </div>
         {% for activity in activities %}
           {% set test = allTests[activity['mediaId']] %}
-          {% set bestTest = bestTests[test.id]|default('') %}
-          {% set finishedResults = finishedTests[test.id]|default('') %}
-          {% set reviewingResults = reviewingTests[test.id]|default('') %}
+          {% set bestTest = bestTests[activity.id]|default('') %}
+          {% set finishedResults = finishedTests[activity.id]|default('') %}
+          {% set reviewingResults = reviewingTests[activity.id]|default('') %}
           {% set typeName = test.type == 'homework' ? '作业' : '考试' %}
           {% set _index = 0 %}
           {% if finishedResults %}
@@ -53,7 +53,7 @@
                       <li>
                         <span class="name">第 {{loop.index + _index}} 次{{typeName}}</span>
                         <span class="date">{{result.beginTime|date('Y/m/d')}}</span>
-                        <span class="score">{{ '批阅中'|trans }}</span>
+                        <span class="score">{{ '待批阅'|trans }}</span>
                       </li>
                     {% endfor %}
                     {% endif %}
@@ -65,6 +65,15 @@
                   {{typeName}}：{{activity.name}}
                   <span class="score hidden-xs">待批阅</span>
               </div>
+              <ul class="score-list">
+                {% for result in reviewingResults %}
+                  <li>
+                    <span class="name">第 {{loop.index}} 次{{typeName}}</span>
+                    <span class="date">{{result.beginTime|date('Y/m/d')}}</span>
+                    <span class="score">{{ '待批阅'|trans }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
             {% endif %}
         {% endfor %}
     </div>

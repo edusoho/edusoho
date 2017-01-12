@@ -27,8 +27,8 @@ class StudentManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $students  = $this->getCourseService()->findStudentsByCourseId($courseId);
-        //TODO find students的学习进度（已完成任务数/总任务数）
         $processes = array();
+
         if (!empty($students)) {
             //分母只包括已发布的任务
             $taskCount = $this->getTaskService()->count(array('courseId' => $courseId, 'status' => 'published'));
@@ -246,16 +246,16 @@ class StudentManageController extends BaseController
             if ($activity['mediaType'] == 'homework') {
                 $homeworksCount += 1;
                 $activities[] = array(
-                    'activityId' => $activity['id'],
-                    'mediaId'    => $activity['mediaId'],
-                    'name'       => $activity['title']
+                    'id'      => $activity['id'],
+                    'mediaId' => $activity['mediaId'],
+                    'name'    => $activity['title']
                 );
             } elseif ($activity['mediaType'] == 'testpaper') {
                 $testpapersCount += 1;
                 $activities[] = array(
-                    'activityId' => $activity['id'],
-                    'mediaId'    => $activity['ext']['mediaId'],
-                    'name'       => $activity['title']
+                    'id'      => $activity['id'],
+                    'mediaId' => $activity['ext']['mediaId'],
+                    'name'    => $activity['title']
                 );
             }
         }
@@ -265,60 +265,62 @@ class StudentManageController extends BaseController
         if (!empty($activities)) {
             $testIds = ArrayToolkit::column($activities, 'mediaId');
 
-            $allTests = $this->getTestpaperService()->findTestpapersByIds($testIds);
+            $allTests = $this->getTestpaperService()->searchTestpapers(array(
+                'ids'   => $testIds,
+                'types' => array('homework', 'testpaper')
+            ), array('createdTime' => 'ASC'), 0, PHP_INT_MAX);
 
             $finishedTargets = $this->getTestpaperService()->searchTestpaperResults(array(
-                'testIds' => $testIds,
-                'userId'  => $user['id'],
-                'status'  => 'finished',
-                'types'   => array('homework', 'testpaper')
-            ), array('testId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
+                'courseId' => $course['id'],
+                'userId'   => $user['id'],
+                'status'   => 'finished',
+                'types'    => array('homework', 'testpaper')
+            ), array('lessonId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
 
             $reviewingTargets = $this->getTestpaperService()->searchTestpaperResults(array(
-                'testIds' => $testIds,
-                'userId'  => $user['id'],
-                'status'  => 'reviewing',
-                'types'   => array('homework', 'testpaper')
-            ), array('testId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
+                'courseId' => $course['id'],
+                'userId'   => $user['id'],
+                'status'   => 'reviewing',
+                'types'    => array('homework', 'testpaper')
+            ), array('lessonId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
         }
 
         if (!empty($finishedTargets)) {
-            $currentTestId = 0;
+            $currentActivityId = 0;
             foreach ($finishedTargets as $target) {
-                if ($currentTestId == 0 || $currentTestId != $target['testId']) {
-                    $currentTestId = $target['testId'];
-
-                    if ($target['type'] == 'homework') {
-                        $finishedHomeworksCount += 1;
-                    } else {
-                        $finishedTestpapersCount += 1;
-                    }
+                if ($currentActivityId == 0 || $currentActivityId != $target['lessonId']) {
+                    $currentActivityId = $target['lessonId'];
+                }
+                if ($target['type'] == 'homework') {
+                    $finishedHomeworksCount += 1;
+                } else {
+                    $finishedTestpapersCount += 1;
                 }
 
-                if (empty($bestTests[$currentTestId])) {
-                    $bestTests[$currentTestId] = array();
+                if (empty($bestTests[$currentActivityId])) {
+                    $bestTests[$currentActivityId] = array();
                 }
-                if ($this->gradeBetterThan($target, $bestTests[$currentTestId])) {
-                    $bestTests[$currentTestId] = $target;
+                if ($this->gradeBetterThan($target, $bestTests[$currentActivityId])) {
+                    $bestTests[$currentActivityId] = $target;
                 }
 
-                if (empty($finishedTests[$currentTestId])) {
-                    $finishedTests[$currentTestId] = array();
+                if (empty($finishedTests[$currentActivityId])) {
+                    $finishedTests[$currentActivityId] = array();
                 }
-                $finishedTests[$currentTestId][] = $target;
+                $finishedTests[$currentActivityId][] = $target;
             }
         }
 
         if (!empty($reviewingTargets)) {
-            $currentTestId = 0;
+            $currentActivityId = 0;
             foreach ($reviewingTargets as $target) {
-                if ($currentTestId == 0 || $currentTestId != $target['testId']) {
-                    $currentTestId = $target['testId'];
+                if ($currentActivityId == 0 || $currentActivityId != $target['lessonId']) {
+                    $currentActivityId = $target['lessonId'];
                 }
-                if (empty($reviewingTests[$currentTestId])) {
-                    $reviewingTests[$currentTestId] = array();
+                if (empty($reviewingTests[$currentActivityId])) {
+                    $reviewingTests[$currentActivityId] = array();
                 }
-                $reviewingTests[$currentTestId][] = $target;
+                $reviewingTests[$currentActivityId][] = $target;
             }
         }
 
