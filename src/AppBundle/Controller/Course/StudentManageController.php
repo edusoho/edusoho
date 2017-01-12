@@ -290,12 +290,11 @@ class StudentManageController extends BaseController
             foreach ($finishedTargets as $target) {
                 if ($currentActivityId == 0 || $currentActivityId != $target['lessonId']) {
                     $currentActivityId = $target['lessonId'];
-
-                    if ($target['type'] == 'homework') {
-                        $finishedHomeworksCount += 1;
-                    } else {
-                        $finishedTestpapersCount += 1;
-                    }
+                }
+                if ($target['type'] == 'homework') {
+                    $finishedHomeworksCount += 1;
+                } else {
+                    $finishedTestpapersCount += 1;
                 }
 
                 if (empty($bestTests[$currentActivityId])) {
