@@ -9,7 +9,7 @@ class AnnouncementDaoTest extends BaseDaoTestCase
     public function testSearch()
     {
         $factor = array();
-        $factor[] = $this->mockDataObject(array('startTime' => 2, 'context' => 'char'));
+        $factor[] = $this->mockDataObject(array('startTime' => 2, 'content' => 'char'));
         $factor[] = $this->mockDataObject(array('userId' => 2, 'endTime' => 2, 'orgCode' => 'char'));
         $factor[] = $this->mockDataObject(array('targetType' => 'int', 'targetId' => 2, 'copyId' => 2));
 
