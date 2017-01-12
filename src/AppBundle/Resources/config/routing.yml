@@ -1712,6 +1712,15 @@ my_courses_learning:
     path: /my/courses/learning
     defaults: { _controller: AppBundle:My/Course:learning }
 
+my_courses_learned:
+    path: /my/courses/learned
+    defaults: { _controller: AppBundle:My/Course:learned }
+
+#my_course_set
+my_course_sets_favorite:
+    path: /my/courses/favorite
+    defaults: { _controller: AppBundle:My/CourseSet:favorite }
+
 my_classrooms:
     path: /my/classrooms
     defaults: { _controller: AppBundle:My/Classroom:classroom }
@@ -1731,6 +1740,15 @@ my_discussions:
 my_notebooks:
     path: /my/notebooks
     defaults: { _controller: AppBundle:My/Notebook:index }
+
+my_notebook_show:
+    path: /my/notebook/{courseId}
+    defaults: { _controller: AppBundle:My/Notebook:show }
+
+my_note_delete:
+    path: /my/note/{id}/delete
+    defaults: { _controller: AppBundle:My/Notebook:noteDelete }
+    methods: [POST]
 
 my_group_member_center:
     path:  /my/group

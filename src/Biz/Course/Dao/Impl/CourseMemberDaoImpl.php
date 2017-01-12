@@ -74,9 +74,9 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function searchMemberFetchCourse($conditions, $orderBys, $start, $limit)
     {
         $builder = $this->_buildQueryBuilder($conditions)->select('m.*');
-        if (!empty($orderBys)) {
-            foreach ($orderBys as $field => $direction) {
-                $builder->addOrderBy($field, $direction);
+        if (!empty($orderBy)) {
+            foreach ($orderBy as $sort => $order) {
+                $builder = $builder->orderBy($sort, $order);
             }
         }
         if ($start && $limit) {

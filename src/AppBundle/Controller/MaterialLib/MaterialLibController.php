@@ -71,7 +71,7 @@ class MaterialLibController extends BaseController
         );
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime'=>'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
