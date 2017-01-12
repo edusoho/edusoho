@@ -76,7 +76,7 @@ npm run compile:debug  #不压缩
 * devDependencies
 
 ```
-放入开发工具的依赖，即不会出现在编译后的文件中，版本默认用 ^ 开头
+放入开发工具的依赖，即不会出现在编译后的文件中，限定具体版本安装
 
 使用下面命令新增
 npm install xxx --save-dev 
