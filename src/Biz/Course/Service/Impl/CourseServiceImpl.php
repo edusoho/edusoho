@@ -39,7 +39,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findPublishedCoursesByCourseSetId($courseSetId)
     {
-        return $this->getCourseDao()->findCourseItemssesByCourseSetIdAndStatus($courseSetId, 'published');
+        return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, 'published');
     }
 
     public function getDefaultCourseByCourseSetId($courseSetId)
@@ -711,7 +711,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         return $sortedCourses;
     }
-
 
     public function findUserTeachCourseCount($conditions, $onlyPublished = true)
     {
