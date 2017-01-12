@@ -205,4 +205,4 @@ import xxx from 'xxxplugin/xx/xxx.js';
 * 字体图标、图像、swf等纳入编译流
 
 ### 待改进
-* dev模式下scanPath的新文件无法监听的问题
+* dev模式下添加新入口文件(index.js)以及libs下的文件无法监听的问题
