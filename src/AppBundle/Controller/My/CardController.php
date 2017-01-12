@@ -1,11 +1,12 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\My;
 
 use Biz\Card\Service\CardService;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Controller\BaseController;
 
 class CardController extends BaseController
 {
@@ -114,7 +115,7 @@ class CardController extends BaseController
         ));
     }
 
-    public function isUseable($cardDetail, $targetType, $targetId)
+    protected function isUseable($cardDetail, $targetType, $targetId)
     {
         if ($cardDetail['targetType'] == 'all' || $cardDetail['targetType'] == 'fullDiscount') {
             return true;

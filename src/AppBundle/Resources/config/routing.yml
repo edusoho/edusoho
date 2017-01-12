@@ -1198,15 +1198,15 @@ my:
 
 my_cards:
     path:  /my/cards
-    defaults: { _controller: AppBundle:Card:index }
+    defaults: { _controller: AppBundle:My/Card:index }
 
 my_useable_coupons:
     path: /my/useable_coupons
-    defaults: { _controller: AppBundle:Card:useableCoupons }
+    defaults: { _controller: AppBundle:My/Card:useableCoupons }
 
 card_info:
     path:  /card/info
-    defaults: { _controller: AppBundle:Card:cardInfo }
+    defaults: { _controller: AppBundle:My/Card:cardInfo }
 
 sms_prepare:
     path:  /sms/prepare/{targetType}/{id}
