@@ -227,7 +227,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId)
     {
-        $conditions = array(
+        $conditions     = array(
             'userId' => $userId
         );
         $myTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions, 0, PHP_INT_MAX, true);
@@ -236,7 +236,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'courseIds'   => ArrayToolkit::column($myTeachCourses, 'courseId'),
             'courseSetId' => $courseSetId
         );
-        $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $courses    = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
         return $this->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
     }
@@ -355,7 +355,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'status'   => 'published',
             'seq_GT'   => $task['seq']
         );
-        $nextTasks = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 1);
+        $nextTasks  = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 1);
         if (empty($nextTasks)) {
             return array();
         }
@@ -370,7 +370,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function canLearnTask($taskId)
     {
-        $task         = $this->getTask($taskId);
+        $task = $this->getTask($taskId);
         list($course) = $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         $canLearnTask = $this->createCourseStrategy($course['id'])->canLearnTask($task);
@@ -430,7 +430,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function findToLearnTasksByCourseId($courseId)
     {
         list($course) = $this->getCourseService()->tryTakeCourse($courseId);
-        $toLearnTasks = array();
+        $toLearnTasks = $tasks = array();
         if ($course['learnMode'] == 'freeMode') {
             $toLearnTasks[] = $this->getToLearnTaskWithFreeMode($courseId);
         } elseif ($course['learnMode'] == 'lockMode') {
