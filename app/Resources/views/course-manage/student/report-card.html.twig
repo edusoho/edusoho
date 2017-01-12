@@ -45,7 +45,7 @@
                               {{ result.score }}
                             {% endif %}
                           </span>
-                          <span class="reviews hidden-xs pull-right" data-toggle="tooltip" data-placement="top" title="{% if bestTest.teacherSay|default('') %}{{ bestTest.teacherSay }}{% else %}暂无评语{% endif %}">评语</span>
+                          <span class="reviews hidden-xs pull-right" data-toggle="tooltip" data-placement="top" title="{% if result.teacherSay|default('') %}{{ result.teacherSay }}{% else %}暂无评语{% endif %}">评语</span>
                         </li>
                     {% endfor %}
                     {% if reviewingResults %}

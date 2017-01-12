@@ -278,17 +278,19 @@ class StudentManageController extends BaseController
             foreach ($finishedTargets as $target) {
                 if ($currentTestId == 0 || $currentTestId != $target['testId']) {
                     $currentTestId = $target['testId'];
-                    if (empty($bestTests[$currentTestId])) {
-                        $bestTests[$currentTestId] = array();
-                    }
-                    if ($this->gradeBetterThan($target, $bestTests[$currentTestId])) {
-                        $bestTests[$currentTestId] = $target;
-                    }
+
                     if ($target['type'] == 'homework') {
                         $finishedHomeworksCount += 1;
                     } else {
                         $finishedTestpapersCount += 1;
                     }
+                }
+
+                if (empty($bestTests[$currentTestId])) {
+                    $bestTests[$currentTestId] = array();
+                }
+                if ($this->gradeBetterThan($target, $bestTests[$currentTestId])) {
+                    $bestTests[$currentTestId] = $target;
                 }
 
                 if (empty($finishedTests[$currentTestId])) {
@@ -334,12 +336,18 @@ class StudentManageController extends BaseController
             return true;
         }
 
-        $levels = array('excellent', 'good', 'passed', 'unpassed', 'none');
-        $levels = array_values($levels);
-        if (array_search($source['passedStatus'], $levels) < array_search($target['passedStatus'], $levels)) {
+        $levels      = array('excellent', 'good', 'passed', 'unpassed', 'none');
+        $levels      = array_values($levels);
+        $sourceIndex = array_search($source['passedStatus'], $levels);
+        $targetIndex = array_search($target['passedStatus'], $levels);
+
+        if ($sourceIndex < $targetIndex) {
             return true;
+        } elseif ($sourceIndex < $targetIndex) {
+            return $source['score'] >= $target['score'];
+        } else {
+            return false;
         }
-        return $source['score'] > $target['score'];
     }
 
     private function getUserIds($keyword)
