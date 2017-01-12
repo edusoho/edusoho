@@ -152,9 +152,6 @@ class ManageController extends BaseController
             throw new ResourceNotFoundException('question', $question['id']);
         }
 
-        $questionConfig       = $this->getQuestionConfig();
-        $question['template'] = $questionConfig[$question['type']]['templates']['do'];
-
         if (!empty($question['matas']['mediaId'])) {
             $questionExtends = $questionTypeObj->get($question['matas']['mediaId']);
             $question        = array_merge_recursive($question, $questionExtends);
