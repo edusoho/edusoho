@@ -202,6 +202,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
         if ($courseIds && $argument) {
             foreach ($courseIds as $key => $courseId) {
+                unset($argument['expiryMode']);
                 $this->getCourseService()->updateCourse($courseIds[$key], $argument);
             }
         }
