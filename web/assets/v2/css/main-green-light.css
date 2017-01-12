@@ -15505,6 +15505,9 @@ textarea {
   left: 120px;
   right: 120px;
 }
+.course-list-page {
+  background: #fff;
+}
 html {
   height: 100%;
 }
