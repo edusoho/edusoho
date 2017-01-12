@@ -16,7 +16,7 @@ class HomeworkController extends BaseController
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($homework['courseId']);
 
-        $result = $this->getTestpaperService()->startTestpaper($homeworkId, $lessonId);
+        $result = $this->getTestpaperService()->startTestpaper($homeworkId, array('lessonId' => $lessonId, 'courseId' => $course['id']));
 
         if ($result['status'] == 'doing') {
             return $this->redirect($this->generateUrl('homework_show', array(

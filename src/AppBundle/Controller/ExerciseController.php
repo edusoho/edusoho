@@ -16,7 +16,7 @@ class ExerciseController extends BaseController
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($exercise['courseId']);
 
-        $result = $this->getTestpaperService()->startTestpaper($exercise['id'], $lessonId);
+        $result = $this->getTestpaperService()->startTestpaper($exercise['id'], array('lessonId' => $lessonId, 'courseId' => $course['id']));
 
         if ($result['status'] == 'doing') {
             return $this->redirect($this->generateUrl('exercise_show', array(

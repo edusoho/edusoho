@@ -77,18 +77,51 @@ class CourseController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('my/course/learning.html.twig', array(
+        return $this->render('my/learning/course/learning.html.twig', array(
             'courses'   => $courses,
             'paginator' => $paginator
         ));
     }
+
+    public function learnedAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        $paginator   = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->findUserLeanedCourseCount($currentUser['id']),
+            12
+        );
+
+        $courses = $this->getCourseService()->findUserLeanedCourses(
+            $currentUser['id'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $userIds = array();
+        foreach ($courses as $key => $course) {
+            $userIds   = array_merge($userIds, $course['teacherIds']);
+            $learnTime = 0;// $this->getCourseService()->searchLearnTime(array('courseId' => $course['id'], 'userId' => $currentUser['id']));
+
+            $courses[$key]['learnTime'] = intval($learnTime / 60 / 60).'小时'.($learnTime / 60 % 60).'分钟';
+        }
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('my/learning/course/learned.html.twig', array(
+            'courses'   => $courses,
+            'users'     => $users,
+            'paginator' => $paginator
+        ));
+    }
+
+
 
     public function headerForMemberAction(Request $request, $course, $member)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
         $taskCount = $this->getTaskService()->countTasksByCourseId($course['id']);
-        $progress  = $taskResultCount  = $toLearnTasks  = $taskPerDay  = $planStudyTaskCount  = $planProgressProgress  = 0;
+        $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
         $user = $this->getUser();
         if ($taskCount) {

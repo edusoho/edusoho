@@ -3,15 +3,56 @@
 {% block title %}{{'课程管理'|trans}} - {{ parent() }}{% endblock %}
 {% set use_webapck_loader = true %}
 
+{% do script(['app/js/courseset-manage/index.js']) %}
+
 {% block content %}
 {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
 
 <div class="row">
   <div class="col-md-3">
-    {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, sideNav: side_nav|default(null)})) }}
+    {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), sideNav: side_nav|default(null)})) }}
   </div>
   <div class="col-md-9">
     {% block main %}{% endblock %}
   </div>
 </div>
+{% endblock %}
+
+{% block bottom %}
+  <div class="modal fade course-function-modal" id="course-function-modal">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content color-gray">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel">课程功能升级啦</h4>
+        </div>
+        <div class="modal-body">
+          <div class="media course-function-top">
+            <a class="pull-left mrm" href="#">
+              <img src="{{ asset('static-dist/app/img/course-manage/course_function_1.png') }}" alt="背景图片1">
+            </a>
+            <div class="media-body">
+              <h4 class="media-heading color-info mbm text-20">全新教学计划</h4>
+              <p class="ptm"><i class="es-icon es-icon-dot prs"></i>支持直播、讨论等更多的教学手段，丰富您的教学形式</p>
+              <p class="ptm"><i class="es-icon es-icon-dot prs"></i>同一个课程支持多个教学计划</p>
+              <p class="ptm pll">满足周期开班、一个课程多种方法教学的需要</p>
+            </div>
+          </div>
+          <div class="media mt0 course-function-bottom">
+            <a class="pull-left mrm" href="#">
+              <img src="{{ asset('static-dist/app/img/course-manage/course_function_2.png') }}" alt="背景图片2">
+            </a>
+            <div class="media-body">
+              <h4 class="media-heading color-info text-20 mvm">对于学员</h4>
+              <p class="ptm"><i class="es-icon es-icon-dot prs"></i>用完成任务的方式，有序学习。</p>
+              <p class="ptm"><i class="es-icon es-icon-dot prs"></i>选择适合自己的教学计划，加入学习。</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">知道啦</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
