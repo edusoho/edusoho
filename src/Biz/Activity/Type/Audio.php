@@ -38,10 +38,20 @@ class Audio extends Activity
      */
     public function isFinished($activityId)
     {
-        $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
-        return !empty($result)
-        && $result > $activity['length'];
+        $audio    = $this->getAudioActivityDao()->get($activity['mediaId']);
+
+        if ($audio['finishType'] == 'time') {
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            return !empty($result) && $result >= $audio['finishDetail'];
+        }
+
+        if ($audio['finishType'] == 'end') {
+            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'audio.finish');
+            return !empty($logs);
+        }
+
+        return false;
     }
 
     /**

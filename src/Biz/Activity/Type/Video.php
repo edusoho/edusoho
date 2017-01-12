@@ -3,6 +3,7 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\VideoActivityDao;
 
 class Video extends Activity
 {
@@ -31,13 +32,18 @@ class Video extends Activity
 
     public function update($activityId, &$fields, $activity)
     {
-        $videoActivityFields = $fields['ext'];
+        $video = $fields['ext'];
 
+        if ($video['finishType'] == 'time') {
+            if (empty($video['finishDetail'])) {
+                throw $this->createAccessDeniedException('finish time can not be emtpy');
+            }
+        }
         $videoActivity = $this->getVideoActivityDao()->get($fields['mediaId']);
         if (empty($videoActivity)) {
             throw $this->createNotFoundException('教学活动不存在');
         }
-        $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $videoActivityFields);
+        $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $video);
         return $videoActivity;
     }
 
@@ -46,10 +52,21 @@ class Video extends Activity
      */
     public function isFinished($activityId)
     {
-        $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
-        return !empty($result)
-        && $result > $activity['length'];
+        $video      = $this->getVideoActivityDao()->get($activity['mediaId']);
+
+        if ($video['finishType'] == 'time') {
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            return !empty($result) && $result >= $video['finishDetail'];
+        }
+
+        if($video['finishType'] == 'end'){
+            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'video.finish');
+            return !empty($logs);
+        }
+
+        return false;
+
     }
 
     public function get($id)
@@ -64,6 +81,9 @@ class Video extends Activity
         return $this->getVideoActivityDao()->delete($id);
     }
 
+    /**
+     * @return VideoActivityDao
+     */
     protected function getVideoActivityDao()
     {
         return $this->getBiz()->dao('Activity:VideoActivityDao');

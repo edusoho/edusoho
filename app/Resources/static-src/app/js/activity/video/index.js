@@ -7,6 +7,7 @@ import ActivityEmitter from '../../activity/activity-emitter';
 class VideoPlay {
   constructor() {
     this.player = {};
+    this.emitter = new ActivityEmitter();
   }
 
   play() {
@@ -53,8 +54,7 @@ class VideoPlay {
   }
 
   _onFinishLearnTask(msg) {
-    let emitter = new ActivityEmitter();
-    emitter.emit('finish', { data: msg }).then(() => {
+    this.emitter.emit('finish', { data: msg }).then(() => {
       console.log('vidoe.finish');
     }).catch((error) => {
       console.error(error);

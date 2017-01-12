@@ -81,7 +81,7 @@ class TaskShow extends Emitter {
   receiveFinish(response) {
     if (response.result.status == 'finish'
         && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
-      $.get($(".js-learned-prompt").data('url'), html => {
+        $.get($(".js-learned-prompt").data('url'), html => {
         $(".js-learned-prompt").attr('data-content', html);
         this.ui.learnedWeakPrompt();
         this.ui.learned();
