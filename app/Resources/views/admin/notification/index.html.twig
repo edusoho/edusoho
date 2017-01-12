@@ -28,7 +28,7 @@
                     {% endif %}
                     <td>{{batchnotification.createdTime|date('Y-m-d H:i')}}</td>
                     <td>{{users[batchnotification.fromId].nickname}}</td>
-                    {% if batchnotification.published %}<td class="text-success">{{'已发布'|trans}}</td>{% else %}<td>{{'未发布'|trans}}</td>{% endif %}
+                    {% if batchnotification.published %}<td class="color-success">{{'已发布'|trans}}</td>{% else %}<td>{{'未发布'|trans}}</td>{% endif %}
                     <td>
                         <div class="btn-group">
                             {% if batchnotification.published %}
