@@ -17,6 +17,4 @@ class DownloadActivityDaoImpl extends GeneralDaoImpl implements DownloadActivity
             'serializes' => array('fileIds' => 'json'),
         );
     }
-
-
 }

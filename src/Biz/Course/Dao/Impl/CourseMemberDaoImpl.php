@@ -142,10 +142,9 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $builder = $this->_createQueryBuilder($conditions);
 
         if (isset($conditions['unique'])) {
-            $builder->select('*');
-            $builder->orderBy($orderBy[0], $orderBy[1]);
-            $builder->from('('.$builder->getSQL().')', $this->table());
             $builder->select('DISTINCT userId');
+            $builder->orderBy($orderBy[0], $orderBy[1]);
+            $builder->from('(' . $builder->getSQL() . ')', $this->table());
             $builder->resetQueryPart('where');
             $builder->resetQueryPart('orderBy');
         } else {
@@ -161,16 +160,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function updateMembers($conditions, $updateFields)
     {
-        $builder = $this->_createQueryBuilder($conditions)
-            ->update($this->table(), $this->table());
-
-        if ($updateFields) {
-            foreach ($updateFields as $key => $value) {
-                $builder->add('set', $key.' = '.$value, true);
-            }
-        }
-        $builder->execute();
-        return true;
+        return $this->db()->update($this->table, $updateFields, $conditions);
     }
 
     public function countThreadsByCourseIdAndUserId($courseId, $userId, $type = 'discuss')
