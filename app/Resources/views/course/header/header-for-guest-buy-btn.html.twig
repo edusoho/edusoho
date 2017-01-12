@@ -15,7 +15,7 @@
         href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
       {% endif %}
 
-      {% if course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
+      {% if course.status != 'published' %}
         disabled="disabled"
       {% endif %}
     >
