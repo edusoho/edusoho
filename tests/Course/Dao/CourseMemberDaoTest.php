@@ -186,22 +186,53 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $this->assertEquals(array($factor[0], $factor[1]), $res[2]);
     }
 
-    // Todo 连表
     public function testSearchMemberFetchCourse()
     {
-        ;
+        $this->mockCourse();
+
+        $factor = array();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject(array('userId' => 2));
+        $factor[] = $this->mockDataObject(array('courseId' => 2, 'role' => 'teacher'));
+
+        $res = array();
+        $res[] = $this->getDao()->searchMemberFetchCourse(array(), array(), 0, 10);
+        $res[] = $this->getDao()->searchMemberFetchCourse(array('userId' => 1), array(), 0, 10);
+        
+        $this->assertEquals(array($factor[0], $factor[1]), $res[0]);
+        $this->assertEquals(array($factor[0]), $res[1]);
     }
 
-    // Todo 连表
     public function testCountMemberFetchCourse()
     {
-        ;
+        $this->mockCourse();
+
+        $factor = array();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject(array('userId' => 2));
+        $factor[] = $this->mockDataObject(array('courseId' => 2, 'role' => 'teacher'));
+
+        $res = array();
+        $res[] = $this->getDao()->countMemberFetchCourse(array(), array(), 0, 10);
+        $res[] = $this->getDao()->countMemberFetchCourse(array('userId' => 1), array(), 0, 10);
+        
+        $this->assertEquals(1, $res[0]);
+        $this->assertEquals(1, $res[1]);
     }
 
-    // Todo 连表
     public function testSearchMemberCountGroupByFields()
     {
-        ;
+        $factor = array();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject(array('userId' => 2));
+        $factor[] = $this->mockDataObject(array('courseId' => 2, 'role' => 'teacher'));
+
+        $res = array();
+        $res[] = $this->getDao()->searchMemberCountGroupByFields(array(), array(), 0, 10);
+        $res[] = $this->getDao()->searchMemberCountGroupByFields(array('userId' => 1), array(), 0, 10);
+        
+        $this->assertEquals(array(array('courseId' => '1', 'count' => '3')), $res[0]);
+        $this->assertEquals(array(array('courseId' => '1', 'count' => '2')), $res[1]);
     }
 
     public function testFindByUserIdAndRole()
@@ -238,13 +269,25 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         }
     }
 
-    // Todo 连表
     public function testFindMembersNotInClassroomByUserIdAndRole()
     {
-        ;
+        $this->mockCourse();
+
+        $factor = array();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject(array('userId' => 2));
+        $factor[] = $this->mockDataObject(array('courseId' => 2, 'role' => 'teacher'));
+
+        $res = array();
+        $res[] = $this->getDao()->findMembersNotInClassroomByUserIdAndRole(1, 'student', 0, 10, false);
+        $res[] = $this->getDao()->findMembersNotInClassroomByUserIdAndRole(2, 'student', 0, 10, false);
+        $res[] = $this->getDao()->findMembersNotInClassroomByUserIdAndRole(2, 'teacher', 0, 10, false);
+
+        $this->assertEquals(array($factor[0]), $res[0]);
+        $this->assertEquals(array($factor[1]), $res[1]);
+        $this->assertEquals(array(), $res[2]);
     }
 
-    //Todo 看不懂
     public function testSearchMemberIds()
     {
         $factor = array();
@@ -252,9 +295,9 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $factor[] = $this->mockDataObject(array('userId' => 2, 'courseSetId' => 2));
         $factor[] = $this->mockDataObject(array('courseId' => 2, 'role' => 'teacher'));
 
-        // $res = $this->getDao()->searchMemberIds(array(), array(), 0, 10);
+        $res = $this->getDao()->searchMemberIds(array('unique' => true), array('createdTime', 'ASC'), 0, 10);
         
-        // var_dump($res);
+        $this->assertEquals(array($factor[0]['userId'], $factor[1]['userId']), $res);
     }
 
     public function testUpdateMembers()
@@ -270,7 +313,10 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $factor[] = $tmp;
         $factor[] = $this->mockDataObject(array('courseId' => 2));
 
-        $this->getDao()->updateMembers(array('userId' => 1, 'courseId' => 2), array('userId' => 2, 'role' => 'teacher'));
+        $this->getDao()->updateMembers(
+            array('userId' => 1, 'courseId' => 2),
+            array('userId' => 2, 'role' => 'teacher')
+        );
 
         $res = array();
         $res[] = $this->getDao()->getByCourseIdAndUserId(1, 1);
@@ -331,5 +377,82 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'lastLearnTime' => '1',
             'courseSetId' => '1'
         );
+    }
+
+    private function mockCourse($fields = array())
+    {
+        $defaultFields = array(
+            'courseSetId' => 1,
+            'title' => 'varchar',
+            'learnMode' => 'freeMode',
+            'expiryMode' => 'days',
+            'expiryDays' => 1,
+            'expiryStartDate' => 1,
+            'expiryEndDate' => 1,
+            'summary' => 'text',
+            'goals' => array('text'),
+            'audiences' => array('text'),
+            'isDefault' => 1,
+            'maxStudentNum' => 10,
+            'status' => 'published',
+            'creator' => 1,
+            'copyCourseId' => 1,
+            'isFree' => 1,
+            'price' => 1,
+            'vipLevelId' => 1,
+            'buyable' => 1,
+            'tryLookable' => 1,
+            'tryLookLength' => 1,
+            'watchLimit' => 1,
+            'services' => array('text'),
+            'taskNum' => 1,
+            'studentNum' => 1,
+            'teacherIds' => array(1, 2),
+            'parentId' => 0,
+            'ratingNum' => 1,
+            'rating' => 1,
+            'noteNum' => 1,
+            'buyExpiryTime' => 1,
+            'threadNum' => 1,
+            'type' => 'normal',
+            'approval' => 1,
+            'income' => 1,
+            'originPrice' => 1,
+            'coinPrice' => 1,
+            'originCoinPrice' => 1,
+            'showStudentNumType' => 'opened',
+            'serializeMode' => 'none',
+            'giveCredit' => 1,    // 学完课程所有课时，可获得的总学分
+            'categoryId' => 1,    // 分类ID
+            'about' => 'text',    // 简介
+            'recommended' => 1,    // 是否为推荐课程
+            'recommendedSeq' => 1,    // 推荐序号
+            'recommendedTime' => 1,    // 推荐时间
+            'locationId' => 1,    // 上课地区ID
+            'address' => 'varchar',    // 上课地区地址
+            'hitNum' => 1,    // 查看次数
+            'discountId' => 1,    // 折扣活动ID
+            'discount' => 1,    // 折扣
+            'deadlineNotify' => 'none',    // 开启有效期通知
+            'daysOfNotifyBeforeDeadline' => 1,
+            'useInClassroom' => 'single',    // 课程能否用于多个班级
+            'singleBuy' => 1,    // 加入班级后课程能否单独购买
+            'freeStartTime' => 1,
+            'freeEndTime' => 2,
+            'locked' => 1,    // 是否上锁1上锁,0解锁
+            'maxRate' => 1,    // 最大抵扣百分比
+            'orgId' => 1,
+            'orgCode' => 'varchar',    // 组织机构内部编码
+            'cover' => 'varchar',
+            'enableFinish' => 1,    // 是否允许学院强制完成任务
+        );
+
+        $fields = array_merge($defaultFields, $fields);
+        return $this->getCourseDao()->create($fields);
+    }
+
+    private function getCourseDao()
+    {
+        return $this->getBiz()->dao('Course:CourseDao');
     }
 }

@@ -152,7 +152,7 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
             'activityId' => 1,
             'userId' => 1,
             'event' => 'ffff',
-            'data' => '啊',
+            'data' => array('a'),
             'learnedTime' => 1,
             'courseTaskId' => 1
         );

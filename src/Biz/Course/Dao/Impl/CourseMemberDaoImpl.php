@@ -143,10 +143,9 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $builder = $this->_createQueryBuilder($conditions);
 
         if (isset($conditions['unique'])) {
-            $builder->select('*');
+            $builder->select('DISTINCT userId');
             $builder->orderBy($orderBy[0], $orderBy[1]);
             $builder->from('(' . $builder->getSQL() . ')', $this->table());
-            $builder->select('DISTINCT userId');
             $builder->resetQueryPart('where');
             $builder->resetQueryPart('orderBy');
         } else {
@@ -157,7 +156,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $builder->setFirstResult($start);
         $builder->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll() ?: array();
+        return array_column($builder->execute()->fetchAll() ?: array(), 'userId');
     }
 
     public function updateMembers($conditions, $updateFields)
@@ -183,7 +182,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $courseId));
     }
 
-    protected function _buildQueryBuilder($conditions, $join)
+    protected function _buildQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
             if ($value === '' || $value === null) {
