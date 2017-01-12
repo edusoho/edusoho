@@ -36,7 +36,7 @@ class CourseSetController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render("course/block-{$view}.html.twig", array(
+        return $this->render("course-set/block/course-block-{$view}.html.twig", array(
             'courseSets' => $courseSets,
             'users'      => $users,
             'mode'       => $mode
