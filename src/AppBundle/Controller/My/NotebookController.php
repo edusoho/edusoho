@@ -35,7 +35,7 @@ class NotebookController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
 
-        return $this->render('my/learn/notebook/index.html.twig', array(
+        return $this->render('my/learning/notebook/index.html.twig', array(
             'courseMembers' => $courseMembers,
             'paginator'     => $paginator,
             'courses'       => $courses
@@ -58,16 +58,16 @@ class NotebookController extends BaseController
 
         $notes = $this->sortNotesByTaskSeq($notes, $tasks);
 
-        return $this->render('my/learn/notebook/show.html.twig', array(
+        return $this->render('my/learning/notebook/show.html.twig', array(
             'course' => $course,
             'tasks'  => $tasks,
             'notes'  => $notes
         ));
     }
 
-    public function deleteAction(Request $request, $id)
+    public function deleteAction($id)
     {
-        $this->getNoteService()->deleteNote($id);
+        $this->getCourseNoteService()->deleteNote($id);
         return $this->createJsonResponse(true);
     }
 

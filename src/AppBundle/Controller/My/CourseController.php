@@ -77,7 +77,7 @@ class CourseController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('my/course/learning.html.twig', array(
+        return $this->render('my/learning/course/learning.html.twig', array(
             'courses'   => $courses,
             'paginator' => $paginator
         ));
@@ -107,7 +107,7 @@ class CourseController extends CourseBaseController
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('my/course/learned.html.twig', array(
+        return $this->render('my/learning/course/learned.html.twig', array(
             'courses'   => $courses,
             'users'     => $users,
             'paginator' => $paginator

@@ -15,13 +15,13 @@
 
             <div class="col-md-12">
 
-              {% include 'my/group/group-member-nav-pill.html.twig' %}
+              {% include 'my/learning/group/group-member-nav-pill.html.twig' %}
 
               <div class="page-header">
                 <h4> {{'我加入的小组'|trans}}<a class="badge pull-right" href="{{path('my_group_member_join',{type:'myGroup'})}}" style="background-color:#3cb373;">{{groupsCount}}</a></h4>
               </div>
 
-              {% include 'my/group/groups-ul.html.twig' with {
+              {% include 'my/learning/group/groups-ul.html.twig' with {
               'groups':groups,  }
               %}
 
@@ -33,7 +33,7 @@
                 <h4>{{'我发起的话题'|trans}}<a class="badge pull-right" href="{{path('my_group_member_threads')}}" style="background-color:#3cb373;">{{threadsCount}}</a></h4>
               </div>
 
-              {% include 'my/group/groups-threads-ul.html.twig' with {
+              {% include 'my/learning/group/groups-threads-ul.html.twig' with {
               'threads':ownThreads,
               'groups':groupsAsOwnThreads, }
               %}
@@ -46,7 +46,7 @@
                 <h4>{{'回复的话题'|trans}}<a class="badge pull-right" href="{{path('my_group_member_posts')}}" style="background-color:#3cb373;">{{postsCount}}</a></h4>
               </div>
 
-              {% include 'my/group/groups-threads-ul.html.twig' with {
+              {% include 'my/learning/group/groups-threads-ul.html.twig' with {
               'lastPostMembers':postLastPostMembers,
               'groups':groupsAsPostThreads,
               'threads':threads,
@@ -61,7 +61,7 @@
                 <h4>{{'收藏的话题'|trans}}<a class="badge pull-right" href="{{path('my_group_thread_collecting')}}" style="background-color:#3cb373;">{{collectCount}}</a></h4>
               </div>
 
-              {% include 'my/group/groups-threads-ul.html.twig' with {
+              {% include 'my/learning/group/groups-threads-ul.html.twig' with {
               'lastPostMembers':collectLastPostMembers,
               'groups':groupsAsCollectThreads,
               'threads':collectThreads,

@@ -28,7 +28,7 @@ class CourseSetController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('my/learn/course-set/favorited.html.twig', array(
+        return $this->render('my/learning/course-set/favorite.html.twig', array(
             'courseFavorites' => $courseFavorites,
             'paginator'       => $paginator
         ));
