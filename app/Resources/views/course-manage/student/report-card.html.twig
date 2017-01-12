@@ -10,9 +10,9 @@
         </div>
         {% for activity in activities %}
           {% set test = allTests[activity['mediaId']] %}
-          {% set bestTest = bestTests[test.id]|default('') %}
-          {% set finishedResults = finishedTests[test.id]|default('') %}
-          {% set reviewingResults = reviewingTests[test.id]|default('') %}
+          {% set bestTest = bestTests[activity.id]|default('') %}
+          {% set finishedResults = finishedTests[activity.id]|default('') %}
+          {% set reviewingResults = reviewingTests[activity.id]|default('') %}
           {% set typeName = test.type == 'homework' ? '作业' : '考试' %}
           {% set _index = 0 %}
           {% if finishedResults %}
