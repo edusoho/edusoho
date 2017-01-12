@@ -581,11 +581,11 @@ my_refunds:
 
 income_records:
     path: /my/income_records
-    defaults: { _controller: AppBundle:MoneyRecord:index }
+    defaults: { _controller: AppBundle:My/MoneyRecord:index }
 
 payout_records:
     path: /my/payout_records
-    defaults: { _controller: AppBundle:MoneyRecord:payout }
+    defaults: { _controller: AppBundle:My/MoneyRecord:payout }
 
 user_show:
     path:  /user/{id}
