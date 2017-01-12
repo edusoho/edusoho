@@ -55,12 +55,17 @@ class CourseSetManageController extends BaseController
 
     public function sidebarAction($courseSetId, $curCourse, $sideNav)
     {
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
         if (empty($curCourse)) {
             $curCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
+        }
+        if (empty($curCourse) && !empty($courses)) {
+            $curCourse = $courses[0];
         }
         return $this->render('courseset-manage/sidebar.html.twig', array(
             'id'        => $courseSetId,
             'curCourse' => $curCourse,
+            'courses'   => $courses,
             'side_nav'  => $sideNav
         ));
     }

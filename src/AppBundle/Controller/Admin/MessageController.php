@@ -71,7 +71,7 @@ class MessageController extends BaseController
             $userConditions = array('nickname' => trim($conditions['nickname']));
             $userCount = $this->getUserService()->searchUserCount($userConditions);
             if ($userCount) {
-                $users                 = $this->getUserService()->searchUsers($userConditions, array('createdTime', 'DESC'), 0, $userCount);
+                $users                 = $this->getUserService()->searchUsers($userConditions, array('createdTime'=>'DESC'), 0, $userCount);
                 $conditions['fromIds'] = ArrayToolkit::column($users, 'id');
             }
             

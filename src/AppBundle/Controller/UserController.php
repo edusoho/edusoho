@@ -129,7 +129,7 @@ class UserController extends BaseController
 
             $classrooms = $this->getClassroomService()->searchClassrooms(
                 $conditions,
-                array('createdTime', 'DESC'),
+                array('createdTime'=>'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
