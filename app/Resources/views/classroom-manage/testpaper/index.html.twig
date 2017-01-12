@@ -14,7 +14,6 @@
       <li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}">{{'未批阅'|trans}}</a></li>
       <li class="{% if status == 'finished' %}active{% endif %}"><a href="{{path('classroom_manage_testpaper', {id:classroom.id,status:'finished'}) }}">{{'已批阅'|trans}}</a></li>
     </ul>
-    <br>
 
     {% include 'TopxiaWebBundle:MyQuiz:list-teacher-test.html.twig' %}
 
