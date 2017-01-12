@@ -8,7 +8,7 @@
 {% do script(['app/js/task/preview/index.js']) %}
 
 {% block body %}
-  {{ render(controller('AppBundle:Activity/Activity:preview',{task:task })) }}
+  <iframe src="{{ path('course_task_content_preview',{courseId:task.courseId, id:task.id}) }}" id="viewerIframe" width="100%" allowfullscreen="" webkitallowfullscreen="" height="400px" style="border:0px"></iframe>
 {% endblock %}
 
 {% block footer %}
@@ -25,13 +25,14 @@
 
       {% if course.price == '0.00' %}
         <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn"
-            {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
-              href="#modal"
-              data-toggle="modal"
+            {#{% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}#}
+              {#href="#modal"#}
+              {#data-toggle="modal"#}
               {#data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"#}
-            {% else %}
-              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-            {% endif %}
+            {#{% else %}#}
+            {#{% endif %}#}
+           href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+
         >
           {% if user.id|default(null) %}
             {{ '免费加入学习'|trans }}
@@ -41,12 +42,13 @@
         </a>
       {% else %}
         <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn"
-            {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus == 'ok' or (course.approval and app.user and app.user.approvalStatus != 'approved')) %}
-              href="javascript:;"
+            {#{% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus == 'ok' or (course.approval and app.user and app.user.approvalStatus != 'approved')) %}#}
+              {#href="javascript:;"#}
               {#data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"#}
-            {% else %}
-              href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-            {% endif %}
+            {#{% else %}#}
+            {##}
+            {#{% endif %}#}
+           href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
         >
           {% if user.id|default(null) %}
             {% if vipStatus == 'ok' %}

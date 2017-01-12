@@ -191,7 +191,7 @@ class CoinController extends BaseController
 
             $invitedUsers = $this->getUserService()->searchUsers(
                 $conditions,
-                array('id', 'DESC'),
+                array('id'=>'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );

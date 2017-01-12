@@ -3,8 +3,8 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseMemberDao;
-use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 
 class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 {
@@ -22,10 +22,9 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->executeQuery($sql, array($userId))->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-
     public function findByCourseIds($courseIds)
     {
-        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql   = "SELECT * FROM {$this->table()} WHERE courseId IN ({$marks})";
         return $this->db()->fetchAll($sql, $courseIds);
     }
@@ -67,16 +66,18 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function findByUserIdAndCourseIds($studentId, $courseIds)
     {
-        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql   = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
         return $this->db()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
 
-    public function searchMemberFetchCourse($conditions, $orderBy, $start, $limit)
+    public function searchMemberFetchCourse($conditions, $orderBys, $start, $limit)
     {
         $builder = $this->_buildQueryBuilder($conditions)->select('m.*');
         if (!empty($orderBy)) {
-            $builder = $builder->orderBy($orderBy[0], $orderBy[1]);
+            foreach ($orderBy as $sort => $order) {
+                $builder = $builder->orderBy($sort, $order);
+            }
         }
         if ($start && $limit) {
             $builder = $builder->setFirstResult($start)->setMaxResults($limit);
@@ -107,10 +108,9 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     }
 
     /**
-     * @param $userId
-     * @param $courseSetId
-     * @param $role
-     *
+     * @param  $userId
+     * @param  $courseSetId
+     * @param  $role
      * @return array
      */
     public function findByUserIdAndCourseSetIdAndRole($userId, $courseSetId, $role)
@@ -121,7 +121,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             'role'        => $role
         ));
     }
-
 
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true)
     {

@@ -54,6 +54,7 @@ location ~ ^/static-dist {
 ```
 npm start
 npm start port:3038 #改变端口
+openModule=lib,app,admin,plugin,copy npm start #可以选择监听哪几个模块
 ```
 
 ```
@@ -204,4 +205,4 @@ import xxx from 'xxxplugin/xx/xxx.js';
 * 字体图标、图像、swf等纳入编译流
 
 ### 待改进
-* dev模式下scanPath的新文件无法监听的问题
+* dev模式下添加新入口文件(index.js)以及libs下的文件无法监听的问题

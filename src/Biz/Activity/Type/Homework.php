@@ -45,18 +45,19 @@ class Homework extends Activity
 
     public function isFinished($activityId)
     {
-        $user = $this->getBiz()['user'];
+        $biz  = $this->getBiz();
+        $user = $biz['user'];
 
         $activity = $this->getActivityService()->getActivity($activityId);
         $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $activity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'homework');
 
-        if (!$result || ($result && $result['status'] != 'finished')) {
+        if (!$result) {
             return false;
         }
 
-        if (!empty($homework['passedCondition']) && $homework['passedCondition']['type'] == 'submit') {
+        if ($homework['passedCondition']['type'] == 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
             return true;
         }
 

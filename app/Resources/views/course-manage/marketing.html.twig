@@ -1,9 +1,8 @@
 {% extends 'course-manage/layout.html.twig' %}
 {% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'plan' %}
-{% set active = 'marketing' %}
-{% do script(['libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/marketing/index.js']) %}
+{% set side_nav = 'marketing' %}
+{% do script(['libs/jquery-validation.js','libs/perfect-scrollbar.js','libs/bootstrap-datetimepicker.js','app/js/course-manage/marketing/index.js']) %}
 
 {% block course %}
 <form id="course-marketing-form" class="form-horizontal" action="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
@@ -31,7 +30,27 @@
       <div class="help-block">{{'设置会员课程后，该会员及更高等级的会员，可免费学习。'|trans}}</div>
     </div>
   </div>
-
+  <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %}hidden{% endif %}">
+    <label class="col-sm-2 control-label">{{'设置免费学习任务'|trans}}</label>
+    <div class="col-sm-8">
+      {% if canFreeTasks %}
+        <ul class="list-group mb0 js-task-price-setting task-price-setting-group">
+          {% for task in canFreeTasks %}
+          <li class="list-group-item {% if freeTasks[task.id]|default(null) %} open {% endif %}">
+            <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}" {% if freeTasks[task.id]|default(null) %}checked {% endif %}>
+            {% set meta = activity_meta(task.type) %}
+            <i class="{{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title=""data-original-title="{{ meta.name }}任务"></i>
+            <span class="inline-block vertical-middle text-overflow title">任务{{ loop.index }}：{{ task.title }} </span>
+            <span class="label label-warning pull-right price">免费</span>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="color-warning mt5">还没有可以设置为免费学习的任务！</p>
+      {% endif %}
+      <p class="color-gray">免费学习的任务仅支持图文、视频、音频、flash、文档、PPT。</p>
+    </div>
+  </div>
   <div class="form-group">
     <label class="col-sm-2 control-label">购买截止日期</label>
     <div class="col-sm-8 radios">
@@ -44,7 +63,7 @@
       <input type="text" class="form-control width-input width-input-large" name="buyExpiryTime" value="{% if course.buyExpiryTime > 0 %}{{course.buyExpiryTime|date_format('Y-m-d')}}{% endif %}">
     </div>
   </div>
-  
+
   {# <div class="form-group">
     <label class="col-sm-2 control-label">{{'学习有效期'|trans}}</label>
     <div class="col-sm-4">
@@ -56,7 +75,7 @@
   <div class="form-group">
     <label class="col-sm-2 control-label">{{'加入方式'|trans}}</label>
     <div class="col-sm-10 radios">
-      {{ radios('buyable', { '1': '学员自己加入学习，也可以由老师来添加学员'|trans, '0': '只能由老师添加／移除学员，学员自己无法加入。常用于封闭型教学'|trans }, course.buyable|default(1)) }}
+      {{ radios('buyable', { '1': '学员自己加入学习，也可以由老师来添加学员。'|trans, '0': '只能由老师添加／移除学员，学员自己无法加入，常用于封闭型教学。'|trans }, course.buyable|default(1)) }}
     </div>
   </div>
   <div class="form-group">
@@ -79,7 +98,7 @@
       <div class="help-block">{{'0表示无限制'|trans}}</div>
     </div>
   </div>
-  
+
   <div class="form-group">
     <label class="col-sm-2 control-label">实名认证</label>
     <div class="col-sm-8 radios">
@@ -93,11 +112,11 @@
     <div class="col-sm-8 form-control-static">
       {% set serviceTags = services(course.services|default([])) %}
       {% for tag in serviceTags %}
-      <a 
-        class="label label-md js-service-item {% if tag.active %}label-primary{% else %}label-default{% endif %}"data-container="body" 
-        data-toggle="popover" 
-        data-trigger="hover"  
-        data-placement="top" 
+      <a
+        class="label label-md js-service-item {% if tag.active %}label-primary{% else %}label-default{% endif %}"data-container="body"
+        data-toggle="popover"
+        data-trigger="hover"
+        data-placement="top"
         data-content="{{tag.summary}}"
       >{{ tag.full_name }}</a>
       &nbsp;

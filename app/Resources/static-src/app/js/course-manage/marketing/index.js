@@ -8,6 +8,7 @@ class Marketing {
 
 	init(){
 		let $form = $('#course-marketing-form');
+		$('.js-task-price-setting').perfectScrollbar();
 		TabChange();
 
 		let validator = $form.validate({
@@ -39,6 +40,18 @@ class Marketing {
 		$.validator.addMethod("currency",function(value, element, params) {
         return this.optional(element) || /^\d{0,8}(\.\d{0,2})?$/.test(value);
     },Translator.trans('请输入价格，最多两位小数'));
+
+    $('.js-task-price-setting').on('click','li',function(event){
+      let $li = $(this).toggleClass('open');
+      let $input =  $li.find('input');
+      $input.prop("checked", !$input.is(":checked"))
+    });
+
+    $('.js-task-price-setting').on('click','input',function(event){
+      event.stopPropagation();
+      let $input =  $(this);
+      $input.closest('li').toggleClass('open');
+    });
 
 		$('input[name="isFree"]').on('change', function(event){
 			if($('input[name="isFree"]:checked').val() == 0){

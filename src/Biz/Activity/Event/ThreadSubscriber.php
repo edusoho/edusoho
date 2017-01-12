@@ -42,6 +42,11 @@ class ThreadSubscriber extends EventSubscriber implements EventSubscriberInterfa
         foreach ($activityIds as $activityId) {
             $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
             if ($task) {
+                $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+                if (empty($taskResult) || $taskResult['status'] == 'finish') {
+                    //如果任务尚未开始，或者已经完成则不必触发
+                    continue;
+                }
                 $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
             }
         }

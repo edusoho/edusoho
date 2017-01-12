@@ -34,4 +34,8 @@ interface TaskResultService
     public function countLearnNumByTaskId($taskId);
 
     public function searchTaskResults($conditions, $orderbys, $start, $limit);
+
+    public function countUserLearnedTasksByCourseId($courseId, $userId);
+
+    public function countTasksByCourseIdGroupByUserId($courseId);
 }
