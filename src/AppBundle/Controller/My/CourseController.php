@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\My;
 
 use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
@@ -186,6 +187,9 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    /**
+     * @return TaskResultService
+     */
     public function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');

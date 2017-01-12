@@ -12,7 +12,7 @@ class VideoActivityChangeFinishCondition extends Migration
         $biz = $this->getContainer();
         $db  = $biz['db'];
         $db->exec("
-             ALTER TABLE `video_activity` ADD COLUMN  `finshType` varchar(60) DEFAULT NULL COMMENT '完成类型';
+             ALTER TABLE `video_activity` ADD COLUMN  `finishType` varchar(60) DEFAULT NULL COMMENT '完成类型';
              ALTER TABLE `video_activity` ADD COLUMN  `finishDetail` text COMMENT '完成条件';
         ");
     }
@@ -25,7 +25,7 @@ class VideoActivityChangeFinishCondition extends Migration
         $biz = $this->getContainer();
         $db  = $biz['db'];
         $db->exec("
-             ALTER TABLE `video_activity` DROP COLUMN  `finshType`;
+             ALTER TABLE `video_activity` DROP COLUMN  `finishType`;
              ALTER TABLE `video_activity` DROP COLUMN  `finishDetail`;
         ");
 

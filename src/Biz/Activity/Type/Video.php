@@ -9,11 +9,6 @@ class Video extends Activity
 {
     protected function registerListeners()
     {
-        return array(
-            'video.start'  => 'Biz\\VideoActivity\\Listener\\VideoStartListener',
-            'video.doing'  => 'Biz\\VideoActivity\\Listener\\VideoWatchingListener',
-            'video.finish' => 'Biz\\VideoActivity\\Listener\\VideoFinishListener'
-        );
     }
 
     public function create($fields)
@@ -47,9 +42,7 @@ class Video extends Activity
         return $videoActivity;
     }
 
-    /**
-     * TODO观看后完成
-     */
+
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
