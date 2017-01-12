@@ -9,15 +9,15 @@ class CourseLessonReplayDaoTest extends BaseDaoTestCase
     public function testDeleteByLessonId()
     {
         $factor = array();
-        $factor[] = $mockDataObject();
-        $factor[] = $mockDataObject();
-        $factor[] = $mockDataObject(array('lessonId' => 2));
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject(array('lessonId' => 2));
 
         $this->getDao()->deleteByLessonId(1);
 
         $res = array();
-        $res[] = findByLessonId(1);
-        $res[] = findByLessonId(2);
+        $res[] = $this->getDao()->findByLessonId(1);
+        $res[] = $this->getDao()->findByLessonId(2);
 
         $this->assertEquals(array(), $res[0]);
         $this->assertEquals(array($factor[2]), $res[1]);
@@ -26,13 +26,13 @@ class CourseLessonReplayDaoTest extends BaseDaoTestCase
     public function testFindByLessonId()
     {
         $factor = array();
-        $factor[] = $mockDataObject();
-        $factor[] = $mockDataObject();
-        $factor[] = $mockDataObject(array('lessonId' => 2));
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject(array('lessonId' => 2));
 
         $res = array();
-        $res[] = findByLessonId(1);
-        $res[] = findByLessonId(2);
+        $res[] = $this->getDao()->findByLessonId(1);
+        $res[] = $this->getDao()->findByLessonId(2);
 
         $this->assertEquals(array($factor[0], $factor[1]), $res[0]);
         $this->assertEquals(array($factor[2]), $res[1]);
@@ -41,15 +41,15 @@ class CourseLessonReplayDaoTest extends BaseDaoTestCase
     public function testDeleteByCourseId()
     {
         $factor = array();
-        $factor[] = $mockDataObject();
-        $factor[] = $mockDataObject(array('lessonId' => 2));
-        $factor[] = $mockDataObject(array('course' => 2));
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject(array('lessonId' => 2));
+        $factor[] = $this->mockDataObject(array('courseId' => 2));
 
         $this->getDao()->deleteByCourseId(1);
 
         $res = array();
-        $res[] = findByLessonId(1);
-        $res[] = findByLessonId(2);
+        $res[] = $this->getDao()->findByLessonId(1);
+        $res[] = $this->getDao()->findByLessonId(2);
 
         $this->assertEquals(array($factor[2]), $res[0]);
         $this->assertEquals(array(), $res[1]);
@@ -59,9 +59,9 @@ class CourseLessonReplayDaoTest extends BaseDaoTestCase
     public function testGetByCourseIdAndLessonId()
     {
         $factor = array();
-        $factor[] = $mockDataObject();
-        $factor[] = $mockDataObject(array('lessonId' => 2));
-        $factor[] = $mockDataObject(array('course' => 2));
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject(array('lessonId' => 2));
+        $factor[] = $this->mockDataObject(array('courseId' => 2));
 
         $res = array();
         $res[] = $this->getDao()->getByCourseIdAndLessonId(1, 1);
@@ -76,13 +76,13 @@ class CourseLessonReplayDaoTest extends BaseDaoTestCase
     public function testFindByCourseIdAndLessonId()
     {
         $factor = array();
-        $factor[] = $mockDataObject();
-        $factor[] = $mockDataObject();
-        $factor[] = $mockDataObject(array('lessonId' => 2));
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject(array('lessonId' => 2));
 
         $res = array();
-        $res[] = $this->getDao()->getByCourseIdAndLessonId(1, 1);
-        $res[] = $this->getDao()->getByCourseIdAndLessonId(1, 2);
+        $res[] = $this->getDao()->findByCourseIdAndLessonId(1, 1);
+        $res[] = $this->getDao()->findByCourseIdAndLessonId(1, 2);
 
         $this->assertEquals(array($factor[0], $factor[1]), $res[0]);
         $this->assertEquals(array($factor[2]), $res[1]);
@@ -91,8 +91,11 @@ class CourseLessonReplayDaoTest extends BaseDaoTestCase
     public function testUpdateByLessonId()
     {
         $factor = array();
-        $factor[] = $mockDataObject();
-        $factor[] = $mockDataObject(array('lessonId' => 2));
+        $factor[] = $this->mockDataObject();
+
+        $tmp = $this->mockDataObject(array('lessonId' => 2));
+        $tmp['lessonId'] = '1';
+        $factor[] = $tmp;
 
         $this->getDao()->updateByLessonId(2, array('lessonId' => 1));
 
@@ -107,9 +110,9 @@ class CourseLessonReplayDaoTest extends BaseDaoTestCase
     public function testSearch()
     {
         $factor = array();
-        $factor[] = $mockDataObject(array());
-        $factor[] = $mockDataObject(array());
-        $factor[] = $mockDataObject(array('lessonId' => 2));
+        $factor[] = $this->mockDataObject(array());
+        $factor[] = $this->mockDataObject(array());
+        $factor[] = $this->mockDataObject(array('lessonId' => 2));
 
         $testConditions = array(
             array(

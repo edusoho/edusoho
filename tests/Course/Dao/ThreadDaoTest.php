@@ -85,7 +85,7 @@ class ThreadDaoTest extends BaseDaoTestCase
                 'expectedCount' => 10
             ),
             array(
-                'condition' => array('protected' => 1),
+                'condition' => array('private' => 1),
                 'expectedResults' => $factor,
                 'expectedCount' => 10
             )
@@ -109,7 +109,7 @@ class ThreadDaoTest extends BaseDaoTestCase
             'isStick' => 1,
             'isElite' => 1,
             'isClosed' => 1,
-            'protected' => 1,
+            'private' => 1,
             'title' => '嗯哼？',
             'content' => '爱上地方',
             'postNum' => 1,

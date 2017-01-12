@@ -52,7 +52,9 @@ class CourseNoteDaoTest extends BaseDaoTestCase
         $res[] = $this->getDao()->findByUserIdAndCourseId(2, 1);
         $res[] = $this->getDao()->findByUserIdAndCourseId(1, 2);
 
-        $this->assertEquals(array($factor[0], $factor[1]), $res[0]);
+        $param = $factor[1]['createdTime'] > $factor[0]['createdTime'] ?
+            array($factor[1], $factor[0]) : array($factor[0], $factor[1]);
+        $this->assertEquals($param, $res[0]);
         $this->assertEquals(array($factor[2]), $res[1]);
         $this->assertEquals(array(), $res[2]);
     }

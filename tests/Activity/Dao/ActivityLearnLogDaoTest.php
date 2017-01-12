@@ -56,10 +56,18 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         $this->assertEquals($this->getSums($factor), $res);
     }
 
-    // Todo 连表查询
     public function testSumLearnedTimeByCourseIdAndUserId()
     {
-        ;
+        $mockActivity = $this->mockActivity();
+        
+        $factor = array();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject();
+
+        $res = $this->getDao()->sumLearnedTimeByCourseIdAndUserId(1, 1);
+
+        $this->assertEquals(3, $res);
     }
 
     public function testFindByActivityIdAndUserIdAndEvent()
@@ -76,16 +84,35 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         }
     }
 
-    // Todo 连表查询
     public function testCountLearnedDaysByCourseIdAndUserId()
     {
-        ;
+        $mockActivity = $this->mockActivity();
+        
+        $factor = array();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject();
+
+        $res = $this->getDao()->countLearnedDaysByCourseIdAndUserId(1, 1);
+
+        $this->assertEquals(1, $res);
     }
 
-    // Todo 连表查询
     public function testSumLearnTime()
     {
-        ;
+        $factor = array();
+        $factor[] = $this->mockDataObject();
+        $factor[] = $this->mockDataObject(array('activityId' => 2));
+        $factor[] = $this->mockDataObject(array('userId' => 2));
+
+        $res = array();
+        $res[] = $this->getDao()->sumLearnTime(array());
+        $res[] = $this->getDao()->sumLearnTime(array('userId' => 2));
+        $res[] = $this->getDao()->sumLearnTime(array('activityId' => 2, 'userId' => 2));
+
+        $this->assertEquals(3, $res[0]);
+        $this->assertEquals(1, $res[1]);
+        $this->assertEquals(0, $res[2]);
     }
     
     protected function fetchAndAssembleIds(array $rawInput)
@@ -129,5 +156,30 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
             'learnedTime' => 1,
             'courseTaskId' => 1
         );
+    }
+
+    private function mockActivity($fields = array())
+    {
+        $defaultFields = array(
+            'title' => 'asdf',
+            'remark' => 'asdf',
+            'mediaId' => 1,
+            'mediaType' => 'video',
+            'content' => 'asdf',
+            'length' => 1,
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
+            'fromUserId' => 1,
+            'startTime' => 1,
+            'endTime' => 10
+        );
+
+        $fields = array_merge($defaultFields, $fields);
+        return $this->getActivityDao()->create($fields);
+    }
+
+    private function getActivityDao()
+    {
+        return $this->getBiz()->dao('Activity:ActivityDao');
     }
 }

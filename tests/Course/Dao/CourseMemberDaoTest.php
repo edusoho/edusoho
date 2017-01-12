@@ -252,9 +252,9 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $factor[] = $this->mockDataObject(array('userId' => 2, 'courseSetId' => 2));
         $factor[] = $this->mockDataObject(array('courseId' => 2, 'role' => 'teacher'));
 
-        $res = $this->getDao()->searchMemberIds(array(), array(), 0, 10);
+        // $res = $this->getDao()->searchMemberIds(array(), array(), 0, 10);
         
-        var_dump($res);
+        // var_dump($res);
     }
 
     public function testUpdateMembers()

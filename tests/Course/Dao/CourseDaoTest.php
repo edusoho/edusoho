@@ -10,7 +10,7 @@ class CourseDaoTest extends BaseDaoTestCase
     {
         $expectedResults[0] = $this->mockDataObject();
         $expectedResults[1] = $this->mockDataObject();
-        $results = $this->getDao()->findCoursesByCourseSetId(1);
+        $results = $this->getDao()->findCoursesByCourseSetIdAndStatus(1);
 
         foreach ($results as $key => $result) {
             $this->assertArrayEquals($expectedResults[$key], $result, $this->getCompareKeys());
