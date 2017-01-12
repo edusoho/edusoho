@@ -37,8 +37,10 @@ class CourseExtension extends \Twig_Extension
     public function isBuyCourseFromModal($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+        $user = $this->biz['user'];
 
-        return $this->shouldUserinfoFill() 
+        return !$user->isLogin() 
+            || $this->shouldUserinfoFill() 
             || $this->isUserApproval($course) 
             || $this->isUserAvatarEmpty();
     }
@@ -55,7 +57,7 @@ class CourseExtension extends \Twig_Extension
         return AvatarAlert::alertJoinCourse($user);
     }
 
-    protected function shouldUserinfoFill()
+    public function shouldUserinfoFill()
     {
         $setting = $this->getSettingService()->get('course');
         return !empty($setting['buy_fill_userinfo']);

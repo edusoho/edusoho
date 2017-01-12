@@ -18,6 +18,12 @@ class CourseOrderController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        if($course['price'] > 0 && !$this->getEnabledPayments()) {
+            return $this->render('course/order/payments-disabled.html.twig', array(
+                'course' => $course
+            ));
+        }
+
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
         if (!empty($member)) {
             return $this->render('course/order/is-member.html.twig', array(
@@ -50,7 +56,6 @@ class CourseOrderController extends BaseController
 
         return $this->render('course/order/buy-modal.html.twig', array(
             'course'           => $course,
-            'payments'         => $this->getEnabledPayments(),
             'user'             => $userInfo,
             'userFields'       => $userFields,
         ));

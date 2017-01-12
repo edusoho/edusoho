@@ -28,10 +28,6 @@
       </div>
     </div>
 
-    {% if not payments %}
-      <div class="alert alert-info">{{ setting('payment.disabled_message')|default('尚未开启支付模块，无法购买课程。'|trans)|raw }}</div>
-    {% endif %}
-
     <input type="hidden" name="targetId" value="{{ course.id }}" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
