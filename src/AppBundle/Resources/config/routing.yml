@@ -553,9 +553,33 @@ my_testpaper_check_list:
     path: /my/testpaper/check/{status}
     defaults: { _controller: AppBundle:My/Testpaper:checkList, status: 'reviewing' }
 
+my_testpaper_list:
+    path: /my/testpaper/list
+    defaults: { _controller: AppBundle:My/Testpaper:list }
+
+my_favorite_question_list:
+    path: /my/question/favorite/list
+    defaults: { _controller: AppBundle:My/Question:favoriteList }
+
+my_favorite_question_preview:
+    path: /my/question/{id}/favorite/preview
+    defaults: { _controller: AppBundle:My/Question:preview }
+
+my_question_favorite:
+    path: /my/question/favorite
+    defaults: { _controller: AppBundle:My/Question:favorite }
+
+my_question_unfavorite:
+    path: /my/question/unfavorite/{id}
+    defaults: { _controller: AppBundle:My/Question:unfavorite }
+
 my_homework_check_list:
     path: /my/homework/check/{status}
     defaults: { _controller: AppBundle:My/Homework:checkList, status: 'reviewing' }
+
+my_homework_list:
+    path: /my/homework/{status}/list
+    defaults: { _controller: AppBundle:My/Homework:list, status: 'finished' }
 
 my_orders:
     path: /my/orders

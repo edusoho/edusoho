@@ -39,9 +39,9 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
         $declares['orderbys'] = array(
             'testId',
             'beginTime',
-            'createdTime',
             'endTime',
-            'checkedTime'
+            'checkedTime',
+            'updateTime'
         );
 
         $declares['conditions'] = array(

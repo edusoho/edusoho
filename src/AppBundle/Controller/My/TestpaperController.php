@@ -62,6 +62,54 @@ class TestpaperController extends BaseController
         ));
     }
 
+    public function listAction(Request $request)
+    {
+        $user = $this->getUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '请先登录！', '', 5, $this->generateUrl('login'));
+        }
+
+        $conditions = array(
+            'userId' => $user['id'],
+            'type'   => 'testpaper'
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getTestpaperService()->searchTestpaperResultsCount($conditions),
+            10
+        );
+
+        $paperResults = $this->getTestpaperService()->searchTestpaperResults(
+            $conditions,
+            array('beginTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courseSetIds = ArrayToolkit::column($paperResults, 'courseSetId');
+        $courseSets   = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
+        $courseIds = ArrayToolkit::column($paperResults, 'courseId');
+        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
+        $testpapers   = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+
+        $activityIds = ArrayToolkit::column($paperResults, 'lessonId');
+        $tasks       = $this->getTaskService()->findTasksByActivityIds($activityIds);
+
+        return $this->render('my/testpaper/my-testpaper-list.html.twig', array(
+            'paperResults' => $paperResults,
+            'paginator'    => $paginator,
+            'courses'      => $courses,
+            'courseSets'   => $courseSets,
+            'testpapers'   => $testpapers,
+            'tasks'        => $tasks,
+            'nav'          => 'testpaper'
+        ));
+    }
+
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
@@ -85,5 +133,10 @@ class TestpaperController extends BaseController
     protected function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 }
