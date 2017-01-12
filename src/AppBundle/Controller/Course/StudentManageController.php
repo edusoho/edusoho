@@ -245,10 +245,18 @@ class StudentManageController extends BaseController
         foreach ($activitiesWithMeta as $activity) {
             if ($activity['mediaType'] == 'homework') {
                 $homeworksCount += 1;
-                $activities[] = array('activityId' => $activity['id'], 'mediaId' => $activity['mediaId']);
+                $activities[] = array(
+                    'activityId' => $activity['id'],
+                    'mediaId'    => $activity['mediaId'],
+                    'name'       => $activity['title']
+                );
             } elseif ($activity['mediaType'] == 'testpaper') {
                 $testpapersCount += 1;
-                $activities[] = array('activityId' => $activity['id'], 'mediaId' => $activity['ext']['mediaId']);
+                $activities[] = array(
+                    'activityId' => $activity['id'],
+                    'mediaId'    => $activity['ext']['mediaId'],
+                    'name'       => $activity['title']
+                );
             }
         }
 

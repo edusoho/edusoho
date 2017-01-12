@@ -18,7 +18,7 @@
           {% if finishedResults %}
               <div class="report-card-main">
                 <div class="card-main-title open"> <i class="es-icon es-icon-exam mrs"></i>
-                  {{typeName}}：{{test.name}}
+                  {{typeName}}：{{activity.name}}
                   <span class="score hidden-xs">
                     {% if test.type == 'homework' %}
                       <span>{{ dict_text('passedStatus', bestTest.passedStatus) }}</span>
@@ -62,7 +62,7 @@
             {% elseif reviewingResults %}
               <div class="report-card-main">
                 <div class="card-main-title open"> <i class="es-icon es-icon-exam mrs"></i>
-                  {{typeName}}：{{test.name}}
+                  {{typeName}}：{{activity.name}}
                   <span class="score hidden-xs">待批阅</span>
               </div>
             {% endif %}
