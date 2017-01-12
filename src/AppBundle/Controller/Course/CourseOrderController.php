@@ -18,12 +18,6 @@ class CourseOrderController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        if($course['price'] > 0 && !$this->getEnabledPayments()) {
-            return $this->render('course/order/payments-disabled.html.twig', array(
-                'course' => $course
-            ));
-        }
-
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
         if (!empty($member)) {
             return $this->render('course/order/is-member.html.twig', array(
@@ -31,9 +25,8 @@ class CourseOrderController extends BaseController
             ));
         }
 
-        $remainingStudentNum = $this->getRemainStudentNum($course);
-        if ($remainingStudentNum <= 0 && $course['type'] == 'live') {
-            return $this->render('course/order/remainless-modal.html.twig', array(
+        if($course['price'] > 0 && !$this->getEnabledPayments()) {
+            return $this->render('course/order/payments-disabled.html.twig', array(
                 'course' => $course
             ));
         }
@@ -42,6 +35,13 @@ class CourseOrderController extends BaseController
         $userInfo['approvalStatus'] = $user['approvalStatus'];
         if ($course['approval'] == 1 && ($userInfo['approvalStatus'] != 'approved')) {
             return $this->render('course/order/approve-modal.html.twig', array(
+                'course' => $course
+            ));
+        }
+
+        $remainingStudentNum = $this->getRemainStudentNum($course);
+        if ($remainingStudentNum <= 0 && $course['type'] == 'live') {
+            return $this->render('course/order/remainless-modal.html.twig', array(
                 'course' => $course
             ));
         }
