@@ -3,13 +3,13 @@
 
 {% block title %}{{'批阅列表'|trans}} - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'plan' %}
-
+{% set side_nav = 'testpaper-check' %}
+  
 {% if testpaper.type == 'homework' %}
-  {% set active = 'homework-check' %}
+  {% set side_nav = 'homework-check' %}
   {% set typeName = '作业' %}
 {% else %}
-  {% set active = 'testpaper-check' %}
+  {% set side_nav = 'testpaper-check' %}
   {% set typeName = '试卷' %}
 {% endif %}
 

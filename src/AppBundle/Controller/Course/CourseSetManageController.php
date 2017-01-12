@@ -5,9 +5,9 @@ namespace AppBundle\Controller\Course;
 use Topxia\Common\ArrayToolkit;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
+use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\BaseController;
 
 class CourseSetManageController extends BaseController
 {
@@ -53,11 +53,15 @@ class CourseSetManageController extends BaseController
         ));
     }
 
-    public function sidebarAction($courseSetId, $sideNav)
+    public function sidebarAction($courseSetId, $curCourse, $sideNav)
     {
+        if (empty($curCourse)) {
+            $curCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
+        }
         return $this->render('courseset-manage/sidebar.html.twig', array(
-            'id'       => $courseSetId,
-            'side_nav' => $sideNav
+            'id'        => $courseSetId,
+            'curCourse' => $curCourse,
+            'side_nav'  => $sideNav
         ));
     }
 
