@@ -1,12 +1,12 @@
 {% extends 'courseset-manage/layout.html.twig' %}
-{% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ '学员管理'|trans }} - {{ parent() }}{% endblock %}
 
 {% do script(['app/js/course-manage/index.js']) %}
 
 {% block main %}
   <div class="panel panel-default">
     <div class="panel-heading">
-      <a class="a-hover" href="{{path('course_set_manage_courses', {courseSetId: courseSet.id})}}">{{'教学计划列表'|trans}}</a> | {{course.title}}
+      <a href="{{path('course_set_manage_courses', {courseSetId: courseSet.id})}}">{{'教学计划列表'|trans}}</a> | {{course.title}}
     {% if course.status == 'published' %}
       <button class="btn btn-link btn-sm pull-right js-close-course" data-url="{{path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id})}}">{{'关闭计划'|trans}}</button>
     {% else %}

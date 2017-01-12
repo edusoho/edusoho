@@ -81,8 +81,9 @@
         <ul class="list-group">
           <li class="list-group-heading">{{'教学计划'|trans}}</li>
           <li class="list-group-item {% if side_nav == 'plan' %}active{% endif %}">
-           <a href="{{ path('course_set_manage_courses', {courseSetId: id}) }}">
-              <span></span>{{'教学计划管理'|trans}}</a>
+            <a href="{{ path('course_set_manage_courses', {courseSetId: id}) }}">
+              {{'教学计划管理'|trans}}
+            </a>
           </li>
         </ul>
       </div>
