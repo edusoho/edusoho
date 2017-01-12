@@ -559,25 +559,25 @@ my_homework_check_list:
 
 my_orders:
     path: /my/orders
-    defaults: { _controller: AppBundle:MyOrder:index }
+    defaults: { _controller: AppBundle:My/Order:index }
 
 my_order_cancel:
     path: /my/order/{id}/cancel
-    defaults: { _controller: AppBundle:MyOrder:cancel }
+    defaults: { _controller: AppBundle:My/Order:cancel }
     methods: [POST]
 
 web_user_order_detail:
     path: /my/order/{id}/detail
-    defaults: { _controller: AppBundle:MyOrder:detail }
+    defaults: { _controller: AppBundle:My/Order:detail }
 
 my_order_cancel_refund:
     path: /my/order/{id}/cancel_refund
-    defaults: { _controller: AppBundle:MyOrder:cancelRefund }
+    defaults: { _controller: AppBundle:My/Order:cancelRefund }
     methods: [POST]
 
 my_refunds:
     path: /my/refunds
-    defaults: { _controller: AppBundle:MyOrder:refunds }
+    defaults: { _controller: AppBundle:My/Order:refunds }
 
 income_records:
     path: /my/income_records
