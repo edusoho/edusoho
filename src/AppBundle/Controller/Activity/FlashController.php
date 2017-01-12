@@ -5,9 +5,10 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
-use Biz\File\Service\UploadFileService;
-use Symfony\Component\HttpFoundation\Request;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\File\Service\UploadFileService;
+use Biz\MaterialLib\Service\MaterialLibService;
+use Symfony\Component\HttpFoundation\Request;
 
 class FlashController extends BaseController implements ActivityActionInterface
 {
@@ -15,13 +16,9 @@ class FlashController extends BaseController implements ActivityActionInterface
     {
         $activity = $this->getActivityService()->getActivity($id);
         $flash    = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
-
         $file = $this->getUploadFileService()->getFullFile($flash['mediaId']);
-
-        $apiClient              = CloudAPIFactory::create('leaf');
-        $result                 = $apiClient->get(sprintf('/resources/%s/player', $file['globalId']));
+        $result = $this->getMaterialLibService()->player($file['globalId']);
         $flashMedia['uri'] = $result['url'];
-
         return $this->render('activity/flash/index.html.twig', array(
             'flash'      => $flash,
             'flashMedia' => $flashMedia
@@ -31,13 +28,9 @@ class FlashController extends BaseController implements ActivityActionInterface
     public function previewAction(Request $request, $task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
-
-        $flash    = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
-
+        $flash = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
         $file = $this->getUploadFileService()->getFullFile($flash['mediaId']);
-
-        $apiClient              = CloudAPIFactory::create('leaf');
-        $result                 = $apiClient->get(sprintf('/resources/%s/player', $file['globalId']));
+        $result = $this->getMaterialLibService()->player($file['globalId']);
         $flashMedia['uri'] = $result['url'];
 
         return $this->render('activity/flash/preview.html.twig', array(
@@ -96,4 +89,11 @@ class FlashController extends BaseController implements ActivityActionInterface
         return $this->createService('File:UploadFileService');
     }
 
+    /**
+     * @return MaterialLibService
+     */
+    protected function getMaterialLibService()
+    {
+        return $this->createService('MaterialLib:MaterialLibService');
+    }
 }
