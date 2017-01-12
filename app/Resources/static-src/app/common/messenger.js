@@ -37,7 +37,6 @@ export default class EsMessenger extends Emitter {
         );
     }
 
-
     sendToChild(child, eventName, args) {
         this.messenger.targets[child.id].send(
             this.convertToString(eventName, args)
