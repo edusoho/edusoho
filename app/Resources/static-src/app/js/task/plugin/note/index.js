@@ -1,3 +1,5 @@
+import notify from 'common/notify';
+
 let $content = $('#note-content-field');
 
 let editor = CKEDITOR.replace('note-content-field', {
@@ -19,7 +21,8 @@ $('#note-save-btn').click(function (event) {
   let $form = $('#task-note-plugin-form');
   let data = $form.serializeArray();
   $.post($form.attr('action'), data)
-      .then((response) => {
-        $btn.removeAttr('disabled');
-      });
+    .then((response) => {
+      notify('info', '保存成功');
+      $btn.removeAttr('disabled');
+    });
 });

@@ -37,7 +37,7 @@
         <div class="state-opration "> 
             <a class="btn btn-gray text-sm js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}" href="javascript:;" data-container=".js-learn-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='{{ render(controller('AppBundle:Task:finishCondition', {task: task}))}}' >
               <i class="es-icon es-icon-help mrs text-md"></i>任务完成条件
-            </a> 
+            </a>
 
             <span class="btn text-sm js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}  " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='{% include "task/task-finished-prompt.html.twig" %}'
             data-url = "{{path('course_task_finished_prompt', {courseId: course.id, id: task.id})}}">
@@ -46,14 +46,13 @@
         </div>
 
         {% if course.enableFinish|default(1)%}
-          <a type="button" 
-            href="javascript:;" 
+          <a type="button" href="javascript:;"
           {% if taskResult.status != 'finish' %}
-            class="btn btn-transparent btn-learn js-btn-learn" 
+            class="btn btn-transparent btn-learn js-btn-learn"
             id = 'learn-btn'
             data-url='{{path("course_task_finish",{courseId: task.courseId, id: task.id})}}'
           {% else %}
-            class="btn btn-transparent btn-learn js-btn-learn active" 
+            class="btn btn-transparent btn-learn js-btn-learn active"
           {% endif %}
           >
             {% if taskResult.status == 'finish' %}
@@ -64,7 +63,7 @@
             学过了
           </a>
         {% endif %}
-        
+
       </div>
     </div>
     <div class="dashboard-sidebar" id="dashboard-sidebar">

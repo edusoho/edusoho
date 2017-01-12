@@ -1,8 +1,7 @@
 {% extends 'course-manage/layout.html.twig' %}
 {% do script(['app/js/course-manage/students/index.js']) %}
 
-{% set side_nav = 'plan' %}
-{% set active = 'students' %}
+{% set side_nav = 'students' %}
 
 {% block course %}
 <div class="text-right">
@@ -76,7 +75,7 @@
                 <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/set_expiryday/{{student.userId}}">增加有效期</a>
               </li> #}
               <li>
-                <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="学员">移除</a>
+                <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="学员">删除</a>
               </li>
             </ul>
           </div>

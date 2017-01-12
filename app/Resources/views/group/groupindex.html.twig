@@ -65,7 +65,7 @@
 
       </div>
 
-      {% include 'group/groups-threads-ul.html.twig' with {users:owner} %}
+      {% include 'my/learning/group/groups-threads-ul.html.twig' with {users:owner} %}
 
       {{ web_macro.paginator(paginator) }}
     </div>
@@ -106,7 +106,7 @@
               <span class="label label-primary">{{'副组长'|trans}}</span>
               {% endif %}
             </p>
-            <a href="{{ path ('group_member_center') }}" class="btn btn-default btn-sm" role="button">{{'我的小组'|trans}}</a>
+            <a href="{{ path ('my_group_member_center') }}" class="btn btn-default btn-sm" role="button">{{'我的小组'|trans}}</a>
           </div>
           <hr>
            <p class="group-message clearfix">

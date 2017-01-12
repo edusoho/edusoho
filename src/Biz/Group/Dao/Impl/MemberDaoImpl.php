@@ -23,7 +23,7 @@ class MemberDaoImpl extends GeneralDaoImpl implements MemberDao
         return array(
             'timestamps' => array('createdTime'),
             'serializes' => array(),
-            'orderbys'   => array('name', 'createdTime'),
+            'orderbys'   => array('postNum','name', 'createdTime'),
             'conditions' => array(
                 'groupId = :groupId',
                 'role = :role',
