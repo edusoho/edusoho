@@ -14,7 +14,7 @@ interface TaskResultService
 
     public function findUserTaskResultsByCourseId($courseId);
 
-    public function countTaskResult($conditions);
+    public function countTaskResults($conditions);
 
     public function getUserTaskResultByTaskId($courseTaskId);
 
@@ -35,7 +35,7 @@ interface TaskResultService
 
     public function searchTaskResults($conditions, $orderbys, $start, $limit);
 
-    public function countUserLearnedTasksByCourseId($courseId, $userId);
+    public function findFinishedTasksByCourseIdGroupByUserId($courseId);
 
-    public function countFinishedTasksByCourseIdGroupByUserId($courseId);
+    public function findFinishedTimeByCourseIdGroupByUserId($courseId);
 }

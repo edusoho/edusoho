@@ -2,6 +2,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -97,14 +98,14 @@ class ReportServiceImpl extends BaseService implements ReportService
             return 0;
         }
 
-        $userTasksCount = $this->getTaskResultService()->countFinishedTasksByCourseIdGroupByUserId($courseId);
-        if (empty($userTasksCount)) {
+        $userFinishedTasks = $this->getTaskResultService()->findFinishedTasksByCourseIdGroupByUserId($courseId);
+        if (empty($userFinishedTasks)) {
             return 0;
         }
 
         $membersCount = 0;
-        foreach ($userTasksCount as $count) {
-            if ($count['taskCount'] == $totalTaskCount) {
+        foreach ($userFinishedTasks as $task) {
+            if ($task['taskCount'] == $totalTaskCount) {
                 $membersCount += 1;
             }
         }
@@ -120,17 +121,18 @@ class ReportServiceImpl extends BaseService implements ReportService
         $startTimeLessThan = strtotime('- 29 days', $now);
         $result            = array();
         //学员数
-        $result['studentNum'] = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId,
-            'role'                                                                                 => $role,
-            'startTimeLessThan'                                                                    => $startTimeLessThan
-        ));
-        //完课数
-        $result['finishedNum'] = $this->getCourseMemberService()->countMembers(array(
+        $result['studentNum'] = $this->getCourseMemberService()->countMembers(array(
             'courseId'          => $courseId,
             'role'              => $role,
-            'isLearned'         => 1,
             'startTimeLessThan' => $startTimeLessThan
         ));
+        //完成数
+        $result['finishedNum'] = $this->getTaskResultService()->countTaskResults(array(
+            'courseId'       => $courseId,
+            'status'         => 'finish',
+            'createdTime_LE' => $startTimeLessThan
+        ));
+
         //完成率
         if ($result['studentNum']) {
             $result['finishedRate'] = round($result['finishedNum'] / $result['studentNum'], 3) * 100;
@@ -234,7 +236,8 @@ class ReportServiceImpl extends BaseService implements ReportService
         $startTimeGreaterThan = strtotime('- 29 days', $now);
         $role                 = 'student';
         $result               = array();
-        $result['students']   = $this->getCourseMemberService()->searchMembers(
+
+        $students = $this->getCourseMemberService()->searchMembers(
             array(
                 'courseId'             => $courseId,
                 'role'                 => $role,
@@ -244,6 +247,19 @@ class ReportServiceImpl extends BaseService implements ReportService
             0,
             PHP_INT_MAX
         );
+
+        $userFinishedTimes = $this->getTaskResultService()->findFinishedTimeByCourseIdGroupByUserId($courseId);
+
+        if (!empty($students) && !empty($userFinishedTimes)) {
+            $userFinishedTimes = ArrayToolkit::index($userFinishedTimes, 'userId');
+            foreach ($students as &$student) {
+                if (!empty($userFinishedTimes[$student['userId']])) {
+                    $student['finishedTime'] = $userFinishedTimes[$student['userId']]['finishedTime'];
+                }
+            }
+        }
+
+        $result['students'] = $students;
 
         $result['notes'] = $this->getCourseNoteService()->searchNotes(
             array(

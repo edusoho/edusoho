@@ -33,7 +33,7 @@ class StudentManageController extends BaseController
             //分母只包括已发布的任务
             $taskCount = $this->getTaskService()->count(array('courseId' => $courseId, 'status' => 'published'));
             if ($taskCount > 0) {
-                $userFinishedTasks = $this->getTaskResultService()->countFinishedTasksByCourseIdGroupByUserId($courseId);
+                $userFinishedTasks = $this->getTaskResultService()->findFinishedTasksByCourseIdGroupByUserId($courseId);
                 if (!empty($userFinishedTasks)) {
                     foreach ($userFinishedTasks as $task) {
                         $processes[$task['userId']] = sprintf('%d', $task['taskCount'] / $taskCount * 100.0);
