@@ -278,6 +278,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $updateFields);
     }
 
+    /**
+     * @todo 教学计划的删除逻辑较复杂，需要整理
+     * @deprecated
+     * @see Topxia\Service\Course\Impl\CourseDeleteServiceImpl
+     */
     public function deleteCourse($id)
     {
         $course = $this->tryManageCourse($id);
