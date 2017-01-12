@@ -43,21 +43,31 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         return $this->db()->delete($this->table(), array('courseTaskId' => $taskId, 'userId' => $userId));
     }
 
-    public function countUsersByTaskIdAndLearnStatus($taskId, $status)
-    {
-        $sql = "SELECT count(userId) FROM {$this->table()} WHERE courseTaskId = ? ";
-
-        if ('all' == $status) {
-            return $this->db()->fetchColumn($sql, array($taskId));
-        }
-        $sql .= " AND status = ?";
-        return $this->db()->fetchColumn($sql, array($taskId, $status));
-    }
-
     public function countLearnNumByTaskId($taskId)
     {
         $sql = "SELECT count(id) FROM {$this->table()} WHERE courseTaskId = ? ";
         return $this->db()->fetchColumn($sql, array($taskId));
+    }
+
+    public function findFinishedTasksByCourseIdGroupByUserId($courseId)
+    {
+        $sql = "SELECT count(courseTaskId) as taskCount, userId FROM {$this->table()} WHERE courseId = ? and status='finish' group by userId";
+        return $this->db()->fetchAll($sql, array($courseId)) ?: array();
+    }
+
+    public function findFinishedTimeByCourseIdGroupByUserId($courseId)
+    {
+        //已发布task总数
+        $sql            = "SELECT count(1) FROM course_task WHERE courseId = ? AND status='published'";
+        $totalTaskCount = $this->db()->fetchColumn($sql, array($courseId));
+
+        if ($totalTaskCount <= 0) {
+            return array();
+        }
+
+        $sql = "SELECT max(finishedTime) AS finishedTime, count(courseTaskId) AS taskCount, userId FROM {$this->table()} WHERE courseId = ? and status='finish' group by userId HAVING taskCount >= ?";
+
+        return $this->db()->fetchAll($sql, array($courseId, $totalTaskCount)) ?: array();
     }
 
     public function declares()
@@ -72,7 +82,9 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
                 'userId =:userId',
                 'courseId =:courseId',
                 'activityId =:activityId',
-                'courseTaskId =: courseTaskId'
+                'courseTaskId = :courseTaskId',
+                'createdTime >= :createdTime_GE',
+                'createdTime <= :createdTime_LE'
             )
         );
     }

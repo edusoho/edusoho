@@ -1,8 +1,7 @@
 {% extends 'course-manage/layout.html.twig' %}
 {% do script(['app/js/course-manage/students/index.js']) %}
 
-{% set side_nav = 'plan' %}
-{% set active = 'students' %}
+{% set side_nav = 'students' %}
 
 {% block course %}
 <div class="text-right">
@@ -54,11 +53,11 @@
         剩余：360天
         </td> #}
         <td>
-          <a class="btn link-gray" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}"><span class="color-primary">0%</span><span class="text-xs">（查看详情）</span></a>
+          <a class="btn link-gray" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}"><span class="color-primary">{{processes[student.userId]|default(0)}}%</span><span class="text-xs">（查看详情）</span></a>
         </td>
         <td>
           <a class="mrm" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">发私信</a>
-          <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/manage/students/{{student.userId}}/show">查看资料</a>
+          <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">查看资料</a>
           <div class="btn-group">
             <a href="#" class="mrm dropdown-toggle" data-toggle="dropdown">
               更多
@@ -76,7 +75,7 @@
                 <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/set_expiryday/{{student.userId}}">增加有效期</a>
               </li> #}
               <li>
-                <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="学员">移除</a>
+                <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="学员">删除</a>
               </li>
             </ul>
           </div>

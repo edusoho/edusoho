@@ -231,13 +231,13 @@ class UserSettingController extends BaseController
 
     public function userFieldsAction(Request $request)
     {
-        $textCount    = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'textField'));
-        $intCount     = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'intField'));
-        $floatCount   = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'floatField'));
-        $dateCount    = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'dateField'));
-        $varcharCount = $this->getUserFieldService()->searchFieldCount(array('fieldName' => 'varcharField'));
+        $textCount    = $this->getUserFieldService()->countFields(array('fieldName' => 'textField'));
+        $intCount     = $this->getUserFieldService()->countFields(array('fieldName' => 'intField'));
+        $floatCount   = $this->getUserFieldService()->countFields(array('fieldName' => 'floatField'));
+        $dateCount    = $this->getUserFieldService()->countFields(array('fieldName' => 'dateField'));
+        $varcharCount = $this->getUserFieldService()->countFields(array('fieldName' => 'varcharField'));
 
-        $fields = $this->getUserFieldService()->getAllFieldsOrderBySeq();
+        $fields = $this->getUserFieldService()->getFieldsOrderBySeq();
 
         for ($i = 0; $i < count($fields); $i++) {
             if (strstr($fields[$i]['fieldName'], "textField")) {

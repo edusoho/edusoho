@@ -31,6 +31,7 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
             'courseId IN (:courseIds)',
             'status = :status',
             'type = :type',
+            'type IN (:types)',
             'id IN (:ids)'
         );
 

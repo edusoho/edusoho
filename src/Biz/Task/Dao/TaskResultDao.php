@@ -16,7 +16,9 @@ interface TaskResultDao extends GeneralDaoInterface
 
     public function deleteByTaskIdAndUserId($taskId, $userId);
 
-    public function countUsersByTaskIdAndLearnStatus($taskId, $status);
-
     public function countLearnNumByTaskId($taskId);
+
+    public function findFinishedTasksByCourseIdGroupByUserId($courseId);
+
+    public function findFinishedTimeByCourseIdGroupByUserId($courseId);
 }

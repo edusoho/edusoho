@@ -549,35 +549,67 @@ my_teaching_classrooms:
     path: /my/teaching/classrooms
     defaults: { _controller: AppBundle:My/Classroom:teaching }
 
+my_testpaper_check_list:
+    path: /my/testpaper/check/{status}
+    defaults: { _controller: AppBundle:My/Testpaper:checkList, status: 'reviewing' }
+
+my_testpaper_list:
+    path: /my/testpaper/list
+    defaults: { _controller: AppBundle:My/Testpaper:list }
+
+my_favorite_question_list:
+    path: /my/question/favorite/list
+    defaults: { _controller: AppBundle:My/Question:favoriteList }
+
+my_favorite_question_preview:
+    path: /my/question/{id}/favorite/preview
+    defaults: { _controller: AppBundle:My/Question:preview }
+
+my_question_favorite:
+    path: /my/question/favorite
+    defaults: { _controller: AppBundle:My/Question:favorite }
+
+my_question_unfavorite:
+    path: /my/question/unfavorite/{id}
+    defaults: { _controller: AppBundle:My/Question:unfavorite }
+
+my_homework_check_list:
+    path: /my/homework/check/{status}
+    defaults: { _controller: AppBundle:My/Homework:checkList, status: 'reviewing' }
+
+my_homework_list:
+    path: /my/homework/{status}/list
+    defaults: { _controller: AppBundle:My/Homework:list, status: 'finished' }
+
 my_orders:
     path: /my/orders
-    defaults: { _controller: AppBundle:MyOrder:index }
+    defaults: { _controller: AppBundle:My/Order:index }
 
 my_order_cancel:
     path: /my/order/{id}/cancel
-    defaults: { _controller: AppBundle:MyOrder:cancel }
+    defaults: { _controller: AppBundle:My/Order:cancel }
     methods: [POST]
 
 web_user_order_detail:
     path: /my/order/{id}/detail
-    defaults: { _controller: AppBundle:MyOrder:detail }
+    defaults: { _controller: AppBundle:My/Order:detail }
 
 my_order_cancel_refund:
     path: /my/order/{id}/cancel_refund
-    defaults: { _controller: AppBundle:MyOrder:cancelRefund }
+    defaults: { _controller: AppBundle:My/Order:cancelRefund }
     methods: [POST]
 
 my_refunds:
     path: /my/refunds
-    defaults: { _controller: AppBundle:MyOrder:refunds }
+    defaults: { _controller: AppBundle:My/Order:refunds }
 
 income_records:
     path: /my/income_records
-    defaults: { _controller: AppBundle:MoneyRecord:index }
+    defaults: { _controller: AppBundle:My/MoneyRecord:index }
 
 payout_records:
     path: /my/payout_records
-    defaults: { _controller: AppBundle:MoneyRecord:payout }
+    defaults: { _controller: AppBundle:My/MoneyRecord:payout }
 
 user_show:
     path:  /user/{id}
@@ -939,13 +971,13 @@ group_thread_delete_attach:
 
 my_bill:
     path: /my/bill
-    defaults: { _controller: AppBundle:Coin:cashBill }
+    defaults: { _controller: AppBundle:My/Coin:cashBill }
 my_coin:
     path:     /my/coin
-    defaults: { _controller: AppBundle:Coin:index }
+    defaults: { _controller: AppBundle:My/Coin:index }
 my_invite_code:
     path:     /my/invitecode
-    defaults: { _controller: AppBundle:Coin:inviteCode }
+    defaults: { _controller: AppBundle:My/Coin:inviteCode }
 
 note_like:
     path: /note/{id}/like
@@ -959,24 +991,21 @@ note_cancel_like:
 
 invite_promote_link:
     path:     /my/invitecode/promotelink
-    defaults: { _controller: AppBundle:Coin:promoteLink }
+    defaults: { _controller: AppBundle:My/Coin:promoteLink }
 
 write_invitecode:
     path:     /my/invitecode/writeinvitecode
-    defaults: { _controller: AppBundle:Coin:writeInvitecode }
+    defaults: { _controller: AppBundle:My/Coin:writeInvitecode }
 receive_coupon:
     path:     /my/invitecode/receivecoupon
-    defaults: { _controller: AppBundle:Coin:receiveCoupon }
+    defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
 
 coin_pay:
-    path:     /coin/pay
-    defaults: { _controller: AppBundle:Coin:pay }
-coin_change:
-    path:     /coin/change
-    defaults: { _controller: AppBundle:Coin:change }
+    path:     /my/coin/pay
+    defaults: { _controller: AppBundle:My/Coin:pay }
 coin_show:
-    path:     /coin/show
-    defaults: { _controller: AppBundle:Coin:show }
+    path:     /my/coin/show
+    defaults: { _controller: AppBundle:My/Coin:show }
 
 user_password_check:
     path:   /user/password/check
@@ -1193,15 +1222,15 @@ my:
 
 my_cards:
     path:  /my/cards
-    defaults: { _controller: AppBundle:Card:index }
+    defaults: { _controller: AppBundle:My/Card:index }
 
 my_useable_coupons:
     path: /my/useable_coupons
-    defaults: { _controller: AppBundle:Card:useableCoupons }
+    defaults: { _controller: AppBundle:My/Card:useableCoupons }
 
 card_info:
     path:  /card/info
-    defaults: { _controller: AppBundle:Card:cardInfo }
+    defaults: { _controller: AppBundle:My/Card:cardInfo }
 
 sms_prepare:
     path:  /sms/prepare/{targetType}/{id}
@@ -1659,6 +1688,10 @@ course_set_manage_course_students_check:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/check
   defaults: {_controller: AppBundle:Course/StudentManage:checkStudent}
 
+course_set_manage_course_students_show:
+   path:  /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/show
+   defaults: { _controller: AppBundle:Course/StudentManage:show }
+
 course_set_manage_course_orders:
   path: /course_set/{courseSetId}/manage/course/{courseId}/orders
   defaults: {_controller: AppBundle:Course/CourseManage:orders}
@@ -1700,6 +1733,15 @@ my_courses_learning:
     path: /my/courses/learning
     defaults: { _controller: AppBundle:My/Course:learning }
 
+my_courses_learned:
+    path: /my/courses/learned
+    defaults: { _controller: AppBundle:My/Course:learned }
+
+#my_course_set
+my_course_sets_favorite:
+    path: /my/courses/favorite
+    defaults: { _controller: AppBundle:My/CourseSet:favorite }
+
 my_classrooms:
     path: /my/classrooms
     defaults: { _controller: AppBundle:My/Classroom:classroom }
@@ -1719,6 +1761,15 @@ my_discussions:
 my_notebooks:
     path: /my/notebooks
     defaults: { _controller: AppBundle:My/Notebook:index }
+
+my_notebook_show:
+    path: /my/notebook/{courseId}
+    defaults: { _controller: AppBundle:My/Notebook:show }
+
+my_note_delete:
+    path: /my/note/{id}/delete
+    defaults: { _controller: AppBundle:My/Notebook:noteDelete }
+    methods: [POST]
 
 my_group_member_center:
     path:  /my/group
@@ -1770,10 +1821,6 @@ course_set_unfavorite:
   path: /course_set/{id}/unfavorite
   defaults: { _controller: AppBundle:Course/CourseSet:unfavorite }
   methods: [POST]
-
-course_show:
-  path: /course/{id}/{tab}
-  defaults: {_controller: AppBundle:Course/Course:show, tab: 'summary'}
 
 course_exit:
   path: /course/{id}/exit
@@ -2572,3 +2619,22 @@ coupon_check:
 my_course_show:
     path:  /my/course/{id}/{tab}
     defaults: { _controller: AppBundle:My/Course:show, tab: 'tasks' }
+
+course_buy:
+   path: /course/{id}/buy
+   defaults: { _controller: AppBundle:Course/CourseOrder:buy }
+
+course_buy_modify_user_info:
+   path: /course/buy/modify_user_info
+   defaults: { _controller: AppBundle:Course/CourseOrder:modifyUserInfo }
+
+course_order_repay:
+   path:  /course/order/repay
+   defaults: { _controller: AppBundle:Course/CourseOrder:repay }
+
+
+
+# last route
+course_show:
+  path: /course/{id}/{tab}
+  defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }

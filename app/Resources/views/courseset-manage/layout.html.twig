@@ -3,12 +3,14 @@
 {% block title %}{{'课程管理'|trans}} - {{ parent() }}{% endblock %}
 {% set use_webapck_loader = true %}
 
+{% do script(['app/js/courseset-manage/index.js']) %}
+
 {% block content %}
 {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), manage: true})) }}
 
 <div class="row">
   <div class="col-md-3">
-    {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, sideNav: side_nav|default(null)})) }}
+    {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), sideNav: side_nav|default(null)})) }}
   </div>
   <div class="col-md-9">
     {% block main %}{% endblock %}
@@ -48,7 +50,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">知道啦</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">知道啦</button>
         </div>
       </div>
     </div>

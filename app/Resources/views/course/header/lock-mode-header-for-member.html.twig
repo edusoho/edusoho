@@ -17,10 +17,7 @@
       {% if taskPerDay %}
         <li class="mb10">
           <i class="es-icon es-icon-dot color-warning"></i>
-          计划完成<span class="mhs">{{ planStudyTaskCount }}</span>个任务
-          {% if planProgressProgress- progress  > 0 %}
-          ，<span class="mlm">落后计划{{ progress- planProgressProgress }}%</span>
-          {% endif %}
+          计划完成<span class="mhs">{{ planStudyTaskCount }}</span>个任务{% if planProgressProgress- progress  > 0 %}，<span>落后计划 {{ planProgressProgress - progress }}%</span>{% endif %}
         </li>
       {% endif %}
       <li class="pt30 mb10 mll">学习有效期</li>

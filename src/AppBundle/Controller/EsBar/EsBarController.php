@@ -28,7 +28,7 @@ class EsBarController extends BaseController
             'classroomId' => 0,
             'role'        => 'student'
         );
-        $sort             = array('createdTime', 'DESC');
+        $sort             = array('createdTime'=>'DESC');
         $members          = $this->getCourseMemberService()->searchMembers($conditions, $sort, 0, 15);
         $courseIds        = ArrayToolkit::column($members, 'courseId');
         $courseConditions = array(
@@ -75,7 +75,7 @@ class EsBarController extends BaseController
             'locked' => 0,
             'role'   => 'student'
         );
-        $sort = array('createdTime', 'DESC');
+        $sort = array('createdTime'=>'DESC');
 
         $members = $this->getClassroomService()->searchMembers($memberConditions, $sort, 0, 15);
 
@@ -142,7 +142,7 @@ class EsBarController extends BaseController
             );
             $homeworkResults = $this->getHomeworkService()->searchResults(
                 $conditions,
-                array('updatedTime', 'DESC'),
+                array('updatedTime'=>'DESC'),
                 0,
                 10
             );
@@ -159,7 +159,7 @@ class EsBarController extends BaseController
 
         $testPaperResults = $this->getTestpaperService()->searchTestpaperResults(
             $testPaperConditions,
-            array('endTime', 'DESC'),
+            array('endTime'=>'DESC'),
             0,
             10
         );

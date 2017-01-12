@@ -56,7 +56,7 @@
 	    </span>
 	  </div>
 	  <div class="lump-list">
-	    <a class="color-lump lump-danger" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content='<div class="process-popover">
+	    <a class="color-lump lump-danger" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content='<div class="process-popover"'>
 	      <div class="process-popover-title bg-danger"> <i class="es-icon es-icon-lesson mrs"></i>
 	        课时 :都睡觉
 	      </div>
@@ -68,33 +68,9 @@
 	  </div>
 	</div>
 	</div>
-	<div class="es-piece" style="margin-bottom:0">
-	<div class="piece-header">成绩单</div>
-	<div class="report-card">
-	  <div class="report-card-header">
-	    <i class="es-icon es-icon-chevronright mrs"></i>
-	    初级阶段
-	    <span class="include">作业：1/2&nbsp;&nbsp;&nbsp;考试：0/3</span>
-	  </div>
-	  <div class="report-card-main">
-	    <div class="card-main-title open">
-	      <i class="es-icon es-icon-homework mrs"></i>
-	      作业：课时＂2016＂的作业
-	      <span class="score hidden-xs">
-	        <span>不合格</span>
-	      </span>
-	      <span class="reviews hidden-xs" data-toggle="tooltip" data-placement="top" title="" data-original-title="暂无评语">评语</span>
-	    </div>
-	    <ul class="score-list" style="display: block;">
-	      <li>
-	        <span class="name">第 1 次作业</span>
-	        <span class="date">2016/11/29</span>
-	        <span class="score">不合格</span>
-	      </li>
-	    </ul>
-	  </div>
-	</div>
-	</div>
+
+	{{ render(controller('AppBundle:Course/StudentManage:reportCard',{course:course,user:user})) }}
+
 	<div class="es-piece" style="margin-bottom:-20px">
 	<div class="piece-header">学习数据</div>
 	<div class="study-data row">
