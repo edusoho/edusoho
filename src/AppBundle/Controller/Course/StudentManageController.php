@@ -265,20 +265,23 @@ class StudentManageController extends BaseController
         if (!empty($activities)) {
             $testIds = ArrayToolkit::column($activities, 'mediaId');
 
-            $allTests = $this->getTestpaperService()->findTestpapersByIds($testIds);
+            $allTests = $this->getTestpaperService()->searchTestpapers(array(
+                'ids'   => $testIds,
+                'types' => array('homework', 'testpaper')
+            ), array('createdTime' => 'ASC'), 0, PHP_INT_MAX);
 
             $finishedTargets = $this->getTestpaperService()->searchTestpaperResults(array(
-                'testIds' => $testIds,
-                'userId'  => $user['id'],
-                'status'  => 'finished',
-                'types'   => array('homework', 'testpaper')
+                'courseId' => $course['id'],
+                'userId'   => $user['id'],
+                'status'   => 'finished',
+                'types'    => array('homework', 'testpaper')
             ), array('lessonId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
 
             $reviewingTargets = $this->getTestpaperService()->searchTestpaperResults(array(
-                'testIds' => $testIds,
-                'userId'  => $user['id'],
-                'status'  => 'reviewing',
-                'types'   => array('homework', 'testpaper')
+                'courseId' => $course['id'],
+                'userId'   => $user['id'],
+                'status'   => 'reviewing',
+                'types'    => array('homework', 'testpaper')
             ), array('lessonId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
         }
 
