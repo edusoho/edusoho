@@ -947,13 +947,13 @@ group_thread_delete_attach:
 
 my_bill:
     path: /my/bill
-    defaults: { _controller: AppBundle:Coin:cashBill }
+    defaults: { _controller: AppBundle:My/Coin:cashBill }
 my_coin:
     path:     /my/coin
-    defaults: { _controller: AppBundle:Coin:index }
+    defaults: { _controller: AppBundle:My/Coin:index }
 my_invite_code:
     path:     /my/invitecode
-    defaults: { _controller: AppBundle:Coin:inviteCode }
+    defaults: { _controller: AppBundle:My/Coin:inviteCode }
 
 note_like:
     path: /note/{id}/like
@@ -967,24 +967,21 @@ note_cancel_like:
 
 invite_promote_link:
     path:     /my/invitecode/promotelink
-    defaults: { _controller: AppBundle:Coin:promoteLink }
+    defaults: { _controller: AppBundle:My/Coin:promoteLink }
 
 write_invitecode:
     path:     /my/invitecode/writeinvitecode
-    defaults: { _controller: AppBundle:Coin:writeInvitecode }
+    defaults: { _controller: AppBundle:My/Coin:writeInvitecode }
 receive_coupon:
     path:     /my/invitecode/receivecoupon
-    defaults: { _controller: AppBundle:Coin:receiveCoupon }
+    defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
 
 coin_pay:
-    path:     /coin/pay
-    defaults: { _controller: AppBundle:Coin:pay }
-coin_change:
-    path:     /coin/change
-    defaults: { _controller: AppBundle:Coin:change }
+    path:     /my/coin/pay
+    defaults: { _controller: AppBundle:My/Coin:pay }
 coin_show:
-    path:     /coin/show
-    defaults: { _controller: AppBundle:Coin:show }
+    path:     /my/coin/show
+    defaults: { _controller: AppBundle:My/Coin:show }
 
 user_password_check:
     path:   /user/password/check
