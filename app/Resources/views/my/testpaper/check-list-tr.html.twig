@@ -11,11 +11,11 @@
     <small class="text-muted mhs">•</small>
     <small class="text-muted">{{'共%score%分 / %itemCount%道题'|trans({'%score%':testpaper.score,'%itemCount%':testpaper.itemCount})}}</small>
   </td>
-  <td width="20%">
+  <td width="20%" class="vertical-middle">
     {{ web_macro.user_link(student) }} <br>
     <small class="text-muted">{{ paperResult.endTime|date("Y-n-d H:i") }} {{'交卷'|trans}}</small>
   </td>
-  <td width="30%">
+  <td width="30%" class="vertical-middle">
     {% if status == 'reviewing' and (not isTeacher is defined or isTeacher) %}
       <a href="{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}" target="_blank">{{'批阅'|trans}}</a>
     {% endif %}
