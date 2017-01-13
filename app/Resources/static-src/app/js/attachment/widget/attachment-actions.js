@@ -17,6 +17,7 @@ class AttachmentActions {
         $target.closest('.js-attachment-list').closest('div').siblings('[data-role="fileId"]').val('');
         console.log($target.closest('.js-attachment-list').closest('div').siblings('[data-role="fileId"]'));
         $target.closest('div').remove();
+        $('.js-upload-file').show();
       }
     })
     

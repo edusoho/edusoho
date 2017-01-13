@@ -13,8 +13,8 @@ export default class QuestionManage{
   _initEvent() {
     this.$button.on('click',event => this._showPickerModal(event));
     this.$typeNav.on('click','li', event => this._changeNav(event));
-    this.$element.on('click','.request-save',event => this._confirmSave(event));
-    this.$modal.on('click','.confirm-submit',event => this._submitSave(event));
+    this.$element.on('click','.js-request-save',event => this._confirmSave(event));
+    this.$modal.on('click','.js-confirm-submit',event => this._submitSave(event));
   }
 
   _showPickerModal(event) {
@@ -146,8 +146,11 @@ export default class QuestionManage{
   }
 
   _submitSave(event) {
-    
-    $.post(this.$element.attr('action'),{questions:this.questions},function(result){
+    let passedScore = 0;
+    if ($('input[name="passedScore"]:visible').length > 0) {
+        passedScore = $('input[name="passedScore"]').val();
+    }
+    $.post(this.$element.attr('action'),{questions:this.questions,passedScore:passedScore},function(result){
       if (result.goto) {
         window.location.href = result.goto;
       }

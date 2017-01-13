@@ -149,7 +149,7 @@ class CourseManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $conditions       = array(
+        $conditions = array(
             'courseId' => $courseId,
             'types'    => array('text', 'video', 'audio', 'flash', 'doc', 'ppt')
         );
@@ -221,6 +221,16 @@ class CourseManageController extends BaseController
         }
 
         return $this->createJsonResponse($teachers);
+    }
+
+    public function closeCheckAction(Request $request, $courseSetId, $courseId)
+    {
+        $course           = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSetId);
+        if (count($publishedCourses) == 1) {
+            return $this->createJsonResponse(array('warn' => true, 'message' => "{$course['title']}是课程下唯一发布的教学计划，如果关闭则所在课程也会被关闭。"));
+        }
+        return $this->createJsonResponse(array('warn' => false));
     }
 
     public function closeAction(Request $request, $courseSetId, $courseId)
@@ -349,7 +359,7 @@ class CourseManageController extends BaseController
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
 
-        $status  = array(
+        $status = array(
             'created'   => '未付款',
             'paid'      => '已付款',
             'refunding' => '退款中',
@@ -575,7 +585,7 @@ class CourseManageController extends BaseController
             $tasks[$key]['watchTime']   = $taskWatchTime;
 
             if ($value['type'] == 'testpaper') {
-                $paperId  = $value['mediaId'];
+                $paperId  = $value['activity']['mediaId'];
                 $score    = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $paperId));
                 $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(array('testId' => $paperId));
 
@@ -699,7 +709,7 @@ class CourseManageController extends BaseController
      */
     protected function getTestpaperService()
     {
-        return $this->createService('Course:TestpaperService');
+        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**

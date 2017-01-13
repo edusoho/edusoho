@@ -34,11 +34,43 @@
     </ul>
   </div>
   <div class="col-sm-6 course-detail-content">
-    <ul class="task-list task-list-md task-list-hover task-list-gray">
+    <ul class="task-list task-list-md task-list-hover task-list-gray js-task-list-ul">
       {% for task in toLearnTasks %}
         {% set meta = activity_meta(task.activity.mediaType|default(null)) %}
         {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
         <li class="task-item task-content mouse-control">
+          <i class="es-icon
+          {% if task_lock %}
+          es-icon-lock
+          {% elseif  not task.result|default(null) %}
+          es-icon-undone-check
+          {% elseif task.result.status == 'start' %}
+          es-icon-doing
+          {% elseif task.result.status == 'finish' %}
+          es-icon-iccheckcircleblack24px
+          {% endif %}
+          left-menu"></i>
+          {% if  task_lock is empty%}
+            <a class="text-overflow title" href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>
+          {% else  %}
+            <span class="text-overflow title">{{ task.title }}</span>
+          {% endif %}
+          <span class="right-menu mouse-leave">
+          {{ task.activity.length|activity_length_format }} <i class="es-icon es-icon {{ meta.icon|default('') }} mlm" data-toggle="tooltip" data-placement="top" title="{{ meta.name|default(null) }}任务"></i>
+        </span>
+          {% if  task_lock is empty%}
+            <span class="right-menu mouse-enter">
+              <a class="btn btn-primary btn-sm btn-learn" href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">继续学习</a>
+            </span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+    <ul class="task-list task-chart task-list-md task-list-hover clearfix js-task-chart-ul hidden">
+      {% for task in toLearnTasks %}
+        {% set meta = activity_meta(task.activity.mediaType|default(null)) %}
+        {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+        <li class="task-item task-content half mouse-control">
           <i class="es-icon
           {% if task_lock %}
           es-icon-lock

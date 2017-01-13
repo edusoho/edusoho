@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\My;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
@@ -17,6 +17,7 @@ use Biz\CloudPlatform\Service\AppService;
 use Biz\User\Service\InviteRecordService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Controller\BaseController;
 
 class CoinController extends BaseController
 {
@@ -330,41 +331,6 @@ class CoinController extends BaseController
         $response = $this->redirect($this->generateUrl('my_cards', array('cardType' => 'coupon', 'cardId' => $record['invitedUserCardId'])));
         $response->headers->setCookie(new Cookie("modalOpened", '1'));
         return $response;
-    }
-
-    public function changeAction(Request $request)
-    {
-        $user   = $this->getCurrentUser();
-        $userId = $user->id;
-
-        $change = $this->getCashAccountService()->getChangeByUserId($userId);
-
-        if (empty($change)) {
-            $change = $this->getCashAccountService()->addChange($userId);
-        }
-
-        $amount = $this->getOrderService()->analysisAmount(array('userId' => $user->id, 'status' => 'paid'));
-        $amount += $this->getCashOrdersService()->analysisAmount(array('userId' => $user->id, 'status' => 'paid'));
-
-        $changeAmount = $amount - $change['amount'];
-
-        list($canUseAmount, $canChange, $data) = $this->caculate($changeAmount, 0, array());
-
-        if ($request->getMethod() == "POST") {
-            if ($canChange > 0) {
-                $this->getCashAccountService()->changeCoin($changeAmount - $canUseAmount, $canChange, $userId);
-            }
-
-            return $this->redirect($this->generateUrl('my_coin'));
-        }
-
-        return $this->render('coin/coin-change-modal.html.twig', array(
-            'amount'       => $amount,
-            'changeAmount' => $changeAmount,
-            'canChange'    => $canChange,
-            'canUseAmount' => $canUseAmount,
-            'data'         => $data
-        ));
     }
 
     public function showAction(Request $request)

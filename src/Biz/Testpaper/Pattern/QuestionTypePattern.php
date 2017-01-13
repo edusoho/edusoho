@@ -139,14 +139,18 @@ class QuestionTypePattern implements TestpaperPatternInterface
 
     protected function getQuestions($options)
     {
-        $conditions = array();
-        //$options['ranges'] = array_filter($options['ranges']);
+        $conditions = array(
+            'parentId' => 0,
+            'courseId' => $options['courseId']
+        );
 
-        if (empty($options['ranges'])) {
-            $conditions['courseId'] = $options['courseId'];
+        if (!empty($options['ranges']['start'])) {
+            $conditions['lessonIdGT'] = $options['ranges']['start'];
         }
 
-        $conditions['parentId'] = 0;
+        if (!empty($options['ranges']['end'])) {
+            $conditions['lessonIdLT'] = $options['ranges']['end'];
+        }
 
         $total = $this->getQuestionService()->searchCount($conditions);
 

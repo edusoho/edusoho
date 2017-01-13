@@ -29,4 +29,9 @@ class MobileDeviceDaoImpl extends GeneralDaoImpl implements MobileDeviceDao
         $sql = "SELECT * FROM {$this->table} WHERE imei = ? limit 1";
         return $this->getConnection()->fetchAssoc($sql, array($imei));
     }
+
+    public function declares()
+    {
+        return array();
+    }
 }

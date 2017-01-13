@@ -47,7 +47,7 @@
 
 {% block paper_sidebar %}
 
-{% if ( paperResult.status|default(null) in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' ) or ( setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' ) %}
+{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
 
   <div class="testpaper-card affix" >
     {% if not target.doTimes|default('0') and paperResult.status == 'finished' and (app.user.id|default(0) == paperResult.userId) %}

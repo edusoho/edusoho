@@ -41,9 +41,9 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
             'courseId',
             'lessonId',
             'beginTime',
-            'createdTime',
             'endTime',
-            'checkedTime'
+            'checkedTime',
+            'updateTime'
         );
 
         $declares['conditions'] = array(
