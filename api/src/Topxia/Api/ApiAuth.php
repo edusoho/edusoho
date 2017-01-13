@@ -18,10 +18,6 @@ class ApiAuth
 
     public function auth(Request $request)
     {
-        $user = $this->getUserService()->getUser(1);
-        $this->setCurrentUser($user);
-        return ;
-
         $token = $request->headers->get('X-Auth-Token');
 
         if (empty($token)) {
