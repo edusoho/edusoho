@@ -28,10 +28,10 @@
                     {{ task.title|plain_text(60) }}
                     <div>
                       {% if courseSet|default(null) %}
-                        <small class="color-gray">{{'来自课程'|trans}}《{{ courseSet.title }}》</small>
+                        <small class="color-gray">{{'来自课程'|trans}}<a href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
                       {% endif %}
                       {% if course|default(null) %}
-                        <small class="color-gray">{{'计划'|trans}}《{{ course.title|default(null) }}》</small>
+                        <small class="color-gray">{{'计划'|trans}}<a href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
                       {% endif %}
                       <small class="color-gray mhs">•</small>
                       <small class="color-gray" title="{{'开始时间'|trans}}">{{ paperResult.beginTime|date('Y年n月d日 H:i:s'|trans) }}</small>
