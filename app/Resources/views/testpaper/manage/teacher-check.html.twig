@@ -88,13 +88,11 @@
         <div class="modal-footer">
           {% if source|default('course') == 'classroom' %}
             {% set postUrl = path('classroom_manage_testpaper_check', {classroomId:targetId,resultId:paperResult.id}) %}
-            {% set gotUrl = path('classroom_manage_testpaper_result_list',{id:targetId,testpaperId:paperResult.testId})%}
           {% else %}
             {% set postUrl = path('course_manage_testpaper_check', {id:targetId,resultId:paperResult.id}) %}
-            {% set gotUrl = path('course_manage_testpaper_result_list',{id:targetId,testpaperId:paperResult.testId})%}
           {% endif %}
           <a href="javascript:;" class="btn btn-default" data-dismiss="modal">{{'取消'|trans}}</a>
-          <button type="button" class="btn btn-info" id="testpaper-teacher-say-btn" data-post-url="{{ postUrl }}" data-goto="{{ gotUrl }}" data-role="finish-check">{{'完成批阅'|trans}}</button>
+          <button type="button" class="btn btn-info" id="testpaper-teacher-say-btn" data-post-url="{{ postUrl }}" data-goto="{{ app.request.server.get('HTTP_REFERER') }}" data-role="finish-check" data-loading-text="{{'正在提交, 请稍等'|trans}}...">{{'完成批阅'|trans}}</button>
         </div>
       </div>
     </div>
