@@ -41,7 +41,9 @@ class Lesson extends BaseResource
             $lesson['hlsLine'] = $line;
         }
 
-        return $this->filter($this->convertLessonContent($lesson));
+        $ssl = $request->isSecure() ? true : false;
+
+        return $this->filter($this->convertLessonContent($lesson, $ssl));
     }
 
     public function filter($lesson)
@@ -51,13 +53,13 @@ class Lesson extends BaseResource
         return $lesson;
     }
 
-    protected function convertLessonContent($lesson)
+    protected function convertLessonContent($lesson, $ssl = false)
     {
         switch ($lesson['type']) {
             case 'ppt':
-                return $this->getPPTLesson($lesson);
+                return $this->getPPTLesson($lesson, $ssl);
             case 'audio':
-                return $this->getVideoLesson($lesson);
+                return $this->getVideoLesson($lesson, $ssl);
             case 'video':
                 return $this->getVideoLesson($lesson);
             case 'testpaper':
@@ -69,7 +71,7 @@ class Lesson extends BaseResource
         }
     }
 
-    protected function getPPTLesson($lesson)
+    protected function getPPTLesson($lesson, $ssl = false)
     {
         $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
@@ -84,24 +86,17 @@ class Lesson extends BaseResource
         if ($file['convertStatus'] != 'success') {
             return $this->error('not_ppt', 'PPT文档还在转换中，还不能查看，请稍等');
         }
-
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        $ppt = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
-
-        if (isset($ppt["error"])) {
-            $ppt = array();
-        }
+        
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
         $lesson['content'] = array(
-            'resource' => $ppt
+            'resource' => $result['images'],
         );
 
         return $lesson;
     }
 
-    protected function getDocumentLesson($lesson)
+    protected function getDocumentLesson($lesson, $ssl = false)
     {
         $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
         if (empty($file)) {
@@ -116,18 +111,11 @@ class Lesson extends BaseResource
             return $this->error('not_document', '文档还在转换中，还不能查看，请稍等');
         }
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        $metas2 = $file['metas2'];
-        $url    = $client->generateFileUrl($metas2['pdf']['key'], 3600);
-        $pdfUri = $url['url'];
-        // $url    = $client->generateFileUrl( $metas2['swf']['key'], 3600);
-        // $swfUri = $url['url'];
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
         $lesson['content'] = array(
-            'previewUrl' => 'http://opencdn.edusoho.net/pdf.js/v7/viewer.html#'.$pdfUri,
-            'resource'   => $pdfUri
+            'previewUrl' => ($ssl ? 'https://' : 'http://') . 'service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#'.$result['pdf'],
+            'resource'   => $result['pdf'],
         );
 
         return $lesson;
@@ -332,5 +320,10 @@ class Lesson extends BaseResource
     protected function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');
+    }
+
+    protected function getMaterialLibService()
+    {
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
 }
