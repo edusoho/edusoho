@@ -18,13 +18,16 @@
             {{ web_macro.user_avatar(user, 'pull-left') }}
             <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
             <div class="clear-fix text-sm">
-              <div class="pull-left">
-                课程:<a class="text-success" href="{{ path('course_set_show',{id:courseSet.id}) }}">《{{ courseSet.title }}》</a>
-              </div>
-              <div class="pull-left">
-                计划:<a class="text-success" href="{{ path('course_show',{id:course.id}) }}">《{{ course.title }}》</a>
-              </div>
-              
+              {% if courseSet|default(null) %}
+                <div class="pull-left">
+                  课程:<a class="text-success" href="{{ path('course_set_show',{id:courseSet.id}) }}">《{{ courseSet.title }}》</a>
+                </div>
+              {% endif %}
+              {% if course|default(null) %}
+                <div class="pull-left">
+                  计划:<a class="text-success" href="{{ path('course_show',{id:course.id}) }}">《{{ course.title }}》</a>
+                </div>
+              {% endif %}
               <div class="mll text-muted pull-left">
                 提交时间：{{ homeworkResult.endTime|date('Y-n-d H:i') }}
               </div>

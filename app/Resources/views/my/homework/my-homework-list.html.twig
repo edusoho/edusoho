@@ -27,8 +27,12 @@
                   <td width="55%">
                     {{ task.title|plain_text(60) }}
                     <div>
-                      <small class="color-gray">{{'来自课程'|trans}}《{{ courseSet.title }}》</small>
-                      <small class="color-gray">{{'计划'|trans}}《{{ course.title|default(null) }}》</small>
+                      {% if courseSet|default(null) %}
+                        <small class="color-gray">{{'来自课程'|trans}}《{{ courseSet.title }}》</small>
+                      {% endif %}
+                      {% if course|default(null) %}
+                        <small class="color-gray">{{'计划'|trans}}《{{ course.title|default(null) }}》</small>
+                      {% endif %}
                       <small class="color-gray mhs">•</small>
                       <small class="color-gray" title="{{'开始时间'|trans}}">{{ paperResult.beginTime|date('Y年n月d日 H:i:s'|trans) }}</small>
                     </div>

@@ -28,8 +28,10 @@
                     {% else %} {{ paperResult.paperName|plain_text(60) }}
                     {% endif %}
                     <div>
-                      <small class="color-gray">{{'来自课程'|trans}}<a href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
-                      {% if course.id|default(0) > 0 %}
+                      {% if courseSet|default(null) %}
+                        <small class="color-gray">{{'来自课程'|trans}}<a href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
+                      {% endif %}
+                      {% if course|default(null) %}
                         <small class="color-gray">{{'计划'|trans}}<a href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
                       {% endif %}
                       
