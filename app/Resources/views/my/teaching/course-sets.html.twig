@@ -69,7 +69,7 @@
             </td>
             {% else %}#}
             <td>{{ courseSet.studentNum }}</td>
-            <td>{{ courseSet.courses[0].price|default(0) }}</td>
+            <td>{{ courseSet.courses|first.price|default(0) }}</td>
             {#{% endif %}#}
 
             <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>
