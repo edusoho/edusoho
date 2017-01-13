@@ -62,7 +62,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 if (!empty($lesson['mediaUri'])) {
                     $correctUri = str_replace('http:', '', $lesson['mediaUri']);
                     $correctUri = str_replace('https:', '', $correctUri);
-                    $fields['mediaSource'] = $correctUri;
+                    $fields['mediaUri'] = $correctUri;
                     $this->getLessonDao()->updateLesson($lesson['id'], $fields);
                 }
             }
