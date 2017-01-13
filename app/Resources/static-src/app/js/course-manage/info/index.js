@@ -87,7 +87,6 @@ let validator = $form.validate({
 $.validator.addMethod(
   "before",
   function (value, element, params) {
-    console.log($('input[name="expiryMode"]:checked').val());
     if ($('input[name="expiryMode"]:checked').val() !== 'date') {
       return true;
     }
@@ -99,7 +98,6 @@ $.validator.addMethod(
 $.validator.addMethod(
   "after",
   function (value, element, params) {
-    console.log($('input[name="expiryMode"]:checked').val());
     if ($('input[name="expiryMode"]:checked').val() !== 'date') {
       return true;
     }

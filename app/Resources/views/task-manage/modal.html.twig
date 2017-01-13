@@ -94,7 +94,7 @@
         <ul class="form-group task-create-type-list ">
           {% set types = activity_metas() %}
           {% for type, meta in types %}
-            <li class="col-xs-3 task-create-type-item js-course-tasks-item {% if currentType|default(null)==  type %} active {% endif %}"
+            <li class="col-xs-3 task-create-type-item js-course-tasks-item {% if task.type|default(null)==  type %} active {% endif %}"
                 data-role="activityType" data-type="{{ type }}"
                 data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">
               <a href="javascript:;" {% if mode=='edit' %} disabled {% endif %}> <i
