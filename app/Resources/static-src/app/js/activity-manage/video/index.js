@@ -27,11 +27,14 @@ function _inItStep3from() {
         required: true,
         unsigned_integer: true,
         max: 300,
+        min: 1,
       }
     },
     messages: {
       'ext[finishDetail]': {
-        required: '请输入时长'
+        required: '请输入时长',
+        max: '时长不能大于300分钟',
+        min: '时长不能小于1分钟'
       }
     }
   });
