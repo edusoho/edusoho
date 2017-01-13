@@ -27,7 +27,7 @@ class ThreadController extends BaseController
         $myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount(array('userId' => $user['id']), true);
 
         if (empty($myTeachingCourseCount)) {
-            return $this->render('my-teaching/threads.html.twig', array(
+            return $this->render('my/teaching/threads.html.twig', array(
                 'type'       => $type,
                 'threadType' => 'course',
                 'threads'    => array()

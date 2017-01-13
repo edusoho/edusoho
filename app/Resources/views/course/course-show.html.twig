@@ -8,7 +8,7 @@
 	{% set course = data('Course', {courseId: course.id|default(route_params.id|default(0))}) %}
   {% set course_set = data('CourseSet', {id: course.courseSetId}) %}
 
-	{{ render(controller(metas.header,{course: course, member: member|default(null)})) }}
+	{{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
 
 	<div class="container">
 	  <div class="row">
@@ -41,7 +41,7 @@
 					  	{% endfor %}
 					  </ul>
 
-					  {% if member|default(false) and (course.parentId == 0 or course.locked == 0) and (app.user.admin|default(false) or member.role|default('') == "teacher") %}
+					  {% if app.user.admin|default(false) or (member|default(null) and member.role|default('') == "teacher") %}
 					    <div class="btnbar hidden-xs">
 					      <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}" class="btn btn-link">
 					        <i class="es-icon es-icon-anonymous-iconfont"></i>
@@ -60,12 +60,13 @@
 	      
 			</div>
 	    <div class="col-lg-3 col-md-4 course-sidebar">
-	    	{% for key, widget in metas.widgets %}
-	    		{% if widget.type == 'render' %}
-	    			{{ render(controller(widget.uri, {course: course, member: member|default({})})) }}
-	    		{% elseif widget.type == 'include' %}
-	    			{% include widget.uri with {course: course} %}
-	    		{% endif %}
+        {# 有些widget只有班级计划才显示 #}
+	    	{% for key, widget in metas.widgets if not (widget.classroomCourse|default(false) and course.parentId == 0) %}
+					{% if widget.renderType == 'render' %}
+						{{ render(controller(widget.uri, {course: course, member: member|default({})})) }}
+					{% elseif widget.renderType == 'include' %}
+						{% include widget.uri with {course: course} %}
+					{% endif %}
 	    	{% endfor %}
 	    </div>
 		</div>

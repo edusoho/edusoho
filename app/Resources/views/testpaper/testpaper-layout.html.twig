@@ -96,7 +96,12 @@
                   </div>
                 </div>
                 <div class="text-right mt20">
-                  <a href="{{ path('testpaper_result_show', {resultId:paperResult.id|default(0)} ) }}" class="btn btn-info">{{'查看结果'|trans}}</a>
+                  {% if paperResult.id|default(0) > 0 %}
+                    <a href="{{ path('testpaper_result_show', {resultId:paperResult.id|default(0)} ) }}" class="btn btn-info">{{'查看结果'|trans}}</a>
+                  {% else %}
+                    <a href="javascript:;" class="btn btn-info" disabled="disabled">{{'查看结果'|trans}}</a>
+                  {% endif %}
+                  
                 </div>
               </div>
             </div>
@@ -133,6 +138,9 @@
 
   {% if paperResult.id|default(0) > 0  and paperResult.status|default(null) == 'doing' %}
     <input type="hidden" name="testSuspend" data-url="{{ path('testpaper_do_suspend',{resultId:paperResult.id}) }}" />
+  {% endif %}
+  {% if not paperResult.id|default(0) %}
+    <input type="hidden" name="preview" value="1" />
   {% endif %}
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>

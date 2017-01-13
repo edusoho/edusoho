@@ -189,7 +189,6 @@ class TaskController extends BaseController
         $data           = $request->request->get('data', array());
         $data['taskId'] = $id;
         $result         = $this->getTaskService()->trigger($id, $eventName, $data);
-
         return $this->createJsonResponse(array(
             'event'  => $eventName,
             'data'   => $data,
@@ -258,7 +257,7 @@ class TaskController extends BaseController
             'status'   => 'finish'
         );
 
-        $finishedCount = $this->getTaskResultService()->countTaskResult($conditions);
+        $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
         $finishedRate = empty($course['taskNum']) ? 0 : intval($finishedCount / $course['taskNum'] * 100);
         return array($course, $nextTask, $finishedRate);

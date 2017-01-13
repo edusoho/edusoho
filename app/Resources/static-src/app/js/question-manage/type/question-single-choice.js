@@ -14,10 +14,7 @@ class SingleChoice extends QuestionChoice {
       dataSource= [];
     }
 
-    console.log(dataSource);
-    console.log(dataAnswer);
     let url = $('#question-options').data('image-upload-url');
-    console.log(url);
 
     ReactDOM.render( <QuestionOptions filebrowserImageUploadUrl= {url} dataSource={dataSource} dataAnswer={dataAnswer}  isRadio={true}/>,
       document.getElementById('question-options')
