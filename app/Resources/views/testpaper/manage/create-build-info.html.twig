@@ -25,7 +25,7 @@
 <div class="form-group">
   <div class="col-md-2 control-label"><label for="testpaper-range-field">{{'出题范围'|trans}}</label></div>
   <div class="col-md-8 controls radios">
-    {{ radios('range', {'course':'整个课程'|trans, 'lesson':'按课时范围'|trans}, 'course') }}
+    {{ radios('range', {'course':'整个课程'|trans, 'lesson':'按任务范围'|trans}, 'course') }}
     {#<input type="hidden" name="ranges" value="">#}
     <div class="hidden mtm" id="testpaper-range-selects">
       <select class="form-control width-input width-input-large" id="testpaper-range-start" name="ranges[start]" >

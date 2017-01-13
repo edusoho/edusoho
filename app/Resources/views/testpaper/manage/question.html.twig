@@ -50,12 +50,12 @@ tr.placeholder:before {
           <tr>
             <th></th>
             <th><input type="checkbox" data-role="batch-select"></th>
-            <th>{{'题号'|trans}}</th>
+            <th width="8%">{{'题号'|trans}}</th>
             <th width="35%">{{'题干'|trans}}</th>
-            <th>{{'类型'|trans}}</th>
-            <th>{{'难度'|trans}}</th>
+            <th width="10%">{{'类型'|trans}}</th>
+            <th width="10%">{{'难度'|trans}}</th>
             <th width="10%">{{'分值'|trans}}</th>
-            <th>{{'操作'|trans}}</th>
+            <th width="20%">{{'操作'|trans}}</th>
           </tr>
         </thead>
         {% for type,count in testpaper['metas']['counts'] if count > 0 %}
