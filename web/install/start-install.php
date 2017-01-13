@@ -192,14 +192,12 @@ function install_step3($init_data = 0)
             $initializer->initFolders();
             $initializer->initLockFile();
             $biz['db']->commit();
-            @fclose($installLogFd);
             header("Location: start-install.php?step=4");
             exit();
         } catch (\Exception $e) {
             echo $e->getMessage();
             $biz['db']->rollBack();
             @fclose($installLogFd);
-        } finally{
         }
     }
 
