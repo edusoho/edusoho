@@ -1,8 +1,7 @@
-function TaskShowaction () {
+export let chapterAnimate = ()=> {
   $(".js-task-chapter").click(function(){
     $(this).nextUntil(".js-task-chapter").animate({height: 'toggle', opacity: 'toggle'}, "normal");
-    var $icon = $(this).children('.js-remove-icon');
-    console.log($icon);
+    let $icon = $(this).children('.js-remove-icon');
     if ($icon.hasClass('es-icon-remove')) {
         $icon.removeClass('es-icon-remove').addClass('es-icon-anonymous-iconfont');
     } else {
@@ -10,4 +9,3 @@ function TaskShowaction () {
     }
   });
 }
-export default TaskShowaction;
