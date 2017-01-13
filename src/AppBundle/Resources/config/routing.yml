@@ -1708,6 +1708,11 @@ course_set_manage_course_dashboard_task_detail:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/dashboard/detail/{taskId}
   defaults: { _controller: AppBundle:Course/CourseManage:taskLearnDetail }
 
+course_set_manage_course_close_check:
+  path: /course_set/{courseSetId}/course/{courseId}/close_check
+  defaults: {_controller: AppBundle:Course/CourseManage:closeCheck}
+  methods: [POST]
+
 course_set_manage_course_close:
   path: /course_set/{courseSetId}/course/{courseId}/close
   defaults: {_controller: AppBundle:Course/CourseManage:close}

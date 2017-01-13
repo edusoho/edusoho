@@ -223,6 +223,16 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse($teachers);
     }
 
+    public function closeCheckAction(Request $request, $courseSetId, $courseId)
+    {
+        $course           = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSetId);
+        if (count($publishedCourses) == 1) {
+            return $this->createJsonResponse(array('warn' => true, 'message' => "{$course['title']}是课程下唯一发布的教学计划，如果关闭则所在课程也会被关闭。"));
+        }
+        return $this->createJsonResponse(array('warn' => false));
+    }
+
     public function closeAction(Request $request, $courseSetId, $courseId)
     {
         try {

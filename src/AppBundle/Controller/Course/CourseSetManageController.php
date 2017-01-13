@@ -2,13 +2,13 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Controller\BaseController;
+use Topxia\Common\ArrayToolkit;
+use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
+use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\OpenCourse\Service\OpenCourseService;
-use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 
 class CourseSetManageController extends BaseController
 {
@@ -17,12 +17,12 @@ class CourseSetManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $type = ArrayToolkit::get($data, 'type', 'aa');
-            if ($type == 'open'){
+            if ($type == 'open') {
                 $openCourse = $this->getOpenCourseService()->createCourse($data);
                 return $this->redirectToRoute('open_course_manage', array(
                     'id' => $openCourse['id']
                 ));
-            }else{
+            } else {
                 $courseSet = $this->getCourseSetService()->createCourseSet($data);
                 return $this->redirect($this->generateUrl('course_set_manage', array(
                     'id' => $courseSet['id']
@@ -171,6 +171,10 @@ class CourseSetManageController extends BaseController
     public function publishAction($id)
     {
         try {
+            $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
+            if (empty($publishedCourses)) {
+                throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
+            }
             $this->getCourseSetService()->publishCourseSet($id);
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
