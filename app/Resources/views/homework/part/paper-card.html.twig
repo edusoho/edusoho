@@ -1,4 +1,4 @@
-<div class="testpaper-card affix">
+<div class="testpaper-card {% if action|default('') is empty %}affix{% endif %}">
   {% if paperResult.status|default(null) == 'finished' and (app.user.id|default(0) == paperResult.userId ) %}
     <div class="mbl">
       <a href="{{ path('homework_start_do',{lessonId:paperResult.lessonId,homeworkId:paperResult.testId}) }}" class="btn btn-primary btn-block btn-lg  border-radius-none">再次尝试</a>

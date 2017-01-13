@@ -159,10 +159,11 @@ class DoTestBase
 
   _btnSubmit(event) {
     let $target = $(event.currentTarget);
-    this._submitTest($target.data('url'));
+    $target.button('loading');
+    this._submitTest($target.data('url'), $target.data('goto'));
   }
 
-  _submitTest(url) {
+  _submitTest(url,toUrl='') {
     let values = {};
     let emitter = new ActivityEmitter();
 
@@ -173,15 +174,18 @@ class DoTestBase
       let answer = questionTypeBuilder.getAnswer(questionId);
       values[questionId] = answer;
     })
-    
+
     $.post(url,{data:values,usedTime:this.usedTime})
     .done((response) => {
       if (response.result) {
         emitter.emit('finish');
       }
-      if (response.goto) {
+
+      if (toUrl != '' || response.goto != '') {
+        window.location.href = toUrl;
+      } else if (response.goto != ''){
         window.location.href = response.goto;
-      } else {
+      } else if (response.message != '') {
         notify('error', response.message);
       }
     })

@@ -4,6 +4,9 @@ import DoTestBase from '../widget/do-test-base';
 class ShowResult extends DoTestBase {
   constructor($container) {
     super($container);
+
+    this.$container.find('.js-testpaper-content').perfectScrollbar();
+    this.$container.find('.js-panel-card').perfectScrollbar();
   }
 }
 
@@ -14,7 +17,6 @@ $('.js-testpaper-redo-timer').timer({
   duration: $('.js-testpaper-redo-timer').data('time'),
   format: '%H:%M:%S',
   callback: function() {
-    console.log('timer');
     $('#finishPaper').attr('disabled',false);
   },
   repeat: true,
