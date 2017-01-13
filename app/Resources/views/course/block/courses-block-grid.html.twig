@@ -12,7 +12,15 @@
       <a href="{{ path('my_course_show', {id:course.id}) }}" class="grid-body">
         <div class="course-grid-img">
           <img src="{{ filepath(course.courseSet.cover.large|default(null), 'course.png') }}"  class="img-responsive thumb">
-          <div class="course-grid-mask"><span class="btn btn-warning btn-sm course-grid-btn-learn">{{'继续学习'|trans}}</span></div>
+          <div class="course-grid-mask">
+            <span class="btn btn-warning btn-sm course-grid-btn-learn">
+              {% if course.memberIsLearned %}
+                {{'查看课程'|trans}}
+              {% else %}
+                {{'继续学习'|trans}}
+              {% endif %}
+            </span>
+          </div>
         </div>
         <span class="course-label">
           {% if course.status == 'draft' %}

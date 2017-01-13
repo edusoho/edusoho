@@ -32,23 +32,30 @@
                 提交时间：{{ homeworkResult.endTime|date('Y-n-d H:i') }}
               </div>
             </div>
-          </td>
-          <td>
-            {% if status == 'reviewing' %}
-              <a href="{{ path('course_manage_homework_check', {id:homeworkResult.courseId,resultId:homeworkResult.id,source:source|default('course'),targetId:targetId|default(0),action:'check' }) }}" class="btn btn-default btn-sm" target="_blank">批改</a>
-            {% else %}
-              <a class="btn btn-default btn-sm"  href="{{ path('homework_result_show',{resultId:homeworkResult.id,action:'check' }) }}" target="_blank" >查看</a>
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
+            <div class="pull-left">
+              计划:<a class="text-success" href="{{ path('course_show',{id:course.id}) }}">《{{ course.title }}》</a>
+            </div>
+            
+            <div class="mll text-muted pull-left">
+              提交时间：{{ homeworkResult.endTime|date('Y-n-d H:i') }}
+            </div>
+          </div>
+        </td>
+        <td class="vertical-middle">
+          {% if status == 'reviewing' %}
+            <a href="{{ path('course_manage_homework_check', {id:homeworkResult.courseId,resultId:homeworkResult.id,source:source|default('course'),targetId:targetId|default(0),action:'check' }) }}" target="_blank">批改</a>
+          {% else %}
+            <a href="{{ path('homework_result_show',{resultId:homeworkResult.id,action:'check' }) }}" target="_blank" >查看</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  {% else %}
+    {% if status == 'reviewing' %}
+      <div class="empty">没有需要批改的作业</div>
     {% else %}
-      {% if status == 'reviewing' %}
-        <div class="empty">没有需要批改的作业</div>
-      {% else %}
-        <div class="empty">没有已批改的作业</div>
-      {% endif %}
-    {% endif  %}
-  </tbody>
+      <div class="empty">没有已批改的作业</div>
+    {% endif %}
+  {% endif  %}
 </table>
 {{ web_macro.paginator(paginator) }}

@@ -13,7 +13,7 @@
   {% endif %}
   {# <a class="btn btn-info btn-sm mhs" href="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}"><i class="glyphicon glyphicon-export"></i> {{'导出学员'|trans}}</a> #}
 </div>
-<ul class="nav nav-tabs mbl">
+<ul class="nav nav-pills mbl">
   <li class="active">
     <a href="javascript:;">{{ '正式学员'|trans }}</a>
   </li>
@@ -32,9 +32,9 @@
 <table class="table table-middle table-striped" id="course-student-list">
   <thead>
     <tr>
-      <th width="30%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</th>
+      <th width="40%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</th>
       {# <th width="20%">{{'服务期限'|trans}}</th> #}
-      <th width="20%">{{'学习进度'|trans}}</th>
+      <th width="30%">{{'学习进度'|trans}}</th>
       <th width="30%%">{{'操作'|trans}}</th>
     </tr>
   </thead>

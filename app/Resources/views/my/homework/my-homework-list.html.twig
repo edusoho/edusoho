@@ -8,7 +8,7 @@
   <div class="panel panel-default panel-col">
     <div class="panel-heading">我的作业</span></div>
     <div class="panel-body">
-      <ul class="nav nav-tabs">
+      <ul class="nav nav-pills mb15">
         <li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'finished'}) }}">已批改</a></li>
         <li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'reviewing'}) }}">批改中</a></li>
       </ul>

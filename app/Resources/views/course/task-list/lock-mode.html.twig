@@ -1,12 +1,13 @@
 <div class="course-detail-content">
-  <div class="clearfix mbl">
+  {#@TODO 方块样式展示#}
+  {#<div class="clearfix mbl">
     <div class="btn-group pull-right js-task-show-type" role="tablist">
       <a class="btn btn-default active" data-list=".js-task-list-ul"> <i class="es-icon es-icon-menu"></i>
       </a>
       <a class="btn btn-default" data-list=".js-task-chart-ul"> <i class="es-icon es-icon-viewmodule"></i>
       </a>
     </div>
-  </div>
+  </div>#}
   <ul class="task-list task-list-md task-list-hover js-task-list-ul">
     {% for key, item in courseItems %}
       {% if item.itemType == 'chapter' and item.type == 'chapter' %}
@@ -78,7 +79,8 @@
       {% endif %}
     {% endfor %}
   </ul>
-  <ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
+   {#@TODO 方块样式展示#}
+  {#<ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
     {% for key, item in courseItems %}
       {% if  item.itemType == 'task' %}
         {% set task = item %}
@@ -108,8 +110,8 @@
                   </a>
                 {% else %}
                   <span class="text-overflow title">
-                  {% include 'course/task-list/parts/list-li-title.html.twig' %}
-                </span>
+                    {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                  </span>
                 {% endif  %}
             {% else %}
               <a class="text-overflow title" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
@@ -127,10 +129,9 @@
               </span>
             {% endif %}
             {% set meta =  activity_meta(task.activity.mediaType) %}
-            {{ task.activity.length|default(0)|activity_length_format }}
             <span class="es-icon es-icon {{ meta.icon }} right-menu task-type-icon {% if task.status != 'published' %} mouse-leave {% endif %}" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ meta.name }}任务"></span>
         </li>
       {% endif %}
     {% endfor %}
-  </ul>
+  </ul>#}
 </div>
