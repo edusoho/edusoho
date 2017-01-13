@@ -90,6 +90,11 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return ServiceKernel::instance()->createDao('course.lessonDao');
     }
+
+    private function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
+    }
 }
 
 abstract class AbstractUpdater
