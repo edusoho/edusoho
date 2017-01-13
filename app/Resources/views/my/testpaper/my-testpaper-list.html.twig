@@ -31,7 +31,6 @@
                       <small class="color-gray">{{'来自课程'|trans}}<a href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
                       {% if course.id|default(0) > 0 %}
                         <small class="color-gray">{{'计划'|trans}}<a href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
-                      {% else %}{{'计划已删除'|trans}}
                       {% endif %}
                       
                       <small class="color-gray mhs">•</small>
