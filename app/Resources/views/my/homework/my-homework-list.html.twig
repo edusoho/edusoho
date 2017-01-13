@@ -8,7 +8,7 @@
   <div class="panel panel-default panel-col">
     <div class="panel-heading">我的作业</span></div>
     <div class="panel-body">
-      <ul class="nav nav-tabs">
+      <ul class="nav nav-pills mb15">
         <li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'finished'}) }}">已批改</a></li>
         <li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'reviewing'}) }}">批改中</a></li>
       </ul>
@@ -27,8 +27,12 @@
                   <td width="55%">
                     {{ task.title|plain_text(60) }}
                     <div>
-                      <small class="color-gray">{{'来自课程'|trans}}《{{ courseSet.title }}》</small>
-                      <small class="color-gray">{{'计划'|trans}}《{{ course.title|default(null) }}》</small>
+                      {% if courseSet|default(null) %}
+                        <small class="color-gray">{{'来自课程'|trans}}<a href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
+                      {% endif %}
+                      {% if course|default(null) %}
+                        <small class="color-gray">{{'计划'|trans}}<a href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
+                      {% endif %}
                       <small class="color-gray mhs">•</small>
                       <small class="color-gray" title="{{'开始时间'|trans}}">{{ paperResult.beginTime|date('Y年n月d日 H:i:s'|trans) }}</small>
                     </div>

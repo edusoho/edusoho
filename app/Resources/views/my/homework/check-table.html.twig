@@ -1,32 +1,38 @@
-<table class="table table-striped">
-  {% if paperResults|default(null) %}
-    <thead>
-      <tr>
-        <th width="80%">学员</th>
-        <th width="20%">操作</th>
-      </tr>
-    </thead>
-    {% for key,homeworkResult in paperResults %}
-      {% set user = users[homeworkResult.userId] %}
-      {% set lesson = lessons[homeworkResult.lessonId]|default(null) %}
-      {% set course = courses[homeworkResult.courseId]|default(null) %}
-      {% set courseSet = courseSets[homeworkResult.courseSetId]|default(null) %}
-      
-      <tr>
-        <td class="media">
-          {{ web_macro.user_avatar(user, 'pull-left') }}
-          <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
-          <div class="clear-fix text-sm">
-            <div class="pull-left">
-              课程:<a class="text-success" href="{{ path('course_set_show',{id:courseSet.id}) }}">《{{ courseSet.title }}》</a>
+<table class="table table-striped table-hover">
+  <tbody>
+    {% if paperResults|default(null) %}
+      <thead>
+        <tr>
+          <th width="70%">学员</th>
+          <th width="30%">操作</th>
+        </tr>
+      </thead>
+      {% for key,homeworkResult in paperResults %}
+        {% set user = users[homeworkResult.userId] %}
+        {% set lesson = lessons[homeworkResult.lessonId]|default(null) %}
+        {% set course = courses[homeworkResult.courseId]|default(null) %}
+        {% set courseSet = courseSets[homeworkResult.courseSetId]|default(null) %}
+        
+        <tr>
+          <td class="media">
+            {{ web_macro.user_avatar(user, 'pull-left') }}
+            <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+            <div class="clear-fix text-sm">
+              {% if courseSet|default(null) %}
+                <div class="pull-left">
+                  课程:<a class="text-success" href="{{ path('course_set_show',{id:courseSet.id}) }}">《{{ courseSet.title }}》</a>
+                </div>
+              {% endif %}
+              {% if course|default(null) %}
+                <div class="pull-left">
+                  计划:<a class="text-success" href="{{ path('course_show',{id:course.id}) }}">《{{ course.title }}》</a>
+                </div>
+              {% endif %}
+              <div class="mll text-muted pull-left">
+                提交时间：{{ homeworkResult.endTime|date('Y-n-d H:i') }}
+              </div>
             </div>
-            <div class="pull-left">
-              计划:<a class="text-success" href="{{ path('course_show',{id:course.id}) }}">《{{ course.title }}》</a>
-            </div>
-            
-            <div class="mll text-muted pull-left">
-              提交时间：{{ homeworkResult.endTime|date('Y-n-d H:i') }}
-            </div>
+
           </div>
         </td>
         <td class="vertical-middle">

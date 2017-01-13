@@ -3,8 +3,10 @@
     <a href="{% if status == 'reviewing' %}{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id}) }}{% elseif status == 'finished' %}{{ path('testpaper_result_show', {resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}{% endif %}" target="_blank">{{ testpaper.name|plain_text(60) }}</a>
     <br>
     <small class="text-muted">
-      {% if course|default(null) %}
+      {% if courseSet|default(null) %}
         {{ '来自课程《%title%》'|trans({'%title%':courseSet.title|default('')}) }} •
+      {% endif %}
+      {% if course|default(null) %}
         {{ '计划《%title%》'|trans({'%title%':course.title|default('')}) }}
       {% endif %}
     </small>

@@ -2,23 +2,22 @@
 
 namespace AppBundle\Controller\Course;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\MaterialService;
-use Biz\Course\Service\ReviewService;
-use Biz\File\Service\UploadFileService;
-use Biz\Task\Service\TaskResultService;
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
+use Biz\Course\Service\ReviewService;
+use Biz\Course\Service\MaterialService;
+use Biz\File\Service\UploadFileService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseNoteService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
 
 class CourseController extends CourseBaseController
 {
     public function summaryAction($course, $member = array())
     {
-
         return $this->render('course/tabs/summary.html.twig', array(
             'course' => $course,
             'member' => $member
@@ -61,7 +60,6 @@ class CourseController extends CourseBaseController
             $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
         }
 
-
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $users = ArrayToolkit::index($users, 'id');
 
@@ -87,12 +85,11 @@ class CourseController extends CourseBaseController
     {
         $courseSet  = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $conditions = array(
-            'parentId' => 0
+            'parentId'    => 0,
+            'courseSetId' => $courseSet['id']
         );
 
-        if (empty($member)) {
-            $conditions['courseSetId'] = $courseSet['id'];
-        } else {
+        if (!empty($member)) {
             $conditions['courseId'] = $course['id'];
         }
 
@@ -131,7 +128,6 @@ class CourseController extends CourseBaseController
         $userIds = array();
 
         foreach ($courses as $key => $course) {
-
             $userIds = array_merge($userIds, $course['teacherIds']);
 
             $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
@@ -153,7 +149,6 @@ class CourseController extends CourseBaseController
             'mode'         => $mode
         ));
     }
-
 
     public function tasksAction($course, $member = array())
     {
@@ -195,11 +190,10 @@ class CourseController extends CourseBaseController
 
     public function otherCourseAction(Request $request, $course)
     {
-
         // $this->getCourseService()->getOtherCourses($course['id']);
 
         return $this->render('course/widgets/other-course.html.twig', array(
-            'otherCourse' => $course,
+            'otherCourse' => $course
         ));
     }
 
@@ -265,7 +259,7 @@ class CourseController extends CourseBaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -276,7 +270,7 @@ class CourseController extends CourseBaseController
     public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user = $this->getCurrentUser();
+        $user                  = $this->getCurrentUser();
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是课程的学员。');
         }
