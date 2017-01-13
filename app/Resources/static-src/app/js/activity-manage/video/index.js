@@ -15,6 +15,28 @@ jQuery.validator.addMethod("time_length", function (value, element) {
 
 showChooserType($('[name="ext[mediaSource]"]'));
 
+
+function _inItStep3from() {
+
+  var $step3_forom = $('#step3-form');
+  var validator = $step3_forom.data('validator');
+
+  $step3_forom.validate({
+    rules: {
+      'ext[finishDetail]': {
+        required: true,
+        unsigned_integer: true,
+        max: 300,
+      }
+    },
+    messages: {
+      'ext[finishDetail]': {
+        required: '请输入时长'
+      }
+    }
+  });
+  $step3_forom.data('validator', validator);
+}
 function _inItStep2form() {
   var $step2_form = $('#step2-form');
   var validator = $step2_form.data('validator');
@@ -29,7 +51,8 @@ function _inItStep2form() {
       },
       minute: 'required unsigned_integer time_length',
       second: 'required second_range time_length',
-      'ext[mediaSource]': 'required'
+      'ext[mediaSource]': 'required',
+      'ext[finishDetail]': 'unsigned_integer'
     },
     messages: {
       minute: {
@@ -41,7 +64,8 @@ function _inItStep2form() {
         second_range: '秒数只能在0-59之间',
         time_length: '时长必须大于0'
       },
-      'ext[mediaSource]': "请上传或选择%display%"
+      'ext[mediaSource]': "请上传或选择%display%",
+      'ext[finishDetail]': 'dddd'
     }
   });
   $step2_form.data('validator', validator);
@@ -82,8 +106,10 @@ const onSelectFile = file => {
 $("#finish-condition").on('change', function (event) {
   if (event.target.value == 'time') {
     $('.viewLength').removeClass('hidden');
+    _inItStep3from();
   } else {
     $('.viewLength').addClass('hidden');
+    $('input[name="ext[finishDetail]"]').rules('remove')
   }
 })
 
