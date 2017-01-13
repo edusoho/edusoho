@@ -29,12 +29,14 @@
     {#<input type="hidden" name="ranges" value="">#}
     <div class="hidden mtm" id="testpaper-range-selects">
       <select class="form-control width-input width-input-large" id="testpaper-range-start" name="ranges[start]" >
+        <option value="">请选择</option>
         {% for range in ranges if range %}
           <option value="{{ range.id }}">{{ range.title }}</option>
         {% endfor %}
       </select>
       <span class="text-muted mrs">{{'到'|trans}}</span>
       <select class="form-control width-input width-input-large" id="testpaper-range-end" name="ranges[end]">
+        <option value="">请选择</option>
         {% for range in ranges if range %}
           <option value="{{ range.id }}">{{ range.title }}</option>
         {% endfor %}

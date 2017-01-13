@@ -30,7 +30,6 @@ export default class PersonaMultiInput extends MultiInput {
   constructor(props) {
     super(props);
     this.searchResult = null;
-    console.log({'dataSource':this.props.dataSource});
   }
 
   componentWillMount() {
@@ -49,7 +48,6 @@ export default class PersonaMultiInput extends MultiInput {
   onChecked(event) {
     let id = event.currentTarget.value;
     updateChecked(this.state.dataSourceUi,id);
-    console.log({'updateChecked after': this.state.dataSourceUi});
     this.getOutputSets();
     this.setState({
       list: this.getList()

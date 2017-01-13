@@ -32,8 +32,13 @@ class StudentManageController extends BaseController
         if (!empty($students)) {
             //分母只包括已发布的任务
             $taskCount = $this->getTaskService()->count(array('courseId' => $courseId, 'status' => 'published'));
-            foreach ($students as $student) {
-                $processes[$student['userId']] = $this->calcStudentLearnProcess($student['userId'], $courseId, $taskCount);
+            if ($taskCount > 0) {
+                $userFinishedTasks = $this->getTaskResultService()->findFinishedTasksByCourseIdGroupByUserId($courseId);
+                if (!empty($userFinishedTasks)) {
+                    foreach ($userFinishedTasks as $task) {
+                        $processes[$task['userId']] = sprintf('%d', $task['taskCount'] / $taskCount * 100.0);
+                    }
+                }
             }
         }
         return $this->render('course-manage/student/index.html.twig', array(
@@ -213,12 +218,6 @@ class StudentManageController extends BaseController
         return $this->render('course-manage/student/report-card.html.twig', $reportCard);
     }
 
-    private function calcStudentLearnProcess($userId, $courseId, $taskCount)
-    {
-        $learnedCount = $this->getTaskResultService()->countUserLearnedTasksByCourseId($courseId, $userId);
-        return $taskCount <= 0 ? '0' : sprintf('%d', $learnedCount / $taskCount * 100.0);
-    }
-
     private function createReportCard($course, $user)
     {
         $reportCard = array();
@@ -265,20 +264,23 @@ class StudentManageController extends BaseController
         if (!empty($activities)) {
             $testIds = ArrayToolkit::column($activities, 'mediaId');
 
-            $allTests = $this->getTestpaperService()->findTestpapersByIds($testIds);
+            $allTests = $this->getTestpaperService()->searchTestpapers(array(
+                'ids'   => $testIds,
+                'types' => array('homework', 'testpaper')
+            ), array('createdTime' => 'ASC'), 0, PHP_INT_MAX);
 
             $finishedTargets = $this->getTestpaperService()->searchTestpaperResults(array(
-                'testIds' => $testIds,
-                'userId'  => $user['id'],
-                'status'  => 'finished',
-                'types'   => array('homework', 'testpaper')
+                'courseId' => $course['id'],
+                'userId'   => $user['id'],
+                'status'   => 'finished',
+                'types'    => array('homework', 'testpaper')
             ), array('lessonId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
 
             $reviewingTargets = $this->getTestpaperService()->searchTestpaperResults(array(
-                'testIds' => $testIds,
-                'userId'  => $user['id'],
-                'status'  => 'reviewing',
-                'types'   => array('homework', 'testpaper')
+                'courseId' => $course['id'],
+                'userId'   => $user['id'],
+                'status'   => 'reviewing',
+                'types'    => array('homework', 'testpaper')
             ), array('lessonId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
         }
 
@@ -287,12 +289,11 @@ class StudentManageController extends BaseController
             foreach ($finishedTargets as $target) {
                 if ($currentActivityId == 0 || $currentActivityId != $target['lessonId']) {
                     $currentActivityId = $target['lessonId'];
-
-                    if ($target['type'] == 'homework') {
-                        $finishedHomeworksCount += 1;
-                    } else {
-                        $finishedTestpapersCount += 1;
-                    }
+                }
+                if ($target['type'] == 'homework') {
+                    $finishedHomeworksCount += 1;
+                } else {
+                    $finishedTestpapersCount += 1;
                 }
 
                 if (empty($bestTests[$currentActivityId])) {

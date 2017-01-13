@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\My;
 
 use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
@@ -126,7 +127,7 @@ class CourseController extends CourseBaseController
         $user = $this->getUser();
         if ($taskCount) {
             //学习记录
-            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id']));
+            $taskResultCount = $this->getTaskResultService()->countTaskResults(array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id']));
 
             //学习进度
             $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
@@ -186,6 +187,9 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    /**
+     * @return TaskResultService
+     */
     public function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');

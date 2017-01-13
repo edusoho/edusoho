@@ -1,9 +1,10 @@
 <?php
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\My;
 
 use Biz\Order\Service\MoneyService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
+use AppBundle\Controller\BaseController;
 
 class MoneyRecordController extends BaseController
 {
@@ -29,7 +30,7 @@ class MoneyRecordController extends BaseController
         	$paginator->getPerPageCount()
     	);
 
-		return $this->render('money-record/index.html.twig',array(
+		return $this->render('my/money-record/index.html.twig',array(
         	'incomeRecords' => $incomeRecords,
             'paginator' => $paginator
         ));
@@ -57,7 +58,7 @@ class MoneyRecordController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-		return $this->render('money-record/payout.html.twig',array(
+		return $this->render('my/money-record/payout.html.twig',array(
             'payoutRecords' => $payoutRecords,
             'paginator' => $paginator
         ));

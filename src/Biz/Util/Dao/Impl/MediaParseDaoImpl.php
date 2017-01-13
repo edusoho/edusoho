@@ -18,4 +18,9 @@ class MediaParseDaoImpl extends GeneralDaoImpl implements MediaParseDao
     {
         return $this->getByFields('hash', $hash);
     }
+
+    public function declares()
+    {
+        return array();
+    }
 }

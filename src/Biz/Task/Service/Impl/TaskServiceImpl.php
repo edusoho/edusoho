@@ -110,6 +110,12 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findByCourseIds($courseIds);
     }
 
+    public function findTasksByActivityIds($activityIds)
+    {
+        $tasks = $this->getTaskDao()->findByActivityIds($activityIds);
+        return ArrayToolkit::index($tasks, 'activityId');
+    }
+
     public function countTasksByCourseId($courseId)
     {
         return $this->getTaskDao()->count(array('courseId' => $courseId));

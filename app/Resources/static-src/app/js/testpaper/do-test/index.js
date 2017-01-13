@@ -28,7 +28,9 @@ class DoTestpaper extends DoTestBase {
           self.$container.find('#time-finish-dialog').modal('show');
           clearInterval(self.$usedTimer);
           self.usedTime = self.$timer.data('time') / 60;
-          self._submitTest(self.$container.find('[data-role="paper-submit"]').data('url'));
+          if ($('input[name="preview"]').length == 0) {
+            self._submitTest(self.$container.find('[data-role="paper-submit"]').data('url'));
+          }
         },
         repeat: true,
         start: function() {

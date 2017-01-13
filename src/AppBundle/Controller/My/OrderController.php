@@ -1,13 +1,14 @@
 <?php
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\My;
 
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 use Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
 
-class MyOrderController extends BaseController
+class OrderController extends BaseController
 {
     protected function getTimeRange($fields)
     {

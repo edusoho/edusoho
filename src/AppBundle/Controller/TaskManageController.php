@@ -13,7 +13,6 @@ class TaskManageController extends BaseController
     public function createAction(Request $request, $courseId)
     {
         $course     = $this->tryManageCourse($courseId);
-        $taskMode   = $request->query->get('type');
         $categoryId = $request->query->get('categoryId');
         $chapterId  = $request->query->get('chapterId');
         if ($request->isMethod('POST')) {
@@ -23,12 +22,12 @@ class TaskManageController extends BaseController
             $task['fromCourseSetId'] = $course['courseSetId'];
 
             $task                    = $this->getTaskService()->createTask($this->parseTimeFields($task));
-            $tasksRenderPage = $this->createCourseStrategy($course)->getTaskItemRenderPage();
 
             if ($course['isDefault'] && isset($task['mode']) && $task['mode'] != 'lesson') {
                 return $this->createJsonResponse(array('append' => false));
             }
 
+            $tasksRenderPage = $this->createCourseStrategy($course)->getTaskItemRenderPage();
             return $this->render($tasksRenderPage, array(
                 'course' => $course,
                 'task'   => $task
@@ -36,9 +35,8 @@ class TaskManageController extends BaseController
         }
 
         return $this->render('task-manage/modal.html.twig', array(
-            'course'     => $course,
             'mode'       => 'create',
-            'taskMode'   => $taskMode,
+            'course'     => $course,
             'categoryId' => $categoryId,
             'chapterId'  => $chapterId
         ));
@@ -48,7 +46,6 @@ class TaskManageController extends BaseController
     {
         $course   = $this->tryManageCourse($courseId);
         $task     = $this->getTaskService()->getTask($id);
-        $taskMode = $request->query->get('type');
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在计划中');
         }
@@ -62,18 +59,11 @@ class TaskManageController extends BaseController
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
-        $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
-
-        $editController = $actionConfig['edit'];
-
         return $this->render('task-manage/modal.html.twig', array(
             'mode'                => 'edit',
             'currentType'         => $activity['mediaType'],
-            'activity'            => $activity,
-            'activity_controller' => $editController,
             'course'              => $course,
             'task'                => $task,
-            'taskMode'            => $taskMode
         ));
     }
 
@@ -154,15 +144,6 @@ class TaskManageController extends BaseController
         return $this->createService('Activity:ActivityService');
     }
 
-    /**
-     * @param  $course
-     * @return BaseStrategy
-     */
-    protected function createCourseStrategy($course)
-    {
-        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
-    }
-
     protected function getActivityConfig()
     {
         return $this->get('extension.default')->getActivities();
@@ -176,6 +157,11 @@ class TaskManageController extends BaseController
     {
         $config = $this->getActivityConfig();
         return $config[$type]['actions'];
+    }
+
+    protected function createCourseStrategy($course)
+    {
+        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
     }
 
     //datetime to int

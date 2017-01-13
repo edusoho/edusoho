@@ -52,21 +52,15 @@ class Testpaper extends Activity
 
         $result = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseSetId'], $activity['id'], 'testpaper');
 
-        if (!$result) {
+        if (!$result || empty($testpaperActivity['finishCondition'])) {
             return false;
         }
 
-        if ($result['status'] == 'reviewing' && $testpaperActivity['finishCondition']['type'] == 'submit') {
+        if (in_array($result['status'], array('reviewing', 'finished')) && $testpaperActivity['finishCondition']['type'] == 'submit') {
             return true;
         }
 
-        if ($result['status'] != 'finished') {
-            return false;
-        }
-
-        if (!empty($testpaperActivity['finishCondition']) && $testpaperActivity['finishCondition']['type'] == 'submit') {
-            return true;
-        } elseif ($result['status'] == 'finished' && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
+        if (in_array($result['status'], array('reviewing', 'finished')) && $testpaperActivity['finishCondition']['type'] == 'score' && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']) {
             return true;
         }
 

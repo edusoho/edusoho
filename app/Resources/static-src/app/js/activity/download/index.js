@@ -1,3 +1,9 @@
-/**
- * Created by Simon on 10/11/2016.
- */
+import ActivityEmitter from "../activity-emitter";
+
+let emitter = new ActivityEmitter();
+
+$(".download-activity-list").on('click', 'a', function () {
+  $(this).attr('href', $(this).data('url'))
+  emitter.emit('finish', {fileId: $(this).data('fileId')});
+})
+
