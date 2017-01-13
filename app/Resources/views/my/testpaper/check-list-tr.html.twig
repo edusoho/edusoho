@@ -15,9 +15,9 @@
     {{ web_macro.user_link(student) }} <br>
     <small class="text-muted">{{ paperResult.endTime|date("Y-n-d H:i") }} {{'交卷'|trans}}</small>
   </td>
-  <td width="10%">
+  <td width="30%">
     {% if status == 'reviewing' and (not isTeacher is defined or isTeacher) %}
-      <a href="{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}" class="btn-sm pull-right" target="_blank">{{'批阅'|trans}}</a>
+      <a href="{{ path('course_manage_testpaper_check', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0)}) }}" target="_blank">{{'批阅'|trans}}</a>
     {% endif %}
 
     {% if status == 'finished' %}
