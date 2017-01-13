@@ -13,4 +13,8 @@ class SystemUtilDaoImpl extends GeneralDaoImpl implements SystemUtilDao
         return $this->getConnection()->fetchAll($sql);
     }
 
+    public function declares()
+    {
+        return array();
+    }
 }
