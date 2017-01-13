@@ -23,6 +23,11 @@ class ClassroomController extends BaseController
         if (!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
+        // @TODO 班级改造再改动
+        return $this->render('my/teaching/classroom.html.twig', array(
+            'classrooms' => array(),
+            'members'    => array()
+        ));
 
         $classrooms   = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->getId()), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
         $classrooms   = array_merge($classrooms, $this->getClassroomService()->searchMembers(array('role' => 'assistant', 'userId' => $user->getId()), array('createdTime' => 'desc'), 0, PHP_INT_MAX));
