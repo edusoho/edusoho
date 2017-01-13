@@ -88,7 +88,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function getLessonDao()
     {
-        return ServiceKernel::instance()->createDao('course.lessonDao');
+        return ServiceKernel::instance()->createDao('Course.lessonDao');
     }
 
     private function getSettingService()
