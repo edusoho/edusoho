@@ -88,11 +88,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $logListener->handle($activity, $logData);
 
         $activityListener = $this->getActivityConfig($activity['mediaType'])->getListener($eventName);
+
         if (!is_null($activityListener)) {
+
             $activityListener->handle($activity, $data);
         }
 
         $this->dispatchEvent("activity.operated", new Event($activity, $data));
+
     }
 
     public function createActivity($fields)
@@ -181,6 +184,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $activity       = $this->getActivity($id);
         $activityConfig = $this->getActivityConfig($activity['mediaType']);
+
         return $activityConfig->isFinished($id);
     }
 

@@ -1,9 +1,11 @@
 import EsMessenger from '../../../common/messenger';
+import ActivityEmitter from '../../activity/activity-emitter';
 class VideoPlay {
   constructor(elment) {
     this.dom = $(elment);
     this.data = this.dom.data();
     this.player = {};
+    this.emitter = new ActivityEmitter();
   }
 
   play() {
@@ -16,7 +18,7 @@ class VideoPlay {
 
     messenger.on("ended", (msg) => {
       this.player.playing = false;
-      this._onFinishLearnTask();
+      this._onFinishLearnTask(msg);
     });
 
     messenger.on("playing", (msg) => {
@@ -30,8 +32,11 @@ class VideoPlay {
     messenger.on("timechange", (msg) => {})
   }
 
-  _onFinishLearnTask() {
-    console.log('messenger------------', '_onFinishLearnTask')
+  _onFinishLearnTask(msg) {
+    this.emitter.emit('finish', { data: msg }).then(() => {
+    }).catch((error) => {
+      console.error(error);
+    });
   }
 
 

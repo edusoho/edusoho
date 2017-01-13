@@ -41,6 +41,7 @@ export default class TaskEventEmitter {
       channel: 'activity-events',
       topic: '#',
       callback: ({event, data}) => {
+        console.log(event, data,'---------------------------')
         let listeners = this.eventMap.receives[event];
         $.post(this.eventUrl, {eventName: event, data: data})
             .done(response => {

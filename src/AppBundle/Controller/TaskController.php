@@ -189,7 +189,6 @@ class TaskController extends BaseController
         $data           = $request->request->get('data', array());
         $data['taskId'] = $id;
         $result         = $this->getTaskService()->trigger($id, $eventName, $data);
-
         return $this->createJsonResponse(array(
             'event'  => $eventName,
             'data'   => $data,

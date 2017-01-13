@@ -41,7 +41,7 @@ class Audio extends Activity
         $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
         return !empty($result)
-        && $result > $activity['length'];
+            && $result > $activity['length'];
     }
 
     /**
