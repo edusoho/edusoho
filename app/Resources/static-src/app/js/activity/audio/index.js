@@ -34,7 +34,6 @@ class VideoPlay {
 
   _onFinishLearnTask(msg) {
     this.emitter.emit('finish', { data: msg }).then(() => {
-      console.log('audio.finish');
     }).catch((error) => {
       console.error(error);
     });

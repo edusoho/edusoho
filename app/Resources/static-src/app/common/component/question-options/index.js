@@ -108,7 +108,6 @@ export default class QuestionOptions extends Component {
   }
 
   publishMessage(isValidator) {
-    console.log({'publishMessage':isValidator});
     postal.publish({
       channel : "manage-question",
       topic : "question-create-form-validator-end",
@@ -119,7 +118,6 @@ export default class QuestionOptions extends Component {
   }
 
   validatorOptions(data) {
-    console.log('validatorOptions');
     let validNum = 0;
 
     //触发视觉
@@ -130,9 +128,6 @@ export default class QuestionOptions extends Component {
     for(let option in this.validatorDatas.Options){
       validNum += this.validatorDatas.Options[option];
     }
-
-    console.log(this.state.dataSource.length);
-    console.log(validNum);
 
     if(validNum < this.state.dataSource.length ) {
       console.log(' validNum is error ');

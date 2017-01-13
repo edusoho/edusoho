@@ -1,4 +1,3 @@
-console.log('live loaded....');
 class Live {
   constructor() {
     this.init();
@@ -6,7 +5,6 @@ class Live {
 
   init() {
     let self = this;
-    console.log();
     this.isLiveRoomOpened = false;
     let intervalId = 0;
     let tryCount = 1;
@@ -30,7 +28,6 @@ class Live {
           if (data.roomUrl) {
             clearInterval(intervalId);
             self.isLiveRoomOpened = true;
-            console.log('isLiveRoomOpened : ', self, self.isLiveRoomOpened);
             let html = '<iframe name="classroom" src="' + data.roomUrl + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
             $("body").html(html);
           }
@@ -51,7 +48,6 @@ class Live {
 
     let eventName = null;
     let eventTrigger = setInterval(function() {
-      console.log('triggerLiveEvent : ', eventName, self.isLiveRoomOpened);
       if (!self.isLiveRoomOpened) return;
       eventName = eventName ? 'doing' : 'start';
       $.ajax({
