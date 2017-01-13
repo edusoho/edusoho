@@ -3,8 +3,8 @@
     {% if paperResults|default(null) %}
       <thead>
         <tr>
-          <th width="70%">学员</th>
-          <th width="30%">操作</th>
+          <th width="80%">学员</th>
+          <th width="20%">操作</th>
         </tr>
       </thead>
       {% for key,homeworkResult in paperResults %}
@@ -32,9 +32,9 @@
           </td>
           <td>
             {% if status == 'reviewing' %}
-              <a href="{{ path('course_manage_homework_check', {id:homeworkResult.courseId,resultId:homeworkResult.id,source:source|default('course'),targetId:targetId|default(0),action:'check' }) }}" class="btn btn-default btn-sm" target="_blank">批改</a>
+              <a href="{{ path('course_manage_homework_check', {id:homeworkResult.courseId,resultId:homeworkResult.id,source:source|default('course'),targetId:targetId|default(0),action:'check' }) }}" target="_blank">批改</a>
             {% else %}
-              <a class="btn btn-default btn-sm"  href="{{ path('homework_result_show',{resultId:homeworkResult.id,action:'check' }) }}" target="_blank" >查看</a>
+              <a href="{{ path('homework_result_show',{resultId:homeworkResult.id,action:'check' }) }}" target="_blank" >查看</a>
             {% endif %}
           </td>
         </tr>
