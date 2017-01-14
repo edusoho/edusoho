@@ -390,7 +390,7 @@
   </div>
         <div class="row form-group">
           <div class="col-md-3 control-label">
-            <label>{{ '云视频指纹:'|trans }}</label>
+            <label>{{ '云视频指纹：'|trans }}</label>
           </div>
           <div class="controls col-md-8 radios">
             {{ radios('video_fingerprint', {'0':'关闭'|trans, '1':'开启'|trans}, storageSetting.video_fingerprint) }}
@@ -408,6 +408,15 @@
       <input type="text" id="video_fingerprint_time" class="form-control width-input width-input-small"
              name="video_fingerprint_time" value="{{ storageSetting.video_fingerprint_time }}"> 秒
       <div class="text-muted mts">建议时长在0.5 - 1.5秒之间</div>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ '云视频防盗增强：'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('enable_hls_encryption_plus', {'0':'关闭'|trans, '1':'开启'|trans}, storageSetting.enable_hls_encryption_plus|default(0)) }}
+      <div class="help-block">{{ '开启后，云视频防盗效果进一步提升，但视频将无法在手机浏览器中播放，系统会引导用户使用App观看。'|trans }}</div>
     </div>
   </div>
   <div class="row form-group">

@@ -41,8 +41,11 @@ class Courses extends BaseResource
             'showCount' => ''
         );
 
-        $result                   = array_merge($defaultQuery, $request->query->all());
-        $conditions['categoryId'] = $result['categoryId'];
+        $result = array_merge($defaultQuery, $request->query->all());
+
+        if (!empty($result['categoryId'])) {
+            $conditions['categoryId'] = $result['categoryId'];
+        }
 
         if ($result['orderType'] == 'hot') {
             $orderBy = 'hitNum';
