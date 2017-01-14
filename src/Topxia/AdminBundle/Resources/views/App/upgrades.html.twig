@@ -44,7 +44,11 @@
                   <div class="text-muted">
                     <small>{{ '开发者：'|trans }}{{ app.developerName }}</small>
                   </div>
-
+                  {% if app.code == 'MAIN' %}
+                  <div class="class-rating mtm">
+                    <span class="text-muted">{{ '更新记录：'|trans }}<a href="{{ path('changelog_list') }}" class="default" target="_blank">所有更新日志</a></span>
+                  </div>
+                  {% endif %}
                   <div class="class-rating mtm">
                     <span class="text-muted">{{ '版本：'|trans }}{{ app.package.toVersion }}</span>
                   </div>
