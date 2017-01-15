@@ -20,7 +20,7 @@
             <i class="es-icon
               {% if task_lock %}
               es-icon-lock
-              {% elseif  not task.result|default(null) %}
+              {% elseif  not task.result|default(null) or(member is empty)  %}
               es-icon-undone-check color-gray
               {% elseif task.result.status == 'start' %}
               es-icon-doing color-primary
