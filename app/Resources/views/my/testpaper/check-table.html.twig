@@ -1,13 +1,6 @@
 {% if paperResults %}
 
 <table class="table table-striped">
-  <thead>
-    <tr>
-      <th width="60%">考试</th>
-      <th width="20%">学员</th>
-      <th width="20%">操作</th>
-    </tr>
-  </thead>
   <tbody>
     {% for paperResult in paperResults %}
       {% set testpaper = testpapers[paperResult.testId] %}
