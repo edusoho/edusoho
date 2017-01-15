@@ -52,7 +52,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     {
         $material = $this->getMaterialDao()->create($fields);
 
-        // $this->dispatchEvent("course.material.create", array('argument' => $argument, 'material' => $material));
+         $this->dispatchEvent("course.material.create", array('argument' => $argument, 'material' => $material));
 
         return $material;
     }
@@ -62,7 +62,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         $sourceMaterial = $this->getMaterialDao()->get($id);
         $material       = $this->getMaterialDao()->update($id, $fields);
 
-        // $this->dispatchEvent("course.material.update", array('argument' => $argument, 'material' => $material, 'sourceMaterial' => $sourceMaterial));
+        $this->dispatchEvent("course.material.update", array('argument' => $argument, 'material' => $material, 'sourceMaterial' => $sourceMaterial));
 
         return $material;
     }
@@ -76,7 +76,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
         $this->getMaterialDao()->delete($materialId);
 
-        // $this->dispatchEvent("course.material.delete", $material);
+         $this->dispatchEvent("course.material.delete", $material);
     }
 
     public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)

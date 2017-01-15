@@ -268,6 +268,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $updateFields = array_merge($updateFields, $ratingFields);
             } elseif ($field === 'noteNum') {
                 $updateFields['noteNum'] = $this->getNoteService()->countCourseNoteByCourseId($id);
+            } elseif ($field === 'materialNum') {
+                $updateFields['materialNum'] = $this->get()->countCourseNoteByCourseId($id);
             }
         }
 
@@ -780,7 +782,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int     $userId
+     * @param  int $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -801,7 +803,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count = $this->searchCourseCount($conditions);
+        $count      = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
@@ -1045,6 +1047,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+
+    protected function getCourseMaterialService()
+    {
+        return $this->createService('Course:MaterialService');
     }
 
     /**
