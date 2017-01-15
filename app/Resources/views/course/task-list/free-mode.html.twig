@@ -29,7 +29,7 @@
               {% endif %}
               left-menu"></i>
             {% if task.status == 'published' %}              
-              <a class="text-overflow title" {% if member %} href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"{% else %}data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" {% endif %}>
+              <a class="text-overflow title" {% if member %} href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"{% else %} href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" {% endif %}>
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </a>
             {% else %}
