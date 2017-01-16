@@ -49,4 +49,28 @@ abstract class BaseDaoTestCase extends BaseTestCase
 
         return $this->getBiz()->dao("{$packageName}:{$daoName}");
     }
+
+    /**
+     * 用在对createdTime和id等排序时
+     * 第二个参数condition内部条件的顺序是唯一确定，不可改变的，这很关键
+     */
+    protected function factorSort(array &$tar, array $condition)
+    {
+        array_walk($condition, function (&$val) {
+            if (strpos($val, 'ASC') !== false) {
+                $val = 1;
+            } elseif (strpos($val, 'DESC') !== false) {
+                $val = -1;
+            }
+        });
+
+        usort($tar, function ($a, $b) use ($condition) {
+            foreach ($condition as $key => $val) {
+                if ($a[$key] == $b[$key]) {
+                    continue;
+                }
+                return $a[$key] < $b[$key] ? -1 * $val : $val;
+            }
+        });
+    }
 }
