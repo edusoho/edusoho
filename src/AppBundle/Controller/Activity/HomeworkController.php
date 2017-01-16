@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller\Activity;
 
+use Biz\Course\Service\CourseService;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
@@ -133,21 +136,33 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
     }
 
+    /**
+     * @return ServiceKernel
+     */
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();

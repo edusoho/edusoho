@@ -36,6 +36,7 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
 
     public function findMyLearnLogsByActivityIdAndEvent($activityId, $event)
     {
+
         $user = $this->getCurrentUser();
         return $this->getActivityLearnLogDao()->findByActivityIdAndUserIdAndEvent($activityId, $user['id'], $event);
     }

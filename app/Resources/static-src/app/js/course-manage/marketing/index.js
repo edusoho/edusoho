@@ -7,6 +7,7 @@ class Marketing {
 	}
 
 	init(){
+		$('.js-task-price-setting').perfectScrollbar();
 		let $form = $('#course-marketing-form');
 		$('.js-task-price-setting').perfectScrollbar();
 		TabChange();

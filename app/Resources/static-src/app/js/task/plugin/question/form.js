@@ -21,14 +21,18 @@ export default class {
     if (!this.validator || !this.validator.form()) {
       return;
     }
+    let $btn = $(event.currentTarget);
+    $btn.attr('disabled', 'disabled');
 
     let channel = postal.channel('task.plugin.question');
 
     $.post(this.$element.attr('action'), this.$element.serialize())
         .done((html) => {
+          notify('info', '提问成功');
           channel.publish("form.save", {
             html: html
           });
+          $btn.removeAttr('disabled');
           this.collapse();
         })
         .fail((error) => {

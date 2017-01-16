@@ -39,7 +39,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findPublishedCoursesByCourseSetId($courseSetId)
     {
-        return $this->getCourseDao()->findCourseItemssesByCourseSetIdAndStatus($courseSetId, 'published');
+        return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, 'published');
     }
 
     public function getDefaultCourseByCourseSetId($courseSetId)
@@ -332,7 +332,20 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         $course['status'] = 'closed';
 
-        $this->getCourseDao()->update($id, $course);
+        try {
+            $this->beginTransaction();
+            $this->getCourseDao()->update($id, $course);
+
+            $publishedCourses = $this->findPublishedCoursesByCourseSetId($course['courseSetId']);
+            //如果课程下没有了已发布的教学计划，则关闭此课程
+            if (empty($publishedCourses)) {
+                $this->getCourseSetDao()->update($course['courseSetId'], array('status' => 'closed'));
+            }
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
     }
 
     public function publishCourse($id, $userId)
@@ -711,7 +724,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         return $sortedCourses;
     }
-
 
     public function findUserTeachCourseCount($conditions, $onlyPublished = true)
     {

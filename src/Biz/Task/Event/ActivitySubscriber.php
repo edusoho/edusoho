@@ -53,6 +53,9 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         $this->getTaskService()->doTask($taskId, $time);
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');

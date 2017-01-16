@@ -134,7 +134,6 @@ const fileSelect = file => {
   chooserUiOpen();
   addFile(false);
   $('.js-current-file').text(file.name);
-  console.log('action triggered', file);
 }
 
 const fileChooser = new FileChooser();

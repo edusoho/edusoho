@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\My;
 
 use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,49 +18,6 @@ class CourseController extends CourseBaseController
         } else {
             return $this->redirect($this->generateUrl('my_courses_learning'));
         }
-    }
-
-    public function teachingCourseSetsAction(Request $request, $filter = 'normal')
-    {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
-        }
-
-        $conditions = array(
-            'type' => 'normal'
-        );
-
-        if ($filter == 'live') {
-            $conditions['type'] = 'live';
-        }
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getCourseSetService()->countUserTeachingCourseSets($user['id'], $conditions),
-            20
-        );
-
-        $sets = $this->getCourseSetService()->searchUserTeachingCourseSets(
-            $user['id'],
-            $conditions,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $service = $this->getCourseService();
-        $sets    = array_map(function ($set) use ($user, $service) {
-            $set['canManage'] = $set['creator'] == $user['id'];
-            $set['courses']   = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
-            return $set;
-        }, $sets);
-
-        return $this->render('my/teaching/teaching.html.twig', array(
-            'courseSets' => $sets,
-            'paginator'  => $paginator,
-            'filter'     => $filter
-        ));
     }
 
     public function learningAction(Request $request)
@@ -126,7 +84,7 @@ class CourseController extends CourseBaseController
         $user = $this->getUser();
         if ($taskCount) {
             //学习记录
-            $taskResultCount = $this->getTaskResultService()->countTaskResult(array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id']));
+            $taskResultCount = $this->getTaskResultService()->countTaskResults(array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id']));
 
             //学习进度
             $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
@@ -186,6 +144,9 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    /**
+     * @return TaskResultService
+     */
     public function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');

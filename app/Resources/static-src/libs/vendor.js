@@ -20,6 +20,17 @@ $('[data-toggle="tooltip"]').tooltip({
   html:true,
 });
 
+if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
+  $("li.nav-hover").mouseenter(function(event) {
+    $(this).addClass("open");
+  }).mouseleave(function(event) {
+    $(this).removeClass("open");
+  });
+
+} else {
+  $("li.nav-hover >a").attr("data-toggle","dropdown");
+}
+
 
 $(document).ajaxSend(function(a, b, c) {
   if (c.type == 'POST') {

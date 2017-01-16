@@ -16,7 +16,6 @@ export default class List extends Component {
       },(data) =>{
         this.props.sortItem(data);
       });
-      console.log($(`#${this.listId}`));
     }
   }
 

@@ -10,7 +10,7 @@
     {{'试卷批阅'|trans}}
   </div>
   <div class="panel-body">
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-pills">
       <li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('my_testpaper_check_list',{status:'reviewing'}) }}">{{'未批阅'|trans}}</a></li>
       <li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('my_testpaper_check_list',{status:'finished'}) }}">{{'已批阅'|trans}}</a></li>
     </ul>

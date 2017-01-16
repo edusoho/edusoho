@@ -1,19 +1,19 @@
 <?php
 namespace Biz\Testpaper\Service\Impl;
 
-use Biz\Activity\Type\Testpaper;
 use Biz\BaseService;
+use Topxia\Common\ArrayToolkit;
+use Biz\Activity\Type\Testpaper;
+use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
-use Biz\Question\Service\QuestionService;
-use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Testpaper\Dao\TestpaperItemDao;
-use Biz\Testpaper\Dao\TestpaperItemResultDao;
-use Biz\Testpaper\Dao\TestpaperResultDao;
-use Topxia\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Dao\TestpaperResultDao;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Testpaper\Dao\TestpaperItemResultDao;
 use Topxia\Common\Exception\ResourceNotFoundException;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
@@ -335,14 +335,14 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function startTestpaper($id, $fields)
     {
-        if (!isset($fields['lessonId'])) {
+        if (!ArrayToolkit::parts($fields, array('lessonId', 'courseId'))) {
             throw $this->createInvalidArgumentException(' Invalid Argument');
         }
 
         $testpaper = $this->getTestpaper($id);
         $user      = $this->getCurrentuser();
 
-        $testpaperResult = $this->getUserUnfinishResult($testpaper['id'], $testpaper['courseId'], $fields['lessonId'], $testpaper['type'], $user['id']);
+        $testpaperResult = $this->getUserUnfinishResult($testpaper['id'], $fields['courseId'], $fields['lessonId'], $testpaper['type'], $user['id']);
 
         if (!$testpaperResult) {
             $fields = array(
