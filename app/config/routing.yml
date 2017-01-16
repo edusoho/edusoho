@@ -49,11 +49,11 @@ topxia_mobile_v2:
 #    prefix:   /admin
 
 custom_web:
-    resource: "@CustomWebBundle/Resources/config/routing.yml"
+    resource: "@CustomWebBundle/Resources/config/custom_routing.yml"
     prefix:   /
 
 custom_admin:
-    resource: "@CustomAdminBundle/Resources/config/routing.yml"
+    resource: "@CustomAdminBundle/Resources/config/custom_admin_routing.yml"
     prefix:   /admin
 
 app:

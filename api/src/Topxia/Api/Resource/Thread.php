@@ -61,7 +61,7 @@ class Thread extends BaseResource
 
     public function filter($res)
     {
-        $res['updateTime']  = date('c', $res['updateTime']);
+        $res['updateTime']  = date('c', isset($res['updatedTime']) ? $res['updatedTime'] : $res['updateTime']);
         $res['createdTime'] = date('c', $res['createdTime']);
         $res['threadId']    = $res['id'];
 

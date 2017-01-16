@@ -119,9 +119,10 @@ define(function(require, exports, module) {
     }
 
    	if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
-	    $("li.nav-hover").mouseenter(function(event) {
+
+	    $("body").on("mouseenter","li.nav-hover",function(event){
 	        $(this).addClass("open");
-	    }).mouseleave(function(event) {
+	    }).on("mouseleave","li.nav-hover",function(event) {
 	        $(this).removeClass("open");
 	    });
 

@@ -6,23 +6,29 @@ use Topxia\Common\StringToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Topxia\Service\Taxonomy\TagOwnerManager;
 
 class CourseEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
-            // 'course.join'            => 'onCourseJoin',
-            // 'course.favorite'        => 'onCourseFavorite',
-            // 'course.update'          => 'onCourseUpdate',
-            // 'course.teacher.update'  => 'onCourseTeacherUpdate',
-            // 'course.price.update'    => 'onCoursePriceUpdate',
-            // 'course.picture.update'  => 'onCoursePictureUpdate',
-            // 'user.role.change'       => 'onRoleChange',
-            // 'announcement.create'    => 'onAnnouncementCreate',
-            // 'announcement.update'    => 'onAnnouncementUpdate',
-            // 'announcement.delete'    => 'onAnnouncementDelete',
-            // 'courseReview.add'       => 'onCourseReviewCreate'
+            'course.join'            => 'onCourseJoin',
+            'course.favorite'        => 'onCourseFavorite',
+            'course.note.create'     => 'onCourseNoteCreate',
+            'course.note.update'     => 'onCourseNoteUpdate',
+            'course.note.delete'     => 'onCourseNoteDelete',
+            'course.note.liked'      => 'onCourseNoteLike',
+            'course.note.cancelLike' => 'onCourseNoteCancelLike',
+            'course.update'          => 'onCourseUpdate',
+            'course.teacher.update'  => 'onCourseTeacherUpdate',
+            'course.price.update'    => 'onCoursePriceUpdate',
+            'course.picture.update'  => 'onCoursePictureUpdate',
+            'user.role.change'       => 'onRoleChange',
+            'announcement.create'    => 'onAnnouncementCreate',
+            'announcement.update'    => 'onAnnouncementUpdate',
+            'announcement.delete'    => 'onAnnouncementDelete',
+            'courseReview.add'       => 'onCourseReviewCreate'
         );
     }
 
@@ -125,17 +131,24 @@ class CourseEventSubscriber implements EventSubscriberInterface
         $course   = $context['course'];
         $tagIds   = $context['tagIds'];
         $userId   = $context['userId'];
+        $argument  = $context['argument'];
+        $course    = $context['course'];
+        $userId    = $context['userId'];
 
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds && $argument) {
             foreach ($courseIds as $key => $courseId) {
+                unset($argument['expiryMode']);
+                unset($argument['expiryDay']);
                 $this->getCourseService()->updateCourse($courseIds[$key], $argument);
             }
         }
 
-        $tagOwnerManager = new TagOwnerManager('course', $course['id'], $tagIds, $userId);
-        $tagOwnerManager->update();
+        if (isset($context['tagIds'])) {
+            $tagOwnerManager = new TagOwnerManager('course', $course['id'], $context['tagIds'], $userId);
+            $tagOwnerManager->update();
+        }
     }
 
     public function onCoursePriceUpdate(Event $event)
