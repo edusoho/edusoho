@@ -664,7 +664,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function deadlineReachAction(Request $request, $courseId)
+    public function deadlineReachAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
 
@@ -672,9 +672,9 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
         }
 
-        $this->getCourseMemberService()->quitCourseByDeadlineReach($user['id'], $courseId);
+        $this->getCourseMemberService()->quitCourseByDeadlineReach($user['id'], $id);
 
-        return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
+        return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
     }
 
     public function listViewAction(Request $request, $courseId)
