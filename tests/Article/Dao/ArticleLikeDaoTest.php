@@ -46,7 +46,7 @@ class ArticleLikeDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject(array('articleId' => 2));
         $expected[] = $this->mockDataObject(array('userId' => 2));
 
-        $this->factorSort($expected, array('createdTime' => 'DESC', 'id' => 'ASC'));
+        $this->sort($expected, array('createdTime' => 'DESC', 'id' => 'ASC'));
 
         $res = array();
         $res[] = $this->getDao()->findByUserId(1);
@@ -65,13 +65,13 @@ class ArticleLikeDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject(array('articleId' => 2));
         $expected[] = $this->mockDataObject(array('userId' => 2));
 
-        $this->factorSort($expected, array('createdTime' => 'DESC', 'id' => 'ASC'));
+        $this->sort($expected, array('createdTime' => 'DESC', 'id' => 'ASC'));
 
         $res = array();
         $res[] = $this->getDao()->findByArticleId(1);
         $res[] = $this->getDao()->findByArticleId(2);
 
-        $this->factorSort($expected, array('createdTime' => 'DESC', 'id' => 'ASC'));
+        $this->sort($expected, array('createdTime' => 'DESC', 'id' => 'ASC'));
         
         $this->assertEquals(array($expected[0], $expected[2]), $res[0]);
         $this->assertEquals(array($expected[1]), $res[1]);
