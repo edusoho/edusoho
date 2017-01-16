@@ -296,10 +296,15 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
         $conditions = array_filter($conditions);
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-            if (!in_array($conditions['keywordType'], array('content', 'courseId', 'courseTitle'))) {
+            if (!in_array($conditions['keywordType'], array('content', 'courseId', 'courseSetId', 'courseTitle'))) {
                 throw $this->createServiceException('keywordType参数不正确');
             }
-            $conditions[$conditions['keywordType']] = $conditions['keyword'];
+
+            if ($conditions['keywordType'] == 'content') {
+                $conditions[$conditions['keywordType']] = "%{$conditions['keyword']}%";
+            } else {
+                $conditions[$conditions['keywordType']] = $conditions['keyword'];
+            }
         }
         unset($conditions['keywordType']);
         unset($conditions['keyword']);
