@@ -185,14 +185,6 @@ admin:
                                     visable: ( filter == 'normal' and course.recommended )
                                     icon: 'glyphicon glyphicon-hand-right'
                                     mode: none
-                                admin_course_copy:
-                                    name: 复制课程
-                                    router_params:
-                                        id: (course.id)
-                                    group: groupButton
-                                    visable: ( course.type == 'normal' and course.parentId|default() == 0 )
-                                    icon: 'glyphicon glyphicon-plus-sign'
-                                    mode: modal
                                 admin_course_guest_member_preview:
                                     name: 预览：作为未购买用户
                                     router_name: course_show

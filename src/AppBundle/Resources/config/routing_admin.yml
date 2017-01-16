@@ -471,16 +471,6 @@ admin_open_course_cancel_recommend:
     defaults: { _controller: AppBundle:Admin/OpenCourse:cancelRecommend }
     methods: [POST]
 
-admin_course_copy:
-    path: /course/{id}/copy
-    defaults: { _controller: AppBundle:Admin/Course:copy }
-    permissions: [admin_course_manage]
-
-admin_course_coping:
-    path: /course/{id}/coping
-    defaults: { _controller: AppBundle:Admin/Course:coping }
-    permissions: [admin_course_manage]
-
 admin_course_set_recommend:
     path: /course_set/{id}/recommend
     defaults: { _controller: AppBundle:Admin/CourseSet:recommend }

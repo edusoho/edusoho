@@ -283,27 +283,6 @@ class CourseController extends BaseController
         return $this->renderCourseTr($id, $request);
     }
 
-    public function copyAction(Request $request, $id)
-    {
-        $course = $this->getCourseService()->getCourse($id);
-
-        return $this->render('admin/course/copy.html.twig', array(
-            'course' => $course
-        ));
-    }
-
-    public function copingAction(Request $request, $id)
-    {
-        $course = $this->getCourseService()->getCourse($id);
-
-        $conditions      = $request->request->all();
-        $course['title'] = $conditions['title'];
-
-        $this->getCourseCopyService()->copy($course);
-
-        return $this->redirect($this->generateUrl('admin_course_set'));
-    }
-
     public function recommendAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
