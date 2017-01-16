@@ -21,6 +21,7 @@ class CourseThreadController extends BaseController
                     'paginator' => new Paginator($request, 0, 20),
                     'threads' => array(),
                     'users'=> array(),
+                    'courseSets' => array(),
                     'courses' => array(),
                     'tasks' => array(),
                 ));
@@ -39,6 +40,7 @@ class CourseThreadController extends BaseController
             $paginator->getPerPageCount()
         );
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($threads, 'courseSetId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
         $tasks = $this->getCourseService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
 
@@ -46,6 +48,7 @@ class CourseThreadController extends BaseController
             'paginator' => $paginator,
             'threads' => $threads,
             'users'=> $users,
+            'courseSets' => $courseSets,
             'courses' => $courses,
             'tasks' => $tasks,
         ));
@@ -74,5 +77,10 @@ class CourseThreadController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

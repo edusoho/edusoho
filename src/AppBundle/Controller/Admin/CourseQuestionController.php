@@ -18,6 +18,7 @@ class CourseQuestionController extends BaseController
                     'paginator' => new Paginator($request, 0, 20),
                     'questions' => array(),
                     'users'     => array(),
+                    'courseSets' => array(),
                     'courses'   => array(),
                     'tasks'   => array(),
                     'type'      => $postStatus
@@ -43,6 +44,7 @@ class CourseQuestionController extends BaseController
         );
 
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($questions, 'courseSetId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
         $tasks = $this->getCourseService()->findTasksByIds(ArrayToolkit::column($questions, 'taskId'));
 
@@ -50,6 +52,7 @@ class CourseQuestionController extends BaseController
             'paginator' => $paginator,
             'questions' => $questions,
             'users'     => $users,
+            'courseSets' => $courseSets,
             'courses'   => $courses,
             'tasks'   => $tasks,
             'type'      => $postStatus
@@ -79,5 +82,10 @@ class CourseQuestionController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }
