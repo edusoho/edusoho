@@ -40,12 +40,16 @@ class CourseController extends CourseBaseController
         $member         = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
         $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']) : false;
         $isPreview      = $request->query->get('previewAs', false);
+
+        //TODO预览的任务
+        $previewTasks = $this->getTaskService()->search(array('courseId' => $course['id'], 'type' => 'video', 'isFree' => '1'), array('seq' => 'ASC'), 0, 1);
         return $this->render('course/header/header-for-guest.html.twig', array(
             'isUserFavorite' => $isUserFavorite,
             'member'         => $member,
             'courseSet'      => $courseSet,
             'courses'        => $courses,
             'course'         => $course,
+            'previewTask'   => empty($previewTasks) ? null : array_shift($previewTasks),
             'isPreview'      => $isPreview
         ));
     }
@@ -134,6 +138,7 @@ class CourseController extends CourseBaseController
 
             $courses[$key]['classroomCount'] = count($classroomIds);
             $courses[$key]['courseSet']      = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
             if (count($classroomIds) > 0) {
                 $classroom                  = $this->getClassroomService()->getClassroom($classroomIds[0]);
                 $courses[$key]['classroom'] = $classroom;
@@ -259,7 +264,7 @@ class CourseController extends CourseBaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -270,7 +275,7 @@ class CourseController extends CourseBaseController
     public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user                  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是课程的学员。');
         }
