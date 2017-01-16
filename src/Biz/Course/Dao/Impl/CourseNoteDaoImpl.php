@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Course\Dao\Impl;
-
 
 use Biz\Course\Dao\CourseNoteDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -50,6 +48,7 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
                 'status = :status',
                 'content LIKE :content',
                 'courseId IN (:courseIds)',
+                'courseSetId IN (:courseSetIds)',
                 'courseSetId = :courseSetId'
             ),
             'orderbys' => array(
