@@ -2,7 +2,6 @@
 
 namespace Biz\Article\Dao\Impl;
 
-
 use Biz\Article\Dao\ArticleLikeDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 

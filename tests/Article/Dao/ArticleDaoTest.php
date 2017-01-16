@@ -8,85 +8,85 @@ class ArticleDaoTest extends BaseDaoTestCase
 {
     public function testSearch()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject(array('status' => 'unpublished', 'promoted' => 0, 'picture' => 'int'));
-        $factor[] = $this->mockDataObject(array('categoryId' => 2, 'sticky' => 0, 'orgCode' => 'char'));
-        $factor[] = $this->mockDataObject(array('featured' => 0, 'title' => 'char', 'thumb' => 'int'));
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('status' => 'unpublished', 'promoted' => 0, 'picture' => 'int'));
+        $expected[] = $this->mockDataObject(array('categoryId' => 2, 'sticky' => 0, 'orgCode' => 'char'));
+        $expected[] = $this->mockDataObject(array('featured' => 0, 'title' => 'char', 'thumb' => 'int'));
 
         $testCondition = array(
             array(
                 'condition' => array(),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 3
             ),
             array(
                 'condition' => array('status' => 'published'),
-                'expectedResults' => array($factor[1], $factor[2]),
+                'expectedResults' => array($expected[1], $expected[2]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('articleIds' => array(1, 2)),
-                'expectedResults' => array($factor[0], $factor[1]),
+                'expectedResults' => array($expected[0], $expected[1]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('categoryId' => 1),
-                'expectedResults' => array($factor[0], $factor[2]),
+                'expectedResults' => array($expected[0], $expected[2]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('featured' => 1),
-                'expectedResults' => array($factor[0], $factor[1]),
+                'expectedResults' => array($expected[0], $expected[1]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('promoted' => 1),
-                'expectedResults' => array($factor[1], $factor[2]),
+                'expectedResults' => array($expected[1], $expected[2]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('sticky' => 1),
-                'expectedResults' => array($factor[0], $factor[2]),
+                'expectedResults' => array($expected[0], $expected[2]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('keywords' => 'char'),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 3
             ),
             array(
                 'condition' => array('pictureNull' => 'int'),
-                'expectedResults' => array($factor[1], $factor[2]),
+                'expectedResults' => array($expected[1], $expected[2]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('categoryIds' => array(1, 2)),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 3
             ),
             array(
                 'condition' => array('likeOrgCode' => 'var'),
-                'expectedResults' => array($factor[0], $factor[2]),
+                'expectedResults' => array($expected[0], $expected[2]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('idNotEqual' => 3),
-                'expectedResults' => array($factor[0], $factor[1]),
+                'expectedResults' => array($expected[0], $expected[1]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('articleId' => 1),
-                'expectedResults' => array($factor[0]),
+                'expectedResults' => array($expected[0]),
                 'expectedCount' => 1
             ),
             array(
                 'condition' => array('thumbNotEqual' => 'int'),
-                'expectedResults' => array($factor[0], $factor[1]),
+                'expectedResults' => array($expected[0], $expected[1]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('orgCode' => 'varchar'),
-                'expectedResults' => array($factor[0], $factor[2]),
+                'expectedResults' => array($expected[0], $expected[2]),
                 'expectedCount' => 2
             ),
         );
@@ -96,34 +96,34 @@ class ArticleDaoTest extends BaseDaoTestCase
 
     public function testGetPrevious()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
 
-        $res = $this->getDao()->getPrevious(1, $factor[2]['createdTime'] + 1);
+        $res = $this->getDao()->getPrevious(1, $expected[2]['createdTime'] + 1);
 
-        $this->assertArrayEquals($factor[2], $res, $this->getCompareKeys());
+        $this->assertArrayEquals($expected[2], $res, $this->getCompareKeys());
     }
 
     public function testGetNext()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
 
-        $res = $this->getDao()->getNext(1, $factor[0]['createdTime'] - 1);
+        $res = $this->getDao()->getNext(1, $expected[0]['createdTime'] - 1);
 
-        $this->assertArrayEquals($factor[0], $res, $this->getCompareKeys());
+        $this->assertArrayEquals($expected[0], $res, $this->getCompareKeys());
     }
 
     public function testFindByIds()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
 
         $res = array();
         $res[] = $this->getDao()->findByIds(array());
@@ -131,43 +131,43 @@ class ArticleDaoTest extends BaseDaoTestCase
         $res[] = $this->getDao()->findByIds(array(1, 2, 3));
 
         $this->assertEquals(array(), $res[0]);
-        $this->assertEquals(array($factor[0]), $res[1]);
-        $this->assertEquals($factor, $res[2]);
+        $this->assertEquals(array($expected[0]), $res[1]);
+        $this->assertEquals($expected, $res[2]);
     }
 
     public function testFindAll()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
 
         $res = $this->getDao()->findAll();
 
-        $this->assertEquals($factor, $res);
+        $this->assertEquals($expected, $res);
     }
 
     public function testSearchByCategoryIds()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject(array('categoryId' => 2));
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject(array('categoryId' => 2));
 
         $res = array();
         $res[] = $this->getDao()->searchByCategoryIds(array(1), 0, 10);
         $res[] = $this->getDao()->searchByCategoryIds(array(1, 2), 0, 10);
 
-        $this->assertEquals(array($factor[0], $factor[1]), $res[0]);
-        $this->assertEquals($factor, $res[1]);
+        $this->assertEquals(array($expected[0], $expected[1]), $res[0]);
+        $this->assertEquals($expected, $res[1]);
     }
 
     public function testCountByCategoryIds()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject(array('categoryId' => 2));
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject(array('categoryId' => 2));
 
         $res = array();
         $res[] = $this->getDao()->countByCategoryIds(array(1));
@@ -179,14 +179,14 @@ class ArticleDaoTest extends BaseDaoTestCase
 
     public function testWaveArticle()
     {
-        $factor = $this->mockDataObject();
+        $expected = $this->mockDataObject();
 
         $this->getDao()->waveArticle(1, 'hits', 2);
-        $factor['hits'] += 2;
+        $expected['hits'] += 2;
 
         $res = current($this->getDao()->findByIds(array(1)));
 
-        $this->assertArrayEquals($factor, $res, $this->getCompareKeys());
+        $this->assertArrayEquals($expected, $res, $this->getCompareKeys());
     }
 
     protected function getDefaultMockFields()

@@ -8,26 +8,26 @@ class ReviewDaoTest extends BaseDaoTestCase
 {
     public function testGetReviewByUserIdAndCourseId()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
 
         $res = array();
         $res[] = $this->getDao()->getReviewByUserIdAndCourseId(1, 1);
         $res[] = $this->getDao()->getReviewByUserIdAndCourseId(1, 2);
         $res[] = $this->getDao()->getReviewByUserIdAndCourseId(2, 1);
 
-        $this->assertEquals($factor[0], $res[0]);
+        $this->assertEquals($expected[0], $res[0]);
         $this->assertNull($res[1]);
         $this->assertNull($res[2]);
     }
 
     public function testSumRatingByParams()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject(array('private' => 0));
-        $factor[] = $this->mockDataObject(array('rating' => 5000));
-        $factor[] = $this->mockDataObject(array('rating' => 9999));
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('private' => 0));
+        $expected[] = $this->mockDataObject(array('rating' => 5000));
+        $expected[] = $this->mockDataObject(array('rating' => 9999));
 
         $res = array();
         $res[] = $this->getDao()->sumRatingByParams(array('private' => 0));
@@ -41,50 +41,50 @@ class ReviewDaoTest extends BaseDaoTestCase
 
     public function testSearch()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject(array('private' => 0, 'userId' => 2));
-        $factor[] = $this->mockDataObject(array('rating' => 5000, 'content' => '?'));
-        $factor[] = $this->mockDataObject(array('rating' => 9999, 'courseId' => 2));
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('private' => 0, 'userId' => 2));
+        $expected[] = $this->mockDataObject(array('rating' => 5000, 'content' => '?'));
+        $expected[] = $this->mockDataObject(array('rating' => 9999, 'courseId' => 2));
 
         $testConditions = array(
             array(
                 'condition' => array('private' => 0),
-                'expectedResults' => array($factor[0]),
+                'expectedResults' => array($expected[0]),
                 'expectedCount' => 1
             ),
             array(
                 'condition' => array(),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 3
             ),
             array(
                 'condition' => array('rating' => 5000),
-                'expectedResults' => array($factor[1]),
+                'expectedResults' => array($expected[1]),
                 'expectedCount' => 1
             ),
             array(
                 'condition' => array('userId' => 1),
-                'expectedResults' => array($factor[1], $factor[2]),
+                'expectedResults' => array($expected[1], $expected[2]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('courseId' => 1),
-                'expectedResults' => array($factor[0], $factor[1]),
+                'expectedResults' => array($expected[0], $expected[1]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('courseIds' => array(1, 2)),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 3
             ),
             array(
                 'condition' => array('courseSetId' => 1),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 3
             ),
             array(
                 'condition' => array('parentId' => 0),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 3
             ),
         );

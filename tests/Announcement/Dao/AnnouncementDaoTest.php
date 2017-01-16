@@ -8,60 +8,60 @@ class AnnouncementDaoTest extends BaseDaoTestCase
 {
     public function testSearch()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject(array('startTime' => 2, 'content' => 'char'));
-        $factor[] = $this->mockDataObject(array('userId' => 2, 'endTime' => 3, 'orgCode' => 'char'));
-        $factor[] = $this->mockDataObject(array('targetType' => 'int', 'targetId' => 2, 'copyId' => 2));
+        $expected = array();
+        $expected[] = $this->mockDataObject(array('startTime' => 2, 'content' => 'char'));
+        $expected[] = $this->mockDataObject(array('userId' => 2, 'endTime' => 3, 'orgCode' => 'char'));
+        $expected[] = $this->mockDataObject(array('targetType' => 'int', 'targetId' => 2, 'copyId' => 2));
 
         $testConditions = array(
             array(
                 'condition' => array(),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 3
             ),
             array(
                 'condition' => array('startTime' => 1),
-                'expectedResults' => array($factor[1], $factor[2]),
+                'expectedResults' => array($expected[1], $expected[2]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('targetType' => 'varchar'),
-                'expectedResults' => array($factor[0], $factor[1]),
+                'expectedResults' => array($expected[0], $expected[1]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('targetId' => 1),
-                'expectedResults' => array($factor[0], $factor[1]),
+                'expectedResults' => array($expected[0], $expected[1]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('targetIds' => array(1, 2)),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 3
             ),
             array(
                 'condition' => array('endTime' => 3),
-                'expectedResults' => array($factor[1]),
+                'expectedResults' => array($expected[1]),
                 'expectedCount' => 1
             ),
             array(
                 'condition' => array('orgCode' => 'varchar'),
-                'expectedResults' => array($factor[0], $factor[2]),
+                'expectedResults' => array($expected[0], $expected[2]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('likeOrgCode' => 'var'),
-                'expectedResults' => array($factor[0], $factor[2]),
+                'expectedResults' => array($expected[0], $expected[2]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('copyId' => 1),
-                'expectedResults' => array($factor[0], $factor[1]),
+                'expectedResults' => array($expected[0], $expected[1]),
                 'expectedCount' => 2
             ),
             array(
                 'condition' => array('userId' => 1),
-                'expectedResults' => array($factor[0], $factor[2]),
+                'expectedResults' => array($expected[0], $expected[2]),
                 'expectedCount' => 2
             ),
         );
