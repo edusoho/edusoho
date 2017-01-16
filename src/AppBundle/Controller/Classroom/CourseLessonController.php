@@ -1,10 +1,10 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
-use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
 
 class CourseLessonController extends BaseController
 {

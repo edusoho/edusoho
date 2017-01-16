@@ -1,11 +1,11 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
 
 class CourseNoteController extends BaseController
 {
@@ -23,9 +23,10 @@ class CourseNoteController extends BaseController
         $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
         $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+
         $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
         if (!$canLook) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         $layout = 'classroom/layout.html.twig';

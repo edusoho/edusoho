@@ -1,12 +1,12 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
-use Biz\Classroom\Service\ClassroomReviewService;
-use Biz\Classroom\Service\ClassroomService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomReviewService;
 
 class ReviewController extends BaseController
 {
@@ -41,7 +41,7 @@ class ReviewController extends BaseController
 
         $reviews = $this->getClassroomReviewService()->searchReviews(
             $conditions,
-            array('createdTime'=>'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

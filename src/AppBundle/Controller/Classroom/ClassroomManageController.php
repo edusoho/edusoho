@@ -1,27 +1,27 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
-use Biz\Classroom\Service\ClassroomReviewService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Content\Service\FileService;
-use Biz\Course\Service\CourseService;
-use Biz\Order\Service\OrderService;
-use Biz\System\Service\SettingService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\Testpaper\Service\TestpaperService;
-use Biz\Thread\Service\ThreadService;
-use Biz\User\Service\NotificationService;
-use Biz\User\Service\UserFieldService;
-use Homework\Service\Homework\HomeworkService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ExportHelp;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\SimpleValidator;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Topxia\WebBundle\Controller\BaseController;
-use Topxia\WebBundle\Twig\Extension\WebExtension;
 use Vip\Service\Vip\LevelService;
+use Topxia\Common\SimpleValidator;
+use Biz\Order\Service\OrderService;
+use Biz\Content\Service\FileService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Service\CourseService;
+use Biz\Thread\Service\ThreadService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserFieldService;
+use AppBundle\Controller\BaseController;
+use Biz\User\Service\NotificationService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Testpaper\Service\TestpaperService;
+use Symfony\Component\HttpFoundation\Request;
+use Homework\Service\Homework\HomeworkService;
+use Symfony\Component\HttpFoundation\Response;
+use Biz\Classroom\Service\ClassroomReviewService;
+use Topxia\WebBundle\Twig\Extension\WebExtension;
 
 class ClassroomManageController extends BaseController
 {
@@ -43,10 +43,10 @@ class ClassroomManageController extends BaseController
 
         //是否可以直接根据courseId查询，取决于classroom对course是【引用】还是【复制】
         //TODO
-        $todayFinishedLessonNum = 0;
+        $todayFinishedLessonNum     = 0;
         $yesterdayFinishedLessonNum = 0;
 //        $todayFinishedLessonNum     = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "finished"));
-//        $yesterdayFinishedLessonNum = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "finished"));
+        //        $yesterdayFinishedLessonNum = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "finished"));
 
         $todayThreadCount     = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $id, 'type' => 'discussion', "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "open"));
         $yesterdayThreadCount = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $id, 'type' => 'discussion', "startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "open"));
@@ -1008,11 +1008,11 @@ class ClassroomManageController extends BaseController
 
         $orderBy = array();
         if ($status == 'reviewing') {
-            $orderBy = array('usedTime'=>'DESC');
+            $orderBy = array('usedTime' => 'DESC');
         }
 
         if ($status == 'finished') {
-            $orderBy = array('checkedTime'=>'DESC');
+            $orderBy = array('checkedTime' => 'DESC');
         }
 
         $homeworksResults = $this->getHomeworkService()->findResultsByCourseIdsAndStatus(
@@ -1022,7 +1022,7 @@ class ClassroomManageController extends BaseController
         );
 
         $reviewingCount = 0;
-        $finishedCount = 0;
+        $finishedCount  = 0;
         if ($status == 'reviewing') {
             $reviewingCount = $homeworksResultsCounts;
             $finishedCount  = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'finished');
@@ -1113,7 +1113,7 @@ class ClassroomManageController extends BaseController
             return $userIds;
         } elseif (SimpleValidator::mobile($keyword)) {
             $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
-            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id'=>'DESC'), 0, PHP_INT_MAX);
+            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id' => 'DESC'), 0, PHP_INT_MAX);
             $mobileNameUser     = $this->getUserService()->getUserByNickname($keyword);
             $userIds            = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
 

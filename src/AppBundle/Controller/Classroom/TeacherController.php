@@ -2,9 +2,9 @@
 namespace AppBundle\Controller\Classroom;
 
 use Topxia\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
 
 class TeacherController extends BaseController
 {

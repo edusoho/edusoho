@@ -1,16 +1,16 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
-use Biz\Classroom\Service\ClassroomReviewService;
-use Biz\Classroom\Service\ClassroomService;
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
+use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
-use Biz\Taxonomy\Service\TagService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomReviewService;
 
 class CourseController extends BaseController
 {
@@ -75,7 +75,7 @@ class CourseController extends BaseController
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
             $classroomName = $this->setting('classroom.name', $this->getServiceKernel()->trans('班级'));
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服',array('%classroomName%'=>$classroomName)), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服', array('%classroomName%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
         }
 
         $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroomId);
@@ -115,7 +115,7 @@ class CourseController extends BaseController
         $conditions             = array("title" => $key);
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
-        $paginator = new Paginator(
+        $paginator              = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseCount($conditions),
             5
@@ -131,11 +131,11 @@ class CourseController extends BaseController
         $users = $this->getUsers($courses);
 
         return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
-            'users'   => $users,
-            'courses' => $courses,
-            'paginator' => $paginator,
+            'users'       => $users,
+            'courses'     => $courses,
+            'paginator'   => $paginator,
             'classroomId' => $classroomId,
-            'type' => 'ajax_pagination'
+            'type'        => 'ajax_pagination'
         ));
     }
 
