@@ -6,9 +6,9 @@
   {% set cancelUrl = path('admin_open_course_cancel_recommend', {id:courseSet.id,target:target}) %}
   {% set recommendUrl = path('admin_open_course_recommend', {id:courseSet.id, ref:'recommendList'}) %}
 {% else %}
-  {% set showUrl = path('course_show',{id:courseSet.id}) %}
-  {% set cancelUrl = path('admin_course_cancel_recommend', {id:courseSet.id,target:target}) %}
-  {% set recommendUrl = path('admin_course_recommend', {id:courseSet.id, ref:'recommendList'}) %}
+  {% set showUrl = path('course_set_show',{id:courseSet.id}) %}
+  {% set cancelUrl = path('admin_course_set_cancel_recommend', {id:courseSet.id,target:target}) %}
+  {% set recommendUrl = path('admin_course_set_recommend', {id:courseSet.id, ref:'recommendList'}) %}
 {% endif %}
 
 <tr id="course-tr-{{ courseSet.id }}" data-sort="{{ courseSet.recommendedSeq }}">

@@ -150,7 +150,7 @@ admin:
                     children:
                         admin_course_manage:
                             name: 课程管理
-                            router_name: admin_course
+                            router_name: admin_course_set
                             children:
                                 admin_course_content_manage:
                                     name: 管理课程
@@ -164,7 +164,7 @@ admin:
                                     router_name: course_set_manage_create
                                     group: topBtn
                                     blank: 1
-                                admin_course_recommend:
+                                admin_course_set_recommend:
                                     name: 推荐课程
                                     router_params:
                                         id: (course.id)
@@ -174,7 +174,7 @@ admin:
                                     visable: ( filter == 'normal' and not course.recommended )
                                     icon: 'glyphicon glyphicon-hand-up'
                                     mode: modal
-                                admin_course_cancel_recommend:
+                                admin_course_set_cancel_recommend:
                                     name: 取消推荐
                                     router_params:
                                         id: (course.id)
@@ -252,7 +252,7 @@ admin:
                                     icon: 'glyphicon glyphicon-trash'
                                     mode: none
                                     visable: ( course.status in ['closed', 'draft', 'published'])
-                        admin_course_recommend_list:
+                        admin_course_set_recommend_list:
                             name: 课程推荐
                         admin_course_data:
                             name: 课程统计

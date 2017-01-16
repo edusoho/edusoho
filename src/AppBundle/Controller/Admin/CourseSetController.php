@@ -7,7 +7,7 @@ use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
-class CourseController extends BaseController
+class CourseSetController extends BaseController
 {
     public function indexAction(Request $request, $filter)
     {

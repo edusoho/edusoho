@@ -416,9 +416,9 @@ admin_note_batch_delete:
     methods: [POST]
     permissions: [admin_course_note_manage]
 
-admin_course:
-    path:  /course/{filter}/index
-    defaults: { _controller: AppBundle:Admin/Course:index, filter:'normal' }
+admin_course_set:
+    path:  /course_set/{filter}/index
+    defaults: { _controller: AppBundle:Admin/CourseSet:index, filter:'normal' }
     permissions: [admin_course_manage]
 
 admin_course_delete:
@@ -481,24 +481,24 @@ admin_course_coping:
     defaults: { _controller: AppBundle:Admin/Course:coping }
     permissions: [admin_course_manage]
 
-admin_course_recommend:
-    path: /course/{id}/recommend
-    defaults: { _controller: AppBundle:Admin/Course:recommend }
-    permissions: [admin_course_recommend_list, admin_course_recommend]
+admin_course_set_recommend:
+    path: /course_set/{id}/recommend
+    defaults: { _controller: AppBundle:Admin/CourseSet:recommend }
+    permissions: [admin_course_set_recommend_list, admin_course_set_recommend]
 
-admin_course_cancel_recommend:
-    path: /course/{id}/recommend/cancel/{target}
-    defaults: { _controller: AppBundle:Admin/Course:cancelRecommend }
+admin_course_set_cancel_recommend:
+    path: /course_set/{id}/recommend/cancel/{target}
+    defaults: { _controller: AppBundle:Admin/CourseSet:cancelRecommend }
     methods: [POST]
-    permissions: [admin_course_recommend_list, admin_course_cancel_recommend]
+    permissions: [admin_course_set_recommend_list, admin_course_set_cancel_recommend]
 
 admin_course_chooser:
     path: /course/chooser
     defaults: { _controller: AppBundle:Admin/Course:chooser }
 
-admin_course_recommend_list:
-    path: /course/recommend/list
-    defaults: { _controller: AppBundle:Admin/Course:recommendList }
+admin_course_set_recommend_list:
+    path: /course_set/recommend/list
+    defaults: { _controller: AppBundle:Admin/CourseSet:recommendList }
 
 admin_course_category:
     path: /course/category
