@@ -17,7 +17,7 @@ class TestpaperActivityDaoImpl extends GeneralDaoImpl implements TestpaperActivi
     {
         $declares['conditions'] = array(
             'id = :id',
-            'ids IN (:ids)'
+            'id IN (:ids)'
         );
 
         $declares['serializes'] = array(

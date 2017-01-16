@@ -39,5 +39,6 @@
 
 {% block footer %}
   <button class="btn btn-danger refund-btn" type="submit" data-toggle="form-submit" data-target="#refund-form" data-loading-text="{{'正在退出'|trans}}...">{{'退出学习'|trans}}</button>
-  <script>app.load('order-refund/order-refund-modal')</script>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>app.lazyLoad = function() {app.load('order-refund/order-refund-modal')}</script>
 {% endblock %}

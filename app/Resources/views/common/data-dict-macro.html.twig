@@ -2,7 +2,7 @@
     {% if status == 'draft' %}
         <span class="text-muted">{{ '未发布'|trans }}</span>
     {% elseif  status == 'published' %}
-        <span class="text-success">{{ '已发布'|trans }}</span>
+        <span class="color-success">{{ '已发布'|trans }}</span>
     {% elseif status == 'closed' %}
         <span class="text-danger">{{ '已关闭'|trans }}</span>
     {% endif %}
@@ -60,7 +60,7 @@
 
 {% macro contentStatus(status) %}
     {% if status == 'published' %}
-        <span class="text-success">{{ '已发布'|trans }}</span>
+        <span class="color-success">{{ '已发布'|trans }}</span>
     {% elseif status == 'unpublished' %}
         <span class="text-muted">{{ '未发布'|trans }}</span>
     {% elseif status == 'trash' %}
@@ -70,7 +70,7 @@
 
 {% macro articleStatus(status) %}
     {% if status == 'published' %}
-        <span class="text-success">{{ '已发布'|trans }}</span>
+        <span class="color-success">{{ '已发布'|trans }}</span>
     {% elseif status == 'unpublished' %}
         <span class="text-muted">{{ '未发布'|trans }}</span>
     {% elseif status == 'trash' %}

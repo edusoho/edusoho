@@ -480,7 +480,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $argument = $fields;
 
-        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+        if (isset($fields['tagIds'])) {
+            $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+        }
 
         $course = $this->getCourseDao()->getCourse($id);
 
@@ -504,7 +506,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
-        $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'tagIds' => $tagIds, 'userId' => $user['id']));
+        if (isset($tagIds)) {
+            $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'tagIds' => $tagIds,'userId' => $user['id']));
+        } else {
+            $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse, 'sourceCourse' => $course, 'userId' => $user['id']));
+        }
 
         return CourseSerialize::unserialize($updatedCourse);
     }
@@ -568,14 +574,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'orgCode'        => '',
             'orgId'          => ''
         ));
-
-        if (!empty($fields['tags'])) {
-            $fields['tags'] = explode(',', $fields['tags']);
-            $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
-            array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int)$item['id'];
-            });
-        }
 
         return $fields;
     }
@@ -641,7 +639,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourseDao()->updateCourse($id, array(
             'recommended'     => 1,
-            'recommendedSeq'  => (int)$number,
+            'recommendedSeq'  => (int) $number,
             'recommendedTime' => time()
         ));
 
@@ -1123,8 +1121,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
 // }
 
-        if (isset($fields['title'])) {
-            $fields['title'] = $this->purifyHtml($fields['title']);
+        if (isset($lesson['title'])) {
+            $lesson['title'] = $this->purifyHtml($lesson['title']);
         }
 
         // 课程处于发布状态时，新增课时，课时默认的状态为“未发布"
@@ -1922,7 +1920,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException($this->getKernel()->trans('itemdIds参数不正确'));
         }
 
-        $lessonNum      = $chapterNum = $unitNum = $seq = 0;
+        $lessonNum      = $chapterNum      = $unitNum      = $seq      = 0;
         $currentChapter = $rootChapter = array('id' => 0);
 
         foreach ($itemIds as $itemId) {
@@ -2032,10 +2030,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      * @todo refactor it.
      * @param  int|string $courseId
      * @param  null|string $otherPermission
-     * @param  int|string $courseId
-     * @param  null|string $otherPermission
      * @throws NotFoundException|AccessDeniedException
-     * @return array
      * @return array
      */
     public function tryManageCourse($courseId, $otherPermission = null)
@@ -2062,10 +2057,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     /**
      * @param  int|string $courseId
      * @param  null|string $actionPermission
-     * @param  int|string $courseId
-     * @param  null|string $actionPermission
      * @throws NotFoundException|AccessDeniedException
-     * @return array
      * @return array
      */
     public function tryAdminCourse($courseId, $actionPermission = null)

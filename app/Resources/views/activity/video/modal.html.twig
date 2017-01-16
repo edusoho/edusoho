@@ -8,8 +8,9 @@
       <label for="ext_mediaSource" class="style control-label-required">{{ '视频'|trans }}</label>
     </div>
     <div class="col-sm-10">
-    {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video',file: activity.ext.file|default(null) } %}
-    <input type="hidden" id="ext_mediaSource" name="ext[mediaSource]" value="{{ activity.ext.mediaSource|default(null) }}">
+      {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video',file: activity.ext.file|default(null) } %}
+      <input type="hidden" id="ext_mediaSource" name="ext[mediaSource]"
+             value="{{ activity.ext.mediaSource|default(null) }}">
     </div>
   </div>
   <div class="form-group for-video-type" id="lesson-length-form-group">
@@ -18,7 +19,10 @@
     </div>
     <div class="col-sm-10">
       <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
-      <input class="form-control width-150 js-length" id="minute" type="text" name="minute" value="{{ activity.minute|default(null) }}"><span class="mhs">{{ '分'|trans }}</span><input class="form-control width-150 js-length" id="second" type="text" name="second" value="{{ activity.second|default(null) }}">{{ '秒'|trans }}
+      <input class="form-control width-150 js-length" id="minute" type="text" name="minute"
+             value="{{ activity.minute|default(null) }}"><span class="mhs">{{ '分'|trans }}</span><input
+          class="form-control width-150 js-length" id="second" type="text" name="second"
+          value="{{ activity.second|default(null) }}">{{ '秒'|trans }}
       <input type="hidden" id="ext_mediaId" name="ext[mediaId]" value="{{ activity.ext.mediaId|default(null) }}">
       <input type="hidden" id="ext_mediaUri" name="ext[mediaUri]" value="{{ activity.ext.mediaUri|default(null) }}">
       <input type="hidden" id="length" name="length" value="{{ activity.length|default(0) }}">
@@ -33,9 +37,23 @@
     </div>
     <div class="col-sm-10">
       <div class="col-sm-4">
-        <select id="finish-condition" name="condition" class="form-control">
-          <option value="downloaded">观看到最后</option>
+        <select id="finish-condition" name="ext[finishType]" class="form-control">
+          <option value="end">观看到最后</option>
+          <option value="time">观看时长</option>
         </select>
+      </div>
+    </div>
+  </div>
+
+  <div class=" form-group hidden viewLength">
+    <div class="col-sm-2 control-label"></div>
+    <div class="col-sm-10">
+      <div class="col-sm-4 controls">
+        <input id="condition-detail" class="form-control" type="text" name="ext[finishDetail]"
+               value="{{ activity.ext.finishDetail|default(1) }}">
+      </div>
+      <div class="col-sm-4 controls">
+        <p class="form-control-static">分钟</p>
       </div>
     </div>
   </div>

@@ -1,11 +1,10 @@
 import postal from 'postal';
-require('postal.federation');
-require('postal.xframe');
+import 'postal.federation';
+import 'postal.xframe';
 
 export default class ActivityEmitter {
 
   constructor() {
-
     this.eventMap = {
       receives: {}
     };
@@ -14,8 +13,8 @@ export default class ActivityEmitter {
   }
 
   _registerIframeEvents(){
-
     postal.instanceId('activity');
+
     postal.fedx.addFilter([
       {
         channel: 'activity-events', //发送事件到task parent
@@ -29,9 +28,9 @@ export default class ActivityEmitter {
       }
     ]);
 
+    postal.fedx.signalReady();
     this._registerReceiveTaskParentEvents();
 
-    postal.fedx.signalReady();
     return this;
   }
 

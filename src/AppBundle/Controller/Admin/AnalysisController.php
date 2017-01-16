@@ -20,13 +20,14 @@ class AnalysisController extends BaseController
     public function registerAction(Request $request, $tab)
     {
         $data              = array();
+        $count = 0;
         $registerStartDate = "";
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
+            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
             return $this->redirect($this->generateUrl('admin_operation_analysis_register', array(
                 'tab' => "trend"
             )));
@@ -40,7 +41,7 @@ class AnalysisController extends BaseController
 
         $registerDetail = $this->getUserService()->searchUsers(
             $timeRange,
-            array('createdTime' => 'DESC'),
+            array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -50,9 +51,12 @@ class AnalysisController extends BaseController
         if ($tab == "trend") {
             $registerData = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data         = $this->fillAnalysisData($condition, $registerData);
+            foreach ($registerData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
-        $registerStartData = $this->getUserService()->searchUsers(array(), array('createdTime' => 'ASC'), 0, 1);
+        $registerStartData = $this->getUserService()->searchUsers(array(), array('createdTime', 'ASC'), 0, 1);
 
         if ($registerStartData) {
             $registerStartDate = date("Y-m-d", $registerStartData[0]['createdTime']);
@@ -70,7 +74,8 @@ class AnalysisController extends BaseController
             'registerProfiles'  => $registerProfiles,
             'data'              => $data,
             "registerStartDate" => $registerStartDate,
-            "dataInfo"          => $dataInfo
+            "dataInfo"          => $dataInfo,
+            'count'             => $count
         ));
     }
 
@@ -107,7 +112,7 @@ class AnalysisController extends BaseController
 
             $userSumDetail = $this->getUserService()->searchUsers(
                 $timeRange,
-                array('createdTime', 'DESC'),
+                array('createdTime'=>'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );

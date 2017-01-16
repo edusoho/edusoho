@@ -51,6 +51,8 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
             'id NOT IN ( :excludeIds )',
             'courseId = :courseId',
             'lessonId = :lessonId',
+            'lessonId >= :lessonIdGT',
+            'lessonId <= :lessonIdLT',
             'lessonId IN ( :lessonIds)'
         );
 

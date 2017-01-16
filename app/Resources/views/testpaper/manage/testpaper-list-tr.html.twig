@@ -27,7 +27,7 @@
     <div class="btn-group">
       <a href="{{ path('course_set_manage_testpaper_preivew', {courseSetId:courseSet.id,testpaperId:testpaper.id}) }}" class="mrm" target="_blank">{{'预览'|trans}}</a>
       <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
-        更多<i class="es-icon es-icon-keyboardarrowdown"></i>
+        更多<i class="es-icon es-icon-arrowdropdown"></i>
       </a>
       <ul class="dropdown-menu pull-right">
         {% if testpaper.status in ['draft', 'closed'] %}

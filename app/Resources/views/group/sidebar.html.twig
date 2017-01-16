@@ -21,7 +21,7 @@
           <div class="media-body">
             <p>{{ web_macro.user_link(user , '') }}</p>
             <div class="metas">
-              <a href="{{ path ('group_member_center') }}" class="btn btn-default btn-sm" role="button">{{'我的小组'|trans}}</a>
+              <a href="{{ path ('my_group_member_center') }}" class="btn btn-default btn-sm" role="button">{{'我的小组'|trans}}</a>
             </div>
           </div>
         </div>
@@ -34,7 +34,7 @@
       <div class="panel-heading">
         <h3 class="panel-title">{{'我的小组'|trans}}</h3>
         {% if user.id %}
-          <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="more">
+          <a href="{{ path ('my_group_member_join',{type:'myGroup'}) }}" class="more">
           <i class="es-icon es-icon-morehoriz"></i></a>
         {% endif %}
       </div>

@@ -62,6 +62,73 @@ class HomeworkController extends BaseController
         ));
     }
 
+    public function listAction(Request $request, $status)
+    {
+        $user = $this->getUser();
+
+        $conditions = array(
+            'status' => $status,
+            'type'   => 'homework',
+            'userId' => $user['id']
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getTestpaperService()->searchTestpaperResultsCount($conditions),
+            10
+        );
+
+        $paperResults = $this->getTestpaperService()->searchTestpaperResults(
+            $conditions,
+            array('updateTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courseIds = ArrayToolkit::column($paperResults, 'courseId');
+        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        $courseSetIds = ArrayToolkit::column($paperResults, 'courseSetId');
+        $courseSets   = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
+        $activityIds = ArrayToolkit::column($paperResults, 'lessonId');
+        $tasks       = $this->getTaskService()->findTasksByActivityIds($activityIds);
+
+        $homeworkIds = ArrayToolkit::column($paperResults, 'testId');
+        $homeworks   = $this->getTestpaperService()->findTestpapersByIds($homeworkIds);
+
+        return $this->render('my/homework/my-homework-list.html.twig', array(
+            'paperResults' => $paperResults,
+            'paginator'    => $paginator,
+            'courses'      => $courses,
+            'courseSets'   => $courseSets,
+            'status'       => $status,
+            'homeworks'    => $homeworks,
+            'tasks'        => $tasks
+        ));
+    }
+
+    protected function _getHomeworkDoTime($homeworkResults)
+    {
+        $homeworkIds     = ArrayToolkit::column($homeworkResults, 'testId');
+        $homeworkIdCount = array_count_values($homeworkIds);
+        $time            = 1;
+        $homeworkId      = 0;
+
+        foreach ($homeworkResults as $key => $homeworkResult) {
+            if ($homeworkId == $homeworkResult['testId']) {
+                $time--;
+            } else {
+                $homeworkId = $homeworkResult['testId'];
+                $time       = $homeworkIdCount[$homeworkResult['testId']];
+            }
+
+            $homeworkResults[$key]['seq'] = $time;
+        }
+
+        return $homeworkResults;
+    }
+
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
@@ -85,5 +152,10 @@ class HomeworkController extends BaseController
     protected function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 }

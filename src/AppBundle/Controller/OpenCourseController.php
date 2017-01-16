@@ -302,7 +302,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $posts = $this->getThreadService()->searchPosts(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime'=>'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -458,7 +458,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $materials = $this->getMaterialService()->searchMaterials(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime'=>'DESC'),
             0,
             PHP_INT_MAX
         );
@@ -739,7 +739,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $courses = $this->getOpenCourseService()->searchCourses(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime'=>'DESC'),
             $start, $limit
         );
 

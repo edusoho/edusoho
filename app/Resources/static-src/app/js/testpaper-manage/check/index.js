@@ -128,9 +128,9 @@ class CheckTest
     let scoreTotal = 0;
 
     if (this.validator == undefined || this.validator.form()) {
-      let content = {};
       let self = this;
       $('*[data-score]').each(function(){
+        let content = {};
         let questionId = $(this).data('id');
         
         content['score'] = Number($(this).val());

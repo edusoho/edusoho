@@ -363,42 +363,42 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     protected function getCashAccountService()
     {
-        return ServiceKernel::instance()->createService('Cash:CashAccountService');
+        return $this->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getClassroomOrderService()
     {
-        return ServiceKernel::instance()->createService("Classroom:ClassroomOrderService");
+        return $this->getBiz()->service("Classroom:ClassroomOrderService");
     }
 
     protected function getOrderService()
     {
-        return ServiceKernel::instance()->createService('Order:OrderService');
+        return $this->getBiz()->service('Order:OrderService');
     }
 
     protected function getPayCenterService()
     {
-        return ServiceKernel::instance()->createService('PayCenter:PayCenterService');
+        return $this->getBiz()->service('PayCenter:PayCenterService');
     }
 
     protected function getCourseMemberService()
     {
-        return ServiceKernel::instance()->createService('Course:MemberService');
+        return $this->getBiz()->service('Course:MemberService');
     }
 
     protected function getKernel()

@@ -30,13 +30,13 @@
       {% if classroom_permit(classroom.id, 'Take', true) %}
         {{ render(controller('AppBundle:Classroom/Classroom:signPage',{classroomId:classroom.id})) }}
       {% endif %}
-      
+
       {{ render(controller('AppBundle:Classroom/Classroom:teachersBlock',{classroom:classroom})) }}
 
       {{ render(controller('AppBundle:Classroom/Classroom:latestMembersBlock',{classroom:classroom})) }}
 
       {{ render(controller('AppBundle:Classroom/Classroom:classroomStatusBlock',{classroom:classroom})) }}
-      
+
     {% endblock %}
   </aside>
 
@@ -53,4 +53,5 @@
   'imgUrl': fileurl(classroom.largePicture,'course.png'),
   }%}
 
+  {% include 'common/consult-supplier.html.twig' %}
 {% endblock %}

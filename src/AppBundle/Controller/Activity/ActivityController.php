@@ -49,8 +49,7 @@ class ActivityController extends BaseController
     public function createAction($type, $courseId)
     {
         $actionConfig = $this->getActivityActionConfig($type);
-        $createController = $actionConfig['create'];
-        return $this->forward($createController, array(
+        return $this->forward($actionConfig['create'], array(
             'courseId' => $courseId,
         ));
     }

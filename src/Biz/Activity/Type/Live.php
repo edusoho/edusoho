@@ -3,6 +3,8 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Service\LiveActivityService;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class Live extends Activity
 {
@@ -34,15 +36,21 @@ class Live extends Activity
 
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'live.start');
+        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'live.finish');
         return !empty($result);
     }
 
+    /**
+     * @return LiveActivityService
+     */
     protected function getLiveActivityService()
     {
         return $this->getBiz()->service('Activity:LiveActivityService');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service("Activity:ActivityLearnLogService");

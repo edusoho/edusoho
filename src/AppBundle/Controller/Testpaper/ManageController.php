@@ -323,8 +323,8 @@ class ManageController extends BaseController
                 return $this->createMessageResponse('error', $this->getServiceKernel()->trans('试卷题目不能为空！'));
             }
 
-            if (!empty($fields['passedCondition'])) {
-                $fields['passedCondition'] = array($fields['passedCondition']);
+            if (!empty($fields['passedScore'])) {
+                $fields['passedCondition'] = array($fields['passedScore']);
             }
 
             $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $fields);

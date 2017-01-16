@@ -110,7 +110,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->search($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
-    public function countTaskResult($conditions)
+    public function countTaskResults($conditions)
     {
         return $this->getTaskResultDao()->count($conditions);
     }
@@ -144,11 +144,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
     public function countUsersByTaskIdAndLearnStatus($taskId, $status)
     {
-        if (!in_array($status, array('start', 'finish', 'all'))) {
-            throw $this->createInvalidArgumentException("Invalid Status#{$status}");
+        if ($status == 'all') {
+            $status = null;
         }
 
-        return $this->getTaskResultDao()->countUsersByTaskIdAndLearnStatus($taskId, $status);
+        return $this->getTaskResultDao()->count(array('courseTaskId' => $taskId, 'status' => $status));
     }
 
     /**
@@ -164,9 +164,14 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->search($conditions, $orderbys, $start, $limit);
     }
 
-    public function countUserLearnedTasksByCourseId($courseId, $userId)
+    public function findFinishedTasksByCourseIdGroupByUserId($courseId)
     {
-        return $this->getTaskResultDao()->countUserLearnedByCourseId($courseId, $userId);
+        return $this->getTaskResultDao()->findFinishedTasksByCourseIdGroupByUserId($courseId);
+    }
+
+    public function findFinishedTimeByCourseIdGroupByUserId($courseId)
+    {
+        return $this->getTaskResultDao()->findFinishedTimeByCourseIdGroupByUserId($courseId);
     }
 
     /**

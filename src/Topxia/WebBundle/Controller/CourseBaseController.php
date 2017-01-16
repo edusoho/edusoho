@@ -81,6 +81,14 @@ abstract class CourseBaseController extends BaseController
         return $member;
     }
 
+    protected function getTagsByOwnerId($ownerId)
+    {
+        return $this->getTagService()->findTagsByOwner(array(
+            'ownerType' => 'course',
+            'ownerId'   => $ownerId
+        ));
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
@@ -89,5 +97,10 @@ abstract class CourseBaseController extends BaseController
     protected function getCourseMemberService()
     {
         return ServiceKernel::instance()->createService('Course:MemberService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 }
