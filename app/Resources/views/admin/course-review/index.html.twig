@@ -48,6 +48,7 @@
       <tbody>
         {% for review in reviews %}
           {% set author = users[review.userId]|default(null) %}
+          {% set courseSet = courseSets[review.courseSetId]|default(null) %}
           {% set course = courses[review.courseId]|default(null) %}
           <tr id="review-table-tr-{{review.id}}" data-role="item">
             <td><input type="checkbox" value="{{review.id}}" data-role="batch-item"></td>
@@ -59,10 +60,10 @@
                 <div class="long-text">{{ review.content|nl2br }} <span class="text-muted trigger">({{'收起'|trans}})</span></div>
               </div>
               <div class="mts">
-                {% if course %}
-                  <a class="text-success text-sm" href="{{ path('course_show', {id:review.courseId}) }}" target="_blank">{{ courses[review.courseId].title }}</a>
-                {% else %}
-                  <span class="text-muted text-sm">{{'课程已删除'|trans}}</span>
+                {% if course and courseSet %}
+                  <a class="text-success text-sm" href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
+                  <span class="text-muted mhs text-sm">&raquo;</span>
+                  <a class="text-success text-sm" href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
                 {% endif %}
               </div>
             </td>
