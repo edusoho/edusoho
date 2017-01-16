@@ -353,7 +353,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
-    public function publishCourse($id, $userId)
+    public function publishCourse($id)
     {
         $this->tryManageCourse($id);
         $this->getCourseDao()->update($id, array(

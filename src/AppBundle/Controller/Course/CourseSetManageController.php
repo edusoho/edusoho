@@ -177,7 +177,15 @@ class CourseSetManageController extends BaseController
     public function publishAction($id)
     {
         try {
+            $courseSet = $this->getCourseSetService()->getCourseSet($id);
+
+            if($courseSet['type'] == 'live'){
+                $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+                $this->getCourseService()->publishCourse($course['id']);
+            }
+
             $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
+
             if (empty($publishedCourses)) {
                 throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
             }

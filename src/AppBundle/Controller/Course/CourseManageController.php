@@ -265,7 +265,7 @@ class CourseManageController extends BaseController
     public function publishAction(Request $request, $courseSetId, $courseId)
     {
         try {
-            $this->getCourseService()->publishCourse($courseId, $this->getUser()->getId());
+            $this->getCourseService()->publishCourse($courseId);
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));

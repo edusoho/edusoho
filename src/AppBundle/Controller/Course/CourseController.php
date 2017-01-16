@@ -2,17 +2,17 @@
 
 namespace AppBundle\Controller\Course;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\TokenService;
-use Biz\Course\Service\ReviewService;
-use Biz\Course\Service\MaterialService;
-use Biz\File\Service\UploadFileService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\MaterialService;
+use Biz\Course\Service\ReviewService;
+use Biz\File\Service\UploadFileService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class CourseController extends CourseBaseController
 {
@@ -49,7 +49,7 @@ class CourseController extends CourseBaseController
             'courseSet'      => $courseSet,
             'courses'        => $courses,
             'course'         => $course,
-            'previewTask'   => empty($previewTasks) ? null : array_shift($previewTasks),
+            'previewTask'    => empty($previewTasks) ? null : array_shift($previewTasks),
             'isPreview'      => $isPreview
         ));
     }

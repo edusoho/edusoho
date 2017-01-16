@@ -36,7 +36,7 @@ interface CourseService
 
     public function closeCourse($id);
 
-    public function publishCourse($id, $userId);
+    public function publishCourse($id);
 
     public function findCourseItems($courseId);
 
