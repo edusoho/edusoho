@@ -3,11 +3,10 @@
 namespace AppBundle\Controller\Classroom;
 
 use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
+use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
 class ClassroomThreadController extends BaseController

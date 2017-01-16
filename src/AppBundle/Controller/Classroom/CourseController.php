@@ -10,12 +10,11 @@ use Biz\Taxonomy\Service\TagService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
 
 class CourseController extends BaseController
 {
-    public function pickAction(Request $request, $classroomId)
+    public function pickAction($classroomId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $actviteCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
@@ -60,12 +59,12 @@ class CourseController extends BaseController
         }
 
         $courses       = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        $currentUser   = $this->getUserService()->getCurrentUser();
+        $currentUser   = $this->getCurrentUser();
         $courseMembers = array();
         $teachers      = array();
 
         foreach ($courses as &$course) {
-            $courseMembers[$course['id']] = $this->getCourseMemberService()->getCourseMember($course['id'], $currentUser->id);
+            $courseMembers[$course['id']] = $this->getCourseMemberService()->getCourseMember($course['id'], $currentUser['id']);
 
             $course['teachers']      = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
             $teachers[$course['id']] = $course['teachers'];
@@ -159,7 +158,7 @@ class CourseController extends BaseController
 
         if (in_array($previewAs, array('guest', 'auditor', 'member'))) {
             if ($previewAs == 'guest') {
-                return;
+                return array();
             }
 
             $member = array(

@@ -19,7 +19,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
     public function createOrder($info)
     {
         try {
-            $this->biz->beginTransaction();
+            $this->beginTransaction();
 
             $user = $this->getCurrentUser();
 
@@ -98,11 +98,11 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
             }
 
-            $this->biz->commit();
+            $this->commit();
 
             return $order;
         } catch (\Exception $e) {
-            $this->biz->rollBack();
+            $this->rollback();
             throw $e;
         }
     }
@@ -163,12 +163,12 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $classroomSetting         = $this->getSettingService()->get('classroom');
             $classroomSetting['name'] = empty($classroomSetting['name']) ? '班级' : $classroomSetting['name'];
 
-            $adminmessage = "用户{$user['nickname']}申请退款<a href='{$classroomUrl}'>{$classroom['title']}</a>{$classroomSetting['name']}，请审核。";
+            $adminMessage = "用户{$user['nickname']}申请退款<a href='{$classroomUrl}'>{$classroom['title']}</a>{$classroomSetting['name']}，请审核。";
             $adminCount   = $this->getUserService()->searchUserCount(array('roles' => 'ADMIN'));
             $admins       = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id' => 'DESC'), 0, $adminCount);
 
             foreach ($admins as $key => $admin) {
-                $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
+                $this->getNotificationService()->notify($admin['id'], 'default', $adminMessage);
             }
         } elseif ($refund['status'] == 'success') {
             $this->getClassroomService()->exitClassroom($order['targetId'], $order['userId']);

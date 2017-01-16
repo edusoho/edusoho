@@ -3,13 +3,12 @@
 namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Controller\BaseController;
-use Biz\Announcement\Service\AnnouncementService;
 use Biz\Classroom\Service\ClassroomService;
-use Symfony\Component\HttpFoundation\Request;
+use Biz\Announcement\Service\AnnouncementService;
 
 class AnnouncementController extends BaseController
 {
-    public function createAction(Request $request, $targetId)
+    public function createAction($targetId)
     {
         $this->getClassroomService()->tryManageClassroom($targetId);
         $classroom = $this->getClassroomService()->getClassroom($targetId);
@@ -22,7 +21,7 @@ class AnnouncementController extends BaseController
         ));
     }
 
-    public function editAction(Request $request, $targetId, $announcementId)
+    public function editAction($targetId, $announcementId)
     {
         $this->getClassroomService()->tryManageClassroom($targetId);
         $classroom    = $this->getClassroomService()->getClassroom($targetId);
@@ -36,7 +35,7 @@ class AnnouncementController extends BaseController
         ));
     }
 
-    public function listAction(Request $request, $targetId)
+    public function listAction($targetId)
     {
         $this->getClassroomService()->tryManageClassroom($targetId);
         $classroom = $this->getClassroomService()->getClassroom($targetId);
@@ -55,6 +54,7 @@ class AnnouncementController extends BaseController
             'canManage'     => true
         ));
     }
+
     /**
      * @return ClassroomService
      */

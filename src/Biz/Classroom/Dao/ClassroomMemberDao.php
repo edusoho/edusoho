@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Classroom\Dao;
-
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
@@ -15,6 +13,8 @@ interface ClassroomMemberDao extends GeneralDaoInterface
     public function getByClassroomIdAndUserId($classroomId, $userId);
 
     public function deleteByClassroomIdAndUserId($classroomId, $userId);
+
+    public function findTeachersByClassroomId($classroomId);
 
     public function findAssistantsByClassroomId($classroomId);
 

@@ -3,24 +3,25 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Classroom\Dao\ClassroomMemberDao;
-use Biz\Content\Service\FileService;
+use Topxia\Common\ArrayToolkit;
+use Vip\Service\Vip\VipService;
 use Biz\Course\Dao\CourseNoteDao;
+use Biz\User\Service\UserService;
+use Biz\System\Service\LogService;
+use Biz\Classroom\Dao\ClassroomDao;
+use Biz\Order\Service\OrderService;
+use Biz\User\Service\StatusService;
+use Biz\Content\Service\FileService;
+use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use Biz\Order\Service\OrderService;
-use Biz\System\Service\LogService;
-use Biz\Taxonomy\Service\CategoryService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\User\Service\StatusService;
-use Biz\User\Service\UserService;
-use Topxia\Common\ArrayToolkit;
-use Biz\Classroom\Dao\ClassroomDao;
+use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Classroom\Dao\ClassroomCourseDao;
+use Biz\Classroom\Dao\ClassroomMemberDao;
+use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Topxia\Service\Course\CourseCopyService;
-use Vip\Service\Vip\VipService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -307,14 +308,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $courses = $this->findActiveCoursesByClassroomId($id);
 
-        $classroom = $this->getClassroom($id);
-
         $oldTeacherIds = $this->findTeachers($id);
         $newTeacherIds = array();
-        $teacherIds    = array();
 
         foreach ($courses as $key => $value) {
-            $teachers      = $this->getCourseService()->findCourseTeachers($value['id']);
+            $teachers      = $this->getCourseMemberService()->findCourseTeachers($value['id']);
             $teacherIds    = ArrayToolkit::column($teachers, 'userId');
             $newTeacherIds = array_merge($newTeacherIds, $teacherIds);
         }
@@ -342,7 +340,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
                 $this->getClassroomMemberDao()->update($addMembers[$userId]['id'], $addMembers[$userId]);
             } else {
-                $member = $this->becomeTeacher($id, $userId);
+                $this->becomeTeacher($id, $userId);
             }
         }
 
@@ -567,7 +565,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException("该用户(#{$userId})不能成为该班级学员！");
         }
 
-        $levelChecked = '';
+        $userMember = array();
 
         if (!empty($info['becomeUseMember'])) {
             $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
@@ -766,7 +764,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     }
                 }
 
-                $this->getClassroomMemberDao()->update($member['id'], $member);
+                $this->getClassroomMemberDao()->update($headTeacherMember['id'], $headTeacherMember);
             }
         }
 
@@ -818,7 +816,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
                 $this->getClassroomMemberDao()->update($addMembers[$userId]['id'], $addMembers[$userId]);
             } else {
-                $member = $this->becomeAssistant($classroomId, $userId);
+                $this->becomeAssistant($classroomId, $userId);
             }
         }
 
@@ -1423,9 +1421,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $conditions              = array(
             'userId'    => $userId,
             'courseIds' => $courseIds,
-            'status'    => 'finished'
+            'status'    => 'finish'
         );
-        $userLearnCount = $this->getCourseService()->searchLearnCount($conditions);
+        $userLearnCount = $this->getTaskResultService()->countTaskResults($conditions);
 
         $fields['lastLearnTime'] = time();
         $fields['learnedNum']    = $userLearnCount;
@@ -1614,5 +1612,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 }

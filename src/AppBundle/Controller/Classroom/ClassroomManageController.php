@@ -5,11 +5,11 @@ use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\ThreadService;
 use Biz\Order\Service\OrderService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
 use Homework\Service\Homework\HomeworkService;
@@ -25,7 +25,7 @@ use Vip\Service\Vip\LevelService;
 
 class ClassroomManageController extends BaseController
 {
-    public function indexAction(Request $request, $id)
+    public function indexAction($id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
@@ -41,8 +41,12 @@ class ClassroomManageController extends BaseController
         $yesterdayTimeStart = strtotime(date("Y-m-d", $currentTime - 24 * 3600));
         $yesterdayTimeEnd   = strtotime(date("Y-m-d", $currentTime));
 
-        $todayFinishedLessonNum     = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "finished"));
-        $yesterdayFinishedLessonNum = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "finished"));
+        //是否可以直接根据courseId查询，取决于classroom对course是【引用】还是【复制】
+        //TODO
+        $todayFinishedLessonNum = 0;
+        $yesterdayFinishedLessonNum = 0;
+//        $todayFinishedLessonNum     = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "finished"));
+//        $yesterdayFinishedLessonNum = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "finished"));
 
         $todayThreadCount     = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $id, 'type' => 'discussion', "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "open"));
         $yesterdayThreadCount = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $id, 'type' => 'discussion', "startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "open"));
@@ -286,7 +290,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function removeAction(Request $request, $classroomId, $userId)
+    public function removeAction($classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
@@ -301,8 +305,9 @@ class ClassroomManageController extends BaseController
         );
         $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
 
+        $order = array();
         foreach ($orders as $key => $value) {
-            $order = $value;
+            $order[$key] = $value;
         }
 
         $this->getClassroomService()->removeStudent($classroomId, $userId);
@@ -756,7 +761,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function setPictureAction(Request $request, $id)
+    public function setPictureAction($id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
@@ -843,7 +848,6 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
 
         $data = $request->request->all();
-        $ids  = array();
 
         if (isset($data['ids']) && $data['ids'] != "") {
             $ids = $data['ids'];
@@ -932,18 +936,18 @@ class ClassroomManageController extends BaseController
         $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
 
         $courseIds    = ArrayToolkit::column($courses, 'id');
-        $testpapers   = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
+        $testpapers   = $this->getTestpaperService()->searchTestpapers(array('courseIds' => $courseIds), array(), 0, PHP_INT_MAX);
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, $status),
+            $this->getTestpaperService()->searchTestpaperCount(array('ids' => $testpaperIds, 'status' => $status)),
             20
         );
 
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            $status,
+        $paperResults = $this->getTestpaperService()->searchTestpapers(
+            array('ids' => $testpaperIds, 'status' => $status),
+            array(),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -982,7 +986,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function homeworkAction(Request $request, $id, $status)
+    public function homeworkAction($id, $status)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -990,7 +994,7 @@ class ClassroomManageController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (empty($currentUser)) {
-            throw $this->createServiceException($this->getServiceKernel()->trans('用户不存在或者尚未登录，请先登录'));
+            throw $this->getBiz()->createAccessDeniedException('用户不存在或者尚未登录，请先登录');
         }
 
         $courses                = $this->getClassroomService()->findCoursesByClassroomId($id);
@@ -1002,6 +1006,7 @@ class ClassroomManageController extends BaseController
             10
         );
 
+        $orderBy = array();
         if ($status == 'reviewing') {
             $orderBy = array('usedTime'=>'DESC');
         }
@@ -1016,6 +1021,8 @@ class ClassroomManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $reviewingCount = 0;
+        $finishedCount = 0;
         if ($status == 'reviewing') {
             $reviewingCount = $homeworksResultsCounts;
             $finishedCount  = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'finished');

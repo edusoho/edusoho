@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Classroom\Service;
-
 
 interface ClassroomService
 {
@@ -29,7 +27,7 @@ interface ClassroomService
 
     public function canManageClassroom($id);
 
-    public function tryManageClassroom($id);
+    public function tryManageClassroom($id, $actionPermission = null);
 
     public function canCreateThreadEvent($resource);
 
@@ -39,9 +37,9 @@ interface ClassroomService
      * 是否可参与班级的活动，只有正式学员、教师、网站管理员才能参与班级的活动，旁听生不能参与活动
      *
      */
-    public function canTakeClassroom($id);
+    public function canTakeClassroom($id, $includeAuditor = false);
 
-    public function tryTakeClassroom($id);
+    public function tryTakeClassroom($id, $includeAuditor = false);
 
     /**
      * 是否可处理班级事务（批改作业，试卷等）
@@ -85,9 +83,9 @@ interface ClassroomService
     public function findClassroomsByCoursesIds($courseIds);
 
     /**
-     * @param $courseId
-     * @return mixed
      * @before findClassroomByCourseId
+     * @param  $courseId
+     * @return mixed
      */
     public function getClassroomByCourseId($courseId);
 
@@ -114,7 +112,6 @@ interface ClassroomService
 
     public function searchMemberCount($conditions);
 
-
     public function findMemberUserIdsByClassroomId($classroomId);
 
     public function getClassroomMember($classroomId, $userId);
@@ -123,7 +120,7 @@ interface ClassroomService
 
     public function removeStudent($classroomId, $userId);
 
-    public function becomeStudent($classroomId, $userId);
+    public function becomeStudent($classroomId, $userId, $info = array());
 
     public function becomeAuditor($classroomId, $userId);
 
@@ -140,10 +137,10 @@ interface ClassroomService
     public function findClassroomsByCourseId($courseId);
 
     /**
-     * @param $classroomId
-     * @param $courseId
-     * @return mixed
      * @before findClassroomCourse
+     * @param  $classroomId
+     * @param  $courseId
+     * @return mixed
      */
     public function getClassroomCourse($classroomId, $courseId);
 
@@ -152,6 +149,8 @@ interface ClassroomService
     public function countMobileVerifiedMembersByClassroomId($classroomId, $locked);
 
     public function findClassroomStudents($classroomId, $start, $limit);
+
+    public function findClassroomMembersByRole($classroomId, $role, $start, $limit);
 
     public function lockStudent($classroomId, $userId);
 

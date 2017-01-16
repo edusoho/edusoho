@@ -3,14 +3,13 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
+use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\UserService;
+use Biz\System\Service\LogService;
 use Biz\Classroom\Dao\ClassroomDao;
+use Codeages\Biz\Framework\Event\Event;
 use Biz\Classroom\Dao\ClassroomReviewDao;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\System\Service\LogService;
-use Biz\User\Service\UserService;
-use Topxia\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Classroom\Service\ClassroomReviewService;
 
 class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewService
@@ -24,7 +23,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     {
         $conditions = $this->_prepareReviewSearchConditions($conditions);
 
-        $orderBy = empty($orderBy) ? $orderBy : array($orderBy[0] => $orderBy[1]);
+        // $orderBy = empty($orderBy) ? $orderBy : array($orderBy[0] => $orderBy[1]);
 
         return $this->getClassroomReviewDao()->search($conditions, $orderBy, $start, $limit);
     }
@@ -39,8 +38,6 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
     public function getUserClassroomReview($userId, $classroomId)
     {
-        $user = $this->getUserService()->getUser($userId);
-
         $classroom = $this->getClassroomDao()->get($classroomId);
 
         if (empty($classroom)) {
@@ -77,8 +74,6 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         }
 
         $classroom = $this->getClassroomDao()->get($fields['classroomId']);
-
-        $userId = $this->getCurrentUser()->id;
 
         if (empty($classroom)) {
             throw $this->createServiceException("班级(#{$fields['classroomId']})不存在，评价失败！");

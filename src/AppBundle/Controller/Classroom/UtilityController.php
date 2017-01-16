@@ -3,7 +3,6 @@ namespace AppBundle\Controller\Classroom;
 
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\WebBundle\Twig\Extension\WebExtension;
 
@@ -55,7 +54,7 @@ class UtilityController extends BaseController
     private function _getExcludeIds($classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $assistantIds = $this->getClassroomService()->findAssistants($classroomId);
+        $assistantIds = $this->getClassroomService()->findAssistants($classroom['id']);
         $excludeIds = $assistantIds;
 
         return $excludeIds;

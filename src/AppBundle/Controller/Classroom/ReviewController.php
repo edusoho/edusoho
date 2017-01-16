@@ -10,7 +10,7 @@ use Topxia\WebBundle\Controller\BaseController;
 
 class ReviewController extends BaseController
 {
-    public function listAction(Request $request, $id)
+    public function listAction($id)
     {
         $classroom = $this->getClassroomService()->getClassroom($id);
 
@@ -122,7 +122,7 @@ class ReviewController extends BaseController
         ));
     }
 
-    public function deleteAction(Request $request, $reviewId)
+    public function deleteAction($reviewId)
     {
         $this->getClassroomReviewService()->deleteReview($reviewId);
         return $this->createJsonResponse(true);
