@@ -8,28 +8,28 @@ use Topxia\Common\ArrayToolkit;
 class CourseThreadController extends BaseController
 {
 
-    public function indexAction (Request $request)
+    public function indexAction(Request $request)
     {
 
-		$conditions = $request->query->all();
+        $conditions = $request->query->all();
 
-        if ( isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle'){
+        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
             $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['keyword']));
             $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-            if (count($conditions['courseIds']) == 0){
+            if (count($conditions['courseIds']) == 0) {
                 return $this->render('admin/course-thread/index.html.twig', array(
-                    'paginator' => new Paginator($request,0,20),
+                    'paginator' => new Paginator($request, 0, 20),
                     'threads' => array(),
                     'users'=> array(),
                     'courses' => array(),
-                    'lessons' => array()               
+                    'tasks' => array(),
                 ));
-            }               
+            }
         }
 
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->searchThreadCount($conditions),
+            $this->getThreadService()->countThreads($conditions),
             20
         );
         $threads = $this->getThreadService()->searchThreads(
@@ -40,15 +40,15 @@ class CourseThreadController extends BaseController
         );
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
+        $tasks = $this->getCourseService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
 
-    	return $this->render('admin/course-thread/index.html.twig', array(
-    		'paginator' => $paginator,
+        return $this->render('admin/course-thread/index.html.twig', array(
+            'paginator' => $paginator,
             'threads' => $threads,
             'users'=> $users,
             'courses' => $courses,
-            'lessons' => $lessons,
-		));
+            'tasks' => $tasks,
+        ));
     }
 
     public function deleteAction(Request $request, $id)
@@ -75,5 +75,4 @@ class CourseThreadController extends BaseController
     {
         return $this->createService('Course:CourseService');
     }
-
 }

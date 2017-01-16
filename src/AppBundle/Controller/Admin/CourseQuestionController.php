@@ -19,7 +19,7 @@ class CourseQuestionController extends BaseController
                     'questions' => array(),
                     'users'     => array(),
                     'courses'   => array(),
-                    'lessons'   => array(),
+                    'tasks'   => array(),
                     'type'      => $postStatus
                 ));
             }
@@ -31,7 +31,7 @@ class CourseQuestionController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->searchThreadCount($conditions),
+            $this->getThreadService()->countThreads($conditions),
             20
         );
 
@@ -44,14 +44,14 @@ class CourseQuestionController extends BaseController
 
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($questions, 'lessonId'));
+        $tasks = $this->getCourseService()->findTasksByIds(ArrayToolkit::column($questions, 'taskId'));
 
         return $this->render('admin/course-question/index.html.twig', array(
             'paginator' => $paginator,
             'questions' => $questions,
             'users'     => $users,
             'courses'   => $courses,
-            'lessons'   => $lessons,
+            'tasks'   => $tasks,
             'type'      => $postStatus
         ));
     }
