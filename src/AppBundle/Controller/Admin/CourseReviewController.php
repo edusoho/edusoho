@@ -11,7 +11,10 @@ class CourseReviewController extends BaseController
     {
         $conditions = $request->query->all();
 
-        $conditions['rating'] = empty($conditions['rating']) ? '' : $conditions['rating'];
+        if (empty($conditions['rating'])) {
+            unset($conditions['rating']);
+        }
+
         if (!empty($conditions['courseTitle'])) {
             $courseSetCondtions = array('title' => '%'.trim($conditions['courseTitle'].'%'));
             $courseSets = $this->getCourseSetService()->searchCourseSets($courseSetCondtions, array(), 0, PHP_INT_MAX);
