@@ -481,13 +481,17 @@ class UserServiceImpl extends BaseService implements UserService
     public function changePassword($id, $password)
     {
         if (empty($password)) {
-            throw $this->createInvalidArgumentException('Invalid Argument');
+            throw $this->createInvalidArgumentException('参数不正确，更改密码失败');
+        }
+
+        if (!SimpleValidator::password($password)) {
+            throw $this->createInvalidArgumentException(('密码校验失败');
         }
 
         $user = $this->getUser($id);
 
         if (empty($user)) {
-            throw $this->createNotFoundException("User#{$id} Not Found");
+            throw $this->createNotFoundException('user not found');
         }
 
         $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);

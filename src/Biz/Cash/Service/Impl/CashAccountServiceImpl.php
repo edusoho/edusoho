@@ -23,6 +23,11 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
         return $this->getAccountDao()->getByUserId($userId, $lock);
     }
 
+    public function findAccountsByUserIds($userIds)
+    {
+        return $this->getAccountDao()->findByUserIds($userIds);
+    }
+
     public function getAccount($id)
     {
         return $this->getAccountDao()->get($id);

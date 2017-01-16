@@ -20,6 +20,12 @@ class ClassroomOrderServiceTest extends BaseTestCase
 
     }
 
+    public function testApplyRefundOrderWithEmptyOrder()
+    {
+        $order = array('id' => '100');
+        $this->getClassroomOrderService()->applyRefundOrder($order['id'], 0, "我要外卖啊", "a");
+    }
+
     public function testCreateOrder()
     {
         $info          = array('targetId' => '1', 'payment' => 'coin', 'priceType' => 'RMB', 'totalPrice' => '0.00', 'coinRate' => '1', 'coinAmount' => '0.00', 'note' => '11', 'coupon' => '123', 'couponDiscount' => '0.0');

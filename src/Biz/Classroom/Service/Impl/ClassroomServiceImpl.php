@@ -216,25 +216,28 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomDao()->findByLikeTitle($title);
     }
 
-    /**
-     * 要过滤要更新的字段
-     */
     public function updateClassroom($id, $fields)
     {
         $user = $this->getCurrentUser();
 
-        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+        if (isset($fields['tagIds'])) {
+            $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+        }
 
         $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId'));
 
         if (empty($fields)) {
-            throw $this->createServiceException($this->getKernel()->trans('参数不正确，更新失败！'));
+            throw $this->createInvalidArgumentException('参数不正确，更新失败！');
         }
 
         $fields    = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->update($id, $fields);
 
-        $this->dispatchEvent('classroom.update', new Event(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds)));
+        if (isset($tagIds)) {
+            $this->dispatchEvent('classroom.update', new Event(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds)));
+        } else {
+            $this->dispatchEvent('classroom.update', new Event(array('userId' => $user['id'], 'classroomId' => $id)));
+        }
 
         return $classroom;
     }

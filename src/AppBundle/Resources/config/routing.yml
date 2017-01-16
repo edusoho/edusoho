@@ -2643,3 +2643,8 @@ course_order_repay:
 course_show:
   path: /course/{id}/{tab}
   defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }
+
+#更新日志列表
+changelog_list:
+    path: /changelog/list
+    defaults: { _controller: AppBundle:Changelog:list }

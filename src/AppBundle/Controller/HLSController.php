@@ -155,12 +155,11 @@ class HLSController extends BaseController
         }
 
         $inWhiteList   = $this->agentInWhiteList($request->headers->get("user-agent"));
-        $keyencryption = ($fromApi || $inWhiteList) ? 0 : 1;
         $tokenFields   = array(
             'data'     => array(
                 'id'            => $file['id'],
                 'level'         => $level,
-                'keyencryption' => $keyencryption
+                'fromApi' => $fromApi,
             ),
             'times'    => $inWhiteList ? 0 : 1,
             'duration' => 3600
@@ -181,7 +180,7 @@ class HLSController extends BaseController
         if (!$inWhiteList && !$this->isHiddenVideoHeader($hideBeginning)) {
             $beginning = $this->getVideoBeginning($request, $level, array(
                 'userId'        => $token['userId'],
-                'keyencryption' => $keyencryption
+                'fromApi' => $fromApi
             ));
 
             if ($beginning['beginningKey']) {
@@ -195,12 +194,16 @@ class HLSController extends BaseController
             $params['line'] = $line;
         }
 
+        if ($request->isSecure()) {
+            $params['protocol'] = 'https';
+        }
+
         $api = CloudAPIFactory::create('leaf');
 
         $stream = $api->get('/hls/stream', $params);
 
         if (empty($stream['stream'])) {
-            return $this->createMessageResponse('error', '生成视频播放地址失败！');
+            return $this->createMessageResponse('error', $this->trans('生成视频播放地址失败！'));
         }
 
         return $this->responseEnhanced($stream['stream'], array(
@@ -211,22 +214,20 @@ class HLSController extends BaseController
 
     public function clefAction(Request $request, $id, $token)
     {
-        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $inWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
         $token       = $this->getTokenService()->verifyToken('hls.clef', $token);
         if (empty($token)) {
             return $this->makeFakeTokenString();
         }
 
-        $enablePlayRate     = $this->setting('storage.enable_playback_rates');
-        $isNoNeedLoginToken = empty($token['userId']) ? true : false;
-
-        if (!($inWhiteList || $isNoNeedLoginToken || $enablePlayRate)) {
-            //倍速播放先放行
-            if (!$this->getCurrentUser()->isLogin()) {
+        $enabledRatePlayback = $this->setting('storage.enable_playback_rates');
+        if (!$inWhiteList && !$enabledRatePlayback) {
+            $needValidateUser = !empty($token['userId']) ? true : false;
+            if ($needValidateUser && !$this->getCurrentUser()->isLogin()) {
                 return $this->makeFakeTokenString();
             }
 
-            if ($this->getCurrentUser()->getId() != $token['userId']) {
+            if ($needValidateUser && ($this->getCurrentUser()->getId() != $token['userId'])) {
                 return $this->makeFakeTokenString();
             }
         }
@@ -243,22 +244,19 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        if (empty($file['globalId']) && isset($file['convertParams']['hlsKey'])) {
-            return $this->responseEnhanced($file['convertParams']['hlsKey']);
-        }
-
         if (empty($file['metas2'][$token['data']['level']]['hlsKey'])) {
             return $this->makeFakeTokenString();
         }
 
-        $api = CloudAPIFactory::create('leaf');
-
-        if (!empty($token['data']['keyencryption'])) {
-            $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/1", array());
-            return $this->responseEnhanced($stream['key']);
+        if (!empty($token['data']['fromApi'])) {
+            return $this->responseEnhanced($file['metas2'][$token['data']['level']]['hlsKey']);
         }
 
-        $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/0", array());
+        if ($this->isHlsEncryptionPlusEnabled() || !$inWhiteList ) {
+            $api = CloudAPIFactory::create('leaf');
+            $result = $api->get("/hls/clef_plus/{$file['metas2'][$token['data']['level']]['hlsKey']}");
+            return $this->responseEnhanced($result['key']);
+        }
 
         return $this->responseEnhanced($file['metas2'][$token['data']['level']]['hlsKey']);
     }
@@ -297,6 +295,12 @@ class HLSController extends BaseController
         }
     }
 
+    protected function isHlsEncryptionPlusEnabled()
+    {
+        $enabled = $this->setting('storage.enable_hls_encryption_plus');
+        return $enabled;
+    }
+
     protected function getVideoBeginning(Request $request, $level, $params = array())
     {
         $beginning = array(
@@ -322,7 +326,7 @@ class HLSController extends BaseController
                     'data'     => array(
                         'id'            => $file['id'],
                         'level'         => $level,
-                        'keyencryption' => $params['keyencryption']
+                        'fromApi' => $params['fromApi']
                     ),
                     'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                     'duration' => 3600,

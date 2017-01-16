@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\WebBundle\Controller;
+namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -7,7 +7,7 @@ class ChangelogController extends BaseController
 {
     public function listAction(Request $request)
     {
-        $rootDir = $this->getServiceKernel()->getParameter('kernel.root_dir');
+        $rootDir = $this->getParameter('kernel.root_dir');
         $changelogUrl = $rootDir."/../CHANGELOG";
         $changelogFile = fopen("{$changelogUrl}", "r");
 
@@ -18,7 +18,7 @@ class ChangelogController extends BaseController
 
         fclose($changelogFile);
 
-        return $this->render('TopxiaWebBundle:Changelog:list.html.twig',array(
+        return $this->render('change-log:list.html.twig',array(
             'logs' => $changelogRows
         ));
     }
