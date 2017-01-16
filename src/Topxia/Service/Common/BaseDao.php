@@ -119,14 +119,22 @@ abstract class BaseDao
                 return $data;
             }
         }
+        if ($this->isRunByCommand()){
+            return call_user_func_array($callback, $args);
+        }else{
+            $this->dataCached[$key] = call_user_func_array($callback, $args);
 
-        $this->dataCached[$key] = call_user_func_array($callback, $args);
-
-        if ($redis) {
-            $redis->setex($key, 2 * 60 * 60, $this->dataCached[$key]);
+            if ($redis) {
+                $redis->setex($key, 2 * 60 * 60, $this->dataCached[$key]);
+            }
+            return $this->dataCached[$key];
         }
+        
+    }
 
-        return $this->dataCached[$key];
+    private function  isRunByCommand()
+    {
+       return  getenv('IS_RUN_BY_COMMAND') && getenv('IS_RUN_BY_COMMAND') === 'true';
     }
 
     protected function getCacheVersion($key)
