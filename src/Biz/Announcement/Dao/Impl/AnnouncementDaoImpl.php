@@ -33,7 +33,7 @@ class AnnouncementDaoImpl extends GeneralDaoImpl implements AnnouncementDao
     protected function _createQueryBuilder($conditions)
     {
         if (isset($conditions['likeOrgCode'])) {
-            $conditions['likeOrgCode'] = "%{$conditions['likeOrgCode']}%";
+            $conditions['likeOrgCode'] = $conditions['likeOrgCode'] . '%';
             unset($conditions['orgCode']);
         }
 

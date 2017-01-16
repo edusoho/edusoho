@@ -10,12 +10,12 @@ abstract class BaseDaoTestCase extends BaseTestCase
     {
         foreach ($testConditons as $testConditon) {
             $count = $dao->count($testConditon['condition']);
-            $this->assertEquals($count, $testConditon['expectedCount']);
+            $this->assertEquals($testConditon['expectedCount'], $count);
 
             $orderBy = empty($testConditon['orderBy']) ? array() : $testConditon['orderBy'];
             $results = $dao->search($testConditon['condition'], $orderBy, 0, 10);
             foreach ($results as $key => $result) {
-                $this->assertArrayEquals($result, $testConditon['expectedResults'][$key], $testFields);
+                $this->assertArrayEquals($testConditon['expectedResults'][$key], $result, $testFields);
             }
         }
     }

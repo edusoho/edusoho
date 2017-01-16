@@ -10,7 +10,7 @@ class AnnouncementDaoTest extends BaseDaoTestCase
     {
         $factor = array();
         $factor[] = $this->mockDataObject(array('startTime' => 2, 'content' => 'char'));
-        $factor[] = $this->mockDataObject(array('userId' => 2, 'endTime' => 2, 'orgCode' => 'char'));
+        $factor[] = $this->mockDataObject(array('userId' => 2, 'endTime' => 3, 'orgCode' => 'char'));
         $factor[] = $this->mockDataObject(array('targetType' => 'int', 'targetId' => 2, 'copyId' => 2));
 
         $testConditions = array(
@@ -21,8 +21,8 @@ class AnnouncementDaoTest extends BaseDaoTestCase
             ),
             array(
                 'condition' => array('startTime' => 1),
-                'expectedResults' => $factor,
-                'expectedCount' => 3
+                'expectedResults' => array($factor[1], $factor[2]),
+                'expectedCount' => 2
             ),
             array(
                 'condition' => array('targetType' => 'varchar'),
@@ -40,9 +40,9 @@ class AnnouncementDaoTest extends BaseDaoTestCase
                 'expectedCount' => 3
             ),
             array(
-                'condition' => array('endTime' => 2),
-                'expectedResults' => array($factor[0], $factor[2]),
-                'expectedCount' => 2
+                'condition' => array('endTime' => 3),
+                'expectedResults' => array($factor[1]),
+                'expectedCount' => 1
             ),
             array(
                 'condition' => array('orgCode' => 'varchar'),
@@ -50,12 +50,12 @@ class AnnouncementDaoTest extends BaseDaoTestCase
                 'expectedCount' => 2
             ),
             array(
-                'condition' => array('likeOrgCode' => 'char'),
-                'expectedResults' => $factor,
-                'expectedCount' => 3
+                'condition' => array('likeOrgCode' => 'var'),
+                'expectedResults' => array($factor[0], $factor[2]),
+                'expectedCount' => 2
             ),
             array(
-                'condition' => array('copyeId' => 1),
+                'condition' => array('copyId' => 1),
                 'expectedResults' => array($factor[0], $factor[1]),
                 'expectedCount' => 2
             ),
@@ -65,6 +65,8 @@ class AnnouncementDaoTest extends BaseDaoTestCase
                 'expectedCount' => 2
             ),
         );
+
+        $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
 
     protected function getDefaultMockFields()
