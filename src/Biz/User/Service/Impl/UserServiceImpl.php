@@ -485,7 +485,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!SimpleValidator::password($password)) {
-            throw $this->createInvalidArgumentException(('密码校验失败');
+            throw $this->createInvalidArgumentException('密码校验失败');
         }
 
         $user = $this->getUser($id);
