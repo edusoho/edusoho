@@ -340,9 +340,7 @@ class CourseSetController extends BaseController
         $courseSet = $this->getCourseSetService()->cancelRecommendCourse($id);
 
         if ($target == 'recommend_list') {
-            return $this->forward('AppBundle:Admin/admin/course/recommendList', array(
-                'request' => $request
-            ));
+            return $this->createJsonResponse(array('success'=>1));
         }
 
         if ($target == 'normal_index') {
