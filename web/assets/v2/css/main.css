@@ -15536,20 +15536,10 @@ textarea {
 }
 .es-mobile .course-detail-header .course-data > li {
   width: auto;
-  margin: 5px 0;
+  margin: 6px 0;
   padding: 0 20px;
   line-height: inherit;
   position: relative;
-}
-.es-mobile .course-detail-header .course-data > li:last-child:after {
-  content: '';
-  display: inline-block;
-  position: absolute;
-  left: 0;
-  top: 10px;
-  height: 15px;
-  width: 1px;
-  background-color: #C1C1C1;
 }
 .es-mobile .course-detail-header .course-data > li i {
   font-size: 20px;
@@ -15565,6 +15555,7 @@ textarea {
   height: 49px;
   background-color: #F5F5F5;
   z-index: 2;
+  border-top: 1px solid #ececec;
 }
 .es-mobile .course-detail-header .course-header-bottom,
 .es-mobile .buy {
@@ -15617,7 +15608,7 @@ textarea {
   padding: 0;
 }
 .es-mobile .course-detail-header.before .course-operation .buy .btn {
-  padding: 17px 14px ;
+  padding: 17px 14px 18px;
   line-height: 1;
 }
 .es-mobile .es-mobile-nav li {
@@ -15655,16 +15646,39 @@ textarea {
 .es-mobile .course-detail-header.after .course-operation,
 .es-mobile .course-detail-header.before .course-operation {
   background-color: transparent;
+  line-height: 1;
+}
+.es-mobile .course-detail-header.after .course-data > li p,
+.es-mobile .course-detail-header.before .course-data > li p {
+  margin-bottom: 5px;
+  font-size: 10px;
+}
+.es-mobile .course-detail-header.after .course-data > li p:last-child,
+.es-mobile .course-detail-header.before .course-data > li p:last-child {
+  margin-bottom: 0;
 }
 .es-mobile .course-detail-header.before .score,
 .es-mobile .course-detail-header.before .discount-price label,
-.es-mobile .course-detail-header.before .old-price label {
+.es-mobile .course-detail-header.before .old-price label,
+.es-mobile .course-detail-header.before .expiry-date {
   display: none;
+}
+.es-mobile .course-detail-header.before .es-share {
+  position: relative;
+}
+.es-mobile .course-detail-header.before .es-share:before {
+  content: '';
+  position: absolute;
+  background: #c1c1c1;
+  width: 1px;
+  height: 14px;
+  left: -20px;
+  top: 11px;
 }
 .es-mobile .course-detail-header.before .discount-price .price {
   font-size: 18px;
   color: #e83d2c;
-  margin: 0 0 0 6px;
+  margin: 0;
 }
 .es-mobile .course-detail-header.before .course-data.active > li {
   width: auto;
@@ -15683,7 +15697,7 @@ textarea {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  padding: 17px 14px ;
+  padding: 17px 14px 18px;
   line-height: 1;
 }
 .es-mobile .course-detail-header.before .activity {
@@ -15691,6 +15705,7 @@ textarea {
 }
 .es-mobile .course-detail-header.before .discount {
   margin-left: 0;
+  margin-right: 5px;
   float: left;
   background-color: #ff8a0c;
   font-size: 12px;
@@ -15732,7 +15747,6 @@ textarea {
 }
 .es-mobile .course-detail-header.before .course-operation {
   padding: 4px 10px 10px;
-  line-height: 1;
 }
 .es-mobile .course-detail-header.before .es-mobile-teacher {
   vertical-align: super;
@@ -15746,6 +15760,10 @@ textarea {
 .es-mobile .course-detail-header.after .title {
   margin: 0 0 5px;
 }
+.es-mobile .course-detail-header.after #favorite-btn,
+.es-mobile .course-detail-header.after #unfavorite-btn {
+  display: none;
+}
 .es-mobile .course-detail-header.after .es-mobile-nav li {
   width: auto;
   padding: 0 10%;
@@ -15758,6 +15776,9 @@ textarea {
 }
 .es-mobile .course-detail-header.after .course-data.two-col > li {
   width: auto;
+}
+.es-mobile .course-detail-header.after .course-header-bottom {
+  line-height: 49px;
 }
 .es-mobile body.homepage.has-app .es-wrap,
 .es-mobile body.course-list-page.has-app .es-wrap,

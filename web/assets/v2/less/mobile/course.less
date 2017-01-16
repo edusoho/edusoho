@@ -28,25 +28,14 @@
 		left: 0;
 		z-index: 9999;
 		padding: 0;
+
 		>li {
 			width: auto;
-			margin: 5px 0;
+			margin: 6px 0;
 			padding: 0 20px;
 			line-height: inherit;
 			position: relative;
 
-			&:last-child {
-				&:after {
-					content: '';
-					display: inline-block;
-					position: absolute;
-					left: 0;
-					top: 10px;
-					height: 15px;
-					width: 1px;
-					background-color: #C1C1C1;
-				}
-			}
 			i {
 				font-size: 20px;
 			}
@@ -63,6 +52,7 @@
 		height: 49px;
 		background-color: #F5F5F5;
 		z-index: 2;
+		border-top: 1px solid #ececec;
 	}
 	.course-detail-header .course-header-bottom, .buy {
 		position: fixed;
@@ -85,7 +75,7 @@
 	.es-section {
 		padding: 10px;
 	}
-	.es-mobile-section{
+	.es-mobile-section {
 		padding: 0;
 	}
 	.nav.nav-tabs > li {
@@ -107,7 +97,7 @@
 			left: 0;
 		}
 	}
-	.next-class,.es-piece .piece-header{
+	.next-class, .es-piece .piece-header {
 		display: none;
 	}
 	.course-detail-header.before .course-operation .buy {
@@ -115,78 +105,104 @@
 		padding: 0;
 
 		.btn {
-			padding: 17px 14px ;
+			padding: 17px 14px 18px;
 			line-height: 1;
 		}
 	}
-	.es-mobile-nav li{
+	.es-mobile-nav li {
 		width: 33.33%;
 		text-align: center;
-		a{
+
+		a {
 			font-weight: normal;
 		}
-		&.active{
+		&.active {
 			border-bottom: 1px solid @brand-primary;
-			a{
-				color:@brand-primary;
+
+			a {
+				color: @brand-primary;
 			}
 		}
-		&.active.navs{
+		&.active.navs {
 			width: auto;
-			border:none;
-			a{
-				color:@gray-darker;
+			border: none;
+
+			a {
+				color: @gray-darker;
 			}
 		}
 	}
 	//加入课程前后
-	.course-detail-header.after,.course-detail-header.before{
-		.course-info{
+	.course-detail-header.after, .course-detail-header.before {
+		.course-info {
 			padding: 15px 10px 10px;
 		}
-		.subtitle{
+		.subtitle {
 			display: none;
 		}
 		.title {
 			font-size: 18px;
 		}
-		.course-operation{
+		.course-operation {
 			background-color: transparent;
-		} 
+			line-height: 1;
+		}
+		.course-data>li p {
+			margin-bottom: 5px;
+			font-size: 10px;
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
 	}
 	//加入课程前
 	.course-detail-header.before {
-		.score, .discount-price label,.old-price label	{
+		.score, .discount-price label, .old-price label, .expiry-date {
 			display: none;
 		}
-		.discount-price .price{
+		.es-share {
+			position: relative;
+
+			&:before {
+				content: '';
+				position: absolute;
+				background: @gray-medium;
+				width: 1px;
+				height: 14px;
+				left: -20px;
+				top: 11px;
+			}
+		}
+		.discount-price .price {
 			font-size: 18px;
 			color: @brand-danger;
-			margin:0 0 0 6px;
+			margin: 0;
 		}
-		.course-data.active > li{
+		.course-data.active > li {
 			width: auto;
 			padding: 0 10%;
 		}
-		.course-info{
+		.course-info {
 			padding: 15px 10px 0;
 		}
-		.buyer-btn{
+		.buyer-btn {
 			position: fixed;
-    	right: 84px;
-    	bottom: 0;
-			.btn{
-				border:none;
+			right: 84px;
+			bottom: 0;
+
+			.btn {
+				border: none;
 				.border-radius(0);
-				padding: 17px 14px ;
+				padding: 17px 14px 18px;
 				line-height: 1;
 			}
 		}
-		.activity{
+		.activity {
 			display: none;
 		}
-		.discount{
+		.discount {
 			margin-left: 0;
+			margin-right: 5px;
 			float: left;
 			background-color: @brand-warning;
 			font-size: 12px;
@@ -194,68 +210,74 @@
 			line-height: 20px;
 			.border-radius(4px);
 			padding: 0 6px;
-			top:3px;
-			&:before{
+			top: 3px;
+
+			&:before {
 				border-color: transparent;
-				border-width:0;
+				border-width: 0;
 			}
-			&:after{
+			&:after {
 				background: transparent;
 				width: 0;
 				height: 0;
 			}
 		}
-		.title{
+		.title {
 			margin: 0 0 10px;
 		}
-		.discount-price,.old-price{
+		.discount-price, .old-price {
 			display: inline-block;
 			margin-right: 3px;
 		}
-		.student-num{
-			display: inline-block!important;
+		.student-num {
+			display: inline-block !important;
 			width: auto;
 			padding: 0;
 			float: right;
 			margin-top: 0;
 			font-size: 12px;
-			i{
+
+			i {
 				font-size: 16px;
 			}
 		}
-		.course-operation{
+		.course-operation {
 			padding: 4px 10px 10px;
-			line-height: 1;
 		}
-		.es-mobile-teacher{
+		.es-mobile-teacher {
 			vertical-align: super;
 		}
-		.metas p{
-			margin:0 0 5px;
-		}
-
-	}
-	//加入课程后
-	.course-detail-header.after{
-		.metas{
-			display: none;
-		}
-		.title{
+		.metas p {
 			margin: 0 0 5px;
 		}
-		.es-mobile-nav li{
+	}
+	//加入课程后
+	.course-detail-header.after {
+		.metas {
+			display: none;
+		}
+		.title {
+			margin: 0 0 5px;
+		}
+		#favorite-btn,#unfavorite-btn{
+			display: none;
+		}
+		.es-mobile-nav li {
 			width: auto;
 			padding: 0 10%;
-			&.active{
-				border:none;
+
+			&.active {
+				border: none;
 			}
-			a{
+			a {
 				font-weight: normal;
 			}
-		} 
-		.course-data.two-col > li{
+		}
+		.course-data.two-col > li {
 			width: auto;
 		}
+		.course-header-bottom {
+			line-height: 49px;
+		}
 	}
-
 }
