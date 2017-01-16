@@ -60,8 +60,11 @@
                 <div class="long-text">{{ review.content|nl2br }} <span class="text-muted trigger">({{'收起'|trans}})</span></div>
               </div>
               <div class="mts">
-                {% if course and courseSet %}
-                  <a class="text-success text-sm" href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
+                {% if courseSet %}
+                  <a class="text-success text-sm" href="{{ path('course_set_show', {id:courseSet.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
+                {% endif %}
+
+                {% if course %}
                   <span class="text-muted mhs text-sm">&raquo;</span>
                   <a class="text-success text-sm" href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
                 {% endif %}
