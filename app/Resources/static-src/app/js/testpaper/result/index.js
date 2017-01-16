@@ -1,16 +1,19 @@
 import DoTestBase from '../widget/do-test-base';
+import { initScrollbar,testpaperCardFixed,testpaperCardLocation,onlyShowError } from '../widget/tool';
 
+initScrollbar();
+testpaperCardFixed();
+testpaperCardLocation();
+onlyShowError();
 
 class ShowResult extends DoTestBase {
   constructor($container) {
     super($container);
-
-    this.$container.find('.js-testpaper-content').perfectScrollbar();
-    this.$container.find('.js-panel-card').perfectScrollbar();
+    
   }
 }
 
-new ShowResult($('.js-task-testpaper-body'));
+new ShowResult($('.js-task-testpaper-body-iframe'));
 
 $('.js-testpaper-redo-timer').timer({
   countdown:true,

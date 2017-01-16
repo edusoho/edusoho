@@ -1,40 +1,42 @@
 import DoTestBase from '../widget/do-test-base';
+import { initScrollbar,testpaperCardFixed,testpaperCardLocation } from '../widget/tool';
+
+
 
 class DoTestpaper extends DoTestBase {
   constructor($container) {
     super($container);
     this.$timePauseDialog = this.$container.find('#time-pause-dialog');
     this.$timer = $container.find('.js-testpaper-timer');
-    this._initTimer();
     this._init();
   }
 
   _init() {
-    this.$container.find('.js-testpaper-content').perfectScrollbar();
-    this.$container.find('.js-panel-card').perfectScrollbar();
+    initScrollbar();
+    testpaperCardFixed();
+    testpaperCardLocation();
+    this._initTimer();
     this.$container.on('click','.js-btn-pause',event=>this._clickBtnPause(event));
     this.$container.on('click','.js-btn-resume',event => this._clickBtnReume(event));
   }
-
+  
   _initTimer() {
-    let self = this;
-    if (this.$timer != undefined) {
-
+    if (this.$timer) {
       this.$timer.timer({
         countdown:true,
         duration: this.$timer.data('time'),
         format: '%H:%M:%S',
-        callback: function() {
-          self.$container.find('#time-finish-dialog').modal('show');
-          clearInterval(self.$usedTimer);
-          self.usedTime = self.$timer.data('time') / 60;
+        callback: ()=> {
+          this.$container.find('#time-finish-dialog').modal('show');
+          clearInterval(this.$usedTimer);
+          this.usedTime = this.$timer.data('time') / 60;
           if ($('input[name="preview"]').length == 0) {
-            self._submitTest(self.$container.find('[data-role="paper-submit"]').data('url'));
+            this._submitTest(this.$container.find('[data-role="paper-submit"]').data('url'));
           }
         },
         repeat: true,
-        start: function() {
-          self.usedTime = 0;
+        start: ()=>{
+          this.usedTime = 0;
         }
       });
     }
@@ -61,4 +63,4 @@ class DoTestpaper extends DoTestBase {
   }
 }
 
-new DoTestpaper($('.js-task-testpaper-body'));
+new DoTestpaper($('.js-task-testpaper-body-iframe'));
