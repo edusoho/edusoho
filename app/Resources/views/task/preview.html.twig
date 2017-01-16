@@ -42,7 +42,7 @@
         </a>
       {% else %}
         <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn"
-            {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus == 'ok' or (course.approval and app.user and app.user.approvalStatus != 'approved')) %}
+            {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus|default(null) == 'ok' or (course.approval and app.user and app.user.approvalStatus != 'approved')) %}
               href="javascript:;"
               data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
             {% else %}
@@ -51,7 +51,7 @@
            href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
         >
           {% if user.id|default(null) %}
-            {% if vipStatus == 'ok' %}
+            {% if vipStatus|default(null) == 'ok' %}
               {{ '觉得不错？点击加入此课程'|trans }}
             {% else %}
               {{ '觉得不错？点击购买此课程'|trans }}（{{ '%price%元'|trans({'%price%': course.price }) }}）
