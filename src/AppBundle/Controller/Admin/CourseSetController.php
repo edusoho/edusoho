@@ -12,6 +12,7 @@ class CourseSetController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+
         if ($filter == 'normal') {
             $conditions["parentId"] = 0;
         }
@@ -271,14 +272,14 @@ class CourseSetController extends BaseController
 
     public function publishAction(Request $request, $id)
     {
-        $this->getCourseService()->publishCourse($id);
+        $this->getCourseSetService()->publishCourseSet($id);
 
         return $this->renderCourseTr($id, $request);
     }
 
     public function closeAction(Request $request, $id)
     {
-        $this->getCourseService()->closeCourse($id);
+        $this->getCourseSetService()->closeCourseSet($id);
 
         return $this->renderCourseTr($id, $request);
     }

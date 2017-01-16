@@ -203,7 +203,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-eye-open'
                                     blank: 1
-                                admin_course_close:
+                                admin_course_set_close:
                                     name: 关闭课程
                                     router_params:
                                         id: (course.id)
@@ -223,7 +223,7 @@ admin:
                                     icon: 'glyphicon glyphicon-envelope'
                                     mode: modal
                                     visable: (course.status == 'published')
-                                admin_course_publish:
+                                admin_course_set_publish:
                                     name: 发布课程
                                     router_params:
                                         id: (course.id)

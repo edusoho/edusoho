@@ -708,7 +708,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function publishCourse($id, $source = 'course')
     {
         if ($source == 'course') {
-            $course = $this->tryManageCourse($id, 'admin_course_publish');
+            $course = $this->tryManageCourse($id, 'admin_course_set_publish');
         } elseif ($source == 'classroom') {
             $course = $this->getCourseDao()->getCourse($id);
 
@@ -725,7 +725,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function closeCourse($id, $source = 'course')
     {
         if ($source == 'course') {
-            $course = $this->tryManageCourse($id, 'admin_course_close');
+            $course = $this->tryManageCourse($id, 'admin_course_set_close');
         } elseif ($source == 'classroom') {
             $course = $this->getCourseDao()->getCourse($id);
 
