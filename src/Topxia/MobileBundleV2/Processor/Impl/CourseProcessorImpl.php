@@ -998,7 +998,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $member = null;
             }
         }
-        $this->updateMemberLastViewTime();
+        $this->updateMemberLastViewTime($member);
         $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
         $vipLevels     = array();
 
