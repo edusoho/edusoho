@@ -94,7 +94,7 @@ class GroupController extends BaseController
 
         $groups = $this->getGroupService()->searchGroups(
             array('title' => $keyWord, 'status' => 'open'),
-            array('createdTime', "DESC"), $paginator->getOffsetCount(),
+            array('createdTime'=>'DESC'), $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
