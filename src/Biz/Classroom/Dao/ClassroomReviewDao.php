@@ -2,7 +2,9 @@
 
 namespace Biz\Classroom\Dao;
 
-interface ClassroomReviewDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface ClassroomReviewDao extends GeneralDaoInterface
 {
     public function getByUserIdAndClassroomId($userId, $classroomId);
 

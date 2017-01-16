@@ -1,6 +1,18 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
+use Biz\Classroom\Service\ClassroomReviewService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Content\Service\FileService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\ThreadService;
+use Biz\Order\Service\OrderService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\NotificationService;
+use Biz\User\Service\UserFieldService;
+use Homework\Service\Homework\HomeworkService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ExportHelp;
 use Topxia\Common\ArrayToolkit;
@@ -8,6 +20,8 @@ use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\WebBundle\Twig\Extension\WebExtension;
+use Vip\Service\Vip\LevelService;
 
 class ClassroomManageController extends BaseController
 {
@@ -1118,71 +1132,113 @@ class ClassroomManageController extends BaseController
         return $cashRate;
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ClassroomReviewService
+     */
     protected function getClassroomReviewService()
     {
         return $this->createService('Classroom:ClassroomReviewService');
     }
 
+    /**
+     * @return LevelService
+     */
     protected function getLevelService()
     {
         return $this->createService('Vip:Vip.LevelService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return NotificationService
+     */
     private function getNotificationService()
     {
         return $this->createService('User:NotificationService');
     }
 
+    /**
+     * @return OrderService
+     */
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
         return $this->createService('User:UserFieldService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->createService('Thread:ThreadService');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
     }
 
+    /**
+     * @return WebExtension
+     */
     private function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return HomeworkService
+     */
     protected function getHomeworkService()
     {
         return $this->createService('Homework:Homework.HomeworkService');

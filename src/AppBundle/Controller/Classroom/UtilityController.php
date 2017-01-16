@@ -1,9 +1,11 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\WebBundle\Twig\Extension\WebExtension;
 
 class UtilityController extends BaseController
 {
@@ -59,11 +61,17 @@ class UtilityController extends BaseController
         return $excludeIds;
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return WebExtension
+     */
     private function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');

@@ -3,11 +3,24 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Classroom\Dao\ClassroomMemberDao;
+use Biz\Content\Service\FileService;
+use Biz\Course\Dao\CourseNoteDao;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Order\Service\OrderService;
+use Biz\System\Service\LogService;
+use Biz\Taxonomy\Service\CategoryService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\User\Service\StatusService;
+use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Classroom\Dao\ClassroomDao;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Classroom\Dao\ClassroomCourseDao;
 use Biz\Classroom\Service\ClassroomService;
+use Topxia\Service\Course\CourseCopyService;
+use Vip\Service\Vip\VipService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -148,7 +161,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $title = trim($classroom['title']);
 
         if (empty($title)) {
-            throw $this->createServiceException($this->getKernel()->trans('班级名称不能为空！'));
+            throw $this->createServiceException('班级名称不能为空！');
         }
 
         $classroom = $this->fillOrgId($classroom);
@@ -228,7 +241,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId'));
 
         if (empty($fields)) {
-            throw $this->createServiceException($this->getKernel()->trans('参数不正确，更新失败！'));
+            throw $this->createServiceException('参数不正确，更新失败！');
         }
 
         $fields    = $this->fillOrgId($fields);
@@ -269,11 +282,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($id);
 
         if (empty($classroom)) {
-            throw $this->createServiceException($this->getKernel()->trans('班级不存在，操作失败。'));
+            throw $this->createServiceException('班级不存在，操作失败。');
         }
 
         if ($classroom['status'] != 'draft') {
-            throw $this->createServiceException($this->getKernel()->trans('只有未发布班级可以删除，操作失败。'));
+            throw $this->createServiceException('只有未发布班级可以删除，操作失败。');
         }
 
         $this->tryManageClassroom($id, 'admin_classroom_delete');
@@ -367,7 +380,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroomDao()->get($id);
 
         if (empty($classroom)) {
-            throw $this->createServiceException($this->getKernel()->trans('班级不存在，图标更新失败！'));
+            throw $this->createServiceException('班级不存在，图标更新失败！');
         }
 
         $fileIds = ArrayToolkit::column($data, "id");
@@ -459,7 +472,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $member = $this->getClassroomMember($classroomId, $userId);
 
         if (empty($member)) {
-            throw $this->createServiceException($this->getKernel()->trans('学员不存在，备注失败!'));
+            throw $this->createServiceException('学员不存在，备注失败!');
         }
 
         $fields = array('remark' => empty($remark) ? '' : (string) $remark);
@@ -472,13 +485,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createServiceException($this->getKernel()->trans('班级不存在，操作失败。'));
+            throw $this->createServiceException('班级不存在，操作失败。');
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
 
         if (empty($member) || !(array_intersect($member['role'], array('student', 'auditor')))) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%id%)不是班级(#%classroomId%)的学员，退出班级失败。', array('%id%' => $userId, '%classroomId%' => $classroomId)));
+            throw $this->createServiceException("用户(#{$userId})不是班级(#{$classroomId})的学员，退出班级失败。");
         }
 
         $this->removeStudentsFromClasroomCourses($classroomId, $userId);
@@ -539,19 +552,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         if (!in_array($classroom['status'], array('published', 'closed'))) {
-            throw $this->createServiceException($this->getKernel()->trans('不能加入未发布班级'));
+            throw $this->createServiceException('不能加入未发布班级');
         }
 
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不存在，加入班级失败！', array('%userId%' => $userId)));
+            throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
 
         if (!$this->canBecomeClassroomMember($member)) {
-            throw $this->createServiceException($this->getKernel()->trans('该用户(#%userId%)不能成为该班级学员！', array('%userId%' => $userId)));
+            throw $this->createServiceException("该用户(#{$userId})不能成为该班级学员！");
         }
 
         $levelChecked = '';
@@ -560,7 +573,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
 
             if ($levelChecked != 'ok') {
-                throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不能以会员身份加入班级！', array('%userId%' => $userId)));
+                throw $this->createServiceException("用户(#{$userId})不能以会员身份加入班级！");
             }
 
             $userMember = $this->getVipService()->getMemberByUserId($user['id']);
@@ -570,7 +583,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $order = $this->getOrderService()->getOrder($info['orderId']);
 
             if (empty($order)) {
-                throw $this->createServiceException($this->getKernel()->trans('订单(#%orderId%)不存在，加入班级失败！', array('%orderId%' => $info['orderId'])));
+                throw $this->createServiceException("订单(#{$info['orderId']})不存在，加入班级失败！");
             }
         } else {
             $order = null;
@@ -833,19 +846,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         if ($classroom['status'] != 'published') {
-            throw $this->createServiceException($this->getKernel()->trans('不能加入未发布班级'));
+            throw $this->createServiceException('不能加入未发布班级');
         }
 
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不存在，加入班级失败！', array('%userId%' => $userId)));
+            throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
 
         if (!$this->canBecomeClassroomMember($member)) {
-            throw $this->createServiceException($this->getKernel()->trans('该用户(#%userId%)不能成为该班级的旁听生！', array('%userId%' => $userId)));
+            throw $this->createServiceException("该用户(#{$userId})不能成为该班级的旁听生！");
         }
 
         $fields = array(
@@ -880,7 +893,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不存在，加入班级失败！', array('%userId%' => $userId)));
+            throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
         }
 
         $fields = array(
@@ -914,7 +927,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不存在，加入班级失败！', array('%userId%' => $userId)));
+            throw $this->createServiceException("用户(#{$userId})不存在，加入班级失败！");
         }
 
         $fields = array(
@@ -1022,7 +1035,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function tryManageClassroom($id, $actionPermission = null)
     {
         if (!$this->canManageClassroom($id, $actionPermission)) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('您无权操作！'));
+            throw $this->createAccessDeniedException('您无权操作！');
         }
     }
 
@@ -1064,7 +1077,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function tryTakeClassroom($id, $includeAuditor = false)
     {
         if (!$this->canTakeClassroom($id, $includeAuditor)) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('您无权操作！'));
+            throw $this->createAccessDeniedException('您无权操作！');
         }
     }
 
@@ -1102,7 +1115,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function tryHandleClassroom($id)
     {
         if (!$this->canHandleClassroom($id)) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('您无权操作！'));
+            throw $this->createAccessDeniedException('您无权操作！');
         }
     }
 
@@ -1140,7 +1153,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function tryLookClassroom($id)
     {
         if (!$this->canLookClassroom($id)) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('您无权操作！'));
+            throw $this->createAccessDeniedException('您无权操作！');
         }
     }
 
@@ -1183,11 +1196,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $member = $this->getClassroomMember($classroomId, $userId);
 
         if (!$member) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('您不是班级学员，无法退出班级！'));
+            throw $this->createAccessDeniedException('您不是班级学员，无法退出班级！');
         }
 
         if (!array_intersect($member['role'], array('student', 'auditor'))) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('教师无法退出班级！'));
+            throw $this->createAccessDeniedException('教师无法退出班级！');
         }
 
         $this->removeStudentsFromClasroomCourses($classroomId, $userId);
@@ -1289,13 +1302,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException($this->getKernel()->trans('班级(#%classroomId%)不存在，封锁学员失败。', array('%classroomId%' => $classroomId)));
+            throw $this->createNotFoundException("班级(#{$classroomId})不存在，封锁学员失败。");
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
 
         if (empty($member) || !in_array('student', $member['role'])) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是班级(#%classroomId%)的学员，封锁学员失败。', array('%userId%' => $userId, '%classroomId%' => $classroomId)));
+            throw $this->createServiceException("用户(#{$classroomId})不是班级(#{$classroomId})的学员，封锁学员失败。");
         }
 
         if ($member['locked']) {
@@ -1310,13 +1323,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException($this->getKernel()->trans('班级(#%classroomId%)不存在，封锁学员失败。', array('%classroomId%' => $classroomId)));
+            throw $this->createNotFoundException("班级(#{$classroomId})不存在，封锁学员失败。");
         }
 
         $member = $this->getClassroomMember($classroomId, $userId);
 
         if (empty($member) || !in_array('student', $member['role'])) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不是该班级(#%classroomId%)的学员，解封学员失败。', array('%userId%' => $userId, '%classroomId%' => $classroomId)));
+            throw $this->createServiceException("用户(#{$userId})不是该班级(#{$classroomId})的学员，解封学员失败。");
         }
 
         if (empty($member['locked'])) {
@@ -1331,7 +1344,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->tryAdminClassroom($id);
 
         if (!is_numeric($number)) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('推荐班级序号只能为数字！'));
+            throw $this->createAccessDeniedException('推荐班级序号只能为数字！');
         }
 
         $classroom = $this->getClassroomDao()->update($id, array(
@@ -1371,11 +1384,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $user = $this->getCurrentUser();
 
         if (empty($user->id)) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('未登录用户，无权操作！'));
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
         }
 
         if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) == 0) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('您不是管理员，无权操作！'));
+            throw $this->createAccessDeniedException('您不是管理员，无权操作！');
         }
 
         return $classroom;
@@ -1482,11 +1495,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $conditions;
     }
 
+    /**
+     * @return FileService
+     */
     public function getFileService()
     {
         return $this->createService('Content:FileService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->createService('System:LogService');
@@ -1500,21 +1519,34 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createDao('Classroom:ClassroomDao');
     }
 
+    /**
+     * @return ClassroomMemberDao
+     */
     protected function getClassroomMemberDao()
     {
         return $this->createDao('Classroom:ClassroomMemberDao');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * FIXME  course copy Service @liuyangyang
+     * @return CourseCopyService
+     */
     protected function getCourseCopyService()
     {
         return $this->createService('Course:CourseCopyService');
@@ -1528,36 +1560,57 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->createDao('Classroom:ClassroomCourseDao');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
     }
 
+    /**
+     * @return VipService
+     */
     protected function getVipService()
     {
         return $this->createService('Vip:Vip.VipService');
     }
 
+    /**
+     * @return CourseNoteDao
+     */
     protected function getNoteDao()
     {
         return $this->createDao('Course:CourseNoteDao');
     }
 
+    /**
+     * @return StatusService
+     */
     protected function getStatusService()
     {
         return $this->createService('User:StatusService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');

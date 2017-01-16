@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
@@ -63,11 +65,17 @@ class CourseNoteController extends BaseController
         return $filters;
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return CourseService
+     */
     private function getCourseService()
     {
         return $this->createService('Course:CourseService');

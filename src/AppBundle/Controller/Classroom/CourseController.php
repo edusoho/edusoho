@@ -1,6 +1,12 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
+use Biz\Classroom\Service\ClassroomReviewService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\TagService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -178,33 +184,51 @@ class CourseController extends BaseController
         return $member;
     }
 
+    /**
+     * @return CourseService
+     */
     private function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ClassroomReviewService
+     */
     protected function getClassroomReviewService()
     {
         return $this->createService('Classroom:ClassroomReviewService');
     }
 
+    /**
+     * @return TagService
+     */
     private function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:MemberService');
+        return $this->createService('Course:MemberService');
     }
 }

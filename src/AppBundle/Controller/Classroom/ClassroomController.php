@@ -2,6 +2,23 @@
 
 namespace AppBundle\Controller\Classroom;
 
+use Biz\Cash\Service\CashAccountService;
+use Biz\Cash\Service\CashOrdersService;
+use Biz\Classroom\Service\ClassroomOrderService;
+use Biz\Classroom\Service\ClassroomReviewService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Course\Service\ThreadService;
+use Biz\Order\Service\OrderService;
+use Biz\Sign\Service\SignService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\CategoryService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\StatusService;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserFieldService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\ExtensionManager;
@@ -9,6 +26,8 @@ use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Controller\BaseController;
+use Vip\Service\Vip\LevelService;
+use Vip\Service\Vip\VipService;
 
 class ClassroomController extends BaseController
 {
@@ -912,96 +931,153 @@ class ClassroomController extends BaseController
         return $this->createJsonResponse($ids);
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->createService('Thread:ThreadService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return SignService
+     */
     private function getSignService()
     {
         return $this->createService('Sign:SignService');
     }
 
+    /**
+     * @return CourseService
+     */
     private function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return LevelService
+     */
     protected function getLevelService()
     {
         return $this->createService('Vip:Vip.LevelService');
     }
 
+    /**
+     * @return VipService
+     */
     protected function getVipService()
     {
         return $this->createService('Vip:Vip.VipService');
     }
 
+    /**
+     * @return ClassroomOrderService
+     */
     protected function getClassroomOrderService()
     {
         return $this->createService('Classroom:ClassroomOrderService');
     }
 
+    /**
+     * @return ClassroomReviewService
+     */
     protected function getClassroomReviewService()
     {
         return $this->createService('Classroom:ClassroomReviewService');
     }
 
+    /**
+     * @return StatusService
+     */
     protected function getStatusService()
     {
         return $this->createService('User:StatusService');
     }
 
+    /**
+     * @return CategoryService
+     */
     private function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
     }
 
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
     }
 
+    /**
+     * @return CashAccountService
+     */
     protected function getCashAccountService()
     {
         return $this->createService('Cash:CashAccountService');
     }
 
+    /**
+     * @return CashOrdersService
+     */
     protected function getCashOrdersService()
     {
         return $this->createService('Cash:CashOrdersService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
         return $this->createService('User:UserFieldService');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
     }
 
+    /**
+     * @return AuthService
+     */
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');

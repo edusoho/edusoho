@@ -3,6 +3,8 @@
 namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Controller\BaseController;
+use Biz\Announcement\Service\AnnouncementService;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 
 class AnnouncementController extends BaseController
@@ -53,12 +55,17 @@ class AnnouncementController extends BaseController
             'canManage'     => true
         ));
     }
-
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return AnnouncementService
+     */
     protected function getAnnouncementService()
     {
         return $this->createService('Announcement:AnnouncementService');

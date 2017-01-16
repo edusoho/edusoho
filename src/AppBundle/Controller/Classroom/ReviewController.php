@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
+use Biz\Classroom\Service\ClassroomReviewService;
+use Biz\Classroom\Service\ClassroomService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -138,11 +140,17 @@ class ReviewController extends BaseController
         return 0;
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ClassroomReviewService
+     */
     private function getClassroomReviewService()
     {
         return $this->createService('Classroom:ClassroomReviewService');

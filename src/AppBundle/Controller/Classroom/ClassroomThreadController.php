@@ -2,6 +2,10 @@
 
 namespace AppBundle\Controller\Classroom;
 
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\ThreadService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
@@ -163,21 +167,33 @@ class ClassroomThreadController extends BaseController
         return $filters;
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->createService('Thread:ThreadService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
