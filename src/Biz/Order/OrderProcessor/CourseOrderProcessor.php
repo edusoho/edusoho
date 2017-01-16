@@ -1,6 +1,7 @@
 <?php
 namespace Biz\Order\OrderProcessor;
 
+use Biz\Course\Service\CourseOrderService;
 use Biz\Course\Service\CourseService;
 use Exception;
 use Topxia\Common\NumberToolkit;
@@ -276,7 +277,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     }
 
     /**
-     * @return CourseService
+     * @return CourseOrderService
      */
     protected function getCourseOrderService()
     {

@@ -78,7 +78,6 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
-
         $taskCount = $this->getTaskService()->count(array('courseId' => $course['id'], 'status' => 'published'));
         $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
