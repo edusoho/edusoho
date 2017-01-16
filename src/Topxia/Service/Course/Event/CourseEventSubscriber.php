@@ -196,19 +196,22 @@ class CourseEventSubscriber implements EventSubscriberInterface
 
         $argument  = $context['argument'];
         $course    = $context['course'];
-        $tagIds    = $context['tagIds'];
         $userId    = $context['userId'];
 
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
 
         if ($courseIds && $argument) {
             foreach ($courseIds as $key => $courseId) {
+                unset($argument['expiryMode']);
+                unset($argument['expiryDay']);
                 $this->getCourseService()->updateCourse($courseIds[$key], $argument);
             }
         }
 
-        $tagOwnerManager = new TagOwnerManager('course', $course['id'], $tagIds, $userId);
-        $tagOwnerManager->update();
+        if (isset($context['tagIds'])) {
+            $tagOwnerManager = new TagOwnerManager('course', $course['id'], $context['tagIds'], $userId);
+            $tagOwnerManager->update();
+        }
     }
 
     public function onCoursePriceUpdate(ServiceEvent $event)

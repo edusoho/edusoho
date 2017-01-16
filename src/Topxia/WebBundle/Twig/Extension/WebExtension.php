@@ -851,7 +851,7 @@ class WebExtension extends \Twig_Extension
 
     private function parseUri($uri, $absolute = false, $package = 'content')
     {
-        if (strpos($uri, "http://") !== false) {
+        if (strpos($uri, "http://") !== false || strpos($uri, "https://") !== false) {
             return $uri;
         }
 

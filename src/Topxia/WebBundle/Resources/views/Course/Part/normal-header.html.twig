@@ -168,21 +168,37 @@
     {% endif %}
   </div>
 {% endmacro %}
+ 
+
+{% set favoriteReward = setting('favorite_reward') %}
 
 {% macro favorite_btn(course, hasFavorited) %}
+  {% set favoriteReward = setting('favorite_reward') %}
   <li id="unfavorite-btn" data-url="{{ path('course_unfavorite', {id:course.id}) }}" {% if not hasFavorited %}style="display:none;"{% endif %}>
     <a href="javascript:;" class="color-primary">
-      <p><i class="es-icon es-icon-bookmark"></i></p>
+      {% if is_plugin_installed('FavoriteReward') and favoriteReward.enabled|default(0)%}
+        {% include 'FavoriteRewardBundle:Widget:unfavorite.html.twig' %}
+      {% else %}
+        <p><i class="es-icon es-icon-bookmark"></i></p>
+      {% endif %}
       <p>{{'已收藏'|trans}}</p>
     </a>
   </li>
 
-  <li id="favorite-btn" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
-    <a href="javascript:;">
+{% if is_plugin_installed('FavoriteReward') and favoriteReward.enabled|default(0) %}
+  <a href="#modal" class="reward-modal hidden" data-toggle="modal" data-url="{{ path('favorite_reward') }}" ><span class=""></span></a>
+{% endif %}
+
+<li id="favorite-btn" data-url="{{ path('course_favorite', {id:course.id}) }}" {% if hasFavorited %}style="display:none;"{% endif %}>
+  <a href="javascript:;">
+    {% if is_plugin_installed('FavoriteReward') and favoriteReward.enabled|default(0) %}
+      {% include 'FavoriteRewardBundle:Widget:favorite.html.twig' %}
+    {% else %}
       <p><i class="es-icon es-icon-bookmarkoutline"></i></p>
       <p>{{'收藏'|trans}}</p>
-    </a>
-  </li>
+    {% endif %}
+  </a>
+</li>
 {% endmacro %}
 
 {% macro share_btn(course) %}

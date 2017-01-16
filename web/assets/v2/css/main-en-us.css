@@ -11168,6 +11168,14 @@ textarea {
   padding: 15px;
   min-height: 16px;
 }
+.period-list .period .course-lesson {
+  color: #919191;
+  display: block;
+  overflow: inherit;
+  text-overflow: inherit;
+  white-space: inherit;
+  word-wrap: inherit;
+}
 .course-filter.search-filter {
   padding-right: 0;
 }
@@ -14402,8 +14410,7 @@ textarea {
   border: 1px solid #f5f5f5;
 }
 .es-open-course-list .course-item .title {
-  max-width: 58%;
-  display: inline-block;
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -15498,6 +15505,7 @@ textarea {
   left: 120px;
   right: 120px;
 }
+<<<<<<< HEAD
 .es-mobile body.homepage.has-app .es-wrap,
 .es-mobile body.course-list-page.has-app .es-wrap,
 .es-mobile body.open-course-list.has-app .es-wrap,
@@ -15712,6 +15720,10 @@ textarea {
   margin-top: 10px;
   color: #919191;
   background-color: transparent;
+=======
+.course-list-page {
+  background: #fff;
+>>>>>>> develop
 }
 html {
   height: 100%;

@@ -4,4 +4,5 @@
   <allow-access-from domain="cache.upuday.com" />
   <allow-access-from domain="*.edusoho.net" />
   <allow-access-from domain="*.qiqiuyun.net" />
+  <allow-access-from domain="oilgb9e2p.qnssl.com" />
 </cross-domain-policy>
