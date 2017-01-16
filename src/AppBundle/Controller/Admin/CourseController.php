@@ -196,7 +196,7 @@ class CourseController extends BaseController
     {
         $currentUser = $this->getUser();
 
-        if (!$currentUser->hasPermission('admin_course_delete')) {
+        if (!$currentUser->hasPermission('admin_course_set_delete')) {
             throw $this->createAccessDeniedException('您没有删除课程的权限！');
         }
 

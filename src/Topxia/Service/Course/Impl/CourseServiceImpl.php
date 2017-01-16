@@ -682,7 +682,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function deleteCourse($id)
     {
-        $course  = $this->tryAdminCourse($id, 'admin_course_delete');
+        $course  = $this->tryAdminCourse($id, 'admin_course_set_delete');
         $lessons = $this->getCourseLessons($course['id']);
 
         // Delete course related data

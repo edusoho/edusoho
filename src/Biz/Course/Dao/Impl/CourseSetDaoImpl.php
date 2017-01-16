@@ -9,6 +9,11 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 {
     protected $table = 'c2_course_set';
 
+    public function findCourseSetsByParentIdAndLocked($parentId, $locked)
+    {
+        return $this->getByFields(array('parentId' => $parentId, 'locked' => $locked ));
+    }
+
     public function findByIds(array $ids)
     {
         return $this->findInField('id', $ids);

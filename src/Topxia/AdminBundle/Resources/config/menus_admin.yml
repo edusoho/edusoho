@@ -233,11 +233,11 @@ admin:
                                     icon: 'glyphicon glyphicon-ok-circle'
                                     mode: none
                                     visable: (course.status != 'published')
-                                admin_course_delete:
+                                admin_course_set_delete:
                                     name: 删除课程
                                     class: delete-course
                                     router_params:
-                                        courseId: (course.id)
+                                        id: (course.id)
                                         filter: (filter)
                                         type: ''
                                     group: groupButton
