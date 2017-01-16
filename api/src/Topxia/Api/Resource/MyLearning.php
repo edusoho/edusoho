@@ -19,7 +19,7 @@ class MyLearning extends BaseResource
         $membersCount = $this->getCourseService()->searchMemberCount($conditions);
         $members = $this->getCourseService()->searchMembers(
             $conditions,
-            array('lastViewTime', 'DESC'),
+            array('lastViewTime', 'DESC', 'id', 'DESC'),
             0,
             $membersCount
         );
@@ -59,6 +59,7 @@ class MyLearning extends BaseResource
 
         foreach ($members as $key => $member) {
             $learningData[$key] = $courses[$member['courseId']];
+            $learningData[$key]['lastViewTime'] = empty($member['lastViewTime']) ? 0 : date('c', $member['lastViewTime']);
             $learningData[$key]['joinedType'] = $member['joinedType'];
             if ('classroom' == $member['joinedType']) {
                 $learningData[$key]['classroomTitle'] = empty($classrooms[$member['classroomId']]) ? '' : $classrooms[$member['classroomId']]['title'];
