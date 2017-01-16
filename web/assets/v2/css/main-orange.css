@@ -15916,10 +15916,6 @@ textarea {
 .es-mobile body.my-course #content-container .my-layout {
   display: none;
 }
-.es-mobile body.my-course #content-container .my-course-section .title {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
 .es-mobile body.open-course-list .es-banner {
   display: none;
 }
