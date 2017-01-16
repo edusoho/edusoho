@@ -190,7 +190,7 @@ admin:
                                     router_params:
                                         id: (course.id)
                                     group: groupButton
-                                    visable: ( course.type == 'normal' and course.parentId == 0 )
+                                    visable: ( course.type == 'normal' and course.parentId|default() == 0 )
                                     icon: 'glyphicon glyphicon-plus-sign'
                                     mode: modal
                                 admin_course_guest_member_preview:

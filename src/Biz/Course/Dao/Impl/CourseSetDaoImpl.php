@@ -32,7 +32,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'cover'     => 'json'
             ),
             'orderbys' => array(
-                'createdTime'
+                'createdTime',
+                'recommended'
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime'

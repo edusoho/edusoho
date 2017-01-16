@@ -82,7 +82,7 @@ class CourseController extends BaseController
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseSets, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseSets, 'creator'));
 
         $courseSetting = $this->getSettingService()->get('course', array());
 
@@ -92,7 +92,7 @@ class CourseController extends BaseController
 
         $default = $this->getSettingService()->get('default', array());
 
-        return $this->render('admin/course/index.html.twig', array(
+        return $this->render('admin/course-set/index.html.twig', array(
             'conditions'               => $conditions,
             'courseSets'               => $courseSets,
             'defaultCourses'           => $defaultCourses,
@@ -306,7 +306,7 @@ class CourseController extends BaseController
 
     public function recommendAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->getCourse($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
         $ref    = $request->query->get('ref');
         $filter = $request->query->get('filter');
@@ -314,13 +314,13 @@ class CourseController extends BaseController
         if ($request->getMethod() == 'POST') {
             $number = $request->request->get('number');
 
-            $course = $this->getCourseService()->recommendCourse($id, $number);
+            $courseSet = $this->getCourseSetService()->recommendCourse($id, $number);
 
-            $user = $this->getUserService()->getUser($course['userId']);
+            $user = $this->getUserService()->getUser($courseSet['creator']);
 
             if ($ref == 'recommendList') {
-                return $this->render('admin/course/course-recommend-tr.html.twig', array(
-                    'course' => $course,
+                return $this->render('admin/course-set/course-recommend-tr.html.twig', array(
+                    'courseSet' => $courseSet,
                     'user'   => $user
                 ));
             }
@@ -328,8 +328,8 @@ class CourseController extends BaseController
             return $this->renderCourseTr($id, $request);
         }
 
-        return $this->render('admin/course/course-recommend-modal.html.twig', array(
-            'course' => $course,
+        return $this->render('admin/course-set/course-recommend-modal.html.twig', array(
+            'courseSet' => $courseSet,
             'ref'    => $ref,
             'filter' => $filter
         ));
@@ -337,7 +337,7 @@ class CourseController extends BaseController
 
     public function cancelRecommendAction(Request $request, $id, $target)
     {
-        $course = $this->getCourseService()->cancelRecommendCourse($id);
+        $courseSet = $this->getCourseSetService()->cancelRecommendCourse($id);
 
         if ($target == 'recommend_list') {
             return $this->forward('AppBundle:Admin/admin/course/recommendList', array(
@@ -360,23 +360,23 @@ class CourseController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions),
+            $this->getCourseSetService()->countCourseSets($conditions),
             20
         );
 
-        $courses = $this->getCourseService()->searchCourses(
+        $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            'recommendedSeq',
+            array('recommended'=>'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseSets, 'creator'));
 
-        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
 
-        return $this->render('admin/course/course-recommend-list.html.twig', array(
-            'courses'    => $courses,
+        return $this->render('admin/course-set/course-recommend-list.html.twig', array(
+            'courseSets'    => $courseSets,
             'users'      => $users,
             'paginator'  => $paginator,
             'categories' => $categories
@@ -549,7 +549,8 @@ class CourseController extends BaseController
     protected function renderCourseTr($courseId, $request)
     {
         $fields     = $request->query->all();
-        $course     = $this->getCourseService()->getCourse($courseId);
+        $courseSet     = $this->getCourseSetService()->getCourseSet($courseId);
+        $courseSet['defaultCourse'] =  $this->getCourseService()->getDefaultCourseByCourseSetId($courseId);
         $default    = $this->getSettingService()->get('default', array());
         $classrooms = array();
         $vips       = array();
@@ -569,10 +570,10 @@ class CourseController extends BaseController
             }
         }
 
-        return $this->render('admin/course/tr.html.twig', array(
-            'user'       => $this->getUserService()->getUser($course['userId']),
-            'category'   => $this->getCategoryService()->getCategory($course['categoryId']),
-            'course'     => $course,
+        return $this->render('admin/course-set/tr.html.twig', array(
+            'user'       => $this->getUserService()->getUser($courseSet['creator']),
+            'category'   => isset($courseSet['categoryId']) ? $this->getCategoryService()->getCategory($courseSet['categoryId']) : array(),
+            'courseSet'     => $courseSet,
             'default'    => $default,
             'classrooms' => $classrooms,
             'filter'     => $fields["filter"],

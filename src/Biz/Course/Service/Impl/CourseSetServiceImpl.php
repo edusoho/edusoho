@@ -14,6 +14,36 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
+    public function recommendCourse($id, $number)
+    {
+        $course = $this->tryManageCourseSet($id);
+        if (!is_numeric($number)) {
+            throw $this->createAccessDeniedException('recmendNum should be number!');
+        }
+        $course = $this->getCourseSetDao()->update($id, array(
+            'recommended'     => 1,
+            'recommendedSeq'  => (int) $number,
+            'recommendedTime' => time()
+        ));
+
+        $this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
+
+        return $course;
+    }
+
+    public function cancelRecommendCourse($id)
+    {
+        $course = $this->tryManageCourseSet($id);
+
+        $this->getCourseSetDao()->update($id, array(
+            'recommended'     => 0,
+            'recommendedTime' => 0,
+            'recommendedSeq'  => 0
+        ));
+
+        $this->getLogService()->info('course', 'cancel_recommend', "取消推荐课程《{$course['title']}》(#{$course['id']})");
+    }
+
     /**
      * collect course set
      *
@@ -511,5 +541,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getFavoriteDao()
     {
         return $this->biz->dao('Course:FavoriteDao');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }
