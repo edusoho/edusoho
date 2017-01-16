@@ -20,12 +20,6 @@ class ClassroomOrderServiceTest extends BaseTestCase
 
     }
 
-    public function testApplyRefundOrderWithEmptyOrder()
-    {
-        $order = array('id' => '100');
-        $this->getClassroomOrderService()->applyRefundOrder($order['id'], 0, "我要外卖啊", "a");
-    }
-
     public function testCreateOrder()
     {
         $info          = array('targetId' => '1', 'payment' => 'coin', 'priceType' => 'RMB', 'totalPrice' => '0.00', 'coinRate' => '1', 'coinAmount' => '0.00', 'note' => '11', 'coupon' => '123', 'couponDiscount' => '0.0');
@@ -39,7 +33,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testCreateOrderWithEmptyInfo()
     {
@@ -48,7 +42,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testCreateOrderWithIsStudent()
     {
@@ -64,7 +58,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testCreateOrderWithEmptyClassroom()
     {
@@ -79,7 +73,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testCreateOrderWithEmptyCantBuyClassroom()
     {
@@ -127,7 +121,7 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testDoSuccessPayOrderNotClassroomOrder()
     {
@@ -184,12 +178,12 @@ class ClassroomOrderServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testApplyRefundOrderWithEmptyOrder()
     {
         $order = array('id' => '100');
-        $this->getClassroomOrderService()->applyRefundOrder($order['id'], "a", "我要外卖啊", "a");
+        $this->getClassroomOrderService()->applyRefundOrder($order['id'], 0, "我要外卖啊", "a");
     }
 
     public function getOrder()
