@@ -3,6 +3,7 @@
 namespace Biz\Group\Service\Impl;
 
 use Biz\BaseService;
+use Biz\File\Service\UploadFileService;
 use Biz\Group\Dao\GroupDao;
 use Biz\Group\Dao\MemberDao;
 use Topxia\Common\ArrayToolkit;
@@ -117,7 +118,7 @@ class GroupServiceImpl extends BaseService implements GroupService
         }
 
         $fileIds = ArrayToolkit::column($data, "id");
-        $files   = $this->getFileService()->getFilesByIds($fileIds);
+        $files   = $this->getFileService()->findFilesByIds($fileIds);
 
         $files   = ArrayToolkit::index($files, "id");
         $fileIds = ArrayToolkit::index($data, "type");
@@ -297,5 +298,13 @@ class GroupServiceImpl extends BaseService implements GroupService
     protected function getGroupDao()
     {
         return $this->createDao('Group:GroupDao');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 }
