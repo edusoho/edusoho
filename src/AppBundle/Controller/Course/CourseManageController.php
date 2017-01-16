@@ -50,8 +50,17 @@ class CourseManageController extends BaseController
 
     public function listAction(Request $request, $courseSetId)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+
+        if($courseSet['type'] == 'live'){
+            $course = current($courses);
+            return $this->redirectToRoute('course_set_manage_course_tasks', array(
+                'courseSetId' => $courseSet['id'],
+                'courseId'    => $course['id']
+            ));
+        }
+
         return $this->render('courseset-manage/courses.html.twig', array(
             'courseSet' => $courseSet,
             'courses'   => $courses

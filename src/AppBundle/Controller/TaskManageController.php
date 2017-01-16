@@ -1,8 +1,10 @@
 <?php
 namespace AppBundle\Controller;
 
+use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\BaseStrategy;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,9 +35,10 @@ class TaskManageController extends BaseController
                 'task'   => $task
             ));
         }
-
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         return $this->render('task-manage/modal.html.twig', array(
             'mode'       => 'create',
+            'courseSet'  => $courseSet,
             'course'     => $course,
             'categoryId' => $categoryId,
             'chapterId'  => $chapterId
@@ -159,12 +162,16 @@ class TaskManageController extends BaseController
         return $config[$type]['actions'];
     }
 
+    /**
+     * @param $course
+     *
+     * @return BaseStrategy|CourseStrategy
+     */
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
     }
 
-    //datetime to int
     protected function parseTimeFields($fields)
     {
         if (!empty($fields['startTime'])) {
@@ -175,5 +182,13 @@ class TaskManageController extends BaseController
         }
 
         return $fields;
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

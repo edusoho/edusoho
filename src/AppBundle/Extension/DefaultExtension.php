@@ -21,14 +21,19 @@ use Biz\Question\Type\Material;
 use Biz\Question\Type\SingleChoice;
 use Biz\Question\Type\UncertainChoice;
 use Biz\Testpaper\Pattern\QuestionTypePattern;
+use Codeages\Biz\Framework\Context\Biz;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Topxia\Common\ArrayToolkit;
 
 class DefaultExtension extends Extension implements ServiceProviderInterface
 {
-    private $biz = null;
+    /**
+     * @var Biz
+     */
+    private $biz;
 
-    public function __construct($biz)
+    public function __construct(Biz $biz)
     {
         $this->biz = $biz;
     }
@@ -242,6 +247,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
 
     public function getActivities()
     {
+        $biz = $this->getBiz();
         return array(
             'text'     => array(
                 'meta'    => array(
@@ -254,7 +260,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Text:show',
                     'preview'         => 'AppBundle:Activity/Text:preview',
                     'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course){
+                    return $courseSet['type'] !='live';
+                }
             ),
             'video'    => array(
                 'meta'    => array(
@@ -267,7 +276,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Video:show',
                     'preview'         => 'AppBundle:Activity/Video:preview',
                     'finishCondition' => 'AppBundle:Activity/Video:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course){
+                    return $courseSet['type'] !='live';
+                }
             ),
             'audio'    => array(
                 'meta'    => array(
@@ -280,7 +292,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Audio:show',
                     'preview'         => 'AppBundle:Activity/Audio:preview',
                     'finishCondition' => 'AppBundle:Activity/Audio:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course){
+                    return $courseSet['type'] !='live';
+                }
             ),
             'download' => array(
                 'meta'    => array(
@@ -292,7 +307,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'edit'            => 'AppBundle:Activity/Download:edit',
                     'show'            => 'AppBundle:Activity/Download:show',
                     'finishCondition' => 'AppBundle:Activity/Download:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course){
+                    return true;
+                }
             ),
             'live'     => array(
                 'meta'    => array(
@@ -304,7 +322,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'edit'            => 'AppBundle:Activity/Live:edit',
                     'show'            => 'AppBundle:Activity/Live:show',
                     'finishCondition' => 'AppBundle:Activity/Live:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course) use ($biz){
+                    $storage = $biz->service('System:SettingService')->get('course');
+                    return ArrayToolkit::get($storage, 'live_course_enabled', false);
+                }
             ),
             'discuss'  => array(
                 'meta'    => array(
@@ -316,7 +338,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'edit'            => 'AppBundle:Activity/Discuss:edit',
                     'show'            => 'AppBundle:Activity/Discuss:show',
                     'finishCondition' => 'AppBundle:Activity/Discuss:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course){
+                    return $courseSet['type'] !='live';
+                }
             ),
 
             'flash'     => array(
@@ -330,7 +355,12 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Flash:show',
                     'preview'         => 'AppBundle:Activity/Flash:preview',
                     'finishCondition' => 'AppBundle:Activity/Flash:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course) use ($biz){
+                    $storage = $biz->service('System:SettingService')->get('storage');
+                    $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
+                    return $uploadMode == 'cloud' && $courseSet['type'] != 'live';
+                }
             ),
             'doc'       => array(
                 'meta'    => array(
@@ -343,7 +373,12 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Doc:show',
                     'preview'         => 'AppBundle:Activity/Doc:preview',
                     'finishCondition' => 'AppBundle:Activity/Doc:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course) use ($biz){
+                    $storage = $biz->service('System:SettingService')->get('storage');
+                    $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
+                    return $uploadMode == 'cloud' && $courseSet['type'] != 'live';
+                }
             ),
             'ppt'       => array(
                 'meta'    => array(
@@ -356,7 +391,12 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Ppt:show',
                     'preview'         => 'AppBundle:Activity/Ppt:preview',
                     'finishCondition' => 'AppBundle:Activity/Ppt:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course) use ($biz){
+                    $storage = $biz->service('System:SettingService')->get('storage');
+                    $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
+                    return $uploadMode == 'cloud' && $courseSet['type'] != 'live';
+                }
             ),
             'testpaper' => array(
                 'meta'    => array(
@@ -368,7 +408,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'edit'            => 'AppBundle:Activity/Testpaper:edit',
                     'show'            => 'AppBundle:Activity/Testpaper:show',
                     'finishCondition' => 'AppBundle:Activity/Testpaper:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course) use ($biz){
+                    return true;
+                }
             ),
             'homework'  => array(
                 'meta'    => array(
@@ -380,7 +423,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'edit'            => 'AppBundle:Activity/Homework:edit',
                     'show'            => 'AppBundle:Activity/Homework:show',
                     'finishCondition' => 'AppBundle:Activity/Homework:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course) use ($biz){
+                    return true;
+                }
             ),
             'exercise'  => array(
                 'meta'    => array(
@@ -392,7 +438,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'edit'            => 'AppBundle:Activity/Exercise:edit',
                     'show'            => 'AppBundle:Activity/Exercise:show',
                     'finishCondition' => 'AppBundle:Activity/Exercise:finishCondition'
-                )
+                ),
+                'visible' => function($courseSet, $course) use ($biz){
+                    return true;
+                }
             )
         );
     }

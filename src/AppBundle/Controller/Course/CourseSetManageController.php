@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Course;
 
+use Biz\Content\Service\FileService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
@@ -16,7 +17,13 @@ class CourseSetManageController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $type = ArrayToolkit::get($data, 'type', 'aa');
+
+            if(!isset($data['type'])){
+                throw $this->createNotFoundException('未设置课程类型');
+            }else{
+                $type = $data['type'];
+            }
+
             if ($type == 'open') {
                 $openCourse = $this->getOpenCourseService()->createCourse($data);
                 return $this->redirectToRoute('open_course_manage', array(
@@ -41,11 +48,8 @@ class CourseSetManageController extends BaseController
 
     public function indexAction(Request $request, $id)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-        $courses   = $this->getCourseService()->findCoursesByCourseSetId($id);
-        return $this->render('courseset-manage/courses.html.twig', array(
-            'courseSet' => $courseSet,
-            'courses'   => $courses
+        return $this->redirectToRoute('course_set_manage_courses', array(
+            'courseSetId' => $id
         ));
     }
 
@@ -69,10 +73,12 @@ class CourseSetManageController extends BaseController
             $curCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
         }
         if (empty($curCourse) && !empty($courses)) {
-            $curCourse = $courses[0];
+            $curCourse = current($courses);
         }
+
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         return $this->render('courseset-manage/sidebar.html.twig', array(
-            'id'        => $courseSetId,
+            'courseSet' => $courseSet,
             'curCourse' => $curCourse,
             'courses'   => $courses,
             'side_nav'  => $sideNav
