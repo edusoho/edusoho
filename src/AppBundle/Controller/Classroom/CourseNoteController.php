@@ -23,10 +23,10 @@ class CourseNoteController extends BaseController
         $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
         $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
+        
         $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
         if (!$canLook) {
-            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}11111，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         $layout = 'classroom/layout.html.twig';
