@@ -1,8 +1,9 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
 
 class ThreadMemberController extends BaseController
 {
@@ -11,13 +12,13 @@ class ThreadMemberController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录!不能加入活动!'));
+            throw $this->createAccessDeniedException('用户没有登录!不能加入活动!');
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $user['id']);
 
         if (empty($member)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('不是本班成员!不能加入活动!'));
+            throw $this->createAccessDeniedException('不是本班成员!不能加入活动!');
         }
 
         return $this->forward('AppBundle:Thread/Member:become', array(
@@ -35,6 +36,9 @@ class ThreadMemberController extends BaseController
         ));
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');

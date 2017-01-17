@@ -34,7 +34,7 @@ class OrderController extends BaseController
             return $this->createMessageResponse('error', '参数不正确');
         }
 
-        $processor = OrderProcessorFactory::create($this->getBiz(), $targetType);
+        $processor = OrderProcessorFactory::create($targetType);
         $checkInfo = $processor->preCheck($targetId, $currentUser['id']);
 
         if (isset($checkInfo['error'])) {

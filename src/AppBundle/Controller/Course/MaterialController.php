@@ -48,8 +48,8 @@ class MaterialController extends CourseBaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
-        if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
-            return $this->redirect($this->generateUrl('course_materials', array('id' => $courseId)));
+        if ($member && !$this->getMemberService()->isMemberNonExpired($course, $member)) {
+            return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId, 'tab' => 'material')));
         }
 
         if ($member && $member['levelId'] > 0) {

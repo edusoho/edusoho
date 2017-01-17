@@ -7,7 +7,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class OrderProcessorFactory
 {
-    public static function create($biz, $type)
+    public static function create($type)
     {
         $map = JoinPointToolkit::load('order');
 
@@ -16,6 +16,7 @@ class OrderProcessorFactory
         }
 
         $class = $map[$type]['processor'];
+    	$biz = ServiceKernel::instance()->getBiz();
         return new $class($biz);
     }
 }

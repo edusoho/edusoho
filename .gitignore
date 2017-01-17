@@ -64,3 +64,4 @@ chunk-manifest.json
 .npminstall.done
 /web/static-dist/*
 .vscode/
+.sonar

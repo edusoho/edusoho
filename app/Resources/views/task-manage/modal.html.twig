@@ -35,61 +35,6 @@
     {% elseif mode == 'create' %}
       data-save-url="{{ path('course_manage_task_create', {courseId: course.id}) }}"
         {% endif %}>
-      {#
-        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
-          <a data-role="activityType">
-            <i class="es-icon es-icon-description"></i>
-            看文档
-          </a>
-        </li>
-        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
-          <a data-role="activityType">
-            <i class="es-icon es-icon-pptclass"></i>
-            看PPT
-          </a>
-        </li>
-        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
-          <a data-role="activityType">
-            <i class="es-icon es-icon-flashclass"></i>
-            看flash
-          </a>
-        </li>
-        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
-          <a data-role="activityType">
-            <i class="es-icon es-icon-videocam"></i>
-            参加直播
-          </a>
-        </li>
-        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
-          <a data-role="activityType">
-            <i class="es-icon es-icon-filedownload"></i>
-            下载资料
-          </a>
-        </li>
-        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
-          <a data-role="activityType">
-            <i class="es-icon es-icon-exam"></i>
-            做作业题
-          </a>
-        </li>
-        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
-          <a data-role="activityType">
-            <i class="es-icon es-icon-mylibrarybooks"></i>
-            做练习题
-          </a>
-        </li>
-        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
-          <a data-role="activityType">
-            <i class="es-icon es-icon-lesson"></i>
-            参加考试
-          </a>
-        </li>
-        <li class="col-xs-3 task-create-type-item js-course-tasks-item">
-          <a data-role="activityType">
-            <i class="es-icon es-icon-comment"></i>
-            参加讨论
-          </a>
-        </li>#}
       <form class="form-horizontal" id="step1-form">
         <ul class="form-group task-create-type-list ">
           {% set types = activity_metas() %}
