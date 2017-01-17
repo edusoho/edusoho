@@ -27,14 +27,13 @@ class TaskPluginController extends BaseController
 
         $preview = $request->query->get('preview', false);
 
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
-        $tasks    = $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($courseId);
-
+        $activity    = $this->getActivityService()->getActivity($task['activityId']);
+        $courseItems = $this->getCourseService()->findCourseItems($courseId);
         return $this->render('task/plugin/task-list.html.twig', array(
-            'tasks'    => $tasks,
-            'course'   => $course,
-            'activity' => $activity,
-            'preview'  => $preview
+            'courseItems' => $courseItems,
+            'course'      => $course,
+            'activity'    => $activity,
+            'preview'     => $preview
         ));
     }
 
@@ -100,7 +99,7 @@ class TaskPluginController extends BaseController
             $question['type'] = 'question';
 
             $thread = $this->getThreadService()->createThread($question);
-            $task = $this->getTaskService()->getTask($taskId);
+            $task   = $this->getTaskService()->getTask($taskId);
             return $this->render("task/plugin/question/item.html.twig", array(
                 'thread' => $thread,
                 'task'   => $task,
