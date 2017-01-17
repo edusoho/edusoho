@@ -7,11 +7,12 @@ use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
-class CourseController extends BaseController
+class CourseSetController extends BaseController
 {
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+
         if ($filter == 'normal') {
             $conditions["parentId"] = 0;
         }
@@ -192,7 +193,7 @@ class CourseController extends BaseController
     2: 移除班级课程
     0: 删除未发布课程成功
      */
-    public function deleteAction(Request $request, $courseId, $type)
+    public function deleteAction(Request $request, $id, $type)
     {
         $currentUser = $this->getUser();
 
@@ -200,26 +201,25 @@ class CourseController extends BaseController
             throw $this->createAccessDeniedException('您没有删除课程的权限！');
         }
 
-        $course = $this->getCourseService()->getCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-        $subCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1);
-
-        if ($course['status'] == 'published') {
-            $this->getCourseService()->closeCourse($courseId);
-            $course['status'] = 'closed';
+        if ($courseSet['status'] == 'published') {
+            $this->getCourseSetService()->closeCourseSet($id);
+            $courseSet['status'] = 'closed';
         }
 
+        $subCourses = $this->getCourseSetService()->findCourseSetsByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
             return $this->createJsonResponse(array('code' => 2, 'message' => '请先删除班级课程'));
         }
 
-        if ($course['status'] == 'draft') {
-            $result = $this->getCourseService()->deleteCourse($courseId);
+        if ($courseSet['status'] == 'draft') {
+            $result = $this->getCourseSetService()->deleteCourseSet($id);
             return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
         }
 
-        if ($course['status'] == 'closed') {
-            $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
+        if ($courseSet['status'] == 'closed') {
+            $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($courseSet['id']);
 
             if ($classroomCourse) {
                 return $this->createJsonResponse(array('code' => 3, 'message' => '当前课程未移除,请先移除班级课程'));
@@ -243,12 +243,12 @@ class CourseController extends BaseController
                     throw $this->createAccessDeniedException('未输入正确的校验密码！');
                 }
 
-                $result = $this->getCourseDeleteService()->delete($courseId, $type);
+                $result = $this->getCourseSetService()->deleteCourseSet($id);
                 return $this->createJsonResponse($this->returnDeleteStatus($result, $type));
             }
         }
 
-        return $this->render('admin/course/delete.html.twig', array('course' => $course));
+        return $this->render('admin/course/delete.html.twig', array('courseSet' => $courseSet));
     }
 
     public function checkPasswordAction(Request $request)
@@ -271,14 +271,7 @@ class CourseController extends BaseController
 
     public function publishAction(Request $request, $id)
     {
-        $this->getCourseService()->publishCourse($id);
-
-        return $this->renderCourseTr($id, $request);
-    }
-
-    public function closeAction(Request $request, $id)
-    {
-        $this->getCourseService()->closeCourse($id);
+        $this->getCourseSetService()->publishCourseSet($id);
 
         return $this->renderCourseTr($id, $request);
     }
@@ -319,9 +312,7 @@ class CourseController extends BaseController
         $courseSet = $this->getCourseSetService()->cancelRecommendCourse($id);
 
         if ($target == 'recommend_list') {
-            return $this->forward('AppBundle:Admin/admin/course/recommendList', array(
-                'request' => $request
-            ));
+            return $this->createJsonResponse(array('success'=>1));
         }
 
         if ($target == 'normal_index') {
@@ -591,14 +582,9 @@ class CourseController extends BaseController
         return $this->createService('Course:CourseSetService');
     }
 
-    protected function getCourseDeleteService()
+    protected function getCourseSetDeleteService()
     {
-        return $this->createService('Course:CourseDeleteService');
-    }
-
-    protected function getCourseCopyService()
-    {
-        return $this->createService('Course:CourseCopyService');
+        return $this->createService('Course:CourseSetDeleteService');
     }
 
     protected function getCategoryService()
