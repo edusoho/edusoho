@@ -1,5 +1,5 @@
 {% extends 'group/layout.html.twig' %}
-{% set script_controller = 'group/group' %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/index.js']) %}
 {% block title %}{{threadMain.title}} - {{ groupinfo.title }} {{ parent() }}{% endblock %}
 {% block keywords %}{{groupinfo.title}}{% endblock %}
 {% block description %}{{threadMainContent|plain_text(100)}}{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'group/layout.html.twig' %}
 {% block title %}{{'创建小组'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'group/group' %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/index.js']) %}
 {% set side_nav = 'group' %}
 
 {% block content %}
@@ -28,7 +28,7 @@
 
         <div class="row">
           <div class="col-md-7 col-md-offset-2">
-            <button id="group-save-btn" data-submiting-text="{{'正在创建'|trans}}" type="submit" class="btn btn-primary">{{'创建'|trans}}</button>
+            <button id="group-save-btn" data-submiting-text="{{'正在创建'|trans}}" type="button" class="btn btn-primary">{{'创建'|trans}}</button>
           </div>
         </div>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

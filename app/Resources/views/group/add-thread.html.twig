@@ -1,5 +1,5 @@
 {% extends 'group/layout.html.twig' %}
-{% set script_controller = 'group/group' %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/index.js']) %}
 {% block group_body %}
 
   {% if thread|default(null) and attachs %}
@@ -45,10 +45,10 @@
         <div class="form-group">
           <div class="col-sm-7 col-xs-10 col-xs-offset-2">
             {% if thread|default(null) %}
-              <button id="groupthread-save-btn" data-submiting-text="{{ '正在修改'|trans }}" type="submit"
+              <button id="groupthread-save-btn" data-submiting-text="{{ '正在修改'|trans }}" type="button"
                       class="btn btn-primary">{{ '修改'|trans }}</button>
             {% else %}
-              <button id="groupthread-save-btn" data-submiting-text="{{ '正在创建'|trans }}" type="submit"
+              <button id="groupthread-save-btn" data-submiting-text="{{ '正在创建'|trans }}" type="button"
                       class="btn btn-primary">{{ '发布'|trans }}</button>
             {% endif %}
           </div>

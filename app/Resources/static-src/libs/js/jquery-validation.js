@@ -1,4 +1,3 @@
-
 import 'jquery-validation';
 
 $.validator.setDefaults({
@@ -7,17 +6,17 @@ $.validator.setDefaults({
   onkeyup: false,
   ignore: '',
   ajax: false,
-  currentDom: null, 
-  highlight: function(element, errorClass, validClass) {
+  currentDom: null,
+  highlight: function (element, errorClass, validClass) {
     let $row = $(element).addClass('form-control-error').closest('.form-group').addClass('has-error');
     $row.find('.help-block').hide();
   },
-  unhighlight: function(element, errorClass, validClass) {
+  unhighlight: function (element, errorClass, validClass) {
     let $row = $(element).removeClass('form-control-error').closest('.form-group');
     $row.removeClass('has-error');
     $row.find('.help-block').show();
   },
-  errorPlacement: function(error, element) {
+  errorPlacement: function (error, element) {
     if (element.parent().hasClass('controls')) {
       element.parent('.controls').append(error);
     } else if (element.parent().hasClass('input-group')) {
@@ -28,19 +27,19 @@ $.validator.setDefaults({
       element.parent().append(error);
     }
   },
-  submitSuccess: function(data) {
+  submitSuccess: function (data) {
   },
-  submitHandler: function(form) {
-    console.log(form);
+  submitHandler: function (form) {
     //规定全局不要用submit默认提交；
     let $form = $(form);
     let settings = this.settings;
-    $(settings.currentDom) ? $(settings.currentDom).button('loading'): '';
-    if(settings.ajax) {
+    console.log(settings);
+    $(settings.currentDom) ? $(settings.currentDom).button('loading') : '';
+    if (settings.ajax) {
       $.post($form.attr('action'), $form.serializeArray(), (data) => {
         settings.submitSuccess(data);
       }).error(() => {
-        settings.currentDom ? settings.currentDom.button('reset'): '';
+        settings.currentDom ? settings.currentDom.button('reset') : '';
       });
     } else {
       form.submit();
@@ -48,47 +47,47 @@ $.validator.setDefaults({
   }
 });
 
-$.extend( $.validator.prototype, {
-  defaultMessage: function( element, rule ) {
-    if ( typeof rule === "string" ) {
-      rule = { method: rule };
+$.extend($.validator.prototype, {
+  defaultMessage: function (element, rule) {
+    if (typeof rule === "string") {
+      rule = {method: rule};
     }
 
     var message = this.findDefined(
-        this.customMessage( element.name, rule.method ),
-        this.customDataMessage( element, rule.method ),
+      this.customMessage(element.name, rule.method),
+      this.customDataMessage(element, rule.method),
 
-        // 'title' is never undefined, so handle empty string as undefined
+      // 'title' is never undefined, so handle empty string as undefined
         !this.settings.ignoreTitle && element.title || undefined,
-        $.validator.messages[ rule.method ],
+      $.validator.messages[rule.method],
         "<strong>Warning: No message defined for " + element.name + "</strong>"
       ),
       theregex = /\$?\{(\d+)\}/g,
       displayregex = /%display%/g;
-    if ( typeof message === "function" ) {
-      message = message.call( this, rule.parameters, element );
-    } else if ( theregex.test( message ) ) {
-      message = $.validator.format( message.replace( theregex, "{$1}" ), rule.parameters );
+    if (typeof message === "function") {
+      message = message.call(this, rule.parameters, element);
+    } else if (theregex.test(message)) {
+      message = $.validator.format(message.replace(theregex, "{$1}"), rule.parameters);
     }
 
-    if ( displayregex.test( message ) ) {
+    if (displayregex.test(message)) {
       var labeltext, name;
-      var id = $(element).attr( "id" );
-      if ( id ) {
-        labeltext = $( "label[for=" + id + "]" ).text();
-        if ( labeltext ) {
+      var id = $(element).attr("id");
+      if (id) {
+        labeltext = $("label[for=" + id + "]").text();
+        if (labeltext) {
           labeltext = labeltext.replace(/^[\*\s\:\：]*/, "").replace(/[\*\s\:\：]*$/, "");
         }
       }
 
       name = $(element).attr("name");
-      message = message.replace( displayregex,labeltext || name )
+      message = message.replace(displayregex, labeltext || name)
     }
 
     return message;
   }
 
-}); 
+});
 
 
 $.extend($.validator.messages, {
@@ -103,16 +102,16 @@ $.extend($.validator.messages, {
   creditcard: "请输入有效的信用卡号码",
   equalTo: "你的输入不相同",
   extension: "请输入有效的后缀",
-  maxlength: $.validator.format( "最多可以输入 {0} 个字符" ),
-  minlength: $.validator.format( "最少要输入 {0} 个字符" ),
-  rangelength: $.validator.format( "请输入长度在 {0} 到 {1} 之间的字符串" ),
-  range: $.validator.format( "请输入范围在 {0} 到 {1} 之间的数值" ),
-  max: $.validator.format( "请输入不大于 {0} 的数值" ),
-  min: $.validator.format( "请输入不小于 {0} 的数值" )
+  maxlength: $.validator.format("最多可以输入 {0} 个字符"),
+  minlength: $.validator.format("最少要输入 {0} 个字符"),
+  rangelength: $.validator.format("请输入长度在 {0} 到 {1} 之间的字符串"),
+  range: $.validator.format("请输入范围在 {0} 到 {1} 之间的数值"),
+  max: $.validator.format("请输入不大于 {0} 的数值"),
+  min: $.validator.format("请输入不小于 {0} 的数值")
 });
 
-$.validator.addMethod("idcardNumber", function(value, element, params) {
-  let _check = function(idcardNumber) {
+$.validator.addMethod("idcardNumber", function (value, element, params) {
+  let _check = function (idcardNumber) {
     let reg = /^\d{17}[0-9xX]$/i;
     if (!reg.test(idcardNumber)) {
       return false;
@@ -153,7 +152,7 @@ $.validator.addMethod("idcardNumber", function(value, element, params) {
   return this.optional(element) || _check(value);
 }, "请正确输入您的身份证号码");
 
+jQuery.validator.addMethod("visible_character", function (value, element, params) {
 
-'positive_integer',
-            /^[1-9]\d*$/,
-            Translator.trans('%display%必须为正整数', {display: '{{display}}'})
+  return this.optional(element) || $.trim(value).length > 0;
+}, jQuery.validator.format("{0}请输入可见性字符"));
