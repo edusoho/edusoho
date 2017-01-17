@@ -139,7 +139,7 @@ class StudentManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function showAction(Request $request, $courseId, $userId)
+    public function showAction(Request $request, $courseSetId, $courseId, $userId)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
             throw $this->createAccessDeniedException('您无权查看学员详细信息！');
@@ -177,6 +177,49 @@ class StudentManageController extends BaseController
             'user'       => $user,
             'profile'    => $profile,
             'userFields' => $userFields
+        ));
+    }
+
+    public function definedShowAction(Request $request, $courseId, $userId)
+    {
+        $profile = $this->getUserService()->getUserProfile($userId);
+
+        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
+
+        for ($i = 0; $i < count($userFields); $i++) {
+            if (strstr($userFields[$i]['fieldName'], "textField")) {
+                $userFields[$i]['type'] = "text";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "varcharField")) {
+                $userFields[$i]['type'] = "varchar";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "intField")) {
+                $userFields[$i]['type'] = "int";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "floatField")) {
+                $userFields[$i]['type'] = "float";
+            }
+
+            if (strstr($userFields[$i]['fieldName'], "dateField")) {
+                $userFields[$i]['type'] = "date";
+            }
+        }
+
+        $course = $this->getSettingService()->get('course', array());
+
+        $userinfoFields = array();
+
+        if (isset($course['userinfoFields'])) {
+            $userinfoFields = $course['userinfoFields'];
+        }
+
+        return $this->render('course-manage/student/defined-show-modal.html.twig', array(
+            'profile'        => $profile,
+            'userFields'     => $userFields,
+            'userinfoFields' => $userinfoFields
         ));
     }
 

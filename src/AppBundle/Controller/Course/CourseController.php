@@ -31,6 +31,29 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    public function memberExpiredAction(Request $request, $id)
+    {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+        if ($member && !$this->getMemberService()->isMemberNonExpired($course, $member)) {
+            return $this->render('course/member/expired.html.twig', array(
+                'course' => $course
+            ));
+        }
+    }
+
+    public function deadlineReachAction(Request $request, $courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
+        }
+
+        $this->getMemberService()->quitCourseByDeadlineReach($user['id'], $courseId);
+
+        return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
+    }
+
     public function headerAction(Request $request, $course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
@@ -49,7 +72,7 @@ class CourseController extends CourseBaseController
             'courseSet'      => $courseSet,
             'courses'        => $courses,
             'course'         => $course,
-            'previewTask'   => empty($previewTasks) ? null : array_shift($previewTasks),
+            'previewTask'    => empty($previewTasks) ? null : array_shift($previewTasks),
             'isPreview'      => $isPreview
         ));
     }

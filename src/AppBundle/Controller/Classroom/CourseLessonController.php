@@ -1,8 +1,10 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
+use Biz\Course\Service\CourseService;
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
 
 class CourseLessonController extends BaseController
 {
@@ -52,11 +54,17 @@ class CourseLessonController extends BaseController
         ));
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return CourseService
+     */
     private function getCourseService()
     {
         return $this->createService('Course:CourseService');

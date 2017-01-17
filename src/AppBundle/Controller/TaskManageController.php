@@ -15,13 +15,14 @@ class TaskManageController extends BaseController
         $course     = $this->tryManageCourse($courseId);
         $categoryId = $request->query->get('categoryId');
         $chapterId  = $request->query->get('chapterId');
+        $taskMode   = $request->query->get('type');
         if ($request->isMethod('POST')) {
             $task                    = $request->request->all();
             $task['_base_url']       = $request->getSchemeAndHttpHost();
             $task['fromUserId']      = $this->getUser()->getId();
             $task['fromCourseSetId'] = $course['courseSetId'];
 
-            $task                    = $this->getTaskService()->createTask($this->parseTimeFields($task));
+            $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
             if ($course['isDefault'] && isset($task['mode']) && $task['mode'] != 'lesson') {
                 return $this->createJsonResponse(array('append' => false));
@@ -38,7 +39,8 @@ class TaskManageController extends BaseController
             'mode'       => 'create',
             'course'     => $course,
             'categoryId' => $categoryId,
-            'chapterId'  => $chapterId
+            'chapterId'  => $chapterId,
+            'taskMode'   => $taskMode,
         ));
     }
 
@@ -46,6 +48,7 @@ class TaskManageController extends BaseController
     {
         $course   = $this->tryManageCourse($courseId);
         $task     = $this->getTaskService()->getTask($id);
+        $taskMode = $request->query->get('type');
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在计划中');
         }
@@ -60,10 +63,11 @@ class TaskManageController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         return $this->render('task-manage/modal.html.twig', array(
-            'mode'                => 'edit',
-            'currentType'         => $activity['mediaType'],
-            'course'              => $course,
-            'task'                => $task,
+            'mode'        => 'edit',
+            'currentType' => $activity['mediaType'],
+            'course'      => $course,
+            'task'        => $task,
+            'taskMode'    => $taskMode,
         ));
     }
 

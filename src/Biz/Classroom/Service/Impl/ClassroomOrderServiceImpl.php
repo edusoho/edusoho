@@ -1,54 +1,60 @@
 <?php
 namespace Biz\Classroom\Service\Impl;
 
+use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
-use Biz\BaseService;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\Cash\Service\CashService;
+use Biz\User\Service\UserService;
+use Biz\System\Service\LogService;
+use Biz\Order\Service\OrderService;
+use Biz\System\Service\SettingService;
+use Biz\Cash\Service\CashAccountService;
+use Biz\User\Service\NotificationService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\ClassroomOrderService;
 
 class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderService
 {
     public function createOrder($info)
     {
-        $connection = ServiceKernel::instance()->getConnection();
         try {
-            $connection->beginTransaction();
+            $this->beginTransaction();
 
             $user = $this->getCurrentUser();
 
             if (!$user->isLogin()) {
-                throw $this->createServiceException($this->getKernel()->trans('用户未登录，不能创建订单'));
+                throw $this->createServiceException('用户未登录，不能创建订单');
             }
 
             if (!ArrayToolkit::requireds($info, array('targetId', 'payment'))) {
-                throw $this->createServiceException($this->getKernel()->trans('订单数据缺失，创建课程订单失败。'));
+                throw $this->createServiceException('订单数据缺失，创建课程订单失败。');
             }
 
             // 获得锁
             $user = $this->getUserService()->getUser($user['id'], true);
 
             if ($this->getClassroomService()->isClassroomStudent($info['targetId'], $user['id'])) {
-                throw $this->createServiceException($this->getKernel()->trans('已经是班级学员，创建订单失败。'));
+                throw $this->createServiceException('已经是班级学员，创建订单失败。');
             }
 
             $classroom = $this->getClassroomService()->getClassroom($info['targetId']);
 
             if (empty($classroom)) {
-                throw $this->createServiceException($this->getKernel()->trans('班级不存在，创建课程订单失败。'));
+                throw $this->createServiceException('班级不存在，创建课程订单失败。');
             }
 
             $info['vipStatus'] = !empty($info['vipStatus']) ? $info['vipStatus'] : null;
 
             if ($classroom['buyable'] == 0 && $info['vipStatus'] != 'ok') {
-                throw $this->createServiceException($this->getKernel()->trans('该班级是封闭班级，学员不能自行加入！'));
+                throw $this->createServiceException('该班级是封闭班级，学员不能自行加入！');
             }
 
             $order               = array();
             $classroomSetting    = $this->getSettingService()->get('classroom');
-            $classroomName       = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->getKernel()->trans('班级');
+            $classroomName       = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
             $order['userId']     = $user['id'];
-            $order['title']      = $this->getKernel()->trans('购买%classroomName%《%title%》', array('%classroomName%' => $classroomName, '%title%' => $classroom['title']));
+            $order['title']      = "购买{$classroomName}《{$classroom['title']}》";
             $order['targetType'] = 'classroom';
             $order['targetId']   = $classroom['id'];
             $order['payment']    = $info['payment'];
@@ -71,7 +77,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             $order = $this->getOrderService()->createOrder($order);
 
             if (empty($order)) {
-                throw $this->createServiceException($this->getKernel()->trans('创建订单失败！'));
+                throw $this->createServiceException('创建订单失败！');
             }
 
             // 免费班级或VIP会员，就直接将订单置为已购买
@@ -92,11 +98,11 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
             }
 
-            $connection->commit();
+            $this->commit();
 
             return $order;
         } catch (\Exception $e) {
-            $connection->rollBack();
+            $this->rollback();
             throw $e;
         }
     }
@@ -106,7 +112,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         $order = $this->getOrderService()->getOrder($id);
 
         if (empty($order) || $order['targetType'] != 'classroom') {
-            throw $this->createServiceException($this->getKernel()->trans('非课程订单，加入课程失败。'));
+            throw $this->createServiceException('非课程订单，加入课程失败。');
         }
 
         $info = array(
@@ -114,14 +120,14 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             'remark'  => empty($order['data']['note']) ? '' : $order['data']['note']
         );
 
-        $classroomSetting         = $this->getSettingService()->get('classroom');
-        $classroomSetting['name'] = empty($classroomSetting['name']) ? $this->getKernel()->trans('班级') : $classroomSetting['name'];
+        $classroomSetting = $this->getSettingService()->get('classroom');
+        $classroomName    = empty($classroomSetting['name']) ? '班级' : $classroomSetting['name'];
 
         if (!$this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
-            $this->getOrderService()->createOrderLog($order['id'], "pay_success", $this->getKernel()->trans('当前用户已经是%name%学员，支付宝支付成功。', array('%name%' => $classroomSetting['name'])), $order);
-            $this->getLogService()->warning("classroom_order", "pay_success", "当前用户已经是{$classroomSetting['name']}学员，支付宝支付成功。", $order);
+            $this->getOrderService()->createOrderLog($order['id'], "pay_success", "当前用户已经是{$classroomName}学员，支付宝支付成功。", $order);
+            $this->getLogService()->warning("classroom_order", "pay_success", "当前用户已经是{$classroomName}学员，支付宝支付成功。", $order);
         }
 
         return;
@@ -133,7 +139,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         $order = $this->getOrderService()->getOrder($id);
 
         if (empty($order)) {
-            throw $this->createServiceException($this->getKernel()->trans('订单不存在，不能申请退款。'));
+            throw $this->createServiceException('订单不存在，不能申请退款。');
         }
 
         $refund = $this->getOrderService()->applyRefundOrder($id, $amount, $reason);
@@ -155,14 +161,14 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             }
 
             $classroomSetting         = $this->getSettingService()->get('classroom');
-            $classroomSetting['name'] = empty($classroomSetting['name']) ? $this->getKernel()->trans('班级') : $classroomSetting['name'];
+            $classroomSetting['name'] = empty($classroomSetting['name']) ? '班级' : $classroomSetting['name'];
 
-            $adminmessage = $this->getKernel()->trans('用户%nickname%申请退款', array('%nickname%' => $user['nickname']))."<a href='{$classroomUrl}'>{$classroom['title']}</a>".$this->getKernel()->trans('%name%，请审核。', array('%name%' => $classroomSetting['name']));
+            $adminMessage = "用户{$user['nickname']}申请退款<a href='{$classroomUrl}'>{$classroom['title']}</a>{$classroomSetting['name']}，请审核。";
             $adminCount   = $this->getUserService()->searchUserCount(array('roles' => 'ADMIN'));
-            $admins       = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id', 'DESC'), 0, $adminCount);
+            $admins       = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id' => 'DESC'), 0, $adminCount);
 
             foreach ($admins as $key => $admin) {
-                $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
+                $this->getNotificationService()->notify($admin['id'], 'default', $adminMessage);
             }
         } elseif ($refund['status'] == 'success') {
             $this->getClassroomService()->exitClassroom($order['targetId'], $order['userId']);
@@ -181,7 +187,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         $order = $this->getOrderService()->getOrder($id);
 
         if (empty($order) || $order['targetType'] != 'classroom') {
-            throw $this->createServiceException($this->getKernel()->trans('订单不存在，取消退款申请失败。'));
+            throw $this->createServiceException('订单不存在，取消退款申请失败。');
         }
 
         $this->getOrderService()->cancelRefundOrder($id);
@@ -191,46 +197,65 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         }
     }
 
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return CashService
+     */
     protected function getCashService()
     {
         return $this->createService('Cash:CashService');
     }
 
+    /**
+     * @return CashAccountService
+     */
     protected function getCashAccountService()
     {
         return $this->createService('Cash:CashAccountService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->createService('System:LogService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
         return $this->createService('User:NotificationService');

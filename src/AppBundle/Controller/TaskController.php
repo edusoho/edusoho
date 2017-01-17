@@ -13,7 +13,14 @@ class TaskController extends BaseController
     public function showAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview');
-        $task    = $this->tryLearnTask($courseId, $id, (bool)$preview);
+
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+
+        $task = $this->tryLearnTask($course, $member, $id, (bool)$preview);
+
+        if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
+            return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
+        }
 
         $this->getActivityService()->trigger($task['activityId'], 'start', array(
             'task' => $task
@@ -45,8 +52,9 @@ class TaskController extends BaseController
         $user = $this->getCurrentUser();
 
         if (empty($task) || $task['courseId'] != $courseId) {
+            exit;
 
-            throw $this->createNotFoundException('task is not exist');
+            return $this->createNotFoundException('task is not exist');
         }
 
         //课程不可购买，且任务不免费
@@ -83,9 +91,10 @@ class TaskController extends BaseController
         //TODO vip 插件改造 判断用户是否为VIP
 
         return $this->render('task/preview.html.twig', array(
-            'course' => $course,
-            'task'   => $task,
-            'user'   => $user
+            'course'    => $course,
+            'task'      => $task,
+            'user'      => $user,
+            'vipStatus' => false
         ));
     }
 
@@ -93,10 +102,10 @@ class TaskController extends BaseController
     {
         $task = $this->getTaskService()->getTask($id);
         if (empty($task) || $task['courseId'] != $courseId) {
-            throw $this->createNotFoundException('task is not exist');
+            return $this->createNotFoundException('task is not exist');
         }
         if (empty($task['isFree'])) {
-            throw $this->createNotFoundException('task is not free');
+            return $this->createNotFoundException('task is not free');
         }
         return $this->forward('AppBundle:Activity/Activity:preview', array('task' => $task));
     }
@@ -268,10 +277,8 @@ class TaskController extends BaseController
         return array($course, $nextTask, $finishedRate);
     }
 
-    protected function tryLearnTask($courseId, $taskId, $preview = false)
+    protected function tryLearnTask($course, $member, $taskId, $preview = false)
     {
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-
         if ($preview) {
             if ($this->canPreview($course, $member)) {
                 $task = $this->getTaskService()->getTask($taskId);
@@ -285,13 +292,10 @@ class TaskController extends BaseController
             throw $this->createResourceNotFoundException('task', $taskId);
         }
 
-        if ($task['courseId'] != $courseId) {
+        if ($task['courseId'] != $course['id']) {
             throw $this->createAccessDeniedException();
         }
 
-        if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
-            return $this->redirect($this->generateUrl('course_task_show', array('courseId' => $courseId, 'id' => $taskId)));
-        }
         return $task;
     }
 

@@ -39,7 +39,7 @@
             {% if (is_plugin_installed("Coupon") and setting('coupon.enabled'))
                 or setting('invite.invite_code_setting')|default(false)
             %}
-              {{ render(controller('AppBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
+              {{ render(controller('AppBundle:My/Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
             {% endif %}
 
             {% if setting('coin.coin_enabled') %}
