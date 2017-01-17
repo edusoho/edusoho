@@ -3,13 +3,18 @@ namespace AppBundle\Controller\Classroom;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\System\Service\SettingService;
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomReviewService;
 
 class CourseController extends BaseController
 {
-    public function pickAction(Request $request, $classroomId)
+    public function pickAction($classroomId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $actviteCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
@@ -54,12 +59,12 @@ class CourseController extends BaseController
         }
 
         $courses       = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        $currentUser   = $this->getUserService()->getCurrentUser();
+        $currentUser   = $this->getCurrentUser();
         $courseMembers = array();
         $teachers      = array();
 
         foreach ($courses as &$course) {
-            $courseMembers[$course['id']] = $this->getCourseMemberService()->getCourseMember($course['id'], $currentUser->id);
+            $courseMembers[$course['id']] = $this->getCourseMemberService()->getCourseMember($course['id'], $currentUser['id']);
 
             $course['teachers']      = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
             $teachers[$course['id']] = $course['teachers'];
@@ -69,8 +74,8 @@ class CourseController extends BaseController
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            $classroomName = $this->setting('classroom.name', $this->getServiceKernel()->trans('班级'));
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服',array('%classroomName%'=>$classroomName)), '', 3, $this->generateUrl('homepage'));
+            $classroomName = $this->setting('classroom.name', '班级');
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroomId);
@@ -110,7 +115,7 @@ class CourseController extends BaseController
         $conditions             = array("title" => $key);
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
-        $paginator = new Paginator(
+        $paginator              = new Paginator(
             $this->get('request'),
             $this->getCourseService()->searchCourseCount($conditions),
             5
@@ -126,11 +131,11 @@ class CourseController extends BaseController
         $users = $this->getUsers($courses);
 
         return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
-            'users'   => $users,
-            'courses' => $courses,
-            'paginator' => $paginator,
+            'users'       => $users,
+            'courses'     => $courses,
+            'paginator'   => $paginator,
             'classroomId' => $classroomId,
-            'type' => 'ajax_pagination'
+            'type'        => 'ajax_pagination'
         ));
     }
 
@@ -153,7 +158,7 @@ class CourseController extends BaseController
 
         if (in_array($previewAs, array('guest', 'auditor', 'member'))) {
             if ($previewAs == 'guest') {
-                return;
+                return array();
             }
 
             $member = array(
@@ -178,33 +183,51 @@ class CourseController extends BaseController
         return $member;
     }
 
+    /**
+     * @return CourseService
+     */
     private function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ClassroomReviewService
+     */
     protected function getClassroomReviewService()
     {
         return $this->createService('Classroom:ClassroomReviewService');
     }
 
+    /**
+     * @return TagService
+     */
     private function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:MemberService');
+        return $this->createService('Course:MemberService');
     }
 }

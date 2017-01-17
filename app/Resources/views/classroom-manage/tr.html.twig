@@ -22,9 +22,9 @@
         <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'发私信'|trans}}</button>
       {% endif %}
       {% if app.user.isAdmin() %}
-        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_show', {courseId:classroom.id, userId:user.id})}}">{{'查看资料'|trans}}</button>
+        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {courseSetId: 0, courseId:classroom.id, userId:user.id})}}">{{'查看资料'|trans}}</button>
       {% elseif setting("course.buy_fill_userinfo") %}
-        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_defined_show', {courseId:classroom.id, userId:user.id}) }}">{{'查看资料'|trans}}</button>
+        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_defined_show', {courseSetId: 0, courseId:classroom.id, userId:user.id}) }}">{{'查看资料'|trans}}</button>
       {% endif %}
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">{{'管理'|trans}}
         <span class="caret"></span>

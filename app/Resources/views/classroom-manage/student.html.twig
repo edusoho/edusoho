@@ -29,7 +29,7 @@
       {% for student in students %}
         {% set user = users[student.userId] %}
         {% set progress = progresses[student.userId] %}
-        {% include ('classroom-manage/tr.html.twig' %}
+        {% include ('classroom-manage/tr.html.twig') %}
       {% else %}
         <tr class="empty"><td colspan="20">{{'无学员记录'|trans}}</td></tr>
       {% endfor %}

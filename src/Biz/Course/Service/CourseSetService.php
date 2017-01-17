@@ -169,4 +169,10 @@ interface CourseSetService
     public function publishCourseSet($id);
 
     public function closeCourseSet($id);
+
+    public function findCourseSetsByParentIdAndLocked($parentId, $locked);
+
+    public function recommendCourse($id, $number);
+
+    public function cancelRecommendCourse($id);
 }

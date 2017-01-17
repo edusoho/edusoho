@@ -244,7 +244,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->count($conditions);
     }
 
-    protected function findCourseTeachers($courseId)
+    public function findCourseTeachers($courseId)
     {
         return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
     }
@@ -766,16 +766,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
-     * @param $userId
-     * @param $courseSetId
-     *
+     * @param  $userId
+     * @param  $courseSetId
      * @return array
      */
     public function findTeacherMembersByUserIdAndCourseSetId($userId, $courseSetId)
     {
         return $this->getMemberDao()->findByUserIdAndCourseSetIdAndRole($userId, $courseSetId, 'teacher');
     }
-
 
     /**
      * @param  int $userId

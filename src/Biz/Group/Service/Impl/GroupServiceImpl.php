@@ -3,6 +3,7 @@
 namespace Biz\Group\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Content\Service\FileService;
 use Biz\File\Service\UploadFileService;
 use Biz\Group\Dao\GroupDao;
 use Biz\Group\Dao\MemberDao;
@@ -108,6 +109,8 @@ class GroupServiceImpl extends BaseService implements GroupService
 
     public function changeGroupImg($id, $field, $data)
     {
+
+
         if (!in_array($field, array("logo", "backgroundLogo"))) {
             throw $this->createInvalidArgumentException('Invalid Field :'.$field);
         }
@@ -118,19 +121,19 @@ class GroupServiceImpl extends BaseService implements GroupService
         }
 
         $fileIds = ArrayToolkit::column($data, "id");
-        $files   = $this->getFileService()->findFilesByIds($fileIds);
 
-        $files   = ArrayToolkit::index($files, "id");
+        $files = $this->getFileService()->getFilesByIds($fileIds);
+        $files = ArrayToolkit::index($files, "id");
+
         $fileIds = ArrayToolkit::index($data, "type");
 
         $fields = array(
             $field => $files[$fileIds[$field]["id"]]["uri"]
         );
 
-        $oldAvatars = array(
+        $oldAvatars  = array(
             $field => $group[$field] ? $group[$field] : null
         );
-
         $fileService = $this->getFileService();
         array_map(function ($oldAvatar) use ($fileService) {
             if (!empty($oldAvatar)) {
@@ -301,10 +304,10 @@ class GroupServiceImpl extends BaseService implements GroupService
     }
 
     /**
-     * @return UploadFileService
+     * @return FileService
      */
     protected function getFileService()
     {
-        return $this->createService('File:UploadFileService');
+        return $this->createService('Content:FileService');
     }
 }
