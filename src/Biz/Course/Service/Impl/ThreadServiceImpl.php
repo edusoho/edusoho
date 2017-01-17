@@ -395,14 +395,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function prepareThreadSearchConditions($conditions)
     {
-        if (empty($conditions['keyword'])) {
-            unset($conditions['keyword']);
-            unset($conditions['keywordType']);
+        foreach ($conditions as $key => $value) {
+            if (empty($value)) {
+                unset($conditions[$key]);
+            }
         }
 
         if (isset($conditions['threadType'])) {
             $conditions[$conditions['threadType']] = 1;
-            unset($conditions['threadType']);
         }
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
