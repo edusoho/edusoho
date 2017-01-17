@@ -4,8 +4,8 @@
 {% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
 {% block main %}
   
-  {% include 'classroom/course:note-nav.html.twig' %}
+  {% include 'classroom/course/note-nav.html.twig' %}
 
-  {{ render(controller('AppBundle:Classroom/CourseNote:list', {request:app.request, courseIds:courseIds, filters:filters})) }}
+  {{ render(controller('AppBundle:Note:list', {request:app.request, courseIds:courseIds, filters:filters})) }}
 
 {% endblock %}

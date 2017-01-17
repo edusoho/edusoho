@@ -3,72 +3,86 @@
 
 {% block full_content %}
 
-	{% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
-	{% set route_params = app.request.attributes.get('_route_params') %}
-	{% set course = data('Course', {courseId: course.id|default(route_params.id|default(0))}) %}
+  {% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
+  {% set route_params = app.request.attributes.get('_route_params') %}
+  {% set course = data('Course', {courseId: course.id|default(route_params.id|default(0))}) %}
   {% set course_set = data('CourseSet', {id: course.courseSetId}) %}
 
-	{{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
+  {{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
 
-	<div class="container">
-	  <div class="row">
-	  	<div class="col-lg-9 col-md-8 course-detail-main">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-9 col-md-8 course-detail-main">
 
-	      {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
+        {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
 
-	      <section class="es-section">
-					<div class="nav-btn-tab">
-					  <ul class="nav nav-tabs" role="tablist">
-					  	{% for key, tab in metas.tabs %}
-						    <li role="presentation" class="{% if app.request.attributes.get('_route_params').tab|default('') == key %}active{% endif %}">
-						      <a
-						      	{% if member|default(false) %}
-						      		href="{{ path('my_course_show', {'id': course.id, 'tab': key}) }}"
-						      	{% else %}
-						      		href="{{ path('course_show', {'id': course.id, 'tab': key}) }}"
-						      	{% endif %}
-						      >
-						      	{{tab.name}}
-						      	{% if tab.number|default(false) %}
-											{% if member|default(false) %}
-												<small class="text-muted">({{ course[tab.number]|default(0) }})</small>
-											{% else %}
-												<small class="text-muted">({{ course_set[tab.number]|default(0) }})</small>
-											{% endif %}
-						      	{% endif %}
-						      </a>
-						    </li>
-					  	{% endfor %}
-					  </ul>
+        <section class="es-section">
+          <div class="nav-btn-tab">
+            <ul class="nav nav-tabs" role="tablist">
+              {% for key, tab in metas.tabs %}
+                <li role="presentation"
+                    class="{% if app.request.attributes.get('_route_params').tab|default('') == key %}active{% endif %}">
+                  <a
+                      {% if member|default(false) %}
+                        href="{{ path('my_course_show', {'id': course.id, 'tab': key}) }}"
+                      {% else %}
+                        href="{{ path('course_show', {'id': course.id, 'tab': key}) }}"
+                      {% endif %}
+                  >
+                    {{ tab.name }}
+                    {% if tab.number|default(false) %}
+                      {% if member|default(false) %}
+                        <small class="text-muted">({{ course[tab.number]|default(0) }})</small>
+                      {% else %}
+                        <small class="text-muted">({{ course_set[tab.number]|default(0) }})</small>
+                      {% endif %}
+                    {% endif %}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
 
-					  {% if app.user.admin|default(false) or (member|default(null) and member.role|default('') == "teacher") %}
-					    <div class="btnbar hidden-xs">
-					      <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}" class="btn btn-link">
-					        <i class="es-icon es-icon-anonymous-iconfont"></i>
-					        {{'公告'|trans}}
-					      </a>
-					    </div>
-					  {% endif %}
+            {% if app.user.admin|default(false) or (member|default(null) and member.role|default('') == "teacher") %}
+              <div class="btnbar hidden-xs">
+                <a href="#modal" data-toggle="modal"
+                   data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}"
+                   class="btn btn-link">
+                  <i class="es-icon es-icon-anonymous-iconfont"></i>
+                  {{ '公告'|trans }}
+                </a>
+              </div>
+            {% endif %}
 
-					</div>
-					<div class="course-detail-content">
-						{% block detail_content %}
-							{{ render(controller(metas.tabs[tab].content, {course: course, member: member|default(null)})) }}
-						{% endblock %}
-					</div>
-	      </section>
-	      
-			</div>
-	    <div class="col-lg-3 col-md-4 course-sidebar">
+          </div>
+          <div class="course-detail-content">
+            {% block detail_content %}
+              {{ render(controller(metas.tabs[tab].content, {course: course, member: member|default(null)})) }}
+            {% endblock %}
+          </div>
+        </section>
+
+      </div>
+      <div class="col-lg-3 col-md-4 course-sidebar">
         {# 有些widget只有班级计划才显示 #}
-	    	{% for key, widget in metas.widgets if not (widget.classroomCourse|default(false) and course.parentId == 0) %}
-					{% if widget.renderType == 'render' %}
-						{{ render(controller(widget.uri, {course: course, member: member|default({})})) }}
-					{% elseif widget.renderType == 'include' %}
-						{% include widget.uri with {course: course} %}
-					{% endif %}
-	    	{% endfor %}
-	    </div>
-		</div>
-	</div>
+        {% for key, widget in metas.widgets if not (widget.classroomCourse|default(false) and course.parentId == 0) %}
+          {% if widget.renderType == 'render' %}
+            {{ render(controller(widget.uri, {course: course, member: member|default({})})) }}
+          {% elseif widget.renderType == 'include' %}
+            {% include widget.uri with {course: course} %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {% block member_expired %}
+    {% if  member|default(null) and member.deadline  and member.deadline < date().timestamp %}
+      <div class="member-expire">
+        <a href="#modal" data-toggle="modal" data-url="{{ path('course_member_expired', {id:course.id}) }}"></a>
+      </div>
+    {% endif %}
+  {% endblock %}
 {% endblock %}
+
+
+

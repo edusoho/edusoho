@@ -2,10 +2,10 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
-use Codeages\Biz\Framework\Event\Event;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\EdusohoLiveClient;
+use Topxia\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Event\Event;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
@@ -44,8 +44,7 @@ class CourseController extends CourseBaseController
         $userIds = array();
 
         foreach ($courses as &$course) {
-
-            $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+            $tags   = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
             $tagIds = ArrayToolkit::column($tags, 'id');
 
             $course['tags'] = $this->getTagService()->findTagsByIds($tagIds);
@@ -65,7 +64,7 @@ class CourseController extends CourseBaseController
     {
         $course   = $this->getCourseService()->getCourse($id);
         $lessons  = $this->getCourseService()->searchLessons(array('courseId' => $course['id'], 'status' => 'published'), array('createdTime', 'ASC'), 0, 1000);
-        $tagIds = $this->getTagIdsByCourse($course);
+        $tagIds   = $this->getTagIdsByCourse($course);
         $tags     = $this->getTagService()->findTagsByIds($tagIds);
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
 
@@ -92,8 +91,8 @@ class CourseController extends CourseBaseController
         $course = $this->getCourseService()->getCourse($id);
 
         $lessons = $this->getCourseService()->searchLessons(array('courseId' => $course['id'], 'status' => 'published'), array('createdTime', 'ASC'), 0, 1000);
-        $tagIds = $this->getTagIdsByCourse($course);
-        $tags = $this->getTagService()->findTagsByIds($tagIds);
+        $tagIds  = $this->getTagIdsByCourse($course);
+        $tags    = $this->getTagService()->findTagsByIds($tagIds);
 
         if ($lessonId == '' && $lessons != null) {
             $currentLesson = $lessons[0];
@@ -122,9 +121,9 @@ class CourseController extends CourseBaseController
         }
 
         return $this->render('TopxiaWebBundle:Course:info.html.twig', array(
-            'course'   => $course,
-            'member'   => $member,
-            'tags'     => ArrayToolkit::column($this->getTagsByOwnerId($id), 'id')
+            'course' => $course,
+            'member' => $member,
+            'tags'   => ArrayToolkit::column($this->getTagsByOwnerId($id), 'id')
         ));
     }
 
@@ -189,11 +188,11 @@ class CourseController extends CourseBaseController
 
         list($course, $member) = $this->buildCourseLayoutData($request, $id);
 
-        if (!array_intersect(array('ROLE_ADMIN','ROLE_SUPER_ADMIN'), $user['roles'])) {
+        if (!array_intersect(array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'), $user['roles'])) {
             if ($course['status'] == 'closed' && $member == null) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('课程已关闭，3秒后返回首页'), '', 3, $this->generateUrl('homepage'));
             }
-        }     
+        }
 
         if ($course['parentId'] && empty($member)) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
@@ -210,12 +209,11 @@ class CourseController extends CourseBaseController
             }
         }
 
-
         $this->getCourseService()->hitCourse($id);
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
 
-        if ('normal' == $course['type']){
+        if ('normal' == $course['type']) {
             $this->dispatchEvent('course.view',
                 new Event($course, array('userId' => $user['id'])));
         }
@@ -304,7 +302,7 @@ class CourseController extends CourseBaseController
         if ($member["joinedType"] == "course" && !empty($member['orderId'])) {
             throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
         }
-        
+
         $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
@@ -360,10 +358,10 @@ class CourseController extends CourseBaseController
             }
 
             if ($member && $member['levelId'] > 0) {
-                if($member['joinedType'] == 'course'){
+                if ($member['joinedType'] == 'course') {
                     $vipLevelId = $course['vipLevelId'];
                 } elseif ($member['joinedType'] == 'classroom') {
-                    $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
+                    $classroom  = $this->getClassroomService()->getClassroom($member['classroomId']);
                     $vipLevelId = $classroom['vipLevelId'];
                 }
 
@@ -435,7 +433,7 @@ class CourseController extends CourseBaseController
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
-        
+
         $learn = $this->getCourseService()->waveWatchingTime($user['id'], $lessonId, $time);
 
         $isLimit = $this->setting('magic.lesson_watch_limit');
@@ -483,8 +481,8 @@ class CourseController extends CourseBaseController
         $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
         return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
-            'course'       => $course,
-            'users'        => $users
+            'course' => $course,
+            'users'  => $users
         ));
     }
 
@@ -608,7 +606,7 @@ class CourseController extends CourseBaseController
         $userIds = array();
 
         foreach ($courses as &$course) {
-            $tagIds = $this->getTagIdsByCourse($course);
+            $tagIds         = $this->getTagIdsByCourse($course);
             $course['tags'] = $this->getTagService()->findTagsByIds($tagIds);
             $userIds        = array_merge($userIds, $course['teacherIds']);
         }
@@ -653,7 +651,7 @@ class CourseController extends CourseBaseController
     public function relatedCoursesBlockAction($course)
     {
         $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
-        
+
         $course['tags'] = ArrayToolkit::column($tags, 'id');
 
         $courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('rating desc,recommendedTime desc ,createdTime desc', ''), 0, 4);
@@ -664,7 +662,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function deadlineReachAction(Request $request, $courseId)
+    public function deadlineReachAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
 
@@ -672,9 +670,9 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
         }
 
-        $this->getCourseMemberService()->quitCourseByDeadlineReach($user['id'], $courseId);
+        $this->getCourseMemberService()->quitCourseByDeadlineReach($user['id'], $id);
 
-        return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
+        return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
     }
 
     public function listViewAction(Request $request, $courseId)
@@ -746,7 +744,7 @@ class CourseController extends CourseBaseController
 
         return true;
     }
-    
+
     protected function getTagIdsByCourse($course)
     {
         $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));

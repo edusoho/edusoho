@@ -78,7 +78,7 @@
     {% for courseSet in courseSets %}
       {% set user = users[courseSet.creator]|default(null) %}
       {% set category = categories[courseSet.categoryId]|default(null) %}
-      {% include 'admin/course/tr.html.twig' %}
+      {% include 'admin/course-set/tr.html.twig' %}
     {% else %}
       <tr>
         <td colspan="20">

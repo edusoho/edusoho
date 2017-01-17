@@ -2,11 +2,10 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
-class RecentLiveCoursesDataTag extends CourseBaseDataTag implements DataTag  
+class RecentLiveCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 {
 
     /**
@@ -16,14 +15,13 @@ class RecentLiveCoursesDataTag extends CourseBaseDataTag implements DataTag
      *
      * 可传入的参数：
      *   count    必需 课程数量，取值不能超过100
-     * 
+     *
      * @param  array $arguments 参数
+     *
      * @return array 课程列表
      */
     public function getData(array $arguments)
-    {	
-        $conditions = array('status' => 'published', 'type' => 'normal');
-
+    {
         $courseSetting = $this->getSettingService()->get('course', array());
 
         if (!empty($courseSetting['live_course_enabled']) && $courseSetting['live_course_enabled']) {
@@ -39,37 +37,41 @@ class RecentLiveCoursesDataTag extends CourseBaseDataTag implements DataTag
     private function getRecentLiveCourses($count)
     {
 
-        $recenntLessonsCondition = array(
-            'status' => 'published',
-            'endTimeGreaterThan' => time(),
+        $recentTasksCondition = array(
+            'status'     => 'published',
+            'endTime_GT' => time(),
+            'type'       => 'live'
         );
 
-        $recentlessons = $this->getCourseService()->searchLessons(
-            $recenntLessonsCondition,  
-            array('startTime', 'ASC'),
+        $recentTasks = $this->getTaskService()->search(
+            $recentTasksCondition,
+            array('startTime' => 'ASC'),
             0,
             1000
         );
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
 
+        $courses       = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentTasks, 'courseId'));
+        $courses       = ArrayToolkit::index($courses, 'id');
         $recentCourses = array();
-        foreach ($recentlessons as $lesson) {
-            $course = $courses[$lesson['courseId']];
+
+        foreach ($recentTasks as $task) {
+            $course = $courses[$task['courseId']];
             if ($course['status'] != 'published') {
                 continue;
             }
-            if($course['parentId'] != 0){
-                continue;   
+            if ($course['parentId'] != 0) {
+                continue;
             }
-            $course['lesson'] = $lesson;
+            $course['task']     = $task;
             $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
-            
+
             if (count($recentCourses) >= $count) {
                 break;
             }
 
             $recentCourses[] = $course;
         }
+
         return $this->getCourseTeachersAndCategories($recentCourses);
     }
 

@@ -31,6 +31,29 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    public function memberExpiredAction(Request $request, $id)
+    {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+        if ($member && !$this->getMemberService()->isMemberNonExpired($course, $member)) {
+            return $this->render('course/member/expired.html.twig', array(
+                'course' => $course
+            ));
+        }
+    }
+
+    public function deadlineReachAction(Request $request, $courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
+        }
+
+        $this->getMemberService()->quitCourseByDeadlineReach($user['id'], $courseId);
+
+        return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
+    }
+
     public function headerAction(Request $request, $course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
@@ -137,7 +160,6 @@ class CourseController extends CourseBaseController
             $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
 
             $courses[$key]['classroomCount'] = count($classroomIds);
-            $courses[$key]['courseSet']      = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
             if (count($classroomIds) > 0) {
                 $classroom                  = $this->getClassroomService()->getClassroom($classroomIds[0]);

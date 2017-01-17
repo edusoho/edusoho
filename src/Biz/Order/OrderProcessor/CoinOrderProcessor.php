@@ -91,7 +91,7 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getCashOrdersService()
     {
-        return ServiceKernel::instance()->createService('Cash:CashOrdersService');
+        return $this->getBiz()->service('Cash:CashOrdersService');
     }
 
 }
