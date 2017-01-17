@@ -300,11 +300,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
                 throw $this->createServiceException('keywordType参数不正确');
             }
 
-            if ($conditions['keywordType'] == 'content') {
-                $conditions[$conditions['keywordType']] = "%{$conditions['keyword']}%";
-            } else {
-                $conditions[$conditions['keywordType']] = $conditions['keyword'];
-            }
+            $conditions[$conditions['keywordType']] = $conditions['keyword'];
         }
         unset($conditions['keywordType']);
         unset($conditions['keyword']);
