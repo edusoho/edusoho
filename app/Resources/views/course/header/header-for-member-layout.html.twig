@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block course_member_exit %}
-	{% if member.id|default(false) %}
+	{% if member.id|default(false) and member.role != 'teacher' %}
 		<li>
 		  <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" data-url="{{ path('order_refund', {id: course.id, targetType:'course' }) }}" ><i class="es-icon es-icon-exit"></i>
 		  </a>
