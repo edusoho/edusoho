@@ -95,7 +95,7 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
                 $this->getLogger('PayCenter')->info("订单号：{$order["sn"]} 标识优惠码为使用状态");
             }
 
-            $processor = OrderProcessorFactory::create($order["targetType"]);
+            $processor = OrderProcessorFactory::create($this->biz, $order["targetType"]);
 
             if ($order['status'] == 'paid' && $processor) {
                 $processor->doPaySuccess($success, $order);

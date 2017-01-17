@@ -507,7 +507,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                     'payment'  => 'coin'
                 );
                 list($success, $order) = $this->getPayCenterService()->pay($payData);
-                $processor             = OrderProcessorFactory::create($order["targetType"]);
+                $processor             = OrderProcessorFactory::create($this->biz, $order["targetType"]);
             }
 
             if ($order["status"] == "paid") {
@@ -555,7 +555,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             return $this->createErrorResponse('coin_close', '网校关闭了课程购买！');
         }
 
-        $processor = OrderProcessorFactory::create($targetType);
+        $processor = OrderProcessorFactory::create($this->biz, $targetType);
 
         try {
             if (!isset($fields["couponCode"])) {
@@ -607,7 +607,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                     'payment'  => 'coin'
                 );
                 list($success, $order) = $this->getPayCenterService()->pay($payData);
-                $processor             = OrderProcessorFactory::create($order["targetType"]);
+                $processor             = OrderProcessorFactory::create($this->biz, $order["targetType"]);
             }
 
             if ($order["status"] == "paid") {
@@ -698,7 +698,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $fields["couponCode"] = "";
         }
 
-        $processor                                = OrderProcessorFactory::create($targetType);
+        $processor                                = OrderProcessorFactory::create($this->biz, $targetType);
         list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
 
         $fields["totalPrice"] = $totalPrice;

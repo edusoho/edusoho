@@ -142,7 +142,7 @@ class OrderController extends BaseController
             $cashRate = $coinSetting["cash_rate"];
         }
 
-        $processor = OrderProcessorFactory::create($targetType);
+        $processor = OrderProcessorFactory::create($this->getBiz(),$targetType);
 
         try {
             if (!isset($fields["couponCode"]) || (isset($fields["couponCode"]) && $fields["couponCode"] == '请输入优惠券')) {

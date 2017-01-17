@@ -182,7 +182,7 @@ class CoinController extends BaseController
 
         if ($type == 'course') {
             foreach ($data as $key => $value) {
-                $this->getCourseService()->updateCourse($key, array('maxRate' => $value));
+                $this->getCourseService()->updateMaxRate($key, $value);
             }
         } elseif ($type == 'classroom') {
             foreach ($data as $key => $value) {
