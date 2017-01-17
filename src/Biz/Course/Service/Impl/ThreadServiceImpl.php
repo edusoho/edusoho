@@ -401,6 +401,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             }
         }
 
+        if (isset($conditions['threadType'])) {
+            $conditions[$conditions['threadType']] = 1;
+        }
+
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             if (!in_array($conditions['keywordType'], array('title', 'content', 'courseId', 'courseTitle'))) {
                 throw $this->createInvalidArgumentException('Invalid keywordType');
