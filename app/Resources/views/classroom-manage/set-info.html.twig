@@ -1,9 +1,10 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 
 {% set side_nav = 'base' %}
-{% set script_controller = 'classroombundle/controller/classroom/set-info' %}
+{# {% set script_controller = 'classroombundle/controller/classroom/set-info' %} #}
+{% do load_script('classroombundle/controller/classroom/set-info') %}
 {% do load_script('classroombundle/controller/classroom-admin/classroom-create') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
 {% set script_arguments = {
 tagMatchUrl: path('tag_match'),
 } %}
@@ -89,7 +90,7 @@ tagMatchUrl: path('tag_match'),
         </div>
       </div>
 
-     {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: classroom.orgCode, inputClass: 'width-input width-input-large'} %}
+     {% include 'org/org-tree-select.html.twig' with {orgCode: classroom.orgCode, inputClass: 'width-input width-input-large'} %}
     
       <div class="row form-group">
         <div class="col-md-2 control-label"></div>
