@@ -7,6 +7,7 @@ use Topxia\Service\User\CurrentUser;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Topxia\Service\Util\EdusohoLiveClient;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -15,12 +16,14 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('util:classroom:DeleteRepair');
+        $this->setName('util:classroom:DeleteRepair')
+            ->addArgument('code', InputArgument::OPTIONAL, '是否删除未删除数据');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<info>查询删除超时时，未删除的同步班级课时~</info>');
+
         //拿到原课时不存在的课时
         $lessons = $this->findLessonsCopyIdNotExist();
         $this->addLog('原课时不存在的课时有'.count($lessons).'个');
@@ -40,9 +43,47 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
             //发布了的问题课时
             $publishQuestionLessons = $this->findPublishQuestionLessonsByCourseIds($questionCourseIds);
             $this->addLog('发布了的问题课时有'.count($publishQuestionLessons).'个');
+
+            $code = empty($input->getArgument('code')) ? null : $input->getArgument('code');
+            if ($code === 'delete') {
+                $this->initServiceKernel();
+                $this->deleteQuestionLessons($questionLessons);
+            }            
         }
        
         $output->writeln('<info>结束~</info>');
+    }
+
+    private function deleteQuestionLessons($questionLessons)
+    {
+        foreach ($questionLessons as $lesson) {
+            $course = $this->getCourseService()->tryManageCourse($lesson['courseId']);
+            $lesson = $this->getCourseService()->getCourseLesson($lesson['courseId'], $lesson['id']);
+
+            if ($course['type'] == 'live') {
+                $client = new EdusohoLiveClient();
+
+                if ($lesson['type'] == 'live') {
+                    $result = $client->deleteLive($lesson['mediaId'], $lesson['liveProvider']);
+                }
+
+                $this->getCourseService()->deleteCourseLessonReplayByLessonId($lesson['id']);
+            }
+
+            //$this->getCourseDeleteService()->deleteLessonResult($lesson['mediaId']);
+            $this->getCourseService()->deleteLesson($course['id'], $lesson['id']);
+
+            if ($this->isPluginInstalled('Homework')) {
+                //如果安装了作业插件那么也删除作业和练习
+                $homework = $this->getHomeworkService()->getHomeworkByLessonId($lesson['id']);
+
+                if (!empty($homework)) {
+                    $this->getHomeworkService()->removeHomework($homework['id']);
+                }
+
+                $this->getExerciseService()->deleteExercisesByLessonId($lesson['id']);
+            }            
+        }
     }
 
     private function findQuestionCoursesByLessons($lessons)
@@ -80,6 +121,9 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
 
     private function findQuestionLessonsByCourseIds($courseIds)
     {
+        if (empty($courseIds)) {
+            return array();
+        }
         $courseIds = array_values($courseIds);
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql = "select * from course_lesson where ((copyId not in (SELECT id from course_lesson WHERE copyId = 0)) and copyId !=0) and courseId in ({$marks})";
@@ -88,6 +132,9 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
 
     private function findPublishQuestionLessonsByCourseIds($courseIds)
     {
+        if (empty($courseIds)) {
+            return array();
+        }
         $courseIds = array_values($courseIds);
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
         $sql = "select * from course_lesson where ((copyId not in (SELECT id from course_lesson WHERE copyId = 0)) and copyId !=0) and courseId in ({$marks}) and status = 'published'";
@@ -101,11 +148,47 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
         $logger->addInfo($message);
     }
 
+    protected function isPluginInstalled($name)
+    {
+        return $this->getApplication()->getKernel()->getContainer()->get('topxia.twig.web_extension')->isPluginInstalled($name);
+    }
+
+    protected function getHomeworkService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+    }
+
+    protected function getExerciseService()
+    {
+        return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
 
     private function getConnectionDb()
     {
         $biz = $this->getBiz();
         return $biz['db'];
+    }
+
+    protected function initServiceKernel()
+    {
+        $serviceKernel = ServiceKernel::create('dev', false);
+        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
+        $serviceKernel->setBiz($this->getContainer()->get('biz'));
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id'        => 1,
+            'nickname'  => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array()
+        ));
+        $serviceKernel->setCurrentUser($currentUser);
+        $currentUser->setPermissions('admin_course_content_manage');
     }
 
     private function getBiz()
