@@ -23,23 +23,25 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
         $output->writeln('<info>查询删除超时时，未删除的同步班级课时~</info>');
         //拿到原课时不存在的课时
         $lessons = $this->findLessonsCopyIdNotExist();
+        $this->addLog('原课时不存在的课时有'.count($lessons).'个');
 
-        //找到有问题的课程
-        $questionCourseIds = $this->findQuestionCoursesByLessons($lessons);
+        if (!empty($lessons)) {
+            //找到有问题的课程
+            $questionCourseIds = $this->findQuestionCoursesByLessons($lessons);
+            $this->addLog('有问题的课程有'.count($questionCourseIds).'个');
 
-        //找到有问题的lesson
-        $questionLessons = $this->findQuestionLessonsByCourseIds($questionCourseIds);
+            //找到有问题的lesson
+            $questionLessons = $this->findQuestionLessonsByCourseIds($questionCourseIds);
+            $this->addLog('有问题的lesson有'.count($questionLessons).'个');
 
-        //找到问题课时的学员数
-        $this->findQuestionLessonMembersByLessons($questionLessons);
+            //找到问题课时的学员数
+            $this->findQuestionLessonMembersByLessons($questionLessons);
 
-        // $publishQuestionLessons = $this->findPublishQuestionLessonsByCourseIds($questionCourseIds);
-        // var_dump(count($publishQuestionLessons));
-
-        $this->addLog('问题课时有'.count($questionLessons).'个');
-        // foreach ($questionLessons as $questionLesson) {
-        //     $this->addLog($questionLesson['id']);
-        // }
+            //发布了的问题课时
+            $publishQuestionLessons = $this->findPublishQuestionLessonsByCourseIds($questionCourseIds);
+            $this->addLog('发布了的问题课时有'.count($publishQuestionLessons).'个');
+        }
+       
         $output->writeln('<info>结束~</info>');
     }
 
