@@ -15885,6 +15885,15 @@ textarea {
 .es-mobile body.my-course .es-footer {
   display: none;
 }
+.es-mobile body.homepage .es-friend-link,
+.es-mobile body.course-list-page .es-friend-link,
+.es-mobile body.open-course-list .es-friend-link,
+.es-mobile body.course-dashboard-page .es-friend-link,
+.es-mobile body.login .es-friend-link,
+.es-mobile body.register .es-friend-link,
+.es-mobile body.my-course .es-friend-link {
+  display: none;
+}
 .es-mobile body.course-list-page {
   background-color: white;
 }
