@@ -217,7 +217,7 @@ class ClassroomController extends BaseController
         $member       = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%title%，如有需要请联系客服', array('%title%' => $classroom['title'])), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroom['title']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         if (!$classroom) {
@@ -387,7 +387,7 @@ class ClassroomController extends BaseController
 
         $isSignedToday = $this->getSignService()->isSignedToday($user['id'], 'classroom_sign', $classroom['id']);
 
-        $week = array($this->getServiceKernel()->trans('日'), $this->getServiceKernel()->trans('一'), $this->getServiceKernel()->trans('二'), $this->getServiceKernel()->trans('三'), $this->getServiceKernel()->trans('四'), $this->getServiceKernel()->trans('五'), $this->getServiceKernel()->trans('六'));
+        $week = array('日', '一', '二', '三', '四', '五', '六');
 
         $userSignStatistics = $this->getSignService()->getSignUserStatistics($user['id'], 'classroom_sign', $classroom['id']);
 
@@ -477,21 +477,21 @@ class ClassroomController extends BaseController
         $member = $this->getClassroomService()->getClassroomMember($id, $user["id"]);
 
         if (empty($member)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是班级的学员。'));
+            throw $this->createAccessDeniedException('您不是班级的学员。');
         }
 
         if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您不是班级的学员。'));
+            throw $this->createAccessDeniedException('您不是班级的学员。');
         }
 
         if (!empty($member['orderId'])) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('有关联的订单，不能直接退出学习。'));
+            throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
 
         if ($order['targetType'] == 'groupSell') {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('组合购买课程不能退出。'));
+            throw $this->createAccessDeniedException('组合购买课程不能退出。');
         }
 
         $this->getClassroomService()->exitClassroom($id, $user["id"]);
@@ -504,7 +504,7 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -514,7 +514,7 @@ class ClassroomController extends BaseController
         }
 
         if (!$classroom['buyable']) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，该%title%不允许加入，如有需要请联系客服', array('%title%' => $classroom['title'])), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，该{$classroom['title']}不允许加入，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         if ($this->getClassroomService()->canTakeClassroom($id)) {
@@ -627,13 +627,13 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户未登录，不能购买。'));
+            return $this->createMessageResponse('error', '用户未登录，不能购买。');
         }
 
         $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
 
         if (empty($classroom)) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('%title%不存在，不能购买。', array('%title%' => $classroom['title'])));
+            return $this->createMessageResponse('error', "{$classroom['title']}不存在，不能购买。");
         }
 
         $userInfo = ArrayToolkit::parts($formData, array(
@@ -727,7 +727,7 @@ class ClassroomController extends BaseController
             return false;
         }
 
-        $courseIds     = ArrayToolkit::column($courses, 'parentId');
+        $courseIds = ArrayToolkit::column($courses, 'parentId');
 //        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
 
@@ -789,8 +789,8 @@ class ClassroomController extends BaseController
 
     /**
      * @deprecated
-     * @param $classroom
-     * @param $userId
+     * @param  $classroom
+     * @param  $userId
      * @return array
      */
     private function calculateUserLearnProgress($classroom, $userId)
@@ -828,7 +828,7 @@ class ClassroomController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isTeacher()) {
-            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('您不是老师，不能查看此页面！'));
+            return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
         $teacherClassrooms     = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user['id']), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
@@ -891,13 +891,13 @@ class ClassroomController extends BaseController
         $order = $this->getOrderService()->getOrderBySn($sn);
 
         if (empty($order)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('订单不存在!'));
+            throw $this->createNotFoundException('订单不存在!');
         }
 
         $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
 
         if (empty($classroom)) {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('找不到要购买的班级!'));
+            throw $this->createNotFoundException('找不到要购买的班级!');
         }
 
         return $this->render('classroom/classroom-order.html.twig', array('order' => $order, 'classroom' => $classroom));

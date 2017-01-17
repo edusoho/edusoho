@@ -74,8 +74,8 @@ class CourseController extends BaseController
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            $classroomName = $this->setting('classroom.name', $this->getServiceKernel()->trans('班级'));
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服', array('%classroomName%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
+            $classroomName = $this->setting('classroom.name', '班级');
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         $canManageClassroom = $this->getClassroomService()->canManageClassroom($classroomId);

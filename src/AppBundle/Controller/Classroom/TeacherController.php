@@ -38,13 +38,13 @@ class TeacherController extends BaseController
         $user     = $this->getCurrentUser();
 
         $classroomSetting = $this->setting('classroom', array());
-        $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->getServiceKernel()->trans('班级');
+        $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
         $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
         $member       = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         $canLook      = $this->getClassroomService()->canLookClassroom($classroom['id']);
         if (!$canLook) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans("非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服", array('%classroomName%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
         $layout = 'classroom/layout.html.twig';
         if ($member && !$member['locked']) {
