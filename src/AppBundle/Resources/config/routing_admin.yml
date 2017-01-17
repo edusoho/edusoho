@@ -495,14 +495,18 @@ admin_course_category:
     defaults: { _controller: AppBundle:Admin/Course:category }
     permissions: [admin_course_category_manage]
 
-admin_course_data:
-    path:  /course/{filter}/data
-    defaults: { _controller: AppBundle:Admin/Course:data , filter:'normal'}
+admin_course_set_data:
+    path:  /course_set/{filter}/data
+    defaults: { _controller: AppBundle:Admin/CourseSet:data , filter:'normal'}
+
+course_set_detail_data:
+   path:  /course_set/detail/data/{id}
+   defaults: { _controller: AppBundle:Admin/CourseSet:detailData }
 
 admin_course_lesson_data:
     path:  /course/lesson/data/{id}
     defaults: { _controller: AppBundle:Admin/Course:lessonData }
-    permissions: [admin_course_data]
+    permissions: [admin_course_set_data]
 
 # admin_course_disk:
 #     path: /course/disk

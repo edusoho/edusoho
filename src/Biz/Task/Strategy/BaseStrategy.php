@@ -56,6 +56,7 @@ class BaseStrategy
 
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
+            'fromCourseSetId',
             'seq',
             'mode',
             'categoryId',

@@ -246,7 +246,7 @@ admin:
                                     visable: ( course.status in ['closed', 'draft', 'published'])
                         admin_course_set_recommend_list:
                             name: 课程推荐
-                        admin_course_data:
+                        admin_course_set_data:
                             name: 课程统计
                 admin_open_course_manage:
                     name: 公开课管理
