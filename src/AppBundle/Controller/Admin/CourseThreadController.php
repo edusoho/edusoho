@@ -14,18 +14,9 @@ class CourseThreadController extends BaseController
         $conditions = $request->query->all();
 
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
-            $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['keyword']));
-            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-            if (count($conditions['courseIds']) == 0) {
-                return $this->render('admin/course-thread/index.html.twig', array(
-                    'paginator' => new Paginator($request, 0, 20),
-                    'threads' => array(),
-                    'users'=> array(),
-                    'courseSets' => array(),
-                    'courses' => array(),
-                    'tasks' => array(),
-                ));
-            }
+            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);
+            $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
+            $conditions['courseSetIds'] = !empty($conditions['courseSetIds']) ?: array(-1);
         }
 
         $paginator = new Paginator(

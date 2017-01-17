@@ -10,21 +10,13 @@ class CourseQuestionController extends BaseController
     public function indexAction(Request $request, $postStatus)
     {
         $conditions = $request->query->all();
+
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
-            $courses                 = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['keyword']));
-            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-            if (count($conditions['courseIds']) == 0) {
-                return $this->render('admin/course-question/index.html.twig', array(
-                    'paginator' => new Paginator($request, 0, 20),
-                    'questions' => array(),
-                    'users'     => array(),
-                    'courseSets' => array(),
-                    'courses'   => array(),
-                    'tasks'   => array(),
-                    'type'      => $postStatus
-                ));
-            }
+            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);
+            $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
+            $conditions['courseSetIds'] = !empty($conditions['courseSetIds']) ?: array(-1);
         }
+        
         $conditions['type'] = 'question';
         if ($postStatus == 'unPosted') {
             $conditions['postNum'] = 0;

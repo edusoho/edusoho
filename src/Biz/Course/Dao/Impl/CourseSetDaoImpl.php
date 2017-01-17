@@ -14,6 +14,14 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
         return $this->findInField('id', $ids);
     }
 
+    public function findLikeTitle($title)
+    {
+        $title = '%' . $title . '%';
+        $sql = "SELECT * FROM {$this->table} WHERE title LIKE ?";
+
+        return $this->db()->fetchAll($sql, array($title));
+    }
+
     public function declares()
     {
         return array(
