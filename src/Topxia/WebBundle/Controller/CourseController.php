@@ -100,7 +100,7 @@ class CourseController extends CourseBaseController
             $currentLesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
         }
 
-        return $this->render('TopxiaWebBundle:Course:old_archiveLesson.html.twig', array(
+        return $this->render('TopxiaWebBundle:Course:old-archive-lesson.html.twig', array(
             'course'        => $course,
             'lessons'       => $lessons,
             'currentLesson' => $currentLesson,
@@ -122,7 +122,8 @@ class CourseController extends CourseBaseController
 
         return $this->render('TopxiaWebBundle:Course:info.html.twig', array(
             'course' => $course,
-            'member' => $member
+            'member' => $member,
+            'tags'   => ArrayToolkit::column($this->getTagsByOwnerId($id), 'id')
         ));
     }
 
@@ -139,6 +140,7 @@ class CourseController extends CourseBaseController
         }
 
         return $this->render('TopxiaWebBundle:Course:lesson-list.html.twig', array(
+            'tags'   => ArrayToolkit::column($this->getTagsByOwnerId($id), 'id'),
             'course' => $course,
             'member' => $member
         ));
@@ -215,21 +217,12 @@ class CourseController extends CourseBaseController
             $this->dispatchEvent('course.view',
                 new Event($course, array('userId' => $user['id'])));
         }
-        $allTags = $this->getTagService()->findTagsByOwner(array(
-            'ownerType' => 'classroom',
-            'ownerId'   => $id
-        ));
-
-        $tags = array(
-            'tagIds' => ArrayToolkit::column($allTags, 'id'),
-            'count'  => count($allTags)
-        );
 
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
             'course' => $course,
             'member' => $member,
             'items'  => $items,
-            'tags'   => $tags
+            'tags'   => ArrayToolkit::column($this->getTagsByOwnerId($id), 'id')
         ));
     }
 
@@ -669,7 +662,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function deadlineReachAction(Request $request, $courseId)
+    public function deadlineReachAction(Request $request, $id)
     {
         $user = $this->getCurrentUser();
 
@@ -677,9 +670,9 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException($this->trans('不允许未登录访问'));
         }
 
-        $this->getCourseMemberService()->quitCourseByDeadlineReach($user['id'], $courseId);
+        $this->getCourseMemberService()->quitCourseByDeadlineReach($user['id'], $id);
 
-        return $this->redirect($this->generateUrl('course_show', array('id' => $courseId)));
+        return $this->redirect($this->generateUrl('course_show', array('id' => $id)));
     }
 
     public function listViewAction(Request $request, $courseId)

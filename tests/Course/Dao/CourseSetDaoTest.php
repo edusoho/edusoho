@@ -8,20 +8,20 @@ class CourseSetDaoTest extends BaseDaoTestCase
 {
     public function testSearch()
     {
-        $factor = array();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
-        $factor[] = $this->mockDataObject();
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
 
         $testConditions = array(
             array(
                 'condition' => array('id' => range(1, 3)),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 3
             ),
             array(
                 'condition' => array('status' => 'draft'),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 3
             )
         );
@@ -31,14 +31,14 @@ class CourseSetDaoTest extends BaseDaoTestCase
 
     public function testFindByIds()
     {
-        $factor = array();
+        $expected = array();
         for ($i = 0; $i < 10; $i++) {
-            $factor[] = $this->mockDataObject();
+            $expected[] = $this->mockDataObject();
         }
         
         $res = $this->getDao()->findByIds(range(1, 10));
 
-        $this->assertEquals($factor, $res);
+        $this->assertEquals($expected, $res);
     }
 
     protected function getDefaultMockFields()

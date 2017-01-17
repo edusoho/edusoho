@@ -2629,6 +2629,14 @@ my_course_show:
     path:  /my/course/{id}/{tab}
     defaults: { _controller: AppBundle:My/Course:show, tab: 'tasks' }
 
+course_member_expired:
+    path:  /course/{id}/member/expired
+    defaults: { _controller: AppBundle:Course/Course:memberExpired }
+
+course_member_deadline_reach:
+    path:  /course/{id}/member/deadline/reach
+    defaults: { _controller: TopxiaWebBundle:Course:deadlineReach }
+
 course_buy:
    path: /course/{id}/buy
    defaults: { _controller: AppBundle:Course/CourseOrder:buy }
@@ -2641,9 +2649,12 @@ course_order_repay:
    path:  /course/order/repay
    defaults: { _controller: AppBundle:Course/CourseOrder:repay }
 
-
-
 # last route
 course_show:
   path: /course/{id}/{tab}
   defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }
+
+#更新日志列表
+changelog_list:
+    path: /changelog/list
+    defaults: { _controller: AppBundle:Changelog:list }

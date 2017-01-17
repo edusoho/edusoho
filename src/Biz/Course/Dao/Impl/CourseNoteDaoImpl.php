@@ -48,6 +48,7 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
                 'status = :status',
                 'content LIKE :content',
                 'courseId IN (:courseIds)',
+                'courseSetId IN (:courseSetIds)',
                 'courseSetId = :courseSetId'
             ),
             'orderbys' => array(

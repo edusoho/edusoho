@@ -2,9 +2,14 @@
 
 {% block course_heard_content %}
   {% set course_set = data('CourseSet', {id: course.courseSetId}) %}
-    
+
   <div class="course-detail-bottom">
     <div class="course-detail-img">
+      {% if previewTask|default(null) %}
+        <a href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:course.id, id:previewTask.id}) }}" class="course-img-cover">
+          <i class="es-icon es-icon-playcircleoutline"></i>
+        </a>
+      {% endif %}
       <img class="img-responsive"
            src=" {% if not  course.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(course.cover.large) }} {% endif %}"
            alt="{{ course.title }} ">
@@ -22,7 +27,7 @@
         <span class="course-detail-title inline-block">价格</span>
         <!-- 折扣价 -->
         {#<span class="gray-darker mrm">¥<b class="text-24">75.00</b></span>#}
-        <span class="gray-darker mrm">¥<b class="text-24">{{ course.price }}</b></span>
+        <span class="gray-darker mrm">¥<b class="text-24">{{ course.price|currency }}</b></span>
         <!-- 原价 -->
         {#<span class="original-price">¥<span class="price">{{ course.price }}</span></span>#}
         {#<span class="tag-discount"><span class="discount-font">8折</span></span>#}
@@ -63,8 +68,11 @@
 
         {% set serviceTags = services(course.services|default([])) %}
         {% for tag in serviceTags %}
-        <span class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5" data-container="body" data-trigger="hover" data-placement="top"
-              data-toggle="popover" title="{{tag.full_name}}{% if not tag.active %}<span class='text-12 color-gray'>(暂未提供)</span>{% endif %}" data-content="{{tag.summary}}">{{tag.short_name}}</span>          
+          <span class="lump-sm color-lump {% if tag.active %}bg-primary{% endif %} mr5" data-container="body"
+                data-trigger="hover" data-placement="top"
+                data-toggle="popover"
+                title="{{ tag.full_name }}{% if not tag.active %}<span class='text-12 color-gray'>(暂未提供)</span>{% endif %}"
+                data-content="{{ tag.summary }}">{{ tag.short_name }}</span>
         {% endfor %}
 
         {# <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top"

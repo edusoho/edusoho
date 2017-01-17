@@ -1,3 +1,4 @@
+var __URL_PROTOCOL = 'https:' == document.location.protocol ? 'https': 'http';
 
 seajs.config({
     alias: {
@@ -77,8 +78,8 @@ seajs.config({
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
         'video-player': 'balloon-video-player/1.3.0/index',
         'edusoho.tree': 'edusoho/tree/1.0.0/tree.js',
-        'video-player-new': (app.cloudSdkCdn ? app.cloudSdkCdn : '//service-cdn.qiqiuyun.net') + '/js-sdk/video-player/sdk-v1.js',
-        'new-uploader': (app.cloudSdkCdn ? app.cloudSdkCdn : '//service-cdn.qiqiuyun.net') + '/js-sdk/uploader/sdk-v1.js',
+        'video-player-new': __URL_PROTOCOL + ':' + (app.cloudSdkCdn ? app.cloudSdkCdn : '//service-cdn.qiqiuyun.net') + '/js-sdk/video-player/sdk-v1.js',
+        'new-uploader':  __URL_PROTOCOL + ':' + (app.cloudSdkCdn ? app.cloudSdkCdn : '//service-cdn.qiqiuyun.net') + '/js-sdk/uploader/sdk-v1.js',
         'subtitle-browser': 'subtitle/1.0.0/subtitle.browser.min.js',
         'echarts': 'gallery2/echarts/3.1.10/echarts',
         'echarts-debug':'gallery2/echarts/3.1.10/echarts-debug',

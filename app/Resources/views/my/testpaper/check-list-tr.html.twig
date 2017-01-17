@@ -4,10 +4,10 @@
     <br>
     <small class="text-muted">
       {% if courseSet|default(null) %}
-        {{ '来自课程《%title%》'|trans({'%title%':courseSet.title|default('')}) }} •
+        {{ '来自课程'|trans }}<a href="{{ path('course_set_show',{id:courseSet.id}) }}">《{{courseSet.title|default('')}}》</a> •
       {% endif %}
       {% if course|default(null) %}
-        {{ '计划《%title%》'|trans({'%title%':course.title|default('')}) }}
+        {{ '计划'|trans }}<a href="{{ path('course_show',{id:course.id}) }}">《{{ course.title|default('') }}》</a>
       {% endif %}
     </small>
     <small class="text-muted mhs">•</small>
