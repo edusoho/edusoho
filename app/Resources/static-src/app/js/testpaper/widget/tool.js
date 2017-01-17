@@ -40,7 +40,14 @@ export const onlyShowError = ()=> {
 	$('#showWrong').change((event)=>{
 		let $current =$(event.currentTarget);
 		$('.js-answer-notwrong').each(function (index,item) {  
-			$($(item).data('anchor')).slideToggle();
-		})
+			let $item = $($(item).data('anchor')).slideToggle();
+			// let $itemParent = $item.closest('js-testpaper-question-block');
+			// if($itemParent.find('.js-testpaper-question:visible').length<=0) {
+			// 	$itemParent.hide();
+			// }else {
+			// 	console.log('ok');
+			// 	$itemParent.show();
+			// }
+		});
 	})
 }
