@@ -1657,7 +1657,7 @@ course_set_manage_course_tasks:
 
 course_set_manage_course_marketing:
   path: /course_set/{courseSetId}/manage/course/{courseId}/marketing
-  defaults: {_controller: AppBundle:Course/CourseManage:marketing}
+  defaults: {_controller: AppBundle:Course/CourseMa/nage:marketing}
 
 course_set_manage_course_teachers:
   path: /course_set/{courseSetId}/manage/course/{courseId}/teachers

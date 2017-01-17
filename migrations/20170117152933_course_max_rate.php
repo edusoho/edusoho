@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class C2CourseSetCopy extends Migration
+class CourseMaxRate extends Migration
 {
     /**
      * Do the migration
@@ -12,7 +12,7 @@ class C2CourseSetCopy extends Migration
         $biz = $this->getContainer();
         $db  = $biz['db'];
         $db->exec("
-             ALTER TABLE `c2_course_set` ADD COLUMN  `parentId` int(10) DEFAULT 0 COMMENT '课程父id';
+             ALTER TABLE `c2_course` ADD COLUMN  `maxRate` tinyint(3) DEFAULT 0 COMMENT '最大抵扣百分比';
         ");
     }
 
@@ -24,7 +24,7 @@ class C2CourseSetCopy extends Migration
         $biz = $this->getContainer();
         $db  = $biz['db'];
         $db->exec("
-             ALTER TABLE `c2_course_set` DROP COLUMN  `parentId`;
+             ALTER TABLE `c2_course` DROP COLUMN  `maxRate`;
         ");
     }
 }

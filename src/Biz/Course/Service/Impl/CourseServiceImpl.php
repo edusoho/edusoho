@@ -165,6 +165,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $fields);
     }
 
+    public function updateMaxRate($id, $maxRate)
+    {
+        return $this->getCourseDao()->update($id, array('maxRate' => $maxRate));
+    }
+
     public function setCourseTeachers($courseId, $teachers)
     {
         $teacherMembers = array();
