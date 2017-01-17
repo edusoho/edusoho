@@ -11,7 +11,7 @@
         </a>
       {% endif %}
       <img class="img-responsive"
-           src=" {% if not  course.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(course.cover.large) }} {% endif %}"
+           src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(courseSet.cover.large) }} {% endif %}"
            alt="{{ course.title }} ">
       <div class="course-detail-remask">
         <i class="es-icon es-icon-people"></i><span class="mhs">{{ course_set.studentNum|default(0) }}</span>人加入学习
@@ -26,11 +26,11 @@
       <div class="mb10">
         <span class="course-detail-title inline-block">价格</span>
         <!-- 折扣价 -->
-        {#<span class="gray-darker mrm">¥<b class="text-24">75.00</b></span>#}
-        <span class="gray-darker mrm">¥<b class="text-24">{{ course.price|currency }}</b></span>
-        <!-- 原价 -->
-        {#<span class="original-price">¥<span class="price">{{ course.price }}</span></span>#}
-        {#<span class="tag-discount"><span class="discount-font">8折</span></span>#}
+        <span class="gray-darker mrm">¥<b class="text-24">{{ course.price }}</b></span>
+        {% if course.price < course.originPrice %}
+          <span class="original-price">¥<span class="price">{{ course.originPrice }}</span></span>
+          <span class="tag-discount"><span class="discount-font">xx折</span></span>
+        {% endif %}
       </div>
       <!-- 有活动显示  -->
       {#<div class="mb10">#}

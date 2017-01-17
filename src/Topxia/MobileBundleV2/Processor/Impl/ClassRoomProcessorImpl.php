@@ -311,7 +311,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $total   = $this->getClassroomReviewService()->searchReviewCount($conditions);
         $reviews = $this->getClassroomReviewService()->searchReviews(
         	$conditions, 
-        	array('createdTime', 'DESC' ),
+        	array('createdTime' => 'DESC' ),
         	$start, 
         	$limit
         );

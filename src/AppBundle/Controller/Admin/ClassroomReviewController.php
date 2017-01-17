@@ -13,6 +13,10 @@ class ClassroomReviewController extends BaseController
     {
         $conditions = $request->query->all();
 
+        if (empty($conditions['rating'])) {
+            unset($conditions['rating']);
+        }
+
         if (!empty($conditions['classroomTitle'])) {
             $classrooms                 = $this->getClassroomService()->findClassroomsByLikeTitle(trim($conditions['classroomTitle']));
             $conditions['classroomIds'] = ArrayToolkit::column($classrooms, 'id');

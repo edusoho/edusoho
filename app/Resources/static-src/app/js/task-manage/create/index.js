@@ -98,7 +98,6 @@ class Editor {
             }
           });
         }
-
         let html = response;
         let chapterId = postData.find(function (input) {
           return input.name == 'chapterId';

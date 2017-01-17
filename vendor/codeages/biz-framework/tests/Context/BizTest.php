@@ -80,7 +80,6 @@ class BizTest extends \PHPUnit_Framework_TestCase
         $dao2 = $biz->dao('TestProject:Example:ExampleDao');
         $this->assertEquals($dao1, $dao2);
     }
-    
 }
 
 class BizTestServiceProvider1 implements ServiceProviderInterface
