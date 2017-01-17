@@ -15,6 +15,8 @@ class TaskManageController extends BaseController
         $course     = $this->tryManageCourse($courseId);
         $categoryId = $request->query->get('categoryId');
         $chapterId  = $request->query->get('chapterId');
+        $taskMode   = $request->query->get('type');
+
         if ($request->isMethod('POST')) {
             $task                    = $request->request->all();
             $task['_base_url']       = $request->getSchemeAndHttpHost();
@@ -35,7 +37,7 @@ class TaskManageController extends BaseController
         }
 
         return $this->render('task-manage/modal.html.twig', array(
-            'mode'       => 'create',
+            'mode'       => $taskMode,
             'course'     => $course,
             'categoryId' => $categoryId,
             'chapterId'  => $chapterId
@@ -46,6 +48,7 @@ class TaskManageController extends BaseController
     {
         $course   = $this->tryManageCourse($courseId);
         $task     = $this->getTaskService()->getTask($id);
+        $taskMode   = $request->query->get('type');
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在计划中');
         }
@@ -60,7 +63,7 @@ class TaskManageController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         return $this->render('task-manage/modal.html.twig', array(
-            'mode'                => 'edit',
+            'mode'                => $taskMode,
             'currentType'         => $activity['mediaType'],
             'course'              => $course,
             'task'                => $task,
