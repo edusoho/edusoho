@@ -395,8 +395,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function prepareThreadSearchConditions($conditions)
     {
-        foreach ($conditions as $key => $val) {
-            if (empty($val)) {
+        foreach ($conditions as $key => $value) {
+            if (empty($value)) {
                 unset($conditions[$key]);
             }
         }

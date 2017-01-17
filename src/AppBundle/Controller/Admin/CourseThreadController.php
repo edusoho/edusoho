@@ -33,7 +33,7 @@ class CourseThreadController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($threads, 'courseSetId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
-        $tasks = $this->getCourseService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
+        $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
 
         return $this->render('admin/course-thread/index.html.twig', array(
             'paginator' => $paginator,
@@ -73,5 +73,10 @@ class CourseThreadController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }
