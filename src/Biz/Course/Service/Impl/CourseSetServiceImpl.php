@@ -14,6 +14,12 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
+
+    public function findCourseSetsByParentIdAndLocked($parentId, $locked)
+    {
+        return $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($parentId, $locked);
+    }
+
     public function recommendCourse($id, $number)
     {
         $course = $this->tryManageCourseSet($id);
