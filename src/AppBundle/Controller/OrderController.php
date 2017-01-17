@@ -34,7 +34,7 @@ class OrderController extends BaseController
             return $this->createMessageResponse('error', '参数不正确');
         }
 
-        $processor = OrderProcessorFactory::create($this->getBiz(), $targetType);
+        $processor = OrderProcessorFactory::create($targetType);
         $checkInfo = $processor->preCheck($targetId, $currentUser['id']);
 
         if (isset($checkInfo['error'])) {
@@ -142,7 +142,7 @@ class OrderController extends BaseController
             $cashRate = $coinSetting["cash_rate"];
         }
 
-        $processor = OrderProcessorFactory::create($this->getBiz(),$targetType);
+        $processor = OrderProcessorFactory::create($targetType);
 
         try {
             if (!isset($fields["couponCode"]) || (isset($fields["couponCode"]) && $fields["couponCode"] == '请输入优惠券')) {

@@ -39,7 +39,7 @@ class PayCenterController extends BaseController
         $orderInfo['sn']         = $fields['sn'];
         $orderInfo['targetType'] = $fields['targetType'];
         $orderInfo['isMobile']   = $this->isMobileClient();
-        $processor               = OrderProcessorFactory::create($this->getBiz(), $fields['targetType']);
+        $processor               = OrderProcessorFactory::create($fields['targetType']);
         $orderInfo['template']   = $processor->getOrderInfoTemplate();
         $order                   = $processor->getOrderBySn($orderInfo['sn']);
         $targetId                = isset($order['targetId']) ? $order['targetId'] : '';
@@ -116,7 +116,7 @@ class PayCenterController extends BaseController
 
     public function redirectOrderTarget($order)
     {
-        $processor = OrderProcessorFactory::create($this->getBiz(), $order['targetType']);
+        $processor = OrderProcessorFactory::create($order['targetType']);
         $goto      = $processor->callbackUrl($order, $this->container);
 
         return $this->render('pay-center/pay-return.html.twig', array(
@@ -141,7 +141,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
 
-        $order = OrderProcessorFactory::create($this->getBiz(), $fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment']));
+        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields['orderId'], array('payment' => $fields['payment']));
 
         if ($user['id'] != $order['userId']) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -276,13 +276,13 @@ class PayCenterController extends BaseController
         } else {
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
-        list($success, $order) = OrderProcessorFactory::create($this->getBiz(), $order['targetType'])->pay($payData);
+        list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
         if (!$success) {
             return $this->redirect($this->generateUrl("pay_error"));
         }
 
-        $processor = OrderProcessorFactory::create($this->getBiz(), $order['targetType']);
+        $processor = OrderProcessorFactory::create($order['targetType']);
 
         $goto = $processor->callbackUrl($order, $this->container);
 
@@ -325,7 +325,7 @@ class PayCenterController extends BaseController
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
 
-        $processor = OrderProcessorFactory::create($this->getBiz(), $order['targetType']);
+        $processor = OrderProcessorFactory::create($order['targetType']);
 
         if ($payData['status'] == 'success') {
             list($success, $order) = $processor->pay($payData);
@@ -360,7 +360,7 @@ class PayCenterController extends BaseController
         $orderId = $request->query->get('id');
         $order   = $this->getOrderService()->getOrder($orderId);
 
-        $processor = OrderProcessorFactory::create($this->getBiz(), $order['targetType']);
+        $processor = OrderProcessorFactory::create($order['targetType']);
         $router    = $processor->callbackUrl($order, $this->container);
 
         return $this->render('pay-center/pay-return.html.twig', array(
@@ -412,7 +412,7 @@ class PayCenterController extends BaseController
                 $payData['paidTime'] = time();
                 $payData['sn']       = $returnArray['out_trade_no'];
 
-                list($success, $order) = OrderProcessorFactory::create($this->getBiz(), $order['targetType'])->pay($payData);
+                list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
                 if ($success) {
                     return $this->createJsonResponse(true);
@@ -432,7 +432,7 @@ class PayCenterController extends BaseController
     {
         $options       = $this->getPaymentOptions($order['payment']);
         $request       = Payment::createRequest($order['payment'], $options);
-        $processor     = OrderProcessorFactory::create($this->getBiz(), $order['targetType']);
+        $processor     = OrderProcessorFactory::create($order['targetType']);
         $targetId      = isset($order['targetId']) ? $order['targetId'] : $order['id'];
         $requestParams = array_merge($requestParams, array(
             'orderSn'     => $order['sn'],
@@ -458,7 +458,7 @@ class PayCenterController extends BaseController
 
     public function generateOrderToken($order, $params)
     {
-        $processor = OrderProcessorFactory::create($this->getBiz(), $order['targetType']);
+        $processor = OrderProcessorFactory::create($order['targetType']);
 
         return $processor->updateOrder($order['id'], array('token' => $params['agent_bill_id']));
     }
