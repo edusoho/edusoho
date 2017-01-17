@@ -549,6 +549,10 @@ my_teaching_classrooms:
     path: /my/teaching/classrooms
     defaults: { _controller: AppBundle:My/Classroom:teaching }
 
+my_live_courses_learning:
+    path: /my/learning/live
+    defaults: { _controller: AppBundle:My/CourseSet:live }
+
 my_testpaper_check_list:
     path: /my/testpaper/check/{status}
     defaults: { _controller: AppBundle:My/Testpaper:checkList, status: 'reviewing' }

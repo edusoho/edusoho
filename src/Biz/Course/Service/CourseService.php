@@ -10,6 +10,8 @@ interface CourseService
 
     public function findCoursesByIds($ids);
 
+    public function findCoursesByCourseSetIds(array $setIds);
+
     public function findPublishedCoursesByCourseSetId($courseSetId);
 
     public function findCoursesByCourseSetId($courseSetId);

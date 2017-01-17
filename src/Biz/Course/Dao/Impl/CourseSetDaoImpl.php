@@ -23,6 +23,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'categoryId = :categoryId',
                 'title LIKE :title',
                 'creator LIKE :creator',
+                'recommended = :recommended',
                 'type = :type'
             ),
             'serializes' => array(
@@ -32,7 +33,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'cover'     => 'json'
             ),
             'orderbys' => array(
-                'createdTime'
+                'createdTime', 'recommendedSeq', 'hitNum', 'recommendedTime', 'rating', 'studentNum'
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime'
