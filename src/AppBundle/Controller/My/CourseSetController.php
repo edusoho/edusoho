@@ -79,7 +79,7 @@ class CourseSetController extends CourseBaseController
         ));
     }
 
-    public function liveAction(Request $request)
+    public function livesAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
 

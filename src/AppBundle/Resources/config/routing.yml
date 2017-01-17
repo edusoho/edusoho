@@ -551,7 +551,7 @@ my_teaching_classrooms:
 
 my_live_courses_learning:
     path: /my/learning/live
-    defaults: { _controller: AppBundle:My/CourseSet:live }
+    defaults: { _controller: AppBundle:My/CourseSet:lives }
 
 my_testpaper_check_list:
     path: /my/testpaper/check/{status}
