@@ -11,7 +11,7 @@
         </a>
       {% endif %}
       <img class="img-responsive"
-           src=" {% if not  course.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(course.cover.large) }} {% endif %}"
+           src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(courseSet.cover.large) }} {% endif %}"
            alt="{{ course.title }} ">
       <div class="course-detail-remask">
         <i class="es-icon es-icon-people"></i><span class="mhs">{{ course_set.studentNum|default(0) }}</span>人加入学习
