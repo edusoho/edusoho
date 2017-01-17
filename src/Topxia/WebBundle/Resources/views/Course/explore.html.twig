@@ -95,7 +95,8 @@
     </div>
   </div>
   {% if not mobile %}
-  <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+    <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+  {% endif %}
 {% endblock %}
 
 {% block bottom %}
