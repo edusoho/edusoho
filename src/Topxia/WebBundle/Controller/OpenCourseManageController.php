@@ -302,7 +302,8 @@ class OpenCourseManageController extends BaseController
         return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
             'users'   => $users,
             'courses' => $courses,
-            'filter'  => $filter
+            'filter'  => $filter,
+            'paginator' => $paginator
         ));
     }
 
