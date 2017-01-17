@@ -58,10 +58,10 @@
               <li class="hidden-lg"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>{{'通知'|trans}}</a></li>
               <li class="hidden-lg"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>{{'私信'|trans}}</a></li>
               {% if mobile %}
-                <li class="mobile-switch js-switch-pc"><a href="javascript:;">
+                <li class="mobile-switch js-switch-pc visible-xs"><a href="javascript:;">
                   <i class="es-icon es-icon-qiehuan"></i>{{'切换电脑版'|trans}}</a></li>
               {% else %}
-                <li class="mobile-switch js-switch-mobile"><a href="javascript:;">
+                <li class="mobile-switch js-switch-mobile visible-xs"><a href="javascript:;">
                   <i class="es-icon es-icon-qiehuan"></i>{{'切换触屏版'|trans}}</a></li>
               {% endif %}
               <li class="user-nav-li-logout"><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'退出登录'|trans}}</a></li>
