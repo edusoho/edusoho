@@ -56,7 +56,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
     public function declares()
     {
         return array(
-            'createdTime' => array('createdTime'),
+            'timestamps' => array('createdTime'),
             'orderbys'    => array('createdTime'),
             'conditions'  => array(
                 'updatedTime >= :updatedTime_GE',
