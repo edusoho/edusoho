@@ -50,29 +50,34 @@ class RecentLiveCourseSetsDataTag extends CourseBaseDataTag implements DataTag
             1000
         );
 
-        $courses       = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentTasks, 'courseId'));
-        $courses       = ArrayToolkit::index($courses, 'id');
-        $recentCourses = array();
+        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentTasks, 'courseId'));
+        $courses = ArrayToolkit::index($courses, 'id');
+
+        $courseSetIds     = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets       = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets       = ArrayToolkit::index($courseSets, 'id');
+        $recentCourseSets = array();
 
         foreach ($recentTasks as $task) {
-            $course = $courses[$task['courseId']];
-            if ($course['status'] != 'published') {
+            $course    = $courses[$task['courseId']];
+            $courseSet = $courseSets[$course['courseSetId']];
+            if ($courseSet['status'] != 'published') {
                 continue;
             }
-            if ($course['parentId'] != 0) {
+            if ($courseSet['parentId'] != 0) {
                 continue;
             }
-            $course['task']     = $task;
-            $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
+            $courseSet['task']     = $task;
+            $courseSet['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
-            if (count($recentCourses) >= $count) {
+            if (count($recentCourseSets) >= $count) {
                 break;
             }
 
-            $recentCourses[] = $course;
+            $recentCourseSets[] = $courseSet;
         }
 
-        return $this->getCourseTeachersAndCategories($recentCourses);
+        return $this->fillCourseSetTeachersAndCategoriesAttribute($recentCourseSets);
     }
 
     protected function getSettingService()

@@ -1,5 +1,5 @@
-{% set RecentLiveCourses = data('RecentLiveCourseSets',{ 'count':4}) %}
-{% if RecentLiveCourses %}
+{% set RecentLiveCourseSets = data('RecentLiveCourseSets',{ 'count':4}) %}
+{% if RecentLiveCourseSets %}
   <section class="live-course-section {{config.background|default("")}}">
     <div class="container">
       <div class="text-line gray">
@@ -8,12 +8,11 @@
       </div>
       <div class="course-list"> 
         <div class="row"> 
-          {% for course in RecentLiveCourses %} 
+          {% for courseSet in RecentLiveCourseSets %}
             <div class="col-lg-3 col-md-4 col-xs-6">
-              {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' with {course:course} %} 
-
-              {% set lesson = course['lesson']|default(null) %}
-              {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+              {% include 'course/widgets/course-grid.html.twig' with {courseSet: courseSet} %}
+              {% set task = courseSet['task']|default(null) %}
+              {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
                 <div class="course-date visible-lg">
                   <div class="btn-circle btn-live  btn-circle-md">
                     <i class="es-icon es-icon-videocam"></i>
@@ -28,7 +27,7 @@
                     <i class="es-icon es-icon-videocam"></i>
                   </div>
                   <div class="date">
-                    {{ lesson.startTime|date('n月j日 H:i') }}
+                    {{ task.startTime|date('n月j日 H:i') }}
                   </div>
                 </div>
               {% endif %}
@@ -36,7 +35,7 @@
             </div>
           {% endfor %}
 
-          {% set emptyCourseNum = 4 - RecentLiveCourses|length %}
+          {% set emptyCourseNum = 4 - RecentLiveCourseSets|length %}
           {% if emptyCourseNum > 0 %}
             {% for i in range(1, emptyCourseNum) %}
               <div class="col-lg-3 col-md-4 col-sm-6 visible-lg">
@@ -56,7 +55,7 @@
         </div>
       </div>
       <div class="section-more-btn">
-        <a href="{{ path('live_course_explore') }}" class="btn btn-default btn-lg">
+        <a href="{# path('live_course_explore') #}" class="btn btn-default btn-lg">
           {{'更多直播'|trans}} <i class="mrs-o es-icon es-icon-chevronright"></i>
         </a>
       </div>
