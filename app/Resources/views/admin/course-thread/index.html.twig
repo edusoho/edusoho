@@ -57,8 +57,9 @@
       <body>
         {% for thread in threads %}
           {% set author = users[thread.userId]|default(null) %}
+          {% set courseSet = courseSets[thread.courseSetId]|default(null) %}
           {% set course = courses[thread.courseId]|default(null) %}
-          {% set lesson = lessons[thread.lessonId]|default(null) %}
+          {% set task = tasks[thread.taskId]|default(null) %}
           <tr data-role="item">
             <td><input value="{{thread.id}}" type="checkbox" data-role="batch-item"> </td>
             <td>
@@ -74,23 +75,29 @@
               </div>
               
               <div class="text-sm mts">
+                {% if courseSet %}
+                  <a href="{{ path('course_set_show', {id:courseSet.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
+                {% endif %}
+
                 {% if course %}
+                  <span class="text-muted mhs">&raquo;</span>
                   <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
-                  {% if lesson %}
-                    <span class="text-muted mhs">&raquo;</span>
-                    <a class="text-success"  href="{{ path('course_learn', {id:lesson.courseId}) }}#lesson/{{lesson.id}}" target="_blank">{{'课时'|trans}}{{lesson.number}}：{{ lesson.title }}</a>
-                  {% endif %}
+                {% endif %}
+
+                {% if task %}
+                  <span class="text-muted mhs">&raquo;</span>
+                  <a class="text-success"  href="{{ path('course_task_show', {courseId:thread.courseId, id:task.id}) }}" target="_blank">{{'任务'|trans}}{{task.number}}：{{ task.title }}</a>
                 {% endif %}
               </div>
             </td>
             <td><span class="text-sm">{{ thread.postNum }} / {{ thread.hitNum }}</span></td>
             <td>
               {% if course %}
-                <a href="javascript:;" data-set-url="{{ path('course_thread_elite', {courseId:course.id, id:thread.id}) }}" data-cancel-url="{{ path('course_thread_unelite', {courseId:course.id, id:thread.id}) }}" class="promoted-label">
+                <a href="javascript:;" data-set-url="{{ path('course_thread_elite', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unelite', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label">
                   <span class="label {% if thread.isElite %}label-success{% else %}label-default{% endif %}">{{'精'|trans}}</span>
                 </a>
               
-                <a href="javascript:;" data-set-url="{{ path('course_thread_stick', {courseId:course.id, id:thread.id}) }}" data-cancel-url="{{ path('course_thread_unstick', {courseId:course.id, id:thread.id}) }}" class="promoted-label">
+                <a href="javascript:;" data-set-url="{{ path('course_thread_stick', {courseId:course.id, threadId:thread.id}) }}" data-cancel-url="{{ path('course_thread_unstick', {courseId:course.id, threadId:thread.id}) }}" class="promoted-label">
                   <span class="label {% if thread.isStick %}label-success{% else %}label-default{% endif %}">{{'顶'|trans}}</span>
                 </a>
               {% endif %}

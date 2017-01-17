@@ -3,12 +3,14 @@ namespace AppBundle\Controller\Classroom;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomReviewService;
 
 class ReviewController extends BaseController
 {
-    public function listAction(Request $request, $id)
+    public function listAction($id)
     {
         $classroom = $this->getClassroomService()->getClassroom($id);
 
@@ -17,12 +19,12 @@ class ReviewController extends BaseController
         $user = $this->getCurrentUser();
 
         $classroomSetting = $this->setting('classroom', array());
-        $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->trans('班级');
+        $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', $this->trans("非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服", array('%classroomName%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         $conditions = array(
@@ -39,7 +41,7 @@ class ReviewController extends BaseController
 
         $reviews = $this->getClassroomReviewService()->searchReviews(
             $conditions,
-            array('createdTime'=>'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -100,7 +102,7 @@ class ReviewController extends BaseController
         $postNum = $this->getClassroomReviewService()->searchReviewCount(array('parentId' => $reviewId));
 
         if ($postNum >= 5) {
-            return $this->createJsonResponse(array('error' => $this->trans('回复数量已达5条上限，不能再回复')));
+            return $this->createJsonResponse(array('error' => '回复数量已达5条上限，不能再回复'));
         }
 
         $user = $this->getCurrentUser();
@@ -120,7 +122,7 @@ class ReviewController extends BaseController
         ));
     }
 
-    public function deleteAction(Request $request, $reviewId)
+    public function deleteAction($reviewId)
     {
         $this->getClassroomReviewService()->deleteReview($reviewId);
         return $this->createJsonResponse(true);
@@ -138,11 +140,17 @@ class ReviewController extends BaseController
         return 0;
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ClassroomReviewService
+     */
     private function getClassroomReviewService()
     {
         return $this->createService('Classroom:ClassroomReviewService');

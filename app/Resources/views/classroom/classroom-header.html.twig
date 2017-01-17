@@ -83,7 +83,11 @@
               </span>
             </li>
           {% if classroomMemberLevel and  classroom.showable %}
-            <li class="hidden-xs color-warning icon-vip" title="{{'会员%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="{{'会员%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}" title="{{'会员%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}">
+            <li 
+              class="hidden-xs color-warning icon-vip" 
+              title="{{'会员%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" 
+              data-original-title="{{'会员%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}" 
+              title="{{'会员%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}">
               <i class="es-icon es-icon-crown"></i><br>
                 {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
             </li>
@@ -119,6 +123,7 @@
   </div>
 </section>            
 
-{% if is_plugin_installed('ClassroomPlan') %}
+{# {% if is_plugin_installed('ClassroomPlan') %}
   {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}
 {% endif %}    
+ #}

@@ -16,10 +16,9 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'ats' => 'json'
             ),
             'orderbys'   => array(
-                'isStick',
-                'latestPostTime',
+                'sticky',
                 'createdTime',
-                'latestPostTime',
+                'lastPostTime',
                 'hitNum'
             ),
             'conditions' => array(
