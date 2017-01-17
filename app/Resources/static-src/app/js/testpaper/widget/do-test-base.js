@@ -22,8 +22,8 @@ class DoTestBase
     this.$container.on('click','.js-testpaper-question-list li',event=>this._choiceList(event));
     this.$container.on('click','*[data-anchor]',event=>this._quick2Question(event));
     this.$container.find('.js-testpaper-question-label').on('click','input',event=>this._choiceLable(event));
-    this.$container.on('click','.js-marking-toggle',event=>this._markingToggle(event));
-    this.$container.on('click','.js-favorite-toggle',event=>this._favoriteToggle(event));
+    this.$container.on('click','.js-marking',event=>this._markingToggle(event));
+    this.$container.on('click','.js-favorite',event=>this._favoriteToggle(event));
     this.$container.on('click','.js-analysis-toggle',event=>this._analysisToggle(event));
     this.$container.on('blur','[data-type="fill"]',event=>this.fillChange(event));
   }
@@ -34,24 +34,28 @@ class DoTestBase
   }
 
   _markingToggle(event) {
-    let $current = this._viewToggle(event);
-    let id = $current.closest('.testpaper-question').attr('id');
-    $(`a[data-anchor="#${id}"]`).toggleClass("have-pro");
+    let $current = $(event.currentTarget).addClass('hidden');
+    $current.siblings('.js-marking.hidden').removeClass('hidden');
+    let id = $current.closest('.js-testpaper-question').attr('id');
+    console.log($(`[data-anchor="#${id}"]`));
+    $(`[data-anchor="#${id}"]`).find('.js-marking-card').toggleClass("hidden");
   }
 
   _favoriteToggle(event) {
-    let $current = this._viewToggle(event);
+    let $current = $(event.currentTarget);
+    let data ={
+      targetType:$current.data('targetType'),
+      targetId:$current.data('targetId'),
+      questionId:$current.data('questionId'),
+    }
+    $.post($current.data('url'),{data},function (html) {  
+      $current.addClass('hidden').siblings('.js-favorite.hidden').removeClass('hidden');
+    })
   }
 
   _analysisToggle(event) {
     let $current = this._viewToggle(event);
     $current.closest('.js-testpaper-question').find('.js-testpaper-question-analysis').slideToggle();
-  }
-
-  _viewToggle(event) {
-    let  $this = $(event.currentTarget).toggleClass('active');
-    let  $current  =  $this.children(':hidden');
-    return $current;
   }
 
   _initUsedTimer() {

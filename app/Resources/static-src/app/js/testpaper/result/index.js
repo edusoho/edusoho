@@ -1,10 +1,11 @@
 import DoTestBase from '../widget/do-test-base';
-import { initScrollbar,testpaperCardFixed,testpaperCardLocation,onlyShowError } from '../widget/tool';
+import { initScrollbar,testpaperCardFixed,testpaperCardLocation,onlyShowError,initWatermark } from '../widget/part';
 
 initScrollbar();
 testpaperCardFixed();
 testpaperCardLocation();
 onlyShowError();
+initWatermark();
 
 class ShowResult extends DoTestBase {
   constructor($container) {

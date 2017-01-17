@@ -1,5 +1,5 @@
 import DoTestBase from '../widget/do-test-base';
-import { initScrollbar,testpaperCardFixed,testpaperCardLocation } from '../widget/tool';
+import { initScrollbar,testpaperCardFixed,testpaperCardLocation,initWatermark } from '../widget/part';
 
 
 
@@ -13,6 +13,7 @@ class DoTestpaper extends DoTestBase {
 
   _init() {
     initScrollbar();
+    initWatermark();
     testpaperCardFixed();
     testpaperCardLocation();
     this._initTimer();
