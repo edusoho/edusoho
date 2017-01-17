@@ -16,8 +16,7 @@ class CourseReviewController extends BaseController
         }
 
         if (!empty($conditions['courseTitle'])) {
-            $courseSetCondtions = array('title' => '%'.trim($conditions['courseTitle'].'%'));
-            $courseSets = $this->getCourseSetService()->searchCourseSets($courseSetCondtions, array(), 0, PHP_INT_MAX);
+            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['courseTitle']);
             $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
             unset($conditions['courseTitle']);
             $conditions['courseSetIds'] = $conditions['courseSetIds'] ? : array(-1);

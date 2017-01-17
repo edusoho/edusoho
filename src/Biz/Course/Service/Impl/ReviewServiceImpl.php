@@ -92,7 +92,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         }
 
         if (!empty($conditions['content'])) {
-            $conditions['content'] = "%{$conditions['content']}%";
+            $conditions['content'] = "{$conditions['content']}";
         }
 
         return $conditions;
