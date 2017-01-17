@@ -51,7 +51,7 @@ class YoukuVideoItemParser extends AbstractItemParser
         $item['page'] = "http://v.youku.com/v_show/id_{$videoId}.html";
         $item['pictures'] = empty($query['pic']) ? array() : array('url' => $query['pic']);
         $item['files'] = array(
-            array('url' => "http://player.youku.com/player.php/sid/{$videoId}/v.swf", 'type' => 'swf'),
+            array('url' => "//player.youku.com/player.php/sid/{$videoId}/v.swf", 'type' => 'swf'),
         );
 
         return $item;

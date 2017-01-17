@@ -26,14 +26,15 @@ class OrderController extends BaseController
 
         $targetType = $request->query->get('targetType');
         $targetId   = $request->query->get('targetId');
-        $orderTypes  = JoinPointToolkit::load('order');
+        $orderTypes = JoinPointToolkit::load('order');
         if (empty($targetType)
             || empty($targetId)
-            || !array_key_exists($targetType, $orderTypes)) {
+            || !array_key_exists($targetType, $orderTypes)
+        ) {
             return $this->createMessageResponse('error', '参数不正确');
         }
 
-        $processor = OrderProcessorFactory::create($targetType);
+        $processor = OrderProcessorFactory::create($this->getBiz(), $targetType);
         $checkInfo = $processor->preCheck($targetId, $currentUser['id']);
 
         if (isset($checkInfo['error'])) {
@@ -43,7 +44,7 @@ class OrderController extends BaseController
         $fields    = $request->query->all();
         $orderInfo = $processor->getOrderInfo($targetId, $fields);
 
-        if (((float) $orderInfo["totalPrice"]) == 0) {
+        if (((float)$orderInfo["totalPrice"]) == 0) {
             $formData               = array();
             $formData['userId']     = $currentUser["id"];
             $formData["targetId"]   = $fields["targetId"];
@@ -76,7 +77,7 @@ class OrderController extends BaseController
 
         $orderInfo['verifiedMobile'] = $verifiedMobile;
         $orderInfo['hasPassword']    = strlen($currentUser['password']) > 0;
-        
+
         return $this->render('order/order-create.html.twig', $orderInfo);
     }
 
@@ -152,8 +153,8 @@ class OrderController extends BaseController
 
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
 
-            $amount         = (string) ((float) $amount);
-            $shouldPayMoney = (string) ((float) $fields["shouldPayMoney"]);
+            $amount         = (string)((float)$amount);
+            $shouldPayMoney = (string)((float)$fields["shouldPayMoney"]);
             //价格比较
 
             if (intval($totalPrice * 100) != intval($fields["totalPrice"] * 100)) {
@@ -172,7 +173,7 @@ class OrderController extends BaseController
             $maxRate   = $coinSetting['cash_model'] == "deduction" && isset($target["maxRate"]) ? $target["maxRate"] : 100;
             $priceCoin = $priceType == 'RMB' ? NumberToolkit::roundUp($totalPrice * $cashRate) : $totalPrice;
 
-            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float) $fields['coinPayAmount'] * $maxRate) > intval($priceCoin * $maxRate))) {
+            if ($coinEnabled && isset($fields['coinPayAmount']) && (intval((float)$fields['coinPayAmount'] * $maxRate) > intval($priceCoin * $maxRate))) {
                 return $this->createMessageResponse('error', '虚拟币抵扣超出限定，不能创建订单!');
             }
 

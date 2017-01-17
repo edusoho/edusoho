@@ -273,14 +273,12 @@ class TestpaperController extends BaseController
 
             $paperResult = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
-            $goto = $this->generateUrl('testpaper_result_show', array('resultId' => $paperResult['id']));
-
             if ($testpaperActivity['finishCondition']['type'] == 'submit') {
-                $response = array('result' => true, 'message' => '', 'goto' => $goto);
+                $response = array('result' => true, 'message' => '');
             } elseif ($testpaperActivity['finishCondition']['type'] == 'score' && $paperResult['status'] == 'finished' && $paperResult['score'] > $testpaperActivity['finishCondition']['finishScore']) {
-                $response = array('result' => true, 'message' => '', 'goto' => $goto);
+                $response = array('result' => true, 'message' => '');
             } else {
-                $response = array('result' => false, 'message' => '', 'goto' => $goto);
+                $response = array('result' => false, 'message' => '');
             }
 
             return $this->createJsonResponse($response);

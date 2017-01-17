@@ -6,13 +6,21 @@ export const closeCourse = () => {
     if (!confirm(Translator.trans('是否确定关闭该教学计划？'))) {
       return;
     }
-    $.post($(evt.currentTarget).data('url'), function(data) {
-      if (data.success) {
-        notify('success', '关闭成功');
-        location.reload();
-      } else {
-        notify('danger', '关闭失败：' + data.message);
+
+    $.post($(evt.currentTarget).data('check-url'), function(data) {
+      if (data.warn) {
+        if (!confirm(Translator.trans(data.message))) {
+          return;
+        }
       }
+      $.post($(evt.currentTarget).data('url'), function(data) {
+        if (data.success) {
+          notify('success', '关闭成功');
+          location.reload();
+        } else {
+          notify('danger', '关闭失败：' + data.message);
+        }
+      });
     });
   });
 }

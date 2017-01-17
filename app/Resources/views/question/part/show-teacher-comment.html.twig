@@ -2,8 +2,8 @@
 	
 	<div class="form-group {% if not showScore|default(1) %}hidden{% endif %}">
 		<label class="col-sm-2 control-label">{{'得分'|trans}}</label>
-		<div class="col-sm-3 controls">
-			<input type="text" class="form-control" placeholder="{{'得分'|trans}}" name="score_{{ question.id }}" data-score="{{ question.score }}" data-type="{{ question.type }}" data-id="{{ question.id }}" value="">
+		<div class="col-sm-8 controls">
+			<input type="text" class="form-control width-150" placeholder="{{'得分'|trans}}" name="score_{{ question.id }}" data-score="{{ question.score }}" data-type="{{ question.type }}" data-id="{{ question.id }}" value="">
 		</div>
 	</div>
 	

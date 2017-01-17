@@ -3390,7 +3390,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3410,7 +3410,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -11151,7 +11151,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #fff url('../img/old/loader.gif') no-repeat center center;
+  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -11245,6 +11245,14 @@ textarea {
 .slide-notice .header {
   padding: 15px;
   min-height: 16px;
+}
+.period-list .period .course-lesson {
+  color: #919191;
+  display: block;
+  overflow: inherit;
+  text-overflow: inherit;
+  white-space: inherit;
+  word-wrap: inherit;
 }
 .course-filter.search-filter {
   padding-right: 0;
@@ -14480,8 +14488,7 @@ textarea {
   border: 1px solid #f5f5f5;
 }
 .es-open-course-list .course-item .title {
-  max-width: 58%;
-  display: inline-block;
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -15575,6 +15582,9 @@ textarea {
   bottom: 60px;
   left: 120px;
   right: 120px;
+}
+.course-list-page {
+  background: #fff;
 }
 html {
   height: 100%;

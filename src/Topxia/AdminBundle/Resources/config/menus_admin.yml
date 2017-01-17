@@ -330,9 +330,6 @@ admin:
                                     router_name: admin_tag_create
                                     mode: modal
                                     group: topBtn
-                admin_course_tag_group:
-                    name: '标签组管理'
-                    children:
                         admin_course_tag_group_manage:
                             name: '标签组管理'
                             router_name: admin_tag_group

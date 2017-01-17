@@ -1,5 +1,5 @@
 {% if showAnalysis|default(0) %}
-	<div class="testpaper-question-analysis js-testpaper-question-analysis " style="display:none">
+	<div class="testpaper-question-analysis js-testpaper-question-analysis">
     <div class="well mb0">
 		{{ question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}
 		{% include 'attachment/widget/list.html.twig' with {targetType:'question.analysis', targetId:question.id  } %}

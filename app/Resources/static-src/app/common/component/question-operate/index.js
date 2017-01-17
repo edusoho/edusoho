@@ -1,5 +1,5 @@
 import notify from 'common/notify';
-import { passedDivShow } from '../question-passed'
+import { questionSubjectiveRemask } from '../question-subjective'
 
 export default class QuestionOperate {
   constructor($form, $modal) {
@@ -53,13 +53,13 @@ export default class QuestionOperate {
   }
 
   deleteQuestion(event) {
-    event.preventDefault();
+    event.stopPropagation();
     let $target = $(event.currentTarget);
     let id = $target.closest('tr').data('id');
     let $tbody =  $target.closest('tbody');
     $tbody.find('[data-parent-id="'+id+'"]').remove();
     $target.closest('tr').remove();
-    passedDivShow(this.$form);
+    questionSubjectiveRemask(this.$form);
     this.refreshSeqs();
   }
 
@@ -78,7 +78,7 @@ export default class QuestionOperate {
       $(this).closest('tr').remove();
       
     })
-    passedDivShow(this.$form);
+    questionSubjectiveRemask(this.$form);
   }
 
   previewQuestion(event) {

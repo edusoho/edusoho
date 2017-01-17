@@ -36,7 +36,7 @@ class ClassroomReviewController extends BaseController
 
         $reviews = $this->getClassroomReviewService()->searchReviews(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime'=>'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

@@ -32,6 +32,7 @@ export default class TaskEventEmitter {
         direction: 'out'
       }
     ]);
+
     this._registerReceiveActivityIframeEvents();
     return this;
   }

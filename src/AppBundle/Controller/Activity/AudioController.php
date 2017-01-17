@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Activity;
 
 
 use AppBundle\Controller\BaseController;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class AudioController extends BaseController implements ActivityActionInterface
@@ -61,6 +62,9 @@ class AudioController extends BaseController implements ActivityActionInterface
         return $activity;
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');

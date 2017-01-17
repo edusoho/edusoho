@@ -642,6 +642,16 @@ class TestpaperController extends BaseController
 
         $testpapers = $this->getTestpaperService()->findAllTestpapersByTarget($id);
 
+        if (empty($testpapers)) {
+            return $this->render('TopxiaWebBundle:MyQuiz:list-course-test-paper.html.twig', array(
+                'status'       => $status,
+                'course'       => $course,
+                'testpapers'   => array(),
+                'paperResults' => array(),
+                'isTeacher'    => $this->getCourseService()->hasTeacherRole($id, $user['id']) || $user->isSuperAdmin()
+            ));
+        }
+
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
         $paginator = new Paginator(

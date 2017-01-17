@@ -30,12 +30,13 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
     {
         $fields = $event->getSubject();
 
-        $tagIds      = $fields['tagIds'];
         $userId      = $fields['userId'];
         $classroomId = $fields['classroomId'];
 
-        $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $tagIds, $userId);
-        $tagOwnerManager->update();
+        if (isset($fields['tagIds'])) {
+            $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $fields['tagIds'], $userId);
+            $tagOwnerManager->update();
+        }
     }
 
     public function onReviewCreate(Event $event)

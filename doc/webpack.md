@@ -76,7 +76,7 @@ npm run compile:debug  #不压缩
 * devDependencies
 
 ```
-放入开发工具的依赖，即不会出现在编译后的文件中，版本默认用 ^ 开头
+放入开发工具的依赖，即不会出现在编译后的文件中，限定具体版本安装
 
 使用下面命令新增
 npm install xxx --save-dev 
@@ -205,4 +205,4 @@ import xxx from 'xxxplugin/xx/xxx.js';
 * 字体图标、图像、swf等纳入编译流
 
 ### 待改进
-* dev模式下scanPath的新文件无法监听的问题
+* dev模式下添加新入口文件(index.js)以及libs下的文件无法监听的问题

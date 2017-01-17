@@ -295,7 +295,7 @@ class OpenCourseLessonManageController extends BaseController
                 'source'   => 'opencoursematerial',
                 'type'     => 'openCourse'
             ),
-            array('createdTime', 'DESC'),
+            array('createdTime'=>'DESC'),
             0, PHP_INT_MAX
         );
         return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(

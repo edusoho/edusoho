@@ -6,6 +6,7 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,37 +16,13 @@ class DocController extends BaseController implements ActivityActionInterface
     public function showAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-        $doc      = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
 
-        $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
+        if (empty($activity)) {
+            throw $this->createNotFoundException('activity not found');
         }
 
-        if (empty($file['globalId'])) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($file['type'] != 'document') {
-            throw $this->createAccessDeniedException('file type error, expect document');
-        }
-
-        $result = $this->getMaterialLibService()->player($file['globalId']);
-
-        $isConvertNotSuccess = isset($file['convertStatus']) && $file['convertStatus'] != 'success';
-        $isPrivate = !isset($result['pdf']) && !isset($result['swf']);
-
-        if ($isConvertNotSuccess) {
-            if ($file['convertStatus'] == 'error' && $isPrivate) {
-                $message = sprintf('文档转换失败，请联系老师，重新转换。');
-                $error = array('code' => 'error', 'message' => $message);
-            } else {
-                $error = array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。');
-            }
-        } else {
-            $error = array();
-        }
+        $doc = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
+        list($result, $error) = $this->getDocFilePlayer($doc);
 
         return $this->render('activity/doc/show.html.twig', array(
             'doc'      => $doc,
@@ -63,38 +40,8 @@ class DocController extends BaseController implements ActivityActionInterface
             throw $this->createNotFoundException('activity not found');
         }
 
-        $doc      = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
-
-        $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if (empty($file['globalId'])) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($file['type'] != 'document') {
-            throw $this->createAccessDeniedException('file type error, expect document');
-        }
-
-        $result = $this->getMaterialLibService()->player($file['globalId']);
-
-        $isConvertNotSuccess = isset($file['convertStatus']) && $file['convertStatus'] != 'success';
-        $isPrivate = !isset($result['pdf']) && !isset($result['swf']);
-
-        if ($isConvertNotSuccess || $isPrivate) {
-            if ($file['convertStatus'] == 'error' || $isPrivate) {
-                $url     = $this->generateUrl('course_manage_files', array('id' => $task['courseId']));
-                $message = sprintf('文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
-                $error = array('code' => 'error', 'message' => $message);
-            } else {
-                $error = array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。');
-            }
-        } else {
-            $error = array();
-        }
+        $doc = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
+        list($result, $error) = $this->getDocFilePlayer($doc);
 
         return $this->render('activity/doc/preview.html.twig', array(
             'doc'      => $doc,
@@ -133,6 +80,46 @@ class DocController extends BaseController implements ActivityActionInterface
             'media' => $media
         ));
     }
+
+    /**
+     * @param $doc
+     *
+     * @return array result and error tuple
+     */
+    protected function getDocFilePlayer($doc)
+    {
+        $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (empty($file['globalId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['type'] != 'document') {
+            throw $this->createAccessDeniedException('file type error, expect document');
+        }
+
+        $result = $this->getMaterialLibService()->player($file['globalId']);
+
+        $isConvertNotSuccess = isset($file['convertStatus']) && $file['convertStatus'] != FileImplementor::CONVERT_STATUS_SUCCESS;
+
+        if ($isConvertNotSuccess) {
+            if ($file['convertStatus'] == FileImplementor::CONVERT_STATUS_ERROR) {
+                $message = '文档转换失败，请到课程文件管理中，重新转换。';
+                $error   = array('code' => 'error', 'message' => $message);
+            } else {
+                $error = array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。');
+            }
+        } else {
+            $error = array();
+        }
+
+        return array($result, $error);
+    }
+
 
     /**
      * @return ActivityService

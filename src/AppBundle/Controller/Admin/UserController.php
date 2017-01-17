@@ -46,7 +46,7 @@ class UserController extends BaseController
             $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
             $userProfiles  = $this->getUserService()->searchUserProfiles(
                 array('mobile' => $conditions['keyword']),
-                array('id', 'DESC'),
+                array('id'=>'DESC'),
                 0,
                 $profilesCount
             );
@@ -67,7 +67,7 @@ class UserController extends BaseController
 
             $users = $this->getUserService()->searchUsers(
                 $conditions,
-                array('createdTime', 'DESC'),
+                array('createdTime'=>'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );

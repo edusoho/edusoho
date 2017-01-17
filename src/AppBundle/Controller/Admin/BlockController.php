@@ -55,7 +55,7 @@ class BlockController extends BaseController
         $sort      = array();
         $condation = array();
         if ($category == 'lastest') {
-            $sort = array('updateTime', 'DESC');
+            $sort = array('updateTime'=>'DESC');
         } elseif ($category != 'all') {
             if ($category == 'theme') {
                 $theme    = $this->getSettingService()->get('theme', array());

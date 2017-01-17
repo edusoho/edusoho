@@ -334,36 +334,31 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     public function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->getBiz()->service('User:NotificationService');
     }
 
     protected function getLevelService()
     {
-        return ServiceKernel::instance()->createService("Vip:Vip.LevelService");
+        return $this->getBiz()->service("Vip:Vip.LevelService");
     }
 
     protected function getVipService()
     {
-        return ServiceKernel::instance()->createService('Vip:Vip.VipService');
+        return $this->getBiz()->service('Vip:Vip.VipService');
     }
 
     protected function getOrderService()
     {
-        return ServiceKernel::instance()->createService('Order:OrderService');
+        return $this->getBiz()->service('Order:OrderService');
     }
 
     protected function getPayCenterService()
     {
-        return ServiceKernel::instance()->createService('PayCenter:PayCenterService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
+        return $this->getBiz()->service('PayCenter:PayCenterService');
     }
 }

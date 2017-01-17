@@ -3,6 +3,7 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class ClassRoomThread extends BaseResource
@@ -11,10 +12,14 @@ class ClassRoomThread extends BaseResource
     {
         $thread = $this->getThreadService()->getThread($threadId);
 
-        $user                      = $this->getUserService()->getUser($thread['userId']);
-        $thread['user']            = $this->simpleUser($user);
-        $classroom                 = $this->getClassroomService()->getClassRoom($thread['targetId']);
-        $thread['target']['id']    = $classroom['id'];
+        if (empty($thread)) {
+            return $this->error('not_found', '没有找到');
+        }
+
+        $user = $this->getUserService()->getUser($thread['userId']);
+        $thread['user'] = $this->simpleUser($user);
+        $classroom = $this->getClassroomService()->getClassRoom($thread['targetId']);
+        $thread['target']['id'] = $classroom['id'];
         $thread['target']['title'] = $classroom['title'];
 
         return $this->filter($thread);
@@ -23,8 +28,8 @@ class ClassRoomThread extends BaseResource
     public function filter($res)
     {
         $res['lastPostTime'] = date('c', $res['lastPostTime']);
-        $res['createdTime']  = date('c', $res['createdTime']);
-        $res['updatedTime']  = date('c', $res['updatedTime']);
+        $res['createdTime'] = date('c', $res['createdTime']);
+        $res['updatedTime'] = date('c', isset($res['updateTime']) ? $res['updateTime'] : $res['updatedTime']);
         return $res;
     }
 

@@ -27,7 +27,7 @@ class ThreadController extends BaseController
         $myTeachingCourseCount = $this->getCourseService()->findUserTeachCourseCount(array('userId' => $user['id']), true);
 
         if (empty($myTeachingCourseCount)) {
-            return $this->render('my-teaching/threads.html.twig', array(
+            return $this->render('my/teaching/threads.html.twig', array(
                 'type'       => $type,
                 'threadType' => 'course',
                 'threads'    => array()
@@ -107,7 +107,8 @@ class ThreadController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
-        return $this->render('my/thread/discussions.html.twig', array(
+        return $this->render('my/learning/thread/discussions.html.twig',array(
+
             'threadType' => 'course',
             'courses'    => $courses,
             'users'      => $users,
@@ -148,7 +149,7 @@ class ThreadController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
-        return $this->render('my/thread/questions.html.twig', array(
+        return $this->render('my/learning/thread/questions.html.twig', array(
             'courses'    => $courses,
             'users'      => $users,
             'threads'    => $threads,

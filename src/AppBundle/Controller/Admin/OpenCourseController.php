@@ -30,7 +30,7 @@ class OpenCourseController extends BaseController
         $paginator = new Paginator($this->get('request'), $count, 20);
         $courses   = $this->getOpenCourseService()->searchCourses(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime'=>'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

@@ -33,7 +33,7 @@
                 <h4>{{'我发起的话题'|trans}}<a class="badge pull-right" href="{{path('group_member_threads')}}" style="background-color:#3cb373;">{{threadsCount}}</a></h4>
               </div>
 
-              {% include 'group/groups-threads-ul.html.twig' with {
+              {% include 'my/learning/group/groups-threads-ul.html.twig' with {
               'threads':ownThreads,
               'groups':groupsAsOwnThreads, }
               %}
@@ -46,7 +46,7 @@
                 <h4>{{'回复的话题'|trans}}<a class="badge pull-right" href="{{path('group_member_posts')}}" style="background-color:#3cb373;">{{postsCount}}</a></h4>
               </div>
 
-              {% include 'group/groups-threads-ul.html.twig' with {
+              {% include 'my/learning/group/groups-threads-ul.html.twig' with {
               'lastPostMembers':postLastPostMembers,
               'groups':groupsAsPostThreads,
               'threads':threads,
@@ -61,7 +61,7 @@
                 <h4>{{'收藏的话题'|trans}}<a class="badge pull-right" href="{{path('group_thread_collecting')}}" style="background-color:#3cb373;">{{collectCount}}</a></h4>
               </div>
 
-              {% include 'group/groups-threads-ul.html.twig' with {
+              {% include 'my/learning/group/groups-threads-ul.html.twig' with {
               'lastPostMembers':collectLastPostMembers,
               'groups':groupsAsCollectThreads,
               'threads':collectThreads,

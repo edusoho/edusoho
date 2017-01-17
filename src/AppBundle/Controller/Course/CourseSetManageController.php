@@ -7,6 +7,7 @@ use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseSetManageController extends BaseController
@@ -14,11 +15,19 @@ class CourseSetManageController extends BaseController
     public function createAction(Request $request)
     {
         if ($request->isMethod('POST')) {
-            $data      = $request->request->all();
-            $courseSet = $this->getCourseSetService()->createCourseSet($data);
-            return $this->redirect($this->generateUrl('course_set_manage', array(
-                'id' => $courseSet['id']
-            )));
+            $data = $request->request->all();
+            $type = ArrayToolkit::get($data, 'type', 'aa');
+            if ($type == 'open') {
+                $openCourse = $this->getOpenCourseService()->createCourse($data);
+                return $this->redirectToRoute('open_course_manage', array(
+                    'id' => $openCourse['id']
+                ));
+            } else {
+                $courseSet = $this->getCourseSetService()->createCourseSet($data);
+                return $this->redirect($this->generateUrl('course_set_manage', array(
+                    'id' => $courseSet['id']
+                )));
+            }
         }
 
         $user        = $this->getUser();
@@ -55,12 +64,17 @@ class CourseSetManageController extends BaseController
 
     public function sidebarAction($courseSetId, $curCourse, $sideNav)
     {
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
         if (empty($curCourse)) {
             $curCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
+        }
+        if (empty($curCourse) && !empty($courses)) {
+            $curCourse = $courses[0];
         }
         return $this->render('courseset-manage/sidebar.html.twig', array(
             'id'        => $courseSetId,
             'curCourse' => $curCourse,
+            'courses'   => $courses,
             'side_nav'  => $sideNav
         ));
     }
@@ -157,6 +171,10 @@ class CourseSetManageController extends BaseController
     public function publishAction($id)
     {
         try {
+            $publishedCourses = $this->getCourseService()->findPublishedCoursesByCourseSetId($id);
+            if (empty($publishedCourses)) {
+                throw $this->createAccessDeniedException('发布课程时请确保课程下至少有一个已发布的教学计划');
+            }
             $this->getCourseSetService()->publishCourseSet($id);
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
@@ -204,5 +222,13 @@ class CourseSetManageController extends BaseController
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
+    }
+
+    /**
+     * @return OpenCourseService
+     */
+    protected function getOpenCourseService()
+    {
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 }

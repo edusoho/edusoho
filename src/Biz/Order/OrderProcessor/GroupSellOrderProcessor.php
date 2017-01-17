@@ -128,7 +128,7 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getGroupSellService()
     {
-        return ServiceKernel::instance()->createService('GroupSell:GroupSell.GroupSellService');
+        return $this->getBiz()->service('GroupSell:GroupSell.GroupSellService');
     }
 
     public function pay($payData)
@@ -175,21 +175,16 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getGroupSellOrderService()
     {
-        return ServiceKernel::instance()->createService('GroupSell:GroupSell.GroupSellOrderService');
+        return $this->getBiz()->service('GroupSell:GroupSell.GroupSellOrderService');
     }
 
     protected function getOrderService()
     {
-        return ServiceKernel::instance()->createService('Order:OrderService');
+        return $this->getBiz()->service('Order:OrderService');
     }
 
     protected function getPayCenterService()
     {
-        return ServiceKernel::instance()->createService('PayCenter:PayCenterService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
+        return $this->getBiz()->service('PayCenter:PayCenterService');
     }
 }

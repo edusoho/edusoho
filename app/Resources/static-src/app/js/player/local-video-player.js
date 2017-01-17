@@ -22,6 +22,9 @@ class LocalVideoPlayer extends Emitter {
       flash: {
         swf: webpack_base_url + videoSwf
       },
+      controlBar: {
+        liveDisplay: false
+      }
     });
 
     player.dimensions('100%', '100%');
@@ -41,8 +44,8 @@ class LocalVideoPlayer extends Emitter {
     });
 
     player.on('ended', (e) => {
-      this._onEnded(e);
       this.trigger('ended', e);
+      this._onEnded(e);
     });
 
     player.on('timeupdate', (e) => {
@@ -78,7 +81,7 @@ class LocalVideoPlayer extends Emitter {
   }
 
   _onEnded(e) {
-    this.player.stop();
+    this.player.pause();
     this.player.currentTime(0);
   }
 
