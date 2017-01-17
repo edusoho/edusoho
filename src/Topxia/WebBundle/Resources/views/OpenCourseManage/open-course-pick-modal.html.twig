@@ -15,7 +15,7 @@
 
 {#{% include 'TopxiaWebBundle:OpenCourseManage:pick-tab.html.twig' %}#}
 
-<form class="form-inline form-search" role="search-form" action="{{ path('open_course_course_search',{id:courseId,filter:filter}) }}">
+<form class="form-inline form-search" role="search-form" data-url="{{ path('open_course_course_search',{id:courseId,filter:filter}) }}">
   <div class="form-group ">
     <input type="text" class="form-control" name="key" id="enterSearch" value="" placeholder="按课程标题或关键字">
   </div>
