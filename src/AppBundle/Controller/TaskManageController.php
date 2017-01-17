@@ -18,7 +18,6 @@ class TaskManageController extends BaseController
         $categoryId = $request->query->get('categoryId');
         $chapterId  = $request->query->get('chapterId');
         $taskMode   = $request->query->get('type');
-
         if ($request->isMethod('POST')) {
             $task                    = $request->request->all();
             $task['_base_url']       = $request->getSchemeAndHttpHost();
@@ -39,11 +38,12 @@ class TaskManageController extends BaseController
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         return $this->render('task-manage/modal.html.twig', array(
-            'mode'       => $taskMode,
+            'mode'       => 'create',
             'course'     => $course,
             'courseSet'  => $courseSet,
             'categoryId' => $categoryId,
-            'chapterId'  => $chapterId
+            'chapterId'  => $chapterId,
+            'taskMode'   => $taskMode,
         ));
     }
 
@@ -66,11 +66,12 @@ class TaskManageController extends BaseController
         $activity  = $this->getActivityService()->getActivity($task['activityId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         return $this->render('task-manage/modal.html.twig', array(
-            'mode'        => $taskMode,
-            'courseSet'   => $courseSet,
+            'mode'        => 'edit',
             'currentType' => $activity['mediaType'],
             'course'      => $course,
+            'courseSet'   => $courseSet,
             'task'        => $task,
+            'taskMode'    => $taskMode,
         ));
     }
 
