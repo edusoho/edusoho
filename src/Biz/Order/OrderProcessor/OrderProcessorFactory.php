@@ -16,11 +16,7 @@ class OrderProcessorFactory
         }
 
         $class = $map[$type]['processor'];
-        return new $class();
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
+    	$biz = ServiceKernel::instance()->getBiz();
+        return new $class($biz);
     }
 }

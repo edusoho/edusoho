@@ -1,9 +1,8 @@
-{% extends 'old-layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}{{classroom.title}} - {{ parent() }}{% endblock %}
 
 {% do load_script('classroombundle/controller/classroom/classroom-join') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 {% block top_content %}
 

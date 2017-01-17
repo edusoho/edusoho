@@ -2,9 +2,8 @@
 namespace Biz\Classroom\Event;
 
 use Topxia\Common\StringToolkit;
-use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Taxonomy\TagOwnerManager;
+use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ClassroomEventSubscriber implements EventSubscriberInterface
@@ -12,9 +11,9 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'classroom.delete'       => 'onClassroomDelete',
-            'classroom.update'       => 'onClassroomUpdate',
-            'classReview.add'        => 'onReviewCreate'
+            'classroom.delete' => 'onClassroomDelete',
+            'classroom.update' => 'onClassroomUpdate',
+            'classReview.add'  => 'onReviewCreate'
         );
     }
 
@@ -30,12 +29,13 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
     {
         $fields = $event->getSubject();
 
-        $tagIds      = $fields['tagIds'];
         $userId      = $fields['userId'];
         $classroomId = $fields['classroomId'];
 
-        $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $tagIds, $userId);
-        $tagOwnerManager->update();
+        if (isset($fields['tagIds'])) {
+            $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $fields['tagIds'], $userId);
+            $tagOwnerManager->update();
+        }
     }
 
     public function onReviewCreate(Event $event)
@@ -74,21 +74,21 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
 
     private function getStatusService()
     {
-        return ServiceKernel::instance()->createService('User:StatusService');
+        return $this->getBiz()->service('User:StatusService');
     }
 
     protected function getNotifiactionService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->getBiz()->service('User:NotificationService');
     }
 
     private function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
     private function getClassroomReviewService()
     {
-        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomReviewService');
+        return $this->getBiz()->service('Classroom:ClassroomReviewService');
     }
 }

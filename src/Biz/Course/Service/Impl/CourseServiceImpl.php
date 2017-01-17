@@ -47,6 +47,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->getDefaultCourseByCourseSetId($courseSetId);
     }
 
+    public function getDefaultCoursesByCourseSetIds($courseSetIds)
+    {
+        return $this->getCourseDao()->getDefaultCoursesByCourseSetIds($courseSetIds);
+    }
+
     public function getFirstPublishedCourseByCourseSetId($courseSetId)
     {
         $courses = $this->searchCourses(
@@ -153,6 +158,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $fields);
     }
 
+    public function updateMaxRate($id, $maxRate)
+    {
+        return $this->getCourseDao()->update($id, array('maxRate' => $maxRate));
+    }
+
     public function setCourseTeachers($courseId, $teachers)
     {
         $teacherMembers = array();
@@ -246,7 +256,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function calculatePrice($id, $originPrice)
     {
-        return $originPrice * 100;
+        return $originPrice;
     }
 
     public function updateCourseStatistics($id, $fields)
@@ -509,7 +519,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        if ($user->hasPermission('admin_course')) {
+        if ($user->hasPermission('admin_course_set')) {
             return true;
         }
 

@@ -150,7 +150,7 @@ admin:
                     children:
                         admin_course_manage:
                             name: 课程管理
-                            router_name: admin_course
+                            router_name: admin_course_set
                             children:
                                 admin_course_content_manage:
                                     name: 管理课程
@@ -164,7 +164,7 @@ admin:
                                     router_name: course_set_manage_create
                                     group: topBtn
                                     blank: 1
-                                admin_course_recommend:
+                                admin_course_set_recommend:
                                     name: 推荐课程
                                     router_params:
                                         id: (course.id)
@@ -174,7 +174,7 @@ admin:
                                     visable: ( filter == 'normal' and not course.recommended )
                                     icon: 'glyphicon glyphicon-hand-up'
                                     mode: modal
-                                admin_course_cancel_recommend:
+                                admin_course_set_cancel_recommend:
                                     name: 取消推荐
                                     router_params:
                                         id: (course.id)
@@ -185,14 +185,6 @@ admin:
                                     visable: ( filter == 'normal' and course.recommended )
                                     icon: 'glyphicon glyphicon-hand-right'
                                     mode: none
-                                admin_course_copy:
-                                    name: 复制课程
-                                    router_params:
-                                        id: (course.id)
-                                    group: groupButton
-                                    visable: ( course.type == 'normal' and course.parentId == 0 )
-                                    icon: 'glyphicon glyphicon-plus-sign'
-                                    mode: modal
                                 admin_course_guest_member_preview:
                                     name: 预览：作为未购买用户
                                     router_name: course_show
@@ -211,7 +203,7 @@ admin:
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-eye-open'
                                     blank: 1
-                                admin_course_close:
+                                admin_course_set_close:
                                     name: 关闭课程
                                     router_params:
                                         id: (course.id)
@@ -231,7 +223,7 @@ admin:
                                     icon: 'glyphicon glyphicon-envelope'
                                     mode: modal
                                     visable: (course.status == 'published')
-                                admin_course_publish:
+                                admin_course_set_publish:
                                     name: 发布课程
                                     router_params:
                                         id: (course.id)
@@ -241,18 +233,18 @@ admin:
                                     icon: 'glyphicon glyphicon-ok-circle'
                                     mode: none
                                     visable: (course.status != 'published')
-                                admin_course_delete:
+                                admin_course_set_delete:
                                     name: 删除课程
                                     class: delete-course
                                     router_params:
-                                        courseId: (course.id)
+                                        id: (course.id)
                                         filter: (filter)
                                         type: ''
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-trash'
                                     mode: none
                                     visable: ( course.status in ['closed', 'draft', 'published'])
-                        admin_course_recommend_list:
+                        admin_course_set_recommend_list:
                             name: 课程推荐
                         admin_course_data:
                             name: 课程统计
@@ -338,9 +330,6 @@ admin:
                                     router_name: admin_tag_create
                                     mode: modal
                                     group: topBtn
-                admin_course_tag_group:
-                    name: '标签组管理'
-                    children:
                         admin_course_tag_group_manage:
                             name: '标签组管理'
                             router_name: admin_tag_group

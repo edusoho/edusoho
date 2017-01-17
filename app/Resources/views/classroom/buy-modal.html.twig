@@ -1,6 +1,6 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
-
+{% do load_script('classroombundle/controller/classroom/buy-modal') %}
 
 {% set billable = false %}
 {% if classroom.price > 0 %}
@@ -59,7 +59,7 @@
     <input type="hidden" name="payment" value="alipay" />
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-    {% include 'TopxiaWebBundle:User:fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:courseSetting.buy_fill_userinfo, userinfoFieldsSetting:courseSetting.userinfoFields, userFields:userFields, user:user, showNavTip:1} %}
+    {% include 'user/fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:courseSetting.buy_fill_userinfo, userinfoFieldsSetting:courseSetting.userinfoFields, userFields:userFields, user:user, showNavTip:1} %}
   
   </form>
 {% endblock %}
@@ -94,6 +94,6 @@
 
   {% endif %}
 
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script>app.lazyLoad = function() { app.load('classroombundle/controller/classroom/buy-modal') };</script>
+  {# {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %} #}
+  {# <script>app.lazyLoad = function() { app.load('classroombundle/controller/classroom/buy-modal') };</script> #}
 {% endblock %}

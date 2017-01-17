@@ -19,6 +19,18 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($courses[0]['isDefault'] == 1);
     }
 
+    public function testFindCourseSetsLikeTitle()
+    {
+        $courseSet = array(
+            'title' => '新课程开始！',
+            'type'  => 'normal'
+        );
+        $expected = $this->getCourseSetService()->createCourseSet($courseSet);
+        $res = $this->getCourseSetService()->findCourseSetsLikeTitle('开始');
+
+        $this->assertEquals(array($expected), $res);
+    }
+
     public function testUpdate()
     {
         $courseSet = array(

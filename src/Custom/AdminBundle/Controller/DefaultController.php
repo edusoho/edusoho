@@ -2,11 +2,12 @@
 
 namespace Custom\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class DefaultController extends Controller
+use AppBundle\Controller\Admin\DefaultController as BaseDefaultController;
+
+class DefaultController extends BaseDefaultController
 {
-    public function indexAction($name)
+    public function helloAction($name)
     {
         return $this->render('CustomAdminBundle:Default:index.html.twig', array('name' => $name));
     }

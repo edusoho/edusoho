@@ -1,4 +1,4 @@
-{% extends 'bootstrap-modal-layout.html.twig' %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'购买课程'|trans}}{% endblock %}
 
@@ -40,8 +40,8 @@
 
 {% block footer %}
   <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="{{'正在创建订单'|trans}}..." data-toggle="form-submit" data-target="#course-buy-form">{{'去支付'|trans}}</button>
-
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>
-    app.load('course/buy-modal');
+    app.lazyLoad = function() {app.load('course/buy-modal')};
   </script>
 {% endblock %}

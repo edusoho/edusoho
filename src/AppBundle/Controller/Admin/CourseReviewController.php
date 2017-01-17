@@ -11,17 +11,16 @@ class CourseReviewController extends BaseController
     {
         $conditions = $request->query->all();
 
+        if (empty($conditions['rating'])) {
+            unset($conditions['rating']);
+        }
+
         if (!empty($conditions['courseTitle'])) {
-            $courses                 = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['courseTitle']));
-            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-            if (count($conditions['courseIds']) == 0) {
-                return $this->render('admin/course-review/index.html.twig', array(
-                    'reviews'   => array(),
-                    'users'     => array(),
-                    'courses'   => array(),
-                    'paginator' => new Paginator($request, 0, 20)
-                ));
-            }
+            $courseSetCondtions = array('title' => '%'.trim($conditions['courseTitle'].'%'));
+            $courseSets = $this->getCourseSetService()->searchCourseSets($courseSetCondtions, array(), 0, PHP_INT_MAX);
+            $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
+            unset($conditions['courseTitle']);
+            $conditions['courseSetIds'] = $conditions['courseSetIds'] ? : array(-1);
         }
 
         $paginator = new Paginator(
@@ -40,12 +39,14 @@ class CourseReviewController extends BaseController
         );
 
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($reviews, 'courseSetId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
 
         return $this->render('admin/course-review/index.html.twig', array(
             'reviews'   => $reviews,
             'users'     => $users,
             'courses'   => $courses,
+            'courseSets'   => $courseSets,
             'paginator' => $paginator
         ));
     }
@@ -68,6 +69,11 @@ class CourseReviewController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getUserService()

@@ -75,7 +75,7 @@
             <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>
             <td>
               <div class="btn-group">
-                <a class="mr10" target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id }) }}">
+                <a class="mr10" target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id|default(1) }) }}">
                   {{ '管理'|trans }}
                 </a>
                 {% if courseSet.canManage|default(false) %}

@@ -13,11 +13,11 @@ class FileController extends BaseController
     public function uploadAction(Request $request)
     {
         list($groupCode, $type) = $this->tryUploadFile($request);
-        
-        if(!$this->isGroup($groupCode)) {
+
+        if (!$this->isGroup($groupCode)) {
             return $this->createMessageResponse("error", '参数不正确');
         }
-        
+
         $file = $request->files->get('file');
         if ($type == 'image') {
             if (!FileToolkit::isImageFile($file)) {
@@ -27,9 +27,8 @@ class FileController extends BaseController
             throw $this->createAccessDeniedException('上传类型不正确！');
         }
 
-        $record = $this->getFileService()->uploadFile($groupCode, $file);
+        $record        = $this->getFileService()->uploadFile($groupCode, $file);
         $record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
-
         $request->getSession()->set("fileId", $record["id"]);
         return $this->createJsonResponse($record);
     }
@@ -38,40 +37,39 @@ class FileController extends BaseController
     {
 
         $options = $request->request->all();
-        if(empty($options['group'])){
+        if (empty($options['group'])) {
             $options['group'] = "default";
         }
 
-        if(!$this->isGroup($options['group'])) {
+        if (!$this->isGroup($options['group'])) {
             return $this->createMessageResponse("error", '参数不正确');
         }
 
         $fileId = $request->getSession()->get("fileId");
-        if(empty($fileId)) {
+        if (empty($fileId)) {
             return $this->createMessageResponse("error", '参数不正确');
         }
 
         $record = $this->getFileService()->getFile($fileId);
-        if(empty($record)) {
+        if (empty($record)) {
             return $this->createMessageResponse("error", '文件不存在');
         }
         $parsed = $this->getFileService()->parseFileUri($record['uri']);
 
         $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options);
-
         $fields = array();
         foreach ($filePaths as $key => $value) {
-            $file = $this->getFileService()->uploadFile($options["group"], new File($value));
+            $file     = $this->getFileService()->uploadFile($options["group"], new File($value));
             $fields[] = array(
                 "type" => $key,
-                "id" => $file['id']
+                "id"   => $file['id']
             );
         }
 
-        if(isset($options["deleteOriginFile"]) && $options["deleteOriginFile"] == 0) {
+        if (isset($options["deleteOriginFile"]) && $options["deleteOriginFile"] == 0) {
             $fields[] = array(
                 "type" => "origin",
-                "id" => $record['id']
+                "id"   => $record['id']
             );
         } else {
             $this->getFileService()->deleteFileByUri($record["uri"]);
@@ -83,7 +81,7 @@ class FileController extends BaseController
     protected function isGroup($group)
     {
         $groups = $this->getFileService()->getAllFileGroups();
-        $codes = ArrayToolkit::column($groups, "code");
+        $codes  = ArrayToolkit::column($groups, "code");
         return in_array($group, $codes);
     }
 
@@ -99,7 +97,7 @@ class FileController extends BaseController
         }
 
         $groupCode = $token['group'];
-        if(empty($groupCode)){
+        if (empty($groupCode)) {
             $groupCode = "default";
         }
 
