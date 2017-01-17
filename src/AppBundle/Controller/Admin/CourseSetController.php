@@ -378,14 +378,16 @@ class CourseSetController extends BaseController
         ));
     }
 
-    public function detailDataAction($id)
+    public function detailDataAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
+        $courseId = $request->query->get('courseId');
 
-        $course =  $courses[0];
+        if (empty($courseId)) {
+            $courseId = $courses[0]['id'];            
+        }
 
-        $courseId = $course['id'];
         $count     = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId));
 
         $paginator = new Paginator($this->get('request'), $count, 20);
@@ -412,7 +414,8 @@ class CourseSetController extends BaseController
             'courseSet'    => $courseSet,
             'courses'   => $courses,
             'paginator' => $paginator,
-            'students'  => $students
+            'students'  => $students,
+            'courseId' => $courseId
         ));
     }
 
