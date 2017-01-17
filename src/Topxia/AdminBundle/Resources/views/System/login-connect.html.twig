@@ -167,19 +167,6 @@
       {% endif %}
     </fieldset>
   {% endfor %}
-
-  <fieldset>
-    <legend id="port" >{{'登录接口验证代码'|trans}}</legend>
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="verify_code" >{{'验证代码'|trans}}</label>
-      </div>
-      <div class="controls col-md-8">
-        <textarea id="verify_code" name="verify_code" class="form-control" rows="5">{{loginConnect.verify_code}}</textarea>
-        <div class="help-block">{{'在申请第三方登录接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。'|trans}}</div>
-      </div>
-    </div>
-  </fieldset>
 </fieldset>
   <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">
