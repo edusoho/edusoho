@@ -6,7 +6,6 @@ use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 
 class UnitTestsBootstrapTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testBoot()
     {
         $config = array(
@@ -21,7 +20,7 @@ class UnitTestsBootstrapTest extends \PHPUnit_Framework_TestCase
             ),
         );
         $biz = new Biz($config);
-        $biz['migration.directories'][] = dirname(__DIR__) . '/TestProject/migrations';
+        $biz['migration.directories'][] = dirname(__DIR__).'/TestProject/migrations';
         $biz->register(new DoctrineServiceProvider());
         $biz->boot();
 

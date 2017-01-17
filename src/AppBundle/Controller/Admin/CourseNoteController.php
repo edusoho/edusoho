@@ -13,7 +13,7 @@ class CourseNoteController extends BaseController
         $conditions = $request->query->all();
 
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
-            $courseSetCondtions = array('title' => '%'.trim($conditions['keyword'].'%'));
+            $courseSetCondtions = array('title' => trim($conditions['keyword']));
             $courseSets = $this->getCourseSetService()->searchCourseSets($courseSetCondtions, array(), 0, PHP_INT_MAX);
             $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
             unset($conditions['keywordType'], $conditions['keyword']);

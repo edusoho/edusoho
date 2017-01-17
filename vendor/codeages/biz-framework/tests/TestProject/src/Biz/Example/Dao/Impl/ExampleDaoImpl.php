@@ -24,11 +24,15 @@ class ExampleDaoImpl extends GeneralDaoImpl implements ExampleDao
         return array(
             'timestamps' => array('created_time', 'updated_time'),
             'serializes' => array('ids1' => 'json', 'ids2' => 'delimiter'),
-            'orderbys'   => array('name', 'created_time'),
+            'orderbys' => array('name', 'created_time'),
             'conditions' => array(
                 'name = :name',
-                'ids1 = :ids1'
-            )
+                'name pre_LIKE :pre_like',
+                'name suF_like :suf_name',
+                'name LIKE :like_name',
+                'id iN (:ids)',
+                'ids1 = :ids1',
+            ),
         );
     }
 }
