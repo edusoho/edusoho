@@ -22,6 +22,7 @@ class CourseDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCourseId($arguments);
 
     	$course = $this->getCourseService()->getCourse($arguments['courseId']);
+
         $course['teachers'] = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
 
         if(!empty($arguments['fetchCourseSet'])) {

@@ -9,6 +9,11 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 {
     protected $table = 'c2_course_set';
 
+    public function findCourseSetsByParentIdAndLocked($parentId, $locked)
+    {
+        return $this->getByFields(array('parentId' => $parentId, 'locked' => $locked ));
+    }
+
     public function findByIds(array $ids)
     {
         return $this->findInField('id', $ids);
@@ -23,7 +28,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'categoryId = :categoryId',
                 'title LIKE :title',
                 'creator LIKE :creator',
-                'type = :type'
+                'type = :type',
+                'recommended = :recommended'
             ),
             'serializes' => array(
                 'tags'      => 'delimiter',
@@ -32,7 +38,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'cover'     => 'json'
             ),
             'orderbys' => array(
-                'createdTime'
+                'createdTime',
+                'recommended'
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime'
