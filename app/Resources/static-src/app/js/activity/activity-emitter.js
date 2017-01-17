@@ -1,6 +1,6 @@
 import postal from 'postal';
-import 'postal.federation';
-import 'postal.xframe';
+import 'postal-federation';
+import 'postal-xframe';
 
 export default class ActivityEmitter {
 
