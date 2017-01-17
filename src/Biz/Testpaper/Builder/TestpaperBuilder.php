@@ -118,6 +118,10 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             $fields['metas']['percentages'] = $fields['percentages'];
         }
 
+        if (isset($fields['passedScore'])) {
+            $fields['passedCondition'] = array($fields['passedScore']);
+        }
+
         $fields = ArrayToolkit::parts($fields, array(
             'name',
             'description',

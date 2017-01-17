@@ -21,11 +21,9 @@
         </testsuite>
     </testsuites>
 
-    <!--
     <php>
-        <server name="KERNEL_DIR" value="/path/to/your/app/" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
     </php>
-    -->
 
     <filter>
         <whitelist>

@@ -2,9 +2,8 @@
 namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\Paginator;
-use Symfony\Component\HttpFoundation\Request;
-
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class TagController extends BaseController
 {
@@ -26,8 +25,8 @@ class TagController extends BaseController
         }
 
         return $this->render('admin/tag/index.html.twig', array(
-            'tags'         => $tags,
-            'paginator'    => $paginator,
+            'tags'      => $tags,
+            'paginator' => $paginator
         ));
     }
 
@@ -40,7 +39,7 @@ class TagController extends BaseController
 
             return $this->render('admin/tag/list-tr.html.twig', array(
                 'tag'          => $tag,
-                'tagRelations' => $tagRelation,
+                'tagRelations' => $tagRelation
             ));
         }
 
@@ -81,7 +80,7 @@ class TagController extends BaseController
         $name    = $request->query->get('value');
         $exclude = $request->query->get('exclude');
 
-        $avaliable = $this->getTagService()->isTagNameAvalieable($name, $exclude);
+        $avaliable = $this->getTagService()->isTagNameAvailable($name, $exclude);
 
         if ($avaliable) {
             $response = array('success' => true, 'message' => '');

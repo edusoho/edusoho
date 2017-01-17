@@ -15,48 +15,13 @@ use Topxia\Common\Paginator;
 
 class NotebookController extends BaseController
 {
-    public function showAction(Request $request, $courseId)
-    {
-        $user = $this->getCurrentUser();
-
-        $course = $this->getCourseService()->getCourse($courseId);
-
-        $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
-        $tasks = ArrayToolkit::index($tasks, 'id');
-
-        $notes = $this->getNoteService()->findCourseNotesByUserIdAndCourseId($user['id'], $course['id']);
-
-        $notes = array_map(function ($note) use($tasks){
-            $note['taskNumber'] = empty($lessons[$note['taskId']]) ? 0 : $lessons[$note['taskId']]['number'];
-            return $note;
-        }, $notes);
-
-        usort($notes, function ($note1, $note2) {
-            if ($note1['taskNumber'] == 0) {
-                return true;
-            }
-
-            if ($note2['taskNumber'] == 0) {
-                return false;
-            }
-
-            return $note1['taskNumber'] > $note2['taskNumber'];
-        });
-
-        return $this->render('my/notebook/show.html.twig', array(
-            'course' => $course,
-            'tasks'  => $tasks,
-            'notes'  => $notes
-        ));
-    }
-
     public function indexAction(Request $request)
     {
         $user = $this->getUser();
 
         $conditions = array(
             'userId'             => $user['id'],
-            'noteNumGreaterThan' => 0.1
+            'noteNumGreaterThan' => 0
         );
 
         $paginator = new Paginator(
@@ -70,16 +35,39 @@ class NotebookController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($courseMembers, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
 
-        return $this->render('my/notebook/index.html.twig', array(
+        return $this->render('my/learning/notebook/index.html.twig', array(
             'courseMembers' => $courseMembers,
             'paginator'     => $paginator,
             'courses'       => $courses
         ));
     }
 
-    public function deleteAction(Request $request, $id)
+
+    public function showAction(Request $request, $courseId)
     {
-        $this->getNoteService()->deleteNote($id);
+        $user = $this->getCurrentUser();
+
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        $notes   = $this->getCourseNoteService()->findCourseNotesByUserIdAndCourseId($user['id'], $course['id']);
+        $taskIds = ArrayToolkit::column($notes, 'taskId');
+
+        $tasks = $this->getTaskService()->findTasksByIds($taskIds);
+        $tasks = ArrayToolkit::index($tasks, 'id');
+
+
+        $notes = $this->sortNotesByTaskSeq($notes, $tasks);
+
+        return $this->render('my/learning/notebook/show.html.twig', array(
+            'course' => $course,
+            'tasks'  => $tasks,
+            'notes'  => $notes
+        ));
+    }
+
+    public function deleteAction($id)
+    {
+        $this->getCourseNoteService()->deleteNote($id);
         return $this->createJsonResponse(true);
     }
 
@@ -100,6 +88,15 @@ class NotebookController extends BaseController
     }
 
     /**
+     * @return CourseNoteService
+     */
+    protected function getCourseNoteService()
+    {
+        return $this->createService('Course:CourseNoteService');
+    }
+
+    /**
+
      * @return TaskService
      */
     protected function getTaskService()
@@ -108,10 +105,22 @@ class NotebookController extends BaseController
     }
 
     /**
-     * @return CourseNoteService
+     * @param $notes
+     * @param $tasks
+     * @return array
      */
-    protected function getNoteService()
+    protected function sortNotesByTaskSeq($notes, $tasks)
     {
-        return $this->createService('Course:CourseNoteService');
+        foreach ($notes as $index => $note) {
+            $notes[$index]['seq'] = empty($tasks[$note['taskId']]) ? 0 : $tasks[$note['taskId']]['seq'];
+        }
+
+        usort($notes, function ($note1, $note2) {
+            if ($note1['seq'] == 0 || $note2['seq'] == 0) {
+                return true;
+            }
+            return $note1['seq'] > $note2['seq'];
+        });
+        return $notes;
     }
 }

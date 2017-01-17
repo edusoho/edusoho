@@ -184,7 +184,12 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
     public function createFavoriteQuestion($fields)
     {
+        $user = $this->getCurrentUser();
+
+        $fields['userId']      = $user['id'];
+        $fields['target']      = $fields['targetType']."-".$fields['targetId'];
         $fields['createdTime'] = time();
+
         return $this->getQuestionFavoriteDao()->create($fields);
     }
 

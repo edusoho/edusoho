@@ -22,13 +22,6 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
         return $this->db()->fetchAssoc($sql, array($categoryId, $createdTime)) ?: array();
     }
 
-    public function getByAlias($alias)
-    {
-        return $this->getByFields(array(
-            'alias' => $alias
-        ));
-    }
-
     public function findByIds(array $ids)
     {
         return $this->findInField('id', $ids);
@@ -54,6 +47,9 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
 
     public function countByCategoryIds(array $categoryIds)
     {
+        if (empty($categoryIds)) {
+            throw new InvalidArgumentException(sprintf('参数不允许为空数组'));
+        }
         return $this->count(array('categoryIds' => $categoryIds));
     }
 
@@ -114,7 +110,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
             ),
             'conditions' => array(
                 'status = :status',
-                'id IN ( :articleIds )',
+                'id IN (:articleIds)',
                 'categoryId = :categoryId',
                 'featured = :featured',
                 'promoted = :promoted',
@@ -122,11 +118,9 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
                 'title LIKE :keywords',
                 'picture != :pictureNull',
                 'updatedTime >= :updatedTime_GE',
-                'categoryId = :categoryId',
                 'categoryId IN (:categoryIds)',
                 'orgCode LIKE :likeOrgCode',
                 'id != :idNotEqual',
-                'id IN (:articleIds)',
                 'id = :articleId',
                 'thumb != :thumbNotEqual',
                 'orgCode = :orgCode',

@@ -89,26 +89,17 @@
             <a href="{{ path('my_notebooks') }}">{{ '我的笔记'|trans }}</a>
           </li>
 
-          {% if is_plugin_installed('Homework') %}
-            <li class="list-group-item {% if side_nav == 'my-homeworks' %} active {% endif %}">
-              <a href="{{ path('my_homework_list') }}">{{ '我的作业'|trans }}</a>
-            </li>
-          {% endif %}
+          <li class="list-group-item {% if side_nav == 'my-homework' %} active {% endif %}">
+            <a href="{{ path('my_homework_list') }}">{{ '我的作业'|trans }}</a>
+          </li>
 
-          <li class="list-group-item
-        {% if side_nav == 'my-quiz' %} active {% endif %}">
-            <a href="">{{ '我的考试'|trans }}</a>
+          <li class="list-group-item {% if side_nav == 'my-testpaper' %} active {% endif %}">
+            <a href="{{ path('my_testpaper_list') }}">{{ '我的考试'|trans }}</a>
           </li>
           <li class="list-group-item
         {% if side_nav == 'my-group' %} active {% endif %}">
             <a href="{{ path('my_group_member_center') }}">{{ '我的小组'|trans }}</a>
           </li>
-          {% if is_plugin_installed('ClassroomPlan') %}
-            <li class="list-group-item
-          {% if side_nav == 'my-task' %} active {% endif %}">
-              <a href="">{{ '我的任务'|trans }}</a>
-            </li>
-          {% endif %}
         </ul>
       </div>
     </div>

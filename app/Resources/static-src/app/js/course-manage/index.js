@@ -9,11 +9,9 @@ if ($('#sortable-list').length) {
   });
 }
 
-console.log(store);
 
 if(!store.get(COURSE_FUNCTION_REMASK)) {
   store.set(COURSE_FUNCTION_REMASK,true);
-  console.log($('#course-function-modal'));
   $('#course-function-modal').modal('show');
 }
 

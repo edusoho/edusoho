@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller\Activity;
 
+use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
-use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseController implements ActivityActionInterface
@@ -103,7 +103,6 @@ class LiveController extends BaseController implements ActivityActionInterface
     public function triggerAction(Request $request, $courseId, $activityId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
-        $user = $this->getUser();
 
         $activity = $this->getActivityService()->getActivity($activityId);
         if ($activity['mediaType'] !== 'live') {

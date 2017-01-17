@@ -23,6 +23,11 @@ class ClassroomController extends BaseController
         if (!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
+        // @TODO 班级改造再改动
+        return $this->render('my/teaching/classroom.html.twig', array(
+            'classrooms' => array(),
+            'members'    => array()
+        ));
 
         $classrooms   = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->getId()), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
         $classrooms   = array_merge($classrooms, $this->getClassroomService()->searchMembers(array('role' => 'assistant', 'userId' => $user->getId()), array('createdTime' => 'desc'), 0, PHP_INT_MAX));
@@ -94,7 +99,7 @@ class ClassroomController extends BaseController
             $progresses[$classroom['id']] = $this->calculateUserLearnProgress($classroom, $user->id);
         }
 
-        return $this->render("my/classroom/classroom.html.twig", array(
+        return $this->render("my/learning/classroom/classroom.html.twig", array(
             'classrooms' => $classrooms,
             'members'    => $members,
             'progresses' => $progresses
@@ -157,7 +162,7 @@ class ClassroomController extends BaseController
         $users      = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'lastPostUserId'));
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($threads, 'targetId'));
 
-        return $this->render('my/classroom/discussions.html.twig', array(
+        return $this->render('my/learning/classroom/discussions.html.twig', array(
             'threadType' => 'classroom',
             'paginator'  => $paginator,
             'threads'    => $threads,

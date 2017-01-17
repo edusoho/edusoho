@@ -290,7 +290,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $text = $this->pureString($string);
 
-        $length = (int) $length;
+        $length = (int)$length;
 
         if (($length > 0) && (mb_strlen($text, 'utf-8') > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -322,7 +322,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function waveHitNum($threadId)
     {
-        $this->getThreadDao()->wave(array($threadId), array('hitNum', 1));
+        $this->getThreadDao()->wave(array($threadId), array('hitNum' => 1));
     }
 
     public function addTrade($fields)
@@ -567,5 +567,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getThreadGoodsDao()
     {
         return $this->createDao('Group:ThreadGoodsDao');
+    }
+
+    protected function getThreadTradeDao()
+    {
+        return $this->createDao('Group:ThreadTradeDao');
     }
 }

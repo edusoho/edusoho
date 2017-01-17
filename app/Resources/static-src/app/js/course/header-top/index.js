@@ -14,7 +14,7 @@ const bindOperation = ($needHideBtn, $needShowBtn) => {
           $needShowBtn.show();
           $needHideBtn.hide();
         });
-  })
+  });
 };
 
 bindOperation($unfavorite, $favorite);

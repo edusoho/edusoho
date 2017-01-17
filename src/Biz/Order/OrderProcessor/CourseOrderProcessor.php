@@ -1,6 +1,8 @@
 <?php
 namespace Biz\Order\OrderProcessor;
 
+use Biz\Course\Service\CourseOrderService;
+use Biz\Course\Service\CourseService;
 use Exception;
 use Topxia\Common\NumberToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -274,6 +276,9 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         return ServiceKernel::instance()->createService('User:UserService');
     }
 
+    /**
+     * @return CourseOrderService
+     */
     protected function getCourseOrderService()
     {
         return ServiceKernel::instance()->createService("Course:CourseOrderService");

@@ -57,5 +57,4 @@ class CourseLessonReplayDaoImpl extends GeneralDaoImpl implements CourseLessonRe
     {
         return $this->db()->update($this->table, $fields, array('lessonId' => $lessonId, 'type' => $lessonType));
     }
-
 }

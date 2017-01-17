@@ -25,9 +25,8 @@ class CourseOrderController extends BaseController
             ));
         }
 
-        $remainingStudentNum = $this->getRemainStudentNum($course);
-        if ($remainingStudentNum <= 0 && $course['type'] == 'live') {
-            return $this->render('course/order/remainless-modal.html.twig', array(
+        if($course['price'] > 0 && !$this->getEnabledPayments()) {
+            return $this->render('course/order/payments-disabled.html.twig', array(
                 'course' => $course
             ));
         }
@@ -40,13 +39,24 @@ class CourseOrderController extends BaseController
             ));
         }
 
+        $remainingStudentNum = $this->getRemainStudentNum($course);
+        if ($remainingStudentNum <= 0 && $course['type'] == 'live') {
+            return $this->render('course/order/remainless-modal.html.twig', array(
+                'course' => $course
+            ));
+        }
+
+        if(AvatarAlert::alertJoinCourse($user)) {
+            return $this->render('course/order/avatar-alert-modal.html.twig', array(
+                'course' => $course
+            ));
+        }
+
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         return $this->render('course/order/buy-modal.html.twig', array(
             'course'           => $course,
-            'payments'         => $this->getEnabledPayments(),
             'user'             => $userInfo,
-            'avatarAlert'      => AvatarAlert::alertJoinCourse($user),
             'userFields'       => $userFields,
         ));
     }
@@ -159,7 +169,7 @@ class CourseOrderController extends BaseController
         return $remainingStudentNum;
     }
 
-    public function getCourseService()
+    protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }

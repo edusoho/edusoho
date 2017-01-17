@@ -7,16 +7,16 @@
 
   {% if course.buyable|default(true) %}
     <a class="btn btn-primary btn-lg"
-      {% if is_buy_course_from_modal(course.id) %}
-        href="#modal"
-        data-toggle="modal"
-        data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
-      {% else %}
-        href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
-      {% endif %}
-
-      {% if course.status != 'published' or (course.maxStudentNum > 0 and course.studentNum >= course.maxStudentNum) %}
+      {% if course.status != 'published' or isPreview %}
         disabled="disabled"
+      {% else %}
+        {% if is_buy_course_from_modal(course.id) %}
+          href="#modal"
+          data-toggle="modal"
+          data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+        {% else %}
+          href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+        {% endif %}
       {% endif %}
     >
       {% if course.price > 0 %}

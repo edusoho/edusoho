@@ -9,6 +9,8 @@ interface CashAccountService
 
     public function getAccountByUserId($userId, $lock=false);
 
+    public function findAccountsByUserIds($userIds);
+
 	public function searchAccount($conditions, $orderBy, $start, $limit);
 
     public function searchAccountCount($conditions);

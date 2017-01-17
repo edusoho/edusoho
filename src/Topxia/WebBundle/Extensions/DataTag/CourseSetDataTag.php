@@ -21,9 +21,13 @@ class CourseSetDataTag extends CourseBaseDataTag implements DataTag
             throw new \InvalidArgumentException($this->getServiceKernel()->trans('id参数缺失'));
         }
 
-    	$set = $this->getCourseSetService()->getCourseSet($arguments['id']);
+    	$courseSet = $this->getCourseSetService()->getCourseSet($arguments['id']);
 
-        return $set;
+        if ($courseSet['categoryId'] != '0') {
+            $courseSet['category'] = $this->getCategoryService()->getCategory($courseSet['categoryId']);
+        }
+
+        return $courseSet;
     }
 }
 

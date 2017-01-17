@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{'任务学习'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{ '任务学习'|trans }} - {{ parent() }}{% endblock %}
 
 {#{% set script_controller = 'taskbundle/controller/task/show' %}#}
 {% set bodyClass = "" %}
@@ -19,52 +19,56 @@
   <div class="task-dashboard-page js-task-dashboard-page">
     <div class="dashboard-content" id="dashboard-content">
       <div class="dashboard-header">
-        <a class="back-link" href="{{path('my_course_show',{id:course.id})}}">
+        <a class="back-link" href="{{ path('my_course_show',{id:course.id}) }}">
           <i class="es-icon es-icon-chevronleft"></i>
         </a>
         任务：{{ task.title }}
       </div>
       <div class="dashboard-body">
         <iframe id="task-content-iframe" class="task-content-iframe"
-
-          data-event-url="{{ path('course_task_trigger', {courseId: task.courseId, id: task.id}) }}"
-          src="{{path('course_task_activity_show',{courseId:task.courseId, id:task.id, preview: preview })}}"
-          style="width:100%;height:100%;border:0px">
+                data-event-url="{{ path('course_task_trigger', {courseId: task.courseId, id: task.id}) }}"
+                src="{{ path('course_task_activity_show',{courseId:task.courseId, id:task.id, preview: preview }) }}"
+                style="width:100%;height:100%;border:0px">
         </iframe>
       </div>
 
       <div class="dashboard-footer ">
-        <div class="state-opration "> 
-            <a class="btn btn-gray text-sm js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}" href="javascript:;" data-container=".js-learn-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='{{ render(controller('AppBundle:Task:finishCondition', {task: task}))}}' >
-              <i class="es-icon es-icon-help mrs text-md"></i>任务完成条件
-            </a> 
+        <div class="state-opration ">
+          <a class="btn btn-gray text-sm js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
+             href="javascript:;" data-container=".js-learn-prompt" data-toggle="popover"
+             data-trigger="hover" data-placement="top"
+             data-content='{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}'>
+            <i class="es-icon es-icon-help mrs text-md"></i>任务完成条件
+          </a>
 
-            <span class="btn text-sm js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}  " href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-trigger="hover" data-placement="top" data-content='{% include "task/task-finished-prompt.html.twig" %}'
-            data-url = "{{path('course_task_finished_prompt', {courseId: course.id, id: task.id})}}">
+          <span
+              class="btn text-sm js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
+              href="javascript:;" data-container=".js-learned-prompt" data-toggle="popover" data-trigger="hover"
+              data-placement="top"
+              data-content='{% include "task/task-finished-prompt.html.twig" %}'
+              data-url="{{ path('course_task_finished_prompt', {courseId: course.id, id: task.id}) }}">
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
             </span>
         </div>
 
-        {% if course.enableFinish|default(1)%}
-          <a type="button" 
-            href="javascript:;" 
-          {% if taskResult.status != 'finish' %}
-            class="btn btn-transparent btn-learn js-btn-learn" 
-            id = 'learn-btn'
-            data-url='{{path("course_task_finish",{courseId: task.courseId, id: task.id})}}'
-          {% else %}
-            class="btn btn-transparent btn-learn js-btn-learn active" 
-          {% endif %}
-          >
-            {% if taskResult.status == 'finish' %}
-            <i class="es-icon es-icon--check-circle done"></i>
+        {% if course.enableFinish|default(1) %}
+          <a type="button" href="javascript:;"
+            {% if taskResult.status != 'finish' %}
+              class="btn btn-transparent btn-learn js-btn-learn"
+              id='learn-btn'
+              data-url='{{ path("course_task_finish",{courseId: task.courseId, id: task.id}) }}'
             {% else %}
-            <i class="es-icon es-icon-undone-check doing"></i>
+              class="btn btn-transparent btn-learn js-btn-learn active"
+            {% endif %}>
+            {% if taskResult.status == 'finish' %}
+              <i class="es-icon es-icon--check-circle done"></i>
+            {% else %}
+              <i class="es-icon es-icon-undone-check doing"></i>
             {% endif %}
             学过了
           </a>
         {% endif %}
-        
+
       </div>
     </div>
     <div class="dashboard-sidebar" id="dashboard-sidebar">

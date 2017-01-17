@@ -38,20 +38,25 @@ function deleteOption(dataSource,validatorDatas,optionId) {
 function changeOptionChecked(dataSource,validatorDatas,id,checked,isRadio) {
   let checkedNum = 0;
   dataSource.map((item,index)=> {
-    if(item.optionId == id) {
-      //如果是单选，
-      if(isRadio && checked){
-        return;
+    if(!isRadio) {
+      if(item.optionId == id ) {
+        dataSource[index].checked= !checked;
       }
-      dataSource[index].checked= !checked;
-    }else if(isRadio && !checked){
-      //如果是单选;
-      dataSource[index].checked = false;
+    }else {
+      //单选
+      if(item.optionId == id && !checked ) { 
+        dataSource[index].checked  = true;
+      }else if(!checked){
+        dataSource[index].checked = false;
+      }
     }
+    //计算选择的答案
+    console.log(dataSource[index].checked);
     if(dataSource[index].checked) {
       checkedNum++;
     }
   });
+  console.log(checkedNum);
   validatorDatas.checkedNum = checkedNum;
 }
 
@@ -108,7 +113,6 @@ export default class QuestionOptions extends Component {
   }
 
   publishMessage(isValidator) {
-    console.log({'publishMessage':isValidator});
     postal.publish({
       channel : "manage-question",
       topic : "question-create-form-validator-end",
@@ -119,7 +123,6 @@ export default class QuestionOptions extends Component {
   }
 
   validatorOptions(data) {
-    console.log('validatorOptions');
     let validNum = 0;
 
     //触发视觉
@@ -131,16 +134,13 @@ export default class QuestionOptions extends Component {
       validNum += this.validatorDatas.Options[option];
     }
 
-    console.log(this.state.dataSource.length);
-    console.log(validNum);
-
     if(validNum < this.state.dataSource.length ) {
       console.log(' validNum is error ');
       return;
     }
 
     if(this.validatorDatas.checkedNum < this.props.minCheckedNum ) {
-      notify('danger','请选择正确答案!');
+      notify('danger',`至少选择${this.props.minCheckedNum}个答案!`);
     }else {
       console.log('publishMessage');
       this.publishMessage(true);

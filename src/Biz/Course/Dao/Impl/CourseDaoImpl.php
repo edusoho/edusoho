@@ -9,7 +9,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 {
     protected $table = 'c2_course';
 
-    public function findCoursesByCourseSetIdAndStatus($courseSetId, $status)
+    public function findCoursesByCourseSetIdAndStatus($courseSetId, $status = null)
     {
         if (empty($status)) {
             return $this->findByFields(array('courseSetId' => $courseSetId));

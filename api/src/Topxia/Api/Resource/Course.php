@@ -3,7 +3,7 @@
 namespace Topxia\Api\Resource;
 
 use Topxia\Api\Util\TagUtil;
-use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\ArrayToolkit;
 
 class Course extends BaseResource
 {
@@ -29,6 +29,9 @@ class Course extends BaseResource
         $res['expiryDay'] = '0';
 
         $res['tags'] = TagUtil::buildTags('course', $res['id']);
+        $res['tags'] = ArrayToolkit::column($res['tags'], 'name');
+
+
 
         return $res;
     }

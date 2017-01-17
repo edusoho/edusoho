@@ -63,7 +63,7 @@ class GroupController extends BaseController
         $userIds             = ArrayToolkit::column($threads, 'lastPostMemberId');
         $postLastPostMembers = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render("my/group/group-member-center.html.twig", array(
+        return $this->render("my/learning/group/group-member-center.html.twig", array(
             'user'                   => $user,
             'groups'                 => $groups,
             'threads'                => $threads,
@@ -107,7 +107,7 @@ class GroupController extends BaseController
         $groupIds = ArrayToolkit::column($members, 'groupId');
         $groups   = $this->getGroupService()->getGroupsByIds($groupIds);
 
-        return $this->render("my/group/group-member-join.html.twig", array(
+        return $this->render("my/learning/group/group-member-join.html.twig", array(
             'user'        => $user,
             'adminGroups' => $adminGroups,
             'paginator'   => $paginator,
@@ -134,7 +134,7 @@ class GroupController extends BaseController
         $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
         $groups          = $this->getGroupService()->getGroupsByIds($groupIds);
 
-        return $this->render("my/group/group-member-threads.html.twig", array(
+        return $this->render("my/learning/group/group-member-threads.html.twig", array(
             'user'            => $user,
             'paginator'       => $paginator,
             'lastPostMembers' => $lastPostMembers,
@@ -167,7 +167,7 @@ class GroupController extends BaseController
 
         $userIds         = ArrayToolkit::column($threads, 'lastPostMemberId');
         $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
-        return $this->render("my/group/group-member-posts.html.twig", array(
+        return $this->render("my/learning/group/group-member-posts.html.twig", array(
             'user'            => $user,
             'paginator'       => $paginator,
             'threads'         => $threads,
@@ -203,7 +203,7 @@ class GroupController extends BaseController
 
         $userIds         = ArrayToolkit::column($threads, 'lastPostMemberId');
         $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
-        return $this->render("my/group/group-member-collect.html.twig", array(
+        return $this->render("my/learning/group/group-member-collect.html.twig", array(
             'user'            => $user,
             'paginator'       => $paginator,
             'threads'         => $threads,
