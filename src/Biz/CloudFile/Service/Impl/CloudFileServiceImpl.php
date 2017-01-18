@@ -145,9 +145,6 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         if ($searchType == 'course') {
             $courseSets   = $this->getCourseSetService()->findCourseSetsLikeTitle($keywords);
             $courseSetIds = ArrayToolkit::column($courseSets, 'id');
-            if (empty($courseSetIds)) {
-                $courseSetIds = array('0');
-            }
 
             $courseMaterials = $this->getMaterialService()->searchMaterials(
                 array('courseSetIds' => $courseSetIds),
