@@ -12,7 +12,7 @@
 
 {% block paper_sidebar %}
   {% if showCard|default(1) %}
-    <div class="testpaper-card affix" >
+    <div class="testpaper-card {{ testpaperCardClass|default('') }}" >
       {% include 'testpaper/testpaper-card.html.twig' %}
     </div>
   {% endif %}

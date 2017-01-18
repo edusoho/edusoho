@@ -297,21 +297,6 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     return $courseSet['type'] !='live';
                 }
             ),
-            'download' => array(
-                'meta'    => array(
-                    'name' => '下载资料',
-                    'icon' => 'es-icon es-icon-filedownload'
-                ),
-                'actions' => array(
-                    'create'          => 'AppBundle:Activity/Download:create',
-                    'edit'            => 'AppBundle:Activity/Download:edit',
-                    'show'            => 'AppBundle:Activity/Download:show',
-                    'finishCondition' => 'AppBundle:Activity/Download:finishCondition'
-                ),
-                'visible' => function($courseSet, $course){
-                    return true;
-                }
-            ),
             'live'     => array(
                 'meta'    => array(
                     'name' => '直播',
@@ -440,6 +425,21 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'finishCondition' => 'AppBundle:Activity/Exercise:finishCondition'
                 ),
                 'visible' => function($courseSet, $course) use ($biz){
+                    return true;
+                }
+            ),
+            'download' => array(
+                'meta'    => array(
+                    'name' => '下载资料',
+                    'icon' => 'es-icon es-icon-filedownload'
+                ),
+                'actions' => array(
+                    'create'          => 'AppBundle:Activity/Download:create',
+                    'edit'            => 'AppBundle:Activity/Download:edit',
+                    'show'            => 'AppBundle:Activity/Download:show',
+                    'finishCondition' => 'AppBundle:Activity/Download:finishCondition'
+                ),
+                'visible' => function($courseSet, $course){
                     return true;
                 }
             )
