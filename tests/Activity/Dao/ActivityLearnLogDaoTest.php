@@ -44,6 +44,18 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
 
+    public function testSumLearnedTimeByActivityId()
+    {
+        $expected = array();
+        $this->mockDataObject(array('activityId' => 1));
+        $expected[] = $this->mockDataObject(array('activityId' => 2));
+        $expected[] = $this->mockDataObject(array('activityId' => 2));
+
+        $res = $this->getDao()->sumLearnedTimeByActivityId(2);
+
+        $this->assertEquals($this->getSums($expected), $res);
+    }
+
     public function testSumLearnedTimeByActivityIdAndUserId()
     {
         $expected = array();
