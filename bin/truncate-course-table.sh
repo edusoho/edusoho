@@ -79,7 +79,7 @@ not_truncate_tables=(
     "migrations"
 )
 
-readonly need_truncate_tables
+readonly not_truncate_tables
 
 for table in ${tables[@]}
 do
