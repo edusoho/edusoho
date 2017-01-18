@@ -22,6 +22,14 @@ class UserApprovalController extends BaseController
         $conditions = array_merge($conditions, $fields);
         $conditions = $this->fillOrgCode($conditions);
 
+        if (!empty($conditions['startDateTime'])) {
+            $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
+        }
+
+        if (!empty($conditions['endDateTime'])) {
+            $userConditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
+        }
+
         if (isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')) {
             //根据条件从user_approval表里查找数据
             $approvalcount   = $this->getUserService()->searchApprovalsCount($conditions);
@@ -39,27 +47,13 @@ class UserApprovalController extends BaseController
             'approvalStatus' => $approvalStatus
         );
 
-        if (!empty($conditions['startDateTime'])) {
-            $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
-        }
-
-        if (!empty($conditions['endDateTime'])) {
-            $userConditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
-        }
-
-        $userApprovalcount = 0;
-
-        if (!empty($userApprovingId)) {
-            $userApprovalcount = $this->getUserService()->searchUserCount($userConditions);
-        }
-
         $paginator = new Paginator(
             $this->get('request'),
-            $userApprovalcount,
+            $usercount,
             20
         );
         $users = array();
-
+        
         if (!empty($userApprovingId)) {
             $users = $this->getUserService()->searchUsers(
                 $userConditions,
@@ -69,13 +63,10 @@ class UserApprovalController extends BaseController
             );
         }
 
-        //最终结果
-        $userProfiles = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
-        $userProfiles = ArrayToolkit::index($userProfiles, 'userId');
         return $this->render('admin/user/approvals.html.twig', array(
             'users'          => $users,
             'paginator'      => $paginator,
-            'userProfiles'   => $userProfiles,
+            'userProfiles'   => $profiles,
             'approvalStatus' => $approvalStatus
         ));
     }

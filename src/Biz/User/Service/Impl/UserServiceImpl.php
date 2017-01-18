@@ -43,6 +43,19 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->count($conditions);
     }
 
+    public function searchUsers(array $conditions, array $orderBy, $start, $limit)
+    {
+        $conditions = $this->prepareConditions($conditions);
+
+        if (isset($conditions['nickname'])) {
+            $conditions['nickname'] = strtoupper($conditions['nickname']);
+        }
+
+        $users = $this->getUserDao()->search($conditions, $orderBy, $start, $limit);
+
+        return UserSerialize::unserializes($users);
+    }
+
     public function getUserSecureQuestionsByUserId($userId)
     {
         return $this->getUserSecureQuestionDao()->findByUserId($userId);
@@ -237,19 +250,6 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $userProfiles = $this->getProfileDao()->findByIds($ids);
         return ArrayToolkit::index($userProfiles, 'id');
-    }
-
-    public function searchUsers(array $conditions, array $orderBy, $start, $limit)
-    {
-        $conditions = $this->prepareConditions($conditions);
-        
-        if (isset($conditions['nickname'])) {
-            $conditions['nickname'] = strtoupper($conditions['nickname']);
-        }
-
-        $users = $this->getUserDao()->search($conditions, $orderBy, $start, $limit);
-
-        return UserSerialize::unserializes($users);
     }
 
     public function countUsers(array $conditions)
@@ -1808,6 +1808,8 @@ class UserServiceImpl extends BaseService implements UserService
                 unset($conditions[$key]);
             }
         }
+
+        return $conditions;
     }
 
     /**
