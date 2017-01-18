@@ -7,7 +7,7 @@
   <form id='teacherCheckForm' autocomplete="off">
     
     {% for type in questionTypes|default([]) if questions[type]|default(null) %}
-      <div class="panel panel-default border-radius-none testpaper-question-block" id="testpaper-questions-{{ type }}">
+      <div class="panel panel-default border-radius-none js-testpaper-question-block" id="testpaper-questions-{{ type }}">
         <div class="panel-heading">
           <strong class="">{{ questionTypeDict[type] }}</strong>
           <small class="text-muted">
