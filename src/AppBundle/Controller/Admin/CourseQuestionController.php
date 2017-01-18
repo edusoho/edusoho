@@ -10,20 +10,13 @@ class CourseQuestionController extends BaseController
     public function indexAction(Request $request, $postStatus)
     {
         $conditions = $request->query->all();
+
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
-            $courses                 = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['keyword']));
-            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
-            if (count($conditions['courseIds']) == 0) {
-                return $this->render('admin/course-question/index.html.twig', array(
-                    'paginator' => new Paginator($request, 0, 20),
-                    'questions' => array(),
-                    'users'     => array(),
-                    'courses'   => array(),
-                    'lessons'   => array(),
-                    'type'      => $postStatus
-                ));
-            }
+            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);
+            $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
+            $conditions['courseSetIds'] = !empty($conditions['courseSetIds']) ?: array(-1);
         }
+        
         $conditions['type'] = 'question';
         if ($postStatus == 'unPosted') {
             $conditions['postNum'] = 0;
@@ -31,7 +24,7 @@ class CourseQuestionController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getThreadService()->searchThreadCount($conditions),
+            $this->getThreadService()->countThreads($conditions),
             20
         );
 
@@ -43,15 +36,17 @@ class CourseQuestionController extends BaseController
         );
 
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($questions, 'courseSetId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($questions, 'lessonId'));
+        $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($questions, 'taskId'));
 
         return $this->render('admin/course-question/index.html.twig', array(
             'paginator' => $paginator,
             'questions' => $questions,
             'users'     => $users,
+            'courseSets' => $courseSets,
             'courses'   => $courses,
-            'lessons'   => $lessons,
+            'tasks'   => $tasks,
             'type'      => $postStatus
         ));
     }
@@ -79,5 +74,15 @@ class CourseQuestionController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }

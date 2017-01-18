@@ -33,6 +33,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
     }
 
+    public function findCoursesByCourseSetIds(array $setIds)
+    {
+        return $this->getCourseDao()->findByCourseSetIds($setIds);
+    }
+
     public function findCoursesByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, null);
@@ -168,6 +173,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $fields);
     }
 
+    public function updateMaxRate($id, $maxRate)
+    {
+        return $this->getCourseDao()->update($id, array('maxRate' => $maxRate));
+    }
+
     public function setCourseTeachers($courseId, $teachers)
     {
         $teacherMembers = array();
@@ -261,7 +271,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function calculatePrice($id, $originPrice)
     {
-        return $originPrice * 100;
+        return $originPrice;
     }
 
     public function updateCourseStatistics($id, $fields)
@@ -296,7 +306,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     /**
      * @todo 教学计划的删除逻辑较复杂，需要整理
      * @deprecated
-     * @see Topxia\Service\Course\Impl\CourseDeleteServiceImpl
+     * @see  Topxia\Service\Course\Impl\CourseDeleteServiceImpl
      */
     public function deleteCourse($id)
     {
@@ -363,7 +373,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
-    public function publishCourse($id, $userId)
+    public function publishCourse($id)
     {
         $this->tryManageCourse($id);
         $this->getCourseDao()->update($id, array(

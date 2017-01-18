@@ -1,19 +1,22 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simon
- * Date: 09/12/2016
- * Time: 16:40
- */
-
 namespace AppBundle\Twig;
+
+use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ActivityExtension extends \Twig_Extension
 {
+    /**
+     * @var Biz
+     */
     protected $biz;
+
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
 
-    public function __construct($container, $biz)
+    public function __construct(ContainerInterface $container, Biz $biz)
     {
         $this->container = $container;
         $this->biz       = $biz;
@@ -22,7 +25,8 @@ class ActivityExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('activity_length_format', array($this, 'lengthFormat'))
+            new \Twig_SimpleFilter('activity_length_format', array($this, 'lengthFormat')),
+            new \Twig_SimpleFilter('activity_visible', array($this, 'isActivityVisible'))
         );
     }
 
@@ -37,6 +41,7 @@ class ActivityExtension extends \Twig_Extension
     public function getActivityMeta($type = null)
     {
         $activities = $this->container->get('extension.default')->getActivities();
+
         if (empty($type)) {
             $activities = array_map(function ($activity) {
                 return $activity['meta'];
@@ -51,6 +56,19 @@ class ActivityExtension extends \Twig_Extension
                 'name' => ''
             );
         }
+    }
+
+    /**
+     * @param $type
+     * @param $courseSet
+     * @param $course
+     *
+     * @return bool
+     */
+    public function isActivityVisible($type, $courseSet, $course)
+    {
+        $activities = $this->container->get('extension.default')->getActivities();
+        return call_user_func($activities[$type]['visible'], $courseSet, $course);
     }
 
     public function lengthFormat($len)

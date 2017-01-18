@@ -1,4 +1,4 @@
-<div class="testpaper-question testpaper-question-essay {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
+<div class="testpaper-question testpaper-question-essay js-testpaper-question {% if setting('magic.testpaper_watermark') %}js-testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
 	<div class="testpaper-question-body">
 	  {% include 'question/part/question-stem.html.twig' %}
   </div>

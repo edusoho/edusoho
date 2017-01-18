@@ -1,14 +1,23 @@
 <?php
 namespace Topxia\WebBundle\Twig\Extension;
 
+use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\WebBundle\Util\AvatarAlert;
 
 class CourseExtension extends \Twig_Extension
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
+
+    /**
+     * @var Biz
+     */
     protected $biz;
 
-    public function __construct($container, $biz)
+    public function __construct(ContainerInterface $container, Biz $biz)
     {
         $this->container = $container;
         $this->biz       = $biz;

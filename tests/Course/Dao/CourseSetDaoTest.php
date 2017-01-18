@@ -41,6 +41,18 @@ class CourseSetDaoTest extends BaseDaoTestCase
         $this->assertEquals($expected, $res);
     }
 
+    public function testFindLikeTitle()
+    {
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject(array('title' => 'mm'));
+        $expected[] = $this->mockDataObject(array('title' => 'hehe'));
+
+        $res = $this->getDao()->findLikeTitle('m');
+
+        $this->assertEquals(array($expected[0], $expected[1]), $res);
+    }
+
     protected function getDefaultMockFields()
     {
         return array(

@@ -23,8 +23,13 @@ node_modules/
 /plugins/*
 !/plugins/.gitkeep
 /build/
+
+#bin dir
 /bin/*
 !/bin/phpmig
+!/bin/truncate-course-table.sh
+
+
 /composer.phar
 /scripts
 /etc/sublimetext2/edusoho.sublime-workspace
@@ -64,3 +69,4 @@ chunk-manifest.json
 .npminstall.done
 /web/static-dist/*
 .vscode/
+.sonar

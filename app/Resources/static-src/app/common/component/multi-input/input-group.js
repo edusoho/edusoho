@@ -15,12 +15,10 @@ export default class InputGroup extends Component {
     this.searchable = this.props.searchable.enable;
     this.addable = this.props.addable;
     this.searchableUrl = this.props.searchable.url;
-    console.log(this.props);
   }
 
   selectChange(event) {
     //在这种情况下，不应该去搜索，那什么时候再搜索呢；
-    this.props.onSearch(event.target.id);
     this.setState({
       searched: false,
       itemName: event.target.innerHTML,
@@ -50,7 +48,6 @@ export default class InputGroup extends Component {
           if(this.state.itemName.length>0) {
             console.log({'searchResult': searchResult});
             this.setState({
-              // searchResult:[{avatar:"/files/user/2016/11-22/17385936ebcd728942.jpg?7.3.4",id:"1526",isVisible:1,nickname:"wuli"}],
               searchResult: searchResult,
               resultful:true,
             });
@@ -64,7 +61,7 @@ export default class InputGroup extends Component {
   handleAdd()  {
     if(this.state.itemName.length>0) {
       //@TODO序号应该再哪里去加；
-      this.props.addItem(this.state.itemName);
+      this.context.addItem(this.state.itemName);
     }
     this.setState({
       itemName:'',
@@ -83,3 +80,7 @@ export default class InputGroup extends Component {
     );
   }
 }
+
+InputGroup.contextTypes = {
+  addItem:React.PropTypes.func,
+};

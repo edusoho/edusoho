@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 
-
 use Biz\File\Service\UploadFileService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\User\Service\TokenService;
@@ -43,7 +42,7 @@ class PlayerController extends BaseController
             if (!empty($file['convertParams']['hasVideoWatermark'])) {
                 $file['videoWatermarkEmbedded'] = 1;
             }
-            $ssl = $request->isSecure() ? true : false;
+            $ssl    = $request->isSecure() ? true : false;
             $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
             if (isset($result['subtitles'])) {
@@ -291,11 +290,11 @@ class PlayerController extends BaseController
 
     protected function getPlayer($file)
     {
-        switch ($file['storage']) {
-            case 'local':
-                return $file["type"] == 'audio' ? 'audio-player' : 'local-video-player';
-            case 'cloud':
-                return 'balloon-cloud-video-player';
+        switch ($file["type"]) {
+            case 'audio':
+                return 'audio-player';
+            case 'video':
+                return $file['storage'] == 'local' ? 'local-video-player' : 'balloon-cloud-video-player';
             default:
                 return null;
         }

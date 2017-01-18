@@ -4,9 +4,9 @@ namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\AudioActivityDao;
-use Biz\Activity\Service\ActivityLearnLogService;
-use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class Audio extends Activity
 {
@@ -47,15 +47,10 @@ class Audio extends Activity
         return $audioActivity;
     }
 
-    /**
-     * TODO观看后完成
-     */
     public function isFinished($activityId)
     {
-        $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
-        $activity = $this->getActivityService()->getActivity($activityId);
-        return !empty($result)
-        && $result > $activity['length'];
+        $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'audio.finish');
+        return !empty($logs);
     }
 
     /**

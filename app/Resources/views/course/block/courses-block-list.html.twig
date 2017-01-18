@@ -1,12 +1,13 @@
 <div class="course-list">
   <div class="row">
     {% for course in courses %}
+      {% set courseSet = data('CourseSet', { id: course.courseSetId }) %}
       <div class="col-lg-3 col-md-4 col-xs-6">
         <div class="course-item">
           <div class="course-img">
-            <a href="{{ path('course_set_show', {id:course.courseSet.id}) }}" target="_blank">
-              {% if course.discountId > 0 %}
-                {% if course.discount == 0 %}
+            <a href="{{ path('course_set_show', {id: courseSet.id}) }}" target="_blank">
+              {% if courseSet.discountId > 0 %}
+                {% if courseSet.discount == 0 %}
                   <!-- 限免 -->
                   <span class="tag-discount free"></span>
                 {% else %}
@@ -14,17 +15,17 @@
                   <span class="tag-discount"></span>
                 {% endif %}
               {% endif %}
-              {% if course.courseSet.serializeMode == 'serialize' %}
+              {% if courseSet.serializeMode == 'serialize' %}
                 <span class="tags"><span class="tag-serialing"></span></span>
-              {% elseif course.courseSet.serializeMode == 'finished' %}
+              {% elseif courseSet.serializeMode == 'finished' %}
                 <span class="tags"><span class="tag-finished"></span></span>
               {% endif %}
-              {% if course.courseSet.type == 'live' %}
+              {% if courseSet.type == 'live' %}
                 <span class="tags">
                   <span class="tag-live"></span>
                 </span>
               {% endif %}
-              <img class="img-responsive" src="{{ filepath(course.courseSet.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+              <img class="img-responsive" src="{{ filepath(courseSet.cover.middlePicture|default(null), 'course.png') }}" alt="{{ course.title }}">
             </a>
           </div>
           <div class="course-info">
@@ -38,7 +39,7 @@
               <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
               {% endif %}
               <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
-              {% include 'course/widget/course-price.html.twig' with {shows:'price'} %}
+              {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
             </div>
           </div>
         </div>
