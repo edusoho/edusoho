@@ -159,7 +159,7 @@ abstract class BaseService
         return true;
     }
 
-    public function setting($name, $default) 
+    public function setting($name, $default = '')
     {
         $names = explode('.', $name);
         $setting = $this->createService('System.SettingService')->get($names[0]);
