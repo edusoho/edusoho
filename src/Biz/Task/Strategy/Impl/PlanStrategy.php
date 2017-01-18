@@ -72,16 +72,6 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
-    public function getTasksRenderPage()
-    {
-        return 'course-manage/lock-mode/tasks.html.twig';
-    }
-
-    public function getTaskItemRenderPage()
-    {
-        return 'task-manage/list-item-lock-mode.html.twig';
-    }
-
     public function prepareCourseItems($courseId, $tasks)
     {
         $items = array();

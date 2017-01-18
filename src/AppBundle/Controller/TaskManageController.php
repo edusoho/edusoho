@@ -30,8 +30,7 @@ class TaskManageController extends BaseController
                 return $this->createJsonResponse(array('append' => false));
             }
 
-            $tasksRenderPage = $this->createCourseStrategy($course)->getTaskItemRenderPage();
-            return $this->render($tasksRenderPage, array(
+            return $this->render($this->getTaskItemTemplate($course), array(
                 'course' => $course,
                 'task'   => $task
             ));
@@ -45,6 +44,15 @@ class TaskManageController extends BaseController
             'chapterId'  => $chapterId,
             'taskMode'   => $taskMode,
         ));
+    }
+
+    protected function getTaskItemTemplate($course)
+    {
+        if($course['isDefault']) {
+            return 'task-manage/list-item.html.twig';
+        } else {
+            return 'task-manage/list-item-lock-mode.html.twig';
+        }
     }
 
     public function updateAction(Request $request, $courseId, $id)

@@ -70,16 +70,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return $result;
     }
 
-    public function getTasksRenderPage()
-    {
-        return 'course-manage/free-mode/tasks.html.twig';
-    }
-
-    public function getTaskItemRenderPage()
-    {
-        return 'task-manage/list-item.html.twig';
-    }
-
     protected function validateTaskMode($field)
     {
         if (empty($field['mode']) || !in_array($field['mode'], array('preparation', 'lesson', 'exercise', 'homework', 'extraClass'))) {
