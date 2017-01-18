@@ -143,23 +143,23 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function findGlobalIdsByKeyWords($searchType, $keywords)
     {
         if ($searchType == 'course') {
-            $courses   = $this->getCourseService()->findCoursesByLikeTitle($keywords);
-            $courseIds = ArrayToolkit::column($courses, 'id');
-
-            if (empty($courseIds)) {
-                $courseIds = array('0');
+            $courseSets   = $this->getCourseSetService()->findCourseSetsLikeTitle($keywords);
+            $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+            if (empty($courseSetIds)) {
+                $courseSetIds = array('0');
             }
 
             $courseMaterials = $this->getMaterialService()->searchMaterials(
-                array('courseIds' => $courseIds),
-                array('createdTime', 'DESC'),
-                0, PHP_INT_MAX
+                array('courseSetIds' => $courseSetIds),
+                array('createdTime' => 'DESC'),
+                0,
+                PHP_INT_MAX
             );
 
             $conditions        = array();
             $conditions['ids'] = ArrayToolkit::column($courseMaterials, 'fileId');
 
-            $materials = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+            $materials = $this->getUploadFileService()->searchFiles($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
             $globalIds = ArrayToolkit::column($materials, 'globalId');
 
             return $globalIds;
@@ -170,7 +170,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
             $userIds    = empty($userIds) ? array(-1) : $userIds;
             $localFiles = $this->getUploadFileService()->searchFiles(
-                array('createdUserIds' => $userIds, 'storage' => 'cloud'), array('createdTime', 'DESC'), 0, PHP_INT_MAX
+                array('createdUserIds' => $userIds, 'storage' => 'cloud'), array('createdTime' => 'DESC'), 0, PHP_INT_MAX
             );
             $globalIds = ArrayToolkit::column($localFiles, 'globalId');
 
@@ -289,9 +289,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->createService('File:UploadFileTagService');
     }
 
-    protected function getCourseService()
+    protected function getCourseSetService()
     {
-        return ServiceKernel::instance()->createService('Course:CourseService');
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
