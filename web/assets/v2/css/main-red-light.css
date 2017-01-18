@@ -8203,7 +8203,7 @@ textarea {
 }
 .card-pack-item .price {
   margin-bottom: 18px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 .card-pack-item .price strong {
   font-size: 30px;
@@ -13856,6 +13856,139 @@ textarea {
 }
 .group-page .media:hover .post-delete-btn {
   visibility: visible;
+}
+.card-pack-item {
+  position: relative;
+  width: 254px;
+  height: 172px;
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+}
+.card-pack-list .card-pack-item {
+  margin: 0 auto 30px auto;
+}
+.card-pack-item h4 {
+  position: absolute;
+  font-size: 18px;
+  left: 18px;
+}
+.card-pack-item p {
+  margin-bottom: 0;
+}
+.card-pack-item .title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+.card-pack-item .deadline {
+  position: absolute;
+  top: 83%;
+  left: 20%;
+}
+.card-pack-item .price {
+  position: absolute;
+  top: 35%;
+  left: 35%;
+}
+.card-pack-item .price strong {
+  font-size: 30px;
+  font-weight: normal;
+}
+.card-pack-item .price a {
+  color: #fff;
+  padding-left: 8px;
+}
+.card-pack-item .price .stamp {
+  position: absolute;
+  display: inline-block;
+  width: 132px;
+  height: 132px;
+  bottom: 8px;
+  left: 15px;
+}
+.card-pack-item .stamp.stamp-outdate {
+  background: url('../img/card.png') no-repeat 0 -349px;
+}
+.card-pack-item .stamp.stamp-cancel {
+  background: url('../img/card.png') no-repeat -410px -351px;
+}
+.card-pack-item.coupon-item {
+  background: url('../img/card.png') no-repeat;
+}
+.card-pack-item.coupon-item .title {
+  padding-top: 38px;
+}
+.card-pack-item.coupon-item .stamp-used {
+  background: url('../img/card.png') no-repeat -140px -349px;
+}
+.card-pack-item.coupon-item.useless {
+  background: url('../img/card.png') no-repeat 0 -174px;
+}
+.card-pack-item.card-item.useless {
+  background: url('../img/card.png') no-repeat -260px -174px;
+}
+.card-pack-item.card-item {
+  background: url('../img/card.png') no-repeat -260px 0;
+}
+.card-pack-item.card-item .title {
+  padding-top: 58px;
+}
+.card-pack-item.card-item .stamp-used {
+  background: url('../img/card.png') no-repeat -275px -351px;
+}
+.modal-card-pack.modal-logined .modal-content:after {
+  position: absolute;
+  width: 96px;
+  height: 97px;
+  top: 105px;
+  right: 90px;
+  content: '';
+  background: url('../img/card_user.png') center center no-repeat;
+}
+@media (max-width: 767px) {
+  .modal-card-pack.modal-logined .modal-content:after {
+    display: none;
+  }
+}
+.modal-card-pack .modal-content {
+  position: relative;
+  background: url('../img/card_bg.png') #feba37 center center no-repeat;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+.modal-card-pack .modal-body {
+  padding: 30px;
+}
+.modal-card-pack .modal-body .modal-info {
+  text-align: center;
+  color: #fff;
+  font-size: 22px;
+  margin-bottom: 30px;
+}
+.modal-card-pack .modal-body .modal-action {
+  margin-top: 30px;
+  text-align: center;
+}
+@media (max-width: 767px) {
+  .modal-card-pack .modal-body {
+    padding: 15px;
+  }
+}
+@media (max-width: 767px) {
+  .modal-card-pack .modal-body .modal-info {
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+}
+@media (max-width: 767px) {
+  .modal-card-pack .modal-body .modal-action {
+    margin-top: 20px;
+  }
 }
 .es-live-poster {
   position: relative;

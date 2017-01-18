@@ -7805,9 +7805,16 @@ textarea {
   white-space: nowrap;
   word-wrap: normal;
 }
+.card-pack-item .deadline {
+  display: inline-block;
+  margin-top: 16px;
+}
 .card-pack-item .price {
   margin-bottom: 18px;
   margin-top: 15px;
+}
+.card-pack-item .price p {
+  padding-top: 66px;
 }
 .card-pack-item .price strong {
   font-size: 30px;

@@ -1,8 +1,7 @@
 <div class="card-pack-item card-item">
   <h4>{{'学习卡'|trans}}</h4>
-  <p class="title"></p>
-  <p class="price">
-    <strong>{{ cardDetail.coin }}</strong>{{ coin.coin_name|default('虚拟币'|trans) }}
-  </p>
-  <p>{{'有效期截止：'|trans}}<span>{{'%deadline%年'|trans({'%deadline%': cardDetail.deadline|date('Y')})}}{{'%deadline%月'|trans({'%deadline%': cardDetail.deadline|date('n')}) }}{{'%deadline%日'|trans({'%deadline%': cardDetail.deadline|date('d')}) }}</span></p>
+  <div class="price">
+    <p><strong>{{ cardDetail.coin }}</strong>{{ coin.coin_name|default('虚拟币'|trans) }}</p>
+  </div>
+  <div class="deadline"><p>{{'有效期截止：'|trans}}<span>{{'%deadline%年'|trans({'%deadline%': cardDetail.deadline|date('Y')})}}{{'%deadline%月'|trans({'%deadline%': cardDetail.deadline|date('n')}) }}{{'%deadline%日'|trans({'%deadline%': cardDetail.deadline|date('d')}) }}</span></p></div>
 </div>
