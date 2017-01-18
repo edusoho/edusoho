@@ -1,3 +1,4 @@
+import notify from 'common/notify';
 class AttachmentActions {
   constructor($ele) {
     this.$ele = $ele;
@@ -13,6 +14,7 @@ class AttachmentActions {
 
     $.post($target.data('url'),{},function(response){
       if (response.msg == 'ok') {
+        notify('success', Translator.trans('删除成功！'));
         $target.closest('.js-attachment-list').siblings('.js-upload-file').show();
         $target.closest('.js-attachment-list').closest('div').siblings('[data-role="fileId"]').val('');
         console.log($target.closest('.js-attachment-list').closest('div').siblings('[data-role="fileId"]'));

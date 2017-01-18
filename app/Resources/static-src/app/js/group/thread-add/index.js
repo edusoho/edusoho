@@ -1,7 +1,10 @@
+import AttachmentActions from '../../attachment/widget/attachment-actions';
+
 let $userThreadForm = $('#user-thread-form');
 let groupThreadAddBtn = '#groupthread-save-btn';
 let threadContent = 'thread_content';
 
+new AttachmentActions($userThreadForm);
 let editor = CKEDITOR.replace(threadContent, {
   toolbar: 'Thread',
   filebrowserImageUploadUrl: $("#" + threadContent).data('imageUploadUrl'),
@@ -11,7 +14,6 @@ let editor = CKEDITOR.replace(threadContent, {
 editor.on('change', () => {
   $("#" + threadContent).val(editor.getData());
 });
-
 
 let formValidator = $userThreadForm.validate({
   currentDom: groupThreadAddBtn,

@@ -26,8 +26,7 @@
         </div>
 
         <div class="form-group">
-          <label class="col-xs-2 control-label"
-                 for="{% if is_feature_enabled('group_reward') %}thread_content1{% else %}thread_content{% endif %}">{{ '内容'|trans }}</label>
+          <label class="col-xs-2 control-label" for="{% if is_feature_enabled('group_reward') %}thread_content1{% else %}thread_content{% endif %}">{{ '内容'|trans }}</label>
           <div class="col-sm-7 col-xs-10 controls">
             {% if is_feature_enabled('group_reward') %}
               <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control"
@@ -45,10 +44,10 @@
         <div class="form-group">
           <div class="col-sm-7 col-xs-10 col-xs-offset-2">
             {% if thread|default(null) %}
-              <button id="groupthread-save-btn" data-submiting-text="{{ '正在修改'|trans }}" type="button"
+              <button id="groupthread-save-btn" data-loading-text="{{ '正在修改...'|trans }}" type="button"
                       class="btn btn-primary">{{ '修改'|trans }}</button>
             {% else %}
-              <button id="groupthread-save-btn" data-submiting-text="{{ '正在创建'|trans }}" type="button"
+              <button id="groupthread-save-btn" data-loading-text="{{ '正在创建...'|trans }}" type="button"
                       class="btn btn-primary">{{ '发布'|trans }}</button>
             {% endif %}
           </div>
