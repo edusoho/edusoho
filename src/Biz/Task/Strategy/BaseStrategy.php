@@ -48,16 +48,6 @@ class BaseStrategy
 
     public function updateTask($id, $fields)
     {
-        $savedTask = $this->getTaskService()->getTask($id);
-
-        if (!$this->getCourseService()->tryManageCourse($savedTask['courseId'])) {
-            throw new AccessDeniedException('无权更新任务');
-        }
-        $activity = $this->getActivityService()->updateActivity($savedTask['activityId'], $fields);
-
-        if ($activity['mediaType'] == 'video') {
-            $fields['mediaSource'] = $fields['ext']['mediaSource'];
-        }
         $fields = ArrayToolkit::parts($fields, array(
             'title',
             'isFree',
@@ -98,7 +88,7 @@ class BaseStrategy
     {
         return $this->biz->service('Course:CourseService');
     }
-    
+
     protected function getChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');

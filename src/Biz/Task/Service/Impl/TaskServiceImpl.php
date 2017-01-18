@@ -92,6 +92,12 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $this->beginTransaction();
         try {
+            $activity = $this->getActivityService()->updateActivity($task['activityId'], $fields);
+
+            if ($activity['mediaType'] == 'video') {
+                $fields['mediaSource'] = $fields['ext']['mediaSource'];
+            }
+            
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task     = $strategy->updateTask($id, $fields);
             $this->commit();
