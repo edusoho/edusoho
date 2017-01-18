@@ -4,14 +4,21 @@ namespace Biz\Thread\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Util\TextHelper;
+use Biz\Thread\Dao\ThreadDao;
 use Topxia\Common\ArrayToolkit;
+use Biz\Thread\Dao\ThreadPostDao;
+use Biz\Thread\Dao\ThreadVoteDao;
+use Biz\User\Service\UserService;
+use Biz\System\Service\LogService;
+use Biz\Thread\Dao\ThreadMemberDao;
 use Biz\Thread\Service\ThreadService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\User\Service\NotificationService;
+use Biz\Sensitive\Service\SensitiveService;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
-    /**
+    /*
      * thread
      */
 
@@ -23,15 +30,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function createThread($thread)
     {
         if (empty($thread['title'])) {
-            throw $this->createServiceException('thread title not null');
+            throw $this->createServiceException('thread title is null');
         }
 
         if (empty($thread['content'])) {
-            throw $this->createServiceException('thread content not null');
+            throw $this->createServiceException('thread content is null');
         }
 
         if (empty($thread['targetId'])) {
-            throw $this->createServiceException($this->getKernel()->trans('thread targetId not null'));
+            throw $this->createServiceException('thread targetId is null');
         }
 
         if (empty($thread['type']) || !in_array($thread['type'], array('discussion', 'question', 'event'))) {
@@ -43,7 +50,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $event = $this->dispatchEvent('thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
-            throw $this->createServiceException($this->getKernel()->trans('发帖次数过多，请稍候尝试。'));
+            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
         }
 
         $thread = ArrayToolkit::parts($thread, array('targetType', 'targetId', 'relationId', 'categoryId', 'title', 'content', 'ats', 'location', 'userId', 'type', 'maxUsers', 'actvityPicture', 'status', 'startTime', 'endTIme'));
@@ -150,7 +157,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->dispatchEvent('thread.delete', $thread);
 
-        $this->getLogService()->info('thread', 'delete', $this->getKernel()->trans('删除话题 %title%(%id%)', array('%title%' => $thread['title'], '%id%' => $thread['id'])));
+        $this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
 
         return true;
     }
@@ -295,7 +302,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->wave(array($id), array($field => $diff));
     }
 
-    /**
+    /*
      * thread_post
      */
 
@@ -395,7 +402,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('post.delete', $post);
 
-        $thread = $this->getThread($post['threadId']);
+//        $thread = $this->getThread($post['threadId']);
 
         $totalDeleted = 1;
 
@@ -461,7 +468,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadPostDao()->update($post['id'], array('adopted' => 0));
     }
 
-    /**
+    /*
      * thread_member
      */
 
@@ -534,7 +541,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadMemberDao()->count($conditions);
     }
 
-    /**
+    /*
      * thread_vote
      */
 
@@ -559,7 +566,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             'createdTime' => time()
         );
 
-        $vote = $this->getThreadVoteDao()->create($fields);
+        $this->getThreadVoteDao()->create($fields);
 
         $this->wavePost($post['id'], 'ups', 1);
 
@@ -658,7 +665,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
             if (!in_array($conditions['keywordType'], array('title', 'content', 'targetId', 'targetTitle'))) {
-                throw $this->InvalidArgumentException('invalid argument');
+                throw $this->createInvalidArgumentException('invalid argument');
             }
 
             $conditions[$conditions['keywordType']] = $conditions['keyword'];
@@ -707,43 +714,59 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->createDao('Thread:ThreadDao');
     }
 
+    /**
+     * @return ThreadPostDao
+     */
     protected function getThreadPostDao()
     {
         return $this->createDao('Thread:ThreadPostDao');
     }
 
+    /**
+     * @return ThreadVoteDao
+     */
     protected function getThreadVoteDao()
     {
         return $this->createDao('Thread:ThreadVoteDao');
     }
 
+    /**
+     * @return ThreadMemberDao
+     */
     protected function getThreadMemberDao()
     {
         return $this->createDao('Thread:ThreadMemberDao');
     }
 
+    /**
+     * @return SensitiveService
+     */
     protected function getSensitiveService()
     {
         return $this->createService('Sensitive:SensitiveService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotifiactionService()
     {
         return $this->createService('User:NotificationService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->createService('System:LogService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

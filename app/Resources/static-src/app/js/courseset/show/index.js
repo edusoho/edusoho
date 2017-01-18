@@ -1,15 +1,16 @@
-import { chapterAnimate } from 'app/common/widget/chapter-animate';
+import {chapterAnimate} from 'app/common/widget/chapter-animate';
 
 chapterAnimate();
-initTaskLeranChart();
+initTaskLearnChart();
+triggerMemberExpired();
 
-$('.js-task-show-type').on('click','a',function() {
+$('.js-task-show-type').on('click', 'a', function () {
   let $this = $(this).addClass('active');
   $($this.data('list')).removeClass('hidden');
   $($this.siblings('a').removeClass('active').data('list')).addClass('hidden');
 })
 
-function initTaskLeranChart() {
+function initTaskLearnChart() {
   $('#freeprogress').easyPieChart({
     easing: 'easeOutBounce',
     trackColor: '#ebebeb',
@@ -17,7 +18,7 @@ function initTaskLeranChart() {
     scaleColor: false,
     lineWidth: 14,
     size: 145,
-    onStep: function(from, to, percent) {
+    onStep: function (from, to, percent) {
       if (Math.round(percent) == 100) {
         $(this.el).addClass('done');
       }
@@ -43,7 +44,7 @@ function initTaskLeranChart() {
     scaleColor: false,
     lineWidth: 14,
     size: 145,
-    onStep: function(from, to, percent) {
+    onStep: function (from, to, percent) {
       if (Math.round(percent) == 100) {
         $(this.el).addClass('done');
       }
@@ -52,5 +53,10 @@ function initTaskLeranChart() {
   });
 }
 
+function triggerMemberExpired() {
+  if($('.member-expire').length){
+    $(".member-expire a").trigger('click');
+  }
+}
 
 

@@ -1,0 +1,47 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{'我的直播课表'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-learning-live' %}
+
+{% block main %}
+
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{'我的直播课表'|trans}}</span></div>
+    <div class="panel-body">
+      {% if courseSets %}
+        <ul class="course-wide-list live-course-list">
+          {% for courseSet in courseSets %}
+            {% set task = courseSet['task'] %}
+            <li class="course-item clearfix">
+              <a class="course-picture-link" href="{{ path('course_set_show', {id:courseSet.id}) }}">
+                <img class="course-picture" src="{{ filepath(courseSet.cover.middlePicture|default(null), 'course.png') }}" alt="{{ courseSet.title }}">
+              </a>
+              <div class="course-body">
+                <h4 class="course-title"><a href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
+                  {% if courseSet.serializeMode=='serialize' %}
+                    <span class="label label-success ">{{'更新中'|trans}}</span>
+                  {% elseif courseSet.serializeMode=='finished' %}
+                    <span class="label label-warning ">{{'已完结'|trans}}</span>
+                  {% endif %}
+                </h4>
+                <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
+                <div class="live-course-lesson mtm">
+                  <span class="text-success fsl mrl">{{ task.startTime|date('n月j日 H:i') }} ~ {{ task.endTime|date('H:i') }}</span>
+                  <span class="text-muted fsl mrl">{{'第%number%课时'|trans({'%number%': task.number})}}</span>
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+        {{ web_macro.paginator(paginator) }}
+      {% else %}
+        <div class="empty">{{'没有等待开始的直播课'|trans}}</div>
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}
+
+
+

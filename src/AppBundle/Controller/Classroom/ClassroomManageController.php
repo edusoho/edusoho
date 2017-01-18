@@ -4,21 +4,35 @@ namespace AppBundle\Controller\Classroom;
 use Topxia\Common\Paginator;
 use Topxia\Common\ExportHelp;
 use Topxia\Common\ArrayToolkit;
+use Vip\Service\Vip\LevelService;
 use Topxia\Common\SimpleValidator;
+use Biz\Order\Service\OrderService;
+use Biz\Content\Service\FileService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Service\CourseService;
+use Biz\Thread\Service\ThreadService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\UserFieldService;
+use AppBundle\Controller\BaseController;
+use Biz\User\Service\NotificationService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
+use Homework\Service\Homework\HomeworkService;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\WebBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomReviewService;
+use Topxia\WebBundle\Twig\Extension\WebExtension;
 
 class ClassroomManageController extends BaseController
 {
-    public function indexAction(Request $request, $id)
+    public function indexAction($id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         $courses   = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        $courseIds = ArrayToolkit::column($courses, 'id');
+//        $courseIds = ArrayToolkit::column($courses, 'id');
 
         $currentTime    = time();
         $todayTimeStart = strtotime(date("Y-m-d", $currentTime));
@@ -27,8 +41,12 @@ class ClassroomManageController extends BaseController
         $yesterdayTimeStart = strtotime(date("Y-m-d", $currentTime - 24 * 3600));
         $yesterdayTimeEnd   = strtotime(date("Y-m-d", $currentTime));
 
-        $todayFinishedLessonNum     = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "finished"));
-        $yesterdayFinishedLessonNum = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "finished"));
+        //是否可以直接根据courseId查询，取决于classroom对course是【引用】还是【复制】
+        //TODO
+        $todayFinishedLessonNum     = 0;
+        $yesterdayFinishedLessonNum = 0;
+//        $todayFinishedLessonNum     = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "finished"));
+        //        $yesterdayFinishedLessonNum = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "finished"));
 
         $todayThreadCount     = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $id, 'type' => 'discussion', "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "open"));
         $yesterdayThreadCount = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $id, 'type' => 'discussion', "startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "open"));
@@ -79,7 +97,7 @@ class ClassroomManageController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', $this->getServiceKernel()->trans('用户未登录，创建班级失败。'));
+            return $this->createErrorResponse($request, 'not_login', '用户未登录，创建班级失败。');
         }
 
         $canManage = $this->getClassroomService()->canManageClassroom($classroom['id']);
@@ -272,7 +290,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function removeAction(Request $request, $classroomId, $userId)
+    public function removeAction($classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
@@ -287,8 +305,9 @@ class ClassroomManageController extends BaseController
         );
         $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
 
+        $order = array();
         foreach ($orders as $key => $value) {
-            $order = $value;
+            $order[$key] = $value;
         }
 
         $this->getClassroomService()->removeStudent($classroomId, $userId);
@@ -321,16 +340,16 @@ class ClassroomManageController extends BaseController
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 
             if (empty($user)) {
-                throw $this->createNotFoundException($this->getServiceKernel()->trans('用户%nickname%不存在', array('%nickname%' => $data['nickname'])));
+                throw $this->createNotFoundException("用户{$data['nickname']}不存在");
             }
 
             if ($this->getClassroomService()->isClassroomStudent($classroom['id'], $user['id'])) {
-                throw $this->createNotFoundException($this->getServiceKernel()->trans('用户已经是学员，不能添加！'));
+                throw $this->createNotFoundException('用户已经是学员，不能添加！');
             }
 
             $classroomSetting = $this->getSettingService()->get('classroom');
 
-            $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->getServiceKernel()->trans('班级');
+            $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
             if (empty($data['price'])) {
                 $data['price'] = 0;
@@ -338,7 +357,7 @@ class ClassroomManageController extends BaseController
 
             $order = $this->getOrderService()->createOrder(array(
                 'userId'     => $user['id'],
-                'title'      => $this->getServiceKernel()->trans('购买%classroomName%《%title%》(管理员添加)', array('%classroomName%' => $classroomName, '%title%' => $classroom['title'])),
+                'title'      => "购买{$classroomName}《{$classroom['title']}》(管理员添加)",
                 'targetType' => 'classroom',
                 'targetId'   => $classroom['id'],
                 'amount'     => $data['price'],
@@ -371,7 +390,7 @@ class ClassroomManageController extends BaseController
 
             $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
 
-            $this->getLogService()->info('classroom', 'add_student', $this->getServiceKernel()->trans('班级《%title%》(#%classroomId%)，添加学员%nickname%(#%userId%)，备注：%remark%', array('%title%' => $classroom['title'], '%classroomId%' => $classroom['id'], '%nickname%' => $user['nickname'], '%userId%' => $user['id'], '%remark%' => $data['remark'])));
+            $this->getLogService()->info('classroom', 'add_student', "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}");
 
             return $this->createStudentTrResponse($classroom, $member);
         }
@@ -389,12 +408,12 @@ class ClassroomManageController extends BaseController
         $user    = $this->getUserService()->getUserByLoginField($keyWord);
 
         if (!$user) {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户不存在'));
+            $response = array('success' => false, 'message' => '该用户不存在');
         } else {
             $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($id, $user['id']);
 
             if ($isClassroomStudent) {
-                $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该用户已是本班级的学员了'));
+                $response = array('success' => false, 'message' => '该用户已是本班级的学员了');
             } else {
                 $response = array('success' => true, 'message' => '');
             }
@@ -437,7 +456,7 @@ class ClassroomManageController extends BaseController
     private function getExportContent($id, $role, $start, $limit, $exportAllowCount)
     {
         $this->getClassroomService()->tryManageClassroom($id);
-        $gender = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
+        $gender = array('female' => '女', 'male' => '男', 'secret' => '秘密');
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
@@ -468,7 +487,7 @@ class ClassroomManageController extends BaseController
 
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
-        $fields['weibo'] = $this->getServiceKernel()->trans('微博');
+        $fields['weibo'] = '微博';
 
         foreach ($userFields as $userField) {
             $fields[$userField['fieldName']] = $userField['title'];
@@ -492,7 +511,7 @@ class ClassroomManageController extends BaseController
             $progresses[$student['userId']] = $this->calculateUserLearnProgress($classroom, $student);
         }
 
-        $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
+        $str = '用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔';
 
         foreach ($fields as $key => $value) {
             $str .= ",".$value;
@@ -540,7 +559,7 @@ class ClassroomManageController extends BaseController
             $data['service'] = empty($data['service']) ? null : $data['service'];
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $data);
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('保存成功！'));
+            $this->setFlashMessage('success', '保存成功！');
         }
 
         return $this->render('classroom-manage/services.html.twig', array(
@@ -574,7 +593,7 @@ class ClassroomManageController extends BaseController
                 $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
             }
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('保存成功！'));
+            $this->setFlashMessage('success', '保存成功！');
         }
 
         $teacherIds = $this->getClassroomService()->findTeachers($id);
@@ -611,7 +630,7 @@ class ClassroomManageController extends BaseController
             $headTeacherId = empty($data['ids']) ? 0 : $data['ids'][0];
             $this->getClassroomService()->addHeadTeacher($id, $headTeacherId);
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('保存成功！'));
+            $this->setFlashMessage('success', '保存成功！');
         }
 
         $classroom      = $this->getClassroomService()->getClassroom($id);
@@ -648,7 +667,7 @@ class ClassroomManageController extends BaseController
                 $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
             }
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('保存成功！'));
+            $this->setFlashMessage('success', '保存成功！');
         }
 
         $assistantIds     = $this->getClassroomService()->findAssistants($id);
@@ -682,7 +701,7 @@ class ClassroomManageController extends BaseController
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('基本信息设置成功！'));
+            $this->setFlashMessage('success', '基本信息设置成功！');
         }
 
         $tags = $this->getTagService()->findTagsByOwner(array(
@@ -715,7 +734,7 @@ class ClassroomManageController extends BaseController
                 $class['vipLevelId'] = 0;
             }
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置成功！'));
+            $this->setFlashMessage('success', '设置成功！');
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
         }
@@ -742,7 +761,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function setPictureAction(Request $request, $id)
+    public function setPictureAction($id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
@@ -796,7 +815,7 @@ class ClassroomManageController extends BaseController
 
             $this->getClassroomService()->updateClassroomCourses($id, $courseIds);
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程修改成功'));
+            $this->setFlashMessage('success', '课程修改成功');
 
             return $this->redirect($this->generateUrl('classroom_manage_courses', array(
                 'id' => $id
@@ -829,7 +848,6 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
 
         $data = $request->request->all();
-        $ids  = array();
 
         if (isset($data['ids']) && $data['ids'] != "") {
             $ids = $data['ids'];
@@ -839,7 +857,7 @@ class ClassroomManageController extends BaseController
         }
 
         $this->getClassroomService()->addCoursesToClassroom($id, $ids);
-        $this->setFlashMessage('success', $this->getServiceKernel()->trans('课程添加成功'));
+        $this->setFlashMessage('success', '课程添加成功');
 
         return new Response('success');
     }
@@ -899,7 +917,7 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         if ($classroom['status'] != 'published') {
-            throw $this->createNotFoundException($this->getServiceKernel()->trans('未发布班级不能导入学员!'));
+            throw $this->createNotFoundException('未发布班级不能导入学员!');
         }
 
         return $this->forward('TopxiaWebBundle:Importer:importExcelData', array(
@@ -912,24 +930,24 @@ class ClassroomManageController extends BaseController
     public function testpaperAction(Request $request, $id, $status)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
-        $user      = $this->getCurrentUser();
+//        $user      = $this->getCurrentUser();
         $classroom = $this->getClassroomService()->getClassroom($id);
         // $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
         $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
 
         $courseIds    = ArrayToolkit::column($courses, 'id');
-        $testpapers   = $this->getTestpaperService()->findAllTestpapersByTargets($courseIds);
+        $testpapers   = $this->getTestpaperService()->searchTestpapers(array('courseIds' => $courseIds), array(), 0, PHP_INT_MAX);
         $testpaperIds = ArrayToolkit::column($testpapers, 'id');
 
         $paginator = new Paginator(
             $request,
-            $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, $status),
+            $this->getTestpaperService()->searchTestpaperCount(array('ids' => $testpaperIds, 'status' => $status)),
             20
         );
 
-        $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
-            $testpaperIds,
-            $status,
+        $paperResults = $this->getTestpaperService()->searchTestpapers(
+            array('ids' => $testpaperIds, 'status' => $status),
+            array(),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -968,7 +986,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function homeworkAction(Request $request, $id, $status)
+    public function homeworkAction($id, $status)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -976,7 +994,7 @@ class ClassroomManageController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (empty($currentUser)) {
-            throw $this->createServiceException($this->getServiceKernel()->trans('用户不存在或者尚未登录，请先登录'));
+            throw $this->getBiz()->createAccessDeniedException('用户不存在或者尚未登录，请先登录');
         }
 
         $courses                = $this->getClassroomService()->findCoursesByClassroomId($id);
@@ -988,12 +1006,13 @@ class ClassroomManageController extends BaseController
             10
         );
 
+        $orderBy = array();
         if ($status == 'reviewing') {
-            $orderBy = array('usedTime'=>'DESC');
+            $orderBy = array('usedTime' => 'DESC');
         }
 
         if ($status == 'finished') {
-            $orderBy = array('checkedTime'=>'DESC');
+            $orderBy = array('checkedTime' => 'DESC');
         }
 
         $homeworksResults = $this->getHomeworkService()->findResultsByCourseIdsAndStatus(
@@ -1002,6 +1021,8 @@ class ClassroomManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $reviewingCount = 0;
+        $finishedCount  = 0;
         if ($status == 'reviewing') {
             $reviewingCount = $homeworksResultsCounts;
             $finishedCount  = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, 'finished');
@@ -1092,7 +1113,7 @@ class ClassroomManageController extends BaseController
             return $userIds;
         } elseif (SimpleValidator::mobile($keyword)) {
             $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
-            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id'=>'DESC'), 0, PHP_INT_MAX);
+            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id' => 'DESC'), 0, PHP_INT_MAX);
             $mobileNameUser     = $this->getUserService()->getUserByNickname($keyword);
             $userIds            = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
 
@@ -1118,71 +1139,113 @@ class ClassroomManageController extends BaseController
         return $cashRate;
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ClassroomReviewService
+     */
     protected function getClassroomReviewService()
     {
         return $this->createService('Classroom:ClassroomReviewService');
     }
 
+    /**
+     * @return LevelService
+     */
     protected function getLevelService()
     {
         return $this->createService('Vip:Vip.LevelService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return NotificationService
+     */
     private function getNotificationService()
     {
         return $this->createService('User:NotificationService');
     }
 
+    /**
+     * @return OrderService
+     */
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
         return $this->createService('User:UserFieldService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->createService('Thread:ThreadService');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
     }
 
+    /**
+     * @return WebExtension
+     */
     private function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return HomeworkService
+     */
     protected function getHomeworkService()
     {
         return $this->createService('Homework:Homework.HomeworkService');

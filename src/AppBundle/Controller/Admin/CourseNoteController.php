@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -7,23 +8,16 @@ use Topxia\Common\Paginator;
 
 class CourseNoteController extends BaseController
 {
-	public function indexAction(Request $request)
-	{
-		$conditions = $request->query->all();
-        
-        if ( isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle'){
-            $courses = $this->getCourseService()->findCoursesByLikeTitle(trim($conditions['keyword']));
-            $conditions['courseIds'] = ArrayToolkit::column($courses, 'id'); 
-            if (count($conditions['courseIds']) == 0){
-                return $this->render('admin/course-note/index.html.twig', array(
-                    'notes' => array(),
-                    'paginator' => new Paginator($request,0,20),
-                    'users'=> array(),
-                    'lessons'=> array(),
-                    'courses'=>array()
-                ));
-            }  
-        }        
+    public function indexAction(Request $request)
+    {
+        $conditions = $request->query->all();
+
+        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
+            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);
+            $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
+            unset($conditions['keywordType'], $conditions['keyword']);
+            $conditions['courseSetIds'] = $conditions['courseSetIds'] ? : array(-1);
+        }
 
         $paginator = new Paginator(
             $request,
@@ -38,15 +32,18 @@ class CourseNoteController extends BaseController
         );
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($notes, 'courseId'));
-        $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($notes, 'lessonId'));
-		return $this->render('admin/course-note/index.html.twig',array(
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($notes, 'courseSetId'));
+        $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($notes, 'taskId'));
+
+        return $this->render('admin/course-note/index.html.twig', array(
             'notes' => $notes,
             'paginator' => $paginator,
-            'users'=>$users,
-            'lessons'=>$lessons,
-            'courses'=>$courses
-		));
-	}
+            'users' => $users,
+            'tasks' => ArrayToolkit::index($tasks, 'id'),
+            'courses' => $courses,
+            'courseSets' => $courseSets,
+        ));
+    }
 
     public function deleteAction(Request $request, $id)
     {
@@ -71,11 +68,21 @@ class CourseNoteController extends BaseController
         return $this->createService('Course:CourseNoteService');
     }
 
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
     /**
      * @return CourseService
      */
     protected function getCourseService()
     {
-    	return $this->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

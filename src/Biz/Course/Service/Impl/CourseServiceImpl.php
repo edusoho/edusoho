@@ -3,21 +3,21 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\ThreadDao;
-use Topxia\Common\ArrayToolkit;
-use Biz\Course\Dao\CourseSetDao;
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\UserService;
-use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseChapterDao;
+use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Dao\ThreadDao;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
+use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
-use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Event\Event;
+use Topxia\Common\ArrayToolkit;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -32,7 +32,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
     }
 
-    public function findCoursesByCourseSetId($courseSetId)
+    public function findCoursesByCourseSetIds(array $setIds)
+    {
+        return $this->getCourseDao()->findByCourseSetIds($setIds);
+    }
+
+    function findCoursesByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, null);
     }
@@ -46,6 +51,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->getCourseDao()->getDefaultCourseByCourseSetId($courseSetId);
     }
+
+    public function getDefaultCoursesByCourseSetIds($courseSetIds)
+    {
+        return $this->getCourseDao()->getDefaultCoursesByCourseSetIds($courseSetIds);
+    }
+
+
 
     public function getFirstPublishedCourseByCourseSetId($courseSetId)
     {
@@ -153,6 +165,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $fields);
     }
 
+    public function updateMaxRate($id, $maxRate)
+    {
+        return $this->getCourseDao()->update($id, array('maxRate' => $maxRate));
+    }
+
     public function setCourseTeachers($courseId, $teachers)
     {
         $teacherMembers = array();
@@ -246,7 +263,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function calculatePrice($id, $originPrice)
     {
-        return $originPrice * 100;
+        return $originPrice;
     }
 
     public function updateCourseStatistics($id, $fields)
@@ -281,7 +298,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     /**
      * @todo 教学计划的删除逻辑较复杂，需要整理
      * @deprecated
-     * @see Topxia\Service\Course\Impl\CourseDeleteServiceImpl
+     * @see  Topxia\Service\Course\Impl\CourseDeleteServiceImpl
      */
     public function deleteCourse($id)
     {
@@ -348,7 +365,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
-    public function publishCourse($id, $userId)
+    public function publishCourse($id)
     {
         $this->tryManageCourse($id);
         $this->getCourseDao()->update($id, array(
@@ -515,7 +532,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        if ($user->hasPermission('admin_course')) {
+        if ($user->hasPermission('admin_course_set')) {
             return true;
         }
 
@@ -786,7 +803,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int     $userId
+     * @param  int $userId
+     *
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -807,7 +825,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count = $this->searchCourseCount($conditions);
+        $count      = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 

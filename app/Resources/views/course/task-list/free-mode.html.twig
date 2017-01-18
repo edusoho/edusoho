@@ -4,13 +4,13 @@
       {% if item.type == 'chapter' %}
         <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
           <a href="javascript:void(0);" class="text-overflow title gray-dark">第{{ item.number }}
-            章：{{ item.title }}</a>
+            章: {{ item.title }}</a>
           <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
         </li>
       {% elseif item.type == 'unit' %}
         <li class="task-item color-gray bg-gray-lighter">
           <span class="text-overflow title">第{{ item.number }}
-            节：{{ item.title }}</span>
+            节: {{ item.title }}</span>
         </li>
       {% elseif  item.type == 'lesson' %}
         {% for task in item.tasks %}
@@ -20,7 +20,7 @@
             <i class="es-icon
               {% if task_lock %}
               es-icon-lock
-              {% elseif  not task.result|default(null) %}
+              {% elseif  not task.result|default(null) or(member is empty)  %}
               es-icon-undone-check color-gray
               {% elseif task.result.status == 'start' %}
               es-icon-doing color-primary
@@ -29,7 +29,7 @@
               {% endif %}
               left-menu"></i>
             {% if task.status == 'published' %}              
-              <a class="text-overflow title" {% if member %} href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"{% else %}data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" {% endif %}>
+              <a class="text-overflow title" {% if member %} href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"{% else %} href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" {% endif %}>
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </a>
             {% else %}

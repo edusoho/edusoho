@@ -89,9 +89,13 @@
       <img src="{{ asset(consult.webchatURI) }}" class="qrcode center-block">
     </div>
 
-    <div id="consult-email-content">
-     <a href="mailto:{{consult.email}}">{{ consult.email }}</a>
-    </div>
+    {% if consult.email is not empty %}
+      <span class="btn btn-consult-{{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="{{'电子邮箱'|trans}}" data-content-element="#consult-email-content"><span class="icon icon-email"></span></span>
+    {% endif %}
+
+    {% if consult.supplier|default() is not empty %}
+      {{ consult.supplier | raw }}
+    {% endif %}
 
   </div>
 </div>

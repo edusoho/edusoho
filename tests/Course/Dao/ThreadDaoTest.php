@@ -8,85 +8,85 @@ class ThreadDaoTest extends BaseDaoTestCase
 {
     public function testSearch()
     {
-        $factor = array();
+        $expected = array();
         for ($i = 0; $i < 10; $i++) {
-            $factor[] = $this->mockDataObject();
+            $expected[] = $this->mockDataObject();
         }
 
         $testConditions = array(
             array(
                 'condition' => array(),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('courseId' => 1),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('courseSetId' => 1),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('taskId' => 1),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('userId' => 1),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('type' => 'discussion'),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('types' => array('discussion', 'question')),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('isStick' => 1),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('isElite' => 1),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('postNum' => 1),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('postNumLargerThan' => 0),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('title' => '哼'),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('content' => '爱上地方'),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('courseIds', array(1, 2)),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             ),
             array(
                 'condition' => array('private' => 1),
-                'expectedResults' => $factor,
+                'expectedResults' => $expected,
                 'expectedCount' => 10
             )
         );

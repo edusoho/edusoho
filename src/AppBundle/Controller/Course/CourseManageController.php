@@ -50,8 +50,17 @@ class CourseManageController extends BaseController
 
     public function listAction(Request $request, $courseSetId)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+
+        if($courseSet['type'] == 'live'){
+            $course = current($courses);
+            return $this->redirectToRoute('course_set_manage_course_tasks', array(
+                'courseSetId' => $courseSet['id'],
+                'courseId'    => $course['id']
+            ));
+        }
+
         return $this->render('courseset-manage/courses.html.twig', array(
             'courseSet' => $courseSet,
             'courses'   => $courses
@@ -68,10 +77,9 @@ class CourseManageController extends BaseController
         $files = $this->prepareTaskActivityFiles($tasks);
 
         $courseItems     = $this->getCourseService()->findCourseItems($courseId);
-        $tasksRenderPage = $this->createCourseStrategy($course)->getTasksRenderPage();
         $taskPerDay      = $this->getFinishedTaskPerDay($course, $tasks);
 
-        return $this->render($tasksRenderPage, array(
+        return $this->render($this->getTasksTemplate($course), array(
             'taskNum'    => count($tasks),
             'files'      => $files,
             'courseSet'  => $courseSet,
@@ -79,6 +87,15 @@ class CourseManageController extends BaseController
             'items'      => $courseItems,
             'taskPerDay' => $taskPerDay
         ));
+    }
+
+    protected function getTasksTemplate($course)
+    {
+        if($course['isDefault']) {
+            return 'course-manage/free-mode/tasks.html.twig';
+        } else {
+            return 'course-manage/lock-mode/tasks.html.twig';
+        }
     }
 
     protected function getFinishedTaskPerDay($course, $tasks)
@@ -256,7 +273,7 @@ class CourseManageController extends BaseController
     public function publishAction(Request $request, $courseSetId, $courseId)
     {
         try {
-            $this->getCourseService()->publishCourse($courseId, $this->getUser()->getId());
+            $this->getCourseService()->publishCourse($courseId);
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));

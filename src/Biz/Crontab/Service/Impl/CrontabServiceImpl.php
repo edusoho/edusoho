@@ -2,37 +2,118 @@
 namespace Biz\Crontab\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use Biz\Crontab\Dao\JobDao;
+use Biz\System\Service\LogService;
 use Symfony\Component\Yaml\Yaml;
 use Biz\Crontab\Service\CrontabService;
+use Topxia\Common\ArrayToolkit;
 
 class CrontabServiceImpl extends BaseService implements CrontabService
 {
-    public function getJob($id)
+    public function getJob($id, $lock=false)
     {
-        return $this->getJobDao()->get($id);
+        return $this->getJobDao()->get($id, $lock);
     }
 
-    public function searchJobs($conditions, $orderby, $start, $limit)
+    public function executeJob($id)
     {
-        $conditions = $this->prepareSearchConditions($conditions);
-
-        switch ($orderby) {
-            case 'created':
-                $orderby = array('createdTime' => 'DESC');
-                break;
-            case 'createdByAsc':
-                $orderby = array('createdTime' => 'ASC');
-                break;
-            case 'nextExcutedTime':
-                $orderby = array('nextExcutedTime' => 'DESC');
-                break;
-            default:
-                throw $this->createInvalidArgumentException('Invalid Order-by Params');
-                break;
+        $job = array();
+        // 开始执行job的时候，设置next_executed_time为0，防止更多的请求进来执行
+        $this->setNextExcutedTime(0);
+        $result = $this->syncronizeUpdateExecutingStatus($id);
+        if (!$result) {
+            return;
         }
 
-        return $this->getJobDao()->search($conditions, $orderby, $start, $limit);
+        $this->beginTransaction();
+        try {
+            // 加锁
+            $job = $this->getJob($id, true);
+
+            $jobInstance = new $job['jobClass']();
+            if (!empty($job['targetType'])) {
+                $job['jobParams']['targetType'] = $job['targetType'];
+            }
+
+            if (!empty($job['targetId'])) {
+                $job['jobParams']['targetId'] = $job['targetId'];
+            }
+
+            $jobInstance->execute($job['jobParams']);
+
+
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            // $this->getJobDao()->updateJob($job['id'], array('executing' => 0));
+            $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}", $job);
+        }
+
+        $this->afterJonExecute($job);
+        $this->commit();
+        $this->refreshNextExecutedTime();
+    }
+
+    protected function afterJonExecute($job)
+    {
+        if ($job['cycle'] == 'once') {
+            $this->getJobDao()->delete($job['id']);
+        }
+        if ($job['cycle'] == 'everyhour') {
+            $time = time();
+            $this->getJobDao()->update($job['id'], array(
+                'executing'          => '0',
+                'latestExecutedTime' => $time,
+                'nextExcutedTime'    => strtotime('+1 hours', $time)
+            ));
+        }
+        if ($job['cycle'] == 'everyday') {
+            $time = time();
+            $this->getJobDao()->update($job['id'], array(
+                'executing'          => '0',
+                'latestExecutedTime' => $time,
+                'nextExcutedTime'    => strtotime(date('Y-m-d', strtotime('+1 day', $time)).' '.$job['cycleTime'])
+            ));
+        }
+    }
+
+    private function syncronizeUpdateExecutingStatus($id)
+    {
+        // 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
+        $lockName = "job_{$id}";
+        $lock = $this->getLock();
+        $lock->get($lockName,10);
+
+        $job = $this->getJob($id);
+        if (empty($job) || $job['executing']) {
+            $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");
+            $lock->release($lockName);
+            return false;
+        }
+
+        $this->getJobDao()->update($job['id'], array('executing' => 1));
+        $lock->release($lockName);
+        return true;
+    }
+
+    public function searchJobs($conditions, $sort, $start, $limit)
+    {
+        $conditions = $this->prepareSearchConditions($conditions);
+        switch ($sort) {
+            case 'created':
+                $sort = array('createdTime', 'DESC');
+                break;
+            case 'createdByAsc':
+                $sort = array('createdTime', 'ASC');
+                break;
+            case 'nextExcutedTime':
+                $sort = array('nextExcutedTime', 'DESC');
+                break;
+            default:
+                throw $this->createServiceException('参数sort不正确。');
+                break;
+        }
+        $jobs = $this->getJobDao()->search($conditions, $sort, $start, $limit);
+        return $jobs;
     }
 
     public function searchJobsCount($conditions)
@@ -45,8 +126,8 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     {
         $user = $this->getCurrentUser();
 
-        if (!ArrayToolKit::requireds($job, array('nextExcutedTime'))) {
-            throw $this->createInvalidException('Field nextExcutedTime Required');
+        if (!ArrayToolkit::requireds($job, array('nextExcutedTime'))) {
+            throw $this->createInvalidArgumentException('Field nextExcutedTime Required');
         }
 
         $job['creatorId']   = $user['id'];
@@ -57,78 +138,6 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         $this->refreshNextExecutedTime();
 
         return $job;
-    }
-
-    protected function syncronizeUpdateExecutingStatus($id)
-    {
-        $lockName = "job_{$id}";
-        $lock = $this->getLock();
-        $lock->get($lockName, 10);
-        $this->getJobDao()->update($job['id'], array('executing' => 1));
-        $lock->release($lockName);
-    }
-
-    public function executeJob($id)
-    {
-        $job = array();
-        // 开始执行job的时候，设置next_executed_time为0，防止更多的请求进来执行
-        $this->setNextExcutedTime(0);
-        $this->syncronizeUpdateExecutingStatus($id);
-
-        $job = $this->getJobDao()->get($id);
-        if(empty($job) || $job['executing']){
-            $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");
-            return ;
-        }
-
-        $this->getJobDao()->db()->beginTransaction();
-
-        try {
-            // 加锁
-            $job = $this->getJob($id, true);
-            $jobInstance = new $job['jobClass']();
-            if (!empty($job['targetType'])) {
-                $job['jobParams']['targetType'] = $job['targetType'];
-            }
-
-            if (!empty($job['targetId'])) {
-                $job['jobParams']['targetId'] = $job['targetId'];
-            }
-
-            $jobInstance->execute($job['jobParams']);
-        } catch (\Exception $e) {
-            $message = $e->getMessage();
-            $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}", $job);
-        }
-
-        $this->afterJobExecute($job);
-        $this->getJobDao()->db()->commit();
-        $this->refreshNextExecutedTime();
-    }
-
-    protected function afterJobExecute($job)
-    {
-        if ($job['cycle'] == 'once') {
-            $this->getJobDao()->delete($job['id']);
-        }
-
-        if ($job['cycle'] == 'everyhour') {
-            $time = time();
-            $this->getJobDao()->update($job['id'], array(
-                'executing'          => '0',
-                'latestExecutedTime' => $time,
-                'nextExcutedTime'    => strtotime('+1 hours', $time)
-            ));
-        }
-
-        if ($job['cycle'] == 'everyday') {
-            $time = time();
-            $this->getJobDao()->update($job['id'], array(
-                'executing'          => '0',
-                'latestExecutedTime' => $time,
-                'nextExcutedTime'    => strtotime(date('Y-m-d', strtotime('+1 day', $time)).' '.$job['cycleTime'])
-            ));
-        }
     }
 
     public function deleteJob($id)
@@ -242,11 +251,17 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         return $conditions;
     }
 
+    /**
+     * @return JobDao
+     */
     protected function getJobDao()
     {
         return $this->createDao('Crontab:JobDao');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->createService('System:LogService');

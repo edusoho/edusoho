@@ -1,0 +1,6 @@
+{% if setting('consult.enabled', 0) %}
+  {% set consult = setting('consult') %}
+  {% if consult.supplier|default() is not empty %}
+    {{ consult.supplier | raw }}
+  {% endif %}
+{% endif %}

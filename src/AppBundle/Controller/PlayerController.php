@@ -286,11 +286,11 @@ class PlayerController extends BaseController
 
     protected function getPlayer($file)
     {
-        switch ($file['storage']) {
-            case 'local':
-                return $file["type"] == 'audio' ? 'audio-player' : 'local-video-player';
-            case 'cloud':
-                return 'balloon-cloud-video-player';
+        switch ($file["type"]) {
+            case 'audio':
+                return 'audio-player';
+            case 'video':
+                return $file['storage'] == 'local' ? 'local-video-player' : 'balloon-cloud-video-player';
             default:
                 return null;
         }

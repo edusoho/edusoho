@@ -77,7 +77,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected function prepareReviewSearchConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
-            if (ctype_digit((string) $value)) {
+            if (ctype_digit($value)) {
                 return true;
             }
 
@@ -92,7 +92,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         }
 
         if (!empty($conditions['content'])) {
-            $conditions['content'] = "%{$conditions['content']}%";
+            $conditions['content'] = "{$conditions['content']}";
         }
 
         return $conditions;

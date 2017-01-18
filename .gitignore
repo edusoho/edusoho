@@ -23,8 +23,13 @@ node_modules/
 /plugins/*
 !/plugins/.gitkeep
 /build/
+
+#bin dir
 /bin/*
 !/bin/phpmig
+!/bin/truncate-course-table.sh
+
+
 /composer.phar
 /scripts
 /etc/sublimetext2/edusoho.sublime-workspace
@@ -56,9 +61,12 @@ web/assets/img/default/video.png
 .phpintel*
 /src/Tests/*
 .crunch
+/app/config/parameters_test.yml
 *.css.map
 *.codekit
 web/php-performance.php
 chunk-manifest.json
 .npminstall.done
 /web/static-dist/*
+.vscode/
+.sonar

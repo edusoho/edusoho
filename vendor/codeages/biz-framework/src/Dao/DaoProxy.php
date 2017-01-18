@@ -108,6 +108,7 @@ class DaoProxy
             $method    = "_{$method}Serialize";
             $row[$key] = $this->$method($row[$key]);
         }
+
         return $row;
     }
 

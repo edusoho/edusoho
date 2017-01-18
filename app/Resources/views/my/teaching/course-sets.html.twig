@@ -75,7 +75,7 @@
             <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>
             <td>
               <div class="btn-group">
-                <a class="mr10" target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id }) }}">
+                <a class="mr10" target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id|default(1) }) }}">
                   {{ '管理'|trans }}
                 </a>
                 {% if courseSet.canManage|default(false) %}
@@ -84,11 +84,13 @@
                     <i class="es-icon es-icon-arrowdropdown"></i>
                   </a>
                   <ul class="dropdown-menu pull-right">
-                    <li>
-                      <a href="{{ path('course_set_manage', {id: courseSet.id}) }}">
-                        {{ '计划管理'|trans }}
-                      </a>
-                    </li>
+                    {% if courseSet.type != 'live' %}
+                      <li>
+                        <a href="{{ path('course_set_manage', {id: courseSet.id}) }}">
+                          {{ '计划管理'|trans }}
+                        </a>
+                      </li>
+                    {% endif %}
                     <li>
                       <a href="{{ path('course_set_manage_files', {id:courseSet.id}) }}">
                         {{ '文件管理'|trans }}

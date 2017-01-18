@@ -6,6 +6,7 @@ use Biz\Article\Service\ArticleService;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Api\Util\TagUtil;
 
 class Article extends BaseResource
 {
@@ -27,6 +28,7 @@ class Article extends BaseResource
 
         $site          = $this->getSettingService()->get('site', array());
         $res['source'] = isset($site['name']) ? $site['name'] : '';
+        $res['tags']   = TagUtil::buildTags('article', $res['id']);
 
         return $res;
     }

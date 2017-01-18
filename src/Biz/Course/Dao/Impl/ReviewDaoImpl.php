@@ -36,10 +36,11 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
             ),
             'conditions' => array(
                 'userId = :userId',
-                'courseId = :courseId',
                 'rating = :rating',
                 'content LIKE :content',
+                'courseId = :courseId',
                 'courseId IN (:courseIds)',
+                'courseSetId IN (:courseSetIds)',
                 'courseSetId = :courseSetId',
                 'parentId = :parentId',
                 'private = :private'

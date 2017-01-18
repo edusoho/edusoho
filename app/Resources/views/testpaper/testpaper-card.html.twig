@@ -1,5 +1,5 @@
 {% set questionTypeDict = getQuestionTypes() %}
-{% if limitedTime > 0 %}
+{% if limitedTime > 0 and showTimer|default(1)  %}
 	<div class="testpaper-timer">
 		<span class="pull-left">{{'倒计时'|trans}}：</span><span class="timer js-testpaper-timer" data-time="{{ limitedTime * 60 }}">00:00:00</span>
 		<a class="btn-pause js-btn-pause" href="javascript:;">
@@ -29,7 +29,7 @@
 			{% for question in questions[type]|default(null) %}
 				{% if question.type == 'material' %}
 					{% for subQuestion in question.subs|default([]) %}
-						{% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:(question.seq + loop.index - 1)} %}
+						{% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:subQuestion,seq:(question.seq + loop.index - 1)} %}
 					{% endfor %}
 				{% else %}
 					{% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}
