@@ -22,7 +22,7 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>查询删除超时时，未删除的同步班级课时~</info>');
+        $output->writeln('<info>删除未删除的班级课时...</info>');
 
         //拿到原课时不存在的课时
         $lessons = $this->findLessonsCopyIdNotExist();
@@ -107,7 +107,7 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
 
     private function findLessonsCopyIdNotExist()
     {
-        $sql = "select * from course_lesson where ((copyId not in (SELECT id from course_lesson WHERE copyId = 0)) and copyId !=0)";
+        $sql = "select * from course_lesson where ((copyId not in (SELECT id from course_lesson)) and copyId !=0)";
         return $this->getConnectionDb()->fetchAll($sql);
     }
 

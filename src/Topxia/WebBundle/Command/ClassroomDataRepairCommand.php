@@ -20,8 +20,7 @@ class ClassroomDataRepairCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>修复数据开始~</info>');
-        $output->writeln('<info>正在查询班级下所有的课程的异常课时...</info>');
+        $output->writeln('<info>更新异常课时...</info>');
         $this->initServiceKernel();
         //拿到需要处理的课程（原课程id，复制出来的课程Id）
         $classroomCourse = $this->getClassroomCourse();
