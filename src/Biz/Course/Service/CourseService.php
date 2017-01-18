@@ -54,23 +54,24 @@ interface CourseService
 
     public function getUserRoleInCourse($courseId, $userId);
 
+    public function findPriceIntervalByCourseSetIds($courseSetIds);
+
     /**
      * 获取用户在教的教学计划
      *
-     * @param integer $courseSetId
-     * @param bool    $onlyPublished
+     * @param  integer                 $courseSetId
+     * @param  bool                    $onlyPublished
      * @throws AccessDeniedException
-     *
      * @return mixed
      */
-    public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished=true);
+    public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished = true);
 
     /**
      * @param  integer   $userId
      * @param  bool      $onlyPublished 是否只需要发布后的教学计划
      * @return array[]
      */
-    public function findTeachingCoursesByUserId($userId, $onlyPublished=true);
+    public function findTeachingCoursesByUserId($userId, $onlyPublished = true);
 
     /**
      * @param  integer   $userId

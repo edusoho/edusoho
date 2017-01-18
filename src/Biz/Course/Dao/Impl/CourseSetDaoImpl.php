@@ -20,7 +20,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
             'conditions' => array(
                 'id IN ( :ids )',
                 'status = :status',
-                'type = :type'
+                'type = :type',
+                'id NOT IN (:excludeIds)'
             ),
             'serializes' => array(
                 'tags'      => 'delimiter',
@@ -28,7 +29,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'audiences' => 'delimiter',
                 'cover'     => 'json'
             ),
-            'orderbys' => array(
+            'orderbys'   => array(
                 'createdTime'
             ),
             'timestamps' => array(

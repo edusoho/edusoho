@@ -12,4 +12,5 @@ interface CourseDao extends GeneralDaoInterface
 
     public function findCoursesByIds($ids);
 
+    public function findPriceIntervalByCourseSetIds($courseSetIds);
 }

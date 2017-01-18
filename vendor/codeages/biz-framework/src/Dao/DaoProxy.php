@@ -11,7 +11,7 @@ class DaoProxy
     public function __construct($container, $dao)
     {
         $this->container = $container;
-        $this->dao = $dao;
+        $this->dao       = $dao;
     }
 
     public function __call($method, $arguments)
@@ -22,13 +22,13 @@ class DaoProxy
             return $this->_unserialize($row);
         }
 
-        if ((strpos($method, 'find') === 0) or (strpos($method, 'search') === 0)) {
+        if ((strpos($method, 'find') === 0) || (strpos($method, 'search') === 0)) {
             $rows = $this->_callRealDao($method, $arguments);
 
-            if(empty($rows)){
+            if (empty($rows)) {
                 return $rows;
             }
-            
+
             return $this->_unserializes($rows);
         }
 
@@ -43,7 +43,7 @@ class DaoProxy
             }
 
             $arguments[0] = $this->_serialize($arguments[0]);
-            $row = $this->_callRealDao($method, $arguments);
+            $row          = $this->_callRealDao($method, $arguments);
 
             return $this->_unserialize($row);
         }
@@ -73,14 +73,14 @@ class DaoProxy
             return $row;
         }
 
-        $declares = $this->dao->declares();
+        $declares   = $this->dao->declares();
         $serializes = empty($declares['serializes']) ? array() : $declares['serializes'];
 
         foreach ($serializes as $key => $method) {
             if (!isset($row[$key])) {
                 continue;
             }
-            $method = "_{$method}Unserialize";
+            $method    = "_{$method}Unserialize";
             $row[$key] = $this->$method($row[$key]);
         }
 
@@ -98,14 +98,14 @@ class DaoProxy
 
     private function _serialize(&$row)
     {
-        $declares = $this->dao->declares();
+        $declares   = $this->dao->declares();
         $serializes = empty($declares['serializes']) ? array() : $declares['serializes'];
 
         foreach ($serializes as $key => $method) {
             if (!isset($row[$key])) {
                 continue;
             }
-            $method = "_{$method}Serialize";
+            $method    = "_{$method}Serialize";
             $row[$key] = $this->$method($row[$key]);
         }
         return $row;
@@ -145,5 +145,23 @@ class DaoProxy
         }
 
         return explode('|', trim($value, '|'));
+    }
+
+    private function _phpSerialize($value)
+    {
+        if (empty($value)) {
+            return '';
+        }
+
+        return serialize($value);
+    }
+
+    private function _phpUnserialize($value)
+    {
+        if (empty($value)) {
+            return array();
+        }
+
+        return unserialize($value);
     }
 }

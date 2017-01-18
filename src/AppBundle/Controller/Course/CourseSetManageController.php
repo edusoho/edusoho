@@ -17,7 +17,7 @@ class CourseSetManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $type = ArrayToolkit::get($data, 'type', 'aa');
-            if ($type == 'open') {
+            if (in_array($type, array('open', 'liveOpen'))) {
                 $openCourse = $this->getOpenCourseService()->createCourse($data);
                 return $this->redirectToRoute('open_course_manage', array(
                     'id' => $openCourse['id']

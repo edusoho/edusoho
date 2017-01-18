@@ -14,7 +14,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         return array(
             'timestamps' => array(),
             'serializes' => array(),
-            'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq'),
+            'orderbys'   => array('createdTime', 'startTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq'),
             'conditions' => array(
                 'id = :lessonId',
                 'id NOT IN (:lessonIdNotIn)',
@@ -39,7 +39,6 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         );
     }
 
-
     public function findByIds(array $ids)
     {
         return $this->findInField('id', $ids);
@@ -50,7 +49,6 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER BY seq ASC";
         return $this->db()->fetchAll($sql, array($courseId));
     }
-
 
     public function deleteByCourseId($id)
     {

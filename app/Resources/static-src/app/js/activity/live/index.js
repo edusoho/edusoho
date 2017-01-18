@@ -45,10 +45,10 @@ class Live {
 
   triggerLiveEvent() {
     let self = this;
-
+    console.log(12312312312312300)
     let eventName = null;
     let eventTrigger = setInterval(function() {
-      if (!self.isLiveRoomOpened) return;
+      if (!self.isLiveRoomOpened || $('meta[name="trigger_url"]').length == 0) return;
       eventName = eventName ? 'doing' : 'start';
       $.ajax({
         url: $('meta[name="trigger_url"]').attr('content'),

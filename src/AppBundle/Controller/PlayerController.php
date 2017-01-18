@@ -2,18 +2,16 @@
 
 namespace AppBundle\Controller;
 
-
-
-use Biz\File\Service\UploadFileService;
-use Biz\MaterialLib\Service\MaterialLibService;
+use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
+use Biz\Util\CloudClientFactory;
 use Biz\User\Service\TokenService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\Util\CloudClientFactory;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
+use Biz\MaterialLib\Service\MaterialLibService;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerController extends BaseController
 {
@@ -43,7 +41,7 @@ class PlayerController extends BaseController
             if (!empty($file['convertParams']['hasVideoWatermark'])) {
                 $file['videoWatermarkEmbedded'] = 1;
             }
-            $ssl = $request->isSecure() ? true : false;
+            $ssl    = $request->isSecure() ? true : false;
             $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
             if (isset($result['subtitles'])) {
@@ -73,7 +71,6 @@ class PlayerController extends BaseController
 
     public function localMediaAction(Request $request, $id, $token)
     {
-
         $file = $this->getUploadFileService()->getFile($id);
 
         if (empty($file)) {
@@ -88,7 +85,6 @@ class PlayerController extends BaseController
         if (!$token || $token['userId'] != $this->getCurrentUser()->getId()) {
             throw $this->createAccessDeniedException();
         }
-
 
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
@@ -226,7 +222,6 @@ class PlayerController extends BaseController
 
     protected function getPlayUrl($file, $context)
     {
-
         if ($file['storage'] == 'cloud') {
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
