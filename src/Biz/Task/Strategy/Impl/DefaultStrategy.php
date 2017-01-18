@@ -192,20 +192,19 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         uasort($lessonChapterTypes, function ($lesson1, $lesson2) {
             return $lesson1['seq'] > $lesson2['seq'];
         });
-        $taskNumber = 0;
+        $taskNumber = 1;
         foreach ($lessonChapterTypes as $key => $chapter) {
             $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
             $tasks = ArrayToolkit::index($tasks, 'mode');
             foreach ($tasks as $task) {
-                $taskNumber++;
                 $seq    = $this->getTaskSeq($task['mode'], $chapter['seq']);
                 $fields = array(
                     'seq'        => $seq,
                     'categoryId' => $chapter['id'],
                     'number'     => $taskNumber
                 );
-
                 $this->getTaskService()->updateSeq($task['id'], $fields);
+                $taskNumber++;
             }
         }
     }

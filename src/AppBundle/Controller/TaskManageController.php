@@ -1,10 +1,12 @@
 <?php
 namespace AppBundle\Controller;
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\BaseStrategy;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\StrategyContext;
-use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Exception\InvalidArgumentException;
 
@@ -15,13 +17,14 @@ class TaskManageController extends BaseController
         $course     = $this->tryManageCourse($courseId);
         $categoryId = $request->query->get('categoryId');
         $chapterId  = $request->query->get('chapterId');
+        $taskMode   = $request->query->get('type');
         if ($request->isMethod('POST')) {
             $task                    = $request->request->all();
             $task['_base_url']       = $request->getSchemeAndHttpHost();
             $task['fromUserId']      = $this->getUser()->getId();
             $task['fromCourseSetId'] = $course['courseSetId'];
 
-            $task                    = $this->getTaskService()->createTask($this->parseTimeFields($task));
+            $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
             if ($course['isDefault'] && isset($task['mode']) && $task['mode'] != 'lesson') {
                 return $this->createJsonResponse(array('append' => false));
@@ -33,12 +36,14 @@ class TaskManageController extends BaseController
                 'task'   => $task
             ));
         }
-
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         return $this->render('task-manage/modal.html.twig', array(
             'mode'       => 'create',
             'course'     => $course,
+            'courseSet'  => $courseSet,
             'categoryId' => $categoryId,
-            'chapterId'  => $chapterId
+            'chapterId'  => $chapterId,
+            'taskMode'   => $taskMode,
         ));
     }
 
@@ -46,6 +51,7 @@ class TaskManageController extends BaseController
     {
         $course   = $this->tryManageCourse($courseId);
         $task     = $this->getTaskService()->getTask($id);
+        $taskMode = $request->query->get('type');
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在计划中');
         }
@@ -57,13 +63,15 @@ class TaskManageController extends BaseController
             return $this->createJsonResponse(array('append' => false));
         }
 
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
-
+        $activity  = $this->getActivityService()->getActivity($task['activityId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         return $this->render('task-manage/modal.html.twig', array(
-            'mode'                => 'edit',
-            'currentType'         => $activity['mediaType'],
-            'course'              => $course,
-            'task'                => $task,
+            'mode'        => 'edit',
+            'currentType' => $activity['mediaType'],
+            'course'      => $course,
+            'courseSet'   => $courseSet,
+            'task'        => $task,
+            'taskMode'    => $taskMode,
         ));
     }
 
@@ -151,6 +159,7 @@ class TaskManageController extends BaseController
 
     /**
      * @param  $type
+     *
      * @return mixed
      */
     protected function getActivityActionConfig($type)
@@ -159,12 +168,16 @@ class TaskManageController extends BaseController
         return $config[$type]['actions'];
     }
 
+    /**
+     * @param $course
+     *
+     * @return BaseStrategy|CourseStrategy
+     */
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
     }
 
-    //datetime to int
     protected function parseTimeFields($fields)
     {
         if (!empty($fields['startTime'])) {
@@ -175,5 +188,13 @@ class TaskManageController extends BaseController
         }
 
         return $fields;
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

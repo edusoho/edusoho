@@ -2,9 +2,8 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
 
-class LatestCoursesDataTag extends CourseBaseDataTag implements DataTag  
+class LatestCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 {
 
     /**
@@ -38,8 +37,13 @@ class LatestCoursesDataTag extends CourseBaseDataTag implements DataTag
             $conditions['originPrice_GT'] = '0.00';
         }
 
-    	$courses = $this->getCourseService()->searchCourses($conditions,'latest', 0, $arguments['count']);
+    	$courseSets = $this->getCourseSetService()->searchCourseSets(
+    	    $conditions,
+            array('createdTime' => 'DESC'),
+            0,
+            $arguments['count']
+        );
 
-        return $this->getCourseTeachersAndCategories($courses);
+        return $this->fillCourseSetTeachersAndCategoriesAttribute($courseSets);
     }
 }

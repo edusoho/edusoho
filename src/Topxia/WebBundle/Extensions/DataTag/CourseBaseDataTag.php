@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Extensions\DataTag;
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -36,6 +37,14 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     protected function getUserService()
     {
         return ServiceKernel::instance()->getBiz()->service('User:UserService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 
     protected function getCategoryService()
@@ -124,14 +133,64 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         }
     }
 
+    protected function fillCourseSetTeachersAndCategoriesAttribute(array $courseSets)
+    {
+        $userIds     = array();
+        $categoryIds = array();
+
+        foreach ($courseSets as &$set) {
+            $course            = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($set['id']);
+            $userIds           = array_merge($userIds, $course['teacherIds']);
+            $set['teacherIds'] = $course['teacherIds'];
+            $categoryIds[]     = $set['categoryId'];
+        }
+
+        $users    = $this->getUserService()->findUsersByIds($userIds);
+        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+
+        foreach ($users as $key => $user) {
+            if ($user['id'] == $profiles[$user['id']]['id']) {
+                $users[$key]['profile'] = $profiles[$user['id']];
+            }
+        }
+
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+
+        foreach ($courseSets as &$set) {
+            $teachers = array();
+
+            foreach ($set['teacherIds'] as $teacherId) {
+                if (!$teacherId) {
+                    continue;
+                }
+
+                $user = $users[$teacherId];
+                unset($user['password']);
+                unset($user['salt']);
+                $teachers[] = $user;
+            }
+
+            $set['teachers'] = $teachers;
+
+            $categoryId = $set['categoryId'];
+
+            if ($categoryId != 0 && array_key_exists($categoryId, $categories)) {
+                $set['category'] = $categories[$categoryId];
+            }
+            unset($set['teacherIds']);
+        }
+
+        return $courseSets;
+    }
+
     protected function getCourseTeachersAndCategories($courses)
     {
         $userIds     = array();
         $categoryIds = array();
 
         foreach ($courses as $course) {
-            $userIds       = array_merge($userIds, $course['teacherIds']);
-            $categoryIds[] = $course['categoryId'];
+            $userIds = array_merge($userIds, $course['teacherIds']);
+            //$categoryIds[] = $course['categoryId'];
         }
 
         $users    = $this->getUserService()->findUsersByIds($userIds);

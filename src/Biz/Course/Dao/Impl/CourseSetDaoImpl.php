@@ -11,12 +11,20 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 
     public function findCourseSetsByParentIdAndLocked($parentId, $locked)
     {
-        return $this->getByFields(array('parentId' => $parentId, 'locked' => $locked ));
+        return $this->getByFields(array('parentId' => $parentId, 'locked' => $locked));
     }
 
     public function findByIds(array $ids)
     {
         return $this->findInField('id', $ids);
+    }
+
+    public function findLikeTitle($title)
+    {
+        $title = '%' . $title . '%';
+        $sql = "SELECT * FROM {$this->table} WHERE title LIKE ?";
+
+        return $this->db()->fetchAll($sql, array($title));
     }
 
     public function declares()
@@ -37,9 +45,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'audiences' => 'delimiter',
                 'cover'     => 'json'
             ),
-            'orderbys' => array(
-                'createdTime',
-                'recommended'
+            'orderbys'   => array(
+                'createdTime', 'recommendedSeq', 'hitNum', 'recommendedTime', 'rating', 'studentNum'
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime'

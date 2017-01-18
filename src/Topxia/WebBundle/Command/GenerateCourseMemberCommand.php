@@ -10,7 +10,6 @@ use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Input\InputArgument;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
 class GenerateCourseMemberCommand extends BaseCommand
 {

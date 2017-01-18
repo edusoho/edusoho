@@ -190,7 +190,7 @@ abstract class BaseController extends Controller
         if ($message) {
             return new InvalidArgumentException($message);
         } else {
-            return new InvalidArgumentException();
+            return new InvalidArgumentException('');
         }
     }
 

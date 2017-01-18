@@ -3,11 +3,14 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Classroom\Service\ClassroomReviewService;
-use Codeages\Biz\Framework\Event\Event;
-
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\User\Service\UserService;
+use Biz\System\Service\LogService;
+use Biz\Classroom\Dao\ClassroomDao;
+use Codeages\Biz\Framework\Event\Event;
+use Biz\Classroom\Dao\ClassroomReviewDao;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Classroom\Service\ClassroomReviewService;
 
 class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewService
 {
@@ -20,7 +23,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     {
         $conditions = $this->_prepareReviewSearchConditions($conditions);
 
-        $orderBy = empty($orderBy) ? $orderBy : array($orderBy[0] => $orderBy[1]);
+        // $orderBy = empty($orderBy) ? $orderBy : array($orderBy[0] => $orderBy[1]);
 
         return $this->getClassroomReviewDao()->search($conditions, $orderBy, $start, $limit);
     }
@@ -35,8 +38,6 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
     public function getUserClassroomReview($userId, $classroomId)
     {
-        $user = $this->getUserService()->getUser($userId);
-
         $classroom = $this->getClassroomDao()->get($classroomId);
 
         if (empty($classroom)) {
@@ -69,21 +70,19 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     public function saveReview($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('classroomId', 'userId', 'rating'))) {
-            throw $this->createServiceException($this->getKernel()->trans('参数不正确，评价失败！'));
+            throw $this->createServiceException('参数不正确，评价失败！');
         }
 
         $classroom = $this->getClassroomDao()->get($fields['classroomId']);
 
-        $userId = $this->getCurrentUser()->id;
-
         if (empty($classroom)) {
-            throw $this->createServiceException($this->getKernel()->trans('班级(#%classroomId%)不存在，评价失败！', array('%classroomId%' => $fields['classroomId'])));
+            throw $this->createServiceException("班级(#{$fields['classroomId']})不存在，评价失败！");
         }
 
         $user = $this->getUserService()->getUser($fields['userId']);
 
         if (empty($user)) {
-            throw $this->createServiceException($this->getKernel()->trans('用户(#%userId%)不存在,评价失败!', array('%userId%' => $fields['userId'])));
+            throw $this->createServiceException("用户(#{$fields['userId']})不存在,评价失败!");
         }
 
         $review = $this->getClassroomReviewDao()->getByUserIdAndClassroomId($user['id'], $classroom['id']);
@@ -132,7 +131,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $review = $this->getReview($id);
 
         if (empty($review)) {
-            throw $this->createServiceException($this->getKernel()->trans('评价(#%id%)不存在，删除失败！', array('%id%' => $id)));
+            throw $this->createServiceException("评价(#{$id})不存在，删除失败！");
         }
 
         $this->getClassroomReviewDao()->delete($id);
@@ -142,33 +141,43 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $this->getLogService()->info('classroom_review', 'delete', "删除评价#{$id}");
     }
 
+    /**
+     * @return ClassroomReviewDao
+     */
     protected function getClassroomReviewDao()
     {
         return $this->createDao('Classroom:ClassroomReviewDao');
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ClassroomDao
+     */
     protected function getClassroomDao()
     {
         return $this->createDao('Classroom:ClassroomDao');
     }
 
+    /**
+     * @return UserService
+     */
     private function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
+    /**
+     * @return LogService
+     */
     private function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
+        return $this->createService('System:LogService');
     }
 }

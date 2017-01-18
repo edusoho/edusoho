@@ -32,6 +32,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'updatedTime >= :updatedTime_GE',
                 'courseId = :courseId',
                 'courseSetId = :courseSetId',
+                'courseSetId IN (:courseSetIds) ',
                 'taskId = :taskId',
                 'userId = :userId',
                 'type = :type',

@@ -549,6 +549,10 @@ my_teaching_classrooms:
     path: /my/teaching/classrooms
     defaults: { _controller: AppBundle:My/Classroom:teaching }
 
+my_live_courses_learning:
+    path: /my/learning/live
+    defaults: { _controller: AppBundle:My/CourseSet:lives }
+
 my_testpaper_check_list:
     path: /my/testpaper/check/{status}
     defaults: { _controller: AppBundle:My/Testpaper:checkList, status: 'reviewing' }
@@ -1692,6 +1696,10 @@ course_set_manage_course_students_show:
    path:  /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/show
    defaults: { _controller: AppBundle:Course/StudentManage:show }
 
+course_set_manage_course_students_defined_show:
+   path:  /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/defined_show
+   defaults: { _controller: AppBundle:Course/StudentManage:show }
+
 course_set_manage_course_orders:
   path: /course_set/{courseSetId}/manage/course/{courseId}/orders
   defaults: {_controller: AppBundle:Course/CourseManage:orders}
@@ -1773,7 +1781,7 @@ my_notebook_show:
 
 my_note_delete:
     path: /my/note/{id}/delete
-    defaults: { _controller: AppBundle:My/Notebook:noteDelete }
+    defaults: { _controller: AppBundle:My/Notebook:delete }
     methods: [POST]
 
 my_group_member_center:
@@ -1792,16 +1800,6 @@ my_group_member_posts:
 my_group_thread_collecting:
     path:  /my/group/collecting
     defaults: { _controller: AppBundle:My/Group:collecting }
-
-my_notebook_show:
-    path: /my/notebook/{courseId}
-    defaults: { _controller: AppBundle:My/Notebook:show }
-
-my_note_delete:
-    path: /my/note/{id}/delete
-    defaults: { _controller: AppBundle:My/Notebook:delete }
-    methods: [POST]
-
 
 #course_set
 course_set_manage_create:

@@ -6,16 +6,17 @@ variables:
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
 before_script:
-  - cp app/config/parameters_test.yml.dist app/config/parameters_test.yml
   - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - cp app/config/parameters.yml.dist app/config/parameters_test.yml
   - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
+  - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
   - mkdir web/files
   - mkdir app/data/private_files
   - touch app/config/routing_plugins.yml
 
 Unit Test With PHP 5.3:
   stage: test
-  image: codeages/ci-php:5.3-1
+  image: codeages/ci-php:5.3-2
   services:
     - mysql:5.5
   script:
@@ -28,7 +29,7 @@ Unit Test With PHP 5.3:
 
 Unit Test With PHP 5.5:
   stage: test
-  image: codeages/ci-php:5.5-2
+  image: codeages/ci-php:5.5-3
   services:
     - mysql:5.5
   script:
@@ -36,7 +37,7 @@ Unit Test With PHP 5.5:
 
 Unit Test With PHP 7.0:
   stage: test
-  image: codeages/ci-php:7.0-4
+  image: codeages/ci-php:7.0-6
   services:
     - mysql:5.5
   script:

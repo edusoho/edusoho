@@ -3242,7 +3242,8 @@
             "qr",
             "qrcode",
             "symfony"
-        ]
+        ],
+        "abandoned": "endroid/qrcode"
     },
     {
         "name": "paragonie/random_compat",
@@ -3577,17 +3578,17 @@
     },
     {
         "name": "codeages/biz-framework",
-        "version": "v0.1.8",
-        "version_normalized": "0.1.8.0",
+        "version": "v0.1.9",
+        "version_normalized": "0.1.9.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "e19e959627156dd0f6b4e034dc8a085539b107da"
+            "reference": "aead82de38b505be6608aad8560dfd25e275a6c3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/e19e959627156dd0f6b4e034dc8a085539b107da.zip",
-            "reference": "e19e959627156dd0f6b4e034dc8a085539b107da",
+            "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/aead82de38b505be6608aad8560dfd25e275a6c3.zip",
+            "reference": "aead82de38b505be6608aad8560dfd25e275a6c3",
             "shasum": ""
         },
         "require": {
@@ -3598,7 +3599,7 @@
             "psr/log": "^1.0.0",
             "symfony/event-dispatcher": "^2.8.9"
         },
-        "time": "2016-12-15 06:24:17",
+        "time": "2017-01-17 06:14:38",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

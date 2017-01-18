@@ -25,10 +25,10 @@ class DaoProxy
         if ((strpos($method, 'find') === 0) or (strpos($method, 'search') === 0)) {
             $rows = $this->_callRealDao($method, $arguments);
 
-            if(empty($rows)){
+            if (empty($rows)) {
                 return $rows;
             }
-            
+
             return $this->_unserializes($rows);
         }
 
@@ -108,6 +108,7 @@ class DaoProxy
             $method = "_{$method}Serialize";
             $row[$key] = $this->$method($row[$key]);
         }
+
         return $row;
     }
 
@@ -145,5 +146,15 @@ class DaoProxy
         }
 
         return explode('|', trim($value, '|'));
+    }
+
+    private function _phpSerialize($value)
+    {
+        return serialize($value);
+    }
+
+    private function _phpUnserialize($value)
+    {
+        return unserialize($value);
     }
 }
