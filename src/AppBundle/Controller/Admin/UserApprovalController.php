@@ -32,8 +32,8 @@ class UserApprovalController extends BaseController
 
         if (isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')) {
             //根据条件从user_approval表里查找数据
-            $approvalcount   = $this->getUserService()->searchApprovalsCount($conditions);
-            $profiles        = $this->getUserService()->searchApprovals($conditions, array('id' => 'DESC'), 0, $approvalcount);
+            $usercount   = $this->getUserService()->searchApprovalsCount($conditions);
+            $profiles        = $this->getUserService()->searchApprovals($conditions, array('id' => 'DESC'), 0, $usercount);
             $userApprovingId = ArrayToolkit::column($profiles, 'userId');
         } else {
             $usercount       = $this->getUserService()->searchUserCount($conditions);
@@ -46,8 +46,8 @@ class UserApprovalController extends BaseController
             $usercount,
             20
         );
-        $users = array();
 
+        $users = array();
         if (!empty($userApprovingId)) {
             $users = $this->getUserService()->searchUsers(
                 $conditions,
