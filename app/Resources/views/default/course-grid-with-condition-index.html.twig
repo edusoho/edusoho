@@ -4,11 +4,11 @@
   {% set categoryId = config.categoryId|default(0) %}
   {% set orderBy = config.orderBy|default('latest') %}
   {% if orderBy == 'latest' %}
-    {% set courses = data('LatestCourses',{'count':count, 'categoryId':categoryId}) %}
+    {% set courseSets = data('LatestCourseSets',{'count':count, 'categoryId':categoryId}) %}
   {% elseif orderBy == 'recommendedSeq' %}
-    {% set courses = data('RecommendCourses',{'count':count, 'categoryId':categoryId}) %}
+    {% set courseSets = data('RecommendCourseSets',{'count':count, 'categoryId':categoryId}) %}
   {% elseif orderBy == 'studentNum' %}
-    {% set courses = data('PopularCourses',{'count':count, 'categoryId':categoryId,'type':'studentNum'}) %}
+    {% set courseSets = data('PopularCourseSets',{'count':count, 'categoryId':categoryId,'type':'studentNum'}) %}
   {% endif %}
   {% set categoriesFirst = data('Categories',{'group':'course', 'parentId':0}) %}
   {% set moreCategories =  categoriesFirst[config.categoryCount|default(4):] %}
@@ -96,9 +96,9 @@
     </div>
     <div class="course-list">
       <div class="row">
-        {% for course in courses %}
+        {% for courseSet in courseSets %}
           <div class="col-lg-3 col-md-4 col-xs-6">
-            {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
+            {% include 'course/widgets/course-grid.html.twig' %}
           </div>
         {% endfor %}
       </div>
