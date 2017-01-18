@@ -79,6 +79,10 @@ not_truncate_tables=(
     "migrations"
     "category"
     "category_group"
+    "file_group"
+    "crontab_job"
+    "dictionary"
+    "dictionary_item"
 )
 
 readonly not_truncate_tables
