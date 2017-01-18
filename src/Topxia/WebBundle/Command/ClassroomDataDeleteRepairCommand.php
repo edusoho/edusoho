@@ -33,16 +33,18 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
             $questionCourseIds = $this->findQuestionCoursesByLessons($lessons);
             $this->addLog('有问题的课程有'.count($questionCourseIds).'个');
 
-            //找到有问题的lesson
+            //找到有问题的课时
             $questionLessons = $this->findQuestionLessonsByCourseIds($questionCourseIds);
             $this->addLog('有问题的lesson有'.count($questionLessons).'个');
+
+            //发布了的问题课时
+            $publishQuestionLessons = ArrayToolkit::group($questionLessons, 'status');
+            $this->addLog('发布了的问题课时有'.count($publishQuestionLessons['published']).'个');
+            $this->addLog('未发布了的问题课时有'.count($publishQuestionLessons['unpublished']).'个');
 
             //找到问题课时的学员数
             $this->findQuestionLessonMembersByLessons($questionLessons);
 
-            //发布了的问题课时
-            $publishQuestionLessons = $this->findPublishQuestionLessonsByCourseIds($questionCourseIds);
-            $this->addLog('发布了的问题课时有'.count($publishQuestionLessons).'个');
 
             $code = empty($input->getArgument('code')) ? null : $input->getArgument('code');
             if ($code === 'delete') {
@@ -107,7 +109,7 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
 
     private function findLessonsCopyIdNotExist()
     {
-        $sql = "select * from course_lesson where (copyId not in (SELECT id from course_lesson)) and copyId !=0";
+        $sql = "select * from course_lesson where copyId not in (SELECT id from course_lesson) and copyId !=0";
         return $this->getConnectionDb()->fetchAll($sql);
     }
 
@@ -115,7 +117,7 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
     {
         $courseIds = array_values($courseIds);
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql = "select * from course where (id in ({$marks}) and locked = 1)";
+        $sql = "select * from course where id in ({$marks}) and locked = 1";
         return $this->getConnectionDb()->fetchAll($sql, $courseIds);
     }
 
@@ -126,18 +128,7 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
         }
         $courseIds = array_values($courseIds);
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql = "select * from course_lesson where copyId not in (SELECT id from course_lesson ) and copyId !=0 and courseId in ({$marks})";
-        return $this->getConnectionDb()->fetchAll($sql, $courseIds);
-    }
-
-    private function findPublishQuestionLessonsByCourseIds($courseIds)
-    {
-        if (empty($courseIds)) {
-            return array();
-        }
-        $courseIds = array_values($courseIds);
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql = "select * from course_lesson where ((copyId not in (SELECT id from course_lesson WHERE copyId = 0)) and copyId !=0) and courseId in ({$marks}) and status = 'published'";
+        $sql = "select * from course_lesson where copyId not in (SELECT id from course_lesson) and copyId !=0 and courseId in ({$marks})";
         return $this->getConnectionDb()->fetchAll($sql, $courseIds);
     }
 
