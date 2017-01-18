@@ -296,10 +296,11 @@ class OpenCourseManageController extends BaseController
         list($paginator, $courses) = $this->_getPickCourseData($request, $id, $conditions);
         $users = $this->_getTeacherUsers($courses);
 
-        return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
+        return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-pick-modal.html.twig', array(
             'users'   => $users,
             'courses' => $courses,
             'filter'  => $filter,
+            'courseId'  => $id,
             'paginator' => $paginator
         ));
     }

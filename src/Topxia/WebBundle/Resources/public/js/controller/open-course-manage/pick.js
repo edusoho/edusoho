@@ -38,17 +38,15 @@ define(function(require, exports, module) {
 
             $.post($searchForm.data('url'),$searchForm.serialize(),function(data){
 
-                $('.courses-list').html(data);
+                $('#modal').html(data);
             });
         });
 
         $('#enterSearch').keydown(function(event){
 
             if(event.keyCode == 13){
-
                 $.post($searchForm.data('url'),$searchForm.serialize(),function(data){
-
-                    $('.courses-list').html(data);
+                    $('#modal').html(data);
                 });
 
                return false;
