@@ -72,7 +72,7 @@
           {% if setting('course.live_course_enabled') %}
             <li class="list-group-item
           {% if side_nav == 'my-learning-live' %} active {% endif %}">
-              <a href="">{{ '我的直播课表'|trans }}</a>
+              <a href="{{ path('my_live_courses_learning') }}">{{ '我的直播课表'|trans }}</a>
             </li>
           {% endif %}
 
