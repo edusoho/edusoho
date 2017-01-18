@@ -1,4 +1,5 @@
 import { initEditor } from './editor';
+import notify from 'common/notify';
 
 export const initThread = () => {
   let btn = '#post-thread-btn';
@@ -9,6 +10,7 @@ export const initThread = () => {
   });
   let formValidator = $form.validate({
     currentDom: btn,
+    ajax: true,
     rules: {
       'content': {
         required: true,
@@ -16,96 +18,61 @@ export const initThread = () => {
         visible_character: true
       }
     },
+    submitError() {
+      data = data.responseText;
+      data = $.parseJSON(data);
+      if (data.error) {
+        notify('danger', data.error.message);
+      } else {
+        notify('danger', Translator.trans('发表回复失败，请重试'));
+      }
+    },
+    submitSuccess: function (data) {
+      console.log(data);
+      // @TODO优化不刷新页面
+      if (data == "/login") {
+        window.location.href = url;
+        return;
+      }
+      // window.location.reload();
+    },
   });
-  $(btn).click(()=>{
-    if(formValidator.form()) {
+  console.log(formValidator);
+  $(btn).click(() => {
+    if (formValidator.form()) {
+      console.log('submit');
       $form.submit();
     }
   })
-} 
+}
 
+export const initThreadReplay = () => {
+  let $forms = $('.thread-post-reply-form');
+  $forms.each(function() {
+    let $form = $(this);
+    let content = $form.find('textarea').attr('name');
+    let formValidator = $form.validate({
+      ignore:'',
+      rules: {
+        [`${content}`]: {
+          required: true,
+          minlength: 2,
+          visible_character: true
+        }
+      },
+      submitError() {
+        console.log('submitError');
+      },
+      submitSuccess: function (data) {
+        console.log('submitSuccess');
+      },
+    });
 
-
-if ($('#post-thread-form').length > 0) {
-
-
-
-  
-
-
-  
-
-   // submitHandler: function (form) {
-    //   if (!$(form).valid()) {
-    //     return false;
-    //   }
-    //   $.ajax({
-    //     url: $("#post-thread-form").attr('post-url'),
-    //     data: $("#post-thread-form").serialize(),
-    //     cache: false,
-    //     async: false,
-    //     type: "POST",
-    //     dataType: 'text',
-    //     success: function (url) {
-    //       if (url == "/login") {
-    //         window.location.href = url;
-    //         return;
-    //       }
-    //       window.location.reload();
-    //     },
-    //     error: function (data) {
-    //       console.log(1);
-    //       data = data.responseText;
-    //       data = $.parseJSON(data);
-    //       if (data.error) {
-    //         notify('danger', data.error.message);
-    //       } else {
-    //         notify('danger', Translator.trans('发表回复失败，请重试'));
-    //       }
-    //     }
-    //   });
-    // }
-
-  // var validator_post_content = new Validator({
-  //   element: '#post-thread-form',
-  //   failSilently: true,
-  //   autoSubmit: false,
-  //   onFormValidated: function (error) {
-  //     if (error) {
-  //       return false;
-  //     }
-  //
-  //     $.ajax({
-  //       url: $("#post-thread-form").attr('post-url'),
-  //       data: $("#post-thread-form").serialize(),
-  //       cache: false,
-  //       async: false,
-  //       type: "POST",
-  //       dataType: 'text',
-  //       success: function (url) {
-  //         if (url == "/login") {
-  //           window.location.href = url;
-  //           return;
-  //         }
-  //         window.location.reload();
-  //       },
-  //       error: function (data) {
-  //         console.log(1);
-  //         data = data.responseText;
-  //         data = $.parseJSON(data);
-  //         if (data.error) {
-  //           notify('danger', data.error.message);
-  //         } else {
-  //           notify('danger', Translator.trans('发表回复失败，请重试'));
-  //         }
-  //       }
-  //     });
-  //   }
-  // });
-  // validator_post_content.addItem({
-  //   element: '[name="content"]',
-  //   required: true,
-  //   rule: 'minlength{min:2} visible_character'
-  // });
-
+    console.log(formValidator);
+    $form.find('button').click(()=>{
+      if(formValidator.form()) {
+        $form.submit();
+      }
+    })
+  })
 }

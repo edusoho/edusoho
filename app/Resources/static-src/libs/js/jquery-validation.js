@@ -27,19 +27,24 @@ $.validator.setDefaults({
       element.parent().append(error);
     }
   },
+  submitError() {
+    console.log('submitError');
+  },
   submitSuccess: function (data) {
+    console.log('submitSuccess');
   },
   submitHandler: function (form) {
     //规定全局不要用submit默认提交；
     let $form = $(form);
     let settings = this.settings;
-    console.log(settings);
+    console.log('submitHandler');
     $(settings.currentDom) ? $(settings.currentDom).button('loading') : '';
     if (settings.ajax) {
       $.post($form.attr('action'), $form.serializeArray(), (data) => {
         settings.submitSuccess(data);
       }).error(() => {
         settings.currentDom ? settings.currentDom.button('reset') : '';
+        settings.submitError();
       });
     } else {
       form.submit();

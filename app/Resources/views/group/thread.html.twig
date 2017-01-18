@@ -227,16 +227,16 @@
                   {% include 'group/post-reply-list.html.twig' with {posts:subPosts, users:postReplyMembers,postMain:post} %}
                 {% else %}
                   <div class="reply-{{post.id}}" style="display:none;">
-                    <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+                    <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  action="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
                       <div class="form-group">
                         <label class="control-label hide" for="reply-content-{{post.id}}">{{'回复内容'|trans}}</label>
                         <div class="controls">
-                        <textarea id="reply-content-{{post.id}}" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"></textarea>
+                        <textarea class="form-control" id="reply-content-{{post.id}}"  name="reply-content-{{post.id}}" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"></textarea>
                       </div>
                       </div>
                       <div id="fromUserIdNoSubDiv"></div>
                       <div class="form-group">
-                        <button type="submit" postId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="{{'正在发表回复'|trans}}">{{'发表'|trans}}</button>
+                        <button class=" btn btn-xs btn-primary pull-right" data-loading-text="{{'正在发表回复'|trans}}">{{'发表'|trans}}</button>
                       </div>
                     </form>
                   </div>
@@ -295,7 +295,7 @@
     <div class="panel-body">
 
       {% if app.user %}
-        <form id="post-thread-form" class="post-thread-form thread-form" method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+        <form id="post-thread-form" class="post-thread-form thread-form" method="post" action="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
 
           <div class="form-group">
             <label class="control-label hide" for="post_content">{{'回复内容'|trans}}</label>

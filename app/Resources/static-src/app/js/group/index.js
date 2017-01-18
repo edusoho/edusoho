@@ -1,7 +1,8 @@
 import notify from "common/notify";
-import { initThread } from './thread-opreate';
+import { initThread,initThreadReplay } from './thread-opreate';
 
 initThread();
+initThreadReplay();
 
 
 function checkUrl(url) {
@@ -119,142 +120,7 @@ if ($('.group-post-list').length > 0) {
 
   });
 
-  if ($('.thread-post-reply-form').length > 0) {
-
-    var forms = $('.thread-post-reply-form');
-
-    for (var i = forms.length - 1; i >= 0; i--) {
-      console.log(222, $(forms[i]).find('textarea').attr('id'));
-
-
-
-      // $("#" + $(forms[i]).find('textarea').attr('id')).rules("add", {
-      //   visible_character: true
-      // });
-      var field = $(forms[i]).find('textarea').attr('id');
-      var $postReplyForm = $(forms[i]).validate({
-        rules: {
-          field: {
-            required: true,
-            minlength: 2,
-            visible_character: true
-          }
-        },
-        submitHandler: function (form) {
-          if (!$(form).valid()) {
-            return false;
-          }
-          var replyBtn = $(this.element).find('.reply-btn');
-
-          var postId = replyBtn.attr('postId');
-          var fromUserIdVal = "";
-          if ($('#fromUserId').length > 0) {
-            fromUserIdVal = $('#fromUserId').val();
-          } else {
-            if ($('#fromUserIdNosub').length > 0) {
-              fromUserIdVal = $('#fromUserIdNosub').val();
-            } else {
-              fromUserIdVal = "";
-            }
-          }
-
-
-          $.ajax({
-            url: $(form).attr('post-url'),
-            data: "content=" + $(form).find('textarea').val() + '&' + 'postId=' + postId + '&' + 'fromUserId=' + fromUserIdVal,
-            cache: false,
-            async: false,
-            type: $(form).attr('method'),
-            dataType: 'text',
-            success: function (url) {
-              if (url == "/login") {
-                //window.location.href = url;
-                return;
-              }
-             // window.location.reload();
-            },
-            error: function (data) {
-              data = data.responseText;
-              data = $.parseJSON(data);
-              if (data.error) {
-                notify('danger', data.error.message);
-              } else {
-                notify('danger', Translator.trans('发表回复失败，请重试'));
-              }
-              replyBtn.button('reset').removeClass('disabled');
-            }
-          });
-        }
-      });
-    }
-
-
-   // $postReplyForm.form();
-
-    // var forms = $('.thread-post-reply-form');
-    //
-    // for (var i = forms.length - 1; i >= 0; i--) {
-    //   var form = $(forms[i]);
-    //
-    //   var validator_threadPost = new Validator({
-    //     element: $(form),
-    //     failSilently: true,
-    //     autoSubmit: false,
-    //     onFormValidated: function (error) {
-    //       if (error) {
-    //         return false;
-    //       }
-    //       var replyBtn = $(this.element).find('.reply-btn');
-    //
-    //       var postId = replyBtn.attr('postId');
-    //       var fromUserIdVal = "";
-    //       if ($('#fromUserId').length > 0) {
-    //         fromUserIdVal = $('#fromUserId').val();
-    //       } else {
-    //         if ($('#fromUserIdNosub').length > 0) {
-    //           fromUserIdVal = $('#fromUserIdNosub').val();
-    //         } else {
-    //           fromUserIdVal = "";
-    //         }
-    //       }
-    //
-    //       replyBtn.button('submiting').addClass('disabled');
-    //
-    //       $.ajax({
-    //         url: $(this.element).attr('post-url'),
-    //         data: "content=" + $(this.element).find('textarea').val() + '&' + 'postId=' + postId + '&' + 'fromUserId=' + fromUserIdVal,
-    //         cache: false,
-    //         async: false,
-    //         type: "POST",
-    //         dataType: 'text',
-    //         success: function (url) {
-    //           if (url == "/login") {
-    //             window.location.href = url;
-    //             return;
-    //           }
-    //           window.location.reload();
-    //         },
-    //         error: function (data) {
-    //           data = data.responseText;
-    //           data = $.parseJSON(data);
-    //           if (data.error) {
-    //             notify('danger', data.error.message);
-    //           } else {
-    //             notify('danger', Translator.trans('发表回复失败，请重试'));
-    //           }
-    //           replyBtn.button('reset').removeClass('disabled');
-    //         }
-    //       });
-    //     }
-    //   });
-    //   validator_threadPost.addItem({
-    //     element: '#' + $(form).find('textarea').attr('id'),
-    //     required: true,
-    //     rule: 'visible_character'
-    //   });
-    // }
-  }
-
+ 
 }
 
 if ($('#hasAttach').length > 0) {
