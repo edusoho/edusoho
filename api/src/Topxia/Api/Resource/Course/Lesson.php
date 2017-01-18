@@ -50,8 +50,6 @@ class Lesson extends BaseResource
     {
         $lesson['createdTime'] = date('c', $lesson['createdTime']);
         $lesson['updatedTime'] = date('c', $lesson['updatedTime']);
-        $lesson['startTime'] = empty($lesson['startTime']) ? 0 : date('c', $lesson['startTime']);
-        $lesson['endTime'] = empty($lesson['endTime']) ? 0 : date('c', $lesson['endTime']);
         return $lesson;
     }
 

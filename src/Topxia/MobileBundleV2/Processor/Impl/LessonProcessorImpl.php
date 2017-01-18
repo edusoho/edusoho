@@ -455,11 +455,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     protected function makeTokenData($fields)
     {
+        $options = array();
         if (!empty($fields['options'])) {
             $options = $fields['options'];
             unset($fields['options']);
-            return array_merge($fields, $options);
         }
+
+        return array_merge($fields, $options);
     }
 
     private function getVideoLesson($lesson, $options = null)
