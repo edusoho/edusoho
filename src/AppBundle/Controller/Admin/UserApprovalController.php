@@ -23,11 +23,11 @@ class UserApprovalController extends BaseController
         $conditions = $this->fillOrgCode($conditions);
 
         if (!empty($conditions['startDateTime'])) {
-            $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
+            $conditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
         }
 
         if (!empty($conditions['endDateTime'])) {
-            $userConditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
+            $conditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
         }
 
         if (isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')) {
@@ -41,32 +41,29 @@ class UserApprovalController extends BaseController
             $userApprovingId = ArrayToolkit::column($profiles, 'id');
         }
 
-        //在user表里筛选要求的实名认证状态
-        $userConditions = array(
-            'userIds'        => $userApprovingId,
-            'approvalStatus' => $approvalStatus
-        );
-
         $paginator = new Paginator(
             $this->get('request'),
             $usercount,
             20
         );
         $users = array();
-        
+
         if (!empty($userApprovingId)) {
             $users = $this->getUserService()->searchUsers(
-                $userConditions,
+                $conditions,
                 array('id'=>'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
         }
 
+        //最终结果
+        $userProfiles = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
+        $userProfiles = ArrayToolkit::index($userProfiles, 'userId');
         return $this->render('admin/user/approvals.html.twig', array(
             'users'          => $users,
             'paginator'      => $paginator,
-            'userProfiles'   => $profiles,
+            'userProfiles'   => $userProfiles,
             'approvalStatus' => $approvalStatus
         ));
     }
