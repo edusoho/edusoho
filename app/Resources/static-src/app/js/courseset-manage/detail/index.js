@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import MultiInput from '../../../common/component/multi-input';
+import MultiInput from 'app/common/component/multi-input';
 import sortList from 'common/sortable';
 
 

@@ -56,6 +56,8 @@
             <input class="js-hidden-data" type="hidden" name="categoryId" value="{{ categoryId|default(null) }}">
             <input class="js-hidden-data" type="hidden" name="chapterId" value="{{ chapterId|default(null) }}">
             <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
+            <input class="js-hidden-data" type="hidden" name="fromCourseId" value='{{ course.id }}'>
+            <input class="js-hidden-data" type="hidden" name="courseSetType" id="courseSetType" value="{{ courseSet.type }}">
             <input type="hidden" id="courseExpiryMode" value="{{ course.expiryMode }}">
           </li>
         </ul>
