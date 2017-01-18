@@ -109,11 +109,30 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $mockObj = Mockery::mock($className);
 
         foreach ($params as $param) {
-            $mockObj->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
+            $mockObj->shouldReceive($param['functionName'])->withAnyArgs()->andReturn($param['returnValue']);
         }
 
         $biz = $this->getBiz();
         $biz['@' . $alias] = $mockObj;
+    }
+
+    public function mockService($mockSrevices)
+    {
+        $biz = $this->getBiz();
+
+        foreach ($mockSrevices as $alias => $expecteds) {
+            list($module, $name) = explode(':', $alias);
+            $class = "Biz\\{$module}\\Service\\Impl\\{$name}Impl";
+            $mock = $this->getMockBuilder($class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            foreach ($expecteds as $method => $return) {
+                $mock->expects($this->any())->method($method)->will($this->returnValue($return));
+            }
+            
+            $biz["@{$alias}"] = $mock;
+        }
     }
 
     protected function setPool($object)
