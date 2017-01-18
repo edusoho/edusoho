@@ -27,7 +27,7 @@ $.validator.setDefaults({
       element.parent().append(error);
     }
   },
-  submitError() {
+  submitError: function(){
     console.log('submitError');
   },
   submitSuccess: function (data) {

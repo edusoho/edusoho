@@ -4,7 +4,7 @@ import { initThread,initThreadReplay } from './thread-opreate';
 initThread();
 initThreadReplay();
 
-
+//@TODO等待整理迁移
 function checkUrl(url) {
   var hrefArray = new Array();
   hrefArray = url.split('#');
@@ -12,9 +12,7 @@ function checkUrl(url) {
   return hrefArray[1];
 }
 
-
 var add_btn_clicked = false;
-
 
 $('#add-btn').click(function () {
   if (!add_btn_clicked) {
@@ -38,12 +36,6 @@ $("#thread-list").on('click', '.uncollect-btn, .collect-btn', function () {
 });
 
 $('.attach').tooltip();
-
-
-
-
-
-
 
 if ($('.group-post-list').length > 0) {
   $('.group-post-list').on('click', '.li-reply', function () {
@@ -168,27 +160,4 @@ if ($('.actions').length > 0) {
       window.location.reload();
     });
   })
-
 }
-
-
-// if ($('#group').length > 0) {
-//   initEditor({
-//     toolbar: 'Full',
-//     replace: 'group'
-//   });
-
-
-//   var $groupForm = $("#user-group-form").validate({
-//     rules: {
-//       'group[grouptitle]': {
-//         required: true,
-//         minlength: 2,
-//         maxlength: 100
-//       },
-//     },
-//     messages: {}
-//   });
-
-//   $groupForm.form();
-// }

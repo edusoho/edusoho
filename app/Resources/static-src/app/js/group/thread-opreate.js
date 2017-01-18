@@ -18,7 +18,7 @@ export const initThread = () => {
         visible_character: true
       }
     },
-    submitError() {
+    submitError: function () {
       data = data.responseText;
       data = $.parseJSON(data);
       if (data.error) {
@@ -29,30 +29,27 @@ export const initThread = () => {
     },
     submitSuccess: function (data) {
       console.log(data);
-      // @TODO优化不刷新页面
       if (data == "/login") {
         window.location.href = url;
         return;
       }
-      // window.location.reload();
+      // @TODO优化不刷新页面
+      window.location.reload();
     },
   });
   console.log(formValidator);
   $(btn).click(() => {
-    if (formValidator.form()) {
-      console.log('submit');
-      $form.submit();
-    }
+    formValidator.form();
   })
 }
 
 export const initThreadReplay = () => {
   let $forms = $('.thread-post-reply-form');
-  $forms.each(function() {
+  $forms.each(function () {
     let $form = $(this);
     let content = $form.find('textarea').attr('name');
     let formValidator = $form.validate({
-      ignore:'',
+      ignore: '',
       rules: {
         [`${content}`]: {
           required: true,
@@ -60,27 +57,52 @@ export const initThreadReplay = () => {
           visible_character: true
         }
       },
-      submitError() {
-        console.log('submitError');
-      },
-      submitSuccess: function (data) {
-        console.log(data);
-        // @TODO优化不刷新页面
-        if (data == "/login") {
-          window.location.href = url;
-          return;
+      submitHandler: function (form) {
+        var replyBtn = $(form).find('.reply-btn');
+        var postId = replyBtn.attr('postId');
+        var fromUserIdVal = "";
+        if ($('#fromUserId').length > 0) {
+          fromUserIdVal = $('#fromUserId').val();
+        } else {
+          if ($('#fromUserIdNosub').length > 0) {
+            fromUserIdVal = $('#fromUserIdNosub').val();
+          } else {
+            fromUserIdVal = "";
+          }
         }
-        window.location.reload();
-        return;
-      },
-    });
-
-    console.log(formValidator);
-    $form.find('button').click((e)=>{
-      e.stopPropagation();
-      if(formValidator.form()) {
-        $form.submit();
+        replyBtn.button('submiting').addClass('disabled');
+        console.log($(form).attr('action'));
+        console.log("content=" + $(form).find('textarea').val() + '&' + 'postId=' + postId + '&' + 'fromUserId=' + fromUserIdVal);
+        $.ajax({
+          url: $(form).attr('action'),
+          data: "content=" + $(form).find('textarea').val() + '&' + 'postId=' + postId + '&' + 'fromUserId=' + fromUserIdVal,
+          cache: false,
+          async: false,
+          type: "POST",
+          dataType: 'text',
+          success: function (url) {
+            if (url == "/login") {
+              window.location.href = url;
+              return;
+            }
+            // @TODO优化不刷新页面
+            window.location.reload();
+          },
+          error: function (data) {
+            data = data.responseText;
+            data = $.parseJSON(data);
+            if (data.error) {
+              notify('danger',data.error.message);
+            } else {
+              notify('danger',Translator.trans('发表回复失败，请重试'));
+            }
+            replyBtn.button('reset').removeClass('disabled');
+          }
+        });
       }
+    });
+    $form.find('button').click((e) => {
+      formValidator.form()
     })
   })
 }
