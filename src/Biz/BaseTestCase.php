@@ -104,18 +104,6 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->setPool($pool);
     }
 
-    protected function mockBiz($alias, $className, $params = array())
-    {
-        $mockObj = Mockery::mock($className);
-
-        foreach ($params as $param) {
-            $mockObj->shouldReceive($param['functionName'])->withAnyArgs()->andReturn($param['returnValue']);
-        }
-
-        $biz = $this->getBiz();
-        $biz['@' . $alias] = $mockObj;
-    }
-
     public function mockService($mockSrevices)
     {
         $biz = $this->getBiz();
