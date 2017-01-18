@@ -77,6 +77,8 @@ not_truncate_tables=(
     "org"
     "navigation"
     "migrations"
+    "category"
+    "category_group"
 )
 
 readonly not_truncate_tables
