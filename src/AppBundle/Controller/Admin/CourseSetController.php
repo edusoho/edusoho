@@ -144,6 +144,13 @@ class CourseSetController extends BaseController
         return array($searchCourseSetsNum, $publishedCourseSetsNum, $closedCourseSetsNum, $unPublishedCourseSetsNum);
     }
 
+    public function closeAction(Request $request, $id)
+    {
+        $this->getCourseSetService()->closeCourseSet($id);
+
+        return $this->renderCourseTr($id, $request);
+    }
+
     /*
     code 状态编号
     1:　删除班级课程
