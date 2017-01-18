@@ -2,16 +2,7 @@
 
 namespace Biz\Task\Strategy;
 
-use Biz\Task\Dao\TaskDao;
 use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Biz\Course\Dao\CourseChapterDao;
-use Biz\Course\Service\CourseService;
-use Biz\Task\Service\TaskResultService;
-use Codeages\Biz\Framework\Context\Biz;
-use Biz\Activity\Service\ActivityService;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class BaseStrategy
 {
