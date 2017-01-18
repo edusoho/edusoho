@@ -13,7 +13,13 @@
 
 {% block body %}
   <div class="course-create-editor" id="course-create-editor">
-      <form class="form-horizontal" id="course-create-form" action="{{path('course_set_manage_course_create', {courseSetId: courseSet.id})}}" method="post">
+      <form class="form-horizontal" id="course-create-form" 
+      {% if course|default(false) %}
+        action="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id})}}"
+      {% else %}
+        action="{{path('course_set_manage_course_create', {courseSetId: courseSet.id})}}"
+      {% endif %}
+        method="post">
         <div class="form-group">
           <div class="col-sm-2 control-label">
             <label for="title" class="control-label-required">{{'新计划名称'|trans}}</label>

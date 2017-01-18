@@ -30,26 +30,26 @@ class TaskCopy extends AbstractEntityCopy
     /*
      * 这里同时处理task和chapter
      * $source = $originalCourse
-     * $parent = $newCourse
+     * $config = $newCourse
      */
     protected function _copy($source, $config = array())
     {
-        $that->addError('TaskCopy', 'copy source:'.json_encode($source));
+        $this->addError('TaskCopy', 'copy source:'.json_encode($source));
         $user  = $this->biz['user'];
         $tasks = $this->getTaskDao()->findByCourseId($source['id']);
         if (empty($tasks)) {
             return array();
         }
 
-        $newCourse    = $config['newCourse'];
-        $newCourseSet = $config['newCourseSet'];
-        $newTasks     = array();
-        $chapterMap   = $this->doCopyChapters($source['id'], $newCourse['id']);
-        $activityMap  = $this->doCopyActivities($source['id'], $newCourse['id'], $newCourseSet['id']);
+        $newCourse      = $config['newCourse'];
+        $newCourseSetId = $newCourse['courseSetId'];
+        $newTasks       = array();
+        $chapterMap     = $this->doCopyChapters($source['id'], $newCourse['id']);
+        $activityMap    = $this->doCopyActivities($source['id'], $newCourse['id'], $newCourseSetId);
 
         foreach ($tasks as $task) {
             $newTask                = $this->doCopyTask($task);
-            $newTask['courseSetId'] = $newCourseSet['id'];
+            $newTask['courseSetId'] = $newCourseSetId;
             $newTask['courseId']    = $newCourse['id'];
             if (!empty($task['categoryId'])) {
                 $newTask['categoryId'] = $chapterMap[$task['categoryId']];
@@ -111,14 +111,15 @@ class TaskCopy extends AbstractEntityCopy
                     'fromCourseSetId' => $courseSetId
                 );
                 $testId = 0;
-                if(in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))){
-                    $testpaper = new ActivityTestpaperCopy($this->biz)->copy($newActivity);
-                    $testId = $testpaper['id'];
+                if (in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
+                    $activityTestpaperCopy = new ActivityTestpaperCopy($this->biz);
+                    $testpaper             = $activityTestpaperCopy->copy($newActivity);
+                    $testId                = $testpaper['id'];
                 }
                 $config = $this->getActivityConfig($activity['mediaType']);
                 $ext    = $config->copy($activity, array(
-                    'refLiveroom' => $activity['fromCourseSetId'] != $courseSetId
-                    'testId' => $testId
+                    'refLiveroom' => $activity['fromCourseSetId'] != $courseSetId,
+                    'testId'      => $testId
                 ));
                 if (!empty($ext)) {
                     $newActivity['mediaId'] = $ext['id'];

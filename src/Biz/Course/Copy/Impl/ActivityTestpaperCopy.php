@@ -18,21 +18,12 @@ class ActivityTestpaperCopy extends TestpaperCopy
     }
 
     /*
-     * type='course-set'
-     * - $source = originalCourse
-     * - $config : newCourseSet
-     *
-     * type='course'
-     * - $source = originalCourse
-     * - $config : newCourse
-     *
-     * type='activity'
      * - $source = $activity
      * - $config:
      * */
     protected function _copy($source, $config = array())
     {
-        $that->addError('ActivityTestpaperCopy', 'copy source:'.json_encode($source));
+        $this->addError('ActivityTestpaperCopy', 'copy source:'.json_encode($source));
         return $this->doCopyTestpaper($source);
     }
 

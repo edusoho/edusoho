@@ -29,7 +29,8 @@ class CourseCopy extends AbstractEntityCopy
      */
     protected function _copy($source, $config = array())
     {
-        $that->addError('CourseCopy', 'copy source:'.json_encode($source));
+        $this->addError('CourseCopy', 'copy source:'.json_encode($source));
+
         $user        = $this->biz['user'];
         $courseSetId = $source['courseSetId'];
         if (!empty($config['newCourseSet'])) {
@@ -40,15 +41,15 @@ class CourseCopy extends AbstractEntityCopy
         //通过教学计划复制出来的教学计划一定不是默认的。
         $new['isDefault']   = $courseSetId == $source['courseSetId'] ? 0 : $source['isDefault'];
         $new['parentId']    = $source['id'];
-        $new['courseSetId'] = $config['newCourseSet']['id'];
+        $new['courseSetId'] = $courseSetId;
         $new['creator']     = $user['id'];
         $new['status']      = 'published';
         $new['teacherIds']  = array($user['id']);
 
         $new = $this->getCourseDao()->create($new);
         $this->doCopyCourseMember($new);
-        $that->addError('CourseCopy', 'copy children:'.json_encode($this->children));
-        $this->childrenCopy($source, array('newCourse' => $new, 'newCourseSet' => $config['newCourseSet']));
+        $this->addError('CourseCopy', 'copy children:'.json_encode($this->children));
+        $this->childrenCopy($source, array('newCourse' => $new));
 
         return $new;
     }
