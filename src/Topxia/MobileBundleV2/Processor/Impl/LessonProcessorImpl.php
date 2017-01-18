@@ -273,26 +273,32 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         foreach ($lessons as $key => $lesson) {
             if ($lesson['type'] == 'video') {
-                if (!empty($lesson['free']) && empty($course['tryLookable'])) {
+                $lessonFree = $this->isLessonFree($lesson);
+                $courseTryLookAble = $this->isCourseTryLookAble($course);
+
+                if ($lessonFree) {
                     $lessons[$key] = $this->getVideoLesson($lesson);
                 }
 
-                if (!empty($course['tryLookable'])) {
-                    if (!empty($lesson['free'])) {
-                        $lessons[$key] = $this->getVideoLesson($lesson);
-                    }
-
-                    if (empty($lesson['free'])) {
-                        $tryLookTime = $course['tryLookTime'];
-                        $options     = array('watchTimeLimit' => $tryLookTime * 60);
-
-                        $lessons[$key] = $this->getVideoLesson($lesson, $options);
-                    }
+                if ($courseTryLookAble && !$lessonFree) {
+                    $tryLookTime = $course['tryLookTime'];
+                    $options     = array('watchTimeLimit' => $tryLookTime * 60);
+                    $lessons[$key] = $this->getVideoLesson($lesson, $options);
                 }
             }
         }
 
         return $lessons;
+    }
+
+    private function isCourseTryLookAble($course)
+    {
+        return empty($course['tryLookable']) ? false : true;
+    }
+
+    private function isLessonFree($lesson)
+    {
+        return empty($lesson['free']) ? false : true;
     }
 
     private function getUploadFiles($courseId)
