@@ -53,6 +53,7 @@
     "rc-select": "6.6.9",
     "rc-steps": "2.2",
     "react": "0.14.8",
+    "react-anything-sortable": "^1.6.1",
     "react-dom": "0.14.8",
     "reset.css": "2.0.2",
     "respond.js": "1.4.2",
@@ -64,7 +65,7 @@
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "NODE_ENV=development babel-node  ./app/Resources/webpack/webpack.dev.js",
+    "dev": "NODE_ENV=development babel-node --max_old_space_size=4096   ./app/Resources/webpack/webpack.dev.js",
     "compile": "NODE_ENV=production babel-node ./node_modules/.bin/webpack --progress --config ./app/Resources/webpack/webpack.js",
     "compile:debug": "npm run compile -- --debugMode=true",
     "lint": "eslint src",
