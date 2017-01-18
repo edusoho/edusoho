@@ -73,7 +73,10 @@ if ($('#thread_content').length > 0) {
   });
 
   $userThreadForm.form();
+  
 }
+
+
 
 if ($('#post-thread-form').length > 0) {
 
@@ -439,23 +442,23 @@ if ($('.actions').length > 0) {
 }
 
 
-if ($('#group').length > 0) {
-  initEditor({
-    toolbar: 'Full',
-    replace: 'group'
-  });
+// if ($('#group').length > 0) {
+//   initEditor({
+//     toolbar: 'Full',
+//     replace: 'group'
+//   });
 
 
-  var $groupForm = $("#user-group-form").validate({
-    rules: {
-      'group[grouptitle]': {
-        required: true,
-        minlength: 2,
-        maxlength: 100
-      },
-    },
-    messages: {}
-  });
+//   var $groupForm = $("#user-group-form").validate({
+//     rules: {
+//       'group[grouptitle]': {
+//         required: true,
+//         minlength: 2,
+//         maxlength: 100
+//       },
+//     },
+//     messages: {}
+//   });
 
-  $groupForm.form();
-}
+//   $groupForm.form();
+// }

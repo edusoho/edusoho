@@ -1,6 +1,6 @@
 {% extends 'group/setting-layout.html.twig' %}
 
-{% set script_controller = 'group/group_logo' %}
+{% do script(['libs/jquery-validation.js','app/js/group/logo/index.js']) %}
 
 {% block title %}{{'%groupinfo%小组'|trans({'%groupinfo%':groupinfo.title})}} - {{ parent() }}{% endblock %}
 

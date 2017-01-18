@@ -1,6 +1,6 @@
 {% extends 'group/layout.html.twig' %}
 {% block title %}{{'创建小组'|trans}} - {{ parent() }}{% endblock %}
-{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/add/index.js']) %}
 {% set side_nav = 'group' %}
 
 {% block content %}
@@ -22,13 +22,13 @@
         <div class="form-group">
           <label class="col-md-2 control-label" for="group_about">{{'小组介绍'|trans}}</label>
           <div class="col-md-7 controls">
-            <textarea name="group[about]" rows="10" id="group" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"></textarea>
+            <textarea name="group[about]" rows="10" id="groupIntroduce" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"></textarea>
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-7 col-md-offset-2">
-            <button id="group-save-btn" data-submiting-text="{{'正在创建'|trans}}" type="button" class="btn btn-primary">{{'创建'|trans}}</button>
+            <button class="btn btn-primary" id="group-save-btn" data-loading-text="{{'正在创建...'|trans}}" type="button" >{{'创建'|trans}}</button>
           </div>
         </div>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
