@@ -55,7 +55,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
         $receipt = $this->getParam("receipt-data");
         $amount  = $this->getParam("amount", 0);
-        $transactionId  = $this->getParam("transaction_id", 0);
+        $transactionId  = $this->getParam("transaction_id", false);
         return $this->requestReceiptData($user["id"], $amount, $receipt, $transactionId, false);
     }
 
@@ -256,11 +256,15 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
                 $inApp = false;
 
-                foreach ($data['receipt']['in_app'] as $value) {
-                    if (ArrayToolkit::requireds($value, array('transaction_id', 'quantity', 'product_id')) && $value['transaction_id'] == $transactionId) {
-                        $inApp = $value;
-                        break;
+                if ($transactionId) {
+                    foreach ($data['receipt']['in_app'] as $value) {
+                        if (ArrayToolkit::requireds($value, array('transaction_id', 'quantity', 'product_id')) && $value['transaction_id'] == $transactionId) {
+                            $inApp = $value;
+                            break;
+                        }
                     }
+                } else { //兼容没有transactionId的模式
+                    $inApp = $data['receipt']['in_app'][0];
                 }
 
                 if (!$inApp) {
