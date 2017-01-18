@@ -19,7 +19,11 @@ abstract class Mail
 
     public function __get($name)
     {
-        if(!array_key_exists($name, $this->options)){
+        if ('options' == $name) {
+            return $this->options;
+        }
+
+        if (!array_key_exists($name, $this->options)) {
             return null;
         };
 
@@ -43,7 +47,7 @@ abstract class Mail
             return $default;
         }
 
-        $value = $this->getSettingService()->get($name,$default);
+        $value = $this->getSettingService()->get($name, $default);
 
         if (!isset($value)) {
             return $default;
@@ -67,6 +71,11 @@ abstract class Mail
     }
 
     public abstract function send();
+
+    protected function parseTemplate($options)
+    {
+        return TemplateToolkit::parseTemplate($options);
+    }
 
     protected function getSettingService()
     {
