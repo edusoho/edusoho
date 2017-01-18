@@ -22,28 +22,24 @@ class UserApprovalController extends BaseController
         $conditions = array_merge($conditions, $fields);
         $conditions = $this->fillOrgCode($conditions);
 
-        if (!empty($conditions['startDateTime'])) {
-            $conditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
-        }
+        $conditions['startApprovalTime'] = !empty($conditions['startDateTime']) ? strtotime($conditions['startDateTime']) : '';
 
-        if (!empty($conditions['endDateTime'])) {
-            $conditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
-        }
+        $conditions['endApprovalTime'] = !empty($conditions['endDateTime']) ? strtotime($conditions['endDateTime']) : '';
 
         if (isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')) {
             //根据条件从user_approval表里查找数据
-            $usercount   = $this->getUserService()->searchApprovalsCount($conditions);
-            $profiles        = $this->getUserService()->searchApprovals($conditions, array('id' => 'DESC'), 0, $usercount);
+            $userCount   = $this->getUserService()->searchApprovalsCount($conditions);
+            $profiles        = $this->getUserService()->searchApprovals($conditions, array('id' => 'DESC'), 0, $userCount);
             $userApprovingId = ArrayToolkit::column($profiles, 'userId');
         } else {
-            $usercount       = $this->getUserService()->searchUserCount($conditions);
-            $profiles        = $this->getUserService()->searchUsers($conditions, array('id' => 'DESC'), 0, $usercount);
+            $userCount       = $this->getUserService()->searchUserCount($conditions);
+            $profiles        = $this->getUserService()->searchUsers($conditions, array('id' => 'DESC'), 0, $userCount);
             $userApprovingId = ArrayToolkit::column($profiles, 'id');
         }
 
         $paginator = new Paginator(
             $this->get('request'),
-            $usercount,
+            $userCount,
             20
         );
 
