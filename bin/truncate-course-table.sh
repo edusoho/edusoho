@@ -1,17 +1,19 @@
 #!/bin/sh
 
-usage="$(basename "$0") [-h] [-u user] [-p password] [-d database]
-example:
+usage="Usage: $(basename "$0") [-h] [-d database] [-u user] [-p password]
+
+Example:
     bin/truncate-course-table.sh -d www.esdev.com
-where:
-    -h  show this help text
-    -u  set the database user (default: root)
-    -d  set the database
-    -p  set the database password (default: null)"
+
+Options:
+    -h  Display this message
+    -d  Set the database
+    -u  Set the database user (default: root)
+    -p  Set the database password (default: root)"
 
 database_name=
 user="root"
-password=
+password="root"
 
 while getopts ':hupd:' option; do
   case "$option" in
@@ -36,6 +38,10 @@ while getopts ':hupd:' option; do
 done
 shift $((OPTIND - 1))
 
+if [ -z "${database_name}" ]; then
+    echo "database name is empty"
+    exit;
+fi
 
 if [ -n "${password}" ] ; then
     tables=$(mysql -u${user} -p${password} ${database_name} -Nse 'show tables')
