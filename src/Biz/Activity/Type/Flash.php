@@ -15,7 +15,7 @@ class Flash extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $flash    = $this->getFlashActivityDao()->get($activity['mediaId']);
         if ($flash['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityIdAndCurrentUser($activityId);
             return $result >= $flash['finishDetail'];
         }
 

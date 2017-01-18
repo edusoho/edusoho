@@ -42,7 +42,7 @@
           {% if courseSets %}
             {% for courseSet in courseSets %}
             <tr>
-            <td><a data-toggle="modal" data-target="#modal" data-url="{{path('course_set_detail_data',{id:courseSet.id})}}" href="javascript:">{{courseSet.title}}</a></td>
+            <td><a data-toggle="modal" data-target="#modal" data-url="{{path('course_set_detail_data',{id:courseSet.id})}}" href="javascript:;">{{courseSet.title}}</a></td>
             {% if filter == 'classroom' %}
             <td>
             {% set classroom = classrooms[courseSet.id]|default(null) %}
@@ -59,7 +59,7 @@
             <td>{{courseSet.isLearnedNum|default()}}</td>
             <td>{{courseSet.learnTime|default(0)}}</td>
             <td>{{courseSet.income|default()}}</td>
-            <td><a href="{{path('admin_course_lesson_data',{id:courseSet.id})}}">{{'查看任务数据'|trans}}</a></td>
+            <td><a data-toggle="modal" data-target="#modal" data-url="{{path('admin_courses_data',{courseSetId:courseSet.id})}}" href="javascript:;">{{'查看任务'|trans}}</a></td>
             </tr>
             {% endfor %}
           {% endif %}

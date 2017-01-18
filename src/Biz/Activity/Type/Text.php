@@ -32,7 +32,7 @@ class Text extends Activity
 
     public function isFinished($activityId)
     {
-        $result       = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $result       = $this->getActivityLearnLogService()->sumLearnedTimeByActivityIdAndCurrentUser($activityId);
         $activity     = $this->getActivityService()->getActivity($activityId);
         $textActivity = $this->getTextActivityDao()->get($activity['mediaId']);
 

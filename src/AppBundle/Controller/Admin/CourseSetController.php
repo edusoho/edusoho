@@ -419,6 +419,51 @@ class CourseSetController extends BaseController
         ));
     }
 
+    public function coursesDataAction(Request $request, $courseSetId)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courseId = $request->query->get('courseId');
+
+        if (empty($courseId)) {
+            $courseId = $courses[0]['id'];            
+        }
+        $tasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
+
+        foreach ($tasks as $key => &$task) {
+
+            $finishedNum = $this->getCourseTaskResultService()->countTaskResults(array('status' => 'finish', 'courseTaskId' => $task['id']));
+            $studentNum = $this->getCourseTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
+            $learnTime =  $this->getCourseTaskResultService()->getLearnTimeByCourseIdGroupByCourseTaskId($task['id']);
+            if (in_array($task['type'], array('video','audio'))) {
+                $activity = $this->getActivityService()->getActivity($task['activityId']);
+                $task['length'] = $activity['length'];
+                $task['watchTime'] = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activity['id']);
+            } 
+
+            if ($task['type'] == 'testpaper') {
+                $activity = $this->getActivityService()->getActivity($task['activityId']);
+                $score    = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $activity['mediaId']));
+                $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(array('testId' => $activity['mediaId']));
+
+                $task['score'] = $paperNum == 0 ? 0 : intval($score / $paperNum);
+            }
+
+            $task['finishedNum'] = $finishedNum;
+            $task['studentNum'] = $studentNum;
+
+            $task['learnTime'] = $learnTime;
+        }
+ 
+        return $this->render('admin/course-set/course-list-data-modal.html.twig', array(
+            'tasks'  => $tasks,
+            'courseSet' => $courseSet,
+            'courses' => $courses,
+            'courseId' => $courseId
+        ));
+    }
+
     /**
      * @return SettingService
      */
@@ -543,8 +588,24 @@ class CourseSetController extends BaseController
         return $this->createService('Task:TaskService');
     }
 
+    protected function getCourseTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
+    }
+
     protected function getThreadService()
     {
         return $this->createService('Thread:ThreadService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->createService('Activity:ActivityLearnLogService');
     }
 }

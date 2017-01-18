@@ -5,7 +5,7 @@
 {% block body %}
   {% if courses|default()|length > 1 %}
     <div class="clearfix mbl">
-      <select style="width:200px;" class="form-control pull-right" name="categoryId" tabindex="-1" id = "course-select">
+      <select style="width:200px;" class="form-control pull-left" name="categoryId" tabindex="-1" id = "course-select">
         {% for course in courses %}
           <option value="{{course.id}}" {% if courseId == course.id  %} selected {% endif %} data-url="{{ path('course_set_detail_data',{id:courseSet.id,courseId:course.id}) }}">{{course.title}}</option> 
         {% endfor %}
@@ -47,6 +47,6 @@
     </table>
     {{ web_macro.paginator(paginator) }}
   </div>
-{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
   <script>app.lazyLoad = function() { app.load('course-set/data-detail.js') };</script>
 {% endblock %}

@@ -54,7 +54,7 @@ class Doc extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $doc      = $this->getDocActivityDao()->get($activity['mediaId']);
         if ($doc['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityIdAndCurrentUser($activityId);
             return $result >= $doc['finishDetail'];
         }
         return false;

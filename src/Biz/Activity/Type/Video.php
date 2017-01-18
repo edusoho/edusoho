@@ -48,7 +48,7 @@ class Video extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $video      = $this->getVideoActivityDao()->get($activity['mediaId']);
         if ($video['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityIdAndCurrentUser($activityId);
             return !empty($result) && $result >= $video['finishDetail'];
         }
 

@@ -38,7 +38,7 @@ class Audio extends Activity
      */
     public function isFinished($activityId)
     {
-        $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+        $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityIdAndCurrentUser($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
         return !empty($result)
             && $result > $activity['length'];

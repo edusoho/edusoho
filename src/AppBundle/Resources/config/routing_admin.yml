@@ -503,9 +503,9 @@ course_set_detail_data:
    path:  /course_set/detail/data/{id}
    defaults: { _controller: AppBundle:Admin/CourseSet:detailData }
 
-admin_course_lesson_data:
-    path:  /course/lesson/data/{id}
-    defaults: { _controller: AppBundle:Admin/Course:lessonData }
+admin_courses_data:
+    path:  /courses/data/{courseSetId}
+    defaults: { _controller: AppBundle:Admin/CourseSet:coursesData }
     permissions: [admin_course_set_data]
 
 # admin_course_disk:

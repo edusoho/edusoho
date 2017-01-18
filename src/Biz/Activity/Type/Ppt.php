@@ -37,7 +37,7 @@ class Ppt extends Activity
         $ppt      = $this->getPptActivityDao()->get($activity['mediaId']);
 
         if ($ppt['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityIdAndCurrentUser($activityId);
             return !empty($result) && $result >= $ppt['finishDetail'];
         }
 
