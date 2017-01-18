@@ -91,7 +91,7 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
                 'createdTime < :endDate',
                 'fromId IN (:fromIds)',
                 'toId IN (:toIds)',
-                'content LIKE %:content%'
+                'content LIKE :content'
             )
         );
     }
