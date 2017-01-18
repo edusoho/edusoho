@@ -32,15 +32,16 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             );
             $chapter             = $this->getCourseService()->createChapter($chapter);
             $field['categoryId'] = $chapter['id'];
-            $task                = $this->baseCreateTask($field);
         } else {
             $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($field['categoryId'], 'lesson');
             if (empty($lessonTask)) {
                 throw new NotFoundException('lesson task is not found');
             }
             $field['status'] = $lessonTask['status'];
-            $task            = $this->baseCreateTask($field);
         }
+
+        $task            = parent::createTask($field);
+
         $chapter          = $this->getChapterDao()->get($task['categoryId']);
         $tasks            = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
         $chapter['tasks'] = $tasks;

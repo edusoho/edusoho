@@ -25,35 +25,8 @@ class BaseStrategy
         $this->biz = $biz;
     }
 
-    public function baseCreateTask($fields)
+    public function breateTask($fields)
     {
-        $fields = array_filter($fields, function ($value) {
-            if (is_array($value) || ctype_digit((string) $value)) {
-                return true;
-            }
-
-            return !empty($value);
-        });
-
-        if ($this->invalidTask($fields)) {
-            throw new InvalidArgumentException('task is invalid');
-        }
-
-        if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
-            throw new AccessDeniedException('无权创建任务');
-        }
-        $activity = $this->getActivityService()->createActivity($fields);
-
-
-        $fields['activityId']    = $activity['id'];
-        $fields['createdUserId'] = $activity['fromUserId'];
-        $fields['courseId']      = $activity['fromCourseId'];
-        $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
-        $fields['type']          = $fields['mediaType'];
-        if ($activity['mediaType'] == 'video') {
-            $fields['mediaSource'] = $fields['ext']['mediaSource'];
-        }
-
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
             'seq',

@@ -10,7 +10,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 {
     public function createTask($field)
     {
-        $task = $this->baseCreateTask($field);
+        $task = parent::createTask($field);
 
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
         return $task;
