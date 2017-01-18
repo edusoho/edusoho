@@ -64,12 +64,20 @@ export const initThreadReplay = () => {
         console.log('submitError');
       },
       submitSuccess: function (data) {
-        console.log('submitSuccess');
+        console.log(data);
+        // @TODO优化不刷新页面
+        if (data == "/login") {
+          window.location.href = url;
+          return;
+        }
+        window.location.reload();
+        return;
       },
     });
 
     console.log(formValidator);
-    $form.find('button').click(()=>{
+    $form.find('button').click((e)=>{
+      e.stopPropagation();
       if(formValidator.form()) {
         $form.submit();
       }
