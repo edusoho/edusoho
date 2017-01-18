@@ -96,7 +96,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createAccessDeniedException('无权删除任务');
         }
         $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
-        $this->biz['dispatcher']->dispatch("course.task.delete", new Event($task));
+        $this->dispatchEvent("course.task.delete", new Event($task, array('user' => $this->getCurrentUser())));
         return $result;
     }
 
@@ -319,8 +319,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $update['status']       = 'finish';
         $update['finishedTime'] = time();
         $taskResult             = $this->getTaskResultService()->updateTaskResult($taskResult['id'], $update);
-
-        $this->dispatchEvent('course.task.finish', new Event($taskId, array('user' => $this->getCurrentUser())));
+        $this->dispatchEvent('course.task.finish', new Event($taskResult, array('user' => $this->getCurrentUser())));
 
         return $taskResult;
     }

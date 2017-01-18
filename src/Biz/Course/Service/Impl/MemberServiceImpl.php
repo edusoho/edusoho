@@ -143,7 +143,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('用户未登录');
         }
 
-        $condition = array(
+        $condition     = array(
             'userId'              => $currentUser["id"],
             'role'                => 'student',
             'deadlineNotified'    => 0,
@@ -177,6 +177,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
     }
 
+    public function waveMember($id, $diffs)
+    {
+        return $this->getMemberDao()->wave(array($id), $diffs);
+    }
+
     public function searchMemberIds($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
@@ -197,7 +202,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return ArrayToolkit::column($members, 'userId');
     }
 
-    public function updateCourseMember($id, $fields)
+    public function updateMember($id, $fields)
     {
         return $this->getMemberDao()->update($id, $fields);
     }
@@ -281,7 +286,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         // 过滤数据
         $teacherMembers = array();
-        $course = $this->getCourseService()->getCourse($courseId);
+        $course         = $this->getCourseService()->getCourse($courseId);
         foreach (array_values($teachers) as $index => $teacher) {
             if (empty($teacher['id'])) {
                 throw $this->createServiceException("教师ID不能为空，设置教学计划(#{$courseId})教师失败");
@@ -371,7 +376,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('教学计划学员不存在，备注失败!');
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
+        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
         return $this->getMemberDao()->update($member['id'], $fields);
     }
 
@@ -628,8 +633,8 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
     {
-        $course = $this->getCourseService()->getCourse($id);
-        $fields = array(
+        $course   = $this->getCourseService()->getCourse($id);
+        $fields   = array(
             'courseId'    => $courseId,
             'courseSetId' => $course['courseSetId'],
             'userId'      => $userId,
@@ -755,7 +760,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $number = $this->getCourseNoteService()->countNotesByUserIdAndCourseId($userId, $courseId);
 
         $this->getMemberDao()->update($member['id'], array(
-            'noteNum'            => (int) $number,
+            'noteNum'            => (int)$number,
             'noteLastUpdateTime' => time()
         ));
 
@@ -780,7 +785,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
 
     /**
-     * @param  int     $userId
+     * @param  int $userId
      * @return mixed
      */
     public function findStudentMemberByUserId($userId)

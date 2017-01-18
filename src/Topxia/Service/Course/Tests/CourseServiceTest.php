@@ -2601,7 +2601,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertArrayEquals($result, array(array('userId' => $this->getCurrentUser()->id)));
     }
 
-    public function testUpdateCourseMember()
+    public function testupdateMember()
     {
         $course       = array(
             'title' => 'test course 1'
