@@ -11,7 +11,7 @@
 
 <span class="course-price-widget">
 
-  {% if course.discountId %}
+  {% if courseSet.discountId %}
 
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}
@@ -32,10 +32,10 @@
     {% if 'full' in shows or 'discount' in shows %}
 
       <span class="discount">
-        {% if (course.discount == 0) or (priceType == 'coin' and course.originPrice == 0) or (priceType == 'default' and course.originPrice == 0) %}
+        {% if (courseSet.discount == 0) or (priceType == 'coin' and course.originPrice == 0) or (priceType == 'default' and course.originPrice == 0) %}
           {{'限免'|trans}}
         {% else  %}
-          {{'%discount%折'|trans({'%discount%': course.discount|round(2, 'common') })}}
+          {{'%discount%折'|trans({'%discount%': courseSet.discount|round(2, 'common') })}}
         {% endif %}
       </span>
 
