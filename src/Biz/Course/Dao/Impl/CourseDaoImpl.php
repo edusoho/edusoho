@@ -34,6 +34,11 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, $courseSetIds);
     }
 
+    public function findByCourseSetIds(array $setIds)
+    {
+        return $this->findInField('courseSetId', $setIds);
+    }
+
     public function findCoursesByIds($ids)
     {
         return $this->findInField('id', $ids);

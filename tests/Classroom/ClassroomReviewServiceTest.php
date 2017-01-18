@@ -55,7 +55,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
         );
         $this->getClassRoomReviewService()->saveReview($fields2);
 
-        $results = $this->getClassRoomReviewService()->searchReviews(array('classroomId' => $classroom['id']), array('rating', 'DESC'), 0, 5);
+        $results = $this->getClassRoomReviewService()->searchReviews(array('classroomId' => $classroom['id']), array('rating' => 'DESC'), 0, 5);
         $this->assertCount(2, $results);
 
     }

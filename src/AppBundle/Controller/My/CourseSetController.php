@@ -5,7 +5,10 @@ namespace AppBundle\Controller\My;
 
 
 use AppBundle\Controller\Course\CourseBaseController;
+use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
 
 class CourseSetController extends CourseBaseController
@@ -74,5 +77,71 @@ class CourseSetController extends CourseBaseController
             'paginator'  => $paginator,
             'filter'     => $filter
         ));
+    }
+
+    public function livesAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        $courseSets = $this->getCourseSetService()->findLearnCourseSetsByUserId($currentUser['id']);
+        $setIds     = ArrayToolkit::column($courseSets, 'id');
+        $courses    = $this->getCourseService()->findCoursesByCourseSetIds($setIds);
+        $courseIds  = ArrayToolkit::column($courses, 'id');
+
+        $conditions = array(
+            'status'       => 'published',
+            'startTime_GE' => time(),
+            'courseIds'    => $courseIds,
+            'type'         => 'live'
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getTaskService()->count($conditions),
+            10
+        );
+
+        $tasks = $this->getTaskService()->search(
+            $conditions,
+            array('startTime' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $courses    = ArrayToolkit::index($courses, 'id');
+
+        $newCourseSets = array();
+        if (!empty($courseSets)) {
+            foreach ($tasks as $key => &$task) {
+                $course                              = $courses[$task['courseId']];
+                $courseSetId                         = $course['courseSetId'];
+                $newCourseSets[$courseSetId]         = $courseSets[$courseSetId];
+                $newCourseSets[$courseSetId]['task'] = $task;
+            }
+        }
+
+        $default = $this->getSettingService()->get('default', array());
+        return $this->render('my/learning/course-set/live-list.html.twig', array(
+            'courseSets' => $newCourseSets,
+            'paginator'  => $paginator,
+            'default'    => $default
+        ));
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

@@ -37,7 +37,7 @@ Unit Test With PHP 5.5:
 
 Unit Test With PHP 7.0:
   stage: test
-  image: codeages/ci-php:7.0-5
+  image: codeages/ci-php:7.0-6
   services:
     - mysql:5.5
   script:

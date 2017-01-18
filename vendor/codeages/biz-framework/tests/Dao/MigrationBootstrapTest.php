@@ -6,7 +6,6 @@ use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 
 class MigrationBootstrapTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testBoot()
     {
         $config = array(
@@ -21,12 +20,12 @@ class MigrationBootstrapTest extends \PHPUnit_Framework_TestCase
             ),
         );
         $biz = new Biz($config);
-        $biz['migration.directories'][] = dirname(__DIR__) . '/TestProject/migrations';
+        $biz['migration.directories'][] = dirname(__DIR__).'/TestProject/migrations';
         $biz->register(new DoctrineServiceProvider());
         $biz->boot();
 
         $bootstrap = new MigrationBootstrap($biz['db'], $biz['migration.directories']);
-        $container    = $bootstrap->boot();
+        $container = $bootstrap->boot();
 
         $this->assertInstanceOf('Pimple\Container', $container);
     }
