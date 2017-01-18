@@ -447,23 +447,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         return $lesson;
     }
 
-    protected function makeTokenDatas($fields)
+    protected function makeTokenData($fields)
     {
-        $datas = array();
-
         if (!empty($fields['options'])) {
-            foreach ($fields['options'] as $key => $option) {
-                $datas[$key] = $option;
-            }
-
+            $options = $fields['options'];
             unset($fields['options']);
+            return array_merge($fields, $options);
         }
-
-        foreach ($fields as $key => $field) {
-            $datas[$key] = $field;
-        }
-
-        return $datas;
     }
 
     private function getVideoLesson($lesson, $options = null)
@@ -501,7 +491,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
                             if ($headLeaderInfo) {
                                 $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                    'data'     => $this->makeTokenDatas(array(
+                                    'data'     => $this->makeTokenData(array(
                                         'id'      => $headLeaderInfo['id'],
                                         'fromApi' => true
                                     )),
@@ -522,7 +512,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                             }
 
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                'data'     => $this->makeTokenDatas(array(
+                                'data'     => $this->makeTokenData(array(
                                     'id'      => $file['id'],
                                     'fromApi' => true,
                                     'options' => $options
