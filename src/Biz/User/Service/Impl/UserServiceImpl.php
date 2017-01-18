@@ -39,6 +39,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function searchUserCount(array $conditions)
     {
+        $conditions = $this->prepareConditions($conditions);
         return $this->getUserDao()->count($conditions);
     }
 
@@ -240,6 +241,8 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function searchUsers(array $conditions, array $orderBy, $start, $limit)
     {
+        $conditions = $this->prepareConditions($conditions);
+        
         if (isset($conditions['nickname'])) {
             $conditions['nickname'] = strtoupper($conditions['nickname']);
         }
@@ -1796,6 +1799,15 @@ class UserServiceImpl extends BaseService implements UserService
     public function deleteUserPayAgreements($id)
     {
         return $this->getUserPayAgreementDao()->delete($id);
+    }
+
+    protected function prepareConditions($conditions)
+    {
+        foreach ($conditions as $key => $value) {
+            if (empty($value)) {
+                unset($conditions[$key]);
+            }
+        }
     }
 
     /**
