@@ -25,7 +25,7 @@ class BaseStrategy
         $this->biz = $biz;
     }
 
-    public function breateTask($fields)
+    public function createTask($fields)
     {
         $fields = ArrayToolkit::parts($fields, array(
             'courseId',
@@ -46,7 +46,7 @@ class BaseStrategy
         return $this->getTaskDao()->create($fields);
     }
 
-    public function baseUpdateTask($id, $fields)
+    public function updateTask($id, $fields)
     {
         $savedTask = $this->getTaskService()->getTask($id);
 
@@ -71,27 +71,6 @@ class BaseStrategy
         return $this->getTaskDao()->update($id, $fields);
     }
 
-    public function baseFindCourseItems($courseId, $tasks)
-    {
-        $items = array();
-        foreach ($tasks as $task) {
-            $task['itemType']            = 'task';
-            $items["task-{$task['id']}"] = $task;
-        }
-
-        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-        foreach ($chapters as $chapter) {
-            $chapter['itemType']               = 'chapter';
-            $items["chapter-{$chapter['id']}"] = $chapter;
-        }
-
-        uasort($items, function ($item1, $item2) {
-            return $item1['seq'] > $item2['seq'];
-        });
-
-        return $items;
-    }
-
     protected function invalidTask($task)
     {
         if (!ArrayToolkit::requireds($task, array(
@@ -105,49 +84,31 @@ class BaseStrategy
         return false;
     }
 
-    /**
-     * @return CourseChapterDao
-     */
-    public function getChapterDao()
-    {
-        return $this->biz->dao('Course:CourseChapterDao');
-    }
-
-    /**
-     * @return TaskService
-     */
-    public function getTaskService()
+    protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
     }
 
-    /**
-     * @return TaskDao
-     */
-    public function getTaskDao()
+    protected function getTaskDao()
     {
         return $this->biz->dao('Task:TaskDao');
     }
 
-    /**
-     * @return TaskResultService
-     */
-    public function getTaskResultService()
-    {
-        return $this->biz->service('Task:TaskResultService');
-    }
-
-    /**
-     * @return CourseService
-     */
     public function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
     }
+    
+    protected function getChapterDao()
+    {
+        return $this->biz->dao('Course:CourseChapterDao');
+    }
 
-    /**
-     * @return ActivityService
-     */
+    protected function getTaskResultService()
+    {
+        return $this->biz->service('Task:TaskResultService');
+    }
+
     public function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
