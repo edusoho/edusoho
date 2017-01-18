@@ -3,6 +3,10 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\AudioActivityDao;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Activity\Service\ActivityService;
+use Biz\File\Service\UploadFileService;
 
 class Audio extends Activity
 {
@@ -16,6 +20,16 @@ class Audio extends Activity
         }
         $audioActivity = $this->getAudioActivityDao()->create($fields['ext']);
         return $audioActivity;
+    }
+
+    public function copy($activity, $config = array())
+    {
+        $audio    = $this->getAudioActivityDao()->get($activity['mediaId']);
+        $newAudio = array(
+            'mediaId' => $audio['mediaId']
+        );
+
+        return $this->getAudioActivityDao()->create($newAudio);
     }
 
     /**
@@ -41,7 +55,7 @@ class Audio extends Activity
         $result   = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
         $activity = $this->getActivityService()->getActivity($activityId);
         return !empty($result)
-            && $result > $activity['length'];
+        && $result > $activity['length'];
     }
 
     /**
@@ -67,21 +81,33 @@ class Audio extends Activity
         return array();
     }
 
+    /**
+     * @return AudioActivityDao
+     */
     protected function getAudioActivityDao()
     {
         return $this->getBiz()->dao("Activity:AudioActivityDao");
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service("Activity:ActivityService");
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');

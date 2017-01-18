@@ -11,4 +11,6 @@ interface LiveActivityService
     public function updateLiveActivity($id, &$fields, $activity);
 
     public function deleteLiveActivity($id);
+
+    public function createLiveroom($activity);
 }

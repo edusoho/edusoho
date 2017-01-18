@@ -2,12 +2,12 @@
 
 namespace Biz\Activity\Type;
 
-use Biz\Activity\Dao\DocActivityDao;
-use Biz\Activity\Service\ActivityLearnLogService;
-use Biz\Activity\Service\ActivityService;
-use Biz\File\Service\UploadFileService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\DocActivityDao;
+use Biz\File\Service\UploadFileService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class Doc extends Activity
 {
@@ -47,6 +47,20 @@ class Doc extends Activity
 
         $doc = $this->getDocActivityDao()->create($doc);
         return $doc;
+    }
+
+    public function copy($activity, $config = array())
+    {
+        $biz    = $this->getBiz();
+        $doc    = $this->getDocActivityDao()->get($activity['mediaId']);
+        $newDoc = array(
+            'mediaId'       => $doc['mediaId'],
+            'finishType'    => $doc['finishType'],
+            'finishDetail'  => $doc['finishDetail'],
+            'createdUserId' => $biz['user']['id']
+        );
+
+        return $this->getDocActivityDao()->create($newDoc);
     }
 
     public function isFinished($activityId)

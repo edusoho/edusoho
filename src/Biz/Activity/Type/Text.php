@@ -2,9 +2,11 @@
 
 namespace Biz\Activity\Type;
 
+use Biz\Activity\Dao\TextActivityDao;
+use Biz\Activity\Service\ActivityService;
+use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityLearnLogService;
-use Topxia\Common\ArrayToolkit;
 
 class Text extends Activity
 {
@@ -16,6 +18,18 @@ class Text extends Activity
     public function get($targetId)
     {
         return $this->getTextActivityDao()->get($targetId);
+    }
+
+    public function copy($activity, $config = array())
+    {
+        $biz     = $this->getBiz();
+        $text    = $this->getTextActivityDao()->get($activity['mediaId']);
+        $newText = array(
+            'finishType'    => $text['finishType'],
+            'finishDetail'  => $text['finishDetail'],
+            'createdUserId' => $biz['user']['id']
+        );
+        return $this->getTextActivityDao()->create($newText);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -57,6 +71,9 @@ class Text extends Activity
         return $this->getTextActivityDao()->create($text);
     }
 
+    /**
+     * @return TextActivityDao
+     */
     protected function getTextActivityDao()
     {
         return $this->getBiz()->dao('Activity:TextActivityDao');
@@ -70,6 +87,9 @@ class Text extends Activity
         return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');

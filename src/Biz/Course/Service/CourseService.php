@@ -22,6 +22,13 @@ interface CourseService
 
     public function createCourse($course);
 
+    /**
+     * 复制教学计划
+     * @param  array   $fields
+     * @return mixed
+     */
+    public function copyCourse($fields);
+
     public function createChapter($chapter);
 
     public function updateChapter($courseId, $chapterId, $fields);
@@ -59,20 +66,19 @@ interface CourseService
     /**
      * 获取用户在教的教学计划
      *
-     * @param integer $courseSetId
-     * @param bool    $onlyPublished
+     * @param  integer                 $courseSetId
+     * @param  bool                    $onlyPublished
      * @throws AccessDeniedException
-     *
      * @return mixed
      */
-    public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished=true);
+    public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished = true);
 
     /**
      * @param  integer   $userId
      * @param  bool      $onlyPublished 是否只需要发布后的教学计划
      * @return array[]
      */
-    public function findTeachingCoursesByUserId($userId, $onlyPublished=true);
+    public function findTeachingCoursesByUserId($userId, $onlyPublished = true);
 
     /**
      * @param  integer   $userId

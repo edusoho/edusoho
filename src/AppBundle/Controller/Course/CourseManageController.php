@@ -38,8 +38,15 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function copyAction(Request $request, $courseSetId, $courseId)
+    public function copyAction(Request $request, $courseSetId)
     {
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $this->getCourseService()->copyCourse($data);
+
+            return $this->redirect($this->generateUrl('course_set_manage_courses', array('courseSetId' => $courseSetId)));
+        }
+        $courseId  = $request->query->get('courseId');
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         return $this->render('course-manage/create-modal.html.twig', array(

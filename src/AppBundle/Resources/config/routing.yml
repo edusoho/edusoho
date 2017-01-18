@@ -1643,6 +1643,10 @@ course_set_manage_course_create:
   path: /course_set/{courseSetId}/manage/course/create
   defaults: {_controller: AppBundle:Course/CourseManage:create}
 
+course_set_manage_course_copy:
+  path: /course_set/{courseSetId}/manage/course/copy
+  defaults: {_controller: AppBundle:Course/CourseManage:copy}
+
 course_set_manage_course_info:
   path: /course_set/{courseSetId}/manage/course/{courseId}/info
   defaults: {_controller: AppBundle:Course/CourseManage:info}

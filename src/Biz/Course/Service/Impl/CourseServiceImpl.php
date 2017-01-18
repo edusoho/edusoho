@@ -10,6 +10,7 @@ use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Copy\Impl\CourseCopy;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -118,6 +119,15 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function copyCourse($fields)
+    {
+        $courseId = $fields['copyCourseId'];
+        $course   = $this->getCourse($courseId);
+
+        $entityCopy = new CourseCopy($this->biz);
+        return $entityCopy->copy($course, $fields);
     }
 
     public function updateCourse($id, $fields)
