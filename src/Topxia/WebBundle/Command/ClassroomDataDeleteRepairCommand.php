@@ -48,7 +48,7 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
             if ($code === 'delete') {
                 $this->initServiceKernel();
                 $this->deleteQuestionLessons($questionLessons);
-            }            
+            }
         }
        
         $output->writeln('<info>结束~</info>');
@@ -82,7 +82,7 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
                 }
 
                 $this->getExerciseService()->deleteExercisesByLessonId($lesson['id']);
-            }            
+            }
         }
     }
 
