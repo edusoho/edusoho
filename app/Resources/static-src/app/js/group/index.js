@@ -49,32 +49,7 @@ $("#thread-list").on('click', '.uncollect-btn, .collect-btn', function () {
 
 $('.attach').tooltip();
 
-if ($('#thread_content').length > 0) {
 
-  initEditor({
-    toolbar: 'Thread',
-    replace: 'thread_content'
-  });
-
-
-  var $userThreadForm = $("#user-thread-form").validate({
-    rules: {
-      'thread[title]': {
-        required: true,
-        minlength: 2,
-        maxlength: 100
-      },
-      'thread[content]': {
-        required: true,
-        minlength: 2,
-      }
-    },
-    messages: {}
-  });
-
-  $userThreadForm.form();
-  
-}
 
 
 
@@ -418,14 +393,7 @@ if ($('#post-action').length > 0) {
   })
 
 }
-if ($('#exit-btn').length > 0) {
-  $('#exit-btn').click(function () {
-    if (!confirm(Translator.trans('真的要退出该小组？您在该小组的信息将删除！'))) {
-      return false;
-    }
-  })
 
-}
 if ($('.actions').length > 0) {
 
   $('.group-post-list').on('click', '.post-delete-btn,.post-adopt-btn', function () {

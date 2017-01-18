@@ -10,6 +10,7 @@ if ($('#exit-btn').length > 0) {
 }
 $('#delete-btn').click(function() {
     if ($(":checkbox:checked").length < 1) {
+        console.log('选择改成说');
         alert(Translator.trans('请选择要踢出的成员！'));
         return false;
     }
@@ -18,10 +19,10 @@ $('#delete-btn').click(function() {
     }
 
     $.post($("#member-form").attr('action'), $("#member-form").serialize(), function() {
-        notify.success(Translator.trans('踢出成功！'));
+        notify('success',Translator.trans('踢出成功！'));
         setTimeout(function() { window.location.reload(); }, 1500);
     }).error(function() {
-        notify.danger(Translator.trans('踢出失败！'));
+        notify('danger',Translator.trans('踢出失败！'));
     });
 })
 
@@ -35,7 +36,7 @@ $('#set-admin-btn').click(function() {
     }
 
     $.post($("#set-admin-url").attr('value'), $("#member-form").serialize(), function() {
-        notify.success(Translator.trans('任职成功！'));
+        notify('success',Translator.trans('任职成功！'));
         setTimeout(function() { window.location.reload(); }, 1500);
 
     }).error(function() {
@@ -54,7 +55,7 @@ $('#remove-admin-btn').click(function() {
     }
 
     $.post($("#admin-form").attr('action'), $("#admin-form").serialize(), function() {
-        notify.success(Translator.trans('设置成功！'));
+        notify('success',Translator.trans('设置成功！'));
         setTimeout(function() { window.location.reload(); }, 1500);
 
     }).error(function() {
