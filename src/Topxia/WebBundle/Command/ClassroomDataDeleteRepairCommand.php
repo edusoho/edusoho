@@ -107,7 +107,7 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
 
     private function findLessonsCopyIdNotExist()
     {
-        $sql = "select * from course_lesson where ((copyId not in (SELECT id from course_lesson)) and copyId !=0)";
+        $sql = "select * from course_lesson where (copyId not in (SELECT id from course_lesson)) and copyId !=0";
         return $this->getConnectionDb()->fetchAll($sql);
     }
 
@@ -126,7 +126,7 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
         }
         $courseIds = array_values($courseIds);
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql = "select * from course_lesson where ((copyId not in (SELECT id from course_lesson WHERE copyId = 0)) and copyId !=0) and courseId in ({$marks})";
+        $sql = "select * from course_lesson where copyId not in (SELECT id from course_lesson ) and copyId !=0 and courseId in ({$marks})";
         return $this->getConnectionDb()->fetchAll($sql, $courseIds);
     }
 
