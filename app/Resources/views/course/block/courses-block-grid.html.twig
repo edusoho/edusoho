@@ -8,10 +8,12 @@
 {% set mode = mode|default('default') %}
 <ul class="course-grids">
   {% for course in courses %}
+    {% set courseSet = data('CourseSet', { id: course.courseSetId }) %}
     <li class="course-grid">
       <a href="{{ path('my_course_show', {id:course.id}) }}" class="grid-body">
         <div class="course-grid-img">
-          <img src="{{ filepath(course.courseSet.cover.large|default(null), 'course.png') }}"  class="img-responsive thumb">
+          <img src="{{ filepath(courseSet.cover.large|default(null), 'course.png') }}"  class="img-responsive thumb">
+
           <div class="course-grid-mask">
             <span class="btn btn-warning btn-sm course-grid-btn-learn">
               {% if course.memberIsLearned %}
@@ -29,15 +31,15 @@
             <span class="label label-danger">{{'已关闭'|trans}}</span>
           {% endif %}
           {% if course.status != 'closed' %}
-            {% if course.courseSet.serializeMode=='serialize' %}
+            {% if courseSet.serializeMode=='serialize' %}
               <span class="label label-success">{{'更新中'|trans}}</span>
-            {% elseif course.courseSet.serializeMode=='finished' %}
+            {% elseif courseSet.serializeMode=='finished' %}
               <span class="label label-warning">{{'已完结'|trans}}</span>
             {% endif %}
           {% endif %}
-          {% if course.courseSet.type == 'live' %}
-            {% set lesson = course['lesson']|default(null) %}
-            {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+          {% if courseSet.type == 'live' %}
+            {% set task = course['task']|default(null) %}
+            {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
               <span class="label label-warning">{{'正在直播中'|trans}}</span>
             {% else %}
               <span class="label label-success">{{'直播'|trans}}</span>
@@ -47,12 +49,12 @@
         
         {% if mode in ['default', 'teach'] %}
 
-          {% if course.type == 'live' %}
-            {% set lesson = course['lesson']|default(null) %}
-            {% if lesson %}
+          {% if courseSet.type == 'live' %}
+            {% set task = course['task']|default(null) %}
+            {% if task %}
               <span class="live-course-lesson metas">
-                <span class="text-success mrm">{{ lesson.startTime|date('n月j日 H:i'|trans) }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                <span class="text-muted mrm">{{'第%number%课时'|trans({'%number%': lessom.number})}}</span>
+                <span class="text-success mrm">{{ task.startTime|date('n月j日 H:i'|trans) }} ~ {{ task.endTime|date('H:i') }}</span>
+                <span class="text-muted mrm">{{'第%number%课时'|trans({'%number%': task.number})}}</span>
               </span>
             {% endif %}
           {% endif %}
@@ -119,7 +121,7 @@
             </div>
           {% endif %}
         {% endif %}
-        <div class="title">{{ course.courseSet.title|sub_text(10) }}<span class="pull-right color-primary text-12"><span class="gray-light mrs">|</span>{{course.title|sub_text(6)}}</span></div>
+        <div class="title">{{ courseSet.title|sub_text(10) }}<span class="pull-right color-primary text-12"><span class="gray-light mrs">|</span>{{course.title|sub_text(6)}}</span></div>
       </a>
     </li>
   {% endfor %}

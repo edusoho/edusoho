@@ -2,9 +2,8 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
 
-class RecommendCoursesDataTag extends CourseBaseDataTag implements DataTag  
+class RecommendCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 {
 
     /**
@@ -39,22 +38,14 @@ class RecommendCoursesDataTag extends CourseBaseDataTag implements DataTag
             $conditions['type'] = $arguments['type'];
         }
         
-        $courses = $this->getCourseService()->searchCourses($conditions,'recommendedSeq', 0, $arguments['count']);
-        $fillCoursesCount = $arguments['count'] - count($courses);
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions,array('recommendedSeq' => 'ASC'), 0, $arguments['count']);
+        $fillCoursesCount = $arguments['count'] - count($courseSets);
         if ($fillCoursesCount > 0 && empty($arguments['notFill'])) {
             $conditions['recommended'] = 0;
-            $coursesTemp = $this->getCourseService()->searchCourses($conditions,'createdTime', 0, $fillCoursesCount);
-            $courses = array_merge($courses, $coursesTemp);
+            $coursesTemp = $this->getCourseSetService()->searchCourseSets($conditions,array('createdTime' => 'DESC'), 0, $fillCoursesCount);
+            $courseSets = array_merge($courseSets, $coursesTemp);
         }
-        
-        return $this->getCourseTeachersAndCategories($courses);
-    }
 
-
-    protected function autoFillCourses()
-    {
-
-
-
+        return $this->fillCourseSetTeachersAndCategoriesAttribute($courseSets);
     }
 }

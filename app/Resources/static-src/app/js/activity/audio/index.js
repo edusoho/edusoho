@@ -10,7 +10,7 @@ class VideoPlay {
 
   play() {
     var messenger = new EsMessenger({
-      name: 'EsMessenger',
+      name: 'parent',
       project: 'PlayerProject',
       children: [],
       type: 'parent'
@@ -34,6 +34,7 @@ class VideoPlay {
 
   _onFinishLearnTask(msg) {
     this.emitter.emit('finish', { data: msg }).then(() => {
+      console.log('audio.finish');
     }).catch((error) => {
       console.error(error);
     });

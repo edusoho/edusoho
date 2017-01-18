@@ -2,8 +2,8 @@
   <div class="course-img">
     {% set course = data('CourseByCourseSet',{ courseSetId: courseSet.id } ) %}
     <a href="{{ path('course_set_show', {id: courseSet.id }) }}" target="_blank">
-      {% if course.discountId > 0 %}
-        {% if course.discount == 0 %}
+      {% if courseSet.discountId > 0 %}
+        {% if courseSet.discount == 0 %}
           <!-- 限免 -->
           <span class="tag-discount free"></span>
         {% else %}
@@ -32,10 +32,10 @@
     </div>
     <div class="metas clearfix">
       {% if setting('course.show_student_num_enabled', '1') == 1  %}
-        <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
+        <span class="num"><i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}</span>
       {% endif %}
-      <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
-      {% include 'course/widget/price.html.twig' with {shows:'price'} %}
+      <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
+      {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
     </div>
   </div>
 </div>

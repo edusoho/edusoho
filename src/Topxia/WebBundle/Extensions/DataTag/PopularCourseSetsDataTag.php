@@ -2,9 +2,8 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
 
-class PopularCoursesDataTag extends CourseBaseDataTag implements DataTag
+class PopularCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
      * 获取最热门课程列表
@@ -24,7 +23,8 @@ class PopularCoursesDataTag extends CourseBaseDataTag implements DataTag
      *
      *   count    必需 课程数量，取值不能超过100
      *
-     * @param  array $arguments      参数
+     * @param  array $arguments 参数
+     *
      * @return array 课程列表
      */
     public function getData(array $arguments)
@@ -49,8 +49,17 @@ class PopularCoursesDataTag extends CourseBaseDataTag implements DataTag
             $arguments['type'] = 'hitNum';
         }
 
-        $courses = $this->getCourseService()->searchCourses($conditions, $arguments['type'], 0, $arguments['count']);
+        $typeOrderByMap = array(
+            'hitNum'         => array('hitNum' => 'DESC'),
+            'recommended'    => array('recommendedTime' => 'DESC'),
+            'rating'         => array('rating' => 'DESC'),
+            'studentNum'     => array('studentNum' => 'DESC'),
+            'recommendedSeq' => array('recommendedSeq' => 'ASC')
+        );
 
-        return $this->getCourseTeachersAndCategories($courses);
+        $orderBy = $typeOrderByMap[$arguments['type']];
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderBy, 0, $arguments['count']);
+
+        return $this->fillCourseSetTeachersAndCategoriesAttribute($courseSets);
     }
 }

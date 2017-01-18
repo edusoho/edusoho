@@ -22,7 +22,7 @@ class C2CourseFixFields extends Migration
         $biz['db']->exec("ALTER TABLE `c2_course_set` ADD `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码';");
         $biz['db']->exec("ALTER TABLE `c2_course_set` ADD `discountId` INT UNSIGNED NOT NULL DEFAULT  '0' COMMENT '折扣活动ID'");
         $biz['db']->exec("ALTER TABLE `c2_course_set` ADD `discount` FLOAT( 10, 2 ) NOT NULL DEFAULT  '10' COMMENT  '折扣'");
-        $biz['db']->exec("ALTER TABLE `c2_course_set` ADD `hitNum` int(10) unsigned NOT NULL DEFAULT  '0' COMMENT '分类ID'");
+        $biz['db']->exec("ALTER TABLE `c2_course_set` ADD `hitNum` int(10) unsigned NOT NULL DEFAULT  '0' COMMENT '课程点击数'");
         $biz['db']->exec("ALTER TABLE `c2_course_set` ADD `maxRate` tinyint(3) unsigned NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比'");
     }
 

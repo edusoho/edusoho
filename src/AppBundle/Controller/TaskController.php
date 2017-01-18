@@ -14,9 +14,9 @@ class TaskController extends BaseController
     {
         $preview = $request->query->get('preview');
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
 
-        $task = $this->tryLearnTask($course, $member, $id, (bool)$preview);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
         if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
@@ -277,8 +277,9 @@ class TaskController extends BaseController
         return array($course, $nextTask, $finishedRate);
     }
 
-    protected function tryLearnTask($course, $member, $taskId, $preview = false)
+    protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         if ($preview) {
             if ($this->canPreview($course, $member)) {
                 $task = $this->getTaskService()->getTask($taskId);
