@@ -43,10 +43,7 @@ const config = {
     'moment/moment.js',
     'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
     'jquery-sortable/source/js/jquery-sortable.js',
-    'nouislider/distribute/nouislider.js',
-    'postal.federation/lib/postal.federation.min.js',
-    'postal.xframe/lib/postal.xframe.min.js',
-    'postal/lib/postal.min.js'
+    'nouislider/distribute/nouislider.js'
   ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
