@@ -48,6 +48,8 @@ class Lesson extends BaseResource
     {
         $lesson['createdTime'] = date('c', $lesson['createdTime']);
         $lesson['updatedTime'] = date('c', $lesson['updatedTime']);
+        $lesson['startTime'] = empty($lesson['startTime']) ? 0 : date('c', $lesson['startTime']);
+        $lesson['endTime'] = empty($lesson['endTime']) ? 0 : date('c', $lesson['endTime']);
         return $lesson;
     }
 
@@ -294,7 +296,7 @@ class Lesson extends BaseResource
         $lesson['seq'] = $res['seq'];
         $lesson['free'] = $res['free'];
         $lesson['title'] = $res['title'];
-        $lesson['summary'] = $res['summary']; 
+        $lesson['summary'] = $res['summary'];
         $lesson['type'] = $res['type'];
         $lesson['content'] = $res['content'];
         $lesson['mediaId'] = $res['mediaId'];
@@ -306,6 +308,8 @@ class Lesson extends BaseResource
         $lesson['userId'] = $res['userId'];
         $lesson['createdTime'] = $res['createdTime'];
         $lesson['updatedTime'] = $res['updatedTime'];
+        $lesson['startTime'] = $res['startTime'];
+        $lesson['endTime'] = $res['endTime'];
         return $lesson;
     }
 
