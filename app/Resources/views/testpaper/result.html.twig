@@ -9,7 +9,7 @@
 {% set questionTypeDict = getQuestionTypes() %}
 {% if action|default('') is not empty %}
   {% set showHeader = 1 %}
-  {% set showBodyColor = 0 %}
+  {% set isIframeBody = 0 %}
 {% else %}
   {% set showHeader = 0 %}
 {% endif %}
@@ -76,20 +76,21 @@
         {% endif %}
       </div>
       <div class="panel-body">
-        {% for type in questionTypes|default([]) %}
-          <p>{{ questionTypeDict[type] }}</p>
-          {% for question in questions[type] %}
-            {% if question.type == 'material' %}
-              {% for questionSub in question.subs|default([]) %}
-                {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:questionSub,seq:questionSub.seq} %}
-              {% endfor %}
-            {% else %}
-              {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}
-            {% endif %}
+        <div class="js-panel-card panel-card">
+          {% for type in questionTypes|default([]) %}
+            <p>{{ questionTypeDict[type] }}</p>
+            {% for question in questions[type] %}
+              {% if question.type == 'material' %}
+                {% for questionSub in question.subs|default([]) %}
+                  {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:questionSub,seq:questionSub.seq} %}
+                {% endfor %}
+              {% else %}
+                {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}
+              {% endif %}
+            {% endfor %}
           {% endfor %}
-        {% endfor %}
-
-        {% include 'testpaper/part/card-choice-explain.html.twig' %}
+          {% include 'testpaper/part/card-choice-explain.html.twig' %}
+        </div>
       </div>
       <div class="panel-footer">
         <div class="checkbox">

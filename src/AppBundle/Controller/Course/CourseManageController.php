@@ -50,8 +50,17 @@ class CourseManageController extends BaseController
 
     public function listAction(Request $request, $courseSetId)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+
+        if($courseSet['type'] == 'live'){
+            $course = current($courses);
+            return $this->redirectToRoute('course_set_manage_course_tasks', array(
+                'courseSetId' => $courseSet['id'],
+                'courseId'    => $course['id']
+            ));
+        }
+
         return $this->render('courseset-manage/courses.html.twig', array(
             'courseSet' => $courseSet,
             'courses'   => $courses
@@ -256,7 +265,7 @@ class CourseManageController extends BaseController
     public function publishAction(Request $request, $courseSetId, $courseId)
     {
         try {
-            $this->getCourseService()->publishCourse($courseId, $this->getUser()->getId());
+            $this->getCourseService()->publishCourse($courseId);
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));

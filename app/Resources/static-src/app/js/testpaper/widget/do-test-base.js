@@ -22,31 +22,40 @@ class DoTestBase
     this.$container.on('click','.js-testpaper-question-list li',event=>this._choiceList(event));
     this.$container.on('click','*[data-anchor]',event=>this._quick2Question(event));
     this.$container.find('.js-testpaper-question-label').on('click','input',event=>this._choiceLable(event));
-    this.$container.on('click','.js-btn-index',event=>this._clickBtnIndex(event));
-    this.$container.on('click','.js-marking-toggle',event=>this._markingToggle(event));
-    this.$container.on('click','.js-favorite-toggle',event=>this._favoriteToggle(event));
+    this.$container.on('click','.js-marking',event=>this._markingToggle(event));
+    this.$container.on('click','.js-favorite',event=>this._favoriteToggle(event));
     this.$container.on('click','.js-analysis-toggle',event=>this._analysisToggle(event));
+    this.$container.on('blur','[data-type="fill"]',event=>this.fillChange(event));
+  }
+
+  fillChange(event) {
+    let $input = $(event.currentTarget);
+    this._renderBtnIndex($input.attr('name'),$input.val()? true:false);
   }
 
   _markingToggle(event) {
-    let $current = this._viewToggle(event);
-    let id = $current.closest('.testpaper-question').attr('id');
-    $(`a[data-anchor="#${id}"]`).toggleClass("have-pro");
+    let $current = $(event.currentTarget).addClass('hidden');
+    $current.siblings('.js-marking.hidden').removeClass('hidden');
+    let id = $current.closest('.js-testpaper-question').attr('id');
+    console.log($(`[data-anchor="#${id}"]`));
+    $(`[data-anchor="#${id}"]`).find('.js-marking-card').toggleClass("hidden");
   }
 
   _favoriteToggle(event) {
-    let $current = this._viewToggle(event);
+    let $current = $(event.currentTarget);
+    let data ={
+      targetType:$current.data('targetType'),
+      targetId:$current.data('targetId'),
+      questionId:$current.data('questionId'),
+    }
+    $.post($current.data('url'),{data},function (html) {  
+      $current.addClass('hidden').siblings('.js-favorite.hidden').removeClass('hidden');
+    })
   }
 
   _analysisToggle(event) {
     let $current = this._viewToggle(event);
     $current.closest('.js-testpaper-question').find('.js-testpaper-question-analysis').slideToggle();
-  }
-
-  _viewToggle(event) {
-    let  $this = $(event.currentTarget).toggleClass('active');
-    let  $current  =  $this.children(':hidden');
-    return $current;
   }
 
   _initUsedTimer() {
@@ -56,27 +65,47 @@ class DoTestBase
     }, 1000);
   }
 
-  _clickBtnIndex(event) {
-    let $btn = $(event.currentTarget).addClass('doing');
-    $btn.siblings('.doing').removeClass('doing');
-    let $current = $($btn.data('anchor'));
-    $(".js-testpaper-content").scrollTop($current.offset().top);
-  }
-
   _choiceLable(event) {
-    let $inputParents = $(event.currentTarget);
-    this._renderBtnIndex($inputParents.attr('name'));
+    let $target = $(event.currentTarget);
+    let $lableContent = $target.closest('.js-testpaper-question-label');
+    this.changeInput($lableContent,$target);
+  }
+ 
+  _choiceList(event) {
+    let $target = $(event.currentTarget);
+    let index = $target.index();
+    let $lableContent = $target.closest('.js-testpaper-question').find('.js-testpaper-question-label');
+    let $input = $lableContent.find('label').eq(index).find('input');
+    $input.prop('checked', !$input.prop('checked')).change();
+    this.changeInput($lableContent,$input);
   }
 
-  _renderBtnIndex(idNum,isChecked = true) {
+  changeInput($lableContent,$input) {
+    let num = 0;
+    $lableContent.find('label').each(function (index,item) {
+      if($(item).find('input').prop('checked')) {
+        $(item).addClass('active');
+        num ++;
+      }else {
+        $(item).removeClass('active');
+      }
+    })
+    let questionId = $input.attr('name');
+    this._renderBtnIndex(questionId,num>0?true:false)
+  }
+
+   _renderBtnIndex(idNum,done = true,doing = false) {
     let $btn = $(`[data-anchor="#question${idNum}"]`);
-    if(!isChecked) {
-      $btn.removeClass('done').removeClass('doing');
-      return;
+    if(done) {
+      $btn.addClass('done');
+    }else {
+      $btn.removeClass('done');
     }
-    let $doingBtn = $btn.siblings('.doing');
-    $btn.addClass('doing').addClass('done');
-    $doingBtn.removeClass('doing');
+    if(doing) {
+      $btn.addClass('doing').siblings('.doing').removeClass('doing');
+    }else {
+      $btn.removeClass('doing')
+    }
   }
   _showEssayInputEditor(event) {
     let $shortTextarea = $(event.currentTarget);
@@ -136,19 +165,6 @@ class DoTestBase
       });
     }
     
-  }
-
-  _choiceList(event) {
-    let $target = $(event.currentTarget);
-    let index = $target.index();
-    let $input = $target.closest('.testpaper-question-body').siblings('.testpaper-question-footer').find('label').eq(index).find('input');
-
-    let isChecked = $input.prop('checked');
-    $input.prop('checked', !isChecked).change();
-
-    isChecked = $input.prop('checked');
-    let questionId = $input.attr('name');
-    this._renderBtnIndex(questionId,isChecked)
   }
 
   _quick2Question(event) {

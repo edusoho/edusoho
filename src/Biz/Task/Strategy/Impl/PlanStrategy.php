@@ -10,15 +10,10 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 {
     public function createTask($field)
     {
-        $task = $this->baseCreateTask($field);
+        $task = parent::createTask($field);
 
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
         return $task;
-    }
-
-    public function updateTask($id, $fields)
-    {
-        return $this->baseUpdateTask($id, $fields);
     }
 
     public function deleteTask($task)
@@ -89,8 +84,25 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 
     public function prepareCourseItems($courseId, $tasks)
     {
-        return $this->baseFindCourseItems($courseId, $tasks);
+        $items = array();
+        foreach ($tasks as $task) {
+            $task['itemType']            = 'task';
+            $items["task-{$task['id']}"] = $task;
+        }
+
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        foreach ($chapters as $chapter) {
+            $chapter['itemType']               = 'chapter';
+            $items["chapter-{$chapter['id']}"] = $chapter;
+        }
+
+        uasort($items, function ($item1, $item2) {
+            return $item1['seq'] > $item2['seq'];
+        });
+
+        return $items;
     }
+
 
     public function sortCourseItems($courseId, array $itemIds)
     {
@@ -158,14 +170,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 
     public function publishTask($task)
     {
-        if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException('无权发布任务');
-        }
-        if ($task['status'] == 'published') {
-            throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
-        }
-        $task = $this->getTaskDao()->update($task['id'], array('status' => 'published'));
-        return $task;
+        return $this->getTaskDao()->update($task['id'], array('status' => 'published'));
     }
 
     public function unpublishTask($task)

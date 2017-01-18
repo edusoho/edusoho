@@ -12,6 +12,7 @@ export default class Options extends Component {
   }
  
   componentDidMount() {
+    console.log('componentDidMount');
     this.initCkeditor();
   }
 
