@@ -35,7 +35,7 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
 
             //找到有问题的课时
             $questionLessons = $this->findQuestionLessonsByCourseIds($questionCourseIds);
-            $this->addLog('有问题的lesson有'.count($questionLessons).'个');
+            $this->addLog('有问题的课时有'.count($questionLessons).'个');
 
             //发布了的问题课时
             $publishQuestionLessons = ArrayToolkit::group($questionLessons, 'status');
@@ -45,8 +45,7 @@ class ClassroomDataDeleteRepairCommand extends BaseCommand
             //找到问题课时的学员数
             $this->findQuestionLessonMembersByLessons($questionLessons);
 
-
-            $code = empty($input->getArgument('code')) ? null : $input->getArgument('code');
+            $code = $input->getArgument('code');
             if ($code === 'delete') {
                 $this->initServiceKernel();
                 $this->deleteQuestionLessons($questionLessons);
