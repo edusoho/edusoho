@@ -13,6 +13,10 @@ class ClassRoomThread extends BaseResource
     {
         $thread = $this->getThreadService()->getThread($threadId);
 
+        if (empty($thread)) {
+            return $this->error('not_found', '没有找到');
+        }
+
         $user = $this->getUserService()->getUser($thread['userId']);
         $thread['user'] = $this->simpleUser($user);
         $classroom = $this->getClassroomService()->getClassRoom($thread['targetId']);

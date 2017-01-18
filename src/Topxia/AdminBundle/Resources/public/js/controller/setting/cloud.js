@@ -133,14 +133,12 @@ define(function(require, exports, module) {
             }
         });
 
-        if ($('input[name="video_fingerprint"]:checked').val() == 1){
-            validator.addItem({
-                element: '[name="video_fingerprint_time"]',
-                required: true,
-                rule: 'decimal min{min:0.1} max{max:100}',
-                display:'云视频指纹显示时间'
-            });
-        }
+        validator.addItem({
+            element: '[name="video_fingerprint_time"]',
+            required: true,
+            rule: 'decimal min{min:0.1} max{max:100}',
+            display:'云视频指纹显示时间'
+        });
 
         $('input[name="video_fingerprint"]').change(function(){
             if($(this).val() == 1) {

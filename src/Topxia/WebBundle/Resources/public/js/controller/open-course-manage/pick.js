@@ -36,7 +36,7 @@ define(function(require, exports, module) {
 
         $('#search').on('click',function(){
 
-            $.post($searchForm.attr('action'),$searchForm.serialize(),function(data){
+            $.post($searchForm.data('url'),$searchForm.serialize(),function(data){
 
                 $('.courses-list').html(data);
             });
@@ -45,11 +45,15 @@ define(function(require, exports, module) {
         $('#enterSearch').keydown(function(event){
 
             if(event.keyCode == 13){
-                $.post($searchForm.attr('action'),$searchForm.serialize(),function(data){
+
+                $.post($searchForm.data('url'),$searchForm.serialize(),function(data){
 
                     $('.courses-list').html(data);
                 });
+
+               return false;
             }
+
         });
        
       
