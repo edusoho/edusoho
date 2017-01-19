@@ -175,4 +175,12 @@ interface CourseSetService
     public function recommendCourse($id, $number);
 
     public function cancelRecommendCourse($id);
+
+    /**
+     * 返回课程的营收额
+     *
+     * @param  array     $ids
+     * @return array[]
+     */
+    public function findCourseSetIncomesByCourseSetIds(array $courseSetIds);
 }

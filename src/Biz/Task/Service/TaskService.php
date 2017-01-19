@@ -142,4 +142,9 @@ interface TaskService
     public function findToLearnTasksByCourseId($courseId);
 
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
+
+    /**
+    * 获得课程的总学习时间
+    */ 
+    public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
 }

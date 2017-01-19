@@ -2,7 +2,6 @@
 
 {% block title %}{% if category.id %}{{'编辑分类'|trans}}{% else %}{{'添加分类'|trans}}{% endif %}{% endblock %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
 
 {% block body %}
 <div id="category-creater-widget">
@@ -59,6 +58,7 @@
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 	</form>
 </div>
+{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
 <script type="text/javascript"> app.lazyLoad = function() { app.load('category/save-modal') }; </script>
 {% endblock %}
 

@@ -1,6 +1,6 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% set menu = 'admin_course_data' %}
+{% set menu = 'admin_course_set_data' %}
 
 {% set script_controller = 'course/data' %}
 
@@ -30,7 +30,8 @@
              {% if filter == 'classroom' %}
             <td>{{'所在'|trans}}{{ setting("classroom.name")|default('班级'|trans) }}</td>
              {% endif %}
-            <td>{{ '课时数'|trans }}</td>
+            <td>{{ '教学计划数量'|trans }}</td>
+            <td>{{ '任务数量'|trans }}</td>
             <td>{{'%user_name%人数'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</td>
             <td>{{'完成课程人数'|trans}}</td>
             <td>{{'课程学习时长(分)'|trans}}</td>
@@ -38,13 +39,13 @@
             <td>{{'操作'|trans}}</td>
           </tr>
           
-          {% if courses %}
-            {% for course in courses %}
+          {% if courseSets %}
+            {% for courseSet in courseSets %}
             <tr>
-            <td><a data-toggle="modal" data-target="#modal" data-url="{{path('course_detail_data',{id:course.id})}}" href="javascript:">{{course.title}}</a></td>
+            <td><a data-toggle="modal" data-target="#modal" data-url="{{path('course_set_detail_data',{id:courseSet.id})}}" href="javascript:;">{{courseSet.title}}</a></td>
             {% if filter == 'classroom' %}
             <td>
-            {% set classroom = classrooms[course.id]|default(null) %}
+            {% set classroom = classrooms[courseSet.id]|default(null) %}
             {% if classroom %}
             <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
             {% elseif not classroom %}
@@ -52,12 +53,13 @@
             {% endif %}
             </td>
             {% endif %}
-            <td>{{course.lessonCount}}</td>
-            <td>{{course.studentNum}}</td>
-            <td>{{course.isLearnedNum}}</td>
-            <td>{{(course.learnTime/60)|round(0, 'floor')}}</td>
-            <td>{{course.income}}</td>
-            <td><a href="{{path('admin_course_lesson_data',{id:course.id})}}">{{'查看课时数据'|trans}}</a></td>
+            <td>{{courseSet.courseCount|default()}}</td>
+            <td>{{courseSet.taskCount|default()}}</td>
+            <td>{{courseSet.studentNum|default()}}</td>
+            <td>{{courseSet.isLearnedNum|default()}}</td>
+            <td>{{courseSet.learnedTime}}</td>
+            <td>{{courseSet.income|default()}}</td>
+            <td><a data-toggle="modal" data-target="#modal" data-url="{{path('admin_courses_data',{courseSetId:courseSet.id})}}" href="javascript:;">{{'查看任务'|trans}}</a></td>
             </tr>
             {% endfor %}
           {% endif %}
