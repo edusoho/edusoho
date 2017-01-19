@@ -14,7 +14,6 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
-
     public function findCourseSetsByParentIdAndLocked($parentId, $locked)
     {
         return $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($parentId, $locked);
@@ -498,6 +497,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    public function findCourseSetIncomesByCourseSetIds(array $courseSetIds)
+    {
+        return $this->getCourseDao()->findCourseSetIncomesByCourseSetIds($courseSetIds);
+    }
+
     protected function hasCourseSetManagerRole($courseSetId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
@@ -533,6 +537,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getCourseSetDao()
     {
         return $this->createDao('Course:CourseSetDao');
+    }
+
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
     }
 
     /**

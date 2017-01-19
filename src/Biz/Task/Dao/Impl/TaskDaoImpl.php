@@ -109,6 +109,12 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->findByFields(array('courseId' => $courseId, 'isFree' => $isFree));
     }
 
+    public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
+    {
+        $sql = "select sum(`time`) from `course_task_result` where `courseTaskId` in (SELECT id FROM {$this->table()}  WHERE `fromCourseSetId`= ?)";
+        return $this->db()->fetchColumn($sql, array($courseSetId)); 
+    }
+
     public function declares()
     {
         return array(
@@ -118,6 +124,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'id IN ( :ids )',
                 'courseId = :courseId',
                 'courseId IN ( :courseIds )',
+                'fromCourseSetId = :fromCourseSetId',
                 'status =:status',
                 'type = :type',
                 'isFree =:isFree',
