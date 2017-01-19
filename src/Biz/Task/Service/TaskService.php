@@ -120,6 +120,13 @@ interface TaskService
     public function findFutureLiveTasks();
 
     /**
+     * 返回过去直播过的教学计划ID
+     *
+     * @return array<int>
+     */
+    public function findPastLivedCourseIds();
+
+    /**
      *
      * 自由式
      * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第一个任务作为下一个学习任务，

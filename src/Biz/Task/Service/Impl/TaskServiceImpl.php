@@ -421,7 +421,7 @@ class TaskServiceImpl extends BaseService implements TaskService
      */
     public function findFutureLiveDatesByCourseIdsGroupByDate($courseIds, $limit)
     {
-        return $this->getTaskDao()->findFutureLiveDates($courseIds, $limit);
+        return $this->getTaskDao()->findFutureLiveDatesGroupByDate($courseIds, $limit);
     }
 
     /**
@@ -490,6 +490,16 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->search($taskConditions, array('startTime' => 'ASC'), 0, $this->count($taskConditions));
     }
 
+    /**
+     * 返回过去直播过的教学计划ID
+     *
+     * @return array
+     */
+    public function findPastLivedCourseIds()
+    {
+        $arrays = $this->getTaskDao()->findPastLivedCourseIds();
+        return ArrayToolkit::column($arrays, 'courseId');
+    }
 
     public function isFinished($taskId)
     {

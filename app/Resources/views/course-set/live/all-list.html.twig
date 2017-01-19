@@ -1,7 +1,7 @@
 {% import 'macro.html.twig' as web_macro %}
 <div class="panel panel-default">
   <div class="panel-heading">
-    <form id="live-search-form" class="form-inline" action="{{ path('live_course_explore') }}" method="get" novalidate="">
+    <form id="live-search-form" class="form-inline" action="{{ path('live_course_set_explore') }}" method="get" novalidate="">
       <div class="form-group mrl">
         <select style="width:150px;" class="form-control" name="categoryId" id="categoryId">
           {{ select_options(category_choices('course'), request.query.get('categoryId'), '课程分类'|trans) }}

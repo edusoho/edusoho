@@ -286,15 +286,6 @@ live_auth:
    path:  /live/auth
    defaults: { _controller: AppBundle:LiveAuth:index }
 
-live_verify:
-   path:  /live/verify
-   defaults: { _controller: AppBundle:LiveCourse:verify }
-
-live_course_explore:
-   path:  /live
-   defaults: { _controller: AppBundle:LiveCourse:explore }
-
-
 course_order_detail:
    path:  /order/{id}/detail_course
    defaults: { _controller: AppBundle:Order:detail }
@@ -1678,7 +1669,7 @@ course_set_explore:
 
 live_course_set_explore:
     path:  /live
-    defaults: { _controller: AppBundle:Explore:liveCourseSets }
+    defaults: { _controller: AppBundle:Course/LiveCourseSet:explore }
 
 course_set_manage_courses:
   path: /course_set/{courseSetId}/manage/courses

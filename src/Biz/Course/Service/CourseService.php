@@ -58,6 +58,13 @@ interface CourseService
 
     public function getUserRoleInCourse($courseId, $userId);
 
+    /**
+     * 返回过去直播过的教学计划(直播课程)
+     *
+     * @return array<int>
+     */
+    public function findPastLivedCourseIds();
+
     public function findPriceIntervalByCourseSetIds($courseSetIds);
 
     /**

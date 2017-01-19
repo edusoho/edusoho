@@ -94,10 +94,26 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
 
         $time = time();
 
-        $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `type`= 'live' AND status='published' AND courseId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
+        $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->table()}` WHERE  `type`= 'live' AND status='published' AND courseId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
         return $this->db()->fetchAll($sql, $courseIds);
     }
 
+    /**
+     * 返回过去直播过的教学计划ID
+     *
+     * @return array<int>
+     */
+    public function findPastLivedCourseIds()
+    {
+        $time = time();
+        $sql  = "SELECT max(startTime) as startTime 
+                 FROM {$this->table()} 
+                 WHERE endTime < {$time} AND status='published' AND type = 'live' 
+                 GROUP BY courseId 
+                 ORDER BY startTime DESC
+                 ";
+        return $this->db()->fetchAll($sql);
+    }
 
     public function getTaskByCourseIdAndActivityId($courseId, $activityId)
     {
@@ -126,7 +142,9 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'seq > :seq_GT',
                 'seq < :seq_LT',
                 'startTime >= :startTime_GE',
-                'endTime < :endTime_GT'
+                'startTime > :startTime_GT',
+                'endTime > :endTime_GT',
+                'endTime < :endTime_LT'
             )
         );
     }

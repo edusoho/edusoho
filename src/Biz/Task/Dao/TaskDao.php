@@ -42,5 +42,12 @@ interface TaskDao extends GeneralDaoInterface
      */
     public function findFutureLiveDatesGroupByDate($courseIds, $limit);
 
+    /**
+     * 返回过去直播过的教学计划ID
+     *
+     * @return array<int>
+     */
+    public function findPastLivedCourseIds();
+
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 }
