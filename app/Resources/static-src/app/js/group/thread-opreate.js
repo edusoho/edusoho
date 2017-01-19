@@ -58,8 +58,9 @@ export const initThreadReplay = () => {
         }
       },
       submitHandler: function (form) {
-        var replyBtn = $(form).find('.reply-btn');
-        var postId = replyBtn.attr('postId');
+        // @TODO优化全局的submitHandler方法，提交统一方式；
+        var $replyBtn = $(form).find('.reply-btn');
+        var postId = $replyBtn.attr('postId');
         var fromUserIdVal = "";
         if ($('#fromUserId').length > 0) {
           fromUserIdVal = $('#fromUserId').val();
@@ -70,7 +71,7 @@ export const initThreadReplay = () => {
             fromUserIdVal = "";
           }
         }
-        replyBtn.button('submiting').addClass('disabled');
+        $replyBtn.button('submiting').addClass('disabled');
         console.log($(form).attr('action'));
         console.log("content=" + $(form).find('textarea').val() + '&' + 'postId=' + postId + '&' + 'fromUserId=' + fromUserIdVal);
         $.ajax({
@@ -89,14 +90,13 @@ export const initThreadReplay = () => {
             window.location.reload();
           },
           error: function (data) {
-            data = data.responseText;
-            data = $.parseJSON(data);
+            data = $.parseJSON(data.responseText);
             if (data.error) {
               notify('danger',data.error.message);
             } else {
               notify('danger',Translator.trans('发表回复失败，请重试'));
             }
-            replyBtn.button('reset').removeClass('disabled');
+            $replyBtn.button('reset').removeClass('disabled');
           }
         });
       }
