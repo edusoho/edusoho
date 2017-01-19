@@ -179,6 +179,10 @@ abstract class BaseResource
         if (strpos($path, $this->getHttpHost()."://") !== false) {
             return $path;
         }
+        if (strpos($path, "http://") !== false) {
+            return $path;
+        }
+
         $path = str_replace('public://', '', $path);
         $path = str_replace('files/', '', $path);
         $files = strpos($path, '/') == 0 ? '/files' : '/files/';
