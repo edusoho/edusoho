@@ -442,7 +442,7 @@ class CourseSetController extends BaseController
 
             $finishedNum = $this->getCourseTaskResultService()->countTaskResults(array('status' => 'finish', 'courseTaskId' => $task['id']));
             $studentNum = $this->getCourseTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
-            $learnTime =  $this->getCourseTaskResultService()->getLearnTimeByCourseIdGroupByCourseTaskId($task['id']);
+            $learnedTime =  $this->getCourseTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
             if (in_array($task['type'], array('video','audio'))) {
                 $activity = $this->getActivityService()->getActivity($task['activityId']);
                 $task['length'] = $activity['length'];
@@ -460,7 +460,7 @@ class CourseSetController extends BaseController
             $task['finishedNum'] = $finishedNum;
             $task['studentNum'] = $studentNum;
 
-            $task['learnTime'] = $learnTime;
+            $task['learnedTime'] = $learnedTime;
         }
  
         return $this->render('admin/course-set/course-list-data-modal.html.twig', array(

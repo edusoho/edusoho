@@ -174,9 +174,9 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->findFinishedTimeByCourseIdGroupByUserId($courseId);
     }
 
-    public function getLearnTimeByCourseIdGroupByCourseTaskId($courseTaskId)
+    public function getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskId)
     {
-         return $this->getTaskResultDao()->getLearnTimeByCourseIdGroupByCourseTaskId($courseTaskId);
+         return $this->getTaskResultDao()->getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskId);
     }
 
     /**
