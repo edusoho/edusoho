@@ -437,7 +437,7 @@ admin_check_password:
     permissions: [admin_course_manage]
 
 admin_course_set_publish:
-    path: /course/{id}/publish
+    path: /course_set/{id}/publish
     defaults: { _controller: AppBundle:Admin/CourseSet:publish }
     methods: [POST]
     permissions: [admin_course_manage]
@@ -448,7 +448,7 @@ admin_open_course_publish:
     methods: [POST]
 
 admin_course_set_close:
-    path: /course/{id}/close
+    path: /course_set/{id}/close
     defaults: { _controller: AppBundle:Admin/CourseSet:close }
     methods: [POST]
     permissions: [admin_course_close]
