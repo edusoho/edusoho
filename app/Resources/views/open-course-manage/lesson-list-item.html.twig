@@ -97,8 +97,6 @@
           </a>
         </li>
 
-        
-
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
           <a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('open_course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
             <span class="glyphicon glyphicon-trash prs"></span>{{'删除'|trans}}

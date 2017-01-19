@@ -6,6 +6,10 @@
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
 
+  <meta name="_csrf_token" content="{{ csrf_token('site') }}">
+  {% if params.activityId|default(0) > 0 and params.courseId|default(0) > 0 %}
+    <meta name="trigger_url" content="{{path('task_live_trigger', {courseId: params.courseId, activityId: params.activityId})}}">
+  {% endif %}
   <meta name="renderer" content="webkit">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
@@ -14,10 +18,16 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
+  <div id="entry" data-url="{{ path('liveroom_ticket', {roomId:roomId, ticket:ticket.no}) }}" class="well well-lg text-center text-success">{{'正在打开教室，请稍后'|trans}}...</div>
+  {% include 'script_boot.html.twig' %}
+  
+  <script src="/static-dist/libs/vendor.js?{{ assets_version() }}"></script>
+  <script src="/static-dist/app/js/common.js?{{ assets_version() }}"></script>
+  <script src="/static-dist/app/js/main.js?{{ assets_version() }}"></script>
+  <script src="/static-dist/app/js/activity/live/index.js?{{ assets_version() }}"></script>
 
-  {% set script_controller = 'liveroom/entry' %}
-  <div id="entry" data-url="{{ path('liveroom_ticket', {id:roomId, ticket:ticket.no}) }}" class="well well-lg text-center text-success">{{'正在打开教室，请稍后'|trans}}...</div>
-  {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
-
+  {# {% do script(['libs/vendor.js', 'app/js/activity/live/index.js'], 1000) %} #}
+  {# 这里的js没有加载！！！！ #}
+  {# {% do script(['app/js/activity/live/index.js']) %} #}
 </body>
 </html>
