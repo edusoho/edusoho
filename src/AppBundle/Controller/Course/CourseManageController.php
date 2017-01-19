@@ -205,7 +205,7 @@ class CourseManageController extends BaseController
                     'id'        => $teacher['userId'],
                     'isVisible' => $teacher['isVisible'],
                     'nickname'  => $teacher['nickname'],
-                    'avatar'    => $this->get('topxia.twig.web_extension')->getFilePath($teacher['smallAvatar'])
+                    'avatar'    => $this->get('topxia.twig.web_extension')->getFilePath($teacher['smallAvatar'], 'avatar.png')
                 );
             }
         }

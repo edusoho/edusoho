@@ -6,6 +6,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface ActivityLearnLogDao extends GeneralDaoInterface
 {
+    public function sumLearnedTimeByActivityId($activityId);
+
     public function sumLearnedTimeByActivityIdAndUserId($activityId, $userId);
 
     public function sumLearnedTimeByCourseIdAndUserId($courseId, $userId);

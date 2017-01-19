@@ -103,6 +103,11 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         return $this->getBiz()->service('Task:TaskService');
     }
 
+    protected function getTaskResultService()
+    {
+        return $this->getBiz()->service('Task:TaskResultService');
+    }
+
     /**
      * @return MemberService
      */

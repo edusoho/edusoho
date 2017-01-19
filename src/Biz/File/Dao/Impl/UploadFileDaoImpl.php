@@ -139,7 +139,8 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
                 'convertParams' => 'json'
             ),
             'orderbys' => array(
-                'createdTime'
+                'createdTime',
+                'id',
             )
         );
     }

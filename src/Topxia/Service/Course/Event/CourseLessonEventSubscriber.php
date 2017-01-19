@@ -63,13 +63,13 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                     foreach ($courseIds as $courseId) {
                         $lockedTarget .= "'course-".$courseId."',";
                     }
-                    $lockedTarget = "(".trim($lockedTarget, ',').")";
+                    $lockedTarget     = "(".trim($lockedTarget, ',').")";
                     $testpaperTargets = ArrayToolkit::index($this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget($argument['mediaId'], $lockedTarget), 'target');
                 }
 
                 foreach ($courseIds as $key => $courseId) {
                     if (array_key_exists('type', $argument) && $argument['type'] == 'testpaper') {
-                        $target = 'course-'.$courseId;
+                        $target              = 'course-'.$courseId;
                         $argument['mediaId'] = $testpaperTargets[$target];
                     }
 
@@ -104,7 +104,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
 
             if ($courseIds) {
-                $lesson    = $context["lesson"];
+                $lesson  = $context["lesson"];
                 $lessons = ArrayToolkit::index($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lesson['id'], $courseIds), 'courseId');
 
                 foreach ($lessons as $courseId => $lesson) {
@@ -140,7 +140,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 }
             }
             $this->getConnection()->commit();
-            
+
         } catch (\Exception $e) {
             $this->getConnection()->rollBack();
             throw $e;
@@ -149,9 +149,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonPublish(Event $event)
     {
-        $lesson    = $event->getSubject();
-        $courseId  = $lesson["courseId"];
-        $lessonId  = $lesson["id"];
+        $lesson   = $event->getSubject();
+        $courseId = $lesson["courseId"];
+        $lessonId = $lesson["id"];
         try {
             $this->getConnection()->beginTransaction();
             $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
@@ -164,7 +164,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 }
             }
             $this->getConnection()->commit();
-            
+
         } catch (\Exception $e) {
             $this->getConnection()->rollBack();
             throw $e;
@@ -173,9 +173,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonUnpublish(Event $event)
     {
-        $lesson    = $event->getSubject();
-        $courseId  = $lesson["courseId"];
-        $lessonId  = $lesson["id"];
+        $lesson   = $event->getSubject();
+        $courseId = $lesson["courseId"];
+        $lessonId = $lesson["id"];
         try {
             $this->getConnection()->beginTransaction();
             $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
@@ -188,7 +188,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 }
             }
             $this->getConnection()->commit();
-            
+
         } catch (\Exception $e) {
             $this->getConnection()->rollBack();
             throw $e;
@@ -581,11 +581,11 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     {
         if ($material['lessonId'] && $material['source'] == 'coursematerial' && $material['type'] == 'course') {
             $count = $this->getMaterialService()->countMaterials(array(
-                'courseId' => $material['courseId'],
-                'lessonId' => $material['lessonId'],
-                'source'   => 'coursematerial',
-                'type'     => 'course'
-            )
+                    'courseId' => $material['courseId'],
+                    'lessonId' => $material['lessonId'],
+                    'source'   => 'coursematerial',
+                    'type'     => 'course'
+                )
             );
             $this->getCourseService()->resetLessonMaterialCount($material['lessonId'], $count);
             return true;

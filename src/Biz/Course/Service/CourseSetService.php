@@ -87,13 +87,13 @@ interface CourseSetService
 
     /**
      * @param array   $conditions
-     * @param array   $orderBys
+     * @param array|string $orderBys
      * @param integer $start
      * @param integer $limit
      *
      * @return array[]
      */
-    public function searchCourseSets(array $conditions, array $orderBys, $start, $limit);
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit);
 
     /**
      * @param array $conditions
@@ -175,4 +175,12 @@ interface CourseSetService
     public function recommendCourse($id, $number);
 
     public function cancelRecommendCourse($id);
+
+    /**
+     * 返回课程的营收额
+     *
+     * @param  array     $ids
+     * @return array[]
+     */
+    public function findCourseSetIncomesByCourseSetIds(array $courseSetIds);
 }

@@ -1,8 +1,8 @@
 <?php
 namespace Biz\OpenCourse\Event;
 
-use Codeages\Biz\Framework\Event\Event;
 use Biz\Taxonomy\TagOwnerManager;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 
 class OpenCourseEventSubscriber extends EventSubscriber
@@ -17,7 +17,8 @@ class OpenCourseEventSubscriber extends EventSubscriber
             'open.course.member.create' => 'onMemberCreate',
             'course.material.create'    => 'onMaterialCreate',
             'course.material.update'    => 'onMaterialUpdate',
-            'course.material.delete'    => 'onMaterialDelete'
+            'course.material.delete'    => 'onMaterialDelete',
+            'live.replay.generate'      => 'onLiveReplayGenerate'
         );
     }
 
@@ -121,6 +122,25 @@ class OpenCourseEventSubscriber extends EventSubscriber
                 $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', -1);
             }
         }
+    }
+
+    public function onLiveReplayGenerate(Event $event)
+    {
+        $context = $event->getSubject();
+        $replays = $context['replays'];
+
+        if (!$replays) {
+            return;
+        }
+
+        $courseId     = $replays[0]['courseId'];
+        $lesson['id'] = $replays[0]['lessonId'];
+
+        $lessonFields = array(
+            'replayStatus' => 'generated'
+        );
+
+        $this->getOpenCourseService()->updateLesson($courseId, $lessonId, $lessonFields);
     }
 
     private function _waveLessonMaterialNum($material)

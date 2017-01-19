@@ -24,7 +24,11 @@
 			              </div>
 			              <ul class="live-courses">
 			              	{% for list in liveList.current %}
-			                	<li><a href="{{ path('course_learn', {id:list.courseId}) }}#lesson/{{ list.id }}"><span>{{ list.startTime|date('H:i') }}</span>{{ list.title }}</a></li>
+			                	<li>
+                          <a href="{{ path('course_task_show', {courseId: list.courseId, id: list.id}) }}"><span>{{ list.startTime|date('H:i') }}</span>
+                            {{ list.title }}
+                          </a>
+                        </li>
 			                {% endfor %}
 			              </ul>
 			            {% endif %}
@@ -41,7 +45,11 @@
 		              </div>
 		              <ul class="live-courses">
 		                {% for list in liveList.future %}
-		                	<li><a href="{{ path('course_learn', {id:list.courseId}) }}#lesson/{{ list.id }}" target="_blank"><span>{{ list.startTime|date('H:i') }}</span>{{ list.title }}</a></li>
+		                	<li>
+                        <a href="{{ path('course_task_show', {courseId:list.courseId, id: list.id}) }}" target="_blank"><span>{{ list.startTime|date('H:i') }}</span>
+                          {{ list.title }}
+                        </a>
+                      </li>
 		                {% endfor %}
 		              </ul>
 		            {% endif %}
