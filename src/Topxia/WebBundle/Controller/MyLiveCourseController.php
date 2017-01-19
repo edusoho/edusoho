@@ -14,7 +14,7 @@ class MyLiveCourseController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
 
-        $courses = $this->getCourseService()->findUserLeaningCourses(
+        $courses = $this->getCourseService()->findUserLearningCourses(
             $currentUser['id'], 0, 1000
         );
         $courseIds = ArrayToolkit::column($courses, 'id');

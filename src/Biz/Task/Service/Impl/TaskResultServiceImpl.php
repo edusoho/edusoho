@@ -122,7 +122,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException('unlogin');
         }
-        $conditions = array(
+        $conditions  = array(
             'userId'   => $user->getId(),
             'status'   => 'finish',
             'courseId' => $courseId
@@ -172,6 +172,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     public function findFinishedTimeByCourseIdGroupByUserId($courseId)
     {
         return $this->getTaskResultDao()->findFinishedTimeByCourseIdGroupByUserId($courseId);
+    }
+
+    public function sumLearnTimeByCourseIdAndUserId($courseId, $userId)
+    {
+        return $this->getTaskResultDao()->sumLearnTimeByCourseIdAndUserId($courseId, $userId);
     }
 
     public function getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskId)
