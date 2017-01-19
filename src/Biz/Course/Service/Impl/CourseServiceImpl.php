@@ -261,6 +261,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $updateFields['studentNum'] = $this->countStudentsByCourseId($id);
             } elseif ($field === 'taskNum') {
                 $updateFields['taskNum'] = $this->getTaskService()->countTasksByCourseId($id);
+            } elseif ($field === 'publishedTaskNum') {
+                $updateFields['publishedTaskNum'] = $this->getTaskService()->count(array('courseId' => $id, 'status' => 'published'));
             } elseif ($field === 'threadNum') {
                 $updateFields['threadNum'] = $this->countThreadsByCourseId($id);
             } elseif ($field === 'ratingNum') {
@@ -636,30 +638,30 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserLeaningCourseCount($userId, $filters = array())
     {
         $conditions = array(
-            'userId'    => $userId,
-            'role'      => 'student',
-            'isLearned' => 0
+            'userId'      => $userId,
+            'role'        => 'student',
+            'learnStatus' => 'learning'
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
-            return $this->getMemberDao()->countMemberFetchCourse($conditions);
         }
-        return $this->getMemberDao()->count($conditions);
+        return $this->getMemberDao()->countMemberFetchCourse($conditions);
+        // return $this->getMemberDao()->count($conditions);
     }
 
     public function findUserLeaningCourses($userId, $start, $limit, $filters = array('type' => ''))
     {
         $conditions = array(
-            'userId'    => $userId,
-            'role'      => 'student',
-            'isLearned' => 0
+            'userId'      => $userId,
+            'role'        => 'student',
+            'learnStatus' => 'learning'
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
-            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime' => 'DESC'), $start, $limit);
-        } else {
-            $members = $this->getMemberDao()->search($conditions, array('createdTime' => 'DESC'), $start, $limit);
         }
+        $members = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime' => 'DESC'), $start, $limit);
+
+
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
 
@@ -682,31 +684,29 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserLeanedCourseCount($userId, $filters = array())
     {
         $conditions = array(
-            'userId'    => $userId,
-            'role'      => 'student',
-            'isLearned' => 1
+            'userId'      => $userId,
+            'role'        => 'student',
+            'learnStatus' => 'learned'
 
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
-            return $this->getMemberDao()->countMemberFetchCourse($conditions);
         }
-        return $this->getMemberDao()->count($conditions);
+        return $this->getMemberDao()->countMemberFetchCourse($conditions);
+
     }
 
     public function findUserLeanedCourses($userId, $start, $limit, $filters = array())
     {
         $conditions = array(
-            'userId'    => $userId,
-            'role'      => 'student',
-            'isLearned' => 1
+            'userId'      => $userId,
+            'role'        => 'student',
+            'learnStatus' => 'learned'
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
-            $members            = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime' => 'DESC'), $start, $limit);
-        } else {
-            $members = $this->getMemberDao()->search($conditions, array(), $start, $limit);
         }
+        $members = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime' => 'DESC'), $start, $limit);
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');

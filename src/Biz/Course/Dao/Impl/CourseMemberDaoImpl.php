@@ -73,7 +73,13 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function searchMemberFetchCourse($conditions, $orderBys, $start, $limit)
     {
-        $builder = $this->_buildQueryBuilder($conditions)->select('m.*');
+        if ($conditions['learnStatus'] == 'learning') {
+            $joinConnection = 'm.courseId = c.id and m.learnedNum < c.publishedTaskNum';
+        } elseif ($conditions['learnStatus'] == 'learned') {
+            $joinConnection = 'm.courseId = c.id and m.learnedNum >= c.publishedTaskNum';
+        }
+        unset($conditions['learnStatus']);
+        $builder = $this->_buildQueryBuilder($conditions, $joinConnection)->select('m.*');
         if (!empty($orderBy)) {
             foreach ($orderBy as $sort => $order) {
                 $builder = $builder->orderBy($sort, $order);
@@ -87,7 +93,13 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
     public function countMemberFetchCourse($conditions)
     {
-        return $this->_buildQueryBuilder($conditions)->select(COUNT('m.courseId'))->execute()->fetchColumn(0);
+        if ($conditions['learnStatus'] == 'learning') {
+            $joinConnection = 'm.courseId = c.id and m.learnedNum < c.publishedTaskNum';
+        } elseif ($conditions['learnStatus'] == 'learned') {
+            $joinConnection = 'm.courseId = c.id and m.learnedNum >= c.publishedTaskNum';
+        }
+        unset($conditions['learnStatus']);
+        return $this->_buildQueryBuilder($conditions, $joinConnection)->select(COUNT('m.courseId'))->execute()->fetchColumn(0);
     }
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
@@ -144,7 +156,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         if (isset($conditions['unique'])) {
             $builder->select('DISTINCT userId');
             $builder->orderBy($orderBy[0], $orderBy[1]);
-            $builder->from('(' . $builder->getSQL() . ')', $this->table());
+            $builder->from('('.$builder->getSQL().')', $this->table());
             $builder->resetQueryPart('where');
             $builder->resetQueryPart('orderBy');
         } else {
@@ -181,7 +193,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $courseId));
     }
 
-    protected function _buildQueryBuilder($conditions)
+    protected function _buildQueryBuilder($conditions, $joinCondition)
     {
         $conditions = array_filter($conditions, function ($value) {
             if ($value === '' || $value === null) {
@@ -192,7 +204,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         $builder = new DynamicQueryBuilder($this->db(), $conditions);
         $builder->from($this->table(), 'm')
-            ->join('m', 'c2_course', 'c', ' m.courseId = c.id ')
+            ->join('m', 'c2_course', 'c', $joinCondition)
             ->andWhere('m.isLearned = :isLearned')
             ->andWhere('m.userId = :userId')
             ->andWhere('m.role = :role')
@@ -201,6 +213,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             ->andWhere('m.noteNum > :noteNumGreaterThan')
             ->andWhere('c.type = :type')
             ->andWhere('c.parentId = parentId');
+
         return $builder;
     }
 

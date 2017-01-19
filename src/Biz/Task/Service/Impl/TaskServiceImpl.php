@@ -56,6 +56,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $strategy = $this->createCourseStrategy($task['courseId']);
 
         $task = $strategy->publishTask($task);
+        $this->dispatchEvent("course.task.publish", new Event($task));
         return $task;
     }
 
@@ -65,6 +66,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $strategy = $this->createCourseStrategy($task['courseId']);
 
         $task = $strategy->unpublishTask($task);
+        $this->dispatchEvent("course.task.unpublish", new Event($task));
         return $task;
     }
 

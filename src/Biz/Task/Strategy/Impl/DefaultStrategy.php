@@ -214,10 +214,10 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     public function publishTask($task)
     {
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException('无权删除任务');
+            throw new AccessDeniedException('无权删除任务');
         }
         if ($task['status'] == 'published') {
-            throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
+            throw new AccessDeniedException("task(#{$task['id']}) has been published");
         }
 
         $tasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
@@ -230,10 +230,10 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     public function unpublishTask($task)
     {
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException('无权删除任务');
+            throw new AccessDeniedException('无权删除任务');
         }
         if ($task['status'] == 'unpublished') {
-            throw $this->createAccessDeniedException("task(#{$task['id']}) has been  cancel published");
+            throw new AccessDeniedException("task(#{$task['id']}) has been  cancel published");
         }
 
         $tasks = $this->getTaskDao()->findByChapterId($task['categoryId']);

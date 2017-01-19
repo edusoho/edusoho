@@ -4,6 +4,7 @@ namespace Biz\Task\Strategy\Impl;
 
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class PlanStrategy extends BaseStrategy implements CourseStrategy
@@ -159,10 +160,10 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
     public function publishTask($task)
     {
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException('无权发布任务');
+            throw new AccessDeniedException('无权发布任务');
         }
         if ($task['status'] == 'published') {
-            throw $this->createAccessDeniedException("task(#{$task['id']}) has been published");
+            throw new AccessDeniedException("task(#{$task['id']}) has been published");
         }
         $task = $this->getTaskDao()->update($task['id'], array('status' => 'published'));
         return $task;
@@ -171,10 +172,10 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
     public function unpublishTask($task)
     {
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
-            throw $this->createAccessDeniedException('无权取消发布任务');
+            throw new AccessDeniedException('无权取消发布任务');
         }
         if ($task['status'] == 'unpublished') {
-            throw $this->createAccessDeniedException("task(#{$task['id']}) has been  cancel published");
+            throw new AccessDeniedException("task(#{$task['id']}) has been  cancel published");
         }
         $task = $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
         return $task;

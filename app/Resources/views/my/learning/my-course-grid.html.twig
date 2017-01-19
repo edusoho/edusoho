@@ -38,7 +38,7 @@
 
       <span class="metas clearfix">
         {% if setting('course.show_student_num_enabled', '1') == 1  %}
-          <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
+          <span class="num"><i class="es-icon es-icon-people"></i>{{ course.maxStudentNum }}</span>
         {% endif %}
         <span class="comment mlm"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
         {% include 'TopxiaWebBundle:Course/Widget:course-price.html.twig' with {shows:['price'] } %}

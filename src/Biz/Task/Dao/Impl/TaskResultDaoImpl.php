@@ -58,7 +58,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     public function findFinishedTimeByCourseIdGroupByUserId($courseId)
     {
         //已发布task总数
-        $sql            = "SELECT count(1) FROM course_task WHERE courseId = ? AND status='published'";
+        $sql            = "SELECT count(id) FROM course_task WHERE courseId = ? AND status='published'";
         $totalTaskCount = $this->db()->fetchColumn($sql, array($courseId));
 
         if ($totalTaskCount <= 0) {
@@ -69,6 +69,13 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
         return $this->db()->fetchAll($sql, array($courseId, $totalTaskCount)) ?: array();
     }
+
+    public function sumLearnTimeByCourseIdAndUserId($courseId, $userId)
+    {
+        $sql = "SELECT sum(TIME) FROM `course_task_result` WHERE `status`= ? AND  `courseId` = ? AND `userId`= ?";
+        return $this->db()->fetchColumn($sql, array('finish', $courseId, $userId));
+    }
+
 
     public function declares()
     {

@@ -59,9 +59,9 @@ class CourseController extends CourseBaseController
         $userIds = array();
         foreach ($courses as $key => $course) {
             $userIds   = array_merge($userIds, $course['teacherIds']);
-            $learnTime = 0;// $this->getCourseService()->searchLearnTime(array('courseId' => $course['id'], 'userId' => $currentUser['id']));
+            $learnTime = $this->getTaskResultService()->sumLearnTimeByCourseIdAndUserId($course['id'], $currentUser['id']);
 
-            $courses[$key]['learnTime'] = intval($learnTime / 60 / 60).'小时'.($learnTime / 60 % 60).'分钟';
+            $courses[$key]['learnTime'] = intval($learnTime / 60).'小时'.($learnTime % 60).'分钟';
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -71,7 +71,6 @@ class CourseController extends CourseBaseController
             'paginator' => $paginator
         ));
     }
-
 
 
     public function headerForMemberAction(Request $request, $course, $member)
