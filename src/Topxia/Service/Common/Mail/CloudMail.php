@@ -25,8 +25,10 @@ class CloudMail extends Mail
                'format' => $format,
                'template'=>'email_default',
                'sourceFrom' => empty($options['sourceFrom']) ? '' : $options['sourceFrom'],
-               'sendedSn' => empty($options['sendedSn']) ? '' : $options['sendedSn']
             );
+            if (!empty($options['sendedSn'])) {
+                $params['sendedSn'] = $options['sendedSn'];
+            }
             $api    = CloudAPIFactory::create('root');
             $result = $api->post("/emails", $params);
             return empty($result['sendedSn']) ? false : true;
