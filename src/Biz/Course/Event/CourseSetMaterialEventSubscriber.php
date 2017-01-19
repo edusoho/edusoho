@@ -74,7 +74,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 'fileId'   => $activity['mediaId'],
                 'source'   => 'courseactivity'
             ),
-            array('createdTime', 'DESC'), 0, 1
+            array('createdTime' => 'DESC'), 0, 1
         );
 
         if (!$material) {
@@ -100,7 +100,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 'lessonId' => $activity['id'],
                 'type'     => 'course'
             ),
-            array('createdTime', 'DESC'), 0, PHP_INT_MAX
+            array('createdTime' => 'DESC'), 0, PHP_INT_MAX
         );
         if (!$materials) {
             return false;
@@ -138,7 +138,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 'source'   => 'courseactivity',
                 'type'     => 'course'
             ),
-            array('createdTime', 'DESC'), 0, 1
+            array('createdTime' => 'DESC'), 0, 1
         );
 
         if ($material) {
@@ -309,7 +309,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 'source'   => 'opencourselesson',
                 'type'     => 'openCourse'
             ),
-            array('createdTime', 'DESC'), 0, 1
+            array('createdTime' => 'DESC'), 0, 1
         );
 
         if (!$material) {
@@ -341,7 +341,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 'source'   => 'opencourselesson',
                 'type'     => 'openCourse'
             ),
-            array('createdTime', 'DESC'), 0, 1
+            array('createdTime' => 'DESC'), 0, 1
         );
 
         if ($material) {
@@ -382,7 +382,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 'lessonId' => $lesson['id'],
                 'type'     => 'openCourse'
             ),
-            array('createdTime', 'DESC'), 0, PHP_INT_MAX
+            array('createdTime' => 'DESC'), 0, PHP_INT_MAX
         );
         if (!$materials) {
             return false;
@@ -415,7 +415,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 'lessonId' => $lesson['id'],
                 'source'   => 'courselesson'
             ),
-            array('createdTime', 'DESC'), 0, 1
+            array('createdTime' => 'DESC'), 0, 1
         );
 
         if ($material) {
@@ -448,7 +448,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 'source'   => 'opencourselesson',
                 'type'     => 'openCourse'
             ),
-            array('createdTime', 'DESC'), 0, 1
+            array('createdTime' => 'DESC'), 0, 1
         );
 
         if ($material) {
