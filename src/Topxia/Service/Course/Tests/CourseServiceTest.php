@@ -1293,10 +1293,8 @@ class CourseServiceTest extends BaseTestCase
             'length' => 100,
             'fileSize' => 1024
         );
-        $this->mockBiz('File:UploadFileService', 'UploadFileService', array(
-            array('functionName' => 'getFile', 'runTimes' => 2, 'returnValue' => $fakeFile),
-            array('functionName' => 'waveUploadFile', 'runTimes' => 1, 'returnValue' => array())
-        ));
+        $this->mockService(array('File:UploadFileService' =>
+            array('getFile' => $fakeFile, 'waveUploadFile' => array())));
 
         $lesson = $this->getCourseService()->createLessonByFileId($course['id'], $fakeFile['id']);
 
