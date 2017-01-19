@@ -128,8 +128,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function copyCourse($fields)
     {
-        $courseId = $fields['copyCourseId'];
-        $course   = $this->getCourse($courseId);
+        $course = $this->tryManageCourse($fields['copyCourseId']);
 
         $entityCopy = new CourseCopy($this->biz);
         return $entityCopy->copy($course, $fields);

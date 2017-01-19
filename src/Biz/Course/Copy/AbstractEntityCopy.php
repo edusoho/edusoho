@@ -53,22 +53,6 @@ abstract class AbstractEntityCopy
             $result = $that->_copy($source, $config);
             return $result;
         });
-
-        try {
-            $this->biz['db']->beginTransaction();
-            $this->addError('AbstractEntityCopy', 'begin transaction');
-
-            $that->addError('AbstractEntityCopy', 'copy source:'.json_encode($source));
-            $result = $this->_copy($source, $config);
-
-            $this->biz['db']->commit();
-            $this->addError('AbstractEntityCopy', 'commit');
-            return $result;
-        } catch (\Exception $e) {
-            $this->biz['db']->rollback();
-            $this->addError('AbstractEntityCopy', 'rollback: '.$e->getMessage());
-            throw $e;
-        }
     }
 
     protected function doTransaction($callback)
