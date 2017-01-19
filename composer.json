@@ -45,7 +45,7 @@
 		"codeages/plugin-bundle": "^0.1.0",
 		"codeages/biz-rate-limiter": "^0.1.1",
 		"xxtea/xxtea": "^1.0",
-		"codeages/biz-framework": "^0.1.9"
+		"codeages/biz-framework": "^0.2.0"
 	},
 	"require-dev": {
 	    "sensio/generator-bundle": "~3.0",

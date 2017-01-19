@@ -38,7 +38,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'creator LIKE :creator',
                 'type = :type',
                 'recommended = :recommended',
-                'id NOT IN (:excludeIds)'
+                'id NOT IN (:excludeIds)',
+                'parentId = :parentId'
             ),
             'serializes' => array(
                 'tags'      => 'delimiter',

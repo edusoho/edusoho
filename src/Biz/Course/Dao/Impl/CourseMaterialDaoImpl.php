@@ -28,6 +28,7 @@ class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
                 'fileId IN (:fileIds)',
                 'source = :source',
                 'source IN (:sources)',
+                'courseSetId IN (:courseSetIds)',
                 'courseId IN (:courseIds)'
             )
         );
