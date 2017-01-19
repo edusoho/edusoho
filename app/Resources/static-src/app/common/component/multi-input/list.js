@@ -6,19 +6,33 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.listId = getRandomString();
+    this.$item = null;
   }
 
+
+
   componentDidMount(){
+    let sortId = `#${this.listId}`;
     if(this.props.sortable) {
       sortList({
-        element:`#${this.listId}`,
+        element:sortId,
         itemSelector: "li",
         ajax: false,
       },(data) =>{
-        this.context.sortItem(data);
+        //sortList操作了真实的DOM需要还原；
+        //@TODO需优化成React的组件
+        $(sortId).children().remove();
+        $(sortId).append(this.$item);
+        // this.context.sortItem(data);
       });
     }
   }
+
+  componentWillMount() {
+    this.$item = $(this.listId).children().clone();
+  }
+
+
 
   render() {
     const { dataSourceUi,sortable } =  this.props;

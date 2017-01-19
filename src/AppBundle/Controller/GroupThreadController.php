@@ -102,7 +102,7 @@ class GroupThreadController extends BaseController
 
         $thread = $this->getThreadService()->getThread($threadId);
 
-        $attachs = $this->getThreadService()->searchGoods(array("threadId" => $thread['id'], 'type' => 'attachment'), array('createdTime'=>'DESC'), 0, 1000);
+        $attachs = $this->getThreadService()->searchGoods(array("threadId" => $thread['id'], 'type' => 'attachment'), array('createdTime' => 'DESC'), 0, 1000);
 
         if ($request->getMethod() == "POST") {
             try {
@@ -308,7 +308,7 @@ class GroupThreadController extends BaseController
                 10
             );
 
-            $reply = $this->getThreadService()->searchPosts(array('postId' => $value), array('createdTime'=>'ASC'),
+            $reply = $this->getThreadService()->searchPosts(array('postId' => $value), array('createdTime' => 'ASC'),
                 $replyPaginator->getOffsetCount(),
                 $replyPaginator->getPerPageCount());
 
@@ -320,7 +320,7 @@ class GroupThreadController extends BaseController
                 $postReplyAll = array_merge($postReplyAll, ArrayToolkit::column($reply, 'userId'));
             }
 
-            $attachs = $this->getThreadService()->searchGoods(array('postId' => $value, 'type' => 'postAttachment'), array('createdTime'=>'DESC'), 0, 1000);
+            $attachs = $this->getThreadService()->searchGoods(array('postId' => $value, 'type' => 'postAttachment'), array('createdTime' => 'DESC'), 0, 1000);
 
             $postFileIds = ArrayToolkit::column($attachs, 'fileId');
 
@@ -334,16 +334,16 @@ class GroupThreadController extends BaseController
         $postMember       = $this->getUserService()->findUsersByIds($postMemberIds);
 
         $activeMembers = $this->getGroupService()->searchMembers(array('groupId' => $id),
-            array('postNum'=>'DESC'), 0, 20);
+            array('postNum' => 'DESC'), 0, 20);
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
         $members   = $this->getUserService()->findUsersByIds($memberIds);
 
-        $isAdopt = $this->getThreadService()->searchPosts(array('adopt' => 1, 'threadId' => $threadId), array('createdTime'=>'DESC'), 0, 1);
+        $isAdopt = $this->getThreadService()->searchPosts(array('adopt' => 1, 'threadId' => $threadId), array('createdTime' => 'DESC'), 0, 1);
 
         $threadMain = $this->hideThings($threadMain);
 
-        $attachs = $this->getThreadService()->searchGoods(array("threadId" => $threadMain['id'], 'type' => 'attachment'), array('createdTime'=>'DESC'), 0, 1000);
+        $attachs = $this->getThreadService()->searchGoods(array("threadId" => $threadMain['id'], 'type' => 'attachment'), array('createdTime' => 'DESC'), 0, 1000);
 
         $fileIds = ArrayToolkit::column($attachs, 'fileId');
 
@@ -392,7 +392,7 @@ class GroupThreadController extends BaseController
             10
         );
 
-        $postReply = $this->getThreadService()->searchPosts(array('postId' => $postId), array('createdTime'=> 'ASC'),
+        $postReply = $this->getThreadService()->searchPosts(array('postId' => $postId), array('createdTime' => 'ASC'),
             $postReplyPaginator->getOffsetCount(),
             $postReplyPaginator->getPerPageCount());
 
@@ -412,7 +412,7 @@ class GroupThreadController extends BaseController
 
     public function downloadAction(Request $request, $fileId)
     {
-        $user     = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
             return $this->redirect($this->generateUrl('login'));
@@ -584,11 +584,9 @@ class GroupThreadController extends BaseController
             $this->getThreadService()->countThreads(array('status' => 'open', 'title' => $keyWord, 'groupId' => $id)),
             15
         );
-        $threads = $this->getThreadService()->searchThreads(array(
-            'status'  => 'open', 'title' => $keyWord,
-            'groupId' => $id
-        ),
-            array(array('createdTime'=>'DESC')),
+        $threads   = $this->getThreadService()->searchThreads(
+            array('status' => 'open', 'title' => $keyWord, 'groupId' => $id),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
@@ -903,7 +901,7 @@ class GroupThreadController extends BaseController
             if ($role == 2 || $role == 3 || $user['id'] == $thread['userId'] || !empty($trade)) {
                 if ($coin) {
                     if ($role == 2 || $role == 3 || $user['id'] == $thread['userId']) {
-                        $context .= $content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>" . '隐藏区域' . "</span>".$hideContent."</div>";
+                        $context .= $content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>".'隐藏区域'."</span>".$hideContent."</div>";
                     } else {
                         $context .= $content.$hideContent;
                     }
@@ -915,9 +913,9 @@ class GroupThreadController extends BaseController
                     $count = 1;
 
                     if ($user['id']) {
-                        $context .= $content."<div class=\"hideContent mtl mbl\"><h4> <a href=\"javascript:\" data-toggle=\"modal\" data-target=\"#modal\" data-urL=\"/thread/{$thread['id']}/hide\">". '点击查看' . "</a>" . '本话题隐藏内容' . "</h4></div>";
+                        $context .= $content."<div class=\"hideContent mtl mbl\"><h4> <a href=\"javascript:\" data-toggle=\"modal\" data-target=\"#modal\" data-urL=\"/thread/{$thread['id']}/hide\">".'点击查看'."</a>".'本话题隐藏内容'."</h4></div>";
                     } else {
-                        $context .= $content."<div class=\"hideContent mtl mbl\"><h4>" . '游客,如果您要查看本话题隐藏内容请先' . "<a href=\"/login\">" . '登录' . "</a>" . '或' . "<a href=\"/register\">" . '注册' . "</a>！</h4></div>";
+                        $context .= $content."<div class=\"hideContent mtl mbl\"><h4>".'游客,如果您要查看本话题隐藏内容请先'."<a href=\"/login\">".'登录'."</a>".'或'."<a href=\"/register\">".'注册'."</a>！</h4></div>";
                     }
                 } else {
                     $context .= $content;
@@ -952,13 +950,13 @@ class GroupThreadController extends BaseController
 
         if ($replyHideContent) {
             if ($role == 2 || $role == 3 || $user['id'] == $thread['userId']) {
-                $context = $content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>" . '回复可见区域' . "</span>".$replyHideContent."</div>";
+                $context = $content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>".'回复可见区域'."</span>".$replyHideContent."</div>";
 
                 return $context;
             }
 
             if (!$user['id']) {
-                $context .= $content."<div class=\"hideContent mtl mbl\"><h4>" . '游客,如果您要查看本话题隐藏内容请先' . "<a href=\"/login\">" . '登录' . "</a>或<a href=\"/register\">" . '注册' . "</a>！</h4></div>";
+                $context .= $content."<div class=\"hideContent mtl mbl\"><h4>".'游客,如果您要查看本话题隐藏内容请先'."<a href=\"/login\">".'登录'."</a>或<a href=\"/register\">".'注册'."</a>！</h4></div>";
                 return $context;
             }
 
@@ -967,7 +965,7 @@ class GroupThreadController extends BaseController
             if ($count > 0) {
                 $context .= $content.$replyHideContent;
             } else {
-                $context .= $content."<div class=\"hideContent mtl mbl\"><h4> <a href=\"#post-thread-form\">" . '回复' . "</a>" . '本话题可见' . "</h4></div>";
+                $context .= $content."<div class=\"hideContent mtl mbl\"><h4> <a href=\"#post-thread-form\">".'回复'."</a>".'本话题可见'."</h4></div>";
             }
         }
 
