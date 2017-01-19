@@ -1,5 +1,6 @@
 {
   "watch": [
-    "app/Resources/webpack"
+    "app/Resources/webpack",
+    "add-new-file.log"
   ]
 }

@@ -13,12 +13,12 @@
   },
   "devDependencies": {
     "babel-cli": "6.18.0",
-    "babel-preset-react": "6.11.1",
     "babel-preset-es2015": "6.9.0",
+    "babel-preset-react": "6.11.1",
     "babel-runtime": "6.20.0",
     "es-webpack-engine": "latest",
-    "webpack": "1.14.0",
-    "nodemon": "1.11.0"
+    "nodemon": "1.11.0",
+    "webpack": "1.14.0"
   },
   "dependencies": {
     "babel-polyfill": "6.5.0",
@@ -26,6 +26,7 @@
     "bootstrap-daterangepicker": "2.1.24",
     "bootstrap-datetime-picker": "2.3.10",
     "bootstrap-notify": "3.1.3",
+    "chokidar": "1.6.1",
     "console-polyfill": "0.2.3",
     "easy-pie-chart": "2.1.7",
     "echarts": "3.3.1",
