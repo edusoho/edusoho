@@ -212,7 +212,9 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             ->andWhere('m.joinedType =:joinedType')
             ->andWhere('m.noteNum > :noteNumGreaterThan')
             ->andWhere('c.type = :type')
-            ->andWhere('c.parentId = parentId');
+            ->andWhere('c.parentId = :parentId')
+            ->andWhere('c.serializeMode =  :serializeMode')
+            ->andWhere('c.serializeMode IN ( :serializeModes)');
 
         return $builder;
     }

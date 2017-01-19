@@ -59,7 +59,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
 
-
     public function getFirstPublishedCourseByCourseSetId($courseSetId)
     {
         $courses = $this->searchCourses(
@@ -142,7 +141,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'summary',
             'goals',
             'audiences',
-            'enableFinish'
+            'enableFinish',
+            'serializeMode'
         ));
 
         if ($course['status'] == 'published') {
@@ -708,10 +708,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserLeanedCourseCount($userId, $filters = array())
     {
         $conditions = array(
-            'userId'      => $userId,
-            'role'        => 'student',
-            'learnStatus' => 'learned'
-
+            'userId'         => $userId,
+            'role'           => 'student',
+            'learnStatus'    => 'learned',
+            'serializeModes' => array('none', 'finished')
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
