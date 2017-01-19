@@ -15,9 +15,8 @@ class OpenCourseFileManageController extends BaseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         $conditions = array(
-            'courseId'    => $course['id'],
-            'type'        => 'openCourse',
-            'courseSetId' => 0
+            'courseId' => $course['id'],
+            'type'     => 'openCourse'
         );
 
         $paginator = new Paginator(
@@ -41,8 +40,7 @@ class OpenCourseFileManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
-        return $this->render('courseset-manage/file/index.html.twig', array(
-            'courseSet'  => $course,
+        return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
             'course'     => $course,
             'files'      => $files,
             'users'      => ArrayToolkit::index($users, 'id'),
@@ -151,9 +149,8 @@ class OpenCourseFileManageController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('courseset-manage/file/file-delete-modal.html.twig', array(
-            'course'    => $course,
-            'courseSet' => $course
+        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
+            'course' => $course
         ));
     }
 
@@ -166,9 +163,8 @@ class OpenCourseFileManageController extends BaseController
         $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
         $files     = ArrayToolkit::index($files, 'id');
 
-        return $this->render('courseset-manage/file/file-delete-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseFileManage:file-delete-modal.html.twig', array(
             'course'    => $course,
-            'courseSet' => $course,
             'materials' => $materials,
             'files'     => $files,
             'ids'       => $fileIds
@@ -193,25 +189,6 @@ class OpenCourseFileManageController extends BaseController
             'targetType'     => 'coursematerial',
             'targetId'       => $course['id']
         ));
-    }
-
-    public function fileStatusAction(Request $request)
-    {
-        $currentUser = $this->getCurrentUser();
-
-        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            return $this->createJsonResponse(array());
-        }
-
-        $fileIds = $request->request->get('ids');
-
-        if (empty($fileIds)) {
-            return $this->createJsonResponse(array());
-        }
-
-        $fileIds = explode(',', $fileIds);
-
-        return $this->createJsonResponse($this->getUploadFileService()->findFilesByIds($fileIds, 1));
     }
 
     /**

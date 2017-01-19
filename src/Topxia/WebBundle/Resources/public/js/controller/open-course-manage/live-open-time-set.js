@@ -120,6 +120,7 @@ define(function(require, exports, module) {
 
 
         validator.on('formValidate', function(elemetn, event) {
+            editor.updateElement();
             var z = editor.getData();
             var x = editor.getData().match(/<embed[\s\S]*?\/>/g);
             if (x) {

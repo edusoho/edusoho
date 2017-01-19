@@ -497,12 +497,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
-    public function findPriceIntervalByCourseSetIds($courseSetIds)
-    {
-        $results = $this->getCourseDao()->findPriceIntervalByCourseSetIds($courseSetIds);
-        return ArrayToolkit::index($results, 'courseSetId');
-    }
-
     public function tryTakeCourse($courseId)
     {
         $course = $this->getCourse($courseId);

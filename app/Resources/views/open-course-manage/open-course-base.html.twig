@@ -1,9 +1,9 @@
-{% extends 'open-course-manage/layout.html.twig' %}
+{% extends 'open-course-manage/open-course-layout.html.twig' %}
 
 {% block title %}{{'基本信息'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'base' %}
-{% set script_controller = 'open-course-manage/base' %}
+{% set script_controller = 'course-manage/base' %}
 {%
   set script_arguments = {
     categoryUrl: path('category_all'),

@@ -6,6 +6,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ExportHelp;
 use Biz\Util\EdusohoLiveClient;
 use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\UserService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
@@ -42,7 +43,7 @@ class OpenCourseManageController extends BaseController
 
         $default = $this->getSettingService()->get('default', array());
 
-        return $this->render('open-course-manage/base-info.html.twig', array(
+        return $this->render('open-course-manage/open-course-base.html.twig', array(
             'course'  => $course,
             'tags'    => ArrayToolkit::column($tags, 'name'),
             'default' => $default
@@ -53,7 +54,7 @@ class OpenCourseManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        return $this->render('open-course-manage/picture.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseManage:picture.html.twig', array(
             'course' => $course
 
         ));
@@ -72,7 +73,7 @@ class OpenCourseManageController extends BaseController
         $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
 
-        return $this->render('open-course-manage/picture-crop.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseManage:picture-crop.html.twig', array(
             'course'      => $course,
             'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
@@ -85,11 +86,17 @@ class OpenCourseManageController extends BaseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
-            if (empty($data) || !isset($data['teachers'])) {
-                throw new InvalidArgumentException('Empty Data');
+            $data        = $request->request->all();
+            $data['ids'] = empty($data['ids']) ? array() : array_values($data['ids']);
+
+            $teachers = array();
+
+            foreach ($data['ids'] as $teacherId) {
+                $teachers[] = array(
+                    'id'        => $teacherId,
+                    'isVisible' => empty($data['visible_'.$teacherId]) ? 0 : 1
+                );
             }
-            $teachers = json_decode($data['teachers'], true);
 
             $this->getOpenCourseService()->setCourseTeachers($id, $teachers);
 
@@ -104,21 +111,21 @@ class OpenCourseManageController extends BaseController
                 'role'      => 'teacher',
                 'isVisible' => 1
             ),
-            array('seq' => 'ASC'),
+            array('seq', 'ASC'),
             0,
             100
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($teacherMembers, 'userId'));
 
-        $teacherIds = array();
+        $teachers = array();
 
         foreach ($teacherMembers as $member) {
             if (empty($users[$member['userId']])) {
                 continue;
             }
 
-            $teacherIds[] = array(
+            $teachers[] = array(
                 'id'        => $member['userId'],
                 'nickname'  => $users[$member['userId']]['nickname'],
                 'avatar'    => $this->getWebExtension()->getFilePath($users[$member['userId']]['smallAvatar'], 'avatar.png'),
@@ -130,37 +137,11 @@ class OpenCourseManageController extends BaseController
         $client   = new EdusohoLiveClient();
         $capacity = $client->getCapacity();
 
-        return $this->render('open-course-manage/teachers.html.twig', array(
-            'course'     => $course,
-            'teacherIds' => $teacherIds,
-            'capacity'   => $capacity
+        return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
+            'course'   => $course,
+            'teachers' => $teachers,
+            'capacity' => $capacity
         ));
-    }
-
-    public function teachersMatchAction(Request $request, $id)
-    {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
-        $queryField = $request->query->get('q');
-        $users      = $this->getUserService()->searchUsers(
-            array('nickname' => $queryField, 'roles' => 'ROLE_TEACHER'),
-            array('createdTime' => 'DESC'),
-            0,
-            10
-        );
-
-        $teachers = array();
-
-        foreach ($users as $user) {
-            $teachers[] = array(
-                'id'        => $user['id'],
-                'nickname'  => $user['nickname'],
-                'avatar'    => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
-                'isVisible' => 1
-            );
-        }
-
-        return $this->createJsonResponse($teachers);
     }
 
     public function studentsAction(Request $request, $id)
@@ -185,7 +166,7 @@ class OpenCourseManageController extends BaseController
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
             $users = $this->getUserService()->searchUsers(
                 array('nickname' => $fields['keyword']),
-                array('createdTime' => 'DESC'),
+                array('createdTime'=>'DESC'),
                 0, PHP_INT_MAX
             );
             $userIds              = ArrayToolkit::column($users, 'id');
@@ -200,7 +181,7 @@ class OpenCourseManageController extends BaseController
 
         $students = $this->getOpenCourseService()->searchMembers(
             $condition,
-            array('lastEnterTime' => 'DESC'),
+            array('lastEnterTime'=>'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -208,7 +189,7 @@ class OpenCourseManageController extends BaseController
         $studentUserIds = ArrayToolkit::column($students, 'userId');
         $users          = $this->getUserService()->findUsersByIds($studentUserIds);
 
-        return $this->render('open-course-manage/students.html.twig', array(
+        return $this->render('open-course-manage/open-course-students.html.twig', array(
             'course'    => $course,
             'students'  => $students,
             'users'     => $users,
@@ -220,7 +201,7 @@ class OpenCourseManageController extends BaseController
     {
         $liveCourse = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $openLiveLesson = $this->getOpenCourseService()->searchLessons(array('courseId' => $liveCourse['id']), array('startTime' => 'DESC'), 0, 1);
+        $openLiveLesson = $this->getOpenCourseService()->searchLessons(array('courseId' => $liveCourse['id']), array('startTime'=>'DESC'), 0, 1);
         $liveLesson     = $openLiveLesson ? $openLiveLesson[0] : array();
 
         if ($request->getMethod() == 'POST') {
@@ -275,22 +256,18 @@ class OpenCourseManageController extends BaseController
 
         $recommends = $this->getOpenCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($id);
 
-        /*$recommendedCourses = array();
+        $recommendedCourses = array();
 
         foreach ($recommends as $key => $recommend) {
-        $recommendedCourses[$recommend['id']] = $this->getTypeCourseService($recommend['type'])->getCourse($recommend['recommendCourseId']);
-        }*/
-        $courseSetIds       = ArrayToolkit::column($recommends, 'recommendCourseId');
-        $recommendedCourses = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+            $recommendedCourses[$recommend['id']] = $this->getTypeCourseService($recommend['type'])->getCourse($recommend['recommendCourseId']);
+        }
 
-        $coursesPrice = $this->_findCoursesPriceInterval($courseSetIds);
-        $users        = $this->_getTeacherUsers($recommendedCourses);
+        $users = $this->_getTeacherUsers($recommendedCourses);
 
         return $this->render('open-course-manage/open-course-marketing.html.twig', array(
-            'courses'      => $recommendedCourses,
-            'users'        => $users,
-            'course'       => $course,
-            'coursesPrice' => $coursesPrice
+            'courses' => $recommendedCourses,
+            'users'   => $users,
+            'course'  => $course
         ));
     }
 
@@ -302,18 +279,14 @@ class OpenCourseManageController extends BaseController
 
         list($paginator, $courses) = $this->_getPickCourseData($request, $id, $conditions);
 
-        $courseSetIds = ArrayToolkit::column($courses, 'id');
-        $coursesPrice = $this->_findCoursesPriceInterval($courseSetIds);
-
         $users = $this->_getTeacherUsers($courses);
 
         return $this->render('open-course-manage/open-course-pick-modal.html.twig', array(
-            'users'        => $users,
-            'courses'      => $courses,
-            'coursesPrice' => $coursesPrice,
-            'paginator'    => $paginator,
-            'courseId'     => $id,
-            'filter'       => $filter
+            'users'     => $users,
+            'courses'   => $courses,
+            'paginator' => $paginator,
+            'courseId'  => $id,
+            'filter'    => $filter
         ));
     }
 
@@ -409,48 +382,7 @@ class OpenCourseManageController extends BaseController
         return ExportHelp::exportCsv($request, $fileName);
     }
 
-    public function studentDetailAction(Request $request, $id, $userId)
-    {
-        if (!$this->getCurrentUser()->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权查看学员详细信息！');
-        }
-
-        $user             = $this->getUserService()->getUser($userId);
-        $profile          = $this->getUserService()->getUserProfile($userId);
-        $profile['title'] = $user['title'];
-
-        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-
-        for ($i = 0; $i < count($userFields); $i++) {
-            if (strstr($userFields[$i]['fieldName'], "textField")) {
-                $userFields[$i]['type'] = "text";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "varcharField")) {
-                $userFields[$i]['type'] = "varchar";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "intField")) {
-                $userFields[$i]['type'] = "int";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "floatField")) {
-                $userFields[$i]['type'] = "float";
-            }
-
-            if (strstr($userFields[$i]['fieldName'], "dateField")) {
-                $userFields[$i]['type'] = "date";
-            }
-        }
-
-        return $this->render('open-course-manage/student-detail-modal.html.twig', array(
-            'user'       => $user,
-            'profile'    => $profile,
-            'userFields' => $userFields
-        ));
-    }
-
-    protected function getExportContent($request, $id, $start, $limit, $exportAllowCount)
+    private function getExportContent($request, $id, $start, $limit, $exportAllowCount)
     {
         $course     = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $gender     = array('female' => '女', 'male' => '男', 'secret' => '秘密');
@@ -471,7 +403,7 @@ class OpenCourseManageController extends BaseController
         if ($courseMemberCount < ($start + $limit + 1)) {
             $limit = $courseMemberCount - $start;
         }
-        $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime' => 'DESC'), $start, $limit);
+        $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime'=>'DESC'), $start, $limit);
         $userFields    = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         $fields['weibo'] = "微博";
@@ -554,7 +486,7 @@ class OpenCourseManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    protected function _getPickCourseData(Request $request, $openCourseId, $conditions)
+    private function _getPickCourseData(Request $request, $openCourseId, $conditions)
     {
         $existRecommendCourseIds = $this->getExistRecommendCourseIds($openCourseId);
 
@@ -562,13 +494,13 @@ class OpenCourseManageController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseSetService()->countCourseSets($conditions),
+            $this->getCourseService()->searchCourseCount($conditions),
             5
         );
 
-        $courses = $this->getCourseSetService()->searchCourseSets(
+        $courses = $this->getCourseService()->searchCourses(
             $conditions,
-            array('createdTime' => 'ASC'),
+            array('createdTime', 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -576,11 +508,11 @@ class OpenCourseManageController extends BaseController
         return array($paginator, $courses);
     }
 
-    protected function getExistRecommendCourseIds($openCourseId)
+    private function getExistRecommendCourseIds($openCourseId)
     {
         $coursesRecommended = $this->getOpenCourseRecommendedService()->searchRecommends(
             array('openCourseId' => $openCourseId),
-            array('createdTime' => 'DESC'),
+            array('createdTime'=>'DESC'),
             0, PHP_INT_MAX
         );
 
@@ -589,17 +521,20 @@ class OpenCourseManageController extends BaseController
         return $existIds;
     }
 
-    protected function _getTeacherUsers($courses)
+    private function _getTeacherUsers($courses)
     {
-        $userIds = ArrayToolkit::column($courses, 'creator');
-        if (!$userIds) {
-            return array();
+        $userIds = array();
+
+        foreach ($courses as &$course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
         }
 
-        return $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $users;
     }
 
-    protected function _filterConditions($conditions, $excludeCourseIds)
+    private function _filterConditions($conditions, $excludeCourseIds)
     {
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
@@ -615,7 +550,7 @@ class OpenCourseManageController extends BaseController
         return $conditions;
     }
 
-    protected function _getType($filter)
+    private function _getType($filter)
     {
         $type = 'open';
 
@@ -626,15 +561,6 @@ class OpenCourseManageController extends BaseController
         }
 
         return $type;
-    }
-
-    protected function _findCoursesPriceInterval($courseSetIds)
-    {
-        if (empty($courses)) {
-            return array();
-        }
-
-        return $this->getCourseService()->findPriceIntervalByCourseSetIds($courseSetIds);
     }
 
     /**
@@ -700,14 +626,6 @@ class OpenCourseManageController extends BaseController
     }
 
     /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->getBiz()->service('Course:CourseSetService');
-    }
-
-    /**
      * @return FileService
      */
     protected function getFileService()
@@ -720,7 +638,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getLiveCourseService()
     {
-        return $this->getBiz()->service('OpenCourse:LiveCourseService');
+        return $this->getBiz()->service('Course:LiveCourseService');
     }
 
     /**
@@ -731,11 +649,4 @@ class OpenCourseManageController extends BaseController
         return $this->getBiz()->service('User:UserFieldService');
     }
 
-    /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->createService('User:UserService');
-    }
 }

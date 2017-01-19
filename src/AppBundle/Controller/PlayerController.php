@@ -2,16 +2,17 @@
 
 namespace AppBundle\Controller;
 
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
-use Biz\Util\CloudClientFactory;
+
+use Biz\File\Service\UploadFileService;
+use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\User\Service\TokenService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\File\Service\UploadFileService;
+use Biz\Util\CloudClientFactory;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Biz\MaterialLib\Service\MaterialLibService;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\FileToolkit;
 
 class PlayerController extends BaseController
 {
@@ -71,6 +72,7 @@ class PlayerController extends BaseController
 
     public function localMediaAction(Request $request, $id, $token)
     {
+
         $file = $this->getUploadFileService()->getFile($id);
 
         if (empty($file)) {
@@ -85,6 +87,7 @@ class PlayerController extends BaseController
         if (!$token || $token['userId'] != $this->getCurrentUser()->getId()) {
             throw $this->createAccessDeniedException();
         }
+
 
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
@@ -222,6 +225,7 @@ class PlayerController extends BaseController
 
     protected function getPlayUrl($file, $context)
     {
+
         if ($file['storage'] == 'cloud') {
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {

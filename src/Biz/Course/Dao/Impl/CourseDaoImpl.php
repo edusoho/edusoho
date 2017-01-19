@@ -44,22 +44,11 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->findInField('id', $ids);
     }
 
-    public function findPriceIntervalByCourseSetIds($courseSetIds)
-    {
-        if (empty($courseSetIds)) {
-            return array();
-        }
-        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
-
-        $sql = "SELECT MIN(price) AS minPrice, MAX(price) AS maxPrice,courseSetId FROM {$this->table} WHERE courseSetId IN ({$marks}) GROUP BY courseSetId";
-        return $this->db()->fetchAll($sql, $courseSetIds) ?: null;
-    }
-
     // rename: analysisCourseSumByTime
     public function countCreatedCoursesLessThanEndTimeByGroupDate($endTime)
     {
         $sql
-        = "SELECT date , max(a.Count) as count from (
+            = "SELECT date , max(a.Count) as count from (
                     SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,(
                         SELECT count(id) as count FROM  `{$this->getTable()}` i WHERE i.createdTime<=o.createdTime and i.parentId = 0
                     )  as Count from `{$this->getTable()}`  o  where o.createdTime<={$endTime} order by 1,2
