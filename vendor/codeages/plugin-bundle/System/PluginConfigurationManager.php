@@ -89,4 +89,18 @@ class PluginConfigurationManager
         return $this;
     }
 
+    public function isPluginInstalled($code)
+    {
+    
+        $plugins = $this->getInstalledPlugins();
+        $code = strtolower($code);
+
+        foreach ($plugins as $plugin) {
+            if ($code == strtolower($plugin['code'])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

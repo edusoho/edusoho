@@ -3495,55 +3495,6 @@
         ]
     },
     {
-        "name": "codeages/plugin-bundle",
-        "version": "v0.1.3",
-        "version_normalized": "0.1.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/plugin-bundle.git",
-            "reference": "9d42b8ee81b661e57d56a7de62c73f3130c4035e"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/9d42b8ee81b661e57d56a7de62c73f3130c4035e",
-            "reference": "9d42b8ee81b661e57d56a7de62c73f3130c4035e",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.1.7 || ^0.2",
-            "php": "^5.3.3 || ^7.0",
-            "symfony/framework-bundle": "^2.8 || ^3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.8|~5.0"
-        },
-        "time": "2017-01-18 16:26:34",
-        "type": "symfony-bundle",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\PluginBundle\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "codeages team",
-                "email": "team@codeages.com"
-            }
-        ],
-        "description": "Symfony PluginBundle",
-        "homepage": "https://github.com/codeages/plugin-bundle",
-        "keywords": [
-            "Extendsion",
-            "plugin",
-            "theme"
-        ]
-    },
-    {
         "name": "codeages/biz-rate-limiter",
         "version": "v0.1.3",
         "version_normalized": "0.1.3.0",
@@ -3612,5 +3563,54 @@
             "MIT"
         ],
         "description": "A service layer framework."
+    },
+    {
+        "name": "codeages/plugin-bundle",
+        "version": "v0.1.4",
+        "version_normalized": "0.1.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/plugin-bundle.git",
+            "reference": "e475c50b4fd3f77f870e546f3a47454bb76215db"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/e475c50b4fd3f77f870e546f3a47454bb76215db",
+            "reference": "e475c50b4fd3f77f870e546f3a47454bb76215db",
+            "shasum": ""
+        },
+        "require": {
+            "codeages/biz-framework": "^0.1.7 || ^0.2",
+            "php": "^5.3.3 || ^7.0",
+            "symfony/framework-bundle": "^2.8 || ^3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.8|~5.0"
+        },
+        "time": "2017-01-19 04:33:24",
+        "type": "symfony-bundle",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\PluginBundle\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "codeages team",
+                "email": "team@codeages.com"
+            }
+        ],
+        "description": "Symfony PluginBundle",
+        "homepage": "https://github.com/codeages/plugin-bundle",
+        "keywords": [
+            "Extendsion",
+            "plugin",
+            "theme"
+        ]
     }
 ]
