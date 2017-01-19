@@ -3442,39 +3442,6 @@
         "description": "Rate Limiting Library With Token Bucket Algorithm"
     },
     {
-        "name": "codeages/biz-rate-limiter",
-        "version": "0.1.2",
-        "version_normalized": "0.1.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-rate-limiter.git",
-            "reference": "4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-rate-limiter/zipball/4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019",
-            "reference": "4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.1.6",
-            "codeages/rate-limiter": "^0.1.3"
-        },
-        "time": "2016-12-06 09:13:51",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\RateLimiter\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Rate limiter with Biz Framework."
-    },
-    {
         "name": "xxtea/xxtea",
         "version": "v1.0.1",
         "version_normalized": "1.0.1.0",
@@ -3528,43 +3495,6 @@
         ]
     },
     {
-        "name": "codeages/biz-framework",
-        "version": "v0.1.9",
-        "version_normalized": "0.1.9.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "aead82de38b505be6608aad8560dfd25e275a6c3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/aead82de38b505be6608aad8560dfd25e275a6c3",
-            "reference": "aead82de38b505be6608aad8560dfd25e275a6c3",
-            "shasum": ""
-        },
-        "require": {
-            "davedevelopment/phpmig": "^1.2.0",
-            "doctrine/dbal": "^2.4.5",
-            "php": "^5.3.3 || ^7.0",
-            "pimple/pimple": "^3.0.2",
-            "psr/log": "^1.0.0",
-            "symfony/event-dispatcher": "^2.8.9"
-        },
-        "time": "2017-01-17 06:14:38",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
-    },
-    {
         "name": "codeages/plugin-bundle",
         "version": "v0.1.3",
         "version_normalized": "0.1.3.0",
@@ -3612,5 +3542,75 @@
             "plugin",
             "theme"
         ]
+    },
+    {
+        "name": "codeages/biz-rate-limiter",
+        "version": "v0.1.3",
+        "version_normalized": "0.1.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-rate-limiter.git",
+            "reference": "ac7b7228783d7146670bbe0c71541a2b6c44e181"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/biz-rate-limiter/zipball/ac7b7228783d7146670bbe0c71541a2b6c44e181",
+            "reference": "ac7b7228783d7146670bbe0c71541a2b6c44e181",
+            "shasum": ""
+        },
+        "require": {
+            "codeages/biz-framework": "^0.1.6 || ^0.2.0",
+            "codeages/rate-limiter": "^0.1.3"
+        },
+        "time": "2017-01-19 02:12:01",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\RateLimiter\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Rate limiter with Biz Framework."
+    },
+    {
+        "name": "codeages/biz-framework",
+        "version": "v0.2.0",
+        "version_normalized": "0.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "effdcd3621506df9a6b36665469f95c2eb60414e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/codeages/biz-framework/zipball/effdcd3621506df9a6b36665469f95c2eb60414e",
+            "reference": "effdcd3621506df9a6b36665469f95c2eb60414e",
+            "shasum": ""
+        },
+        "require": {
+            "davedevelopment/phpmig": "^1.2.0",
+            "doctrine/dbal": "^2.4.5",
+            "php": "^5.3.3 || ^7.0",
+            "pimple/pimple": "^3.0.2",
+            "psr/log": "^1.0.0",
+            "symfony/event-dispatcher": "^2.8.9"
+        },
+        "time": "2017-01-18 06:55:29",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
     }
 ]

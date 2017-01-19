@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a391eab3b308991b19137d1b8d486683",
-    "content-hash": "6eff103e65c8c51a5bf857d008f3bf15",
+    "hash": "114b057da18e9a6f78df14570a3fe31c",
+    "content-hash": "8ba8f7dc48b91a73cc230aee129cfc52",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -207,16 +207,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.1.9",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "aead82de38b505be6608aad8560dfd25e275a6c3"
+                "reference": "effdcd3621506df9a6b36665469f95c2eb60414e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/aead82de38b505be6608aad8560dfd25e275a6c3",
-                "reference": "aead82de38b505be6608aad8560dfd25e275a6c3",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/effdcd3621506df9a6b36665469f95c2eb60414e",
+                "reference": "effdcd3621506df9a6b36665469f95c2eb60414e",
                 "shasum": ""
             },
             "require": {
@@ -238,24 +238,24 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-01-17 06:14:38"
+            "time": "2017-01-18 06:55:29"
         },
         {
             "name": "codeages/biz-rate-limiter",
-            "version": "0.1.2",
+            "version": "v0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-rate-limiter.git",
-                "reference": "4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019"
+                "reference": "ac7b7228783d7146670bbe0c71541a2b6c44e181"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-rate-limiter/zipball/4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019",
-                "reference": "4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019",
+                "url": "https://api.github.com/repos/codeages/biz-rate-limiter/zipball/ac7b7228783d7146670bbe0c71541a2b6c44e181",
+                "reference": "ac7b7228783d7146670bbe0c71541a2b6c44e181",
                 "shasum": ""
             },
             "require": {
-                "codeages/biz-framework": "^0.1.6",
+                "codeages/biz-framework": "^0.1.6 || ^0.2.0",
                 "codeages/rate-limiter": "^0.1.3"
             },
             "type": "library",
@@ -269,7 +269,7 @@
                 "MIT"
             ],
             "description": "Rate limiter with Biz Framework.",
-            "time": "2016-12-06 09:13:51"
+            "time": "2017-01-19 02:12:01"
         },
         {
             "name": "codeages/plugin-bundle",
