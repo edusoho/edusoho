@@ -273,7 +273,7 @@ class TaskController extends BaseController
 
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
-        $finishedRate = empty($course['taskNum']) ? 0 : intval($finishedCount / $course['taskNum'] * 100);
+        $finishedRate = empty($course['publishedTaskNum']) ? 0 : intval($finishedCount / $course['publishedTaskNum'] * 100);
         return array($course, $nextTask, $finishedRate);
     }
 

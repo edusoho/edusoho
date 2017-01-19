@@ -298,7 +298,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
-    public function findUserLeaningCourseCount($userId, $filters = array())
+    public function countUserLeaningCourses($userId, $filters = array())
     {
         if (isset($filters["type"])) {
             return $this->getMemberDao()->findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], 0);
@@ -307,7 +307,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 0);
     }
 
-    public function findUserLeaningCourses($userId, $start, $limit, $filters = array())
+    public function findUserLearningCourses($userId, $start, $limit, $filters = array())
     {
         if (isset($filters["type"])) {
             $members = $this->getMemberDao()->findMembersByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], '0', $start, $limit);
@@ -357,7 +357,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
 
-    public function findUserLeanedCourses($userId, $start, $limit, $filters = array())
+    public function findUserLearnedCourses($userId, $start, $limit, $filters = array())
     {
         $conditions = array(
             'userId'    => $userId,
