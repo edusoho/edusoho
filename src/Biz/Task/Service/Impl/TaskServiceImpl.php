@@ -2,15 +2,16 @@
 
 namespace Biz\Task\Service\Impl;
 
-use Biz\BaseService;
-use Biz\Task\Dao\TaskDao;
-use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Biz\Course\Service\CourseService;
-use Biz\Task\Strategy\StrategyContext;
-use Biz\Task\Service\TaskResultService;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\Activity\Service\ActivityService;
+use Biz\BaseService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Task\Dao\TaskDao;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\StrategyContext;
+use Codeages\Biz\Framework\Event\Event;
+use Topxia\Common\ArrayToolkit;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -250,7 +251,9 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     /**
      * 给定一个任务 ，判断前置解锁条件是完成
+     *
      * @param  $preTasks
+     *
      * @return bool
      */
     public function isPreTasksIsFinished($preTasks)
@@ -409,6 +412,86 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $tasks;
     }
 
+    /**
+     * 统计当前时间以后每天的直播次数
+     *
+     * @param $courseIds
+     * @param $limit
+     *
+     * @return array<string, int|string>
+     */
+    public function findFutureLiveDatesByCourseIdsGroupByDate($courseIds, $limit)
+    {
+        return $this->getTaskDao()->findFutureLiveDates($courseIds, $limit);
+    }
+
+    /**
+     * 返回当前正在直播的直播任务
+     *
+     * @return array
+     */
+    public function findCurrentLiveTasks()
+    {
+        $setConditions = array(
+            'type'     => 'live',
+            'status'   => 'published',
+            'parentId' => 0,
+            'locked'   => 0
+        );
+
+        $courseSets = $this->getCourseSetService()->searchCourseSets(
+            $setConditions,
+            array('createdTime' => 'DESC'),
+            0,
+            $this->getCourseSetService()->countCourseSets($setConditions)
+        );
+
+        $courseSetIds   = ArrayToolkit::column($courseSets, 'id');
+        $courses        = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+        $taskConditions = array(
+            'startTime_LT' => time(),
+            'endTime_GT'   => time(),
+            'type'         => 'live',
+            'courseIds'    => ArrayToolkit::column($courses, 'id'),
+            'status'       => 'published'
+        );
+        return $this->search($taskConditions, array('startTime' => 'ASC'), 0, $this->count($taskConditions));
+    }
+
+    /**
+     * 返回当前将要直播的直播任务
+     *
+     * @return array
+     */
+    public function findFutureLiveTasks()
+    {
+        $setConditions = array(
+            'type'     => 'live',
+            'status'   => 'published',
+            'parentId' => 0,
+            'locked'   => 0
+        );
+
+        $courseSets = $this->getCourseSetService()->searchCourseSets(
+            $setConditions,
+            array('createdTime' => 'DESC'),
+            0,
+            $this->getCourseSetService()->countCourseSets($setConditions)
+        );
+
+        $courseSetIds   = ArrayToolkit::column($courseSets, 'id');
+        $courses        = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+        $taskConditions = array(
+            'startTime_GT' => time(),
+            'endTime_LT'   => strtotime(date('Y-m-d') . ' 23:59:59'),
+            'type'         => 'live',
+            'courseIds'    => ArrayToolkit::column($courses, 'id'),
+            'status'       => 'published'
+        );
+        return $this->search($taskConditions, array('startTime' => 'ASC'), 0, $this->count($taskConditions));
+    }
+
+
     public function isFinished($taskId)
     {
         $task = $this->getTask($taskId);
@@ -507,7 +590,9 @@ class TaskServiceImpl extends BaseService implements TaskService
      * 2.如果不为空，则取关联的三个。
      *
      * 自由式和任务式的逻辑由任务策略完成
+     *
      * @param  $courseId
+     *
      * @return array       tasks
      */
     public function findToLearnTasksByCourseId($courseId)
@@ -618,6 +703,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskResultService()->getUserTaskResultByTaskId($id);
     }
 
+    public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
+    {
+        return $this->getTaskDao()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
+    }
+
     /**
      * @return TaskDao
      */
@@ -668,6 +758,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     /**
      * @param  $tasks
      * @param  $task
+     *
      * @return mixed
      */
     protected function setTaskLockStatus($tasks, $task)
@@ -693,5 +784,13 @@ class TaskServiceImpl extends BaseService implements TaskService
             $task['lock'] = false;
         }
         return $task;
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

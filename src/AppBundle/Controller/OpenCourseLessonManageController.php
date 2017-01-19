@@ -2,11 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use Biz\CloudPlatform\Service\AppService;
-use Biz\File\Service\UploadFileService;
-use Biz\OpenCourse\Service\OpenCourseService;
-use Biz\System\Service\SettingService;
+use Topxia\Common\Paginator;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
+use Biz\System\Service\SettingService;
+use Biz\File\Service\UploadFileService;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OpenCourseLessonManageController extends BaseController
@@ -45,7 +47,7 @@ class OpenCourseLessonManageController extends BaseController
             }
         }
 
-        return $this->render('open-course-lesson-manage/index.html.twig', array(
+        return $this->render('open-course-manage/lesson-list.html.twig', array(
             'course' => $course,
             'items'  => $courseItems,
             'files'  => ArrayToolkit::index($files, 'id')
@@ -94,7 +96,7 @@ class OpenCourseLessonManageController extends BaseController
 
             $lessonId = 0;
 
-            return $this->render('open-course-lesson-manage/open-course-lesson-list-item.html.twig', array(
+            return $this->render('open-course-manage/lesson-list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson,
                 'file'   => $file
@@ -109,7 +111,7 @@ class OpenCourseLessonManageController extends BaseController
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-        return $this->render('open-course-lesson-manage/lesson-modal.html.twig', array(
+        return $this->render('open-course-manage/lesson-modal.html.twig', array(
             'course'         => $course,
             'targetType'     => 'opencourselesson',
             'targetId'       => $course['id'],
@@ -161,7 +163,7 @@ class OpenCourseLessonManageController extends BaseController
                 }
             }
 
-            return $this->render('open-course-lesson-manage/open-course-lesson-list-item.html.twig', array(
+            return $this->render('open-course-manage/lesson-list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson,
                 'file'   => $file
@@ -207,7 +209,7 @@ class OpenCourseLessonManageController extends BaseController
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-        return $this->render('open-course-lesson-manage/lesson-modal.html.twig', array(
+        return $this->render('open-course-manage/lesson-modal.html.twig', array(
             'course'         => $course,
             'lesson'         => $lesson,
             'file'           => $file,
@@ -295,7 +297,7 @@ class OpenCourseLessonManageController extends BaseController
                 'source'   => 'opencoursematerial',
                 'type'     => 'openCourse'
             ),
-            array('createdTime'=>'DESC'),
+            array('createdTime' => 'DESC'),
             0, PHP_INT_MAX
         );
         return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
@@ -324,14 +326,15 @@ class OpenCourseLessonManageController extends BaseController
                 throw $this->createNotFoundException();
             }
 
-            $fields['courseId'] = $course['id'];
-            $fields['lessonId'] = $lessonId;
-            $fields['type']     = 'openCourse';
-            $fields['source']   = 'opencoursematerial';
+            $fields['courseId']    = $course['id'];
+            $fields['lessonId']    = $lessonId;
+            $fields['type']        = 'openCourse';
+            $fields['source']      = 'opencoursematerial';
+            $fields['courseSetId'] = 0;
 
             $material = $this->getMaterialService()->uploadMaterial($fields);
 
-            return $this->render('TopxiaWebBundle:CourseMaterialManage:list-item.html.twig', array(
+            return $this->render('open-course-manage/material-list-item.html.twig', array(
                 'material' => $material,
                 'course'   => $course
             ));
@@ -354,10 +357,64 @@ class OpenCourseLessonManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
 
-        return $this->forward('TopxiaWebBundle:CourseMaterialManage:materialBrowser', array(
-            'request'  => $request,
-            'courseId' => $courseId
-        ));
+        $conditions = array();
+        $type       = $request->query->get('type');
+        if (!empty($type)) {
+            $conditions['type'] = $type;
+        }
+
+        $courseMaterialIds = $this->getMaterialService()->searchFileIds(
+            array(
+                'courseId' => $course['id'],
+                'type'     => 'openCourse'
+            ),
+            array('createdTime' => 'DESC'),
+            0,
+            PHP_INT_MAX
+        );
+
+        $conditions['ids'] = $courseMaterialIds ? $courseMaterialIds : array(-1);
+        $paginator         = new Paginator(
+            $request,
+            $this->getUploadFileService()->searchFileCount($conditions),
+            20
+        );
+
+        $files = $this->getUploadFileService()->searchFiles(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->createFilesJsonResponse($files, $paginator);
+    }
+
+    public function draftCreateAction(Request $request)
+    {
+        $formData = $request->request->all();
+        $user     = $this->getCurrentUser();
+        $userId   = $user['id'];
+        $courseId = $formData['courseId'];
+
+        if (isset($formData['lessonId'])) {
+            $lessonId = $formData['lessonId'];
+        } else {
+            $lessonId             = 0;
+            $formData['lessonId'] = 0;
+        }
+
+        $content = $formData['content'];
+
+        $drafts = $this->getCourseDraftService()->findCourseDraft($courseId, $lessonId, $userId);
+
+        if ($drafts) {
+            $draft = $this->getCourseDraftService()->updateCourseDraft($courseId, $lessonId, $userId, $formData);
+        } else {
+            $draft = $this->getCourseDraftService()->createCourseDraft($formData);
+        }
+
+        return $this->createJsonResponse(true);
     }
 
     protected function textToSeconds($minutes, $seconds)
@@ -379,12 +436,39 @@ class OpenCourseLessonManageController extends BaseController
 
     protected function lessonExists($courseId)
     {
-        $lessons = $this->getOpenCourseService()->searchLessons(array('courseId' => $courseId), array('seq', 'ASC'), 0, 1);
+        $lessons = $this->getOpenCourseService()->searchLessons(array('courseId' => $courseId), array('seq' => 'ASC'), 0, 1);
         if ($lessons) {
             return true;
         }
 
         return false;
+    }
+
+    protected function createFilesJsonResponse($files, $paginator = null)
+    {
+        foreach ($files as &$file) {
+            $file['updatedTime'] = $file['updatedTime'] ? $file['updatedTime'] : $file['createdTime'];
+            $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);
+            $file['fileSize']    = FileToolkit::formatFileSize($file['fileSize']);
+
+            // Delete some file attributes to redunce the json response size
+            unset($file['hashId']);
+            unset($file['convertHash']);
+            unset($file['etag']);
+            unset($file['convertParams']);
+
+            unset($file);
+        }
+
+        if (!empty($paginator)) {
+            $paginator = Paginator::toArray($paginator);
+            return $this->createJsonResponse(array(
+                'files'     => $files,
+                'paginator' => $paginator
+            ));
+        } else {
+            return $this->createJsonResponse($files);
+        }
     }
 
     /**
@@ -425,5 +509,10 @@ class OpenCourseLessonManageController extends BaseController
     protected function getMaterialService()
     {
         return $this->getBiz()->service('Course:MaterialService');
+    }
+
+    protected function getCourseDraftService()
+    {
+        return $this->getBiz()->service('Course:CourseDraftService');
     }
 }

@@ -15,11 +15,6 @@ class CourseEventSubscriber implements EventSubscriberInterface
         return array(
             'course.join'            => 'onCourseJoin',
             'course.favorite'        => 'onCourseFavorite',
-            'course.note.create'     => 'onCourseNoteCreate',
-            'course.note.update'     => 'onCourseNoteUpdate',
-            'course.note.delete'     => 'onCourseNoteDelete',
-            'course.note.liked'      => 'onCourseNoteLike',
-            'course.note.cancelLike' => 'onCourseNoteCancelLike',
             'course.update'          => 'onCourseUpdate',
             'course.teacher.update'  => 'onCourseTeacherUpdate',
             'course.price.update'    => 'onCoursePriceUpdate',

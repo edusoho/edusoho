@@ -1,4 +1,4 @@
-{% extends 'open-course-manage/open-course-layout.html.twig' %}
+{% extends 'open-course-manage/layout.html.twig' %}
 
 {% set script_controller = 'open-course-manage/recommend-course' %}
 
@@ -54,7 +54,7 @@
             {% for recommendId,course in courses %}
 
               {% if course.type == 'normal' or course.type == 'live' %}
-                {% set showUrl = path('course_show',{id:course.id}) %}
+                {% set showUrl = path('course_set_show',{id:course.id}) %}
               {% else %}
                 {% set showUrl = path('open_course_show',{courseId:course.id}) %}
               {% endif %}
@@ -64,33 +64,14 @@
                 
                 <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>
                 <a class="course-picture-link" href="{{ showUrl }}" target="_blank">
-                  <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+                  <img class="course-picture" src="{{ filepath(course.cover.middle|default(null), 'course.png') }}" alt="{{ course.title }}">
                 </a>
 
                 <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="删除" style="font-size:35px;" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{course.id}}">× </button>
 
                 <div class="course-body">
                   <div style="float:right;" class="text-muted mrm mls">
-                    {% if course.type == 'normal' or course.type == 'live' %}
-                      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                        <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.coinPrice }}">
-                          {% if course.coinPrice > 0 %}
-                            {{ course.coinPrice }}{{setting('coin.coin_name')}}
-                          {% else %}
-                            免费
-                          {% endif %}
-                        </span>
-
-                      {% else %}
-                        <span class="course-price course-price-{{course.id}}" data-price="{{ course.price }}">
-                          {% if course.price > 0 %}
-                            {{ course.price }} 元
-                          {% else %}
-                            免费
-                          {% endif %}
-                        </span>
-                      {% endif %}
-                    {% endif %}    
+                    {% include 'open-course-manage/course-set-price-interval.html.twig' %}
                   </div>
 
                   <h4 class="course-title"><a href="{{ showUrl }}" target="_blank">{{ course.title }}</a>
@@ -125,7 +106,7 @@
                   {% endif %}
 
                   <div class="course-footer clearfix">
-                    {% set teacher = users[course.teacherIds|first]|default(null) %}
+                    {% set teacher = users[course.creator|first]|default(null) %}
                     {% if teacher %}
                       <div class="teacher">
                         <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
@@ -138,13 +119,13 @@
 
                       {% if setting('course.show_student_num_enabled', '1') == 1  %}
                         <span class="text-muted text-sm">{{ course.studentNum }}{{setting('default.user_name', '学员')}}</span>
-                        <span class="divider"></span>
+                        {#<span class="divider"></span>#}
                       {% endif %}  
 
-                        <span class="text-muted text-sm">
-                            {{course.lessonNum}}个课时
-                        </span>
-                         {% if course.type == 'normal' or course.type == 'live' %}
+                      {#<span class="text-muted text-sm">
+                          {{course.lessonNum}}个任务
+                      </span>#}
+                      {#{% if course.type == 'normal' or course.type == 'live' %}
                         <span class="divider"></span>
                        
                         <span class="text-muted text-sm">
@@ -155,7 +136,7 @@
                             永久
                           {% endif %}
                         </span>
-                      {% endif %}
+                      {% endif %}#}
                     </div>
 
                   </div>

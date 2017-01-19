@@ -11,24 +11,24 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.lesson.create'                => 'onCourseLessonCreate',
-            'course.lesson.delete'                => 'onCourseLessonDelete',
-            'course.lesson.update'                => 'onCourseLessonUpdate',
-            'course.lesson.publish'               => 'onCourseLessonPublish',
-            'course.lesson.unpublish'             => 'onCourseLessonUnpublish',
-            'course.lesson_start'                 => 'onLessonStart',
-            'course.lesson_finish'                => 'onLessonFinish',
-            'course.material.create'              => 'onMaterialCreate',
-            'course.material.update'              => 'onMaterialUpdate',
-            'course.material.delete'              => 'onMaterialDelete',
-            'chapter.create'                      => 'onChapterCreate',
-            'chapter.delete'                      => 'onChapterDelete',
-            'chapter.update'                      => 'onChapterUpdate',
+            /*'course.lesson.create'                => 'onCourseLessonCreate',
+        'course.lesson.delete'                => 'onCourseLessonDelete',
+        'course.lesson.update'                => 'onCourseLessonUpdate',
+        'course.lesson.publish'               => 'onCourseLessonPublish',
+        'course.lesson.unpublish'             => 'onCourseLessonUnpublish',
+        'course.lesson_start'                 => 'onLessonStart',
+        'course.lesson_finish'                => 'onLessonFinish',
+        'course.material.create'              => 'onMaterialCreate',
+        'course.material.update'              => 'onMaterialUpdate',
+        'course.material.delete'              => 'onMaterialDelete',
+        'chapter.create'                      => 'onChapterCreate',
+        'chapter.delete'                      => 'onChapterDelete',
+        'chapter.update'                      => 'onChapterUpdate',
 
-            'course.lesson.generate.video.replay' => 'onLiveLessonGenerateVideo',
-            'course.lesson.replay.create'         => 'onLiveLessonReplayCreate',
-            'course.lesson.replay.update'         => 'onLiveLessonReplayUpdate',
-            'course.lesson.review.delete'         => 'onLiveLessonReplayDelete'
+        'course.lesson.generate.video.replay' => 'onLiveLessonGenerateVideo',
+        'course.lesson.replay.create'         => 'onLiveLessonReplayCreate',
+        'course.lesson.replay.update'         => 'onLiveLessonReplayUpdate',
+        'course.lesson.review.delete'         => 'onLiveLessonReplayDelete'*/
         );
     }
 

@@ -1,254 +1,314 @@
 <?php
 namespace AppBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
+use Biz\Taxonomy\Service\CategoryService;
+use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
+use Topxia\Common\Paginator;
 
 class ExploreController extends BaseController
 {
-    public function courseAction(Request $request, $category)
+    public function liveCourseSetsAction(Request $request)
     {
-        /*$conditions = $request->query->all();
+        if (!$this->setting('course.live_course_enabled')) {
+            return $this->createMessageResponse('info', $this->get('translator')->trans('直播频道已关闭'));
+        }
 
-    $selectedTag        = '';
-    $selectedTagGroupId = '';
-    $tags               = array();
-    $categoryArray      = array();
-    $levels             = array();
+        $recentTasksCondition = array(
+            'status'     => 'published',
+            'endTime_GT' => time(),
+            'type'       => 'live'
+        );
 
-    if (!empty($conditions['tag'])) {
-    if (!empty($conditions['tag']['tags'])) {
-    $tags = $conditions['tag']['tags'];
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getTaskService()->count($recentTasksCondition)
+            , 30
+        );
+
+        $recentTasks = $this->getTaskService()->search(
+            $recentTasksCondition,
+            array('startTime' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courses          = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentTasks, 'courseId'));
+        $courses          = ArrayToolkit::index($courses, 'id');
+        $courseSets       = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($courses, 'courseSetId'));
+        $courseSets       = ArrayToolkit::index($courseSets, 'id');
+        $recentCourseSets = array();
+
+        foreach ($recentTasks as $task) {
+            $course    = $courses[$task['courseId']];
+            $courseSet = $courseSets[$course['courseSetId']];
+
+            if ($courseSet['status'] != 'published' || $courseSet['parentId'] != '0') {
+                continue;
+            }
+
+            $courseSet['task']  = $task;
+            $recentCourseSets[] = $courseSet;
+        }
+
+        $liveCourseSets = $this->getCourseSetService()->searchCourseSets(array(
+            'status'   => 'published',
+            'type'     => 'live',
+            'parentId' => '0'
+        ), 'lastest', 0, 10);
+
+        $liveCourses    = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($liveCourseSets, 'id'));
+
+        $userIds = array();
+        foreach ($liveCourses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+        }
+
+        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $default = $this->getSettingService()->get('default', array());
+        return $this->render('course-set/live/explore.html.twig', array(
+            'recentCourseSets' => $recentCourseSets,
+            'liveCourseSets'   => $liveCourseSets,
+            'users'            => $users,
+            'paginator'        => $paginator,
+            'default'          => $default
+        ));
     }
 
-    if (!empty($conditions['tag']['selectedTag'])) {
-    $selectedTag        = $conditions['tag']['selectedTag']['tag'];
-    $selectedTagGroupId = $conditions['tag']['selectedTag']['group'];
-    }
-    }
+    public function courseSetsAction(Request $request, $category)
+    {
+        $conditions = $request->query->all();
 
-    $tag = array($selectedTagGroupId => $selectedTag);
+        $selectedTag        = '';
+        $selectedTagGroupId = '';
+        $tags               = array();
+        $categoryArray      = array();
+        $levels             = array();
 
-    $flag = false;
+        if (!empty($conditions['tag'])) {
+            if (!empty($conditions['tag']['tags'])) {
+                $tags = $conditions['tag']['tags'];
+            }
 
-    foreach ($tags as $groupId => $tagId) {
-    if ($groupId == $selectedTagGroupId && $tagId != $selectedTag) {
-    $tags[$groupId] = $selectedTag;
-    $flag           = true;
-    break;
-    }
+            if (!empty($conditions['tag']['selectedTag'])) {
+                $selectedTag        = $conditions['tag']['selectedTag']['tag'];
+                $selectedTagGroupId = $conditions['tag']['selectedTag']['group'];
+            }
+        }
 
-    if ($groupId == $selectedTagGroupId && $tagId == $selectedTag) {
-    unset($tags[$groupId]);
-    $flag = true;
-    break;
-    }
-    }
+        $flag = false;
 
-    if (!$flag) {
-    $tags[$selectedTagGroupId] = $selectedTag;
-    }
+        foreach ($tags as $groupId => $tagId) {
+            if ($groupId == $selectedTagGroupId && $tagId != $selectedTag) {
+                $tags[$groupId] = $selectedTag;
+                $flag           = true;
+                break;
+            }
 
-    $tags = array_filter($tags);
+            if ($groupId == $selectedTagGroupId && $tagId == $selectedTag) {
+                unset($tags[$groupId]);
+                $flag = true;
+                break;
+            }
+        }
 
-    if (!empty($tags)) {
-    $conditions['tagIds'] = array_values($tags);
-    $conditions['tagIds'] = array_unique($conditions['tagIds']);
-    $conditions['tagIds'] = array_filter($conditions['tagIds']);
-    $conditions['tagIds'] = array_merge($conditions['tagIds']);
+        if (!$flag) {
+            $tags[$selectedTagGroupId] = $selectedTag;
+        }
 
-    $tagIdsNum = count($conditions['tagIds']);
+        $tags = array_filter($tags);
 
-    $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course');
-    $courseIds         = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
-    $flag              = array_count_values($courseIds);
+        if (!empty($tags)) {
+            $conditions['tagIds'] = array_values($tags);
+            $conditions['tagIds'] = array_unique($conditions['tagIds']);
+            $conditions['tagIds'] = array_filter($conditions['tagIds']);
+            $conditions['tagIds'] = array_merge($conditions['tagIds']);
 
-    $courseIds = array_unique($courseIds);
+            $tagIdsNum = count($conditions['tagIds']);
 
-    foreach ($courseIds as $key => $courseId) {
-    if ($flag[$courseId] != $tagIdsNum) {
-    unset($courseIds[$key]);
-    }
-    }
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course');
+            $courseIds         = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+            $flag              = array_count_values($courseIds);
 
-    if (empty($courseIds)) {
-    $conditions['courseIds'] = array(0);
-    } else {
-    $conditions['courseIds'] = $courseIds;
-    }
+            $courseIds = array_unique($courseIds);
 
-    unset($conditions['tagIds']);
-    }
+            foreach ($courseIds as $key => $courseId) {
+                if ($flag[$courseId] != $tagIdsNum) {
+                    unset($courseIds[$key]);
+                }
+            }
 
-    unset($conditions['tag']);
+            if (empty($courseIds)) {
+                $conditions['courseIds'] = array(0);
+            } else {
+                $conditions['courseIds'] = $courseIds;
+            }
 
-    $subCategory        = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
-    $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
+            unset($conditions['tagIds']);
+        }
 
-    if (!empty($conditions['subCategory']) && empty($conditions['selectedthirdLevelCategory'])) {
-    $conditions['code'] = $subCategory;
-    } elseif (!empty($conditions['selectedthirdLevelCategory'])) {
-    $conditions['code'] = $thirdLevelCategory;
-    } else {
-    $conditions['code'] = $category;
-    }
+        unset($conditions['tag']);
 
-    if (!empty($conditions['code'])) {
-    $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
+        $subCategory        = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+        $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
 
-    $conditions['categoryId'] = $categoryArray['id'];
-    }
+        if (!empty($conditions['subCategory']) && empty($conditions['selectedthirdLevelCategory'])) {
+            $conditions['code'] = $subCategory;
+        } elseif (!empty($conditions['selectedthirdLevelCategory'])) {
+            $conditions['code'] = $thirdLevelCategory;
+        } else {
+            $conditions['code'] = $category;
+        }
 
-    $category = array(
-    'category'           => $category,
-    'subCategory'        => $subCategory,
-    'thirdLevelCategory' => $thirdLevelCategory
-    );
+        if (!empty($conditions['code'])) {
+            $categoryArray = $this->getCategoryService()->getCategoryByCode($conditions['code']);
 
-    unset($conditions['code']);
+            $conditions['categoryId'] = $categoryArray['id'];
+        }
 
-    if (!isset($conditions['filter'])) {
-    $conditions['filter'] = array(
-    'type'           => 'all',
-    'price'          => 'all',
-    'currentLevelId' => 'all'
-    );
-    }
+        $category = array(
+            'category'           => $category,
+            'subCategory'        => $subCategory,
+            'thirdLevelCategory' => $thirdLevelCategory
+        );
 
-    $filter = $conditions['filter'];
+        unset($conditions['code']);
 
-    if ($filter['price'] == 'free') {
-    $coinSetting = $this->getSettingService()->get("coin");
-    $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-    $priceType   = "RMB";
+        if (!isset($conditions['filter'])) {
+            $conditions['filter'] = array(
+                'type'           => 'all',
+                'price'          => 'all',
+                'currentLevelId' => 'all'
+            );
+        }
 
-    if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
-    $priceType = $coinSetting["price_type"];
-    }
+        $filter = $conditions['filter'];
 
-    $conditions['price'] = '0.00';
-    }
+        if ($filter['price'] == 'free') {
+            $conditions['price'] = '0.00';
+        }
 
-    if ($filter['type'] == 'live') {
-    $conditions['type'] = 'live';
-    }
+        if ($filter['type'] == 'live') {
+            $conditions['type'] = 'live';
+        }
 
-    if ($this->isPluginInstalled('Vip')) {
-    $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
+        if ($this->isPluginInstalled('Vip')) {
+            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
 
-    if ($filter['currentLevelId'] != 'all') {
-    $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
-    $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
-    }
-    }
+            if ($filter['currentLevelId'] != 'all') {
+                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
+                $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
+            }
+        }
 
-    unset($conditions['filter']);
+        unset($conditions['filter']);
 
-    $courseSetting = $this->getSettingService()->get('course', array());
+        $courseSetting = $this->getSettingService()->get('course', array());
 
-    if (!isset($courseSetting['explore_default_orderBy'])) {
-    $courseSetting['explore_default_orderBy'] = 'latest';
-    }
+        if (!isset($courseSetting['explore_default_orderBy'])) {
+            $courseSetting['explore_default_orderBy'] = 'latest';
+        }
 
-    $orderBy = $courseSetting['explore_default_orderBy'];
-    $orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
-    unset($conditions['orderBy']);
+        $orderBy = $courseSetting['explore_default_orderBy'];
+        $orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
+        unset($conditions['orderBy']);
 
-    $conditions['parentId'] = 0;
-    $conditions['status']   = 'published';
+        $conditions['parentId'] = 0;
+        $conditions['status']   = 'published';
 
-    $paginator = new Paginator(
-    $this->get('request'),
-    $this->getCourseService()->searchCourseCount($conditions),
-    20
-    );
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseSetService()->countCourseSets($conditions),
+            20
+        );
 
-    if ($orderBy != 'recommendedSeq') {
-    $courses = $this->getCourseService()->searchCourses(
-    $conditions,
-    $orderBy,
-    $paginator->getOffsetCount(),
-    $paginator->getPerPageCount()
-    );
-    }
+        $courseSets = array();
+        if ($orderBy != 'recommendedSeq') {
+            $courseSets = $this->getCourseSetService()->searchCourseSets(
+                $conditions,
+                $orderBy,
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
 
-    if ($orderBy == 'recommendedSeq') {
-    $conditions['recommended'] = 1;
-    $recommendCount            = $this->getCourseService()->searchCourseCount($conditions);
-    $currentPage               = $request->query->get('page') ? $request->query->get('page') : 1;
-    $recommendPage             = intval($recommendCount / 20);
-    $recommendLeft             = $recommendCount % 20;
+        if ($orderBy == 'recommendedSeq') {
+            $conditions['recommended'] = 1;
+            $recommendCount            = $this->getCourseSetService()->countCourseSets($conditions);
+            $currentPage               = $request->query->get('page') ? $request->query->get('page') : 1;
+            $recommendPage             = intval($recommendCount / 20);
+            $recommendLeft             = $recommendCount % 20;
 
-    if ($currentPage <= $recommendPage) {
-    $courses = $this->getCourseService()->searchCourses(
-    $conditions,
-    $orderBy,
-    ($currentPage - 1) * 20,
-    20
-    );
-    } elseif (($recommendPage + 1) == $currentPage) {
-    $courses = $this->getCourseService()->searchCourses(
-    $conditions,
-    $orderBy,
-    ($currentPage - 1) * 20,
-    20
-    );
-    $conditions['recommended'] = 0;
-    $coursesTemp               = $this->getCourseService()->searchCourses(
-    $conditions,
-    'createdTime',
-    0,
-    20 - $recommendLeft
-    );
-    $courses = array_merge($courses, $coursesTemp);
-    } else {
-    $conditions['recommended'] = 0;
-    $courses                   = $this->getCourseService()->searchCourses(
-    $conditions,
-    'createdTime',
-    (20 - $recommendLeft) + ($currentPage - $recommendPage - 2) * 20,
-    20
-    );
-    }
-    }
+            if ($currentPage <= $recommendPage) {
+                $courseSets = $this->getCourseSetService()->searchCourseSets(
+                    $conditions,
+                    $orderBy,
+                    ($currentPage - 1) * 20,
+                    20
+                );
+            } elseif (($recommendPage + 1) == $currentPage) {
+                $courseSets                = $this->getCourseSetService()->searchCourseSets(
+                    $conditions,
+                    $orderBy,
+                    ($currentPage - 1) * 20,
+                    20
+                );
+                $conditions['recommended'] = 0;
+                $coursesTemp               = $this->getCourseSetService()->searchCourseSets(
+                    $conditions,
+                    array('createdTime' => 'DESC'),
+                    0,
+                    20 - $recommendLeft
+                );
+                $courseSets                = array_merge($courseSets, $coursesTemp);
+            } else {
+                $conditions['recommended'] = 0;
+                $courseSets                = $this->getCourseSetService()->searchCourseSets(
+                    $conditions,
+                    array('createdTime' => 'DESC'),
+                    (20 - $recommendLeft) + ($currentPage - $recommendPage - 2) * 20,
+                    20
+                );
+            }
+        }
 
-    $group = $this->getCategoryService()->getGroupByCode('course');
+        if (!$categoryArray) {
+            $categoryArrayDescription = array();
+        } else {
+            $categoryArrayDescription = $categoryArray['description'];
+            $categoryArrayDescription = strip_tags($categoryArrayDescription, '');
+            $categoryArrayDescription = preg_replace("/ /", "", $categoryArrayDescription);
+            $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
+        }
 
-    if (!$categoryArray) {
-    $categoryArrayDescription = array();
-    } else {
-    $categoryArrayDescription = $categoryArray['description'];
-    $categoryArrayDescription = strip_tags($categoryArrayDescription, '');
-    $categoryArrayDescription = preg_replace("/ /", "", $categoryArrayDescription);
-    $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
-    }
+        if (!$categoryArray) {
+            $categoryParent = '';
+        } else {
+            if (!$categoryArray['parentId']) {
+                $categoryParent = '';
+            } else {
+                $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
+            }
+        }
 
-    if (!$categoryArray) {
-    $categoryParent = '';
-    } else {
-    if (!$categoryArray['parentId']) {
-    $categoryParent = '';
-    } else {
-    $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
-    }
-    }
-
-    return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
-    'courses'                  => $courses,
-    'category'                 => $category,
-    'filter'                   => $filter,
-    'orderBy'                  => $orderBy,
-    'paginator'                => $paginator,
-    'consultDisplay'           => true,
-    'path'                     => 'course_explore',
-    'categoryArray'            => $categoryArray,
-    'categoryArrayDescription' => $categoryArrayDescription,
-    'categoryParent'           => $categoryParent,
-    'levels'                   => $levels,
-    'tags'                     => $tags
-    ));*/
+        return $this->render('course-set/explore.html.twig', array(
+            'courseSets'               => $courseSets,
+            'category'                 => $category,
+            'filter'                   => $filter,
+            'orderBy'                  => $orderBy,
+            'paginator'                => $paginator,
+            'consultDisplay'           => true,
+            'categoryArray'            => $categoryArray,
+            'categoryArrayDescription' => $categoryArrayDescription,
+            'categoryParent'           => $categoryParent,
+            'levels'                   => $levels,
+            'tags'                     => $tags
+        ));
     }
 
     public function classroomAction(Request $request, $category)
@@ -453,16 +513,25 @@ class ExploreController extends BaseController
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
@@ -495,16 +564,40 @@ class ExploreController extends BaseController
 
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip.VipService');
+        return $this->createService('Vip:Vip:VipService');
     }
 
-    public function getLevelService()
+    protected function getLevelService()
     {
-        return $this->createService('Vip:Vip.LevelService');
+        return $this->createService('Vip:Vip:LevelService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 }

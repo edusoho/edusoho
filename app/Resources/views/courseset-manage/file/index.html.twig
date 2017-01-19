@@ -1,5 +1,5 @@
 {% if courseSet.type == 'open' or courseSet.type == 'liveOpen' %}
-  {% set layout = 'open-course-manage/open-course-layout.html.twig' %}
+  {% set layout = 'open-course-manage/layout.html.twig' %}
 {% else %}
   {% set layout = 'courseset-manage/layout.html.twig' %}
 {% endif %}
@@ -26,7 +26,7 @@
     <div class="panel-heading">
       <a class="btn btn-info btn-sm pull-right"
         data-toggle="modal" data-target="#modal"
-        data-url="{{path('uploader_batch_uplod', {token:uploader_token(targetType, courseSet.id, 'private')}) }}"
+        data-url="{{path('uploader_batch_upload', {token:uploader_token(targetType, courseSet.id, 'private')}) }}"
       >
         <i class="glyphicon glyphicon-cloud-upload"></i>{{'添加课程文件'|trans}}
       </a>
