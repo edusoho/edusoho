@@ -43,4 +43,6 @@ interface TaskDao extends GeneralDaoInterface
     public function findFutureLiveDatesGroupByDate($courseIds, $limit);
 
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
+
+    public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
 }

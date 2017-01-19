@@ -36,4 +36,5 @@ interface CourseDao
 
     public function findCoursesByLikeTitle($title);
 
+    public function getIncomesByCourseSetIds(array $courseSetIds);
 }
