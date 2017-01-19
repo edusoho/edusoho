@@ -655,7 +655,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array();
     }
 
-    public function countUserLeaningCourses($userId, $filters = array())
+    public function countUserLearningCourses($userId, $filters = array())
     {
         $conditions = array(
             'userId' => $userId,

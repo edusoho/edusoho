@@ -341,7 +341,7 @@ class CourseController extends MobileController
         }
 
         $result          = array();
-        $result['total'] = $this->getCourseService()->countUserLeaningCourses($user['id']);
+        $result['total'] = $this->getCourseService()->countUserLearningCourses($user['id']);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
         $courses         = $this->getCourseService()->findUserLearningCourses($user['id'], $result['start'], $result['limit']);

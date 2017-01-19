@@ -1002,7 +1002,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         );
         $index++;
 
-        $learningCourseTotal = $this->controller->getCourseService()->countUserLeaningCourses($user['id']);
+        $learningCourseTotal = $this->controller->getCourseService()->countUserLearningCourses($user['id']);
         $learningCourses     = $this->controller->getCourseService()->findUserLearningCourses($user['id'], 0, $learningCourseTotal);
         $resultLearning      = $this->controller->filterCourses($learningCourses);
 

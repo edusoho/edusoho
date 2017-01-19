@@ -373,7 +373,7 @@ class CourseServiceTest extends BaseTestCase
         $tryLearn1  = $this->getCourseService()->tryLearnCourse($createCourse1['id']);
         $tryLearn2  = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
 
-        $result = $this->getCourseService()->countUserLeaningCourses($user['id'], array("type" => "normal"));
+        $result = $this->getCourseService()->countUserLearningCourses($user['id'], array("type" => "normal"));
         $this->assertEquals(2, $result);
     }
 

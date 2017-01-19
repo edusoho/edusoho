@@ -25,7 +25,7 @@ class CourseController extends CourseBaseController
         $currentUser = $this->getUser();
         $paginator   = new Paginator(
             $request,
-            $this->getCourseService()->countUserLeaningCourses($currentUser['id']),
+            $this->getCourseService()->countUserLearningCourses($currentUser['id']),
             12
         );
 

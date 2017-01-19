@@ -101,7 +101,7 @@ interface CourseService
     public function findPublicCoursesByIds(array $ids);
 
     //---start 前两个已经重构了，后面的四个也需要重构，目前还没有用到，用到的时候在重构
-    public function countUserLeaningCourses($userId, $filters = array());
+    public function countUserLearningCourses($userId, $filters = array());
 
     public function findUserLearningCourses($userId, $start, $limit, $filters = array());
 

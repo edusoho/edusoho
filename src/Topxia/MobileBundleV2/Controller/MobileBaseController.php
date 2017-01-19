@@ -473,7 +473,7 @@ class MobileBaseController extends BaseController
 
     public function filterOneLiveCourseByDESC($user)
     {
-        $learningCourseTotal = $this->getCourseService()->countUserLeaningCourses($user['id']);
+        $learningCourseTotal = $this->getCourseService()->countUserLearningCourses($user['id']);
 
         $resultLiveCourses = $this->filterLiveCourses($user, 0, $learningCourseTotal);
 
