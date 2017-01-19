@@ -16,7 +16,6 @@ class CourseSetTestpaperCopy extends TestpaperCopy
      * */
     protected function _copy($source, $config = array())
     {
-        $this->addError('CourseSetTestpaperCopy', 'copy source:'.json_encode($source));
         return $this->doCopyTestpaper($config['newCourseSet'], $source['courseSetId']);
     }
 

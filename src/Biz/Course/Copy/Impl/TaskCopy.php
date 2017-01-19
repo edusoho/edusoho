@@ -35,7 +35,6 @@ class TaskCopy extends AbstractEntityCopy
      */
     protected function _copy($source, $config = array())
     {
-        $this->addError('TaskCopy', 'copy source:'.json_encode($source));
         $user  = $this->biz['user'];
         $tasks = $this->getTaskDao()->findByCourseId($source['id']);
         if (empty($tasks)) {

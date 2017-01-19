@@ -16,7 +16,6 @@ class ActivityTestpaperCopy extends TestpaperCopy
      * */
     protected function _copy($source, $config = array())
     {
-        $this->addError('ActivityTestpaperCopy', 'copy source:'.json_encode($source));
         return $this->doCopyTestpaper($source);
     }
 

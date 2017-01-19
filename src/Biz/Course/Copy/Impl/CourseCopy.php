@@ -27,8 +27,6 @@ class CourseCopy extends AbstractEntityCopy
      */
     protected function _copy($source, $config = array())
     {
-        $this->addError('CourseCopy', 'copy source:'.json_encode($source));
-
         $user        = $this->biz['user'];
         $courseSetId = $source['courseSetId'];
         if (!empty($config['newCourseSet'])) {
@@ -66,7 +64,6 @@ class CourseCopy extends AbstractEntityCopy
 
         $new = $this->getCourseDao()->create($new);
         $this->doCopyCourseMember($new);
-        $this->addError('CourseCopy', 'copy children:'.json_encode($this->children));
         $this->childrenCopy($source, array('newCourse' => $new, 'modeChange' => $modeChange));
 
         return $new;

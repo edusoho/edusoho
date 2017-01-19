@@ -29,7 +29,6 @@ abstract class AbstractEntityCopy
         } else {
             $this->children = array();
         }
-        $this->addError('AbstractEntityCopy', 'construct --> $node/children: '.$this->node.'-/-'.json_encode($this->children));
     }
 
     /**
@@ -45,13 +44,6 @@ abstract class AbstractEntityCopy
 
     protected function childrenCopy($source, $config = array())
     {
-        // $children = $this->children;
-        // if (!empty($children)) {
-        //     foreach ($children as $child) {
-        //         $child->copy($source, $config);
-        //     }
-        // }
-        $this->addError('AbstractEntityCopy', 'copy $node/children: '.$this->node.'-/-'.json_encode($this->children));
         $children = $this->children;
         if (!empty($children)) {
             foreach ($children as $key => $child) {
@@ -72,7 +64,6 @@ abstract class AbstractEntityCopy
     {
         $that = $this;
         return $this->doTransaction(function () use ($that, $source, $config) {
-            $that->addError('AbstractEntityCopy', 'copy source node: '.$that->node);
             $result = $that->_copy($source, $config);
             return $result;
         });
@@ -82,16 +73,13 @@ abstract class AbstractEntityCopy
     {
         try {
             $this->biz['db']->beginTransaction();
-            $this->addError('AbstractEntityCopy', 'begin transaction');
 
             $result = $callback();
 
             $this->biz['db']->commit();
-            $this->addError('AbstractEntityCopy', 'commit');
             return $result;
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
-            $this->addError('AbstractEntityCopy', 'rollback: '.$e->getMessage());
             throw $e;
         }
     }

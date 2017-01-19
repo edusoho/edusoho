@@ -480,8 +480,6 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                 return $that->arrayWalk($chains, $node);
             };
         };
-
-        $this->biz['course_copy.chains1'] = '1111';
     }
 
     private function arrayWalk($array, $key)
