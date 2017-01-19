@@ -3,21 +3,22 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\ThreadDao;
-use Biz\Course\Service\CourseNoteService;
+use Topxia\Common\ArrayToolkit;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Copy\Impl\CourseCopy;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
-use Biz\Taxonomy\Service\CategoryService;
-use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Common\ArrayToolkit;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Taxonomy\Service\CategoryService;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -37,7 +38,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->findByCourseSetIds($setIds);
     }
 
-    function findCoursesByCourseSetId($courseSetId)
+    public function findCoursesByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, null);
     }
@@ -56,8 +57,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->getCourseDao()->getDefaultCoursesByCourseSetIds($courseSetIds);
     }
-
-
 
     public function getFirstPublishedCourseByCourseSetId($courseSetId)
     {
@@ -125,6 +124,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function copyCourse($fields)
+    {
+        $course = $this->tryManageCourse($fields['copyCourseId']);
+
+        $entityCopy = new CourseCopy($this->biz);
+        return $entityCopy->copy($course, $fields);
     }
 
     public function updateCourse($id, $fields)
@@ -803,8 +810,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -825,7 +831,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count      = $this->searchCourseCount($conditions);
+        $count = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 

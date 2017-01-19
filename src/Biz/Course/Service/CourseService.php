@@ -24,6 +24,13 @@ interface CourseService
 
     public function createCourse($course);
 
+    /**
+     * 复制教学计划
+     * @param  array   $fields
+     * @return mixed
+     */
+    public function copyCourse($fields);
+
     public function createChapter($chapter);
 
     public function updateChapter($courseId, $chapterId, $fields);

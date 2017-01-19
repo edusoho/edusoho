@@ -3,9 +3,13 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Content\Service\FileService;
 use Biz\Course\Dao\FavoriteDao;
+use Biz\Course\Service\ReviewService;
+use Biz\Taxonomy\Service\TagService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Copy\Impl\CourseSetCopy;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\CourseSetService;
@@ -296,6 +300,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $created;
     }
 
+    public function copyCourseSet($courseSet, $config)
+    {
+        //todo
+
+        $entityCopy = new CourseSetCopy($this->biz);
+        return $entityCopy->copy($courseSet, $config);
+    }
+
     public function updateCourseSet($id, $fields)
     {
         if (!ArrayToolkit::requireds($fields, array('title', 'categoryId', 'serializeMode'))) {
@@ -568,16 +580,25 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->biz->service('Course:CourseService');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->biz->service('Taxonomy:TagService');
     }
 
+    /**
+     * @return ReviewService
+     */
     protected function getReviewService()
     {
         return $this->biz->service('Course:ReviewService');
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
         return $this->biz->service('Content:FileService');
