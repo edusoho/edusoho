@@ -1639,6 +1639,14 @@ course_manage_chapter_delete:
     methods: [POST]
 
 #course
+course_set_explore:
+   path:  /course/explore/{category}
+   defaults: { _controller: AppBundle:Explore:courseSets, category:'' }
+
+live_course_set_explore:
+    path:  /live
+    defaults: { _controller: AppBundle:Explore:liveCourseSets }
+
 course_set_manage_courses:
   path: /course_set/{courseSetId}/manage/courses
   defaults: {_controller: AppBundle:Course/CourseManage:list}
@@ -2611,9 +2619,6 @@ org_tree:
     methods: [GET]
 
 #todo:只为展示页面
-course_explore:
-   path:  /course/explore/{category}
-   defaults: { _controller: AppBundle:Explore:course, category:'' }
 
 coupon_check:
     path:  /{type}/{id}/coupon/check
