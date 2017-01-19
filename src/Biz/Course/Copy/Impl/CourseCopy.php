@@ -17,10 +17,8 @@ class CourseCopy extends AbstractEntityCopy
      */
     public function __construct($biz)
     {
-        $this->biz        = $biz;
-        $this->children   = array();
-        $this->children[] = new TaskCopy($biz);
-        // $children[] = new CourseTestpaperCopy($biz);
+        $this->biz = $biz;
+        parent::__construct($biz, 'course');
     }
 
     /*

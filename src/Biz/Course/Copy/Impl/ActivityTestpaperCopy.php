@@ -4,6 +4,12 @@ namespace Biz\Course\Copy\Impl;
 
 class ActivityTestpaperCopy extends TestpaperCopy
 {
+    public function __construct($biz)
+    {
+        $this->biz = $biz;
+        parent::__construct($biz, 'activity-testpaper');
+    }
+
     /*
      * - $source = $activity
      * - $config:

@@ -17,6 +17,21 @@ abstract class AbstractEntityCopy
 
     protected $children;
 
+    protected $node;
+
+    public function __construct($biz, $node)
+    {
+        $this->biz  = $biz;
+        $this->node = $node;
+        $chain      = call_user_func($this->biz['course_copy.chains'], $node);
+        if (!empty($chain['children'])) {
+            $this->children = $chain['children'];
+        } else {
+            $this->children = array();
+        }
+        $this->addError('AbstractEntityCopy', 'construct --> $node/children: '.$this->node.'-/-'.json_encode($this->children));
+    }
+
     /**
      * 当前copy实体的业务逻辑，注意：
      * 1. 不需要考虑事务
@@ -30,10 +45,18 @@ abstract class AbstractEntityCopy
 
     protected function childrenCopy($source, $config = array())
     {
+        // $children = $this->children;
+        // if (!empty($children)) {
+        //     foreach ($children as $child) {
+        //         $child->copy($source, $config);
+        //     }
+        // }
+        $this->addError('AbstractEntityCopy', 'copy $node/children: '.$this->node.'-/-'.json_encode($this->children));
         $children = $this->children;
         if (!empty($children)) {
-            foreach ($children as $child) {
-                $child->copy($source, $config);
+            foreach ($children as $key => $child) {
+                $cls = new $child['clz']($this->biz, $this->node);
+                $cls->copy($source, $config);
             }
         }
     }
@@ -49,7 +72,7 @@ abstract class AbstractEntityCopy
     {
         $that = $this;
         return $this->doTransaction(function () use ($that, $source, $config) {
-            $that->addError('AbstractEntityCopy', 'copy source:'.json_encode($source));
+            $that->addError('AbstractEntityCopy', 'copy source node: '.$that->node);
             $result = $that->_copy($source, $config);
             return $result;
         });

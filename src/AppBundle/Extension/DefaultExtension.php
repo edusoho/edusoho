@@ -1,30 +1,30 @@
 <?php
 namespace AppBundle\Extension;
 
-use Biz\Activity\Type\Audio;
-use Biz\Activity\Type\Discuss;
+use Pimple\Container;
 use Biz\Activity\Type\Doc;
+use Biz\Activity\Type\Ppt;
+use Biz\Activity\Type\Live;
+use Biz\Activity\Type\Text;
+use Biz\Question\Type\Fill;
+use Biz\Activity\Type\Audio;
+use Biz\Activity\Type\Flash;
+use Biz\Activity\Type\Video;
+use Biz\Question\Type\Essay;
+use Biz\Question\Type\Choice;
+use Biz\Activity\Type\Discuss;
 use Biz\Activity\Type\Download;
 use Biz\Activity\Type\Exercise;
-use Biz\Activity\Type\Flash;
 use Biz\Activity\Type\Homework;
-use Biz\Activity\Type\Live;
-use Biz\Activity\Type\Ppt;
-use Biz\Activity\Type\Testpaper;
-use Biz\Activity\Type\Text;
-use Biz\Activity\Type\Video;
-use Biz\Question\Type\Choice;
-use Biz\Question\Type\Determine;
-use Biz\Question\Type\Essay;
-use Biz\Question\Type\Fill;
 use Biz\Question\Type\Material;
-use Biz\Question\Type\SingleChoice;
-use Biz\Question\Type\UncertainChoice;
-use Biz\Testpaper\Pattern\QuestionTypePattern;
-use Codeages\Biz\Framework\Context\Biz;
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
 use Topxia\Common\ArrayToolkit;
+use Biz\Activity\Type\Testpaper;
+use Biz\Question\Type\Determine;
+use Biz\Question\Type\SingleChoice;
+use Pimple\ServiceProviderInterface;
+use Biz\Question\Type\UncertainChoice;
+use Codeages\Biz\Framework\Context\Biz;
+use Biz\Testpaper\Pattern\QuestionTypePattern;
 
 class DefaultExtension extends Extension implements ServiceProviderInterface
 {
@@ -249,7 +249,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     {
         $biz = $this->getBiz();
         return array(
-            'text'     => array(
+            'text'      => array(
                 'meta'    => array(
                     'name' => '图文',
                     'icon' => 'es-icon es-icon-graphicclass'
@@ -261,11 +261,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'preview'         => 'AppBundle:Activity/Text:preview',
                     'finishCondition' => 'AppBundle:Activity/Text:finishCondition'
                 ),
-                'visible' => function($courseSet, $course){
-                    return $courseSet['type'] !='live';
+                'visible' => function ($courseSet, $course) {
+                    return $courseSet['type'] != 'live';
                 }
             ),
-            'video'    => array(
+            'video'     => array(
                 'meta'    => array(
                     'name' => '视频',
                     'icon' => 'es-icon es-icon-videoclass'
@@ -277,11 +277,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'preview'         => 'AppBundle:Activity/Video:preview',
                     'finishCondition' => 'AppBundle:Activity/Video:finishCondition'
                 ),
-                'visible' => function($courseSet, $course){
-                    return $courseSet['type'] !='live';
+                'visible' => function ($courseSet, $course) {
+                    return $courseSet['type'] != 'live';
                 }
             ),
-            'audio'    => array(
+            'audio'     => array(
                 'meta'    => array(
                     'name' => '音频',
                     'icon' => 'es-icon es-icon-audioclass'
@@ -293,11 +293,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'preview'         => 'AppBundle:Activity/Audio:preview',
                     'finishCondition' => 'AppBundle:Activity/Audio:finishCondition'
                 ),
-                'visible' => function($courseSet, $course){
-                    return $courseSet['type'] !='live';
+                'visible' => function ($courseSet, $course) {
+                    return $courseSet['type'] != 'live';
                 }
             ),
-            'live'     => array(
+            'live'      => array(
                 'meta'    => array(
                     'name' => '直播',
                     'icon' => 'es-icon es-icon-videocam'
@@ -308,12 +308,12 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Live:show',
                     'finishCondition' => 'AppBundle:Activity/Live:finishCondition'
                 ),
-                'visible' => function($courseSet, $course) use ($biz){
+                'visible' => function ($courseSet, $course) use ($biz) {
                     $storage = $biz->service('System:SettingService')->get('course');
                     return ArrayToolkit::get($storage, 'live_course_enabled', false);
                 }
             ),
-            'discuss'  => array(
+            'discuss'   => array(
                 'meta'    => array(
                     'name' => '讨论',
                     'icon' => 'es-icon es-icon-comment'
@@ -324,8 +324,8 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Discuss:show',
                     'finishCondition' => 'AppBundle:Activity/Discuss:finishCondition'
                 ),
-                'visible' => function($courseSet, $course){
-                    return $courseSet['type'] !='live';
+                'visible' => function ($courseSet, $course) {
+                    return $courseSet['type'] != 'live';
                 }
             ),
 
@@ -341,8 +341,8 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'preview'         => 'AppBundle:Activity/Flash:preview',
                     'finishCondition' => 'AppBundle:Activity/Flash:finishCondition'
                 ),
-                'visible' => function($courseSet, $course) use ($biz){
-                    $storage = $biz->service('System:SettingService')->get('storage');
+                'visible' => function ($courseSet, $course) use ($biz) {
+                    $storage    = $biz->service('System:SettingService')->get('storage');
                     $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
                     return $uploadMode == 'cloud' && $courseSet['type'] != 'live';
                 }
@@ -359,8 +359,8 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'preview'         => 'AppBundle:Activity/Doc:preview',
                     'finishCondition' => 'AppBundle:Activity/Doc:finishCondition'
                 ),
-                'visible' => function($courseSet, $course) use ($biz){
-                    $storage = $biz->service('System:SettingService')->get('storage');
+                'visible' => function ($courseSet, $course) use ($biz) {
+                    $storage    = $biz->service('System:SettingService')->get('storage');
                     $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
                     return $uploadMode == 'cloud' && $courseSet['type'] != 'live';
                 }
@@ -377,8 +377,8 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'preview'         => 'AppBundle:Activity/Ppt:preview',
                     'finishCondition' => 'AppBundle:Activity/Ppt:finishCondition'
                 ),
-                'visible' => function($courseSet, $course) use ($biz){
-                    $storage = $biz->service('System:SettingService')->get('storage');
+                'visible' => function ($courseSet, $course) use ($biz) {
+                    $storage    = $biz->service('System:SettingService')->get('storage');
                     $uploadMode = ArrayToolkit::get($storage, 'upload_mode', 'local');
                     return $uploadMode == 'cloud' && $courseSet['type'] != 'live';
                 }
@@ -394,7 +394,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Testpaper:show',
                     'finishCondition' => 'AppBundle:Activity/Testpaper:finishCondition'
                 ),
-                'visible' => function($courseSet, $course) use ($biz){
+                'visible' => function ($courseSet, $course) use ($biz) {
                     return true;
                 }
             ),
@@ -409,7 +409,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Homework:show',
                     'finishCondition' => 'AppBundle:Activity/Homework:finishCondition'
                 ),
-                'visible' => function($courseSet, $course) use ($biz){
+                'visible' => function ($courseSet, $course) use ($biz) {
                     return true;
                 }
             ),
@@ -424,11 +424,11 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Exercise:show',
                     'finishCondition' => 'AppBundle:Activity/Exercise:finishCondition'
                 ),
-                'visible' => function($courseSet, $course) use ($biz){
+                'visible' => function ($courseSet, $course) use ($biz) {
                     return true;
                 }
             ),
-            'download' => array(
+            'download'  => array(
                 'meta'    => array(
                     'name' => '下载资料',
                     'icon' => 'es-icon es-icon-filedownload'
@@ -439,11 +439,64 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'show'            => 'AppBundle:Activity/Download:show',
                     'finishCondition' => 'AppBundle:Activity/Download:finishCondition'
                 ),
-                'visible' => function($courseSet, $course){
+                'visible' => function ($courseSet, $course) {
                     return true;
                 }
             )
         );
+    }
+
+    // public function getCourseCopyChain($node)
+    // {
+    //     $chains = $this->biz['course_copy.chains'];
+
+    //     return $this->array_walk($chains, $node);
+    // }
+
+    protected function registerCourseCopyChain($container)
+    {
+        $chains = array(
+            'course-set' => array(
+                'clz'      => 'Biz\Course\Copy\Impl\CourseSetCopy',
+                'children' => array(
+                    'course-set-testpaper' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\CourseSetTestpaperCopy'
+                    ),
+                    'course'               => array(
+                        'clz'      => 'Biz\Course\Copy\Impl\CourseCopy',
+                        'children' => array(
+                            'task' => array(
+                                'clz' => 'Biz\Course\Copy\Impl\TaskCopy'
+                            )
+                        )
+                    )
+                )
+            )
+        );
+        $that = $this;
+        //used for course/courseSet copy
+        $container['course_copy.chains'] = function ($node) use ($that, $chains) {
+            return function ($node) use ($that, $chains) {
+                return $that->arrayWalk($chains, $node);
+            };
+        };
+
+        $this->biz['course_copy.chains1'] = '1111';
+    }
+
+    private function arrayWalk($array, $key)
+    {
+        if (!empty($array[$key])) {
+            return $array[$key];
+        }
+        $result = array();
+        foreach ($array as $k => $value) {
+            if (!empty($value['children']) && empty($result)) {
+                $result = $this->arrayWalk($value['children'], $key);
+            }
+        }
+
+        return $result;
     }
 
     public function register(Container $container)
@@ -451,27 +504,29 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         $this->registerQuestionTypes($container);
 
         $this->registerActivityTypes($container);
+
+        $this->registerCourseCopyChain($container);
     }
 
     protected function registerActivityTypes($container)
     {
-        $that                                = $this;
-        $container['activity_type.text']     = function () use ($that) {
+        $that                            = $this;
+        $container['activity_type.text'] = function () use ($that) {
             return new Text($that->getBiz());
         };
-        $container['activity_type.video']    = function () use ($that) {
+        $container['activity_type.video'] = function () use ($that) {
             return new Video($that->getBiz());
         };
-        $container['activity_type.audio']    = function () use ($that) {
+        $container['activity_type.audio'] = function () use ($that) {
             return new Audio($that->getBiz());
         };
         $container['activity_type.download'] = function () use ($that) {
             return new Download($that->getBiz());
         };
-        $container['activity_type.live']     = function () use ($that) {
+        $container['activity_type.live'] = function () use ($that) {
             return new Live($that->getBiz());
         };
-        $container['activity_type.discuss']  = function () use ($that) {
+        $container['activity_type.discuss'] = function () use ($that) {
             return new Discuss($that->getBiz());
         };
 
@@ -483,47 +538,46 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             return new Doc($that->getBiz());
         };
 
-        $container['activity_type.ppt']       = function () use ($that) {
+        $container['activity_type.ppt'] = function () use ($that) {
             return new Ppt($that->getBiz());
         };
         $container['activity_type.testpaper'] = function () use ($that) {
             return new Testpaper($that->getBiz());
         };
-        $container['activity_type.homework']  = function () use ($that) {
+        $container['activity_type.homework'] = function () use ($that) {
             return new Homework($that->getBiz());
         };
-        $container['activity_type.exercise']  = function () use ($that) {
+        $container['activity_type.exercise'] = function () use ($that) {
             return new Exercise($that->getBiz());
         };
     }
 
     protected function registerQuestionTypes($container)
     {
-        $container['question_type.choice']           = function () {
+        $container['question_type.choice'] = function () {
             return new Choice();
         };
-        $container['question_type.single_choice']    = function () {
+        $container['question_type.single_choice'] = function () {
             return new SingleChoice();
         };
         $container['question_type.uncertain_choice'] = function () {
             return new UncertainChoice();
         };
-        $container['question_type.determine']        = function () {
+        $container['question_type.determine'] = function () {
             return new Determine();
         };
-        $container['question_type.essay']            = function () {
+        $container['question_type.essay'] = function () {
             return new Essay();
         };
-        $container['question_type.fill']             = function () {
+        $container['question_type.fill'] = function () {
             return new Fill();
         };
-        $container['question_type.material']         = function () {
+        $container['question_type.material'] = function () {
             return new Material();
         };
 
         $container['testpaper_pattern.questionType'] = function ($container) {
             return new QuestionTypePattern($container);
         };
-
     }
 }

@@ -19,7 +19,8 @@ class TestpaperCopy extends AbstractEntityCopy
      */
     public function __construct($biz)
     {
-        $this->biz  = $biz;
+        $this->biz = $biz;
+        parent::__construct($biz, '');
     }
 
     /*

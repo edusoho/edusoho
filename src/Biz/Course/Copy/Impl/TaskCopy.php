@@ -18,13 +18,14 @@ class TaskCopy extends AbstractEntityCopy
      * - Activity 活动信息
      *   - ActivityConfig 活动自定义信息
      *   - Material 关联到activity的Material
+     *   - Testpaper 关联到Activity的testpaper
      *
      * @param $biz
      */
     public function __construct($biz)
     {
-        $this->biz      = $biz;
-        $this->children = array();
+        $this->biz = $biz;
+        parent::__construct($biz, 'task');
     }
 
     /*
@@ -154,7 +155,6 @@ class TaskCopy extends AbstractEntityCopy
                 if ($newActivity['mediaType'] == 'live') {
                     unset($newActivity['startTime']);
                     unset($newActivity['endTime']);
-                    $newActivity['status'] = 'draft';
                 }
                 $newActivity = $this->getActivityDao()->create($newActivity);
 
