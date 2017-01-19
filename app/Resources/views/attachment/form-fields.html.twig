@@ -4,7 +4,7 @@
   {% set list_class  = (useType == true) ? 'js-attachment-list-'~fileType  : 'js-attachment-list'%}
   {% set reupload = attachments|default(null)|length %}
   
-  {% do load_script('attachment/upload-form') %}
+  {#{% do load_script('attachment/upload-form') %}#}
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <div class="form-group">
     {% if showLabel|default(false) %}
@@ -23,7 +23,7 @@
           </div>
         {% endfor %}
       </div>
-      <a class="btn btn-primary js-upload-file {% if reupload %}hidden{% endif %}" data-toggle="modal" data-backdrop="static"
+      <a class="btn btn-primary js-upload-file" {% if reupload %}style="display: none;"{% endif %} data-toggle="modal" data-backdrop="static"
          data-target="#attachment-modal"
          data-url="{{ path('attachment_upload', {idsClass: ids_class, listClass : list_class, token:uploader_token('attachment', app.user.id, 'private')}) }}"
          title="上传附件" data-placement="bottom" data-title="上传附件">

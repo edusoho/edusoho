@@ -65,6 +65,8 @@ interface CourseService
 
     public function getUserRoleInCourse($courseId, $userId);
 
+    public function findPriceIntervalByCourseSetIds($courseSetIds);
+
     /**
      * 获取用户在教的教学计划
      *

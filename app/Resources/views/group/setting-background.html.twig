@@ -1,6 +1,7 @@
 {% extends 'group/setting-layout.html.twig' %}
 
 {% set script_controller = 'group/group_logo' %}
+{% do script(['app/js/group/logo/index.js']) %}
 
 {% block title %}{{'%groupinfo%小组'|trans({'%groupinfo%':groupinfo.title})}} - {{ parent() }}{% endblock %}
 

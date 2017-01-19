@@ -39,7 +39,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         } else {
             $conditions['targetType'] = $conditions['resType'];
             $result['count']          = $this->getUploadFileService()->searchFileCount($conditions);
-            $result['data']           = $this->getUploadFileService()->searchFiles($conditions, array('id', 'DESC'), $start, $limit);
+            $result['data']           = $this->getUploadFileService()->searchFiles($conditions, array('id' => 'DESC'), $start, $limit);
 
             $createdUserIds         = ArrayToolkit::column($result['data'], 'createdUserId');
             $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
@@ -114,11 +114,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     {
         if ($usedStatus == "used") {
             $conditions = array('startCount' => 1);
-        }else{
+        } else {
             $conditions = array('endCount' => 1);
         }
 
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
         if (!empty($files)) {
             return ArrayToolkit::column($files, 'globalId');
@@ -143,34 +143,34 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function findGlobalIdsByKeyWords($searchType, $keywords)
     {
         if ($searchType == 'course') {
-            $courses   = $this->getCourseService()->findCoursesByLikeTitle($keywords);
-            $courseIds = ArrayToolkit::column($courses, 'id');
-
-            if (empty($courseIds)) {
-                $courseIds = array('0');
-            }
+            $courseSets   = $this->getCourseSetService()->findCourseSetsLikeTitle($keywords);
+            $courseSetIds = ArrayToolkit::column($courseSets, 'id');
 
             $courseMaterials = $this->getMaterialService()->searchMaterials(
-                array('courseIds' => $courseIds),
-                array('createdTime', 'DESC'),
-                0, PHP_INT_MAX
+                array('courseSetIds' => $courseSetIds),
+                array('createdTime' => 'DESC'),
+                0,
+                PHP_INT_MAX
             );
 
             $conditions        = array();
             $conditions['ids'] = ArrayToolkit::column($courseMaterials, 'fileId');
 
-            $materials = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+            $materials = $this->getUploadFileService()->searchFiles($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
             $globalIds = ArrayToolkit::column($materials, 'globalId');
 
             return $globalIds;
         } elseif ($searchType == 'user') {
-            $users = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id', 'desc'), 0, PHP_INT_MAX);
+            $users = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id' => 'DESC'), 0, PHP_INT_MAX);
 
             $userIds = ArrayToolkit::column($users, 'id');
 
             $userIds    = empty($userIds) ? array(-1) : $userIds;
             $localFiles = $this->getUploadFileService()->searchFiles(
-                array('createdUserIds' => $userIds, 'storage' => 'cloud'), array('createdTime', 'DESC'), 0, PHP_INT_MAX
+                array('createdUserIds' => $userIds, 'storage' => 'cloud'),
+                array('createdTime' => 'DESC'),
+                0,
+                PHP_INT_MAX
             );
             $globalIds = ArrayToolkit::column($localFiles, 'globalId');
 
@@ -289,9 +289,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->createService('File:UploadFileTagService');
     }
 
-    protected function getCourseService()
+    protected function getCourseSetService()
     {
-        return ServiceKernel::instance()->createService('Course:CourseService');
+        return $this->createService('Course:CourseSetService');
     }
 
     /**

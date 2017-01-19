@@ -113,7 +113,7 @@
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('explore_default_orderBy', {latest:'最新'|trans, studentNum:'最热'|trans,recommendedSeq:'推荐'|trans}, courseSetting.explore_default_orderBy) }}
-        <p class="help-block"><a target="_blank" href="{{ path('course_explore') }}">课程列表页</a>地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。</p>
+        <p class="help-block"><a target="_blank" href="{{ path('course_set_explore') }}">课程列表页</a>地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。</p>
       </div>
     </div>
 

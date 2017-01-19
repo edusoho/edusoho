@@ -28,7 +28,7 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
                 $unrecommendedCourses = $this->getOpenCourseService()->searchCourses(array(
                     'status'      => 'published',
                     'recommended' => 0
-                ), array('createdTime', 'DESC'),
+                ), array('createdTime' => 'DESC'),
                     0, ($arguments['count'] - count($courses))
                 );
 
@@ -42,13 +42,13 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
     protected function filterConditions($arguments)
     {
         $conditions = array('status' => 'published');
-        $orderBy    = array('createdTime', 'DESC');
+        $orderBy    = array('createdTime' => 'DESC');
 
         if (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'recommendedSeq') {
             $conditions['recommended'] = 1;
-            $orderBy                   = array('recommendedSeq', 'ASC');
+            $orderBy                   = array('recommendedSeq' => 'ASC');
         } elseif (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'hitNum') {
-            $orderBy = array('hitNum', 'DESC');
+            $orderBy = array('hitNum' => 'DESC');
         }
 
         if (!empty($arguments['categoryId'])) {

@@ -426,6 +426,20 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $category;
     }
 
+    public function isCategoryCodeAvaliable($code, $exclude = null)
+    {
+        if (empty($code)) {
+            return false;
+        }
+
+        if ($code == $exclude) {
+            return true;
+        }
+
+        $category = $this->getCategoryDao()->getByCode($code);
+
+        return $category ? false : true;
+    }
 
     /**
      * @return CategoryDao
