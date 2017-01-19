@@ -40,20 +40,27 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
 
     public function onTaskFinish(Event $event)
     {
-        $taskId   = $event->getSubject();
+        $taskId = $event->getSubject();
+        $task   = $this->getTaskService()->getTask($taskId);
+
         $user     = $event->getArgument('user');
         $nextTask = $this->getTaskService()->getNextTask($taskId);
-        if (!empty($nextTask)) {
-            return;
+
+        $taskResultCount = $this->getTaskResultService()->countTaskResults(array('courseId' => $task['courseId'], 'status' => 'finish', 'userId' => $user['id']));
+
+        $fields = array(
+            'learnedNum' => $taskResultCount
+        );
+
+        if (empty($nextTask)) {
+            $fields['isLearned']    = 1;
+            $fields['finishedTime'] = time();
         }
 
         $this->getMemberService()->updateMembers(array(
             'userId' => $user['id'],
             'role'   => 'student'
-        ), array(
-            'isLearned'    => 1,
-            'finishedTime' => time()
-        ));
+        ), $fields);
     }
 
     public function onCourseThreadChange(Event $event)
@@ -103,6 +110,11 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->getBiz()->service('Task:TaskResultService');
     }
 
     /**

@@ -348,13 +348,14 @@ class SettingController extends BaseController
         $mailer = $this->getSettingService()->get('mailer', array());
 
         $default = array(
-            'enabled'  => 0,
-            'host'     => '',
-            'port'     => '',
-            'username' => '',
-            'password' => '',
-            'from'     => '',
-            'name'     => ''
+            'enabled'       => 0,
+            'host'          => '',
+            'port'          => '',
+            'username'      => '',
+            'password'      => '',
+            'from'          => '',
+            'name'          => '',
+            'encryption'    => '',
         );
         $mailer = array_merge($default, $mailer);
 

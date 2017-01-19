@@ -76,6 +76,29 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->getByFields(array('courseId' => $courseId, 'seq' => $sql));
     }
 
+    /**
+     * 统计当前时间以后每天的直播次数
+     *
+     * @param $courseIds
+     * @param $limit
+     *
+     * @return array<string, int|string>
+     */
+    public function findFutureLiveDatesGroupByDate($courseIds, $limit)
+    {
+        if (empty($courseIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $time = time();
+
+        $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `type`= 'live' AND status='published' AND courseId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
+        return $this->db()->fetchAll($sql, $courseIds);
+    }
+
+
     public function getTaskByCourseIdAndActivityId($courseId, $activityId)
     {
         return $this->getByFields(array('courseId' => $courseId, 'activityId' => $activityId));
@@ -84,6 +107,12 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     public function findByCourseIdAndIsFree($courseId, $isFree)
     {
         return $this->findByFields(array('courseId' => $courseId, 'isFree' => $isFree));
+    }
+
+    public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
+    {
+        $sql = "select sum(`time`) from `course_task_result` where `courseTaskId` in (SELECT id FROM {$this->table()}  WHERE `fromCourseSetId`= ?)";
+        return $this->db()->fetchColumn($sql, array($courseSetId)); 
     }
 
     public function declares()
@@ -95,6 +124,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'id IN ( :ids )',
                 'courseId = :courseId',
                 'courseId IN ( :courseIds )',
+                'fromCourseSetId = :fromCourseSetId',
                 'status =:status',
                 'type = :type',
                 'isFree =:isFree',

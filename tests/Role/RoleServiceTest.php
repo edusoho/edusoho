@@ -5,9 +5,8 @@ namespace Tests\Role;
 use Biz\Role\Service\RoleService;
 use Topxia\Common\Tree;
 use Topxia\Common\ArrayToolkit;
-use Biz\BaseTestCase;;
-use Permission\Common\PermissionBuilder;
-
+use Biz\BaseTestCase;
+use Biz\Role\Util\PermissionBuilder;
 
 class  RoleServiceTest extends BaseTestCase
 {
@@ -58,11 +57,42 @@ class  RoleServiceTest extends BaseTestCase
         $this->assertEquals(count(array()), count($userRole['data']));
     }
 
+    public function testSearch()
+    {
+        $role1 = array(
+            'name' => '管123理员',
+            'code' => 'ADMIN',
+            'createdUserId' => 1,
+            'data' => array()
+        );
+
+        $role2 = array(
+            'name' => '用123户',
+            'code' => 'USER',
+            'createdUserId' => 1,
+            'data' => array()
+        );
+
+        $this->getRoleDao()->create($role1);
+        $this->getRoleDao()->create($role2);
+
+        $result1 = $this->getRoleService()->searchRoles(array('nameLike' => '管12'), array(), 0, 100);
+        $this->assertCount(1, $result1);
+
+        $result2 = $this->getRoleService()->searchRoles(array('nameLike' => '用12'), array(), 0, 100);
+        $this->assertCount(1, $result2);
+    }
+
     /**
      * @return RoleService
      */
     protected function getRoleService()
     {
         return $this->getServiceKernel()->createService('Role:RoleService');
+    }
+
+    protected function getRoleDao()
+    {
+        return $this->getBiz()->dao('Role:RoleDao');
     }
 }

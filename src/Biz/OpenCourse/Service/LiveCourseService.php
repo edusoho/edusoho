@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\Course;
+namespace Biz\OpenCourse\Service;
 
 interface LiveCourseService
 {
@@ -13,8 +13,6 @@ interface LiveCourseService
     public function checkLessonStatus($lesson);
 
     public function checkCourseUserRole($lesson);
-
-    public function generateLessonReplay($course, $lesson);
 
     public function findBeginingLiveCourse($afterSecond);
 

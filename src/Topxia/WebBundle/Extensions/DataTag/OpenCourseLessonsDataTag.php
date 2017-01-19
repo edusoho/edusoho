@@ -20,7 +20,7 @@ class OpenCourseLessonsDataTag extends BaseDataTag implements DataTag
         $lessons = $this->getOpenCourseService()->searchLessons(array(
             'courseId' => $arguments['courseId'],
             'status'   => 'published'
-        ), array('seq', 'ASC'), 0, $count);
+        ), array('seq' => 'ASC'), 0, $count);
 
         return $lessons;
     }
