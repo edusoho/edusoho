@@ -151,6 +151,11 @@ class TaskCopy extends AbstractEntityCopy
                 if (!empty($ext)) {
                     $newActivity['mediaId'] = $ext['id'];
                 }
+                if ($newActivity['mediaType'] == 'live') {
+                    unset($newActivity['startTime']);
+                    unset($newActivity['endTime']);
+                    $newActivity['status'] = 'draft';
+                }
                 $newActivity = $this->getActivityDao()->create($newActivity);
 
                 $this->doCopyMaterial($activity, $newActivity, array('newCourseId' => $newCourseId, 'newCourseSetId' => $courseSetId));
