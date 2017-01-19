@@ -1,6 +1,5 @@
 
 {% do load_script('open-course/open-course-header') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 <div class="col-md-9 open-course-views" data-get-recommend-course-url="{{ path('open_course_ad_modal_recommend_course', {id: course.id, num: 3}) }}">
   {% if course.type == 'liveOpen' %}
@@ -36,7 +35,6 @@
 
     </div>
   </div>
-  <div class="black-mask"></div>
 </div>
 
 

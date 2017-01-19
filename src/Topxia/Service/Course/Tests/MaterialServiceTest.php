@@ -11,31 +11,21 @@ class MaterialServiceTest extends BaseTestCase
         $course = $this->createCourse();
         $lesson = $this->createdCourseLesson($course['id']);
 
-        $name   = 'File:UploadFileService';
         $params = array(
-            array(
-                'functionName' => 'getFile',
-                'runTimes'     => 1,
-                'withParams'   => array(1),
-                'returnValue'  => array(
-                    'id'            => 1,
-                    'storage'       => 'cloud',
-                    'filename'      => 'test',
-                    'createdUserId' => 1,
-                    'fileSize'      => 1024
-                )
+            'getFile' => array(
+                'id'            => 1,
+                'storage'       => 'cloud',
+                'filename'      => 'test',
+                'createdUserId' => 1,
+                'fileSize'      => 1024
             ),
-            array(
-                'functionName' => 'waveUploadFile',
-                'runTimes'     => 1,
-                'withParams'   => array(1),
-                'returnValue'  => array(
-                    'id'        => 1,
-                    'usedCount' => 1
-                )
+            'waveUploadFile' => array(
+                'id'        => 1,
+                'usedCount' => 1
             )
         );
-        $this->mockBiz($name, 'UploadFileService',$params);
+
+        $this->mockService(array('File:UploadFileService' => $params));
 
         $fields = array(
             'courseId' => $course['id'],

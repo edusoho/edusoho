@@ -4,7 +4,6 @@
             <div class="col-lg-3 col-md-4 col-xs-6">
                 <div class="course-item">
                   <div class="course-img">
-                    {% set course = courseSet.course %}
                     <a href="{{ path('course_set_show', {id: courseSet.id }) }}" target="_blank">
                       {% if courseSet.discountId > 0 %}
                         {% if courseSet.discount == 0 %}
@@ -39,7 +38,10 @@
                         <span class="num"><i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}</span>
                       {% endif %}
                       <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
-                      {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
+                      {% set course = courseSet.course %}
+                        {% if course|default() %}
+                          {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
+                        {% endif %}
                     </div>
                   </div>
                 </div>
