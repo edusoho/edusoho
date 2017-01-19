@@ -192,7 +192,7 @@ class CourseController extends CourseBaseController
             if ($course['status'] == 'closed' && $member == null) {
                 return $this->createMessageResponse('info', $this->getServiceKernel()->trans('课程已关闭，3秒后返回首页'), '', 3, $this->generateUrl('homepage'));
             }
-        }     
+        }
 
         if ($course['parentId'] && empty($member)) {
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
@@ -214,10 +214,7 @@ class CourseController extends CourseBaseController
 
         $items = $this->getCourseService()->getCourseItems($course['id']);
 
-        if ('normal' == $course['type']){
-            $this->dispatchEvent('course.view',
-                new ServiceEvent($course, array('userId' => $user['id'])));
-        }
+        $this->dispatchEvent('course.view', new ServiceEvent($course, array('userId' => $user['id'])));
 
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
             'course' => $course,
