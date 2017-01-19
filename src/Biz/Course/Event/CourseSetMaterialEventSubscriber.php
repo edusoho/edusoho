@@ -461,11 +461,12 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
         }
 
         $fields = array(
-            'courseId' => $lesson['courseId'],
-            'lessonId' => $lesson['id'],
-            'fileId'   => $lesson['mediaId'],
-            'source'   => 'opencourselesson',
-            'type'     => 'openCourse'
+            'courseId'    => $lesson['courseId'],
+            'lessonId'    => $lesson['id'],
+            'fileId'      => $lesson['mediaId'],
+            'source'      => 'opencourselesson',
+            'type'        => 'openCourse',
+            'courseSetId' => 0
         );
         $this->getMaterialService()->uploadMaterial($fields);
     }
