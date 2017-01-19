@@ -52,4 +52,6 @@ interface CategoryService
     public function deleteGroup($id);
 
     public function sortCategories($ids);
+
+    public function isCategoryCodeAvaliable($code, $exclude = null);
 }

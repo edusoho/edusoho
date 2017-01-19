@@ -418,7 +418,6 @@
 
     // INITIALIZE THE PLUGIN
     var pluginName = 'timer';
-    console.log($);
     $.fn[pluginName] = function(options) {
         options = options || 'start';
 

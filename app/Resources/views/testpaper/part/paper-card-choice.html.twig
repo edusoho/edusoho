@@ -1,13 +1,13 @@
-<a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm
+<span href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm
   {% if paperResult.status|default('null') == 'reviewing' and question.type == 'essay' %}
-    bg-warning
+    bg-warning js-answer-notwrong
   {% elseif paperResult.status|default('null') == 'doing' and question.testResult|default(null) %}
-    lump-card done
+    lump-card done js-answer-notwrong
   {% elseif question.testResult.status|default('noAnswer') == 'right' %}
-    bg-success 
+    bg-success js-answer-notwrong
   {% elseif question.testResult.status|default('noAnswer') == 'noAnswer' %}
-    lump-card
+    lump-card js-answer-notwrong
   {% else %}
     bg-danger 
   {% endif %}
-">{{ seq|default(0) }}</a>
+" ><i class="text-12 glyphicon glyphicon-bookmark marking-card js-marking-card hidden"></i>{{ seq|default(0) }}</span>

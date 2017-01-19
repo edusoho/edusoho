@@ -190,12 +190,6 @@ class RoleServiceImpl extends BaseService implements RoleService
             unset($conditions['cycle']);
         }
 
-        if (empty($conditions['name'])) {
-            unset($conditions['name']);
-        } else {
-            $conditions['nameLike'] = '%'.$conditions['name'].'%';
-        }
-
         return $conditions;
     }
 

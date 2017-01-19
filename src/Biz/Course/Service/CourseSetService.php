@@ -87,13 +87,13 @@ interface CourseSetService
 
     /**
      * @param array   $conditions
-     * @param array   $orderBys
+     * @param array|string $orderBys
      * @param integer $start
      * @param integer $limit
      *
      * @return array[]
      */
-    public function searchCourseSets(array $conditions, array $orderBys, $start, $limit);
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit);
 
     /**
      * @param array $conditions

@@ -143,15 +143,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function findGlobalIdsByKeyWords($searchType, $keywords)
     {
         if ($searchType == 'course') {
-            $courses   = $this->getCourseService()->findCoursesByLikeTitle($keywords);
-            $courseIds = ArrayToolkit::column($courses, 'id');
-
-            if (empty($courseIds)) {
-                $courseIds = array('0');
-            }
+            $courseSets   = $this->getCourseSetService()->findCourseSetsLikeTitle($keywords);
+            $courseSetIds = ArrayToolkit::column($courseSets, 'id');
 
             $courseMaterials = $this->getMaterialService()->searchMaterials(
-                array('courseIds' => $courseIds),
+                array('courseSetIds' => $courseSetIds),
                 array('createdTime' => 'DESC'),
                 0,
                 PHP_INT_MAX
@@ -293,9 +289,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->createService('File:UploadFileTagService');
     }
 
-    protected function getCourseService()
+    protected function getCourseSetService()
     {
-        return ServiceKernel::instance()->createService('Course:CourseService');
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
