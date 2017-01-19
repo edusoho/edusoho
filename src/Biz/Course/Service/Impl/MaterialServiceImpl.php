@@ -37,7 +37,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
                     'source'      => $fields['source'],
                     'description' => $fields['description']
                 );
-                $material = $this->updateMaterial($courseMaterials[0]['id'], $updateFields, $argument);
+                $material     = $this->updateMaterial($courseMaterials[0]['id'], $updateFields, $argument);
             } else {
                 $material = $this->addMaterial($fields, $argument);
             }
@@ -53,7 +53,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     {
         $material = $this->getMaterialDao()->create($fields);
 
-       //  $this->dispatchEvent("course.material.create", array('argument' => $argument, 'material' => $material));
+        $this->dispatchEvent("course.material.create", $material, array('argument' => $argument));
 
         return $material;
     }
@@ -63,7 +63,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         $sourceMaterial = $this->getMaterialDao()->get($id);
         $material       = $this->getMaterialDao()->update($id, $fields);
 
-      //  $this->dispatchEvent("course.material.update", array('argument' => $argument, 'material' => $material, 'sourceMaterial' => $sourceMaterial));
+        $this->dispatchEvent("course.material.update", $material, array('argument' => $argument, 'sourceMaterial' => $sourceMaterial));
 
         return $material;
     }
@@ -77,7 +77,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
         $this->getMaterialDao()->delete($materialId);
 
-       //  $this->dispatchEvent("course.material.delete", $material);
+        $this->dispatchEvent("course.material.delete", $material);
     }
 
     public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
@@ -281,7 +281,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             $fields['link']   = $material['link'];
             $fields['title']  = empty($material['description']) ? $material['link'] : $material['description'];
         } else {
-            $fields['fileId'] = (int) $material['fileId'];
+            $fields['fileId'] = (int)$material['fileId'];
             $file             = $this->getUploadFileService()->getFile($material['fileId']);
             if (empty($file)) {
                 throw $this->createServiceException('文件不存在，上传资料失败！');

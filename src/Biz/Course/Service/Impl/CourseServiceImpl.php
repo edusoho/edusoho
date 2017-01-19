@@ -60,7 +60,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
 
-
     public function getFirstPublishedCourseByCourseSetId($courseSetId)
     {
         $courses = $this->searchCourses(
@@ -290,7 +289,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             } elseif ($field === 'noteNum') {
                 $updateFields['noteNum'] = $this->getNoteService()->countCourseNoteByCourseId($id);
             } elseif ($field === 'materialNum') {
-                $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(array('courseId'=>$id));
+                $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(array('courseId' => $id));
             }
         }
 

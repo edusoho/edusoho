@@ -33,9 +33,9 @@ class OpenCourseEventSubscriber extends EventSubscriber
     {
         $fields = $event->getSubject();
 
-        $course      = $fields['course'];
-        $tagIds      = $fields['tagIds'];
-        $userId      = $fields['userId'];
+        $course = $fields['course'];
+        $tagIds = $fields['tagIds'];
+        $userId = $fields['userId'];
 
         $tagOwnerManager = new TagOwnerManager('openCourse', $course['id'], $tagIds, $userId);
         $tagOwnerManager->update();
@@ -52,7 +52,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
             throw new \RuntimeException('添加课时失败，课程不存在。');
         }
 
-        if($course['status'] === 'draft' || $lesson['type'] === 'liveOpen'){
+        if ($course['status'] === 'draft' || $lesson['type'] === 'liveOpen') {
             $this->getOpenCourseService()->publishLesson($course['id'], $lesson['id']);
         }
 
@@ -82,8 +82,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
 
     public function onMaterialCreate(Event $event)
     {
-        $context  = $event->getSubject();
-        $material = $context['material'];
+        $material = $event->getSubject();
 
         if ($material && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse') {
             $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', 1);
@@ -92,9 +91,8 @@ class OpenCourseEventSubscriber extends EventSubscriber
 
     public function onMaterialUpdate(Event $event)
     {
-        $context  = $event->getSubject();
-        $argument = $context['argument'];
-        $material = $context['material'];
+        $material = $event->getSubject();
+        $argument = $event->getArgument('argument');
 
         $lesson = $this->getOpenCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
 
@@ -129,11 +127,11 @@ class OpenCourseEventSubscriber extends EventSubscriber
     {
         if ($material['lessonId'] && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse') {
             $count = $this->getMaterialService()->countMaterials(array(
-                'courseId' => $material['courseId'],
-                'lessonId' => $material['lessonId'],
-                'source'   => 'opencoursematerial',
-                'type'     => 'openCourse'
-            )
+                    'courseId' => $material['courseId'],
+                    'lessonId' => $material['lessonId'],
+                    'source'   => 'opencoursematerial',
+                    'type'     => 'openCourse'
+                )
             );
             $this->getOpenCourseService()->updateLesson($material['courseId'], $material['lessonId'], array('materialNum' => $count));
             return true;

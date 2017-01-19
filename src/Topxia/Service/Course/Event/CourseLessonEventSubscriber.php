@@ -12,7 +12,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     //TODO 禁止topxia的事件订阅 接受 biz下的事件 这些需要迁移到biz下
     public static function getSubscribedEvents()
     {
-//        return array(
+        return array(
 //            'course.lesson.create'                => 'onCourseLessonCreate',
 //            'course.lesson.delete'                => 'onCourseLessonDelete',
 //            'course.lesson.update'                => 'onCourseLessonUpdate',
@@ -31,7 +31,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 //            'course.lesson.replay.create'         => 'onLiveLessonReplayCreate',
 //            'course.lesson.replay.update'         => 'onLiveLessonReplayUpdate',
 //            'course.lesson.review.delete'         => 'onLiveLessonReplayDelete'
-//        );
+        );
     }
 
     public function onCourseLessonCreate(Event $event)
