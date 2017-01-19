@@ -303,22 +303,24 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
 
         $material = $this->getMaterialService()->searchMaterials(
             array(
-                'courseId' => $lesson['courseId'],
-                'lessonId' => $lesson['id'],
-                'fileId'   => $lesson['mediaId'],
-                'source'   => 'opencourselesson',
-                'type'     => 'openCourse'
+                'courseId'    => $lesson['courseId'],
+                'lessonId'    => $lesson['id'],
+                'fileId'      => $lesson['mediaId'],
+                'source'      => 'opencourselesson',
+                'type'        => 'openCourse',
+                'courseSetId' => 0
             ),
             array('createdTime' => 'DESC'), 0, 1
         );
 
         if (!$material) {
             $fields = array(
-                'courseId' => $lesson['courseId'],
-                'lessonId' => $lesson['id'],
-                'fileId'   => $lesson['mediaId'],
-                'source'   => 'opencourselesson',
-                'type'     => 'openCourse'
+                'courseId'    => $lesson['courseId'],
+                'lessonId'    => $lesson['id'],
+                'fileId'      => $lesson['mediaId'],
+                'source'      => 'opencourselesson',
+                'type'        => 'openCourse',
+                'courseSetId' => 0
             );
             $this->getMaterialService()->uploadMaterial($fields);
         }
@@ -336,10 +338,11 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
 
         $material = $this->getMaterialService()->searchMaterials(
             array(
-                'courseId' => $lesson['courseId'],
-                'lessonId' => $lesson['id'],
-                'source'   => 'opencourselesson',
-                'type'     => 'openCourse'
+                'courseId'    => $lesson['courseId'],
+                'lessonId'    => $lesson['id'],
+                'source'      => 'opencourselesson',
+                'type'        => 'openCourse',
+                'courseSetId' => 0
             ),
             array('createdTime' => 'DESC'), 0, 1
         );
@@ -349,11 +352,12 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 $this->_resetExistMaterialLessonId($material[0]);
 
                 $fields = array(
-                    'courseId' => $lesson['courseId'],
-                    'lessonId' => $lesson['id'],
-                    'fileId'   => $lesson['mediaId'],
-                    'source'   => 'opencourselesson',
-                    'type'     => 'openCourse'
+                    'courseId'    => $lesson['courseId'],
+                    'lessonId'    => $lesson['id'],
+                    'fileId'      => $lesson['mediaId'],
+                    'source'      => 'opencourselesson',
+                    'type'        => 'openCourse',
+                    'courseSetId' => 0
                 );
                 $this->getMaterialService()->uploadMaterial($fields);
             } elseif ($lesson['mediaSource'] != 'self' && $lesson['mediaId'] == 0) {
@@ -361,11 +365,12 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             }
         } else {
             $fields = array(
-                'courseId' => $lesson['courseId'],
-                'lessonId' => $lesson['id'],
-                'fileId'   => $lesson['mediaId'],
-                'source'   => 'opencourselesson',
-                'type'     => 'openCourse'
+                'courseId'    => $lesson['courseId'],
+                'lessonId'    => $lesson['id'],
+                'fileId'      => $lesson['mediaId'],
+                'source'      => 'opencourselesson',
+                'type'        => 'openCourse',
+                'courseSetId' => 0
             );
             $this->getMaterialService()->uploadMaterial($fields);
         }
