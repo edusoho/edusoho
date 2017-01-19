@@ -1,6 +1,9 @@
 <?php
 namespace AppBundle\Controller\Course;
 
+use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
+use Biz\Util\EdusohoLiveClient;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
@@ -48,12 +51,40 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function replayAction(Request $request, $courseSetId, $courseId)
+    {
+        $course    = $this->getCourseService()->tryManageCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $tasks     = $this->getTaskService()->findTasksByCourseId($course['id']);
+
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        foreach ($tasks as $key => $task) {
+            $task["isEnd"]     = intval(time() - $task["endTime"]) > 0;
+            $activity = $activities[$task['activityId']];
+            $task["canRecord"] = $activity['ext']['replayStatus'] != 'videoGenerated' && $this->_canRecord($activity['ext']['liveId']);
+            $task['file']      = $this->_getLiveReplayMedia($task);
+            $task['activity']  = $activity;
+            $tasks[$key]       = $task;
+        }
+
+        $default = $this->getSettingService()->get('default', array());
+        return $this->render('course-manage/live-replay/index.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course,
+            'tasks'     => $tasks,
+            'default'   => $default
+        ));
+    }
+
     public function listAction(Request $request, $courseSetId)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
         $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
 
-        if($courseSet['type'] == 'live'){
+        if ($courseSet['type'] == 'live') {
             $course = current($courses);
             return $this->redirectToRoute('course_set_manage_course_tasks', array(
                 'courseSetId' => $courseSet['id'],
@@ -76,8 +107,8 @@ class CourseManageController extends BaseController
 
         $files = $this->prepareTaskActivityFiles($tasks);
 
-        $courseItems     = $this->getCourseService()->findCourseItems($courseId);
-        $taskPerDay      = $this->getFinishedTaskPerDay($course, $tasks);
+        $courseItems = $this->getCourseService()->findCourseItems($courseId);
+        $taskPerDay  = $this->getFinishedTaskPerDay($course, $tasks);
 
         return $this->render($this->getTasksTemplate($course), array(
             'taskNum'    => count($tasks),
@@ -91,7 +122,7 @@ class CourseManageController extends BaseController
 
     protected function getTasksTemplate($course)
     {
-        if($course['isDefault']) {
+        if ($course['isDefault']) {
             return 'course-manage/free-mode/tasks.html.twig';
         } else {
             return 'course-manage/lock-mode/tasks.html.twig';
@@ -166,7 +197,7 @@ class CourseManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $conditions = array(
+        $conditions       = array(
             'courseId' => $courseId,
             'types'    => array('text', 'video', 'audio', 'flash', 'doc', 'ppt')
         );
@@ -289,6 +320,7 @@ class CourseManageController extends BaseController
 
     /**
      * @param  $tasks
+     *
      * @return array
      */
     public function prepareTaskActivityFiles($tasks)
@@ -376,7 +408,7 @@ class CourseManageController extends BaseController
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
 
-        $status = array(
+        $status  = array(
             'created'   => '未付款',
             'paid'      => '已付款',
             'refunding' => '退款中',
@@ -432,24 +464,24 @@ class CourseManageController extends BaseController
 
         foreach ($orders as $key => $order) {
             $column = "";
-            $column .= $order['sn'].",";
-            $column .= $status[$order['status']].",";
-            $column .= $order['title'].",";
-            $column .= "《".$course['title']."》".",";
-            $column .= $order['totalPrice'].",";
+            $column .= $order['sn'] . ",";
+            $column .= $status[$order['status']] . ",";
+            $column .= $order['title'] . ",";
+            $column .= "《" . $course['title'] . "》" . ",";
+            $column .= $order['totalPrice'] . ",";
 
             if (!empty($order['coupon'])) {
-                $column .= $order['coupon'].",";
+                $column .= $order['coupon'] . ",";
             } else {
-                $column .= '无'.",";
+                $column .= '无' . ",";
             }
 
-            $column .= $order['couponDiscount'].",";
-            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate'])."," : '0,';
-            $column .= $order['amount'].",";
-            $column .= $payment[$order['payment']].",";
-            $column .= $users[$order['userId']]['nickname'].",";
-            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
+            $column .= $order['couponDiscount'] . ",";
+            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate']) . "," : '0,';
+            $column .= $order['amount'] . ",";
+            $column .= $payment[$order['payment']] . ",";
+            $column .= $users[$order['userId']]['nickname'] . ",";
+            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'] . "," : "-" . ",";
 
             if (preg_match('/管理员添加/', $order['title'])) {
                 $column .= '管理员添加,';
@@ -457,7 +489,7 @@ class CourseManageController extends BaseController
                 $column .= "-,";
             }
 
-            $column .= date('Y-n-d H:i:s', $order['createdTime']).",";
+            $column .= date('Y-n-d H:i:s', $order['createdTime']) . ",";
 
             if ($order['paidTime'] != 0) {
                 $column .= date('Y-n-d H:i:s', $order['paidTime']);
@@ -469,13 +501,13 @@ class CourseManageController extends BaseController
         }
 
         $str .= implode("\r\n", $results);
-        $str = chr(239).chr(187).chr(191).$str;
+        $str = chr(239) . chr(187) . chr(191) . $str;
 
         $filename = sprintf("%s-订单-(%s).csv", $course['title'], date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 
@@ -536,6 +568,12 @@ class CourseManageController extends BaseController
             'paginator' => $paginator,
             'students'  => $students
         ));
+    }
+
+    private function _canRecord($liveId)
+    {
+        $client = new EdusohoLiveClient();
+        return $client->isAvailableRecord($liveId);
     }
 
     protected function renderDashboardForCourse($course, $courseSet)
@@ -619,6 +657,20 @@ class CourseManageController extends BaseController
             'questionCount' => $questionCount,
             'tasks'         => $tasks
         ));
+    }
+
+    protected function _getLiveReplayMedia(array $task)
+    {
+        if ($task['type'] == 'live') {
+            $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            if ($activity['ext']['replayStatus'] == 'videoGenerated') {
+                return $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
+            } else {
+                return array();
+            }
+        }
+
+        return array();
     }
 
     protected function formatCourseDate($course)
@@ -722,11 +774,27 @@ class CourseManageController extends BaseController
     }
 
     /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
      * @return TestpaperService
      */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 
     /**

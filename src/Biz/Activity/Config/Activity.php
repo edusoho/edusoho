@@ -46,6 +46,7 @@ abstract class Activity
      */
     public function get($targetId)
     {
+        return array();
     }
 
     final public function __construct(Biz $biz)

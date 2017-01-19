@@ -109,6 +109,25 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         return $this->createLiveClient()->entryReplay($args);
     }
 
+    public function updateReplayShow($showReplayIds, $lessonId)
+    {
+        $replayLessons = $this->findReplayByLessonId($lessonId);
+
+        if (!$replayLessons) {
+            return false;
+        }
+
+        foreach ($replayLessons as $replay) {
+            if (empty($showReplayIds) || (!$replay['hidden'] && !in_array($replay['id'], $showReplayIds))) {
+                $this->updateReplay($replay['id'], array('hidden' => 1));
+            } elseif ($replay['hidden'] && in_array($replay['id'], $showReplayIds)) {
+                $this->updateReplay($replay['id'], array('hidden' => 0));
+            }
+        }
+
+        return true;
+    }
+
     public function generateReplay($liveId, $courseId, $lessonId, $liveProvider, $type)
     {
         $replayList = $this->createLiveClient()->createReplayList($liveId, "录播回放", $liveProvider);

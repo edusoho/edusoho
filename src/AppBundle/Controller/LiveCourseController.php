@@ -363,29 +363,7 @@ class LiveCourseController extends BaseController
 
     public function replayCreateAction(Request $request, $courseId, $lessonId)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $resultList = $this->getCourseService()->generateLessonReplay($courseId, $lessonId);
-
-        if (array_key_exists("error", $resultList)) {
-            return $this->createJsonResponse($resultList);
-        }
-
-        $lesson              = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $lesson["isEnd"]     = intval(time() - $lesson["endTime"]) > 0;
-        $lesson["canRecord"] = $this->_canRecord($lesson['mediaId']);
-
-        $client = new EdusohoLiveClient();
-
-        if ($lesson['type'] == 'live') {
-            $result = $client->getMaxOnline($lesson['mediaId']);
-            $this->getCourseService()->setCourseLessonMaxOnlineNum($lesson['id'], $result['onLineNum']);
-        }
-
-        return $this->render('TopxiaWebBundle:LiveCourseReplayManage:list-item.html.twig', array(
-            'course' => $this->getCourseService()->getCourse($courseId),
-            'lesson' => $lesson
-        ));
     }
 
     public function uploadModalAction(Request $request, $courseId, $lessonId)
@@ -591,13 +569,6 @@ class LiveCourseController extends BaseController
         }
 
         return $courses;
-    }
-
-    private function _canRecord($mediaId)
-    {
-        $client = new EdusohoLiveClient();
-
-        return $client->isAvailableRecord($mediaId);
     }
 
     protected function getCourseService()

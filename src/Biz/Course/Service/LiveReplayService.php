@@ -75,6 +75,8 @@ interface LiveReplayService
 
     public function entryReplay($replayId, $liveId, $liveProvider, $ssl = false);
 
+    public function updateReplayShow($showReplayIds, $lessonId);
+
     public function generateReplay($liveId, $courseId, $lessonId, $liveProvider, $type);
 
 }
