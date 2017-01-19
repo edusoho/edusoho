@@ -35,6 +35,7 @@ class UserApprovalDaoImpl extends GeneralDaoImpl implements UserApprovalDao
     public function declares()
     {
         return array(
+            'orderbys' => array('id'),
             'conditions' => array(
                 'truename LIKE :truename',
                 'createTime >=:startTime',

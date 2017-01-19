@@ -54,7 +54,7 @@ class HtmlExtension extends \Twig_Extension
                     $html .= "<option value=\"{$key}\">{$value}</option>";
                 }
             } else {
-                $html .= "<option value=\"0\">{$empty}</option>";
+                $html .= "<option value=\"\">{$empty}</option>";
             }
         }
 
