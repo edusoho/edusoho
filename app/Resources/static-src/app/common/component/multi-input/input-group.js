@@ -8,6 +8,7 @@ export default class InputGroup extends Component {
     super(props);
     this.state = {
       itemName: "",
+      itemData: null,
       searched: true,
       resultful: false,
       searchResult:[],
@@ -17,11 +18,14 @@ export default class InputGroup extends Component {
     this.searchableUrl = this.props.searchable.url;
   }
 
-  selectChange(event) {
+  selectChange(data,name) {
+    console.log(data);
+    console.log(name);
     //在这种情况下，不应该去搜索，那什么时候再搜索呢；
     this.setState({
       searched: false,
-      itemName: event.target.innerHTML,
+      itemName: name,
+      itemData: data,
     })
   }
 
@@ -42,16 +46,13 @@ export default class InputGroup extends Component {
 
     if(this.searchable && value.length > 0 && this.state.searched) {
       setTimeout(()=>{
-        console.log('seach start..');
         send(this.searchableUrl+value,searchResult=>{
-          console.log({'seach url':this.searchableUrl+value});
           if(this.state.itemName.length>0) {
             console.log({'searchResult': searchResult});
             this.setState({
               searchResult: searchResult,
-              resultful:true,
+              resultful : true,
             });
-            console.log({'searchResult':this.state.searchResult});
           }
         });
       },100)
@@ -61,12 +62,13 @@ export default class InputGroup extends Component {
   handleAdd()  {
     if(this.state.itemName.length>0) {
       //@TODO序号应该再哪里去加；
-      this.context.addItem(this.state.itemName);
+      this.props.addItem(this.state.itemName,this.state.itemData);
     }
     this.setState({
       itemName:'',
       searchResult:[],
       resultful: false,
+      itemData: null,
     })
   }
 
@@ -74,7 +76,7 @@ export default class InputGroup extends Component {
     return (
       <div className="input-group">
         <input className="form-control" value={this.state.itemName} onChange={event => this.handleNameChange(event)} onFocus = {event=>this.onFocus(event)}  />
-        { this.searchable && this.state.resultful && <Options searchResult ={this.state.searchResult} selectChange ={(event)=>this.selectChange(event)} resultful={this.state.resultful}/> }
+        { this.searchable && this.state.resultful && <Options searchResult ={this.state.searchResult} selectChange ={(event,name)=>this.selectChange(event,name)} resultful={this.state.resultful}/> }
         { this.addable && <span className="input-group-btn"><a className="btn btn-default" onClick={()=>this.handleAdd()}>添加</a></span> }
       </div>
     );
