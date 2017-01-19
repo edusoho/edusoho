@@ -10,4 +10,6 @@ interface TagGroupDao extends  GeneralDaoInterface
     public function find();
 
     public function findByIds($ids);
+
+    public function findTagGroupByName($name);
 }
