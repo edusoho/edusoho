@@ -12,7 +12,7 @@
 
   <div class="form-group">
     <select id="keywordType" class="form-control" name="keywordType">
-          {% set options = {'':'--关键词类型--','name':'角色名称','code':'编码'} %}
+          {% set options = {'':'--关键词类型--','nameLike':'角色名称','codeLike':'编码'} %}
           {{ select_options(options, app.request.get('keywordType')) }}
     </select>
   </div>
