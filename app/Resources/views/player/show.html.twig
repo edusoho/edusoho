@@ -57,7 +57,6 @@
           ></div>
         </div>
       {% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
-      {% include 'script_boot.html.twig' %}
       {% if setting("developer.cloud_sdk_cdn") %}
           {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
         {% else %}
@@ -66,6 +65,7 @@
         <script src="{{ cdnUrl }}/js-sdk/video-player/v1/sdk.js"></script>
         {% do script(['app/js/player/index.js']) %}
       {% endif %}
+      {% include 'script_boot.html.twig' %}
     {% else %}
       <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'该浏览器不支持云视频播放，请前往'|trans}}<a href="{{path('mobile')}}" target="parent">{{'下载App'|trans}}</a>。</div>
     {% endif %}

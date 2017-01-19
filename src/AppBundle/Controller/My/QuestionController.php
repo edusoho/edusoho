@@ -46,7 +46,7 @@ class QuestionController extends BaseController
         ));
     }
 
-    public function favoriteAction(Request $request)
+    public function favoriteAction(Request $request, $questionId)
     {
         if ($request->getMethod() == 'POST') {
             $user = $this->getUser();
@@ -57,9 +57,12 @@ class QuestionController extends BaseController
 
             $fields = $request->request->all();
 
-            $this->getQuestionService()->createFavoriteQuestion($fields);
+            $fields['questionId'] = $questionId;
 
-            return $this->createJsonResponse(array('result' => true, 'message' => ''));
+            $favorite = $this->getQuestionService()->createFavoriteQuestion($fields);
+
+            $cancelUrl = $this->generateUrl('my_question_unfavorite', array('id' => $favorite['id']));
+            return $this->createJsonResponse(array('result' => true, 'message' => '', 'url' => $cancelUrl));
         }
     }
 

@@ -19,7 +19,6 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Course\Impl\CourseDeleteServiceImpl;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -39,7 +38,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->findByCourseSetIds($setIds);
     }
 
-    function findCoursesByCourseSetId($courseSetId)
+    public function findCoursesByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, null);
     }
@@ -58,7 +57,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->getCourseDao()->getDefaultCoursesByCourseSetIds($courseSetIds);
     }
-
 
     public function getFirstPublishedCourseByCourseSetId($courseSetId)
     {
@@ -128,6 +126,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
     }
 
+    public function copyCourse($fields)
+    {
+        $course = $this->tryManageCourse($fields['copyCourseId']);
+
+        $entityCopy = new CourseCopy($this->biz);
+        return $entityCopy->copy($course, $fields);
+    }
+
     public function updateCourse($id, $fields)
     {
         $course = $this->tryManageCourse($id);
@@ -142,7 +148,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'summary',
             'goals',
             'audiences',
-            'enableFinish'
+            'enableFinish',
+            'serializeMode'
         ));
 
         if ($course['status'] == 'published') {
@@ -381,6 +388,9 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function validateExpiryMode($course)
     {
+        if (empty($course['expiryMode'])) {
+            return $course;
+        }
         if ($course['expiryMode'] === 'days') {
             $course['expiryStartDate'] = null;
             $course['expiryEndDate']   = null;
@@ -659,31 +669,28 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array();
     }
 
-    public function findUserLeaningCourseCount($userId, $filters = array())
+    public function countUserLearningCourses($userId, $filters = array())
     {
         $conditions = array(
-            'userId'      => $userId,
-            'role'        => 'student',
-            'learnStatus' => 'learning'
+            'userId' => $userId,
+            'role'   => 'student',
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
         }
-        return $this->getMemberDao()->countMemberFetchCourse($conditions);
-        // return $this->getMemberDao()->count($conditions);
+        return $this->getMemberDao()->countLearningMembersByUserId($userId);
     }
 
-    public function findUserLeaningCourses($userId, $start, $limit, $filters = array('type' => ''))
+    public function findUserLearningCourses($userId, $start, $limit, $filters = array('type' => ''))
     {
         $conditions = array(
-            'userId'      => $userId,
-            'role'        => 'student',
-            'learnStatus' => 'learning'
+            'userId' => $userId,
+            'role'   => 'student',
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
         }
-        $members = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime' => 'DESC'), $start, $limit);
+        $members = $this->getMemberDao()->findLearningMembers($userId, $start, $limit);
 
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
@@ -705,32 +712,32 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
-    public function findUserLeanedCourseCount($userId, $filters = array())
+    public function countUserLearnedCourses($userId, $filters = array())
     {
         $conditions = array(
-            'userId'      => $userId,
-            'role'        => 'student',
-            'learnStatus' => 'learned'
-
+            'userId'         => $userId,
+            'role'           => 'student',
+            'serializeModes' => array('none', 'finished')
         );
+        //TODO 不同类型的课程
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
         }
-        return $this->getMemberDao()->countMemberFetchCourse($conditions);
+        return $this->getMemberDao()->countLearnedMembersByUserId($userId);
 
     }
 
-    public function findUserLeanedCourses($userId, $start, $limit, $filters = array())
+    public function findUserLearnedCourses($userId, $start, $limit, $filters = array())
     {
         $conditions = array(
-            'userId'      => $userId,
-            'role'        => 'student',
-            'learnStatus' => 'learned'
+            'userId'         => $userId,
+            'role'           => 'student',
+            'serializeModes' => array('none', 'finished')
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
         }
-        $members = $this->getMemberDao()->searchMemberFetchCourse($conditions, array('createdTime' => 'DESC'), $start, $limit);
+        $members = $this->getMemberDao()->findLearnedMembers($userId, $start, $limit);
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
@@ -827,7 +834,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count      = $this->searchCourseCount($conditions);
+        $count = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 

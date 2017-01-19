@@ -46,7 +46,7 @@ class LiveActivityServiceTest extends BaseTestCase
         $savedActivity['startTime'] = time() + 2000;
         $savedActivity['endTime']   = time() + 5000;
         $savedActivity['endTime']   = 3000;
-        $updatedActivity            = $this->getLiveActivityService()->updateLiveActivity($savedActivity['id'], $savedActivity);
+        $updatedActivity            = $this->getLiveActivityService()->updateLiveActivity($savedActivity['id'], $savedActivity, array());
         $this->assertEquals($savedActivity['liveId'], $updatedActivity['liveId']);
     }
 

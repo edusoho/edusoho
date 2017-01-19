@@ -240,7 +240,10 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         $lesson  = $context['lesson'];
 
         if (!empty($lesson['mediaId'])) {
-            $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], -1);
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            if ($file['usedCount'] > 0) {
+                $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], -1);
+            }
         }
     }
 

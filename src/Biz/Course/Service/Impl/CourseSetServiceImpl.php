@@ -3,10 +3,14 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Content\Service\FileService;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Service\MaterialService;
+use Biz\Course\Service\ReviewService;
+use Biz\Taxonomy\Service\TagService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Copy\Impl\CourseSetCopy;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\CourseSetService;
@@ -157,10 +161,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  array   $conditions
-     * @param  array|string   $orderBys
-     * @param  int     $start
-     * @param  int     $limit
+     * @param  array $conditions
+     * @param  array|string $orderBys
+     * @param  int $start
+     * @param  int $limit
      * @return mixed
      */
     public function searchCourseSets(array $conditions, $orderBys, $start, $limit)
@@ -281,20 +285,20 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         // XXX
         // 1. 是否创建默认教学计划应该是可配的；
         // 2. 教学计划的内容（主要是学习模式、有效期模式）也应该是可配的
-        $defaultCourse = array(
-            'courseSetId' => $created['id'],
-            'title'       => '默认教学计划',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0,
-            'learnMode'   => 'freeMode',
-            'isDefault'   => 1,
-            'status'      => 'draft'
-        );
+        $defaultCourse = $this->generateDefaultCourse($created);
 
         $course['creator'] = $this->getCurrentUser()->getId();
         $this->getCourseService()->createCourse($defaultCourse);
 
         return $created;
+    }
+
+    public function copyCourseSet($courseSet, $config)
+    {
+        //todo
+
+        $entityCopy = new CourseSetCopy($this->biz);
+        return $entityCopy->copy($courseSet, $config);
     }
 
     public function updateCourseSet($id, $fields)
@@ -327,7 +331,18 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $item = (int)$item['id'];
             });
         }
+        $this->updateCourseSerializeMode($courseSet, $fields);
         return $this->getCourseSetDao()->update($courseSet['id'], $fields);
+    }
+
+    protected function updateCourseSerializeMode($courseSet, $fields)
+    {
+        if (isset($fields['serializeMode']) && $fields['serializeMode'] !== $courseSet['serializeMode']) {
+            $courses = $this->getCourseDao()->findByCourseSetIds(array($courseSet['id']));
+            foreach ($courses as $course) {
+                $this->getCourseService()->updateCourse($course['id'], array('serializeMode' => $fields['serializeMode']));
+            }
+        }
     }
 
     public function updateCourseSetDetail($id, $fields)
@@ -478,7 +493,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      */
     protected function getOrderBys($order)
     {
-        if(is_array($order)){
+        if (is_array($order)) {
             return $order;
         }
 
@@ -489,9 +504,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'studentNum'     => array('studentNum' => 'DESC'),
             'recommendedSeq' => array('recommendedSeq' => 'ASC')
         );
-        if(isset($typeOrderByMap[$order])){
+        if (isset($typeOrderByMap[$order])) {
             return $typeOrderByMap[$order];
-        }else{
+        } else {
             return array('createdTime' => 'DESC');
         }
     }
@@ -567,16 +582,25 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->biz->service('Course:CourseService');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->biz->service('Taxonomy:TagService');
     }
 
+    /**
+     * @return ReviewService
+     */
     protected function getReviewService()
     {
         return $this->biz->service('Course:ReviewService');
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
         return $this->biz->service('Content:FileService');
@@ -601,5 +625,24 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getCourseMaterialService()
     {
         return $this->createService('Course:MaterialService');
+    }
+
+    /**
+     * @param $created
+     * @return array
+     */
+    protected function generateDefaultCourse($created)
+    {
+        $defaultCourse = array(
+            'courseSetId'   => $created['id'],
+            'title'         => '默认教学计划',
+            'expiryMode'    => 'days',
+            'expiryDays'    => 0,
+            'learnMode'     => 'freeMode',
+            'isDefault'     => 1,
+            'serializeMode' => $created['serializeMode'],
+            'status'        => 'draft'
+        );
+        return $defaultCourse;
     }
 }

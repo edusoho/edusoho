@@ -11,11 +11,11 @@
 {% endif %}
 
 {% if 'favorite' in flags and resultStatus != 'doing' %}
-  <a class="link-gray js-favorite {% if question.id in favorites %} hidden {% endif %}" data-url="{{ path('my_question_favorite', {id:question.id, targetType:'testpaper', targetId:paper.id}) }}" data-target-type="testpaper" data-target-id="{{paper.id}}" data-question-id={{question.id}}>
+  <a class="link-gray js-favorite {% if question.id in favorites %} hidden {% endif %}" data-url="{{ path('my_question_favorite', {questionId:question.id}) }}" data-target-type="testpaper" data-target-id="{{ paper.id }}" data-question-id="{{ question.id }}">
     <span class="glyphicon glyphicon-star-empty"></span>
      {{'收藏'|trans}}
   </a>
-  <a class="link-gray js-favorite {% if question.id not in favorites %} hidden {% endif %}" data-url="{{ path('my_question_unfavorite', {id:question.id, targetType:'testpaper', targetId:paper.id}) }}" data-target-type="testpaper" data-target-id="{{paper.id}}" data-question-id={{question.id}}>
+  <a class="link-gray js-favorite {% if question.id not in favorites %} hidden {% endif %}" data-url="{{ path('my_question_unfavorite', {id:question.id}) }}" data-target-type="testpaper" data-target-id="{{ paper.id }}" data-question-id="{{ question.id }}">
     <span class="glyphicon glyphicon-star"></span>
     {{'取消收藏'|trans}}
   </a>
@@ -24,8 +24,8 @@
 {% if 'analysis' in flags %}
   {% if not question.analysis == '' %}
   <span class="view-toggle js-analysis-toggle">
-    <a class="btn  link-gray view-show"><span class="glyphicon glyphicon-chevron-down"></span> {{'展开解析'|trans}}</a>
-    <a class="btn link-gray view-hide"><span class="glyphicon glyphicon-chevron-up"></span> {{'收起解析'|trans}}</a>
+    <a class="btn link-gray view-show js-analysis"><span class="glyphicon glyphicon-chevron-down"></span> {{'展开解析'|trans}}</a>
+    <a class="btn link-gray view-hide js-analysis hidden"><span class="glyphicon glyphicon-chevron-up"></span> {{'收起解析'|trans}}</a>
   </span>
   {% endif %}
 {% endif %}
