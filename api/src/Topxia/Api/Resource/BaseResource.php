@@ -164,7 +164,6 @@ abstract class BaseResource
         if (empty($matches)) {
             return $text;
         }
-
         foreach ($matches[1] as $url) {
             $text = str_replace($url, $this->getFileUrl($url), $text);
         }
@@ -182,8 +181,8 @@ abstract class BaseResource
         }
         $path = str_replace('public://', '', $path);
         $path = str_replace('files/', '', $path);
-        $path = $this->getHttpHost()."/files/{$path}";
-
+        $files = strpos($path, '/') == 0 ? '/files' : '/files/';
+        $path = $this->getHttpHost().$files."{$path}";
         return $path;
     }
 
