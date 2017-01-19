@@ -1,6 +1,8 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class ClassroomAdminController extends BaseController
 {
     public function indexAction(Request $request)
