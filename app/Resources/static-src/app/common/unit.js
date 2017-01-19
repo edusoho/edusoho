@@ -1,3 +1,5 @@
+// @TODO移动到unit文件夹下
+
 export const trim = (str,is_global=true )=> {
   let result = str.replace(/(^\s+)|(\s+$)/g,"");
   if(is_global) {

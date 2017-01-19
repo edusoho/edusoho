@@ -1,9 +1,11 @@
 import { initEditor } from './editor';
 import notify from 'common/notify';
+import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 
 export const initThread = () => {
   let btn = '#post-thread-btn';
   let $form = $("#post-thread-form");
+  new AttachmentActions($form);
   initEditor({
     toolbar: 'Thread',
     replace: 'post_content'
