@@ -14,8 +14,6 @@ interface LiveCourseService
 
     public function checkCourseUserRole($lesson);
 
-    public function generateLessonReplay($course, $lesson);
-
     public function findBeginingLiveCourse($afterSecond);
 
 }
