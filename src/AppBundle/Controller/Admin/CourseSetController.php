@@ -370,7 +370,7 @@ class CourseSetController extends BaseController
             $isLearnedNum = $this->getMemberService()->countMembers(array('isLearned' => 1, 'courseSetId' => $courseSetId));
             $taskCount = $this->getCourseTaskService()->count(array('fromCourseSetId' => $courseSetId));
 
-            $courseSet['learnTime'] = $this->getCourseTaskService()->getLearnTimeByCourseSetId($courseSetId);
+            $courseSet['learnTime'] = $this->getCourseTaskService()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
             $courseSet['income'] = $courseSetIncomes[$courseSetId]['income'];
             $courseSet['isLearnedNum'] = $isLearnedNum;
             $courseSet['taskCount']  = $taskCount;
