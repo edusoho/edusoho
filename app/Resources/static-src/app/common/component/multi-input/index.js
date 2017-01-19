@@ -76,7 +76,6 @@ export default class MultiInput extends Component {
   }
 
   addItem = (value,data) => {
-    console.log('data old');
     initItem(this.state.dataSourceUi,value);
     this.setState({
       dataSourceUi: this.state.dataSourceUi,
@@ -105,7 +104,7 @@ export default class MultiInput extends Component {
     return (
       <div className="multi-group">
         {list}
-        <InputGroup searchable = { searchable } addable = { addable }  addItem={(value,data)=>{this.addItem(value,data)}}  />
+        <InputGroup searchable = { searchable } addable = { addable } />
         <input type='hidden' name={outputDataElement} value={JSON.stringify(outputSets)} />
       </div>
     );

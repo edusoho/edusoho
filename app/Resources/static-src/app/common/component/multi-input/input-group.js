@@ -62,7 +62,7 @@ export default class InputGroup extends Component {
   handleAdd()  {
     if(this.state.itemName.length>0) {
       //@TODO序号应该再哪里去加；
-      this.props.addItem(this.state.itemName,this.state.itemData);
+      this.context.addItem(this.state.itemName,this.state.itemData);
     }
     this.setState({
       itemName:'',

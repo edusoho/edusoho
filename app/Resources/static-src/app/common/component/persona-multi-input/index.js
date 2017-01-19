@@ -29,7 +29,6 @@ function updateChecked(dataSourceUi,id) {
 export default class PersonaMultiInput extends MultiInput {
   constructor(props) {
     super(props);
-    this.searchResult = null;
   }
 
   componentWillMount() {
@@ -41,7 +40,16 @@ export default class PersonaMultiInput extends MultiInput {
     })
   }
 
-  onChecked(event) {
+  getChildContext() {
+    return {
+      removeItem: this.removeItem,
+      sortItem: this.sortItem,
+      addItem: this.addItem,
+      onChecked:this.onChecked,
+    }
+  }
+
+  onChecked=(event)=> {
     let id = event.currentTarget.value;
     updateChecked(this.state.dataSourceUi,id);
     this.setState({
@@ -49,14 +57,15 @@ export default class PersonaMultiInput extends MultiInput {
     });
   }
 
-  addItem(value,data) {
-    console.log('addItem');
+  addItem = (value,data) =>{
+    console.log('new addItem');
     console.log(data);
-    if(!this.searchResult)  {
+    if(!data)  {
       return;
     }
     //@TODO重复添加提示
     initItem(this.state.dataSourceUi,data,this.state.dataSourceUi.length+1,this.props);
+    console.log({'add after':this.state.dataSourceUi});
     this.setState({
       dataSourceUi: this.state.dataSourceUi,
     });
@@ -84,5 +93,10 @@ PersonaMultiInput.defaultProps = {
   nickname:'nickname',
   avatar: 'avatar',
   isVisible:'isVisible',
+};
+
+PersonaMultiInput.childContextTypes = {
+  ...MultiInput.childContextTypes,
+  onChecked: React.PropTypes.func
 };
 
