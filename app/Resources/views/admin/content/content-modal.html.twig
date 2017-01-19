@@ -130,8 +130,8 @@
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
-  <script> app.lazyLoad = function() { app.load('content/content-modal') }; </script>
+
+  <script> app.load('content/content-modal'); </script>
 
 {% endblock %}
 
