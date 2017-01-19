@@ -480,17 +480,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return empty($member) ? null : $member['role'];
     }
 
-    /**
-     * 返回过去直播过的教学计划(直播课程)
-     *
-     * @return array<int>
-     */
-    public function findPastLivedCourseIds()
-    {
-        return $this->getTaskService()->findPastLivedCourseIds();
-    }
-
-
     public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished = true)
     {
         $user = $this->getCurrentUser();
