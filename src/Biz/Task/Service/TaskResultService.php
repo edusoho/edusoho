@@ -40,4 +40,6 @@ interface TaskResultService
     public function findFinishedTimeByCourseIdGroupByUserId($courseId);
 
     public function getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskId);
+
+    public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId);
 }
