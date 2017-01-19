@@ -188,7 +188,7 @@ uploader_auth:
     defaults: { _controller: AppBundle:Uploader:uploadAuth }
     methods: [GET, POST, OPTIONS]
 
-uploader_batch_uplod:
+uploader_batch_upload:
     path:  /uploader/batch_upload
     defaults: { _controller: AppBundle:Uploader:batchUpload }
 
@@ -279,8 +279,21 @@ editor_download:
     methods: [POST]
 
 liveroom_ticket:
-    path:  /liveroom/{id}/ticket
+    path:  /liveroom/{roomId}/ticket
     defaults: { _controller: AppBundle:Liveroom:ticket }
+
+live_auth:
+   path:  /live/auth
+   defaults: { _controller: AppBundle:LiveAuth:index }
+
+live_verify:
+   path:  /live/verify
+   defaults: { _controller: AppBundle:LiveCourse:verify }
+
+live_course_explore:
+   path:  /live
+   defaults: { _controller: AppBundle:LiveCourse:explore }
+
 
 course_order_detail:
    path:  /order/{id}/detail_course
@@ -1293,6 +1306,10 @@ open_course_manage_lesson_sort:
     defaults: { _controller: AppBundle:OpenCourseLessonManage:sort }
     methods: [POST]
 
+open_course_draft_create:
+   path:  /open/course/draft/create
+   defaults: { _controller: AppBundle:OpenCourseLessonManage:draftCreate }
+
 open_course_manage_picture:
     path:  /open/course/{id}/manage/picture
     defaults: { _controller: AppBundle:OpenCourseManage:picture }
@@ -1304,6 +1321,10 @@ open_course_manage_picture_crop:
 open_course_manage_teachers:
     path:  /open/course/{id}/manage/teachers
     defaults: { _controller: AppBundle:OpenCourseManage:teachers }
+
+open_course_manage_teachers_match:
+  path: /open/course/{id}/manage/teachers/match
+  defaults: {_controller: AppBundle:OpenCourseManage:teachersMatch}
 
 open_course_manage_live_time_set:
     path:  /open/course/{id}/manage/live/time
@@ -1317,6 +1338,10 @@ open_course_manage_students:
     path:  /open/course/{id}/manage/students
     defaults: { _controller: AppBundle:OpenCourseManage:students }
 
+open_course_manage_students_show:
+   path:  /open/course/{id}/manage/students/{userId}/show
+   defaults: { _controller: AppBundle:OpenCourseManage:studentDetail }
+
 open_course_manage_files:
     path:  /open/course/{id}/manage/files
     defaults: { _controller: AppBundle:OpenCourseFileManage:index }
@@ -1329,6 +1354,10 @@ open_course_manage_file_convert:
     path:  /open/course/{id}/manage/file/{fileId}/convert
     defaults: { _controller: AppBundle:OpenCourseFileManage:convert }
     methods: [POST]
+
+open_course_manage_file_status:
+   path:  /open/course/manage/file/status
+   defaults: { _controller: AppBundle:OpenCourseFileManage:fileStatus }
 
 open_course_manage_files_batch_upload:
     path:  /open/course/{id}/manage/files/batch/upload/{targetType}
@@ -1473,6 +1502,10 @@ live_open_lesson_time_check:
     path:  /open/course/{courseId}/manage/live/time/check
     defaults: { _controller: AppBundle:OpenCourseManage:lessonTimeCheck }
 
+live_open_es_live_replay_show: 
+    path:  /open/course/live/replay/{replayId}/show
+    defaults: { _controller: AppBundle:LiveOpenCourse:playESLiveReplay }
+
 open_course_member_sms:
     path:  /open/course/{id}/member/sms
     defaults: { _controller: AppBundle:OpenCourse:memberSms }
@@ -1580,9 +1613,9 @@ task_live_entry:
     path: /course/{courseId}/activity/{activityId}/live_entry
     defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
 
-task_liveroom_ticket:
-    path: /course/{courseId}/activity/{activityId}/liveroom/{roomId}/ticket
-    defaults: {_controller:  AppBundle:Liveroom:ticket}
+# task_liveroom_ticket:
+#     path: /course/{courseId}/activity/{activityId}/liveroom/{roomId}/ticket
+#     defaults: {_controller:  AppBundle:Liveroom:ticket}
 
 task_live_trigger:
     path: /course/{courseId}/activity/{activityId}/live_trigger
@@ -2637,16 +2670,16 @@ course_member_deadline_reach:
     defaults: { _controller: TopxiaWebBundle:Course:deadlineReach }
 
 course_buy:
-   path: /course/{id}/buy
-   defaults: { _controller: AppBundle:Course/CourseOrder:buy }
+    path: /course/{id}/buy
+    defaults: { _controller: AppBundle:Course/CourseOrder:buy }
 
 course_buy_modify_user_info:
-   path: /course/buy/modify_user_info
-   defaults: { _controller: AppBundle:Course/CourseOrder:modifyUserInfo }
+    path: /course/buy/modify_user_info
+    defaults: { _controller: AppBundle:Course/CourseOrder:modifyUserInfo }
 
 course_order_repay:
-   path:  /course/order/repay
-   defaults: { _controller: AppBundle:Course/CourseOrder:repay }
+    path:  /course/order/repay
+    defaults: { _controller: AppBundle:Course/CourseOrder:repay }
 
 # last route
 course_show:
