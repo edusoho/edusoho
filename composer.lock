@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5fa40f53c6e82355e06a7a3dcf315cbb",
-    "content-hash": "d1d576ea98ca5ae902710b84bc4610a9",
+    "hash": "a391eab3b308991b19137d1b8d486683",
+    "content-hash": "6eff103e65c8c51a5bf857d008f3bf15",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -215,7 +215,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/aead82de38b505be6608aad8560dfd25e275a6c3.zip",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/aead82de38b505be6608aad8560dfd25e275a6c3",
                 "reference": "aead82de38b505be6608aad8560dfd25e275a6c3",
                 "shasum": ""
             },
@@ -250,7 +250,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/biz-rate-limiter/4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019.zip",
+                "url": "https://api.github.com/repos/codeages/biz-rate-limiter/zipball/4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019",
                 "reference": "4ef5d797de4b30c2fa7b4a04a26aaa9c1a883019",
                 "shasum": ""
             },
@@ -273,20 +273,20 @@
         },
         {
             "name": "codeages/plugin-bundle",
-            "version": "v0.1.0",
+            "version": "v0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "bd7915aa65a0663664441beea3278769c45b6785"
+                "reference": "9d42b8ee81b661e57d56a7de62c73f3130c4035e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/plugin-bundle/bd7915aa65a0663664441beea3278769c45b6785.zip",
-                "reference": "bd7915aa65a0663664441beea3278769c45b6785",
+                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/9d42b8ee81b661e57d56a7de62c73f3130c4035e",
+                "reference": "9d42b8ee81b661e57d56a7de62c73f3130c4035e",
                 "shasum": ""
             },
             "require": {
-                "codeages/biz-framework": "^0.1.7",
+                "codeages/biz-framework": "^0.1.7 || ^0.2",
                 "php": "^5.3.3 || ^7.0",
                 "symfony/framework-bundle": "^2.8 || ^3.0"
             },
@@ -316,7 +316,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2016-12-01 04:00:35"
+            "time": "2017-01-18 16:26:34"
         },
         {
             "name": "codeages/rate-limiter",
@@ -328,7 +328,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/rate-limiter/5ae42fa6ef75c0b807fb68fbfc2073b9f0813120.zip",
+                "url": "https://api.github.com/repos/codeages/rate-limiter/zipball/5ae42fa6ef75c0b807fb68fbfc2073b9f0813120",
                 "reference": "5ae42fa6ef75c0b807fb68fbfc2073b9f0813120",
                 "shasum": ""
             },
@@ -370,7 +370,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/codeages/rest-api-client/660aafdec2287a82bf208e17407ae62c0172e21c.zip",
+                "url": "https://api.github.com/repos/codeages/rest-api-client/zipball/660aafdec2287a82bf208e17407ae62c0172e21c",
                 "reference": "660aafdec2287a82bf208e17407ae62c0172e21c",
                 "shasum": ""
             },
@@ -1236,7 +1236,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/endroid/EndroidQrCodeBundle/691ba76fc4c22e31a79ffa75647630212432b6b2.zip",
+                "url": "https://api.github.com/repos/endroid/EndroidQrCodeBundle/zipball/691ba76fc4c22e31a79ffa75647630212432b6b2",
                 "reference": "691ba76fc4c22e31a79ffa75647630212432b6b2",
                 "shasum": ""
             },
@@ -1795,7 +1795,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/paragonie/random_compat/c0125896dbb151380ab47e96c621741e79623beb.zip",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/c0125896dbb151380ab47e96c621741e79623beb",
                 "reference": "c0125896dbb151380ab47e96c621741e79623beb",
                 "shasum": ""
             },
@@ -3185,7 +3185,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packagist.phpcomposer.com/files/willdurand/BazingaJsTranslationBundle/2d449d345ec0f83f9479358c1d37111d0cf3df9a.zip",
+                "url": "https://api.github.com/repos/willdurand/BazingaJsTranslationBundle/zipball/2d449d345ec0f83f9479358c1d37111d0cf3df9a",
                 "reference": "2d449d345ec0f83f9479358c1d37111d0cf3df9a",
                 "shasum": ""
             },
