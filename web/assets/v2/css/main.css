@@ -15788,7 +15788,13 @@ textarea {
   width: auto;
 }
 .es-mobile .course-detail-header.after .course-header-bottom {
-  line-height: 49px;
+  line-height: 46px;
+}
+.es-mobile .course-detail-header.after .es-share.top .dropdown-menu {
+  margin-left: -14px;
+}
+.es-mobile .course-detail-header.after .es-share.top .dropdown-menu:after {
+  left: 20%;
 }
 .es-mobile body.homepage.has-app .es-wrap,
 .es-mobile body.course-list-page.has-app .es-wrap,

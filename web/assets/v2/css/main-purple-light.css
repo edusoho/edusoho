@@ -15788,7 +15788,13 @@ textarea {
   width: auto;
 }
 .es-mobile .course-detail-header.after .course-header-bottom {
-  line-height: 49px;
+  line-height: 46px;
+}
+.es-mobile .course-detail-header.after .es-share.top .dropdown-menu {
+  margin-left: -14px;
+}
+.es-mobile .course-detail-header.after .es-share.top .dropdown-menu:after {
+  left: 20%;
 }
 .es-mobile body.homepage.has-app .es-wrap,
 .es-mobile body.course-list-page.has-app .es-wrap,
@@ -15885,6 +15891,15 @@ textarea {
 .es-mobile body.my-course .es-footer {
   display: none;
 }
+.es-mobile body.homepage .es-friend-link,
+.es-mobile body.course-list-page .es-friend-link,
+.es-mobile body.open-course-list .es-friend-link,
+.es-mobile body.course-dashboard-page .es-friend-link,
+.es-mobile body.login .es-friend-link,
+.es-mobile body.register .es-friend-link,
+.es-mobile body.my-course .es-friend-link {
+  display: none;
+}
 .es-mobile body.course-list-page {
   background-color: white;
 }
@@ -15894,8 +15909,6 @@ textarea {
 .es-mobile body.course-list-page #content-container {
   margin-top: 0px;
   margin-bottom: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
 }
 .es-mobile body.course-list-page #content-container .tabs-wrapper,
 .es-mobile body.course-list-page #content-container .es-filter {
