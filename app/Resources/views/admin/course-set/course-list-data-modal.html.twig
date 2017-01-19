@@ -29,7 +29,7 @@
                 <td>{{ task.title }}</td>
                 <td>{{task.studentNum|default() }}</td>
                 <td>{{task.finishedNum|default() }}</td>
-                <td>{% if task.studentNum|default() == 0 %}0{% else %}{{task.learnTime|default() // task.studentNum|default()}}{% endif %}</td>
+                <td>{% if task.studentNum|default() == 0 %}0{% else %}{{task.learnedTime|default() // task.studentNum|default()}}{% endif %}</td>
                 <td>
                     {% if task.length|default() %}
                         {{ task.length // 60 }}

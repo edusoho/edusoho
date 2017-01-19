@@ -361,7 +361,7 @@ class CourseSetController extends BaseController
             }
         }
 
-        $courseSetIncomes = $this->getCourseService()->getIncomesByCourseSetIds($courseSetIds);
+        $courseSetIncomes = $this->getCourseSetService()->findCourseSetIncomesByCourseSetIds($courseSetIds);
         $courseSetIncomes = ArrayToolkit::index($courseSetIncomes, 'courseSetId');
 
         foreach ($courseSets as $key => &$courseSet) {
@@ -370,7 +370,7 @@ class CourseSetController extends BaseController
             $isLearnedNum = $this->getMemberService()->countMembers(array('isLearned' => 1, 'courseSetId' => $courseSetId));
             $taskCount = $this->getCourseTaskService()->count(array('fromCourseSetId' => $courseSetId));
 
-            $courseSet['learnTime'] = $this->getCourseTaskService()->getLearnTimeByCourseSetId($courseSetId);
+            $courseSet['learnedTime'] = $this->getCourseTaskService()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
             $courseSet['income'] = $courseSetIncomes[$courseSetId]['income'];
             $courseSet['isLearnedNum'] = $isLearnedNum;
             $courseSet['taskCount']  = $taskCount;
@@ -442,11 +442,11 @@ class CourseSetController extends BaseController
 
             $finishedNum = $this->getCourseTaskResultService()->countTaskResults(array('status' => 'finish', 'courseTaskId' => $task['id']));
             $studentNum = $this->getCourseTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
-            $learnTime =  $this->getCourseTaskResultService()->getLearnTimeByCourseIdGroupByCourseTaskId($task['id']);
+            $learnedTime =  $this->getCourseTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
             if (in_array($task['type'], array('video','audio'))) {
                 $activity = $this->getActivityService()->getActivity($task['activityId']);
                 $task['length'] = $activity['length'];
-                $task['watchTime'] = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activity['id']);
+                $task['watchTime'] = $this->getCourseTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
             } 
 
             if ($task['type'] == 'testpaper') {
@@ -460,7 +460,7 @@ class CourseSetController extends BaseController
             $task['finishedNum'] = $finishedNum;
             $task['studentNum'] = $studentNum;
 
-            $task['learnTime'] = $learnTime;
+            $task['learnedTime'] = $learnedTime;
         }
  
         return $this->render('admin/course-set/course-list-data-modal.html.twig', array(

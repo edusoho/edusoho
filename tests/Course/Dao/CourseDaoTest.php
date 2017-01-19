@@ -26,7 +26,7 @@ class CourseDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($expectedResult, $result, $this->getCompareKeys());
     }
 
-    public function testGetIncomesByCourseSetIds()
+    public function testfindCourseSetIncomesByCourseSetIds()
     {
         $resultResult = array(
           array(
@@ -43,7 +43,7 @@ class CourseDaoTest extends BaseDaoTestCase
         $this->mockDataObject(array('income' => 2));
         $this->mockDataObject(array('income' => 4));
         $this->mockDataObject(array('income' => 5));
-        $result = $this->getDao()->getIncomesByCourseSetIds(array(1,2));
+        $result = $this->getDao()->findCourseSetIncomesByCourseSetIds(array(1,2));
         $this->assertArrayEquals($resultResult, $result);
     }
 
