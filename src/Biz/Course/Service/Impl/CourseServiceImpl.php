@@ -962,11 +962,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function getIncomesByCourseSetIds(array $courseSetIds)
-    {
-        return $this->getCourseDao()->getIncomesByCourseSetIds($courseSetIds);
-    }
-
     protected function _prepareCourseOrderBy($sort)
     {
         if (is_array($sort)) {

@@ -361,7 +361,7 @@ class CourseSetController extends BaseController
             }
         }
 
-        $courseSetIncomes = $this->getCourseService()->getIncomesByCourseSetIds($courseSetIds);
+        $courseSetIncomes = $this->getCourseSetService()->findCourseSetIncomesByCourseSetIds($courseSetIds);
         $courseSetIncomes = ArrayToolkit::index($courseSetIncomes, 'courseSetId');
 
         foreach ($courseSets as $key => &$courseSet) {

@@ -115,12 +115,4 @@ interface CourseService
     public function sortCourseItems($courseId, $ids);
 
     public function deleteChapter($courseId, $chapterId);
-
-    /**
-     * 返回课程的营收额
-     *
-     * @param  array     $ids
-     * @return array[]
-     */
-    public function getIncomesByCourseSetIds(array $courseSetIds);
 }
