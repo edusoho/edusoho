@@ -54,7 +54,15 @@ class CourseSetCopy extends AbstractEntityCopy
             'summary',
             'goals',
             'audiences',
-            'cover'
+            'cover',
+            'categoryId',
+            'recommended',
+            'recommendedSeq',
+            'recommendedTime',
+            'discountId',
+            'discount',
+            'orgId',
+            'orgCode'
         );
         $newCourseSet = array(
             'parentId' => $courseSet['id'],
@@ -63,7 +71,7 @@ class CourseSetCopy extends AbstractEntityCopy
         );
 
         foreach ($fields as $field) {
-            if (!empty($courseSet[$field])) {
+            if (!empty($courseSet[$field]) || $courseSet[$field] == 0) {
                 $newCourseSet[$field] = $courseSet[$field];
             }
         }

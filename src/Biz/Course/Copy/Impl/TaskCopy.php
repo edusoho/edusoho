@@ -132,7 +132,7 @@ class TaskCopy extends AbstractEntityCopy
                     'fromCourseSetId' => $courseSetId
                 );
                 foreach ($fields as $field) {
-                    if (!empty($activity[$field])) {
+                    if (!empty($activity[$field]) || $activity[$field] == 0) {
                         $newActivity[$field] = $activity[$field];
                     }
                 }
@@ -152,6 +152,7 @@ class TaskCopy extends AbstractEntityCopy
                     $newActivity['mediaId'] = $ext['id'];
                 }
                 $newActivity = $this->getActivityDao()->create($newActivity);
+
                 $this->doCopyMaterial($activity, $newActivity, array('newCourseId' => $newCourseId, 'newCourseSetId' => $courseSetId));
                 $activityMap[$activity['id']] = $newActivity['id'];
             }
@@ -162,7 +163,8 @@ class TaskCopy extends AbstractEntityCopy
 
     private function doCopyMaterial($activity, $newActivity, $config = array())
     {
-        $materials = $this->getMaterialDao()->findMaterialsByLessonIdAndSource($activity['id'], 'courseactivity');
+        $source    = $activity['mediaType'] == 'download' ? 'coursematerial' : 'courseactivity';
+        $materials = $this->getMaterialDao()->findMaterialsByLessonIdAndSource($activity['id'], $source);
         if (empty($materials)) {
             return;
         }
@@ -183,7 +185,7 @@ class TaskCopy extends AbstractEntityCopy
                 'courseSetId' => $config['newCourseSetId'],
                 'courseId'    => $config['newCourseId'],
                 'lessonId'    => $newActivity['id'],
-                'source'      => 'courseactivity',
+                'source'      => $source,
                 'userId'      => $this->biz['user']['id'],
                 'copyId'      => $material['id']
             );
@@ -215,7 +217,7 @@ class TaskCopy extends AbstractEntityCopy
 
         $new = array();
         foreach ($fields as $field) {
-            if (!empty($task[$field])) {
+            if (!empty($task[$field]) || $task[$field] == 0) {
                 $new[$field] = $task[$field];
             }
         }

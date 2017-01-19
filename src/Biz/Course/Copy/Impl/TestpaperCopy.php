@@ -42,22 +42,30 @@ class TestpaperCopy extends AbstractEntityCopy
 
     private function baseCopyTestpaper($testpaper)
     {
-        return array(
-            'name'            => $testpaper['name'],
-            'description'     => $testpaper['description'],
-            'lessonId'        => 0,
-            'limitedTime'     => $testpaper['limitedTime'],
-            'pattern'         => $testpaper['pattern'],
-            'target'          => $testpaper['target'],
-            'status'          => $testpaper['status'],
-            'score'           => $testpaper['score'],
-            'passedCondition' => $testpaper['passedCondition'],
-            'itemCount'       => $testpaper['itemCount'],
-            'createdUserId'   => $this->biz['user']['id'],
-            'metas'           => $testpaper['metas'],
-            'copyId'          => $testpaper['id'],
-            'type'            => $testpaper['type']
+        $fields = array(
+            'name',
+            'description',
+            'limitedTime',
+            'pattern',
+            'target',
+            'status',
+            'score',
+            'passedCondition',
+            'itemCount',
+            'metas',
+            'type'
         );
+        $newTestpaper = array(
+            'lessonId'      => 0,
+            'createdUserId' => $this->biz['user']['id'],
+            'copyId'        => $testpaper['id']
+        );
+        foreach ($fields as $field) {
+            if (!empty($testpaper[$field]) || $testpaper[$field] == 0) {
+                $newTestpaper[$field] = $testpaper[$field];
+            }
+        }
+        return $newTestpaper;
     }
 
     private function doCopyTestpaperItems($testpaper, $newTestpaper)
@@ -99,22 +107,30 @@ class TestpaperCopy extends AbstractEntityCopy
             //@todo 这个逻辑待测试
             return $a['parentId'] < $b['parentId'];
         });
+
+        $fields = array(
+            'type',
+            'stem',
+            'score',
+            'answer',
+            'analysis',
+            'metas',
+            'categoryId',
+            'difficulty',
+            'target'
+        );
         foreach ($questions as $question) {
             $newQuestion = array(
-                'type'       => $question['type'],
-                'stem'       => $question['stem'],
-                'score'      => $question['score'],
-                'answer'     => $question['answer'],
-                'analysis'   => $question['analysis'],
-                'metas'      => $question['metas'],
-                'categoryId' => $question['categoryId'],
-                'difficulty' => $question['difficulty'],
-                'target'     => $question['target'],
-                'courseId'   => $newCourseId,
-                'lessonId'   => 0,
-                'copyId'     => $question['id'],
-                'userId'     => $this->biz['user']['id']
+                'courseId' => $newCourseId,
+                'lessonId' => 0,
+                'copyId'   => $question['id'],
+                'userId'   => $this->biz['user']['id']
             );
+            foreach ($fields as $field) {
+                if (!empty($question[$field]) || $question[$field] == 0) {
+                    $newQuestion[$field] = $question[$field];
+                }
+            }
 
             $newQuestion['parentId'] = $question['parentId'] > 0 ? $questionMap[$question['parentId']] : 0;
 

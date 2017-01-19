@@ -106,15 +106,9 @@ class CourseCopy extends AbstractEntityCopy
             'showStudentNumType',
             'serializeMode',
             'giveCredit',
-            'categoryId',
             'about',
-            'recommended',
-            'recommendedSeq',
-            'recommendedTime',
             'locationId',
             'address',
-            'discountId',
-            'discount',
             'deadlineNotify',
             'daysOfNotifyBeforeDeadline',
             'useInClassroom',
@@ -123,15 +117,13 @@ class CourseCopy extends AbstractEntityCopy
             'freeEndTime',
             'locked',
             'maxRate',
-            'orgId',
-            'orgCode',
             'cover',
             'enableFinish'
         );
 
         $new = array();
         foreach ($fields as $field) {
-            if (!empty($source[$field])) {
+            if (!empty($source[$field]) || $source[$field] == 0) {
                 $new[$field] = $source[$field];
             }
         }
