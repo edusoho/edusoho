@@ -15,6 +15,7 @@ class HomeworkManageController extends BaseController
 
         $conditions = $request->query->all();
 
+        $conditions['courseId'] = $courseSet['id'];
         $conditions['parentId'] = 0;
 
         $paginator = new Paginator(
