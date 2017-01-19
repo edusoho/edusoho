@@ -115,11 +115,14 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
+        $taskCount = $this->getTaskService()->count(array('courseId' => $course['id'], 'status' => 'published'));
 
         $review = $this->getReviewDao()->getReviewByUserIdAndCourseId($user['id'], $course['id']);
 
         $fields['parentId'] = empty($fields['parentId']) ? 0 : $fields['parentId'];
-        //$meta               = $fields['parentId'] > 0 ? array() : array('learnedNum' => $member['learnedNum'], 'lessonNum' => $course['lessonNum']);
+
+        $meta = $fields['parentId'] > 0 ? array() : array('learnedNum' => $member['learnedNum'], 'lessonNum' => $taskCount);
+
         if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getReviewDao()->create(array(
                 'userId'      => $user['id'],
@@ -130,7 +133,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
                 'parentId'    => $fields['parentId'],
                 'content'     => empty($fields['content']) ? '' : $fields['content'],
                 'createdTime' => time(),
-                'meta'        => empty($fields['meta']) ? array() : $fields['meta']
+                'meta'        => $meta
             ));
 
             $this->dispatchEvent('course.review.add', new Event($review));
@@ -139,7 +142,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
                 'rating'      => $fields['rating'],
                 'content'     => empty($fields['content']) ? '' : $fields['content'],
                 'updatedTime' => time(),
-                'meta'        => empty($fields['meta']) ? array() : $fields['meta']
+                'meta'        => $meta
             ));
 
             $this->dispatchEvent('course.review.update', new Event($review));
@@ -241,5 +244,10 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }
