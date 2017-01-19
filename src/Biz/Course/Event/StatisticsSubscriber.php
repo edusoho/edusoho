@@ -16,8 +16,8 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     public static function getSubscribedEvents()
     {
         return array(
-            'course.task.create'    => 'onTaskNumberChange',
-            'course.task.delete'    => 'onTaskNumberChange',
+            'course.task.create'    => 'onTaskCreate',
+            'course.task.delete'    => 'onTaskDelete',
             'course.task.publish'   => 'onPublishTaskNumberChange',
             'course.task.unpublish' => 'onPublishTaskNumberChange',
 
@@ -30,12 +30,14 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         );
     }
 
-    public function onTaskNumberChange(Event $event)
+    public function onTaskCreate(Event $event)
     {
-        $task = $event->getSubject();
-        $this->getCourseService()->updateCourseStatistics($task['courseId'], array(
-            'taskNum'
-        ));
+        $this->onTaskNumberChange($event, array('taskNum'));
+    }
+
+    public function onTaskDelete(Event $event)
+    {
+        $this->onTaskNumberChange($event, array('taskNum', 'publishedTaskNum'));
     }
 
     public function onPublishTaskNumberChange(Event $event)
@@ -61,6 +63,12 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $this->getCourseService()->updateCourseStatistics($review['courseId'], array(
             'ratingNum'
         ));
+    }
+
+    protected function onTaskNumberChange($event, $fields)
+    {
+        $task = $event->getSubject();
+        $this->getCourseService()->updateCourseStatistics($task['courseId'], $fields);
     }
 
     /**
