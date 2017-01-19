@@ -468,7 +468,7 @@ class MaterialServiceTest extends BaseTestCase
         $material2 = $this->getMaterialService()->addMaterial($fields2, $fields2);
 
         $conditions     = array('type' => 'course');
-        $materialsCount = $this->getMaterialService()->searchMaterialCount($conditions);
+        $materialsCount = $this->getMaterialService()->countMaterials($conditions);
 
         $this->assertEquals(1, $materialsCount);
     }

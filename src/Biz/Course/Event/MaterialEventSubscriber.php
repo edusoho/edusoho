@@ -23,27 +23,25 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
 
     public function onCourseMaterialCreate(Event $event)
     {
-        $material = $event->getSubject();
-
-        $this->getCourseService()->updateCourseStatistics($material['courseId'], array('materialNum'));
-        $this->getCourseSetService()->updateCourseSetStatistics($material['courseSetId'], array('materialNum'));
+        $this->updateMaterialNum($event);
     }
 
     public function onCourseMaterialUpdate(Event $event)
     {
-        $material = $event->getSubject();
-
-        $this->getCourseService()->updateCourseStatistics($material['courseId'], array('materialNum'));
-        $this->getCourseSetService()->updateCourseSetStatistics($material['courseSetId'], array('materialNum'));
+        $this->updateMaterialNum($event);
     }
 
     public function onCourseMaterialDelete(Event $event)
+    {
+        $this->updateMaterialNum($event);
+    }
+
+    protected function updateMaterialNum($event)
     {
         $material = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($material['courseId'], array('materialNum'));
         $this->getCourseSetService()->updateCourseSetStatistics($material['courseSetId'], array('materialNum'));
     }
-
 
     /**
      * @return CourseService

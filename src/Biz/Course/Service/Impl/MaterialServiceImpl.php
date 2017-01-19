@@ -48,11 +48,12 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         return $material;
     }
 
+
     public function addMaterial($fields, $argument)
     {
         $material = $this->getMaterialDao()->create($fields);
 
-         $this->dispatchEvent("course.material.create", array('argument' => $argument, 'material' => $material));
+       //  $this->dispatchEvent("course.material.create", array('argument' => $argument, 'material' => $material));
 
         return $material;
     }
@@ -62,7 +63,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         $sourceMaterial = $this->getMaterialDao()->get($id);
         $material       = $this->getMaterialDao()->update($id, $fields);
 
-        $this->dispatchEvent("course.material.update", array('argument' => $argument, 'material' => $material, 'sourceMaterial' => $sourceMaterial));
+      //  $this->dispatchEvent("course.material.update", array('argument' => $argument, 'material' => $material, 'sourceMaterial' => $sourceMaterial));
 
         return $material;
     }
@@ -76,7 +77,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
         $this->getMaterialDao()->delete($materialId);
 
-         $this->dispatchEvent("course.material.delete", $material);
+       //  $this->dispatchEvent("course.material.delete", $material);
     }
 
     public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
@@ -162,7 +163,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         return $this->getMaterialDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchMaterialCount($conditions)
+    public function countMaterials($conditions)
     {
         return $this->getMaterialDao()->count($conditions);
     }

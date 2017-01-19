@@ -55,7 +55,7 @@ class OpenCourseFileManageController extends BaseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $file   = $this->getUploadFileService()->getFile($fileId);
 
-        $materialCount = $this->getMaterialService()->searchMaterialCount(
+        $materialCount = $this->getMaterialService()->countMaterials(
             array(
                 'courseId' => $id,
                 'fileId'   => $fileId

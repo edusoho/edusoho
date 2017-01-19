@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -8,28 +9,29 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CourseLessonEventSubscriber implements EventSubscriberInterface
 {
+    //TODO 禁止topxia的事件订阅 接受 biz下的事件 这些需要迁移到biz下
     public static function getSubscribedEvents()
     {
-        return array(
-            'course.lesson.create'                => 'onCourseLessonCreate',
-            'course.lesson.delete'                => 'onCourseLessonDelete',
-            'course.lesson.update'                => 'onCourseLessonUpdate',
-            'course.lesson.publish'               => 'onCourseLessonPublish',
-            'course.lesson.unpublish'             => 'onCourseLessonUnpublish',
-            'course.lesson_start'                 => 'onLessonStart',
-            'course.lesson_finish'                => 'onLessonFinish',
-            'course.material.create'              => 'onMaterialCreate',
-            'course.material.update'              => 'onMaterialUpdate',
-            'course.material.delete'              => 'onMaterialDelete',
-            'chapter.create'                      => 'onChapterCreate',
-            'chapter.delete'                      => 'onChapterDelete',
-            'chapter.update'                      => 'onChapterUpdate',
-
-            'course.lesson.generate.video.replay' => 'onLiveLessonGenerateVideo',
-            'course.lesson.replay.create'         => 'onLiveLessonReplayCreate',
-            'course.lesson.replay.update'         => 'onLiveLessonReplayUpdate',
-            'course.lesson.review.delete'         => 'onLiveLessonReplayDelete'
-        );
+//        return array(
+//            'course.lesson.create'                => 'onCourseLessonCreate',
+//            'course.lesson.delete'                => 'onCourseLessonDelete',
+//            'course.lesson.update'                => 'onCourseLessonUpdate',
+//            'course.lesson.publish'               => 'onCourseLessonPublish',
+//            'course.lesson.unpublish'             => 'onCourseLessonUnpublish',
+//            'course.lesson_start'                 => 'onLessonStart',
+//            'course.lesson_finish'                => 'onLessonFinish',
+//            'course.material.create'              => 'onMaterialCreate',
+//            'course.material.update'              => 'onMaterialUpdate',
+//            'course.material.delete'              => 'onMaterialDelete',
+//            'chapter.create'                      => 'onChapterCreate',
+//            'chapter.delete'                      => 'onChapterDelete',
+//            'chapter.update'                      => 'onChapterUpdate',
+//
+//            'course.lesson.generate.video.replay' => 'onLiveLessonGenerateVideo',
+//            'course.lesson.replay.create'         => 'onLiveLessonReplayCreate',
+//            'course.lesson.replay.update'         => 'onLiveLessonReplayUpdate',
+//            'course.lesson.review.delete'         => 'onLiveLessonReplayDelete'
+//        );
     }
 
     public function onCourseLessonCreate(Event $event)
@@ -578,7 +580,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
     private function _waveLessonMaterialNum($material)
     {
         if ($material['lessonId'] && $material['source'] == 'coursematerial' && $material['type'] == 'course') {
-            $count = $this->getMaterialService()->searchMaterialCount(array(
+            $count = $this->getMaterialService()->countMaterials(array(
                 'courseId' => $material['courseId'],
                 'lessonId' => $material['lessonId'],
                 'source'   => 'coursematerial',

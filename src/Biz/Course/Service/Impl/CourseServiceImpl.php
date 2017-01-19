@@ -10,6 +10,7 @@ use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Service\TaskService;
@@ -289,7 +290,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             } elseif ($field === 'noteNum') {
                 $updateFields['noteNum'] = $this->getNoteService()->countCourseNoteByCourseId($id);
             } elseif ($field === 'materialNum') {
-                $updateFields['materialNum'] = $this->getCourseMaterialService()->countCourseNoteByCourseId($id);
+                $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(array('courseId'=>$id));
             }
         }
 
@@ -1067,7 +1068,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('Course:MemberService');
     }
 
-
+    /**
+     * @return MaterialService
+     */
     protected function getCourseMaterialService()
     {
         return $this->createService('Course:MaterialService');

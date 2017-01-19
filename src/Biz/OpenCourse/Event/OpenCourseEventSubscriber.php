@@ -128,7 +128,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
     private function _waveLessonMaterialNum($material)
     {
         if ($material['lessonId'] && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse') {
-            $count = $this->getMaterialService()->searchMaterialCount(array(
+            $count = $this->getMaterialService()->countMaterials(array(
                 'courseId' => $material['courseId'],
                 'lessonId' => $material['lessonId'],
                 'source'   => 'opencoursematerial',

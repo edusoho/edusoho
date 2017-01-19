@@ -452,7 +452,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         /*$paginator = new Paginator(
         $request,
-        $this->getMaterialService()->searchMaterialCount($conditions),
+        $this->getMaterialService()->countMaterials($conditions),
         5
         );*/
 
