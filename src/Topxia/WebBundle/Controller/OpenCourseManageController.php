@@ -301,6 +301,7 @@ class OpenCourseManageController extends BaseController
             'courses' => $courses,
             'filter'  => $filter,
             'courseId'  => $id,
+            'title' => $request->request->get('key'),
             'paginator' => $paginator
         ));
     }
