@@ -194,6 +194,11 @@ import QuestionOperate from 'app/common/component/question-operate';
 import xxx from 'xxxplugin/xx/xxx.js';
 ```
 
+### 重要更新记录
+* 引入nodemon (2017-01-19)
+开发环境下，利用nodemon来重启node服务，（当根目录下nodemon.json文件中的watch值里的目录或文件发生变化时）<br>
+例如watch值中有<code>app/Resources/webpack</code> 则，该目录下的文件改动，会使node服务重启
+
 
 ### 已实现功能
 总：可处理所有前端资源
