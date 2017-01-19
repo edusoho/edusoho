@@ -18,12 +18,12 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->get($id);
     }
 
-    public function createLiveActivity($activity)
+    public function createLiveActivity($activity, $ignoreValidation = false)
     {
-        if (empty($activity['startTime'])
+        if (!$ignoreValidation && (empty($activity['startTime'])
             || $activity['startTime'] <= time()
             || empty($activity['length'])
-            || $activity['length'] <= 0) {
+            || $activity['length'] <= 0)) {
             throw $this->createInvalidArgumentException('参数有误');
         }
 

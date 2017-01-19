@@ -140,7 +140,7 @@ class TaskCopy extends AbstractEntityCopy
                 $testId = 0;
                 if (in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
                     $activityTestpaperCopy = new ActivityTestpaperCopy($this->biz);
-                    $testpaper             = $activityTestpaperCopy->copy($newActivity);
+                    $testpaper             = $activityTestpaperCopy->copy($activity);
                     $testId                = $testpaper['id'];
                 }
                 $config = $this->getActivityConfig($activity['mediaType']);

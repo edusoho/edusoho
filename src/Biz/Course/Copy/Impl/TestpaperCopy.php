@@ -10,20 +10,16 @@ use Biz\Testpaper\Dao\TestpaperItemDao;
 
 class TestpaperCopy extends AbstractEntityCopy
 {
-    private $type;
-
     /**
      * 复制链说明：
      * Testpaper 试卷/作业/练习
      * - TestpaperItem 题目列表
      *   - Question 题目内容
      * @param $biz
-     * @param $type
      */
-    public function __construct($biz, $type)
+    public function __construct($biz)
     {
         $this->biz  = $biz;
-        $this->type = $type;
     }
 
     /*
@@ -40,7 +36,7 @@ class TestpaperCopy extends AbstractEntityCopy
         return null;
     }
 
-    private function baseCopyTestpaper($testpaper)
+    protected function baseCopyTestpaper($testpaper)
     {
         $fields = array(
             'name',
@@ -68,7 +64,7 @@ class TestpaperCopy extends AbstractEntityCopy
         return $newTestpaper;
     }
 
-    private function doCopyTestpaperItems($testpaper, $newTestpaper)
+    protected function doCopyTestpaperItems($testpaper, $newTestpaper)
     {
         $items = $this->getTestpaperItemDao()->findItemsByTestId($testpaper['id']);
         if (empty($items)) {
@@ -84,8 +80,8 @@ class TestpaperCopy extends AbstractEntityCopy
                 'questionType' => $item['questionType'],
                 'parentId'     => $questionMap[$item['questionId']][1],
                 'score'        => $item['score'],
-                'missScore'    => $item['missScore'],
-                'copyId'       => $item['id']
+                'missScore'    => $item['missScore']
+                // 'copyId'       => $item['id']
             );
 
             $this->getTestpaperItemDao()->create($newItem);
@@ -95,7 +91,7 @@ class TestpaperCopy extends AbstractEntityCopy
     /*
      * $ids = question ids
      * */
-    private function doCopyQuestions($ids, $newCourseId)
+    protected function doCopyQuestions($ids, $newCourseId)
     {
         $questions   = $this->getQuestionDao()->findQuestionsByIds($ids);
         $questionMap = array();

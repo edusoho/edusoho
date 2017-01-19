@@ -28,7 +28,7 @@ class Live extends Activity
             $activity['fromUserId'] = $biz['user']['id'];
             $activity['_base_url']  = ''; //todo 临时赋值
             unset($activity['id']);
-            return $this->getLiveActivityService()->createLiveActivity($activity);
+            return $this->getLiveActivityService()->createLiveActivity($activity, true);
         }
 
         return $live;

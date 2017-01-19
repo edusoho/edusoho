@@ -2,13 +2,13 @@
 
 namespace Biz\Activity\Type;
 
-use Biz\Activity\Dao\TestpaperActivityDao;
-use Biz\Activity\Service\ActivityLearnLogService;
-use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Dao\TestpaperActivityDao;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Activity\Service\TestpaperActivityService;
 
 class Testpaper extends Activity
 {
@@ -33,7 +33,7 @@ class Testpaper extends Activity
     {
         $ext    = $this->getTestpaperActivityDao()->get($activity['mediaId']);
         $newExt = array(
-            'mediaId'         => $ext['testId'],
+            'mediaId'         => $ext['mediaId'],
             'doTimes'         => 0,
             'redoInterval'    => $ext['redoInterval'],
             'limitedTime'     => $ext['limitedTime'],
@@ -171,6 +171,6 @@ class Testpaper extends Activity
      */
     protected function getTestpaperActivityDao()
     {
-        return $this->getBiz()->service('Activity:TestpaperActivityDao');
+        return $this->getBiz()->dao('Activity:TestpaperActivityDao');
     }
 }

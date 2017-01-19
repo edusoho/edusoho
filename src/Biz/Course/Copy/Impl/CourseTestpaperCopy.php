@@ -4,19 +4,6 @@ namespace Biz\Course\Copy\Impl;
 
 class CourseTestpaperCopy extends TestpaperCopy
 {
-    /**
-     * 复制链说明：
-     * Testpaper 试卷/作业/练习
-     * - TestpaperItem 题目列表
-     *   - Question 题目内容
-     * @param $biz
-     * @param $type
-     */
-    public function __construct($biz)
-    {
-        $this->biz = $biz;
-    }
-
     /*
      * - $source = $activity
      * - $config:
@@ -24,7 +11,7 @@ class CourseTestpaperCopy extends TestpaperCopy
     protected function _copy($source, $config = array())
     {
         $this->addError('CourseTestpaperCopy', 'copy source:'.json_encode($source));
-        return $this->doCopyCourseTestpaper($config['newCourse'], $source['courseSetId'], $source['id']);
+        return $this->doCopyTestpaper($config['newCourse'], $source['courseSetId'], $source['id']);
     }
 
     private function doCopyTestpaper($newCourse, $courseSetId, $courseId = 0)

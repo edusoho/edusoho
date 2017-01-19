@@ -4,19 +4,6 @@ namespace Biz\Course\Copy\Impl;
 
 class CourseSetTestpaperCopy extends TestpaperCopy
 {
-    /**
-     * 复制链说明：
-     * Testpaper 试卷/作业/练习
-     * - TestpaperItem 题目列表
-     *   - Question 题目内容
-     * @param $biz
-     * @param $type
-     */
-    public function __construct($biz)
-    {
-        $this->biz = $biz;
-    }
-
     /*
      * - $source = $activity
      * - $config:
