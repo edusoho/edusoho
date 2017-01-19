@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Content\Service\FileService;
 use Biz\Course\Dao\FavoriteDao;
+use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\ReviewService;
 use Biz\Taxonomy\Service\TagService;
 use Topxia\Common\ArrayToolkit;
@@ -31,7 +32,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
         $course = $this->getCourseSetDao()->update($id, array(
             'recommended'     => 1,
-            'recommendedSeq'  => (int) $number,
+            'recommendedSeq'  => (int)$number,
             'recommendedTime' => time()
         ));
 
@@ -128,8 +129,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  int    $userId
-     * @param  int    $courseSetId
+     * @param  int $userId
+     * @param  int $courseSetId
      * @return bool
      */
     public function isUserFavorite($userId, $courseSetId)
@@ -173,7 +174,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  array   $conditions
+     * @param  array $conditions
      * @return mixed
      */
     public function countCourseSets(array $conditions)
@@ -182,7 +183,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  int       $userId
+     * @param  int $userId
      * @return integer
      */
     public function countUserLearnCourseSets($userId)
@@ -193,9 +194,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  int       $userId
-     * @param  int       $start
-     * @param  int       $limit
+     * @param  int $userId
+     * @param  int $start
+     * @param  int $limit
      * @return array[]
      */
     public function searchUserLearnCourseSets($userId, $start, $limit)
@@ -272,7 +273,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $this->createInvalidArgumentException("Invalid Param: type");
         }
 
-        $courseSet = ArrayToolkit::parts($courseSet, array(
+        $courseSet            = ArrayToolkit::parts($courseSet, array(
             'type',
             'title'
         ));
@@ -327,7 +328,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
             array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int) $item['id'];
+                $item = (int)$item['id'];
             });
         }
         $this->updateCourseSerializeMode($courseSet, $fields);
@@ -394,7 +395,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  int     $userId
+     * @param  int $userId
      * @return mixed
      */
     public function findLearnCourseSetsByUserId($userId)
@@ -405,7 +406,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  array   $ids
+     * @param  array $ids
      * @return mixed
      */
     public function findPublicCourseSetsByIds(array $ids)
@@ -418,7 +419,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'ids'    => $ids,
             'status' => 'published'
         );
-        $count = $this->countCourseSets($conditions);
+        $count      = $this->countCourseSets($conditions);
         return $this->searchCourseSets($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
@@ -433,15 +434,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             if ($field === 'ratingNum') {
                 $ratingFields = $this->getReviewService()->countRatingByCourseSetId($id);
                 $updateFields = array_merge($updateFields, $ratingFields);
-            }
-
-            if ($field === 'noteNum') {
+            } elseif ($field === 'noteNum') {
                 $noteNum                 = $this->getNoteService()->countCourseNoteByCourseSetId($id);
                 $updateFields['noteNum'] = $noteNum;
-            }
-
-            if ($field === 'studentNum') {
+            } elseif ($field === 'studentNum') {
                 $updateFields['studentNum'] = $this->countStudentNumById($id);
+            } elseif ($field === 'materialNum') {
+                $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(array('courseSetId' => $id));
             }
         }
 
@@ -466,7 +465,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  int       $userId
+     * @param  int $userId
      * @return integer
      */
     public function countUserFavorites($userId)
@@ -475,9 +474,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
-     * @param  int       $userId
-     * @param  int       $start
-     * @param  int       $limit
+     * @param  int $userId
+     * @param  int $start
+     * @param  int $limit
      * @return array[]
      */
     public function searchUserFavorites($userId, $start, $limit)

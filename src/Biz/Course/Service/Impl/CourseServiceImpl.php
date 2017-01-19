@@ -3,8 +3,22 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use Biz\Course\Dao\CourseChapterDao;
+use Biz\Course\Dao\CourseDao;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Dao\ThreadDao;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MaterialService;
+use Biz\Course\Service\MemberService;
+use Biz\Course\Service\ReviewService;
+use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\StrategyContext;
+use Biz\Taxonomy\Service\CategoryService;
+use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Event\Event;
+use Topxia\Common\ArrayToolkit;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -282,7 +296,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             } elseif ($field === 'noteNum') {
                 $updateFields['noteNum'] = $this->getNoteService()->countCourseNoteByCourseId($id);
             } elseif ($field === 'materialNum') {
-                $updateFields['materialNum'] = $this->getCourseMaterialService()->countCourseNoteByCourseId($id);
+                $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(array('courseId' => $id));
             }
         }
 
@@ -1066,7 +1080,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('Course:MemberService');
     }
 
-
+    /**
+     * @return MaterialService
+     */
     protected function getCourseMaterialService()
     {
         return $this->createService('Course:MaterialService');
