@@ -67,6 +67,18 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->getConnection()->fetchAll($sql);
     }
 
+    public function findCourseSetIncomesByCourseSetIds(array $courseSetIds)
+    {
+        if (empty($courseSetIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
+        $sql   = "SELECT courseSetId,sum(`income`) as income FROM {$this->table} WHERE courseSetId IN ({$marks}) group by courseSetId;";
+
+        return $this->db()->fetchAll($sql, $courseSetIds);  
+    }
+
     public function declares()
     {
         return array(

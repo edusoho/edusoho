@@ -1,7 +1,7 @@
 <form id="message-search-form" class="form-inline well well-sm" action="{{ actionUrl|default('')}}" method="get" novalidate>
   <div class="form-group">
     <select style="max-width:150px;" class="form-control" name="categoryId">
-      {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
+      {{ select_options(category_choices('course'), app.request.query.get('categoryId'), {'0':'课程分类'}) }}
     </select>
   </div>
   {% if showStatusSelect|default(null) %}

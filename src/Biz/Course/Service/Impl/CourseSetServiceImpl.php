@@ -14,7 +14,6 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
-
     public function findCourseSetsByParentIdAndLocked($parentId, $locked)
     {
         return $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($parentId, $locked);
@@ -158,13 +157,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     /**
      * @param  array   $conditions
-     * @param  array   $orderBys
+     * @param  array|string   $orderBys
      * @param  int     $start
      * @param  int     $limit
      * @return mixed
      */
-    public function searchCourseSets(array $conditions, array $orderBys, $start, $limit)
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit)
     {
+        $orderBys = $this->getOrderBys($orderBys);
         return $this->getCourseSetDao()->search($conditions, $orderBys, $start, $limit);
     }
 
@@ -470,6 +470,38 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getFavoriteDao()->searchByUserId($userId, $start, $limit);
     }
 
+    /**
+     * 根据排序规则返回排序数组
+     *
+     * @param string $order
+     *
+     * @return array
+     */
+    protected function getOrderBys($order)
+    {
+        if(is_array($order)){
+            return $order;
+        }
+
+        $typeOrderByMap = array(
+            'hitNum'         => array('hitNum' => 'DESC'),
+            'recommended'    => array('recommendedTime' => 'DESC'),
+            'rating'         => array('rating' => 'DESC'),
+            'studentNum'     => array('studentNum' => 'DESC'),
+            'recommendedSeq' => array('recommendedSeq' => 'ASC')
+        );
+        if(isset($typeOrderByMap[$order])){
+            return $typeOrderByMap[$order];
+        }else{
+            return array('createdTime' => 'DESC');
+        }
+    }
+
+    public function findCourseSetIncomesByCourseSetIds(array $courseSetIds)
+    {
+        return $this->getCourseDao()->findCourseSetIncomesByCourseSetIds($courseSetIds);
+    }
+
     protected function hasCourseSetManagerRole($courseSetId = 0)
     {
         $userId = $this->getCurrentUser()->getId();
@@ -505,6 +537,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getCourseSetDao()
     {
         return $this->createDao('Course:CourseSetDao');
+    }
+
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
     }
 
     /**

@@ -68,7 +68,7 @@
             {% endfor %}
             {% if  moreCategories %}
               <li role="presentation" class="js-course-filteractive" data-type="course"><a
-                    href="{{ path('course_explore') }}">更多</a></li>
+                    href="{{ path('course_set_explore') }}">更多</a></li>
             {% endif %}
           {% endif %}
         </ul>
@@ -104,7 +104,7 @@
       </div>
     </div>
     <div class="section-more-btn">
-      <a href="{{ path('course_explore') }}" class="btn btn-default btn-lg">
+      <a href="{{ path('course_set_explore') }}" class="btn btn-default btn-lg">
         {{ '更多课程'|trans }} <i class="mrs-o es-icon es-icon-chevronright"></i>
       </a>
     </div>
