@@ -4,6 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
+use Biz\Task\Service\TaskResultService;
 use Topxia\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\User\Service\UserService;
@@ -248,7 +249,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->count($conditions);
     }
 
-    protected function findCourseTeachers($courseId)
+    public function findCourseTeachers($courseId)
     {
         return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
     }
@@ -479,13 +480,11 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         //按照教学计划有效期模式计算学员有效期
         $deadline = 0;
-        if ($course['expiryDays'] > 0) {
-            if ($course['expiryMode'] == 'days') {
-                $deadline = $course['expiryDays'] * 24 * 60 * 60 + time();
-            }
-            if ($course['expiryMode'] == 'date') {
-                $deadline = $course['expiryDays'];
-            }
+        if ($course['expiryMode'] == 'days' and $course['expiryDays'] > 0) {
+            $endTime  = strtotime(date('Y-m-d', time())); //从第二天零点开始计算
+            $deadline = $course['expiryDays'] * 24 * 60 * 60 + $endTime;
+        } elseif ($course['expiryMode'] == 'date') {
+            $deadline = $course['expiryEndDate'];
         }
 
         if (!empty($info['orderId'])) {
@@ -500,11 +499,11 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $conditions = array(
             'userId'   => $userId,
-            'status'   => 'finished',
+            'status'   => 'finish',
             'courseId' => $courseId
         );
-        //TODO course2.0 获取学习了的task数量
-        $count  = 0; //$this->getLessonLearnDao()->searchLearnCount($conditions);
+        $count      = $this->getTaskResult()->countTaskResults($conditions);
+
         $fields = array(
             'courseId'    => $courseId,
             'userId'      => $userId,
@@ -633,7 +632,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
     {
-        $course   = $this->getCourseService()->getCourse($id);
+        $course   = $this->getCourseService()->getCourse($courseId);
         $fields   = array(
             'courseId'    => $courseId,
             'courseSetId' => $course['courseSetId'],
@@ -773,16 +772,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
-     * @param $userId
-     * @param $courseSetId
-     *
+     * @param  $userId
+     * @param  $courseSetId
      * @return array
      */
     public function findTeacherMembersByUserIdAndCourseSetId($userId, $courseSetId)
     {
         return $this->getMemberDao()->findByUserIdAndCourseSetIdAndRole($userId, $courseSetId, 'teacher');
     }
-
 
     /**
      * @param  int $userId
@@ -899,6 +896,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResult()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     /**

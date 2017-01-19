@@ -2,12 +2,13 @@
 namespace AppBundle\Controller\Classroom;
 
 use Topxia\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
 
 class TeacherController extends BaseController
 {
-    public function listAction(Request $request, $classroomId)
+    public function listAction($classroomId)
     {
         $classroom   = $this->getClassroomService()->getClassroom($classroomId);
         $headTeacher = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'headTeacher', 0, 1);
@@ -23,11 +24,11 @@ class TeacherController extends BaseController
         $assisantIds    = $this->getClassroomService()->findAssistants($classroomId);
 
         $teacherIds    = array_unique(array_merge($headTeacherIds, $teacherIds, $assisantIds));
-        $newteacherIds = array();
+        $newTeacherIds = array();
         foreach ($teacherIds as $key => $value) {
-            $newteacherIds[] = $value;
+            $newTeacherIds[] = $value;
         }
-        $teacherIds = $newteacherIds;
+        $teacherIds = $newTeacherIds;
         $teachers   = $this->getUserService()->findUsersByIds($teacherIds);
         $users      = array();
         foreach ($teacherIds as $key => $teacherId) {
@@ -37,13 +38,13 @@ class TeacherController extends BaseController
         $user     = $this->getCurrentUser();
 
         $classroomSetting = $this->setting('classroom', array());
-        $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : $this->getServiceKernel()->trans('班级');
+        $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
         $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
         $member       = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
+        $canLook      = $this->getClassroomService()->canLookClassroom($classroom['id']);
         if (!$canLook) {
-            return $this->createMessageResponse('info', $this->getServiceKernel()->trans("非常抱歉，您无权限访问该%classroomName%，如有需要请联系客服", array('%classroomName%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
         $layout = 'classroom/layout.html.twig';
         if ($member && !$member['locked']) {
@@ -87,6 +88,9 @@ class TeacherController extends BaseController
         return $this->createJsonResponse($teacherIds);
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');

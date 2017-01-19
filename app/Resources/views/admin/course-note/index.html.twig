@@ -11,7 +11,7 @@
 
     <div class="form-group">
       <select class="form-control" name="keywordType">
-        {{ select_options({content: '内容'|trans, courseId:'课程编号'|trans, courseTitle:'课程名'|trans }, app.request.get('keywordType')) }}
+        {{ select_options({content: '内容'|trans, courseSetId:'课程编号'|trans, courseTitle:'课程名'|trans }, app.request.get('keywordType')) }}
       </select>
     </div>
 
@@ -46,23 +46,26 @@
 
       {% for note in notes %}
         {% set course = courses[note.courseId]|default(null) %}
-        {% set lesson = lessons[note.lessonId]|default(null) %}
+        {% set courseSet = courseSets[note.courseSetId]|default(null) %}
+        {% set task = tasks[note.taskId]|default(null) %}
         <tr data-role="item">
-          <td><input value="{{note.id}}" type="checkbox"  data-role="batch-item" ></td>
+          <td><input value="{{ note.id }}" type="checkbox"  data-role="batch-item" ></td>
           <td>
               <div class="short-long-text">
-                <div class="short-text">{{ note.content|plain_text(100) }} <span class="trigger">({{'展开'|trans}})</span></div>
-                <div class="long-text">{{ note.content|raw }} <span class="trigger">({{'收起'|trans}})</span></div>
+                <div class="short-text">{{ note.content|plain_text(100) }} <span class="trigger">({{ '展开'|trans }})</span></div>
+                <div class="long-text">{{ note.content|raw }} <span class="trigger">({{ '收起'|trans }})</span></div>
               </div>
 
               <div class="text-sm mts">
-                {% if course %}
+                {% if course and courseSet %}
+                  <a href="{{ path('course_set_show', {id:courseSet.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
+                  <span class="text-muted mhs">&raquo;</span>
                   <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
-                  {% if lesson %}
-                    <span class="text-muted mhs">&raquo;</span>
-                    <a class="text-success"  href="{{ path('course_learn', {id:lesson.courseId}) }}#lesson/{{lesson.id}}" target="_blank">{{'课时'|trans}}{{lesson.number}}：{{ lesson.title }}</a>
+                {% endif %}
 
-                  {% endif %}
+                {% if task %}
+                  <span class="text-muted mhs">&raquo;</span>
+                  <a class="text-success"  href="{{ path('course_task_show', {courseId:note.courseId, id:task.id}) }}" target="_blank">{{'任务'|trans}}{{ task.number }}：{{ task.title }}</a>
                 {% endif %}
               </div>
           </td>
@@ -72,7 +75,7 @@
             <span class="text-muted text-sm">{{ note.createdTime|date('Y-n-d H:i') }}</span>
           </td>
           <td>
-            <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'笔记'|trans}}" data-url="{{ path('admin_note_delete', {id:note.id}) }}">{{'删除'|trans}}</button>
+            <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{ '笔记'|trans }}" data-url="{{ path('admin_note_delete', {id:note.id}) }}">{{ '删除'|trans }}</button>
           </td>
         </tr>
       {% else %}

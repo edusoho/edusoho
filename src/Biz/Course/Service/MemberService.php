@@ -37,6 +37,8 @@ interface MemberService
 
     public function findCourseStudents($courseId, $start, $limit);
 
+    public function findCourseTeachers($courseId);
+
     public function findCourseStudentsByCourseIds($courseIds);
 
     public function getCourseStudentCount($courseId);
@@ -96,9 +98,8 @@ interface MemberService
     public function findTeacherMembersByUserId($userId);
 
     /**
-     * @param $userId
-     * @param $courseSetId
-     *
+     * @param  $userId
+     * @param  $courseSetId
      * @return array
      */
     public function findTeacherMembersByUserIdAndCourseSetId($userId, $courseSetId);

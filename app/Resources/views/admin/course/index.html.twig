@@ -42,10 +42,10 @@
   </div>
   
   <p class="text-muted">
-    <span class="mrl">{{'课程：'|trans}}<strong class="inflow-num">{{ searchCoursesNum }}</strong> {{ '个'|trans }}</span>
-    <span class="mrl">{{'已发布：'|trans}}<strong class="inflow-num">{{ publishedCoursesNum }}</strong> {{ '个'|trans }}</span>
-    <span class="mrl">{{'已关闭：'|trans}}<strong class="outflow-num">{{ closedCoursesNum }}</strong> {{ '个'|trans }}</span>
-    <span class="mrl">{{'未发布：'|trans}}<strong class="outflow-num">{{ unPublishedCoursesNum }}</strong> {{ '个'|trans }}</span>
+    <span class="mrl">{{'课程：'|trans}}<strong class="inflow-num">{{ searchCourseSetsNum }}</strong> {{ '个'|trans }}</span>
+    <span class="mrl">{{'已发布：'|trans}}<strong class="inflow-num">{{ publishedCourseSetsNum }}</strong> {{ '个'|trans }}</span>
+    <span class="mrl">{{'已关闭：'|trans}}<strong class="outflow-num">{{ closedCourseSetsNum }}</strong> {{ '个'|trans }}</span>
+    <span class="mrl">{{'未发布：'|trans}}<strong class="outflow-num">{{ unPublishedCourseSetsNum }}</strong> {{ '个'|trans }}</span>
   </p>
 
   <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
@@ -75,10 +75,10 @@
     </tr>
     </thead>
     <tbody>
-    {% for course in courses %}
-      {% set user = users[course.creator]|default(null) %}
-      {% set category = categories[course.categoryId]|default(null) %}
-      {% include 'admin/course/tr.html.twig' %}
+    {% for courseSet in courseSets %}
+      {% set user = users[courseSet.creator]|default(null) %}
+      {% set category = categories[courseSet.categoryId]|default(null) %}
+      {% include 'admin/course-set/tr.html.twig' %}
     {% else %}
       <tr>
         <td colspan="20">

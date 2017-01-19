@@ -1,12 +1,12 @@
 {% extends 'group/setting-layout.html.twig' %}
 
 {% if app.request.get('page')=='logoCrop' %}
-  {% set script_controller = 'group/group_logo_crop' %}
+  {% do script(['app/js/group/logo-crop/index.js'])%}
   {% set settingNav = 'logo' %}
 {% endif %}
 
 {% if app.request.get('page')=='backGroundLogoCrop' %}
-  {% set script_controller = 'group/group_backgroundlogo_crop' %}
+  {% do script(['app/js/group/background-crop/index.js'])%}
   {% set settingNav = 'background' %}
 {% endif %}
 

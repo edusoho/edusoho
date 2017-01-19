@@ -1,6 +1,7 @@
 <?php
 namespace Biz\Order\OrderProcessor;
 
+use Codeages\Biz\Framework\Context\Biz;
 use Exception;
 use Topxia\Common\NumberToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -9,9 +10,24 @@ class BaseProcessor
 {
     protected $router = 'homepage';
 
+    protected $biz = null;
+
+    public function __construct($biz)
+    {
+        $this->biz = $biz;
+    }
+
     public function getTarget($targetId)
     {
         return array();
+    }
+
+    /**
+     * @return Biz
+     */
+    public function getBiz()
+    {
+        return $this->biz;
     }
 
     public function callbackUrl($order, $container)
@@ -104,36 +120,31 @@ class BaseProcessor
 
     protected function getCouponService()
     {
-        return ServiceKernel::instance()->createService('Coupon:CouponService');
+        return $this->getBiz()->service('Coupon:CouponService');
     }
 
     protected function getCashAccountService()
     {
-        return ServiceKernel::instance()->createService('Cash:CashAccountService');
+        return $this->getBiz()->service('Cash:CashAccountService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     protected function getAuthService()
     {
-        return ServiceKernel::instance()->createService('User:AuthService');
+        return $this->getBiz()->service('User:AuthService');
     }
 
     protected function getAppService()
     {
-        return ServiceKernel::instance()->createService('CloudPlatform:AppService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
+        return $this->getBiz()->service('CloudPlatform:AppService');
     }
 }

@@ -70,8 +70,26 @@ class Editor {
     this._renderNext(true);
   }
 
+  _askSave(){
+    const isCreateOperation = $('#task-create-type').data('editor-mode') == 'create';
+    const isDaysMode = $('#courseExpiryMode').val() == 'days';
+    const isNormalCourseSet = $('#courseSetType').val() == 'normal';
+    const isLiveType = this.type == 'live';
+    let confirmResult = true;
+    console.log($('#courseExpiryMode').val());
+    if(isCreateOperation && isDaysMode && isNormalCourseSet && isLiveType){
+      confirmResult = confirm('本计划的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。确定要添加吗？');
+    }
+
+    return confirmResult;
+  }
+
   _onSave(event) {
     if (!this._validator(this.step)) {
+      return;
+    }
+
+    if(!this._askSave()){
       return;
     }
 
@@ -79,13 +97,6 @@ class Editor {
     let postData = $('#step1-form').serializeArray()
       .concat(this.$iframe_body.find('#step2-form').serializeArray())
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
-
-    if($('#task-create-type').data('editor-mode') == 'create' 
-      && $('#courseExpiryMode').val() == 'days' 
-      && $('#mediaType').val() == 'live' 
-      && !confirm('本课程的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。确定要添加吗？')){
-      return;
-    }
 
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
@@ -98,7 +109,6 @@ class Editor {
             }
           });
         }
-
         let html = response;
         let chapterId = postData.find(function (input) {
           return input.name == 'chapterId';

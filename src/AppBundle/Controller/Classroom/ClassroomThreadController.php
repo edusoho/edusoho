@@ -2,9 +2,12 @@
 
 namespace AppBundle\Controller\Classroom;
 
+use Biz\User\Service\UserService;
+use Biz\Thread\Service\ThreadService;
+use Biz\System\Service\SettingService;
+use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Controller\BaseController;
 
 class ClassroomThreadController extends BaseController
 {
@@ -15,13 +18,13 @@ class ClassroomThreadController extends BaseController
         $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
         if (!$canLook) {
             $classroomName = $this->setting('classroom.name', '班级');
-            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomName)), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
-        $user = $this->getCurrentUser();
+        $user   = $this->getCurrentUser();
         $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
-        $layout = ($member && $member['locked'] == '0') ? 'ClassroomBundle:Classroom:join-layout.html.twig' : 'ClassroomBundle:Classroom:layout.html.twig';
+        $layout = ($member && $member['locked'] == '0') ? 'classroom/join-layout.html.twig' : 'classroom/layout.html.twig';
 
         if (!$classroom) {
             $classroomDescription = array();
@@ -45,21 +48,21 @@ class ClassroomThreadController extends BaseController
     public function createAction(Request $request, $classroomId, $type)
     {
         if (!in_array($type, array('discussion', 'question', 'event'))) {
-            throw $this->createAccessDeniedException($this->trans('类型参数有误!'));
+            throw $this->createAccessDeniedException('类型参数有误!');
         }
 
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             $request->getSession()->set('_target_path', $this->generateUrl('classroom_thread_create', array('classroomId' => $classroomId, 'type' => $type)));
-            return $this->createMessageResponse('info', $this->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ($type == 'event' && !$this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroomId))) {
-            throw $this->createAccessDeniedException($this->trans('无权限创建活动!'));
+            throw $this->createAccessDeniedException('无权限创建活动!');
         } elseif (in_array($type, array('discussion', 'question')) && !$this->getClassroomService()->canTakeClassroom($classroomId, true)) {
-            throw $this->createAccessDeniedException($this->trans('无权限创建话题!'));
+            throw $this->createAccessDeniedException('无权限创建话题!');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -84,14 +87,14 @@ class ClassroomThreadController extends BaseController
     public function updateAction(Request $request, $classroomId, $threadId)
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $thread = $this->getThreadService()->getThread($threadId);
-        $user   = $this->getCurrentUser();
+        $classroom        = $this->getClassroomService()->getClassroom($classroomId);
+        $thread           = $this->getThreadService()->getThread($threadId);
+        $user             = $this->getCurrentUser();
 
         if (!($user->isAdmin()
-            || $this->getClassroomService()->canManageClassroom($classroomId) 
+            || $this->getClassroomService()->canManageClassroom($classroomId)
             || ($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] != $user['id']))) {
-            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
@@ -122,13 +125,13 @@ class ClassroomThreadController extends BaseController
             $filter = array('adopted' => $adopted);
         }
 
-        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member  = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
         if (!$canLook) {
-            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
         if (empty($thread)) {
-            return $this->createMessageResponse('error', $this->trans('帖子已不存在'));
+            return $this->createMessageResponse('error', '帖子已不存在');
         }
 
         $layout = 'classroom/layout.html.twig';
@@ -163,21 +166,33 @@ class ClassroomThreadController extends BaseController
         return $filters;
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->createService('Thread:ThreadService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

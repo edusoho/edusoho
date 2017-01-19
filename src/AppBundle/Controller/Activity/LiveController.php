@@ -103,7 +103,6 @@ class LiveController extends BaseController implements ActivityActionInterface
     public function triggerAction(Request $request, $courseId, $activityId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
-        $user = $this->getUser();
 
         $activity = $this->getActivityService()->getActivity($activityId);
         if ($activity['mediaType'] !== 'live') {

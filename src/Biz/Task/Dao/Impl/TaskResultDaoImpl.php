@@ -88,6 +88,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
                 'status =:status',
                 'userId =:userId',
                 'courseId =:courseId',
+                'courseId IN ( :courseIds )',
                 'activityId =:activityId',
                 'courseTaskId = :courseTaskId',
                 'createdTime >= :createdTime_GE',

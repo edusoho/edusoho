@@ -25,6 +25,7 @@ class Articles extends BaseResource
         } else {
             $total = $this->getArticleService()->searchArticlesCount($conditions);
             $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' => 'DESC'), $start, $limit);
+            $articles = $this->assemblyArticles($articles);
             return $this->wrap($this->filter($articles), $total);
         }
     }
@@ -36,32 +37,8 @@ class Articles extends BaseResource
 
     protected function assemblyArticles(&$articles)
     {
-        $tagIds = array();
-        foreach ($articles as $article) {
-            $tempTagIds = $this->getTagIdsByArticle($article);
-            $tagIds = array_merge($tagIds, $tempTagIds);
-        }
-
-        $tags = $this->getTagService()->findTagsByIds($tagIds);
-
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-
-        foreach ($articles as &$article) {
-            $article['tags'] = array();
-            if (empty($article['tagIds'])) {
-                continue;
-            }
-            foreach ($article['tagIds'] as $tagId) {
-                if (empty($tags[$tagId])) {
-                    continue;
-                }
-                $article['tags'][] = array(
-                    'id' => $tagId,
-                    'name' => $tags[$tagId]['name'],
-                );
-            }
-        }
 
         foreach ($articles as &$article) {
             if (isset($categories[$article['categoryId']])) {
@@ -83,13 +60,6 @@ class Articles extends BaseResource
             $res[$key] = $this->callFilter($name, $one);
         }
         return $res;
-    }
-
-    protected function getTagIdsByArticle($article)
-    {
-        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'article', 'ownerId' => $article['id']));
-
-        return ArrayToolkit::column($tags, 'id');
     }
 
     protected function getArticleService()

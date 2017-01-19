@@ -3,6 +3,7 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Service\CourseOrderService;
+use Biz\Course\Service\MemberService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\StringToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -248,6 +249,9 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         return $this->createService('System:SettingService');        
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');

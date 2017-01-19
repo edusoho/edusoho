@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import List from './list';
 import InputGroup from './input-group';
+import { getRandomString } from './part';
 import '!style!css!less!./style.less';
 
-
-function initItem(dataSourceUi,value,index) {
-  let obj = {
-    itemId:Math.random(),
+function initItem(dataSourceUi,value) {
+  let item = {
+    itemId: getRandomString(),
     label: value,
-    seq: index,
+    seq: dataSourceUi.length + 1,
     outputValue: value
   };
-  dataSourceUi.push(obj);
+  dataSourceUi.push(item);
 }
 
 function removeItem(dataSourceUi,itemId) {
@@ -41,77 +41,68 @@ function updateItemSeq(data,datas) {
 export default class MultiInput extends Component {
   constructor(props) {
     super(props);
-   console.log(this.props);
-  }
-
-  componentWillMount() {
-    console.log(this.props);
     this.state = {
       dataSourceUi: [],
-      list: [],
-      outputSets:[],
     }
     this.props.dataSource.map((item,index)=>{
-      initItem(this.state.dataSourceUi,item,index+1);
+      initItem(this.state.dataSourceUi,item);
     })
-
-    this.getOutputSets();
-    this.state.list = this.getList();
   }
 
-  getList() {
-    console.log(this.props.addable);
-    return (<List sortable={this.props.sortable} listClassName={this.props.listClassName} dataSourceUi = {this.state.dataSourceUi} removeItem={(itemId)=>this.removeItem(itemId)} sortItem={(event=>this.sortItem(event))} ></List>);
+  getChildContext() {
+    return {
+      removeItem: this.removeItem,
+      sortItem: this.sortItem,
+      addItem: this.addItem,
+    }
   }
 
-  sortItem(datas) {
-    this.state.dataSourceUi = updateItemSeq(datas,this.state.dataSourceUi);
-    console.log({'sortItem after':this.state.dataSourceUi })
-    this.getOutputSets();
-    this.setState({
-      list: this.getList()
-    });
-  }
-
-  removeItem(event) {
-    let id = event.currentTarget.id;
+  removeItem = (event) => {
+    let id = event.currentTarget.attributes["data-item-id"].value;
     removeItem(this.state.dataSourceUi,id);
-    console.log({'removeItem after': this.state.dataSourceUi});
-    this.getOutputSets();
     this.setState({
-      list: this.getList()
+      dataSourceUi: this.state.dataSourceUi,
     });
   }
 
-  addItem(value) {
-    initItem(this.state.dataSourceUi,value,this.state.dataSourceUi.length+1);
-    console.log({'addItem after': this.state.dataSourceUi});
-    this.getOutputSets();
+  sortItem = (datas) => {
+    this.state.dataSourceUi = updateItemSeq(datas,this.state.dataSourceUi);
     this.setState({
-      list: this.getList()
+      dataSourceUi: this.state.dataSourceUi,
+    });
+  }
+
+  addItem = (value) => {
+    initItem(this.state.dataSourceUi,value);
+    this.setState({
+      dataSourceUi: this.state.dataSourceUi,
     });
   }
   
-  getOutputSets(dataSourceUi) {
-    this.state.outputSets = [];
+  getOutputSets() {
+    //应该优化成表单数据进行填充
+    let outputSets = [];
     this.state.dataSourceUi.map((item,index)=>{
-      this.state.outputSets.push(item.outputValue);
+      outputSets.push(item.outputValue);
     }) 
-    console.log({"outputSets":this.state.outputSets});
-    this.setState({
-      outputSets: this.state.outputSets,
-    })
+    return outputSets;
+
+  }
+
+  getList() {
+    const { sortable,listClassName } = this.props;
+    return (<List sortable={ sortable } listClassName={ listClassName } dataSourceUi = {this.state.dataSourceUi}></List>);
   }
 
   render (){
     const { searchable, addable, outputDataElement} = this.props;
-    console.log(searchable);
-    console.log(this.props);
+    let list =  this.getList();
+    let outputSets = this.getOutputSets();
     return (
       <div className="multi-group">
-        {this.state.list}
-        <InputGroup searchable = { searchable } addable = { addable } addItem={(value)=>this.addItem(value)}  onSearch={(data)=>this.onSearch(data)}  />
-        <input type='hidden' name={outputDataElement} value={JSON.stringify(this.state.outputSets)} />
+        {list}
+        <InputGroup searchable = { searchable } addable = { addable }/>
+        <input type='hidden' name={outputDataElement} value={JSON.stringify(outputSets)} />
       </div>
     );
   }
@@ -140,6 +131,12 @@ MultiInput.defaultProps = {
     url: '',
   },//必须是bool
   outputDataElement:'hidden-input',//必须是string,
+};
+
+MultiInput.childContextTypes = {
+  removeItem: React.PropTypes.func,
+  sortItem: React.PropTypes.func,
+  addItem: React.PropTypes.func,
 };
 
 
