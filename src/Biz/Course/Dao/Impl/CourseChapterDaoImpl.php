@@ -69,5 +69,8 @@ class CourseChapterDaoImpl extends GeneralDaoImpl implements CourseChapterDao
 
     public function declares()
     {
+        return array(
+            'timestamps' => array('createdTime')
+        );
     }
 }

@@ -44,21 +44,29 @@ class CourseSetCopy extends AbstractEntityCopy
 
     private function doCopyCourseSet($courseSet)
     {
-        $newCourseSet = array(
-            'type'          => $courseSet['type'],
-            'title'         => $courseSet['title'],
-            'subtitle'      => $courseSet['subtitle'],
-            'tags'          => $courseSet['tags'],
-            'categoryId'    => $courseSet['categoryId'],
-            'serializeMode' => $courseSet['serializeMode'],
-            'summary'       => $courseSet['summary'],
-            'goals'         => $courseSet['goals'],
-            'audiences'     => $courseSet['audiences'],
-            'cover'         => $courseSet['cover'],
-            'parentId'      => $courseSet['id'],
-            'status'        => 'published',
-            'creator'       => $this->biz['user']['id']
+        $fields = array(
+            'type',
+            'title',
+            'subtitle',
+            'tags',
+            'categoryId',
+            'serializeMode',
+            'summary',
+            'goals',
+            'audiences',
+            'cover'
         );
+        $newCourseSet = array(
+            'parentId' => $courseSet['id'],
+            'status'   => 'published',
+            'creator'  => $this->biz['user']['id']
+        );
+
+        foreach ($fields as $field) {
+            if (!empty($courseSet[$field])) {
+                $newCourseSet[$field] = $courseSet[$field];
+            }
+        }
 
         return $this->getCourseSetDao()->create($newCourseSet);
     }
@@ -70,6 +78,17 @@ class CourseSetCopy extends AbstractEntityCopy
             return;
         }
 
+        $fields = array(
+            'title',
+            'description',
+            'link',
+            'fileId',
+            'fileUri',
+            'fileMime',
+            'fileSize',
+            'type'
+        );
+
         foreach ($materials as $material) {
             //仅处理挂在课程下的文件
             if ($material['courseId'] > 0) {
@@ -80,18 +99,16 @@ class CourseSetCopy extends AbstractEntityCopy
                 'courseSetId' => $newCourseSet['id'],
                 'courseId'    => 0,
                 'lessonId'    => 0,
-                'title'       => $material['title'],
-                'description' => $material['description'],
-                'link'        => $material['link'],
-                'fileId'      => $material['fileId'],
-                'fileUri'     => $material['fileUri'],
-                'fileMime'    => $material['fileMime'],
-                'fileSize'    => $material['fileSize'],
                 'source'      => 'coursematerial',
                 'userId'      => $this->biz['user']['id'],
-                'type'        => $material['type'],
                 'copyId'      => $material['id']
             );
+
+            foreach ($fields as $field) {
+                if (!empty($material[$field])) {
+                    $newMaterial[$field] = $material[$field];
+                }
+            }
             $this->getMaterialDao()->create($newMaterial);
         }
     }

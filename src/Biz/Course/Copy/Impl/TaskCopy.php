@@ -30,7 +30,7 @@ class TaskCopy extends AbstractEntityCopy
     /*
      * 这里同时处理task和chapter
      * $source = $originalCourse
-     * $config = $newCourse
+     * $config = $newCourse, $modeChange
      */
     protected function _copy($source, $config = array())
     {
@@ -41,6 +41,8 @@ class TaskCopy extends AbstractEntityCopy
             return array();
         }
 
+        $modeChange = $config['modeChange'];
+
         $newCourse      = $config['newCourse'];
         $newCourseSetId = $newCourse['courseSetId'];
         $newTasks       = array();
@@ -48,11 +50,18 @@ class TaskCopy extends AbstractEntityCopy
         $activityMap    = $this->doCopyActivities($source['id'], $newCourse['id'], $newCourseSetId);
 
         foreach ($tasks as $task) {
-            $newTask                = $this->doCopyTask($task);
-            $newTask['courseSetId'] = $newCourseSetId;
-            $newTask['courseId']    = $newCourse['id'];
+            $newTask             = $this->doCopyTask($task);
+            $newTask['courseId'] = $newCourse['id'];
             if (!empty($task['categoryId'])) {
-                $newTask['categoryId'] = $chapterMap[$task['categoryId']];
+                $newChapter = $chapterMap[$task['categoryId']];
+                //如果是从默认教学计划复制，则删除type=lesson的chapter，并将对应task的categoryId指向该chapter的父级
+                if ($modeChange && $newChapter['type'] == 'lesson') {
+                    $this->getChapterDao()->delete($newChapter['id']);
+                    $newTask['categoryId'] = $newChapter['parentId'];
+                    $newTask['mode']       = 'default';
+                } else {
+                    $newTask['categoryId'] = $newChapter['id'];
+                }
             }
             $newTask['activityId']    = $activityMap[$task['activityId']];
             $newTask['createdUserId'] = $user['id'];
@@ -66,13 +75,21 @@ class TaskCopy extends AbstractEntityCopy
     {
         //查询出course下所有chapter，新增并保留新旧chapter id，用于填充newTask的categoryId
         $chapters   = $this->getChapterDao()->findChaptersByCourseId($courseId);
-        $chapterMap = array(); // key=oldChapterId,value=newChapterId
+        $chapterMap = array(); // key=oldChapterId,value=newChapter
         if (!empty($chapters)) {
             //order by parentId
             usort($chapters, function ($a, $b) {
                 //@todo 这个逻辑待测试
-                return $a['parentId'] < $b['parentId'];
+                if ($a['parentId'] < $b['parentId']) {
+                    return -1;
+                }
+
+                if ($a['parentId'] == $b['parentId']) {
+                    return $a['id'] > $b['id'];
+                }
+                return 1;
             });
+            // var_dump($chapters);exit;
             foreach ($chapters as $chapter) {
                 $newChapter = array(
                     'courseId' => $newCourseId,
@@ -83,10 +100,10 @@ class TaskCopy extends AbstractEntityCopy
                     'copyId'   => $chapter['id']
                 );
                 if ($chapter['parentId'] > 0) {
-                    $newChapter['parentId'] = $chapterMap[$chapter['parentId']];
+                    $newChapter['parentId'] = $chapterMap[$chapter['parentId']]['id'];
                 }
                 $newChapter                 = $this->getChapterDao()->create($newChapter);
-                $chapterMap[$chapter['id']] = $newChapter['id'];
+                $chapterMap[$chapter['id']] = $newChapter;
             }
         }
         return $chapterMap;
@@ -97,19 +114,29 @@ class TaskCopy extends AbstractEntityCopy
         // 查询出course下所有activity，新增并保留新旧activity id，用于填充newTask的activityId
         $activities  = $this->getActivityDao()->findByCourseId($courseId);
         $activityMap = array();
+
         if (!empty($activities)) {
+            $fields = array(
+                'mediaType',
+                'title',
+                'remark',
+                'content',
+                'length',
+                'startTime',
+                'endTime'
+            );
             foreach ($activities as $activity) {
                 $newActivity = array(
-                    'title'           => $activity['title'],
-                    'remark'          => $activity['remark'],
-                    'content'         => $activity['content'],
-                    'length'          => $activity['length'],
                     'fromUserId'      => $this->biz['user']['id'],
-                    'startTime'       => $activity['startTime'],
-                    'endTime'         => $activity['endTime'],
                     'fromCourseId'    => $newCourseId,
                     'fromCourseSetId' => $courseSetId
                 );
+                foreach ($fields as $field) {
+                    if (!empty($activity[$field])) {
+                        $newActivity[$field] = $activity[$field];
+                    }
+                }
+
                 $testId = 0;
                 if (in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
                     $activityTestpaperCopy = new ActivityTestpaperCopy($this->biz);
@@ -140,23 +167,31 @@ class TaskCopy extends AbstractEntityCopy
             return;
         }
 
+        $fields = array(
+            'title',
+            'description',
+            'link',
+            'fileId',
+            'fileUri',
+            'fileMime',
+            'fileSize',
+            'type'
+        );
+
         foreach ($materials as $material) {
             $newMaterial = array(
                 'courseSetId' => $config['newCourseSetId'],
                 'courseId'    => $config['newCourseId'],
                 'lessonId'    => $newActivity['id'],
-                'title'       => $material['title'],
-                'description' => $material['description'],
-                'link'        => $material['link'],
-                'fileId'      => $material['fileId'],
-                'fileUri'     => $material['fileUri'],
-                'fileMime'    => $material['fileMime'],
-                'fileSize'    => $material['fileSize'],
                 'source'      => 'courseactivity',
                 'userId'      => $this->biz['user']['id'],
-                'type'        => $material['type'],
                 'copyId'      => $material['id']
             );
+            foreach ($fields as $field) {
+                if (!empty($material[$field])) {
+                    $newMaterial[$field] = $material[$field];
+                }
+            }
             $this->getMaterialDao()->create($newMaterial);
         }
     }
@@ -174,12 +209,15 @@ class TaskCopy extends AbstractEntityCopy
             'mode',
             'number',
             'type',
-            'mediaSource'
+            'mediaSource',
+            'status'
         );
 
         $new = array();
         foreach ($fields as $field) {
-            $new[$field] = $task[$field];
+            if (!empty($task[$field])) {
+                $new[$field] = $task[$field];
+            }
         }
 
         return $new;
