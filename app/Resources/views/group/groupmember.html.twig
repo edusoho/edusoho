@@ -1,7 +1,8 @@
 {% extends 'group/layout.html.twig' %}
-{% set script_controller = 'group/group_member' %}
 {% block title %}{{'%title%小组'|trans({'%title%': groupinfo.title})}} - {{ parent() }}{% endblock %}
+{% do script(['app/js/group/member/index.js']) %}
 {% set groupNav = 'member' %}
+
 {% block group_main %}
   <div class="panel panel-default">
     <div class="panel-heading"><h3 class="panel-title">{{'小组介绍'|trans}}</h3></div>
@@ -102,8 +103,8 @@
     </nav>
   </div>
 {% endblock %}
-{% block group_side %}
 
+{% block group_side %}
   {% if is_groupmember != 0 %}
     <div class="mbm"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success btn-xlg btn-block" role="button"><i class="es-icon es-icon-comment mrs text-xlg"></i>{{'发表话题'|trans}}</a>
     </div>
@@ -162,8 +163,6 @@
       </div>
     </div>
   </div>
-
-
   <div class="panel panel-default">
     <div class="panel-heading"><h3 class="panel-title">{{'新加组员'|trans}}</h3></div>
     <div class="panel-body">
@@ -180,7 +179,6 @@
       {% endif %}
     </div>
   </div>
-
   <div class="panel panel-default">
     <div class="panel-heading"><h3 class="panel-title">{{'热门小组'|trans}}</h3></div>
     <div class="panel-body">

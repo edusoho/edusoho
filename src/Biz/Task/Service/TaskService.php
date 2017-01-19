@@ -96,6 +96,30 @@ interface TaskService
     public function findFreeTasksByCourseId($courseId);
 
     /**
+     * 统计当前时间以后每天的直播次数
+     *
+     * @param $courseIds
+     * @param $limit
+     *
+     * @return array<string, int|string>
+     */
+    public function findFutureLiveDatesByCourseIdsGroupByDate($courseIds, $limit);
+
+    /**
+     * 返回当前正在直播的直播任务
+     *
+     * @return array
+     */
+    public function findCurrentLiveTasks();
+
+    /**
+     * 返回当前将要直播的直播任务
+     *
+     * @return array
+     */
+    public function findFutureLiveTasks();
+
+    /**
      *
      * 自由式
      * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第一个任务作为下一个学习任务，

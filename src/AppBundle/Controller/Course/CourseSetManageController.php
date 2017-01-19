@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Course;
 
-use Biz\Content\Service\FileService;
 use Topxia\Common\ArrayToolkit;
+use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
@@ -18,13 +18,13 @@ class CourseSetManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
 
-            if(!isset($data['type'])){
+            if (!isset($data['type'])) {
                 throw $this->createNotFoundException('未设置课程类型');
-            }else{
+            } else {
                 $type = $data['type'];
             }
 
-            if ($type == 'open') {
+            if (in_array($type, array('open', 'liveOpen'))) {
                 $openCourse = $this->getOpenCourseService()->createCourse($data);
                 return $this->redirectToRoute('open_course_manage', array(
                     'id' => $openCourse['id']
@@ -179,7 +179,7 @@ class CourseSetManageController extends BaseController
         try {
             $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-            if($courseSet['type'] == 'live'){
+            if ($courseSet['type'] == 'live') {
                 $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
                 $this->getCourseService()->publishCourse($course['id']);
             }

@@ -94,9 +94,8 @@ class LiveController extends BaseController implements ActivityActionInterface
         $params['id']       = $user['id'];
         $params['nickname'] = $user['nickname'];
         return $this->forward('AppBundle:Liveroom:_entry', array(
-            'roomId'     => $activity['ext']['liveId'],
-            'courseId'   => $courseId,
-            'activityId' => $activityId
+            'roomId' => $activity['ext']['liveId'],
+            'params' => array('courseId' => $courseId, 'activityId' => $activityId)
         ), $params);
     }
 
