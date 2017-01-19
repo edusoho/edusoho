@@ -237,7 +237,7 @@ class OpenCourseLessonManageController extends BaseController
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
-        return $this->render('open-course-lesson-manage/open-course-lesson-list-item.html.twig', array(
+        return $this->render('open-course-manage/lesson-list-item.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
             'file'   => $file
@@ -257,7 +257,7 @@ class OpenCourseLessonManageController extends BaseController
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
-        return $this->render('open-course-lesson-manage/open-course-lesson-list-item.html.twig', array(
+        return $this->render('open-course-manage/lesson-list-item.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
             'file'   => $file
