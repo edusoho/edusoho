@@ -77,10 +77,9 @@ class CourseManageController extends BaseController
         $files = $this->prepareTaskActivityFiles($tasks);
 
         $courseItems     = $this->getCourseService()->findCourseItems($courseId);
-        $tasksRenderPage = $this->createCourseStrategy($course)->getTasksRenderPage();
         $taskPerDay      = $this->getFinishedTaskPerDay($course, $tasks);
 
-        return $this->render($tasksRenderPage, array(
+        return $this->render($this->getTasksTemplate($course), array(
             'taskNum'    => count($tasks),
             'files'      => $files,
             'courseSet'  => $courseSet,
@@ -88,6 +87,15 @@ class CourseManageController extends BaseController
             'items'      => $courseItems,
             'taskPerDay' => $taskPerDay
         ));
+    }
+
+    protected function getTasksTemplate($course)
+    {
+        if($course['isDefault']) {
+            return 'course-manage/free-mode/tasks.html.twig';
+        } else {
+            return 'course-manage/lock-mode/tasks.html.twig';
+        }
     }
 
     protected function getFinishedTaskPerDay($course, $tasks)
@@ -197,7 +205,7 @@ class CourseManageController extends BaseController
                     'id'        => $teacher['userId'],
                     'isVisible' => $teacher['isVisible'],
                     'nickname'  => $teacher['nickname'],
-                    'avatar'    => $this->get('topxia.twig.web_extension')->getFilePath($teacher['smallAvatar'])
+                    'avatar'    => $this->get('topxia.twig.web_extension')->getFilePath($teacher['smallAvatar'], 'avatar.png')
                 );
             }
         }

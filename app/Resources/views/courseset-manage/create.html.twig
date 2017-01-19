@@ -27,11 +27,11 @@
             </div>
             <div class="col-md-3">
               {% if not setting('live-course.live_course_enabled') %}
-              <div class="course-select js-courseSetType disabled" data-toggle="tooltip" data-placement="top"
+                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
                    title="云直播开启后可用" data-type="live">
-                {% else %}
+              {% else %}
                 <div class="course-select js-courseSetType" data-type="live">
-                  {% endif %}
+              {% endif %}
                   <i class="es-icon es-icon-zhibokecheng "></i>
                   <div class="course-type">直播课程</div>
                   <div class="course-intro">以直播为教学形式的，支持多个学习工具的课程</div>
@@ -48,11 +48,11 @@
 
               <div class="col-md-3">
                 {% if not setting('live-course.live_course_enabled') %}
-                <div class="course-select js-courseSetType disabled" data-toggle="tooltip" data-placement="top"
+                  <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
                      title="云直播开启后可用" data-type="liveOpen">
-                  {% else %}
+                {% else %}
                   <div class="course-select js-courseSetType" data-type="liveOpen">
-                    {% endif %}
+                {% endif %}
                     <i class="es-icon es-icon-zhibokecheng2"></i>
                     <div class="course-type">直播公开课</div>
                     <div class="course-intro">免费、无门槛参与的直播课程，主要用于营销推广</div>
