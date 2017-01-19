@@ -291,8 +291,15 @@ class OpenCourseManageController extends BaseController
 
     public function searchAction(Request $request, $id, $filter)
     {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        $conditions = array("title" => $request->request->get('key'));
+        $key = $request->request->get('key');
+        if (!empty($key)) {
+            $request->getSession()->set("key", $key);
+        } else {
+            $key = $request->getSession()->get("key");
+        }
+
+        $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $conditions = array("title" => $key);
         list($paginator, $courses) = $this->_getPickCourseData($request, $id, $conditions);
         $users = $this->_getTeacherUsers($courses);
 
@@ -301,7 +308,7 @@ class OpenCourseManageController extends BaseController
             'courses' => $courses,
             'filter'  => $filter,
             'courseId'  => $id,
-            'title' => $request->request->get('key'),
+            'title' => $key,
             'paginator' => $paginator
         ));
     }
