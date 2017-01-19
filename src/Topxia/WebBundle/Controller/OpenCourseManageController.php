@@ -291,14 +291,8 @@ class OpenCourseManageController extends BaseController
 
     public function searchAction(Request $request, $id, $filter)
     {
-        $key = $request->request->get('key');
-        if (!empty($key)) {
-            $request->getSession()->set("key", $key);
-        } else {
-            $key = $request->getSession()->get("key");
-        }
-
         $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $key = $request->query->get('key');
         $conditions = array("title" => $key);
         list($paginator, $courses) = $this->_getPickCourseData($request, $id, $conditions);
         $users = $this->_getTeacherUsers($courses);
