@@ -1,8 +1,8 @@
 <?php
 namespace Biz\OpenCourse\Event;
 
-use Biz\Taxonomy\TagOwnerManager;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Taxonomy\TagOwnerManager;
 use Codeages\PluginBundle\Event\EventSubscriber;
 
 class OpenCourseEventSubscriber extends EventSubscriber
@@ -17,8 +17,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
             'open.course.member.create' => 'onMemberCreate',
             'course.material.create'    => 'onMaterialCreate',
             'course.material.update'    => 'onMaterialUpdate',
-            'course.material.delete'    => 'onMaterialDelete',
-            'live.replay.generate'      => 'onLiveReplayGenerate'
+            'course.material.delete'    => 'onMaterialDelete'
         );
     }
 
@@ -34,9 +33,9 @@ class OpenCourseEventSubscriber extends EventSubscriber
     {
         $fields = $event->getSubject();
 
-        $course = $fields['course'];
-        $tagIds = $fields['tagIds'];
-        $userId = $fields['userId'];
+        $course      = $fields['course'];
+        $tagIds      = $fields['tagIds'];
+        $userId      = $fields['userId'];
 
         $tagOwnerManager = new TagOwnerManager('openCourse', $course['id'], $tagIds, $userId);
         $tagOwnerManager->update();
@@ -53,7 +52,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
             throw new \RuntimeException('添加课时失败，课程不存在。');
         }
 
-        if ($course['status'] === 'draft' || $lesson['type'] === 'liveOpen') {
+        if($course['status'] === 'draft' || $lesson['type'] === 'liveOpen'){
             $this->getOpenCourseService()->publishLesson($course['id'], $lesson['id']);
         }
 
@@ -124,25 +123,6 @@ class OpenCourseEventSubscriber extends EventSubscriber
                 $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', -1);
             }
         }
-    }
-
-    public function onLiveReplayGenerate(Event $event)
-    {
-        $context = $event->getSubject();
-        $replays = $context['replays'];
-
-        if (!$replays) {
-            return;
-        }
-
-        $courseId     = $replays[0]['courseId'];
-        $lesson['id'] = $replays[0]['lessonId'];
-
-        $lessonFields = array(
-            'replayStatus' => 'generated'
-        );
-
-        $this->getOpenCourseService()->updateLesson($courseId, $lessonId, $lessonFields);
     }
 
     private function _waveLessonMaterialNum($material)

@@ -1,12 +1,12 @@
 <?php
 namespace AppBundle\Controller;
 
+use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\Sms\SmsProcessor\SmsProcessorFactory;
+use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
-use Biz\System\Service\LogService;
-use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\System\Service\SettingService;
-use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
@@ -202,8 +202,8 @@ class EduCloudController extends BaseController
 
         $url = $this->setting('site.url', '');
         $url = empty($url) ? $url : rtrim($url, ' \/');
-        $url = empty($url) ? $this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId), true) : $url.$this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId));
-        $url .= '?index='.$index.'&smsType='.$smsType;
+        $url = empty($url) ? $this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId), true) : $url . $this->generateUrl('edu_cloud_sms_send_callback', array('targetType' => $targetType, 'targetId' => $targetId));
+        $url .= '?index=' . $index . '&smsType=' . $smsType;
         $api  = CloudAPIFactory::create('leaf');
         $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
 
@@ -247,7 +247,7 @@ class EduCloudController extends BaseController
         $code = rand(0, 9);
 
         for ($i = 1; $i < $length; $i++) {
-            $code = $code.rand(0, 9);
+            $code = $code . rand(0, 9);
         }
 
         return $code;

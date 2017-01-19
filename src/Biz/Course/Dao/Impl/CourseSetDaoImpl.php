@@ -21,8 +21,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 
     public function findLikeTitle($title)
     {
-        $title = '%'.$title.'%';
-        $sql   = "SELECT * FROM {$this->table} WHERE title LIKE ?";
+        $title = '%' . $title . '%';
+        $sql = "SELECT * FROM {$this->table} WHERE title LIKE ?";
 
         return $this->db()->fetchAll($sql, array($title));
     }
@@ -37,8 +37,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'title LIKE :title',
                 'creator LIKE :creator',
                 'type = :type',
-                'recommended = :recommended',
-                'id NOT IN (:excludeIds)'
+                'recommended = :recommended'
             ),
             'serializes' => array(
                 'tags'      => 'delimiter',

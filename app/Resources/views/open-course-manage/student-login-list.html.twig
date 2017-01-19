@@ -56,7 +56,7 @@
               <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'发私信'|trans}}</button>
             {% endif %}
             {% if app.user.isAdmin() %}
-              <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_students_show', {id:course.id, userId:user.id})}}">{{'查看资料'|trans}}</button>
+              <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_show', {courseId:course.id, userId:user.id})}}">{{'查看资料'|trans}}</button>
             {% endif %}
           </div>
         </td>

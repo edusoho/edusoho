@@ -10,9 +10,9 @@ interface OpenCourseRecommendedService
     public function updateOpenCourseRecommendedCourses($openCourseId, $activeCourseIds);
 
     /**
-     * @before searchRecommendCount
-     * @param  $conditions
+     * @param $conditions
      * @return mixed
+     * @before searchRecommendCount
      */
     public function countRecommends($conditions);
 
@@ -25,4 +25,6 @@ interface OpenCourseRecommendedService
     public function findRandomRecommendCourses($courseId, $num = 3);
 
     public function deleteRecommendCourse($recommendId);
+    
+    protected function deleteBatchRecommendCourses($recommendIds);
 }

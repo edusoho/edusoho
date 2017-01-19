@@ -3,10 +3,10 @@
 namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
 use Biz\OpenCourse\Dao\RecommendedCourseDao;
-use Biz\OpenCourse\Processor\CourseProcessorFactory;
 use Biz\OpenCourse\Service\OpenCourseRecommendedService;
+use Topxia\Common\ArrayToolkit;
+use Biz\OpenCourse\Processor\CourseProcessorFactory;
 
 class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourseRecommendedService
 {
@@ -27,7 +27,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
             $exitsRecommendCourse = $this->getRecommendedCourseByCourseIdAndType($openCourseId, $courseId, $type);
 
             if (!$exitsRecommendCourse) {
-                $fields = array(
+                $fields             = array(
                     'recommendCourseId' => $courseId,
                     'openCourseId'      => $openCourseId,
                     'type'              => $type
@@ -46,7 +46,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
     {
         $allExistingRecommendedCourses = $this->findRecommendedCoursesByOpenCourseId($openCourseId);
 
-        $existRecommendedIds = ArrayToolkit::column($allExistingRecommendedCourses, 'recommendCourseId');
+        $existRecommendedIds = ArrayToolkit::column($allExistingRecommendedCourses, 'id');
 
         if (empty($activeRecommendIds)) {
             $this->deleteBatchRecommendCourses($existRecommendedIds);
@@ -63,27 +63,21 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
 
     public function findRecommendedCoursesByOpenCourseId($openCourseId)
     {
-        return $this->getRecommendedCourseDao()->findByOpenCourseId($openCourseId);
+        $recommendCourses = $this->getRecommendedCourseDao()->findByOpenCourseId($openCourseId);
+        return $recommendCourses;
     }
 
     protected function refreshCoursesSeq($openCourseId, $recommendIds)
     {
-        $existingRecommended = $this->findRecommendedCoursesByOpenCourseId($openCourseId);
-        $existingRecommended = ArrayToolkit::index($existingRecommended, 'recommendCourseId');
-
         $seq = 1;
 
         if (empty($recommendIds)) {
             return;
         }
 
-        foreach ($recommendIds as $key => $recommendId) {
-            $existing = empty($existingRecommended[$recommendId]) ? array() : $existingRecommended[$recommendId];
-
-            if ($existing) {
-                $this->getRecommendedCourseDao()->update($existing['id'], array('seq' => $seq));
-                $seq++;
-            }
+        foreach ($recommendIds as $key => &$recommendId) {
+            $this->getRecommendedCourseDao()->update($recommendId, array('seq' => $seq));
+            $seq++;
         }
 
         return true;
@@ -153,7 +147,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         }
         $recommendCourses = $this->getRecommendedCourseDao()->findRandomRecommendCourses($courseId, $num);
 
-        $courseIds = ArrayToolkit::column($recommendCourses, 'recommendCourseId');
+        $courseIds        = ArrayToolkit::column($recommendCourses, 'recommendCourseId');
 
         return $this->getTypeCourseService('course')->findCoursesByIds($courseIds);
     }

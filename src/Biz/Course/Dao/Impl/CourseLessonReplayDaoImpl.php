@@ -24,6 +24,7 @@ class CourseLessonReplayDaoImpl extends GeneralDaoImpl implements CourseLessonRe
         );
     }
 
+
     public function deleteByLessonId($lessonId, $lessonType = 'live')
     {
         return $this->db()->delete($this->table, array('lessonId' => $lessonId, 'type' => $lessonType));

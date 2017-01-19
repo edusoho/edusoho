@@ -3,14 +3,16 @@
 namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Dao\CourseLessonReplayDao;
 use Biz\Course\Dao\FavoriteDao;
-use Topxia\Common\ArrayToolkit;
-use Biz\System\Service\LogService;
 use Biz\OpenCourse\Dao\OpenCourseDao;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\OpenCourse\Dao\OpenCourseLessonDao;
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\System\Service\LogService;
+use Topxia\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Event\Event;
+
 
 class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 {
@@ -102,7 +104,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $this->getOpenCourseDao()->delete($id);
 
         if ($course["type"] == "liveOpen") {
-            $this->getLiveReplayService()->deleteReplaysByCourseId($id, 'liveOpen');
+            $this->getCourseLessonReplayDao()->deleteByCourseId($id, 'liveOpen');
         }
 
         $this->getLogService()->info('open_course', 'delete_course', "删除公开课《{$course['title']}》(#{$course['id']})");
@@ -114,8 +116,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function waveCourse($id, $field, $diff)
     {
-        $this->getOpenCourseDao()->wave(array($id), array($field => $diff));
-        return $this->getCourse($id);
+        return $this->getOpenCourseDao()->wave(array($id), array($field => $diff));
     }
 
     public function publishCourse($id)
@@ -155,7 +156,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createAccessDeniedException('未登录用户，无权操作！');
         }
 
-        $course = $this->getCourse($courseId);
+        $course = $this->getOpenCourseDao()->get($courseId);
 
         if (empty($course)) {
             throw $this->createNotFoundException();
@@ -540,7 +541,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createNotFoundException(sprintf('lesson #%s not found', $lessonId));
         }
 
-        $conditions = array(
+        $conditions  = array(
             'number'   => $lesson['number'] + 1,
             'courseId' => $courseId
         );
@@ -895,7 +896,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 $fields['tags'] = explode(',', $fields['tags']);
                 $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
                 array_walk($fields['tags'], function (&$item, $key) {
-                    $item = (int) $item['id'];
+                    $item = (int)$item['id'];
                 }
 
                 );
@@ -990,20 +991,15 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $conditions = array(
             'courseId' => $courseId,
-            'role'     => 'teacher'
+            'role'     => 'teacher',
         );
-        $orders = array('seq' => 'DESC', 'createdTime' => 'DESC');
+        $orders     = array('seq' => 'DESC', 'createdTime' => 'DESC');
         return $this->getOpenCourseMemberDao()->search($conditions, $orders, 0, 100);
     }
 
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
-    }
-
-    protected function getLiveReplayService()
-    {
-        return $this->createService('Course:LiveReplayService');
     }
 
     /**
@@ -1036,6 +1032,14 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function getFavoriteDao()
     {
         return $this->createDao('Course:FavoriteDao');
+    }
+
+    /**
+     * @return CourseLessonReplayDao
+     */
+    protected function getCourseLessonReplayDao()
+    {
+        return $this->createDao('Course:CourseLessonReplayDao');
     }
 
     /**

@@ -1,28 +1,27 @@
 <?php
-namespace Biz\OpenCourse\Service\Impl;
+namespace Topxia\Service\Course\Impl;
 
-use Biz\BaseService;
-use Biz\Util\EdusohoLiveClient;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\OpenCourse\Service\LiveCourseService;
+use Topxia\Service\Util\EdusohoLiveClient;
+use Topxia\Service\Course\LiveCourseService;
 
 class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 {
-    private $liveClient = null;
-
     public function createLiveRoom($course, $lesson, $container)
     {
         $liveParams = $this->_filterParams($course['teacherIds'], $lesson, $container, 'add');
 
-        $live = $this->createLiveClient()->createLive($liveParams);
+        $client = new EdusohoLiveClient();
+        $live   = $client->createLive($liveParams);
 
         if (empty($live)) {
-            throw $this->createServiceException('Create liveroom failed, please try again');
+            throw new \RuntimeException('创建直播教室失败，请重试！');
         }
 
         if (isset($live['error'])) {
-            throw $this->createServiceException($live['error']);
+            throw new \RuntimeException($live['error']);
         }
 
         return $live;
@@ -32,13 +31,43 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     {
         $liveParams = $this->_filterParams($course['teacherIds'], $lesson, $container, 'update');
 
-        return $this->createLiveClient()->updateLive($liveParams);
+        $client = new EdusohoLiveClient();
+        $live   = $client->updateLive($liveParams);
+
+        return $live;
     }
 
     public function entryLive($params)
     {
-        //$lesson = $this->getOpenCourseService()->getLesson($lessonId);
-        return $this->createLiveClient()->entryLive($params);
+        $lesson = $this->getCourseService($courseType)->getLesson($lessonId);
+        $client = new EdusohoLiveClient();
+        $result = $client->entryLive($params);
+
+        return $result;
+    }
+
+    public function entryReplay($lessonReplayId, $ssl = false)
+    {
+        $lessonReplay = $this->getCourseService('course')->getCourseLessonReplay($lessonReplayId);
+        $user         = $this->getCurrentUser();
+
+        $lesson = $this->getCourseService($lessonReplay['type'])->getCourseLesson($lessonReplay['courseId'], $lessonReplay['lessonId']);
+
+        $args = array(
+            'liveId'   => $lesson["mediaId"],
+            'replayId' => $lessonReplay["replayId"],
+            'provider' => $lesson["liveProvider"],
+            'user'     => $user->isLogin() ? $user['email'] : '',
+            'nickname' => $user->isLogin() ? $user['nickname'] : 'guest'
+        );
+
+        if ($ssl) {
+            $args['protocol'] = 'https';
+        }
+
+        $client = new EdusohoLiveClient();
+        $result = $client->entryReplay($args);
+        return $result;
     }
 
     public function checkLessonStatus($lesson)
@@ -77,14 +106,14 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             throw $this->createServiceException("您还未登录，不能参加直播！");
         }
 
-        $courseMember = $this->getOpenCourseService()->getCourseMember($lesson['courseId'], $user['id']);
+        $courseMember = $this->getCourseService($lesson['type'])->getCourseMember($lesson['courseId'], $user['id']);
 
         if (!$courseMember) {
             throw $this->createServiceException('您不是课程学员，不能参加直播！');
         }
 
         $role              = 'student';
-        $courseTeachers    = $this->getOpenCourseService()->findCourseTeachers($lesson['courseId']);
+        $courseTeachers    = $this->getCourseService($lesson['type'])->findCourseTeachers($lesson['courseId']);
         $courseTeachersIds = ArrayToolkit::column($courseTeachers, 'userId');
 
         if (in_array($user['id'], $courseTeachersIds)) {
@@ -97,6 +126,44 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         }
 
         return $role;
+    }
+
+    public function generateLessonReplay($course, $lesson)
+    {
+        $client     = new EdusohoLiveClient();
+        $replayList = $client->createReplayList($lesson["mediaId"], "录播回放", $lesson["liveProvider"]);
+
+        if (isset($replayList['error']) && !empty($replayList['error'])) {
+            return $replayList;
+        }
+
+        $this->getCourseService('live')->deleteLessonReplayByLessonId($lesson['id'], $course['type']);
+
+        if (isset($replayList['data']) && !empty($replayList['data'])) {
+            $replayList = json_decode($replayList["data"], true);
+        }
+
+        foreach ($replayList as $key => $replay) {
+            $fields = array(
+                'courseId'    => $course['id'],
+                'lessonId'    => $lesson['id'],
+                'title'       => $replay['subject'],
+                'replayId'    => $replay['id'],
+                'userId'      => $this->getCurrentUser()->id,
+                'createdTime' => time(),
+                'type'        => $course['type']
+            );
+
+            $courseLessonReplay = $this->getCourseService('live')->addCourseLessonReplay($fields);
+        }
+
+        $lessonFields = array(
+            "replayStatus" => "generated"
+        );
+
+        $lesson = $this->getCourseService($course['type'])->updateLesson($course['id'], $lesson['id'], $lessonFields);
+
+        return $replayList;
     }
 
     public function findBeginingLiveCourse($afterSecond)
@@ -121,24 +188,6 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         }
 
         return array();
-    }
-
-    /**
-     * only for mock
-     * @param [type] $liveClient [description]
-     */
-    public function setLiveClient($liveClient)
-    {
-        return $this->liveClient = $liveClient;
-    }
-
-    protected function createLiveClient()
-    {
-        if (empty($this->liveClient)) {
-            $this->liveClient = new EdusohoLiveClient();
-        }
-
-        return $this->liveClient;
     }
 
     private function _getSpeaker($courseTeachers)
@@ -190,19 +239,23 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return $liveLogoUrl;
     }
 
-    protected function getOpenCourseService()
+    protected function getCourseService($courseType = 'live')
     {
-        return $this->createService('OpenCourse:OpenCourseService');
+        if ($courseType == 'liveOpen') {
+            return $this->createService('OpenCourse:OpenCourseService');
+        } else {
+            return $this->createService('Course:CourseService');
+        }
     }
 
     protected function getUserService()
     {
-        return $this->createService('User:UserService');
+        return ServiceKernel::instance()->createService('User:UserService');
     }
 
     protected function getLogService()
     {
-        return $this->createService('System:LogService');
+        return ServiceKernel::instance()->createService('System:LogService');
     }
 
     protected function getLessonDao()
@@ -212,16 +265,6 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
     protected function getCourseMemberService()
     {
-        return $this->createService('Course:MemberService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->createService('System:SettingService');
-    }
-
-    protected function getLiveReplayService()
-    {
-        return $this->createService('Course:LiveReplayService');
+        return $this->getServiceKernel()->createService('Course:MemberService');
     }
 }

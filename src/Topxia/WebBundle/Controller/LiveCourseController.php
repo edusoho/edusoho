@@ -1,10 +1,10 @@
 <?php
-namespace AppBundle\Controller;
+namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
-use Biz\Util\EdusohoLiveClient;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveCourseController extends BaseController
@@ -72,7 +72,7 @@ class LiveCourseController extends BaseController
 
         $users   = $this->getUserService()->findUsersByIds($userIds);
         $default = $this->getSettingService()->get('default', array());
-        return $this->render('liveCourse/index.html.twig', array(
+        return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig', array(
             'recentCourses' => $recentCourses,
             'liveCourses'   => $liveCourses,
             'users'         => $users,
@@ -133,7 +133,7 @@ class LiveCourseController extends BaseController
             }
         }
 
-        return $this->render('liveCourse/live-tab.html.twig', array(
+        return $this->render('TopxiaWebBundle:LiveCourse:live-tab.html.twig', array(
             'liveTabs' => $liveTabs,
             'dateTabs' => $dateTabs
         ));
@@ -151,7 +151,7 @@ class LiveCourseController extends BaseController
             'courseIds'       => $publishedCourseIds
         ), array('startTime', 'DESC'), 0, 10);
 
-        return $this->render('liveCourse/live-replay-list.html.twig', array(
+        return $this->render('TopxiaWebBundle:LiveCourse:live-replay-list.html.twig', array(
             'liveReplayList' => $liveReplayList
 
         ));
@@ -223,7 +223,7 @@ class LiveCourseController extends BaseController
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
         }
 
-        return $this->render('liveCourse/live-course-all-list.html.twig', array(
+        return $this->render('TopxiaWebBundle:LiveCourse:live-course-all-list.html.twig', array(
             'liveCourses' => $liveCourses,
             'paginator'   => $paginator,
             'request'     => $request,
@@ -242,7 +242,7 @@ class LiveCourseController extends BaseController
 
         $courses = $this->getCourseService()->searchCourses($conditions, 'Rating', 0, 10);
 
-        return $this->render('liveCourse/rating-courses-block.html.twig', array(
+        return $this->render('TopxiaWebBundle:LiveCourse:rating-courses-block.html.twig', array(
             'courses' => $courses
         ));
     }
@@ -371,7 +371,7 @@ class LiveCourseController extends BaseController
 
         $params['id']       = $user['id'];
         $params['nickname'] = $user['nickname'];
-        return $this->forward('AppBundle:Liveroom:_entry', array('roomId' => $lesson['mediaId']), $params);
+        return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
     }
 
     public function verifyAction(Request $request)
@@ -455,7 +455,7 @@ class LiveCourseController extends BaseController
         $course = $this->getCourseService()->tryTakeCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
-        return $this->render("liveCourse/classroom.html.twig", array(
+        return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
             'lesson' => $lesson,
             'url'    => $this->generateUrl('live_classroom_replay_url', array(
                 'courseId'             => $courseId,
