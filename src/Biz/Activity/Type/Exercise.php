@@ -2,6 +2,10 @@
 
 namespace Biz\Activity\Type;
 
+use Biz\Activity\Dao\TestpaperActivityDao;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 
@@ -22,6 +26,23 @@ class Exercise extends Activity
         $fields = $this->filterFields($fields);
 
         return $this->getTestpaperService()->buildTestpaper($fields, 'exercise');
+    }
+
+    public function copy($activity, $config = array())
+    {
+        $ext    = $this->getTestpaperActivityDao()->get($activity['mediaId']);
+        $newExt = array(
+            'mediaId'         => $ext['testId'],
+            'doTimes'         => 0,
+            'redoInterval'    => $ext['redoInterval'],
+            'limitedTime'     => $ext['limitedTime'],
+            'checkType'       => $ext['checkType'],
+            'finishCondition' => $ext['finishCondition'],
+            'requireCredit'   => $ext['requireCredit'],
+            'testMode'        => $ext['testMode']
+        );
+
+        return $this->getTestpaperActivityDao()->create($newExt);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -89,18 +110,35 @@ class Exercise extends Activity
         return $filterFields;
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service("Activity:ActivityService");
+    }
+
+    /**
+     * @return TestpaperActivityDao
+     */
+    protected function getTestpaperActivityDao()
+    {
+        return $this->getBiz()->service('Activity:TestpaperActivityDao');
     }
 }

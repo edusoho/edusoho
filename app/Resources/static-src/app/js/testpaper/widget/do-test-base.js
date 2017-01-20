@@ -24,7 +24,7 @@ class DoTestBase
     this.$container.find('.js-testpaper-question-label').on('click','input',event=>this._choiceLable(event));
     this.$container.on('click','.js-marking',event=>this._markingToggle(event));
     this.$container.on('click','.js-favorite',event=>this._favoriteToggle(event));
-    this.$container.on('click','.js-analysis-toggle',event=>this._analysisToggle(event));
+    this.$container.on('click','.js-analysis',event=>this._analysisToggle(event));
     this.$container.on('blur','[data-type="fill"]',event=>this.fillChange(event));
   }
 
@@ -37,24 +37,29 @@ class DoTestBase
     let $current = $(event.currentTarget).addClass('hidden');
     $current.siblings('.js-marking.hidden').removeClass('hidden');
     let id = $current.closest('.js-testpaper-question').attr('id');
-    console.log($(`[data-anchor="#${id}"]`));
+    
     $(`[data-anchor="#${id}"]`).find('.js-marking-card').toggleClass("hidden");
   }
 
   _favoriteToggle(event) {
     let $current = $(event.currentTarget);
-    let data ={
-      targetType:$current.data('targetType'),
-      targetId:$current.data('targetId'),
-      questionId:$current.data('questionId'),
-    }
-    $.post($current.data('url'),{data},function (html) {  
+    let targetType = $current.data('targetType');
+    let targetId = $current.data('targetId');
+
+    $.post($current.data('url'),{targetType:targetType, targetId:targetId},function (response) {
+      $current.addClass('hidden').siblings('.js-favorite.hidden').data('url',response.url);  
       $current.addClass('hidden').siblings('.js-favorite.hidden').removeClass('hidden');
+    })
+    .error(function(response){
+      notify('error', response.error.message);
     })
   }
 
   _analysisToggle(event) {
-    let $current = this._viewToggle(event);
+    let $current = $(event.currentTarget);
+    $current.addClass('hidden');
+    console.log($current.siblings('.js-analysis.hidden'));
+    $current.siblings('.js-analysis.hidden').removeClass('hidden');
     $current.closest('.js-testpaper-question').find('.js-testpaper-question-analysis').slideToggle();
   }
 

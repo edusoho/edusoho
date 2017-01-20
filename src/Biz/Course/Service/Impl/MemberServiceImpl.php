@@ -178,6 +178,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
     }
 
+    public function waveMember($id, $diffs)
+    {
+        return $this->getMemberDao()->wave(array($id), $diffs);
+    }
+
     public function searchMemberIds($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
@@ -198,7 +203,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return ArrayToolkit::column($members, 'userId');
     }
 
-    public function updateCourseMember($id, $fields)
+    public function updateMember($id, $fields)
     {
         return $this->getMemberDao()->update($id, $fields);
     }

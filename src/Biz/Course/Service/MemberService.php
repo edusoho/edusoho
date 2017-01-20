@@ -23,11 +23,13 @@ interface MemberService
 
     public function getCourseMember($courseId, $userId);
 
+    public function waveMember($id, $diffs);
+
     public function searchMemberIds($conditions, $sort, $start, $limit);
 
     public function findMemberUserIdsByCourseId($courseId);
 
-    public function updateCourseMember($id, $fields);
+    public function updateMember($id, $fields);
 
     public function updateMembers($conditions, $updateFields);
 

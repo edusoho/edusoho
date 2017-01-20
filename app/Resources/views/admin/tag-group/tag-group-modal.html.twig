@@ -6,7 +6,7 @@
   {% if tagGroup.name|default(null) %}{{'编辑标签组'|trans}}{% else %}{{'添加标签组'|trans}}{% endif %}
 {% endblock %}
 {% block body %}
-  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
+  
   <form class="form-horizontal" id="tag-group-form" action="{% if tagGroup.name|default(null) %}{{ path('admin_tag_group_update',{groupId:tagGroup.id|default(null)}) }}{% else %}{{ path('admin_tag_group_create') }}{% endif %}" method="post">
     <div class="form-group">
       <label class="col-md-3 control-label" for="tag-group-name-field">{{'标签组名称'|trans}}</label>
@@ -37,8 +37,7 @@
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
-  <script type="text/javascript">app.lazyLoad = function() { app.load('tag-group/save-modal') };</script>
+  <script type="text/javascript">app.load('tag-group/save-modal');</script>
 {% endblock %}
 
 {% block footer %}

@@ -100,13 +100,13 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         $conditions = $this->prepareSearchConditions($conditions);
         switch ($sort) {
             case 'created':
-                $sort = array('createdTime', 'DESC');
+                $sort = array('createdTime' => 'DESC');
                 break;
             case 'createdByAsc':
-                $sort = array('createdTime', 'ASC');
+                $sort = array('createdTime' => 'ASC');
                 break;
             case 'nextExcutedTime':
-                $sort = array('nextExcutedTime', 'DESC');
+                $sort = array('nextExcutedTime' => 'DESC');
                 break;
             default:
                 throw $this->createServiceException('参数sort不正确。');
