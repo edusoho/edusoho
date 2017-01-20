@@ -77,7 +77,8 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         $subtitles = ArrayToolkit::index($subtitles, 'subtitleId');
 
         $fileIds = ArrayToolkit::column($subtitles, 'subtitleId');
-        $files = $this->getUploadFileService()->findFilesByIds($fileIds, true, array('resType' => 'sub'));
+        //$files = $this->getUploadFileService()->findFilesByIds($fileIds, true, array('resType' => 'sub'));
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds, true);
         foreach ($files as $file) {
             if (!($file["type"] == "subtitle" || $file["targetType"] == "subtitle")) {
                 continue;
