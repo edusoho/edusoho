@@ -13,7 +13,8 @@ class RoleDaoImpl extends GeneralDaoImpl implements RoleDao
         $declares['conditions'] = array(
             'name = :name',
             'code = :code',
-            'name like :nameLike',
+            'code LIKE :codeLike',
+            'name LIKE :nameLike',
             'createdUserId = :createdUserId',
         );
 

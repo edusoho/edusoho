@@ -2,7 +2,6 @@
 
 {% set menu = 'admin_cloud_file' %}
 {% do load_script('cloudfile/manage') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
 
 {% block stylesheets %}
   {{ parent() }}
@@ -17,6 +16,8 @@
 {% endblock %}
 
 {% block main %}
+
+  
 
   <div class="eduyun-main">
 

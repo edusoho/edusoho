@@ -1,21 +1,21 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Course\Service\CourseService;
-use Biz\File\Service\UploadFileService;
-use Biz\OpenCourse\Service\OpenCourseRecommendedService;
-use Biz\OpenCourse\Service\OpenCourseService;
-use Biz\System\Service\SettingService;
-use Biz\Taxonomy\Service\TagService;
-use Biz\Thread\Service\ThreadService;
-use Biz\User\Service\AuthService;
-use Biz\User\Service\TokenService;
-use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\UserService;
+use Biz\User\Service\TokenService;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Service\CourseService;
+use Biz\Thread\Service\ThreadService;
+use Biz\System\Service\SettingService;
+use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Cookie;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 
 class OpenCourseController extends BaseOpenCourseController
 {
@@ -57,7 +57,7 @@ class OpenCourseController extends BaseOpenCourseController
         $course      = $this->getOpenCourseService()->getCourse($courseId);
         $preview     = $request->query->get('as');
         $isWxPreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
-        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'openCourse', 'ownerId' => $courseId));
+        $tags        = $this->getTagService()->findTagsByOwner(array('ownerType' => 'openCourse', 'ownerId' => $courseId));
 
         $tagIds = ArrayToolkit::column($tags, 'id');
 
@@ -197,8 +197,8 @@ class OpenCourseController extends BaseOpenCourseController
 
     public function infoBarAction(Request $request, $courseId)
     {
-        $course                = $this->getOpenCourseService()->getCourse($courseId);
-        $course['favoriteNum'] = $this->_getFavoriteNum($courseId);
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+        //$course['favoriteNum'] = $this->_getFavoriteNum($courseId);
 
         $member = $this->_getMember($course['id']);
 
@@ -282,7 +282,7 @@ class OpenCourseController extends BaseOpenCourseController
 
     public function commentAction(Request $request, $courseId)
     {
-        $course      = $this->getOpenCourseService()->getCourse($courseId);
+        $course = $this->getOpenCourseService()->getCourse($courseId);
 
         if (!$course) {
             return $this->createMessageResponse('error', '课程不存在，或未发布。');
@@ -302,7 +302,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $posts = $this->getThreadService()->searchPosts(
             $conditions,
-            array('createdTime'=>'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -332,7 +332,7 @@ class OpenCourseController extends BaseOpenCourseController
             return $this->createMessageResponse('error', '课程不存在，或未发布。');
         }
 
-        return $this->forward('thread/postSave', array(
+        return $this->forward('AppBundle:Thread:postSave', array(
             'request'    => $request,
             'targetType' => 'openCourse',
             'targetId'   => $id
@@ -452,13 +452,13 @@ class OpenCourseController extends BaseOpenCourseController
 
         /*$paginator = new Paginator(
         $request,
-        $this->getMaterialService()->searchMaterialCount($conditions),
+        $this->getMaterialService()->countMaterials($conditions),
         5
         );*/
 
         $materials = $this->getMaterialService()->searchMaterials(
             $conditions,
-            array('createdTime'=>'DESC'),
+            array('createdTime' => 'DESC'),
             0,
             PHP_INT_MAX
         );
@@ -614,7 +614,7 @@ class OpenCourseController extends BaseOpenCourseController
             'courseId' => $courseId,
             'status'   => 'published'
         ),
-            array('seq', 'ASC'), 0, 1
+            array('seq' => 'ASC'), 0, 1
         );
 
         if (!$lessons) {
@@ -626,6 +626,7 @@ class OpenCourseController extends BaseOpenCourseController
 
     private function _getFavoriteNum($courseId)
     {
+        //涉及到课程 暂定
         $favoriteNum = $this->getCourseService()->searchCourseFavoriteCount(array(
             'courseId' => $courseId,
             'type'     => 'openCourse'
@@ -700,7 +701,7 @@ class OpenCourseController extends BaseOpenCourseController
         $replays = array();
 
         if ($lesson['type'] == 'liveOpen') {
-            $replays = $this->getCourseService()->searchCourseLessonReplays(array(
+            $replays = $this->getLiveReplayService()->searchReplays(array(
                 'courseId' => $lesson['courseId'],
                 'lessonId' => $lesson['id'],
                 'hidden'   => 0,
@@ -722,7 +723,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $currentPageCourses = $this->getOpenCourseService()->searchCourses(
             $conditions,
-            array('recommendedSeq', 'ASC'),
+            array('recommendedSeq' => 'ASC'),
             ($currentPage - 1) * $pageSize,
             $pageSize
         );
@@ -739,7 +740,7 @@ class OpenCourseController extends BaseOpenCourseController
 
         $courses = $this->getOpenCourseService()->searchCourses(
             $conditions,
-            array('createdTime'=>'DESC'),
+            array('createdTime' => 'DESC'),
             $start, $limit
         );
 
@@ -791,7 +792,7 @@ class OpenCourseController extends BaseOpenCourseController
      */
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -799,7 +800,7 @@ class OpenCourseController extends BaseOpenCourseController
      */
     protected function getTagService()
     {
-        return $this->getBiz()->service('Taxonomy:TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
     /**
@@ -807,7 +808,7 @@ class OpenCourseController extends BaseOpenCourseController
      */
     protected function getOpenCourseService()
     {
-        return $this->getBiz()->service('OpenCourse:OpenCourseService');
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 
     /**
@@ -815,7 +816,7 @@ class OpenCourseController extends BaseOpenCourseController
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     /**
@@ -823,7 +824,7 @@ class OpenCourseController extends BaseOpenCourseController
      */
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     /**
@@ -831,7 +832,7 @@ class OpenCourseController extends BaseOpenCourseController
      */
     protected function getUploadFileService()
     {
-        return $this->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     /**
@@ -839,7 +840,7 @@ class OpenCourseController extends BaseOpenCourseController
      */
     protected function getTokenService()
     {
-        return $this->getBiz()->service('User:TokenService');
+        return $this->createService('User:TokenService');
     }
 
     /**
@@ -847,7 +848,7 @@ class OpenCourseController extends BaseOpenCourseController
      */
     protected function getThreadService()
     {
-        return $this->getBiz()->service('Thread:ThreadService');
+        return $this->createService('Thread:ThreadService');
     }
 
     /**
@@ -855,7 +856,7 @@ class OpenCourseController extends BaseOpenCourseController
      */
     protected function getMaterialService()
     {
-        return $this->getBiz()->service('Course:MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     /**
@@ -863,7 +864,7 @@ class OpenCourseController extends BaseOpenCourseController
      */
     protected function getAuthService()
     {
-        return $this->getBiz()->service('User:AuthService');
+        return $this->createService('User:AuthService');
     }
 
     /**
@@ -871,6 +872,11 @@ class OpenCourseController extends BaseOpenCourseController
      */
     protected function getOpenCourseRecommendedService()
     {
-        return $this->getBiz()->service('OpenCourse:OpenCourseRecommendedService');
+        return $this->createService('OpenCourse:OpenCourseRecommendedService');
+    }
+
+    protected function getLiveReplayService()
+    {
+        return $this->createService('Course:LiveReplayService');
     }
 }

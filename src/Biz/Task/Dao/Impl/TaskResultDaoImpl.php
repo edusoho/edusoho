@@ -58,7 +58,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     public function findFinishedTimeByCourseIdGroupByUserId($courseId)
     {
         //已发布task总数
-        $sql            = "SELECT count(1) FROM course_task WHERE courseId = ? AND status='published'";
+        $sql            = "SELECT count(id) FROM course_task WHERE courseId = ? AND status='published'";
         $totalTaskCount = $this->db()->fetchColumn($sql, array($courseId));
 
         if ($totalTaskCount <= 0) {
@@ -68,6 +68,28 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         $sql = "SELECT max(finishedTime) AS finishedTime, count(courseTaskId) AS taskCount, userId FROM {$this->table()} WHERE courseId = ? and status='finish' group by userId HAVING taskCount >= ?";
 
         return $this->db()->fetchAll($sql, array($courseId, $totalTaskCount)) ?: array();
+    }
+
+    public function sumLearnTimeByCourseIdAndUserId($courseId, $userId)
+    {
+        $sql = "SELECT sum(TIME) FROM `course_task_result` WHERE `status`= ? AND  `courseId` = ? AND `userId`= ?";
+        return $this->db()->fetchColumn($sql, array('finish', $courseId, $userId));
+    }
+
+    public function getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskId)
+    {
+        $builder = $this->_createQueryBuilder(array('courseTaskId'=>$courseTaskId))
+            ->select('sum(time) AS learnedTime')
+            ->groupBy('courseTaskId');
+        return $builder->execute()->fetchColumn();
+    }
+
+    public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId)
+    {
+        $builder = $this->_createQueryBuilder(array('courseTaskId'=>$courseTaskId))
+            ->select('sum(watchTime) AS watchTime')
+            ->groupBy('courseTaskId');
+        return $builder->execute()->fetchColumn();
     }
 
     public function declares()
@@ -81,6 +103,8 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
                 'status =:status',
                 'userId =:userId',
                 'courseId =:courseId',
+                'type =: type',
+                'courseTaskId =: courseTaskId',
                 'courseId IN ( :courseIds )',
                 'activityId =:activityId',
                 'courseTaskId = :courseTaskId',

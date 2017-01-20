@@ -11,24 +11,25 @@ class CourseMaterialEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
+        //TODO 禁止topxia的事件订阅 接受 biz下的事件 这些需要迁移到biz下
         return array(
-            // 'course.delete'                            => 'onCourseDelete',
-            // 'course.lesson.create'                     => 'onCourseLessonCreate',
-            // 'course.lesson.delete'                     => 'onCourseLessonDelete',
-            // 'course.lesson.update'                     => 'onCourseLessonUpdate',
-            // 'upload.file.delete'                       => 'onUploadFileDelete',
-            // 'upload.file.finish'                       => 'onUploadFileFinish',
-            // 'course.material.create'                   => 'onMaterialCreate',
-            // 'course.material.update'                   => 'onMaterialUpdate',
-            // 'course.material.delete'                   => 'onMaterialDelete',
-
-            // 'open.course.delete'                       => 'onOpenCourseDelete',
-            // 'open.course.lesson.create'                => 'onOpenCourseLessonCreate',
-            // 'open.course.lesson.update'                => 'onOpenCourseLessonUpdate',
-            // 'open.course.lesson.delete'                => 'onOpenCourseLessonDelete',
-
-            // 'course.lesson.generate.video.replay'      => 'onLiveFileReplay',
-            // 'open.course.lesson.generate.video.replay' => 'onLiveOpenFileReplay'
+//            'course.delete'          => 'onCourseDelete',
+//            'course.lesson.create'   => 'onCourseLessonCreate',
+//            'course.lesson.delete'   => 'onCourseLessonDelete',
+//            'course.lesson.update'   => 'onCourseLessonUpdate',
+//            'upload.file.delete'     => 'onUploadFileDelete',
+//            'upload.file.finish'     => 'onUploadFileFinish',
+//            'course.material.create' => 'onMaterialCreate',
+//            'course.material.update' => 'onMaterialUpdate',
+//            'course.material.delete' => 'onMaterialDelete',
+//
+//            'open.course.delete'        => 'onOpenCourseDelete',
+//            'open.course.lesson.create' => 'onOpenCourseLessonCreate',
+//            'open.course.lesson.update' => 'onOpenCourseLessonUpdate',
+//            'open.course.lesson.delete' => 'onOpenCourseLessonDelete',
+//
+//            'course.lesson.generate.video.replay'      => 'onLiveFileReplay',
+//            'open.course.lesson.generate.video.replay' => 'onLiveOpenFileReplay'
         );
     }
 

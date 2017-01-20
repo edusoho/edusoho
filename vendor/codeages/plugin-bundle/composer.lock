@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9feeb0305e7fded4ff16cd626da16ef2",
-    "content-hash": "796e9bac009d388100635e79c7181f76",
+    "hash": "44a5833427fdcd72d2684355f7233b15",
+    "content-hash": "00132262fc82a2054c9bb604e3778a91",
     "packages": [
         {
             "name": "codeages/biz-framework",
-            "version": "v0.1.7",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "69eb16e1bf90b80567d88aa88aab697ee292a5a6"
+                "reference": "effdcd3621506df9a6b36665469f95c2eb60414e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/69eb16e1bf90b80567d88aa88aab697ee292a5a6",
-                "reference": "69eb16e1bf90b80567d88aa88aab697ee292a5a6",
+                "url": "https://packagist.phpcomposer.com/files/codeages/biz-framework/effdcd3621506df9a6b36665469f95c2eb60414e.zip",
+                "reference": "effdcd3621506df9a6b36665469f95c2eb60414e",
                 "shasum": ""
             },
             "require": {
@@ -40,7 +40,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2016-11-22 08:31:24"
+            "time": "2017-01-18 06:55:29"
         },
         {
             "name": "davedevelopment/phpmig",

@@ -95,11 +95,6 @@ class ThreadPostDaoTest extends BaseDaoTestCase
             }
         }
     }
-
-    protected function mockDataObject($fields)
-    {
-        return $this->getDao()->create(array_merge($this->getDefaultMockFields(), $fields));
-    }
     
     protected function getDefaultMockFields()
     {

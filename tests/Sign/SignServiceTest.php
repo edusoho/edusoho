@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Sign\Tests;
+namespace Tests\Sign;
 
 use Biz\BaseTestCase;;
 use Biz\Sign\Service\SignService;

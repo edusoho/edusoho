@@ -2,11 +2,11 @@
 
 namespace Biz\Activity\Type;
 
-use Biz\Activity\Dao\PptActivityDao;
-use Biz\Activity\Service\ActivityLearnLogService;
-use Biz\Activity\Service\ActivityService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\PptActivityDao;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class Ppt extends Activity
 {
@@ -37,11 +37,11 @@ class Ppt extends Activity
         $ppt      = $this->getPptActivityDao()->get($activity['mediaId']);
 
         if ($ppt['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
             return !empty($result) && $result >= $ppt['finishDetail'];
         }
 
-        if($ppt['finishType'] == 'end'){
+        if ($ppt['finishType'] == 'end') {
             $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finish');
             return !empty($logs);
         }
@@ -63,6 +63,19 @@ class Ppt extends Activity
 
         $ppt = $this->getPptActivityDao()->create($ppt);
         return $ppt;
+    }
+
+    public function copy($activity, $config = array())
+    {
+        $biz    = $this->getBiz();
+        $ppt    = $this->getPptActivityDao()->get($activity['mediaId']);
+        $newPpt = array(
+            'mediaId'       => $ppt['mediaId'],
+            'finishType'    => $ppt['finishType'],
+            'finishDetail'  => $ppt['finishDetail'],
+            'createdUserId' => $biz['user']['id']
+        );
+        return $this->getPptActivityDao()->create($newPpt);
     }
 
     public function update($targetId, &$fields, $activity)

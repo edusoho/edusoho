@@ -28,7 +28,7 @@ class ClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array('createdTime', 'desc'),
+            array('createdTime' => 'desc'),
             0,
             $arguments['count']
         );

@@ -22,47 +22,31 @@ class UserApprovalController extends BaseController
         $conditions = array_merge($conditions, $fields);
         $conditions = $this->fillOrgCode($conditions);
 
+        $conditions['startApprovalTime'] = !empty($conditions['startDateTime']) ? strtotime($conditions['startDateTime']) : '';
+
+        $conditions['endApprovalTime'] = !empty($conditions['endDateTime']) ? strtotime($conditions['endDateTime']) : '';
+
         if (isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')) {
             //根据条件从user_approval表里查找数据
-            $approvalcount   = $this->getUserService()->searchApprovalsCount($conditions);
-            $profiles        = $this->getUserService()->searchApprovals($conditions, array('id' => 'DESC'), 0, $approvalcount);
+            $userCount   = $this->getUserService()->searchApprovalsCount($conditions);
+            $profiles        = $this->getUserService()->searchApprovals($conditions, array('id' => 'DESC'), 0, $userCount);
             $userApprovingId = ArrayToolkit::column($profiles, 'userId');
         } else {
-            $usercount       = $this->getUserService()->searchUserCount($conditions);
-            $profiles        = $this->getUserService()->searchUsers($conditions, array('id' => 'DESC'), 0, $usercount);
+            $userCount       = $this->getUserService()->searchUserCount($conditions);
+            $profiles        = $this->getUserService()->searchUsers($conditions, array('id' => 'DESC'), 0, $userCount);
             $userApprovingId = ArrayToolkit::column($profiles, 'id');
-        }
-
-        //在user表里筛选要求的实名认证状态
-        $userConditions = array(
-            'userIds'        => $userApprovingId,
-            'approvalStatus' => $approvalStatus
-        );
-
-        if (!empty($conditions['startDateTime'])) {
-            $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
-        }
-
-        if (!empty($conditions['endDateTime'])) {
-            $userConditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
-        }
-
-        $userApprovalcount = 0;
-
-        if (!empty($userApprovingId)) {
-            $userApprovalcount = $this->getUserService()->searchUserCount($userConditions);
         }
 
         $paginator = new Paginator(
             $this->get('request'),
-            $userApprovalcount,
+            $userCount,
             20
         );
-        $users = array();
 
+        $users = array();
         if (!empty($userApprovingId)) {
             $users = $this->getUserService()->searchUsers(
-                $userConditions,
+                $conditions,
                 array('id'=>'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()

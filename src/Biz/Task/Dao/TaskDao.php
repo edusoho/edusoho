@@ -32,5 +32,17 @@ interface TaskDao extends GeneralDaoInterface
 
     public function getByCourseIdAndSeq($courseId, $sql);
 
+    /**
+     * 统计当前时间以后每天的直播次数
+     *
+     * @param $courseIds
+     * @param $limit
+     *
+     * @return array<string, int|string>
+     */
+    public function findFutureLiveDatesGroupByDate($courseIds, $limit);
+
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
+
+    public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
 }

@@ -87,13 +87,13 @@ interface CourseSetService
 
     /**
      * @param array   $conditions
-     * @param array   $orderBys
+     * @param array|string $orderBys
      * @param integer $start
      * @param integer $limit
      *
      * @return array[]
      */
-    public function searchCourseSets(array $conditions, array $orderBys, $start, $limit);
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit);
 
     /**
      * @param array $conditions
@@ -105,6 +105,14 @@ interface CourseSetService
     public function getCourseSet($id);
 
     public function createCourseSet($courseSet);
+
+    /**
+     * 复制课程
+     * @param array $courseSet 要复制的课程
+     * @param array $config 额外的参数
+     * @return mixed
+     */
+    public function copyCourseSet($courseSet, $config);
 
     public function updateCourseSet($id, $fields);
 
@@ -175,4 +183,12 @@ interface CourseSetService
     public function recommendCourse($id, $number);
 
     public function cancelRecommendCourse($id);
+
+    /**
+     * 返回课程的营收额
+     *
+     * @param  array     $ids
+     * @return array[]
+     */
+    public function findCourseSetIncomesByCourseSetIds(array $courseSetIds);
 }

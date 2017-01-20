@@ -12,6 +12,8 @@ interface CourseService
 
     public function findCoursesByCourseSetIds(array $setIds);
 
+    public function findCoursesByParentIdAndLocked($parentId, $locked);
+
     public function findPublishedCoursesByCourseSetId($courseSetId);
 
     public function findCoursesByCourseSetId($courseSetId);
@@ -23,6 +25,13 @@ interface CourseService
     public function getFirstPublishedCourseByCourseSetId($courseSetId);
 
     public function createCourse($course);
+
+    /**
+     * 复制教学计划
+     * @param  array   $fields
+     * @return mixed
+     */
+    public function copyCourse($fields);
 
     public function createChapter($chapter);
 
@@ -58,23 +67,24 @@ interface CourseService
 
     public function getUserRoleInCourse($courseId, $userId);
 
+    public function findPriceIntervalByCourseSetIds($courseSetIds);
+
     /**
      * 获取用户在教的教学计划
      *
-     * @param integer $courseSetId
-     * @param bool    $onlyPublished
+     * @param  integer                 $courseSetId
+     * @param  bool                    $onlyPublished
      * @throws AccessDeniedException
-     *
      * @return mixed
      */
-    public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished=true);
+    public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished = true);
 
     /**
      * @param  integer   $userId
      * @param  bool      $onlyPublished 是否只需要发布后的教学计划
      * @return array[]
      */
-    public function findTeachingCoursesByUserId($userId, $onlyPublished=true);
+    public function findTeachingCoursesByUserId($userId, $onlyPublished = true);
 
     /**
      * @param  integer   $userId
@@ -93,13 +103,13 @@ interface CourseService
     public function findPublicCoursesByIds(array $ids);
 
     //---start 前两个已经重构了，后面的四个也需要重构，目前还没有用到，用到的时候在重构
-    public function findUserLeaningCourseCount($userId, $filters = array());
+    public function countUserLearningCourses($userId, $filters = array());
 
-    public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
+    public function findUserLearningCourses($userId, $start, $limit, $filters = array());
 
-    public function findUserLeanedCourseCount($userId, $filters = array());
+    public function countUserLearnedCourses($userId, $filters = array());
 
-    public function findUserLeanedCourses($userId, $start, $limit, $filters = array());
+    public function findUserLearnedCourses($userId, $start, $limit, $filters = array());
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 

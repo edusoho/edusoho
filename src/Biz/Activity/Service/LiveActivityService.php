@@ -6,9 +6,11 @@ interface LiveActivityService
 {
     public function getLiveActivity($id);
 
-    public function createLiveActivity($activity);
+    public function createLiveActivity($activity, $ignoreValidation = false);
 
     public function updateLiveActivity($id, &$fields, $activity);
 
     public function deleteLiveActivity($id);
+
+    public function createLiveroom($activity);
 }

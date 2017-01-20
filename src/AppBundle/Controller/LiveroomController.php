@@ -1,12 +1,12 @@
 <?php
 namespace AppBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Symfony\Component\HttpFoundation\Request;
 
 class LiveroomController extends BaseController
 {
-    public function _entryAction(Request $request, $courseId, $activityId, $roomId)
+    public function _entryAction(Request $request, $roomId, $params = array())
     {
         $user           = $request->query->all();
         $user['device'] = $this->getDevice($request);
@@ -15,13 +15,17 @@ class LiveroomController extends BaseController
             $user['protocol'] = 'https';
         }
 
+        $systemUser     = $this->getUserService()->getUser($user['id']);
+        $avatar         = !empty($systemUser['smallAvatar']) ? $systemUser['smallAvatar'] : '';
+        $avatar         = $this->getWebExtension()->getFurl($avatar, 'avatar.png');
+        $user['avatar'] = $avatar;
+
         $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $user);
 
-        return $this->render("activity/live/entry.html.twig", array(
-            'courseId'   => $courseId,
-            'activityId' => $activityId,
-            'roomId'     => $roomId,
-            'ticket'     => $ticket
+        return $this->render("liveroom/entry.html.twig", array(
+            'roomId' => $roomId,
+            'params' => $params,
+            'ticket' => $ticket
         ));
     }
 
@@ -35,10 +39,15 @@ class LiveroomController extends BaseController
 
     protected function getDevice($request)
     {
-        // if ($this->isMobileClient()) {
-        // return 'mobile';
-        // } else {
-        return 'desktop';
-        // }
+        if ($this->isMobileClient()) {
+            return 'mobile';
+        } else {
+            return 'desktop';
+        }
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

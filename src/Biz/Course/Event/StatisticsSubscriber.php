@@ -16,10 +16,10 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     public static function getSubscribedEvents()
     {
         return array(
-            'course.task.create'   => 'onTaskNumberChange',
-            'course.task.delete'   => 'onTaskNumberChange',
-
-            'course.task.finish'   => 'onTaskFinish',
+            'course.task.create'    => 'onTaskCreate',
+            'course.task.delete'    => 'onTaskDelete',
+            'course.task.publish'   => 'onPublishTaskNumberChange',
+            'course.task.unpublish' => 'onPublishTaskNumberChange',
 
             'course.thread.create' => 'onCourseThreadChange',
             'course.thread.delete' => 'onCourseThreadChange',
@@ -30,29 +30,21 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         );
     }
 
-    public function onTaskNumberChange(Event $event)
+    public function onTaskCreate(Event $event)
+    {
+        $this->onTaskNumberChange($event, array('taskNum'));
+    }
+
+    public function onTaskDelete(Event $event)
+    {
+        $this->onTaskNumberChange($event, array('taskNum', 'publishedTaskNum'));
+    }
+
+    public function onPublishTaskNumberChange(Event $event)
     {
         $task = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($task['courseId'], array(
-            'taskNum'
-        ));
-    }
-
-    public function onTaskFinish(Event $event)
-    {
-        $taskId   = $event->getSubject();
-        $user     = $event->getArgument('user');
-        $nextTask = $this->getTaskService()->getNextTask($taskId);
-        if (!empty($nextTask)) {
-            return;
-        }
-
-        $this->getMemberService()->updateMembers(array(
-            'userId' => $user['id'],
-            'role'   => 'student'
-        ), array(
-            'isLearned'    => 1,
-            'finishedTime' => time()
+            'publishedTaskNum'
         ));
     }
 
@@ -71,6 +63,12 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $this->getCourseService()->updateCourseStatistics($review['courseId'], array(
             'ratingNum'
         ));
+    }
+
+    protected function onTaskNumberChange($event, $fields)
+    {
+        $task = $event->getSubject();
+        $this->getCourseService()->updateCourseStatistics($task['courseId'], $fields);
     }
 
     /**
@@ -103,6 +101,11 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->getBiz()->service('Task:TaskResultService');
     }
 
     /**

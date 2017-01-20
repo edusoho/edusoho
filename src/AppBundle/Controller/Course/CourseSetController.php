@@ -28,9 +28,11 @@ class CourseSetController extends BaseController
 
         $service = $this->getCourseService();
 
-        $courseSets = array_map(function($set) use (&$userIds, $service) {
+        $courseSets = array_map(function ($set) use (&$userIds, $service) {
             $set['course'] = $service->getFirstPublishedCourseByCourseSetId($set['id']);
-            $userIds = array_merge($userIds, $set['course']['teacherIds']);
+            if (!empty($set['course']['teacherIds'])) {
+                $userIds = array_merge($userIds, $set['course']['teacherIds']); 
+            }
             return $set;
         }, $courseSets);
 

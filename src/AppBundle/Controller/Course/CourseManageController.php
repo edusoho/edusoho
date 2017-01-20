@@ -38,10 +38,19 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function copyAction(Request $request, $courseSetId, $courseId)
+    public function copyAction(Request $request, $courseSetId)
     {
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $this->getCourseService()->copyCourse($data);
+
+            return $this->redirect($this->generateUrl('course_set_manage_courses', array('courseSetId' => $courseSetId)));
+        }
+
+        $courseId  = $request->query->get('courseId');
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
         return $this->render('course-manage/create-modal.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course
@@ -53,7 +62,7 @@ class CourseManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
         $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
 
-        if($courseSet['type'] == 'live'){
+        if ($courseSet['type'] == 'live') {
             $course = current($courses);
             return $this->redirectToRoute('course_set_manage_course_tasks', array(
                 'courseSetId' => $courseSet['id'],
@@ -76,8 +85,8 @@ class CourseManageController extends BaseController
 
         $files = $this->prepareTaskActivityFiles($tasks);
 
-        $courseItems     = $this->getCourseService()->findCourseItems($courseId);
-        $taskPerDay      = $this->getFinishedTaskPerDay($course, $tasks);
+        $courseItems = $this->getCourseService()->findCourseItems($courseId);
+        $taskPerDay  = $this->getFinishedTaskPerDay($course, $tasks);
 
         return $this->render($this->getTasksTemplate($course), array(
             'taskNum'    => count($tasks),
@@ -91,7 +100,7 @@ class CourseManageController extends BaseController
 
     protected function getTasksTemplate($course)
     {
-        if($course['isDefault']) {
+        if ($course['isDefault']) {
             return 'course-manage/free-mode/tasks.html.twig';
         } else {
             return 'course-manage/lock-mode/tasks.html.twig';
@@ -205,7 +214,7 @@ class CourseManageController extends BaseController
                     'id'        => $teacher['userId'],
                     'isVisible' => $teacher['isVisible'],
                     'nickname'  => $teacher['nickname'],
-                    'avatar'    => $this->get('topxia.twig.web_extension')->getFilePath($teacher['smallAvatar'])
+                    'avatar'    => $this->get('topxia.twig.web_extension')->getFilePath($teacher['smallAvatar'], 'avatar.png')
                 );
             }
         }
