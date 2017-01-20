@@ -57,9 +57,9 @@ class ServiceMethodCommand extends BaseCommand
 			$output->writeln($str);
 		}
 
-		// foreach ($this->notices['info'] as $key => $str) {
-		// 	$output->writeln($str);
-		// }
+		foreach ($this->notices['info'] as $key => $str) {
+			$output->writeln($str);
+		}
 	}
 
 	protected function loadAllService()
