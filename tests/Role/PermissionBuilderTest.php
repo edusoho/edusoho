@@ -2,8 +2,8 @@
 namespace Tests\Tests;
 
 use Symfony\Component\Yaml\Yaml;
-use Biz\BaseTestCase;;
-use Permission\Common\PermissionBuilder;
+use Biz\BaseTestCase;
+use Biz\Role\Util\PermissionBuilder;
 use Topxia\Service\Common\ServiceKernel;
 
 class PermissionBuilderTest extends BaseTestCase
