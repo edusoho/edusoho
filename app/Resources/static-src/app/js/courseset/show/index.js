@@ -1,5 +1,7 @@
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import { Card } from 'app/common/unit/card';
+import Swiper from 'Swiper';
+let orderLearnSwiper = null;
 
 Card();
 chapterAnimate();
@@ -10,6 +12,9 @@ $('.js-task-show-type').on('click', 'a', function() {
     let $this = $(this).addClass('active');
     $($this.data('list')).removeClass('hidden');
     $($this.siblings('a').removeClass('active').data('list')).addClass('hidden');
+    if($this.data('type') == 'chart'&& !orderLearnSwiper) {
+      initSwiper();
+    }
 })
 
 function initTaskLearnChart() {
@@ -60,3 +65,23 @@ function triggerMemberExpired() {
         $(".member-expire a").trigger('click');
     }
 }
+
+function initSwiper() {
+  orderLearnSwiper = new Swiper('.swiper-container',{
+    pagination: '.swiper-pager',
+    loop:true,
+    grabCursor: true,
+    paginationClickable: true
+  })
+  $('.arrow-left').on('click', function(e){
+    e.preventDefault()
+    orderLearnSwiper.swipePrev()
+  })
+  $('.arrow-right').on('click', function(e){
+    e.preventDefault()
+    orderLearnSwiper.swipeNext()
+  })
+
+  // $('data-toggle="tooltip"').tooTip()
+}
+
