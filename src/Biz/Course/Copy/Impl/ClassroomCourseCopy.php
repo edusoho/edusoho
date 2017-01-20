@@ -5,9 +5,8 @@ namespace Biz\Course\Copy\Impl;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\CourseMaterialDao;
-use Biz\Course\Copy\AbstractEntityCopy;
 
-class CourseSetCopy extends AbstractEntityCopy
+class ClassroomCourseCopy extends CourseCopy
 {
     /**
      * 复制链说明：
@@ -21,8 +20,7 @@ class CourseSetCopy extends AbstractEntityCopy
      */
     public function __construct($biz)
     {
-        $this->biz = $biz;
-        parent::__construct($biz, 'course-set');
+        parent::__construct($biz);
     }
 
     /*
@@ -35,9 +33,25 @@ class CourseSetCopy extends AbstractEntityCopy
         $this->doCopyMaterial($source, $newCourseSet);
 
         $course = $this->getCourseDao()->get($config['courseId']);
-        $this->childrenCopy($course, array('newCourseSet' => $newCourseSet));
 
-        return $newCourseSet;
+        $user        = $this->biz['user'];
+        $courseSetId = $newCourseSet['id'];
+
+        $newCourse                = $this->doCopy($course);
+        $newCourse['isDefault']   = $course['isDefault'];
+        $modeChange               = false;
+        $newCourse['parentId']    = $course['id'];
+        $newCourse['courseSetId'] = $courseSetId;
+        $newCourse['creator']     = $user['id'];
+        $newCourse['status']      = 'published';
+        $newCourse['teacherIds']  = array($user['id']);
+
+        $newCourse = $this->getCourseDao()->create($newCourse);
+        $this->doCopyCourseMember($newCourse);
+
+        $this->childrenCopy($course, array('newCourse' => $newCourse, 'modeChange' => $modeChange));
+
+        return $newCourse;
     }
 
     private function doCopyCourseSet($courseSet)

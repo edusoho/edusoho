@@ -27,6 +27,19 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
         return $this->db()->fetchAll($sql, array($title));
     }
 
+    protected function _createQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if (empty($value)) {
+                return false;
+            }
+
+            return true;
+        });
+
+        return parent::_createQueryBuilder($conditions);
+    }
+
     public function declares()
     {
         return array(
@@ -48,7 +61,13 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'cover'     => 'json'
             ),
             'orderbys'   => array(
-                'createdTime', 'recommendedSeq', 'hitNum', 'recommendedTime', 'rating', 'studentNum'
+                'createdTime',
+                'updatedTime',
+                'recommendedSeq',
+                'hitNum',
+                'recommendedTime',
+                'rating',
+                'studentNum'
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime'
