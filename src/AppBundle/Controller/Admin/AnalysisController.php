@@ -207,6 +207,8 @@ class AnalysisController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
+        $count = $this->getLogService()->analysisLoginNumByTime($timeRange['startTime'], $timeRange['endTime']);
+
         if (!$timeRange) {
             $this->setFlashMessage("danger", '输入的日期有误!');
             return $this->redirect($this->generateUrl('admin_operation_analysis_login', array(
@@ -232,7 +234,6 @@ class AnalysisController extends BaseController
         if ($tab == "trend") {
             $loginData = $this->getLogService()->analysisLoginDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data = $this->fillAnalysisData($condition, $loginData);
-            $count = $this->getLogService()->analysisLoginNumByTime($timeRange['startTime'], $timeRange['endTime']);
         }
 
         $userIds = ArrayToolkit::column($loginDetail, 'userId');
