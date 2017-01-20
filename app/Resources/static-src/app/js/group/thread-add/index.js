@@ -1,4 +1,4 @@
-import AttachmentActions from '../../attachment/widget/attachment-actions';
+import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 
 let $userThreadForm = $('#user-thread-form');
 let groupThreadAddBtn = '#groupthread-save-btn';

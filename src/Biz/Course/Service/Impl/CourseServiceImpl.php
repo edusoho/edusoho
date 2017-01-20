@@ -10,6 +10,7 @@ use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Copy\Impl\CourseCopy;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -132,6 +133,17 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function copyCourse($fields)
     {
         $course = $this->tryManageCourse($fields['copyCourseId']);
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'courseSetId',
+            'learnMode',
+            'expiryMode',
+            'expiryDays',
+            'expiryStartDate',
+            'expiryEndDate',
+            'isDefault'
+        ));
+        $fields = $this->validateExpiryMode($fields);
 
         $entityCopy = new CourseCopy($this->biz);
         return $entityCopy->copy($course, $fields);
