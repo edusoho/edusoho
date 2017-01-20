@@ -156,7 +156,7 @@ class CloudFileController extends BaseController
         $globalIds = $request->request->get('ids');
         $files     = $this->getUploadFileService()->searchFiles(
             array('globalIds' => $globalIds),
-            array('createdTime', 'desc'),
+            array('createdTime' => 'desc'),
             0, PHP_INT_MAX
         );
 
@@ -167,7 +167,7 @@ class CloudFileController extends BaseController
             $materials = $this->getCourseMaterialService()->findUsedCourseMaterials($fileIds, $courseId = 0);
         }
 
-        return $this->render('material-lib/Web/delete-file-modal.html.twig', array(
+        return $this->render('material-lib/web/delete-file-modal.html.twig', array(
             'materials'     => $materials,
             'files'         => $files,
             'ids'           => $globalIds,

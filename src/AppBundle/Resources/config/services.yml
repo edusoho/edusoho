@@ -96,6 +96,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    course_material_event_subscriber:
+        class: Biz\Course\Event\MaterialEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     conversation_event_subscriber:
         class: Biz\IM\Event\ConversationEventSubscriber
         arguments: ['@biz']

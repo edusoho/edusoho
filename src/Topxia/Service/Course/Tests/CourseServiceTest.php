@@ -341,7 +341,7 @@ class CourseServiceTest extends BaseTestCase
         $tryLearn1  = $this->getCourseService()->tryLearnCourse($createCourse1['id']);
         $tryLearn2  = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
 
-        $result = $this->getCourseService()->findUserLeaningCourses($user['id'], 0, 5, array("type" => "normal"));
+        $result = $this->getCourseService()->findUserLearningCourses($user['id'], 0, 5, array("type" => "normal"));
         $this->assertCount(2, $result);
     }
 
@@ -373,7 +373,7 @@ class CourseServiceTest extends BaseTestCase
         $tryLearn1  = $this->getCourseService()->tryLearnCourse($createCourse1['id']);
         $tryLearn2  = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
 
-        $result = $this->getCourseService()->findUserLeaningCourseCount($user['id'], array("type" => "normal"));
+        $result = $this->getCourseService()->countUserLearningCourses($user['id'], array("type" => "normal"));
         $this->assertEquals(2, $result);
     }
 
@@ -434,7 +434,7 @@ class CourseServiceTest extends BaseTestCase
         $tryLearn2  = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
         $this->getCourseService()->finishLearnLesson($createCourse1['id'], $createdLesson1['id']);
         $this->getCourseService()->finishLearnLesson($createCourse2['id'], $createdLesson2['id']);
-        $result = $this->getCourseService()->findUserLeanedCourseCount($user['id']);
+        $result = $this->getCourseService()->countUserLearnedCourses($user['id']);
         $this->assertEquals(2, $result);
     }
 
@@ -495,7 +495,7 @@ class CourseServiceTest extends BaseTestCase
         $tryLearn2  = $this->getCourseService()->tryLearnCourse($createCourse2['id']);
         $this->getCourseService()->finishLearnLesson($createCourse1['id'], $createdLesson1['id']);
         $this->getCourseService()->finishLearnLesson($createCourse2['id'], $createdLesson2['id']);
-        $result = $this->getCourseService()->findUserLeanedCourses($user['id'], 0, 5);
+        $result = $this->getCourseService()->findUserLearnedCourses($user['id'], 0, 5);
         $this->assertCount(2, $result);
     }
 
@@ -1293,10 +1293,8 @@ class CourseServiceTest extends BaseTestCase
             'length' => 100,
             'fileSize' => 1024
         );
-        $this->mockBiz('File:UploadFileService', 'UploadFileService', array(
-            array('functionName' => 'getFile', 'runTimes' => 2, 'returnValue' => $fakeFile),
-            array('functionName' => 'waveUploadFile', 'runTimes' => 1, 'returnValue' => array())
-        ));
+        $this->mockService(array('File:UploadFileService' =>
+            array('getFile' => $fakeFile, 'waveUploadFile' => array())));
 
         $lesson = $this->getCourseService()->createLessonByFileId($course['id'], $fakeFile['id']);
 
@@ -2601,7 +2599,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertArrayEquals($result, array(array('userId' => $this->getCurrentUser()->id)));
     }
 
-    public function testUpdateCourseMember()
+    public function testupdateMember()
     {
         $course       = array(
             'title' => 'test course 1'

@@ -91,6 +91,7 @@ class PluginConfigurationManager
 
     public function isPluginInstalled($code)
     {
+    
         $plugins = $this->getInstalledPlugins();
         $code = strtolower($code);
 

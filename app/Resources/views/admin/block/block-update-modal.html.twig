@@ -3,7 +3,7 @@
 
 {% block title %}{{'编辑内容'|trans}}{% endblock %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
+
 {% set modal_class = 'modal-lg' %}
 
 {% block body %}
@@ -43,5 +43,5 @@
 {% block footer %}
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
   <button id="block-update-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#block-form">{{'保存'|trans}}</button>
-  <script type="text/javascript">app.lazyLoad = function() { app.load('block/update') };</script>
+  <script type="text/javascript">app.load('block/update');</script>
 {% endblock %}

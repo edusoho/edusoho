@@ -140,8 +140,10 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
         foreach ($courseSets as &$set) {
             $course            = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($set['id']);
-            $userIds           = array_merge($userIds, $course['teacherIds']);
-            $set['teacherIds'] = $course['teacherIds'];
+            if (!empty($course)) {
+                $set['teacherIds'] = $course['teacherIds'];                
+                $userIds = array_merge($userIds, $course['teacherIds']);                
+            }
             $categoryIds[]     = $set['categoryId'];
         }
 
@@ -157,8 +159,16 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
         foreach ($courseSets as &$set) {
+            $categoryId = $set['categoryId'];
+            if ($categoryId != 0 && array_key_exists($categoryId, $categories)) {
+                $set['category'] = $categories[$categoryId];
+            }
+
             $teachers = array();
 
+            if (empty($set['teacherIds'])) {
+                continue;
+            }
             foreach ($set['teacherIds'] as $teacherId) {
                 if (!$teacherId) {
                     continue;
@@ -171,15 +181,8 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             }
 
             $set['teachers'] = $teachers;
-
-            $categoryId = $set['categoryId'];
-
-            if ($categoryId != 0 && array_key_exists($categoryId, $categories)) {
-                $set['category'] = $categories[$categoryId];
-            }
             unset($set['teacherIds']);
         }
-
         return $courseSets;
     }
 

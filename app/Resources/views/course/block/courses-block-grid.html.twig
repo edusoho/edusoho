@@ -117,7 +117,7 @@
             <div class="text-12 color-gray ph10 pt10">{{'学习总时长：%learnTime%'|trans({'%learnTime%': course.learnTime})}}</div>
           {% else %}
             <div class="progress progress-sm mb0">
-              <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.taskNum) }};"></div>
+              <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.publishedTaskNum) }};"></div>
             </div>
           {% endif %}
         {% endif %}

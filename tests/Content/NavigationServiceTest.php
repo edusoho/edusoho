@@ -1,5 +1,6 @@
 <?php
-namespace Topxia\Service\Content\Tests;
+
+namespace Tests\Content;
 
 use Biz\BaseTestCase;
 use Biz\Content\Service\NavigationService;
