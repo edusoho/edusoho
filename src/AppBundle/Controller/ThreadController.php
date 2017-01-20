@@ -1,13 +1,13 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\File\Service\UploadFileService;
-use Biz\PostFilter\Service\TokenBucketService;
-use Biz\Thread\Service\ThreadService;
-use Biz\User\Service\NotificationService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Biz\Thread\Service\ThreadService;
+use Biz\File\Service\UploadFileService;
+use Biz\User\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\PostFilter\Service\TokenBucketService;
 
 class ThreadController extends BaseController
 {
