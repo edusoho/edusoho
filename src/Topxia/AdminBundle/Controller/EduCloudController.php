@@ -1070,20 +1070,19 @@ class EduCloudController extends BaseController
     {
         $cloud_consult = $this->getSettingService()->get('cloud_consult', array());
 
-        $api         = CloudAPIFactory::create('root');
-        $loginStatus    = $api->post("/robot/login_url");
-        var_dump($loginStatus);
-        exit();
-        if ($loginStatus['code'] == '10000') {
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,请联系客服人员:4008041114！'));
-        }
+        $defaultSetting = array(
+            'cloud_consult_setting_enabled' => 0,
+            'cloud_consult_enabled' => 0,
+            'cloud_consult_landing_url' => '',
+            'cloud_consult_js' => ''
+        );
 
-        if ($loginStatus['code'] == '10001') {
-            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('账号已过期,请联系客服人员:4008041114！'));
-        }
+        $cloud_consult = $this->validateConsult(array_merge($defaultSetting, $cloud_consult));
 
         if ($request->getMethod() == 'POST') {
-            $cloud_consult = $request->request->all();
+            $request_cloud_consult = $request->request->all();
+            $cloud_consult['cloud_consult_setting_enabled'] = $request_cloud_consult['cloud_consult_setting_enabled'];
+
             $this->getSettingService()->set('cloud_consult', $cloud_consult);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('云客服设置已保存！'));
         }
@@ -1091,6 +1090,34 @@ class EduCloudController extends BaseController
         return $this->render('TopxiaAdminBundle:EduCloud/Consult:setting.html.twig', array(
             'cloud_consult'=> $cloud_consult
         ));
+    }
+
+    protected function validateConsult($cloud_consult)
+    {
+        try {
+            $api         = CloudAPIFactory::create('root');
+            $loginStatus    = $api->post("/robot/login_url");
+            $jsResource    = $api->post("/robot/install");
+
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Consult:cloud-consult-error.html.twig', array());
+        }
+
+        if ((isset($loginStatus['code']) && $loginStatus['code']== '10000') || (isset($jsResource['code']) && $jsResource['code']== '10000')) {
+            $default['cloud_consult_enabled'] = 0;
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,请联系客服人员:4008041114！'));
+        } else if ((isset($loginStatus['code']) && $loginStatus['code']== '10001') || (isset($jsResource['code']) && $jsResource['code']== '10001')) {
+            $default['cloud_consult_enabled'] = 0;
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('账号已过期,请联系客服人员:4008041114！'));
+        } else {
+            $default['cloud_consult_enabled'] = 1;
+            $default['cloud_consult_landing_url'] = $loginStatus;
+            $default['cloud_consult_js'] = $jsResource;
+        }
+
+        $cloud_consult = array_merge($cloud_consult, $default);
+
+        return $cloud_consult;
     }
 
     protected function dateFormat($time)

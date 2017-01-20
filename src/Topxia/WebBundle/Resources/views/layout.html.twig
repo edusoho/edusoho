@@ -80,6 +80,11 @@
   {% endblock %}
 
   {% block floatConsult %}
+    {% set cloud_consult = setting('cloud_consult', '') %}
+    {% if cloud_consult.cloud_consult_setting_enabled and cloud_consult.cloud_consult_enabled and cloud_consult.cloud_consult_js |default() %}
+      {{ cloud_consult.cloud_consult_js | raw }}
+    {% endif %}
+
     {% if setting('consult.enabled', 0) and (consultDisplay|default(false) or siteNav|default() == '/' ) %}
       {% if not setting('esBar.enabled',0) %}
         {% include 'TopxiaWebBundle::float-consult.html.twig' %}
