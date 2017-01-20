@@ -41,6 +41,9 @@ function updateItemSeq(data,datas) {
 export default class MultiInput extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentWillMount() {
     this.state = {
       dataSourceUi: [],
     }
@@ -72,7 +75,7 @@ export default class MultiInput extends Component {
     });
   }
 
-  addItem = (value) => {
+  addItem = (value,data) => {
     initItem(this.state.dataSourceUi,value);
     this.setState({
       dataSourceUi: this.state.dataSourceUi,
@@ -101,7 +104,7 @@ export default class MultiInput extends Component {
     return (
       <div className="multi-group">
         {list}
-        <InputGroup searchable = { searchable } addable = { addable }/>
+        <InputGroup searchable = { searchable } addable = { addable } />
         <input type='hidden' name={outputDataElement} value={JSON.stringify(outputSets)} />
       </div>
     );
