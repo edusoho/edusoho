@@ -78,7 +78,7 @@ class CourseSetFileManageController extends BaseController
     {
         $this->getCourseSetService()->tryManageCourseSet($id);
 
-        $materialCount = $this->getMaterialService()->searchMaterialCount(
+        $materialCount = $this->getMaterialService()->countMaterials(
             array(
                 'courseSetId' => $id,
                 'fileId'      => $fileId

@@ -11,7 +11,7 @@
 {% if course.type == 'open' or course.type == 'liveOpen' %}
   {% set uploadUrl = path('live_open_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
 {% else %}
-  {% set uploadUrl = path('live_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
+  {% set uploadUrl = path('live_open_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
 {% endif %}
 
 <form id="course-material-form" class="form-horizontal" action="{{ uploadUrl }}" enctype="multipart/form-data" method="post">
@@ -20,7 +20,7 @@
   {% set targetId   = course.id %}
   <div class="form-group">
     <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
-      {% include 'live-course-replay-manage:file-chooser.html.twig' %}
+      {% include 'live-course-replay-manage/file-chooser.html.twig' %}
       <input type="hidden" name="fileId">
       <input id="lesson-media-field" type="hidden" name="media" value="{{ field_value(lesson, 'media')|json_encode }}">
     </div>

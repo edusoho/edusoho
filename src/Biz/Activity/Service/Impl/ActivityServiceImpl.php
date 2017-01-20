@@ -282,7 +282,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             foreach ($currents as $current) {
                 //如果fileId存在则匹配fileId，否则匹配link
                 if (($exist['fileId'] != 0 && $exist['fileId'] == $current['fileId'])
-                    || ($exist['fileId'] == 0 && $exist['link'] == $current['link'])) {
+                    || ($exist['fileId'] == 0 && $exist['link'] == $current['link'])
+                ) {
                     $current['id'] = $exist['id'];
                     if (empty($current['description'])) {
                         $current['description'] = $exist['description'];
