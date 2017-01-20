@@ -207,6 +207,8 @@ class AnalysisController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
+        $count = 0;
+
         if (!$timeRange) {
             $this->setFlashMessage("danger", '输入的日期有误!');
             return $this->redirect($this->generateUrl('admin_operation_analysis_login', array(
@@ -258,65 +260,66 @@ class AnalysisController extends BaseController
         ));
     }
 
-    public function courseAction(Request $request, $tab)
+    public function courseSetAction(Request $request, $tab)
     {
         $data            = array();
-        $count           = 0;
-        $courseStartDate = "";
+        $courseSetStartDate = "";
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
+        $count = $this->getCourseSetService()->countCourseSets($timeRange);
+
         if (!$timeRange) {
             $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_course', array(
+            return $this->redirect($this->generateUrl('admin_operation_analysis_course_set', array(
                 'tab' => "trend"
             )));
         }
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchCourseCount($timeRange),
+            $count,
             20
         );
 
-        $courseDetail = $this->getCourseService()->searchCourses(
+        $courseSetDetail = $this->getCourseSetService()->searchCourseSets(
             $timeRange,
             '',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $courseData = "";
+        $courseSetData = "";
 
         if ($tab == "trend") {
-            $courseData = $this->getCourseService()->analysisCourseDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
-            $data = $this->fillAnalysisData($condition, $courseData);
+            $courseSetData = $this->getCourseSetService()->analysisCourseSetDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $data = $this->fillAnalysisData($condition, $courseSetData);
         }
 
-        $userIds = ArrayToolkit::column($courseDetail, 'userId');
+        $userIds = ArrayToolkit::column($courseSetDetail, 'creator');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseDetail, 'categoryId'));
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSetDetail, 'categoryId'));
 
-        $courseStartData = $this->getCourseService()->searchCourses(array(), 'createdTimeByAsc', 0, 1);
+        $courseSetStartData = $this->getCourseSetService()->searchCourseSets(array(), 'createdTimeByAsc', 0, 1);
 
-        if ($courseStartData) {
-            $courseStartDate = date("Y-m-d", $courseStartData[0]['createdTime']);
+        if ($courseSetStartData) {
+            $courseSetStartDate = date("Y-m-d", $courseSetStartData[0]['createdTime']);
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("admin/operation-analysis/course.html.twig", array(
-            'courseDetail'    => $courseDetail,
+        return $this->render("admin/operation-analysis/course-set.html.twig", array(
+            'courseSetDetail'    => $courseSetDetail,
             'paginator'       => $paginator,
             'tab'             => $tab,
             'categories'      => $categories,
             'data'            => $data,
             'users'           => $users,
-            'courseStartDate' => $courseStartDate,
-            'dataInfo'        => $dataInfo
+            'courseSetStartDate' => $courseSetStartDate,
+            'dataInfo'        => $dataInfo,
+            'count'           => $count,
         ));
     }
 
@@ -739,7 +742,8 @@ class AnalysisController extends BaseController
             $this->getCourseService()->searchAnalysisLessonViewCount(
                 $searchCondition,
                 20
-            ));
+            )
+        );
 
         $videoViewedDetail = $this->getCourseService()->searchAnalysisLessonView(
             $searchCondition,
@@ -805,7 +809,8 @@ class AnalysisController extends BaseController
             $this->getCourseService()->searchAnalysisLessonViewCount(
                 $searchCondition,
                 20
-            ));
+            )
+        );
 
         $videoViewedDetail = $this->getCourseService()->searchAnalysisLessonView(
             $searchCondition,
@@ -855,7 +860,7 @@ class AnalysisController extends BaseController
         $searchCondition = array(
             "fileType"    => 'video',
             "fileStorage" => 'local',
-            "startTime"   => $timeRange['startTime'], 
+            "startTime"   => $timeRange['startTime'],
             "endTime" => $timeRange['endTime']
         );
 
@@ -871,7 +876,8 @@ class AnalysisController extends BaseController
             $this->getCourseService()->searchAnalysisLessonViewCount(
                 $searchCondition,
                 20
-            ));
+            )
+        );
 
         $videoViewedDetail = $this->getCourseService()->searchAnalysisLessonView(
             $searchCondition,
@@ -937,7 +943,8 @@ class AnalysisController extends BaseController
             $this->getCourseService()->searchAnalysisLessonViewCount(
                 $searchCondition,
                 20
-            ));
+            )
+        );
 
         $videoViewedDetail = $this->getCourseService()->searchAnalysisLessonView(
             $searchCondition,
@@ -1393,6 +1400,11 @@ class AnalysisController extends BaseController
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getCourseService()
