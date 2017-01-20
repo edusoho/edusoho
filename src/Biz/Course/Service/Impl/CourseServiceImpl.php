@@ -82,7 +82,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
         }
         //临时注释
-        if (!$this->hasCourseManagerRole(0, $course['courseSetId'])) {
+        if (!$this->hasCourseCreateRole($course['courseSetId'])) {
             throw $this->createAccessDeniedException('You have no access to Course Management');
         }
 
@@ -838,7 +838,25 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
-    public function hasCourseManagerRole($courseId = 0, $courseSetId = 0)
+    protected function hasCourseCreateRole($courseSetId)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if ($this->hasAdminRole()) {
+            return true;
+        }
+
+        $courseSet = $this->getCourseSetDao()->get($courseSetId);
+        if (empty($courseSet)) {
+            return false;
+        }
+        return $courseSet['creator'] == $user->getId();
+    }
+
+    public function hasCourseManagerRole($courseId = 0)
     {
         $user = $this->getCurrentUser();
         //未登录，无权限管理
@@ -846,27 +864,19 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        if ($courseId > 0) {
-            $course = $this->getCourse($courseId);
-            //课程不存在，无权限管理
-            if (empty($course)) {
-                return false;
-            }
-            $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
-            //不是课程教师，无权限管理
-            if ($teacher) {
-                return true;
-            }
-        } else {
-            $courseSet = $this->getCourseSetDao()->get($courseSetId);
-            if (empty($courseSet)) {
-                return false;
-            }
-            return $courseSet['creator'] == $user->getId();
-        }
-
         //不是管理员，无权限管理
         if ($this->hasAdminRole()) {
+            return true;
+        }
+
+        $course = $this->getCourse($courseId);
+        //课程不存在，无权限管理
+        if (empty($course)) {
+            return false;
+        }
+        $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
+        //不是课程教师，无权限管理
+        if ($teacher) {
             return true;
         }
 
