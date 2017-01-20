@@ -267,9 +267,9 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
     private function hasPermission($currentUser, $note)
     {
-        return $note['userId'] != $currentUser['id']
+        return $note['userId'] == $currentUser['id']
             ||
-            !$this->getCourseMemberService()->isCourseTeacher($note['courseId'], $currentUser['id'])
+            $this->getCourseMemberService()->isCourseTeacher($note['courseId'], $currentUser['id'])
             || $currentUser->isAdmin();
     }
 
