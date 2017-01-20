@@ -148,7 +148,7 @@ export const generateReplay = () => {
         const error = JSON.parse(response.responseText);
         const code = error.code;
         const message = error.error;
-        notify('error', message);
+        notify('danger', message);
       });
   })
 };

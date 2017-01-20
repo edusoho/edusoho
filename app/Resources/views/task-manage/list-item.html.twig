@@ -11,10 +11,13 @@
       class="color-warning"> (未发布)</span> {% endif %}
     {% if task.activity.mediaType is same as('live') %}
       {% if task.activity.endTime < date().timestamp %}
-        <span class="text-muted">{{ '已结束'|trans }}</span>
+        <span class="text-muted">{{ '直播已经结束'|trans }}</span>
       {% else %}
         <span class="color-success mls">
-        {{ task.activity.startTime|date('Y-n-j H:i'|trans) }} ~ {{ task.activity.endTime|date('H:i'|trans) }}</span>
+        {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
+      {% endif %}
+      {% if task.activity.ext.replayStatus|default('') == 'generated' %}
+        <span class="color-success mls">{{ '已录制回放'|trans }}</span>
       {% endif %}
     {% else %}
       {% if task.activity.length|activity_length_format %}<span class="color-gray mls">
@@ -70,9 +73,16 @@
           {# 已生成录制 #}
           {% elseif replayStatus == 'generated' %}
             <li>
-              <a class='js-edit-replay' href="javascript:;" data-type="task"
+              <a class='js-edit-replay' href="#modal" data-toggle="modal" data-type="task"
                 data-url="{{ path('course_manage_task_replay_edit',{ courseId: task.courseId, taskId:task.id}) }}">
-                 <i class="es-icon es-icon--check-circle mrm"></i>编辑录制
+                 <i class="glyphicon glyphicon-th-list mrm"></i>编辑录制
+              </a>
+            </li>
+
+            <li>
+              <a class='js-generate-replay' href="javascript:;" data-type="task"
+                data-url="{{ path('course_manage_task_replay_create',{ courseId: task.courseId, taskId:task.id}) }}">
+                 <i class="glyphicon glyphicon-facetime-video mrm"></i>重新录制
               </a>
             </li>
           {% endif %}

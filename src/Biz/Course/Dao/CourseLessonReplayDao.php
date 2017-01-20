@@ -5,7 +5,7 @@ namespace Biz\Course\Dao;
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 /**
- * 直播回放, lessonId 在type为openLive情况下是直播公开课的课时ID, type为live情况下是task的ID
+ * 直播回放, lessonId 在type为openLive情况下是直播公开课的课时ID, type为live情况下是activity的ID
  * Interface CourseLessonReplayDao
  *
  * @package Biz\Course\Dao

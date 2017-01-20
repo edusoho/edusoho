@@ -19,7 +19,7 @@ class LiveShow {
 
     let courseId = activityData.fromCourseId;
     let activityId = activityData.id;
-    let replayStatus = null;
+    let replayStatus = activityData.ext.replayStatus || 'ungenerated';
 
     let $liveNotice = "<p>" + Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。', { liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>', liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>' }) + "</p>";
 
@@ -32,6 +32,7 @@ class LiveShow {
     this.entry_url = location.protocol + "//" + location.hostname + '/course/' + courseId + '/activity/' + activityId + '/live_entry';
 
     function generateHtml() {
+
       nowDate = nowDate + intervalSecond;
       let startLeftSeconds = parseInt(startTime - nowDate);
       let endLeftSeconds = parseInt(endTime - nowDate);
@@ -63,10 +64,9 @@ class LiveShow {
 
       let $countDown = that._getCountDown(days, hours, minutes, seconds);
 
-
       if (0 < startLeftSeconds && startLeftSeconds < 7200) {
         $liveNotice = "<p>" + Translator.trans('直播将于%liveStartTime%开始，于%liveEndTime%结束，请在课前10分钟内提早进入。', { liveStartTime: '<strong>' + liveStartTimeFormat + '</strong>', liveEndTime: '<strong>' + liveEndTimeFormat + '</strong>' }) + "</p>";
-        if (!!activityData.isTeacher) {
+        if (activityData.isTeacher) {
           $countDown = $replayGuid + $countDown;
           $countDown = "<p>" + $countDown + "&nbsp;<a class='btn btn-primary js-start-live' href='javascript:;' onclick='liveShow.entryLiveRoom()'>" + Translator.trans('进入直播教室') + "</a><br><br></p>";
         } else {

@@ -29,13 +29,11 @@ class LiveReplayEventSubscriber extends EventSubscriber implements EventSubscrib
 
         $replay = current($replays);
 
-        if ($replay['type'] != 'open') {
+        if ($replay['type'] != 'live') {
             return;
         }
 
-        $taskId = $replay['lessonId'];
-
-        $task = $this->getTaskService()->getTask($taskId);
+        $activityId = $replay['lessonId'];
 
         if(empty($task)){
             return;
@@ -45,8 +43,8 @@ class LiveReplayEventSubscriber extends EventSubscriber implements EventSubscrib
             'replayStatus' => 'generated'
         );
 
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
-        $this->getActivityService()->getActivityConfig('live')->update($activity['id'], $liveActivityFields, $activity);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $this->getActivityService()->getActivityConfig('live')->update($activity['mediaId'], $liveActivityFields, $activity);
     }
 
     /**

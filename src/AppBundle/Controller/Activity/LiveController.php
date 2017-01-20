@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Activity;
 
+use Biz\Course\Service\LiveReplayService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -22,6 +23,9 @@ class LiveController extends BaseController implements ActivityActionInterface
             $activity['endTimeFormat'] = date($format, $activity['endTime']);
         }
         $activity['nowDate'] = time();
+
+        $activity['replays'] = $this->_getLiveReplays($activity);
+
         //FIXME 应当判断是否是当前任务的teacher
         $activity['isTeacher'] = $this->getUser()->isTeacher();
         $summary               = $activity['remark'];
@@ -128,6 +132,27 @@ class LiveController extends BaseController implements ActivityActionInterface
         return $this->render('activity/live/finish-condition.html.twig', array());
     }
 
+    protected function _getLiveReplays($activity, $ssl = false)
+    {
+        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_GENERATE_STATUS) {
+            $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
+            $service = $this->getLiveReplayService();
+            $self    = $this;
+            $replays = array_map(function ($replay) use ($service, $activity, $ssl, $self) {
+                $result = $service->entryReplay($replay['id'], $activity['ext']['liveId'], $activity['ext']['liveProvider'], $ssl);
+                if (!empty($result) && !empty($result['resourceNo'])) {
+                    $replay['url'] = $self->generateUrl('global_file_player', array('globalId' => $replay['globalId']));
+                }
+
+                return $replay;
+            }, $replays);
+        }else{
+            $replays = array();
+        }
+
+        return $replays;
+    }
+
     /**
      * @return TaskService
      */
@@ -175,5 +200,13 @@ class LiveController extends BaseController implements ActivityActionInterface
         }
 
         return $fields;
+    }
+
+    /**
+     * @return LiveReplayService
+     */
+    protected function getLiveReplayService()
+    {
+        return $this->createService('Course:LiveReplayService');
     }
 }

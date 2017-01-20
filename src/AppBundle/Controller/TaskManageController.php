@@ -12,6 +12,7 @@ use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Exception\InvalidArgumentException;
 
 class TaskManageController extends BaseController
@@ -139,11 +140,13 @@ class TaskManageController extends BaseController
     {
         $course  = $this->getCourseService()->tryManageCourse($courseId);
         $task    = $this->getTaskService()->getTask($taskId);
-        $replays = $this->getLiveReplayService()->findReplayByLessonId($task['id']);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
 
         if ($request->getMethod() == 'POST') {
-            $ids = $request->request->get("visibleReplaies");
-            $this->getLiveReplayService()->updateReplayShow($ids, $taskId);
+            $ids = $request->request->get("visibleReplays");
+            $this->getLiveReplayService()->updateReplayShow($ids, $activity['id']);
+
             return $this->redirect($this->generateUrl('course_set_manage_course_replay', array(
                 'courseSetId' => $course['courseSetId'],
                 'courseId'    => $course['id']
@@ -194,7 +197,7 @@ class TaskManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $liveId        = $activity['ext']['liveId'];
             $liveProvideId = $activity['ext']['liveProvider'];
-            $this->getLiveReplayService()->generateReplay($liveId, $courseId, $taskId, $liveProvideId, 'live');
+            $this->getLiveReplayService()->generateReplay($liveId, $courseId, $activity['id'], $liveProvideId, 'live');
         }
 
         return $this->render('course-manage/live-replay/upload-modal.html.twig', array(
@@ -215,7 +218,7 @@ class TaskManageController extends BaseController
         $resultList = $this->getLiveReplayService()->generateReplay($liveId, $course['id'], $task['id'], $provider, 'live');
 
         if (array_key_exists("error", $resultList)) {
-            return $this->createJsonResponse($resultList, 500);
+            return $this->createJsonResponse($resultList, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $task["isEnd"]     = intval(time() - $task["endTime"]) > 0;
