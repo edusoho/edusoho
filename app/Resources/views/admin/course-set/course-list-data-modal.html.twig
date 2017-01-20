@@ -51,6 +51,6 @@
           {% endif %}
         </table>
     </div>
-    {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
-    <script>app.lazyLoad = function() { app.load('course-set/data-detail.js') };</script>
+    
+    <script>app.load('course-set/data-detail.js');</script>
 {% endblock %}
