@@ -116,7 +116,7 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
         $memberFields['lastLearnTime'] = time();
 
         $courseMember = $this->getCourseMemberService()->getCourseMember($course['id'], $learn['userId']);
-        $this->getCourseMemberService()->updateCourseMember($courseMember['id'], $memberFields);
+        $this->getCourseMemberService()->updateMember($courseMember['id'], $memberFields);
 
         $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 

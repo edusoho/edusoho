@@ -128,7 +128,7 @@ class CourseDeleteServiceTest extends BaseTestCase
         $this->assertEquals(0, $questionCount);
         $testpaperCount = $this->getTestpaperDao()->searchTestpapersCount(array('target' => "course-{$createCourse['id']}"));
         $this->assertEquals(0, $testpaperCount);
-        $materialCount = $this->getMaterialDao()->searchMaterialCount(array('courseId' => $createCourse['id']));
+        $materialCount = $this->getMaterialDao()->countMaterials(array('courseId' => $createCourse['id']));
         $this->assertEquals(0, $materialCount);
         $chapterCount = $this->getCourseChapterDao()->searchChapterCount(array('courseId' => $createCourse['id']));
         $this->assertEquals(0, $chapterCount);

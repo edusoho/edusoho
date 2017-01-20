@@ -9,6 +9,7 @@ use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 {
     protected $table = 'course_member';
+    protected $alias = 'm';
 
     public function findByCourseId($courseId)
     {
@@ -71,24 +72,44 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
 
-    public function searchMemberFetchCourse($conditions, $orderBys, $start, $limit)
+    public function countLearningMembersByUserId($userId)
     {
-        $builder = $this->_buildQueryBuilder($conditions)->select('m.*');
-        if (!empty($orderBy)) {
-            foreach ($orderBy as $sort => $order) {
-                $builder = $builder->orderBy($sort, $order);
-            }
-        }
-        if ($start && $limit) {
-            $builder = $builder->setFirstResult($start)->setMaxResults($limit);
-        }
-        return $builder->execute()->fetchAll() ?: array();
+        $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
+        $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
+        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND (m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serilized')";
+
+        return $this->db()->fetchColumn($sql, array($userId));
     }
 
-    public function countMemberFetchCourse($conditions)
+    public function findLearningMembers($userId, $start, $limit)
     {
-        return $this->_buildQueryBuilder($conditions)->select(COUNT('m.courseId'))->execute()->fetchColumn(0);
+        $sql = "SELECT m.* FROM {$this->table()} m ";
+        $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
+        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND (m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serilized') ";
+        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->db()->fetchAll($sql, array($userId))?: array();
     }
+
+    public function countLearnedMembersByUserId($userId)
+    {
+        $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
+        $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
+        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
+
+        return $this->db()->fetchColumn($sql, array($userId));
+    }
+
+    public function findLearnedMembers($userId,  $start, $limit)
+    {
+        $sql = "SELECT m.* FROM {$this->table()} m ";
+        $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
+        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
+        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->db()->fetchAll($sql, array($userId))?: array();
+    }
+
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
     {
@@ -144,7 +165,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         if (isset($conditions['unique'])) {
             $builder->select('DISTINCT userId');
             $builder->orderBy($orderBy[0], $orderBy[1]);
-            $builder->from('(' . $builder->getSQL() . ')', $this->table());
+            $builder->from('('.$builder->getSQL().')', $this->table());
             $builder->resetQueryPart('where');
             $builder->resetQueryPart('orderBy');
         } else {
@@ -181,7 +202,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchColumn($sql, array($userId, $courseId));
     }
 
-    protected function _buildQueryBuilder($conditions)
+    protected function _buildJoinQueryBuilder($conditions, $joinConnections = '')
     {
         $conditions = array_filter($conditions, function ($value) {
             if ($value === '' || $value === null) {
@@ -192,7 +213,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         $builder = new DynamicQueryBuilder($this->db(), $conditions);
         $builder->from($this->table(), 'm')
-            ->join('m', 'c2_course', 'c', ' m.courseId = c.id ')
+            ->join('m', 'c2_course', 'c', 'm.courseId = c.id '.$joinConnections)
             ->andWhere('m.isLearned = :isLearned')
             ->andWhere('m.userId = :userId')
             ->andWhere('m.role = :role')
@@ -200,7 +221,10 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             ->andWhere('m.joinedType =:joinedType')
             ->andWhere('m.noteNum > :noteNumGreaterThan')
             ->andWhere('c.type = :type')
-            ->andWhere('c.parentId = parentId');
+            ->andWhere('c.parentId = :parentId')
+            ->andWhere('c.serializeMode =  :serializeMode')
+            ->andWhere('c.serializeMode IN ( :serializeModes)');
+
         return $builder;
     }
 
