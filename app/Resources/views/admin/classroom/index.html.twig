@@ -6,7 +6,7 @@
 {% block main %}
 
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
-    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+    {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
 
     <div class="form-group">
       <input class="form-control" type="text" placeholder="{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}" name="title" value="{{ app.request.get('title') }}">
@@ -44,7 +44,7 @@
   {% else %}
     <div class="empty">{{'暂无%name%信息!'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
   {% endif %}
-  {% include 'OrgBundle:Org:batch-update-org-btn.html.twig' with {module:'classroom', formId:'classroom-table'} %}
+  {% include 'org/batch-update-org-btn.html.twig' with {module:'classroom', formId:'classroom-table'} %}
   <div class="pull-right">
    {{ web_macro.paginator(paginator) }}
   </div>

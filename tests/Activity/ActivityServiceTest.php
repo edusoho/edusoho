@@ -11,7 +11,17 @@ class ActivityServiceTest extends BaseTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->mockService(array('Course:CourseService' => array('tryManageCourse' => array('id' => 1, ))));
+        $this->mockBiz(
+            'Course:CourseService',
+            'CourseService',
+            array(
+                array(
+                'functionName' => 'tryManageCourse',
+                'returnValue' => array('id' => 1)
+                )
+            )
+        );
+
     }
 
     /**
@@ -98,12 +108,28 @@ class ActivityServiceTest extends BaseTestCase
             'isDefault'   => 0
         );
 
-        $this->mockService(array(
-            'Course:CourseService' => array(
-                'tryManageCourse' => 1,
-                'getCourse' => $course,
-                'getNextCourseItemSeq' => 1
-            )));
+        $this->mockBiz(
+            'Course:CourseService',
+            'CourseService',
+            array(
+                array(
+                'functionName' => 'tryManageCourse',
+                'returnValue' => 1
+                ),
+                array(
+                'functionName' => 'getCourse',
+                'returnValue' => $course
+                ),
+                array(
+                'functionName' => 'getNextCourseItemSeq',
+                'returnValue' => 1
+                ),
+                array(
+                'functionName' => 'updateCourseStatistics',
+                'returnValue' => 1
+                )
+            )
+        );
 
         $task = array(
             'title'           => 'test1 task',

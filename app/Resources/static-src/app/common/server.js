@@ -8,9 +8,6 @@ export const send = (url,callback,data=null,type="POST") =>{
     },  
     error: function(){
       (callback && typeof(callback) === "function") && callback([]);
-    // },  
-    // complete: function(){
-    //   (callback && typeof(callback) === "function") && callback([]);
     }  
   });
 }

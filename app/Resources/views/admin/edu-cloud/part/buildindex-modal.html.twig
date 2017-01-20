@@ -23,6 +23,6 @@
 {% block footer %}
   <button id="announcement-create-btn" class="btn btn-primary" data-target="">{{'确定'|trans}}</button>
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
-  <script>app.lazyLoad = function() { app.load('announcement/create-modal') };</script>
+  
+  <script>app.load('announcement/create-modal');</script>
 {% endblock %}
