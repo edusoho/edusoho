@@ -1059,6 +1059,40 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(false);
     }
 
+    public function consultOverviewAction(Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:EduCloud/Consult:overview.html.twig', array(
+
+        ));
+    }
+
+    public function consultSettingAction(Request $request)
+    {
+        $cloud_consult = $this->getSettingService()->get('cloud_consult', array());
+
+        $api         = CloudAPIFactory::create('root');
+        $loginStatus    = $api->post("/robot/login_url");
+        var_dump($loginStatus);
+        exit();
+        if ($loginStatus['code'] == '10000') {
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,请联系客服人员:4008041114！'));
+        }
+
+        if ($loginStatus['code'] == '10001') {
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('账号已过期,请联系客服人员:4008041114！'));
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $cloud_consult = $request->request->all();
+            $this->getSettingService()->set('cloud_consult', $cloud_consult);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云客服设置已保存！'));
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud/Consult:setting.html.twig', array(
+            'cloud_consult'=> $cloud_consult
+        ));
+    }
+
     protected function dateFormat($time)
     {
         return strtotime(substr($time, 0, 4).'-'.substr($time, 4, 2));

@@ -642,6 +642,16 @@ admin:
                         admin_cloud_attachment:
                             name: 云附件
                             disable: true
+                admin_cloud_consult:
+                    name: 云客服
+                    children:
+                        admin_cloud_consult_overview:
+                            name: 概览
+                            router_name: admin_cloud_consult
+                            disable: true
+                        admin_cloud_consult_setting:
+                            name: 设置
+                            disable: true
                 admin_setting_cloud:
                     name: 授权信息
                     children:
