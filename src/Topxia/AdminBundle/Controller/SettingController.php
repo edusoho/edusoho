@@ -367,6 +367,7 @@ class SettingController extends BaseController
         }
 
         $status = $this->checkMailerStatus();
+
         return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array(
             'mailer' => $mailer,
             'status' => $status
@@ -396,12 +397,12 @@ class SettingController extends BaseController
 
     protected function checkMailerStatus()
     {
-        $cloudEmail = $this->getSettingService()->get('cloud_email', array());
+        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
         $mailer     = $this->getSettingService()->get('mailer', array());
         $status     = "";
 
         if (!empty($cloudEmail) && $cloudEmail['status'] == 'enable') {
-            return $status = "cloud_email";
+            return $status = "cloud_email_crm";
         }
 
         if (!empty($mailer) && $mailer['enabled'] == 1) {
