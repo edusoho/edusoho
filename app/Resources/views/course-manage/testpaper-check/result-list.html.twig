@@ -1,10 +1,8 @@
-{% extends 'course-manage/layout.html.twig' %}
+{% extends 'courseset-manage/layout.html.twig' %}
+{% block title %}{{ testpaper.name }} - {{'试卷批阅'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% import 'macro.html.twig' as macro %}
 
-{% block title %}{{'批阅列表'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'testpaper-check' %}
-  
 {% if testpaper.type == 'homework' %}
   {% set side_nav = 'homework-check' %}
   {% set typeName = '作业' %}
@@ -13,22 +11,22 @@
   {% set typeName = '试卷' %}
 {% endif %}
 
-{% block course %}
-
-<div class="panel panel-default panel-col">
-
-  <div class="panel-heading">
-    {{ testpaper.name }}
+{% block main %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{ course.title }}<span class="mh5">／</span>{{ testpaper.name }}
+      {% if course.status != 'published' %}
+        <button class="btn btn-success btn-sm pull-right js-publish-course" 
+          data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
+          {{ '发布计划'|trans }}
+        </button>
+      {% endif %}
+    </div>
+    <div class="panel-body">
+      {% if isTeacher is defined and not isTeacher %}
+        <span class="color-danger">{{'当前用户不是本课程教师，没有批改%typeName%的权限。'|trans({'%typeName%':typeName}) }}</span>
+      {% endif %}
+      {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id})) }}
+    </div>
   </div>
-  <div class="panel-body">
-
-    {% if isTeacher is defined and not isTeacher %}
-      <span class="color-danger">{{'当前用户不是本课程教师，没有批改%typeName%的权限。'|trans({'%typeName%':typeName}) }}</span>
-    {% endif %}
-
-    {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id})) }}
-
-  </div>
-</div>
-
 {% endblock %}

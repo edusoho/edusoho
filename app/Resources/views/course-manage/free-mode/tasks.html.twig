@@ -1,14 +1,13 @@
 {% extends 'courseset-manage/layout.html.twig' %} 
-{% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
-{% set side_nav = 'tasks' %}
-
+{% block title %}{{'计划任务'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% do script(['libs/jquery-sortable.js','app/js/course-manage/index.js']) %}
+{% set side_nav = 'tasks' %}
 
 {% block main %}
   <div class="panel panel-default">
     {% if courseSet.type != 'live' %}
       <div class="panel-heading">
-        {{ course.title }}
+        {{ course.title }}<span class="mh5">／</span>{{'计划任务'|trans}}
         {% if course.status != 'published' %}
           <button class="btn btn-success btn-sm pull-right js-publish-course" 
             data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
@@ -61,8 +60,6 @@
       </ul>
     </div>
   </div>
-  
- 
 {% endblock %}
 
 
