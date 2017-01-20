@@ -164,7 +164,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         }
     }
 
-    private function grantPermissionToUser($currentUser)
+    protected function grantPermissionToUser($currentUser)
     {
         $permissions = new \ArrayObject();
         $permissions['admin_course_content_manage'] = true;
