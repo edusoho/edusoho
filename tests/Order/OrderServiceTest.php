@@ -1,5 +1,6 @@
 <?php
-namespace Topxia\Service\Order\Tests;
+
+namespace Tests\Order;
 
 
 use Biz\Order\Service\OrderService;
@@ -12,7 +13,7 @@ class OrderServiceTest extends BaseTestCase
     public function setUp()
     {
         parent::setUp();
-
+        
         $this->getSettingService()->set('refund', array(
             'maxRefundDays'       => 0,
             'applyNotification'   => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',

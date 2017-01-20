@@ -24,6 +24,7 @@ use Biz\Question\Type\SingleChoice;
 use Pimple\ServiceProviderInterface;
 use Biz\Question\Type\UncertainChoice;
 use Codeages\Biz\Framework\Context\Biz;
+use Biz\Testpaper\Pattern\QuestionTypePattern;
 
 class DefaultExtension extends Extension implements ServiceProviderInterface
 {
@@ -445,11 +446,64 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         );
     }
 
+    // public function getCourseCopyChain($node)
+    // {
+    //     $chains = $this->biz['course_copy.chains'];
+
+    //     return $this->array_walk($chains, $node);
+    // }
+
+    protected function registerCourseCopyChain($container)
+    {
+        $chains = array(
+            'course-set' => array(
+                'clz'      => 'Biz\Course\Copy\Impl\CourseSetCopy',
+                'children' => array(
+                    'course-set-testpaper' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\CourseSetTestpaperCopy'
+                    ),
+                    'course'               => array(
+                        'clz'      => 'Biz\Course\Copy\Impl\CourseCopy',
+                        'children' => array(
+                            'task' => array(
+                                'clz' => 'Biz\Course\Copy\Impl\TaskCopy'
+                            )
+                        )
+                    )
+                )
+            )
+        );
+        $that = $this;
+        //used for course/courseSet copy
+        $container['course_copy.chains'] = function ($node) use ($that, $chains) {
+            return function ($node) use ($that, $chains) {
+                return $that->arrayWalk($chains, $node);
+            };
+        };
+    }
+
+    private function arrayWalk($array, $key)
+    {
+        if (!empty($array[$key])) {
+            return $array[$key];
+        }
+        $result = array();
+        foreach ($array as $k => $value) {
+            if (!empty($value['children']) && empty($result)) {
+                $result = $this->arrayWalk($value['children'], $key);
+            }
+        }
+
+        return $result;
+    }
+
     public function register(Container $container)
     {
         $this->registerQuestionTypes($container);
 
         $this->registerActivityTypes($container);
+
+        $this->registerCourseCopyChain($container);
     }
 
     protected function registerActivityTypes($container)
@@ -520,5 +574,8 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             return new Material();
         };
 
+        $container['testpaper_pattern.questionType'] = function ($container) {
+            return new QuestionTypePattern($container);
+        };
     }
 }

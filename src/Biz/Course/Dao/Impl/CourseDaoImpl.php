@@ -9,6 +9,16 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 {
     protected $table = 'c2_course';
 
+    public function findCoursesByParentIdAndLocked($parentId, $locked)
+    {
+        if (empty($parentId)) {
+            return array();
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? AND locked = ?";
+        return $this->db()->fetchAll($sql, array($parentId, $locked));
+    }
+
     public function findCoursesByCourseSetIdAndStatus($courseSetId, $status = null)
     {
         if (empty($status)) {

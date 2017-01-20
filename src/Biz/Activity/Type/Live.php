@@ -19,6 +19,21 @@ class Live extends Activity
         return $this->getLiveActivityService()->createLiveActivity($fields);
     }
 
+    public function copy($activity, $config = array())
+    {
+        $biz         = $this->getBiz();
+        $live        = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
+        $refLiveroom = $config['refLiveroom'];
+        if (!$refLiveroom) {
+            $activity['fromUserId'] = $biz['user']['id'];
+            $activity['_base_url']  = ''; //todo 临时赋值
+            unset($activity['id']);
+            return $this->getLiveActivityService()->createLiveActivity($activity, true);
+        }
+
+        return $live;
+    }
+
     public function update($id, &$fields, $activity)
     {
         return $this->getLiveActivityService()->updateLiveActivity($id, $fields, $activity);

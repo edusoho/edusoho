@@ -152,14 +152,14 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
 
         $conditions = $this->_prepareSearchConditions($conditions);
 
-        return $this->getOrderDao()->searchOrders($conditions, $orderBy, $start, $limit);
+        return $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function searchOrdersCount($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
 
-        return $this->getOrderDao()->searchOrdersCount($conditions);
+        return $this->getOrderDao()->count($conditions);
     }
 
     public function closeOrders()

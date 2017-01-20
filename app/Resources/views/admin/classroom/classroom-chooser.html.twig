@@ -7,7 +7,7 @@
 <form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_classroom_chooser') }}" method="get" novalidate>
 	<div class="form-group">
 	  <select class="form-control" name="categoryId">
-	    {{ select_options(category_choices('course'), app.request.query.get('categoryId'), {'0':'班级分类'|trans}) }}
+	    {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '班级分类'|trans) }}
 	  </select>
 	</div>
 	<div class="form-group">
@@ -79,6 +79,6 @@
 {% endblock %}
 {% block footer %}
   <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ '关闭'|trans }}</button>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
-  <script>app.lazyLoad = function() { app.load('classroombundle/controller/classroom-admin/chooser') };</script>
+  
+  <script>app.load('classroombundle/controller/classroom-admin/chooser');</script>
 {% endblock %}
