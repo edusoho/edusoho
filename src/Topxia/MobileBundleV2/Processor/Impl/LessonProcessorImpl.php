@@ -259,7 +259,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $files   = $this->getUploadFiles($courseId);
         $lessons = $this->filterLessons($lessons, $files);
 
-        $lessons = $this->makeTryLookVideoUrl($lessons, $courseId);
+//        $lessons = $this->makeTryLookVideoUrl($lessons, $courseId);
 
         return array(
             "lessons"       => array_values($lessons),
