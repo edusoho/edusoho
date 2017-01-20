@@ -117,7 +117,7 @@ class MarkerServiceTest extends BaseTestCase
     public function testUpdateMarker()
     {
         $this->getCourseService()->createCourse(array(
-            'title' => 'testCourse'
+            'title' => 'testCourse',
         ));
         $fields = array(
             'second'     => 30,
