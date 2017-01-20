@@ -42,7 +42,7 @@
       <label class="col-md-3 control-label">{{'分类'|trans}}</label>
       <div class="col-md-8 controls">
         <select id="" name="categoryId" required="required" class="form-control width-input width-input-large">
-					{{ select_options(category_choices('course'), categoryId, {'0':'分类'|trans}) }}
+					{{ select_options(category_choices('course'), categoryId, '分类'|trans) }}
         </select>
         <div class="help-block" style="display:none;"></div>
       </div>

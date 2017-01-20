@@ -48,8 +48,13 @@ class DynamicQueryBuilder extends QueryBuilder
     private function addWhereIn($where)
     {
         $conditionName = $this->getConditionName($where);
-        if (empty($this->conditions[$conditionName]) or !is_array($this->conditions[$conditionName])) {
-            return $this;
+
+        if (!is_array($this->conditions[$conditionName])) {
+            throw new DaoException('IN search parameter must be an Array type');
+        }
+
+        if (empty($this->conditions[$conditionName])) {
+            return parent::andWhere('1 = 0');
         }
 
         $marks = array();
@@ -66,7 +71,8 @@ class DynamicQueryBuilder extends QueryBuilder
     private function addWhereLike($where, $likeType)
     {
         $conditionName = $this->getConditionName($where);
-        if (empty($this->conditions[$conditionName]) || !is_string($this->conditions[$conditionName])) {
+
+        if (empty($this->conditions[$conditionName])) {
             return $this;
         }
 

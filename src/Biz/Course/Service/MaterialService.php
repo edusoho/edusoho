@@ -29,7 +29,7 @@ interface MaterialService
 
     public function searchMaterials($conditions, $orderBy, $start, $limit);
 
-    public function searchMaterialCount($conditions);
+    public function countMaterials($conditions);
 
     public function searchFileIds($conditions, $orderBy, $start, $limit);
 

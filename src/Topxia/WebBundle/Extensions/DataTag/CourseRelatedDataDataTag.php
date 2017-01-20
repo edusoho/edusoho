@@ -2,8 +2,6 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
-
 class CourseRelatedDataDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
@@ -32,7 +30,7 @@ class CourseRelatedDataDataTag extends CourseBaseDataTag implements DataTag
             'excludeLessonId' => 0,
             'source'          => 'coursematerial'
         );
-        $courseData['materialNum'] = $this->getCourseMaterialService()->searchMaterialCount($materialConditions);
+        $courseData['materialNum'] = $this->getCourseMaterialService()->countMaterials($materialConditions);
 
         return $courseData;
     }
