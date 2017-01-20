@@ -1639,9 +1639,9 @@ admin_operation_analysis_login:
     defaults: { _controller: AppBundle:Admin/Analysis:login }
     permissions: [admin_operation_analysis]
 
-admin_operation_analysis_course:
-    path:  /operation/analysis/course/{tab}
-    defaults: { _controller: AppBundle:Admin/Analysis:course }
+admin_operation_analysis_course_set:
+    path:  /operation/analysis/course_set/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:courseSet }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_lesson:
