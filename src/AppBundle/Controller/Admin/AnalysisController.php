@@ -231,8 +231,8 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $loginData = $this->getLogService()->analysisLoginDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
             $data = $this->fillAnalysisData($condition, $loginData);
+            $count = $this->getLogService()->analysisLoginNumByTime($timeRange['startTime'], $timeRange['endTime']);
         }
 
         $userIds = ArrayToolkit::column($loginDetail, 'userId');
@@ -253,13 +253,15 @@ class AnalysisController extends BaseController
             'data'           => $data,
             'users'          => $users,
             'loginStartDate' => $loginStartDate,
-            'dataInfo'       => $dataInfo
+            'dataInfo'       => $dataInfo,
+            'count'          => $count,
         ));
     }
 
     public function courseAction(Request $request, $tab)
     {
         $data            = array();
+        $count           = 0;
         $courseStartDate = "";
 
         $condition = $request->query->all();
