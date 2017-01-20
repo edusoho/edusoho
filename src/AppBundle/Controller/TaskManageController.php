@@ -215,11 +215,11 @@ class TaskManageController extends BaseController
         $resultList = $this->getLiveReplayService()->generateReplay($liveId, $course['id'], $task['id'], $provider, 'live');
 
         if (array_key_exists("error", $resultList)) {
-            return $this->createJsonResponse($resultList);
+            return $this->createJsonResponse($resultList, 500);
         }
 
         $task["isEnd"]     = intval(time() - $task["endTime"]) > 0;
-        $task["canRecord"] = $this->_canRecord($liveId);
+        $task["canRecord"] = $this->get('web.twig.live_extension')->canRecord($liveId);
 
         $client = new EdusohoLiveClient();
 
@@ -228,17 +228,7 @@ class TaskManageController extends BaseController
             $this->getTaskService()->setTaskMaxOnlineNum($task['id'], $result['onLineNum']);
         }
 
-        return $this->render('course-manage/live-replay/list-item.html.twig', array(
-            'course'   => $course,
-            'task'     => $task,
-            'activity' => $activity
-        ));
-    }
-
-    private function _canRecord($mediaId)
-    {
-        $client = new EdusohoLiveClient();
-        return $client->isAvailableRecord($mediaId);
+        return $this->createJsonResponse(true);
     }
 
     protected function tryManageCourse($courseId)

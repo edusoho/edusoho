@@ -1616,6 +1616,7 @@ course_manage_task_replay_upload:
 course_manage_task_replay_create:
   path:  /course/{courseId}/task/{taskId}/replay/create
   defaults: { _controller: AppBundle:TaskManage:createReplay }
+  methods: [POST]
 
 task_live_entry:
     path: /course/{courseId}/activity/{activityId}/live_entry

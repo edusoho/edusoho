@@ -128,15 +128,20 @@ class OpenCourseEventSubscriber extends EventSubscriber
 
     public function onLiveReplayGenerate(Event $event)
     {
-        $context = $event->getSubject();
-        $replays = $context['replays'];
+        $replays = $event->getSubject();
 
         if (!$replays) {
             return;
         }
 
-        $courseId     = $replays[0]['courseId'];
-        $lesson['id'] = $replays[0]['lessonId'];
+        $replay = current($replays);
+
+        if($replay['type'] != 'liveOpen'){
+            return;
+        }
+
+        $courseId = $replay['courseId'];
+        $lessonId = $replay['lessonId'];
 
         $lessonFields = array(
             'replayStatus' => 'generated'
@@ -149,11 +154,11 @@ class OpenCourseEventSubscriber extends EventSubscriber
     {
         if ($material['lessonId'] && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse') {
             $count = $this->getMaterialService()->searchMaterialCount(array(
-                'courseId' => $material['courseId'],
-                'lessonId' => $material['lessonId'],
-                'source'   => 'opencoursematerial',
-                'type'     => 'openCourse'
-            )
+                    'courseId' => $material['courseId'],
+                    'lessonId' => $material['lessonId'],
+                    'source'   => 'opencoursematerial',
+                    'type'     => 'openCourse'
+                )
             );
             $this->getOpenCourseService()->updateLesson($material['courseId'], $material['lessonId'], array('materialNum' => $count));
             return true;

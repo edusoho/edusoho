@@ -21,9 +21,9 @@ abstract class Activity
     }
 
     /**
-     * @param $targetId
-     * @param $fields     fields  to update
-     * @param $activity   existed activity
+     * @param int   $targetId
+     * @param array $fields   fields  to update
+     * @param array $activity existed activity
      */
     public function update($targetId, &$fields, $activity)
     {
@@ -60,7 +60,8 @@ abstract class Activity
     abstract protected function registerListeners();
 
     /**
-     * @param  string     $eventName
+     * @param  string $eventName
+     *
      * @return Listener
      */
     final public function getListener($eventName)
