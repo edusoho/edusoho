@@ -19,23 +19,13 @@ interface CourseMemberDao extends GeneralDaoInterface
      */
     public function getByCourseIdAndUserId($courseId, $userId);
 
-    /**
-     * 用来替代各种命名复杂的关联表的列表查询
-     *
-     * @param  $conditions
-     * @param  $orderBy
-     * @param  $start
-     * @param  $limit
-     * @return mixed
-     */
-    public function searchMemberFetchCourse($conditions, $orderBy, $start, $limit);
+    public function countLearningMembersByUserId($userId);
 
-    /**
-     * 用来替代各种命名复杂的关联表的数量查询
-     * @param  $conditions
-     * @return mixed
-     */
-    public function countMemberFetchCourse($conditions);
+    public function findLearningMembers($userId, $start, $limit);
+
+    public function countLearnedMembersByUserId($userId);
+
+    public function findLearnedMembers($userId, $start, $limit);
 
     public function findLearnedByCourseIdAndUserId($courseId, $userId);
 
@@ -72,7 +62,7 @@ interface CourseMemberDao extends GeneralDaoInterface
      * @param  $role
      * @param  $start
      * @param  $limit
-     * @param  bool      $onlyPublished
+     * @param  bool $onlyPublished
      * @return mixed
      */
     public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true); //

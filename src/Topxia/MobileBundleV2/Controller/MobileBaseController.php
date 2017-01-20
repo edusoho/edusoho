@@ -423,7 +423,7 @@ class MobileBaseController extends BaseController
 
     public function filterLiveCourses($user, $start, $limit)
     {
-        $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit);
+        $courses = $this->getCourseService()->findUserLearningCourses($user['id'], $start, $limit);
 
         $tempCourses   = array();
         $tempCourseIds = array();
@@ -473,7 +473,7 @@ class MobileBaseController extends BaseController
 
     public function filterOneLiveCourseByDESC($user)
     {
-        $learningCourseTotal = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
+        $learningCourseTotal = $this->getCourseService()->countUserLearningCourses($user['id']);
 
         $resultLiveCourses = $this->filterLiveCourses($user, 0, $learningCourseTotal);
 
