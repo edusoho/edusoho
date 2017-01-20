@@ -10,7 +10,7 @@ class CourseSerializeMode extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec(" ALTER TABLE `c2_course` ADD COLUMN `serializeMode` VARCHAR(32) NOT NULL DEFAULT 'none' COMMENT 'none, serilized, finished';");
+        // $biz['db']->exec(" ALTER TABLE `c2_course` ADD COLUMN `serializeMode` VARCHAR(32) NOT NULL DEFAULT 'none' COMMENT 'none, serilized, finished';");
     }
 
     /**
