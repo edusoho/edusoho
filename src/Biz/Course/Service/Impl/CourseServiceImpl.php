@@ -43,6 +43,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, null);
     }
 
+    public function findCoursesByParentIdAndLocked($parentId, $locked)
+    {
+        return $this->getCourseDao()->findCoursesByParentIdAndLocked($parentId, $locked);
+    }
+
     public function findPublishedCoursesByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, 'published');
@@ -78,17 +83,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
             throw $this->createInvalidArgumentException("Lack of required fields");
         }
+
         if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
             throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
         }
-        //临时注释
-        if (!$this->hasCourseCreateRole($course['courseSetId'])) {
+
+        if (!$this->getCourseSetService()->hasCourseSetManageRole($course['courseSetId'])) {
             throw $this->createAccessDeniedException('You have no access to Course Management');
         }
 
         if (!isset($course['isDefault'])) {
             $course['isDefault'] = 0;
         }
+
         $course = ArrayToolkit::parts($course, array(
             'title',
             'courseSetId',
@@ -836,24 +843,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
         $count = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
-    }
-
-    protected function hasCourseCreateRole($courseSetId)
-    {
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return false;
-        }
-
-        if ($this->hasAdminRole()) {
-            return true;
-        }
-
-        $courseSet = $this->getCourseSetDao()->get($courseSetId);
-        if (empty($courseSet)) {
-            return false;
-        }
-        return $courseSet['creator'] == $user->getId();
     }
 
     public function hasCourseManagerRole($courseId = 0)

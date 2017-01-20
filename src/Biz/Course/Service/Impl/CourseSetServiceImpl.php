@@ -71,7 +71,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('user is not log in');
+            throw $this->createAccessDeniedException('user is not login');
         }
 
         $isFavorite = $this->isUserFavorite($user['id'], $courseSet['id']);
@@ -153,11 +153,33 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $this->createNotFoundException("CourseSet#{$id} Not Found");
         }
 
-        if (!$this->hasCourseSetManagerRole($id)) {
+        if (!$this->hasCourseSetManageRole($id)) {
             throw $this->createAccessDeniedException("Unauthorized");
         }
 
         return $courseSet;
+    }
+
+    public function hasCourseSetManageRole($courseSetId = 0)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if ($this->hasAdminRole()) {
+            return true;
+        }
+
+        if(empty($courseSetId)) {
+            return false;
+        }
+
+        $courseSet = $this->getCourseSetDao()->get($courseSetId);
+        if (empty($courseSet)) {
+            return false;
+        }
+        return $courseSet['creator'] == $user->getId();
     }
 
     /**
@@ -263,14 +285,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function createCourseSet($courseSet)
     {
-        if (!$this->hasCourseSetManagerRole()) {
-            throw $this->createAccessDeniedException('You have no access to Course Set Management');
-        }
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
             throw $this->createInvalidArgumentException("Lack of required fields");
         }
+
         if (!in_array($courseSet['type'], array('normal', 'live', 'liveOpen', 'open'))) {
             throw $this->createInvalidArgumentException("Invalid Param: type");
+        }
+
+        if (!$this->hasCourseSetManageRole()) {
+            throw $this->createAccessDeniedException('You have no access to Course Set Management');
         }
 
         $courseSet            = ArrayToolkit::parts($courseSet, array(
@@ -514,15 +538,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function findCourseSetIncomesByCourseSetIds(array $courseSetIds)
     {
         return $this->getCourseDao()->findCourseSetIncomesByCourseSetIds($courseSetIds);
-    }
-
-    protected function hasCourseSetManagerRole($courseSetId = 0)
-    {
-        $userId = $this->getCurrentUser()->getId();
-        //TODO
-        //1. courseSetId为空，判断是否有创建课程的权限
-        //2. courseSetId不为空，判断是否有该课程的管理权限
-        return true;
     }
 
     protected function validateCourseSet($courseSet)
