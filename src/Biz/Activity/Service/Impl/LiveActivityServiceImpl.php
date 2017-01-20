@@ -18,40 +18,17 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $this->getLiveActivityDao()->get($id);
     }
 
-    public function createLiveActivity($activity)
+    public function createLiveActivity($activity, $ignoreValidation = false)
     {
-        if (empty($activity['startTime'])
+        if (!$ignoreValidation && (empty($activity['startTime'])
             || $activity['startTime'] <= time()
             || empty($activity['length'])
-            || $activity['length'] <= 0) {
+            || $activity['length'] <= 0)) {
             throw $this->createInvalidArgumentException('参数有误');
         }
 
         //创建直播室
-        $speaker = $this->getUserService()->getUser($activity['fromUserId']);
-        if (empty($speaker)) {
-            throw $this->createNotFoundException('教师不存在！');
-        }
-
-        $speaker = $speaker['nickname'];
-
-        $liveLogo    = $this->getSettingService()->get('course');
-        $liveLogoUrl = "";
-
-        if (!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])) {
-            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
-        }
-
-        $live = $this->getEdusohoLiveClient()->createLive(array(
-            'summary'     => empty($activity['remark']) ? '' : $activity['remark'],
-            'title'       => $activity['title'],
-            'speaker'     => $speaker,
-            'startTime'   => $activity['startTime'].'',
-            'endTime'     => ($activity['startTime'] + $activity['length'] * 60).'',
-            'authUrl'     => $activity['_base_url'].'/live/auth',
-            'jumpUrl'     => $activity['_base_url'].'/live/jump?id='.$activity['fromCourseId'],
-            'liveLogoUrl' => $liveLogoUrl
-        ));
+        $live = $this->createLiveroom($activity);
 
         if (empty($live)) {
             throw $this->createNotFoundException('云直播创建失败，请重试！');
@@ -139,5 +116,40 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $this->client = new EdusohoLiveClient();
         }
         return $this->client;
+    }
+
+    /**
+     * @param  $activity
+     * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @return array
+     */
+    public function createLiveroom($activity)
+    {
+        $speaker = $this->getUserService()->getUser($activity['fromUserId']);
+        if (empty($speaker)) {
+            throw $this->createNotFoundException('教师不存在！');
+        }
+
+        $speaker = $speaker['nickname'];
+
+        $liveLogo    = $this->getSettingService()->get('course');
+        $liveLogoUrl = "";
+
+        if (!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])) {
+            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
+        }
+
+        $live = $this->getEdusohoLiveClient()->createLive(array(
+            'summary'     => empty($activity['remark']) ? '' : $activity['remark'],
+            'title'       => $activity['title'],
+            'speaker'     => $speaker,
+            'startTime'   => $activity['startTime'].'',
+            'endTime'     => ($activity['startTime'] + $activity['length'] * 60).'',
+            //FIXME 如果上面的baseUrl和下面的$activity['_base_url']等效，则不使用下面的（因为下面的参数来自controller，应避免这种依赖）
+            'authUrl'     => $activity['_base_url'].'/live/auth',
+            'jumpUrl'     => $activity['_base_url'].'/live/jump?id='.$activity['fromCourseId'],
+            'liveLogoUrl' => $liveLogoUrl
+        ));
+        return $live;
     }
 }

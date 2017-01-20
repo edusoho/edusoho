@@ -26,6 +26,13 @@ interface CourseService
 
     public function createCourse($course);
 
+    /**
+     * 复制教学计划
+     * @param  array   $fields
+     * @return mixed
+     */
+    public function copyCourse($fields);
+
     public function createChapter($chapter);
 
     public function updateChapter($courseId, $chapterId, $fields);
@@ -96,13 +103,13 @@ interface CourseService
     public function findPublicCoursesByIds(array $ids);
 
     //---start 前两个已经重构了，后面的四个也需要重构，目前还没有用到，用到的时候在重构
-    public function findUserLeaningCourseCount($userId, $filters = array());
+    public function countUserLearningCourses($userId, $filters = array());
 
-    public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
+    public function findUserLearningCourses($userId, $start, $limit, $filters = array());
 
-    public function findUserLeanedCourseCount($userId, $filters = array());
+    public function countUserLearnedCourses($userId, $filters = array());
 
-    public function findUserLeanedCourses($userId, $start, $limit, $filters = array());
+    public function findUserLearnedCourses($userId, $start, $limit, $filters = array());
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 

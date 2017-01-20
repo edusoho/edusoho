@@ -7,5 +7,4 @@ return array(
         'Topxia\\Service\\Course\\Event\\CourseMaterialEventSubscriber',
         'Topxia\\Service\\Course\\Event\\CourseMemberEventSubscriber'
     ),
-    ''
 );

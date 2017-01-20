@@ -89,7 +89,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     protected function deleteMaterials($course)
     {
         $conditions    = array('courseId' => $course['id'], 'type' => 'course');
-        $materialCount = $this->getMaterialService()->searchMaterialCount($conditions);
+        $materialCount = $this->getMaterialService()->countMaterials($conditions);
         $count         = 0;
 
         if ($materialCount > 0) {
