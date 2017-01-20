@@ -137,17 +137,19 @@ class AnalysisController extends BaseController
         return $this->render("admin/operation-analysis/user-sum.html.twig", $result);
     }
 
-    public function courseSumAction(Request $request, $tab)
+    public function courseSetSumAction(Request $request, $tab)
     {
         $data               = array();
-        $courseSumStartDate = "";
+        $courseSetSumStartDate = "";
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
+        $count = $this->getCourseSetService()->countCourseSets($timeRange);
+
         if (!$timeRange) {
             $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_course_sum', array(
+            return $this->redirect($this->generateUrl('admin_operation_analysis_course_set_sum', array(
                 'tab' => "trend"
             )));
         }
@@ -155,47 +157,47 @@ class AnalysisController extends BaseController
         $timeRange['parentId'] = 0;
         $paginator             = new Paginator(
             $request,
-            $this->getCourseService()->searchCourseCount($timeRange),
+            $count,
             20
         );
 
-        $courseSumDetail = $this->getCourseService()->searchCourses(
+        $courseSetSumDetail = $this->getCourseSetService()->searchCourseSets(
             $timeRange,
             '',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $courseSumData = "";
+        $courseSetSumData = "";
 
         if ($tab == "trend") {
-            $courseSumData = $this->getCourseService()->analysisCourseSumByTime($timeRange['endTime']);
+            $courseSetSumData = $this->getCourseSetService()->analysisCourseSetSumByTime($timeRange['endTime']);
 
-            $data = $this->fillAnalysisCourseSum($condition, $courseSumData);
+            $data = $this->fillAnalysisCourseSum($condition, $courseSetSumData);
         }
 
-        $userIds = ArrayToolkit::column($courseSumDetail, 'userId');
+        $userIds = ArrayToolkit::column($courseSetSumDetail, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSumDetail, 'categoryId'));
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSetSumDetail, 'categoryId'));
 
-        $courseSumStartData = $this->getCourseService()->searchCourses(array(), 'createdTimeByAsc', 0, 1);
+        $courseSetSumStartData = $this->getCourseSetService()->searchCourseSets(array(), array('createdTime' => 'ASC'), 0, 1);
 
-        if ($courseSumStartData) {
-            $courseSumStartDate = date("Y-m-d", $courseSumStartData[0]['createdTime']);
+        if ($courseSetSumStartData) {
+            $courseSetSumStartDate = date("Y-m-d", $courseSetSumStartData[0]['createdTime']);
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
         return $this->render("admin/operation-analysis/course-sum.html.twig", array(
-            'courseSumDetail'    => $courseSumDetail,
-            'paginator'          => $paginator,
-            'tab'                => $tab,
-            'categories'         => $categories,
-            'data'               => $data,
-            'users'              => $users,
-            'courseSumStartDate' => $courseSumStartDate,
-            'dataInfo'           => $dataInfo
+            'courseSetSumDetail'    => $courseSetSumDetail,
+            'paginator'             => $paginator,
+            'tab'                   => $tab,
+            'categories'            => $categories,
+            'data'                  => $data,
+            'users'                 => $users,
+            'courseSetSumStartDate' => $courseSetSumStartDate,
+            'dataInfo'              => $dataInfo
         ));
     }
 
