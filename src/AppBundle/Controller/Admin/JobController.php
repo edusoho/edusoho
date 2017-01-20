@@ -36,7 +36,7 @@ class JobController extends BaseController
         ));
     }
 
-    protected function getjobService()
+    protected function getJobService()
     {
         return $this->createService('Crontab:CrontabService');
     }

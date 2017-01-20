@@ -1,15 +1,9 @@
 {% import "admin/macro.html.twig" as admin_macro %}
 {% set target = 'recommend_list' %}
 
-{% if courseSet.type == 'open' or courseSet.type == 'liveOpen' %}
-  {% set showUrl = path('open_course_show',{courseId:courseSet.id}) %}
-  {% set cancelUrl = path('admin_open_course_cancel_recommend', {id:courseSet.id,target:target}) %}
-  {% set recommendUrl = path('admin_open_course_recommend', {id:courseSet.id, ref:'recommendList'}) %}
-{% else %}
-  {% set showUrl = path('course_set_show',{id:courseSet.id}) %}
-  {% set cancelUrl = path('admin_course_set_cancel_recommend', {id:courseSet.id,target:target}) %}
-  {% set recommendUrl = path('admin_course_set_recommend', {id:courseSet.id, ref:'recommendList'}) %}
-{% endif %}
+{% set showUrl = path('course_set_show',{id:courseSet.id}) %}
+{% set cancelUrl = path('admin_course_set_cancel_recommend', {id:courseSet.id,target:target}) %}
+{% set recommendUrl = path('admin_course_set_recommend', {id:courseSet.id, ref:'recommendList'}) %}
 
 <tr id="course-tr-{{ courseSet.id }}" data-sort="{{ courseSet.recommendedSeq }}">
   <td>{{ courseSet.recommendedSeq }}</td>
@@ -18,9 +12,7 @@
     <br>
     <span class="text-muted text-sm">{{'分类：'|trans}}{{ category.name|default('--') }}</span>
   </td>
-  {% if courseSet.type not in ['open','liveOpen'] %}
-    {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode}%}
-  {% endif %}
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode}%}
   <td>
     {{ admin_macro.user_link(user) }}
     <br>

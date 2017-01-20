@@ -54,11 +54,9 @@
             {% endif %}
 
           </div>
-          <div class="course-detail-content">
-            {% block detail_content %}
-              {{ render(controller(metas.tabs[tab].content, {course: course, member: member|default(null)})) }}
-            {% endblock %}
-          </div>
+          {% block detail_content %}
+            {{ render(controller(metas.tabs[tab].content, {course: course, member: member|default(null)})) }}
+          {% endblock %}
         </section>
 
       </div>
