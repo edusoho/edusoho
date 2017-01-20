@@ -21,8 +21,7 @@ class VideoPlay {
 
   record() {
     this.intervalId = setInterval(() => {
-      console.log(this)
-      this.recorder.print(this.player);
+      this.recorder.addVideoPlayerCounter(this.player);
     }, 1000);
   }
 
@@ -86,7 +85,6 @@ class VideoRecorder {
   addVideoPlayerCounter(player) {
     let $container = $(this.container);
     let taskId = $container.data('taskId');
-    console.log($container.data());
     let playerCounter = store.get("task_id" + taskId + "_playing_counter");
     if (!playerCounter) {
       playerCounter = 0;
@@ -109,10 +107,6 @@ class VideoRecorder {
     store.set("task_id" + taskId + "_playing_counter", playerCounter);
   }
 
-  print(player) {
-    this.addVideoPlayerCounter(player);
-    console.log(player);
-  }
 }
 
 let recorder = new VideoRecorder('#video-content');

@@ -117,7 +117,7 @@ class TaskController extends BaseController
         }
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
 
-        $taskResult = $this->getTaskResultService()->waveWatchTime($taskResult['id'], $time);
+        $this->getTaskResultService()->waveWatchTime($taskResult['id'], $time);
 
         $isLimit = $this->setting('magic.lesson_watch_limit');
         if ($isLimit) {
