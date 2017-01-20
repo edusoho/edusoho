@@ -17,9 +17,9 @@ class CourseController extends BaseController
     public function pickAction($classroomId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-        $actviteCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
 
-        $excludeIds = ArrayToolkit::column($actviteCourses, 'parentId');
+        $excludeIds = ArrayToolkit::column($activeCourses, 'parentId');
         $conditions = array(
             'status'     => 'published',
             'parentId'   => 0,
