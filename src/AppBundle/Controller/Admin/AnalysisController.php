@@ -89,7 +89,7 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
-            $this->setFlashMessage("danger",  '输入的日期有误!');
+            $this->setFlashMessage("danger", '输入的日期有误!');
             return $this->redirect($this->generateUrl('admin_operation_analysis_user_sum', array(
                 'tab' => "trend"
             )));
@@ -112,7 +112,7 @@ class AnalysisController extends BaseController
 
             $userSumDetail = $this->getUserService()->searchUsers(
                 $timeRange,
-                array('createdTime'=>'DESC'),
+                array('createdTime' => 'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
@@ -120,7 +120,7 @@ class AnalysisController extends BaseController
             $result['paginator']     = $paginator;
         }
 
-        $userSumStartData = $this->getUserService()->searchUsers(array(), array('createdTime', 'ASC'), 0, 1);
+        $userSumStartData = $this->getUserService()->searchUsers(array(), array('createdTime' => 'ASC'), 0, 1);
 
         if ($userSumStartData) {
             $userSumStartDate = date("Y-m-d", $userSumStartData[0]['createdTime']);
