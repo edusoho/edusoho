@@ -5,12 +5,9 @@ namespace Tests\Order;
 use Biz\User\CurrentUser;
 use Biz\BaseTestCase;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
-use Tests\Common\CourseTrait;
 
 class ClassroomOrderProcessorTest extends BaseTestCase
 {
-    use CourseTrait;
-
     public function testPreCheckWithBecomedStudent()
     {
         $createCourse = $this->createCourse();
@@ -198,7 +195,7 @@ class ClassroomOrderProcessorTest extends BaseTestCase
         $this->createCourse(array('about' => '测试'));
         $processor = OrderProcessorFactory::create('course');
         $title = $processor->getTitle(1);
-        $this->assertEquals('onlinetestcourse1', $title);
+        $this->assertEquals('test-create-course', $title);
         $classroom = array(
             'title' => 'test',
             'id' => 1,
@@ -240,6 +237,19 @@ class ClassroomOrderProcessorTest extends BaseTestCase
         $result2 = $processor->doPaySuccess('', $order);
         $this->assertNull($result1);
         $this->assertNull($result2);
+    }
+
+    private function createCourse($customFields = array())
+    {
+        $defaultFields = array(
+            'title' => 'test-create-course',
+            'courseSetId' => 1,
+            'expiryMode' => '',
+            'learnMode' => 'freeMode',
+        );
+
+        $fields = array_merge($defaultFields, $customFields);
+        return $this->getCourseService()->createCourse($fields);
     }
 
     protected function getClassroomService()
