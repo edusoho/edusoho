@@ -10,10 +10,14 @@ use Biz\Testpaper\Builder\ExerciseBuilder;
 use Biz\Testpaper\Builder\HomeworkBuilder;
 use Biz\Testpaper\Builder\TestpaperBuilder;
 use Biz\Sms\SmsProcessor\LessonSmsProcessor;
+use Biz\Article\Event\ArticleEventSubscriber;
+use Biz\Testpaper\Pattern\QuestionTypePattern;
 use Biz\Thread\Firewall\ArticleThreadFirewall;
 use Biz\Thread\Firewall\ClassroomThreadFirewall;
 use Biz\Thread\Firewall\OpenCourseThreadFirewall;
 use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
+use Biz\Classroom\Event\ClassroomThreadEventProcessor;
+use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
 
 class DefaultServiceProvider implements ServiceProviderInterface
@@ -62,6 +66,22 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['thread_firewall.openCourse'] = function ($biz) {
             return new OpenCourseThreadFirewall();
+        };
+
+        $biz['testpaper_pattern.questionType'] = function ($biz) {
+            return new QuestionTypePattern($biz);
+        };
+
+        $biz['thread_event_processor.classroom'] = function ($biz) {
+            return new ClassroomThreadEventProcessor($biz);
+        };
+
+        $biz['thread_event_processor.openCourse'] = function ($biz) {
+            return new OpenCourseThreadEventProcessor($biz);
+        };
+
+        $biz['thread_event_processor.article'] = function ($biz) {
+            return new ArticleEventSubscriber($biz);
         };
 
     }

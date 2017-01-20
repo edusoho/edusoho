@@ -160,7 +160,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 
         $currentUser = $this->getCurrentUser();
 
-        if (($note['userId'] != $currentUser['id']) && !$this->getCourseMemberService()->isCourseTeacher($note['courseId'], 'admin_course_note')) {
+        if (!$this->hasPermission($currentUser, $note)) {
             throw $this->createServiceException('你没有权限删除笔记');
         }
 
@@ -263,6 +263,14 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     public function countNotesByUserIdAndCourseId($userId, $courseId)
     {
         return $this->getNoteDao()->countByUserIdAndCourseId($userId, $courseId);
+    }
+
+    private function hasPermission($currentUser, $note)
+    {
+        return $note['userId'] == $currentUser['id']
+            ||
+            $this->getCourseMemberService()->isCourseTeacher($note['courseId'], $currentUser['id'])
+            || $currentUser->isAdmin();
     }
 
     /**

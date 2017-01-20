@@ -5,11 +5,7 @@
 {% block title %}{{'设置推荐课程'|trans}}{% endblock %}
 {% block body %}
 
-{% if courseSet.type == 'open' or courseSet.type == 'liveOpen' %}
-  {% set recommendUrl = path('admin_open_course_recommend', {id:courseSet.id, ref:ref, filter:filter}) %}
-{% else %}
-  {% set recommendUrl = path('admin_course_set_recommend', {id:courseSet.id, ref:ref, filter:filter}) %}
-{% endif %}
+{% set recommendUrl = path('admin_course_set_recommend', {id:courseSet.id, ref:ref, filter:filter}) %}
 <form id="course-recommend-form" class="form-horizontal" method="post" action="{{ recommendUrl }}">
   
 
