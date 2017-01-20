@@ -37,6 +37,11 @@ class ClassroomDaoTest extends BaseDaoTestCase
                 'expectedCount' => 1
                 ),
             array(
+                'condition' => array('titleLike' => 'b'),
+                'expectedResults' => array($expected[1]),
+                'expectedCount' => 1
+                ),
+            array(
                 'condition' => array('price' => 55.5),
                 'expectedResults' => array($expected[2]),
                 'expectedCount' => 1
