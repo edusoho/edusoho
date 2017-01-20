@@ -1,0 +1,9 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{% do script(['app/js/activity/video/index.js']) %}
+
+{% block body %}
+  {% if watchStatus.status == 'error' %}
+    <span >您的观看时长已到 <strong> {{ watchStatus.watchLimitTime|duration_text }} </strong>不能再观看</span>
+  {% endif %}
+{% endblock %}
