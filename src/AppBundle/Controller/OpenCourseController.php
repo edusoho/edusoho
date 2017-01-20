@@ -205,7 +205,7 @@ class OpenCourseController extends BaseOpenCourseController
         $user           = $this->getCurrentUser();
         $memberFavorite = $this->getOpenCourseService()->getFavoriteByUserIdAndCourseId($user['id'], $courseId, 'openCourse');
 
-        return $this->render('open-course/open-course-info-bar-block.html.twig', array(
+        return $this->render('open-course/info-bar-block.html.twig', array(
             'course'         => $course,
             'member'         => $member,
             'memberFavorite' => $memberFavorite
