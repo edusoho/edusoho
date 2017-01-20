@@ -36,20 +36,22 @@ define(function(require, exports, module) {
 
         $('#search').on('click',function(){
 
-            $.post($searchForm.attr('action'),$searchForm.serialize(),function(data){
+            $.get($searchForm.data('url'),$searchForm.serialize(),function(data){
 
-                $('.courses-list').html(data);
+                $('#modal').html(data);
             });
         });
 
         $('#enterSearch').keydown(function(event){
 
             if(event.keyCode == 13){
-                $.post($searchForm.attr('action'),$searchForm.serialize(),function(data){
-
-                    $('.courses-list').html(data);
+                $.get($searchForm.data('url'),$searchForm.serialize(),function(data){
+                    $('#modal').html(data);
                 });
+
+               return false;
             }
+
         });
        
       
