@@ -4,6 +4,9 @@ namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\VideoActivityDao;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Activity\Service\ActivityService;
+use Biz\File\Service\UploadFileService;
 
 class Video extends Activity
 {
@@ -25,6 +28,19 @@ class Video extends Activity
         return $videoActivity;
     }
 
+    public function copy($activity, $config = array())
+    {
+        $video    = $this->getVideoActivityDao()->get($activity['mediaId']);
+        $newVideo = array(
+            'mediaSource'  => $video['mediaSource'],
+            'mediaId'      => $video['mediaId'],
+            'mediaUri'     => $video['mediaUri'],
+            'finishType'   => $video['finishType'],
+            'finishDetail' => $video['finishDetail']
+        );
+        return $this->getVideoActivityDao()->create($newVideo);
+    }
+
     public function update($activityId, &$fields, $activity)
     {
         $video = $fields['ext'];
@@ -36,29 +52,27 @@ class Video extends Activity
         }
         $videoActivity = $this->getVideoActivityDao()->get($fields['mediaId']);
         if (empty($videoActivity)) {
-            throw $this->createNotFoundException('教学活动不存在');
+            throw new \Exception('教学活动不存在');
         }
         $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $video);
         return $videoActivity;
     }
 
-
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
-        $video      = $this->getVideoActivityDao()->get($activity['mediaId']);
+        $video    = $this->getVideoActivityDao()->get($activity['mediaId']);
         if ($video['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
             return !empty($result) && $result >= $video['finishDetail'];
         }
 
-        if($video['finishType'] == 'end'){
+        if ($video['finishType'] == 'end') {
             $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'video.finish');
             return !empty($logs);
         }
 
         return false;
-
     }
 
     public function get($id)
@@ -81,16 +95,25 @@ class Video extends Activity
         return $this->getBiz()->dao('Activity:VideoActivityDao');
     }
 
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->getBiz()->service("Activity:ActivityLearnLogService");
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getBiz()->service("Activity:ActivityService");

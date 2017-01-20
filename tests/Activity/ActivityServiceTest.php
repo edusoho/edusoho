@@ -2,12 +2,18 @@
 namespace Tests\Activity;
 
 use Biz\Task\Service\TaskService;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
 
 class ActivityServiceTest extends BaseTestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        $this->mockService(array('Course:CourseService' => array('tryManageCourse' => array('id' => 1, ))));
+    }
+
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
@@ -16,6 +22,7 @@ class ActivityServiceTest extends BaseTestCase
         $activity = array(
             'title' => 'test activity'
         );
+        
         $savedActivity = $this->getActivityService()->createActivity($activity);
         $this->assertEquals($activity['title'], $savedActivity['title']);
     }
@@ -82,13 +89,21 @@ class ActivityServiceTest extends BaseTestCase
     public function testFinishTrigger()
     {
         $course = array(
+            'id'          => 1,
             'title'       => 'test',
             'courseSetId' => 1,
             'expiryMode'  => 'days',
             'learnMode'   => 'lockMode',
-            'expiryDays'  => 0
+            'expiryDays'  => 0,
+            'isDefault'   => 0
         );
-        $course = $this->getCourseService()->createCourse($course);
+
+        $this->mockService(array(
+            'Course:CourseService' => array(
+                'tryManageCourse' => 1,
+                'getCourse' => $course,
+                'getNextCourseItemSeq' => 1
+            )));
 
         $task = array(
             'title'           => 'test1 task',

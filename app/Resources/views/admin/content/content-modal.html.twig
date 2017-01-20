@@ -93,7 +93,7 @@
         <div class="panel">
           <div class="panel-heading">{{'分类'|trans}}</div>
           <select name="categoryId">
-            {{ select_options(category_choices('default'), field_value(content, 'categoryId'), {'0':'请选择分类'|trans}) }}
+            {{ select_options(category_choices('default'), field_value(content, 'categoryId'), '请选择分类'|trans) }}
           </select>
         </div>
       {% endif %}

@@ -271,12 +271,12 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
 
-        $learningCourseTotal = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id']);
-        $learningCourses     = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], 0, $learningCourseTotal);
+        $learningCourseTotal = $this->controller->getCourseService()->countUserLearningCourses($user['id']);
+        $learningCourses     = $this->controller->getCourseService()->findUserLearningCourses($user['id'], 0, $learningCourseTotal);
         $resultLearning      = $this->controller->filterCourses($learningCourses);
 
-        $learnedCourseTotal = $this->controller->getCourseService()->findUserLeanedCourseCount($user['id']);
-        $learnedCourses     = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], 0, $learnedCourseTotal);
+        $learnedCourseTotal = $this->controller->getCourseService()->countUserLearnedCourses($user['id']);
+        $learnedCourses     = $this->controller->getCourseService()->findUserLearnedCourses($user['id'], 0, $learnedCourseTotal);
         $resultLearned      = $this->controller->filterCourses($learnedCourses);
         $courseIds          = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
 
@@ -1142,8 +1142,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
-        $total   = $this->controller->getCourseService()->findUserLeanedCourseCount($user['id']);
-        $courses = $this->controller->getCourseService()->findUserLeanedCourses($user['id'], $start, $limit);
+        $total   = $this->controller->getCourseService()->countUserLearnedCourses($user['id']);
+        $courses = $this->controller->getCourseService()->findUserLearnedCourses($user['id'], $start, $limit);
 
         $result = array(
             "start" => $start,
@@ -1164,8 +1164,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $start   = (int) $this->getParam("start", 0);
         $limit   = (int) $this->getParam("limit", 10);
-        $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($userId);
-        $courses = $this->controller->getCourseService()->findUserLeaningCourses($userId, $start, $limit);
+        $total   = $this->controller->getCourseService()->countUserLearningCourses($userId);
+        $courses = $this->controller->getCourseService()->findUserLearningCourses($userId, $start, $limit);
 
         $count = $this->controller->getCourseService()->searchLearnCount(array(
         ));
@@ -1246,8 +1246,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $filter = array("type" => "normal");
         }
 
-        $total   = $this->controller->getCourseService()->findUserLeaningCourseCount($user['id'], $filter);
-        $courses = $this->controller->getCourseService()->findUserLeaningCourses($user['id'], $start, $limit, $filter);
+        $total   = $this->controller->getCourseService()->countUserLearningCourses($user['id'], $filter);
+        $courses = $this->controller->getCourseService()->findUserLearningCourses($user['id'], $start, $limit, $filter);
 
         $count = $this->controller->getCourseService()->searchLearnCount(array(
             "userId" => $user["id"]
@@ -1431,7 +1431,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $start = (int) $this->getParam("start", 0);
         $limit = (int) $this->getParam("limit", 10);
 
-        $courses = $this->controller->getCourseService()->findUserLeaningCourses(
+        $courses = $this->controller->getCourseService()->findUserLearningCourses(
             $user['id'], $start, 1000, array('type' => 'live')
         );
         $courseIds = ArrayToolkit::column($courses, 'id');

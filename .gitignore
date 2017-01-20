@@ -70,3 +70,4 @@ chunk-manifest.json
 /web/static-dist/*
 .vscode/
 .sonar
+.happypack

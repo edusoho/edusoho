@@ -13,6 +13,9 @@ class AnnouncementDaoImpl extends GeneralDaoImpl implements AnnouncementDao
     public function declares()
     {
         return array(
+            'timestamps' => array(
+                'createdTime', 'updatedTime'
+            ),
             'orderbys' => array(
                 'createdTime'
             ),

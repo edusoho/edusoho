@@ -12,7 +12,7 @@
       
       <div class="form-group">
         <select style="width:150px;" class="form-control" name="categoryId">
-          {{ select_options(category_choices('course'), app.request.query.get('categoryId'), {'0':'课程分类'|trans}) }}
+          {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类'|trans) }}
         </select>
       </div>
       <div class="form-group">
@@ -57,7 +57,7 @@
             <td>{{courseSet.taskCount|default()}}</td>
             <td>{{courseSet.studentNum|default()}}</td>
             <td>{{courseSet.isLearnedNum|default()}}</td>
-            <td>{{courseSet.learnTime|default(0)}}</td>
+            <td>{{courseSet.learnedTime}}</td>
             <td>{{courseSet.income|default()}}</td>
             <td><a data-toggle="modal" data-target="#modal" data-url="{{path('admin_courses_data',{courseSetId:courseSet.id})}}" href="javascript:;">{{'查看任务'|trans}}</a></td>
             </tr>

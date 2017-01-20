@@ -66,6 +66,16 @@
      <p></p>
       <div class="row form-group">
         <div class="col-md-3 control-label">
+          <label for="encryption">{{'SMTP连接方式'|trans}}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('encryption', {'':'无加密'|trans, 'ssl':'ssl'|trans}, mailer.encryption) }}
+          <p class="help-block">{{'可选无加密或ssl,qq企业邮箱需要ssl连接'|trans}}</p>
+        </div>
+      </div>
+     <p></p>
+      <div class="row form-group">
+        <div class="col-md-3 control-label">
           <label for="username" >{{'SMTP用户名'|trans}}</label>
         </div>
         <div class="controls col-md-8">

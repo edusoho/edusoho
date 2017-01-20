@@ -64,7 +64,7 @@ class TagGroupController extends BaseController
         $name    = $request->query->get('value');
         $exclude = $request->query->get('exclude');
 
-        $avalieable = $this->getTagService()->isTagGroupNameAvalieable($name, $exclude);
+        $avalieable = $this->getTagService()->isTagGroupNameAvailable($name, $exclude);
 
         if ($avalieable) {
             $response = array('success' => true, 'message' => '');

@@ -2,11 +2,11 @@
 
 namespace Biz\Activity\Type;
 
-use Biz\Activity\Dao\FlashActivityDao;
-use Biz\Activity\Service\ActivityLearnLogService;
-use Biz\Activity\Service\ActivityService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\FlashActivityDao;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class Flash extends Activity
 {
@@ -15,7 +15,7 @@ class Flash extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $flash    = $this->getFlashActivityDao()->get($activity['mediaId']);
         if ($flash['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumLearnedTimeByActivityId($activityId);
+            $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
             return $result >= $flash['finishDetail'];
         }
 
@@ -39,6 +39,19 @@ class Flash extends Activity
 
         $flash = $this->getFlashActivityDao()->create($flash);
         return $flash;
+    }
+
+    public function copy($activity, $config = array())
+    {
+        $biz      = $this->getBiz();
+        $flash    = $this->getFlashActivityDao()->get($activity['mediaId']);
+        $newFlash = array(
+            'mediaId'       => $flash['mediaId'],
+            'finishType'    => $flash['finishType'],
+            'finishDetail'  => $flash['finishDetail'],
+            'createdUserId' => $biz['user']['id']
+        );
+        return $this->getFlashActivityDao()->create($newFlash);
     }
 
     public function update($targetId, &$fields, $activity)
