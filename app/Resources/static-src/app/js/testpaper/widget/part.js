@@ -1,10 +1,17 @@
 import 'app/common/watermark';
+import { Browser } from 'common/utils';
 
 export const initScrollbar = ()=> {
 	let $taskTestpaperBodyIframe = $('.js-task-testpaper-body-iframe');
 	let $paneCard = $('.js-panel-card');
-	$taskTestpaperBodyIframe.perfectScrollbar();
-	$taskTestpaperBodyIframe.perfectScrollbar('update'); 
+	
+	if (Browser.isIE  || Browser.isFirefox) {
+		$taskTestpaperBodyIframe.css('overflow-y','auto')
+	} else {
+		$taskTestpaperBodyIframe.perfectScrollbar();
+		$taskTestpaperBodyIframe.perfectScrollbar('update'); 
+	}
+
   $paneCard.perfectScrollbar();
 	$paneCard.perfectScrollbar('update');
 }
