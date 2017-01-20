@@ -1557,6 +1557,10 @@ course_task_show:
     path:  /course/{courseId}/task/{id}/show
     defaults: { _controller: AppBundle:Task:show }
 
+course_task_watch_time:
+    path:  /course/{courseId}/task/{id}/watch/time/{time}
+    defaults: { _controller: AppBundle:Task:recordWatchingTime,time:'' }
+
 course_task_preview:
     path:  /course/{courseId}/task/{id}/preview
     defaults: { _controller: AppBundle:Task:preview }

@@ -1,12 +1,12 @@
-/**
- * Created by Simon on 08/11/2016.
- */
 import swfobject from 'es-swfobject';
 import EsMessenger from '../../../common/messenger';
 import ActivityEmitter from '../../activity/activity-emitter';
+import 'store';
 class VideoPlay {
-  constructor() {
+  constructor(recorder) {
     this.player = {};
+    this.intervalId = null;
+    this.recorder = recorder;
     this.emitter = new ActivityEmitter();
   }
 
@@ -16,6 +16,18 @@ class VideoPlay {
     } else {
       this._playVideo();
     }
+    this.record();
+  }
+
+  record() {
+    this.intervalId = setInterval(() => {
+      console.log(this)
+      this.recorder.print(this.player);
+    }, 1000);
+  }
+
+  getPlay() {
+    return this.player;
   }
 
   _playerSwf() {
@@ -54,14 +66,55 @@ class VideoPlay {
   }
 
   _onFinishLearnTask(msg) {
-    this.emitter.emit('finish', { data: msg }).then(() => {
+    this.emitter.emit('finish', {data: msg}).then(() => {
       console.log('vidoe.finish');
+      clearInterval(this.intervalId)
     }).catch((error) => {
       console.error(error);
     });
   }
 
-
 }
-let videoplay = new VideoPlay();
+
+
+class VideoRecorder {
+  constructor(container) {
+    this.container = container;
+    this.interval = 120;
+  }
+
+  addVideoPlayerCounter(player) {
+    let $container = $(this.container);
+    let taskId = $container.data('taskId');
+    console.log($container.data());
+    let playerCounter = store.get("task_id" + taskId + "_playing_counter");
+    if (!playerCounter) {
+      playerCounter = 0;
+    }
+    if (!(player && player.playing)) {
+      return false;
+    }
+
+    if (playerCounter >= this.interval) {
+      let url = $container.data('watchUrl') + '/' + playerCounter
+      $.post(url, function (response) {
+        if (response.watchLimited) {
+          window.location.reload()
+        }
+      });
+      playerCounter = 0;
+    } else if (player.playing) {
+      playerCounter++;
+    }
+    store.set("task_id" + taskId + "_playing_counter", playerCounter);
+  }
+
+  print(player) {
+    this.addVideoPlayerCounter(player);
+    console.log(player);
+  }
+}
+
+let recorder = new VideoRecorder('#video-content');
+let videoplay = new VideoPlay(recorder);
 videoplay.play();

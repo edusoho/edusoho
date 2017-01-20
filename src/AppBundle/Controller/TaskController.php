@@ -32,7 +32,6 @@ class TaskController extends BaseController
         if ($taskResult['status'] == 'finish') {
             list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
         }
-
         return $this->render('task/show.html.twig', array(
             'course'       => $course,
             'task'         => $task,
@@ -110,6 +109,34 @@ class TaskController extends BaseController
         return $this->forward('AppBundle:Activity/Activity:preview', array('task' => $task));
     }
 
+    public function recordWatchingTimeAction(Request $request, $courseId, $id, $time)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
+
+        $taskResult = $this->getTaskResultService()->waveWatchTime($taskResult['id'], $time);
+
+        $isLimit = $this->setting('magic.lesson_watch_limit');
+        if ($isLimit) {
+            $task   = $this->getTaskService()->getTask($id);
+            $course = $this->getCourseService()->getCourse($courseId);
+
+            $watchLimitTime = $course['watchLimit'] * $task['length'];
+
+            //非法请求
+            if (empty($taskResult)) {
+                $taskResult['watchLimited'] = true;
+            }
+            if ($task['type'] == 'video' && ($course['watchLimit'] > 0) && ($taskResult['watchTime'] >= $watchLimitTime)) {
+                $taskResult['watchLimited'] = true;
+            }
+        }
+        return $this->createJsonResponse($taskResult);
+    }
+
     public function qrcodeAction(Request $request, $courseId, $id)
     {
         $user = $this->getCurrentUser();
@@ -148,9 +175,8 @@ class TaskController extends BaseController
             return $this->render('task/inform.html.twig');
         }
         return $this->forward('AppBundle:Activity/Activity:show', array(
-            'id'       => $task['activityId'],
-            'courseId' => $courseId,
-            'preview'  => $preview
+            'task'    => $task,
+            'preview' => $preview
         ));
     }
 
