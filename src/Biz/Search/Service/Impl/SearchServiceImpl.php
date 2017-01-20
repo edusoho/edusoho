@@ -109,6 +109,11 @@ class SearchServiceImpl extends BaseService implements SearchService
         return $conditions;
     }
 
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
     protected function getUserService()
     {
         return $this->createService('User:UserService');

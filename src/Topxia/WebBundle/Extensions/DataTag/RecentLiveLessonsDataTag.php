@@ -29,7 +29,7 @@ class RecentLiveLessonsDataTag extends CourseBaseDataTag implements DataTag
                 'userId' => $userId
             );
             $userCourseCount = $this->getCourseService()->searchMemberCount($memConditions);
-            $liveCourses = $this->getCourseService()->findUserLeaningCourses($userId,0,$userCourseCount,$filters);
+            $liveCourses = $this->getCourseService()->findUserLearningCourses($userId,0,$userCourseCount,$filters);
 
             $courseIds = ArrayToolkit::column($liveCourses,'id');
             if(empty($courseIds)){

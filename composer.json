@@ -42,8 +42,8 @@
 		"endroid/qrcode-bundle": "v1.6.3",
 		"bshaffer/oauth2-server-bundle": "^0.3.0",
 		"codeages/rest-api-client": "^0.1.3",
-		"codeages/plugin-bundle": "^0.1.0",
-		"codeages/biz-rate-limiter": "^0.1.1",
+		"codeages/plugin-bundle": "^0.1.4",
+		"codeages/biz-rate-limiter": "^0.1.3",
 		"xxtea/xxtea": "^1.0",
 		"codeages/biz-framework": "^0.2.0"
 	},

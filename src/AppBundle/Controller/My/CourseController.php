@@ -25,11 +25,11 @@ class CourseController extends CourseBaseController
         $currentUser = $this->getUser();
         $paginator   = new Paginator(
             $request,
-            $this->getCourseService()->findUserLeaningCourseCount($currentUser['id']),
+            $this->getCourseService()->countUserLearningCourses($currentUser['id']),
             12
         );
 
-        $courses = $this->getCourseService()->findUserLeaningCourses(
+        $courses = $this->getCourseService()->findUserLearningCourses(
             $currentUser['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -46,11 +46,11 @@ class CourseController extends CourseBaseController
         $currentUser = $this->getCurrentUser();
         $paginator   = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserLeanedCourseCount($currentUser['id']),
+            $this->getCourseService()->countUserLearnedCourses($currentUser['id']),
             12
         );
 
-        $courses = $this->getCourseService()->findUserLeanedCourses(
+        $courses = $this->getCourseService()->findUserLearnedCourses(
             $currentUser['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -59,9 +59,9 @@ class CourseController extends CourseBaseController
         $userIds = array();
         foreach ($courses as $key => $course) {
             $userIds   = array_merge($userIds, $course['teacherIds']);
-            $learnTime = 0;// $this->getCourseService()->searchLearnTime(array('courseId' => $course['id'], 'userId' => $currentUser['id']));
+            $learnTime = $this->getTaskResultService()->sumLearnTimeByCourseIdAndUserId($course['id'], $currentUser['id']);
 
-            $courses[$key]['learnTime'] = intval($learnTime / 60 / 60).'小时'.($learnTime / 60 % 60).'分钟';
+            $courses[$key]['learnTime'] = intval($learnTime / 60).'小时'.($learnTime % 60).'分钟';
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 

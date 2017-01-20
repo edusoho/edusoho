@@ -16,7 +16,7 @@
       {% elseif courseSet.serializeMode == 'finished' %}
         <span class="tags"><span class="tag-finished"></span></span>
       {% endif %}
-      {% if course.type == 'live' %}
+      {% if course.type|default() == 'live' %}
         <span class="tags">
           <span class="tag-live"></span>
         </span>
@@ -35,7 +35,9 @@
         <span class="num"><i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}</span>
       {% endif %}
       <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
-      {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
+      {% if course %}
+        {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
+      {% endif %}
     </div>
   </div>
 </div>

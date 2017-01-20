@@ -215,12 +215,6 @@ class CourseSetController extends BaseController
         return $this->render('admin/course/delete.html.twig', array('courseSet' => $courseSet));
     }
 
-    public function closeAction(Request $request, $id)
-    {
-        $this->getCourseSetService()->closeCourseSet($id);
-        return $this->renderCourseTr($id, $request);
-    }
-
     public function checkPasswordAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {

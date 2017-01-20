@@ -2,13 +2,12 @@
 
 namespace AppBundle\Controller\Activity;
 
-
-use AppBundle\Controller\BaseController;
-use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\DownloadActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
+use AppBundle\Controller\BaseController;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\DownloadActivityService;
 
 class DownloadController extends BaseController implements ActivityActionInterface
 {
@@ -28,6 +27,7 @@ class DownloadController extends BaseController implements ActivityActionInterfa
     {
         $activity  = $this->getActivityService()->getActivity($id, $fetchMedia = true);
         $materials = $this->getMaterialService()->findMaterialsByLessonIdAndSource($activity['id'], 'coursematerial');
+
         foreach ($materials as $material) {
             $id                                = empty($material['fileId']) ? $material['link'] : $material['fileId'];
             $activity['ext']['materials'][$id] = array('id' => $material['fileId'], 'size' => $material['fileSize'], 'name' => $material['title'], 'link' => $material['link']);
@@ -42,8 +42,8 @@ class DownloadController extends BaseController implements ActivityActionInterfa
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        $materialId = $request->query->get('materialId');
-        $downloadFile   = $this->getDownloadActivityService()->downloadActivityFile($activityId, $materialId);
+        $materialId   = $request->query->get('materialId');
+        $downloadFile = $this->getDownloadActivityService()->downloadActivityFile($activityId, $materialId);
 
         if (!empty($downloadFile['link'])) {
             return $this->redirect($downloadFile['link']);
@@ -80,7 +80,6 @@ class DownloadController extends BaseController implements ActivityActionInterfa
      */
     protected function getCourseService()
     {
-
         return $this->createService('Course:CourseService');
     }
 

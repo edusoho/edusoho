@@ -2,7 +2,9 @@
 
 namespace Biz\Activity\Dao;
 
-interface TestpaperActivityDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface TestpaperActivityDao extends GeneralDaoInterface
 {
     public function findActivitiesByIds($ids);
 }
