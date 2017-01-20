@@ -12,9 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PptController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         $config = $this->getActivityService()->getActivityConfig('ppt');
 
@@ -29,7 +29,7 @@ class PptController extends BaseController implements ActivityActionInterface
         $error = array();
         if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
-                $url              = $this->generateUrl('course_manage_files', array('id' => $courseId));
+                $url              = $this->generateUrl('course_manage_files', array('id' => $task['courseId']));
                 $message          = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
                 $error['code']    = 'error';
                 $error['message'] = $message;

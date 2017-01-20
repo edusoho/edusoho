@@ -12,13 +12,19 @@ use Symfony\Component\HttpFoundation\Request;
 
 class VideoController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
 
+        $watchStatus = $this->getWatchStatus($task);
+        if ($watchStatus['status'] == 'error') {
+            return $this->render('activity/video/limit.html.twig', array(
+                'watchStatus' => $watchStatus
+            ));
+        }
         return $this->render('activity/video/show.html.twig', array(
             'activity' => $activity,
-            'courseId' => $courseId
+            'task'     => $task
         ));
     }
 
@@ -26,8 +32,8 @@ class VideoController extends BaseController implements ActivityActionInterface
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
 
-        $course = $this->getCourseService()->getCourse($task['courseId']);
-        $user   = $this->getCurrentUser();
+        $course  = $this->getCourseService()->getCourse($task['courseId']);
+        $user    = $this->getCurrentUser();
         $context = array();
 
         if ($task['mediaSource'] != 'self') {
@@ -121,4 +127,24 @@ class VideoController extends BaseController implements ActivityActionInterface
         return $this->createService('Course:CourseService');
     }
 
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
+    }
+
+    /**
+     * get the information if the video can be watch
+     * @param $task
+     * @return null
+     */
+    protected function getWatchStatus($task)
+    {
+        $course      = $this->getCourseService()->getCourse($task['courseId']);
+        $watchStatus = null;
+        if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
+            $watchStatus = $this->getTaskResultService()->checkUserWatchNum($task['id']);
+            return $watchStatus;
+        }
+        return $watchStatus;
+    }
 }

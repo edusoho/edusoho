@@ -13,18 +13,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId, $preview = 0)
+    public function showAction(Request $request, $task, $preview = 0)
     {
         if ($preview) {
             return $this->forward('AppBundle:Activity/Homework:preview', array(
-                'id'       => $id,
-                'courseId' => $courseId
+                'id'       => $task['activityId'],
+                'courseId' => $task['courseId']
             ));
         }
 
         $user = $this->getUser();
 
-        $activity       = $this->getActivityService()->getActivity($id);
+        $activity       = $this->getActivityService()->getActivity($task['activityId']);
         $homework       = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
         $homeworkResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $homework['id'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
 

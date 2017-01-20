@@ -12,12 +12,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class FlashController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($id);
-        $flash    = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
-        $file = $this->getUploadFileService()->getFullFile($flash['mediaId']);
-        $result = $this->getMaterialLibService()->player($file['globalId']);
+        $activity          = $this->getActivityService()->getActivity($task['activityId']);
+        $flash             = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
+        $file              = $this->getUploadFileService()->getFullFile($flash['mediaId']);
+        $result            = $this->getMaterialLibService()->player($file['globalId']);
         $flashMedia['uri'] = $result['url'];
         return $this->render('activity/flash/index.html.twig', array(
             'flash'      => $flash,
@@ -27,10 +27,10 @@ class FlashController extends BaseController implements ActivityActionInterface
 
     public function previewAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
-        $flash = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
-        $file = $this->getUploadFileService()->getFullFile($flash['mediaId']);
-        $result = $this->getMaterialLibService()->player($file['globalId']);
+        $activity          = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
+        $flash             = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
+        $file              = $this->getUploadFileService()->getFullFile($flash['mediaId']);
+        $result            = $this->getMaterialLibService()->player($file['globalId']);
         $flashMedia['uri'] = $result['url'];
 
         return $this->render('activity/flash/preview.html.twig', array(

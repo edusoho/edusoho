@@ -8,17 +8,17 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId, $preview = 0)
+    public function showAction(Request $request, $task, $preview = 0)
     {
         if ($preview) {
             return $this->forward('AppBundle:Activity/Testpaper:preview', array(
-                'id'       => $id,
-                'courseId' => $courseId
+                'id'       => $task['activityId'],
+                'courseId' => $task['courseId']
             ));
         }
 
         $user              = $this->getUser();
-        $activity          = $this->getActivityService()->getActivity($id);
+        $activity          = $this->getActivityService()->getActivity($task['activityId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $testpaper         = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
 

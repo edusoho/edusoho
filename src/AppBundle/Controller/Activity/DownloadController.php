@@ -11,15 +11,14 @@ use Biz\Activity\Service\DownloadActivityService;
 
 class DownloadController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $task)
     {
-        $activity             = $this->getActivityService()->getActivity($id, $fetchMedia = true);
-        $activity['courseId'] = $courseId;
+        $activity             = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
         $materials            = $this->getMaterialService()->findMaterialsByLessonIdAndSource($activity['id'], 'coursematerial');
         return $this->render('activity/download/show.html.twig', array(
             'materials' => $materials,
             'activity'  => $activity,
-            'courseId'  => $courseId
+            'task'  => $task
         ));
     }
 

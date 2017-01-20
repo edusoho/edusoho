@@ -13,9 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DocController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');

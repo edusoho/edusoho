@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DiscussController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($id);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
         return $this->render('activity/discuss/show.html.twig', array(
             'activity' => $activity
         ));

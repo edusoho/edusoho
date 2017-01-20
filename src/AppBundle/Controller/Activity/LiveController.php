@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $task)
     {
-        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
         $format   = 'Y-m-d H:i';
         if (isset($activity['startTime'])) {
             $activity['startTimeFormat'] = date($format, $activity['startTime']);
