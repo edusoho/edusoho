@@ -850,7 +850,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-
         if ($this->hasAdminRole()) {
             return true;
         }
