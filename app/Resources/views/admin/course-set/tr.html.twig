@@ -6,11 +6,6 @@
   <td>{{ courseSet.id }}</td>
   <td>
     <a href="{{ path('course_set_show', {id:courseSet.id}) }}" target="_blank"><strong>{{ courseSet.title }}</strong></a>
-    
-    {% if courseSet.type == 'live' or courseSet.type == 'liveOpen' %}
-      <span class="label label-success live-label mls">{{'直播'|trans}}</span>
-    {% endif %}
-
     {% if filter == 'classroom' %}
       {% set classroom = classrooms[courseSet.id]|default(null) %}
       {% if not classroom %}
