@@ -37,9 +37,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->findByCourseSetIds($setIds);
     }
 
-    function findCoursesByCourseSetId($courseSetId)
+    public function findCoursesByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, null);
+    }
+
+    public function findCoursesByParentIdAndLocked($parentId, $locked)
+    {
+        return $this->getCourseDao()->findCoursesByParentIdAndLocked($parentId, $locked);
     }
 
     public function findPublishedCoursesByCourseSetId($courseSetId)
@@ -837,6 +842,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
+        //不是管理员，无权限管理
+        if ($this->hasAdminRole()) {
+            return true;
+        }
+
         if ($courseId > 0) {
             $course = $this->getCourse($courseId);
             //课程不存在，无权限管理
@@ -854,11 +864,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 return false;
             }
             return $courseSet['creator'] == $user->getId();
-        }
-
-        //不是管理员，无权限管理
-        if ($this->hasAdminRole()) {
-            return true;
         }
 
         return false;
