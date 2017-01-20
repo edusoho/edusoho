@@ -182,6 +182,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $courseSet['creator'] == $user->getId();
     }
 
+    protected function hasAdminRole()
+    {
+        $user = $this->getCurrentUser();
+        return $user->hasPermission('admin_course_content_manage');
+    }
+
     /**
      * @param  array $conditions
      * @param  array|string $orderBys

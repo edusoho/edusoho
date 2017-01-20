@@ -1,6 +1,6 @@
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import { Card } from 'app/common/unit/card';
-import Swiper from 'Swiper';
+import Swiper from 'swiper';
 let orderLearnSwiper = null;
 
 Card();
