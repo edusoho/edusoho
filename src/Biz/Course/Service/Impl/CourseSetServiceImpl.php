@@ -71,7 +71,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('user is not log in');
+            throw $this->createAccessDeniedException('user is not login');
         }
 
         $isFavorite = $this->isUserFavorite($user['id'], $courseSet['id']);
