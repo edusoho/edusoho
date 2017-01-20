@@ -111,7 +111,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
     protected function deleteMaterials($course)
     {
         $conditions    = array('courseId' => $course['id'], 'type' => 'openCourse');
-        $materialCount = $this->getMaterialService()->searchMaterialCount($conditions);
+        $materialCount = $this->getMaterialService()->countMaterials($conditions);
         $count         = 0;
 
         if ($materialCount > 0) {

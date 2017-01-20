@@ -14,16 +14,16 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public static function getSubscribedEvents()
     {
         return array(
-            'question.create'           => 'onQuestionCreate',
-            'question.update'           => 'onQuestionUpdate',
-            'question.delete'           => 'onQuestionDelete',
+            'question.create' => 'onQuestionCreate',
+            'question.update' => 'onQuestionUpdate',
+            'question.delete' => 'onQuestionDelete',
 
-            'course.delete'             => 'onCourseDelete',
+            'course.delete'          => 'onCourseDelete',
             //'course.lesson.create' => 'onCourseLessonCreate',
-            'course.lesson.delete'      => 'onCourseLessonDelete',
-            'course.material.create'    => 'onMaterialCreate',
-            'course.material.update'    => 'onMaterialUpdate',
-            'course.material.delete'    => 'onMaterialDelete',
+            'course.lesson.delete'   => 'onCourseLessonDelete',
+            'course.material.create' => 'onMaterialCreate',
+            'course.material.update' => 'onMaterialUpdate',
+            'course.material.delete' => 'onMaterialDelete',
 
             'open.course.lesson.delete' => 'onOpenCourseLessonDelete',
             'open.course.delete'        => 'onOpenCourseDelete',
@@ -190,8 +190,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
     public function onMaterialCreate(Event $event)
     {
-        $context  = $event->getSubject();
-        $material = $context['material'];
+        $material = $event->getSubject();
 
         if (!empty($material['fileId'])) {
             $this->getUploadFileService()->waveUsedCount($material['fileId'], 1);
@@ -200,10 +199,9 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
     public function onMaterialUpdate(Event $event)
     {
-        $context        = $event->getSubject();
-        $argument       = $context['argument'];
-        $material       = $context['material'];
-        $sourceMaterial = $context['sourceMaterial'];
+        $material       = $event->getSubject();
+        $argument       = $event->getArgument('argument');
+        $sourceMaterial = $event->getArgument('sourceMaterial');
 
         if (!$material['lessonId'] && $sourceMaterial['lessonId']) {
             $this->getUploadFileService()->waveUsedCount($material['fileId'], -1);
