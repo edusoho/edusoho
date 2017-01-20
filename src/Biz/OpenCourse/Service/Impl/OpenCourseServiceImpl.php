@@ -939,7 +939,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             unset($conditions['creator']);
         }
 
-        if (isset($conditions['categoryId'])) {
+        if (isset($conditions['categoryId']) && !empty($conditions['categoryId'])) {
             $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
             $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
             unset($conditions['categoryId']);

@@ -32,7 +32,8 @@
         </div>
       </div>
   </div>
+{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
 {% endblock %}
 
 {% do load_script('open-course-analysis/watch') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
+
