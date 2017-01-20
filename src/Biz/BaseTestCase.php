@@ -73,6 +73,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $user['org']       = array('id' => 1);
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
+        $this->grantPermissionToUser($currentUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getServiceKernel()->createService('Role:RoleService')->refreshRoles();
         $this->getServiceKernel()->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
@@ -104,23 +105,16 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->setPool($pool);
     }
 
-    public function mockService($mockSrevices)
+    protected function mockBiz($alias, $className, $params = array())
     {
-        $biz = $this->getBiz();
-
-        foreach ($mockSrevices as $alias => $expecteds) {
-            list($module, $name) = explode(':', $alias);
-            $class = "Biz\\{$module}\\Service\\Impl\\{$name}Impl";
-            $mock = $this->getMockBuilder($class)
-                ->disableOriginalConstructor()
-                ->getMock();
-
-            foreach ($expecteds as $method => $return) {
-                $mock->expects($this->any())->method($method)->will($this->returnValue($return));
-            }
-            
-            $biz["@{$alias}"] = $mock;
+        $mockObj = Mockery::mock($className);
+    
+        foreach ($params as $param) {
+            $mockObj->shouldReceive($param['functionName'])->withAnyArgs()->andReturn($param['returnValue']);
         }
+
+        $biz = $this->getBiz();
+        $biz['@' . $alias] = $mockObj;
     }
 
     protected function setPool($object)
@@ -168,5 +162,12 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
                 $this->assertEquals($ary1[$key], $ary2[$key]);
             }
         }
+    }
+
+    protected function grantPermissionToUser($currentUser)
+    {
+        $permissions = new \ArrayObject();
+        $permissions['admin_course_content_manage'] = true;
+        $currentUser->setPermissions($permissions);
     }
 }
