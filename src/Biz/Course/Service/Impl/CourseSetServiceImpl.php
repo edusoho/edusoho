@@ -171,7 +171,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return true;
         }
 
-        if(empty($courseSetId)) {
+        if (empty($courseSetId)) {
             return false;
         }
 
@@ -538,6 +538,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function findCourseSetIncomesByCourseSetIds(array $courseSetIds)
     {
         return $this->getCourseDao()->findCourseSetIncomesByCourseSetIds($courseSetIds);
+    }
+
+    public function analysisCourseSetDataByTime($startTime, $endTime)
+    {
+        return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
     }
 
     protected function validateCourseSet($courseSet)
