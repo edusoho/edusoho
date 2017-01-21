@@ -27,6 +27,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 {
     public function deleteCourseSet($courseSetId)
     {
+        //XXX 这里仅处理删除逻辑，不对能否删除做判断
         try {
             $this->beginTransaction();
             //delete course_material
@@ -91,8 +92,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
             //delete course_note
             $notes = $this->getNoteDao()->search(array('courseId' => $courseId), array(), 0, PHP_INT_MAX);
-            if(!empty($notes)){
-                foreach ($notes as $note){
+            if (!empty($notes)) {
+                foreach ($notes as $note) {
                     $this->getNoteLikeDao()->deleteByNoteId($note['id']);
                 }
                 $this->getNoteDao()->deleteByCourseId($courseId);
