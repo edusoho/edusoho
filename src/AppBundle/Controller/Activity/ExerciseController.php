@@ -12,18 +12,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $task, $preview = 0)
+    public function showAction(Request $request, $activity, $preview = 0)
     {
         if ($preview) {
             return $this->forward('AppBundle:Activity/Exercise:preview', array(
-                'id'       => $task['activityId'],
-                'courseId' => $task['courseId']
+                'id'       => $activity,
+                'courseId' => $activity['fromCourseId']
             ));
         }
 
         $user = $this->getUser();
 
-        $activity       = $this->getActivityService()->getActivity($task['activityId']);
+        $activity       = $this->getActivityService()->getActivity($activity['id']);
         $exercise       = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
         $exerciseResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $exercise['id'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
 

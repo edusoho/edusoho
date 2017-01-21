@@ -12,9 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class FlashController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $task)
+    public function showAction(Request $request, $activity)
     {
-        $activity          = $this->getActivityService()->getActivity($task['activityId']);
         $flash             = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
         $file              = $this->getUploadFileService()->getFullFile($flash['mediaId']);
         $result            = $this->getMaterialLibService()->player($file['globalId']);

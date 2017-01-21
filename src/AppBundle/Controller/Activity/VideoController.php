@@ -12,10 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class VideoController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $task)
+    public function showAction(Request $request, $activity)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
-
+        $video       = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
         $watchStatus = $this->getWatchStatus($task);
         if ($watchStatus['status'] == 'error') {
             return $this->render('activity/video/limit.html.twig', array(
@@ -24,6 +23,7 @@ class VideoController extends BaseController implements ActivityActionInterface
         }
         return $this->render('activity/video/show.html.twig', array(
             'activity' => $activity,
+            'video'    => $video,
             'task'     => $task
         ));
     }

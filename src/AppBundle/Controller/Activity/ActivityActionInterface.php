@@ -6,9 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface ActivityActionInterface
 {
-    public function showAction(Request $request, $task);
-
-    //public function previewAction(Request $request, $id, $courseId);
+    public function showAction(Request $request, $activity);
 
     public function editAction(Request $request, $id, $courseId);
 

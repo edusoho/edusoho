@@ -11,10 +11,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $task)
+    public function showAction(Request $request, $activity)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
-        $format   = 'Y-m-d H:i';
+        $live            = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
+        $activity['ext'] = $live;
+
+        $format = 'Y-m-d H:i';
         if (isset($activity['startTime'])) {
             $activity['startTimeFormat'] = date($format, $activity['startTime']);
         }
