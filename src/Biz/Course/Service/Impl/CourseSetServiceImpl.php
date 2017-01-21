@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
@@ -14,6 +15,7 @@ use Biz\Course\Service\ReviewService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\CourseDeleteService;
 use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
@@ -405,11 +407,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function deleteCourseSet($id)
     {
-        //TODO
-        //1. 判断该课程能否被删除
-        //2. 删除时需级联删除课程下的教学计划、用户信息等等
         $courseSet = $this->tryManageCourseSet($id);
-        return $this->getCourseSetDao()->delete($courseSet['id']);
+        return $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
     }
 
     public function findTeachingCourseSetsByUserId($userId, $onlyPublished = true)
@@ -573,6 +572,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->createDao('Course:CourseSetDao');
     }
 
+    /**
+     * @return CourseDao
+     */
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
@@ -645,6 +647,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getCourseMaterialService()
     {
         return $this->createService('Course:MaterialService');
+    }
+
+    /**
+     * @return CourseDeleteService
+     */
+    protected function getCourseDeleteService()
+    {
+        return $this->createService('Course:CourseDeleteService');
     }
 
     /**

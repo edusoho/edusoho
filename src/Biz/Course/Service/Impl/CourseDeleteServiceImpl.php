@@ -2,26 +2,26 @@
 
 namespace Biz\Course\Service\Impl;
 
-use Biz\Announcement\Dao\AnnouncementDao;
 use Biz\BaseService;
-use Biz\Course\Dao\CourseChapterDao;
+use Biz\User\Dao\StatusDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMaterialDao;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Dao\CourseNoteDao;
-use Biz\Course\Dao\CourseNoteLikeDao;
-use Biz\Course\Dao\CourseSetDao;
-use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\ReviewDao;
 use Biz\Course\Dao\ThreadDao;
-use Biz\Course\Dao\ThreadPostDao;
-use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Dao\FavoriteDao;
 use Biz\IM\Dao\ConversationDao;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Course\Dao\CourseNoteDao;
+use Biz\Course\Dao\ThreadPostDao;
 use Biz\Question\Dao\QuestionDao;
 use Biz\Task\Service\TaskService;
+use Biz\Course\Dao\CourseMemberDao;
 use Biz\Testpaper\Dao\TestpaperDao;
+use Biz\Course\Dao\CourseChapterDao;
+use Biz\Course\Dao\CourseMaterialDao;
+use Biz\Course\Dao\CourseNoteLikeDao;
 use Biz\Testpaper\Dao\TestpaperItemDao;
-use Biz\User\Dao\StatusDao;
+use Biz\Announcement\Dao\AnnouncementDao;
+use Biz\Course\Service\CourseDeleteService;
 
 class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 {
@@ -60,13 +60,13 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         try {
             $this->beginTransaction();
             //todo tryManageCourse
-//            $course = $this->getCourseDao()->get($courseId);
+            //            $course = $this->getCourseDao()->get($courseId);
             //delete course_material
             $this->getMaterialDao()->deleteByCourseId($courseId, 'course');
             //delete testpaper & testpaperItem
             $testpapers = $this->getTestpaperDao()->search(array('courseId' => $courseId), array(), 0, PHP_INT_MAX);
-            if(!empty($testpapers)){
-                foreach ($testpapers as $testpaper){
+            if (!empty($testpapers)) {
+                foreach ($testpapers as $testpaper) {
                     $this->getTestpaperItemDao()->deleteItemsByTestpaperId($testpaper['id']);
                     $this->getTestpaperDao()->delete($testpaper['id']);
                 }
@@ -78,24 +78,30 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->getMemberDao()->deleteByCourseId($courseId);
             //delete task & activity & activityConfig
             $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
-            if(!empty($tasks)){
-                foreach ($tasks as $task){
+            if (!empty($tasks)) {
+                foreach ($tasks as $task) {
                     //delete task and activity
                     $this->getTaskService()->deleteTask($task['id']);
                 }
             }
             //delete question
             $questions = $this->getQuestionDao()->search(array('courseId' => $courseId), array(), 0, PHP_INT_MAX);
-            if(!empty($questions)){
-                foreach ($questions as $question){
+            if (!empty($questions)) {
+                foreach ($questions as $question) {
                     $this->getQuestionDao()->deleteSubQuestions($question['id']);
                     $this->getQuestionDao()->delete($question['id']);
                 }
             }
 
             //delete course_note
-            $this->getNoteLikeDao()->deleteByCourseId($courseId);
-            $this->getNoteDao()->deleteByCourseId($courseId);
+            $notes = $this->getNoteDao()->search(array('courseId' => $courseId), array(), 0, PHP_INT_MAX);
+            if(!empty($notes)){
+                foreach ($notes as $note){
+                    $this->getNoteLikeDao()->deleteByNoteId($note['id']);
+                }
+                $this->getNoteDao()->deleteByCourseId($courseId);
+            }
+
             //delete course_thread
             $this->getThreadPostDao()->deleteByCourseId($courseId);
             $this->getThreadDao()->deleteByCourseId($courseId);
@@ -128,7 +134,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getCourseSetDao()
     {
-        return $this->createService('Course:CourseSetDao');
+        return $this->createDao('Course:CourseSetDao');
     }
 
     /**
@@ -136,7 +142,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getCourseDao()
     {
-        return $this->createService('Course:CourseDao');
+        return $this->createDao('Course:CourseDao');
     }
 
     /**
@@ -144,7 +150,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getMaterialDao()
     {
-        return $this->createService('Course:CourseMaterialDao');
+        return $this->createDao('Course:CourseMaterialDao');
     }
 
     /**
@@ -152,7 +158,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getTestpaperDao()
     {
-        return $this->createService('Testpaper:TestpaperDao');
+        return $this->createDao('Testpaper:TestpaperDao');
     }
 
     /**
@@ -160,7 +166,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getTestpaperItemDao()
     {
-        return $this->createService('Testpaper:TestpaperItemDao');
+        return $this->createDao('Testpaper:TestpaperItemDao');
     }
 
     /**
@@ -168,7 +174,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getChapterDao()
     {
-        return $this->createService('Course:CourseChapterDao');
+        return $this->createDao('Course:CourseChapterDao');
     }
 
     /**
@@ -176,7 +182,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getMemberDao()
     {
-        return $this->createService('Course:CourseMemberDao');
+        return $this->createDao('Course:CourseMemberDao');
     }
 
     /**
@@ -192,7 +198,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getQuestionDao()
     {
-        return $this->createService('Question:QuestionDao');
+        return $this->createDao('Question:QuestionDao');
     }
 
     /**
@@ -200,7 +206,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getNoteDao()
     {
-        return $this->createService('Course:CourseNoteDao');
+        return $this->createDao('Course:CourseNoteDao');
     }
 
     /**
@@ -208,7 +214,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getNoteLikeDao()
     {
-        return $this->createService('Course:CourseNoteLikeDao');
+        return $this->createDao('Course:CourseNoteLikeDao');
     }
 
     /**
@@ -216,7 +222,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getThreadDao()
     {
-        return $this->createService('Course:ThreadDao');
+        return $this->createDao('Course:ThreadDao');
     }
 
     /**
@@ -224,7 +230,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getThreadPostDao()
     {
-        return $this->createService('Course:ThreadPostDao');
+        return $this->createDao('Course:ThreadPostDao');
     }
 
     /**
@@ -232,7 +238,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getReviewDao()
     {
-        return $this->createService('Course:ReviewDao');
+        return $this->createDao('Course:ReviewDao');
     }
 
     /**
@@ -240,7 +246,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getFavoriteDao()
     {
-        return $this->createService('Course:FavoriteDao');
+        return $this->createDao('Course:FavoriteDao');
     }
 
     /**
@@ -248,7 +254,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getAnnouncementDao()
     {
-        return $this->createService('Announcement:AnnouncementDao');
+        return $this->createDao('Announcement:AnnouncementDao');
     }
 
     /**
@@ -256,7 +262,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getStatusDao()
     {
-        return $this->createService('User:StatusDao');
+        return $this->createDao('User:StatusDao');
     }
 
     /**
@@ -264,7 +270,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getConversationDao()
     {
-        return $this->createService('IM:ConversationDao');
+        return $this->createDao('IM:ConversationDao');
     }
 }
-

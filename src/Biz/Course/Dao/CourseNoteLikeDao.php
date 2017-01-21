@@ -18,6 +18,4 @@ interface CourseNoteLikeDao extends GeneralDaoInterface
     public function findByNoteIdsAndUserId(array $noteIds, $userId);
 
     public function deleteByNoteId($noteId);
-
-    public function deleteByCourseId($courseId);
 }

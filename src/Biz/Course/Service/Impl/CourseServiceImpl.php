@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
+use Biz\Course\Service\CourseDeleteService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
@@ -17,7 +18,6 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\MaterialService;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 
@@ -333,39 +333,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($course['status'] == 'published') {
             throw $this->createAccessDeniedException("Deleting published Course is not allowed");
         }
-        try {
-            $this->beginTransaction();
-            //member
-            //tasks(with activities)
-            //chapter
-
-            //by event ? s
-            //threads
-            //notes
-            //reviews
-
-            $this->getMemberDao()->deleteByCourseId($id);
-
-            $tasks = $this->getTaskService()->findTasksByCourseId($id);
-            if (!empty($tasks)) {
-                foreach ($tasks as $task) {
-                    $this->getTaskService()->deleteTask($task['id']);
-                }
-            }
-
-            $this->getChapterDao()->deleteChaptersByCourseId($id);
-
-            $deleted = $this->getCourseDao()->delete($id);
-
-            $this->dispatchEvent("course.delete", new Event($course));
-
-            $this->commit();
-
-            return $deleted;
-        } catch (\Exception $e) {
-            $this->rollback();
-            throw $e;
-        }
+        return $this->getCourseDeleteService()->deleteCourse($id);
     }
 
     public function closeCourse($id)
@@ -1115,5 +1083,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getNoteService()
     {
         return $this->biz->service('Course:CourseNoteService');
+    }
+
+    /**
+     * @return CourseDeleteService
+     */
+    protected function getCourseDeleteService()
+    {
+        return $this->createService('Course:CourseDeleteService');
     }
 }
