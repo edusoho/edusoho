@@ -17,7 +17,6 @@ class CourseCopy extends AbstractEntityCopy
      */
     public function __construct($biz)
     {
-        $this->biz = $biz;
         parent::__construct($biz, 'course');
     }
 
@@ -39,6 +38,7 @@ class CourseCopy extends AbstractEntityCopy
         //标记是否是从默认教学计划转成非默认的，如果是则需要对chapter-task结构进行调整
         $modeChange         = $new['isDefault'] != $source['isDefault'];
         $new['parentId']    = $source['id'];
+        $new['locked'] = 0;
         $new['courseSetId'] = $courseSetId;
         $new['creator']     = $user['id'];
         $new['status']      = 'published';
@@ -64,7 +64,7 @@ class CourseCopy extends AbstractEntityCopy
 
         $new = $this->getCourseDao()->create($new);
         $this->doCopyCourseMember($new);
-        $this->childrenCopy($source, array('newCourse' => $new, 'modeChange' => $modeChange));
+        $this->childrenCopy($source, array('newCourse' => $new, 'modeChange' => $modeChange, 'isCopy' => false));
 
         return $new;
     }

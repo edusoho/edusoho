@@ -41,6 +41,7 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourse['isDefault']   = $course['isDefault'];
         $modeChange               = false;
         $newCourse['parentId']    = $course['id'];
+        $newCourse['locked']      = 1; //默认锁定
         $newCourse['courseSetId'] = $courseSetId;
         $newCourse['creator']     = $user['id'];
         $newCourse['status']      = 'published';
@@ -50,9 +51,13 @@ class ClassroomCourseCopy extends CourseCopy
         $this->doCopyCourseMember($newCourse);
 
         $testpaperCopy = new CourseSetTestpaperCopy($this->biz);
-        $testpaperCopy->copy($course, array('newCourseSet' => $newCourseSet));
+        $testpaperCopy->copy($course, array('newCourseSet' => $newCourseSet, 'isCopy' => true));
 
-        $this->childrenCopy($course, array('newCourse' => $newCourse, 'modeChange' => $modeChange));
+        $this->childrenCopy($course, array(
+            'newCourse'  => $newCourse,
+            'modeChange' => $modeChange,
+            'isCopy'     => true // 用于标记是复制还是clone，clone不需要记录parentId
+        ));
 
         return $newCourse;
     }
@@ -82,7 +87,8 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourseSet = array(
             'parentId' => $courseSet['id'],
             'status'   => 'published',
-            'creator'  => $this->biz['user']['id']
+            'creator'  => $this->biz['user']['id'],
+            'locked'   => 1 // 默认锁定
         );
 
         foreach ($fields as $field) {

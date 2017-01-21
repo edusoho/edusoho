@@ -322,16 +322,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $updateFields);
     }
 
-    /**
-     * @todo 教学计划的删除逻辑较复杂，需要整理
-     * @deprecated
-     * @see  CourseDeleteServiceImpl
-     */
     public function deleteCourse($id)
     {
         $course = $this->tryManageCourse($id);
         if ($course['status'] == 'published') {
             throw $this->createAccessDeniedException("Deleting published Course is not allowed");
+        }
+        $subCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($id, 1);
+        if(!empty($subCourses)){
+            throw $this->createAccessDeniedException('该教学计划在班级下存在引用，请先删除相关引用');
         }
         return $this->getCourseDeleteService()->deleteCourse($id);
     }

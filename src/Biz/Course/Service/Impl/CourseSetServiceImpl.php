@@ -408,6 +408,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function deleteCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
+        $subCourseSets = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($id, 1);
+        if(!empty($subCourseSets)){
+            throw $this->createAccessDeniedException('该课程在班级下引用，请先删除引用课程！');
+        }
         return $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
     }
 
