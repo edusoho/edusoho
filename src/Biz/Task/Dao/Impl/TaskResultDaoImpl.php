@@ -11,7 +11,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
     public function analysisCompletedTaskDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) AS count, from_unixtime('finishedTime') AS date FROM
+        $sql = "SELECT count(id) AS count, from_unixtime(finishedTime, '%Y-%m-%d') AS date FROM
             {$this->table} WHERE finishedTime >= ? AND finishedTime <= ? GROUP BY date ORDER BY date ASC";
 
         return $this->db()->fetchAll($sql, array($startTime, $endTime));

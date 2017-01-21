@@ -684,7 +684,6 @@ class AnalysisController extends BaseController
         if ($tab == "trend") {
             $completedTaskData = $this->getTaskResultService()->analysisCompletedTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data = $this->fillAnalysisData($condition, $completedTaskData);
-
             foreach ($completedTaskData as $val) {
                 $count += $val['count'];
             }
@@ -714,8 +713,6 @@ class AnalysisController extends BaseController
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
-        var_dump($completedTaskDetail, $paginator, $tab, $data, $courseSets, $courses, $tasks,
-            $users, $completedTaskStartData, $dataInfo, $count);exit;
         return $this->render("admin/operation-analysis/completed-task.html.twig", array(
             'completedTaskDetail'    => $completedTaskDetail,
             'paginator'               => $paginator,
@@ -1351,7 +1348,7 @@ class AnalysisController extends BaseController
         foreach ($currentData as $key => $value) {
             $data[] = $value;
         }
-
+        
         return json_encode($data);
     }
 
