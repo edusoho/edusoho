@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Activity;
 
 
 use AppBundle\Controller\BaseController;
+use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
 use Biz\User\Service\TokenService;
@@ -15,7 +16,8 @@ class VideoController extends BaseController implements ActivityActionInterface
     public function showAction(Request $request, $activity)
     {
         $video       = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
-        $watchStatus = $this->getWatchStatus($task);
+        $watchStatus = $this->getWatchStatus($activity);
+
         if ($watchStatus['status'] == 'error') {
             return $this->render('activity/video/limit.html.twig', array(
                 'watchStatus' => $watchStatus
@@ -24,7 +26,6 @@ class VideoController extends BaseController implements ActivityActionInterface
         return $this->render('activity/video/show.html.twig', array(
             'activity' => $activity,
             'video'    => $video,
-            'task'     => $task
         ));
     }
 
@@ -127,9 +128,12 @@ class VideoController extends BaseController implements ActivityActionInterface
         return $this->createService('Course:CourseService');
     }
 
-    protected function getTaskResultService()
+    /**
+     * @return ActivityLearnLogService
+     */
+    protected function getActivityLearnLogService()
     {
-        return $this->createService('Task:TaskResultService');
+        return $this->createService('Activity:ActivityLearnLogService');
     }
 
     /**
@@ -137,13 +141,31 @@ class VideoController extends BaseController implements ActivityActionInterface
      * @param $task
      * @return null
      */
-    protected function getWatchStatus($task)
+    protected function getWatchStatus($activity)
     {
-        $course      = $this->getCourseService()->getCourse($task['courseId']);
-        $watchStatus = null;
+        $user      = $this->getCurrentUser();
+        $watchTime = $this->getActivityLearnLogService()->sumWatchTimeByActivityIdAndUserId($activity['id'], $user['id']);
+
+        $course      = $this->getCourseService()->getCourse($activity['fromCourseId']);
+        $watchStatus = array();
         if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
-            $watchStatus = $this->getTaskResultService()->checkUserWatchNum($task['id']);
-            return $watchStatus;
+
+            //只有视频课程才限制观看时长
+            if (empty($course['watchLimit']) || $activity['mediaType'] != 'video') {
+                return array('status' => 'ignore');
+            }
+
+            $watchLimitTime = $activity['length'] * $course['watchLimit'];
+
+            if (empty($watchTime)) {
+                return array('status' => 'ok', 'watchedTime' => 0, 'watchLimitTime' => $watchLimitTime);
+            }
+            if ($watchTime < $watchLimitTime) {
+                return array('status' => 'ok', 'watchedTime' => $watchTime, 'watchLimitTime' => $watchLimitTime);
+            }
+
+            return array('status' => 'error', 'watchedTime' => $watchTime, 'watchLimitTime' => $watchLimitTime);
+
         }
         return $watchStatus;
     }

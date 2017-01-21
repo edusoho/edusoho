@@ -77,7 +77,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return;
         }
 
-        if (in_array($eventName, array('start', 'doing'))) {
+        if (in_array($eventName, array('start', 'watching', 'doing'))) {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
 

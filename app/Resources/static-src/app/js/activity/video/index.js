@@ -21,7 +21,7 @@ class VideoPlay {
 
   record() {
     this.intervalId = setInterval(() => {
-      this.recorder.addVideoPlayerCounter(this.player);
+      this.recorder.addVideoPlayerCounter(this.emitter, this.player);
     }, 1000);
   }
 
@@ -82,29 +82,27 @@ class VideoRecorder {
     this.interval = 120;
   }
 
-  addVideoPlayerCounter(player) {
+  addVideoPlayerCounter(emitter, player) {
     let $container = $(this.container);
-    let taskId = $container.data('taskId');
-    let playerCounter = store.get("task_id" + taskId + "_playing_counter");
+    let activityId = $container.data('id');
+    let playerCounter = store.get("activity_id_" + activityId + "_playing_counter");
     if (!playerCounter) {
       playerCounter = 0;
     }
     if (!(player && player.playing)) {
       return false;
     }
-
+    console.log(playerCounter, this.interval)
     if (playerCounter >= this.interval) {
-      let url = $container.data('watchUrl') + '/' + playerCounter
-      $.post(url, function (response) {
-        if (response.watchLimited) {
-          window.location.reload()
-        }
+      emitter.emit('watching', {watchTime: this.interval}).then(() => {
+      }).catch((error) => {
+        console.error(error);
       });
       playerCounter = 0;
     } else if (player.playing) {
       playerCounter++;
     }
-    store.set("task_id" + taskId + "_playing_counter", playerCounter);
+    store.set("activity_id_" + activityId + "_playing_counter", playerCounter);
   }
 
 }

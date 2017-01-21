@@ -23,7 +23,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function createTask($fields)
     {
         $fields = array_filter($fields, function ($value) {
-            if (is_array($value) || ctype_digit((string) $value)) {
+            if (is_array($value) || ctype_digit((string)$value)) {
                 return true;
             }
 
@@ -40,10 +40,10 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $this->beginTransaction();
         try {
-            
-            $fields = $this->createActivity($fields);
+
+            $fields   = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
-            $task = $strategy->createTask($fields);
+            $task     = $strategy->createTask($fields);
 
             $this->dispatchEvent("course.task.create", new Event($task));
             $this->commit();
@@ -85,7 +85,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function updateTask($id, $fields)
     {
-        $task     = $this->getTask($id);
+        $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException("can not update task #{$id}.");
@@ -98,7 +98,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             if ($activity['mediaType'] == 'video') {
                 $fields['mediaSource'] = $fields['ext']['mediaSource'];
             }
-            
+
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task     = $strategy->updateTask($id, $fields);
             $this->commit();
@@ -111,7 +111,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function publishTask($id)
     {
-        $task     = $this->getTask($id);
+        $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException("can not publish task #{$id}.");
@@ -130,7 +130,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function unpublishTask($id)
     {
-        $task     = $this->getTask($id);
+        $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException("can not unpublish task #{$id}.");
@@ -141,7 +141,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         $strategy = $this->createCourseStrategy($task['courseId']);
-        $task = $strategy->unpublishTask($task);
+        $task     = $strategy->unpublishTask($task);
         $this->dispatchEvent("course.task.unpublish", new Event($task));
         return $task;
     }
@@ -173,7 +173,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException('无权删除任务');
         }
-        
+
         $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
         $this->dispatchEvent("course.task.delete", new Event($task, array('user' => $this->getCurrentUser())));
         return $result;
@@ -373,6 +373,19 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->getTaskResultService()->waveLearnTime($taskResult['id'], $time);
     }
 
+    public function watchTask($taskId, $watchTime = TaskService::WATCH_TIME_STEP)
+    {
+        $task = $this->tryTakeTask($taskId);
+
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+
+        if (empty($taskResult)) {
+            throw $this->createAccessDeniedException("task #{taskId} can not do. ");
+        }
+
+        $this->getTaskResultService()->waveWatchTime($taskResult['id'], $watchTime);
+    }
+
     public function finishTask($taskId)
     {
         $this->tryTakeTask($taskId);
@@ -483,7 +496,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $courses        = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
         $taskConditions = array(
             'startTime_GT' => time(),
-            'endTime_LT'   => strtotime(date('Y-m-d') . ' 23:59:59'),
+            'endTime_LT'   => strtotime(date('Y-m-d').' 23:59:59'),
             'type'         => 'live',
             'courseIds'    => ArrayToolkit::column($courses, 'id'),
             'status'       => 'published'
@@ -699,6 +712,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function trigger($id, $eventName, $data = array())
     {
         $task = $this->getTask($id);
+        $data = $this->prepareData($task, $data);
         $this->getActivityService()->trigger($task['activityId'], $eventName, $data);
         return $this->getTaskResultService()->getUserTaskResultByTaskId($id);
     }
@@ -706,6 +720,14 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
     {
         return $this->getTaskDao()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
+    }
+
+    protected function prepareData($task, $data)
+    {
+        if (empty($data['taskId'])) {
+            $data['taskId'] = $task['id'];
+        }
+        return $data;
     }
 
     /**

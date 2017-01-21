@@ -6,6 +6,11 @@ interface TaskService
 {
     const LEARN_TIME_STEP = 2;
 
+    /*
+     * watch video, audio time, unit is second
+     */
+    const WATCH_TIME_STEP = 120;
+
     public function getTask($id);
 
     public function createTask($task);
@@ -35,7 +40,7 @@ interface TaskService
     public function count($conditions);
 
     /**
-     * @param  array   $ids
+     * @param  array $ids
      * @return array
      */
     public function findTasksByIds(array $ids);
@@ -55,6 +60,8 @@ interface TaskService
     public function startTask($taskId);
 
     public function doTask($taskId, $time = self::LEARN_TIME_STEP);
+
+    public function watchTask($taskId, $watchTime = self::WATCH_TIME_STEP);
 
     public function finishTask($taskId);
 
@@ -137,7 +144,7 @@ interface TaskService
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 
     /**
-    * 获得课程的总学习时间
-    */ 
+     * 获得课程的总学习时间
+     */
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
 }

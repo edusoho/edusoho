@@ -10,6 +10,8 @@ interface ActivityLearnLogDao extends GeneralDaoInterface
 
     public function sumLearnedTimeByActivityIdAndUserId($activityId, $userId);
 
+    public function sumWatchTimeByActivityIdAndUserId($activityId, $userId);
+
     public function sumLearnedTimeByCourseIdAndUserId($courseId, $userId);
 
     public function findByActivityIdAndUserIdAndEvent($activityId, $userId, $event);

@@ -13,21 +13,39 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         return array(
             'activity.start'    => 'onActivityStart',
             'activity.doing'    => 'onActivityDoing',
+            'activity.watching' => 'onActivityWatching',
             'activity.operated' => 'onActivityOperated'
         );
     }
 
     public function onActivityOperated(Event $event)
     {
-        if(!$event->hasArgument('taskId')) {
+        if (!$event->hasArgument('taskId')) {
             return;
         }
 
         $taskId = $event->getArgument('taskId');
 
-        if($this->getTaskService()->isFinished($taskId)) {
+        if ($this->getTaskService()->isFinished($taskId)) {
             $this->getTaskService()->finishTaskResult($taskId);
         }
+    }
+
+    public function onActivityWatching(Event $event)
+    {
+        $taskId = $event->getArgument('taskId');
+
+        if (!$event->hasArgument('watchTime') || $event->hasArgument('watchTime') >= TaskService::WATCH_TIME_STEP) {
+            $watchTime = TaskService::WATCH_TIME_STEP;
+        } else {
+            $watchTime = $event->getArgument('watchTime');
+        }
+
+        if (empty($taskId)) {
+            return;
+        }
+
+        $this->getTaskService()->watchTask($taskId, $watchTime);
     }
 
     public function onActivityStart(Event $event)

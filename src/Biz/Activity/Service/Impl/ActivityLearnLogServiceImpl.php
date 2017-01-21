@@ -15,6 +15,7 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
             'userId'      => $this->getCurrentUser()->getId(),
             'event'       => $eventName,
             'learnedTime' => !empty($data['learnedTime']) ?: 0,
+            'watchTime'   => !empty($data['watchTime']) ? $data['watchTime'] : 0,
             'data'        => $data,
             'createdTime' => time()
         );
@@ -32,6 +33,12 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
     {
         return $this->getActivityLearnLogDao()->sumLearnedTimeByActivityId($activityId);
     }
+
+    public function sumWatchTimeByActivityIdAndUserId($activityId, $userId)
+    {
+        return $this->getActivityLearnLogDao()->sumWatchTimeByActivityIdAndUserId($activityId, $userId);
+    }
+
 
     public function sumMyLearnedTimeByActivityId($activityId)
     {

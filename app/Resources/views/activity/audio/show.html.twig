@@ -3,7 +3,7 @@
 {% do script(['app/js/activity/audio/index.js']) %}
 
 {% block body %}
-    <div class="audio-content" id="audio-content" data-role="audio-content" >
-      {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId})) }}
-    </div>
+  <div class="audio-content" id="audio-content" data-role="audio-content">
+    {{ render(controller('AppBundle:Player:show', {id: audio.mediaId})) }}
+  </div>
 {% endblock %}

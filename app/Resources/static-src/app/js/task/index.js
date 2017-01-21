@@ -50,15 +50,15 @@ class TaskShow extends Emitter {
         taskId: this.taskId
       };
       this.eventEmitter.emit('doing', eventData)
-          .then(response => {
-            this.receiveFinish(response);
-          })
-          .catch(() => {
-            //
-          })
-          .then(() => { //always
-            this.trigger('doing', timeStep);
-          });
+        .then(response => {
+          this.receiveFinish(response);
+        })
+        .catch(() => {
+          //
+        })
+        .then(() => { //always
+          this.trigger('doing', timeStep);
+        });
     }, timeStep * minute);
 
     this.trigger('doing', timeStep);
@@ -77,12 +77,25 @@ class TaskShow extends Emitter {
       this.receiveFinish(response);
     });
 
+    this.eventEmitter.receive('watching', response => {
+      this.receiveWatch();
+    })
+  }
+
+  receiveWatch() {
+    let url = $("#task-content-iframe").data('watchUrl');
+    $.post(url, function (response) {
+      console.log(response, url)
+      if (response && response.watchLimited) {
+        window.location.reload();
+      }
+    })
   }
 
   receiveFinish(response) {
     if (response.result.status == 'finish'
-        && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
-        $.get($(".js-learned-prompt").data('url'), html => {
+      && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
+      $.get($(".js-learned-prompt").data('url'), html => {
         $(".js-learned-prompt").attr('data-content', html);
         this.ui.learnedWeakPrompt();
         this.ui.learned();
@@ -98,16 +111,16 @@ class TaskShow extends Emitter {
       url: this.element.find('#js-hidden-data [name="plugins_url"]').val()
     });
     this.sidebar
-        .on('popup', (px, time) => {
-          this.element.find('#dashboard-content').animate({
-            right: px
-          }, time);
-        })
-        .on('fold', (px, time) => {
-          this.element.find('#dashboard-content').animate({
-            right: px
-          }, time);
-        });
+      .on('popup', (px, time) => {
+        this.element.find('#dashboard-content').animate({
+          right: px
+        }, time);
+      })
+      .on('fold', (px, time) => {
+        this.element.find('#dashboard-content').animate({
+          right: px
+        }, time);
+      });
   }
 }
 

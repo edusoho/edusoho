@@ -109,7 +109,7 @@ class TaskController extends BaseController
         return $this->forward('AppBundle:Activity/Activity:preview', array('task' => $task));
     }
 
-    public function recordWatchingTimeAction(Request $request, $courseId, $id, $time)
+    public function watchAction(Request $request, $courseId, $id)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -117,20 +117,11 @@ class TaskController extends BaseController
         }
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
 
-        $taskResult = $this->getTaskResultService()->waveWatchTime($taskResult['id'], $time);
-
         $isLimit = $this->setting('magic.lesson_watch_limit');
         if ($isLimit) {
-            $task   = $this->getTaskService()->getTask($id);
-            $course = $this->getCourseService()->getCourse($courseId);
+            $watchStatus = $this->getTaskResultService()->checkUserWatchNum($id);
 
-            $watchLimitTime = $course['watchLimit'] * $task['length'];
-
-            //非法请求
-            if (empty($taskResult)) {
-                $taskResult['watchLimited'] = true;
-            }
-            if ($task['type'] == 'video' && ($course['watchLimit'] > 0) && ($taskResult['watchTime'] >= $watchLimitTime)) {
+            if ($watchStatus['status'] == 'error') {
                 $taskResult['watchLimited'] = true;
             }
         }

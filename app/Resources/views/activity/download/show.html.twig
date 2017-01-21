@@ -8,7 +8,7 @@
       {% for material in materials %}
         <li>
           <a class="link-darker" data-file-id="{{ material.id }}"
-             data-url="{{ path('course_activity_download', {courseId:task.courseId, activityId:material.lessonId , materialId:material.id }) }}"
+             data-url="{{ path('course_activity_download', {courseId:activity.fromCourseId, activityId:material.lessonId , materialId:material.id }) }}"
              target="_blank">{{ material.title }}
             {% if material.link|default(null) %}
               (link)
