@@ -22,7 +22,7 @@
     <tr>
       <th>{{'%title%编号'|trans({'%title%':setting('calssroom.title')|default('班级'|trans)}) }}</th>
       <th width="25%">{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</th>
-      {% include 'OrgBundle:Org/Parts:table-thead-tr.html.twig' %}
+      {% include 'org/parts/table-thead-tr.html.twig' %}
       <th>{{'课程数'|trans}}</th>
       <th>{{'学员数'|trans}}</th>
       <th width="15%">{{'价格'|trans}}</th>

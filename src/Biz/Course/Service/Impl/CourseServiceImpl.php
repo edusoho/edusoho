@@ -3,22 +3,23 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\ThreadDao;
-use Biz\Course\Service\CourseNoteService;
+use Topxia\Common\ArrayToolkit;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Copy\Impl\CourseCopy;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
-use Biz\Taxonomy\Service\CategoryService;
-use Biz\User\Service\UserService;
+use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Common\ArrayToolkit;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Taxonomy\Service\CategoryService;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -680,7 +681,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = array(
             'userId' => $userId,
-            'role'   => 'student',
+            'role'   => 'student'
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
@@ -692,13 +693,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = array(
             'userId' => $userId,
-            'role'   => 'student',
+            'role'   => 'student'
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
         }
         $members = $this->getMemberDao()->findLearningMembers($userId, $start, $limit);
-
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
@@ -731,7 +731,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $conditions['type'] = $filters["type"];
         }
         return $this->getMemberDao()->countLearnedMembersByUserId($userId);
-
     }
 
     public function findUserLearnedCourses($userId, $start, $limit, $filters = array())
@@ -820,7 +819,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int $userId
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)

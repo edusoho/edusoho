@@ -20,8 +20,6 @@
 
 {% block body %}
 
-  {% include 'seajs_loader_compatible.html.twig' with { topxiaadminbundle: true} %}
-
   <form class="form-horizontal" id="navigation-form"
       {% if navigation.id == 0 %}
         action="{{ path('admin_navigation_create') }}"
@@ -97,13 +95,9 @@
 
   <script type="text/javascript">
     {% if navigation.id  == 0 %}
-    app.lazyLoad = function () {
       app.load('navigation/create-modal')
-    };
     {% else %}
-    app.lazyLoad = function () {
       app.load('navigation/edit-modal')
-    };
     {% endif %}
   </script>
 
