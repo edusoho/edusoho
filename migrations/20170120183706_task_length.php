@@ -9,7 +9,7 @@ class TaskLength extends Migration
      */
     public function up()
     {
-        $this->container['db']->exce("ALTER TABLE `course_task` ADD COLUMN `length` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '若是视频类型，则表示时长；若是ppt，则表示页数；由具体的活动业务来定义';");
+        $this->container['db']->exec("ALTER TABLE `course_task` ADD COLUMN `length` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '若是视频类型，则表示时长；若是ppt，则表示页数；由具体的活动业务来定义';");
     }
 
     /**
@@ -17,6 +17,6 @@ class TaskLength extends Migration
      */
     public function down()
     {
-        $this->container['db']->exce("ALTER TABLE `course_task` DROP COLUMN `length`");
+        $this->container['db']->exec("ALTER TABLE `course_task` DROP COLUMN `length`");
     }
 }
