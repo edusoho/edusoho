@@ -126,7 +126,7 @@ class OpenCourseController extends BaseController
 
         $courses = $this->getOpenCourseService()->searchCourses(
             $conditions,
-            array('recommendedSeq', 'ASC'),
+            array('recommendedSeq'=>'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -160,7 +160,7 @@ class OpenCourseController extends BaseController
             $user = $this->getUserService()->getUser($course['userId']);
 
             if ($ref == 'recommendList') {
-                return $this->render('Course:course-recommend-tr.html.twig', array(
+                return $this->render('admin/open-course/recommend-tr.html.twig', array(
                     'course' => $course,
                     'user'   => $user
                 ));
@@ -169,7 +169,7 @@ class OpenCourseController extends BaseController
             return $this->renderOpenCourseTr($id, $request);
         }
 
-        return $this->render('Course:course-recommend-modal.html.twig', array(
+        return $this->render('admin/open-course/recommend-modal.html.twig', array(
             'course' => $course,
             'ref'    => $ref,
             'filter' => $filter

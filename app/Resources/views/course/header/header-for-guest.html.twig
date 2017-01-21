@@ -13,6 +13,7 @@
       <img class="img-responsive"
            src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(courseSet.cover.large) }} {% endif %}"
            alt="{{ course.title }} ">
+      <div class="image-overlay"></div>
       <div class="course-detail-remask">
         <i class="es-icon es-icon-people"></i><span class="mhs">{{ course_set.studentNum|default(0) }}</span>人加入学习
         <div class="score pull-right">
@@ -20,7 +21,6 @@
           <span class="vertical-middle">{{ course_set.ratingNum|default(0) }}</span>
         </div>
       </div>
-
     </div>
     <div class="course-detail-info text-12 color-gray">
       <div class="mb10">

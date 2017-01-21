@@ -1,13 +1,13 @@
 <div class="course-detail-content">
   {#@TODO 方块样式展示#}
-  {#<div class="clearfix mbl">
+  <div class="clearfix mbl">
     <div class="btn-group pull-right js-task-show-type" role="tablist">
-      <a class="btn btn-default active" data-list=".js-task-list-ul"> <i class="es-icon es-icon-menu"></i>
+      <a class="btn btn-default active" data-list=".js-task-list-ul" data-type="list"> <i class="es-icon es-icon-menu"></i>
       </a>
-      <a class="btn btn-default" data-list=".js-task-chart-ul"> <i class="es-icon es-icon-viewmodule"></i>
+      <a class="btn btn-default" data-list=".js-task-chart-ul" data-type="chart"> <i class="es-icon es-icon-viewmodule"></i>
       </a>
     </div>
-  </div>#}
+  </div>
   <ul class="task-list task-list-md task-list-hover js-task-list-ul">
     {% for key, item in courseItems %}
       {% if item.itemType == 'chapter' and item.type == 'chapter' %}
@@ -28,9 +28,7 @@
         {% else %}
           {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
         {% endif %}
-
         {% set file = files[task.activity.mediaId]|default(null) %}
-
         <li class="task-item task-content mouse-control">
           <i class="es-icon
               {% if task_lock %}
@@ -68,7 +66,6 @@
           {% endif %}
           <span class="right-menu mouse-leave">
             {% set meta =  activity_meta(task.activity.mediaType) %}
-            {#{% if task.status != 'published' %}敬请期待{% endif %}#}
             {{ task.activity.length|default(0)|activity_length_format }}
             <i class="es-icon es-icon {{ meta.icon }}" data-toggle="tooltip" data-placement="top" title=""
                data-original-title="{{ meta.name }}任务"></i>
@@ -81,7 +78,7 @@
     {% endfor %}
   </ul>
   {#@TODO 方块样式展示#}
-  {#<ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
+  <ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
     {% for key, item in courseItems %}
       {% if  item.itemType == 'task' %}
         {% set task = item %}
@@ -102,7 +99,8 @@
               {% elseif task.result.status == 'finish' %}
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
-              left-menu"></i>
+              left-menu">
+          </i>
           {% if task.status == 'published'  %}
             {% if member  %}
                 {% if task_lock is empty %}
@@ -134,5 +132,5 @@
         </li>
       {% endif %}
     {% endfor %}
-  </ul>#}
+  </ul>
 </div>
