@@ -11,14 +11,18 @@
       class="color-warning"> (未发布)</span> {% endif %}
     {% if task.activity.mediaType is same as('live') %}
       {% if task.activity.endTime < date().timestamp %}
-        <span class="text-muted">{{ '直播已经结束'|trans }}</span>
+        {% if task.activity.ext.replayStatus|default('') == 'generated' %}
+          <span class="color-success mls">{{ '已录制回放'|trans }}</span>
+        {% elseif task.activity.ext.replayStatus|default('') == 'videoGenerated' %}
+          <span class="color-success mls">{{ '已上传录像'|trans }}</span>
+        {% else %}
+          <span class="text-muted">{{ '直播已经结束'|trans }}</span>
+        {% endif %}
       {% else %}
         <span class="color-success mls">
         {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
       {% endif %}
-      {% if task.activity.ext.replayStatus|default('') == 'generated' %}
-        <span class="color-success mls">{{ '已录制回放'|trans }}</span>
-      {% endif %}
+
     {% else %}
       {% if task.activity.length|activity_length_format %}<span class="color-gray mls">
         （{{ task.activity.length|activity_length_format }}）</span>{% endif %}
@@ -86,9 +90,8 @@
               </a>
             </li>
           {% endif %}
-
           <li>
-            <a class='js-upload-replay' href="javascript:;" data-type="task"
+            <a class='js-upload-replay' href="#modal" data-toggle="modal" data-type="task"
               data-url="{{ path('course_manage_task_replay_upload', {courseId: task.courseId, taskId:task.id}) }}">
               <i class="glyphicon glyphicon-paperclip mrm"></i>上传回放
             </a>

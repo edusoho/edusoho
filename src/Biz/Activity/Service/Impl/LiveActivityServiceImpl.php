@@ -3,6 +3,7 @@
 namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Service\LiveReplayService;
 use Biz\Util\EdusohoLiveClient;
 use Biz\User\Service\UserService;
 use Biz\System\Service\SettingService;
@@ -103,7 +104,14 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $this->getEdusohoLiveClient()->updateLive($liveParams);
         }
 
-        $liveActivity = ArrayToolkit::parts($fields, array('replayStatus', 'mediaId'));
+        $liveActivity = ArrayToolkit::parts($fields, array('replayStatus', 'fileId'));
+
+        if (!empty($liveActivity['fileId'])) {
+            $liveActivity['mediaId']      = $liveActivity['fileId'];
+            $liveActivity['replayStatus'] = LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS;
+            unset($liveActivity['fileId']);
+        }
+
         $liveActivity = $this->getLiveActivityDao()->update($id, $liveActivity);
         return $liveActivity;
     }

@@ -20,7 +20,7 @@ interface LiveReplayService
      *
      * @param  integer $id
      *
-     * @return replay
+     * @return array
      */
     public function getReplay($id);
 
@@ -73,7 +73,7 @@ interface LiveReplayService
      * @param  array   $fields
      * @param  string  $lessonType
      *
-     * @return replay
+     * @return array
      */
     public function updateReplayByLessonId($lessonId, $fields, $lessonType = 'live');
 
@@ -82,7 +82,7 @@ interface LiveReplayService
      *
      * @param  array $conditions
      *
-     * @return replays
+     * @return integer
      */
     public function searchCount($conditions);
 
@@ -94,7 +94,7 @@ interface LiveReplayService
      * @param  integer $start
      * @param  integer $limit
      *
-     * @return replays
+     * @return array[]
      */
     public function searchReplays($conditions, $orderBy, $start, $limit);
 

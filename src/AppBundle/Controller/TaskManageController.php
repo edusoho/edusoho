@@ -147,7 +147,7 @@ class TaskManageController extends BaseController
             $ids = $request->request->get("visibleReplays");
             $this->getLiveReplayService()->updateReplayShow($ids, $activity['id']);
 
-            return $this->redirect($this->generateUrl('course_set_manage_course_replay', array(
+            return $this->redirect($this->generateUrl('course_set_manage_course_tasks', array(
                 'courseSetId' => $course['courseSetId'],
                 'courseId'    => $course['id']
             )));
@@ -179,25 +179,17 @@ class TaskManageController extends BaseController
         $task     = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
-        if ($activity['ext']['replayStatus'] == 'videoGenerated') {
-            $file = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
-            if (!empty($file)) {
-                $task['media'] = array(
-                    'id'     => $file['id'],
-                    'status' => $file['convertStatus'],
-                    'source' => 'self',
-                    'name'   => $file['filename'],
-                    'uri'    => ''
-                );
-            } else {
-                $task['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
-            }
+        if ($request->getMethod() == 'POST') {
+            $fileId = $request->request->get('fileId', 0);
+            $this->getActivityService()->updateActivity($activity['id'], array('fileId' => $fileId));
+            return $this->redirect($this->generateUrl('course_set_manage_course_tasks', array(
+                'courseSetId' => $course['courseSetId'],
+                'courseId'    => $course['id']
+            )));
         }
 
-        if ($request->getMethod() == 'POST') {
-            $liveId        = $activity['ext']['liveId'];
-            $liveProvideId = $activity['ext']['liveProvider'];
-            $this->getLiveReplayService()->generateReplay($liveId, $courseId, $activity['id'], $liveProvideId, 'live');
+        if ($activity['ext']['replayStatus'] == 'videoGenerated') {
+            $task['media'] = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
         }
 
         return $this->render('course-manage/live-replay/upload-modal.html.twig', array(

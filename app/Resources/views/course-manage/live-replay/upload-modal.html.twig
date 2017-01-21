@@ -1,6 +1,10 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% set modal_class = 'modal-lg' %}
+
+{% set courseId = course.id %}
+
+{% do script(['//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js', 'libs/perfect-scrollbar.js', 'app/js/course-manage/live-replay/upload/index.js']) %}
 
 {% block title %}
   {% if activity.ext.replayStatus == 'videoGenerated' %}{{ '编辑回放视频'|trans }}{% else %}{{ '添加回放视频'|trans }}{% endif %}
@@ -15,9 +19,10 @@
 
     <div class="form-group">
       <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
-        {% include 'course-manage/live-replay/file-chooser.html.twig' with {course: course} %}
+
+        {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video', file: task.media|default(null) } %}
+
         <input type="hidden" name="fileId">
-        <input id="lesson-media-field" type="hidden" name="media" value="{{ field_value(task, 'media')|json_encode }}">
       </div>
     </div>
 
@@ -30,12 +35,6 @@
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
   </form>
-
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script>app.lazyLoad = function () {
-      app.load('live-course-manage/replay-lesson-video-modal')
-    };</script>
-
 {% endblock %}
 
 {% set hide_footer = true %}

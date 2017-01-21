@@ -3,6 +3,7 @@
 namespace Biz\Activity\Event;
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\LiveReplayService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
@@ -35,16 +36,12 @@ class LiveReplayEventSubscriber extends EventSubscriber implements EventSubscrib
 
         $activityId = $replay['lessonId'];
 
-        if(empty($task)){
-            return;
-        }
-
         $liveActivityFields = array(
-            'replayStatus' => 'generated'
+            'replayStatus' => LiveReplayService::REPLAY_GENERATE_STATUS
         );
 
         $activity = $this->getActivityService()->getActivity($activityId);
-        $this->getActivityService()->getActivityConfig('live')->update($activity['mediaId'], $liveActivityFields, $activity);
+        $this->getActivityService()->updateActivity($activity['id'], $liveActivityFields);
     }
 
     /**

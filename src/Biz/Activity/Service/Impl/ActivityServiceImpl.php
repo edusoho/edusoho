@@ -137,7 +137,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $savedActivity = $this->getActivity($id);
 
-        $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
+        $this->getCourseService()->tryManageCourse($savedActivity['fromCourseId']);
 
         $materials = $this->getFileDataFromActivity($fields);
         if (!empty($materials)) {
@@ -145,6 +145,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $realActivity = $this->getActivityConfig($savedActivity['mediaType']);
+
         if (!empty($savedActivity['mediaId'])) {
             $media = $realActivity->update($savedActivity['mediaId'], $fields, $savedActivity);
 
@@ -253,9 +254,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if (empty($arr2)) {
             return $arr1;
         }
-        foreach ($arr1 as $key1 => $value1) {
+        foreach ($arr1 as $value1) {
             $contained = false;
-            foreach ($arr2 as $key1 => $value2) {
+            foreach ($arr2 as $value2) {
                 if ($value1['fileId'] == 0) {
                     $contained = $value1['link'] == $value2['link'];
                 } else {
