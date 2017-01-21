@@ -58,23 +58,17 @@ export default class PersonaMultiInput extends MultiInput {
   }
 
   addItem = (value,data) =>{
-    console.log('new addItem');
-    console.log(data);
     if(!data)  {
       return;
     }
     //@TODO重复添加提示
     initItem(this.state.dataSourceUi,data,this.state.dataSourceUi.length+1,this.props);
-    console.log({'add after':this.state.dataSourceUi});
     this.setState({
       dataSourceUi: this.state.dataSourceUi,
     });
-    console.log({'addItem after':this.state.dataSourceUi});
   }
 
   getList() {
-    console.log('new getList');
-    console.log(this.props.sortable);
     return (<List listClassName={this.props.listClassName}  dataSourceUi = {this.state.dataSourceUi}  sortable={this.props.sortable}></List>);
   }
 }
