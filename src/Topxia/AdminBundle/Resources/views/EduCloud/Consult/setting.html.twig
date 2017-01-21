@@ -26,6 +26,9 @@
           {% if cloud_consult.cloud_consult_landing_url | default('')%}
             <a href=" {{ cloud_consult.cloud_consult_landing_url }} " target="_blank">登录云客服</a>。
           {% endif %}
+          {% if not cloud_consult.cloud_consult_enabled %}
+            请您联系客服购买云客服
+          {% endif %}
         </div>
       </div>
     </div>
