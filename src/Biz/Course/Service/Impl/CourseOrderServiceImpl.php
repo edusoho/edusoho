@@ -34,7 +34,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $user = $this->getUserService()->getUser($user['id'], true);
 
             if ($this->getCourseMemberService()->isCourseStudent($info['targetId'], $user['id'])) {
-                throw $this->createServiceException($this->getKernel()->trans('已经是该教学学员，操作失败。'));
+                throw $this->createServiceException($this->getKernel()->trans('已经是该教学计划学员，操作失败。'));
             }
 
             $course = $this->getCourseService()->getCourse($info['targetId']);
