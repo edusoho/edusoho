@@ -87,6 +87,7 @@
           </div>
         {% endif %}
         <div class="pull-right">
+          {# <label>{{'选择教学计划'|trans}}</label> #}
           <select class="form-control js-course-select" id="course-select-{{courseSet.id}}">
             {% if courseSet.courses %}
               {% for course in courseSet.courses %}

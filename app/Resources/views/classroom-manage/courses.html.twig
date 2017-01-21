@@ -66,7 +66,7 @@
                         {% endif %}
                       </div>
 
-                      <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
+                      <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title }}({{'教学计划：'|trans}}{{course.title}})</a>
                       {% if course.serializeMode=='serialize' %}
                         <span class="label label-success ">{{'更新中'|trans}}</span>
                       {% elseif course.serializeMode=='finished' %}
@@ -87,7 +87,7 @@
                         {% if lesson %}
                           <div class="live-course-lesson mbm">
                             <span class="text-success fsm mrm">{{ lesson.startTime|date('m-d H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                            <span class="text-muted fsm mrm">{{'第%number%课时'|trans({'%number%':lesson.number})}}</span>
+                            <span class="text-muted fsm mrm">{{'第%number%任务'|trans({'%number%':lesson.number})}}</span>
                           </div>
                         {% endif %}
                       {% else %}
@@ -112,20 +112,20 @@
                           {% endif %}  
 
                             <span class="text-muted text-sm">
-                                {{'%lessonNum%个课时'|trans({'%lessonNum%':course.taskNum})}}
+                                {{'%taskNum%个任务'|trans({'%taskNum%':course.taskNum})}}
                             </span>
                             <span class="divider"></span>
                             <span class="text-muted text-sm">
                                 {{'有效期:'|trans}}
-                                {# {% if course.expiryDay %} #}
-                                  {% if course.expiryMode|default(null) == 'date' %}
-                                    {{course.expiryStartDate|date('Y-m-d H:i') ~ '~' ~ course.expiryEndDate|date('Y-m-d H:i')}}
-                                  {% else %}
+                                {% if course.expiryMode|default(null) == 'date' %}
+                                  {{course.expiryStartDate|date('Y-m-d H:i') ~ '~' ~ course.expiryEndDate|date('Y-m-d H:i')}}
+                                {% else %}
+                                  {% if course.expiryDays %}
                                     {{course.expiryDays}}{{'天'|trans}}
+                                  {% else %}
+                                    {{'永久'|trans}}
                                   {% endif %}
-                                {# {% else %} #}
-                                    {# {{'永久'|trans}} #}
-                                {# {% endif %} #}
+                                {% endif %}
                             </span>
                         </div>
 
