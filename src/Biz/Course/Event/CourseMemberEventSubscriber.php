@@ -52,7 +52,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $this->updateMemberLearnedNum($taskResult['courseId'], $user['id']);
     }
 
-    protected function onTaskDelete(Event $event)
+    public function onTaskDelete(Event $event)
     {
         $task = $event->getSubject();
         $user = $event->getArgument('user');

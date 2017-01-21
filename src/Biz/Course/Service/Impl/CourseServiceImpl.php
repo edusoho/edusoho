@@ -1109,4 +1109,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->biz->service('Course:CourseNoteService');
     }
+
+    protected function getCourseSetService()
+    {
+         return $this->createService('Course:CourseSetService');
+    }
 }
