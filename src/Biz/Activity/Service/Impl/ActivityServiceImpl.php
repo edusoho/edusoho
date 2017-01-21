@@ -2,6 +2,7 @@
 
 namespace Biz\Activity\Service\Impl;
 
+use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\BaseService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Dao\ActivityDao;
@@ -90,12 +91,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activityListener = $this->getActivityConfig($activity['mediaType'])->getListener($eventName);
 
         if (!is_null($activityListener)) {
-
             $activityListener->handle($activity, $data);
         }
 
         $this->dispatchEvent("activity.operated", new Event($activity, $data));
-
     }
 
     public function createActivity($fields)
@@ -170,6 +169,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $activityConfig = $this->getActivityConfig($activity['mediaType']);
             $activityConfig->delete($activity['mediaId']);
 
+            $this->getActivityLearnLogService()->deleteLearnLogsByActivityId($id);
             $this->getActivityDao()->delete($id);
             $this->commit();
         } catch (\Exception $e) {
@@ -255,7 +255,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
         foreach ($arr1 as $key1 => $value1) {
             $contained = false;
-            foreach ($arr2 as $key1 => $value2) {
+            foreach ($arr2 as $key2 => $value2) {
                 if ($value1['fileId'] == 0) {
                     $contained = $value1['link'] == $value2['link'];
                 } else {
@@ -402,6 +402,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function getActivityDao()
     {
         return $this->createDao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return ActivityLearnLogService
+     */
+    protected function getActivityLearnLogService()
+    {
+        return $this->createService('Activity:ActivityLearnLogService');
     }
 
     /**

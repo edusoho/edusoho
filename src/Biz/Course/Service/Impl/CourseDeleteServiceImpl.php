@@ -29,8 +29,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         try {
             $this->beginTransaction();
-            //todo tryManageCourseSet...
-
             //delete course_material
             $this->getMaterialDao()->deleteByCourseSetId($courseSetId, 'course');
             //delete testpaper
@@ -59,8 +57,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     {
         try {
             $this->beginTransaction();
-            //todo tryManageCourse
-            //            $course = $this->getCourseDao()->get($courseId);
             //delete course_material
             $this->getMaterialDao()->deleteByCourseId($courseId, 'course');
             //delete testpaper & testpaperItem
