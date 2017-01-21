@@ -8,7 +8,6 @@
 
 const settings = {
   imglimit: 1024,
-  devtool: 'source-map',
   fontlimit: 1024,
   openModule: ['lib','app','admin','plugin','copy'], // 可以选择监听哪几种资源文件
 };
