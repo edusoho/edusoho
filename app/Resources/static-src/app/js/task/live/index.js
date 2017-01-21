@@ -110,7 +110,7 @@ class LiveShow {
           }
         }
       };
-      let $content = $liveNotice + '<div style="padding:15px 15px 15px 30px; border-bottom:1px dashed #ccc; height: auto;">' + summary + '</div>' + '<br>' + $countDown;
+      let $content = $liveNotice + '<div class="pb20" style=" border-bottom:1px dashed #ccc; height: auto;">' + summary + '</div>' + '<br>' + $countDown;
       $("#lesson-live-content").find('.lesson-content-text-body').html($content);
 
       intervalSecond++;
@@ -144,10 +144,10 @@ class LiveShow {
 
   _getCountDown(days, hours, minutes, seconds) {
     let content = Translator.trans('还剩: ');
-    content += days ? "<strong class='text-info'>" + days + "</strong>" + Translator.trans('天') : "";
-    content += hours ? "<strong class='text-info'>" + hours + "</strong>" + Translator.trans('小时') : "";
-    content += minutes ? "<strong class='text-info'>" + minutes + "</strong>" + Translator.trans('分钟') : "";
-    content += seconds ? "<strong class='text-info'>" + seconds + "</strong>" + Translator.trans('秒') : "";
+    content += days ? "<strong class='color-info'>" + days + "</strong>" + Translator.trans('天') : "";
+    content += hours ? "<strong class='color-info'>" + hours + "</strong>" + Translator.trans('小时') : "";
+    content += minutes ? "<strong class='color-info'>" + minutes + "</strong>" + Translator.trans('分钟') : "";
+    content += seconds ? "<strong class='color-info'>" + seconds + "</strong>" + Translator.trans('秒') : "";
 
     return content;
   }

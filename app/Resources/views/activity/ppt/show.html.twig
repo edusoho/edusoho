@@ -10,11 +10,12 @@
       data-finish-detail="{{ ppt.finishDetail }}"
       data-slides="{{ slides|join(',') }}" {% if setting('magic.ppt_watermark') %} data-watermark-url="{{ path('cloud_ppt_watermark') }}"{% endif %}>
     {% if not error is empty %}
-      {{ error.message|raw }}
+      <div class="alert alert-danger mv20 mh20">
+        <i class="es-icon es-icon-info"></i>{{ error.message|raw }}
+      </div>
     {% else %}
 
     {% endif %}
   </div>
-
 {% endblock %}
 

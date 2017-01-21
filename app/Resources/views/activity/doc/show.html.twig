@@ -5,7 +5,7 @@
 {% block body %}
   {% if not error is empty %}
     <div class="iframe-parent-content pv20 ph20">
-      <span class="color-danger">{{ error.message|raw }}</span>
+      <div class="alert alert-danger"><i class="es-icon es-icon-info"></i>{{ error.message|raw }}</div>
     </div>
   {% else %}
     <div class="iframe-parent-content iframe-parent-full" id="document-content" data-swf="{{ docMedia.swf }}" data-pdf="{{ docMedia.pdf }}" 
