@@ -69,6 +69,16 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activities;
     }
 
+    public function search($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getActivityDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function count($conditions)
+    {
+        return $this->getActivityDao()->count($conditions);
+    }
+
     public function trigger($id, $eventName, $data = array())
     {
         $activity = $this->getActivity($id);
@@ -90,12 +100,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activityListener = $this->getActivityConfig($activity['mediaType'])->getListener($eventName);
 
         if (!is_null($activityListener)) {
-
             $activityListener->handle($activity, $data);
         }
 
         $this->dispatchEvent("activity.operated", new Event($activity, $data));
-
     }
 
     public function createActivity($fields)

@@ -221,8 +221,9 @@ class DoTestBase
       let url = $('input[name="testSuspend"]').data('url');
       setInterval(function(){
         self._submitTest(url);
-        notify('success','已保存');
-      }, 5 * 60 * 1000);
+        let currentTime = new Date().getHours()+ ':' + new Date().getMinutes()+ ':' +new Date().getSeconds();
+        notify('success',currentTime + ' 已保存');
+      }, 1 * 60 * 1000);
     }
   }
 
