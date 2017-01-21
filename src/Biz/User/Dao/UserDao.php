@@ -28,5 +28,5 @@ interface UserDao extends GeneralDaoInterface
 
     public function analysisRegisterDataByTime($startTime, $endTime);
 
-    public function analysisUserSumByTime($endTime);
+    public function countUserNumDueTime($endTime);
 }

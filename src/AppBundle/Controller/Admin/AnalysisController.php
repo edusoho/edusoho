@@ -100,8 +100,9 @@ class AnalysisController extends BaseController
         );
 
         if ($tab == "trend") {
-            $userSumData    = $this->getUserService()->analysisUserSumByTime($timeRange['endTime']);
-            $data           = $this->fillAnalysisUserSum($condition, $userSumData);
+            $registerData  = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $userSumData    = $this->getUserService()->countUserNumDueTime($timeRange['startTime']);
+            $data           = $this->fillAnalysisSum($condition, $registerData, $userSumData);
             $result["data"] = $data;
         } else {
             $paginator = new Paginator(
@@ -171,9 +172,9 @@ class AnalysisController extends BaseController
         $courseSetSumData = "";
 
         if ($tab == "trend") {
-            $courseSetSumData = $this->getCourseSetService()->analysisCourseSetDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
-            $data = $this->fillAnalysisCourseSum($condition, $courseSetSumData);
+            $courseSetData = $this->getCourseSetService()->analysisCourseSetDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $courseSetSumData = $this->getCourseSetService()->countCourseSetNumDueTime($timeRange['startTime']);
+            $data = $this->fillAnalysisSum($condition, $courseSetData, $courseSetSumData);
         }
 
         $userIds = ArrayToolkit::column($courseSetSumDetail, 'creator');
@@ -296,6 +297,7 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $courseSetData = $this->getCourseSetService()->analysisCourseSetDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            
             $data = $this->fillAnalysisData($condition, $courseSetData);
         }
 
@@ -1244,82 +1246,27 @@ class AnalysisController extends BaseController
         ));
     }
 
-    protected function fillAnalysisUserSum($condition, $currentData)
+    protected function fillAnalysisSum($condition, $currentData, $initValue = 0)
     {
         $dates       = $this->getDatesByCondition($condition);
-        $currentData = ArrayToolkit::index($currentData, 'date');
-        $timeRange   = $this->getTimeRange($condition);
-        $userSumData = array();
 
         foreach ($dates as $key => $value) {
-            $zeroData[] = array("date" => $value, "count" => 0);
+            $initData[] = array('date' => $value, 'count' => $initValue);
         }
 
-        $userSumData = $this->getUserService()->analysisUserSumByTime($timeRange['endTime']);
-
-        if ($userSumData) {
-            $countTmp = $userSumData[0]["count"];
-
-            foreach ($zeroData as $key => $value) {
-                foreach ($userSumData as $userKey => $val) {
-                    if ($userKey != 0 && ($value['date'] < $val['date']) && (isset($userSumData[($userKey + 1)]) && $value['date'] > $userSumData[($userKey + 1)]['date'])) {
-                        $countTmp = $userSumData[($userKey + 1)]['count'];
-                    }
+        for ($i = 0; $i < count($initData); $i++) {
+            foreach ($currentData as $val) {
+                if (in_array($initData[$i]['date'], $val)) {
+                    $initData[$i]['count'] += $val['count'];
+                    break;
                 }
-
-                $date = $value['date'];
-
-                if (array_key_exists($date, $currentData)) {
-                    $zeroData[$key]['count'] = $currentData[$date]['count'];
-                    $countTmp                = $currentData[$date]['count'];
-                } else {
-                    $zeroData[$key]['count'] = $countTmp;
-                }
+            }
+            if (isset($initData[$i + 1])) {
+                $initData[$i + 1]['count'] = $initData[$i]['count'];
             }
         }
 
-        return json_encode($zeroData);
-    }
-
-    protected function fillAnalysisCourseSum($condition, $currentData)
-    {
-        $dates       = $this->getDatesByCondition($condition);
-        $currentData = ArrayToolkit::index($currentData, 'date');
-        $timeRange   = $this->getTimeRange($condition);
-        $zeroData    = array();
-
-        foreach ($dates as $key => $value) {
-            $zeroData[] = array("date" => $value, "count" => 0);
-        }
-
-        $courseSumData = $this->getCourseSetService()->analysisCourseSetDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
-        if ($courseSumData) {
-            $countTmp = $courseSumData[0]["count"];
-
-            foreach ($zeroData as $key => $value) {
-                if ($value["date"] < $courseSumData[0]["date"]) {
-                    $countTmp = 0;
-                } else {
-                    foreach ($courseSumData as $courseKey => $val) {
-                        if ($courseKey != 0 && ($value['date'] < $val['date']) && ($value['date'] > $courseSumData[($courseKey - 1)]['date'])) {
-                            $countTmp = $courseSumData[($courseKey - 1)]['count'];
-                        }
-                    }
-                }
-
-                $date = $value['date'];
-
-                if (array_key_exists($date, $currentData)) {
-                    $zeroData[$key]['count'] = $currentData[$date]['count'];
-                    $countTmp                = $currentData[$date]['count'];
-                } else {
-                    $zeroData[$key]['count'] = $countTmp;
-                }
-            }
-        }
-
-        return json_encode($zeroData);
+        return json_encode($initData);
     }
 
     protected function fillAnalysisData($condition, $currentData)
@@ -1336,11 +1283,9 @@ class AnalysisController extends BaseController
 
         $currentData = array_merge($zeroData, $currentData);
 
-        foreach ($currentData as $key => $value) {
-            $data[] = $value;
-        }
+        $currentData = array_values($currentData);
 
-        return json_encode($data);
+        return json_encode($currentData);
     }
 
     protected function getDatesByCondition($condition)

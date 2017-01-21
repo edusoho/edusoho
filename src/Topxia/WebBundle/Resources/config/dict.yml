@@ -170,17 +170,17 @@ analysisDateType:
     register: 新注册用户数
     login: 用户登录数
     courseSet: 新增课程数
-    lesson: 新增课时数
-    joinLesson: 加入学习数
-    paidLesson: 购买课程数
+    task: 新增任务数
+    joinCourse: 加入教学计划数
+    paidCourse: 购买教学计划数
     paidClassroom: 购买班级数
-    finishedLesson: 完成课时学习数
+    finishedTask: 完成任务数
     videoViewed: 视频观看数
     cloudVideoViewed: └─ 云视频观看数
     localVideoViewed: └─ 本地视频观看数
     netVideoViewed: └─ 网络视频观看数
     income: 营收额
-    courseIncome: └─ 课程营收额
+    courseSetIncome: └─ 课程营收额
     classroomIncome: └─ 班级营收额
     vipIncome: └─ 会员营收额
     courseSetSum: 课程总数

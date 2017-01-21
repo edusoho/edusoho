@@ -251,7 +251,7 @@ interface UserService
 
     public function analysisRegisterDataByTime($startTime, $endTime);
 
-    public function analysisUserSumByTime($endTime);
+    public function countUserNumDueTime($time);
 
     public function countUsersByLessThanCreatedTime($endTime);
 

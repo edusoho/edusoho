@@ -34,6 +34,14 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
+    public function countCourseSetNumDueTime($time)
+    {
+        $sql = "SELECT count(*) AS count FROM (SELECT from_unixtime(createdTime, '%Y-%m-%d') AS date FROM {$this->table}
+            WHERE createdTime <= $time) AS sums ORDER BY date DESC";
+
+        return $this->db()->fetchColumn($sql, array($time));
+    }
+
     public function declares()
     {
         return array(
