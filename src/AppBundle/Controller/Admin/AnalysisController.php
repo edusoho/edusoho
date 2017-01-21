@@ -713,6 +713,9 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
+
+        var_dump($completedTaskDetail, $paginator, $tab, $data, $courseSets, $courses, $tasks,
+            $users, $completedTaskStartData, $dataInfo, $count);exit;
         return $this->render("admin/operation-analysis/completed-task.html.twig", array(
             'completedTaskDetail'    => $completedTaskDetail,
             'paginator'               => $paginator,
