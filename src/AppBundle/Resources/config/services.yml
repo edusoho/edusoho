@@ -72,6 +72,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    classroom_event_subscriber:
+        class: Biz\Classroom\Event\ClassroomEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     course_statistics_event_subscriber:
         class: Biz\Course\Event\StatisticsSubscriber
         arguments: ['@biz']

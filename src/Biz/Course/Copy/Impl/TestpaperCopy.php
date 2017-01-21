@@ -17,10 +17,10 @@ class TestpaperCopy extends AbstractEntityCopy
      *   - Question 题目内容
      * @param $biz
      */
-    public function __construct($biz)
+    public function __construct($biz, $node)
     {
         $this->biz = $biz;
-        parent::__construct($biz, '');
+        parent::__construct($biz, $node);
     }
 
     /*
