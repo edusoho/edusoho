@@ -59,6 +59,11 @@ class CourseNoteLikeDaoImpl extends GeneralDaoImpl implements CourseNoteLikeDao
         return $this->db()->delete($this->table, array('noteId' => $noteId));
     }
 
+    public function deleteByCourseId($courseId)
+    {
+        return $this->db()->delete($this->table(), array('courseId' => $courseId));
+    }
+
     public function declares()
     {
         return array(
