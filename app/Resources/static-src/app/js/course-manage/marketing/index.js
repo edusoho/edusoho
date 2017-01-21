@@ -26,6 +26,9 @@ class Marketing {
 				tryLookLimit: {
 					required: '#enableTryLook:checked',
 					digits: true
+				},
+        watchLimit:{
+          digits:true
 				}
 			},
 			messages: {
