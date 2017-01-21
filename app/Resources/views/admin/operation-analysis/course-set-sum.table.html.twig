@@ -3,18 +3,16 @@
             <tr>
               <th>{{'课程'|trans}}</th>
               <th>{{'创建者'|trans}}</th>
-              <th>{% if setting('default.user_name') %}{{'%user_name%数'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}{{'数'|trans}}</th>
-              <th>{{'价格'|trans}}</th>
+              <th>{% if setting('default.user_name') %}{{'%user_name%'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}{{'数'|trans}}</th>
             </tr>
           </thead>
           <tbody>
-            {% if courseSumDetail %}
-              {% for data in courseSumDetail %}
+            {% if courseSetSumDetail %}
+              {% for data in courseSetSumDetail %}
                 <tr>
                     <td> <a href="{{ path('course_show', {id:data.id}) }}" target="_blank"><strong>{{ data.title }}</strong></a><br><span class="text-muted text-sm">{{'分类：'|trans}}{{ categories[data.categoryId].name|default('--') }}</span></td>
-                     <td>{{ admin_macro.user_link(users[data.userId]) }}<br>{{data.createdTime|date("Y-m-d H:i:s")}}</td>
+                     <td>{{ admin_macro.user_link(users[data.creator]) }}<br>{{data.createdTime|date("Y-m-d H:i:s")}}</td>
                      <td>{{data.studentNum}}</td>
-                     <td class="text-danger">{{data.price}}</td>
                 </tr>
               {% endfor %}
             {% else %}

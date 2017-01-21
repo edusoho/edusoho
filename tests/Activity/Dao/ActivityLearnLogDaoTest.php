@@ -145,7 +145,6 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
                 if (isset($val['learnedTime'])) {
                     $sum += $val['learnedTime'];
                 } else {
-                    var_dump($val);
                     throw new \Exception('?');
                 }
             } elseif (is_numeric($val)) {

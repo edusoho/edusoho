@@ -171,12 +171,12 @@ class AnalysisController extends BaseController
         $courseSetSumData = "";
 
         if ($tab == "trend") {
-            $courseSetSumData = $this->getCourseSetService()->analysisCourseSetSumByTime($timeRange['endTime']);
+            $courseSetSumData = $this->getCourseSetService()->analysisCourseSetDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisCourseSum($condition, $courseSetSumData);
         }
 
-        $userIds = ArrayToolkit::column($courseSetSumDetail, 'userId');
+        $userIds = ArrayToolkit::column($courseSetSumDetail, 'creator');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -189,7 +189,7 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("admin/operation-analysis/course-sum.html.twig", array(
+        return $this->render("admin/operation-analysis/course-set-sum.html.twig", array(
             'courseSetSumDetail'    => $courseSetSumDetail,
             'paginator'             => $paginator,
             'tab'                   => $tab,
@@ -1292,7 +1292,7 @@ class AnalysisController extends BaseController
             $zeroData[] = array("date" => $value, "count" => 0);
         }
 
-        $courseSumData = $this->getCourseService()->analysisCourseSumByTime($timeRange['endTime']);
+        $courseSumData = $this->getCourseSetService()->analysisCourseSetDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
         if ($courseSumData) {
             $countTmp = $courseSumData[0]["count"];
