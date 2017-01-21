@@ -1131,7 +1131,7 @@ class ClassroomManageController extends BaseController
      */
     protected function getLevelService()
     {
-        return $this->createService('Vip:Vip.LevelService');
+        return $this->createService('Vip:Vip:LevelService');
     }
 
     /**

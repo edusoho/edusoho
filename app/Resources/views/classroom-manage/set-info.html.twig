@@ -83,8 +83,8 @@ tagMatchUrl: path('tag_match'),
       <div class="form-group">
         <label class="col-md-2 control-label">{{'分类'|trans}}</label>
         <div class="col-md-8 controls">
-          <select id="course_categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
-            {{ select_options(category_choices('classroom'), classroom.categoryId, '分类'|trans) }}
+          <select id="course_categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">{{dump(category_choices('classroom'))}}
+            {{ select_options(category_choices('classroom'), classroom.categoryId, {0:'分类'|trans}) }}
           </select>
           <div class="help-block" style="display:none;"></div>
         </div>
