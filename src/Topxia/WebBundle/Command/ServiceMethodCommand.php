@@ -43,7 +43,7 @@ class ServiceMethodCommand extends BaseCommand
 			if(is_dir($file) && in_array($fileName, array('.', '..'))) {
 				continue;
 			}
-
+			
 			if(is_dir($file)) {
 				$this->scandir($file, $output);
 			} else {
@@ -53,13 +53,13 @@ class ServiceMethodCommand extends BaseCommand
 		}
 
 
-		foreach ($this->notices['error'] as $key => $str) {
-			$output->writeln($str);
-		}
+		// foreach ($this->notices['error'] as $key => $str) {
+		// 	$output->writeln($str);
+		// }
 
-		foreach ($this->notices['info'] as $key => $str) {
-			$output->writeln($str);
-		}
+		// foreach ($this->notices['info'] as $key => $str) {
+		// 	$output->writeln($str);
+		// }
 	}
 
 	protected function loadAllService()
@@ -107,15 +107,17 @@ class ServiceMethodCommand extends BaseCommand
 		return $service;
 	}
 
-	protected function printNoDeclaredServiceMethod($file, $output)
+	protected function printNoDeclaredServiceMethod($fileName, $output)
 	{
-		$file = file($file);
+		$file = file($fileName);
 		foreach($file as &$line) {
 			// $partten = "/^http://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?$/";
 			$partten = '/get([a-zA-Z]*Service)\(\)->([a-zA-Z]\w*)\(/';
 			preg_match_all($partten, $line, $matchs, PREG_SET_ORDER);
-			if(!empty($matchs)) {
+			if(!empty($matchs) && $fileName == '/Users/fengni/edusoho/www/edusoho/src/AppBundle/Controller/Admin/AnalysisController.php') {
 				foreach ($matchs as $key => $value) {
+					var_dump($matchs);
+					
 					$service = $value[1];
 
 					$serviceMap = array(
@@ -138,7 +140,8 @@ class ServiceMethodCommand extends BaseCommand
 
 					$method = $value[2];
 					if(empty($this->results[$service])) {
-						$this->notices['info'][] = sprintf('<info> service: %s, method: %s</info>', $service, $method);
+						$this->notices['info'][] = sprintf('<info>file: %s, service: %s, method: %s</info>', $fileName, $service, $method);
+						// $output->writeln(sprintf('<error>file: %s, service: %s, method: %s</error>', $fileName, $service, $method));
 						continue;
 					}
 
@@ -153,8 +156,10 @@ class ServiceMethodCommand extends BaseCommand
 					}
 
 					if(!$hasMethod) {
-						$this->notices['error'][] = sprintf('<error>service: %s, method: %s</error>', $service, $method);
+						$this->notices['error'][] = sprintf('<error>file: %s, service: %s, method: %s</error>', $fileName, $service, $method);
+						// $output->writeln(sprintf('<error>file: %s, service: %s, method: %s</error>', $fileName, $service, $method));
 					}
+
 				}
 			}
 		}
