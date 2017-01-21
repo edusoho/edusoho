@@ -30,6 +30,9 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
     protected function _createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
+            if ($value == 0) {
+                return true;
+            }
             if (empty($value)) {
                 return false;
             }

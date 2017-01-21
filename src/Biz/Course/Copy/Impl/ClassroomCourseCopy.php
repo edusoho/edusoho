@@ -49,6 +49,9 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourse = $this->getCourseDao()->create($newCourse);
         $this->doCopyCourseMember($newCourse);
 
+        $testpaperCopy = new CourseSetTestpaperCopy($this->biz);
+        $testpaperCopy->copy($course, array('newCourseSet' => $newCourseSet));
+
         $this->childrenCopy($course, array('newCourse' => $newCourse, 'modeChange' => $modeChange));
 
         return $newCourse;

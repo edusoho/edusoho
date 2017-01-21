@@ -20,7 +20,7 @@ class CourseController extends BaseController
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
 
-        $excludeIds = ArrayToolkit::column($activeCourses, 'id');
+        $excludeIds = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
         $conditions = array(
             'status'     => 'published',
             'parentId'   => 0,
@@ -190,6 +190,7 @@ class CourseController extends BaseController
     private function searchCourseSetWithCourses($conditions, $orderbys, $start, $limit)
     {
         $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderbys, $start, $limit);
+
         if (empty($courseSets)) {
             return array();
         }

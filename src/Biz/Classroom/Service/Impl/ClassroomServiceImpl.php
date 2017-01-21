@@ -56,7 +56,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseSets   = ArrayToolkit::index($courseSets, 'id');
 
         foreach ($courses as &$course) {
-            $course['courseSet'] = $courseSets[$course['courseSetId']];
+            $course['courseSet']         = $courseSets[$course['courseSetId']];
+            $course['parentCourseSetId'] = $course['courseSet']['parentId'];
         }
 
         $sortedCourses = array();
