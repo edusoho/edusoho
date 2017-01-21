@@ -517,10 +517,10 @@ class AnalysisController extends BaseController
         ));
     }
 
-    public function paidLessonAction(Request $request, $tab)
+    public function paidCourseAction(Request $request, $tab)
     {
         $data                = array();
-        $paidLessonStartDate = "";
+        $paidCourseStartDate = "";
 
         $condition = $request->query->all();
 
@@ -528,7 +528,7 @@ class AnalysisController extends BaseController
 
         if (!$timeRange) {
             $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_paid', array(
+            return $this->redirect($this->generateUrl('admin_operation_analysis_course_paid', array(
                 'tab' => "trend"
             )));
         }
@@ -546,12 +546,12 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $paidLessonData = "";
+        $paidCourseData = "";
 
         if ($tab == "trend") {
-            $paidLessonData = $this->getOrderService()->analysisPaidCourseOrderDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $paidCourseData = $this->getOrderService()->analysisPaidCourseOrderDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
-            $data = $this->fillAnalysisData($condition, $paidLessonData);
+            $data = $this->fillAnalysisData($condition, $paidCourseData);
         }
 
         $courseIds = ArrayToolkit::column($paidCourseDetail, 'targetId'); //订单中的课程
@@ -567,22 +567,22 @@ class AnalysisController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $paidLessonStartData = $this->getOrderService()->searchOrders(array("status" => "paid", "amount" => "0.00"), "early", 0, 1);
+        $paidCourseStartData = $this->getOrderService()->searchOrders(array("status" => "paid", "amount" => "0.00"), "early", 0, 1);
 
-        foreach ($paidLessonStartData as $key) {
-            $paidLessonStartDate = date("Y-m-d", $key['createdTime']);
+        foreach ($paidCourseStartData as $key) {
+            $paidCourseStartDate = date("Y-m-d", $key['createdTime']);
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
-        return $this->render("admin/operation-analysis/paid-lesson.html.twig", array(
+        return $this->render("admin/operation-analysis/paid-course.html.twig", array(
             'paidCourseDetail'    => $paidCourseDetail,
             'paginator'           => $paginator,
             'tab'                 => $tab,
             'data'                => $data,
             'courses'             => $courses,
             'users'               => $users,
-            'paidLessonStartDate' => $paidLessonStartDate,
+            'paidCourseStartDate' => $paidCourseStartDate,
             'dataInfo'            => $dataInfo
         ));
     }
