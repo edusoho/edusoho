@@ -483,7 +483,7 @@ class VipImporter extends Importer
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content.FileService');
+        return $this->getServiceKernel()->getBiz()->service('Content:FileService');
     }
 
     protected function getUserService()
