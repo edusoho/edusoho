@@ -10,7 +10,7 @@
             {% if completedTaskDetail %}
             {% for data in completedTaskDetail %}
               <tr>
-                   <td> <strong>{{tasks[data.courseTaskId].title|default("")}}</strong><br><span class="text-muted text-sm">{{'属于课程:'|trans}}{{courses[data.courseId].title}}</span></td>
+                   <td> <strong>{{tasks[data.courseTaskId].title|default("")}}</strong><br><span class="text-muted text-sm">{{'属于课程:'|trans}}{{courseSets[courses[data.courseId].courseSetId].title}} &raquo; {{courses[data.courseId].title}}</span></td>
                    <td>{% if tasks[data.courseTaskId].type=="text" %}{{'图文'|trans}}
                   {% elseif tasks[data.courseTaskId].type=="video" %}{{'视频'|trans}}
                   {% elseif tasks[data.courseTaskId].type=="audio" %}{{'音频'|trans}}

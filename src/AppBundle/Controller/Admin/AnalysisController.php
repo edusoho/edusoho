@@ -689,11 +689,15 @@ class AnalysisController extends BaseController
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        $taskIds = ArrayToolkit::index($completedTaskDetail, 'courseTaskId');
+        $taskIds = ArrayToolkit::column($completedTaskDetail, 'courseTaskId');
 
-        $tasks = $this->getTaskService()->findTasksByIds($taskIds);
+        $tasks = ArrayToolkit::index($this->getTaskService()->findTasksByIds($taskIds), 'id');
 
-var_dump($tasks);
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
+var_dump($courses);
         $userIds = ArrayToolkit::column($completedTaskDetail, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -710,6 +714,7 @@ var_dump($tasks);
             'paginator'               => $paginator,
             'tab'                     => $tab,
             'data'                    => $data,
+            'courseSets'              => $courseSets,
             'courses'                 => $courses,
             'tasks'                 => $tasks,
             'users'                   => $users,
