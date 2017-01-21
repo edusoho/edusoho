@@ -657,6 +657,8 @@ class AnalysisController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
+        $count = 0;
+
         if (!$timeRange) {
             $this->setFlashMessage("danger", '输入的日期有误!');
             return $this->redirect($this->generateUrl('admin_operation_analysis_task_completed', array(
@@ -680,9 +682,12 @@ class AnalysisController extends BaseController
         $completedTaskData = "";
 
         if ($tab == "trend") {
-            $completedTaskData = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
+            $completedTaskData = $this->getTaskResultService()->analysisCompletedTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data = $this->fillAnalysisData($condition, $completedTaskData);
+
+            foreach ($completedTaskData as $val) {
+                $count += $val['count'];
+            }
         }
 
         $courseIds = ArrayToolkit::column($completedTaskDetail, 'courseId');
@@ -697,7 +702,6 @@ class AnalysisController extends BaseController
 
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
 
-var_dump($courses);
         $userIds = ArrayToolkit::column($completedTaskDetail, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -719,7 +723,8 @@ var_dump($courses);
             'tasks'                 => $tasks,
             'users'                   => $users,
             'completedTaskStartDate' => $completedTaskStartDate,
-            'dataInfo'                => $dataInfo
+            'dataInfo'                => $dataInfo,
+            'count'                   => $count,
         ));
     }
 

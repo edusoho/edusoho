@@ -9,6 +9,14 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 {
     protected $table = 'course_task_result';
 
+    public function analysisCompletedTaskDataByTime($startTime, $endTime)
+    {
+        $sql = "SELECT count(id) AS count, from_unixtime('finishedTime') AS date FROM
+            {$this->table} WHERE finishedTime >= ? AND finishedTime <= ? GROUP BY date ORDER BY date ASC";
+
+        return $this->db()->fetchAll($sql, array($startTime, $endTime));
+    }
+
     public function findByCourseIdAndUserId($courseId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? and userId = ? ";

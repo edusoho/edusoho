@@ -9,6 +9,11 @@ use Biz\Task\Service\TaskResultService;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService
 {
+    public function analysisCompletedTaskDataByTime($startTime, $endTime)
+    {
+        return $this->getTaskResultDao()->analysisCompletedTaskDataByTime($startTime, $endTime);
+    }
+
     public function findUserTaskResultsByCourseId($courseId)
     {
         $user = $this->getCurrentUser();
