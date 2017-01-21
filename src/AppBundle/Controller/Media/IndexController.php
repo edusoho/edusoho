@@ -15,7 +15,7 @@ class IndexController extends BaseController
             throw $this->createAccessDeniedException('没有权限管理资源');
         }
 
-        return $this->forward('player/show', array('id' => $mediaId, 'context' => $context));
+        return $this->forward('AppBundle:Player:show', array('id' => $mediaId, 'context' => $context));
     }
 
     /**
