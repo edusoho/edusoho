@@ -649,70 +649,71 @@ class AnalysisController extends BaseController
         ));
     }
 
-    public function finishedLessonAction(Request $request, $tab)
+    public function completedTaskAction(Request $request, $tab)
     {
         $data                    = array();
-        $finishedLessonStartDate = "";
+        $completedTaskStartDate = "";
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
             $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_finished', array(
+            return $this->redirect($this->generateUrl('admin_operation_analysis_task_completed', array(
                 'tab' => "trend"
             )));
         }
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchLearnCount(array("startTime" => $timeRange['startTime'], "endTime" => $timeRange['endTime'], "status" => "finished")),
+            $this->getTaskResultService()->countTaskResults(array("startTime" => $timeRange['startTime'], "endTime" => $timeRange['endTime'], "status" => "finish")),
             20
         );
 
-        $finishedLessonDetail = $this->getCourseService()->searchLearns(
-            array("startTime" => $timeRange['startTime'], "endTime" => $timeRange['endTime'], "status" => "finished"),
-            array("finishedTime", "DESC"),
+        $completedTaskDetail = $this->getTaskResultService()->searchTaskResults(
+            array("startTime" => $timeRange['startTime'], "endTime" => $timeRange['endTime'], "status" => "finish"),
+            array("finishedTime" => "DESC"),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        $finishedLessonData = "";
+        
+        $completedTaskData = "";
 
         if ($tab == "trend") {
-            $finishedLessonData = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $completedTaskData = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
-            $data = $this->fillAnalysisData($condition, $finishedLessonData);
+            $data = $this->fillAnalysisData($condition, $completedTaskData);
         }
 
-        $courseIds = ArrayToolkit::column($finishedLessonDetail, 'courseId');
+        $courseIds = ArrayToolkit::column($completedTaskDetail, 'courseId');
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        $lessonIds = ArrayToolkit::column($finishedLessonDetail, 'lessonId');
+        $taskIds = ArrayToolkit::index($completedTaskDetail, 'courseTaskId');
 
-        $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
+        $tasks = $this->getTaskService()->findTasksByIds($taskIds);
 
-        $userIds = ArrayToolkit::column($finishedLessonDetail, 'userId');
+var_dump($tasks);
+        $userIds = ArrayToolkit::column($completedTaskDetail, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $finishedLessonStartData = $this->getCourseService()->searchLearns(array("status" => "finished"), array("finishedTime", "ASC"), 0, 1);
+        $completedTaskStartData = $this->getTaskResultService()->searchTaskResults(array("status" => "finish"), array("finishedTime" => "ASC"), 0, 1);
 
-        if ($finishedLessonStartData) {
-            $finishedLessonStartDate = date("Y-m-d", $finishedLessonStartData[0]['finishedTime']);
+        if ($completedTaskStartData) {
+            $completedTaskStartDate = date("Y-m-d", $completedTaskStartData[0]['finishedTime']);
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("admin/operation-analysis/finished-lesson.html.twig", array(
-            'finishedLessonDetail'    => $finishedLessonDetail,
+        return $this->render("admin/operation-analysis/completed-task.html.twig", array(
+            'completedTaskDetail'    => $completedTaskDetail,
             'paginator'               => $paginator,
             'tab'                     => $tab,
             'data'                    => $data,
             'courses'                 => $courses,
-            'lessons'                 => $lessons,
+            'tasks'                 => $tasks,
             'users'                   => $users,
-            'finishedLessonStartDate' => $finishedLessonStartDate,
+            'completedTaskStartDate' => $completedTaskStartDate,
             'dataInfo'                => $dataInfo
         ));
     }
@@ -1410,6 +1411,16 @@ class AnalysisController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     protected function getCategoryService()

@@ -7,15 +7,15 @@
             </tr>
           </thead>
           <tbody>
-            {% if finishedLessonDetail %}
-            {% for data in finishedLessonDetail %}
+            {% if completedTaskDetail %}
+            {% for data in completedTaskDetail %}
               <tr>
-                   <td> <strong>{{lessons[data.lessonId].title|default("")}}</strong><br><span class="text-muted text-sm">{{'属于课程:'|trans}}{{courses[data.courseId].title}}</span></td>
-                   <td>{% if lessons[data.lessonId].type=="text" %}{{'图文'|trans}}
-                  {% elseif lessons[data.lessonId].type=="video" %}{{'视频'|trans}}
-                  {% elseif lessons[data.lessonId].type=="audio" %}{{'音频'|trans}}
-                  {% elseif lessons[data.lessonId].type=="ppt" %}PPT
-                  {% elseif lessons[data.lessonId].type=="testpaper" %}{{'试卷'|trans}}
+                   <td> <strong>{{tasks[data.courseTaskId].title|default("")}}</strong><br><span class="text-muted text-sm">{{'属于课程:'|trans}}{{courses[data.courseId].title}}</span></td>
+                   <td>{% if tasks[data.courseTaskId].type=="text" %}{{'图文'|trans}}
+                  {% elseif tasks[data.courseTaskId].type=="video" %}{{'视频'|trans}}
+                  {% elseif tasks[data.courseTaskId].type=="audio" %}{{'音频'|trans}}
+                  {% elseif tasks[data.courseTaskId].type=="ppt" %}PPT
+                  {% elseif tasks[data.courseTaskId].type=="testpaper" %}{{'试卷'|trans}}
                   {% endif %}</td>
                    <td>{{ admin_macro.user_link(users[data.userId]) }}<br>{{data.finishedTime|date("Y-m-d H:i:s")}}</td>
               </tr>
