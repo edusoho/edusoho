@@ -60,7 +60,7 @@ class ThreadEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $subject = $event->getSubject();
 
         $targetType = $subject['targetType'];
-        $biz    = $this->getBiz();
+        $biz        = $this->getBiz();
 
         if (!isset($biz["thread_event_processor.{$targetType}"])) {
             return;
@@ -68,7 +68,7 @@ class ThreadEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $processor = $biz["thread_event_processor.{$targetType}"];
 
         if (!method_exists($processor, $method)) {
-            break;
+            return;
         }
 
         $processor->$method($event);
