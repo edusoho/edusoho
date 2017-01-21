@@ -223,7 +223,7 @@ class DoTestBase
         self._submitTest(url);
         let currentTime = new Date().getHours()+ ':' + new Date().getMinutes()+ ':' +new Date().getSeconds();
         notify('success',currentTime + ' 已保存');
-      }, 1 * 60 * 1000);
+      }, 5 * 60 * 1000);
     }
   }
 
