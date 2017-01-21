@@ -1549,10 +1549,10 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
         }
 
-        $liveEnabled = $liveCourseSetting['live_course_enabled'];
-        if ((isset($liveEnabled) && $liveEnabled == 0)||!isset($liveEnabled)) {
+        if (empty($liveCourseSetting['live_course_enabled'])) {
             return $this->redirect($this->generateUrl('admin_cloud_edulive_overview'));
         }
+
         try {
             $api         = CloudAPIFactory::create('root');
             $overview    = $api->get("/me/live/overview");
@@ -1570,7 +1570,7 @@ class EduCloudController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $liveCourseSetting = $this->getSettingService()->get('live-course', array());
-            $courseSetting     = $this->getSettingService()->get('course', array()); 
+            $courseSetting     = $this->getSettingService()->get('course', array());
 
             $liveLogo = $request->request->all();
             $liveCourseSetting = array_merge($liveCourseSetting, $liveLogo);
