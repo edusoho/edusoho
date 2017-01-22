@@ -198,7 +198,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function searchCourseSets(array $conditions, $orderBys, $start, $limit)
     {
         $orderBys = $this->getOrderBys($orderBys);
-        return $this->getCourseSetDao()->search($conditions, $orderBys, $start, $limit);
+        $preparedCondtions = $this->prepareConditions($conditions);
+        return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit);
     }
 
     /**
@@ -560,6 +561,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    protected function prepareConditions($conditions)
+    {
+        if (!empty($conditions['creatorName'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['creatorName']);
+            $conditions['creator'] = $user ? $user['id'] : -1;
+        }
+
+        return $conditions;
+    }
+
     protected function countStudentNumById($id)
     {
         $courseSet = $this->getCourseSet($id);
@@ -642,6 +653,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     /**

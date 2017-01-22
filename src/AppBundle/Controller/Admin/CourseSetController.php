@@ -329,14 +329,6 @@ class CourseSetController extends BaseController
             $conditions["parentId_GT"] = 0;
         }
 
-        if (isset($conditions["title"]) && $conditions["title"] == "") {
-            unset($conditions["title"]);
-        }
-
-        if (isset($conditions["creator"]) && $conditions["creator"] == "") {
-            unset($conditions["creator"]);
-        }
-
         $conditions = $this->fillOrgCode($conditions);
 
         $count     = $this->getCourseSetService()->countCourseSets($conditions);
