@@ -5,7 +5,6 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
-use Biz\Course\Service\CourseDeleteService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
@@ -20,6 +19,7 @@ use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\Course\Service\CourseDeleteService;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -330,7 +330,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException("Deleting published Course is not allowed");
         }
         $subCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($id, 1);
-        if(!empty($subCourses)){
+        if (!empty($subCourses)) {
             throw $this->createAccessDeniedException('该教学计划在班级下存在引用，请先删除相关引用');
         }
         return $this->getCourseDeleteService()->deleteCourse($id);
@@ -794,7 +794,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int $userId
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -815,7 +815,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count      = $this->searchCourseCount($conditions);
+        $count = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
