@@ -94,7 +94,7 @@ class ThreadServiceTest extends BaseTestCase
         $course1 = $this->createDemoCourse();
         $thread1 = array(
             'courseId' => $course1['id'],
-            'lessonId' => 0,
+            'taskId'   => 0,
             'type'     => 'discussion',
             'title'    => 'test thread 1 ',
             'content'  => 'test content'
@@ -103,7 +103,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $thread2 = array(
             'courseId' => $course1['id'],
-            'lessonId' => 1,
+            'taskId'   => 1,
             'type'     => 'discussion',
             'title'    => 'test thread 2',
             'content'  => 'test content'
@@ -112,7 +112,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $thread3 = array(
             'courseId' => $course1['id'],
-            'lessonId' => 1,
+            'taskId'   => 1,
             'type'     => 'question',
             'title'    => 'test thread 3',
             'content'  => 'test content'
@@ -123,7 +123,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $thread4 = array(
             'courseId' => $course2['id'],
-            'lessonId' => 0,
+            'taskId'   => 0,
             'type'     => 'discussion',
             'title'    => 'test thread 3',
             'content'  => 'test content'
@@ -134,7 +134,7 @@ class ThreadServiceTest extends BaseTestCase
         $foundThreads = $this->getThreadService()->searchThreads($conditions, 'created', 0, 20);
         $this->assertEquals(3, count($foundThreads));
 
-        $conditions   = array('courseId' => $course1['id'], 'lessonId' => 1);
+        $conditions   = array('courseId' => $course1['id'], 'taskId' => 1);
         $foundThreads = $this->getThreadService()->searchThreads($conditions, 'created', 0, 20);
         $this->assertEquals(2, count($foundThreads));
 
@@ -146,7 +146,7 @@ class ThreadServiceTest extends BaseTestCase
             $this->assertEquals('question', $thread['type']);
         }
 
-        $conditions   = array('courseId' => $course1['id'], 'lessonId' => 1, 'type' => 'question');
+        $conditions   = array('courseId' => $course1['id'], 'taskId' => 1, 'type' => 'question');
         $foundThreads = $this->getThreadService()->searchThreads($conditions, 'created', 0, 20);
         $this->assertEquals(1, count($foundThreads));
 

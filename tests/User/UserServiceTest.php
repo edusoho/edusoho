@@ -2,7 +2,7 @@
 
 namespace Tests\User;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class UserServiceTest extends BaseTestCase
 {
@@ -1197,10 +1197,19 @@ class UserServiceTest extends BaseTestCase
      */
     public function testApplyUserApprovalTwice()
     {
+
+        $file = new \Symfony\Component\HttpFoundation\File\UploadedFile(
+            __DIR__.'/Fixtures/test.gif',
+            'original.gif',
+            'image/gif',
+            filesize(__DIR__.'/Fixtures/test.gif'),
+            null
+        );
+
         $userId    = null;
         $approval  = null;
-        $faceImg   = null;
-        $backImg   = null;
+        $faceImg   = $file;
+        $backImg   = $file;
         $directory = null;
         $this->getUserService()->applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
     }
