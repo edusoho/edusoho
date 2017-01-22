@@ -8,7 +8,7 @@
   <div class="panel panel-default panel-col">
     <div class="panel-heading">我的考试</span></div>
     <div class="panel-body">
-      <ul class="nav nav-tabs">
+      <ul class="nav nav-pills mb15">
         <li class="{% if nav == 'testpaper' %}active{% endif %}"><a href="{{ path('my_testpaper_list') }}">考试记录</a></li>
         <li class="{% if nav == 'questionFavorite'%}active{% endif %}"><a href="{{ path('my_favorite_question_list') }}">收藏的题目</a></li>
       </ul>
