@@ -95,6 +95,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = ArrayToolkit::parts($course, array(
             'title',
+            'about',
             'courseSetId',
             'learnMode',
             'expiryMode',

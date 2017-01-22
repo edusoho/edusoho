@@ -79,7 +79,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);
         }
-
+        
         $liveActivity = ArrayToolkit::parts($fields, array('replayStatus', 'fileId'));
 
         if (!empty($liveActivity['fileId'])) {
