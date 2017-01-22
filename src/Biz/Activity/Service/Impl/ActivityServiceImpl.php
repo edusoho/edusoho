@@ -70,6 +70,16 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activities;
     }
 
+    public function search($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getActivityDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function count($conditions)
+    {
+        return $this->getActivityDao()->count($conditions);
+    }
+
     public function trigger($id, $eventName, $data = array())
     {
         $activity = $this->getActivity($id);
