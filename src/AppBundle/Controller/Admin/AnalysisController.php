@@ -521,6 +521,7 @@ class AnalysisController extends BaseController
     {
         $data                = array();
         $paidCourseStartDate = "";
+        $count               = 0;
 
         $condition = $request->query->all();
 
@@ -550,7 +551,7 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $paidCourseData = $this->getOrderService()->analysisPaidCourseOrderDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
+            $count = count($paidCourseData);
             $data = $this->fillAnalysisData($condition, $paidCourseData);
         }
 
@@ -583,7 +584,8 @@ class AnalysisController extends BaseController
             'courses'             => $courses,
             'users'               => $users,
             'paidCourseStartDate' => $paidCourseStartDate,
-            'dataInfo'            => $dataInfo
+            'dataInfo'            => $dataInfo,
+            'count'               => $count,
         ));
     }
 
