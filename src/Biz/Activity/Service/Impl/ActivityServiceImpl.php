@@ -182,6 +182,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity = $this->getActivity($id);
 
         try {
+            $this->beginTransaction();
+            
             $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
 
             $this->syncActivityMaterials($activity, array(), 'delete');
