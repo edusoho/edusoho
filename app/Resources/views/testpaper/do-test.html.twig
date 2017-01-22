@@ -1,8 +1,9 @@
 
 {% set questionTypeDict = getQuestionTypes() %}
+{% set resultStatus = paperResult.status|default(null) %}
 
 
-{% if isTeacher|default(0) or (paperResult.status|default(null) in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and paperResult.status|default(null) == 'finished' ) %}
+{% if isTeacher|default(0) or (resultStatus in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and resultStatus == 'finished' ) or resultStatus == 'doing' %}
   
   <form id='teacherCheckForm' autocomplete="off">
     
