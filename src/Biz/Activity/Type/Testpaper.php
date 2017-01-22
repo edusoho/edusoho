@@ -31,6 +31,9 @@ class Testpaper extends Activity
 
     public function copy($activity, $config = array())
     {
+        if ($activity['mediaType'] != 'testpaper') {
+            return null;
+        }
         $ext    = $this->getTestpaperActivityDao()->get($activity['mediaId']);
         $newExt = array(
             'mediaId'         => $ext['mediaId'],
