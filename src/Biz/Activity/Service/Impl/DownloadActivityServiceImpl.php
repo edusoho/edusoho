@@ -2,12 +2,12 @@
 
 namespace Biz\Activity\Service\Impl;
 
-use Biz\Activity\Service\DownloadActivityService;
 use Biz\BaseService;
 use Biz\Course\Service\MaterialService;
-use Biz\File\Service\UploadFileService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Dao\DownloadFileRecordDao;
+use Biz\Activity\Service\DownloadActivityService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Topxia\Common\ArrayToolkit;
 
 class DownloadActivityServiceImpl extends BaseService implements DownloadActivityService
 {
@@ -44,7 +44,6 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
         return $material;
     }
 
-
     /**
      * @return DownloadFileRecordDao
      */
@@ -53,6 +52,9 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
         return $this->createDao('Activity:DownloadFileRecordDao');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');
@@ -65,5 +67,4 @@ class DownloadActivityServiceImpl extends BaseService implements DownloadActivit
     {
         return $this->biz->service('Course:MaterialService');
     }
-
 }

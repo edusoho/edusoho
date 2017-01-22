@@ -199,6 +199,10 @@ class CourseController extends BaseController
         $courses    = $this->getCourseService()->findCoursesByCourseSetIds(array_keys($courseSets));
         if (!empty($courses)) {
             foreach ($courses as $course) {
+                if ($course['status'] != 'published') {
+                    continue;
+                }
+
                 if (empty($courseSets[$course['courseSetId']]['courses'])) {
                     $courseSets[$course['courseSetId']]['courses'] = array($course);
                 } else {
