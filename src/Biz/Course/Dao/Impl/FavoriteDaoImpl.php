@@ -58,4 +58,9 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
             'userId' => $userId
         ));
     }
+
+    public function deleteByCourseId($courseId)
+    {
+        return $this->db()->delete($this->table(), array('courseId' => $courseId));
+    }
 }

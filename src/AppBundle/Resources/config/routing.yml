@@ -2377,12 +2377,24 @@ classroom_manage_student_to_base:
     methods: [POST]
 
 classroom_manage_testpaper:
-    path:  /classroom/{id}/manage/testpaper/{status}
+    path:  /classroom/{id}/manage/testpaper/list
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaper }
 
+classroom_manage_testpaper_result_list:
+  path: /classroom/{id}/manage/testpaper/{testpaperId}/result
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperResultList }
+
+classroom_manage_testpaper_check:
+  path: /classroom/{id}/manage/testpaper/{resultId}/check
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperCheck }
+
 classroom_manage_homework:
-    path:  /classroom/{id}/manage/homework/{status}
+    path:  /classroom/{id}/manage/homework/list
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:homework }
+
+classroom_manage_homework_check:
+  path: /classroom/{id}/manage/homework/{resultId}/check
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:homeworkCheck }
 
 classroom_explore:
     path:  /classroom/explore/{category}

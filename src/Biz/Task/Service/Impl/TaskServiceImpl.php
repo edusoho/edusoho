@@ -31,11 +31,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         });
 
         if ($this->invalidTask($fields)) {
-            throw new InvalidArgumentException('task is invalid');
+            throw $this->createInvalidArgumentException('task is invalid');
         }
 
         if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
-            throw new AccessDeniedException('无权创建任务');
+            throw $this->createAccessDeniedException('无权创建任务');
         }
 
         $this->beginTransaction();

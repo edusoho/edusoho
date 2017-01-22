@@ -6,7 +6,6 @@ class CourseTestpaperCopy extends TestpaperCopy
 {
     public function __construct($biz)
     {
-        $this->biz = $biz;
         parent::__construct($biz, 'course-testpaper');
     }
 
@@ -16,10 +15,10 @@ class CourseTestpaperCopy extends TestpaperCopy
      * */
     protected function _copy($source, $config = array())
     {
-        return $this->doCopyTestpaper($config['newCourse'], $source['courseSetId'], $source['id']);
+        return $this->doCopyTestpaper($config['newCourse'], $source['courseSetId'], $source['id'], $config['isCopy']);
     }
 
-    private function doCopyTestpaper($newCourse, $courseSetId, $courseId = 0)
+    private function doCopyTestpaper($newCourse, $courseSetId, $courseId, $isCopy)
     {
         $testpapers = $this->getTestpaperDao()->search(array('courseSetId' => $courseSetId, 'courseId' => $courseId), array(), 0, PHP_INT_MAX);
         if (empty($testpapers)) {
@@ -31,12 +30,12 @@ class CourseTestpaperCopy extends TestpaperCopy
                 continue;
             }
 
-            $newTestpaper                = $this->baseCopyTestpaper($testpaper);
+            $newTestpaper                = $this->baseCopyTestpaper($testpaper, $isCopy);
             $newTestpaper['courseSetId'] = $newCourse['courseSetId'];
             $newTestpaper['courseId']    = $newCourse['id'];
 
             $newTestpaper = $this->getTestpaperDao()->create($newTestpaper);
-            $this->doCopyTestpaperItems($testpaper, $newTestpaper);
+            $this->doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy);
             $newTestpapers[] = $newTestpaper;
         }
 
