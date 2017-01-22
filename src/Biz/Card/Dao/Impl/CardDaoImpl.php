@@ -66,7 +66,8 @@ class CardDaoImpl extends GeneralDaoImpl implements CardDao
                 'useTime < :endDateTime',
                 'createdTime >= :reciveStartTime',
                 'createdTime < :reciveEndTime',
-            )
+            ),
+            'timestamps' => array('createdTime'),
         );
     }
 }
