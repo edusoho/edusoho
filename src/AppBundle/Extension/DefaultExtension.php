@@ -325,7 +325,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'finishCondition' => 'AppBundle:Activity/Discuss:finishCondition'
                 ),
                 'visible' => function ($courseSet, $course) {
-                    return $courseSet['type'] != 'live';
+                    return true;
                 }
             ),
 
