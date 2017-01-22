@@ -2,7 +2,7 @@
 
 namespace Tests\User;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class UserServiceTest extends BaseTestCase
 {
@@ -2424,6 +2424,6 @@ class UserServiceTest extends BaseTestCase
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content.FileService');
+        return $this->getBiz()->service('Content:FileService');
     }
 }
