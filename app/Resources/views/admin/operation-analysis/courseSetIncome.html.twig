@@ -1,6 +1,6 @@
 {% extends 'admin/operation-analysis/analysis-base-layout.html.twig' %}
 {% set script_controller = 'analysis/course-income' %}
-{% set href="admin_operation_analysis_course_income" %}
+{% set href="admin_operation_analysis_course_set_income" %}
 {% set menu = 'course-income' %}
 {% block analysisBody %}
   <div class="col-md-12">
@@ -11,7 +11,7 @@
 	          </input><input id="courseIncomeStartDate"  type="hidden" value='{% if courseIncomeStartDate %}{{courseIncomeStartDate}}{% endif %}'> 
 	          </input>
               {% elseif tab=="detail" %}
-                      {% include 'admin/operation-analysis/courseIncome.table.html.twig' %}
+                      {% include 'admin/operation-analysis/courseSetIncome.table.html.twig' %}
               {% endif %}
   </div>
 {% endblock %}

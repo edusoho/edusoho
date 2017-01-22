@@ -34,16 +34,21 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $user = $this->getUserService()->getUser($user['id'], true);
 
             if ($this->getCourseMemberService()->isCourseStudent($info['targetId'], $user['id'])) {
-                throw $this->createServiceException($this->getKernel()->trans('已经是课程学员，操作失败。'));
+                throw $this->createServiceException($this->getKernel()->trans('已经是教学计划学员，操作失败。'));
             }
 
             $course = $this->getCourseService()->getCourse($info['targetId']);
+            if (empty($course)) {
+                throw $this->createServiceException($this->getKernel()->trans('教学计划不存在，操作失败。'));
+            }
+
+            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
             if (empty($course)) {
                 throw $this->createServiceException($this->getKernel()->trans('课程不存在，操作失败。'));
             }
 
             if ($course['buyExpiryTime'] && $course['buyExpiryTime'] < time()) {
-                throw $this->createServiceException($this->getKernel()->trans('该课程已经超过购买截止日期，不允许购买'));
+                throw $this->createServiceException($this->getKernel()->trans('该教学计划已经超过购买截止日期，不允许购买'));
             }
 
             if ($course['approval'] && $user['approvalStatus'] != 'approved') {
@@ -53,7 +58,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order = array();
 
             $order['userId']     = $user['id'];
-            $order['title']      = $this->getKernel()->trans('购买课程《%courseTitle%》', array('%courseTitle%' => $course['title']));
+            $order['title']      = $this->getKernel()->trans('购买课程《%courseSetTitle%》（教学计划：%courseTitle%）', array('%courseSetTitle%' => $courseSet['title'], '%courseTitle%' => $course['title']));
             $order['targetType'] = 'course';
             $order['targetId']   = $course['id'];
             if (!empty($course['discountId'])) {
@@ -232,6 +237,11 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getOrderService()

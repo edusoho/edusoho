@@ -988,6 +988,7 @@ class AnalysisController extends BaseController
     {
         $data            = array();
         $incomeStartDate = "";
+        $count           = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
@@ -1004,6 +1005,9 @@ class AnalysisController extends BaseController
         if ($tab == "trend") {
             $incomeData = $this->getOrderService()->analysisAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data       = $this->fillAnalysisData($condition, $incomeData);
+            foreach ($incomeData as $val) {
+                $count += $val['count'];
+            }
         }
 
         $paginator = new Paginator(
@@ -1054,21 +1058,23 @@ class AnalysisController extends BaseController
             'classrooms'      => $classrooms,
             'users'           => $users,
             'incomeStartDate' => $incomeStartDate,
-            'dataInfo'        => $dataInfo
+            'dataInfo'        => $dataInfo,
+            'count'           => $count,
         ));
     }
 
-    public function courseIncomeAction(Request $request, $tab)
+    public function courseSetIncomeAction(Request $request, $tab)
     {
         $data                  = array();
-        $courseIncomeStartDate = "";
+        $courseSetIncomeStartDate = "";
+        $count                 = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
         if (!$timeRange) {
             $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_course_income', array(
+            return $this->redirect($this->generateUrl('admin_operation_analysis_course_set_income', array(
                 'tab' => "trend"
             )));
         }
@@ -1090,8 +1096,10 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $courseIncomeData = $this->getOrderService()->analysisCourseAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
             $data = $this->fillAnalysisData($condition, $courseIncomeData);
+            foreach ($courseIncomeData as $val) {
+                $count += $val['count'];
+            }
         }
 
         $courseIds = ArrayToolkit::column($courseIncomeDetail, 'targetId');
@@ -1109,7 +1117,8 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("admin/operation-analysis/courseIncome.html.twig", array(
+
+        return $this->render("admin/operation-analysis/courseSetIncome.html.twig", array(
             'courseIncomeDetail'    => $courseIncomeDetail,
             'paginator'             => $paginator,
             'tab'                   => $tab,
@@ -1117,7 +1126,8 @@ class AnalysisController extends BaseController
             'courses'               => $courses,
             'users'                 => $users,
             'courseIncomeStartDate' => $courseIncomeStartDate,
-            'dataInfo'              => $dataInfo
+            'dataInfo'              => $dataInfo,
+            'count'                 => $count,
         ));
     }
 
@@ -1125,6 +1135,7 @@ class AnalysisController extends BaseController
     {
         $data                     = array();
         $classroomIncomeStartDate = "";
+        $count                    = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
@@ -1153,8 +1164,10 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $classroomIncomeData = $this->getOrderService()->analysisClassroomAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
             $data = $this->fillAnalysisData($condition, $classroomIncomeData);
+            foreach ($classroomIncomeData as $val) {
+                $count += $val['count'];
+            }
         }
 
         $classroomIds = ArrayToolkit::column($classroomIncomeDetail, 'targetId');
@@ -1180,7 +1193,8 @@ class AnalysisController extends BaseController
             'classrooms'               => $classrooms,
             'users'                    => $users,
             'classroomIncomeStartDate' => $classroomIncomeStartDate,
-            'dataInfo'                 => $dataInfo
+            'dataInfo'                 => $dataInfo,
+            'count'                    => $count,
         ));
     }
 
@@ -1188,6 +1202,7 @@ class AnalysisController extends BaseController
     {
         $data               = array();
         $vipIncomeStartDate = "";
+        $count              = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
@@ -1216,8 +1231,10 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $vipIncomeData = $this->getOrderService()->analysisvipAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
             $data = $this->fillAnalysisData($condition, $vipIncomeData);
+            foreach ($vipIncomeData as $val) {
+                $count += $val['count'];
+            }
         }
 
         $userIds = ArrayToolkit::column($vipIncomeDetail, 'userId');
@@ -1238,7 +1255,8 @@ class AnalysisController extends BaseController
             'data'               => $data,
             'users'              => $users,
             'vipIncomeStartDate' => $vipIncomeStartDate,
-            'dataInfo'           => $dataInfo
+            'dataInfo'           => $dataInfo,
+            'count'              => $count,
         ));
     }
 
