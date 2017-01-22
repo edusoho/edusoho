@@ -81,7 +81,7 @@ class ManageController extends BaseController
         ));
     }
 
-    public function checkListAction(Request $request, $targetId, $type, $testpaperIds = array())
+    public function checkListAction(Request $request, $targetId, $targetType, $type, $testpaperIds = array())
     {
         if (empty($testpaperIds)) {
             $testpaperIds = array(0);
@@ -113,7 +113,8 @@ class ManageController extends BaseController
         return $this->render('testpaper/manage/check-list.html.twig', array(
             'testpapers' => ArrayToolkit::index($testpapers, 'id'),
             'paginator'  => $paginator,
-            'targetId'   => $targetId
+            'targetId'   => $targetId,
+            'targetType' => $targetType
         ));
     }
 

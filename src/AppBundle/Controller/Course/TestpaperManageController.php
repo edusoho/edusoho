@@ -1,15 +1,14 @@
 <?php
 namespace AppBundle\Controller\Course;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpFoundation\Request;
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseSetService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Testpaper\Service\TestpaperService;
+use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\TestpaperActivityService;
 
 class TestpaperManageController extends BaseController
 {
@@ -17,7 +16,6 @@ class TestpaperManageController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($id);
         $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
-        $course = $this->getCourseService()->tryManageCourse($course['id']);
 
         return $this->forward('AppBundle:Testpaper/Manage:check', array(
             'request'  => $request,
