@@ -6,8 +6,8 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\PluginBundle\Event\EventSubscriber;
 use Biz\Course\Service\CourseSetService;
+use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -15,11 +15,11 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public static function getSubscribedEvents()
     {
         return array(
-            'course.join' => 'onMemberCreate',
-            'course.quit' => 'onMemberDelete',
+            'course.join'        => 'onMemberCreate',
+            'course.quit'        => 'onMemberDelete',
 
             'course.task.delete' => 'onTaskDelete',
-            'course.task.finish' => 'onTaskFinish',
+            'course.task.finish' => 'onTaskFinish'
         );
     }
 
@@ -58,7 +58,6 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $user = $event->getArgument('user');
         $this->updateMemberLearnedNum($task['courseId'], $user['id']);
     }
-
 
     /**
      * @return CourseSetService

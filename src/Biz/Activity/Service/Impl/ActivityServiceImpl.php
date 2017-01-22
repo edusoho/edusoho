@@ -11,6 +11,7 @@ use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Listener\ActivityLearnLogListener;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
@@ -67,6 +68,16 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             }
         }
         return $activities;
+    }
+
+    public function search($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getActivityDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function count($conditions)
+    {
+        return $this->getActivityDao()->count($conditions);
     }
 
     public function trigger($id, $eventName, $data = array())
@@ -145,7 +156,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $savedActivity = $this->getActivity($id);
 
-        $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
+        $this->getCourseService()->tryManageCourse($savedActivity['fromCourseId']);
 
         $materials = $this->getFileDataFromActivity($fields);
         if (!empty($materials)) {
@@ -153,6 +164,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $realActivity = $this->getActivityConfig($savedActivity['mediaType']);
+
         if (!empty($savedActivity['mediaId'])) {
             $media = $realActivity->update($savedActivity['mediaId'], $fields, $savedActivity);
 
@@ -170,22 +182,20 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity = $this->getActivity($id);
 
         try {
-            $this->beginTransaction();
             $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
 
             $this->syncActivityMaterials($activity, array(), 'delete');
 
             $activityConfig = $this->getActivityConfig($activity['mediaType']);
             $activityConfig->delete($activity['mediaId']);
-
-            $this->getActivityDao()->delete($id);
+            $this->getActivityLearnLogService()->deleteLearnLogsByActivityId($id);
+            $result = $this->getActivityDao()->delete($id);
             $this->commit();
+            return $result;
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
-
-        return true;
     }
 
     public function isFinished($id)
@@ -261,9 +271,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if (empty($arr2)) {
             return $arr1;
         }
-        foreach ($arr1 as $key1 => $value1) {
+        foreach ($arr1 as $value1) {
             $contained = false;
-            foreach ($arr2 as $key1 => $value2) {
+            foreach ($arr2 as $value2) {
                 if ($value1['fileId'] == 0) {
                     $contained = $value1['link'] == $value2['link'];
                 } else {
@@ -410,6 +420,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function getActivityDao()
     {
         return $this->createDao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return ActivityLearnLogService
+     */
+    protected function getActivityLearnLogService()
+    {
+        return $this->createService('Activity:ActivityLearnLogService');
     }
 
     /**

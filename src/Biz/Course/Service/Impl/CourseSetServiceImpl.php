@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
@@ -14,6 +15,7 @@ use Biz\Course\Service\ReviewService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\CourseDeleteService;
 use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
@@ -198,7 +200,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function searchCourseSets(array $conditions, $orderBys, $start, $limit)
     {
         $orderBys = $this->getOrderBys($orderBys);
-        return $this->getCourseSetDao()->search($conditions, $orderBys, $start, $limit);
+        $preparedCondtions = $this->prepareConditions($conditions);
+        return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit);
     }
 
     /**
@@ -323,12 +326,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $created;
     }
 
-    public function copyCourseSet($courseSetId, $courseId)
+    public function copyCourseSet($classroomId, $courseSetId, $courseId)
     {
         $courseSet = $this->tryManageCourseSet($courseSetId);
 
         $entityCopy = new ClassroomCourseCopy($this->biz);
-        return $entityCopy->copy($courseSet, array('courseId' => $courseId));
+        return $entityCopy->copy($courseSet, array('courseId' => $courseId, 'classroomId' => $classroomId));
     }
 
     public function updateCourseSet($id, $fields)
@@ -405,11 +408,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function deleteCourseSet($id)
     {
-        //TODO
-        //1. 判断该课程能否被删除
-        //2. 删除时需级联删除课程下的教学计划、用户信息等等
-        $courseSet = $this->tryManageCourseSet($id);
-        return $this->getCourseSetDao()->delete($courseSet['id']);
+        $courseSet     = $this->tryManageCourseSet($id);
+        $subCourseSets = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($id, 1);
+        if (!empty($subCourseSets)) {
+            throw $this->createAccessDeniedException('该课程在班级下引用，请先删除引用课程！');
+        }
+        return $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
     }
 
     public function findTeachingCourseSetsByUserId($userId, $onlyPublished = true)
@@ -470,7 +474,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             } elseif ($field === 'studentNum') {
                 $updateFields['studentNum'] = $this->countStudentNumById($id);
             } elseif ($field === 'materialNum') {
-                $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(array('courseSetId' => $id));
+                $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(array('courseSetId' => $id, 'source'=>'coursematerial'));
             }
         }
 
@@ -560,6 +564,24 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    protected function prepareConditions($conditions)
+    {
+        array_filter($conditions, function ($value) {
+            if (is_numeric($value)) {
+                return true;
+            }
+
+            return !empty($value);
+        });
+
+        if (!empty($conditions['creatorName'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['creatorName']);
+            $conditions['creator'] = $user ? $user['id'] : -1;
+        }
+
+        return $conditions;
+    }
+
     protected function countStudentNumById($id)
     {
         $courseSet = $this->getCourseSet($id);
@@ -578,6 +600,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->createDao('Course:CourseSetDao');
     }
 
+    /**
+     * @return CourseDao
+     */
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
@@ -644,12 +669,25 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->createService('System:LogService');
     }
 
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
+    }
+
     /**
      * @return MaterialService
      */
     protected function getCourseMaterialService()
     {
         return $this->createService('Course:MaterialService');
+    }
+
+    /**
+     * @return CourseDeleteService
+     */
+    protected function getCourseDeleteService()
+    {
+        return $this->createService('Course:CourseDeleteService');
     }
 
     /**

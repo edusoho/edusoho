@@ -17,4 +17,6 @@ interface ActivityLearnLogDao extends GeneralDaoInterface
     public function countLearnedDaysByCourseIdAndUserId($courseId, $userId);
 
     public function sumLearnTime($conditions);
+
+    public function deleteByActivityId($activityId);
 }

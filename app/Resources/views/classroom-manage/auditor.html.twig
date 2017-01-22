@@ -1,4 +1,4 @@
-  {% extends 'classroom-manage/students.html.twig' %}
+{% extends 'classroom-manage/students.html.twig' %}
 
 {% block title %}{{'旁听生管理'|trans}} - {{ parent() }}{% endblock %}
 
@@ -28,7 +28,7 @@
     <tbody>
        {% for student in students %}
         {% set user = users[student.userId] %}
-        {% include ('classroom-manage/tr.html.twig' %}
+        {% include ('classroom-manage/tr.html.twig') %}
       {% else %}
         <tr class="empty"><td colspan="20">{{'无学员记录'|trans}}</td></tr>
       {% endfor %}

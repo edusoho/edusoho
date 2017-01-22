@@ -13,4 +13,6 @@ interface CourseNoteDao extends GeneralDaoInterface
 
     public function countByUserIdAndCourseId($userId, $courseId);
 
+    public function deleteByCourseId($courseId);
+
 }

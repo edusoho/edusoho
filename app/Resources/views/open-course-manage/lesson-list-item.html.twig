@@ -26,9 +26,7 @@
     {% else %}
       <i class="fa fa-file-powerpoint-o text-success"></i>
     {% endif %}
-    {% if setting('course.custom_chapter_enabled')|default(true) %}
-      课时 <span class="number">{{ lesson.number }}</span>：
-    {% endif %}
+    课时 <span class="number">{{ lesson.number }}</span>：
 
     {% if lesson.type not in ['liveOpen'] 
       and lesson.mediaSource == 'self'
