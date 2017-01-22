@@ -62,16 +62,12 @@ class ThreadEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $targetType = $subject['targetType'];
         $biz    = $this->getBiz();
 
-        if (!isset($biz["thread_event_processor.{$targetType}"])) {
-            return;
+        if (isset($biz["thread_event_processor.{$targetType}"])) {
+            $processor = $biz["thread_event_processor.{$targetType}"];
+            if (method_exists($processor, $method)) {
+                $processor->$method($event);
+            }
         }
-        $processor = $biz["thread_event_processor.{$targetType}"];
-
-        if (!method_exists($processor, $method)) {
-            break;
-        }
-
-        $processor->$method($event);
     }
 
     protected function getThreadService()

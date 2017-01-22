@@ -89,10 +89,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
         }
 
-        if (!$this->getCourseSetService()->hasCourseSetManageRole($course['courseSetId'])) {
-            throw $this->createAccessDeniedException('You have no access to Course Management');
-        }
-
         if (!isset($course['isDefault'])) {
             $course['isDefault'] = 0;
         }
@@ -137,6 +133,17 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function copyCourse($fields)
     {
         $course = $this->tryManageCourse($fields['copyCourseId']);
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'courseSetId',
+            'learnMode',
+            'expiryMode',
+            'expiryDays',
+            'expiryStartDate',
+            'expiryEndDate',
+            'isDefault'
+        ));
+        $fields = $this->validateExpiryMode($fields);
 
         $entityCopy = new CourseCopy($this->biz);
         return $entityCopy->copy($course, $fields);
