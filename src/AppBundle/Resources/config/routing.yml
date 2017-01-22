@@ -1619,8 +1619,12 @@ course_manage_task_replay_create:
   methods: [POST]
 
 task_live_entry:
-    path: /course/{courseId}/activity/{activityId}/live_entry
-    defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
+  path: /course/{courseId}/activity/{activityId}/live_entry
+  defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
+
+task_live_replay_player:
+  path: /course/{courseId}/activity/{activityId}/replay
+  defaults: {_controller: AppBundle:Activity/Live:liveReplay }
 
 
 

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Activity;
 
 use Biz\Course\Service\LiveReplayService;
+use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -24,11 +25,15 @@ class LiveController extends BaseController implements ActivityActionInterface
         }
         $activity['nowDate'] = time();
 
-        $activity['replays'] = $this->_getLiveReplays($activity);
+        if($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS){
+            $activity['replays'] = array($this->_getLiveVideoReplay($activity));
+        }else{
+            $activity['replays'] = $this->_getLiveReplays($activity);
+        }
 
-        //FIXME 应当判断是否是当前任务的teacher
-        $activity['isTeacher'] = $this->getUser()->isTeacher();
-        $summary               = $activity['remark'];
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->id))
+            $activity['isTeacher'] = $this->getUser()->isTeacher();
+        $summary = $activity['remark'];
         unset($activity['remark']);
         return $this->render('activity/live/show.html.twig', array(
             'activity' => $activity,
@@ -103,6 +108,17 @@ class LiveController extends BaseController implements ActivityActionInterface
         ), $params);
     }
 
+    public function liveReplayAction(Request $request, $courseId, $activityId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $live     = $this->getActivityService()->getActivityConfig('live')->get($activity['mediaId']);
+
+        return $this->render('activity/live/replay-player.html.twig', array(
+            'live' => $live
+        ));
+    }
+
     public function triggerAction(Request $request, $courseId, $activityId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
@@ -132,13 +148,30 @@ class LiveController extends BaseController implements ActivityActionInterface
         return $this->render('activity/live/finish-condition.html.twig', array());
     }
 
+    protected function _getLiveVideoReplay($activity, $ssl=false){
+        if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
+            $file = $this->getUploadFileService()->getFullFile($activity['ext']['mediaId']);
+            return array(
+                'url' => $this->generateUrl('task_live_replay_player', array(
+                    'activityId' => $activity['id'],
+                    'courseId'   => $activity['fromCourseId']
+                )),
+                'title' => $file['filename']
+            );
+        }else{
+            return array();
+        }
+    }
+
     protected function _getLiveReplays($activity, $ssl = false)
     {
         if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_GENERATE_STATUS) {
             $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
+
             $service = $this->getLiveReplayService();
             $self    = $this;
             $replays = array_map(function ($replay) use ($service, $activity, $ssl, $self) {
+
                 $result = $service->entryReplay($replay['id'], $activity['ext']['liveId'], $activity['ext']['liveProvider'], $ssl);
                 if (!empty($result) && !empty($result['resourceNo'])) {
                     $replay['url'] = $self->generateUrl('global_file_player', array('globalId' => $replay['globalId']));
@@ -146,7 +179,7 @@ class LiveController extends BaseController implements ActivityActionInterface
 
                 return $replay;
             }, $replays);
-        }else{
+        } else {
             $replays = array();
         }
 
@@ -208,5 +241,13 @@ class LiveController extends BaseController implements ActivityActionInterface
     protected function getLiveReplayService()
     {
         return $this->createService('Course:LiveReplayService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
     }
 }
