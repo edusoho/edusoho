@@ -71,7 +71,6 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
-
     activity_event_subscriber:
         class: Biz\Activity\Event\ThreadSubscriber
         arguments: ['@biz']
@@ -124,15 +123,33 @@ services:
         class: Biz\OpenCourse\Event\OpenCourseEventSubscriber
         arguments: ['@biz']
         tags:
-            - { name: codeages_plugin.event.subscriber }
+                - { name: codeages_plugin.event.subscriber }
 
     orderrefererlog_event_subscriber:
         class: Biz\RefererLog\Event\OrderRefererLogEventSubscriber
         arguments: ['@biz']
         tags:
-            - { name: codeages_plugin.event.subscriber }
+                - { name: codeages_plugin.event.subscriber }
     tokenbucket_event_subscriber:
         class: Biz\PostFilter\Event\TokenBucketEventSubscriber
+        arguments: ['@biz']
+        tags:
+                - { name: codeages_plugin.event.subscriber }
+
+    thread_event_subscriber:
+        class: Biz\Thread\Event\ThreadEventSubscriber
+        arguments: ['@biz']
+        tags:
+                - { name: codeages_plugin.event.subscriber }
+
+    classroom_event_subscriber:
+        class: Biz\Classroom\Event\ClassroomEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    course_material_event_subscriber:
+        class: Biz\Course\Event\MaterialEventSubscriber
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }

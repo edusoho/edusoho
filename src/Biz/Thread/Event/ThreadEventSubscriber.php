@@ -2,10 +2,10 @@
 namespace Biz\Thread\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
+use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ThreadEventSubscriber implements EventSubscriberInterface
+class ThreadEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -59,27 +59,19 @@ class ThreadEventSubscriber implements EventSubscriberInterface
     {
         $subject = $event->getSubject();
 
-        $processors = ServiceKernel::instance()->getModuleConfig('thread.event_processor');
+        $targetType = $subject['targetType'];
+        $biz    = $this->getBiz();
 
-        if (!isset($processors[$subject['targetType']])) {
-            return;
-        }
-
-        $processors = (array) $processors[$subject['targetType']];
-
-        foreach ($processors as $processor) {
-            $processor = new $processor();
-
-            if (!method_exists($processor, $method)) {
-                break;
+        if (isset($biz["thread_event_processor.{$targetType}"])) {
+            $processor = $biz["thread_event_processor.{$targetType}"];
+            if (method_exists($processor, $method)) {
+                $processor->$method($event);
             }
-
-            $processor->$method($event);
         }
     }
 
     protected function getThreadService()
     {
-        return ServiceKernel::instance()->createService('Thread.ThreadService');
+        return $this->getBiz()->service('Thread.ThreadService');
     }
 }

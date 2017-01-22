@@ -1,5 +1,8 @@
 import FileChooser from '../../file-chooser/file-choose';
 import {chooserUiOpen, chooserUiClose, showChooserType} from '../widget/chooser-ui.js';
+import SubtitleDialog from './subtitle/dialog';
+
+
 jQuery.validator.addMethod("unsigned_integer", function (value, element) {
   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "时长必须为非负整数");
@@ -87,6 +90,9 @@ $(".js-length").blur(function () {
 });
 
 const fileChooser = new FileChooser();
+//字幕组件
+const subtitleDialog = new SubtitleDialog('.js-subtitle-list');
+
 
 const onSelectFile = file => {
   chooserUiClose();
@@ -104,6 +110,8 @@ const onSelectFile = file => {
     $("#ext_mediaUri").val(file.uri)
   }
 
+  //渲染字幕
+  subtitleDialog.render(file);
 };
 
 $("#finish-condition").on('change', function (event) {

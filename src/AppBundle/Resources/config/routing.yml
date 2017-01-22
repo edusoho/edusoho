@@ -574,7 +574,7 @@ my_favorite_question_preview:
     defaults: { _controller: AppBundle:My/Question:preview }
 
 my_question_favorite:
-    path: /my/question/favorite
+    path: /my/question/{questionId}/favorite
     defaults: { _controller: AppBundle:My/Question:favorite }
 
 my_question_unfavorite:
@@ -1698,6 +1698,10 @@ course_set_manage_courses:
 course_set_manage_course_create:
   path: /course_set/{courseSetId}/manage/course/create
   defaults: {_controller: AppBundle:Course/CourseManage:create}
+
+course_set_manage_course_copy:
+  path: /course_set/{courseSetId}/manage/course/copy
+  defaults: {_controller: AppBundle:Course/CourseManage:copy}
 
 course_set_manage_course_info:
   path: /course_set/{courseSetId}/manage/course/{courseId}/info

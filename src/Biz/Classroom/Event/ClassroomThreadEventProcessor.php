@@ -2,9 +2,9 @@
 namespace Biz\Classroom\Event;
 
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
+use Codeages\PluginBundle\Event\EventSubscriber;
 
-class ClassroomThreadEventProcessor
+class ClassroomThreadEventProcessor extends EventSubscriber
 {
     public function onThreadCreate(Event $event)
     {
@@ -49,11 +49,11 @@ class ClassroomThreadEventProcessor
 
     private function getClassroomService()
     {
-        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
     private function getThreadService()
     {
-        return ServiceKernel::instance()->createDao('Thread:ThreadService');
+        return $this->getBiz()->service('Thread:ThreadService');
     }
 }

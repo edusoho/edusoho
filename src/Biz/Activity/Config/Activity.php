@@ -36,6 +36,17 @@ abstract class Activity
     {
     }
 
+    /**
+     * 实现Activity的复制，这里仅需要处理Activity的附属信息
+     * @param  array   $activity 要复制的Activity
+     * @param  array   $config   : newLiveroom => true/false // 是否新建直播教室（对于直播任务）
+     * @return mixed
+     */
+    public function copy($activity, $config = array())
+    {
+        return null;
+    }
+
     public function isFinished($id)
     {
         return false;
@@ -80,7 +91,7 @@ abstract class Activity
         return $listener;
     }
 
-    protected function createNotFoundService($message = '')
+    protected function createNotFoundException($message = '')
     {
         return new NotFoundException($message);
     }

@@ -1,6 +1,6 @@
 {% extends 'courseset-manage/layout.html.twig' %}
 
-{% block title %}{{ '教学计划列表'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ '教学计划管理'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'plan' %}
 
 {% do script(['app/js/course-manage/index.js']) %}
@@ -41,11 +41,17 @@
 		                </a>
 		                <ul class="dropdown-menu pull-right">
 		                  <li>
-		                  	<a href="{{path('course_show', { id: course.id, preview: 1 })}}" target="_blank"><i class="es-icon es-icon-removeredeye mrm"></i>{{'预览'|trans}}</a>
+		                  	<a href="{{path('course_show', { id: course.id, preview: 1 })}}" target="_blank">
+                          <i class="es-icon es-icon-removeredeye mrm"></i>
+                          {{'预览'|trans}}
+                        </a>
 		                  </li>
-    	      				  {# <li>
-    	      				  	<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id})}}">{{'复制为'|trans}}</a>
-    	      				  </li> #}
+    	      				  <li>
+    	      				  	<a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id})}}">
+                          <i class="es-icon es-icon-contentcopy mrm"></i>
+                          {{'复制为'|trans}}
+                        </a>
+    	      				  </li>
                       {% if course.status|default('') == 'published' %}
         				      <li>
         				      	<a href="javascript:;" 

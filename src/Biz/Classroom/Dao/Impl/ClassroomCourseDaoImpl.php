@@ -22,7 +22,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
 
     public function updateByParam($params, $fields)
     {
-        $this->db()->update($this->table, $fields, $params);
+        return $this->db()->update($this->table, $fields, $params);
     }
 
     public function deleteByClassroomIdAndCourseId($classroomId, $courseId)

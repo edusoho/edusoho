@@ -83,8 +83,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
 
     public function onMaterialCreate(Event $event)
     {
-        $context  = $event->getSubject();
-        $material = $context['material'];
+        $material = $event->getSubject();
 
         if ($material && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse') {
             $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', 1);
@@ -93,9 +92,8 @@ class OpenCourseEventSubscriber extends EventSubscriber
 
     public function onMaterialUpdate(Event $event)
     {
-        $context  = $event->getSubject();
-        $argument = $context['argument'];
-        $material = $context['material'];
+        $material = $event->getSubject();
+        $argument = $event->getArgument('argument');
 
         $lesson = $this->getOpenCourseService()->getCourseLesson($material['courseId'], $material['lessonId']);
 
@@ -136,7 +134,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
 
         $replay = current($replays);
 
-        if($replay['type'] != 'liveOpen'){
+        if ($replay['type'] != 'liveOpen') {
             return;
         }
 
@@ -153,7 +151,8 @@ class OpenCourseEventSubscriber extends EventSubscriber
     private function _waveLessonMaterialNum($material)
     {
         if ($material['lessonId'] && $material['source'] == 'opencoursematerial' && $material['type'] == 'openCourse') {
-            $count = $this->getMaterialService()->searchMaterialCount(array(
+
+            $count = $this->getMaterialService()->countMaterials(array(
                     'courseId' => $material['courseId'],
                     'lessonId' => $material['lessonId'],
                     'source'   => 'opencoursematerial',

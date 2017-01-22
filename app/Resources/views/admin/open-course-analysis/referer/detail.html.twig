@@ -18,6 +18,6 @@
 {% endblock %}
 
 {% block script %}
-    {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
-  <script>app.lazyLoad = function() { app.load('open-course-analysis/detail') };</script>
+    
+  <script>app.load('open-course-analysis/detail');</script>
 {% endblock %}

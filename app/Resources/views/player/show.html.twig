@@ -50,6 +50,9 @@
             {% if context.hideQuestion|default(0) == 0 %}
               data-markerurl="{#{{ path('course_lesson_question_markers_show', {mediaId: file.id}) }}#}"
             {% endif %}
+            {% if context.subtitles is defined and context.hideSubtitle|default(0) == 0%}
+              data-subtitles="{{ context.subtitles|json_encode }}"
+            {% endif %}
             data-timelimit="{{ context.watchTimeLimit|default('')}}"
             data-starttime="{{ context.starttime|default('')}}"
             data-lesson-id="{{ context.lessonId|default(0)}}"
@@ -57,15 +60,15 @@
           ></div>
         </div>
       {% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
-      {% include 'script_boot.html.twig' %}
       {% if setting("developer.cloud_sdk_cdn") %}
           {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
         {% else %}
-          {% set cdnUrl = 'http://cdn.qiqiuyun.net'  %}
+          {% set cdnUrl = 'http://service-cdn.qiqiuyun.net'  %}
         {% endif %}
-        <script src="{{ cdnUrl }}/js-sdk/video-player/v1/sdk.js"></script>
+        <script src="{{ cdnUrl }}/js-sdk/video-player/sdk-v1.js"></script>
         {% do script(['app/js/player/index.js']) %}
       {% endif %}
+      {% include 'script_boot.html.twig' %}
     {% else %}
       <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'该浏览器不支持云视频播放，请前往'|trans}}<a href="{{path('mobile')}}" target="parent">{{'下载App'|trans}}</a>。</div>
     {% endif %}

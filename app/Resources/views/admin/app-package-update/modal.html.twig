@@ -2,7 +2,7 @@
 
 {% set updateName = package.type == 'upgrade' ? '升级'|trans : '安装'|trans %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
+
 
 {% block title %}{{ updateName }}{{ '应用'|trans }}{% endblock %}
 
@@ -47,7 +47,7 @@
     <div class="text-success progress-text"></div>
   </div>
 
-  <script type="text/javascript"> app.lazyLoad = function() { app.load('app/package-update-modal') }; </script>
+  <script type="text/javascript"> app.load('app/package-update-modal'); </script>
 {% endblock %}
 
 {% block footer %}

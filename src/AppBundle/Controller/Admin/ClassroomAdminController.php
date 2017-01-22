@@ -1,6 +1,10 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
+
 class ClassroomAdminController extends BaseController
 {
     public function indexAction(Request $request)
@@ -16,7 +20,7 @@ class ClassroomAdminController extends BaseController
 
         $classroomInfo = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array('createdTime', 'desc'),
+            array('createdTime' => 'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -215,7 +219,7 @@ class ClassroomAdminController extends BaseController
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array('recommendedSeq', 'ASC'),
+            array('recommendedSeq' => 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -257,7 +261,7 @@ class ClassroomAdminController extends BaseController
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
-            array('createdTime', 'ASC'),
+            array('createdTime' => 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

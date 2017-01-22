@@ -23,7 +23,7 @@ class UserLatestLearnCoursesDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
         $this->checkUserId($arguments);
 
-    	$courses =  $this->getCourseService()->findUserLeaningCourses($arguments['userId'], 0, $arguments['count']);
+    	$courses =  $this->getCourseService()->findUserLearningCourses($arguments['userId'], 0, $arguments['count']);
         
         return $this->getCourseTeachersAndCategories($courses);
     }

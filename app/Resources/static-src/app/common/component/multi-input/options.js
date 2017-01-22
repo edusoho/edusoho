@@ -10,7 +10,7 @@ export default class Options extends Component {
   render() {
     let options = [];
     this.props.searchResult.map((item,i) => {
-      let temp = (<li key={item.id}><a id={JSON.stringify(item)} onClick={event=>this.handleChange(event)}>{item.nickname}</a></li>);
+      let temp = (<li key={ i }><a data-item = {JSON.stringify(item)} onClick={event=>this.handleChange(event)} data-name={item.nickname}>{item.nickname}</a></li>);
       options.push(temp);
     })
     if(options.length <= 0) {
@@ -27,6 +27,7 @@ export default class Options extends Component {
     this.setState({
       resultful: false,
     });
-    this.props.selectChange(event);
+    let data = event.currentTarget.attributes["data-item"].value;
+    this.props.selectChange(event.currentTarget.attributes['data-name'].value,JSON.parse(data));
   }
 }

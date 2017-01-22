@@ -7,7 +7,8 @@ define(function(require, exports, module) {
         $('[data-role="tree-select"], [name="categoryId"]').select2({
             treeview: true,
             dropdownAutoWidth: true,
-            treeviewInitState: 'collapsed'
+            treeviewInitState: 'collapsed',
+            placeholderOption: 'first'
             // treeviewInitState: 'expanded'
         });
 

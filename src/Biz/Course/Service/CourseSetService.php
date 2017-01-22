@@ -9,8 +9,7 @@ interface CourseSetService
     /**
      * collect course set
      *
-     * @param $id
-     *
+     * @param  $id
      * @throws AccessDeniedException
      * @return bool
      */
@@ -19,85 +18,74 @@ interface CourseSetService
     /**
      * cancel collected course set
      *
-     * @param $id
-     *
+     * @param  $id
      * @throws AccessDeniedException
      * @return bool
      */
     public function unfavorite($id);
 
     /**
-     * @param int $userId
-     * @param int $courseSetId
-     *
+     * @param  int    $userId
+     * @param  int    $courseSetId
      * @return bool
-     *
      */
     public function isUserFavorite($userId, $courseSetId);
 
     public function tryManageCourseSet($id);
 
     /**
-     * @param integer $userId
-     *
+     * @param  integer   $userId
      * @return integer
      */
     public function countUserLearnCourseSets($userId);
 
     /**
-     * @param integer $userId
-     * @param integer $start
-     * @param integer $limit
-     *
+     * @param  integer   $userId
+     * @param  integer   $start
+     * @param  integer   $limit
      * @return array[]
      */
     public function searchUserLearnCourseSets($userId, $start, $limit);
 
     /**
-     * @param  integer $userId
-     * @param  array   $conditions
-     *
+     * @param  integer   $userId
+     * @param  array     $conditions
      * @return integer
      */
     public function countUserTeachingCourseSets($userId, array $conditions);
 
     /**
-     * @param integer $userId
-     * @param array   $conditions
-     * @param integer $start
-     * @param integer $limit
-     *
+     * @param  integer   $userId
+     * @param  array     $conditions
+     * @param  integer   $start
+     * @param  integer   $limit
      * @return array[]
      */
     public function searchUserTeachingCourseSets($userId, array $conditions, $start, $limit);
 
     /**
-     * @param integer[] $courseIds
-     *
+     * @param  integer[] $courseIds
      * @return array[]
      */
     public function findCourseSetsByCourseIds(array $courseIds);
 
     /**
-     * @param array $ids
-     *
+     * @param  array     $ids
      * @return array[]
      */
     public function findCourseSetsByIds(array $ids);
 
     /**
-     * @param array   $conditions
-     * @param array|string $orderBys
-     * @param integer $start
-     * @param integer $limit
-     *
+     * @param  array        $conditions
+     * @param  array|string $orderBys
+     * @param  integer      $start
+     * @param  integer      $limit
      * @return array[]
      */
     public function searchCourseSets(array $conditions, $orderBys, $start, $limit);
 
     /**
-     * @param array $conditions
-     *
+     * @param  array     $conditions
      * @return integer
      */
     public function countCourseSets(array $conditions);
@@ -105,6 +93,14 @@ interface CourseSetService
     public function getCourseSet($id);
 
     public function createCourseSet($courseSet);
+
+    /**
+     * 复制课程
+     * @param  array   $courseSetId 要复制的课程
+     * @param  array   $courseId    要复制的教学计划
+     * @return mixed
+     */
+    public function copyCourseSet($courseSetId, $courseId);
 
     public function updateCourseSet($id, $fields);
 
@@ -114,42 +110,35 @@ interface CourseSetService
 
     public function deleteCourseSet($id);
 
-
     /**
-     * @param integer $userId
-     * @param bool    $onlyPublished 是否只需要发布的课程
-     *
+     * @param  integer   $userId
+     * @param  bool      $onlyPublished 是否只需要发布的课程
      * @return array[]
      */
-    public function findTeachingCourseSetsByUserId($userId, $onlyPublished=true);
+    public function findTeachingCourseSetsByUserId($userId, $onlyPublished = true);
 
     /**
-     * @param integer $userId
-     *
+     * @param  integer   $userId
      * @return array[]
      */
     public function findLearnCourseSetsByUserId($userId);
 
     /**
-     * @param array $ids
-     *
+     * @param  array     $ids
      * @return array[]
      */
     public function findPublicCourseSetsByIds(array $ids);
 
     /**
-     * @param int $userId
-     *
+     * @param  int       $userId
      * @return integer
      */
     public function countUserFavorites($userId);
 
     /**
-     * @param int $userId
-     *
-     * @param int    $start
-     * @param int    $limit
-     *
+     * @param  int       $userId
+     * @param  int       $start
+     * @param  int       $limit
      * @return array[]
      */
     public function searchUserFavorites($userId, $start, $limit);
@@ -159,9 +148,8 @@ interface CourseSetService
      *
      * 如: 学员数、笔记数、评价数量
      *
-     * @param       $id
-     * @param array $fields
-     *
+     * @param  $id
+     * @param  array   $fields
      * @return mixed
      */
     public function updateCourseSetStatistics($id, array $fields);

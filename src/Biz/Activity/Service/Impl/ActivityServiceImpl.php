@@ -77,25 +77,33 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return;
         }
 
-        if (in_array($eventName, array('start', 'doing'))) {
+        if ($eventName == 'start') {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
 
+        $this->triggerActivityLearnLogListener($activity, $eventName, $data);
+        $this->triggerExtendListener($activity, $eventName, $data);
+
+        if (in_array($eventName, array('doing', 'watching'))) {
+            $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
+        }
+    }
+
+    protected function triggerActivityLearnLogListener($activity, $eventName, $data)
+    {
         $logListener = new ActivityLearnLogListener($this->biz);
 
         $logData          = $data;
         $logData['event'] = $activity['mediaType'].'.'.$eventName;
         $logListener->handle($activity, $logData);
+    }
 
+    protected function triggerExtendListener($activity, $eventName, $data)
+    {
         $activityListener = $this->getActivityConfig($activity['mediaType'])->getListener($eventName);
-
         if (!is_null($activityListener)) {
-
             $activityListener->handle($activity, $data);
         }
-
-        $this->dispatchEvent("activity.operated", new Event($activity, $data));
-
     }
 
     public function createActivity($fields)
@@ -283,7 +291,8 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             foreach ($currents as $current) {
                 //如果fileId存在则匹配fileId，否则匹配link
                 if (($exist['fileId'] != 0 && $exist['fileId'] == $current['fileId'])
-                    || ($exist['fileId'] == 0 && $exist['link'] == $current['link'])) {
+                    || ($exist['fileId'] == 0 && $exist['link'] == $current['link'])
+                ) {
                     $current['id'] = $exist['id'];
                     if (empty($current['description'])) {
                         $current['description'] = $exist['description'];
