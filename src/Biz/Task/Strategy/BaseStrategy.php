@@ -2,6 +2,13 @@
 
 namespace Biz\Task\Strategy;
 
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Dao\CourseChapterDao;
+use Biz\Course\Service\CourseService;
+use Biz\Task\Dao\TaskDao;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Common\ArrayToolkit;
 
 class BaseStrategy
@@ -66,31 +73,49 @@ class BaseStrategy
         return false;
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->biz->service('Task:TaskService');
     }
 
+    /**
+     * @return TaskDao
+     */
     protected function getTaskDao()
     {
         return $this->biz->dao('Task:TaskDao');
     }
 
+    /**
+     * @return CourseService
+     */
     public function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
     }
 
+    /**
+     * @return CourseChapterDao
+     */
     protected function getChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
     }
 
+    /**
+     * @return TaskResultService
+     */
     protected function getTaskResultService()
     {
         return $this->biz->service('Task:TaskResultService');
     }
 
+    /**
+     * @return ActivityService
+     */
     public function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');

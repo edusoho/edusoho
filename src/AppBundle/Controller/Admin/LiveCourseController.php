@@ -146,6 +146,6 @@ class LiveCourseController extends BaseController
 
     protected function getEduCloudService()
     {
-        return $this->createService('CloudPlatform.EduCloudService');
+        return $this->createService('CloudPlatform:EduCloudService');
     }
 }

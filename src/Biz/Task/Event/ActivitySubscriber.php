@@ -13,21 +13,7 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         return array(
             'activity.start'    => 'onActivityStart',
             'activity.doing'    => 'onActivityDoing',
-            'activity.operated' => 'onActivityOperated'
         );
-    }
-
-    public function onActivityOperated(Event $event)
-    {
-        if(!$event->hasArgument('taskId')) {
-            return;
-        }
-
-        $taskId = $event->getArgument('taskId');
-
-        if($this->getTaskService()->isFinished($taskId)) {
-            $this->getTaskService()->finishTaskResult($taskId);
-        }
     }
 
     public function onActivityStart(Event $event)
@@ -51,6 +37,10 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         }
 
         $this->getTaskService()->doTask($taskId, $time);
+
+        if($this->getTaskService()->isFinished($taskId)) {
+            $this->getTaskService()->finishTaskResult($taskId);
+        }
     }
 
     /**

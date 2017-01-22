@@ -31,6 +31,7 @@
       {% if paperResult.id|default(0) > 0 %}
         {% if paperResult.status == 'doing' %}
           <a id="paper-finish" class="btn btn-primary" data-toggle="modal" data-target="#testpaper-finished-dialog">{{'提交练习'|trans}}</a>
+          <input type="hidden" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-role="test-suspend">
         {% endif %}
       {% else %}
         <a id="paper-finish" class="btn btn-primary" disabled="disabled">{{'提交练习'|trans}}</a>

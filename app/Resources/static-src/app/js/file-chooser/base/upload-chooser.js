@@ -41,6 +41,12 @@ export default class UploaderChooser extends Chooser {
   }
 
   _onFileUploadFinish(file) {
+
+    //FIXME
+    if (file.name.endsWith('.srt')) {
+      return
+    }
+
     file.source = 'self';
 
     let placeFileName = (name) => {

@@ -1,23 +1,26 @@
-{% extends 'course-manage/layout.html.twig' %}
-
-
-{% block title %}{{'作业批阅'|trans}} - {{ parent() }}{% endblock %}
-
+{% extends 'courseset-manage/layout.html.twig' %}
+{% block title %}{{'作业批阅'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'homework-check' %}
 
-{% block course %}
-
-<div class="panel panel-default panel-col">
-
-  <div class="panel-body">
-
-    {% if isTeacher is defined and not isTeacher %}
-      <span class="color-danger">{{'当前用户不是本课程教师，没有批改作业的权限。'|trans}}</span>
+{% block main %}
+  <div class="panel panel-default">
+    {% if courseSet.type != 'live' %}
+      <div class="panel-heading">
+        {{ course.title }}<span class="mh5">／</span>{{'作业批阅'|trans}}
+        {% if course.status != 'published' %}
+          <button class="btn btn-success btn-sm pull-right js-publish-course" 
+            data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
+            {{ '发布计划'|trans }}
+          </button>
+        {% endif %}
+      </div>
     {% endif %}
+    <div class="panel-body">
+      {% if isTeacher is defined and not isTeacher %}
+        <span class="color-danger">{{'当前用户不是本课程教师，没有批改作业的权限。'|trans}}</span>
+      {% endif %}
 
-    {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id,type:'homework',testpaperIds:homeworkIds})) }}
-
+      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id,type:'homework',testpaperIds:homeworkIds})) }}
+    </div>
   </div>
-</div>
-
 {% endblock %}

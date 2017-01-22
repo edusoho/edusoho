@@ -17,10 +17,9 @@ class TestpaperCopy extends AbstractEntityCopy
      *   - Question 题目内容
      * @param $biz
      */
-    public function __construct($biz)
+    public function __construct($biz, $node)
     {
-        $this->biz = $biz;
-        parent::__construct($biz, '');
+        parent::__construct($biz, $node);
     }
 
     /*
@@ -37,7 +36,7 @@ class TestpaperCopy extends AbstractEntityCopy
         return null;
     }
 
-    protected function baseCopyTestpaper($testpaper)
+    protected function baseCopyTestpaper($testpaper, $isCopy)
     {
         $fields = array(
             'name',
@@ -55,7 +54,7 @@ class TestpaperCopy extends AbstractEntityCopy
         $newTestpaper = array(
             'lessonId'      => 0,
             'createdUserId' => $this->biz['user']['id'],
-            'copyId'        => $testpaper['id']
+            'copyId'        => $isCopy ? $testpaper['id']: 0
         );
         foreach ($fields as $field) {
             if (!empty($testpaper[$field]) || $testpaper[$field] == 0) {
@@ -65,14 +64,14 @@ class TestpaperCopy extends AbstractEntityCopy
         return $newTestpaper;
     }
 
-    protected function doCopyTestpaperItems($testpaper, $newTestpaper)
+    protected function doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy)
     {
         $items = $this->getTestpaperItemDao()->findItemsByTestId($testpaper['id']);
         if (empty($items)) {
             return;
         }
 
-        $questionMap = $this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseId']);
+        $questionMap = $this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseId'], $isCopy);
         foreach ($items as $item) {
             $newItem = array(
                 'testId'       => $newTestpaper['id'],
@@ -81,8 +80,8 @@ class TestpaperCopy extends AbstractEntityCopy
                 'questionType' => $item['questionType'],
                 'parentId'     => $questionMap[$item['questionId']][1],
                 'score'        => $item['score'],
-                'missScore'    => $item['missScore']
-                // 'copyId'       => $item['id']
+                'missScore'    => $item['missScore'],
+                'copyId'       => $isCopy ? $item['id'] : 0
             );
 
             $this->getTestpaperItemDao()->create($newItem);
@@ -92,7 +91,7 @@ class TestpaperCopy extends AbstractEntityCopy
     /*
      * $ids = question ids
      * */
-    protected function doCopyQuestions($ids, $newCourseId)
+    protected function doCopyQuestions($ids, $newCourseId, $isCopy)
     {
         $questions   = $this->getQuestionDao()->findQuestionsByIds($ids);
         $questionMap = array();
@@ -101,7 +100,6 @@ class TestpaperCopy extends AbstractEntityCopy
         }
 
         usort($questions, function ($a, $b) {
-            //@todo 这个逻辑待测试
             return $a['parentId'] < $b['parentId'];
         });
 
@@ -120,7 +118,7 @@ class TestpaperCopy extends AbstractEntityCopy
             $newQuestion = array(
                 'courseId' => $newCourseId,
                 'lessonId' => 0,
-                'copyId'   => $question['id'],
+                'copyId'   => $isCopy ? $question['id'] : 0,
                 'userId'   => $this->biz['user']['id']
             );
             foreach ($fields as $field) {
