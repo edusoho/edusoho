@@ -100,6 +100,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'expiryMode',
             'expiryDays',
             'expiryStartDate',
+            'serializeMode',
             'expiryEndDate',
             'isDefault'
         ));
@@ -826,7 +827,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int     $userId
+     * @param  int $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -847,7 +848,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count = $this->searchCourseCount($conditions);
+        $count      = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
