@@ -1019,7 +1019,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getTaskService()
     {
-        return $this->biz->service('Task:TaskService');
+        return $this->createService('Task:TaskService');
     }
 
     /**
@@ -1062,12 +1062,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course:ThreadDao');
     }
 
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
     /**
      * @return UserService
      */
     protected function getUserService()
     {
-        return $this->biz->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -1091,7 +1096,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getCategoryService()
     {
-        return $this->biz->service('Taxonomy:CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     /**
@@ -1099,7 +1104,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getReviewService()
     {
-        return $this->biz->service('Course:ReviewService');
+        return $this->createService('Course:ReviewService');
     }
 
     /**
@@ -1107,6 +1112,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getNoteService()
     {
-        return $this->biz->service('Course:CourseNoteService');
+        return $this->createService('Course:CourseNoteService');
     }
 }
