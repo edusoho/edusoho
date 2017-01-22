@@ -263,7 +263,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courses      = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
-        $sets         = $this->findCourseSetsByIds(array_unique($courseSetIds));
+        $sets         = $this->findCourseSetsByIds($courseSetIds);
         return $sets;
     }
 
