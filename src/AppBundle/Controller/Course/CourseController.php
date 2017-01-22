@@ -26,8 +26,12 @@ class CourseController extends CourseBaseController
 
     public function showAction(Request $request, $id, $tab = 'summary')
     {
+        $course = $this->getCourseService()->getCourse($id);
+        $user   = $this->getCurrentUser();
+        $member = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
         return $this->render('course/course-show.html.twig', array(
-            'tab' => $tab
+            'tab'    => $tab,
+            'member' => $member
         ));
     }
 

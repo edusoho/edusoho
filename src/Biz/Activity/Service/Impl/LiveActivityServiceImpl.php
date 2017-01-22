@@ -3,9 +3,11 @@
 namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Service\LiveReplayService;
 use Biz\Util\EdusohoLiveClient;
 use Biz\User\Service\UserService;
 use Biz\System\Service\SettingService;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\LiveActivityService;
 
@@ -51,24 +53,42 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function updateLiveActivity($id, &$fields, $activity)
     {
         $liveActivity = $this->getLiveActivityDao()->get($id);
-        $liveParams   = array(
-            'liveId'   => $liveActivity['liveId'],
-            'provider' => $liveActivity['liveProvider'],
-            'summary'  => empty($fields['remark']) ? '' : $fields['remark'],
-            'title'    => $fields['title'],
-            'authUrl'  => $fields['_base_url'].'/live/auth',
-            'jumpUrl'  => $fields['_base_url'].'/live/jump?id='.$fields['fromCourseId']
-        );
-        //直播开始后，开始时间不允许修改
-        if (empty($fields['startTime']) || $fields['startTime'] <= time()) {
-            $fields['startTime'] = $activity['startTime'];
-            $fields['length']    = $activity['length'];
+
+        if (empty($liveActivity)) {
+            return array();
         }
-        $liveParams['startTime'] = $fields['startTime'];
-        $liveParams['endTime']   = ($fields['startTime'] + $fields['length'] * 60).'';
 
-        $this->getEdusohoLiveClient()->updateLive($liveParams);
+        $fields = array_merge($liveActivity, $fields);
 
+        //直播还未结束的情况下才更新直播房间信息
+        if ($activity['endTime'] > time()) {
+            $liveParams = array(
+                'liveId'  => $fields['liveId'],
+                'summary' => empty($fields['remark']) ? '' : $fields['remark'],
+                'title'   => $fields['title'],
+            );
+
+            $liveParams['startTime'] = $activity['startTime'];
+            $liveParams['endTime']   = (string)($activity['startTime'] + $fields['length'] * 60);
+
+            //直播开始后不更新开始时间和直播时长
+            if (empty($activity['startTime']) || $activity['startTime'] <= time()) {
+                unset($liveParams['startTime']);
+                unset($liveParams['endTime']);
+            }
+
+            $this->getEdusohoLiveClient()->updateLive($liveParams);
+        }
+
+        $liveActivity = ArrayToolkit::parts($fields, array('replayStatus', 'fileId'));
+
+        if (!empty($liveActivity['fileId'])) {
+            $liveActivity['mediaId']      = $liveActivity['fileId'];
+            $liveActivity['replayStatus'] = LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS;
+            unset($liveActivity['fileId']);
+        }
+
+        $liveActivity = $this->getLiveActivityDao()->update($id, $liveActivity);
         return $liveActivity;
     }
 

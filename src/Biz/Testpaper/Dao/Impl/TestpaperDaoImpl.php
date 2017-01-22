@@ -19,6 +19,11 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
         return $this->db()->fetchAll($sql, array($copyId));
     }
 
+    public function deleteByCourseSetId($courseSetId)
+    {
+        return $this->db()->delete($this->table(), array('courseSetId' => $courseSetId));
+    }
+
     public function declares()
     {
         $declares['orderbys'] = array(

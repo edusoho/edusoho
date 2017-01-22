@@ -1,8 +1,8 @@
 <?php
 namespace Tests\Activity;
 
-use Biz\Task\Service\TaskService;
 use Biz\BaseTestCase;
+use Biz\Task\Service\TaskService;
 use Topxia\Service\Course\CourseService;
 use Biz\Activity\Service\ActivityService;
 
@@ -16,8 +16,8 @@ class ActivityServiceTest extends BaseTestCase
             'CourseService',
             array(
                 array(
-                'functionName' => 'tryManageCourse',
-                'returnValue' => array('id' => 1)
+                    'functionName' => 'tryManageCourse',
+                    'returnValue'  => array('id' => 1)
                 )
             )
         );
@@ -32,7 +32,7 @@ class ActivityServiceTest extends BaseTestCase
         $activity = array(
             'title' => 'test activity'
         );
-        
+
         $savedActivity = $this->getActivityService()->createActivity($activity);
         $this->assertEquals($activity['title'], $savedActivity['title']);
     }
@@ -113,20 +113,20 @@ class ActivityServiceTest extends BaseTestCase
             'CourseService',
             array(
                 array(
-                'functionName' => 'tryManageCourse',
-                'returnValue' => 1
+                    'functionName' => 'tryManageCourse',
+                    'returnValue'  => 1
                 ),
                 array(
-                'functionName' => 'getCourse',
-                'returnValue' => $course
+                    'functionName' => 'getCourse',
+                    'returnValue'  => $course
                 ),
                 array(
-                'functionName' => 'getNextCourseItemSeq',
-                'returnValue' => 1
+                    'functionName' => 'getNextCourseItemSeq',
+                    'returnValue'  => 1
                 ),
                 array(
-                'functionName' => 'updateCourseStatistics',
-                'returnValue' => 1
+                    'functionName' => 'updateCourseStatistics',
+                    'returnValue'  => 1
                 )
             )
         );
@@ -145,6 +145,61 @@ class ActivityServiceTest extends BaseTestCase
 
         $this->getActivityService()->trigger($savedTask['activityId'], 'start', $data);
         $this->getActivityService()->trigger($savedTask['activityId'], 'finish', $data);
+    }
+
+    public function testSearch()
+    {
+        $activity1 = array(
+            'title'           => 'test activity',
+            'mediaType'       => 'text',
+            'fromCourseId'    => 1,
+            'fromCourseSetId' => 1
+        );
+        $savedActivity1 = $this->getActivityService()->createActivity($activity1);
+
+        $activity2 = array(
+            'title'           => 'test activity2',
+            'mediaType'       => 'text',
+            'fromCourseId'    => 2,
+            'fromCourseSetId' => 1
+        );
+        $savedActivity2 = $this->getActivityService()->createActivity($activity2);
+
+        $conditions = array(
+            'fromCourseId' => 1,
+            'mediaType'    => 'text'
+        );
+        $activities = $this->getActivityService()->search($conditions, null, 0, 10);
+
+        $this->assertEquals(1, count($activities));
+        $this->assertArrayEquals($savedActivity1, $activities[0]);
+    }
+
+    public function testCount()
+    {
+        $activity1 = array(
+            'title'           => 'test activity',
+            'mediaType'       => 'text',
+            'fromCourseId'    => 1,
+            'fromCourseSetId' => 1
+        );
+        $savedActivity1 = $this->getActivityService()->createActivity($activity1);
+
+        $activity2 = array(
+            'title'           => 'test activity2',
+            'mediaType'       => 'text',
+            'fromCourseId'    => 2,
+            'fromCourseSetId' => 1
+        );
+        $savedActivity2 = $this->getActivityService()->createActivity($activity2);
+
+        $conditions = array(
+            'fromCourseId' => 1,
+            'mediaType'    => 'text'
+        );
+        $count = $this->getActivityService()->count($conditions);
+
+        $this->assertEquals(1, $count);
     }
 
     /**

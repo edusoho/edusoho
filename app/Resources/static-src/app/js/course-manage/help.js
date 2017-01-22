@@ -23,7 +23,7 @@ export const closeCourse = () => {
       });
     });
   });
-}
+};
 
 export const sortList = (element = '#sortable-list') => {
   let data = $(element).sortable("serialize").get();
@@ -32,7 +32,8 @@ export const sortList = (element = '#sortable-list') => {
       document.location.reload();
     }
   });
-}
+};
+
 export const deleteCourse = () => {
   $('body').on('click', '.js-delete-course', function(evt) {
     if (!confirm(Translator.trans('是否确定删除该教学计划？'))) {
@@ -47,7 +48,7 @@ export const deleteCourse = () => {
       }
     });
   });
-}
+};
 
 export const publishCourse = () => {
   $('body').on('click', '.js-publish-course', function(evt) {
@@ -63,7 +64,7 @@ export const publishCourse = () => {
       }
     });
   });
-}
+};
 
 export const deleteTask = () => {
   $('body').on('click', '.delete-item', function(evt) {
@@ -86,7 +87,7 @@ export const deleteTask = () => {
       }
     });
   });
-}
+};
 
 export const publishTask = () => {
   $('body').on('click', '.publish-item', (event) => {
@@ -99,7 +100,7 @@ export const publishTask = () => {
       }
     });
   })
-}
+};
 
 export const unpublishTask = () => {
   $('body').on('click', '.unpublish-item', (event) => {
@@ -112,7 +113,7 @@ export const unpublishTask = () => {
       }
     });
   })
-}
+};
 
 export const showSettings = () => {
   $("#sortable-list").on('click', '.js-item-content', event => {
@@ -125,11 +126,29 @@ export const showSettings = () => {
       $this.addClass('active').find('.js-settings-list').slideDown();
     }
   });
-}
+};
 
 export const TabChange = () => {
   $('[data-role="tab"]').click(function (event) {
     let $this = $(this);
     $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
   });
-}
+};
+
+export const generateReplay = () => {
+  $('.js-generate-replay').on('click', (event) => {
+    const $this = $(event.currentTarget);
+    const url = $this.data('url');
+    if(!url) return;
+    Promise.resolve($.post(url))
+      .then(success => {
+        notify('success', '生成录制回放成功');
+      })
+      .catch(response => {
+        const error = JSON.parse(response.responseText);
+        const code = error.code;
+        const message = error.error;
+        notify('danger', message);
+      });
+  })
+};

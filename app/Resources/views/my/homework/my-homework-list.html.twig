@@ -51,7 +51,7 @@
                     {% if paperResult.status in ['doing', 'paused'] %}
                       <a href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" class="btn btn-default btn-sm">{{'继续做题'|trans}}</a>
                     {% elseif paperResult.status == 'finished' %}
-                      <a href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" class="btn btn-link btn-sm" target="_blank">{{'查看结果'|trans}}</a>
+                      <a href="{{ path('homework_result_show',{resultId:paperResult.id,action:'my'}) }}" class="btn btn-link btn-sm" target="_blank">{{'查看结果'|trans}}</a>
                     {% endif %}
                   </td>
                 </tr>
@@ -60,7 +60,7 @@
                   <td colspan="3">
                     <a href="javascript:;">{{ paperResult.paperName }}</a>
                     <br>
-                    <small>{{'该试卷已删除'|trans}}</small>
+                    <small>{{'该作业已删除'|trans}}</small>
                   </td>
                 </tr>
               {% endif %}
