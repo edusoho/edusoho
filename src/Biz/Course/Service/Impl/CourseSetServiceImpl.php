@@ -545,6 +545,19 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseDao()->findCourseSetIncomesByCourseSetIds($courseSetIds);
     }
 
+    public function batchUpdateOrg($courseSetIds, $orgCode)
+    {
+        if (!is_array($courseSetIds)) {
+            $courseSetIds = array($courseSetIds);
+        }
+
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
+        foreach ($courseSetIds as $courseSetId) {
+            $user = $this->getCourseSetDao()->update($courseSetId, $fields);
+        }
+    }
+
     protected function validateCourseSet($courseSet)
     {
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
