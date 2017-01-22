@@ -203,7 +203,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $newCourseIds = array();
 
                 foreach ($courses as $key => $course) {
-                    $newCourse      = $this->getCourseSetService()->copyCourseSet($course['courseSetId'], $course['id']);
+                    $newCourse      = $this->getCourseSetService()->copyCourseSet($classroomId, $course['courseSetId'], $course['id']);
                     $newCourseIds[] = $newCourse['id'];
                     $this->getLogService()->info('classroom', 'add_course', "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})");
                 }

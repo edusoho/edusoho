@@ -5,6 +5,7 @@ namespace Biz\Course\Copy\Impl;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\CourseMaterialDao;
+use Biz\Classroom\Dao\ClassroomMemberDao;
 
 class ClassroomCourseCopy extends CourseCopy
 {
@@ -25,7 +26,7 @@ class ClassroomCourseCopy extends CourseCopy
 
     /*
      * $source = $originalCourseSet
-     * $config : courseId (course to copy), classroomId(?)
+     * $config : courseId (course to copy), classroomId
      */
     protected function _copy($source, $config = array())
     {
@@ -48,7 +49,8 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourse['teacherIds']  = array($user['id']);
 
         $newCourse = $this->getCourseDao()->create($newCourse);
-        $this->doCopyCourseMember($newCourse);
+        $this->doCopyCourseMember($course, $newCourse);
+        $this->doCopyTeachersToClassroom($course, $config['classroomId']);
 
         $testpaperCopy = new CourseSetTestpaperCopy($this->biz);
         $testpaperCopy->copy($course, array('newCourseSet' => $newCourseSet, 'isCopy' => true));
@@ -142,6 +144,20 @@ class ClassroomCourseCopy extends CourseCopy
         }
     }
 
+    protected function doCopyTeachersToClassroom($oldCourse, $classroomId)
+    {
+        $teachers = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
+        if (!empty($teachers)) {
+            foreach ($teachers as $teacher) {
+                $this->getClassroomMemberDao()->create(array(
+                    'classroomId' => $classroomId,
+                    'userId'      => $teacher['userId'],
+                    'role'        => array('teacher')
+                ));
+            }
+        }
+    }
+
     /**
      * @return CourseSetDao
      */
@@ -164,5 +180,13 @@ class ClassroomCourseCopy extends CourseCopy
     protected function getMaterialDao()
     {
         return $this->biz->dao('Course:CourseMaterialDao');
+    }
+
+    /**
+     * @return ClassroomMemberDao
+     */
+    protected function getClassroomMemberDao()
+    {
+        return $this->biz->dao('Classroom:ClassroomMemberDao');
     }
 }

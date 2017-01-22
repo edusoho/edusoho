@@ -325,12 +325,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $created;
     }
 
-    public function copyCourseSet($courseSetId, $courseId)
+    public function copyCourseSet($classroomId, $courseSetId, $courseId)
     {
         $courseSet = $this->tryManageCourseSet($courseSetId);
 
         $entityCopy = new ClassroomCourseCopy($this->biz);
-        return $entityCopy->copy($courseSet, array('courseId' => $courseId));
+        return $entityCopy->copy($courseSet, array('courseId' => $courseId, 'classroomId' => $classroomId));
     }
 
     public function updateCourseSet($id, $fields)
@@ -407,9 +407,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function deleteCourseSet($id)
     {
-        $courseSet = $this->tryManageCourseSet($id);
+        $courseSet     = $this->tryManageCourseSet($id);
         $subCourseSets = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($id, 1);
-        if(!empty($subCourseSets)){
+        if (!empty($subCourseSets)) {
             throw $this->createAccessDeniedException('该课程在班级下引用，请先删除引用课程！');
         }
         return $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
