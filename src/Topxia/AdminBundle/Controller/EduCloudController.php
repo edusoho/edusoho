@@ -1080,6 +1080,10 @@ class EduCloudController extends BaseController
         $cloud_consult = $this->validateConsult(array_merge($defaultSetting, $cloud_consult));
 
         if ($request->getMethod() == 'POST') {
+            if ($cloud_consult['cloud_consult_enabled'] == 0) {
+                return $this->render('TopxiaAdminBundle:EduCloud/Consult:cloud-consult-error.html.twig', array());
+            }
+
             $request_cloud_consult = $request->request->all();
             $cloud_consult['cloud_consult_setting_enabled'] = $request_cloud_consult['cloud_consult_setting_enabled'];
 
