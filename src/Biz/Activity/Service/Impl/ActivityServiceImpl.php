@@ -171,23 +171,20 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity = $this->getActivity($id);
 
         try {
-            $this->beginTransaction();
             $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
 
             $this->syncActivityMaterials($activity, array(), 'delete');
 
             $activityConfig = $this->getActivityConfig($activity['mediaType']);
             $activityConfig->delete($activity['mediaId']);
-
             $this->getActivityLearnLogService()->deleteLearnLogsByActivityId($id);
-            $this->getActivityDao()->delete($id);
+            $result = $this->getActivityDao()->delete($id);
             $this->commit();
+            return $result;
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
-
-        return true;
     }
 
     public function isFinished($id)
