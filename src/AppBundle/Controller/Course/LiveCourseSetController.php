@@ -4,6 +4,7 @@
 namespace AppBundle\Controller\Course;
 
 
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
@@ -36,18 +37,100 @@ class LiveCourseSetController extends CourseBaseController
         ));
     }
 
+    public function exploreAction(Request $request)
+    {
+        if (!$this->setting('course.live_course_enabled')) {
+            return $this->createMessageResponse('info', $this->get('translator')->trans('直播频道已关闭'));
+        }
+
+        $recentTasksCondition = array(
+            'status'     => 'published',
+            'endTime_GT' => time(),
+            'type'       => 'live'
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getTaskService()->count($recentTasksCondition)
+            , 30
+        );
+
+        $recentTasks = $this->getTaskService()->search(
+            $recentTasksCondition,
+            array('startTime' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courseSets       = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($recentTasks, 'fromCourseSetId'));
+        $courseSets       = ArrayToolkit::index($courseSets, 'id');
+        $recentCourseSets = array();
+
+        foreach ($recentTasks as $task) {
+            $courseSet = $courseSets[$task['courseSetId']];
+
+            if ($courseSet['status'] != 'published' || $courseSet['parentId'] != '0') {
+                continue;
+            }
+
+            $courseSet['task']  = $task;
+            $recentCourseSets[] = $courseSet;
+        }
+
+        $liveCourseSets = $this->getCourseSetService()->searchCourseSets(array(
+            'status'   => 'published',
+            'type'     => 'live',
+            'parentId' => '0'
+        ), 'lastest', 0, 10);
+
+        $liveCourses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($liveCourseSets, 'id'));
+
+        $userIds = array();
+        foreach ($liveCourses as $course) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+        }
+
+        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $default = $this->getSettingService()->get('default', array());
+        return $this->render('course-set/live/explore.html.twig', array(
+            'recentCourseSets' => $recentCourseSets,
+            'liveCourseSets'   => $liveCourseSets,
+            'users'            => $users,
+            'paginator'        => $paginator,
+            'default'          => $default
+        ));
+    }
+
+    public function replayListAction()
+    {
+        $publishedCourseSetIds = $this->_findPublishedLiveCourseSetIds();
+
+        $liveReplayList = $this->getTaskService()->search(array(
+            'endTime_LT'       => time(),
+            'type'             => 'live',
+            'copyId'           => 0,
+            'status'           => 'published',
+            'fromCourseSetIds' => $publishedCourseSetIds
+        ), array('startTime' => 'DESC'), 0, 10);
+
+        return $this->render('course-set/live/replay-list.html.twig', array(
+            'liveReplayList' => $liveReplayList
+
+        ));
+    }
+
     public function liveTabAction()
     {
-        $courseSets   = $this->getCourseSetService()->searchCourseSets(array(
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array(
             'type'     => 'live',
             'status'   => 'published',
             'parentId' => 0,
             'locked'   => 0
         ), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
-        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
-        $courseIds    = ArrayToolkit::column($this->getCourseService()->findCoursesByCourseSetIds($courseSetIds), 'id');
 
-        $taskDates         = $this->getTaskService()->findFutureLiveDatesByCourseIdsGroupByDate($courseIds, 4);
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+
+        $taskDates         = $this->getTaskService()->findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, 4);
         $currentLiveTasks  = $this->getTaskService()->findCurrentLiveTasks();
         $futureLiveLessons = $this->getTaskService()->findFutureLiveTasks();
 
@@ -61,16 +144,16 @@ class LiveCourseSetController extends CourseBaseController
             if ($today == $value['date'] || count($liveTabs) >= 4) {
                 continue;
             } else {
-                $dayLessons = $futureLiveLessons = $this->getTaskService()->search(array(
+                $dayTasks = $futureLiveLessons = $this->getTaskService()->search(array(
                     'startTimeGreaterThan' => strtotime($value['date']),
                     'endTimeLessThan'      => strtotime($value['date'] . ' 23:59:59'),
                     'type'                 => 'live',
-                    'courseIds'            => $courseIds,
+                    'fromCourseSetIds'     => $courseSetIds,
                     'status'               => 'published'
                 ), array('startTime' => 'ASC'), 0, PHP_INT_MAX);
 
                 $date                      = date('m-d', strtotime($value['date']));
-                $liveTabs[$date]['future'] = $dayLessons;
+                $liveTabs[$date]['future'] = $dayTasks;
                 $dateTabs[]                = $date;
             }
         }
@@ -107,28 +190,27 @@ class LiveCourseSetController extends CourseBaseController
             10
         );
 
-        $futureLiveTasks     = $this->getTaskService()->findFutureLiveTasks();
-        $futureLiveCourseIds = ArrayToolkit::column($futureLiveTasks, 'courseId');
+        $futureLiveTasks        = $this->getTaskService()->findFutureLiveTasks();
+        $futureLiveCourseSetIds = ArrayToolkit::column($futureLiveTasks, 'fromCourseSetId');
 
-        $futureLiveCourses = array();
+        $pageFutureLiveCourseSets = array();
 
-        if (!empty($futureLiveCourseIds)) {
-            $pageCourseIds     = array_slice($futureLiveCourseIds, $paginator->getOffsetCount(), $paginator->getPerPageCount());
-            $futureLiveCourses = $this->getCourseService()->findCoursesByIds($pageCourseIds);
+        if (!empty($futureLiveCourseSetIds)) {
+            $pageCourseSetIds         = array_slice($futureLiveCourseSetIds, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+            $pageFutureLiveCourseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($pageCourseSetIds);
 
-            $futureLiveCourses = ArrayToolkit::index($futureLiveCourses, 'id');
-            $futureLiveCourses = $this->_liveCourseSort($futureLiveCourseIds, $futureLiveCourses, 'future');
+            $pageFutureLiveCourseSets = ArrayToolkit::index($pageFutureLiveCourseSets, 'id');
+            $pageFutureLiveCourseSets = $this->_fillLiveCourseSetAttribute($futureLiveCourseSetIds, $pageFutureLiveCourseSets, 'future');
         }
 
-        $replayLiveCourses = array();
+        $replayLiveCourseSets = array();
 
-        if (count($futureLiveCourses) < $paginator->getPerPageCount()) {
-            $conditions['courseIds'] = $futureLiveCourseIds;
-            //$replayLiveCourses       = $this->_searchReplayLiveCourse($request, $conditions, $futureLiveCourseIds, $futureLiveCourses);
-            $replayLiveCourses = array();
+        if (count($pageFutureLiveCourseSets) < $paginator->getPerPageCount()) {
+            $conditions['ids']    = $futureLiveCourseSetIds;
+            $replayLiveCourseSets = $this->_searchReplayLiveCourseSets($request, $conditions, $futureLiveCourseSetIds);
         }
 
-        $liveCourses = array_merge($futureLiveCourses, $replayLiveCourses);
+        $liveCourseSets = array_merge($pageFutureLiveCourseSets, $replayLiveCourseSets);
 
         $levels = array();
 
@@ -137,38 +219,84 @@ class LiveCourseSetController extends CourseBaseController
         }
 
         return $this->render('course-set/live/all-list.html.twig', array(
-            'liveCourses' => $liveCourses,
-            'paginator'   => $paginator,
-            'request'     => $request,
-            'levels'      => $levels
+            'liveCourseSets' => $liveCourseSets,
+            'paginator'      => $paginator,
+            'request'        => $request,
+            'levels'         => $levels
         ));
     }
 
-    private function _liveCourseSort($liveLessonCourseIds, $liveCourses, $type)
+    private function _fillLiveCourseSetAttribute($allLiveLessonCourseIds, $liveCourseSets, $type)
     {
-        $courses = array();
-
-        if (empty($liveCourses)) {
+        if (empty($liveCourseSets)) {
             return array();
         }
-
-        foreach ($liveLessonCourseIds as $key => $courseId) {
-            if (isset($liveCourses[$courseId])) {
-                $courses[$courseId] = $liveCourses[$courseId];
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds($allLiveLessonCourseIds);
+        $courses = ArrayToolkit::index($courses, 'courseSetId');
+        $ret = array();
+        foreach ($allLiveLessonCourseIds as $key => $courseSetId) {
+            if (isset($liveCourseSets[$courseSetId])) {
+                $ret[$courseSetId] = $liveCourseSets[$courseSetId];
 
                 if ($type == 'future') {
-                    $lessons = $this->getCourseService()->searchLessons(array('courseId' => $courseId, 'endTimeGreaterThan' => time()), array('startTime', 'ASC'), 0, 1);
+                    $tasks = $this->getTaskService()->search(array('fromCourseSetId' => $courseSetId, 'endTime_GT' => time()), array('startTime' => 'ASC'), 0, 1);
                 } else {
-                    $lessons = $this->getCourseService()->searchLessons(array('courseId' => $courseId, 'endTimeLessThan' => time()), array('startTime', 'DESC'), 0, 1);
+                    $tasks = $this->getTaskService()->search(array('fromCourseSetId' => $courseSetId, 'endTime_LT' => time()), array('startTime' => 'DESC'), 0, 1);
                 }
 
-                $courses[$courseId]['liveStartTime'] = $lessons[0]['startTime'];
-                $courses[$courseId]['liveEndTime']   = $lessons[0]['endTime'];
-                $courses[$courseId]['lessonId']      = $lessons[0]['id'];
+                $ret[$courseSetId]['course'] = $courses[$courseSetId];
+                $ret[$courseSetId]['liveStartTime'] = $tasks[0]['startTime'];
+                $ret[$courseSetId]['liveEndTime']   = $tasks[0]['endTime'];
+                $ret[$courseSetId]['taskId']      = $tasks[0]['id'];
             }
         }
 
-        return $courses;
+        return $ret;
+    }
+
+    private function _findPublishedLiveCourseSetIds()
+    {
+        $conditions          = array(
+            'status'   => 'published',
+            'type'     => 'live',
+            'parentId' => 0
+        );
+        $publishedCourseSets = $this->getCourseSetService()->searchCourseSets($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        return ArrayToolkit::column($publishedCourseSets, 'id');
+    }
+
+    private function _searchReplayLiveCourseSets(Request $request, $conditions, $allFutureLiveCourseSetIds)
+    {
+        $pageSize    = 10;
+        $currentPage = $request->query->get('page', 1);
+
+        if (isset($conditions['ids'])) {
+            $futureLiveCourseSetsCount = $this->getCourseSetService()->countCourseSets($conditions);
+        } else {
+            $futureLiveCourseSetsCount = 0;
+        }
+
+        $pages = $futureLiveCourseSetsCount <= $pageSize ? 1 : floor($futureLiveCourseSetsCount / $pageSize);
+
+        if ($pages == $currentPage) {
+            $start = 0;
+            $limit = $pageSize - ($futureLiveCourseSetsCount % $pageSize);
+        } else {
+            $start = ($currentPage - 1) * $pageSize;
+            $limit = $pageSize;
+        }
+
+        $replayLiveCourseSetIds = $this->getTaskService()->findPastLivedCourseSetIds();
+
+        unset($conditions['ids']);
+        $conditions['excludeIds'] = $allFutureLiveCourseSetIds;
+
+        $replayLiveCourses = $this->getCourseSetService()->searchCourseSets($conditions, array('createdTime' => 'DESC'), $start, $limit);
+
+        $replayLiveCourses = ArrayToolkit::index($replayLiveCourses, 'id');
+        $replayLiveCourses = $this->_fillLiveCourseSetAttribute($replayLiveCourseSetIds, $replayLiveCourses, 'replay');
+
+        return $replayLiveCourses;
     }
 
     /**
@@ -178,4 +306,13 @@ class LiveCourseSetController extends CourseBaseController
     {
         return $this->createService('Task:TaskService');
     }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
 }
