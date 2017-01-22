@@ -141,9 +141,12 @@ class ClassroomServiceTest extends BaseTestCase
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
 
-        $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course1['id'], $course2['id']));
+        $courseSet     = $this->mockCourseSet();
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
 
+        $this->getClassroomService()->setClassroomCourses($classroom['id'], array($course1['id'], $course2['id']));
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
+
         $this->assertEquals(2, count($courses));
 
         $this->getClassroomService()->deleteClassroomCourses($classroom['id'], array($course2['id']));
@@ -807,6 +810,7 @@ class ClassroomServiceTest extends BaseTestCase
             'title' => 'test'
         );
         $course1 = $this->createCourse('Test Course 1');
+
         $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(array('id' => $teacher1['id'], 'isVisible' => 1), array('id' => $teacher2['id'], 'isVisible' => 1)));
 
         $courseIds = array($course1['id']);
@@ -1227,6 +1231,7 @@ class ClassroomServiceTest extends BaseTestCase
         $course2 = $this->createCourse('Test Course 2');
         $course3 = $this->createCourse('Test Course 3');
 
+
         $this->getCourseMemberService()->setCourseTeachers($course1['id'], array(
             array('id' => $teacher1['id'], 'isVisible' => 1),
             array('id' => $teacher2['id'], 'isVisible' => 1),
@@ -1250,6 +1255,7 @@ class ClassroomServiceTest extends BaseTestCase
         $courses = $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
 
         $teachers = $this->getClassroomService()->findTeachers($classroom['id']);
+
         $this->assertEquals(count($teachers), 6);
 
         $courseIds = array($courses[2]['id']);
@@ -1315,6 +1321,11 @@ class ClassroomServiceTest extends BaseTestCase
             'expiryMode'  => 'days',
             'expiryDays'  => 0
         );
+    }
+
+    protected function mockCourseSet($title = 'Test Course 1')
+    {
+        return array('title' => $title, 'type' => 'normal');
     }
 
     private function createUser()

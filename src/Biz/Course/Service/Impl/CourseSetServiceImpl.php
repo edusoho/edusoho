@@ -200,7 +200,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function searchCourseSets(array $conditions, $orderBys, $start, $limit)
     {
         $orderBys = $this->getOrderBys($orderBys);
-        return $this->getCourseSetDao()->search($conditions, $orderBys, $start, $limit);
+        $preparedCondtions = $this->prepareConditions($conditions);
+        return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit);
     }
 
     /**
@@ -548,6 +549,19 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseDao()->findCourseSetIncomesByCourseSetIds($courseSetIds);
     }
 
+    public function batchUpdateOrg($courseSetIds, $orgCode)
+    {
+        if (!is_array($courseSetIds)) {
+            $courseSetIds = array($courseSetIds);
+        }
+
+        $fields = $this->fillOrgId(array('orgCode' => $orgCode));
+
+        foreach ($courseSetIds as $courseSetId) {
+            $user = $this->getCourseSetDao()->update($courseSetId, $fields);
+        }
+    }
+
     public function analysisCourseSetDataByTime($startTime, $endTime)
     {
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
@@ -561,6 +575,24 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!in_array($courseSet['type'], array('normal', 'live', 'liveOpen', 'open'))) {
             throw $this->createInvalidArgumentException("Invalid Param: type");
         }
+    }
+
+    protected function prepareConditions($conditions)
+    {
+        array_filter($conditions, function ($value) {
+            if (is_numeric($value)) {
+                return true;
+            }
+
+            return !empty($value);
+        });
+
+        if (!empty($conditions['creatorName'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['creatorName']);
+            $conditions['creator'] = $user ? $user['id'] : -1;
+        }
+
+        return $conditions;
     }
 
     protected function countStudentNumById($id)
@@ -648,6 +680,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     /**

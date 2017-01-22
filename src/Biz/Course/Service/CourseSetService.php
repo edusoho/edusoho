@@ -172,4 +172,6 @@ interface CourseSetService
      * @return array[]
      */
     public function findCourseSetIncomesByCourseSetIds(array $courseSetIds);
+
+    public function batchUpdateOrg($courseSetIds, $orgCode);
 }

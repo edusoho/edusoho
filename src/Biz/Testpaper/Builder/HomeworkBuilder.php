@@ -256,7 +256,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
         $total = $this->getQuestionService()->searchCount($conditions);
 
-        return $this->getQuestionService()->search($conditions, array('createdTime', 'DESC'), 0, $total);
+        return $this->getQuestionService()->search($conditions, array('createdTime' => 'DESC'), 0, $total);
     }
 
     protected function makeItem($homeworkId, $question)

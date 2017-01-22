@@ -128,7 +128,7 @@ class TaskCopy extends AbstractEntityCopy
                     'fromUserId'      => $this->biz['user']['id'],
                     'fromCourseId'    => $newCourseId,
                     'fromCourseSetId' => $courseSetId,
-                    'copyId' => $isCopy ? $activity['id'] : 0
+                    'copyId'          => $isCopy ? $activity['id'] : 0
                 );
                 foreach ($fields as $field) {
                     if (!empty($activity[$field]) || $activity[$field] == 0) {
