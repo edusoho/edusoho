@@ -130,6 +130,7 @@ class CourseCopy extends AbstractEntityCopy
     {
         $members = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
         if (!empty($members)) {
+            $teacherIds = array();
             foreach ($members as $member) {
                 $member = array(
                     'courseId'    => $newCourse['id'],
@@ -139,7 +140,13 @@ class CourseCopy extends AbstractEntityCopy
                     'seq'         => $member['seq'],
                     'isVisible'   => $member['isVisible']
                 );
+                if ($member['isVisible']) {
+                    $teacherIds[] = $member['userId'];
+                }
                 $this->getMemberDao()->create($member);
+            }
+            if (!empty($teacherIds)) {
+                $this->getCourseDao()->update($newCourse['id'], array('teacherIds' => $teacherIds));
             }
         }
     }
