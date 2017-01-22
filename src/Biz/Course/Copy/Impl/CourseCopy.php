@@ -69,7 +69,7 @@ class CourseCopy extends AbstractEntityCopy
         return $new;
     }
 
-    private function doCopy($source)
+    protected function doCopy($source)
     {
         $fields = array(
             'title',
@@ -126,7 +126,7 @@ class CourseCopy extends AbstractEntityCopy
         return $new;
     }
 
-    private function doCopyCourseMember($course)
+    protected function doCopyCourseMember($course)
     {
         $member = array(
             'courseId'    => $course['id'],

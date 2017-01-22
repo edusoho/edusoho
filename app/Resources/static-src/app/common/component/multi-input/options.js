@@ -28,6 +28,6 @@ export default class Options extends Component {
       resultful: false,
     });
     let data = event.currentTarget.attributes["data-item"].value;
-    this.props.selectChange(JSON.parse(data),event.currentTarget.attributes['data-name'].value);
+    this.props.selectChange(event.currentTarget.attributes['data-name'].value,JSON.parse(data));
   }
 }
