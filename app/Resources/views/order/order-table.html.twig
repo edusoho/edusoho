@@ -6,7 +6,6 @@
 #}
 {% import "common/data-dict-macro.html.twig" as dict_macro %}
 {% import "macro.html.twig" as web_macro %}
-
 {% set mode = mode|default(['my']) %}
   <thead>
     <tr>
@@ -30,6 +29,8 @@
   <tbody>
     {% for order in orders %}
       {% set buyer = users[order.userId]|default(null) %}
+      {% set course = courses[order.targetId] %}
+      {% set courseSet = courseSets[course.courseSetId] %}
         <tr id="order-table-{{order.id}}" style="word-break: break-all;word-wrap: break-word;">
           <td>
             {% if order.targetType == 'course' %}
@@ -42,7 +43,8 @@
               <strong>{{order.title}}</strong>
             {% endif %}
             <br>
-            <span class="text-muted text-sm">{{'订单号：%sn%'|trans({'%sn%':order.sn})}}</span>
+            <span class="text-muted text-sm">{{'订单号：%sn%'|trans({'%sn%':order.sn})}}</span><br>
+            <span class="text-muted text-sm">{{'所属课程:'|trans}}<a href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a></span>
           </td>
           <td><span class="text-muted text-sm">{{ order.createdTime|date('Y-n-d H:i:s') }}</span></td>
           <td>{{ dict_macro.orderStatus(order.status) }}</td>

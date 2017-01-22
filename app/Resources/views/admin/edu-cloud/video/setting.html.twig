@@ -223,12 +223,6 @@
   </div>
   <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
     <div class="row form-group">
-      <label for="" class="col-sm-3 control-label">视频转码画质：</label>
-      <div class="controls col-sm-9 radios">
-        {{ radios('video_quality', {'low':'流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'}), 'normal':'标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'}), 'high': '精细 %<span class="text-muted">%(适合动态电影)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})}, storageSetting.video_quality) }}
-      </div>
-    </div>
-    <div class="row form-group">
       <div class="col-md-3 control-label">
         <label for="support_mobile">{{ '手机浏览器MP4视频:'|trans }}</label>
       </div>
@@ -241,6 +235,14 @@
         </div>
       </div>
     </div>
+
+    <div class="row form-group">
+      <label for="" class="col-sm-3 control-label">视频转码画质：</label>
+      <div class="controls col-sm-9 radios">
+        {{ radios('video_quality', {'low':'流畅 %<span class="text-muted">%(适合PPT讲解)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'}), 'normal':'标准 %<span class="text-muted">%(适合屏幕录制、摄像头拍摄)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'}), 'high': '精细 %<span class="text-muted">%(适合动态电影)%</span>%'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})}, storageSetting.video_quality) }}
+      </div>
+    </div>
+    
     <div class="row form-group">
       <label for="" class="col-sm-3 control-label">视频转码音质：</label>
       <div class="controls col-sm-9 radios">

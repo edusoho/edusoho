@@ -34,7 +34,7 @@
 
    {% for classroom in classroomInfo %}
       {% set category = categories[classroom.categoryId]|default(null) %}
-      {% include 'ClassroomBundle:ClassroomAdmin:table-tr.html.twig' with {classroom:classroom,category:category} %}
+      {% include 'admin/classroom/table-tr.html.twig' with {classroom:classroom,category:category} %}
 
    {% endfor %}
 
