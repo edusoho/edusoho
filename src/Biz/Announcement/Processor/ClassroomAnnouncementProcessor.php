@@ -27,7 +27,7 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
 
         $members = $this->getClassroomService()->searchMembers(
             array('classroomId' => $targetId, 'role' => 'student'),
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             0, $count
         );
 

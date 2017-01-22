@@ -2,6 +2,7 @@
 
 namespace Biz\Task\Strategy;
 
+use Biz\Activity\Service\ActivityService;
 use Topxia\Common\ArrayToolkit;
 
 class BaseStrategy
@@ -91,6 +92,9 @@ class BaseStrategy
         return $this->biz->service('Task:TaskResultService');
     }
 
+    /**
+     * @return ActivityService
+     */
     public function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');

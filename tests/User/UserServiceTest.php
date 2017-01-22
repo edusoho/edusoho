@@ -2,7 +2,7 @@
 
 namespace Tests\User;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class UserServiceTest extends BaseTestCase
 {
