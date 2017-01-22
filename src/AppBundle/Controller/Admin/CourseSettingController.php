@@ -14,10 +14,8 @@ class CourseSettingController extends BaseController
     {
         $courseSetting        = $this->getSettingService()->get('course', array());
         $liveCourseSetting    = $this->getSettingService()->get('live-course', array());
-        $defaultSettings      = $this->getSettingService()->get('default', array());
         $userDefaultSetting   = $this->getSettingService()->get('user_default', array());
         $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
-        $path                 = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
         $courseDefaultSet     = $this->getCourseDefaultSet();
         $defaultSetting       = array_merge($courseDefaultSet, $courseDefaultSetting);
 
@@ -35,8 +33,7 @@ class CourseSettingController extends BaseController
             'coursesPrice'             => '0',
             'allowAnonymousPreview'    => '1',
             "copy_enabled"             => '0',
-            "testpaperCopy_enabled"    => '0',
-            "custom_chapter_enabled"   => '1'
+            "testpaperCopy_enabled"    => '0'
         );
 
         $this->getSettingService()->set('course', $courseSetting);
@@ -46,18 +43,12 @@ class CourseSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $defaultSetting = $request->request->all();
 
-            if (!isset($defaultSetting['chapter_name'])) {
-                $defaultSetting['chapter_name'] = '章';
-            }
+            $courseDefaultSetting = array(
+                'chapter_name' => '章',
+                'part_name' => '节'
+            );
 
-            if (!isset($defaultSetting['part_name'])) {
-                $defaultSetting['part_name'] = '节';
-            }
-
-            $courseDefaultSetting = ArrayToolkit::parts($defaultSetting, array(
-                'chapter_name',
-                'part_name'
-            ));
+            $courseDefaultSetting = array_merge($courseDefaultSetting, $defaultSetting);
             $this->getSettingService()->set('course_default', $courseDefaultSetting);
 
             $default        = $this->getSettingService()->get('default', array());

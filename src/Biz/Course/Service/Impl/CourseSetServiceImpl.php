@@ -271,7 +271,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courses      = $this->getCourseService()->findCoursesByIds($courseIds);
         $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
-        $sets         = $this->findCourseSetsByIds(array_unique($courseSetIds));
+        $sets         = $this->findCourseSetsByIds($courseSetIds);
         return $sets;
     }
 
@@ -546,6 +546,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function findCourseSetIncomesByCourseSetIds(array $courseSetIds)
     {
         return $this->getCourseDao()->findCourseSetIncomesByCourseSetIds($courseSetIds);
+    }
+
+    public function analysisCourseSetDataByTime($startTime, $endTime)
+    {
+        return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
     }
 
     protected function validateCourseSet($courseSet)
