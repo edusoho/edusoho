@@ -957,7 +957,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function testpaperResultListAction(Request $request, $id, $questionId)
+    public function testpaperResultListAction(Request $request, $id, $testpaperId)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
