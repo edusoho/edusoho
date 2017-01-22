@@ -1746,7 +1746,7 @@ class UserServiceImpl extends BaseService implements UserService
         if ($needVerified) {
             $conditions['hasVerifiedMobile'] = true;
             $count                           = $this->searchUserCount($conditions);
-            $users                           = $this->searchUsers($conditions, array('createdTime', 'ASC'), 0, $count);
+            $users                           = $this->searchUsers($conditions, array('createdTime' => 'ASC'), 0, $count);
             $mobiles                         = ArrayToolkit::column($users, 'verifiedMobile');
             return $mobiles;
         } else {

@@ -562,9 +562,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         $orderBy = array();
 
         if ($sort == 'early') {
-            $orderBy = array('createdTime' , 'ASC');
+            $orderBy = array('createdTime' => 'ASC');
         } else {
-            $orderBy = array('createdTime' , 'DESC');
+            $orderBy = array('createdTime' => 'DESC');
         }
 
         $conditions = $this->_prepareSearchConditions($conditions);
