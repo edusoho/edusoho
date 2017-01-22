@@ -51,6 +51,9 @@ class HomeworkController extends BaseController
         $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
         $testpapers   = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
 
+        $activityIds = ArrayToolkit::column($paperResults, 'lessonId');
+        $tasks       = $this->getTaskService()->findTasksByActivityIds($activityIds);
+
         return $this->render('my/homework/check-list.html.twig', array(
             'paperResults' => $paperResults,
             'paginator'    => $paginator,
@@ -58,7 +61,8 @@ class HomeworkController extends BaseController
             'courseSets'   => $courseSets,
             'users'        => $users,
             'status'       => $status,
-            'testpapers'   => $testpapers
+            'testpapers'   => $testpapers,
+            'tasks'        => $tasks
         ));
     }
 
