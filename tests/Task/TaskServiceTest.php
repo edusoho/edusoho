@@ -188,7 +188,8 @@ class TaskServiceTest extends BaseTestCase
             'title'           => 'test task',
             'mediaType'       => 'text',
             'fromCourseId'    => $course['id'],
-            'fromCourseSetId' => 1
+            'fromCourseSetId' => 1,
+            'finishType' => 'time'
         );
     }
 

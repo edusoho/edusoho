@@ -19,21 +19,21 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     public function preCheck($targetId, $userId)
     {
         if ($this->getCourseMemberService()->isCourseStudent($targetId, $userId)) {
-            return array('error' => $this->getKernel()->trans('已经是课程的学员了!'));
+            return array('error' => $this->getKernel()->trans('已经是该教学计划的学员了!'));
         }
 
         $course = $this->getCourseService()->getCourse($targetId);
 
         if (!$course['buyable']) {
-            return array('error' => $this->getKernel()->trans('该课程不可购买，如有需要，请联系客服'));
+            return array('error' => $this->getKernel()->trans('该教学计划不可购买，如有需要，请联系客服'));
         }
 
         if ($course['buyExpiryTime'] && $course['buyExpiryTime'] < time()) {
-            return array('error' => $this->getKernel()->trans('该课程已经超过购买截止日期，不允许购买'));
+            return array('error' => $this->getKernel()->trans('该教学计划已经超过购买截止日期，不允许购买'));
         }
 
         if ($course['status'] != 'published') {
-            return array('error' => $this->getKernel()->trans('不能加入未发布课程!'));
+            return array('error' => $this->getKernel()->trans('不能加入未发布的教学计划!'));
         }
 
         if ($course["type"] == "live" && $course["studentNum"] >= $course["maxStudentNum"]) {
@@ -48,7 +48,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         $course = $this->getCourseService()->getCourse($targetId);
 
         if (empty($course)) {
-            throw new Exception($this->getKernel()->trans('找不到要购买课程!'));
+            throw new Exception($this->getKernel()->trans('找不到要购买教学计划!'));
         }
 
         $users = $this->getUserService()->findUsersByIds($course['teacherIds']);

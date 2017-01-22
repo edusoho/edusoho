@@ -93,7 +93,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             }
             $builder->addOrderBy($field, $direction);
         }
-
         return $builder->execute()->fetchAll();
     }
 
@@ -161,7 +160,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
             return true;
         });
-
         $builder = $this->_getQueryBuilder($conditions);
         $builder->from($this->table(), $this->table());
 

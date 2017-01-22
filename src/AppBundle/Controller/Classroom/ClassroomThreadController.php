@@ -138,7 +138,6 @@ class ClassroomThreadController extends BaseController
         if ($member && !$member['locked']) {
             $layout = 'classroom/join-layout.html.twig';
         }
-
         return $this->render('classroom-thread/show.html.twig', array(
             'classroom' => $classroom,
             'thread'    => $thread,
