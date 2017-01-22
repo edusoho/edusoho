@@ -26,9 +26,9 @@
 
   {% endif %}
   
-  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
+  
   <script>
-    app.lazyLoad = function() { app.load('materiallibbundle/controller/material-lib/preview') };
+    app.load('materiallibbundle/controller/material-lib/preview');
   </script>
 {% endblock %}
 

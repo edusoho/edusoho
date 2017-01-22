@@ -1,8 +1,11 @@
 {% extends 'course/header/header-layout.html.twig' %}
 
+{% block course_header_subtitle %}
+  <p class="mt10  text-overflow  mb20">{{ courseSet.subtitle }}</p>
+{% endblock %}
+
 {% block course_heard_content %}
   {% set course_set = data('CourseSet', {id: course.courseSetId}) %}
-
   <div class="course-detail-bottom">
     <div class="course-detail-img">
       {% if previewTask|default(null) %}
@@ -13,6 +16,7 @@
       <img class="img-responsive"
            src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(courseSet.cover.large) }} {% endif %}"
            alt="{{ course.title }} ">
+      <div class="image-overlay"></div>
       <div class="course-detail-remask">
         <i class="es-icon es-icon-people"></i><span class="mhs">{{ course_set.studentNum|default(0) }}</span>人加入学习
         <div class="score pull-right">
@@ -20,7 +24,6 @@
           <span class="vertical-middle">{{ course_set.ratingNum|default(0) }}</span>
         </div>
       </div>
-
     </div>
     <div class="course-detail-info text-12 color-gray">
       <div class="mb10">

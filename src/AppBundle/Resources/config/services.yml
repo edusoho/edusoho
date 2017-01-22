@@ -72,6 +72,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    classroom_event_subscriber:
+        class: Biz\Classroom\Event\ClassroomEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     course_statistics_event_subscriber:
         class: Biz\Course\Event\StatisticsSubscriber
         arguments: ['@biz']
@@ -145,6 +151,12 @@ services:
                 - { name: codeages_plugin.event.subscriber }
     tokenbucket_event_subscriber:
         class: Biz\PostFilter\Event\TokenBucketEventSubscriber
+        arguments: ['@biz']
+        tags:
+                - { name: codeages_plugin.event.subscriber }
+
+    thread_event_subscriber:
+        class: Biz\Thread\Event\ThreadEventSubscriber
         arguments: ['@biz']
         tags:
                 - { name: codeages_plugin.event.subscriber }

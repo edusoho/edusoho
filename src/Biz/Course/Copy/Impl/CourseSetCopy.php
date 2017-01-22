@@ -27,7 +27,7 @@ class CourseSetCopy extends AbstractEntityCopy
 
     /*
      * $source = $originalCourseSet
-     * $config : courseId (course to copy), classroomId
+     * $config : courseId (course to copy), classroomId(?)
      */
     protected function _copy($source, $config = array())
     {

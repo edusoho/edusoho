@@ -14,6 +14,6 @@
 {% block footer %}
   <button id="edit-user-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">{{'保存'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
-  <script>app.lazyLoad = function() { app.load('user/update-org-modal') };</script>
+  
+  <script>app.load('user/update-org-modal');</script>
 {% endblock %}

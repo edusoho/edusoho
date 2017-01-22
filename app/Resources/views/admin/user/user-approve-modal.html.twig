@@ -39,8 +39,8 @@
   <button type="submit" class="btn btn-success user-approve-btn" data-toggle="form-submit" data-status='success' data-target="#approve-form">{{'审核通过'|trans}}</button>
 
 
-  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
-  <script>app.lazyLoad = function() { app.load('user/approve') };</script>
+  
+  <script>app.load('user/approve');</script>
     
 </div>
 {% endblock %}

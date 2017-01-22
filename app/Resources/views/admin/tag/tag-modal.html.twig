@@ -5,7 +5,7 @@
 {% if tag.id %}{{'编辑标签'|trans}}{% else %}{{'新增标签'|trans}}{% endif %}
 {% endblock %}
 {% block body %}
-  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
+  
 
   <form class="form-horizontal" id="tag-form" action="{% if tag.id %}{{ path('admin_tag_update', {id:tag.id}) }}{% else %}{{ path('admin_tag_create') }}{% endif %}" method="post">
     <div class="form-group">
@@ -16,7 +16,7 @@
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
-  <script type="text/javascript">app.lazyLoad = function() { app.load('tag/save-modal') };</script>
+  <script type="text/javascript">app.load('tag/save-modal');</script>
 {% endblock %}
 
 {% block footer %}

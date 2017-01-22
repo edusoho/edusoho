@@ -314,21 +314,6 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagOwnerDao()->deleteByOwnerTypeAndOwnerId($owner['ownerType'], $owner['ownerId']);
     }
 
-    public function isTagGroupNameAvalieable($name, $exclude = null)
-    {
-        if (empty($name)) {
-            return false;
-        }
-
-        if ($name == $exclude) {
-            return true;
-        }
-
-        $tag = $this->getTagGroupDao()->findTagGroupByName($name);
-
-        return $tag ? false : true;
-    }
-
     protected function filterTagFields(&$tag, $relatedTag = null)
     {
         if (empty($tag['name'])) {

@@ -3,22 +3,23 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\ThreadDao;
-use Biz\Course\Service\CourseNoteService;
+use Topxia\Common\ArrayToolkit;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Copy\Impl\CourseCopy;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
-use Biz\Taxonomy\Service\CategoryService;
-use Biz\User\Service\UserService;
+use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Common\ArrayToolkit;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Taxonomy\Service\CategoryService;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -41,6 +42,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findCoursesByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSetId, null);
+    }
+
+    public function findCoursesByParentIdAndLocked($parentId, $locked)
+    {
+        return $this->getCourseDao()->findCoursesByParentIdAndLocked($parentId, $locked);
     }
 
     public function findPublishedCoursesByCourseSetId($courseSetId)
@@ -78,17 +84,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
             throw $this->createInvalidArgumentException("Lack of required fields");
         }
+
         if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
             throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
-        }
-        //临时注释
-        if (!$this->hasCourseManagerRole(0, $course['courseSetId'])) {
-            throw $this->createAccessDeniedException('You have no access to Course Management');
         }
 
         if (!isset($course['isDefault'])) {
             $course['isDefault'] = 0;
         }
+
         $course = ArrayToolkit::parts($course, array(
             'title',
             'courseSetId',
@@ -129,6 +133,17 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function copyCourse($fields)
     {
         $course = $this->tryManageCourse($fields['copyCourseId']);
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'courseSetId',
+            'learnMode',
+            'expiryMode',
+            'expiryDays',
+            'expiryStartDate',
+            'expiryEndDate',
+            'isDefault'
+        ));
+        $fields = $this->validateExpiryMode($fields);
 
         $entityCopy = new CourseCopy($this->biz);
         return $entityCopy->copy($course, $fields);
@@ -673,7 +688,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = array(
             'userId' => $userId,
-            'role'   => 'student',
+            'role'   => 'student'
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
@@ -685,13 +700,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = array(
             'userId' => $userId,
-            'role'   => 'student',
+            'role'   => 'student'
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
         }
         $members = $this->getMemberDao()->findLearningMembers($userId, $start, $limit);
-
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
@@ -724,7 +738,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $conditions['type'] = $filters["type"];
         }
         return $this->getMemberDao()->countLearnedMembersByUserId($userId);
-
     }
 
     public function findUserLearnedCourses($userId, $start, $limit, $filters = array())
@@ -813,7 +826,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int $userId
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -838,7 +851,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
-    public function hasCourseManagerRole($courseId = 0, $courseSetId = 0)
+    public function hasCourseManagerRole($courseId = 0)
     {
         $user = $this->getCurrentUser();
         //未登录，无权限管理
@@ -846,27 +859,19 @@ class CourseServiceImpl extends BaseService implements CourseService
             return false;
         }
 
-        if ($courseId > 0) {
-            $course = $this->getCourse($courseId);
-            //课程不存在，无权限管理
-            if (empty($course)) {
-                return false;
-            }
-            $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
-            //不是课程教师，无权限管理
-            if ($teacher) {
-                return true;
-            }
-        } else {
-            $courseSet = $this->getCourseSetDao()->get($courseSetId);
-            if (empty($courseSet)) {
-                return false;
-            }
-            return $courseSet['creator'] == $user->getId();
-        }
-
         //不是管理员，无权限管理
         if ($this->hasAdminRole()) {
+            return true;
+        }
+
+        $course = $this->getCourse($courseId);
+        //课程不存在，无权限管理
+        if (empty($course)) {
+            return false;
+        }
+        $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
+        //不是课程教师，无权限管理
+        if ($teacher) {
             return true;
         }
 

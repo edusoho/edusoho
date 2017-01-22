@@ -8,7 +8,7 @@
   {% endif %}
 {% endblock %}
 
-{% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
+
 
 {% block body %}
 <div id="category-creater-widget" data-upload-url="#">
@@ -77,7 +77,7 @@
 		
 	</form>
 </div>
-<script type="text/javascript"> app.lazyLoad = function() { app.load('discovery-column/discovery-column-modal') }; </script>
+<script type="text/javascript"> app.load('discovery-column/discovery-column-modal'); </script>
 {% endblock %}
 
 {% block footer %}

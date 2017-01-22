@@ -33,6 +33,8 @@ class Show {
     this.disableVolumeButton = container.data('disableVolumeButton');
     this.disablePlaybackButton = container.data('disablePlaybackButton');
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
+    this.subtitles = container.data('subtitles');
+
     this.initView();
     this.initEvent();
   }
@@ -77,9 +79,34 @@ class Show {
           userId: this.userId,
           userName: this.userName
         },
-        videoHeaderLength: this.videoHeaderLength
+        videoHeaderLength: this.videoHeaderLength,
+        textTrack: this.transToTextrack(this.subtitles)
       }
     );
+  }
+
+  transToTextrack(subtitles) {
+    let textTracks = [];
+    if (subtitles) {
+        for (let i in subtitles) {
+            let item = {
+                label: subtitles[i].name,
+                src: subtitles[i].url,
+                'default': ("default" in subtitles[i]) ? subtitles[i]['default'] : false
+            }
+            textTracks.push(item);
+        }
+    }
+
+    // set first item to default if no default
+    for (let i in textTracks) {
+        if (textTracks[i]['default']) {
+            return;
+        }
+        textTracks[0]['default'] = true;
+    }
+
+    return textTracks;
   }
 
   initMesseger() {

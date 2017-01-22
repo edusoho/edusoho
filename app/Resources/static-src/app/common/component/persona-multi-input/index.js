@@ -29,52 +29,47 @@ function updateChecked(dataSourceUi,id) {
 export default class PersonaMultiInput extends MultiInput {
   constructor(props) {
     super(props);
-    this.searchResult = null;
   }
 
   componentWillMount() {
     this.state = {
       dataSourceUi: [],
-      list: [],
-      outputSets: [],
     }
     this.props.dataSource.map((item,index)=>{
       initItem(this.state.dataSourceUi,item,index+1,this.props);
     })
-    this.state.list = this.getList();
-    this.getOutputSets();
   }
 
-  onChecked(event) {
+  getChildContext() {
+    return {
+      removeItem: this.removeItem,
+      sortItem: this.sortItem,
+      addItem: this.addItem,
+      onChecked:this.onChecked,
+    }
+  }
+
+  onChecked=(event)=> {
     let id = event.currentTarget.value;
     updateChecked(this.state.dataSourceUi,id);
-    this.getOutputSets();
     this.setState({
-      list: this.getList()
+      dataSourceUi: this.state.dataSourceUi,
     });
   }
 
-  addItem(data) {
-    if(!this.searchResult)  {
+  addItem = (value,data) =>{
+    if(!data)  {
       return;
     }
     //@TODO重复添加提示
-    initItem(this.state.dataSourceUi,this.searchResult,this.state.dataSourceUi.length+1,this.props);
-    this.searchResult = null;
-    this.getOutputSets();
+    initItem(this.state.dataSourceUi,data,this.state.dataSourceUi.length+1,this.props);
     this.setState({
-      list: this.getList()
+      dataSourceUi: this.state.dataSourceUi,
     });
-    console.log({'addItem after':this.state.dataSourceUi});
-  }
-
-  onSearch(data) {
-    this.searchResult = JSON.parse(data);
   }
 
   getList() {
-    console.log(this.props.sortable);
-    return (<List listClassName={this.props.listClassName}  dataSourceUi = {this.state.dataSourceUi} removeItem={(itemId)=>this.removeItem(itemId)} sortItem={(event=>this.sortItem(event))} onChecked={(event=>this.onChecked(event))} sortable={this.props.sortable}></List>);
+    return (<List listClassName={this.props.listClassName}  dataSourceUi = {this.state.dataSourceUi}  sortable={this.props.sortable}></List>);
   }
 }
 
@@ -93,3 +88,9 @@ PersonaMultiInput.defaultProps = {
   avatar: 'avatar',
   isVisible:'isVisible',
 };
+
+PersonaMultiInput.childContextTypes = {
+  ...MultiInput.childContextTypes,
+  onChecked: React.PropTypes.func
+};
+
