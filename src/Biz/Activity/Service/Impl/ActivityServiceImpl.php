@@ -11,6 +11,7 @@ use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Listener\ActivityLearnLogListener;
 
 class ActivityServiceImpl extends BaseService implements ActivityService
@@ -169,17 +170,21 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $activity = $this->getActivity($id);
 
+        try {
+            $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
 
-        $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
+            $this->syncActivityMaterials($activity, array(), 'delete');
 
-        $this->syncActivityMaterials($activity, array(), 'delete');
-
-        $activityConfig = $this->getActivityConfig($activity['mediaType']);
-        $activityConfig->delete($activity['mediaId']);
-
-        $this->getActivityDao()->delete($id);
-
-        return true;
+            $activityConfig = $this->getActivityConfig($activity['mediaType']);
+            $activityConfig->delete($activity['mediaId']);
+            $this->getActivityLearnLogService()->deleteLearnLogsByActivityId($id);
+            $result = $this->getActivityDao()->delete($id);
+            $this->commit();
+            return $result;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function isFinished($id)
@@ -257,7 +262,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
         foreach ($arr1 as $key1 => $value1) {
             $contained = false;
-            foreach ($arr2 as $key1 => $value2) {
+            foreach ($arr2 as $key2 => $value2) {
                 if ($value1['fileId'] == 0) {
                     $contained = $value1['link'] == $value2['link'];
                 } else {
@@ -404,6 +409,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function getActivityDao()
     {
         return $this->createDao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return ActivityLearnLogService
+     */
+    protected function getActivityLearnLogService()
+    {
+        return $this->createService('Activity:ActivityLearnLogService');
     }
 
     /**
