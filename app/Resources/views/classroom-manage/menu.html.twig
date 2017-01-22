@@ -28,12 +28,6 @@
     <li class="list-group-item {% if side_nav == 'assistant' %}active{% endif %}">
       <a href="{{ path('classroom_manage_assistants', {id:classroom.id}) }}">{{'助教设置'|trans}}</a>
     </li>
-
-    {% if is_plugin_installed("ClassroomPlan") %}
-      <li class="list-group-item {% if side_nav == 'plan' %}active{% endif %}">
-        <a href="{{ path('classroom_manage_plan', {classroomId:classroom.id}) }}">{{'学习计划'|trans}}</a>
-      </li>
-    {% endif %}
   </ul>
 {% endif %}
 
@@ -48,13 +42,11 @@
 
   {% if canHandle %}
     <li class="list-group-item {% if side_nav == 'testpaper-check' %} active {% endif %}">
-      <a href="{{ path('classroom_manage_testpaper', {id:classroom.id,status:'reviewing'}) }}">{{'试卷批阅'|trans}}</a>
+      <a href="{{ path('classroom_manage_testpaper', {id:classroom.id}) }}">{{'试卷批阅'|trans}}</a>
     </li>
    
-    {% if is_plugin_installed('Homework') %}
-      <li class="list-group-item {% if side_nav == 'homework-check' %} active {% endif %}">
-        <a href="{{ path('classroom_manage_homework', {id:classroom.id,status:'reviewing'}) }}">{{'作业批改'|trans}}</a>
-      </li>
-    {% endif %}
+    <li class="list-group-item {% if side_nav == 'homework-check' %} active {% endif %}">
+      <a href="{{ path('classroom_manage_homework', {id:classroom.id}) }}">{{'作业批改'|trans}}</a>
+    </li>
   {% endif %}
 </ul>

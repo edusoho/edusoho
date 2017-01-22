@@ -24,13 +24,13 @@ class BalloonCloudVideoPlayer extends Emitter {
     let extConfig = {};
 
     //字幕
-    if (self.options.textTrack != '') {
+    if (self.options.textTrack) {
       extConfig = Object.assign(extConfig, {
         textTrack: self.options.textTrack
       });
     }
 
-    if (self.options.watermark != '') {
+    if (self.options.watermark) {
       extConfig = Object.assign(extConfig, {
         watermark: {
           file: self.options.watermark,
@@ -41,7 +41,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
-    if (self.options.fingerprint != '') {
+    if (self.options.fingerprint) {
       extConfig = Object.assign(extConfig, {
         fingerprint: {
           html: self.options.fingerprint,
@@ -50,7 +50,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       })
     }
 
-    if (self.options.timelimit != '') {
+    if (self.options.timelimit) {
       extConfig = Object.assign(extConfig, {
         pluck: {
           timelimit: self.options.timelimit,
@@ -60,7 +60,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       })
     }
 
-    if (self.options.enablePlaybackRates != false && self.isBrowserSupportPlaybackRates()) {
+    if (self.options.enablePlaybackRates && self.isBrowserSupportPlaybackRates()) {
       extConfig = Object.assign(extConfig, {
         playbackRates: {
           enable: true,
@@ -70,13 +70,13 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
-    if (self.options.controlBar != '') {
+    if (self.options.controlBar) {
       extConfig = Object.assign(extConfig, {
         controlBar: self.options.controlBar
       });
     }
 
-    if (self.options.statsInfo != '') {
+    if (self.options.statsInfo) {
       var statsInfo = self.options.statsInfo;
       extConfig = Object.assign(extConfig, {
         statsInfo: {

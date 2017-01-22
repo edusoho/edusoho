@@ -95,12 +95,13 @@ interface CourseSetService
     public function createCourseSet($courseSet);
 
     /**
-     * 复制课程
-     * @param  array   $courseSetId 要复制的课程
-     * @param  array   $courseId    要复制的教学计划
+     * 复制课程到班级
+     * @param  int     $classroomId
+     * @param  int     $courseSetId   要复制的课程
+     * @param  int     $courseId      要复制的教学计划
      * @return mixed
      */
-    public function copyCourseSet($courseSetId, $courseId);
+    public function copyCourseSet($classroomId, $courseSetId, $courseId);
 
     public function updateCourseSet($id, $fields);
 

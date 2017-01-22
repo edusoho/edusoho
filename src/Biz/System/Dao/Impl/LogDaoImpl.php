@@ -29,13 +29,13 @@ class LogDaoImpl extends GeneralDaoImpl implements LogDao
         );
     }
 
-    public function analysisLoginNumByTime($startTime,$endTime)
+    public function analysisLoginNumByTime($startTime, $endTime)
     {
         $sql="SELECT count(distinct userid)  as num FROM `{$this->table}` WHERE `action`='login_success' AND  `createdTime`>= ? AND `createdTime`<= ?  ";
         return $this->db()->fetchColumn($sql, array($startTime, $endTime));
     }
 
-    public function analysisLoginDataByTime($startTime,$endTime)
+    public function analysisLoginDataByTime($startTime, $endTime)
     {
         $sql="SELECT count(distinct userid) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `action`='login_success' AND `createdTime`>= ? AND `createdTime`<= ? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
         return $this->db()->fetchAll($sql, array($startTime, $endTime));

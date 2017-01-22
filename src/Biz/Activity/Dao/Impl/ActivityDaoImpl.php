@@ -24,7 +24,8 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
     {
         $declares['conditions'] = array(
             'fromCourseId = :fromCourseId',
-            'mediaType = :mediaType'
+            'mediaType = :mediaType',
+            'fromCourseId IN (:courseIds)'
         );
 
         return $declares;

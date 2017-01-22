@@ -14,11 +14,17 @@
     {% endif %}
 
     {% if task.activity.mediaType is same as('live') %}
-      {% if task.result.status|default('') == 'finished' %}
-        <span class="color-gray mls">已结束</span>
+      {% if task.activity.endTime < date().timestamp %}
+        {% if task.activity.ext.replayStatus|default('') == 'generated' %}
+          <span class="color-success mls">{{ '已录制回放'|trans }}</span>
+        {% elseif task.activity.ext.replayStatus|default('') == 'videoGenerated' %}
+          <span class="color-success mls">{{ '已上传录像'|trans }}</span>
+        {% else %}
+          <span class="text-muted">{{ '直播已经结束'|trans }}</span>
+        {% endif %}
       {% else %}
         <span class="color-success mls">
-        {{ task.activity.startTime|date('Y-n-j H:i'|trans) }} ~ {{ task.activity.endTime|date('H:i'|trans) }}</span>
+        {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
       {% endif %}
     {% else %}
       {% if task.activity.length|activity_length_format %}<span class="color-gray mls">
@@ -27,39 +33,75 @@
   </div>
   <div class="item-actions">
     <a class="btn btn-gray" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
-       data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}"><i
-          class="es-icon es-icon-edit mrs"></i>编辑</a>
+      data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}"><i
+        class="es-icon es-icon-edit mrs"></i>编辑</a>
     <a class="btn btn-gray" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}"
-       target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>预览</a>
+      target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>预览</a>
     <span class="dropdown">
       <a class="dropdown-toggle dropdown-more btn btn-gray" id="dropdown-more" data-toggle="dropdown" href="#"><i
-            class="es-icon es-icon-keyboardarrowdown mrs" aria-haspopup="true"
-            aria-expanded="false"></i>{{ '更多'|trans }}
+          class="es-icon es-icon-keyboardarrowdown mrs" aria-haspopup="true"
+          aria-expanded="false"></i>{{ '更多'|trans }}
       </a>
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px"
-          aria-labelledby="dLabel" style="display:none;">
-         {% if task.status|default('create') != 'published' %}
-           <li>
-              <a class='publish-item' href="javascript:;" data-type="task"
-                 data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
-                 <i class="es-icon es-icon--check-circle mrs"></i>发布
-               </a>
-            </li>
-           <li>
+        aria-labelledby="dLabel" style="display:none;">
+        {% if task.status|default('create') != 'published' %}
+          <li>
+            <a class='publish-item' href="javascript:;" data-type="task"
+              data-url="{{ path('course_manage_task_publish', {id:task.id,courseId:task.courseId}) }}">
+              <i class="es-icon es-icon--check-circle mrs"></i>发布
+            </a>
+          </li>
+          <li>
             <a class='delete-item' href="javascript:;" data-type="task"
-               data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
+              data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}">
               <i class="es-icon es-icon-delete mrs"></i>
               删除
             </a>
           </li>
         {% else %}
-           <li>
-              <a class='unpublish-item' href="javascript:;" data-type="task"
-                 data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">
-                 <i class="es-icon es-icon-close01 mrm"></i>取消发布
-               </a>
+          <li>
+            <a class='unpublish-item' href="javascript:;" data-type="task"
+              data-url="{{ path('course_manage_task_unpublish', {id:task.id,courseId:task.courseId}) }}">
+              <i class="es-icon es-icon-close01 mrm"></i>取消发布
+            </a>
+          </li>
+        {% endif %}
+        {# 直播课时结束后 #}
+        {% if task.activity.mediaType is same as('live') and task.activity.endTime < date().timestamp %}
+          {% set live = task.activity.ext %}
+          {% set replayStatus = live.replayStatus|default('ungenerated') %}
+
+          {# 未生成回放 #}
+          {% if replayStatus == 'ungenerated' and live_can_record(live.liveId) %}
+            <li>
+              <a class='js-generate-replay' href="javascript:;" data-type="task"
+                data-url="{{ path('course_manage_task_replay_create', {courseId:task.courseId, taskId:task.id}) }}">
+                 <i class="glyphicon glyphicon-facetime-video mrm"></i>录制
+              </a>
             </li>
-         {% endif %}
+          {# 已生成录制 #}
+          {% elseif replayStatus == 'generated' %}
+            <li>
+              <a class='js-edit-replay' href="#modal" data-toggle="modal" data-type="task"
+                data-url="{{ path('course_manage_task_replay_edit',{ courseId: task.courseId, taskId:task.id}) }}">
+                 <i class="glyphicon glyphicon-th-list mrm"></i>编辑录制
+              </a>
+            </li>
+
+            <li>
+              <a class='js-generate-replay' href="javascript:;" data-type="task"
+                data-url="{{ path('course_manage_task_replay_create',{ courseId: task.courseId, taskId:task.id}) }}">
+                 <i class="glyphicon glyphicon-facetime-video mrm"></i>重新录制
+              </a>
+            </li>
+          {% endif %}
+          <li>
+            <a class='js-upload-replay' href="#modal" data-toggle="modal" data-type="task"
+              data-url="{{ path('course_manage_task_replay_upload', {courseId: task.courseId, taskId:task.id}) }}">
+              <i class="glyphicon glyphicon-paperclip mrm"></i>上传回放
+            </a>
+          </li>
+        {% endif %}
       </ul>
     </span>
   </div>

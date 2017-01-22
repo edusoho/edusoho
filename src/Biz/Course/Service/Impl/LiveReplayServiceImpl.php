@@ -2,6 +2,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Util\EdusohoLiveClient;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Service\LiveReplayService;
@@ -109,9 +110,32 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         return $this->createLiveClient()->entryReplay($args);
     }
 
+    public function updateReplayShow($showReplayIds, $lessonId)
+    {
+        $replayLessons = $this->findReplayByLessonId($lessonId);
+
+        if (!$replayLessons) {
+            return false;
+        }
+
+        foreach ($replayLessons as $replay) {
+            if (empty($showReplayIds) || (!$replay['hidden'] && !in_array($replay['id'], $showReplayIds))) {
+                $this->updateReplay($replay['id'], array('hidden' => 1));
+            } elseif ($replay['hidden'] && in_array($replay['id'], $showReplayIds)) {
+                $this->updateReplay($replay['id'], array('hidden' => 0));
+            }
+        }
+
+        return true;
+    }
+
     public function generateReplay($liveId, $courseId, $lessonId, $liveProvider, $type)
     {
-        $replayList = $this->createLiveClient()->createReplayList($liveId, "录播回放", $liveProvider);
+        try{
+            $replayList = $this->createLiveClient()->createReplayList($liveId, "录播回放", $liveProvider);
+        }catch (CloudAPIIOException $cloudAPIIOException){
+            return array();
+        }
 
         if (isset($replayList['error']) && !empty($replayList['error'])) {
             return $replayList;
@@ -124,7 +148,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         }
 
         $replays = array();
-        foreach ($replayList as $key => $replay) {
+        foreach ($replayList as $replay) {
             $fields = array(
                 'courseId' => $courseId,
                 'lessonId' => $lessonId,
@@ -137,7 +161,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             $replays[] = $this->addReplay($fields);
         }
 
-        $this->dispatchEvent("live.replay.generate", array('replays' => $replays));
+        $this->dispatchEvent('live.replay.generate', $replays);
 
         return $replayList;
     }

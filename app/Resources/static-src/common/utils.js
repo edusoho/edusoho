@@ -9,5 +9,4 @@ Browser.isSafari = (navigator.userAgent.toLowerCase().indexOf("safari") != -1);
 Browser.isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != -1);
 Browser.isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != -1);
 Browser.isChrome = (navigator.userAgent.toLowerCase().indexOf("chrome") != -1);
-
 export { Browser }

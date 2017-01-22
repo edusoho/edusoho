@@ -76,8 +76,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
         $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
-        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND (m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serilized')";
-
+        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND (m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized')";
         return $this->db()->fetchColumn($sql, array($userId));
     }
 
@@ -85,7 +84,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
         $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
-        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND (m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serilized') ";
+        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND (m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized') ";
         $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
         return $this->db()->fetchAll($sql, array($userId))?: array();
