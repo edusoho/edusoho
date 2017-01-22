@@ -171,9 +171,9 @@ class ClassroomOrderProcessorTest extends BaseTestCase
 
     public function testGetNote()
     {
-        $this->createCourse(array('about' => '测试'));
+        $course = $this->createCourse(array('about' => '测试'));
         $processor = OrderProcessorFactory::create('course');
-        $note = $processor->getNote(1);
+        $note = $processor->getNote($course['id']);
         $this->assertEquals('测试', $note);
 
         $classroom = array(
@@ -192,9 +192,9 @@ class ClassroomOrderProcessorTest extends BaseTestCase
     public function testGetTitle()
     {
 
-        $this->createCourse(array('about' => '测试'));
+        $course = $this->createCourse(array('about' => '测试'));
         $processor = OrderProcessorFactory::create('course');
-        $title = $processor->getTitle(1);
+        $title = $processor->getTitle($course['id']);
         $this->assertEquals('test-create-course', $title);
         $classroom = array(
             'title' => 'test',
@@ -241,9 +241,15 @@ class ClassroomOrderProcessorTest extends BaseTestCase
 
     private function createCourse($customFields = array())
     {
+        $courseSet = array(
+            'title' => '新课程开始！',
+            'type'  => 'normal'
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
+
         $defaultFields = array(
             'title' => 'test-create-course',
-            'courseSetId' => 1,
+            'courseSetId' => $courseSet['id'],
             'learnMode' => 'freeMode',
             'expiryMode' => 'days',
             'expiryDays' => '0',
@@ -273,6 +279,11 @@ class ClassroomOrderProcessorTest extends BaseTestCase
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 
     protected function getCashAccountService()
