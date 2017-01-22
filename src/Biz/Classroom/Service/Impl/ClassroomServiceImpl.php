@@ -1488,19 +1488,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         if (isset($conditions['roles'])) {
-            $roles = "";
-
-            foreach ($conditions['roles'] as $role) {
-                $roles .= "|".$role;
-            }
-
-            $roles = $roles."|";
-
             foreach ($conditions['roles'] as $key => $role) {
-                $conditions['roles'][$key] = "|".$role."|";
+                $conditions['roles'][$key] = $role;
             }
-
-            $conditions['roles'][] = $roles;
         }
 
         if (isset($conditions['nickname'])) {
