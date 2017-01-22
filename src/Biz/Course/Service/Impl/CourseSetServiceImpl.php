@@ -167,9 +167,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return false;
         }
 
-        // if ($this->hasAdminRole()) {
-        //     return true;
-        // }
+        if ($this->hasAdminRole()) {
+            return true;
+        }
 
         if (empty($courseSetId)) {
             return false;

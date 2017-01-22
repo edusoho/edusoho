@@ -89,7 +89,7 @@ class TaskCopy extends AbstractEntityCopy
                 }
                 return 1;
             });
-            // var_dump($chapters);exit;
+
             foreach ($chapters as $chapter) {
                 $newChapter = array(
                     'courseId' => $newCourseId,
