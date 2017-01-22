@@ -1469,7 +1469,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'parentCourseId' => $course['parentId']
         );
 
-        var_dump($course);
         $classroomCourse = $this->getClassroomCourseDao()->create($classroomCourse);
         $this->dispatchEvent('classroom.put_course', $classroomCourse);
     }
