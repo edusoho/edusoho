@@ -6,6 +6,7 @@ use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Classroom\Dao\ClassroomMemberDao;
+use Topxia\Common\ArrayToolkit;
 
 class ClassroomCourseCopy extends CourseCopy
 {
@@ -146,9 +147,19 @@ class ClassroomCourseCopy extends CourseCopy
 
     protected function doCopyTeachersToClassroom($oldCourse, $classroomId)
     {
+        $existTeachers = $this->getClassroomMemberDao()->findByClassroomIdAndRole($classroomId, 'teacher', 0, PHP_INT_MAX);
+        if(empty($existTeachers)){
+            $existTeachers = array();
+        }else{
+            $existTeachers = ArrayToolkit::index($existTeachers, 'userId');
+        }
+
         $teachers = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
         if (!empty($teachers)) {
             foreach ($teachers as $teacher) {
+                if(!empty($existTeachers[$teacher['userId']])){
+                    continue;
+                }
                 $this->getClassroomMemberDao()->create(array(
                     'classroomId' => $classroomId,
                     'userId'      => $teacher['userId'],
