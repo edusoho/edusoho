@@ -9,7 +9,7 @@
       <div class="panel-heading">
         {{ course.title }}<span class="mh5">／</span>{{'计划任务'|trans}}
         {% if course.status != 'published' %}
-          <button class="btn btn-success btn-sm pull-right js-publish-course" 
+          <button class="btn btn-success btn-sm pull-right js-publish-course"
             data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
             {{ '发布计划'|trans }}
           </button>
@@ -22,7 +22,7 @@
         <div class="pull-right">
           <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id}) }}">
             <i class="es-icon es-icon-anonymous-iconfont"></i>
-            任务
+            学习任务
           </button>
           <div class="btn-group">
             <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
@@ -61,4 +61,14 @@
       </ul>
     </div>
   </div>
+  <ul id="sortable-list" class="task-manage-list sortable-list"
+      data-sort-url='{{ path("course_manage_items_sort",{courseId: course.id}) }}'>
+    {% for key, item in items %}
+      {% if item.itemType == 'task' %}
+        {% include 'task-manage/list-item-lock-mode.html.twig' with {task:item} %}
+      {% elseif item.itemType == 'chapter' %}
+        {% include 'course-manage/chapter/list-item-lock-mode.html.twig' with {chapter:item, course:course} %}
+      {% endif %}
+    {% endfor %}
+  </ul>
 {% endblock %}

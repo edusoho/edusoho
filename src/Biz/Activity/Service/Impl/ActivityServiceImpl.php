@@ -87,23 +87,33 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return;
         }
 
-        if (in_array($eventName, array('start', 'doing'))) {
+        if ($eventName == 'start') {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
 
+        $this->triggerActivityLearnLogListener($activity, $eventName, $data);
+        $this->triggerExtendListener($activity, $eventName, $data);
+
+        if (in_array($eventName, array('doing', 'watching'))) {
+            $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
+        }
+    }
+
+    protected function triggerActivityLearnLogListener($activity, $eventName, $data)
+    {
         $logListener = new ActivityLearnLogListener($this->biz);
 
         $logData          = $data;
         $logData['event'] = $activity['mediaType'].'.'.$eventName;
         $logListener->handle($activity, $logData);
+    }
 
+    protected function triggerExtendListener($activity, $eventName, $data)
+    {
         $activityListener = $this->getActivityConfig($activity['mediaType'])->getListener($eventName);
-
         if (!is_null($activityListener)) {
             $activityListener->handle($activity, $data);
         }
-
-        $this->dispatchEvent("activity.operated", new Event($activity, $data));
     }
 
     public function createActivity($fields)

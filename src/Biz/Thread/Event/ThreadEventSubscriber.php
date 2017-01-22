@@ -65,6 +65,7 @@ class ThreadEventSubscriber extends EventSubscriber implements EventSubscriberIn
         if (!isset($biz["thread_event_processor.{$targetType}"])) {
             return;
         }
+
         $processor = $biz["thread_event_processor.{$targetType}"];
 
         if (!method_exists($processor, $method)) {
