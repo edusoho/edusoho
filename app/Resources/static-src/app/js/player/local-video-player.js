@@ -1,7 +1,7 @@
 import videojs from 'video.js'
 import Emitter from 'es6-event-emitter';
 let videoSwf = require('video.js/dist/video-js/video-js.swf');
-let webpack_base_url = 'http://127.0.0.1:3030';
+
 class LocalVideoPlayer extends Emitter {
   constructor(options) {
     super();
@@ -20,7 +20,7 @@ class LocalVideoPlayer extends Emitter {
       techOrder: techOrder,
       loop: false,
       flash: {
-        swf: webpack_base_url + videoSwf
+        swf: videoSwf
       },
       controlBar: {
         liveDisplay: false

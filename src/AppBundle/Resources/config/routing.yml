@@ -286,15 +286,6 @@ live_auth:
    path:  /live/auth
    defaults: { _controller: AppBundle:LiveAuth:index }
 
-live_verify:
-   path:  /live/verify
-   defaults: { _controller: AppBundle:LiveCourse:verify }
-
-live_course_explore:
-   path:  /live
-   defaults: { _controller: AppBundle:LiveCourse:explore }
-
-
 course_order_detail:
    path:  /order/{id}/detail_course
    defaults: { _controller: AppBundle:Order:detail }
@@ -1609,9 +1600,33 @@ course_manage_task_delete:
     path:  /course/{courseId}/task/{taskId}/delete
     defaults: { _controller: AppBundle:TaskManage:delete }
 
+course_manage_task_replay_edit:
+  path: /course/{courseId}/task/{taskId}/replay/edit
+  defaults: { _controller: AppBundle:TaskManage:editTaskReplay }
+
+course_manage_task_replay_title_update:
+  path:  /course/{courseId}/task/{taskId}/replay/{replayId}/update_title
+  defaults: { _controller: AppBundle:TaskManage:updateTaskReplayTitle }
+  methods: [POST]
+
+course_manage_task_replay_upload:
+  path:  /course/{courseId}/task/{taskId}/replay/upload
+  defaults: { _controller: AppBundle:TaskManage:uploadReplay }
+
+course_manage_task_replay_create:
+  path:  /course/{courseId}/task/{taskId}/replay/create
+  defaults: { _controller: AppBundle:TaskManage:createReplay }
+  methods: [POST]
+
 task_live_entry:
-    path: /course/{courseId}/activity/{activityId}/live_entry
-    defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
+  path: /course/{courseId}/activity/{activityId}/live_entry
+  defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
+
+task_live_replay_player:
+  path: /course/{courseId}/activity/{activityId}/replay
+  defaults: {_controller: AppBundle:Activity/Live:liveReplay }
+
+
 
 # task_liveroom_ticket:
 #     path: /course/{courseId}/activity/{activityId}/liveroom/{roomId}/ticket
@@ -1678,7 +1693,7 @@ course_set_explore:
 
 live_course_set_explore:
     path:  /live
-    defaults: { _controller: AppBundle:Explore:liveCourseSets }
+    defaults: { _controller: AppBundle:Course/LiveCourseSet:explore }
 
 course_set_manage_courses:
   path: /course_set/{courseSetId}/manage/courses
@@ -1699,6 +1714,10 @@ course_set_manage_course_info:
 course_set_manage_course_tasks:
   path: /course_set/{courseSetId}/manage/course/{courseId}/tasks
   defaults: {_controller: AppBundle:Course/CourseManage:tasks}
+
+course_set_manage_course_replay:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/replay
+  defaults: { _controller: AppBundle:Course/CourseManage:replay }
 
 course_set_manage_course_marketing:
   path: /course_set/{courseSetId}/manage/course/{courseId}/marketing
@@ -1940,7 +1959,7 @@ course_set_manage_cover:
   path: /course_set/{id}/manage/cover
   defaults: {_controller: AppBundle:Course/CourseSetManage:cover}
 
-course_set_manage_cover_crop:
+course_manage_cover_crop:
   path: /course_set/{id}/manage/cover_crop
   defaults: {_controller: AppBundle:Course/CourseSetManage:coverCrop}
 
@@ -2076,7 +2095,7 @@ course_set_manage_question_check:
   defaults: { _controller: AppBundle:Question/Manage:check }
 
 #testpaper
-course_set_manage_testpaper:  
+course_set_manage_testpaper:
   path: /course_set/{id}/manage/testpaper
   defaults: { _controller: AppBundle:Testpaper/Manage:index }
 
@@ -2186,15 +2205,15 @@ course_manage_homework_check:
 
 
 homework_start_do:
-  pattern: /lesson/{lessonId}/homework/{homeworkId}/startDo
+  path: /lesson/{lessonId}/homework/{homeworkId}/startDo
   defaults: { _controller: AppBundle:Homework:startDo }
 
 homework_show:
-  pattern: /homework/{resultId}/show
+  path: /homework/{resultId}/show
   defaults: { _controller: AppBundle:Homework:doTest }
 
 homework_result_show:
-  pattern: /homework/result/{resultId}/show
+  path: /homework/result/{resultId}/show
   defaults: { _controller: AppBundle:Homework:showResult }
 
 homework_finish:
@@ -2224,10 +2243,6 @@ exercise_finish:
   path: /exercise/result/{resultId}/finish
   defaults: { _controller: AppBundle:Exercise:submit }
   methods: [POST]
-
-course_set_manage_question_check:
-  path: /course_set/{id}/manage/question/check
-  defaults: { _controller: AppBundle:Question/Manage:check }
 
 #attachment
 attachment_upload:
