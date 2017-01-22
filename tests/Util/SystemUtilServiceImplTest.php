@@ -34,7 +34,7 @@ class SystemUtilServiceImplTest extends BaseTestCase
         );
         
         $this->mockBiz('File:UploadFileService', 'UploadFileService', $params);
-        
+
         $test = $this->getSystemUtilService()->removeUnusedUploadFiles();
 
         $this->assertEquals(3, $test);
