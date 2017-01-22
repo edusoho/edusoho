@@ -61,7 +61,7 @@
                         <a href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" class="btn btn-default btn-sm">{{'再做一次'|trans}}</a>
                       {% endif %}
                       {% if task %}
-                        <a href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" class="btn btn-link btn-sm" target="_blank">{{'查看结果'|trans}}</a>
+                        <a href="{{ path('testpaper_result_show',{resultId:paperResult.id,action:'my'}) }}" class="btn btn-link btn-sm" target="_blank">{{'查看结果'|trans}}</a>
                       {% endif %}
                     {% endif %}
                   </td>

@@ -56,11 +56,11 @@
           {% set redoTime = (paperResult.checkedTime + target.redoInterval * 3600) - ("now"|date("U")) %}
           重考倒计时:
           <span class="timer js-testpaper-redo-timer" data-time="{{ redoTime }}">00:00:00</span>
-          <a class="btn btn-success do-test" id="finishPaper" href="{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}" disabled="disabled">{{'再考一次'|trans}}</a>
+          <a class="btn btn-success do-test" id="finishPaper" href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}{% endif %}" disabled="disabled">{{'再考一次'|trans}}</a>
         </div>
       {% else %}
         <div class="testpaper-timer">
-          <a class="btn btn-success do-test" id="finishPaper" href="{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}">{{'再考一次'|trans}}</a>
+          <a class="btn btn-success do-test" id="finishPaper" href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}{% endif %}">{{'再考一次'|trans}}</a>
         </div>
       {% endif %}
     {% endif %}
