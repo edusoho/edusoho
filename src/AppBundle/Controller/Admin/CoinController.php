@@ -641,7 +641,7 @@ class CoinController extends BaseController
         $conditions['cashType'] = $cashType;
 
         $num            = $this->getCashService()->searchFlowsCount($conditions);
-        $orders         = $this->getCashService()->searchFlows($conditions, array('ID' => 'DESC'), 0, $num);
+        $orders         = $this->getCashService()->searchFlows($conditions, array('id' => 'desc'), 0, $num);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
