@@ -3,7 +3,7 @@
 {% set resultStatus = paperResult.status|default(null) %}
 
 
-{% if isTeacher|default(0) or (resultStatus in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and resultStatus == 'finished' ) or resultStatus == 'doing' %}
+{% if isTeacher|default(0) or (resultStatus in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and resultStatus == 'finished' ) or resultStatus == 'doing' or not paperResult.id|default(0) %}
   
   <form id='teacherCheckForm' autocomplete="off">
     
