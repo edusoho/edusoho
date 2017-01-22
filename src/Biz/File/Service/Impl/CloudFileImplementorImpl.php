@@ -649,7 +649,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function synData($conditions)
     {
-        $files = $this->getUploadFileDao()->search($conditions, array('createdTime', 'DESC'), 0, 100);
+        $files = $this->getUploadFileDao()->search($conditions, array('createdTime' => 'DESC'), 0, 100);
 
         if (!empty($files)) {
             $api      = CloudAPIFactory::create('root');

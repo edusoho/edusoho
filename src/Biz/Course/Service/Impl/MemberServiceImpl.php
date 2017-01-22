@@ -190,7 +190,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (is_array($sort)) {
             $orderBy = $sort;
         } else {
-            $orderBy = array('createdTime', 'DESC');
+            $orderBy = array('createdTime' => 'DESC');
         }
 
         return $this->getMemberDao()->searchMemberIds($conditions, $orderBy, $start, $limit);
