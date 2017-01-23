@@ -86,9 +86,11 @@ class AnalysisController extends BaseController
         );
 
         if ($tab == "trend") {
-            $registerData   = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
-            $userSumData    = $this->getUserService()->countUserNumDueTime($timeRange['startTime']);
-            $data           = $this->fillAnalysisSum($condition, $registerData, $userSumData);
+            $registerData = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $userInitCount = $this->getUserService()->countUsers(
+                array('endTime' => $timeRange['startTime'])
+            );
+            $data           = $this->fillAnalysisSum($condition, $registerData, $userInitCount);
             $result["data"] = $data;
         } else {
             $paginator = new Paginator(
@@ -1185,14 +1187,16 @@ class AnalysisController extends BaseController
             date('Y-m-d', $timeRange['endTime'])
         );
 
-        foreach ($dateRange as $key => $value) {
+        $initData = array();
+
+        foreach ($dateRange as $value) {
             $initData[] = array('date' => $value, 'count' => $initValue);
         }
 
         for ($i = 0; $i < count($initData); $i++) {
-            foreach ($currentData as $val) {
-                if (in_array($initData[$i]['date'], $val)) {
-                    $initData[$i]['count'] += $val['count'];
+            foreach ($currentData as $value) {
+                if (in_array($initData[$i]['date'], $value)) {
+                    $initData[$i]['count'] += $value['count'];
                     break;
                 }
             }

@@ -75,13 +75,6 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
-    public function countUserNumDueTime($time)
-    {
-        $sql = "SELECT count(*) AS count FROM (SELECT from_unixtime(createdTime, '%Y-%m-%d') AS date FROM {$this->table} 
-            WHERE createdTime <= ?) AS sums ORDER BY date DESC";
-        return $this->db()->fetchColumn($sql, array($time));
-    }
-
     public function countByLessThanCreatedTime($time)
     {
         $sql = "SELECT count(id) as count FROM `{$this->table()}` WHERE  `createdTime` <= ?  ";

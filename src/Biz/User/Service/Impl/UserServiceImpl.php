@@ -1671,11 +1671,6 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->analysisRegisterDataByTime($startTime, $endTime);
     }
 
-    public function countUserNumDueTime($time)
-    {
-        return $this->getUserDao()->countUserNumDueTime($time);
-    }
-
     public function parseAts($text)
     {
         preg_match_all('/@([\x{4e00}-\x{9fa5}\w]{2,16})/u', $text, $matches);
