@@ -28,10 +28,8 @@ class CourseController extends CourseBaseController
     {
         $course = $this->getCourseService()->getCourse($id);
         $user   = $this->getCurrentUser();
-        $member = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
         return $this->render('course/course-show.html.twig', array(
             'tab'    => $tab,
-            'member' => $member
         ));
     }
 
