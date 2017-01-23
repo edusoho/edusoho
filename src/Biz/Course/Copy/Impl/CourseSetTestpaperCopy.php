@@ -20,7 +20,7 @@ class CourseSetTestpaperCopy extends TestpaperCopy
 
     private function doCopyTestpaper($newCourseSet, $courseSetId, $isCopy)
     {
-        $testpapers = $this->getTestpaperDao()->search(array('courseSetId' => $courseSetId), array(), 0, PHP_INT_MAX);
+        $testpapers = $this->getTestpaperService()->searchTestpapers(array('courseSetId' => $courseSetId), array(), 0, PHP_INT_MAX);
         if (empty($testpapers)) {
             return array();
         }
@@ -34,7 +34,7 @@ class CourseSetTestpaperCopy extends TestpaperCopy
             $newTestpaper['courseSetId'] = $newCourseSet['id'];
             $newTestpaper['courseId']    = 0;
 
-            $newTestpaper = $this->getTestpaperDao()->create($newTestpaper);
+            $newTestpaper = $this->getTestpaperService()->createTestpaper($newTestpaper);
             $this->doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy);
 
             $newTestpapers[] = $newTestpaper;
