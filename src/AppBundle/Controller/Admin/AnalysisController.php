@@ -3,6 +3,7 @@ namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\DateToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class AnalysisController extends BaseController
@@ -1114,9 +1115,13 @@ class AnalysisController extends BaseController
 
     protected function fillAnalysisSum($condition, $currentData, $initValue = 0)
     {
-        $dates = $this->getDatesByCondition($condition);
+        $timeRange = $this->getTimeRange($condition);
+        $dateRange = DateToolkit::generateDateRange(
+            date('Y-m-d', $timeRange['startTime']),
+            date('Y-m-d', $timeRange['endTime'])
+        );
 
-        foreach ($dates as $key => $value) {
+        foreach ($dateRange as $key => $value) {
             $initData[] = array('date' => $value, 'count' => $initValue);
         }
 
@@ -1137,9 +1142,13 @@ class AnalysisController extends BaseController
 
     protected function fillAnalysisData($condition, $currentData)
     {
-        $dates = $this->getDatesByCondition($condition);
-
-        foreach ($dates as $key => $value) {
+        $timeRange = $this->getTimeRange($condition);
+        $dateRange = DateToolkit::generateDateRange(
+            date('Y-m-d', $timeRange['startTime']),
+            date('Y-m-d', $timeRange['endTime'])
+        );
+        
+        foreach ($dateRange as $key => $value) {
             $zeroData[] = array("date" => $value, "count" => 0);
         }
 
@@ -1152,15 +1161,6 @@ class AnalysisController extends BaseController
         $currentData = array_values($currentData);
 
         return json_encode($currentData);
-    }
-
-    protected function getDatesByCondition($condition)
-    {
-        $timeRange = $this->getTimeRange($condition);
-
-        $dates = $this->makeDateRange($timeRange['startTime'], $timeRange['endTime'] - 24 * 3600);
-
-        return $dates;
     }
 
     protected function getDataInfo($condition, $timeRange)
@@ -1179,33 +1179,13 @@ class AnalysisController extends BaseController
 
     protected function getTimeRange($fields)
     {
-        $startTime = !empty($fields['startTime']) ? $fields['startTime'] : time();
-        $endTime = !empty($fields['endTime']) ? $fields['endTime'] : time();
+        $startTime = !empty($fields['startTime']) ? $fields['startTime'] : date("Y-m", time());
+        $endTime = !empty($fields['endTime']) ? $fields['endTime'] : date("Y-m", time());
 
         return array(
             'startTime' => strtotime($startTime), 
             'endTime' => strtotime($endTime) + 24 * 3600
         );
-    }
-
-    protected function makeDateRange($startTime, $endTime)
-    {
-        $dates = array();
-
-        $currentTime = $startTime;
-
-        while (true) {
-            if ($currentTime > $endTime) {
-                break;
-            }
-
-            $currentDate = date('Y-m-d', $currentTime);
-            $dates[]     = $currentDate;
-
-            $currentTime = $currentTime + 3600 * 24;
-        }
-
-        return $dates;
     }
 
     protected function getLogService()

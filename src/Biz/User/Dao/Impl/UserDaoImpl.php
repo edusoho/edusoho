@@ -163,7 +163,14 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime', 'promotedTime', 'promoted', 'promotedSeq','id', 'nickname'),
+            'orderbys'   => array(
+                'id', 
+                'createdTime', 
+                'promotedTime', 
+                'promoted', 
+                'promotedSeq', 
+                'nickname'
+            ),
             'timestamps' => array(
                 'createdTime',
                 'updatedTime'
