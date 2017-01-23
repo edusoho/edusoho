@@ -3,10 +3,7 @@
 namespace Biz\Course\Copy\Impl;
 
 use Topxia\Common\ArrayToolkit;
-use Biz\Question\Dao\QuestionDao;
-use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Copy\AbstractEntityCopy;
-use Biz\Testpaper\Dao\TestpaperItemDao;
 
 class TestpaperCopy extends AbstractEntityCopy
 {
@@ -54,7 +51,7 @@ class TestpaperCopy extends AbstractEntityCopy
         $newTestpaper = array(
             'lessonId'      => 0,
             'createdUserId' => $this->biz['user']['id'],
-            'copyId'        => $isCopy ? $testpaper['id']: 0
+            'copyId'        => $isCopy ? $testpaper['id'] : 0
         );
         foreach ($fields as $field) {
             if (!empty($testpaper[$field]) || $testpaper[$field] == 0) {
@@ -66,25 +63,30 @@ class TestpaperCopy extends AbstractEntityCopy
 
     protected function doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy)
     {
-        $items = $this->getTestpaperItemDao()->findItemsByTestId($testpaper['id']);
+        $items = $this->getTestpaperService()->findItemsByTestId($testpaper['id']);
         if (empty($items)) {
             return;
         }
 
         $questionMap = $this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseId'], $isCopy);
         foreach ($items as $item) {
+            $question = empty($questionMap[$item['questionId']]) ? array() : $questionMap[$item['questionId']];
+
+            if (empty($question)) {
+                continue;
+            }
             $newItem = array(
                 'testId'       => $newTestpaper['id'],
                 'seq'          => $item['seq'],
-                'questionId'   => $questionMap[$item['questionId']][0],
+                'questionId'   => $question[0],
                 'questionType' => $item['questionType'],
-                'parentId'     => $questionMap[$item['questionId']][1],
+                'parentId'     => $question[1],
                 'score'        => $item['score'],
                 'missScore'    => $item['missScore'],
                 'copyId'       => $isCopy ? $item['id'] : 0
             );
 
-            $this->getTestpaperItemDao()->create($newItem);
+            $this->getTestpaperService()->createItem($newItem);
         }
     }
 
@@ -93,14 +95,17 @@ class TestpaperCopy extends AbstractEntityCopy
      * */
     protected function doCopyQuestions($ids, $newCourseId, $isCopy)
     {
-        $questions   = $this->getQuestionDao()->findQuestionsByIds($ids);
+        $questions   = $this->getQuestionService()->findQuestionsByIds($ids);
         $questionMap = array();
         if (empty($questions)) {
             return $questionMap;
         }
 
         usort($questions, function ($a, $b) {
-            return $a['parentId'] < $b['parentId'];
+            if ($a['parentId'] == $b['parentId']) {
+                return 0;
+            }
+            return $a['parentId'] < $b['parentId'] ? -1 : 1;
         });
 
         $fields = array(
@@ -127,9 +132,10 @@ class TestpaperCopy extends AbstractEntityCopy
                 }
             }
 
-            $newQuestion['parentId'] = $question['parentId'] > 0 ? $questionMap[$question['parentId']] : 0;
+            $newQuestion['parentId'] = $question['parentId'] > 0 ? $questionMap[$question['parentId']][0] : 0;
 
-            $newQuestion = $this->getQuestionDao()->create($newQuestion);
+            //$newQuestion = $this->getQuestionDao()->create($newQuestion);
+            $newQuestion = $this->getQuestionService()->create($newQuestion);
 
             $questionMap[$question['id']] = array($newQuestion['id'], $newQuestion['parentId']);
         }
@@ -137,27 +143,13 @@ class TestpaperCopy extends AbstractEntityCopy
         return $questionMap;
     }
 
-    /**
-     * @return TestpaperDao
-     */
-    protected function getTestpaperDao()
+    protected function getTestpaperService()
     {
-        return $this->biz->dao('Testpaper:TestpaperDao');
+        return $this->biz->service('Testpaper:TestpaperService');
     }
 
-    /**
-     * @return TestpaperItemDao
-     */
-    protected function getTestpaperItemDao()
+    protected function getQuestionService()
     {
-        return $this->biz->dao('Testpaper:TestpaperItemDao');
-    }
-
-    /**
-     * @return QuestionDao
-     */
-    protected function getQuestionDao()
-    {
-        return $this->biz->dao('Question:QuestionDao');
+        return $this->biz->service('Question:QuestionService');
     }
 }
