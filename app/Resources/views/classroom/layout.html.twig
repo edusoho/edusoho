@@ -2,7 +2,7 @@
 
 {% block title %}{{ classroom.title }} - {{ parent() }}{% endblock %}
 {% block keywords %} {{classroom.title}} {% endblock %}
-{% do load_script('classroom/unjoin') %}
+{% do load_script('classroombundle/controller/classroom/unjoin') %}
 
 {% block top_content %}
 
