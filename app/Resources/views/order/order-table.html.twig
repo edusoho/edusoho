@@ -43,9 +43,11 @@
             <br>
             <span class="text-muted text-sm">{{'订单号：%sn%'|trans({'%sn%':order.sn})}}</span><br>
             <span class="text-muted text-sm">
-              {% if courseSets[courses[order.targetId].courseSetId]|default(false) %}
+              {% if courses[order.targetId]|default(false) and courseSets[courses[order.targetId].courseSetId]|default(false) %}
                 {% set courseSet = courseSets[courses[order.targetId].courseSetId] %}
                 {{'所属课程:'|trans}}<a href="{{ path('course_set_show', {id:courseSet.id}) }}">{{ courseSet.title }}</a>
+              {% else %}
+                该课程已被删除
               {% endif %}
             </span>
           </td>
