@@ -1725,8 +1725,8 @@ admin_operation_analysis_user_sum:
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_rount:
-    path:  /operation/analysis/rountByanalysisDateType/{tab}
-    defaults: { _controller: AppBundle:Admin/Analysis:rountByanalysisDateType }
+    path:  /operation/analysis/route_analysis_data_type/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:routeAnalysisDataType }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_lesson_exit:

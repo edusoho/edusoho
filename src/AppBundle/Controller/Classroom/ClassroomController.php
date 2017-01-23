@@ -92,7 +92,7 @@ class ClassroomController extends BaseController
         $cashRate = $this->getCashRate();
 
         foreach ($courses as $key => $course) {
-            $lessonNum += $course['taskCount'];
+            $lessonNum += $course['taskNum'];
 
             $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];

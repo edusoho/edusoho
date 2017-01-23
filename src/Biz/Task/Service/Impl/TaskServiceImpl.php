@@ -23,7 +23,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function createTask($fields)
     {
         $fields = array_filter($fields, function ($value) {
-            if (is_array($value) || ctype_digit((string) $value)) {
+            if (is_array($value) || ctype_digit((string)$value)) {
                 return true;
             }
 
@@ -31,19 +31,19 @@ class TaskServiceImpl extends BaseService implements TaskService
         });
 
         if ($this->invalidTask($fields)) {
-            throw new InvalidArgumentException('task is invalid');
+            throw $this->createInvalidArgumentException('task is invalid');
         }
 
         if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
-            throw new AccessDeniedException('无权创建任务');
+            throw $this->createAccessDeniedException('无权创建任务');
         }
 
         $this->beginTransaction();
         try {
-            
-            $fields = $this->createActivity($fields);
+
+            $fields   = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
-            $task = $strategy->createTask($fields);
+            $task     = $strategy->createTask($fields);
 
             $this->dispatchEvent("course.task.create", new Event($task));
             $this->commit();
@@ -63,6 +63,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
         $fields['type']          = $fields['mediaType'];
+        $fields['endTime']       = $activity['endTime'];
+
         if ($activity['mediaType'] == 'video') {
             $fields['mediaSource'] = $fields['ext']['mediaSource'];
         }
@@ -85,7 +87,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function updateTask($id, $fields)
     {
-        $task     = $this->getTask($id);
+        $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException("can not update task #{$id}.");
@@ -98,9 +100,10 @@ class TaskServiceImpl extends BaseService implements TaskService
             if ($activity['mediaType'] == 'video') {
                 $fields['mediaSource'] = $fields['ext']['mediaSource'];
             }
-            
-            $strategy = $this->createCourseStrategy($task['courseId']);
-            $task     = $strategy->updateTask($id, $fields);
+
+            $fields['endTime'] = $activity['endTime'];
+            $strategy          = $this->createCourseStrategy($task['courseId']);
+            $task              = $strategy->updateTask($id, $fields);
             $this->commit();
             return $task;
         } catch (\Exception $exception) {
@@ -111,7 +114,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function publishTask($id)
     {
-        $task     = $this->getTask($id);
+        $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException("can not publish task #{$id}.");
@@ -130,7 +133,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function unpublishTask($id)
     {
-        $task     = $this->getTask($id);
+        $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException("can not unpublish task #{$id}.");
@@ -141,8 +144,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         $strategy = $this->createCourseStrategy($task['courseId']);
-        $task = $strategy->unpublishTask($task);
-        $this->dispatchEvent("course.task.unpublish", new Event($task));
+        $task     = $strategy->unpublishTask($task);
+        $this->dispatchEvent('course.task.unpublish', new Event($task));
         return $task;
     }
 
@@ -173,7 +176,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException('无权删除任务');
         }
-        
+
         $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
         $this->dispatchEvent("course.task.delete", new Event($task, array('user' => $this->getCurrentUser())));
         return $result;
@@ -209,7 +212,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $tasks       = $this->findTasksByCourseId($courseId);
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities  = $this->getActivityService()->findActivities($activityIds);
+        $activities  = $this->getActivityService()->findActivities($activityIds, true);
         $activities  = ArrayToolkit::index($activities, 'id');
 
         array_walk($tasks, function (&$task) use ($activities) {
@@ -413,16 +416,30 @@ class TaskServiceImpl extends BaseService implements TaskService
     }
 
     /**
+     * 设置当前任务最大可同时进行的人数  如直播任务等
+     *
+     * @param $taskId
+     * @param $maxNum
+     *
+     * @return mixed
+     */
+    public function setTaskMaxOnlineNum($taskId, $maxNum)
+    {
+        return $this->getTaskDao()->update($taskId, array('maxOnlineNum' => $maxNum));
+    }
+
+
+    /**
      * 统计当前时间以后每天的直播次数
      *
-     * @param $courseIds
+     * @param $courseSetIds
      * @param $limit
      *
-     * @return array<string, int|string>
+     * @return array <string, int|string>
      */
-    public function findFutureLiveDatesByCourseIdsGroupByDate($courseIds, $limit)
+    public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit)
     {
-        return $this->getTaskDao()->findFutureLiveDates($courseIds, $limit);
+        return $this->getTaskDao()->findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
     }
 
     /**
@@ -446,14 +463,14 @@ class TaskServiceImpl extends BaseService implements TaskService
             $this->getCourseSetService()->countCourseSets($setConditions)
         );
 
-        $courseSetIds   = ArrayToolkit::column($courseSets, 'id');
-        $courses        = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+
         $taskConditions = array(
-            'startTime_LT' => time(),
-            'endTime_GT'   => time(),
-            'type'         => 'live',
-            'courseIds'    => ArrayToolkit::column($courses, 'id'),
-            'status'       => 'published'
+            'startTime_LT'     => time(),
+            'endTime_GT'       => time(),
+            'type'             => 'live',
+            'fromCourseSetIds' => ArrayToolkit::column($courseSetIds, 'id'),
+            'status'           => 'published'
         );
         return $this->search($taskConditions, array('startTime' => 'ASC'), 0, $this->count($taskConditions));
     }
@@ -479,18 +496,28 @@ class TaskServiceImpl extends BaseService implements TaskService
             $this->getCourseSetService()->countCourseSets($setConditions)
         );
 
-        $courseSetIds   = ArrayToolkit::column($courseSets, 'id');
-        $courses        = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+
         $taskConditions = array(
-            'startTime_GT' => time(),
-            'endTime_LT'   => strtotime(date('Y-m-d') . ' 23:59:59'),
-            'type'         => 'live',
-            'courseIds'    => ArrayToolkit::column($courses, 'id'),
-            'status'       => 'published'
+            'startTime_GT'     => time(),
+            'endTime_LT'       => strtotime(date('Y-m-d') . ' 23:59:59'),
+            'type'             => 'live',
+            'fromCourseSetIds' => ArrayToolkit::column($courseSetIds, 'id'),
+            'status'           => 'published'
         );
         return $this->search($taskConditions, array('startTime' => 'ASC'), 0, $this->count($taskConditions));
     }
 
+    /**
+     * 返回过去直播过的教学计划ID
+     *
+     * @return array
+     */
+    public function findPastLivedCourseSetIds()
+    {
+        $arrays = $this->getTaskDao()->findPastLivedCourseSetIds();
+        return ArrayToolkit::column($arrays, 'fromCourseSetId');
+    }
 
     public function isFinished($taskId)
     {

@@ -4,7 +4,6 @@ namespace Biz\Task\Strategy\Impl;
 
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
-use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class PlanStrategy extends BaseStrategy implements CourseStrategy
@@ -19,12 +18,18 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 
     public function deleteTask($task)
     {
-        $that = $this;
-        $this->biz['db']->transactional(function () use ($task, $that) {
-            $that->getTaskDao()->delete($task['id']);
-            $that->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
-            $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
-        });
+        try{
+            $this->biz['db']->beginTransaction();
+
+            $this->getTaskDao()->delete($task['id']);
+            $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
+            $this->getActivityService()->deleteActivity($task['activityId']); //删除该课时
+
+            $this->biz['db']->commit();
+        }catch(\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
 
         return true;
     }
@@ -37,7 +42,6 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
      */
     public function canLearnTask($task)
     {
-
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         //自由式学习 可以学习任意课时
@@ -54,7 +58,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             return true;
         }
 
-        if ($task['type'] == 'testpaper' and $task['startTime']) {
+        if ($task['type'] == 'testpaper' && $task['startTime']) {
             return true;
         }
 
@@ -94,7 +98,6 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         return $items;
     }
 
-
     public function sortCourseItems($courseId, array $itemIds)
     {
         $parentChapters = array(
@@ -102,8 +105,8 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             'unit'    => array(),
             'chapter' => array()
         );
-        $taskNumber     = 0;
-        $chapterTypes   = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+        $taskNumber   = 0;
+        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
         foreach ($itemIds as $key => $id) {
             if (strpos($id, 'chapter') === 0) {
                 $id      = str_replace('chapter-', '', $id);

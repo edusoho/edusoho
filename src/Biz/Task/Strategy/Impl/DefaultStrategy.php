@@ -19,7 +19,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $this->validateTaskMode($field);
 
         if ($field['mode'] == 'lesson') {
-            $chapter             = array(
+            $chapter = array(
                 'courseId' => $field['fromCourseId'],
                 'title'    => $field['title'],
                 'type'     => 'lesson'
@@ -34,7 +34,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $field['status'] = $lessonTask['status'];
         }
 
-        $task            = parent::createTask($field);
+        $task = parent::createTask($field);
 
         $chapter          = $this->getChapterDao()->get($task['categoryId']);
         $tasks            = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
@@ -57,17 +57,20 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     public function deleteTask($task)
     {
-        $that   = $this;
-        $result = $this->biz['db']->transactional(function () use ($task, $that) {
+        try {
+            $this->biz['db']->beginTransaction();
             if ($task['mode'] == 'lesson') {
-                $that->getTaskDao()->deleteByCategoryId($task['categoryId']); //删除该课时下的所有任务，
-                $that->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
-                $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
+                $this->getTaskDao()->deleteByCategoryId($task['categoryId']); //删除该课时下的所有任务，
+                $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
+                $this->getActivityService()->deleteActivity($task['activityId']); //删除该课时
             } else {
-                $that->getTaskDao()->delete($task['id']);
+                $this->getTaskDao()->delete($task['id']);
             }
-        });
-        return $result;
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
     }
 
     protected function validateTaskMode($field)
@@ -215,5 +218,4 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
         return $chapterSeq + $taskModes[$taskMode];
     }
-
 }

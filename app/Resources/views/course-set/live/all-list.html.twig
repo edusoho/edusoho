@@ -1,7 +1,7 @@
 {% import 'macro.html.twig' as web_macro %}
 <div class="panel panel-default">
   <div class="panel-heading">
-    <form id="live-search-form" class="form-inline" action="{{ path('live_course_explore') }}" method="get" novalidate="">
+    <form id="live-search-form" class="form-inline" action="{{ path('live_course_set_explore') }}" method="get" novalidate="">
       <div class="form-group mrl">
         <select style="width:150px;" class="form-control" name="categoryId" id="categoryId">
           {{ select_options(category_choices('course'), request.query.get('categoryId'), '课程分类'|trans) }}
@@ -19,55 +19,64 @@
   </div>
 
   <div class="panel-body  es-live-all">
-    {% for course in liveCourses if course %}
+    {% for courseSet in liveCourseSets if courseSet %}
+
       <div class="media">
         <div class="media-left">
-          {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
-            <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" title="{{ course.title }}" target="_blank">
+          {% if ("now"|date("U") >= courseSet.liveStartTime and "now"|date("U") <= courseSet.liveEndTime) %}
+            <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" title="{{ course.title }}" target="_blank">
           {% else %}
-            <a href="{{ path('course_show',{id:course.id}) }}" title="{{ course.title }}" target="_blank">
+            <a href="{{ path('course_set_show',{id: courseSet.id}) }}" title="{{ courseSet.title }}" target="_blank">
           {% endif %}
-            {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
-            {% if course.recommended %}
+            {{ lazy_img(filepath(courseSet.cover.middle, 'course.png'), 'img-responsive', courseSet.title) }}
+            {% if courseSet.recommended %}
               <span class="re-live"></span>
             {% endif %}
-            {% if "now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime %}
-              <span class="re-report">{{'正在直播 今天'|trans}} {{ course.liveStartTime|date('H:i')}}</span>
-            {% elseif "now"|date("U") < course.liveStartTime and course.liveStartTime|date('Y-m-d') == "now"|date('Y-m-d') %}
-              <span class="re-report">{{'即将直播'|trans}} {{ course.liveStartTime|date('m-d H:i')}}</span>
-            {% elseif "now"|date("U") < course.liveStartTime and course.liveStartTime|date('Y-m-d') != "now"|date('Y-m-d') %}
+            {% if "now"|date("U") >= courseSet.liveStartTime and "now"|date("U") <= courseSet.liveEndTime %}
+              <span class="re-report">{{'正在直播 今天'|trans}} {{ courseSet.liveStartTime|date('H:i')}}</span>
+            {% elseif "now"|date("U") < courseSet.liveStartTime and courseSet.liveStartTime|date('Y-m-d') == "now"|date('Y-m-d') %}
+              <span class="re-report">{{'即将直播'|trans}} {{ courseSet.liveStartTime|date('m-d H:i')}}</span>
+            {% elseif "now"|date("U") < courseSet.liveStartTime and courseSet.liveStartTime|date('Y-m-d') != "now"|date('Y-m-d') %}
               <span class="re-report">{{'直播预告'|trans}} {{ course.liveStartTime|date('m-d H:i')}}</span>
             {% endif %}
           </a>
         </div>
         <div class="media-body">
           <div class="title mbm">
-            {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
-              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="gray-darker" title="{{ course.title }}" target="_blank">{{ course.title }}</a>
+            {% if ("now"|date("U") >= courseSet.liveStartTime and "now"|date("U") <= courseSet.liveEndTime) %}
+              <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" class="gray-darker" title="{{ courseSet.title }}" target="_blank">
+                {{ courseSet.title }}
+              </a>
             {% else %}
-              <a href="{{ path('course_show',{id:course.id}) }}"  class="gray-darker" title="{{ course.title }}" target="_blank">{{ course.title }}</a>
+              <a href="{{ path('course_set_show',{id: courseSet.id}) }}"  class="gray-darker" title="{{ courseSet.title }}" target="_blank">
+                {{ courseSet.title }}
+              </a>
             {% endif %}
           </div>
 
 
           <div class="metas">
-            <span class="num prl"><i class="es-icon es-icon-people prm"></i>{{ course.studentNum }}</span>
-            <span class="comment"><i class="es-icon es-icon-textsms prm"></i>{{ course.ratingNum }}</span>
+            <span class="num prl"><i class="es-icon es-icon-people prm"></i>{{ courseSet.studentNum }}</span>
+            <span class="comment"><i class="es-icon es-icon-textsms prm"></i>{{ courseSet.ratingNum }}</span>
           </div>
           <div class="user">
-            {% if course.teacherIds|default(null) %}
-              {% set user = data('User',{userId:course.teacherIds[0]}) %}
+            {% if courseSet.course.teacherIds|default(null) %}
+              {% set user = data('User',{ userId:course.teacherIds[0] }) %}
               {{ web_macro.user_avatar(user, 'mrm','avatar-xs') }}
               {{ web_macro.user_link(user, 'link-light') }}
             {% endif %}
           </div>
           <div class="other">
-            {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
+            {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
 
             {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
-              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="btn btn-warning" target="_blank">{{'进入直播'|trans}}</a>
+              <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" class="btn btn-warning" target="_blank">
+                {{'进入直播'|trans}}
+              </a>
             {% else %}
-              <a href="{{ path('course_show',{id:course.id}) }}" class="btn btn-primary" target="_blank">{{'查看回放'|trans}}</a>
+              <a href="{{ path('course_set_show',{id:courseSet.id}) }}" class="btn btn-primary" target="_blank">
+                {{'查看回放'|trans}}
+              </a>
             {% endif %}
 
           </div>

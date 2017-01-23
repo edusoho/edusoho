@@ -26,24 +26,7 @@ class CourseSetController extends BaseController
             $conditions["parentId"]              = 0;
         }
 
-        foreach (array("categoryId", "status", "title", "creator") as $value) {
-            if (isset($conditions[$value]) && $conditions[$value] == "") {
-                unset($conditions[$value]);
-            }
-        }
-
         $conditions = $this->fillOrgCode($conditions);
-
-        $coinSetting = $this->getSettingService()->get("coin");
-        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1 && $coinSetting['cash_model'] == 'currency';
-
-        if (isset($conditions["chargeStatus"])) {
-            if ($conditions["chargeStatus"] == "free") {
-                $conditions['price'] = '0.00';
-            } elseif ($conditions["chargeStatus"] == "charge") {
-                $conditions['price_GT'] = '0.00';
-            }
-        }
 
         $count = $this->getCourseSetService()->countCourseSets($conditions);
 
@@ -327,14 +310,6 @@ class CourseSetController extends BaseController
 
         if ($filter == 'classroom') {
             $conditions["parentId_GT"] = 0;
-        }
-
-        if (isset($conditions["title"]) && $conditions["title"] == "") {
-            unset($conditions["title"]);
-        }
-
-        if (isset($conditions["creator"]) && $conditions["creator"] == "") {
-            unset($conditions["creator"]);
         }
 
         $conditions = $this->fillOrgCode($conditions);

@@ -62,11 +62,24 @@ abstract class AbstractEntityCopy
      */
     public function copy($source, $config = array())
     {
-        $that = $this;
-        return $this->doTransaction(function () use ($that, $source, $config) {
-            $result = $that->_copy($source, $config);
+        //php 5.3 貌似不支持在函数里调用外部protected方法
+        // $that = $this;
+        // return $this->doTransaction(function () use ($that, $source, $config) {
+        //     $result = $that->_copy($source, $config);
+        //     return $result;
+        // });
+
+        try {
+            $this->biz['db']->beginTransaction();
+
+            $result = $this->_copy($source, $config);
+
+            $this->biz['db']->commit();
             return $result;
-        });
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
     }
 
     protected function doTransaction($callback)

@@ -23,4 +23,6 @@ interface CourseDao extends GeneralDaoInterface
     public function analysisCourseDataByTime($startTime, $endTime);
 
     public function countCourseNumDueTime($time);
+
+    public function findCoursesByParentIdAndLocked($parentId, $locked);
 }

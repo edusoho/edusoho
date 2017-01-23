@@ -86,7 +86,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
         $sql   = "SELECT courseSetId,sum(`income`) as income FROM {$this->table} WHERE courseSetId IN ({$marks}) group by courseSetId;";
 
-        return $this->db()->fetchAll($sql, $courseSetIds);  
+        return $this->db()->fetchAll($sql, $courseSetIds);
     }
 
     public function analysisCourseDataByTime($startTime, $endTime)

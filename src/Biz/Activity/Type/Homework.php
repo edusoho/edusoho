@@ -150,6 +150,6 @@ class Homework extends Activity
      */
     protected function getTestpaperActivityDao()
     {
-        return $this->getBiz()->service('Activity:TestpaperActivityDao');
+        return $this->getBiz()->dao('Activity:TestpaperActivityDao');
     }
 }
