@@ -1,6 +1,6 @@
 {% import 'admin/macro.html.twig' as admin_macro %}
 <tr id="classroom-table-tr-{{ classroom.id }}">
-  {% include 'OrgBundle:Org/Parts:table-body-checkbox.html.twig' %}
+    {% include 'org/parts/table-body-checkbox.html.twig' %}
     <td>{{ classroom.id }}</td>
 
     <td>
@@ -13,7 +13,7 @@
       <span class="label label-default">{{'荐'|trans}}:{{ classroom.recommendedTime|date('Y-m-d') }} / {{'序号'|trans}}:{{ classroom.recommendedSeq }}</span>
     {% endif %}
     </td>
-    {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: classroom.orgCode}%}
+    {% include 'org/parts/table-body-td.html.twig' with {orgCode: classroom.orgCode}%}
     <td>
     {{ classroomCoursesNum[classroom.id] }}
 

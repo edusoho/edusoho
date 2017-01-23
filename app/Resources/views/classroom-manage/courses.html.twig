@@ -40,7 +40,7 @@
                 <li class="course-item item-{{course.id}} clearfix" data-role="item" >
                 <input type="hidden" name="courseIds[]" value="{{course.id}}" />
                 <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>    <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
-                <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+                <img class="course-picture" src="{{ filepath(course.cover['middle']|default(null), 'course.png') }}" alt="{{ course.title }}">
                     </a>
                         <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="{{'删除'|trans}}" style="font-size:35px;" data-id="{{course.id}}">× </button>
                     <div class="course-body">
@@ -66,7 +66,7 @@
                         {% endif %}
                       </div>
 
-                      <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
+                      <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title }}({{'教学计划：'|trans}}{{course.title}})</a>
                       {% if course.serializeMode=='serialize' %}
                         <span class="label label-success ">{{'更新中'|trans}}</span>
                       {% elseif course.serializeMode=='finished' %}
@@ -87,11 +87,11 @@
                         {% if lesson %}
                           <div class="live-course-lesson mbm">
                             <span class="text-success fsm mrm">{{ lesson.startTime|date('m-d H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                            <span class="text-muted fsm mrm">{{'第%number%课时'|trans({'%number%':lesson.number})}}</span>
+                            <span class="text-muted fsm mrm">{{'第%number%任务'|trans({'%number%':lesson.number})}}</span>
                           </div>
                         {% endif %}
                       {% else %}
-                        <div class="course-about ellipsis">{{ course.subtitle }}</div>
+                        <div class="course-about ellipsis">{{ course.courseSet.subtitle|default('') }}</div>
                       {% endif %}
 
                       <div class="course-footer clearfix">
@@ -112,19 +112,19 @@
                           {% endif %}  
 
                             <span class="text-muted text-sm">
-                                {{'%lessonNum%个课时'|trans({'%lessonNum%':course.lessonNum})}}
+                                {{'%taskNum%个任务'|trans({'%taskNum%':course.taskNum})}}
                             </span>
                             <span class="divider"></span>
                             <span class="text-muted text-sm">
                                 {{'有效期:'|trans}}
-                                {% if course.expiryDay %}
-                                  {% if course.expiryMode|default(null) == 'date' %}
-                                    {{course.expiryDay|date('Y-m-d H:i')}}
-                                  {% else %}
-                                    {{course.expiryDay}}{{'天'|trans}}
-                                  {% endif %}
+                                {% if course.expiryMode|default(null) == 'date' %}
+                                  {{course.expiryStartDate|date('Y-m-d H:i') ~ '~' ~ course.expiryEndDate|date('Y-m-d H:i')}}
                                 {% else %}
+                                  {% if course.expiryDays %}
+                                    {{course.expiryDays}}{{'天'|trans}}
+                                  {% else %}
                                     {{'永久'|trans}}
+                                  {% endif %}
                                 {% endif %}
                             </span>
                         </div>

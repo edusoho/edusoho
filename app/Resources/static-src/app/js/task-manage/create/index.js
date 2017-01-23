@@ -251,7 +251,7 @@ class Editor {
   }
 
   _rendStepIframe(step) {
-    if (!this.loaded) {
+    if (!this.loaded || !this.$iframe_body) {
       return;
     }
     (step === 2) ? this.$iframe_body.find(".js-step2-view").addClass('active') : this.$iframe_body.find(".js-step2-view").removeClass('active');

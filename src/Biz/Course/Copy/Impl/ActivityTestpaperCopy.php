@@ -6,7 +6,6 @@ class ActivityTestpaperCopy extends TestpaperCopy
 {
     public function __construct($biz)
     {
-        $this->biz = $biz;
         parent::__construct($biz, 'activity-testpaper');
     }
 
@@ -16,10 +15,10 @@ class ActivityTestpaperCopy extends TestpaperCopy
      * */
     protected function _copy($source, $config = array())
     {
-        return $this->doCopyTestpaper($source);
+        return $this->doCopyTestpaper($source, $config['isCopy']);
     }
 
-    public function doCopyTestpaper($activity)
+    public function doCopyTestpaper($activity, $isCopy)
     {
         if (!in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
             return null;
@@ -30,12 +29,12 @@ class ActivityTestpaperCopy extends TestpaperCopy
             return null;
         }
 
-        $newTestpaper                = $this->baseCopyTestpaper($testpaper);
+        $newTestpaper                = $this->baseCopyTestpaper($testpaper, $isCopy);
         $newTestpaper['courseSetId'] = $activity['fromCourseSetId'];
         $newTestpaper['courseId']    = $activity['fromCourseId'];
 
         $newTestpaper = $this->getTestpaperDao()->create($newTestpaper);
-        $this->doCopyTestpaperItems($testpaper, $newTestpaper);
+        $this->doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy);
 
         return $newTestpaper;
     }

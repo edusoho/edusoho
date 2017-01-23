@@ -41,7 +41,6 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
 
     public function findMyLearnLogsByActivityIdAndEvent($activityId, $event)
     {
-
         $user = $this->getCurrentUser();
         return $this->getActivityLearnLogDao()->findByActivityIdAndUserIdAndEvent($activityId, $user['id'], $event);
     }
@@ -63,8 +62,13 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
     public function sumWatchTime($conditions)
     {
         //1. 视为所有的任务均统计观看时长，
-        //2. 对于无法统计观看时长的，不会尤其learnTime，所以暂时统计learnTime
+        //2. 对于无法统计观看时长的，不会有learnTime，所以暂时统计learnTime
         return $this->sumLearnTime($conditions);
+    }
+
+    public function deleteLearnLogsByActivityId($activityId)
+    {
+        return $this->getActivityLearnLogDao()->deleteByActivityId($activityId);
     }
 
     /**

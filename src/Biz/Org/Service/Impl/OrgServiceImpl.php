@@ -6,8 +6,8 @@ use Biz\BaseService;
 use Biz\Org\Dao\OrgDao;
 use Biz\Org\Service\OrgService;
 use Topxia\Common\ArrayToolkit;
-use Biz\Org\Service\OrgBatchUpdateFactory;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Org\Service\OrgBatchUpdateFactory;
 
 class OrgServiceImpl extends BaseService implements OrgService
 {
@@ -61,7 +61,7 @@ class OrgServiceImpl extends BaseService implements OrgService
 
     public function updateOrg($id, $fields)
     {
-        $org = $this->checkBeforProccess($id);
+        $org = $this->checkBeforeProccess($id);
 
         $fields = ArrayToolkit::parts($fields, array('name', 'code', 'parentId', 'description'));
 
@@ -75,17 +75,22 @@ class OrgServiceImpl extends BaseService implements OrgService
 
     public function deleteOrg($id)
     {
-        $org  = $this->checkBeforProccess($id);
-        $that = $this;
+        $org = $this->checkBeforeProccess($id);
 
-        $this->getOrgDao()->db()->transactional(function () use ($org, $id, $that) {
+        try {
+            $this->biz['db']->beginTransaction();
+
             if ($org['parentId']) {
-                $that->getOrgDao()->wave($org['parentId'], array('childrenNum' => -1));
+                $this->getOrgDao()->wave($org['parentId'], array('childrenNum' => -1));
             }
-            $that->getOrgDao()->delete($id);
+            $this->getOrgDao()->delete($id);
             //删除辖下
-            $that->getOrgDao()->deleteByPrefixOrgCode($org['orgCode']);
-        });
+            $this->getOrgDao()->deleteByPrefixOrgCode($org['orgCode']);
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
     }
 
     public function switchOrg($id)
@@ -93,7 +98,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         $user = $this->getCurrentUser();
 
         $data              = $user->toArray();
-        $data['selectOrg'] = $this->checkBeforProccess($id);
+        $data['selectOrg'] = $this->checkBeforeProccess($id);
         $user->fromArray($data);
         $this->getKernel()->setCurrentUser($user);
     }
@@ -135,7 +140,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         return ($org['code'] === $exclude);
     }
 
-    private function checkBeforProccess($id)
+    private function checkBeforeProccess($id)
     {
         $org = $this->getOrg($id);
 
@@ -220,7 +225,7 @@ class OrgServiceImpl extends BaseService implements OrgService
     {
         $moduleService = OrgBatchUpdateFactory::getModuleService($module);
 
-        if(is_array($moduleService) && $moduleService['protocol'] === 'biz'){
+        if (is_array($moduleService) && $moduleService['protocol'] === 'biz') {
             return ServiceKernel::instance()->createService($moduleService['service']);
         }
 

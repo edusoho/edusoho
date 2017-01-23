@@ -17,7 +17,6 @@ class CourseCopy extends AbstractEntityCopy
      */
     public function __construct($biz)
     {
-        $this->biz = $biz;
         parent::__construct($biz, 'course');
     }
 
@@ -39,6 +38,7 @@ class CourseCopy extends AbstractEntityCopy
         //标记是否是从默认教学计划转成非默认的，如果是则需要对chapter-task结构进行调整
         $modeChange         = $new['isDefault'] != $source['isDefault'];
         $new['parentId']    = $source['id'];
+        $new['locked']      = 0;
         $new['courseSetId'] = $courseSetId;
         $new['creator']     = $user['id'];
         $new['status']      = 'published';
@@ -63,13 +63,13 @@ class CourseCopy extends AbstractEntityCopy
         }
 
         $new = $this->getCourseDao()->create($new);
-        $this->doCopyCourseMember($new);
-        $this->childrenCopy($source, array('newCourse' => $new, 'modeChange' => $modeChange));
+        $this->doCopyCourseMember($source, $new);
+        $this->childrenCopy($source, array('newCourse' => $new, 'modeChange' => $modeChange, 'isCopy' => false));
 
         return $new;
     }
 
-    private function doCopy($source)
+    protected function doCopy($source)
     {
         $fields = array(
             'title',
@@ -126,17 +126,29 @@ class CourseCopy extends AbstractEntityCopy
         return $new;
     }
 
-    private function doCopyCourseMember($course)
+    protected function doCopyCourseMember($oldCourse, $newCourse)
     {
-        $member = array(
-            'courseId'    => $course['id'],
-            'courseSetId' => $course['courseSetId'],
-            'userId'      => $this->biz['user']['id'],
-            'role'        => 'teacher',
-            'seq'         => 0,
-            'isVisible'   => 1
-        );
-        $this->getMemberDao()->create($member);
+        $members = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
+        if (!empty($members)) {
+            $teacherIds = array();
+            foreach ($members as $member) {
+                $member = array(
+                    'courseId'    => $newCourse['id'],
+                    'courseSetId' => $newCourse['courseSetId'],
+                    'userId'      => $member['userId'],
+                    'role'        => 'teacher',
+                    'seq'         => $member['seq'],
+                    'isVisible'   => $member['isVisible']
+                );
+                if ($member['isVisible']) {
+                    $teacherIds[] = $member['userId'];
+                }
+                $this->getMemberDao()->create($member);
+            }
+            if (!empty($teacherIds)) {
+                $this->getCourseDao()->update($newCourse['id'], array('teacherIds' => $teacherIds));
+            }
+        }
     }
 
     /**

@@ -73,12 +73,12 @@ class CouponServiceImpl extends BaseService implements CouponService
         switch ($mode) {
             case 'register':
                 $settingName = 'promoted_user_value';
-                $rewardName  = $this->getKernel()->trans('注册');
+                $rewardName  = '注册';
                 break;
 
             case 'pay':
                 $settingName = 'promote_user_value';
-                $rewardName  = $this->getKernel()->trans('邀请');
+                $rewardName  = '邀请';
                 break;
         }
 

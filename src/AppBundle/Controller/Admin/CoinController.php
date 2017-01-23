@@ -130,7 +130,7 @@ class CoinController extends BaseController
         if ($type == 'course') {
             $items = $this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00', 'parentId' => 0), 'latest', 0, PHP_INT_MAX);
         } elseif ($type == 'classroom') {
-            $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+            $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         } elseif ($type == 'vip') {
             $items = $this->getLevelService()->searchLevels(array('enable' => 1), 0, PHP_INT_MAX);
         }
@@ -641,7 +641,7 @@ class CoinController extends BaseController
         $conditions['cashType'] = $cashType;
 
         $num            = $this->getCashService()->searchFlowsCount($conditions);
-        $orders         = $this->getCashService()->searchFlows($conditions, array('ID' => 'DESC'), 0, $num);
+        $orders         = $this->getCashService()->searchFlows($conditions, array('id' => 'DESC'), 0, $num);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);

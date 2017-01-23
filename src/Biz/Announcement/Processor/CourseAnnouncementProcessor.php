@@ -29,7 +29,11 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
 
     public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl)
     {
-        $count   = $this->getCourseService()->getCourseStudentCount($targetId);
+        $conditions = array(
+            'courseId' => $targetId,
+            'role'     => 'student'
+        );
+        $count   = $this->getCourseMemberService()->countMembers($conditions);
         $members = $this->getCourseMemberService()->findCourseStudents($targetId, 0, $count);
 
         $result = false;

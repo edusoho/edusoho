@@ -162,26 +162,15 @@
   </fieldset>
 
   <fieldset>
-      <legend>{{'名称设置'|trans}}</legend>
+      <legend>{{ '章节名称自定义'|trans }}</legend>
 
-        <div class="form-group">
-          <div class="col-md-3 control-label">
-            <label>{{'设置章节名称'|trans}}</label>
-          </div>
-          <div class="controls col-md-8 radios">
-            {{ radios('custom_chapter_enabled', {1:'开启'|trans, 0:'关闭'|trans}, courseSetting.custom_chapter_enabled) }}
-            <div class="help-block">
-              {{'开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。'|trans}}</div>
-          </div>
-        </div>
-
-      <div id="show_course_chapter_name"  style="display: {% if  courseSetting.custom_chapter_enabled %} block {% else %} none {% endif %};">
+      <div id="show_course_chapter_name">
         <div class="form-group">
           <div class="col-md-3 control-label">
               <label for="chapter_name">{{'课程章名称'|trans}}</label>
           </div>
           <div class="controls col-md-4">
-            <input  type="text" id="chapter_name" name="chapter_name" class="form-control" {% if defaultSetting.chapter_name %}value="{{defaultSetting.chapter_name}}" {% else %} value="{{'章'|trans}}" {% endif %}>
+            <input  type="text" id="chapter_name" name="chapter_name" class="form-control" value="{{ defaultSetting.chapter_name|default('章') }}">
           </div>
         </div>
 
@@ -190,7 +179,7 @@
               <label for="part_name">{{'课程节名称'|trans}}</label>
           </div>
           <div class="controls col-md-4">
-            <input  type="text" id="part_name" name="part_name" class="form-control" {% if defaultSetting.part_name %} value="{{defaultSetting.part_name}}" {% else %} value="{{'节'|trans}}" {% endif %}>
+            <input  type="text" id="part_name" name="part_name" class="form-control" value="{{ defaultSetting.part_name|default('节') }}">
           </div>
         </div>
       </div>

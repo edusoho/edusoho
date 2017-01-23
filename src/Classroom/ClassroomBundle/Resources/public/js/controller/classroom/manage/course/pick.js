@@ -68,31 +68,43 @@ define(function(require, exports, module) {
             
         });
 
+        $('.js-course-select').on('change', function(){
+            var id = $(this).val();
+            var sid = $(this).attr('id').split("-")[2];
+            for (var i = 0; i < ids.length; i++) {
+                var idArr = ids[i].split(":");
+                if(idArr[0] == sid){
+                    ids[i] = sid + ":" + id;
+                    break;
+                }
+            }
+        });
+
         $('.row').on('click',".course-item ",function(){
 
-            var id=$(this).data('id');
+            var sid=$(this).data('id');//courseSet.id
 
             if($(this).hasClass('enabled')){
                 return;
             }
-
+            var id = $('#course-select-'+sid).val();
             if($(this).hasClass('select')){
 
                 $(this).removeClass('select');
-                $('.course-metas-'+id).hide();
+                $('.course-metas-'+sid).hide();
 
                 ids = $.grep(ids, function(val, key) {
 
-                    if(val != id )
+                    if(val != sid + ":" + id )
                         return true;
                 }, false);
 
             }else{
                 $(this).addClass('select');
                 
-                $('.course-metas-'+id).show();
+                $('.course-metas-'+sid).show();
 
-                ids.push(id);
+                ids.push(sid + ':' + id);
 
             }
 

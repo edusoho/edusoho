@@ -40,7 +40,8 @@ class UploaderExtension extends \Twig_Extension
             'courselesson'    => 'auto',
             'coursematerial'  => 'auto',
             'materiallib'     => 'auto',
-            'course-activity' => 'auto'
+            'course-activity' => 'auto',
+            'headLeader'      => 'none',
         );
 
         if (isset($modes[$targetType])) {
@@ -59,7 +60,7 @@ class UploaderExtension extends \Twig_Extension
             'materiallib'     => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
             'attachment'      => array('video', 'audio', 'ppt', 'document', 'zip')
         );
-        $availableAccepts = array(
+        $availableAccepts  = array(
             'video'          => array(
                 'extensions' => array('mp4', 'avi', 'flv', 'f4v', 'mpg', 'wmv', 'mov', 'vob', 'rmvb', 'mkv', 'm4v'),
                 'mimeTypes'  => array('video/mp4', 'video/mpeg', 'video/x-la-asf', 'video/x-ms-asf', 'video/x-msvideo', 'video/x-sgi-movie', 'video/quicktime', 'video/3gpp')

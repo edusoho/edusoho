@@ -1733,7 +1733,7 @@ class UserServiceImpl extends BaseService implements UserService
         if ($needVerified) {
             $conditions['hasVerifiedMobile'] = true;
             $count                           = $this->searchUserCount($conditions);
-            $users                           = $this->searchUsers($conditions, array('createdTime', 'ASC'), 0, $count);
+            $users                           = $this->searchUsers($conditions, array('createdTime' => 'ASC'), 0, $count);
             $mobiles                         = ArrayToolkit::column($users, 'verifiedMobile');
             return $mobiles;
         } else {
@@ -1871,7 +1871,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     protected function getFileService()
     {
-        return $this->getKernel()->createService('Content:FileService');
+        return $this->createService('Content:FileService');
     }
 
     /**
@@ -1879,7 +1879,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getNotificationService()
     {
-        return $this->biz->service('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 
     /**
@@ -1887,7 +1887,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getSettingService()
     {
-        return $this->biz->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     /**
@@ -1895,7 +1895,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getLogService()
     {
-        return $this->biz->service('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     /**
@@ -1903,7 +1903,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getIpBlacklistService()
     {
-        return $this->biz->service('System:IpBlacklistService');
+        return $this->createService('System:IpBlacklistService');
     }
 
     protected function getPasswordEncoder()
@@ -1916,7 +1916,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getBlacklistService()
     {
-        return $this->biz->service('User:BlacklistService');
+        return $this->createService('User:BlacklistService');
     }
 
     /**
@@ -1924,7 +1924,7 @@ class UserServiceImpl extends BaseService implements UserService
      */
     protected function getInviteRecordService()
     {
-        return $this->biz->service('User:InviteRecordService');
+        return $this->createService('User:InviteRecordService');
     }
 
     /**

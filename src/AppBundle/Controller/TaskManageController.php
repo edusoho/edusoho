@@ -2,12 +2,17 @@
 namespace AppBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\LiveReplayService;
+use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\StrategyContext;
+use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Exception\InvalidArgumentException;
 
 class TaskManageController extends BaseController
@@ -48,7 +53,7 @@ class TaskManageController extends BaseController
 
     protected function getTaskItemTemplate($course)
     {
-        if($course['isDefault']) {
+        if ($course['isDefault']) {
             return 'task-manage/list-item.html.twig';
         } else {
             return 'task-manage/list-item-lock-mode.html.twig';
@@ -131,6 +136,96 @@ class TaskManageController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
+    public function editTaskReplayAction(Request $request, $courseId, $taskId)
+    {
+        $course  = $this->getCourseService()->tryManageCourse($courseId);
+        $task    = $this->getTaskService()->getTask($taskId);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
+
+        if ($request->getMethod() == 'POST') {
+            $ids = $request->request->get("visibleReplays");
+            $this->getLiveReplayService()->updateReplayShow($ids, $activity['id']);
+
+            return $this->redirect($this->generateUrl('course_set_manage_course_tasks', array(
+                'courseSetId' => $course['courseSetId'],
+                'courseId'    => $course['id']
+            )));
+        }
+
+        return $this->render('course-manage/live-replay/modal.html.twig', array(
+            'replays' => $replays,
+            'taskId'  => $task['id'],
+            'course'  => $course,
+            'task'    => $task
+        ));
+    }
+
+    public function updateTaskReplayTitleAction(Request $request, $courseId, $taskId, $replayId)
+    {
+        $title = $request->request->get('title');
+
+        if (empty($title)) {
+            return $this->createJsonResponse(false);
+        }
+
+        $this->getLiveReplayService()->updateReplay($replayId, array('title' => $title));
+        return $this->createJsonResponse(true);
+    }
+
+    public function uploadReplayAction(Request $request, $courseId, $taskId)
+    {
+        $course   = $this->getCourseService()->tryManageCourse($courseId);
+        $task     = $this->getTaskService()->getTask($taskId);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+
+        if ($request->getMethod() == 'POST') {
+            $fileId = $request->request->get('fileId', 0);
+            $this->getActivityService()->updateActivity($activity['id'], array('fileId' => $fileId));
+            return $this->redirect($this->generateUrl('course_set_manage_course_tasks', array(
+                'courseSetId' => $course['courseSetId'],
+                'courseId'    => $course['id']
+            )));
+        }
+
+        if ($activity['ext']['replayStatus'] == 'videoGenerated') {
+            $task['media'] = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
+        }
+
+        return $this->render('course-manage/live-replay/upload-modal.html.twig', array(
+            'course'   => $course,
+            'task'     => $task,
+            'activity' => $activity
+        ));
+    }
+
+    public function createReplayAction(Request $request, $courseId, $taskId)
+    {
+        $course   = $this->getCourseService()->tryManageCourse($courseId);
+        $task     = $this->getTaskService()->getTask($taskId);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+
+        $liveId     = $activity['ext']['liveId'];
+        $provider   = $activity['ext']['liveProvider'];
+        $resultList = $this->getLiveReplayService()->generateReplay($liveId, $course['id'], $task['id'], $provider, 'live');
+
+        if (array_key_exists("error", $resultList)) {
+            return $this->createJsonResponse($resultList, Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $task["isEnd"]     = intval(time() - $task["endTime"]) > 0;
+        $task["canRecord"] = $this->get('web.twig.live_extension')->canRecord($liveId);
+
+        $client = new EdusohoLiveClient();
+
+        if ($task['type'] == 'live') {
+            $result = $client->getMaxOnline($liveId);
+            $this->getTaskService()->setTaskMaxOnlineNum($task['id'], $result['onLineNum']);
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
     protected function tryManageCourse($courseId)
     {
         return $this->getCourseService()->tryManageCourse($courseId);
@@ -204,5 +299,21 @@ class TaskManageController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @return LiveReplayService
+     */
+    protected function getLiveReplayService()
+    {
+        return $this->createService('Course:LiveReplayService');
     }
 }

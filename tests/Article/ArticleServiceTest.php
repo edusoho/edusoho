@@ -7,7 +7,7 @@ use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\Service\UserService;
 use Biz\User\CurrentUser;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 
 class ArticleServiceTest extends BaseTestCase

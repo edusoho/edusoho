@@ -35,6 +35,11 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
         return $this->db()->fetchColumn($sql, array($userId, $courseId));
     }
 
+    public function deleteByCourseId($courseId)
+    {
+        return $this->db()->delete($this->table(), array('courseId' => $courseId));
+    }
+
     public function declares()
     {
         return array(
