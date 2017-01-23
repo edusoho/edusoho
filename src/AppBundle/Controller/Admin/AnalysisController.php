@@ -150,12 +150,12 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $courseSetSumData = "";
+        $courseSetInitSum = "";
 
         if ($tab == "trend") {
             $courseSetData    = $this->getCourseSetService()->analysisCourseSetDataByTime($timeRange['startTime'], $timeRange['endTime']);
-            $courseSetSumData = $this->getCourseSetService()->countCourseSetNumDueTime($timeRange['startTime']);
-            $data             = $this->fillAnalysisSum($condition, $courseSetData, $courseSetSumData);
+            $courseSetInitSum = $this->getCourseSetService()->countCourseSets(array('endTime' => $timeRange['startTime']));
+            $data             = $this->fillAnalysisSum($condition, $courseSetData, $courseSetInitSum);
         }
 
         $userIds = ArrayToolkit::column($courseSetSumDetail, 'creator');
@@ -187,10 +187,11 @@ class AnalysisController extends BaseController
     {
         $data               = array();
         $courseSumStartDate = "";
-        $count = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
+
+        $count = $this->getCourseService()->countCourses($timeRange);
 
         if (!$timeRange) {
             $this->setFlashMessage("danger", '输入的日期有误!');
@@ -217,9 +218,8 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $courseData = $this->getCourseService()->analysisCourseDataByTime($timeRange['startTime'], $timeRange['endTime']);
-            $courseSumData = $this->getCourseService()->countCourseNumDueTime($timeRange['startTime']);
-            $count = $this->getCourseService()->searchCourseCount($timeRange);
-            $data = $this->fillAnalysisSum($condition, $courseData, $courseSumData);
+            $courseInitSum = $this->getCourseService()->countCourses(array('endTime' => $timeRange['startTime']));
+            $data = $this->fillAnalysisSum($condition, $courseData, $courseInitSum);
         }
 
         $userIds = ArrayToolkit::column($courseSumDetail, 'creator');

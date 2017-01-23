@@ -566,12 +566,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
     }
-
-    public function countCourseSetNumDueTime($time)
-    {
-        return $this->getCourseSetDao()->countCourseSetNumDueTime($time);
-    }
-
+    
     protected function validateCourseSet($courseSet)
     {
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {

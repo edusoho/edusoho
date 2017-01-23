@@ -852,11 +852,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->analysisCourseDataByTime($startTime, $endTime);
     }
 
-    public function countCourseNumDueTime($time)
-    {
-        return $this->getCourseDao()->countCourseNumDueTime($time);
-    }
-
     protected function fillMembersWithUserInfo($members)
     {
         if (empty($members)) {
@@ -986,6 +981,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function searchCourseCount($conditions)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
+        return $this->getCourseDao()->count($conditions);
+    }
+
+    public function countCourses(array $conditions)
+    {
         return $this->getCourseDao()->count($conditions);
     }
 

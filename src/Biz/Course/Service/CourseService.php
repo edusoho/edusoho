@@ -128,5 +128,5 @@ interface CourseService
 
     public function analysisCourseDataByTime($startTime, $endTime);
 
-    public function countCourseNumDueTime($time);
+    public function countCourses(array $conditions);
 }
