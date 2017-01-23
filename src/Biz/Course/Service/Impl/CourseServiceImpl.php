@@ -872,6 +872,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
+    public function analysisCourseDataByTime($startTime, $endTime)
+    {
+        return $this->getCourseDao()->analysisCourseDataByTime($startTime, $endTime);
+    }
+
+    public function countCourseNumDueTime($time)
+    {
+        return $this->getCourseDao()->countCourseNumDueTime($time);
+    }
+
     protected function fillMembersWithUserInfo($members)
     {
         if (empty($members)) {

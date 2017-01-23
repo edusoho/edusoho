@@ -202,6 +202,70 @@ class AnalysisController extends BaseController
         ));
     }
 
+    public function courseSumAction(Request $request, $tab)
+    {
+        $data               = array();
+        $courseSumStartDate = "";
+        $count = 0;
+
+        $condition = $request->query->all();
+        $timeRange = $this->getTimeRange($condition);
+
+        if (!$timeRange) {
+            $this->setFlashMessage("danger", '输入的日期有误!');
+            return $this->redirect($this->generateUrl('admin_operation_analysis_course_sum', array(
+                'tab' => "trend"
+            )));
+        }
+
+        $timeRange['parentId'] = 0;
+        $paginator             = new Paginator(
+            $request,
+            $count,
+            20
+        );
+
+        $courseSumDetail = $this->getCourseService()->searchCourses(
+            $timeRange,
+            '',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courseSetSumData = "";
+
+        if ($tab == "trend") {
+            $courseData = $this->getCourseService()->analysisCourseDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $courseSumData = $this->getCourseService()->countCourseNumDueTime($timeRange['startTime']);
+            $count = $this->getCourseService()->searchCourseCount($timeRange);
+            $data = $this->fillAnalysisSum($condition, $courseData, $courseSumData);
+        }
+
+        $userIds = ArrayToolkit::column($courseSumDetail, 'creator');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSumDetail, 'categoryId'));
+
+        $courseStartData = $this->getCourseService()->searchCourses(array(), array('createdTime' => 'ASC'), 0, 1);
+
+        if ($courseStartData) {
+            $courseStartDate = date("Y-m-d", $courseStartData[0]['createdTime']);
+        }
+
+        $dataInfo = $this->getDataInfo($condition, $timeRange);
+        return $this->render("admin/operation-analysis/course-sum.html.twig", array(
+            'courseSumDetail'       => $courseSumDetail,
+            'paginator'             => $paginator,
+            'tab'                   => $tab,
+            'categories'            => $categories,
+            'data'                  => $data,
+            'users'                 => $users,
+            'courseSumStartDate'    => $courseSumStartDate,
+            'dataInfo'              => $dataInfo
+        ));
+    }
+
     public function loginAction(Request $request, $tab)
     {
         $data           = array();
