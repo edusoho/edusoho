@@ -12,28 +12,6 @@ class ArrayToolkit
         }
     }
 
-    public static function sort(array &$target, array $condition)
-    {
-        array_walk($condition, function (&$value) {
-            if (stripos($value, 'ASC') !== false) {
-                $value = 1;
-            } elseif (stripos($value, 'DESC') !== false) {
-                $value = -1;
-            } else {
-                throw new Exception('no legal order is given, there has to be "asc" or "desc" which is case-insensitive');
-            }
-        });
-
-        usort($target, function ($a, $b) use ($condition) {
-            foreach ($condition as $key => $value) {
-                if ($a[$key] == $b[$key]) {
-                    continue;
-                }
-                return $a[$key] < $b[$key] ? -1 * $value : $value;
-            }
-        });
-    }
-
     public static function column(array $array, $columnName)
     {
         if(function_exists('array_column')){

@@ -184,6 +184,7 @@ analysisDateType:
     classroomIncome: └─ 班级营收额
     vipIncome: └─ 会员营收额
     courseSetSum: 课程总数
+    courseSum: 教学计划总数
     userSum: 用户总数
     # exitLesson: 退出学习数
 

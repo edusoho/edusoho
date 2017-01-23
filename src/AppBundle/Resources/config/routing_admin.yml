@@ -1714,6 +1714,11 @@ admin_operation_analysis_course_set_sum:
     defaults: { _controller: AppBundle:Admin/Analysis:courseSetSum }
     permissions: [admin_operation_analysis]
 
+admin_operation_analysis_course_sum:
+    path:  /operation/analysis/course/sum/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:courseSum }
+    permissions: [admin_operation_analysis]
+
 admin_operation_analysis_user_sum:
     path:  /operation/analysis/user/sum/{tab}
     defaults: { _controller: AppBundle:Admin/Analysis:userSum }

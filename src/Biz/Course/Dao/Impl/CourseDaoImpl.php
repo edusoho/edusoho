@@ -89,6 +89,22 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, $courseSetIds);
     }
 
+    public function analysisCourseDataByTime($startTime, $endTime)
+    {
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM {$this->table} WHERE createdTime >= ? AND createdTime <= ?
+            group by from_unixtime(createdTime,'%Y-%m-%d') order by date ASC";
+
+        return $this->db()->fetchAll($sql, array($startTime, $endTime));
+    }
+
+    public function countCourseNumDueTime($time)
+    {
+        $sql = "SELECT count(*) AS count FROM (SELECT from_unixtime(createdTime, '%Y-%m-%d') AS date FROM {$this->table}
+            WHERE createdTime <= $time) AS sums ORDER BY date DESC";
+
+        return $this->db()->fetchColumn($sql, array($time));
+    }
+
     public function declares()
     {
         return array(
