@@ -1,16 +1,13 @@
 <?php
 namespace Tests\Marker;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use Topxia\Service\Common\ServiceKernel;
 
 class MarkerServiceTest extends BaseTestCase
 {
     public function testAddMarker()
     {
-        $this->getCourseService()->createCourse(array(
-            'title' => 'testCourse'
-        ));
         $fields = array(
             'second'     => 30,
             'questionId' => 1
@@ -33,9 +30,6 @@ class MarkerServiceTest extends BaseTestCase
 
     public function testGetMarker()
     {
-        $this->getCourseService()->createCourse(array(
-            'title' => 'testCourse'
-        ));
         $fields = array(
             'second'     => 30,
             'questionId' => 1
@@ -59,9 +53,6 @@ class MarkerServiceTest extends BaseTestCase
 
     public function testGetMarkersByIds()
     {
-        $this->getCourseService()->createCourse(array(
-            'title' => 'testCourse'
-        ));
         $fields = array(
             'second'     => 30,
             'questionId' => 1
@@ -76,8 +67,8 @@ class MarkerServiceTest extends BaseTestCase
         );
 
         $this->getQuestionService()->create($arguments);
-        $marker1 = $this->getMarkerService()->addMarker(1, $fields);
-        $marker2 = $this->getMarkerService()->addMarker(3, $fields);
+        $this->getMarkerService()->addMarker(1, $fields);
+        $this->getMarkerService()->addMarker(3, $fields);
         $markers = $this->getMarkerService()->getMarkersByIds(array(1, 2));
         $this->assertEquals($markers[1]['mediaId'], 0);
         $this->assertEquals($markers[2]['mediaId'], 0);
@@ -86,9 +77,6 @@ class MarkerServiceTest extends BaseTestCase
 
     public function testSearchMarkers()
     {
-        $this->getCourseService()->createCourse(array(
-            'title' => 'testCourse'
-        ));
         $fields = array(
             'second'     => 30,
             'questionId' => 1
@@ -103,9 +91,9 @@ class MarkerServiceTest extends BaseTestCase
         );
 
         $this->getQuestionService()->create($arguments);
-        $marker1    = $this->getMarkerService()->addMarker(1, $fields);
-        $marker2    = $this->getMarkerService()->addMarker(3, $fields);
-        $marker3    = $this->getMarkerService()->addMarker(3, $fields);
+        $this->getMarkerService()->addMarker(1, $fields);
+        $this->getMarkerService()->addMarker(3, $fields);
+        $this->getMarkerService()->addMarker(3, $fields);
         $conditions = array(
             'mediaId' => 0
         );
@@ -116,9 +104,6 @@ class MarkerServiceTest extends BaseTestCase
 
     public function testUpdateMarker()
     {
-        $this->getCourseService()->createCourse(array(
-            'title' => 'testCourse',
-        ));
         $fields = array(
             'second'     => 30,
             'questionId' => 1
@@ -149,9 +134,6 @@ class MarkerServiceTest extends BaseTestCase
 
     public function testDeleteMarker()
     {
-        $this->getCourseService()->createCourse(array(
-            'title' => 'testCourse'
-        ));
         $fields = array(
             'second'     => 30,
             'questionId' => 1
@@ -172,6 +154,22 @@ class MarkerServiceTest extends BaseTestCase
         $marker = $this->getMarkerService()->deleteMarker($marker1['id']);
         $this->assertEquals($marker, true);
         return $marker;
+    }
+
+    private function createCourse($customFields = array())
+    {
+        $defaultFields = array(
+            'title' => 'test-create-course',
+            'courseSetId' => 1,
+            'learnMode' => 'freeMode',
+            'expiryMode' => 'days',
+            'expiryDays' => '0',
+            'expiryStartDate' => '',
+            'expiryEndDate' => '',
+        );
+
+        $fields = array_merge($defaultFields, $customFields);
+        return $this->getCourseService()->createCourse($fields);
     }
 
     protected function getMarkerService()

@@ -96,14 +96,24 @@ interface TaskService
     public function findFreeTasksByCourseId($courseId);
 
     /**
+     * 设置当前任务最大可同时进行的人数  如直播任务等
+     *
+     * @param $taskId
+     * @param $maxNum
+     *
+     * @return mixed
+     */
+    public function setTaskMaxOnlineNum($taskId, $maxNum);
+
+    /**
      * 统计当前时间以后每天的直播次数
      *
-     * @param $courseIds
+     * @param $courseSetIds
      * @param $limit
      *
-     * @return array<string, int|string>
+     * @return array <string, int|string>
      */
-    public function findFutureLiveDatesByCourseIdsGroupByDate($courseIds, $limit);
+    public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
 
     /**
      * 返回当前正在直播的直播任务
@@ -118,6 +128,13 @@ interface TaskService
      * @return array
      */
     public function findFutureLiveTasks();
+
+    /**
+     * 返回过去直播过的课程ID
+     *
+     * @return array<int>
+     */
+    public function findPastLivedCourseSetIds();
 
     /**
      *

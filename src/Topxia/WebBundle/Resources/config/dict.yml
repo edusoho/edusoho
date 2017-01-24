@@ -216,7 +216,8 @@ difficulty:
     difficulty: 困难
 
 targetName:
-    course: 课程
+    course: 教学计划
+    courseSet: 课程
     vip: 会员
     classroom: 班级
     groupSell: 组合

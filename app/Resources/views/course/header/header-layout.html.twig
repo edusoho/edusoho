@@ -14,7 +14,6 @@
 
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top clearfix">
-
       <span class="tags mrm">
         {% if courseSet.serializeMode == 'serialized' %}
         <span class="tag-serialing"></span>
@@ -22,7 +21,6 @@
         <span class="tag-finished"></span>
         {% endif %}
       </span>
-
       <span class="text-overflow vertical-top inline-block gray-darker text-24 course-detail-heading">{{ course.title }}</span>
       <span class="es-qrcode top" data-url="{{ path('course_qrcode', { id: course.id }) }}">
         <i class="es-icon es-icon-qrcode"></i>
@@ -31,8 +29,7 @@
           扫二维码继续学习二维码时效为半小时
         </span>
       </span>
-
-     <p class="mt10  text-overflow  mb20">{{ courseSet.subtitle }}</p>
+      {% block course_header_subtitle %}{% endblock %}
       <ul class="course-operation hidden-xs hidden-sm clearfix">
         <li>
           <span class="btn btn-xs">

@@ -9,46 +9,35 @@ class SystemUtilServiceImplTest extends BaseTestCase
     {
         $params = array(
             array(
-                'functionName' => 'create',
-                'runTimes'     => 1,
-                'withParams'   => array(1),
+                'functionName' => 'getCourseIdsWhereCourseHasDeleted',
                 'returnValue'  => array(
-                    'id'            => 1,
-                    'storage'       => 'cloud',
-                    'filename'      => 'test',
-                    'createdUserId' => 1
+                    array('targetId' => 1),
+                    array('targetId' => 2)
                 )
             )
         );
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao', $params);
+        $this->mockBiz('Util:SystemUtilDao', 'SystemUtilDao', $params);
 
         $params = array(
             array(
-                'functionName' => 'addFile',
-                'runTimes'     => 1,
-                'withParams'   => array(
-                    'id'            => 1,
-                    'storage'       => 'cloud',
-                    'filename'      => 'test',
-                    'createdUserId' => 1
-                ),
+                'functionName' => 'searchFiles',
                 'returnValue'  => array(
-                    'id'            => 1,
-                    'storage'       => 'cloud',
-                    'filename'      => 'test',
-                    'createdUserId' => 1
+                    array('id' => 1),
+                    array('id' => 2),
+                    array('id' => 3)
                 )
+            ),
+            array(
+                'functionName' => 'deleteFile',
+                'returnValue'  => 1
             )
         );
-        $this->mockBiz('File:LocalFileImplementor', 'LocalFileImplementor', $params);
-        $file = $this->getUploadFileService()->addFile('materiallib', 1);
+        
+        $this->mockBiz('File:UploadFileService', 'UploadFileService', $params);
 
         $test = $this->getSystemUtilService()->removeUnusedUploadFiles();
 
-        $this->assertEquals(1, $test);
-        $biz = $this->getBiz();
-        unset($biz['@File:LocalFileImplementor']);
-        unset($biz['@File:UploadFileDao']);
+        $this->assertEquals(3, $test);
     }
 
     protected function getUploadFileService()

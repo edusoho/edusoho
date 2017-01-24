@@ -1,8 +1,6 @@
 <?php
 namespace Biz\Course\Dao\Impl;
 
-
-
 use Biz\Course\Dao\CourseNoteLikeDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -48,7 +46,7 @@ class CourseNoteLikeDaoImpl extends GeneralDaoImpl implements CourseNoteLikeDao
             return array();
         }
         $marks = str_repeat('?,', count($noteIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND noteId IN ({$marks});";
+        $sql   = "SELECT * FROM {$this->table} WHERE userId = ? AND noteId IN ({$marks});";
 
         $noteIds = array_merge(array($userId), $noteIds);
         return $this->db()->fetchAll($sql, $noteIds);

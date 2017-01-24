@@ -71,3 +71,4 @@ chunk-manifest.json
 .vscode/
 .sonar
 .happypack
+add-new-file.log

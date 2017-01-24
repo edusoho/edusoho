@@ -79,25 +79,41 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     /**
      * 统计当前时间以后每天的直播次数
      *
-     * @param $courseIds
+     * @param $courseSetIds
      * @param $limit
      *
-     * @return array<string, int|string>
+     * @return array <string, int|string>
      */
-    public function findFutureLiveDatesGroupByDate($courseIds, $limit)
+    public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit)
     {
-        if (empty($courseIds)) {
+        if (empty($courseSetIds)) {
             return array();
         }
 
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
 
         $time = time();
 
-        $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `type`= 'live' AND status='published' AND courseId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
-        return $this->db()->fetchAll($sql, $courseIds);
+        $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->table()}` WHERE  `type`= 'live' AND status='published' AND fromCourseSetId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
+        return $this->db()->fetchAll($sql, $courseSetIds);
     }
 
+    /**
+     * 返回过去直播过的教学计划ID
+     *
+     * @return array<int>
+     */
+    public function findPastLivedCourseSetIds()
+    {
+        $time = time();
+        $sql  = "SELECT fromCourseSetId, max(startTime) as startTime
+                 FROM {$this->table()} 
+                 WHERE endTime < {$time} AND status='published' AND type = 'live' 
+                 GROUP BY fromCourseSetId 
+                 ORDER BY startTime DESC
+                 ";
+        return $this->db()->fetchAll($sql);
+    }
 
     public function getTaskByCourseIdAndActivityId($courseId, $activityId)
     {
@@ -125,6 +141,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'courseId = :courseId',
                 'courseId IN ( :courseIds )',
                 'fromCourseSetId = :fromCourseSetId',
+                'fromCourseSetId IN (:fromCourseSetIds)',
                 'status =:status',
                 'type = :type',
                 'isFree =:isFree',
@@ -133,7 +150,9 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'seq > :seq_GT',
                 'seq < :seq_LT',
                 'startTime >= :startTime_GE',
-                'endTime < :endTime_GT'
+                'startTime > :startTime_GT',
+                'endTime > :endTime_GT',
+                'endTime < :endTime_LT'
             )
         );
     }

@@ -5,6 +5,7 @@
 {% set role = 'teacher' %}
 {% set showHeader = 1 %}
 {% set isIframeBody = 0 %}
+{% set isTeacher = 1 %}
 
 {% block paper_result_bar %}
   {% include 'testpaper/part/paper-result-objective.html.twig' %}
@@ -15,8 +16,6 @@
 {% endblock %}
 
 {% block paper_sidebar %}
-
-{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
 
   <div class="testpaper-card" data-spy="affix" data-offset-top="200">
     <div class="panel panel-default">
@@ -40,7 +39,6 @@
       </div>
     </div>
   </div>
-{% endif %}
 
 {% endblock %}
 
