@@ -1694,9 +1694,9 @@ admin_operation_analysis_income:
     defaults: { _controller: AppBundle:Admin/Analysis:income }
     permissions: [admin_operation_analysis]
 
-admin_operation_analysis_course_income:
-    path:  /operation/analysis/course/income/{tab}
-    defaults: { _controller: AppBundle:Admin/Analysis:courseIncome }
+admin_operation_analysis_course_set_income:
+    path:  /operation/analysis/course_set/income/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:courseSetIncome }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_classroom_income:

@@ -180,7 +180,7 @@ analysisDateType:
     localVideoViewed: └─ 本地视频观看数
     netVideoViewed: └─ 网络视频观看数
     income: 营收额
-    courseIncome: └─ 课程营收额
+    courseSetIncome: └─ 课程营收额
     classroomIncome: └─ 班级营收额
     vipIncome: └─ 会员营收额
     courseSetSum: 课程总数
