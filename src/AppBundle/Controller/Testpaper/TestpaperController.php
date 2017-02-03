@@ -121,7 +121,7 @@ class TestpaperController extends BaseController
 
         $activity          = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        //$task              = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        $task              = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->render('testpaper/result.html.twig', array(
             'questions'     => $questions,
@@ -135,7 +135,7 @@ class TestpaperController extends BaseController
             'attachments'   => $attachments,
             'questionTypes' => $this->getCheckedQuestionType($testpaper),
             'limitedTime'   => 0,
-            //'task'          => $task,
+            'task'          => $task,
             'action'        => $request->query->get('action', ''),
             'target'        => $testpaperActivity
         ));

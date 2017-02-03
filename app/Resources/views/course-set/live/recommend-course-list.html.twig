@@ -1,4 +1,4 @@
-{% set recommendCourseSets = data('RecommendCoursesSets',{type:'live',count:5}) %}
+{% set recommendCourseSets = data('RecommendCourseSets',{type:'live',count:5}) %}
 <div class="panel panel-default es-live-recommend">
   <div class="panel-heading">
     <a href="{{ path('course_set_explore', {filter: {type: 'live',price: '',currentLevelId: 'all'},orderBy: 'recommendedSeq'}) }} " class="more">

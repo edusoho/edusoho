@@ -22,7 +22,7 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
         );
 		return $this->getClassroomService()->searchClassrooms(
             $conditions, 
-            array('createdTime','desc'),
+            array('createdTime' => 'desc'),
             0,
             100
         );

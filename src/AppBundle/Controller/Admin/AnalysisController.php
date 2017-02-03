@@ -3,15 +3,15 @@ namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\DateToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class AnalysisController extends BaseController
 {
-    public function rountByanalysisDateTypeAction(Request $request, $tab)
+    public function routeAnalysisDataTypeAction(Request $request, $tab)
     {
         $analysisDateType = $request->query->get("analysisDateType");
-        return $this->forward('AppBundle:Admin/Analysis:'.$analysisDateType, array(
+        return $this->forward("AppBundle:Admin/Analysis:{$analysisDateType}", array(
             'request' => $request,
             'tab'     => $tab
         ));
@@ -20,18 +20,11 @@ class AnalysisController extends BaseController
     public function registerAction(Request $request, $tab)
     {
         $data              = array();
-        $count = 0;
+        $count             = 0;
         $registerStartDate = "";
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
-
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", $this->getServiceKernel()->trans('输入的日期有误!'));
-            return $this->redirect($this->generateUrl('admin_operation_analysis_register', array(
-                'tab' => "trend"
-            )));
-        }
 
         $paginator = new Paginator(
             $request,
@@ -88,20 +81,16 @@ class AnalysisController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
-        if (!$timeRange) {
-            $this->setFlashMessage("danger",  '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_user_sum', array(
-                'tab' => "trend"
-            )));
-        }
-
         $result = array(
             'tab' => $tab
         );
 
         if ($tab == "trend") {
-            $userSumData    = $this->getUserService()->analysisUserSumByTime($timeRange['endTime']);
-            $data           = $this->fillAnalysisUserSum($condition, $userSumData);
+            $registerData = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $userInitCount = $this->getUserService()->countUsers(
+                array('endTime' => $timeRange['startTime'])
+            );
+            $data           = $this->fillAnalysisSum($condition, $registerData, $userInitCount);
             $result["data"] = $data;
         } else {
             $paginator = new Paginator(
@@ -112,7 +101,7 @@ class AnalysisController extends BaseController
 
             $userSumDetail = $this->getUserService()->searchUsers(
                 $timeRange,
-                array('createdTime'=>'DESC'),
+                array('createdTime' => 'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
@@ -120,7 +109,7 @@ class AnalysisController extends BaseController
             $result['paginator']     = $paginator;
         }
 
-        $userSumStartData = $this->getUserService()->searchUsers(array(), array('createdTime', 'ASC'), 0, 1);
+        $userSumStartData = $this->getUserService()->searchUsers(array(), array('createdTime' => 'ASC'), 0, 1);
 
         if ($userSumStartData) {
             $userSumStartDate = date("Y-m-d", $userSumStartData[0]['createdTime']);
@@ -137,6 +126,63 @@ class AnalysisController extends BaseController
         return $this->render("admin/operation-analysis/user-sum.html.twig", $result);
     }
 
+    public function courseSetSumAction(Request $request, $tab)
+    {
+        $data                  = array();
+        $courseSetSumStartDate = "";
+
+        $condition = $request->query->all();
+        $timeRange = $this->getTimeRange($condition);
+
+        $count = $this->getCourseSetService()->countCourseSets($timeRange);
+
+        $timeRange['parentId'] = 0;
+        $paginator             = new Paginator(
+            $request,
+            $count,
+            20
+        );
+
+        $courseSetSumDetail = $this->getCourseSetService()->searchCourseSets(
+            $timeRange,
+            '',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $courseSetInitSum = "";
+
+        if ($tab == "trend") {
+            $courseSetData    = $this->getCourseSetService()->analysisCourseSetDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $courseSetInitSum = $this->getCourseSetService()->countCourseSets(array('endTime' => $timeRange['startTime']));
+            $data             = $this->fillAnalysisSum($condition, $courseSetData, $courseSetInitSum);
+        }
+
+        $userIds = ArrayToolkit::column($courseSetSumDetail, 'creator');
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSetSumDetail, 'categoryId'));
+
+        $courseSetSumStartData = $this->getCourseSetService()->searchCourseSets(array(), array('createdTime' => 'ASC'), 0, 1);
+
+        if ($courseSetSumStartData) {
+            $courseSetSumStartDate = date("Y-m-d", $courseSetSumStartData[0]['createdTime']);
+        }
+
+        $dataInfo = $this->getDataInfo($condition, $timeRange);
+        return $this->render("admin/operation-analysis/course-set-sum.html.twig", array(
+            'courseSetSumDetail'    => $courseSetSumDetail,
+            'paginator'             => $paginator,
+            'tab'                   => $tab,
+            'categories'            => $categories,
+            'data'                  => $data,
+            'users'                 => $users,
+            'courseSetSumStartDate' => $courseSetSumStartDate,
+            'dataInfo'              => $dataInfo
+        ));
+    }
+
     public function courseSumAction(Request $request, $tab)
     {
         $data               = array();
@@ -145,17 +191,12 @@ class AnalysisController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_course_sum', array(
-                'tab' => "trend"
-            )));
-        }
+        $count = $this->getCourseService()->countCourses($timeRange);
 
         $timeRange['parentId'] = 0;
         $paginator             = new Paginator(
             $request,
-            $this->getCourseService()->searchCourseCount($timeRange),
+            $count,
             20
         );
 
@@ -166,36 +207,36 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $courseSumData = "";
+        $courseSetSumData = "";
 
         if ($tab == "trend") {
-            $courseSumData = $this->getCourseService()->analysisCourseSumByTime($timeRange['endTime']);
-
-            $data = $this->fillAnalysisCourseSum($condition, $courseSumData);
+            $courseData = $this->getCourseService()->analysisCourseDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $courseInitSum = $this->getCourseService()->countCourses(array('endTime' => $timeRange['startTime']));
+            $data = $this->fillAnalysisSum($condition, $courseData, $courseInitSum);
         }
 
-        $userIds = ArrayToolkit::column($courseSumDetail, 'userId');
+        $userIds = ArrayToolkit::column($courseSumDetail, 'creator');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSumDetail, 'categoryId'));
 
-        $courseSumStartData = $this->getCourseService()->searchCourses(array(), 'createdTimeByAsc', 0, 1);
+        $courseStartData = $this->getCourseService()->searchCourses(array(), array('createdTime' => 'ASC'), 0, 1);
 
-        if ($courseSumStartData) {
-            $courseSumStartDate = date("Y-m-d", $courseSumStartData[0]['createdTime']);
+        if ($courseStartData) {
+            $courseStartDate = date("Y-m-d", $courseStartData[0]['createdTime']);
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
         return $this->render("admin/operation-analysis/course-sum.html.twig", array(
-            'courseSumDetail'    => $courseSumDetail,
-            'paginator'          => $paginator,
-            'tab'                => $tab,
-            'categories'         => $categories,
-            'data'               => $data,
-            'users'              => $users,
-            'courseSumStartDate' => $courseSumStartDate,
-            'dataInfo'           => $dataInfo
+            'courseSumDetail'       => $courseSumDetail,
+            'paginator'             => $paginator,
+            'tab'                   => $tab,
+            'categories'            => $categories,
+            'data'                  => $data,
+            'users'                 => $users,
+            'courseSumStartDate'    => $courseSumStartDate,
+            'dataInfo'              => $dataInfo
         ));
     }
 
@@ -208,13 +249,6 @@ class AnalysisController extends BaseController
         $timeRange = $this->getTimeRange($condition);
 
         $count = 0;
-
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_login', array(
-                'tab' => "trend"
-            )));
-        }
 
         $paginator = new Paginator(
             $request,
@@ -233,8 +267,8 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $loginData = $this->getLogService()->analysisLoginDataByTime($timeRange['startTime'], $timeRange['endTime']);
-            $data = $this->fillAnalysisData($condition, $loginData);
-            $count = $this->getLogService()->analysisLoginNumByTime($timeRange['startTime'], $timeRange['endTime']);
+            $data      = $this->fillAnalysisData($condition, $loginData);
+            $count     = $this->getLogService()->analysisLoginNumByTime($timeRange['startTime'], $timeRange['endTime']);
         }
 
         $userIds = ArrayToolkit::column($loginDetail, 'userId');
@@ -256,26 +290,19 @@ class AnalysisController extends BaseController
             'users'          => $users,
             'loginStartDate' => $loginStartDate,
             'dataInfo'       => $dataInfo,
-            'count'          => $count,
+            'count'          => $count
         ));
     }
 
     public function courseSetAction(Request $request, $tab)
     {
-        $data            = array();
+        $data               = array();
         $courseSetStartDate = "";
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
         $count = $this->getCourseSetService()->countCourseSets($timeRange);
-
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_course_set', array(
-                'tab' => "trend"
-            )));
-        }
 
         $paginator = new Paginator(
             $request,
@@ -294,6 +321,7 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $courseSetData = $this->getCourseSetService()->analysisCourseSetDataByTime($timeRange['startTime'], $timeRange['endTime']);
+
             $data = $this->fillAnalysisData($condition, $courseSetData);
         }
 
@@ -312,14 +340,14 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($condition, $timeRange);
         return $this->render("admin/operation-analysis/course-set.html.twig", array(
             'courseSetDetail'    => $courseSetDetail,
-            'paginator'       => $paginator,
-            'tab'             => $tab,
-            'categories'      => $categories,
-            'data'            => $data,
-            'users'           => $users,
+            'paginator'          => $paginator,
+            'tab'                => $tab,
+            'categories'         => $categories,
+            'data'               => $data,
+            'users'              => $users,
             'courseSetStartDate' => $courseSetStartDate,
-            'dataInfo'        => $dataInfo,
-            'count'           => $count,
+            'dataInfo'           => $dataInfo,
+            'count'              => $count
         ));
     }
 
@@ -330,13 +358,6 @@ class AnalysisController extends BaseController
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
-
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_lesson', array(
-                'tab' => "trend"
-            )));
-        }
 
         $paginator = new Paginator(
             $request,
@@ -394,13 +415,6 @@ class AnalysisController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_join', array(
-                'tab' => "trend"
-            )));
-        }
-
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid")),
@@ -456,13 +470,6 @@ class AnalysisController extends BaseController
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
-
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_exit', array(
-                'tab' => "trend"
-            )));
-        }
 
         $paginator = new Paginator(
             $request,
@@ -527,13 +534,6 @@ class AnalysisController extends BaseController
 
         $timeRange = $this->getTimeRange($condition);
 
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_course_paid', array(
-                'tab' => "trend"
-            )));
-        }
-
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "status" => "paid", "amount" => "0.00", "targetType" => 'course')),
@@ -597,13 +597,6 @@ class AnalysisController extends BaseController
         $timeRange              = $this->getTimeRange($condition);
         $paidClassroomStartDate = '';
 
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_Classroom_paid', array(
-                'tab' => "trend"
-            )));
-        }
-
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "statusPaid" => "paid", "statusCreated" => "created", "targetType" => 'classroom')),
@@ -658,13 +651,6 @@ class AnalysisController extends BaseController
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
-
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_lesson_finished', array(
-                'tab' => "trend"
-            )));
-        }
 
         $paginator = new Paginator(
             $request,
@@ -732,13 +718,6 @@ class AnalysisController extends BaseController
             , "endTime" => $timeRange['endTime']
         );
 
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
-                'tab' => "trend"
-            )));
-        }
-
         $paginator = new Paginator(
             $request,
             $this->getCourseService()->searchAnalysisLessonViewCount(
@@ -799,13 +778,6 @@ class AnalysisController extends BaseController
             , "endTime" => $timeRange['endTime']
         );
 
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
-                'tab' => "trend"
-            )));
-        }
-
         $paginator = new Paginator(
             $request,
             $this->getCourseService()->searchAnalysisLessonViewCount(
@@ -863,15 +835,8 @@ class AnalysisController extends BaseController
             "fileType"    => 'video',
             "fileStorage" => 'local',
             "startTime"   => $timeRange['startTime'],
-            "endTime" => $timeRange['endTime']
+            "endTime"     => $timeRange['endTime']
         );
-
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
-                'tab' => "trend"
-            )));
-        }
 
         $paginator = new Paginator(
             $request,
@@ -933,13 +898,6 @@ class AnalysisController extends BaseController
             , "endTime" => $timeRange['endTime']
         );
 
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_video_viewed', array(
-                'tab' => "trend"
-            )));
-        }
-
         $paginator = new Paginator(
             $request,
             $this->getCourseService()->searchAnalysisLessonViewCount(
@@ -990,22 +948,19 @@ class AnalysisController extends BaseController
     {
         $data            = array();
         $incomeStartDate = "";
+        $count           = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
-
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_income', array(
-                'tab' => "trend"
-            )));
-        }
 
         $incomeData = "";
 
         if ($tab == "trend") {
             $incomeData = $this->getOrderService()->analysisAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data       = $this->fillAnalysisData($condition, $incomeData);
+            foreach ($incomeData as $val) {
+                $count += $val['count'];
+            }
         }
 
         $paginator = new Paginator(
@@ -1056,24 +1011,19 @@ class AnalysisController extends BaseController
             'classrooms'      => $classrooms,
             'users'           => $users,
             'incomeStartDate' => $incomeStartDate,
-            'dataInfo'        => $dataInfo
+            'dataInfo'        => $dataInfo,
+            'count'           => $count,
         ));
     }
 
-    public function courseIncomeAction(Request $request, $tab)
+    public function courseSetIncomeAction(Request $request, $tab)
     {
         $data                  = array();
-        $courseIncomeStartDate = "";
+        $courseSetIncomeStartDate = "";
+        $count                 = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
-
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_course_income', array(
-                'tab' => "trend"
-            )));
-        }
 
         $paginator = new Paginator(
             $request,
@@ -1092,8 +1042,10 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $courseIncomeData = $this->getOrderService()->analysisCourseAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
             $data = $this->fillAnalysisData($condition, $courseIncomeData);
+            foreach ($courseIncomeData as $val) {
+                $count += $val['count'];
+            }
         }
 
         $courseIds = ArrayToolkit::column($courseIncomeDetail, 'targetId');
@@ -1111,7 +1063,8 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("admin/operation-analysis/courseIncome.html.twig", array(
+
+        return $this->render("admin/operation-analysis/courseSetIncome.html.twig", array(
             'courseIncomeDetail'    => $courseIncomeDetail,
             'paginator'             => $paginator,
             'tab'                   => $tab,
@@ -1119,7 +1072,8 @@ class AnalysisController extends BaseController
             'courses'               => $courses,
             'users'                 => $users,
             'courseIncomeStartDate' => $courseIncomeStartDate,
-            'dataInfo'              => $dataInfo
+            'dataInfo'              => $dataInfo,
+            'count'                 => $count,
         ));
     }
 
@@ -1127,16 +1081,10 @@ class AnalysisController extends BaseController
     {
         $data                     = array();
         $classroomIncomeStartDate = "";
+        $count                    = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
-
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_classroom_income', array(
-                'tab' => "trend"
-            )));
-        }
 
         $paginator = new Paginator(
             $request,
@@ -1155,8 +1103,10 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $classroomIncomeData = $this->getOrderService()->analysisClassroomAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
             $data = $this->fillAnalysisData($condition, $classroomIncomeData);
+            foreach ($classroomIncomeData as $val) {
+                $count += $val['count'];
+            }
         }
 
         $classroomIds = ArrayToolkit::column($classroomIncomeDetail, 'targetId');
@@ -1182,7 +1132,8 @@ class AnalysisController extends BaseController
             'classrooms'               => $classrooms,
             'users'                    => $users,
             'classroomIncomeStartDate' => $classroomIncomeStartDate,
-            'dataInfo'                 => $dataInfo
+            'dataInfo'                 => $dataInfo,
+            'count'                    => $count,
         ));
     }
 
@@ -1190,16 +1141,10 @@ class AnalysisController extends BaseController
     {
         $data               = array();
         $vipIncomeStartDate = "";
+        $count              = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
-
-        if (!$timeRange) {
-            $this->setFlashMessage("danger", '输入的日期有误!');
-            return $this->redirect($this->generateUrl('admin_operation_analysis_vip_income', array(
-                'tab' => "trend"
-            )));
-        }
 
         $paginator = new Paginator(
             $request,
@@ -1218,8 +1163,10 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $vipIncomeData = $this->getOrderService()->analysisvipAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
             $data = $this->fillAnalysisData($condition, $vipIncomeData);
+            foreach ($vipIncomeData as $val) {
+                $count += $val['count'];
+            }
         }
 
         $userIds = ArrayToolkit::column($vipIncomeDetail, 'userId');
@@ -1240,93 +1187,49 @@ class AnalysisController extends BaseController
             'data'               => $data,
             'users'              => $users,
             'vipIncomeStartDate' => $vipIncomeStartDate,
-            'dataInfo'           => $dataInfo
+            'dataInfo'           => $dataInfo,
+            'count'              => $count,
         ));
     }
 
-    protected function fillAnalysisUserSum($condition, $currentData)
+    protected function fillAnalysisSum($condition, $currentData, $initValue = 0)
     {
-        $dates       = $this->getDatesByCondition($condition);
-        $currentData = ArrayToolkit::index($currentData, 'date');
-        $timeRange   = $this->getTimeRange($condition);
-        $userSumData = array();
+        $timeRange = $this->getTimeRange($condition);
+        $dateRange = DateToolkit::generateDateRange(
+            date('Y-m-d', $timeRange['startTime']),
+            date('Y-m-d', $timeRange['endTime'])
+        );
 
-        foreach ($dates as $key => $value) {
-            $zeroData[] = array("date" => $value, "count" => 0);
+        $initData = array();
+
+        foreach ($dateRange as $value) {
+            $initData[] = array('date' => $value, 'count' => $initValue);
         }
 
-        $userSumData = $this->getUserService()->analysisUserSumByTime($timeRange['endTime']);
-
-        if ($userSumData) {
-            $countTmp = $userSumData[0]["count"];
-
-            foreach ($zeroData as $key => $value) {
-                foreach ($userSumData as $userKey => $val) {
-                    if ($userKey != 0 && ($value['date'] < $val['date']) && (isset($userSumData[($userKey + 1)]) && $value['date'] > $userSumData[($userKey + 1)]['date'])) {
-                        $countTmp = $userSumData[($userKey + 1)]['count'];
-                    }
+        for ($i = 0; $i < count($initData); $i++) {
+            foreach ($currentData as $value) {
+                if (in_array($initData[$i]['date'], $value)) {
+                    $initData[$i]['count'] += $value['count'];
+                    break;
                 }
-
-                $date = $value['date'];
-
-                if (array_key_exists($date, $currentData)) {
-                    $zeroData[$key]['count'] = $currentData[$date]['count'];
-                    $countTmp                = $currentData[$date]['count'];
-                } else {
-                    $zeroData[$key]['count'] = $countTmp;
-                }
+            }
+            if (isset($initData[$i + 1])) {
+                $initData[$i + 1]['count'] = $initData[$i]['count'];
             }
         }
 
-        return json_encode($zeroData);
-    }
-
-    protected function fillAnalysisCourseSum($condition, $currentData)
-    {
-        $dates       = $this->getDatesByCondition($condition);
-        $currentData = ArrayToolkit::index($currentData, 'date');
-        $timeRange   = $this->getTimeRange($condition);
-        $zeroData    = array();
-
-        foreach ($dates as $key => $value) {
-            $zeroData[] = array("date" => $value, "count" => 0);
-        }
-
-        $courseSumData = $this->getCourseService()->analysisCourseSumByTime($timeRange['endTime']);
-
-        if ($courseSumData) {
-            $countTmp = $courseSumData[0]["count"];
-
-            foreach ($zeroData as $key => $value) {
-                if ($value["date"] < $courseSumData[0]["date"]) {
-                    $countTmp = 0;
-                } else {
-                    foreach ($courseSumData as $courseKey => $val) {
-                        if ($courseKey != 0 && ($value['date'] < $val['date']) && ($value['date'] > $courseSumData[($courseKey - 1)]['date'])) {
-                            $countTmp = $courseSumData[($courseKey - 1)]['count'];
-                        }
-                    }
-                }
-
-                $date = $value['date'];
-
-                if (array_key_exists($date, $currentData)) {
-                    $zeroData[$key]['count'] = $currentData[$date]['count'];
-                    $countTmp                = $currentData[$date]['count'];
-                } else {
-                    $zeroData[$key]['count'] = $countTmp;
-                }
-            }
-        }
-
-        return json_encode($zeroData);
+        return json_encode($initData);
     }
 
     protected function fillAnalysisData($condition, $currentData)
     {
-        $dates = $this->getDatesByCondition($condition);
-
-        foreach ($dates as $key => $value) {
+        $timeRange = $this->getTimeRange($condition);
+        $dateRange = DateToolkit::generateDateRange(
+            date('Y-m-d', $timeRange['startTime']),
+            date('Y-m-d', $timeRange['endTime'])
+        );
+        
+        foreach ($dateRange as $key => $value) {
             $zeroData[] = array("date" => $value, "count" => 0);
         }
 
@@ -1336,20 +1239,9 @@ class AnalysisController extends BaseController
 
         $currentData = array_merge($zeroData, $currentData);
 
-        foreach ($currentData as $key => $value) {
-            $data[] = $value;
-        }
+        $currentData = array_values($currentData);
 
-        return json_encode($data);
-    }
-
-    protected function getDatesByCondition($condition)
-    {
-        $timeRange = $this->getTimeRange($condition);
-
-        $dates = $this->makeDateRange($timeRange['startTime'], $timeRange['endTime'] - 24 * 3600);
-
-        return $dates;
+        return json_encode($currentData);
     }
 
     protected function getDataInfo($condition, $timeRange)
@@ -1368,35 +1260,13 @@ class AnalysisController extends BaseController
 
     protected function getTimeRange($fields)
     {
-        if (isset($fields['startTime']) && isset($fields['endTime']) && $fields['startTime'] != "" && $fields['endTime'] != "") {
-            if ($fields['startTime'] > $fields['endTime']) {
-                return false;
-            }
+        $startTime = !empty($fields['startTime']) ? $fields['startTime'] : date("Y-m", time());
+        $endTime = !empty($fields['endTime']) ? $fields['endTime'] : date("Y-m", time());
 
-            return array('startTime' => strtotime($fields['startTime']), 'endTime' => (strtotime($fields['endTime']) + 24 * 3600));
-        }
-
-        return array('startTime' => strtotime(date("Y-m", time())), 'endTime' => strtotime(date("Y-m-d", time() + 24 * 3600)));
-    }
-
-    protected function makeDateRange($startTime, $endTime)
-    {
-        $dates = array();
-
-        $currentTime = $startTime;
-
-        while (true) {
-            if ($currentTime > $endTime) {
-                break;
-            }
-
-            $currentDate = date('Y-m-d', $currentTime);
-            $dates[]     = $currentDate;
-
-            $currentTime = $currentTime + 3600 * 24;
-        }
-
-        return $dates;
+        return array(
+            'startTime' => strtotime($startTime), 
+            'endTime' => strtotime($endTime) + 24 * 3600
+        );
     }
 
     protected function getLogService()

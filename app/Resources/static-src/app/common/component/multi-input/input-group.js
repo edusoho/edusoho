@@ -8,7 +8,6 @@ export default class InputGroup extends Component {
     super(props);
     this.state = {
       itemName: "",
-      itemData: null,
       searched: true,
       resultful: false,
       searchResult:[],
@@ -18,15 +17,13 @@ export default class InputGroup extends Component {
     this.searchableUrl = this.props.searchable.url;
   }
 
-  selectChange(data,name) {
-    console.log(data);
-    console.log(name);
-    //在这种情况下，不应该去搜索，那什么时候再搜索呢；
+  selectChange(name,data) {
+    if(data) {
+      this.context.addItem(name,data);
+    }
     this.setState({
-      searched: false,
-      itemName: name,
-      itemData: data,
-    })
+      itemName: '',
+    });
   }
 
   onFocus(event) {
@@ -61,14 +58,12 @@ export default class InputGroup extends Component {
 
   handleAdd()  {
     if(this.state.itemName.length>0) {
-      //@TODO序号应该再哪里去加；
       this.context.addItem(this.state.itemName,this.state.itemData);
     }
     this.setState({
       itemName:'',
       searchResult:[],
       resultful: false,
-      itemData: null,
     })
   }
 

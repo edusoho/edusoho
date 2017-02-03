@@ -21,6 +21,10 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 
     public function findLikeTitle($title)
     {
+        if (empty($title)) {
+            $title = '';
+        }
+        $title = '%'.$title.'%';
         $sql   = "SELECT * FROM {$this->table} WHERE title LIKE ?";
 
         return $this->db()->fetchAll($sql, array($title));
@@ -32,6 +36,22 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
             group by from_unixtime(createdTime,'%Y-%m-%d') order by date ASC";
 
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
+    }
+
+    protected function _createQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == 0) {
+                return true;
+            }
+            if (empty($value)) {
+                return false;
+            }
+
+            return true;
+        });
+
+        return parent::_createQueryBuilder($conditions);
     }
 
     public function declares()
@@ -46,7 +66,9 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'type = :type',
                 'recommended = :recommended',
                 'id NOT IN (:excludeIds)',
-                'parentId = :parentId'
+                'parentId = :parentId',
+                'createdTime >= :startTime',
+                'createdTime <= :endTime',
             ),
             'serializes' => array(
                 'tags'      => 'delimiter',
@@ -55,7 +77,13 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'cover'     => 'json'
             ),
             'orderbys'   => array(
-                'createdTime', 'recommendedSeq', 'hitNum', 'recommendedTime', 'rating', 'studentNum'
+                'createdTime',
+                'updatedTime',
+                'recommendedSeq',
+                'hitNum',
+                'recommendedTime',
+                'rating',
+                'studentNum'
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime'

@@ -27,33 +27,33 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             }
 
             if (!ArrayToolkit::requireds($info, array('targetId', 'payment'))) {
-                throw $this->createServiceException($this->getKernel()->trans('订单数据缺失，创建课程订单失败。'));
+                throw $this->createServiceException($this->getKernel()->trans('订单数据缺失，创建订单失败。'));
             }
 
             // 获得锁
             $user = $this->getUserService()->getUser($user['id'], true);
 
             if ($this->getCourseMemberService()->isCourseStudent($info['targetId'], $user['id'])) {
-                throw $this->createServiceException($this->getKernel()->trans('已经是课程学员，操作失败。'));
+                throw $this->createServiceException($this->getKernel()->trans('已经是该教学计划学员，操作失败。'));
             }
 
             $course = $this->getCourseService()->getCourse($info['targetId']);
             if (empty($course)) {
-                throw $this->createServiceException($this->getKernel()->trans('课程不存在，操作失败。'));
+                throw $this->createServiceException($this->getKernel()->trans('教学计划不存在，操作失败。'));
             }
 
             if ($course['buyExpiryTime'] && $course['buyExpiryTime'] < time()) {
-                throw $this->createServiceException($this->getKernel()->trans('该课程已经超过购买截止日期，不允许购买'));
+                throw $this->createServiceException($this->getKernel()->trans('该教学计划已经超过购买截止日期，不允许购买'));
             }
 
             if ($course['approval'] && $user['approvalStatus'] != 'approved') {
-                throw $this->createServiceException($this->getKernel()->trans('该课程需要实名认证，你还没有实名认证，不可购买。'));
+                throw $this->createServiceException($this->getKernel()->trans('该教学计划需要实名认证，你还没有实名认证，不可购买。'));
             }
 
             $order = array();
 
             $order['userId']     = $user['id'];
-            $order['title']      = $this->getKernel()->trans('购买课程《%courseTitle%》', array('%courseTitle%' => $course['title']));
+            $order['title']      = $this->getKernel()->trans('购买教学计划《%courseTitle%》', array('%courseTitle%' => $course['title']));
             $order['targetType'] = 'course';
             $order['targetId']   = $course['id'];
             if (!empty($course['discountId'])) {
@@ -93,7 +93,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             }
             $order = $this->getOrderService()->createOrder($order);
             if (empty($order)) {
-                throw $this->createServiceException($this->getKernel()->trans('创建课程订单失败！'));
+                throw $this->createServiceException($this->getKernel()->trans('创建订单失败！'));
             }
             // 免费课程或VIP用户，就直接将订单置为已购买
             if ((intval($order['amount'] * 100) == 0 && intval($order['coinAmount'] * 100) == 0 && empty($order['coupon'])) || !empty($info["becomeUseMember"])) {
@@ -124,7 +124,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     {
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order) || $order['targetType'] != 'course') {
-            throw $this->createServiceException($this->getKernel()->trans('非课程订单，加入课程失败。'));
+            throw $this->createServiceException($this->getKernel()->trans('非教学计划订单，加入教学计划失败。'));
         }
 
         $info = array(
@@ -135,8 +135,8 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         if (!$this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
             $this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
-            $this->getOrderService()->createOrderLog($order['id'], "pay_success", $this->getKernel()->trans('当前用户已经是课程学员，支付宝支付成功。'), $order);
-            $this->getLogService()->warning("course_order", "pay_success", $this->getKernel()->trans('当前用户已经是课程学员，支付成功。'), $order);
+            $this->getOrderService()->createOrderLog($order['id'], "pay_success", $this->getKernel()->trans('当前用户已经是教学计划学员，支付宝支付成功。'), $order);
+            $this->getLogService()->warning("course_order", "pay_success", $this->getKernel()->trans('当前用户已经是教学计划学员，支付成功。'), $order);
         }
 
         return;
@@ -167,7 +167,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);
             }
 
-            $adminmessage = $this->getKernel()->trans('用户%nickname%申请退款<a href="%courseUrl%">%title%</a>课程，请审核。', array('%nickname%' => $user['nickname'], '%courseUrl%' => $courseUrl, '%title%' => $course['title']));
+            $adminmessage = $this->getKernel()->trans('用户%nickname%申请退款<a href="%courseUrl%">%title%</a>教学计划，请审核。', array('%nickname%' => $user['nickname'], '%courseUrl%' => $courseUrl, '%title%' => $course['title']));
             $adminCount   = $this->getUserService()->searchUserCount(array('roles' => 'ADMIN'));
             $admins       = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id' => 'DESC'), 0, $adminCount);
             foreach ($admins as $key => $admin) {
@@ -232,6 +232,11 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getOrderService()

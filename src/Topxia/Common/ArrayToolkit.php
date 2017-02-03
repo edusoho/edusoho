@@ -14,6 +14,10 @@ class ArrayToolkit
 
     public static function column(array $array, $columnName)
     {
+        if(function_exists('array_column')){
+            return array_column($array, $columnName);
+        }
+
         if (empty($array)) {
             return array();
         }

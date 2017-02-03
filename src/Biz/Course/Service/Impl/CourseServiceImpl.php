@@ -3,22 +3,23 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\ThreadDao;
-use Biz\Course\Service\CourseNoteService;
+use Topxia\Common\ArrayToolkit;
+use Biz\Course\Dao\CourseSetDao;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Copy\Impl\CourseCopy;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\StrategyContext;
+use Biz\Course\Service\MaterialService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
-use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Event\Event;
-use Topxia\Common\ArrayToolkit;
+use Biz\Course\Service\CourseDeleteService;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -88,21 +89,19 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
         }
 
-        if (!$this->getCourseSetService()->hasCourseSetManageRole($course['courseSetId'])) {
-            throw $this->createAccessDeniedException('You have no access to Course Management');
-        }
-
         if (!isset($course['isDefault'])) {
             $course['isDefault'] = 0;
         }
 
         $course = ArrayToolkit::parts($course, array(
             'title',
+            'about',
             'courseSetId',
             'learnMode',
             'expiryMode',
             'expiryDays',
             'expiryStartDate',
+            'serializeMode',
             'expiryEndDate',
             'isDefault'
         ));
@@ -136,6 +135,17 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function copyCourse($fields)
     {
         $course = $this->tryManageCourse($fields['copyCourseId']);
+        $fields = ArrayToolkit::parts($fields, array(
+            'title',
+            'courseSetId',
+            'learnMode',
+            'expiryMode',
+            'expiryDays',
+            'expiryStartDate',
+            'expiryEndDate',
+            'isDefault'
+        ));
+        $fields = $this->validateExpiryMode($fields);
 
         $entityCopy = new CourseCopy($this->biz);
         return $entityCopy->copy($course, $fields);
@@ -303,7 +313,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             } elseif ($field === 'noteNum') {
                 $updateFields['noteNum'] = $this->getNoteService()->countCourseNoteByCourseId($id);
             } elseif ($field === 'materialNum') {
-                $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(array('courseId' => $id));
+                $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(array('courseId' => $id, 'source' => 'coursematerial'));
             }
         }
 
@@ -314,50 +324,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->update($id, $updateFields);
     }
 
-    /**
-     * @todo 教学计划的删除逻辑较复杂，需要整理
-     * @deprecated
-     * @see  CourseDeleteServiceImpl
-     */
     public function deleteCourse($id)
     {
         $course = $this->tryManageCourse($id);
         if ($course['status'] == 'published') {
             throw $this->createAccessDeniedException("Deleting published Course is not allowed");
         }
-        try {
-            $this->beginTransaction();
-            //member
-            //tasks(with activities)
-            //chapter
-
-            //by event ? s
-            //threads
-            //notes
-            //reviews
-
-            $this->getMemberDao()->deleteByCourseId($id);
-
-            $tasks = $this->getTaskService()->findTasksByCourseId($id);
-            if (!empty($tasks)) {
-                foreach ($tasks as $task) {
-                    $this->getTaskService()->deleteTask($task['id']);
-                }
-            }
-
-            $this->getChapterDao()->deleteChaptersByCourseId($id);
-
-            $deleted = $this->getCourseDao()->delete($id);
-
-            $this->dispatchEvent("course.delete", new Event($course));
-
-            $this->commit();
-
-            return $deleted;
-        } catch (\Exception $e) {
-            $this->rollback();
-            throw $e;
+        $subCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($id, 1);
+        if (!empty($subCourses)) {
+            throw $this->createAccessDeniedException('该教学计划在班级下存在引用，请先删除相关引用');
         }
+        return $this->getCourseDeleteService()->deleteCourse($id);
     }
 
     public function closeCourse($id)
@@ -680,7 +657,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = array(
             'userId' => $userId,
-            'role'   => 'student',
+            'role'   => 'student'
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
@@ -692,13 +669,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = array(
             'userId' => $userId,
-            'role'   => 'student',
+            'role'   => 'student'
         );
         if (isset($filters["type"])) {
             $conditions['type'] = $filters["type"];
         }
         $members = $this->getMemberDao()->findLearningMembers($userId, $start, $limit);
-
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
@@ -731,7 +707,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $conditions['type'] = $filters["type"];
         }
         return $this->getMemberDao()->countLearnedMembersByUserId($userId);
-
     }
 
     public function findUserLearnedCourses($userId, $start, $limit, $filters = array())
@@ -820,7 +795,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int $userId
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -870,6 +845,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return false;
+    }
+
+    public function analysisCourseDataByTime($startTime, $endTime)
+    {
+        return $this->getCourseDao()->analysisCourseDataByTime($startTime, $endTime);
     }
 
     protected function fillMembersWithUserInfo($members)
@@ -1004,6 +984,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
+    public function countCourses(array $conditions)
+    {
+        return $this->getCourseDao()->count($conditions);
+    }
+
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
@@ -1020,7 +1005,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getTaskService()
     {
-        return $this->biz->service('Task:TaskService');
+        return $this->createService('Task:TaskService');
     }
 
     /**
@@ -1063,12 +1048,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course:ThreadDao');
     }
 
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
     /**
      * @return UserService
      */
     protected function getUserService()
     {
-        return $this->biz->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -1092,7 +1082,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getCategoryService()
     {
-        return $this->biz->service('Taxonomy:CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     /**
@@ -1100,7 +1090,7 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getReviewService()
     {
-        return $this->biz->service('Course:ReviewService');
+        return $this->createService('Course:ReviewService');
     }
 
     /**
@@ -1108,6 +1098,14 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function getNoteService()
     {
-        return $this->biz->service('Course:CourseNoteService');
+        return $this->createService('Course:CourseNoteService');
+    }
+
+    /**
+     * @return CourseDeleteService
+     */
+    protected function getCourseDeleteService()
+    {
+        return $this->createService('Course:CourseDeleteService');
     }
 }

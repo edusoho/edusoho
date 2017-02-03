@@ -186,7 +186,7 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $this->assertEquals(array($expected[0], $expected[1]), $res[2]);
     }
 
-    public function testSearchMemberFetchCourse()
+    public function testSearchMember()
     {
         $this->mockCourse();
 
@@ -195,15 +195,14 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject(array('userId' => 2));
         $expected[] = $this->mockDataObject(array('courseId' => 2, 'role' => 'teacher'));
 
-        $res = array();
-        $res[] = $this->getDao()->searchMemberFetchCourse(array(), array(), 0, 10);
-        $res[] = $this->getDao()->searchMemberFetchCourse(array('userId' => 1), array(), 0, 10);
+        $res1 = $this->getDao()->search(array(), array(), 0, 10);
+        $res2 = $this->getDao()->search(array('userId' => 1), array(), 0, 10);
         
-        $this->assertEquals(array($expected[0], $expected[1]), $res[0]);
-        $this->assertEquals(array($expected[0]), $res[1]);
+        $this->assertEquals(array($expected[0], $expected[1], $expected[2]), $res1);
+        $this->assertEquals(array($expected[0], $expected[2]), $res2);
     }
 
-    public function testCountMemberFetchCourse()
+    public function testCountMember()
     {
         $this->mockCourse();
 
@@ -212,12 +211,11 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject(array('userId' => 2));
         $expected[] = $this->mockDataObject(array('courseId' => 2, 'role' => 'teacher'));
 
-        $res = array();
-        $res[] = $this->getDao()->countMemberFetchCourse(array(), array(), 0, 10);
-        $res[] = $this->getDao()->countMemberFetchCourse(array('userId' => 1), array(), 0, 10);
+        $res1 = $this->getDao()->count(array(), array(), 0, 10);
+        $res2 = $this->getDao()->count(array('userId' => 1), array(), 0, 10);
         
-        $this->assertEquals(1, $res[0]);
-        $this->assertEquals(1, $res[1]);
+        $this->assertEquals(3, $res1);
+        $this->assertEquals(2, $res2);
     }
 
     public function testSearchMemberCountGroupByFields()
@@ -423,16 +421,9 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'showStudentNumType' => 'opened',
             'serializeMode' => 'none',
             'giveCredit' => 1,    // 学完课程所有课时，可获得的总学分
-            'categoryId' => 1,    // 分类ID
             'about' => 'text',    // 简介
-            'recommended' => 1,    // 是否为推荐课程
-            'recommendedSeq' => 1,    // 推荐序号
-            'recommendedTime' => 1,    // 推荐时间
             'locationId' => 1,    // 上课地区ID
             'address' => 'varchar',    // 上课地区地址
-            'hitNum' => 1,    // 查看次数
-            'discountId' => 1,    // 折扣活动ID
-            'discount' => 1,    // 折扣
             'deadlineNotify' => 'none',    // 开启有效期通知
             'daysOfNotifyBeforeDeadline' => 1,
             'useInClassroom' => 'single',    // 课程能否用于多个班级
@@ -441,8 +432,6 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'freeEndTime' => 2,
             'locked' => 1,    // 是否上锁1上锁,0解锁
             'maxRate' => 1,    // 最大抵扣百分比
-            'orgId' => 1,
-            'orgCode' => 'varchar',    // 组织机构内部编码
             'cover' => 'varchar',
             'enableFinish' => 1,    // 是否允许学院强制完成任务
         );

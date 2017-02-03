@@ -8,6 +8,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use AppBundle\Controller\BaseController;
+use Biz\Course\Service\CourseSetService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Classroom\Service\ClassroomReviewService;
@@ -17,9 +18,9 @@ class CourseController extends BaseController
     public function pickAction($classroomId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
-        $actviteCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
 
-        $excludeIds = ArrayToolkit::column($actviteCourses, 'parentId');
+        $excludeIds = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
         $conditions = array(
             'status'     => 'published',
             'parentId'   => 0,
@@ -28,22 +29,22 @@ class CourseController extends BaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions),
+            $this->getCourseSetService()->countCourseSets($conditions),
             5
         );
 
-        $courses = $this->getCourseService()->searchCourses(
+        $courseSets = $this->searchCourseSetWithCourses(
             $conditions,
-            'latest',
+            array('updatedTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUsers($courses);
+        $users = $this->getUsers($courseSets);
 
         return $this->render("classroom-manage/course/course-pick-modal.html.twig", array(
             'users'       => $users,
-            'courses'     => $courses,
+            'courseSets'  => $courseSets,
             'classroomId' => $classroomId,
             'paginator'   => $paginator
         ));
@@ -130,7 +131,7 @@ class CourseController extends BaseController
 
         $users = $this->getUsers($courses);
 
-        return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
+        return $this->render('course/course-select-list.html.twig', array(
             'users'       => $users,
             'courses'     => $courses,
             'paginator'   => $paginator,
@@ -139,14 +140,17 @@ class CourseController extends BaseController
         ));
     }
 
-    protected function getUsers($courses)
+    protected function getUsers($courseSets)
     {
         $userIds = array();
-        foreach ($courses as &$course) {
-            $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+        foreach ($courseSets as &$courseSet) {
+            // $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course', 'ownerId' => $course['id']));
+            if (!empty($courseSet['tags'])) {
+                $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
 
-            $course['tags'] = ArrayToolkit::column($tags, 'id');
-            $userIds        = array_merge($userIds, $course['teacherIds']);
+                $courseSet['tags'] = ArrayToolkit::column($tags, 'id');
+                $userIds           = array_merge($userIds, array($courseSet['creator']));
+            }
         }
 
         return $this->getUserService()->findUsersByIds($userIds);
@@ -183,12 +187,47 @@ class CourseController extends BaseController
         return $member;
     }
 
+    private function searchCourseSetWithCourses($conditions, $orderbys, $start, $limit)
+    {
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderbys, $start, $limit);
+
+        if (empty($courseSets)) {
+            return array();
+        }
+
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $courses    = $this->getCourseService()->findCoursesByCourseSetIds(array_keys($courseSets));
+        if (!empty($courses)) {
+            foreach ($courses as $course) {
+                if ($course['status'] != 'published') {
+                    continue;
+                }
+
+                if (empty($courseSets[$course['courseSetId']]['courses'])) {
+                    $courseSets[$course['courseSetId']]['courses'] = array($course);
+                } else {
+                    $courseSets[$course['courseSetId']]['courses'][] = $course;
+                }
+            }
+        }
+
+        return array_values($courseSets);
+    }
+
     /**
      * @return CourseService
      */
     private function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**

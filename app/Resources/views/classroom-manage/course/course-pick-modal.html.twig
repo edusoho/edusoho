@@ -27,7 +27,7 @@
 <div class="row mtl">
     <div class="col-md-12">
       <div class="courses-list">
-        {% include('TopxiaWebBundle:Course:course-select-list.html.twig') %}
+        {% include('course/course-select-list.html.twig') %}
       </div>
     </div>
 </div>
@@ -38,6 +38,6 @@
   <button id="sure" class="btn btn-primary pull-right" data-url="{{ path('classroom_courses_select', {id:classroomId})}}">{{'添加'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
 
-    {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('classroombundle/controller/classroom/manage/course/pick') };</script>
 {% endblock %}

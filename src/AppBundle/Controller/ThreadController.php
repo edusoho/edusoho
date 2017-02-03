@@ -63,7 +63,7 @@ class ThreadController extends BaseController
 
         $posts = $this->getThreadService()->searchPosts(
             array_merge($conditions, $filter),
-            array('createdTime', 'asc'),
+            array('createdTime'=>'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

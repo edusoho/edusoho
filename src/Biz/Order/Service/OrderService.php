@@ -16,8 +16,6 @@ interface OrderService
 
     public function searchOrders($conditions, $sort, $start, $limit);
 
-    public function searchBill($conditions, $sort, $start, $limit);
-
     public function countUserBillNum($conditions);
 
     public function sumOrderAmounts($startTime, $endTime, array $courseId);

@@ -6,11 +6,11 @@ use Monolog\Logger;
 use Biz\User\CurrentUser;
 use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Event\Event;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
@@ -53,12 +53,11 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     }
 
     /**
-     * @param string      $eventName
-     * @param Event|mixed $subject
-     *
+     * @param  string      $eventName
+     * @param  Event|mixed $subject
      * @return Event
      */
-    protected function dispatchEvent($eventName, $subject, $arguments=array())
+    protected function dispatchEvent($eventName, $subject, $arguments = array())
     {
         if ($subject instanceof Event) {
             $event = $subject;
@@ -131,7 +130,6 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     protected function fillOrgId($fields)
     {
         $magic = $this->biz->service('System:SettingService')->get('magic');
-
         if (isset($magic['enable_org']) && $magic['enable_org']) {
             if (!empty($fields['orgCode'])) {
                 $org = ServiceKernel::instance()->createService('Org:OrgService')->getOrgByOrgCode($fields['orgCode']);

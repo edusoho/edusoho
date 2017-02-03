@@ -1694,9 +1694,9 @@ admin_operation_analysis_income:
     defaults: { _controller: AppBundle:Admin/Analysis:income }
     permissions: [admin_operation_analysis]
 
-admin_operation_analysis_course_income:
-    path:  /operation/analysis/course/income/{tab}
-    defaults: { _controller: AppBundle:Admin/Analysis:courseIncome }
+admin_operation_analysis_course_set_income:
+    path:  /operation/analysis/course_set/income/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:courseSetIncome }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_classroom_income:
@@ -1707,6 +1707,11 @@ admin_operation_analysis_classroom_income:
 admin_operation_analysis_vip_income:
     path:  /operation/analysis/vip/income/{tab}
     defaults: { _controller: AppBundle:Admin/Analysis:vipIncome }
+    permissions: [admin_operation_analysis]
+
+admin_operation_analysis_course_set_sum:
+    path:  /operation/analysis/course_set/sum/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:courseSetSum }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_course_sum:
@@ -1720,8 +1725,8 @@ admin_operation_analysis_user_sum:
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_rount:
-    path:  /operation/analysis/rountByanalysisDateType/{tab}
-    defaults: { _controller: AppBundle:Admin/Analysis:rountByanalysisDateType }
+    path:  /operation/analysis/route_analysis_data_type/{tab}
+    defaults: { _controller: AppBundle:Admin/Analysis:routeAnalysisDataType }
     permissions: [admin_operation_analysis]
 
 admin_operation_analysis_lesson_exit:
