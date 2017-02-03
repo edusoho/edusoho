@@ -173,5 +173,7 @@ interface CourseSetService
      */
     public function findCourseSetIncomesByCourseSetIds(array $courseSetIds);
 
+    public function analysisCourseSetDataByTime($startTime, $endTime);
+
     public function batchUpdateOrg($courseSetIds, $orgCode);
 }
