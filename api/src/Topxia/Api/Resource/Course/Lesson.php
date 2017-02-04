@@ -59,7 +59,7 @@ class Lesson extends BaseResource
             case 'ppt':
                 return $this->getPPTLesson($lesson, $ssl);
             case 'audio':
-                return $this->getVideoLesson($lesson, $ssl);
+                return $this->getAudioLesson($lesson, $ssl);
             case 'video':
                 return $this->getVideoLesson($lesson);
             case 'testpaper':
@@ -86,7 +86,7 @@ class Lesson extends BaseResource
         if ($file['convertStatus'] != 'success') {
             return $this->error('not_ppt', 'PPT文档还在转换中，还不能查看，请稍等');
         }
-        
+
         $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
         $lesson['content'] = array(
@@ -117,6 +117,19 @@ class Lesson extends BaseResource
             'previewUrl' => ($ssl ? 'https://' : 'http://') . 'service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#'.$result['pdf'],
             'resource'   => $result['pdf'],
         );
+
+        return $lesson;
+    }
+
+    protected function getAudioLesson($lesson, $ssl = false)
+    {
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
+        if (empty($file)) {
+            return $this->error('not_audio', "文件不存在");
+        }
+
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $lesson['mediaUri'] = $result['url'];
 
         return $lesson;
     }
