@@ -844,6 +844,16 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
+        if ($course['parentId'] > 0) {
+            $classrooms = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
+
+            $isTeacher     = $this->getClassroomService()->isClassroomTeacher($classrooms[0]['classroomId'], $user['id']);
+            $isHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classrooms[0]['classroomId'], $user['id']);
+            if ($isTeacher || $isHeadTeacher) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -1097,5 +1107,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCourseDeleteService()
     {
         return $this->createService('Course:CourseDeleteService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }
