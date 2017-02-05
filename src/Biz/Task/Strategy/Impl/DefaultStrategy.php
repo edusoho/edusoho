@@ -57,14 +57,20 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     public function deleteTask($task)
     {
+        if (empty($task)) {
+            return;
+        }
         try {
             $this->biz['db']->beginTransaction();
+            $allTasks = array();
             if ($task['mode'] == 'lesson') {
-                $this->getTaskDao()->deleteByCategoryId($task['categoryId']); //删除该课时下的所有任务，
-                $this->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
-                $this->getActivityService()->deleteActivity($task['activityId']); //删除该课时
-            } else {
-                $this->getTaskDao()->delete($task['id']);
+                $allTasks   = $this->getTaskDao()->findByCategoryId($task['categoryId']);
+                $allTasks[] = $task;
+            }
+            foreach ($allTasks as $_task) {
+                $this->getTaskDao()->delete($_task['id']);
+                $this->getTaskResultService()->deleteUserTaskResultByTaskId($_task['id']);
+                $this->getActivityService()->deleteActivity($_task['activityId']);
             }
             $this->biz['db']->commit();
         } catch (\Exception $e) {

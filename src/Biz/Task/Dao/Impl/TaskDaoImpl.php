@@ -35,6 +35,11 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->findInField('id', $ids);
     }
 
+    public function findByCategoryId($categoryId)
+    {
+        return $this->findByFields(array('categoryId' => $categoryId));
+    }
+
     public function getMaxSeqByCourseId($courseId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table()} WHERE courseId = ? ";
@@ -79,10 +84,9 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     /**
      * 统计当前时间以后每天的直播次数
      *
-     * @param $courseSetIds
-     * @param $limit
-     *
-     * @return array <string, int|string>
+     * @param  $courseSetIds
+     * @param  $limit
+     * @return array           <string, int|string>
      */
     public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit)
     {
@@ -107,9 +111,9 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     {
         $time = time();
         $sql  = "SELECT fromCourseSetId, max(startTime) as startTime
-                 FROM {$this->table()} 
-                 WHERE endTime < {$time} AND status='published' AND type = 'live' 
-                 GROUP BY fromCourseSetId 
+                 FROM {$this->table()}
+                 WHERE endTime < {$time} AND status='published' AND type = 'live'
+                 GROUP BY fromCourseSetId
                  ORDER BY startTime DESC
                  ";
         return $this->db()->fetchAll($sql);
@@ -128,7 +132,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
     {
         $sql = "select sum(`time`) from `course_task_result` where `courseTaskId` in (SELECT id FROM {$this->table()}  WHERE `fromCourseSetId`= ?)";
-        return $this->db()->fetchColumn($sql, array($courseSetId)); 
+        return $this->db()->fetchColumn($sql, array($courseSetId));
     }
 
     public function declares()
