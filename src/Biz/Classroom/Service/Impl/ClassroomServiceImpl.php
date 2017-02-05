@@ -205,6 +205,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $diff      = array_diff($courseIds, $existCourseIds);
             $classroom = $this->getClassroom($classroomId);
+
             if (!empty($diff)) {
                 $courses      = $this->getCourseService()->findCoursesByIds($diff);
                 $newCourseIds = array();
@@ -730,6 +731,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function findClassroomsByCoursesIds($courseIds)
     {
         return $this->getClassroomCourseDao()->findByCoursesIds($courseIds);
+    }
+
+    public function findClassroomCourseByCourseSetIds($courseSetIds)
+    {
+        return $this->getClassroomCourseDao()->findByCourseSetIds($courseSetIds);
     }
 
     private function refreshCoursesSeq($classroomId, $courseIds)

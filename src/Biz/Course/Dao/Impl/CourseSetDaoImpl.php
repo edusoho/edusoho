@@ -67,6 +67,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'recommended = :recommended',
                 'id NOT IN (:excludeIds)',
                 'parentId = :parentId',
+                'parentId > :parentId_GT',
                 'createdTime >= :startTime',
                 'createdTime <= :endTime',
             ),

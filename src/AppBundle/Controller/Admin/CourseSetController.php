@@ -50,8 +50,8 @@ class CourseSetController extends BaseController
         $classrooms = array();
         $vips       = array();
         if ($filter == 'classroom') {
-            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds($courseSetIds);
-            $classrooms = ArrayToolkit::index($classrooms, 'courseId');
+            $classrooms = $this->getClassroomService()->findClassroomCourseByCourseSetIds($courseSetIds);
+            $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
 
             foreach ($classrooms as $key => $classroom) {
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
@@ -166,7 +166,7 @@ class CourseSetController extends BaseController
         }
 
         if ($courseSet['status'] == 'closed') {
-            $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($courseSet['id']);
+            $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
 
             if ($classroomCourse) {
                 return $this->createJsonResponse(array('code' => 3, 'message' => '当前课程未移除,请先移除班级课程'));
@@ -464,8 +464,8 @@ class CourseSetController extends BaseController
         $vips       = array();
 
         if ($fields['filter'] == 'classroom') {
-            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(array($course['id']));
-            $classrooms = ArrayToolkit::index($classrooms, 'courseId');
+            $classrooms = $this->getClassroomService()->findClassroomCourseByCourseSetIds(array($courseSet['id']));
+            $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
 
             foreach ($classrooms as $key => $classroom) {
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
