@@ -9,7 +9,7 @@
     {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
 
     <div class="form-group">
-      <input class="form-control" type="text" placeholder="{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}" name="title" value="{{ app.request.get('title') }}">
+      <input class="form-control" type="text" placeholder="{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}" name="titleLike" value="{{ app.request.get('titleLike') }}">
     </div>
 
     <button class="btn btn-primary">{{'搜索'|trans}}</button>
