@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Course;
 
 use Biz\Activity\Service\ActivityService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\ReviewService;
@@ -29,7 +30,7 @@ class CourseController extends CourseBaseController
         $course = $this->getCourseService()->getCourse($id);
         $user   = $this->getCurrentUser();
         return $this->render('course/course-show.html.twig', array(
-            'tab'    => $tab,
+            'tab' => $tab,
         ));
     }
 
@@ -66,7 +67,6 @@ class CourseController extends CourseBaseController
         $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']) : false;
         $isPreview      = $request->query->get('previewAs', false);
 
-        //TODO预览的任务
         $previewTasks = $this->getTaskService()->search(array('courseId' => $course['id'], 'type' => 'video', 'isFree' => '1'), array('seq' => 'ASC'), 0, 1);
         return $this->render('course/header/header-for-guest.html.twig', array(
             'isUserFavorite' => $isUserFavorite,
@@ -157,14 +157,14 @@ class CourseController extends CourseBaseController
         $userIds = array();
 
         foreach ($courses as $key => $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-
+            $userIds      = array_merge($userIds, $course['teacherIds']);
             $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
 
             $courses[$key]['classroomCount'] = count($classroomIds);
-
             if (count($classroomIds) > 0) {
-                $classroom                  = $this->getClassroomService()->getClassroom($classroomIds[0]);
+                $classroomId = $classroomIds[0]['classroomId'];
+                $classroom   = $this->getClassroomService()->getClassroom($classroomId);
+
                 $courses[$key]['classroom'] = $classroom;
             }
         }
@@ -172,10 +172,9 @@ class CourseController extends CourseBaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render("course/block/courses-block-{$view}.html.twig", array(
-            'courses'      => $courses,
-            'users'        => $users,
-            'classroomIds' => $classroomIds,
-            'mode'         => $mode
+            'courses' => $courses,
+            'users'   => $users,
+            'mode'    => $mode
         ));
     }
 
@@ -313,7 +312,9 @@ class CourseController extends CourseBaseController
         return $this->createJsonResponse(true);
     }
 
-    // TODO old
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
