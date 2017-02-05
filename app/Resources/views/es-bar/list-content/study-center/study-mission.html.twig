@@ -4,8 +4,8 @@
 </div>
 
 {% if app.user.id|default(0) %}
-  {% set classrooms = data('ClassroomMissions',{userId:app.user.id, count:5, missionCount:4}) %}
-  {% set courses = data('CourseMissions',{userId:app.user.id, count:5, missionCount:4}) %}
+  {% set classrooms = data('ClassroomMissions',{userId:app.user.id, count:5, missionCount:3}) %}
+  {% set courses = data('CourseMissions',{userId:app.user.id, count:5, missionCount:3}) %}
 {% endif %}
 
 {% if classrooms|default(false) or courses|default(false) %}

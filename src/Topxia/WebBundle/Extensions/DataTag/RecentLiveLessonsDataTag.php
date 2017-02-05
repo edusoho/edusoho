@@ -24,14 +24,10 @@ class RecentLiveLessonsDataTag extends CourseBaseDataTag implements DataTag
         $filters['type'] = 'live';
 
         if (isset($arguments['userId'])) {
-            $userId          = $arguments['userId'];
-            $memConditions   = array(
-                'userId' => $userId
-            );
-            $userCourseCount = $this->getCourseMemberService()->countMembers($memConditions);
-            $liveCourses     = $this->getCourseService()->findUserLearningCourses($userId, 0, $userCourseCount, $filters);
-
-            $courseIds = ArrayToolkit::column($liveCourses, 'id');
+            $userId = $arguments['userId'];
+            //普通课程也包含直播任务
+            $courseMembers = $this->getCourseMemberService()->findStudentMemberByUserId($userId);
+            $courseIds     = ArrayToolkit::column($courseMembers, 'courseId');
             if (empty($courseIds)) {
                 return array();
             }
