@@ -524,10 +524,11 @@ class AnalysisController extends BaseController
         ));
     }
 
-    public function paidLessonAction(Request $request, $tab)
+    public function paidCourseAction(Request $request, $tab)
     {
         $data                = array();
-        $paidLessonStartDate = "";
+        $paidCourseStartDate = "";
+        $count               = 0;
 
         $condition = $request->query->all();
 
@@ -546,12 +547,12 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $paidLessonData = "";
+        $paidCourseData = "";
 
         if ($tab == "trend") {
-            $paidLessonData = $this->getOrderService()->analysisPaidCourseOrderDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
-            $data = $this->fillAnalysisData($condition, $paidLessonData);
+            $paidCourseData = $this->getOrderService()->analysisPaidCourseOrderDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $count = count($paidCourseData);
+            $data = $this->fillAnalysisData($condition, $paidCourseData);
         }
 
         $courseIds = ArrayToolkit::column($paidCourseDetail, 'targetId'); //订单中的课程
@@ -567,23 +568,24 @@ class AnalysisController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $paidLessonStartData = $this->getOrderService()->searchOrders(array("status" => "paid", "amount" => "0.00"), "early", 0, 1);
+        $paidCourseStartData = $this->getOrderService()->searchOrders(array("status" => "paid", "amount" => "0.00"), "early", 0, 1);
 
-        foreach ($paidLessonStartData as $key) {
-            $paidLessonStartDate = date("Y-m-d", $key['createdTime']);
+        foreach ($paidCourseStartData as $key) {
+            $paidCourseStartDate = date("Y-m-d", $key['createdTime']);
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
 
-        return $this->render("admin/operation-analysis/paid-lesson.html.twig", array(
+        return $this->render("admin/operation-analysis/paid-course.html.twig", array(
             'paidCourseDetail'    => $paidCourseDetail,
             'paginator'           => $paginator,
             'tab'                 => $tab,
             'data'                => $data,
             'courses'             => $courses,
             'users'               => $users,
-            'paidLessonStartDate' => $paidLessonStartDate,
-            'dataInfo'            => $dataInfo
+            'paidCourseStartDate' => $paidCourseStartDate,
+            'dataInfo'            => $dataInfo,
+            'count'               => $count,
         ));
     }
 
