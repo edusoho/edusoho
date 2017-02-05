@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Extensions\DataTag;
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Topxia\Service\Common\ServiceKernel;
@@ -26,6 +27,9 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         return $this->getServiceKernel()->getBiz()->service('Course:CourseSetService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->getServiceKernel()->createService('Course:MemberService');
@@ -139,12 +143,12 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         $categoryIds = array();
 
         foreach ($courseSets as &$set) {
-            $course            = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($set['id']);
+            $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($set['id']);
             if (!empty($course)) {
-                $set['teacherIds'] = $course['teacherIds'];                
-                $userIds = array_merge($userIds, $course['teacherIds']);                
+                $set['teacherIds'] = $course['teacherIds'];
+                $userIds           = array_merge($userIds, $course['teacherIds']);
             }
-            $categoryIds[]     = $set['categoryId'];
+            $categoryIds[] = $set['categoryId'];
         }
 
         $users    = $this->getUserService()->findUsersByIds($userIds);

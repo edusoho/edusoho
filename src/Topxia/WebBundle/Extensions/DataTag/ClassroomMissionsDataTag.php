@@ -65,7 +65,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
                         'userId'    => $userId,
                         'courseIds' => $courseIds
                     );
-                    $sort                = array('finishedTime', 'ASC');
+                    $sort                = array('finishedTime'=> 'ASC');
                     $learnedCount        = $this->getCourseService()->searchLearnCount($learnedConditions);
                     $learneds            = $this->getCourseService()->searchLearns($learnedConditions, $sort, 0, $learnedCount);
                     $learnedsGroupStatus = ArrayToolkit::group($learneds, 'status');
@@ -82,7 +82,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
                         'notLearnedIds' => $finishIds
                     );
                     $sort = array(
-                        'seq', 'ASC'
+                        'seq'=>'ASC'
                     );
                     $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions, $sort, 0, $arguments['missionCount']);
 

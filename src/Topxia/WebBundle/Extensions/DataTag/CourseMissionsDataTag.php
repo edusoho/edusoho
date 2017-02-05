@@ -68,7 +68,7 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
                     'status'   => 'finished',
                     'courseId' => $course['id']
                 );
-                $sort     = array('finishedTime', 'ASC');
+                $sort     = array('finishedTime'=>'ASC');
                 $learneds = $this->getCourseService()->findUserLearnedLessons($userId, $course['id']);
                 /**
                  * 找出未学过的课时
@@ -88,7 +88,7 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
                 );
 
                 $sort = array(
-                    'seq', 'ASC'
+                    'seq'=> 'ASC'
                 );
                 $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions, $sort, 0, $arguments['missionCount']);
 

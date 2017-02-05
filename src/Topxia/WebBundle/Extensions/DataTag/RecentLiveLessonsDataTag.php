@@ -28,7 +28,7 @@ class RecentLiveLessonsDataTag extends CourseBaseDataTag implements DataTag
             $memConditions = array(
                 'userId' => $userId
             );
-            $userCourseCount = $this->getCourseService()->searchMemberCount($memConditions);
+            $userCourseCount = $this->getCourseMemberService()->countMembers($memConditions);
             $liveCourses = $this->getCourseService()->findUserLearningCourses($userId,0,$userCourseCount,$filters);
 
             $courseIds = ArrayToolkit::column($liveCourses,'id');
@@ -47,7 +47,7 @@ class RecentLiveLessonsDataTag extends CourseBaseDataTag implements DataTag
         }
 
         $sort = array(
-            'startTime','ASC'
+            'startTime'=>'ASC'
         );
 
         return $this->getCourseService()->searchLessons($conditions,$sort,0, $arguments['count']);
