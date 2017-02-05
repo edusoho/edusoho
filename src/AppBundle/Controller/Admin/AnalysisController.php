@@ -2,8 +2,8 @@
 namespace AppBundle\Controller\Admin;
 
 use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\DateToolkit;
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class AnalysisController extends BaseController
@@ -86,7 +86,7 @@ class AnalysisController extends BaseController
         );
 
         if ($tab == "trend") {
-            $registerData = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $registerData  = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $userInitCount = $this->getUserService()->countUsers(
                 array('endTime' => $timeRange['startTime'])
             );
@@ -210,9 +210,9 @@ class AnalysisController extends BaseController
         $courseSetSumData = "";
 
         if ($tab == "trend") {
-            $courseData = $this->getCourseService()->analysisCourseDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $courseData    = $this->getCourseService()->analysisCourseDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $courseInitSum = $this->getCourseService()->countCourses(array('endTime' => $timeRange['startTime']));
-            $data = $this->fillAnalysisSum($condition, $courseData, $courseInitSum);
+            $data          = $this->fillAnalysisSum($condition, $courseData, $courseInitSum);
         }
 
         $userIds = ArrayToolkit::column($courseSumDetail, 'creator');
@@ -229,14 +229,14 @@ class AnalysisController extends BaseController
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
         return $this->render("admin/operation-analysis/course-sum.html.twig", array(
-            'courseSumDetail'       => $courseSumDetail,
-            'paginator'             => $paginator,
-            'tab'                   => $tab,
-            'categories'            => $categories,
-            'data'                  => $data,
-            'users'                 => $users,
-            'courseSumStartDate'    => $courseSumStartDate,
-            'dataInfo'              => $dataInfo
+            'courseSumDetail'    => $courseSumDetail,
+            'paginator'          => $paginator,
+            'tab'                => $tab,
+            'categories'         => $categories,
+            'data'               => $data,
+            'users'              => $users,
+            'courseSumStartDate' => $courseSumStartDate,
+            'dataInfo'           => $dataInfo
         ));
     }
 
@@ -551,8 +551,8 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $paidCourseData = $this->getOrderService()->analysisPaidCourseOrderDataByTime($timeRange['startTime'], $timeRange['endTime']);
-            $count = count($paidCourseData);
-            $data = $this->fillAnalysisData($condition, $paidCourseData);
+            $count          = count($paidCourseData);
+            $data           = $this->fillAnalysisData($condition, $paidCourseData);
         }
 
         $courseIds = ArrayToolkit::column($paidCourseDetail, 'targetId'); //订单中的课程
@@ -585,7 +585,7 @@ class AnalysisController extends BaseController
             'users'               => $users,
             'paidCourseStartDate' => $paidCourseStartDate,
             'dataInfo'            => $dataInfo,
-            'count'               => $count,
+            'count'               => $count
         ));
     }
 
@@ -644,64 +644,74 @@ class AnalysisController extends BaseController
         ));
     }
 
-    public function finishedLessonAction(Request $request, $tab)
+    public function completedTaskAction(Request $request, $tab)
     {
-        $data                    = array();
-        $finishedLessonStartDate = "";
+        $data                   = array();
+        $completedTaskStartDate = "";
+        $count                  = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchLearnCount(array("startTime" => $timeRange['startTime'], "endTime" => $timeRange['endTime'], "status" => "finished")),
+            $this->getTaskResultService()->countTaskResults(array("startTime" => $timeRange['startTime'], "endTime" => $timeRange['endTime'], "status" => "finish")),
             20
         );
 
-        $finishedLessonDetail = $this->getCourseService()->searchLearns(
-            array("startTime" => $timeRange['startTime'], "endTime" => $timeRange['endTime'], "status" => "finished"),
-            array("finishedTime", "DESC"),
+        $completedTaskDetail = $this->getTaskResultService()->searchTaskResults(
+            array("startTime" => $timeRange['startTime'], "endTime" => $timeRange['endTime'], "status" => "finish"),
+            array("finishedTime" => "DESC"),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $finishedLessonData = "";
+        $completedTaskData = "";
 
         if ($tab == "trend") {
-            $finishedLessonData = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
-
-            $data = $this->fillAnalysisData($condition, $finishedLessonData);
+            $completedTaskData = $this->getTaskResultService()->analysisCompletedTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $data              = $this->fillAnalysisData($condition, $completedTaskData);
+            foreach ($completedTaskData as $val) {
+                $count += $val['count'];
+            }
         }
 
-        $courseIds = ArrayToolkit::column($finishedLessonDetail, 'courseId');
+        $courseIds = ArrayToolkit::column($completedTaskDetail, 'courseId');
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        $lessonIds = ArrayToolkit::column($finishedLessonDetail, 'lessonId');
+        $taskIds = ArrayToolkit::column($completedTaskDetail, 'courseTaskId');
 
-        $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
+        $tasks = ArrayToolkit::index($this->getTaskService()->findTasksByIds($taskIds), 'id');
 
-        $userIds = ArrayToolkit::column($finishedLessonDetail, 'userId');
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
+        $userIds = ArrayToolkit::column($completedTaskDetail, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $finishedLessonStartData = $this->getCourseService()->searchLearns(array("status" => "finished"), array("finishedTime", "ASC"), 0, 1);
+        $completedTaskStartData = $this->getTaskResultService()->searchTaskResults(array("status" => "finish"), array("finishedTime" => "ASC"), 0, 1);
 
-        if ($finishedLessonStartData) {
-            $finishedLessonStartDate = date("Y-m-d", $finishedLessonStartData[0]['finishedTime']);
+        if ($completedTaskStartData) {
+            $completedTaskStartDate = date("Y-m-d", $completedTaskStartData[0]['finishedTime']);
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("admin/operation-analysis/finished-lesson.html.twig", array(
-            'finishedLessonDetail'    => $finishedLessonDetail,
-            'paginator'               => $paginator,
-            'tab'                     => $tab,
-            'data'                    => $data,
-            'courses'                 => $courses,
-            'lessons'                 => $lessons,
-            'users'                   => $users,
-            'finishedLessonStartDate' => $finishedLessonStartDate,
-            'dataInfo'                => $dataInfo
+
+        return $this->render("admin/operation-analysis/completed-task.html.twig", array(
+            'completedTaskDetail'    => $completedTaskDetail,
+            'paginator'              => $paginator,
+            'tab'                    => $tab,
+            'data'                   => $data,
+            'courseSets'             => $courseSets,
+            'courses'                => $courses,
+            'tasks'                  => $tasks,
+            'users'                  => $users,
+            'completedTaskStartDate' => $completedTaskStartDate,
+            'dataInfo'               => $dataInfo,
+            'count'                  => $count
         ));
     }
 
@@ -1012,15 +1022,15 @@ class AnalysisController extends BaseController
             'users'           => $users,
             'incomeStartDate' => $incomeStartDate,
             'dataInfo'        => $dataInfo,
-            'count'           => $count,
+            'count'           => $count
         ));
     }
 
     public function courseSetIncomeAction(Request $request, $tab)
     {
-        $data                  = array();
+        $data                     = array();
         $courseSetIncomeStartDate = "";
-        $count                 = 0;
+        $count                    = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
@@ -1042,7 +1052,7 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $courseIncomeData = $this->getOrderService()->analysisCourseAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
-            $data = $this->fillAnalysisData($condition, $courseIncomeData);
+            $data             = $this->fillAnalysisData($condition, $courseIncomeData);
             foreach ($courseIncomeData as $val) {
                 $count += $val['count'];
             }
@@ -1073,7 +1083,7 @@ class AnalysisController extends BaseController
             'users'                 => $users,
             'courseIncomeStartDate' => $courseIncomeStartDate,
             'dataInfo'              => $dataInfo,
-            'count'                 => $count,
+            'count'                 => $count
         ));
     }
 
@@ -1103,7 +1113,7 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $classroomIncomeData = $this->getOrderService()->analysisClassroomAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
-            $data = $this->fillAnalysisData($condition, $classroomIncomeData);
+            $data                = $this->fillAnalysisData($condition, $classroomIncomeData);
             foreach ($classroomIncomeData as $val) {
                 $count += $val['count'];
             }
@@ -1133,7 +1143,7 @@ class AnalysisController extends BaseController
             'users'                    => $users,
             'classroomIncomeStartDate' => $classroomIncomeStartDate,
             'dataInfo'                 => $dataInfo,
-            'count'                    => $count,
+            'count'                    => $count
         ));
     }
 
@@ -1163,7 +1173,7 @@ class AnalysisController extends BaseController
 
         if ($tab == "trend") {
             $vipIncomeData = $this->getOrderService()->analysisvipAmountDataByTime($timeRange['startTime'], $timeRange['endTime']);
-            $data = $this->fillAnalysisData($condition, $vipIncomeData);
+            $data          = $this->fillAnalysisData($condition, $vipIncomeData);
             foreach ($vipIncomeData as $val) {
                 $count += $val['count'];
             }
@@ -1188,7 +1198,7 @@ class AnalysisController extends BaseController
             'users'              => $users,
             'vipIncomeStartDate' => $vipIncomeStartDate,
             'dataInfo'           => $dataInfo,
-            'count'              => $count,
+            'count'              => $count
         ));
     }
 
@@ -1228,7 +1238,7 @@ class AnalysisController extends BaseController
             date('Y-m-d', $timeRange['startTime']),
             date('Y-m-d', $timeRange['endTime'])
         );
-        
+
         foreach ($dateRange as $key => $value) {
             $zeroData[] = array("date" => $value, "count" => 0);
         }
@@ -1261,11 +1271,11 @@ class AnalysisController extends BaseController
     protected function getTimeRange($fields)
     {
         $startTime = !empty($fields['startTime']) ? $fields['startTime'] : date("Y-m", time());
-        $endTime = !empty($fields['endTime']) ? $fields['endTime'] : date("Y-m", time());
+        $endTime   = !empty($fields['endTime']) ? $fields['endTime'] : date("Y-m", time());
 
         return array(
-            'startTime' => strtotime($startTime), 
-            'endTime' => strtotime($endTime) + 24 * 3600
+            'startTime' => strtotime($startTime),
+            'endTime'   => strtotime($endTime) + 24 * 3600
         );
     }
 
@@ -1282,6 +1292,16 @@ class AnalysisController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     protected function getCategoryService()

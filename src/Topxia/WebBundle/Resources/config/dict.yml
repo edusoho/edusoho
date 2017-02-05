@@ -174,7 +174,7 @@ analysisDateType:
     joinLesson: 加入学习数
     paidCourse: 购买教学计划数
     paidClassroom: 购买班级数
-    finishedLesson: 完成课时学习数
+    completedTask: 完成学习任务数
     videoViewed: 视频观看数
     cloudVideoViewed: └─ 云视频观看数
     localVideoViewed: └─ 本地视频观看数
