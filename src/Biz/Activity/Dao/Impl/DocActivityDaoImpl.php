@@ -13,6 +13,6 @@ class DocActivityDaoImpl extends GeneralDaoImpl implements DocActivityDao
 
     public function declares()
     {
-
+        return array('timestamps' => array('createdTime', 'updatedTime'));
     }
 }
