@@ -10,8 +10,7 @@ class EsBarController extends BaseController
 {
     public function studyCenterAction(Request $request)
     {
-        return $this->render("es-bar/list-content/study-center.html.twig", array(
-        ));
+        return $this->render('es-bar/list-content/study-center.html.twig');
     }
 
     public function courseAction(Request $request)
@@ -22,22 +21,22 @@ class EsBarController extends BaseController
             throw $this->createAccessDeniedException('用户没有登录,不能查看!');
         }
 
-        $conditions = array(
+        $conditions       = array(
             'userId'      => $user->id,
             'locked'      => 0,
             'classroomId' => 0,
             'role'        => 'student'
         );
-        $sort             = array('createdTime'=>'DESC');
+        $sort             = array('createdTime' => 'DESC');
         $members          = $this->getCourseMemberService()->searchMembers($conditions, $sort, 0, 15);
         $courseIds        = ArrayToolkit::column($members, 'courseId');
         $courseConditions = array(
             'courseIds' => $courseIds,
             'parentId'  => 0
         );
-        $courses       = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, 15);
-        $courses       = ArrayToolkit::index($courses, 'id');
-        $sortedCourses = array();
+        $courses          = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, 15);
+        $courses          = ArrayToolkit::index($courses, 'id');
+        $sortedCourses    = array();
 
         if (!empty($courses)) {
             foreach ($members as $member) {
@@ -75,7 +74,7 @@ class EsBarController extends BaseController
             'locked' => 0,
             'role'   => 'student'
         );
-        $sort = array('createdTime'=>'DESC');
+        $sort             = array('createdTime' => 'DESC');
 
         $members = $this->getClassroomService()->searchMembers($memberConditions, $sort, 0, 15);
 
@@ -110,11 +109,7 @@ class EsBarController extends BaseController
             throw $this->createAccessDeniedException('用户没有登录,不能查看!');
         }
 
-        $notifications = $this->getNotificationService()->findUserNotifications(
-            $user->id,
-            0,
-            15
-        );
+        $notifications = $this->getNotificationService()->searchNotificationsByUserId($user->id, 0, 15);
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
 
         return $this->render('es-bar/list-content/notification/notify.html.twig', array(
@@ -136,13 +131,13 @@ class EsBarController extends BaseController
         $lessons          = array();
 
         if ($this->isPluginInstalled('Homework')) {
-            $conditions = array(
+            $conditions        = array(
                 'status' => $status,
                 'userId' => $user->id
             );
-            $homeworkResults = $this->getHomeworkService()->searchResults(
+            $homeworkResults   = $this->getHomeworkService()->searchResults(
                 $conditions,
-                array('updatedTime'=>'DESC'),
+                array('updatedTime' => 'DESC'),
                 0,
                 10
             );
@@ -159,7 +154,7 @@ class EsBarController extends BaseController
 
         $testPaperResults = $this->getTestpaperService()->searchTestpaperResults(
             $testPaperConditions,
-            array('endTime'=>'DESC'),
+            array('endTime' => 'DESC'),
             0,
             10
         );

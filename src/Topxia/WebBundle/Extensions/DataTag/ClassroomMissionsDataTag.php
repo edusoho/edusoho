@@ -36,7 +36,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
             'locked' => 0,
             'role'   => 'student'
         );
-        $sort          = array('createdTime', 'DESC');
+        $sort          = array('createdTime'=> 'DESC');
         $classroomMems = $this->getClassroomService()->searchMembers($memberConditions, $sort, 0, $arguments['count']);
         $classroomIds  = ArrayToolkit::column($classroomMems, 'classroomId');
 

@@ -38,7 +38,7 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
             'role'        => 'student'
         );
 
-        $courseMem = $this->getCourseMemberService()->searchMembers($courseMemConditions, array('createdTime', 'DESC'), 0, 5);
+        $courseMem = $this->getCourseMemberService()->searchMembers($courseMemConditions, array('createdTime'=> 'DESC'), 0, 5);
         $courseIds = ArrayToolkit::column($courseMem, 'courseId');
 
         if (!empty($courseIds)) {
