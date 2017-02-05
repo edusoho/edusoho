@@ -13,7 +13,7 @@ class RecentLiveLessonsDataTag extends CourseBaseDataTag implements DataTag
      * 可传入的参数：
      *   userId    可选 用户ID
      *   count     必需 课时数量，取值不能超过100
-     * 
+     *
      * @param  array $arguments 参数
      * @return array 课时列表
      */
@@ -23,34 +23,34 @@ class RecentLiveLessonsDataTag extends CourseBaseDataTag implements DataTag
 
         $filters['type'] = 'live';
 
-        if(isset($arguments['userId'])) {
-            $userId = $arguments['userId'];
-            $memConditions = array(
+        if (isset($arguments['userId'])) {
+            $userId          = $arguments['userId'];
+            $memConditions   = array(
                 'userId' => $userId
             );
             $userCourseCount = $this->getCourseMemberService()->countMembers($memConditions);
-            $liveCourses = $this->getCourseService()->findUserLearningCourses($userId,0,$userCourseCount,$filters);
+            $liveCourses     = $this->getCourseService()->findUserLearningCourses($userId, 0, $userCourseCount, $filters);
 
-            $courseIds = ArrayToolkit::column($liveCourses,'id');
-            if(empty($courseIds)){
+            $courseIds = ArrayToolkit::column($liveCourses, 'id');
+            if (empty($courseIds)) {
                 return array();
             }
         }
         $conditions = array(
-            'status' => 'published',
-            'type' => 'live',
-            'endTimeGreaterThan' => time()
+            'status'     => 'published',
+            'type'       => 'live',
+            'endTime_GT' => time()
         );
 
-        if(isset($courseIds)) {
+        if (isset($courseIds)) {
             $conditions["courseIds"] = $courseIds;
         }
 
         $sort = array(
-            'startTime'=>'ASC'
+            'startTime' => 'ASC'
         );
 
-        return $this->getCourseService()->searchLessons($conditions,$sort,0, $arguments['count']);
+        return $this->getTaskService()->search($conditions, $sort, 0, $arguments['count']);
 
     }
 
