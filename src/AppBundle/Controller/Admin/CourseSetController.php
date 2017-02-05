@@ -50,8 +50,8 @@ class CourseSetController extends BaseController
         $classrooms = array();
         $vips       = array();
         if ($filter == 'classroom') {
-            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds($courseSetIds);
-            $classrooms = ArrayToolkit::index($classrooms, 'courseId');
+            $classrooms = $this->getClassroomService()->findClassroomCourseByCourseSetIds($courseSetIds);
+            $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
 
             foreach ($classrooms as $key => $classroom) {
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
@@ -464,8 +464,8 @@ class CourseSetController extends BaseController
         $vips       = array();
 
         if ($fields['filter'] == 'classroom') {
-            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(array($course['id']));
-            $classrooms = ArrayToolkit::index($classrooms, 'courseId');
+            $classrooms = $this->getClassroomService()->findClassroomCourseByCourseSetIds(array($courseSet['id']));
+            $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
 
             foreach ($classrooms as $key => $classroom) {
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);

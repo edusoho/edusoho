@@ -87,6 +87,11 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         return $this->db()->fetchAll($sql, $courseIds) ?: array();
     }
 
+    public function findByCourseSetIds($courseSetIds)
+    {
+        return $this->findInField('courseSetId', $courseSetIds);
+    }
+
     public function findEnabledByCoursesIds($courseIds)
     {
         if (empty($courseIds)) {

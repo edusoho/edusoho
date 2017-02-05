@@ -82,6 +82,8 @@ interface ClassroomService
 
     public function findClassroomsByCoursesIds($courseIds);
 
+    public function findClassroomCourseByCourseSetIds($courseSetIds);
+
     /**
      * @before findClassroomByCourseId
      * @param  $courseId
