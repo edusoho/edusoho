@@ -32,6 +32,7 @@ class ClassroomCourseCopy extends CourseCopy
     protected function _copy($source, $config = array())
     {
         $newCourseSet = $this->doCopyCourseSet($source);
+
         $this->doCopyMaterial($source, $newCourseSet);
 
         $course = $this->getCourseDao()->get($config['courseId']);
@@ -53,8 +54,8 @@ class ClassroomCourseCopy extends CourseCopy
         $this->doCopyCourseMember($course, $newCourse);
         $this->doCopyTeachersToClassroom($course, $config['classroomId']);
 
-        $testpaperCopy = new CourseSetTestpaperCopy($this->biz);
-        $testpaperCopy->copy($course, array('newCourseSet' => $newCourseSet, 'isCopy' => true));
+        //$testpaperCopy = new CourseSetTestpaperCopy($this->biz);
+        //$testpaperCopy->copy($course, array('newCourseSet' => $newCourseSet, 'isCopy' => true));
 
         $this->childrenCopy($course, array(
             'newCourse'  => $newCourse,

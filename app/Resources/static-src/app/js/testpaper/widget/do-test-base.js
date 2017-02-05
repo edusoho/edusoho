@@ -58,7 +58,6 @@ class DoTestBase
   _analysisToggle(event) {
     let $current = $(event.currentTarget);
     $current.addClass('hidden');
-    console.log($current.siblings('.js-analysis.hidden'));
     $current.siblings('.js-analysis.hidden').removeClass('hidden');
     $current.closest('.js-testpaper-question').find('.js-testpaper-question-analysis').slideToggle();
   }

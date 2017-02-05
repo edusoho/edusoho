@@ -24,8 +24,9 @@ class ActivityTestpaperCopy extends TestpaperCopy
             return null;
         }
 
-        $testpaper = $this->getTestpaperDao()->get($activity['mediaId']);
-        if (empty($testpaper) || $testpaper['lessonId'] == 0) {
+        $testpaper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+
+        if (empty($testpaper)) {
             return null;
         }
 
@@ -33,7 +34,8 @@ class ActivityTestpaperCopy extends TestpaperCopy
         $newTestpaper['courseSetId'] = $activity['fromCourseSetId'];
         $newTestpaper['courseId']    = $activity['fromCourseId'];
 
-        $newTestpaper = $this->getTestpaperDao()->create($newTestpaper);
+        $newTestpaper = $this->getTestpaperService()->createTestpaper($newTestpaper);
+
         $this->doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy);
 
         return $newTestpaper;

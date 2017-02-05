@@ -3,12 +3,12 @@
 namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Service\LiveReplayService;
 use Biz\Util\EdusohoLiveClient;
+use Topxia\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
 use Biz\System\Service\SettingService;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
+use Biz\Course\Service\LiveReplayService;
 use Biz\Activity\Service\LiveActivityService;
 
 class LiveActivityServiceImpl extends BaseService implements LiveActivityService
@@ -65,11 +65,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveParams = array(
                 'liveId'  => $fields['liveId'],
                 'summary' => empty($fields['remark']) ? '' : $fields['remark'],
-                'title'   => $fields['title'],
+                'title'   => $fields['title']
             );
 
             $liveParams['startTime'] = $activity['startTime'];
-            $liveParams['endTime']   = (string)($activity['startTime'] + $fields['length'] * 60);
+            $liveParams['endTime']   = (string) ($activity['startTime'] + $fields['length'] * 60);
 
             //直播开始后不更新开始时间和直播时长
             if (empty($activity['startTime']) || $activity['startTime'] <= time()) {
@@ -86,6 +86,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveActivity['mediaId']      = $liveActivity['fileId'];
             $liveActivity['replayStatus'] = LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS;
             unset($liveActivity['fileId']);
+        } else {
+            return $this->getLiveActivityDao()->get($id);
         }
 
         $liveActivity = $this->getLiveActivityDao()->update($id, $liveActivity);

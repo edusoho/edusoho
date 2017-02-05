@@ -205,6 +205,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $diff      = array_diff($courseIds, $existCourseIds);
             $classroom = $this->getClassroom($classroomId);
+
             if (!empty($diff)) {
                 $courses      = $this->getCourseService()->findCoursesByIds($diff);
                 $newCourseIds = array();

@@ -720,7 +720,7 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        if ($this->setting('vip.enabled')) {
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
             $levels = $this->getLevelService()->findEnabledLevels();
         } else {
             $levels = array();

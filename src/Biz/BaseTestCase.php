@@ -35,6 +35,18 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
             ->initCurrentUser();
     }
 
+    public function tearDown()
+    {
+        $biz = $this->getBiz();
+        $keys = $biz->keys();
+
+        foreach ($keys as $key) {
+            if (substr($key, 0, 1) === '@') {
+                unset($biz[$key]);
+            }
+        }
+    }
+
     protected function initDevelopSetting()
     {
         $this->getServiceKernel()->createService('System:SettingService')->set('developer', array(

@@ -59,11 +59,6 @@
             <span></span>{{ '计划设置'|trans }}</a>
         </li>
 
-        <li class="list-group-item {% if side_nav == 'info' %}active{% endif %}">
-          <a href="{{ path('course_set_manage_course_replay', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-            <span></span>{{ '录播管理'|trans }}</a>
-        </li>
-
         <li class="list-group-item {% if side_nav == 'marketing' %}active{% endif %}">
           <a href="{{ path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
             <span></span>{{ '营销设置'|trans }}</a>

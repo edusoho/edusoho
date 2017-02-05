@@ -347,7 +347,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderInfoTemplate()
     {
-        return "ClassroomBundle:Classroom:orderInfo";
+        return "AppBundle:Classroom/Classroom:orderInfo";
     }
 
     public function isTargetExist($targetId)
