@@ -10,7 +10,7 @@
   </a>
 {% endif %}
 
-{% if 'favorite' in flags and resultStatus and resultStatus != 'doing' %}
+{% if 'favorite' in flags and resultStatus and resultStatus == 'finished' %}
   <a class="link-gray js-favorite {% if question.id in favorites %} hidden {% endif %}" data-url="{{ path('my_question_favorite', {questionId:question.id}) }}" data-target-type="testpaper" data-target-id="{{ paper.id|default(0) }}" data-question-id="{{ question.id }}">
     <span class="glyphicon glyphicon-star-empty"></span>
      {{'收藏'|trans}}
