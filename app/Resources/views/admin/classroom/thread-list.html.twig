@@ -36,6 +36,9 @@
           <tr data-role="item">
             <td><input value="{{thread.id}}" type="checkbox" data-role="batch-item"> </td>
             <td>
+              {% if thread.type == 'question' %}
+                <span class="label label-info">{{'问'|trans}}</span>
+              {% endif %}
               <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
               <div class="short-long-text">
                 <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">({{'展开'|trans}})</span></div>
