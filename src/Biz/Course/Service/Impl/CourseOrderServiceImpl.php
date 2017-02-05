@@ -234,6 +234,11 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         return $this->createService('Course:CourseService');
     }
 
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');

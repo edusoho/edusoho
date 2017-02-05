@@ -30,13 +30,12 @@ class ClassroomReviewController extends BaseController
             }
         }
 
+        $conditions['parentId'] = 0;
         $paginator = new Paginator(
             $request,
             $this->getClassroomReviewService()->searchReviewCount($conditions),
             20
         );
-
-        $conditions['parentId'] = 0;
 
         $reviews = $this->getClassroomReviewService()->searchReviews(
             $conditions,

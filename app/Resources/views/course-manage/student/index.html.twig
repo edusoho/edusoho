@@ -15,12 +15,18 @@
               {{ '发布计划'|trans }}
             </button>
           {% endif %}
-          <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_add', {courseSetId:courseSet.id, courseId: course.id}) }}"><i class="es-icon es-icon-anonymous-iconfont"></i> {{'添加学员'|trans}}</button>
-          {% if course.status == 'published' %}
-          {#  <a class="btn btn-info btn-sm mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('importer_index', {type: 'classroom-member',classroomId:classroom.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a> #}
-          {% else %}
-            {# <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="班级未发布,不可导入学员"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a> #}
+
+
+          {# 管理学员-导入、添加 #}
+          {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}
+            <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_add', {courseSetId:courseSet.id, courseId: course.id}) }}"><i class="es-icon es-icon-anonymous-iconfont"></i> {{'添加学员'|trans}}</button>
+            {% if course.status == 'published' %}
+            {#  <a class="btn btn-info btn-sm mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('importer_index', {type: 'classroom-member',classroomId:classroom.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a> #}
+            {% else %}
+              {# <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="班级未发布,不可导入学员"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a> #}
+            {% endif %}
           {% endif %}
+
           {# <a class="btn btn-info btn-sm mhs" href="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}"><i class="glyphicon glyphicon-export"></i> {{'导出学员'|trans}}</a> #}
       </div>
       </div>
@@ -76,9 +82,9 @@
                     <span class="caret mls"></span>
                   </a>
                   <ul class="dropdown-menu pull-right">
-                  {#  <li>
+                    <li>
                       <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/manage/student/{{student.userId}}/remark">备注</a>
-                    </li> #}
+                    </li>
                     {# <li>
                       <a class="follow-student-btn" href="javascript:;" data-url="/user/{{student.userId}}/follow">关注</a>
                       <a class="unfollow-student-btn" href="javascript:;" data-url="/user/{{student.userId}}/unfollow" style="display:none;">已关注</a>
@@ -86,9 +92,13 @@
                   {#  <li>
                       <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/set_expiryday/{{student.userId}}">增加有效期</a>
                     </li> #}
-                    <li>
-                      <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="学员">删除</a>
-                    </li>
+
+                    {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}
+                      <li>
+                        <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="学员">移除</a>
+                      </li>
+                    {% endif %}
+
                   </ul>
                 </div>
               </td>

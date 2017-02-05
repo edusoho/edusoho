@@ -3,7 +3,7 @@
 {% set resultStatus = paperResult.status|default(null) %}
 
 
-{% if  ((paperResult|default(null) and paperResult.status|default(null) in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'hide') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and paperResult.status|default(null) == 'reviewing' )) %}
+{% if  ((paperResult|default(null) and paperResult.status|default(null) in ['finished','reviewing'] and setting('questions.testpaper_answers_show_mode','submitted') == 'hide') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed' and paperResult.status|default(null) == 'reviewing' )) and not isTeacher|default(0) %}
 {% else %}
   
   <form id='teacherCheckForm' autocomplete="off">

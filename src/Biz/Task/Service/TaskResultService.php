@@ -4,6 +4,8 @@ namespace Biz\Task\Service;
 
 interface TaskResultService
 {
+    public function analysisCompletedTaskDataByTime($startTime, $endTime);
+    
     public function createTaskResult($taskResult);
 
     public function updateTaskResult($id, $taskResult);

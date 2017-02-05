@@ -18,6 +18,12 @@ class ManageController extends BaseController
             'type'        => 'testpaper'
         );
 
+        if ($courseSet['parentId'] > 0) {
+            $conditions['copyIdGT'] = 0;
+        } else {
+            $conditions['copyId'] = 0;
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getTestpaperService()->searchTestpaperCount($conditions),

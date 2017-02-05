@@ -125,4 +125,8 @@ interface CourseService
     public function sortCourseItems($courseId, $ids);
 
     public function deleteChapter($courseId, $chapterId);
+
+    public function analysisCourseDataByTime($startTime, $endTime);
+
+    public function countCourses(array $conditions);
 }
