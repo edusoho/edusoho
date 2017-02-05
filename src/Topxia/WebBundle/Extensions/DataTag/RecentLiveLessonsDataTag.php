@@ -50,7 +50,7 @@ class RecentLiveLessonsDataTag extends CourseBaseDataTag implements DataTag
             'startTime' => 'ASC'
         );
 
-        return $this->getTaskService()->search($conditions, $sort, 0, $arguments['count']);
+        return $this->getTaskService()->searchTasks($conditions, $sort, 0, $arguments['count']);
 
     }
 

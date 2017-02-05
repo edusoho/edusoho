@@ -2,6 +2,9 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Biz\Task\Dao\TaskResultDao;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
 
 class CourseMissionsDataTag extends BaseDataTag implements DataTag
@@ -13,7 +16,7 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
      *   count          课程数量
      *   missionCount   任务数量
      *
-     * @param  array $arguments                       参数
+     * @param  array $arguments 参数
      * @return array 按课程分组的任务列表
      */
     public function getData(array $arguments)
@@ -38,7 +41,7 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
             'role'        => 'student'
         );
 
-        $courseMem = $this->getCourseMemberService()->searchMembers($courseMemConditions, array('createdTime'=> 'DESC'), 0, 5);
+        $courseMem = $this->getCourseMemberService()->searchMembers($courseMemConditions, array('createdTime' => 'DESC'), 0, 5);
         $courseIds = ArrayToolkit::column($courseMem, 'courseId');
 
         if (!empty($courseIds)) {
@@ -46,8 +49,8 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
                 'courseIds' => $courseIds,
                 'parentId'  => 0
             );
-            $courses = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, $arguments['count']);
-            $courses = ArrayToolkit::index($courses, 'id');
+            $courses          = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, $arguments['count']);
+            $courses          = ArrayToolkit::index($courses, 'id');
 
             foreach ($courseMem as $member) {
                 if (empty($courses[$member['courseId']])) {
@@ -68,8 +71,8 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
                     'status'   => 'finished',
                     'courseId' => $course['id']
                 );
-                $sort     = array('finishedTime'=>'ASC');
-                $learneds = $this->getCourseService()->findUserLearnedLessons($userId, $course['id']);
+                $sort              = array('finishedTime' => 'ASC');
+                $learneds          = $this->getTaskResultService()->findUserTaskResultsByCourseId($course['id']);
                 /**
                  * 找出未学过的课时
                  */
@@ -87,10 +90,10 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
                     'notLearnedIds' => $finishIds
                 );
 
-                $sort = array(
-                    'seq'=> 'ASC'
+                $sort              = array(
+                    'seq' => 'ASC'
                 );
-                $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions, $sort, 0, $arguments['missionCount']);
+                $notLearnedLessons = $this->getTaskService()->searchTasks($notLearnedConditions, $sort, 0, $arguments['missionCount']);
 
                 if (empty($notLearnedLessons)) {
                     unset($sortedCourses[$key]);
@@ -105,7 +108,7 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
 
                     $course['lessons']          = $notLearnedLessons;
                     $course['learnedLessonNum'] = count($finishIds);
-                    $course['allLessonNum']     = $course['lessonNum'];
+                    $course['allLessonNum']     = $course['taskNum'];
                 }
             }
         }
@@ -126,5 +129,21 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
     protected function getCourseMemberService()
     {
         return $this->getServiceKernel()->createService('Course:MemberService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskResultService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 }

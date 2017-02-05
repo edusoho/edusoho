@@ -106,7 +106,8 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     public function findPastLivedCourseSetIds()
     {
         $time = time();
-        $sql  = "SELECT fromCourseSetId, max(startTime) as startTime
+        $sql
+              = "SELECT fromCourseSetId, max(startTime) as startTime
                  FROM {$this->table()} 
                  WHERE endTime < {$time} AND status='published' AND type = 'live' 
                  GROUP BY fromCourseSetId 
@@ -128,7 +129,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
     {
         $sql = "select sum(`time`) from `course_task_result` where `courseTaskId` in (SELECT id FROM {$this->table()}  WHERE `fromCourseSetId`= ?)";
-        return $this->db()->fetchColumn($sql, array($courseSetId)); 
+        return $this->db()->fetchColumn($sql, array($courseSetId));
     }
 
     public function declares()
@@ -138,6 +139,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
             'conditions' => array(
                 'id = :id',
                 'id IN ( :ids )',
+                'id NOT IN (:excludeIds)',
                 'courseId = :courseId',
                 'courseId IN ( :courseIds )',
                 'fromCourseSetId = :fromCourseSetId',

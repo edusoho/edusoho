@@ -35,41 +35,41 @@ class UserClassroomPlanTaskNumInfoDataTag extends BaseDataTag implements DataTag
         
         $userDoneInfo = array();
 
-        $userDoneInfo['homeworkDoneNum'] = $this->getTaskService()->searchTaskCount(array(
+        $userDoneInfo['homeworkDoneNum'] = $this->getTaskService()->countTasks(array(
             'userId' => $arguments['userId'],
             'batchId' => $classroomPlan['id'],
             'taskType' => 'studyplan',
             'status' => 'completed',
             'targetType' => 'homework'
         ));
-        $userDoneInfo['homeworkTaskNum'] = $this->getTaskService()->searchTaskCount(array(
+        $userDoneInfo['homeworkTaskNum'] = $this->getTaskService()->countTasks(array(
             'userId' => $arguments['userId'],
             'batchId' => $classroomPlan['id'],
             'taskType' => 'studyplan',
             'targetType' => 'homework'
         ));
 
-        $userDoneInfo['testpaperDoneNum'] = $this->getTaskService()->searchTaskCount(array(
+        $userDoneInfo['testpaperDoneNum'] = $this->getTaskService()->countTasks(array(
             'userId' => $arguments['userId'],
             'batchId' => $classroomPlan['id'],
             'taskType' => 'studyplan',
             'status' => 'completed',
             'targetType' => 'testpaper'
         ));
-        $userDoneInfo['testpaperTaskNum'] = $this->getTaskService()->searchTaskCount(array(
+        $userDoneInfo['testpaperTaskNum'] = $this->getTaskService()->countTasks(array(
             'userId' => $arguments['userId'],
             'batchId' => $classroomPlan['id'],
             'taskType' => 'studyplan',
             'targetType' => 'testpaper'
         ));
 
-        $userDoneInfo['allDoneNum'] = $this->getTaskService()->searchTaskCount(array(
+        $userDoneInfo['allDoneNum'] = $this->getTaskService()->countTasks(array(
             'userId' => $arguments['userId'],
             'batchId' => $classroomPlan['id'],
             'taskType' => 'studyplan',
             'status' => 'completed',
         ));
-        $userDoneInfo['tasksNum'] = $this->getTaskService()->searchTaskCount(array(
+        $userDoneInfo['tasksNum'] = $this->getTaskService()->countTasks(array(
             'userId' => $arguments['userId'],
             'batchId' => $classroomPlan['id'],
             'taskType' => 'studyplan',

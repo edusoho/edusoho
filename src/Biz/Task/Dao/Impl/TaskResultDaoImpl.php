@@ -95,7 +95,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime', 'updatedTime'),
+            'orderbys'   => array('createdTime', 'updatedTime', 'finishedTime'),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'id = :id',

@@ -115,7 +115,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
-        $taskCount = $this->getTaskService()->count(array('courseId' => $course['id'], 'status' => 'published'));
+        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published'));
 
         $review = $this->getReviewDao()->getReviewByUserIdAndCourseId($user['id'], $course['id']);
 

@@ -46,8 +46,8 @@ class EsBarController extends BaseController
 
                 $course = $courses[$member['courseId']];
 
-                if ($course['lessonNum'] != 0) {
-                    $course['percent'] = intval($member['learnedNum'] / $course['lessonNum'] * 100);
+                if ($course['taskNum'] != 0) {
+                    $course['percent'] = intval($member['learnedNum'] / $course['taskNum'] * 100);
                 } else {
                     $course['percent'] = 0;
                 }

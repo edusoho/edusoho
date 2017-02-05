@@ -97,11 +97,11 @@ class CourseSetController extends CourseBaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getTaskService()->count($conditions),
+            $this->getTaskService()->countTasks($conditions),
             10
         );
 
-        $tasks = $this->getTaskService()->search(
+        $tasks = $this->getTaskService()->searchTasks(
             $conditions,
             array('startTime' => 'ASC'),
             $paginator->getOffsetCount(),
