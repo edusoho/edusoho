@@ -1295,17 +1295,6 @@ class UserServiceTest extends BaseTestCase
         $this->assertGreaterThanOrEqual('3', $result['count']);
     }
 
-    public function testAnalysisUserSumByTime()
-    {
-        $user1  = $this->createUser('user1');
-        $user2  = $this->createUser('user2');
-        $user3  = $this->createUser('user3');
-        $time2  = time();
-        $arrays = $this->getUserService()->analysisUserSumByTime($time2);
-        $result = $arrays['0'];
-        $this->assertEquals('4', $result['count']);
-    }
-
     public function testParseAts()
     {
         $user1  = $this->createUser('user1');

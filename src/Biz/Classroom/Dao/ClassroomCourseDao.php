@@ -1,14 +1,12 @@
 <?php
 
-
 namespace Biz\Classroom\Dao;
-
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
-interface ClassroomCourseDao extends  GeneralDaoInterface
+interface ClassroomCourseDao extends GeneralDaoInterface
 {
-	public function updateByParam($params, $fields);
+    public function updateByParam($params, $fields);
 
     public function deleteByClassroomIdAndCourseId($classroomId, $courseId);
 
@@ -24,9 +22,11 @@ interface ClassroomCourseDao extends  GeneralDaoInterface
 
     public function findByCoursesIds($courseIds);
 
+    public function findByCourseSetIds($courseSetIds);
+
     public function findEnabledByCoursesIds($courseIds);
 
     public function getClassroomIdByCourseId($courseId);
-	
+
     public function findActiveCoursesByClassroomId($classroomId);
 }

@@ -1312,6 +1312,13 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertCount(1, $members);
     }
 
+    public function testFindClassroomCourseByCourseSetIds()
+    {
+        $result = $this->getClassroomService()->findClassroomCourseByCourseSetIds(array(-1, -2));
+
+        $this->assertCount(0, $result);
+    }
+
     protected function mockCourse($title = 'Test Course 1')
     {
         return array(
