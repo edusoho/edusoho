@@ -71,7 +71,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
     public function analysisRegisterDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? group by date order by date ASC ";
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `createdTime`>=? AND `createdTime`<=? group by date order by date ASC ";
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
