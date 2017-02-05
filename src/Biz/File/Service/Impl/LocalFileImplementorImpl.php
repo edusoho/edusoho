@@ -187,7 +187,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         unset($conditions['start']);
         unset($conditions['limit']);
 
-        return $this->getUploadFileDao()->search($conditions, array('createdTime', 'DESC'), $start, $limit);
+        return $this->getUploadFileDao()->search($conditions, array('createdTime' => 'DESC'), $start, $limit);
     }
 
     public function synData($conditions)

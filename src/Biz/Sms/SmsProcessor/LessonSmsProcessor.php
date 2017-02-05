@@ -74,10 +74,10 @@ class LessonSmsProcessor implements SmsProcessor
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if ($classroom) {
-                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime', 'Desc'), $index, 1000);
+                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime' => 'Desc'), $index, 1000);
             }
         } else {
-            $students = $this->getCourseService()->searchMembers(array('courseId' => $course['id']), array('createdTime', 'Desc'), $index, 1000);
+            $students = $this->getCourseService()->searchMembers(array('courseId' => $course['id']), array('createdTime' => 'Desc'), $index, 1000);
         }
 
         $studentIds = ArrayToolkit::column($students, 'userId');

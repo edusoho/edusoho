@@ -1,6 +1,9 @@
 <?php
 namespace Biz\Classroom\Event;
 
+use Biz\Classroom\Service\ClassroomReviewService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\User\Service\NotificationService;
 use Topxia\Common\StringToolkit;
 use Biz\Taxonomy\TagOwnerManager;
 use Codeages\Biz\Framework\Event\Event;
@@ -72,21 +75,25 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    private function getStatusService()
-    {
-        return $this->getBiz()->service('User:StatusService');
-    }
-
+    /**
+     * @return NotificationService
+     */
     protected function getNotifiactionService()
     {
         return $this->getBiz()->service('User:NotificationService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
+    /**
+     * @return ClassroomReviewService
+     */
     private function getClassroomReviewService()
     {
         return $this->getBiz()->service('Classroom:ClassroomReviewService');

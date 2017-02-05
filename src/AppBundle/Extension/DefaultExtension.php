@@ -325,7 +325,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     'finishCondition' => 'AppBundle:Activity/Discuss:finishCondition'
                 ),
                 'visible' => function ($courseSet, $course) {
-                    return $courseSet['type'] != 'live';
+                    return true;
                 }
             ),
 
@@ -446,13 +446,6 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         );
     }
 
-    // public function getCourseCopyChain($node)
-    // {
-    //     $chains = $this->biz['course_copy.chains'];
-
-    //     return $this->array_walk($chains, $node);
-    // }
-
     protected function registerCourseCopyChain($container)
     {
         $chains = array(
@@ -482,7 +475,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         };
     }
 
-    private function arrayWalk($array, $key)
+    public function arrayWalk($array, $key)
     {
         if (!empty($array[$key])) {
             return $array[$key];

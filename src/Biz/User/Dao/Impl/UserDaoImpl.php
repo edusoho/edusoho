@@ -75,12 +75,6 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
-    public function analysisUserSumByTime($endTime)
-    {
-        $sql = "select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
-        return $this->db()->fetchAll($sql, array($endTime));
-    }
-
     public function countByLessThanCreatedTime($time)
     {
         $sql = "SELECT count(id) as count FROM `{$this->table()}` WHERE  `createdTime` <= ?  ";
@@ -162,7 +156,14 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime', 'promotedTime', 'promoted', 'promotedSeq','id', 'nickname'),
+            'orderbys'   => array(
+                'id', 
+                'createdTime', 
+                'promotedTime', 
+                'promoted', 
+                'promotedSeq', 
+                'nickname'
+            ),
             'timestamps' => array(
                 'createdTime',
                 'updatedTime'

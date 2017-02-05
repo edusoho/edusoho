@@ -11,7 +11,7 @@
 
 <span class="course-price-widget">
 
-  {% if course.discountId %}
+  {% if course.discountId|default(null) %}
 
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}

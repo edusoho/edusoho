@@ -73,16 +73,6 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return $this->findInField('sn', $sns);
     }
 
-    public function searchBill($conditions, $orderBy, $start, $limit)
-    {
-        if (!isset($conditions['startTime'])) {
-            $conditions['startTime'] = 0;
-        }
-
-        $sql = "SELECT * FROM {$this->table} WHERE `createdTime`>={$conditions['startTime']} AND `createdTime`<{$conditions['endTime']} AND `userId` = {$conditions['userId']} AND (not(`payment` in ('none','coin'))) AND `status` = 'paid' ORDER BY {$orderBy[0]} {$orderBy[1]}  LIMIT {$start}, {$limit}";
-        return $this->db()->fetchAll($sql, array());
-    }
-
     public function countBill($conditions)
     {
         if (!isset($conditions['startTime'])) {

@@ -50,25 +50,25 @@ class RecentLiveCourseSetsDataTag extends CourseBaseDataTag implements DataTag
             1000
         );
 
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentTasks, 'courseId'));
-        $courses = ArrayToolkit::index($courses, 'id');
-
-        $courseSetIds     = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSetIds     = ArrayToolkit::column($recentTasks, 'fromCourseSetId');
         $courseSets       = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSets       = ArrayToolkit::index($courseSets, 'id');
         $recentCourseSets = array();
 
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+        $courses = ArrayToolkit::index($courses, 'id');
+
         foreach ($recentTasks as $task) {
-            $course    = $courses[$task['courseId']];
-            $courseSet = $courseSets[$course['courseSetId']];
+            $courseSet = $courseSets[$task['fromCourseSetId']];
             if ($courseSet['status'] != 'published') {
                 continue;
             }
+
             if ($courseSet['parentId'] != 0) {
                 continue;
             }
             $courseSet['task']     = $task;
-            $courseSet['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
+            $courseSet['teachers'] = $this->getUserService()->findUsersByIds($courses[$task['courseId']]['teacherIds']);
 
             if (count($recentCourseSets) >= $count) {
                 break;

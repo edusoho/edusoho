@@ -1,8 +1,11 @@
 {% extends 'course/header/header-layout.html.twig' %}
 
+{% block course_header_subtitle %}
+  <p class="mt10  text-overflow  mb20">{{ courseSet.subtitle }}</p>
+{% endblock %}
+
 {% block course_heard_content %}
   {% set course_set = data('CourseSet', {id: course.courseSetId}) %}
-
   <div class="course-detail-bottom">
     <div class="course-detail-img">
       {% if previewTask|default(null) %}

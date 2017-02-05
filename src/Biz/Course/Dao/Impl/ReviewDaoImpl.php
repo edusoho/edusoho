@@ -23,12 +23,18 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function deleteByCourseId($courseId)
+    {
+        return $this->db()->delete($this->table(), array('courseId' => $courseId));
+    }
+
     public function declares()
     {
         return array(
             'serializes' => array(
                 'meta' => 'json'
             ),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'orderbys'   => array(
                 'createdTime',
                 'updatedTime',

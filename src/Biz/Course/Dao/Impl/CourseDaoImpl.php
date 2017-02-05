@@ -86,7 +86,15 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
         $sql   = "SELECT courseSetId,sum(`income`) as income FROM {$this->table} WHERE courseSetId IN ({$marks}) group by courseSetId;";
 
-        return $this->db()->fetchAll($sql, $courseSetIds);  
+        return $this->db()->fetchAll($sql, $courseSetIds);
+    }
+
+    public function analysisCourseDataByTime($startTime, $endTime)
+    {
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM {$this->table} WHERE createdTime >= ? AND createdTime <= ?
+            group by from_unixtime(createdTime,'%Y-%m-%d') order by date ASC";
+
+        return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function declares()
@@ -116,8 +124,8 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'title LIKE :titleLike',
                 'userId = :userId',
                 'recommended = :recommended',
-                'startTime >= :startTimeGreaterThan',
-                'startTime < :startTimeLessThan',
+                'createdTime >= :startTime',
+                'createdTime < :endTime',
                 'rating > :ratingGreaterThan',
                 'vipLevelId >= :vipLevelIdGreaterThan',
                 'vipLevelId = :vipLevelId',
