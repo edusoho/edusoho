@@ -166,7 +166,7 @@ class CourseSetController extends BaseController
         }
 
         if ($courseSet['status'] == 'closed') {
-            $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($courseSet['id']);
+            $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
 
             if ($classroomCourse) {
                 return $this->createJsonResponse(array('code' => 3, 'message' => '当前课程未移除,请先移除班级课程'));
