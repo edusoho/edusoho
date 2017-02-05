@@ -6,7 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class TaskServiceTest extends BaseTestCase
 {
@@ -106,6 +106,7 @@ class TaskServiceTest extends BaseTestCase
         $task = $this->getTaskService()->createTask($task);
 
         $this->getTaskService()->startTask($task['id']);
+        $this->getActivityLearnLogService()->createLog($task['activity'],'text',array('task'=>$task,'learnedTime'=>1));
         $this->getTaskService()->finishTask($task['id']);
 
         $result = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
@@ -126,11 +127,11 @@ class TaskServiceTest extends BaseTestCase
 
         //finish firstTask;
         $this->getTaskService()->startTask($firstTask['id']);
+        $this->getActivityLearnLogService()->createLog($firstTask['activity'],'text',array('task'=>$firstTask,'learnedTime'=>1));
         $this->getTaskService()->finishTask($firstTask['id']);
 
         $nextTask = $this->getTaskService()->getNextTask($firstTask['id']);
         $this->assertEquals($secondTask['id'], $nextTask['id']);
-
     }
 
     public function testCanLearnTask()
@@ -164,40 +165,6 @@ class TaskServiceTest extends BaseTestCase
         $this->getTaskResultService()->updateTaskResult($taskResult['id'], array('status' => 'finish'));
         $isLearned = $this->getTaskService()->isTaskLearned($firstTask['id']);
         $this->assertEquals(true, $isLearned);
-
-    }
-
-    public function testFindTasksWithLearningResultByCourseId()
-    {
-        $course = $this->getCourseService()->createCourse(array(
-            'title'       => 'Demo Course',
-            'courseSetId' => 1,
-            'learnMode'   => 'lockMode',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0
-        ));
-
-        $this->getCourseService()->createCourseStudent($course['id'], array('userId' => 1, 'price' => 1));
-
-        $task = $this->mockSimpleTask($course['id']);
-
-        $firstTask = $this->getTaskService()->createTask($task);
-        $this->getTaskService()->startTask($firstTask['id']);
-        $this->getTaskService()->finishTask($firstTask['id']);
-
-        $secondTask = $this->getTaskService()->createTask($task);
-        $this->getTaskService()->startTask($secondTask['id']);
-
-        $thirdTask = $this->getTaskService()->createTask($task);
-
-        $forthTask = $this->getTaskService()->createTask($task);
-
-        $tasks = $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($course['id']);
-        $tasks = ArrayToolkit::index($tasks, 'id');
-
-        $this->assertEquals('finish', $tasks[$firstTask['id']]['result']['status']);
-        $this->assertEquals('start', $tasks[$secondTask['id']]['result']['status']);
-
     }
 
     protected function mockSimpleTask($courseId = 1)
@@ -206,7 +173,9 @@ class TaskServiceTest extends BaseTestCase
             'title'           => 'test task',
             'mediaType'       => 'text',
             'fromCourseId'    => $courseId,
-            'fromCourseSetId' => 1
+            'fromCourseSetId' => 1,
+            'finishType' => 'time',
+            'status' => 'published'
         );
     }
 
@@ -223,7 +192,9 @@ class TaskServiceTest extends BaseTestCase
             'title'           => 'test task',
             'mediaType'       => 'text',
             'fromCourseId'    => $course['id'],
-            'fromCourseSetId' => 1
+            'fromCourseSetId' => 1,
+            'finishType' => 'time',
+            'status' => 'published'
         );
     }
 
@@ -251,4 +222,8 @@ class TaskServiceTest extends BaseTestCase
         return $this->getBiz()->service('Task:TaskResultService');
     }
 
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
+    }
 }

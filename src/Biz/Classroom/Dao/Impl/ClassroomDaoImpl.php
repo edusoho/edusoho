@@ -16,9 +16,9 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
             'serializes' => array('assistantIds' => 'json', 'teacherIds' => 'json', 'service' => 'json'),
             'orderbys'   => array('name', 'createdTime', 'recommendedSeq'),
             'conditions' => array(
-                'name = :name',
+                'title = :title',
                 'status = :status',
-                'title like :title',
+                'title like :titleLike',
                 'price > :price_GT',
                 'price = :price',
                 'private = :private',

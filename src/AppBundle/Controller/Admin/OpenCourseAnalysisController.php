@@ -33,7 +33,8 @@ class OpenCourseAnalysisController extends BaseController
     {
         $query     = $request->query->all();
         $timeRange = $this->getTimeRange($query);
-        list($refererlogDatas, $paginator) = $this->getRefererLogData($request, $timeRange, array('hitNum'=>'DESC'));
+
+        list($refererlogDatas, $paginator) = $this->getRefererLogData($request, $timeRange, array('hitNum','DESC'));
 
         $targetIds   = ArrayToolkit::column($refererlogDatas, 'targetId');
         $openCourses = $this->getOpenCourseService()->findCoursesByIds($targetIds);
@@ -231,7 +232,7 @@ class OpenCourseAnalysisController extends BaseController
             'startTime' => $timeRange['startTime'],
             'endTime'   => $timeRange['endTime']
         );
-        list($refererLogs, $paginator) = $this->getRefererLogData($request, $conditions, array('orderCount'=>'DESC'));
+        list($refererLogs, $paginator) = $this->getRefererLogData($request, $conditions, array('orderCount','DESC'));
 
         $courseIds = ArrayToolkit::column($refererLogs, 'targetId');
         $courses   = ArrayToolkit::index($this->getOpenCourseService()->findCoursesByIds($courseIds), 'id');

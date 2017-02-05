@@ -22,6 +22,6 @@
 {% block footer %}
   <button id="change-user-roles-btn" data-submiting-text="{{'正在提交'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-roles-form"  data-user="{{default.user_name|default('学员'|trans)}}" >{{'保存'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true} %}
-  <script>app.lazyLoad = function() { app.load('user/roles-modal') };</script>
+  
+  <script>app.load('user/roles-modal');</script>
 {% endblock %}

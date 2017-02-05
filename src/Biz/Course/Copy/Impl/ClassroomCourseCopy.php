@@ -3,11 +3,12 @@
 namespace Biz\Course\Copy\Impl;
 
 use Biz\Course\Dao\CourseDao;
+use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\CourseMaterialDao;
-use Biz\Course\Copy\AbstractEntityCopy;
+use Biz\Classroom\Dao\ClassroomMemberDao;
 
-class CourseSetCopy extends AbstractEntityCopy
+class ClassroomCourseCopy extends CourseCopy
 {
     /**
      * 复制链说明：
@@ -21,8 +22,7 @@ class CourseSetCopy extends AbstractEntityCopy
      */
     public function __construct($biz)
     {
-        $this->biz = $biz;
-        parent::__construct($biz, 'course-set');
+        parent::__construct($biz);
     }
 
     /*
@@ -35,9 +35,34 @@ class CourseSetCopy extends AbstractEntityCopy
         $this->doCopyMaterial($source, $newCourseSet);
 
         $course = $this->getCourseDao()->get($config['courseId']);
-        $this->childrenCopy($course, array('newCourseSet' => $newCourseSet));
 
-        return $newCourseSet;
+        $user        = $this->biz['user'];
+        $courseSetId = $newCourseSet['id'];
+
+        $newCourse                = $this->doCopy($course);
+        $newCourse['isDefault']   = $course['isDefault'];
+        $modeChange               = false;
+        $newCourse['parentId']    = $course['id'];
+        $newCourse['locked']      = 1; //默认锁定
+        $newCourse['courseSetId'] = $courseSetId;
+        $newCourse['creator']     = $user['id'];
+        $newCourse['status']      = 'published';
+        $newCourse['teacherIds']  = array($user['id']);
+
+        $newCourse = $this->getCourseDao()->create($newCourse);
+        $this->doCopyCourseMember($course, $newCourse);
+        $this->doCopyTeachersToClassroom($course, $config['classroomId']);
+
+        $testpaperCopy = new CourseSetTestpaperCopy($this->biz);
+        $testpaperCopy->copy($course, array('newCourseSet' => $newCourseSet, 'isCopy' => true));
+
+        $this->childrenCopy($course, array(
+            'newCourse'  => $newCourse,
+            'modeChange' => $modeChange,
+            'isCopy'     => true // 用于标记是复制还是clone，clone不需要记录parentId
+        ));
+
+        return $newCourse;
     }
 
     private function doCopyCourseSet($courseSet)
@@ -65,7 +90,8 @@ class CourseSetCopy extends AbstractEntityCopy
         $newCourseSet = array(
             'parentId' => $courseSet['id'],
             'status'   => 'published',
-            'creator'  => $this->biz['user']['id']
+            'creator'  => $this->biz['user']['id'],
+            'locked'   => 1 // 默认锁定
         );
 
         foreach ($fields as $field) {
@@ -119,6 +145,30 @@ class CourseSetCopy extends AbstractEntityCopy
         }
     }
 
+    protected function doCopyTeachersToClassroom($oldCourse, $classroomId)
+    {
+        $existTeachers = $this->getClassroomMemberDao()->findByClassroomIdAndRole($classroomId, 'teacher', 0, PHP_INT_MAX);
+        if (empty($existTeachers)) {
+            $existTeachers = array();
+        } else {
+            $existTeachers = ArrayToolkit::index($existTeachers, 'userId');
+        }
+
+        $teachers = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
+        if (!empty($teachers)) {
+            foreach ($teachers as $teacher) {
+                if (!empty($existTeachers[$teacher['userId']])) {
+                    continue;
+                }
+                $this->getClassroomMemberDao()->create(array(
+                    'classroomId' => $classroomId,
+                    'userId'      => $teacher['userId'],
+                    'role'        => array('teacher')
+                ));
+            }
+        }
+    }
+
     /**
      * @return CourseSetDao
      */
@@ -141,5 +191,13 @@ class CourseSetCopy extends AbstractEntityCopy
     protected function getMaterialDao()
     {
         return $this->biz->dao('Course:CourseMaterialDao');
+    }
+
+    /**
+     * @return ClassroomMemberDao
+     */
+    protected function getClassroomMemberDao()
+    {
+        return $this->biz->dao('Classroom:ClassroomMemberDao');
     }
 }

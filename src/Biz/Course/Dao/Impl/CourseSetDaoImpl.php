@@ -21,10 +21,37 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 
     public function findLikeTitle($title)
     {
+        if (empty($title)) {
+            $title = '';
+        }
         $title = '%'.$title.'%';
         $sql   = "SELECT * FROM {$this->table} WHERE title LIKE ?";
 
         return $this->db()->fetchAll($sql, array($title));
+    }
+
+    public function analysisCourseSetDataByTime($startTime, $endTime)
+    {
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM {$this->table} WHERE createdTime >= ? AND createdTime <= ?
+            group by from_unixtime(createdTime,'%Y-%m-%d') order by date ASC";
+
+        return $this->db()->fetchAll($sql, array($startTime, $endTime));
+    }
+
+    protected function _createQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == 0) {
+                return true;
+            }
+            if (empty($value)) {
+                return false;
+            }
+
+            return true;
+        });
+
+        return parent::_createQueryBuilder($conditions);
     }
 
     public function declares()
@@ -48,7 +75,13 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'cover'     => 'json'
             ),
             'orderbys'   => array(
-                'createdTime', 'recommendedSeq', 'hitNum', 'recommendedTime', 'rating', 'studentNum'
+                'createdTime',
+                'updatedTime',
+                'recommendedSeq',
+                'hitNum',
+                'recommendedTime',
+                'rating',
+                'studentNum'
             ),
             'timestamps' => array(
                 'createdTime', 'updatedTime'

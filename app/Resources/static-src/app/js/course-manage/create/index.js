@@ -1,4 +1,8 @@
 import { TabChange } from '../help';
+jQuery.validator.addMethod("max_year", function (value, element) {
+  return this.optional(element) || value < 100000;
+}, "有效期最大值不能超过99,999天");
+
 
 class Creator {
   constructor() {
@@ -44,7 +48,8 @@ class Creator {
         },
         expiryDays: {
           required: '#expiryByDays:checked',
-          digits: true
+          digits: true,
+          max_year: true
         },
         expiryStartDate: {
           required: '#expiryByDate:checked',
@@ -59,7 +64,6 @@ class Creator {
       },
       messages: {
         title: Translator.trans('请输入教学计划课程标题'),
-        expiryDays: Translator.trans('请输入学习有效期'),
         expiryStartDate: {
           required: Translator.trans('请输入开始日期'),
           before: Translator.trans('开始日期应早于结束日期')

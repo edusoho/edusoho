@@ -96,7 +96,7 @@
     
   </div>
    {% if type != 'event' %}
-      {{ render(controller('AppBundle:Attachment:formFields', {targetType: 'classroom.thread', targetId: thread.id|default(0)}, {'showLabel':false})) }}
+      {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'classroom.thread', targetId: thread.id|default(0)}, {'showLabel':false})) }}
     {% endif %}
   <div class="clearfix">
       {% if thread %}

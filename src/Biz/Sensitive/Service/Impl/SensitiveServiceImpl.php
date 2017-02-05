@@ -185,7 +185,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             'state'       => $state,
             'createdTime' => time()
         );
-        $result = $this->getSensitiveDao()->add($conditions);
+        $result = $this->getSensitiveDao()->create($conditions);
 
         $this->getKeywordFilter()->add($result);
 

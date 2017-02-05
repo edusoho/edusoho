@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\RefererLog\Tests;
+namespace Tests\RefererLog;
 
 use Biz\BaseTestCase;
 use Biz\RefererLog\Service\RefererLogService;

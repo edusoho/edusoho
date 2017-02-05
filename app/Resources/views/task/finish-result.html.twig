@@ -20,10 +20,12 @@
 {% endblock %}
 
 {% block footer %}
-  <a class="btn btn-info dropdown-toggle" href="" data-toggle="dropdown">
-    <i class="es-icon es-icon-share">分享</i>
+  <div class="es-share top">
+    <a class="btn btn-info dropdown-toggle" href="" data-toggle="dropdown">
+      <i class="es-icon es-icon-share mr5"></i>分享
+    </a>
     {% include 'common/share-dropdown.html.twig' with {type:'task'} %}
-  </a>
+  </div>
   {% if nextTask|default(false) %}
   <a class="btn btn-primary" href="{{path('course_task_show', {courseId:nextTask.courseId, id:nextTask.id})}}">下一任务</a>
   {% endif %}

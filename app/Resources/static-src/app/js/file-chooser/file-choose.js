@@ -18,7 +18,7 @@ class FileChooser extends Emitter {
   }
 
   initTab() {
-    $("#material a").click(function(e) {
+    $("#material a").click(function (e) {
       e.preventDefault();
       let $this = $(this);
       $this.find('[type="radio"]').prop('checked', 'checked');
@@ -42,6 +42,15 @@ class FileChooser extends Emitter {
     this.trigger('select', file);
   }
 
+  static openUI() {
+    $('.file-chooser-bar').addClass('hidden');
+    $('.file-chooser-main').removeClass('hidden');
+  }
+
+  static closeUI() {
+    $('.file-chooser-main').addClass('hidden');
+    $('.file-chooser-bar').removeClass('hidden');
+  }
 }
 
 export default FileChooser;

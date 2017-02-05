@@ -26,7 +26,7 @@ class CourseSetServiceTest extends BaseTestCase
             'type'  => 'normal'
         );
         $expected = $this->getCourseSetService()->createCourseSet($courseSet);
-        $res = $this->getCourseSetService()->findCourseSetsLikeTitle('开始');
+        $res      = $this->getCourseSetService()->findCourseSetsLikeTitle('开始');
 
         $this->assertEquals(array($expected), $res);
     }

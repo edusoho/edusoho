@@ -17,7 +17,7 @@
     </thead>
     <tbody>
       {% for classroom in classrooms %}
-        {% include 'ClassroomBundle:ClassroomAdmin:recommend-tr.html.twig' %}
+        {% include 'admin/classroom/recommend-tr.html.twig' %}
       {% else %}
         <tr><td colspan="20"><div class="empty">{{'暂无推荐%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div></td></tr>
       {% endfor %}

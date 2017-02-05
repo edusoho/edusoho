@@ -26,8 +26,7 @@
     {% endcache %}
 
     {% cache 'live/recommend/course/replay/list' 600 %}
-    {# @TODO 直播回放列表 #}
-    {#{{ render(controller('TopxiaWebBundle:LiveCourse:replayList')) }}#}
+    {{ render(controller('AppBundle:Course/LiveCourseSet:replayList')) }}
     {% endcache %}
   {% endblock %}
 

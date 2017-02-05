@@ -15,10 +15,8 @@
     <input class="form-control" type="text" placeholder="标题" name="title" value="{{ app.request.get('title') }}">
   </div>
   <div class="form-group">
-    <input class="form-control" type="text" placeholder="创建者" name="creator" value="{{ app.request.get('creator') }}">
+    <input class="form-control" type="text" placeholder="创建者" name="userId" value="{{ app.request.get('userId') }}">
   </div>
-  <button class="btn btn-primary">搜索</button>
-
   <button class="btn btn-primary">搜索</button>
   {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: '公开课说明Tooltip'|trans|raw, placement: 'left'} %}
 </form>

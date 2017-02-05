@@ -4,9 +4,9 @@ namespace Biz;
 
 use Mockery;
 use Biz\User\CurrentUser;
+use Biz\Role\Util\PermissionBuilder;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\Role\Util\PermissionBuilder;
 
 class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 {
@@ -35,6 +35,18 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
             ->initCurrentUser();
     }
 
+    public function tearDown()
+    {
+        $biz = $this->getBiz();
+        $keys = $biz->keys();
+
+        foreach ($keys as $key) {
+            if (substr($key, 0, 1) === '@') {
+                unset($biz[$key]);
+            }
+        }
+    }
+
     protected function initDevelopSetting()
     {
         $this->getServiceKernel()->createService('System:SettingService')->set('developer', array(
@@ -49,6 +61,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $userService = ServiceKernel::instance()->createService('User:UserService');
 
         $currentUser = new CurrentUser();
+        //由于创建管理员用户时，当前用户（CurrentUser）必须有管理员权限，所以在register之前先mock一个临时管理员用户作为CurrentUser
         $currentUser->fromArray(array(
             'id'        => 0,
             'nickname'  => '游客',
@@ -73,6 +86,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $user['org']       = array('id' => 1);
         $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
+        $this->grantPermissionToUser($currentUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getServiceKernel()->createService('Role:RoleService')->refreshRoles();
         $this->getServiceKernel()->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
@@ -104,23 +118,16 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->setPool($pool);
     }
 
-    public function mockService($mockSrevices)
+    protected function mockBiz($alias, $className, $params = array())
     {
-        $biz = $this->getBiz();
+        $mockObj = Mockery::mock($className);
 
-        foreach ($mockSrevices as $alias => $expecteds) {
-            list($module, $name) = explode(':', $alias);
-            $class = "Biz\\{$module}\\Service\\Impl\\{$name}Impl";
-            $mock = $this->getMockBuilder($class)
-                ->disableOriginalConstructor()
-                ->getMock();
-
-            foreach ($expecteds as $method => $return) {
-                $mock->expects($this->any())->method($method)->will($this->returnValue($return));
-            }
-            
-            $biz["@{$alias}"] = $mock;
+        foreach ($params as $param) {
+            $mockObj->shouldReceive($param['functionName'])->withAnyArgs()->andReturn($param['returnValue']);
         }
+
+        $biz               = $this->getBiz();
+        $biz['@'.$alias] = $mockObj;
     }
 
     protected function setPool($object)
@@ -168,5 +175,12 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
                 $this->assertEquals($ary1[$key], $ary2[$key]);
             }
         }
+    }
+
+    protected function grantPermissionToUser($currentUser)
+    {
+        $permissions                                = new \ArrayObject();
+        $permissions['admin_course_content_manage'] = true;
+        $currentUser->setPermissions($permissions);
     }
 }
