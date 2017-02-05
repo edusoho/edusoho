@@ -128,12 +128,16 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
     {
         $sql = "select sum(`time`) from `course_task_result` where `courseTaskId` in (SELECT id FROM {$this->table()}  WHERE `fromCourseSetId`= ?)";
-        return $this->db()->fetchColumn($sql, array($courseSetId)); 
+        return $this->db()->fetchColumn($sql, array($courseSetId));
     }
 
     public function declares()
     {
         return array(
+            'timestamps' => array(
+                'createdTime',
+                'updatedTime'
+            ),
             'orderbys'   => array('seq', 'startTime'),
             'conditions' => array(
                 'id = :id',

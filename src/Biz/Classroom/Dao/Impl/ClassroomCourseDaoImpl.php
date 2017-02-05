@@ -43,6 +43,12 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         return $this->db()->fetchAssoc($sql, array($courseId)) ?: null;
     }
 
+    public function getByCourseSetId($courseSetId)
+    {
+        $sql = "SELECT * FROM {$this->table()} where courseSetId = ? LIMIT 1";
+        return $this->db()->fetchAssoc($sql, array($courseSetId)) ?: null;
+    }
+
     public function getByClassroomIdAndCourseId($classroomId, $courseId)
     {
         $sql = "SELECT * FROM {$this->table} where classroomId = ? AND courseId = ? LIMIT 1";
