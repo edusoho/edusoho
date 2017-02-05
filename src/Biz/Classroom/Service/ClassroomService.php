@@ -89,6 +89,8 @@ interface ClassroomService
      */
     public function getClassroomByCourseId($courseId);
 
+    public function getClassroomCourseByCourseSetId($courseSetId);
+
     // 内部方法
     public function updateClassroomTeachers($id);
 
