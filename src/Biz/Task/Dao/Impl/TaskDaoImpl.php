@@ -138,6 +138,10 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     public function declares()
     {
         return array(
+            'timestamps' => array(
+                'createdTime',
+                'updatedTime'
+            ),
             'orderbys'   => array('seq', 'startTime'),
             'conditions' => array(
                 'id = :id',
