@@ -1671,24 +1671,6 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->analysisRegisterDataByTime($startTime, $endTime);
     }
 
-    public function analysisUserSumByTime($endTime)
-    {
-        $perDayUserAddCount = $this->getUserDao()->analysisUserSumByTime($endTime);
-        $dayUserTotals      = array();
-
-        foreach ($perDayUserAddCount as $key => $value) {
-            $dayUserTotals[$key]          = array();
-            $dayUserTotals[$key]["date"]  = $value["date"];
-            $dayUserTotals[$key]["count"] = 0;
-
-            for ($i = $key; $i < count($perDayUserAddCount); $i++) {
-                $dayUserTotals[$key]["count"] += $perDayUserAddCount[$i]["count"];
-            }
-        }
-
-        return $dayUserTotals;
-    }
-
     public function parseAts($text)
     {
         preg_match_all('/@([\x{4e00}-\x{9fa5}\w]{2,16})/u', $text, $matches);

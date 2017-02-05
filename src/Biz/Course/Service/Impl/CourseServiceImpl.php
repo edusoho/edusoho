@@ -95,6 +95,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = ArrayToolkit::parts($course, array(
             'title',
+            'about',
             'courseSetId',
             'learnMode',
             'expiryMode',
@@ -846,6 +847,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
+    public function analysisCourseDataByTime($startTime, $endTime)
+    {
+        return $this->getCourseDao()->analysisCourseDataByTime($startTime, $endTime);
+    }
+
     protected function fillMembersWithUserInfo($members)
     {
         if (empty($members)) {
@@ -975,6 +981,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function searchCourseCount($conditions)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
+        return $this->getCourseDao()->count($conditions);
+    }
+
+    public function countCourses(array $conditions)
+    {
         return $this->getCourseDao()->count($conditions);
     }
 
