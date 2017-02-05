@@ -1851,6 +1851,7 @@ my_group_member_center:
 my_group_member_join:
     path:  /my/group/join
     defaults: { _controller: AppBundle:My/Group:memberJoin}
+
 my_group_member_threads:
     path:  /my/group/threads
     defaults: { _controller: AppBundle:My/Group:memberThreads}
