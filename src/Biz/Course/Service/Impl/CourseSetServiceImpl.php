@@ -5,6 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Content\Service\FileService;
@@ -360,12 +361,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!empty($fields['tags'])) {
             $fields['tags'] = explode(',', $fields['tags']);
             $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
-            array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int) $item['id'];
-            });
+            $fields['tags'] = ArrayToolkit::column($fields['tags'], 'id');
         }
+
+        $fields = array_filter($fields);
+
         $this->updateCourseSerializeMode($courseSet, $fields);
-        return $this->getCourseSetDao()->update($courseSet['id'], $fields);
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
+
+        $this->dispatchEvent('course-set.update', new Event($courseSet));
+        return $courseSet;
     }
 
     protected function updateCourseSerializeMode($courseSet, $fields)
