@@ -39,7 +39,7 @@
   {% set url = url('course_task_show', {courseId: task.courseId, id: task.id}) %}
   {% set title = task.title %}
   {% set summary = '' %}
-  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('我正在学习《%coruse%》，收获巨大哦，一起来学习吧！')|trans({'%course%': task.title}) %}
+  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('我正在学习《%course%》，收获巨大哦，一起来学习吧！')|trans({'%course%': task.title}) %}
   {% set picture = '' %}
   {% set id = task.id%}
 {% endif %}
