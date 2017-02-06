@@ -195,7 +195,7 @@ class ClassroomMemberImporter extends Importer
             }
 
             foreach ($fieldSort as $sort) {
-                $userData[$sort['fieldName']] = $columnsData[$sort['num']];
+                $userData[$sort['fieldName']] = trim($columnsData[$sort['num']]);
                 $fieldCol[$sort['fieldName']] = $sort['num'] + 1;
             }
 
@@ -395,7 +395,7 @@ class ClassroomMemberImporter extends Importer
     {
         $classroomId = $request->query->get('classroomId');
         $classroom   = $this->getClassroomService()->getClassroom($classroomId);
-        return $this->render('ClassroomBundle:ClassroomManage:import.html.twig', array(
+        return $this->render('classroom-manage/import.html.twig', array(
             'classroom'    => $classroom,
             'importerType' => $this->type
         ));
@@ -430,7 +430,7 @@ class ClassroomMemberImporter extends Importer
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getNotificationService()

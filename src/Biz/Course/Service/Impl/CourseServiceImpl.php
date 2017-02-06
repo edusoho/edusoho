@@ -428,9 +428,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException("Unauthorized");
         }
-
+        //var_dump($courseId);
         $course = $this->getCourseDao()->get($courseId);
-
+        //var_dump($course);exit;
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }

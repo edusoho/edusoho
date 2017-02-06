@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Course;
 
 use Topxia\Common\Paginator;
+use Topxia\Common\ExportHelp;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -15,6 +16,7 @@ use Biz\User\Service\UserFieldService;
 use Biz\Task\Service\TaskResultService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
+use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,20 +29,8 @@ class StudentManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $students  = $this->getCourseService()->findStudentsByCourseId($courseId);
-        $processes = array();
+        $processes = $this->calculateUserLearnProgress($course['id']);
 
-        if (!empty($students)) {
-            //分母只包括已发布的任务
-            $taskCount = $this->getTaskService()->countTasks(array('courseId' => $courseId, 'status' => 'published'));
-            if ($taskCount > 0) {
-                $userFinishedTasks = $this->getTaskResultService()->findFinishedTasksByCourseIdGroupByUserId($courseId);
-                if (!empty($userFinishedTasks)) {
-                    foreach ($userFinishedTasks as $task) {
-                        $processes[$task['userId']] = sprintf('%d', $task['taskCount'] / $taskCount * 100.0);
-                    }
-                }
-            }
-        }
         return $this->render('course-manage/student/index.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $course,
@@ -259,6 +249,157 @@ class StudentManageController extends BaseController
         $reportCard = $this->createReportCard($course, $user);
 
         return $this->render('course-manage/student/report-card.html.twig', $reportCard);
+    }
+
+    public function exportCsvAction(Request $request, $courseSetId, $courseId)
+    {
+        $fileName = sprintf("course-%s-students-(%s).csv", $courseId, date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
+    }
+
+    public function exportDatasAction(Request $request, $courseSetId, $courseId)
+    {
+        $courseSetting = $this->getSettingService()->get('course', array());
+        if (!$this->hasAdminRole() || !empty($courseSetting['teacher_export_student'])) {
+            $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        }
+
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($title, $students, $courseMemberCount) = $this->getExportContent($courseId, $start, $limit, $exportAllowCount);
+
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request, 'course_students', $title);
+        }
+
+        $content = implode("\r\n", $students);
+        $file    = ExportHelp::saveToTempFile($request, $content, $file);
+
+        $status = ExportHelp::getNextMethod($start + $limit, $courseMemberCount);
+
+        return $this->createJsonResponse(
+            array(
+                'status'   => $status,
+                'fileName' => $file,
+                'start'    => $start + $limit
+            )
+        );
+    }
+
+    protected function getExportContent($id, $start, $limit, $exportAllowCount)
+    {
+        $gender = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
+
+        $userinfoFields = array();
+
+        $course = $this->getCourseService()->getCourse($id);
+
+        if (isset($courseSetting['userinfoFields'])) {
+            $userinfoFields = array_diff($courseSetting['userinfoFields'], array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin'));
+        }
+
+        $condition = array(
+            'courseId' => $course['id'],
+            'role'     => 'student'
+        );
+
+        $courseMemberCount = $this->getCourseMemberService()->countMembers($condition);
+
+        $courseMemberCount = ($courseMemberCount > $exportAllowCount) ? $exportAllowCount : $courseMemberCount;
+        if ($courseMemberCount < ($start + $limit + 1)) {
+            $limit = $courseMemberCount - $start;
+        }
+        $courseMembers = $this->getCourseMemberService()->searchMembers($condition, array('createdTime' => 'DESC'), $start, $limit);
+        $userFields    = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
+
+        $fields['weibo'] = $this->getServiceKernel()->trans('微博');
+
+        foreach ($userFields as $userField) {
+            $fields[$userField['fieldName']] = $userField['title'];
+        }
+
+        $userinfoFields = array_flip($userinfoFields);
+
+        $fields = array_intersect_key($fields, $userinfoFields);
+
+        if (empty($courseSetting['buy_fill_userinfo'])) {
+            $fields = array();
+        }
+
+        $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
+
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $users = ArrayToolkit::index($users, 'id');
+
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+        $profiles = ArrayToolkit::index($profiles, 'id');
+
+        $progresses = $this->calculateUserLearnProgress($course['id']);
+
+        $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
+
+        foreach ($fields as $key => $value) {
+            $str .= ",".$value;
+        }
+
+        $students = array();
+
+        foreach ($courseMembers as $courseMember) {
+            $member = "";
+            $member .= $users[$courseMember['userId']]['nickname'].",";
+            $member .= $users[$courseMember['userId']]['email'].",";
+            $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
+            $member .= isset($progresses[$courseMember['userId']]) ? $progresses[$courseMember['userId']].',' : '0,';
+            $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename']."," : "-".",";
+            $member .= $gender[$profiles[$courseMember['userId']]['gender']].",";
+            $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
+            $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job']."," : "-".",";
+            $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
+
+            foreach ($fields as $key => $value) {
+                $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key]."," : "-".",";
+            }
+
+            $students[] = $member;
+        };
+
+        return array($str, $students, $courseMemberCount);
+    }
+
+    protected function calculateUserLearnProgress($courseId)
+    {
+        $taskCount = $this->getTaskService()->count(array('courseId' => $courseId, 'status' => 'published'));
+
+        if (empty($taskCount)) {
+            return array();
+        }
+
+        $userFinishedTasks = $this->getTaskResultService()->findFinishedTasksByCourseIdGroupByUserId($courseId);
+
+        if (!$userFinishedTasks) {
+            return array();
+        }
+
+        $processes = array();
+        foreach ($userFinishedTasks as $task) {
+            $processes[$task['userId']] = sprintf('%d', $task['taskCount'] / $taskCount * 100.0);
+        }
+
+        return $processes;
+    }
+
+    protected function hasAdminRole()
+    {
+        $user = $this->getCurrentUser();
+        if (in_array('ROLE_ADMIN', $user['roles']) || in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
+            return true;
+        }
+
+        return false;
     }
 
     private function createReportCard($course, $user)
@@ -526,5 +667,10 @@ class StudentManageController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }
