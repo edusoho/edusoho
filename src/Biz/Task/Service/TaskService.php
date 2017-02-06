@@ -35,7 +35,7 @@ interface TaskService
     public function countTasks($conditions);
 
     /**
-     * @param  array   $ids
+     * @param  array $ids
      * @return array
      */
     public function findTasksByIds(array $ids);
@@ -151,10 +151,17 @@ interface TaskService
      */
     public function findToLearnTasksByCourseId($courseId);
 
+    /**
+     * 侧边栏的任务中心不区分课程类型
+     * @param $courseId
+     * @return mixed
+     */
+    public function findToLearnTasksByCourseIdForMisson($courseId);
+
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 
     /**
-    * 获得课程的总学习时间
-    */ 
+     * 获得课程的总学习时间
+     */
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
 }

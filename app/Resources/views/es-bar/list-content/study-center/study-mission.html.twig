@@ -59,18 +59,29 @@
       <div class="bar-task-header">
         <div class="title">
           {{'课程:%title%'|trans({'%title%': course.title}) }}
-          <span>{{ course.learnedLessonNum ~ '/' ~ course.allLessonNum }}</span>
+          <span>{{ course.finishTaskNum ~ '/' ~ course.taskNum }}</span>
         </div>
       </div>
 
       <ul class="bar-time-line">
-        {% if course['lessons'] %}
-          {% for lesson in course['lessons'] %}
-            {% set status = lesson.isLearned %}
-            {% if status %}
-              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_task_show', {courseId:lesson.courseId, id:lesson.id}) }}" title="{{ lesson.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': lesson.number,'%title%': lesson.title}) }}</a></li>
-            {% else %}
-              <li><span class="es-icon es-icon-undone"></span><a class="link-light" href="{{ path('course_task_show', {courseId:lesson.courseId, id:lesson.id})  }}" title="{{ lesson.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': lesson.number,'%title%': lesson.title}) }}</a></li>
+        {% if course['tasks'] %}
+          {% for task in course['tasks'] %}
+            {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+            <li><span class="es-icon
+            {% if task_lock %}
+            es-icon-lock
+            {% elseif  not task.result|default(null) %}
+            es-icon-undone-check
+            {% elseif task.result.status == 'start' %}
+            es-icon-doing
+            {% elseif task.result.status == 'finish' %}
+            es-icon-iccheckcircleblack24px
+            {% endif %}
+            left-menu"></span>
+            {% if task_lock is empty%}
+              <a class="link-light" href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}" title="{{ task.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</a></li>
+            {% else  %}
+             {{'课时%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</li>
             {% endif %}
           {% endfor %}
         {% endif %}
