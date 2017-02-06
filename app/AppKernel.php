@@ -154,7 +154,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $currentUser->fromArray(array(
                 'id'        => 0,
                 'nickname'  => '游客',
-                'currentIp' => $this->request->getClientIp(),
+                'currentIp' => $this->request->getClientIp() ? : '127.0.0.1',
                 'roles'     => array()
             ));
 
