@@ -3,6 +3,8 @@ namespace AppBundle\Controller\EsBar;
 
 
 use AppBundle\Controller\BaseController;
+use Biz\Task\Service\TaskService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 
@@ -125,44 +127,31 @@ class EsBarController extends BaseController
             throw $this->createAccessDeniedException('用户没有登录,不能查看!');
         }
 
-        $homeworkResults  = array();
-        $testPaperResults = array();
-        $courses          = array();
-        $lessons          = array();
-
-        if ($this->isPluginInstalled('Homework')) {
-            $conditions        = array(
-                'status' => $status,
-                'userId' => $user->id
-            );
-            $homeworkResults   = $this->getHomeworkService()->searchResults(
-                $conditions,
-                array('updatedTime' => 'DESC'),
-                0,
-                10
-            );
-            $homeworkCourseIds = ArrayToolkit::column($homeworkResults, 'courseId');
-            $homeworkLessonIds = ArrayToolkit::column($homeworkResults, 'lessonId');
-            $courses           = $this->getCourseService()->findCoursesByIds($homeworkCourseIds);
-            $lessons           = $this->getCourseService()->findLessonsByIds($homeworkLessonIds);
-        }
-
-        $testPaperConditions = array(
+        $conditions      = array(
             'status' => $status,
-            'userId' => $user->id
+            'userId' => $user['id'],
+            'type'   => 'homework'
         );
+        $sort            = array('updateTime' => 'DESC');
+        $homeworkResults = $this->getTestpaperService()->searchTestpaperResults($conditions, $sort, 0, 10);
+        $courseIds       = ArrayToolkit::column($homeworkResults, 'courseId');
+        $taskIds         = ArrayToolkit::column($homeworkResults, 'lessonId');
+        $courses         = $this->getCourseService()->findCoursesByIds($courseIds);
+        $tasks           = $this->getTaskService()->findTasksByIds($taskIds);
 
-        $testPaperResults = $this->getTestpaperService()->searchTestpaperResults(
-            $testPaperConditions,
-            array('endTime' => 'DESC'),
-            0,
-            10
+        $conditions = array(
+            'status' => $status,
+            'userId' => $user['id'],
+            'type'   => 'testpater'
         );
+        $sort       = array('endTime' => 'DESC');
+
+        $testPaperResults = $this->getTestpaperService()->searchTestpaperResults($conditions, $sort, 0, 10);
 
         return $this->render('es-bar/list-content/practice/practice.html.twig', array(
             'testPaperResults' => $testPaperResults,
             'courses'          => $courses,
-            'lessons'          => $lessons,
+            'tasks'            => $tasks,
             'homeworkResults'  => $homeworkResults,
             'status'           => $status
         ));
@@ -183,12 +172,9 @@ class EsBarController extends BaseController
         return $this->getBiz()->service('User:NotificationService');
     }
 
-    // @TODO
-    protected function getHomeworkService()
-    {
-        return $this->getBiz()->service('Homework:Homework.HomeworkService');
-    }
-
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
@@ -197,5 +183,13 @@ class EsBarController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 }
