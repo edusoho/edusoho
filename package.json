@@ -16,7 +16,7 @@
     "babel-preset-es2015": "6.9.0",
     "babel-preset-react": "6.11.1",
     "babel-runtime": "6.20.0",
-    "es-webpack-engine": "latest",
+    "es-webpack-engine": "2.3.1",
     "nodemon": "1.11.0",
     "webpack": "1.14.0"
   },
@@ -68,7 +68,7 @@
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "NODE_ENV=development nodemon ./app/Resources/webpack/webpack.dev.js --exec babel-node --max_old_space_size=4096",
+    "dev": "babel-node  ./app/Resources/webpack/chokidar-watch.js && NODE_ENV=development nodemon ./app/Resources/webpack/webpack.dev.js --exec babel-node --max_old_space_size=4096",
     "compile": "NODE_ENV=production babel-node --max_old_space_size=4096 ./node_modules/.bin/webpack --progress --config ./app/Resources/webpack/webpack.js",
     "compile:debug": "npm run compile -- --debugMode=true",
     "lint": "eslint src",
