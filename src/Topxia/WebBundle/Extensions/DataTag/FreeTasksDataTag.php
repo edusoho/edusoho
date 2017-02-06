@@ -2,9 +2,9 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
+use Biz\Task\Service\TaskService;
 
-class FreeLessonsDataTag extends BaseDataTag implements DataTag  
+class FreeTasksDataTag extends BaseDataTag implements DataTag
 {
 
     /**
@@ -23,12 +23,15 @@ class FreeLessonsDataTag extends BaseDataTag implements DataTag
             $arguments['count'] = 4;
         }   
 
-        return $this->getCourseService()->searchLessons(array('free' => 1), array('createdTime', 'DESC'), 0, $arguments['count']);
+        return $this->getTaskService()->searchTasks(array('isFree' => 1), array('createdTime'=> 'DESC'), 0, $arguments['count']);
     }
 
-    private function getCourseService()
+    /**
+     * @return TaskService
+     */
+    private function getTaskService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 
 }

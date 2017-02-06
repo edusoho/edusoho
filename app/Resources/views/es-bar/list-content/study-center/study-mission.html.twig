@@ -1,0 +1,90 @@
+<div class="text-line gray small">
+  <h5><span>{{'学习任务'|trans}}</span></h5>
+  <div class="line"></div>
+</div>
+
+{% if app.user.id|default(0) %}
+  {% set classrooms = data('ClassroomMissions',{userId:app.user.id, count:5, missionCount:3}) %}
+  {% set courses = data('CourseMissions',{userId:app.user.id, count:5, missionCount:3}) %}
+{% endif %}
+
+{% if classrooms|default(false) or courses|default(false) %}
+  {% for classroom in classrooms if classrooms %}
+    <div class="bar-task">
+      <div class="bar-task-header">
+        <div class="title">
+          
+          {{ setting('classroom.name')|default('班级'|trans) }}:{{ classroom.title }}
+          
+          {% if classroomPlan|default(null) and classroomPlan.status == 'published' and userPlanTaskNumInfo|default(null) %}
+            <span>{{ userPlanTaskNumInfo.allDoneNum ~ '/' ~ userPlanTaskNumInfo.tasksNum }}</span>
+          {% else %}
+            <span>{{ classroom.learnedTaskNum ~ '/' ~ classroom.allTaskNum }}</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <ul class="bar-time-line">
+        {% if classroomPlan|default(null) and classroomPlan.status == 'published' and userPlanTaskNumInfo %}
+          {% set tasks = data('TodayUserTasks',{'userId':app.user.id, 'taskType':'studyplan', 'batchId':classroomPlan.id, 'count':4}) %}
+        {% endif %}
+
+        {% if tasks|default(null) %}
+          {% for task in tasks %}
+            {% if task.targetType == 'homework' %}
+              <li><span class="es-icon es-icon-undone"></span><a class="link-light {% if task.timeStatus == 'behind' %}text-danger{% endif %}" href="{{ path('course_homework_start_do', {courseId:task.meta.courseId,homeworkId:task.targetId}) }}" title="{{ task.title}}" target="_blank">{{ task.title }}</a></li>
+            {% else %}
+              <li><span class="es-icon es-icon-undone"></span><a class="link-light {% if task.timeStatus == 'behind' %}text-danger{% endif %}" href="{{ path('course_task_show', {courseId:task.meta.courseId, id:task.targetId}) }}" title="{{ task.title}}" target="_blank">{{ task.title }}</a></li>
+            {% endif %}
+          {% endfor %}
+        {% elseif classroom['tasks'] %}
+          {% for task in classroom['tasks'] %}
+            {% set status = task.isLearned %}
+            {% if status %}
+              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}" title="{{ task.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</a></li>
+            {% else %}
+              <li><span class="es-icon es-icon-undone"></span><a class="link-light" href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}" title="{{ task.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</a></li>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+  {% endfor %}
+  {% for course in courses if courses %}
+    <div class="bar-task">
+      <div class="bar-task-header">
+        <div class="title">
+          {{'课程:%title%'|trans({'%title%': course.title}) }}
+          <span>{{ course.finishTaskNum ~ '/' ~ course.taskNum }}</span>
+        </div>
+      </div>
+
+      <ul class="bar-time-line">
+        {% if course['tasks'] %}
+          {% for task in course['tasks'] %}
+            {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+            <li><span class="es-icon
+            {% if task_lock %}
+            es-icon-lock
+            {% elseif  not task.result|default(null) %}
+            es-icon-undone-check
+            {% elseif task.result.status == 'start' %}
+            es-icon-doing
+            {% elseif task.result.status == 'finish' %}
+            es-icon-iccheckcircleblack24px
+            {% endif %}
+            left-menu"></span>
+            {% if task_lock is empty%}
+              <a class="link-light" href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}" title="{{ task.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</a></li>
+            {% else  %}
+             {{'课时%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</li>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+  {% endfor %}
+{% else %}
+  <span class=""></span>{{'暂未发现还有未学习课时。'|trans}}<a href="{{ path('course_set_explore') }}">{{'去逛逛'|trans}}>></a>
+
+{% endif %}

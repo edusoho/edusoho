@@ -31,7 +31,7 @@ class StudentManageController extends BaseController
 
         if (!empty($students)) {
             //分母只包括已发布的任务
-            $taskCount = $this->getTaskService()->count(array('courseId' => $courseId, 'status' => 'published'));
+            $taskCount = $this->getTaskService()->countTasks(array('courseId' => $courseId, 'status' => 'published'));
             if ($taskCount > 0) {
                 $userFinishedTasks = $this->getTaskResultService()->findFinishedTasksByCourseIdGroupByUserId($courseId);
                 if (!empty($userFinishedTasks)) {

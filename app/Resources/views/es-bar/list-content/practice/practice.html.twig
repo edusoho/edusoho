@@ -35,14 +35,12 @@
   {% set homeworkCount = 10 %}
   {% for homeworkResult in homeworkResults %}
     {% set homeworkCount = loop.length %}
-    {% set lesson = lessons[homeworkResult.lessonId] %}
+    {% set task = tasks[homeworkResult.lessonId] %}
     {% set course = courses[homeworkResult.courseId] %}
-    {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ lesson.id %}
     <li>
       <i class="es-icon es-icon-chevronright"></i>
       <a target="_blank" class="link-light" href="{{ path('course_homework_result', {courseId:course.id, homeworkId:homeworkResult.homeworkId, resultId:homeworkResult.id, userId:app.user.id}) }}">
-      
-        {{'%title%第%number%课时'|trans({'%title%': '《' ~ course.title ~ '》','%number%': lesson.number}) }}
+        {{'%title%第%number%课时'|trans({'%title%': '《' ~ course.title ~ '》','%number%': task.number}) }}
       </a>
     </li>
   {% endfor %}
