@@ -22,9 +22,9 @@ admin_user_statistic:
     defaults: { _controller: AppBundle:Admin/Default:userStatistic }
     permissions: [admin]
 
-admin_lesson_learn_statistic:
-    path: /lesson/learn/statistic/{period}
-    defaults: { _controller: AppBundle:Admin/Default:lessonLearnStatistic }
+admin_task_learn_statistic:
+    path: /task/learn/statistic/{period}
+    defaults: { _controller: AppBundle:Admin/Default:taskLearnStatistic }
     permissions: [admin]
 
 admin_study_statistic:

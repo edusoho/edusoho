@@ -241,18 +241,14 @@ class DefaultController extends BaseController
         return $this->createJsonResponse($userAnalysis);
     }
 
-    public function lessonLearnStatisticAction(Request $request, $period)
+    public function taskLearnStatisticAction(Request $request, $period)
     {
         $days   = $this->getDaysDiff($period);
         $series = array();
-
         $timeRange                     = $this->getTimeRange($period);
-        $finishedLessonData            = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
-        $series['finishedLessonCount'] = $finishedLessonData;
-
-        $LessonLearnAnalysis = EchartsBuilder::createBarDefaultData($days, 'Y/m/d', $series);
-
-        return $this->createJsonResponse($LessonLearnAnalysis);
+        $finishedTaskData = $this->getTaskResultService()->analysisTaskFinishedDataByTime($timeRange);
+        $series['finishedTaskCount'] = $finishedTaskData;
+        return $this->createJsonResponse(EchartsBuilder::createBarDefaultData($days, 'Y/m/d', $series));
     }
 
     /**
@@ -595,6 +591,11 @@ class DefaultController extends BaseController
     protected function getVipService()
     {
         return $this->createService('Vip:Vip.VipService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     protected function isPluginInstalled($name)

@@ -33,36 +33,6 @@
       <h3 class="panel-title">
         {{ '今日数据'|trans }} 
         <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-today-data-popover"></span>
-        <div class="popover-content hidden">
-          <div class="popover-item">
-            <div class="title">{{ '登录用户'|trans }}</div>
-            <div class="content">{{ '15分钟内活动的登录用户'|trans }}</div>
-          </div>
-          <div class="popover-item">
-            <div class="title">{{ '在线总数'|trans }}</div>
-            <div class="content">{{ '15分钟内活动用户数，包括登录用户及未登录用户'|trans }}</div>
-          </div>
-          <div class="popover-item">
-            <div class="title">{{ '新增注册'|trans }}</div>
-            <div class="content">{{ '平台新增用户数，包括自主注册、第三方注册及导入'|trans }}</div>
-          </div>
-          <div class="popover-item">
-            <div class="title">{{ '新增学员人次'|trans }}</div>
-            <div class="content">{{ '今日加入课程和班级的总人次，1个学员加入2个课程，算2人次'|trans }}</div>
-          </div>
-          <div class="popover-item">
-            <div class="title">{{ '新增会员'|trans }}</div>
-            <div class="content">{{ '今日购买会员的人数'|trans }}</div>
-          </div>
-          <div class="popover-item">
-            <div class="title">{{ '未回复问答'|trans }}</div>
-            <div class="content">{{ '今日新产生问题中未回答的数量'|trans }}</div>
-          </div>
-          <div class="popover-item">
-            <div class="title">{{ '未回复总数'|trans }}</div>
-            <div class="content">{{ '到目前为止，未回答问题总数'|trans }}</div>
-          </div>
-        </div>
       </h3>
 
     </div>
@@ -176,15 +146,15 @@
           <div class="pull-right">
             <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
             <div class="btn-group btn-group-xs">
-              <button type="button" class="btn btn-primary js-lesson-switch-button"
+              <button type="button" class="btn btn-primary js-task-switch-button"
                       data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_lesson_learn_statistic', {period: 'week'}) }}">{{ '最近7天'|trans }}</button>
-              <button type="button" class="btn btn-default js-lesson-switch-button"
+                      data-url="{{ path('admin_task_learn_statistic', {period: 'week'}) }}">{{ '最近7天'|trans }}</button>
+              <button type="button" class="btn btn-default js-task-switch-button"
                       data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_lesson_learn_statistic', {period: 'month'}) }}">{{ '最近30天'|trans }}</button>
+                      data-url="{{ path('admin_task_learn_statistic', {period: 'month'}) }}">{{ '最近30天'|trans }}</button>
             </div>
           </div>
-          <h3 class="panel-title">{{ '课时完成数'|trans }}
+          <h3 class="panel-title">{{ '任务完成数'|trans }}
             <span data-toggle="popover"
                   class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
             <div class="popover-content hidden">
@@ -194,8 +164,8 @@
             </div>
           </h3>
         </div>
-        <div class="panel-body js-statistic-areas" id="study-lesson-count-statistic"
-             data-url="{{ path('admin_lesson_learn_statistic', {period: 'week'}) }}" style="height:360px;">
+        <div class="panel-body js-statistic-areas" id="study-task-count-statistic"
+             data-url="{{ path('admin_task_learn_statistic', {period: 'week'}) }}" style="height:360px;">
 
         </div>
       </div>
