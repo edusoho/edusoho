@@ -1,4 +1,4 @@
-import {closeCourse, deleteCourse, publishCourse, showSettings, deleteTask, publishTask, unpublishTask} from './help';
+import {closeCourse, deleteCourse, showSettings, deleteTask, publishTask, unpublishTask} from './help';
 import sortable from 'common/sortable';
 import 'store';
 import {generateReplay} from './help';
@@ -19,7 +19,6 @@ if(!store.get(COURSE_FUNCTION_REMASK)) {
 generateReplay();
 closeCourse();
 deleteCourse(store);
-publishCourse();
 deleteTask();
 publishTask();
 unpublishTask();
