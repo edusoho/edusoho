@@ -977,7 +977,7 @@ class ClassroomController extends BaseController
      */
     protected function getLevelService()
     {
-        return $this->createService('Vip:Vip.LevelService');
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     /**
@@ -985,7 +985,7 @@ class ClassroomController extends BaseController
      */
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip.VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     /**

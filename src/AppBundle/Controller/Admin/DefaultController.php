@@ -594,7 +594,7 @@ class DefaultController extends BaseController
      */
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip.VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     protected function isPluginInstalled($name)
