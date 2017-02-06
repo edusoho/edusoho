@@ -35,7 +35,7 @@ class TemplateToolkit
         }
     }
 
-    protected static function getEffectEmailResetPassword($options)
+    private static function getEffectEmailResetPassword($options)
     {
         $arguments = array(
             '%nickname%' => $options['params']['nickname'],
@@ -47,7 +47,7 @@ class TemplateToolkit
         );
     }
 
-    protected static function getEmailResetPassword($options)
+    private static function getEmailResetPassword($options)
     {
         $arguments = array(
             '%nickname%' => $options['params']['nickname'],
@@ -59,7 +59,7 @@ class TemplateToolkit
         );
     }
 
-    protected static function getEmailSystemSelfTest($options)
+    private static function getEmailSystemSelfTest($options)
     {
         $arguments = array(
             '%sitename%' => self::getSiteName()
@@ -70,7 +70,7 @@ class TemplateToolkit
         );
     }
 
-    protected static  function getEmailRegistration($options)
+    private static function getEmailRegistration($options)
     {
         $emailTitle        = self::setting('auth.email_activation_title', self::trans('请激活你的帐号 完成注册'));
         $emailBody         = self::setting('auth.email_activation_body', self::trans(' 验证邮箱内容'));
@@ -87,7 +87,7 @@ class TemplateToolkit
         );
     }
 
-    protected static function getEmailResetEmail($options)
+    private static function getEmailResetEmail($options)
     {
         $arguments = array(
             '%nickname%' => $options['params']['nickname'],
@@ -100,7 +100,7 @@ class TemplateToolkit
         );
     }
 
-    protected static function getEmailVerifyEmail($options)
+    private static function getEmailVerifyEmail($options)
     {
         $arguments = array(
             '%nickname%' => $options['params']['nickname'],
@@ -113,12 +113,12 @@ class TemplateToolkit
         );
     }
 
-    protected static function getSiteName()
+    private static function getSiteName()
     {
         return self::setting('site.name', 'EDUSOHO');
     }
 
-    protected static function setting($name, $default = '')
+    private static function setting($name, $default = '')
     {
         return SettingToolkit::getSetting($name, $default);
     }
@@ -130,12 +130,12 @@ class TemplateToolkit
         return  $twig->render($view, $params);
     }
 
-    protected static function trans($message, $arguments = array())
+    private static function trans($message, $arguments = array())
     {
         return self::getKernel()->trans($message, $arguments);
     }
 
-    protected static function getKernel()
+    private static function getKernel()
     {
         return ServiceKernel::instance();
     }
