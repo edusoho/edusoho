@@ -311,7 +311,7 @@ class CashServiceTest extends BaseTestCase
      */
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     /**
@@ -319,7 +319,7 @@ class CashServiceTest extends BaseTestCase
      */
     protected function getCashAccountService()
     {
-        return $this->getBiz()->service('Cash:CashAccountService');
+        return $this->createService('Cash:CashAccountService');
     }
 
     /**
@@ -327,7 +327,7 @@ class CashServiceTest extends BaseTestCase
      */
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -335,6 +335,6 @@ class CashServiceTest extends BaseTestCase
      */
     protected function getCashService()
     {
-        return $this->getBiz()->service('Cash:CashService');
+        return $this->createService('Cash:CashService');
     }
 }

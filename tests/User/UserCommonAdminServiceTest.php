@@ -101,11 +101,11 @@ class UserCommonAdminServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getUserCommonAdminService()
     {
-        return $this->getBiz()->service('User:UserCommonAdminService');
+        return $this->createService('User:UserCommonAdminService');
     }
 }

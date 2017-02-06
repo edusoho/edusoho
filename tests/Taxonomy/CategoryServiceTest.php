@@ -268,6 +268,6 @@ class CategoryServiceTest extends BaseTestCase
      */
     protected function getCategoryService()
     {
-        return $this->getBiz()->service('Taxonomy:CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 }

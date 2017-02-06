@@ -445,6 +445,6 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
     private function getCourseDao()
     {
-        return $this->getBiz()->dao('Course:CourseDao');
+        return $this->createDao('Course:CourseDao');
     }
 }

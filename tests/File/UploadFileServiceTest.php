@@ -27,7 +27,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao', $params);
+        $this->mockBiz('File:UploadFileDao', $params);
 
         $params = array(
             array(
@@ -47,7 +47,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:CloudFileImplementor', 'CloudFileImplementor',$params);
+        $this->mockBiz('File:CloudFileImplementor', $params);
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
@@ -77,7 +77,7 @@ class UploadFileServiceTest extends BaseTestCase
             )
         );
 
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao',$params);
+        $this->mockBiz('File:UploadFileDao', $params);
 
 
         $params = array(
@@ -98,7 +98,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:CloudFileImplementor', 'CloudFileImplementor',$params);
+        $this->mockBiz('File:CloudFileImplementor', $params);
 
         $file = $this->getUploadFileService()->getFullFile($fileId);
 
@@ -126,7 +126,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             ),
         );
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao',$params);
+        $this->mockBiz('File:UploadFileDao', $params);
 
 
         $params = array(
@@ -143,7 +143,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:CloudFileImplementor', 'CloudFileImplementor',$params);
+        $this->mockBiz('File:CloudFileImplementor', $params);
 
 
         $params = array(
@@ -160,7 +160,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:LocalFileImplementor', 'LocalFileImplementor',$params);
+        $this->mockBiz('File:LocalFileImplementor', $params);
 
         $params = array(
             array(
@@ -176,7 +176,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:CloudFileImplementor', 'CloudFileImplementor',$params);
+        $this->mockBiz('File:CloudFileImplementor', $params);
 
         $globalId  = '65d474f089074fa0810d1f2f146fd218';
         $cloudFile = $this->getUploadFileService()->getFileByGlobalId($globalId);
@@ -207,7 +207,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao',$params);
+        $this->mockBiz('File:UploadFileDao', $params);
 
 
         $params = array(
@@ -232,7 +232,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:CloudFileImplementor', 'CloudFileImplementor',$params);
+        $this->mockBiz('File:CloudFileImplementor', $params);
 
         $file = $this->getUploadFileService()->getFileByHashId($hashId);
         $this->assertEquals($file['hashId'], $hashId);
@@ -261,7 +261,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao',$params);
+        $this->mockBiz('File:UploadFileDao', $params);
         $file = $this->getUploadFileService()->getFileByConvertHash($hash);
 
         $this->assertEquals($file['convertHash'], $hash);
@@ -301,7 +301,7 @@ class UploadFileServiceTest extends BaseTestCase
             )
         );
 
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao', $params);
+        $this->mockBiz('File:UploadFileDao', $params);
 
         $files = $this->getUploadFileService()->findFilesByIds($ids, false);
 
@@ -358,7 +358,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao',$params);
+        $this->mockBiz('File:UploadFileDao', $params);
 
         $params = array(
             array(
@@ -385,7 +385,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:UploadFileShareDao', 'UploadFileShareDao',$params);
+        $this->mockBiz('File:UploadFileShareDao', $params);
 
         $files = $this->getUploadFileService()->searchFiles($conditions, $orderBy, $start, $limit);
         $this->assertEquals($files[0]['id'], 1);
@@ -428,7 +428,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:UploadFileShareDao', 'UploadFileShareDao',$params);
+        $this->mockBiz('File:UploadFileShareDao', $params);
 
 
         $params = array(
@@ -454,7 +454,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:UploadFileCollectDao', 'UploadFileCollectDao',$params);
+        $this->mockBiz('File:UploadFileCollectDao', $params);
 
 
         $params = array(
@@ -465,7 +465,7 @@ class UploadFileServiceTest extends BaseTestCase
                 'returnValue'  => 2
             )
         );
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao', $params);
+        $this->mockBiz('File:UploadFileDao', $params);
         $count = $this->getUploadFileService()->searchFileCount($conditions);
         $this->assertEquals($count, 2);
 
@@ -491,7 +491,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao', $params);
+        $this->mockBiz('File:UploadFileDao', $params);
 
         $params = array(
             array(
@@ -511,7 +511,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:LocalFileImplementor', 'LocalFileImplementor', $params);
+        $this->mockBiz('File:LocalFileImplementor', $params);
         $file = $this->getUploadFileService()->addFile('materiallib', 1);
         $this->assertEquals($file['id'], 1);
 
@@ -557,7 +557,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao', $params);
+        $this->mockBiz('File:UploadFileDao', $params);
 
         $file = $this->getUploadFileService()->renameFile($id, $newFileName);
         $this->assertEquals($file['filename'], 'test2');
@@ -594,7 +594,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao', $params);
+        $this->mockBiz('File:UploadFileDao', $params);
 
         $params = array(
             array(
@@ -625,7 +625,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:CloudFileImplementor', 'CloudFileImplementor', $params);
+        $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->deleteFile($id);
         $this->assertEquals($result, true);
@@ -781,7 +781,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:UploadFileDao', 'UploadFileDao', $params);
+        $this->mockBiz('File:UploadFileDao', $params);
 
 
         $params = array(
@@ -802,7 +802,7 @@ class UploadFileServiceTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('File:LocalFileImplementor', 'LocalFileImplementor', $params);
+        $this->mockBiz('File:LocalFileImplementor', $params);
 
         $file = $this->getUploadFileService()->addFile('materiallib', 1);
 
@@ -831,7 +831,7 @@ class UploadFileServiceTest extends BaseTestCase
      */
     protected function getUploadFileService()
     {
-        return $this->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     /**
@@ -839,7 +839,7 @@ class UploadFileServiceTest extends BaseTestCase
      */
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
 }

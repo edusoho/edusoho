@@ -128,16 +128,16 @@ class ThemeServiceTest extends BaseTestCase
 
     protected function getThemeService()
     {
-        return $this->getBiz()->service('Theme:ThemeService');
+        return $this->createService('Theme:ThemeService');
     }
 
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

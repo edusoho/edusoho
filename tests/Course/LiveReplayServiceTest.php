@@ -214,6 +214,6 @@ class LiveReplayServiceTest extends BaseTestCase
 
     protected function getLiveReplayService()
     {
-        return ServiceKernel::instance()->createService('Course:LiveReplayService');
+        return $this->createService('Course:LiveReplayService');
     }
 }
