@@ -7,7 +7,7 @@ class CloudMail extends Mail
 {
     /**
      * @sourceFrom: 发送来源(默认不传，crm插件需传值)
-     * @sendedSn: 发送批次号(默认不传，crm传入批量发送的批次号)
+     * @sendedSn: 发送批次号(默认不传，crm传入发送的批次号)
      * @return bool
      */
     public function send()

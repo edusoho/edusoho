@@ -6,7 +6,7 @@ use Topxia\Service\Common\ServiceKernel;
 class MailFactory
 {
     /**
-     * @To Do $mailOptions
+     * @To Do fix cloud_email_crm
      *
      * @return CloudMail|NormalMail
      */
@@ -16,7 +16,7 @@ class MailFactory
 
         $cloudConfig = $setting->get('cloud_email_crm', array());
 
-        if (!empty($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
+        if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
             $mail = new CloudMail($mailOptions);
         } else {
             $mail = new NormalMail($mailOptions);

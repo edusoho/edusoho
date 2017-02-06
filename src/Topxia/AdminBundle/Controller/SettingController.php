@@ -395,6 +395,9 @@ class SettingController extends BaseController
         }
     }
 
+    /*
+     * 当前云邮件字段为cloud_email_crm
+     */
     protected function checkMailerStatus()
     {
         $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
