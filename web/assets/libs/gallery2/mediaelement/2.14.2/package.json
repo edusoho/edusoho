@@ -1,0 +1,36 @@
+{
+  "family": "gallery2",
+  "name": "mediaelement",
+  "version": "2.14.2",
+  "description": "HTML5 <audio> or <video> player with Flash and Silverlight shims that mimics the HTML5 MediaElement API, enabling a consistent UI in all browsers.",
+  "homepage": "http://mediaelementjs.com/",
+  "author": {
+    "name": "John Dyer"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johndyer/mediaelement.git"
+  },
+  "bugs": "https://github.com/johndyer/mediaelement/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ],
+  "keywords": ["mediaelement", "player", "video", "audio" ],
+  "spm": {
+    "output": [
+       "background.png",
+       "bigplay.png",
+       "bigplay.svg",
+       "controls.png",
+       "controls.svg",
+       "flashmediaelement.swf",
+       "loading.gif",
+       "mediaelement-and-player.js",
+       "mediaelementplayer.css",
+       "silverlightmediaelement.xap"
+     ]
+  }
+}

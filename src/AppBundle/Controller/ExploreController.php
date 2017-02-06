@@ -64,7 +64,7 @@ class ExploreController extends BaseController
 
             $tagIdsNum = count($conditions['tagIds']);
 
-            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course');
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course-set');
             $courseSetIds         = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
             $flag              = array_count_values($courseSetIds);
 

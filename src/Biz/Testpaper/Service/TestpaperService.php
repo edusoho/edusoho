@@ -15,6 +15,8 @@ interface TestpaperService
 
     public function findTestpapersByIds($ids);
 
+    public function getTestpaperByCopyIdAndCourseSetId($copyId, $courseSetId);
+
     public function searchTestpapers($conditions, $sort, $start, $limit);
 
     public function searchTestpaperCount($conditions);
@@ -40,6 +42,8 @@ interface TestpaperService
     public function getItemsCountByParams(array $conditions, $groupBy = '');
 
     public function findItemsByTestId($testpaperId);
+
+    public function findItemsByTestIds($testpaperIds);
 
     public function searchItems($conditions, $orderBy, $start, $limit);
 

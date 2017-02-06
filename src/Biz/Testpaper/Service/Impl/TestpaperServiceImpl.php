@@ -83,6 +83,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return true;
     }
 
+    public function getTestpaperByCopyIdAndCourseSetId($copyId, $courseSetId)
+    {
+        return $this->getTestpaperDao()->getTestpaperByCopyIdAndCourseSetId($copyId, $courseSetId);
+    }
+
     public function findTestpapersByIds($ids)
     {
         $testpapers = $this->getTestpaperDao()->findTestpapersByIds($ids);
@@ -152,6 +157,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $items = $this->getItemDao()->findItemsByTestId($testpaperId);
         return ArrayToolkit::index($items, 'questionId');
+    }
+
+    public function findItemsByTestIds($testpaperIds)
+    {
+        return $this->getItemDao()->findItemsByTestIds($testpaperIds);
     }
 
     public function searchItems($conditions, $orderBy, $start, $limit)

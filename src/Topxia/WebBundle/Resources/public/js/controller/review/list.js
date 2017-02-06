@@ -106,9 +106,11 @@ define(function(require, exports, module) {
             $review.find('.show-full-btn').show();
         });
   
-        var threadShowWidget = new ThreadShowWidget({
+        if(('.js-reviews').length>0) {
+          var threadShowWidget = new ThreadShowWidget({
             element: '.js-reviews',
-        });
+          });
+        }
       
         threadShowWidget.undelegateEvents('.js-toggle-subpost-form', 'click');
         $('.js-toggle-subpost-form').click(function(e){

@@ -153,3 +153,9 @@ services:
         arguments: ['@biz']
         tags:
             - { name: codeages_plugin.event.subscriber }
+
+    tag_course_set_event_subscriber:
+        class: Biz\Taxonomy\Event\CourseSetEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
