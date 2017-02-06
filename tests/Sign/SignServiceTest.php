@@ -98,7 +98,7 @@ class SignServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -106,6 +106,6 @@ class SignServiceTest extends BaseTestCase
      */
     protected function getSignService()
     {
-        return $this->getBiz()->service('Sign:SignService');
+        return $this->createService('Sign:SignService');
     }
 }

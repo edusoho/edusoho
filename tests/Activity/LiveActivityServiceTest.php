@@ -75,7 +75,7 @@ class LiveActivityServiceTest extends BaseTestCase
      */
     protected function getLiveActivityService()
     {
-        $service = $this->getBiz()->service('Activity:LiveActivityService');
+        $service = $this->createService('Activity:LiveActivityService');
         //mock client
         $class      = new \ReflectionClass(get_class($service));
         $clientProp = $class->getProperty('client');

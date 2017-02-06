@@ -568,22 +568,22 @@ class ThreadServiceTest extends BaseTestCase
 
     protected function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Thread:ThreadService');
+        return $this->createService('Thread:ThreadService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getArticleService()
     {
-        return $this->getServiceKernel()->createService('Article:ArticleService');
+        return $this->createService('Article:ArticleService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
 }

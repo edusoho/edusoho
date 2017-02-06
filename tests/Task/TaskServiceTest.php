@@ -203,7 +203,7 @@ class TaskServiceTest extends BaseTestCase
      */
     protected function getTaskService()
     {
-        return $this->getBiz()->service('Task:TaskService');
+        return $this->createService('Task:TaskService');
     }
 
     /**
@@ -211,7 +211,7 @@ class TaskServiceTest extends BaseTestCase
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -219,11 +219,11 @@ class TaskServiceTest extends BaseTestCase
      */
     protected function getTaskResultService()
     {
-        return $this->getBiz()->service('Task:TaskResultService');
+        return $this->createService('Task:TaskResultService');
     }
 
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
+        return $this->createService('Activity:ActivityLearnLogService');
     }
 }

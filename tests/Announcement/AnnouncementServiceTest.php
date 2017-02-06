@@ -120,7 +120,7 @@ class AnnouncementServiceTest extends BaseTestCase
      */
     protected function getAnnouncementService()
     {
-        return $this->getBiz()->service('Announcement:AnnouncementService');
+        return $this->createService('Announcement:AnnouncementService');
     }
 
 }

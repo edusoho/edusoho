@@ -263,37 +263,37 @@ class ClassroomOrderProcessorTest extends BaseTestCase
 
     protected function getClassroomService()
     {
-        return $this->getBiz()->service('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getCourseSetService()
     {
-        return $this->getBiz()->service('Course:CourseSetService');
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getCashAccountService()
     {
-        return $this->getBiz()->service('Cash:CashAccountService');
+        return $this->createService('Cash:CashAccountService');
     }
 
     protected function getClassroomOrderService()
     {
-        return $this->getBiz()->service('Classroom:ClassroomOrderService');
+        return $this->createService('Classroom:ClassroomOrderService');
     }
 
     private function createNormalUser()

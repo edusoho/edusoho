@@ -39,6 +39,6 @@ class FileServiceTest extends BaseTestCase
      */
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('Content:FileService');
+        return $this->createService('Content:FileService');
     }
 }
