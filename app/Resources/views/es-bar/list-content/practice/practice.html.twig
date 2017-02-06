@@ -37,7 +37,6 @@
     {% set homeworkCount = loop.length %}
     {% set task = tasks[homeworkResult.lessonId] %}
     {% set course = courses[homeworkResult.courseId] %}
-    {% set lessonUrl = path('course_task_show', {courseId:course.id, id:task.id})%}
     <li>
       <i class="es-icon es-icon-chevronright"></i>
       <a target="_blank" class="link-light" href="{{ path('course_homework_result', {courseId:course.id, homeworkId:homeworkResult.homeworkId, resultId:homeworkResult.id, userId:app.user.id}) }}">

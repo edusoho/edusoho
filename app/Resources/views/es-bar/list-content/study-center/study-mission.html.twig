@@ -10,10 +10,6 @@
 
 {% if classrooms|default(false) or courses|default(false) %}
   {% for classroom in classrooms if classrooms %}
-    {% if is_plugin_installed('ClassroomPlan') %}
-      {% set classroomPlan = data('GetClassroomPlanByClassroomId',{'classroomId':classroom.id})|default(null) %}
-      {% set userPlanTaskNumInfo = data('UserClassroomPlanTaskNumInfo',{'classroomId':classroom.id, 'userId':app.user.id})|default(null) %}
-    {% endif %}
     <div class="bar-task">
       <div class="bar-task-header">
         <div class="title">
@@ -23,7 +19,7 @@
           {% if classroomPlan|default(null) and classroomPlan.status == 'published' and userPlanTaskNumInfo|default(null) %}
             <span>{{ userPlanTaskNumInfo.allDoneNum ~ '/' ~ userPlanTaskNumInfo.tasksNum }}</span>
           {% else %}
-            <span>{{ classroom.learnedLessonNum ~ '/' ~ classroom.allLessonNum }}</span>
+            <span>{{ classroom.learnedTaskNum ~ '/' ~ classroom.allTaskNum }}</span>
           {% endif %}
         </div>
       </div>
@@ -41,13 +37,13 @@
               <li><span class="es-icon es-icon-undone"></span><a class="link-light {% if task.timeStatus == 'behind' %}text-danger{% endif %}" href="{{ path('course_task_show', {courseId:task.meta.courseId, id:task.targetId}) }}" title="{{ task.title}}" target="_blank">{{ task.title }}</a></li>
             {% endif %}
           {% endfor %}
-        {% elseif classroom['lessons'] %}
-          {% for lesson in classroom['lessons'] %}
-            {% set status = lesson.isLearned %}
+        {% elseif classroom['tasks'] %}
+          {% for task in classroom['tasks'] %}
+            {% set status = task.isLearned %}
             {% if status %}
-              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_task_show', {courseId:lesson.courseId, id:lesson.id}) }}" title="{{ lesson.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': lesson.number,'%title%': lesson.title}) }}</a></li>
+              <li><span class="es-icon es-icon-doing"></span><a class="link-light" href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}" title="{{ task.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</a></li>
             {% else %}
-              <li><span class="es-icon es-icon-undone"></span><a class="link-light" href="{{ path('course_task_show', {courseId:lesson.courseId, id:lesson.id}) }}" title="{{ lesson.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': lesson.number,'%title%': lesson.title}) }}</a></li>
+              <li><span class="es-icon es-icon-undone"></span><a class="link-light" href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}" title="{{ task.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</a></li>
             {% endif %}
           {% endfor %}
         {% endif %}

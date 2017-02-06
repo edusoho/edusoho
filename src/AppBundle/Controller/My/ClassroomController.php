@@ -7,6 +7,7 @@ namespace AppBundle\Controller\My;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskResultService;
 use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,11 +24,7 @@ class ClassroomController extends BaseController
         if (!$user->isTeacher()) {
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
-        // @TODO 班级改造再改动
-        return $this->render('my/teaching/classroom.html.twig', array(
-            'classrooms' => array(),
-            'members'    => array()
-        ));
+
 
         $classrooms   = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->getId()), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
         $classrooms   = array_merge($classrooms, $this->getClassroomService()->searchMembers(array('role' => 'assistant', 'userId' => $user->getId()), array('createdTime' => 'desc'), 0, PHP_INT_MAX));
@@ -53,13 +50,13 @@ class ClassroomController extends BaseController
 
             $todayTimeStart         = strtotime(date("Y-m-d", time()));
             $todayTimeEnd           = strtotime(date("Y-m-d", time() + 24 * 3600));
-            $todayFinishedLessonNum = 0; //$this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "finished"));
+            $todayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(array("courseIds" => $courseIds, "createdTime" => $todayTimeStart, "finishedTime" => $todayTimeEnd, "status" => "finish"));
 
             $threadCount = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $classroom['id'], 'type' => 'discussion', "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "open"));
 
             $classrooms[$key]['threadCount'] = $threadCount;
 
-            $classrooms[$key]['todayFinishedLessonNum'] = $todayFinishedLessonNum;
+            $classrooms[$key]['todayFinishedTaskNum'] = $todayFinishedTaskNum;
         }
 
         return $this->render('my/teaching/classroom.html.twig', array(
@@ -201,6 +198,13 @@ class ClassroomController extends BaseController
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected  function getTaskResultService(){
+        return $this->createService('Task:TaskResultService');
     }
 
 }

@@ -87,11 +87,11 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
                     $sort                 = array('seq' => 'ASC');
                     $notLearnedLessons    = $this->getTaskService()->searchTasks($notLearnedConditions, $sort, 0, $arguments['missionCount']);
 
-                    $classroomLessonNum = 0;
+                    $classroomTaskNum = 0;
 
                     foreach ($courses as $course) {
                         //迭代班级下课时总数
-                        $classroomLessonNum += $course['taskNum'];
+                        $classroomTaskNum += $course['taskNum'];
                     }
 
                     if (empty($notLearnedLessons)) {
@@ -105,9 +105,9 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
                             }
                         }
 
-                        $classroom['lessons']          = $notLearnedLessons;
-                        $classroom['learnedLessonNum'] = count($finishTaskIds);
-                        $classroom['allLessonNum']     = $classroomLessonNum;
+                        $classroom['tasks']          = $notLearnedLessons;
+                        $classroom['learnedTaskNum'] = count($finishTaskIds);
+                        $classroom['allTaskNum']     = $classroomTaskNum;
                     }
                 } else {
                     unset($sortedClassrooms[$key]);

@@ -5,7 +5,7 @@ namespace Topxia\WebBundle\Extensions\DataTag;
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
-class RecentLiveLessonsDataTag extends CourseBaseDataTag implements DataTag
+class RecentLiveTasksDataTag extends CourseBaseDataTag implements DataTag
 {
 
     /**
