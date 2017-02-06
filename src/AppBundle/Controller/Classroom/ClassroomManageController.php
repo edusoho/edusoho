@@ -806,11 +806,7 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         if ($request->getMethod() == 'POST') {
-            $courseIds = $request->request->get('courseIds');
-
-            if (empty($courseIds)) {
-                $courseIds = array();
-            }
+            $courseIds = $request->request->get('courseIds', array());
 
             $this->getClassroomService()->updateClassroomCourses($id, $courseIds);
 

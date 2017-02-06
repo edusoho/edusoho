@@ -347,8 +347,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function copyCourseSet($classroomId, $courseSetId, $courseId)
     {
-        $courseSet = $this->tryManageCourseSet($courseSetId);
-
+        //$courseSet = $this->tryManageCourseSet($courseSetId);
+        $courseSet  = $this->getCourseSet($courseSetId);
         $entityCopy = new ClassroomCourseCopy($this->biz);
         return $entityCopy->copy($courseSet, array('courseId' => $courseId, 'classroomId' => $classroomId));
     }

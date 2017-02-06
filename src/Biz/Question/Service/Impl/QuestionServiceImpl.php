@@ -121,6 +121,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->findQuestionsByParentId($id);
     }
 
+    public function findQuestionsByCourseSetId($courseSetId)
+    {
+        return $this->getQuestionDao()->findQuestionsByCourseSetId($courseSetId);
+    }
+
     public function search($conditions, $sort, $start, $limit)
     {
         $conditions = $this->filterQuestionFields($conditions);

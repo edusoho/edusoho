@@ -33,9 +33,11 @@ class Homework extends Activity
 
     public function copy($activity, $config = array())
     {
-        $ext = $this->get($activity['mediaId']);
+        $newActivity = $config['newActivity'];
 
-        return $this->getTestpaperCopy()->copy($activity, array('isCopy' => 1));
+        $newActivity['mediaId'] = $activity['mediaId'];
+
+        return $this->getTestpaperCopy()->copy($newActivity, array('isCopy' => 1));
     }
 
     public function update($targetId, &$fields, $activity)

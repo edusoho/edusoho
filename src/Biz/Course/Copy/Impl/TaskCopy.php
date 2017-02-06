@@ -146,7 +146,8 @@ class TaskCopy extends AbstractEntityCopy
 
                 $ext = $config->copy($activity, array(
                     'refLiveroom' => $activity['fromCourseSetId'] != $courseSetId,
-                    'testId'      => $testId
+                    'testId'      => $testId,
+                    'newActivity' => $newActivity
                 ));
                 if (!empty($ext)) {
                     $newActivity['mediaId'] = $ext['id'];

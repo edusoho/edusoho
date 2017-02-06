@@ -16,6 +16,26 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals($testpaper['type'], $findTestpaper['type']);
     }
 
+    public function testGetTestpaperByCopyIdAndCourseSetId()
+    {
+        $testpaper      = $this->createTestpaper1();
+        $copyTestpaper1 = $testpaper;
+        unset($copyTestpaper1['id']);
+        $copyTestpaper1['copyId']      = $testpaper['id'];
+        $copyTestpaper1['courseSetId'] = 2;
+        $copyTestpaper1                = $this->getTestpaperService()->createTestpaper($copyTestpaper1);
+
+        $copyTestpaper2 = $testpaper;
+        unset($copyTestpaper2['id']);
+        $copyTestpaper2['copyId']      = $testpaper['id'];
+        $copyTestpaper2['courseSetId'] = 3;
+        $copyTestpaper2                = $this->getTestpaperService()->createTestpaper($copyTestpaper2);
+
+        $copyTestpaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($testpaper['id'], 2);
+
+        $this->assertArrayEquals($copyTestpaper1, $copyTestpaper);
+    }
+
     public function testCreateTestpaper()
     {
         $testpaper = $this->createTestpaper1();
