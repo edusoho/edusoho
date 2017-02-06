@@ -13,7 +13,7 @@
             {% if userSumDetail %}
             {% for data in userSumDetail %}
               <tr>
-                <td>{{data.nickname}}</td>
+                <td>{{ admin_macro.user_link(data) }}</td>
                 <td>
                     {% if data.verifiedMobile %}
                     {{ data.verifiedMobile }}<span class="text-success">({{'已绑定'|trans}})</span>

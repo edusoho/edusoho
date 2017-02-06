@@ -137,15 +137,17 @@ class TaskCopy extends AbstractEntityCopy
                 }
 
                 $testId = 0;
-                if (in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
-                    $activityTestpaperCopy = new ActivityTestpaperCopy($this->biz);
-                    $testpaper             = $activityTestpaperCopy->copy($activity, array('isCopy' => $isCopy));
-                    $testId                = $testpaper['id'];
-                }
+                /*if (in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
+                $activityTestpaperCopy = new ActivityTestpaperCopy($this->biz);
+                $testpaper             = $activityTestpaperCopy->copy($activity, array('isCopy' => $isCopy));
+                $testId                = $testpaper['id'];
+                }*/
                 $config = $this->getActivityConfig($activity['mediaType']);
-                $ext    = $config->copy($activity, array(
+
+                $ext = $config->copy($activity, array(
                     'refLiveroom' => $activity['fromCourseSetId'] != $courseSetId,
-                    'testId'      => $testId
+                    'testId'      => $testId,
+                    'newActivity' => $newActivity
                 ));
                 if (!empty($ext)) {
                     $newActivity['mediaId'] = $ext['id'];

@@ -844,7 +844,22 @@ class CourseServiceImpl extends BaseService implements CourseService
             return true;
         }
 
+        if ($course['parentId'] > 0) {
+            $classrooms = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
+
+            $isTeacher     = $this->getClassroomService()->isClassroomTeacher($classrooms[0]['classroomId'], $user['id']);
+            $isHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classrooms[0]['classroomId'], $user['id']);
+            if ($isTeacher || $isHeadTeacher) {
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    public function analysisCourseDataByTime($startTime, $endTime)
+    {
+        return $this->getCourseDao()->analysisCourseDataByTime($startTime, $endTime);
     }
 
     protected function fillMembersWithUserInfo($members)
@@ -979,6 +994,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
+    public function countCourses(array $conditions)
+    {
+        return $this->getCourseDao()->count($conditions);
+    }
+
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
@@ -1097,5 +1117,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCourseDeleteService()
     {
         return $this->createService('Course:CourseDeleteService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

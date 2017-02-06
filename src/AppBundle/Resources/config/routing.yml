@@ -1715,10 +1715,6 @@ course_set_manage_course_tasks:
   path: /course_set/{courseSetId}/manage/course/{courseId}/tasks
   defaults: {_controller: AppBundle:Course/CourseManage:tasks}
 
-course_set_manage_course_replay:
-  path: /course_set/{courseSetId}/manage/course/{courseId}/replay
-  defaults: { _controller: AppBundle:Course/CourseManage:replay }
-
 course_set_manage_course_marketing:
   path: /course_set/{courseSetId}/manage/course/{courseId}/marketing
   defaults: {_controller: AppBundle:Course/CourseManage:marketing}
@@ -1855,6 +1851,7 @@ my_group_member_center:
 my_group_member_join:
     path:  /my/group/join
     defaults: { _controller: AppBundle:My/Group:memberJoin}
+
 my_group_member_threads:
     path:  /my/group/threads
     defaults: { _controller: AppBundle:My/Group:memberThreads}

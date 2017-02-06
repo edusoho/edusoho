@@ -64,22 +64,22 @@ class ExploreController extends BaseController
 
             $tagIdsNum = count($conditions['tagIds']);
 
-            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course');
-            $courseIds         = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
-            $flag              = array_count_values($courseIds);
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course-set');
+            $courseSetIds         = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+            $flag              = array_count_values($courseSetIds);
 
-            $courseIds = array_unique($courseIds);
+            $courseSetIds = array_unique($courseSetIds);
 
-            foreach ($courseIds as $key => $courseId) {
-                if ($flag[$courseId] != $tagIdsNum) {
-                    unset($courseIds[$key]);
+            foreach ($courseSetIds as $key => $setId) {
+                if ($flag[$setId] != $tagIdsNum) {
+                    unset($courseSetIds[$key]);
                 }
             }
 
-            if (empty($courseIds)) {
-                $conditions['courseIds'] = array(0);
+            if (empty($courseSetIds)) {
+                $conditions['ids'] = array(0);
             } else {
-                $conditions['courseIds'] = $courseIds;
+                $conditions['ids'] = $courseSetIds;
             }
 
             unset($conditions['tagIds']);

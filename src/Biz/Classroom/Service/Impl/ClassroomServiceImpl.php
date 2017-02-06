@@ -128,6 +128,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroom($classroomId['classroomId']);
     }
 
+    public function getClassroomCourseByCourseSetId($courseSetId)
+    {
+        return $this->getClassroomCourseDao()->getByCourseSetId($courseSetId);
+    }
+
     public function findAssistants($classroomId)
     {
         $classroom  = $this->getClassroom($classroomId);
@@ -200,6 +205,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $diff      = array_diff($courseIds, $existCourseIds);
             $classroom = $this->getClassroom($classroomId);
+
             if (!empty($diff)) {
                 $courses      = $this->getCourseService()->findCoursesByIds($diff);
                 $newCourseIds = array();
@@ -686,9 +692,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             if (!empty($diff)) {
                 foreach ($diff as $courseId) {
                     $this->getCourseService()->updateCourse($courseId, array('locked' => 0));
+                    $this->getCourseService()->closeCourse($courseId); //, 'classroom'
+
                     $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
                     $this->getCourseMemberService()->deleteMemberByCourseIdAndRole($courseId, 'student');
-                    $this->getCourseService()->closeCourse($courseId); //, 'classroom'
+
                     $course = $this->getCourseService()->getCourse($courseId);
                     $this->getClassroomDao()->wave(array($classroomId), array('noteNum' => "-{$course['noteNum']}"));
                     $this->getLogService()->info('classroom', 'delete_course', "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})");
@@ -725,6 +733,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function findClassroomsByCoursesIds($courseIds)
     {
         return $this->getClassroomCourseDao()->findByCoursesIds($courseIds);
+    }
+
+    public function findClassroomCourseByCourseSetIds($courseSetIds)
+    {
+        return $this->getClassroomCourseDao()->findByCourseSetIds($courseSetIds);
     }
 
     private function refreshCoursesSeq($classroomId, $courseIds)

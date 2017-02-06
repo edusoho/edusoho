@@ -3,10 +3,7 @@
 namespace Biz\Course\Copy\Impl;
 
 use Topxia\Common\ArrayToolkit;
-use Biz\Question\Dao\QuestionDao;
-use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Copy\AbstractEntityCopy;
-use Biz\Testpaper\Dao\TestpaperItemDao;
 
 class TestpaperCopy extends AbstractEntityCopy
 {
@@ -43,7 +40,6 @@ class TestpaperCopy extends AbstractEntityCopy
             'description',
             'limitedTime',
             'pattern',
-            'target',
             'status',
             'score',
             'passedCondition',
@@ -54,7 +50,7 @@ class TestpaperCopy extends AbstractEntityCopy
         $newTestpaper = array(
             'lessonId'      => 0,
             'createdUserId' => $this->biz['user']['id'],
-            'copyId'        => $isCopy ? $testpaper['id']: 0
+            'copyId'        => $isCopy ? $testpaper['id'] : 0
         );
         foreach ($fields as $field) {
             if (!empty($testpaper[$field]) || $testpaper[$field] == 0) {
@@ -66,43 +62,86 @@ class TestpaperCopy extends AbstractEntityCopy
 
     protected function doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy)
     {
-        $items = $this->getTestpaperItemDao()->findItemsByTestId($testpaper['id']);
+        $items = $this->getTestpaperService()->findItemsByTestId($testpaper['id']);
         if (empty($items)) {
             return;
         }
 
-        $questionMap = $this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseId'], $isCopy);
+        //$this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseSetId'], $isCopy);
+
+        $copyQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($newTestpaper['courseSetId']);
+        $copyQuestions = ArrayToolkit::index($copyQuestions, 'copyId');
+
         foreach ($items as $item) {
+            $question = empty($copyQuestions[$item['questionId']]) ? array() : $copyQuestions[$item['questionId']];
+
+            if (empty($question)) {
+                continue;
+            }
             $newItem = array(
                 'testId'       => $newTestpaper['id'],
                 'seq'          => $item['seq'],
-                'questionId'   => $questionMap[$item['questionId']][0],
+                'questionId'   => $question['id'],
                 'questionType' => $item['questionType'],
-                'parentId'     => $questionMap[$item['questionId']][1],
+                'parentId'     => $item['parentId'] > 0 ? $copyQuestions[$item['parentId']]['id'] : 0,
                 'score'        => $item['score'],
                 'missScore'    => $item['missScore'],
                 'copyId'       => $isCopy ? $item['id'] : 0
             );
 
-            $this->getTestpaperItemDao()->create($newItem);
+            $this->getTestpaperService()->createItem($newItem);
         }
     }
 
     /*
      * $ids = question ids
      * */
-    protected function doCopyQuestions($ids, $newCourseId, $isCopy)
+    protected function doCopyQuestions($ids, $newCourseSetId, $isCopy)
     {
-        $questions   = $this->getQuestionDao()->findQuestionsByIds($ids);
-        $questionMap = array();
-        if (empty($questions)) {
-            return $questionMap;
+        $copyQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($newCourseSetId);
+
+        $copyQuestionIds = ArrayToolkit::column($copyQuestions, 'copyId');
+
+        $diff = array_values(array_diff($ids, $copyQuestionIds));
+        if (empty($diff)) {
+            return array();
         }
 
+        $copyQuestions = ArrayToolkit::index($copyQuestions, 'copyId');
+        $questions     = $this->getQuestionService()->findQuestionsByIds($diff);
+        $questions     = $this->questionSort($questions);
+
+        $questionMap = array();
+        foreach ($questions as $question) {
+            $newQuestion = $this->filterQuestion($newCourseSetId, $question, $isCopy);
+
+            $newQuestion['parentId'] = 0;
+            if ($question['parentId'] > 0) {
+                $newQuestion['parentId'] = isset($copyQuestions[$question['parentId']]) ? $copyQuestions[$question['parentId']]['id'] : $questionMap[$question['parentId']][0];
+            }
+
+            $newQuestion = $this->getQuestionService()->create($newQuestion);
+
+            $questionMap[$question['id']] = array($newQuestion['id'], $newQuestion['parentId']);
+        }
+
+        return $questionMap;
+    }
+
+    private function questionSort($questions)
+    {
         usort($questions, function ($a, $b) {
-            return $a['parentId'] < $b['parentId'];
+            if ($a['parentId'] == $b['parentId']) {
+                return 0;
+            }
+            return $a['parentId'] < $b['parentId'] ? -1 : 1;
         });
 
+        return $questions;
+    }
+
+    private function filterQuestion($newCourseSetId, $question, $isCopy)
+    {
         $fields = array(
             'type',
             'stem',
@@ -111,53 +150,26 @@ class TestpaperCopy extends AbstractEntityCopy
             'analysis',
             'metas',
             'categoryId',
-            'difficulty',
-            'target'
+            'difficulty'
         );
-        foreach ($questions as $question) {
-            $newQuestion = array(
-                'courseId' => $newCourseId,
-                'lessonId' => 0,
-                'copyId'   => $isCopy ? $question['id'] : 0,
-                'userId'   => $this->biz['user']['id']
-            );
-            foreach ($fields as $field) {
-                if (!empty($question[$field]) || $question[$field] == 0) {
-                    $newQuestion[$field] = $question[$field];
-                }
-            }
 
-            $newQuestion['parentId'] = $question['parentId'] > 0 ? $questionMap[$question['parentId']] : 0;
+        $newQuestion             = ArrayToolkit::parts($question, $fields);
+        $newQuestion['courseId'] = $newCourseSetId;
+        $newQuestion['lessonId'] = 0;
+        $newQuestion['copyId']   = $isCopy ? $question['id'] : 0;
+        $newQuestion['userId']   = $this->biz['user']['id'];
+        $newQuestion['target']   = 'course-'.$newCourseSetId;
 
-            $newQuestion = $this->getQuestionDao()->create($newQuestion);
-
-            $questionMap[$question['id']] = array($newQuestion['id'], $newQuestion['parentId']);
-        }
-
-        return $questionMap;
+        return $newQuestion;
     }
 
-    /**
-     * @return TestpaperDao
-     */
-    protected function getTestpaperDao()
+    protected function getTestpaperService()
     {
-        return $this->biz->dao('Testpaper:TestpaperDao');
+        return $this->biz->service('Testpaper:TestpaperService');
     }
 
-    /**
-     * @return TestpaperItemDao
-     */
-    protected function getTestpaperItemDao()
+    protected function getQuestionService()
     {
-        return $this->biz->dao('Testpaper:TestpaperItemDao');
-    }
-
-    /**
-     * @return QuestionDao
-     */
-    protected function getQuestionDao()
-    {
-        return $this->biz->dao('Question:QuestionDao');
+        return $this->biz->service('Question:QuestionService');
     }
 }

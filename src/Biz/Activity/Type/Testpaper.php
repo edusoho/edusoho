@@ -5,13 +5,15 @@ namespace Biz\Activity\Type;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Dao\TestpaperActivityDao;
 use Biz\Testpaper\Service\TestpaperService;
+use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\TestpaperActivityService;
 
 class Testpaper extends Activity
 {
+    private $testpaperCopy = null;
+
     protected function registerListeners()
     {
         return array();
@@ -34,10 +36,15 @@ class Testpaper extends Activity
         if ($activity['mediaType'] != 'testpaper') {
             return null;
         }
-        $ext    = $this->getTestpaperActivityDao()->get($activity['mediaId']);
+
+        $newActivity = $config['newActivity'];
+        $ext         = $this->get($activity['mediaId']);
+
+        $testpaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($ext['mediaId'], $newActivity['fromCourseSetId']);
+
         $newExt = array(
-            'mediaId'         => $ext['mediaId'],
-            'doTimes'         => 0,
+            'mediaId'         => $testpaper['id'],
+            'doTimes'         => $ext['doTimes'],
             'redoInterval'    => $ext['redoInterval'],
             'limitedTime'     => $ext['limitedTime'],
             'checkType'       => $ext['checkType'],
@@ -46,7 +53,7 @@ class Testpaper extends Activity
             'testMode'        => $ext['testMode']
         );
 
-        return $this->getTestpaperActivityDao()->create($newExt);
+        return $this->create($newExt);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -137,6 +144,15 @@ class Testpaper extends Activity
         return $filterFields;
     }
 
+    protected function getTestpaperCopy()
+    {
+        if (!$this->testpaperCopy) {
+            $this->testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
+        }
+
+        return $this->testpaperCopy;
+    }
+
     /**
      * @return TestpaperActivityService
      */
@@ -167,13 +183,5 @@ class Testpaper extends Activity
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return TestpaperActivityDao
-     */
-    protected function getTestpaperActivityDao()
-    {
-        return $this->getBiz()->dao('Activity:TestpaperActivityDao');
     }
 }

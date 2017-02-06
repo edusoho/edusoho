@@ -2,15 +2,17 @@
 
 namespace Biz\Activity\Type;
 
-use Biz\Activity\Dao\TestpaperActivityDao;
-use Biz\Activity\Service\ActivityLearnLogService;
-use Biz\Activity\Service\ActivityService;
-use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Service\ActivityService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class Exercise extends Activity
 {
+    private $testpaperCopy = null;
+
     protected function registerListeners()
     {
         return array();
@@ -30,19 +32,11 @@ class Exercise extends Activity
 
     public function copy($activity, $config = array())
     {
-        $ext    = $this->getTestpaperActivityDao()->get($activity['mediaId']);
-        $newExt = array(
-            'mediaId'         => $ext['testId'],
-            'doTimes'         => 0,
-            'redoInterval'    => $ext['redoInterval'],
-            'limitedTime'     => $ext['limitedTime'],
-            'checkType'       => $ext['checkType'],
-            'finishCondition' => $ext['finishCondition'],
-            'requireCredit'   => $ext['requireCredit'],
-            'testMode'        => $ext['testMode']
-        );
+        $newActivity = $config['newActivity'];
 
-        return $this->getTestpaperActivityDao()->create($newExt);
+        $newActivity['mediaId'] = $activity['mediaId'];
+
+        return $this->getTestpaperCopy()->copy($newActivity, array('isCopy' => 1));
     }
 
     public function update($targetId, &$fields, $activity)
@@ -110,6 +104,15 @@ class Exercise extends Activity
         return $filterFields;
     }
 
+    protected function getTestpaperCopy()
+    {
+        if (!$this->testpaperCopy) {
+            $this->testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
+        }
+
+        return $this->testpaperCopy;
+    }
+
     /**
      * @return TestpaperService
      */
@@ -132,13 +135,5 @@ class Exercise extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service("Activity:ActivityService");
-    }
-
-    /**
-     * @return TestpaperActivityDao
-     */
-    protected function getTestpaperActivityDao()
-    {
-        return $this->getBiz()->dao('Activity:TestpaperActivityDao');
     }
 }

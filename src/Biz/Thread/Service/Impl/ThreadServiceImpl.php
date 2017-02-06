@@ -673,7 +673,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             unset($conditions['keyword']);
         }
 
-        if (isset($conditions['author'])) {
+        if (!empty($conditions['author'])) {
             $author               = $this->getUserService()->getUserByNickname($conditions['author']);
             $conditions['userId'] = $author ? $author['id'] : -1;
         }
@@ -682,14 +682,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             if ($conditions['latest'] == 'week') {
                 $conditions['GTEcreatedTime'] = mktime(0, 0, 0, date('m'), date('d') - 7, date('Y'));
             }
-        }
-
-        if (!empty($conditions['title'])) {
-            $conditions['title'] = "%{$conditions['title']}%";
-        }
-
-        if (!empty($conditions['content'])) {
-            $conditions['content'] = "%{$conditions['content']}%";
         }
 
         return $conditions;
