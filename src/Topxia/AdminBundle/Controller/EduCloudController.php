@@ -1059,13 +1059,6 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(false);
     }
 
-    public function consultOverviewAction(Request $request)
-    {
-        return $this->render('TopxiaAdminBundle:EduCloud/Consult:overview.html.twig', array(
-
-        ));
-    }
-
     public function consultSettingAction(Request $request)
     {
         $cloud_consult = $this->getSettingService()->get('cloud_consult', array());
@@ -1081,7 +1074,7 @@ class EduCloudController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             if ($cloud_consult['cloud_consult_enabled'] == 0) {
-                return $this->render('TopxiaAdminBundle:EduCloud/Consult:cloud-consult-error.html.twig', array());
+                return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array());
             }
 
             $request_cloud_consult = $request->request->all();
@@ -1102,9 +1095,8 @@ class EduCloudController extends BaseController
             $api         = CloudAPIFactory::create('root');
             $loginStatus    = $api->post("/robot/login_url");
             $jsResource    = $api->post("/robot/install");
-
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:EduCloud/Consult:cloud-consult-error.html.twig', array());
+            return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array());
         }
 
         if ((isset($loginStatus['code']) && $loginStatus['code']== '10000') || (isset($jsResource['code']) && $jsResource['code']== '10000')) {

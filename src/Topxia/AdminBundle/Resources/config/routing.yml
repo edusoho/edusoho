@@ -2053,8 +2053,8 @@ admin_cloud_attachment:
     permissions: [admin_cloud_attachment_manage]
 
 admin_cloud_consult:
-    path: /cloud/consult/overview
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:consultOverview }
+    path: /cloud/consult
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:consultSetting }
 
 admin_cloud_consult_setting:
     path: /cloud/setting/consult
