@@ -67,7 +67,7 @@ class LiveCourseSetController extends CourseBaseController
         $recentCourseSets = array();
 
         foreach ($recentTasks as $task) {
-            $courseSet = $courseSets[$task['courseSetId']];
+            $courseSet = $courseSets[$task['fromCourseSetId']];
 
             if ($courseSet['status'] != 'published' || $courseSet['parentId'] != '0') {
                 continue;
