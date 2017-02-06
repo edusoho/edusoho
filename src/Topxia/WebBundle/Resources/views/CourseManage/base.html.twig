@@ -84,7 +84,7 @@ isCoursePublished: course.status,
                    class="form-control width-input width-input-large" > <span
                 {% if course.expiryMode|default('none') != 'days' %}class="hidden" {% endif %}>{{ '天'|trans }} </span>
             {% set date_help = '设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) %}
-            {% set days_help = '设置该值后，%user_name%学员只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) %}
+            {% set days_help = '设置该值后，%user_name%只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) %}
             <div class="help-block" data-date="{{ date_help }}" data-days="{{ days_help }}">
               {% if course.expiryMode|default('none') == 'date' %}  {{ date_help }}{% elseif  course.expiryMode|default('none') == 'days' %}{{ days_help }} {% endif %}
             </div>{#即有效期为N天，则只能学习N天，即有效期至yyyy-mm-dd，则只能学习至yyyy-mm-dd 即有效期为N天，则只能学习N天，#}
