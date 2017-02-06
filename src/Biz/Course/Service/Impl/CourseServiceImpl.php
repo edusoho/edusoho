@@ -428,9 +428,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException("Unauthorized");
         }
-        //var_dump($courseId);
+
         $course = $this->getCourseDao()->get($courseId);
-        //var_dump($course);exit;
+
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
@@ -803,9 +803,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberService()->countMembers(array('userId' => $userId));
     }
 
-
     /**
-     * @param  int $userId
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -826,7 +825,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count      = $this->searchCourseCount($conditions);
+        $count = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
