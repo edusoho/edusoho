@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
+use Biz\Task\Service\TaskService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Biz\Util\EdusohoLiveClient;
@@ -44,10 +45,10 @@ class LiveCourseController extends BaseController
         list($taskConditions, $orderBy) = $this->getConditionAndOrderByStatus($status, $taskConditions);
         $paginator = new Paginator(
             $request,
-            $this->getTaskService()->count($taskConditions),
+            $this->getTaskService()->countTasks($taskConditions),
             20
         );
-        $liveTasks = $this->getTaskService()->search(
+        $liveTasks = $this->getTaskService()->searchTasks(
             $taskConditions,
             $orderBy,
             $paginator->getOffsetCount(),
@@ -152,6 +153,9 @@ class LiveCourseController extends BaseController
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
