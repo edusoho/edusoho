@@ -659,6 +659,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $toLearnTasks;
     }
 
+    public function analysisTaskDataByTime($startTime, $endTime)
+    {
+        return $this->getTaskDao()->analysisTaskDataByTime($startTime, $endTime);
+    }
+
     protected function getToLearnTaskWithFreeMode($courseId)
     {
         $taskResults = $this->getTaskResultService()->findUserProgressingTaskResultByCourseId($courseId);
