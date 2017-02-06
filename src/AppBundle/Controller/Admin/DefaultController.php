@@ -304,14 +304,14 @@ class DefaultController extends BaseController
         $days      = $this->getDaysDiff($period);
         $startTime = strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60));
 
-        $memberCounts = $this->getCourseMemberService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0, 'role' => 'student'), 'courseId', 0, 10);
-        $courseIds    = ArrayToolkit::column($memberCounts, 'courseId');
-        $courses      = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courses      = ArrayToolkit::index($courses, 'id');
+        $memberCounts = $this->getCourseMemberService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0, 'role' => 'student'), 'courseSetId', 0, 10);
+        $courseSetIds    = ArrayToolkit::column($memberCounts, 'courseSetId');
+        $courseSets      = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets      = ArrayToolkit::index($courseSets, 'id');
 
         return $this->render('admin/default/parts/course-explore-table.html.twig', array(
             'memberCounts' => $memberCounts,
-            'courses'      => $courses
+            'courseSets'      => $courseSets
         ));
     }
 
@@ -527,6 +527,11 @@ class DefaultController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
