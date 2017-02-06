@@ -24,7 +24,7 @@ admin_user_statistic:
 
 admin_task_learn_statistic:
     path: /task/learn/statistic/{period}
-    defaults: { _controller: AppBundle:Admin/Default:taskLearnStatistic }
+    defaults: { _controller: AppBundle:Admin/Default:completedTaskStatistic }
     permissions: [admin]
 
 admin_study_statistic:

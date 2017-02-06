@@ -241,12 +241,12 @@ class DefaultController extends BaseController
         return $this->createJsonResponse($userAnalysis);
     }
 
-    public function taskLearnStatisticAction(Request $request, $period)
+    public function completedTaskStatisticAction(Request $request, $period)
     {
         $days   = $this->getDaysDiff($period);
         $series = array();
         $timeRange                     = $this->getTimeRange($period);
-        $finishedTaskData = $this->getTaskResultService()->analysisTaskFinishedDataByTime($timeRange);
+        $finishedTaskData = $this->getTaskResultService()->analysisCompletedTaskDataByTime($timeRange['startTime'],$timeRange['endTime']);
         $series['finishedTaskCount'] = $finishedTaskData;
         return $this->createJsonResponse(EchartsBuilder::createBarDefaultData($days, 'Y/m/d', $series));
     }
