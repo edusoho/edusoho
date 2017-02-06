@@ -106,7 +106,7 @@ define(function(require, exports, module) {
             $review.find('.show-full-btn').show();
         });
   
-        if(('.js-reviews').length>0) {
+        if($('.js-reviews').length>0) {
           var threadShowWidget = new ThreadShowWidget({
             element: '.js-reviews',
           });
