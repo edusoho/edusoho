@@ -156,7 +156,7 @@ interface TaskService
      * @param $courseId
      * @return mixed
      */
-    public function findToLearnTasksByCourseIdForMisson($courseId);
+    public function findToLearnTasksByCourseIdForMission($courseId);
 
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 

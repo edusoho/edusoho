@@ -71,7 +71,7 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
 
                 $finishTaskCount = $this->getTaskResultService()->countTaskResults($conditions);
 
-                $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseIdForMisson($course['id'], false);
+                $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseIdForMission($course['id']);
                 $course['tasks']         = $toLearnTasks;
                 $course['finishTaskNum'] = $finishTaskCount;
 

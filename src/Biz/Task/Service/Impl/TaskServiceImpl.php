@@ -628,7 +628,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             list($tasks, $toLearnTasks) = $this->getToLearnTasksWithLockMode($courseId);
         }
 
-        $task = $this->fillTaskReusltAndLockStatu($toLearnTasks, $task, $course, $tasks);
+        $toLearnTasks = $this->fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks);
 
         return $toLearnTasks;
     }
@@ -637,7 +637,7 @@ class TaskServiceImpl extends BaseService implements TaskService
      * @param $courseId
      * @return array|mixed
      */
-    public function findToLearnTasksByCourseIdForMisson($courseId)
+    public function findToLearnTasksByCourseIdForMission($courseId)
     {
         list($course) = $this->getCourseService()->tryTakeCourse($courseId);
         $toLearnTasks = $tasks = array();
@@ -647,7 +647,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
         list($tasks, $toLearnTasks) = $this->getToLearnTasksWithLockMode($courseId);
 
-        $task = $this->fillTaskReusltAndLockStatu($toLearnTasks, $task, $course, $tasks);
+        $toLearnTasks = $this->fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks);
 
         return $toLearnTasks;
     }
@@ -825,7 +825,7 @@ class TaskServiceImpl extends BaseService implements TaskService
      * @param $tasks
      * @return mixed
      */
-    protected function fillTaskReusltAndLockStatu($toLearnTasks, $task, $course, $tasks)
+    protected function fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks)
     {
         $activityIds = ArrayToolkit::column($toLearnTasks, 'activityId');
 
@@ -848,6 +848,6 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $task = $this->setTaskLockStatus($tasks, $task);
             }
         }
-        return $task;
+        return $toLearnTasks;
     }
 }
