@@ -49,6 +49,11 @@ class TestpaperItemDaoImpl extends GeneralDaoImpl implements TestpaperItemDao
         return $this->findInField('testId', array($testpaperId));
     }
 
+    public function findItemsByTestIds($testpaperIds)
+    {
+        return $this->findInField('testId', $testpaperIds);
+    }
+
     public function findTestpaperItemsByPIdAndLockedTestIds($pId, $testIds)
     {
         if (empty($testIds)) {

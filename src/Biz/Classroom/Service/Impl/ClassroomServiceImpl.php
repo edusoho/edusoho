@@ -692,9 +692,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             if (!empty($diff)) {
                 foreach ($diff as $courseId) {
                     $this->getCourseService()->updateCourse($courseId, array('locked' => 0));
+                    $this->getCourseService()->closeCourse($courseId); //, 'classroom'
+
                     $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
                     $this->getCourseMemberService()->deleteMemberByCourseIdAndRole($courseId, 'student');
-                    $this->getCourseService()->closeCourse($courseId); //, 'classroom'
+
                     $course = $this->getCourseService()->getCourse($courseId);
                     $this->getClassroomDao()->wave(array($classroomId), array('noteNum' => "-{$course['noteNum']}"));
                     $this->getLogService()->info('classroom', 'delete_course', "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})");
