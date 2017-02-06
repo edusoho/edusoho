@@ -20,6 +20,8 @@ interface TaskDao extends GeneralDaoInterface
 
     public function findByCourseIdAndIsFree($ids, $isFree);
 
+    public function findByCopyIdAndLockedCourseIds($copyId, $courseIds);
+
     public function getMaxSeqByCourseId($courseId);
 
     public function getNextTaskByCourseIdAndSeq($courseId, $seq);

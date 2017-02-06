@@ -129,6 +129,21 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->findByFields(array('courseId' => $courseId, 'isFree' => $isFree));
     }
 
+    public function findByCopyIdAndLockedCourseIds($copyId, $courseIds)
+    {
+        if (empty($courseIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $parmaters = array_merge(array($copyId), $courseIds);
+
+        $sql = "SELECT * FROM {$this->table()} WHERE copyId= ? AND courseId IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, $parmaters) ?: array();
+    }
+
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
     {
         $sql = "select sum(`time`) from `course_task_result` where `courseTaskId` in (SELECT id FROM {$this->table()}  WHERE `fromCourseSetId`= ?)";

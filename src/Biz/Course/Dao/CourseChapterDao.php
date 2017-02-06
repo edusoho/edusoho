@@ -6,6 +6,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CourseChapterDao extends GeneralDaoInterface
 {
+    public function getByCopyIdAndLockedCourseId($copyId, $courseId);
+
     public function findChaptersByCourseId($courseId);
 
     public function getChapterCountByCourseIdAndType($courseId, $type);
