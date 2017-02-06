@@ -1073,15 +1073,18 @@ class EduCloudController extends BaseController
         $cloud_consult = $this->validateConsult(array_merge($defaultSetting, $cloud_consult));
 
         if ($request->getMethod() == 'POST') {
-            if ($cloud_consult['cloud_consult_enabled'] == 0) {
-                return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array());
-            }
 
             $request_cloud_consult = $request->request->all();
             $cloud_consult['cloud_consult_setting_enabled'] = $request_cloud_consult['cloud_consult_setting_enabled'];
 
             $this->getSettingService()->set('cloud_consult', $cloud_consult);
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('云客服设置已保存！'));
+        }
+
+        if ($cloud_consult['cloud_consult_setting_enabled'] == 0) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
+                'cloud_consult' => $cloud_consult
+            ));
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud/Consult:setting.html.twig', array(
@@ -1093,10 +1096,10 @@ class EduCloudController extends BaseController
     {
         try {
             $api         = CloudAPIFactory::create('root');
-            $loginStatus    = $api->post("/robot/login_url");
+            $loginStatus = $api->post("/robot/login_url");
             $jsResource    = $api->post("/robot/install");
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array());
+            return $this->render('TopxiaAdminBundle:EduCloud/Consult:consult-error.html.twig', array());
         }
 
         if ((isset($loginStatus['code']) && $loginStatus['code']== '10000') || (isset($jsResource['code']) && $jsResource['code']== '10000')) {
@@ -1112,6 +1115,12 @@ class EduCloudController extends BaseController
         }
 
         $cloud_consult = array_merge($cloud_consult, $default);
+
+        if ($cloud_consult['cloud_consult_enabled'] == 0) {
+            return $this->render('TopxiaAdminBundle:EduCloud/Consult:without-enable.html.twig', array(
+                'cloud_consult' => $cloud_consult
+            ));
+        }
 
         return $cloud_consult;
     }

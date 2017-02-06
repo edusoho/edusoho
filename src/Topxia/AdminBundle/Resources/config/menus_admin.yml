@@ -644,10 +644,10 @@ admin:
                             disable: true
                 admin_cloud_consult:
                     name: 云问答
+                    router_name: admin_cloud_consult_setting
                     children:
                         admin_cloud_consult_setting:
                             name: 设置
-                            router_name: admin_cloud_consult
                             disable: true
                 admin_setting_cloud:
                     name: 授权信息
