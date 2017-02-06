@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Common\Mail;
 
+use Topxia\Common\SettingToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class TemplateToolkit
@@ -119,36 +120,7 @@ class TemplateToolkit
 
     protected static function setting($name, $default = '')
     {
-
-        $names = explode('.', $name);
-
-        $name = array_shift($names);
-
-        if (empty($name)) {
-            return $default;
-        }
-
-        $value = self::getSettingService()->get($name, $default);
-
-        if (!isset($value)) {
-            return $default;
-        }
-
-        if (empty($names)) {
-            return $value;
-        }
-
-        $result = $value;
-
-        foreach ($names as $name) {
-            if (!isset($result[$name])) {
-                return $default;
-            }
-
-            $result = $result[$name];
-        }
-
-        return $result;
+        return SettingToolkit::getSetting($name, $default);
     }
 
     private static function renderBody($view, $params)
@@ -166,10 +138,5 @@ class TemplateToolkit
     protected static function getKernel()
     {
         return ServiceKernel::instance();
-    }
-
-    protected static function getSettingService()
-    {
-        return self::getKernel()->createService('System.SettingService');
     }
 }
