@@ -14,90 +14,52 @@ class LiveCourseController extends BaseController
 
         $default = $this->getSettingService()->get('default', array());
 
-        $query = $request->query->all();
+        $taskConditions = $request->query->all();
 
-        $courseCondition = array(
+        $courseConditions = array(
             'type'   => 'live',
             'status' => 'published'
         );
 
-        $courseCondition = array_merge($courseCondition, $query);
+        $courseConditions = array_merge($courseConditions, $taskConditions);
 
-        if (!empty($query['keywordType']) && !empty($query['keyword'])) {
-            if ($query['keywordType'] == 'courseTitle') {
-                $courseCondition['title'] = $query['keyword'];
+        if (!empty($taskConditions['keywordType']) && !empty($taskConditions['keyword'])) {
+            if ($taskConditions['keywordType'] == 'courseSetTitle') {
+                $courseConditions['title'] = $taskConditions['keyword'];
             }
 
-            if ($query['keywordType'] == 'lessonTitle') {
-                $conditions['title'] = $query['keyword'];
+            if ($taskConditions['keywordType'] == 'taskTitle') {
+                $taskConditions['titleLike'] = $taskConditions['keyword'];
             }
         }
 
-        $courseCondition = $this->fillOrgCode($courseCondition);
-        $courses   = $this->getCourseService()->searchCourses($courseCondition, $sort = 'latest', 0, 1000);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-        if (empty($courseIds)) {
-            return $this->render('admin/live-course/index.html.twig', array(
-                'status'    => $status,
-                'lessons'   => array(),
-                'courses'   => array(),
-                'paginator' => new Paginator(
-                    $request,
-                    0,
-                    20
-                ),
-                'default'   => $default,
-                'eduCloudStatus' => $eduCloudStatus
-            ));
-        }
+        $courseConditions = $this->fillOrgCode($courseConditions);
+        $courseSets   = $this->getCourseSetService()->searchCourseSets($courseConditions, array(), 0, 10000);
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+        $taskConditions['fromCourseSetIds'] = $courseSetIds;
 
-        $conditions['courseIds'] = $courseIds;
+        $taskConditions['type'] = "live";
+        $taskConditions['status'] = 'published';
 
-        $conditions['type'] = "live";
-
-        if ($status == 'coming') {
-            $conditions['startTimeGreaterThan'] = !empty($query['startDateTime']) ? strtotime($query['startDateTime']) : time();
-            $conditions['startTimeLessThan']    = !empty($query['endDateTime']) ? strtotime($query['endDateTime']) : null;
-        }
-
-        if ($status == 'end') {
-            $conditions['endTimeLessThan']      = time();
-            $conditions['startTimeLessThan']    = !empty($query['endDateTime']) ? strtotime($query['endDateTime']) : null;
-            $conditions['startTimeGreaterThan'] = !empty($query['startDateTime']) ? strtotime($query['startDateTime']) : null;
-        }
-
-        if ($status == 'underway') {
-            $conditions['endTimeGreaterThan']   = time();
-            $conditions['startTimeLessThan']    = !empty($query['endDateTime']) ? strtotime($query['endDateTime']) : time();
-            $conditions['startTimeGreaterThan'] = !empty($query['startDateTime']) ? strtotime($query['startDateTime']) : null;
-        }
-
-        $conditions['status'] = 'published';
-
+        list($taskConditions, $orderBy) = $this->getConditionAndOrderByStatus($status, $taskConditions);
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchLessonCount($conditions),
+            $this->getTaskService()->count($taskConditions),
             20
         );
+        $liveTasks = $this->getTaskService()->search(
+            $taskConditions,
+            $orderBy,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        if ($status == 'end') {
-            $lessons = $this->getCourseService()->searchLessons($conditions,
-                array('startTime'=>'DESC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        } else {
-            $lessons = $this->getCourseService()->searchLessons($conditions,
-                array('startTime', 'ASC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        }
+        $this->migrate($courseSets, $liveTasks);
 
         return $this->render('admin/live-course/index.html.twig', array(
             'status'    => $status,
-            'lessons'   => $lessons,
-            'courses'   => ArrayToolkit::index($courses, 'id'),
+            'liveTasks'   => $liveTasks,
+            'courseSets'   => ArrayToolkit::index($courseSets, 'id'),
             'paginator' => $paginator,
             'default'   => $default,
             'eduCloudStatus' => $eduCloudStatus
@@ -122,14 +84,45 @@ class LiveCourseController extends BaseController
         return $this->createJsonResponse($lesson);
     }
 
-    protected function getCourseService()
+    private function getConditionAndOrderByStatus($status, $conditions)
     {
-        return $this->createService('Course:CourseService');
+        $orderBy = array('startTime' => 'ASC');
+        if ($status == 'coming') {
+            $conditions['startTime_GT'] = time();
+        }
+
+        if ($status == 'underway') {
+            $conditions['startTime_LE'] = time();
+            $conditions['endTime_GT'] = time();
+        }
+
+        if ($status == 'end') {
+            $conditions['endTime_LT'] = time();
+            $orderBy = array('startTime' => 'DESC');
+        }
+
+        if (!empty($conditions['startDateTime'])) {
+            $conditions['startTime_GE'] = strtotime($conditions['startDateTime']);
+        }
+
+        if (!empty($conditions['endDateTime'])) {
+            $conditions['endTime_GE'] = strtotime($conditions['endDateTime']);
+        }
+
+        return array($conditions, $orderBy);
     }
 
-    protected function getSettingService()
+    private function migrate(&$courseSets, &$liveTasks)
     {
-        return $this->createService('System:SettingService');
+        foreach ($courseSets as &$courseSet) {
+            $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+            $courseSet['maxStudentNum'] = $defaultCourse['maxStudentNum'];
+        }
+
+        foreach ($liveTasks as &$liveTask) {
+            $activity = $this->getActivityService()->getActivity($liveTask['activityId']);
+            $liveTask['length'] = $activity['length'];
+        }
     }
 
     private function getEduCloudStatus()
@@ -144,8 +137,33 @@ class LiveCourseController extends BaseController
         return $eduCloudStatus;
     }
 
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
+    }
+
     protected function getEduCloudService()
     {
         return $this->createService('CloudPlatform:EduCloudService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
