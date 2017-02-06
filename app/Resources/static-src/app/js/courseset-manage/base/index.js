@@ -46,6 +46,7 @@ class Base {
       formatResult: function(item) {
         return item.name;
       },
+      formatSearching: '搜索中...',
       width: 'off',
       multiple: true,
       maximumSelectionSize: 20,
