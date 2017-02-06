@@ -15,6 +15,6 @@ class  SensitiveServiceTest extends BaseTestCase{
 
 	private function getSensitiveService()
 	{
-		return $this->getServiceKernel()->createService('Sensitive:SensitiveService');
+		return $this->createService('Sensitive:SensitiveService');
 	}
 }

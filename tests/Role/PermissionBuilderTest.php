@@ -89,11 +89,11 @@ class PermissionBuilderTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getRoleService()
     {
-        return $this->getServiceKernel()->createService('System:RoleService');
+        return $this->createService('System:RoleService');
     }
 }

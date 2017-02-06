@@ -400,12 +400,12 @@ class GroupServiceTest extends BaseTestCase
 
     protected function getGroupService()
     {
-        return $this->getBiz()->service('Group:GroupService');
+        return $this->createService('Group:GroupService');
     }
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function createUser()

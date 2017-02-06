@@ -47,7 +47,7 @@ abstract class BaseDaoTestCase extends BaseTestCase
             throw new \Exception('classname must be up to standard, which is to end up with \'Test\'');
         }
 
-        return $this->getBiz()->dao("{$packageName}:{$daoName}");
+        return $this->createDao("{$packageName}:{$daoName}");
     }
 
     /**
