@@ -36,16 +36,15 @@ class Testpaper extends Activity
         if ($activity['mediaType'] != 'testpaper') {
             return null;
         }
-        $ext                    = $this->get($activity['mediaId']);
-        $ext['fromCourseSetId'] = $activity['fromCourseSetId'];
-        $ext['fromCourseId']    = $activity['fromCourseId'];
-        $ext['mediaType']       = $activity['mediaType'];
 
-        $testpaper = $this->getTestpaperCopy()->copy($ext, array('isCopy' => 1));
-        var_dump($testpaper);
+        $newActivity = $config['newActivity'];
+        $ext         = $this->get($activity['mediaId']);
+
+        $testpaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($ext['mediaId'], $newActivity['fromCourseSetId']);
+
         $newExt = array(
             'mediaId'         => $testpaper['id'],
-            'doTimes'         => 0,
+            'doTimes'         => $ext['doTimes'],
             'redoInterval'    => $ext['redoInterval'],
             'limitedTime'     => $ext['limitedTime'],
             'checkType'       => $ext['checkType'],

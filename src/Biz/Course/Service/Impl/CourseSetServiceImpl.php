@@ -200,7 +200,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      */
     public function searchCourseSets(array $conditions, $orderBys, $start, $limit)
     {
-        $orderBys = $this->getOrderBys($orderBys);
+        $orderBys          = $this->getOrderBys($orderBys);
         $preparedCondtions = $this->prepareConditions($conditions);
         return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit);
     }
@@ -329,8 +329,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function copyCourseSet($classroomId, $courseSetId, $courseId)
     {
-        $courseSet = $this->tryManageCourseSet($courseSetId);
-
+        //$courseSet = $this->tryManageCourseSet($courseSetId);
+        $courseSet  = $this->getCourseSet($courseSetId);
         $entityCopy = new ClassroomCourseCopy($this->biz);
         return $entityCopy->copy($courseSet, array('courseId' => $courseId, 'classroomId' => $classroomId));
     }
@@ -479,7 +479,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             } elseif ($field === 'studentNum') {
                 $updateFields['studentNum'] = $this->countStudentNumById($id);
             } elseif ($field === 'materialNum') {
-                $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(array('courseSetId' => $id, 'source'=>'coursematerial'));
+                $updateFields['materialNum'] = $this->getCourseMaterialService()->countMaterials(array('courseSetId' => $id, 'source' => 'coursematerial'));
             }
         }
 
@@ -593,7 +593,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         });
 
         if (!empty($conditions['creatorName'])) {
-            $user = $this->getUserService()->getUserByNickname($conditions['creatorName']);
+            $user                  = $this->getUserService()->getUserByNickname($conditions['creatorName']);
             $conditions['creator'] = $user ? $user['id'] : -1;
         }
 
