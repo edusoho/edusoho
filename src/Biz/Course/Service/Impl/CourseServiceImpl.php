@@ -414,12 +414,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
-            $tasks = $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($course['id']);
-        } else {
-            $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
+            return $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($course['id']);
         }
+        return $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
-        return $tasks;
     }
 
     public function tryManageCourse($courseId, $courseSetId = 0)
@@ -804,7 +802,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int     $userId
+     * @param  int $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -825,7 +823,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count = $this->searchCourseCount($conditions);
+        $count      = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 

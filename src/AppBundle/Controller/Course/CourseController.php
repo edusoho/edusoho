@@ -183,6 +183,7 @@ class CourseController extends CourseBaseController
     public function tasksAction($course, $member = array())
     {
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
+
         $files       = $this->findFiles($courseItems);
         return $this->render('course/tabs/tasks.html.twig', array(
             'course'      => $course,
