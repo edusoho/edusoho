@@ -7,7 +7,7 @@
 {% do script(['libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
 
 {% block body %}
-
+  {% set preview = app.request.query.get('preview') %}
   <div id="js-hidden-data">
     <input type="hidden" name="course-id" value="{{ task.courseId }}">
     <input type="hidden" name="task-id" value="{{ task.id }}">
