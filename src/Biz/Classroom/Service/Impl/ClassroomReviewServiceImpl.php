@@ -50,7 +50,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     private function _prepareReviewSearchConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
-            if (is_array($value) || ctype_digit((string) $value)) {
+            if (is_array($value) || is_numeric($value)) {
                 return true;
             }
 
@@ -96,7 +96,6 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
                 'content'     => empty($fields['content']) ? '' : $fields['content'],
                 'title'       => empty($fields['title']) ? '' : $fields['title'],
                 'parentId'    => $fields['parentId'],
-                'createdTime' => time(),
                 'meta'        => array()
             ));
             $this->dispatchEvent('classReview.add', new Event($review));
