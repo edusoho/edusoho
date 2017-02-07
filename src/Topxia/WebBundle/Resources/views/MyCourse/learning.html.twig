@@ -3,6 +3,7 @@
 {% block title %}{{'学习中'|trans}} - {{ parent() }}{% endblock %}
 
 {% set tab_nav = 'learning' %}
+{% set mobile = is_show_mobile_page() %}
 
 {% block main %}
 	<div class="panel panel-default panel-col">
@@ -21,7 +22,9 @@
 {% endblock %}
 
 {% block main_mobile %}
-	{% include 'TopxiaWebBundle:MyCourse:learning-mobile.html.twig'%}
+	{% if mobile %}
+		{% include 'TopxiaWebBundle:MyCourse:learning-mobile.html.twig' %}
+	{% endif %}
 {% endblock %}
 
 {% block bottom %}
