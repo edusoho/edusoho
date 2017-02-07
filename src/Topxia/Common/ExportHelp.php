@@ -2,8 +2,8 @@
 
 namespace Topxia\Common;
 
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Response;
 
 class ExportHelp
 {
@@ -16,10 +16,10 @@ class ExportHelp
         }
 
         if (empty($magic['export_allow_count'])) {
-            $magic['export_allow_count'] = 10000;   
+            $magic['export_allow_count'] = 10000;
         }
 
-        $limit = ($magic['export_limit']>$magic['export_allow_count']) ? $magic['export_allow_count']:$magic['export_limit'];
+        $limit = ($magic['export_limit'] > $magic['export_allow_count']) ? $magic['export_allow_count'] : $magic['export_limit'];
 
         return array($start, $limit, $magic['export_allow_count']);
     }
@@ -46,7 +46,7 @@ class ExportHelp
         if (empty($file)) {
             $file = $request->query->get('fileName');
         }
-        
+
         file_put_contents($file, $content."\r\n", FILE_APPEND);
 
         return $file;
@@ -55,7 +55,7 @@ class ExportHelp
     public static function genereateExportCsvFileName($contentName = '')
     {
         $rootPath = ServiceKernel::instance()->getParameter('topxia.upload.private_directory');
-        $user = ServiceKernel::instance()->getCurrentUser();
+        $user     = ServiceKernel::instance()->getCurrentUser();
         return $rootPath."/export_content_".$contentName.'_'.$user['id'].time().".txt";
     }
 
@@ -67,7 +67,7 @@ class ExportHelp
         if (!empty($file)) {
             FileToolkit::remove($file);
         }
-        
+
         $str = chr(239).chr(187).chr(191).$str;
 
         $response = new Response();

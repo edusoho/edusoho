@@ -303,11 +303,7 @@ class ClassroomManageController extends BaseController
             'status'     => 'paid'
         );
         $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
-
-        $order = array();
-        foreach ($orders as $key => $value) {
-            $order[$key] = $value;
-        }
+        $order  = current($orders);
 
         $this->getClassroomService()->removeStudent($classroomId, $userId);
 
@@ -316,6 +312,7 @@ class ClassroomManageController extends BaseController
             'note'     => '"'.$user['nickname'].'"'.' 手动移除',
             'operator' => $user['id']
         );
+
         $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         $message = array(
             'classroomId'    => $classroom['id'],
