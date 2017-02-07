@@ -14584,6 +14584,7 @@ textarea {
   height: 100%;
   background: #000;
   background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1;
 }
 .open-course-views .mask .mask-content {
   position: absolute;
