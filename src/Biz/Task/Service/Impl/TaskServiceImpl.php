@@ -234,11 +234,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
         foreach ($tasks as &$task) {
-            foreach ($taskResults as $key => $result) {
-                if ($key != $task['id']) {
-                    continue;
-                }
-                $task['result'] = $result;
+            if (in_array($task['id'], array_keys($taskResults))) {
+                $task['result'] = $taskResults[$task['id']];
             }
             $task = $this->setTaskLockStatus($tasks, $task);
         }
@@ -788,12 +785,15 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function setTaskLockStatus($tasks, $task)
     {
         $preTasks = $this->getPreTask($tasks, $task);
+
         if (empty($preTasks)) {
             $task['lock'] = false;
         }
 
         $finish       = $this->isPreTasksIsFinished($preTasks);
+        //当前任务未完成且前一个问题未完成则锁定
         $task['lock'] = !$finish;
+
 
         //选修任务不需要判断解锁条件
         if ($task['isOptional']) {
@@ -805,6 +805,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         if ($task['type'] == 'testpaper' && $task['startTime']) {
+            $task['lock'] = false;
+        }
+
+        //如果该任务已经完成则忽略其他的条件
+        if(isset($task['result']['status']) && ($task['result']['status'] == 'finish')){
             $task['lock'] = false;
         }
         return $task;
