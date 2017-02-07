@@ -9,8 +9,9 @@ var script = function (scripts, fn, target) {
 }
 
 var loadJs = function (path, fn, target) {
-  var elem = document.createElement('script'), loaded;
-  elem.onload = elem.onerror = elem.onreadystatechange = () => {
+  var elem = document.createElement('script'), 
+      loaded;
+  elem.onload = elem.onerror = elem.onreadystatechange = function () {
     if ((elem.readyState && !(/^c|loade/.test(elem.readyState))) || loaded) {
       return;
     }
@@ -33,7 +34,7 @@ window.seajsBoot = function() {
   if (typeof app === 'undefined') {
     app = {};
   }
-  app.debug = {% if app.debug %}true{% else %}false{% endif %};
+  app.debug = {% if app.debug %} true {% else %} false {% endif %};
   app.jsPaths = {{ js_paths()|json_encode|raw }};
 
   var CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
