@@ -1,6 +1,6 @@
 import 'bootstrap-notify';
 
-const notify = (level, message='ok',delay=3000,icon=null) => {
+const notify = (level, message, delay=3000, icon=null) => {
   $('[data-notify="container"]').remove();
   let iconFont = icon;
   if(!iconFont) {
