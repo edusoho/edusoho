@@ -91,7 +91,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
         $marks = str_repeat('?,', count($courseId) - 1).'?';
 
-        $sql = "SELECT  targetId,sum(amount) as  amount from {$this->table} WHERE  createdTime > ? AND createdTime < ? AND targetId IN ({$marks}) AND targetType = 'course' AND status = 'paid' group by targetId";
+        $sql = "SELECT  targetId,sum(amount) as  amount from {$this->table} WHERE  createdTime > ? AND createdTime < ? AND targetId IN ({$marks}) AND targetType = 'course' AND status = 'paid' GROUP BY targetId";
         return $this->db()->fetchAll($sql, array_merge(array($startTime, $endTime), $courseId));
     }
 
@@ -128,19 +128,19 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisCourseOrderDataByTimeAndStatus($startTime, $endTime, $status)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? AND `status`=? AND targetType='course' group by date_format(from_unixtime(`createdTime`),'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? AND `status`=? AND targetType='course' GROUP BY date ORDER BY date ASC ";
         return $this->db()->fetchAll($sql, array($startTime, $endTime, $status));
     }
 
     public function analysisPaidCourseOrderDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? AND `status`='paid' AND targetType='course'  AND `amount`>0 group by date_format(from_unixtime(`createdTime`),'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? AND `status`='paid' AND targetType='course'  AND `amount`>0 GROUP BY date ORDER BY date ASC ";
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function analysisPaidClassroomOrderDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? AND `status`='paid' AND targetType='classroom'  AND `amount`>0 group by date_format(from_unixtime(`paidTime`),'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? AND `status`='paid' AND targetType='classroom'  AND `amount`>0 GROUP BY date ORDER BY date ASC ";
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
@@ -167,25 +167,25 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisAmountDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>= ?  AND `paidTime`<= ? AND `status`='paid'  group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT sum(amount) AS count, from_unixtime(paidTime,'%Y-%m-%d') AS date FROM `{$this->table}` WHERE`paidTime`>= ?  AND `paidTime`<= ? AND `status`='paid'  GROUP BY from_unixtime(`paidTime`,'%Y-%m-%d') ORDER BY date ASC ";
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function analysisCourseAmountDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='course'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT sum(amount) AS count, from_unixtime(paidTime,'%Y-%m-%d') AS date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='course' GROUP BY from_unixtime(`paidTime`,'%Y-%m-%d') ORDER BY date ASC ";
         return $this->db()->fetchAll($sql);
     }
 
     public function analysisClassroomAmountDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='classroom'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT sum(amount) AS count, from_unixtime(paidTime,'%Y-%m-%d') AS date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='classroom' GROUP BY from_unixtime(`paidTime`,'%Y-%m-%d') ORDER BY date ASC ";
         return $this->db()->fetchAll($sql);
     }
 
     public function analysisVipAmountDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='vip'   group by from_unixtime(`paidTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT sum(amount) as count, from_unixtime(paidTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`paidTime`>={$startTime} AND `paidTime`<={$endTime} AND `status`='paid' AND targetType='vip' GROUP BY from_unixtime(`paidTime`,'%Y-%m-%d') ORDER BY date ASC ";
         return $this->db()->fetchAll($sql);
     }
 
@@ -224,7 +224,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
 
     public function analysisExitCourseOrderDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} AND `createdTime`<={$endTime} AND `status`<>'paid' AND `status`<>'created' AND targetType='course' group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>={$startTime} AND `createdTime`<={$endTime} AND `status`<>'paid' AND `status`<>'created' AND targetType='course' GROUP BY from_unixtime(`createdTime`,'%Y-%m-%d') ORDER BY date ASC ";
 
         return $this->db()->fetchAll($sql);
     }
