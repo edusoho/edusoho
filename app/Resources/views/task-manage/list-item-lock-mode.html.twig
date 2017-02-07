@@ -4,7 +4,7 @@
   <div class="item-content  js-item-content text-overflow">
     <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm"></i>
     {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
-    {{ task.title }}
+    任务<span class="number">{{ task.number }}</span>： {{ task.title }}
     {% if task.status != 'published' %}<span class="color-warning">(未发布)</span> {% endif %}
 
     {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
