@@ -29,7 +29,7 @@ export default class Options extends Component {
     if(!this.editor) {
       this.editor = CKEDITOR.replace(this.props.datas.optionId, {
         toolbar: 'Minimal',
-        filebrowserImageUploadUrl:this.props.filebrowserImageUploadUrl,
+        filebrowserImageUploadUrl:this.props.imageUploadUrl,
         height: 120
       });
       let self = this;
@@ -67,7 +67,7 @@ export default class Options extends Component {
           <label className="choice-label control-label-required">{this.props.datas.optionLabel}</label>
         </div>
         <div className="col-sm-8 controls">
-          <textarea className="form-control datas-input col-md-8" id={this.props.datas.optionId}  defaultValue={this.props.datas.inputValue} name='choices[]' value={this.props.datas.inputValue}></textarea>
+          <textarea className="form-control datas-input col-md-8" id={this.props.datas.optionId}  defaultValue={this.props.datas.inputValue} name='choices[]' value={this.props.datas.inputValue} data-image-upload-url={this.props.imageUploadUrl} data-image-download-url={this.props.imageDownloadUrl}></textarea>
           <div className="mtm">
             <label>
               <input type={type} name='answer[]' data-option-id={this.props.datas.optionId} value={this.props.index}  checked={this.props.datas.checked} className="answer-checkbox" onChange = {(event)=>this.onChangeChecked(event)}/>正确答案 

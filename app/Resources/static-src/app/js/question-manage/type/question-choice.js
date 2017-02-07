@@ -1,12 +1,29 @@
 import QuestionFormBase from './form-base';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import QuestionOptions from '../../../common/component/question-options';
+import QuestionOptions from 'app/common/component/question-options';
 import postal from 'postal';
 
 class Choice extends QuestionFormBase {
   constructor($form) {
     super($form);
+    this.$questionOptions = $('#question-options');
+    this.dataSource = this.$questionOptions.data('choices');
+    this.dataAnswer = this.$questionOptions.data('answer');
+    if(this.dataSource) {
+      this.dataSource = JSON.parse(this.$questionOptions.data('choices'));
+    }else {
+      this.dataSource = [];
+    }
+    if(this.dataAnswer) {
+      this.dataAnswer = JSON.parse(this.$questionOptions.data('answer'));
+    }else {
+      this.dataAnswer = [];
+    }
+    this.imageUploadUrl = this.$questionOptions.data('imageUploadUrl');
+    this.imageDownloadUrl = this.$questionOptions.data('imageDownloadUrl');
+    console.log(this.imageUploadUrl);
+    console.log(this.imageDownloadUrl);
     this.isSubmit =  false;
     this.$submit = null;
     this.initTitleEditor();
@@ -38,17 +55,7 @@ class Choice extends QuestionFormBase {
   }
 
   initOptions() {
-    let dataSource = $('#question-options').data('choices');
-    let dataAnswer = $('#question-options').data('answer');
-    if(dataSource) {
-      dataSource = JSON.parse(dataSource);
-      dataAnswer = JSON.parse(dataAnswer);
-    }else {
-      dataSource= [];
-    }
-    let url = $('#question-options').data('image-upload-url');
-    console.log(url);
-    ReactDOM.render( <QuestionOptions filebrowserImageUploadUrl={url} dataSource={dataSource} dataAnswer={dataAnswer}  minCheckedNum={ 2 } />,
+    ReactDOM.render( <QuestionOptions imageUploadUrl={this.imageUploadUrl} imageDownloadUrl={this.imageDownloadUrl} dataSource={this.dataSource} dataAnswer={this.dataAnswer}  minCheckedNum={ 2 } />,
       document.getElementById('question-options')
     );
   }
@@ -84,27 +91,3 @@ class Choice extends QuestionFormBase {
 }
 
 export default Choice;
-
-
-
-
-// import QuestionFormBase from './form-base';
-// import ReactDOM from 'react-dom';
-// import React from 'react';
-// import QuestionOptions from '../../../common/widget/question-options';
-
-// class Choice extends QuestionFormBase {
-//   constructor($form) {
-//     super($form);
-//     this.initTitleEditor();
-//     this.initAnalysisEditor();
-//     this.initOptions();
-//   }
-//   initOptions() {
-//     ReactDOM.render( <QuestionOptions dataSource={[]} inputValueName='value' checkedName="checked" idName="id"/>,
-//       document.getElementById('question-options')
-//     );
-//   }
-// }
-
-// export default Choice;
