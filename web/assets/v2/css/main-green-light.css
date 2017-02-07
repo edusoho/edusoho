@@ -1915,6 +1915,7 @@ select:-webkit-autofill {
   height: 60px;
   border: none;
   padding: 0 20px;
+  z-index: 1000;
 }
 .es-header .container {
   position: relative;
@@ -14584,7 +14585,7 @@ textarea {
   height: 100%;
   background: #000;
   background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1;
+  z-index: 999;
 }
 .open-course-views .mask .mask-content {
   position: absolute;
