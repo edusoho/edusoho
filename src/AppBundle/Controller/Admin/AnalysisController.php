@@ -351,58 +351,63 @@ class AnalysisController extends BaseController
         ));
     }
 
-    public function lessonAction(Request $request, $tab)
+    public function taskAction(Request $request, $tab)
     {
         $data            = array();
-        $lessonStartDate = "";
+        $taskStartDate = "";
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchLessonCount($timeRange),
+            $this->getTaskService()->count($timeRange),
             20
         );
 
-        $lessonDetail = $this->getCourseService()->searchLessons(
+        $taskDetail = $this->getTaskService()->search(
             $timeRange,
-            array('createdTime', "desc"),
+            array('createdTime' => "DESC"),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $lessonData = "";
+        $taskData = "";
 
         if ($tab == "trend") {
-            $lessonData = $this->getCourseService()->analysisLessonDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $taskData = $this->getTaskService()->analysisTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
-            $data = $this->fillAnalysisData($condition, $lessonData);
+            $data = $this->fillAnalysisData($condition, $taskData);
         }
 
-        $courseIds = ArrayToolkit::column($lessonDetail, 'courseId');
+        $courseIds = ArrayToolkit::column($taskDetail, 'courseId');
 
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        $userIds = ArrayToolkit::column($courses, 'userId');
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
+        $userIds = ArrayToolkit::column($courses, 'creator');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $lessonStartData = $this->getCourseService()->searchLessons(array(), array('createdTime', "asc"), 0, 1);
+        $taskStartData = $this->getTaskService()->search(array(), array('createdTime' => "ASC"), 0, 1);
 
-        if ($lessonStartData) {
-            $lessonStartDate = date("Y-m-d", $lessonStartData[0]['createdTime']);
+        if ($taskStartData) {
+            $taskStartDate = date("Y-m-d", $taskStartData[0]['createdTime']);
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
-        return $this->render("admin/operation-analysis/lesson.html.twig", array(
-            'lessonDetail'    => $lessonDetail,
+        return $this->render("admin/operation-analysis/task.html.twig", array(
+            'taskDetail'    => $taskDetail,
             'paginator'       => $paginator,
             'tab'             => $tab,
             'data'            => $data,
             'courses'         => $courses,
+            'courseSets'      => $courseSets,
             'users'           => $users,
-            'lessonStartDate' => $lessonStartDate,
+            'taskStartDate' => $taskStartDate,
             'dataInfo'        => $dataInfo
         ));
     }

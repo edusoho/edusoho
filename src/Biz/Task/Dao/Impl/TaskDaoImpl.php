@@ -131,6 +131,14 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchColumn($sql, array($courseSetId));
     }
 
+    public function analysisTaskDataByTime($startTime, $endTime)
+    {
+        $sql = "SELECT count(id) AS count, from_unixtime(createdTime, '%Y-%m-%d') AS date FROM {$this->table} WHERE
+            createdTime >= ? AND createdTime <= ? GROUP BY date ORDER BY date ASC";
+
+        return $this->db()->fetchAll($sql, array($startTime, $endTime));
+    }
+
     public function declares()
     {
         return array(
@@ -138,7 +146,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'createdTime',
                 'updatedTime'
             ),
-            'orderbys'   => array('seq', 'startTime'),
+            'orderbys'   => array('seq', 'startTime', 'createdTime'),
             'conditions' => array(
                 'id = :id',
                 'id IN ( :ids )',
