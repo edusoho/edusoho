@@ -4,8 +4,7 @@ import { Browser } from 'common/utils';
 export const initScrollbar = ()=> {
 	let $taskTestpaperBodyIframe = $('.js-task-testpaper-body-iframe');
 	let $paneCard = $('.js-panel-card');
-	
-	if (Browser.isIE  || Browser.isFirefox || Browser.isMozilla ) {
+	if (Browser.ie  || Browser.firefox) {
 		$taskTestpaperBodyIframe.css('overflow-y','auto')
 	} else {
 		$taskTestpaperBodyIframe.perfectScrollbar();
