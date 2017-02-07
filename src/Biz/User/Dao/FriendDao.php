@@ -21,8 +21,4 @@ interface FriendDao extends GeneralDaoInterface
     public function searchByToId($toId, $start, $limit);
 
     public function searchByUserId($userId, $start, $limit);
-
-    public function countByFromId($userId);
-
-    public function countByToId($toId);
 }

@@ -59,16 +59,6 @@ class FriendDaoImpl extends GeneralDaoImpl implements FriendDao
         return $this->search(array('fromId' => $userId, 'pair' => 1), array('createdTime' => 'DESC'), $start, $limit);
     }
 
-    public function countByFromId($userId)
-    {
-        return $this->count(array('fromId' => $userId));
-    }
-
-    public function countByToId($userId)
-    {
-        return $this->count(array('toId' => $userId));
-    }
-
     public function declares()
     {
         return array(
@@ -77,7 +67,7 @@ class FriendDaoImpl extends GeneralDaoImpl implements FriendDao
                 'toId = :toId',
                 'pair = :pair'
             ),
-            'orderbys' => array('createdTime')
+            'orderbys'   => array('createdTime')
         );
     }
 }
