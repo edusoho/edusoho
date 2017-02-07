@@ -199,6 +199,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         foreach ($tasks as $task) {
             $this->getTaskDao()->update($task['id'], array('status' => 'published'));
         }
+        return $task;
     }
 
     //取消发布课时中一组任务
