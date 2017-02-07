@@ -99,7 +99,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     private function countMembersFinishedAllTasksByCourseId($courseId)
     {
-        $totalTaskCount = $this->getTaskService()->count(array('courseId' => $courseId, 'status' => 'published'));
+        $totalTaskCount = $this->getTaskService()->countTasks(array('courseId' => $courseId, 'status' => 'published'));
         if ($totalTaskCount == 0) {
             return 0;
         }

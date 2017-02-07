@@ -20,7 +20,7 @@ class PersonDynamicDataTag extends BaseDataTag implements DataTag
     {
         $personDynamics = $this->getStatusService()->searchStatuses(
             array('private' => 0),
-            array('createdTime', 'DESC'),
+            array('createdTime'=> 'DESC'),
             0,
             $arguments['count']
         );

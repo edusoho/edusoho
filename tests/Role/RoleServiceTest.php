@@ -88,11 +88,11 @@ class  RoleServiceTest extends BaseTestCase
      */
     protected function getRoleService()
     {
-        return $this->getServiceKernel()->createService('Role:RoleService');
+        return $this->createService('Role:RoleService');
     }
 
     protected function getRoleDao()
     {
-        return $this->getBiz()->dao('Role:RoleDao');
+        return $this->createDao('Role:RoleDao');
     }
 }

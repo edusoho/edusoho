@@ -482,17 +482,17 @@ class ThreadServiceTest extends BaseTestCase
 
     protected function getGroupService()
     {
-        return $this->getBiz()->service('Group:GroupService');
+        return $this->createService('Group:GroupService');
     }
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getThreadService()
     {
-        return $this->getBiz()->service('Group:ThreadService');
+        return $this->createService('Group:ThreadService');
     }
 
     protected function createUser()

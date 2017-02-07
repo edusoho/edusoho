@@ -51,11 +51,11 @@ class LiveCourseSetController extends CourseBaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getTaskService()->count($recentTasksCondition)
+            $this->getTaskService()->countTasks($recentTasksCondition)
             , 30
         );
 
-        $recentTasks = $this->getTaskService()->search(
+        $recentTasks = $this->getTaskService()->searchTasks(
             $recentTasksCondition,
             array('startTime' => 'ASC'),
             $paginator->getOffsetCount(),
@@ -67,7 +67,7 @@ class LiveCourseSetController extends CourseBaseController
         $recentCourseSets = array();
 
         foreach ($recentTasks as $task) {
-            $courseSet = $courseSets[$task['courseSetId']];
+            $courseSet = $courseSets[$task['fromCourseSetId']];
 
             if ($courseSet['status'] != 'published' || $courseSet['parentId'] != '0') {
                 continue;
@@ -105,7 +105,7 @@ class LiveCourseSetController extends CourseBaseController
     {
         $publishedCourseSetIds = $this->_findPublishedLiveCourseSetIds();
 
-        $liveReplayList = $this->getTaskService()->search(array(
+        $liveReplayList = $this->getTaskService()->searchTasks(array(
             'endTime_LT'       => time(),
             'type'             => 'live',
             'copyId'           => 0,
@@ -144,7 +144,7 @@ class LiveCourseSetController extends CourseBaseController
             if ($today == $value['date'] || count($liveTabs) >= 4) {
                 continue;
             } else {
-                $dayTasks = $futureLiveLessons = $this->getTaskService()->search(array(
+                $dayTasks = $futureLiveLessons = $this->getTaskService()->searchTasks(array(
                     'startTimeGreaterThan' => strtotime($value['date']),
                     'endTimeLessThan'      => strtotime($value['date'] . ' 23:59:59'),
                     'type'                 => 'live',
@@ -239,9 +239,9 @@ class LiveCourseSetController extends CourseBaseController
                 $ret[$courseSetId] = $liveCourseSets[$courseSetId];
 
                 if ($type == 'future') {
-                    $tasks = $this->getTaskService()->search(array('fromCourseSetId' => $courseSetId, 'endTime_GT' => time()), array('startTime' => 'ASC'), 0, 1);
+                    $tasks = $this->getTaskService()->searchTasks(array('fromCourseSetId' => $courseSetId, 'endTime_GT' => time()), array('startTime' => 'ASC'), 0, 1);
                 } else {
-                    $tasks = $this->getTaskService()->search(array('fromCourseSetId' => $courseSetId, 'endTime_LT' => time()), array('startTime' => 'DESC'), 0, 1);
+                    $tasks = $this->getTaskService()->searchTasks(array('fromCourseSetId' => $courseSetId, 'endTime_LT' => time()), array('startTime' => 'DESC'), 0, 1);
                 }
 
                 $ret[$courseSetId]['course'] = $courses[$courseSetId];

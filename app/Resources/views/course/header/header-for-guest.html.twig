@@ -9,7 +9,9 @@
   <div class="course-detail-bottom">
     <div class="course-detail-img">
       {% if previewTask|default(null) %}
-        <a href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:course.id, id:previewTask.id}) }}" class="course-img-cover">
+        <a href="#modal" data-toggle="modal"
+           data-url="{{ path('course_task_preview',{courseId:course.id, id:previewTask.id}) }}"
+           class="course-img-cover">
           <i class="es-icon es-icon-playcircleoutline"></i>
         </a>
       {% endif %}
@@ -81,25 +83,16 @@
                 data-content="{{ tag.summary }}">{{ tag.short_name }}</span>
         {% endfor %}
 
-        {# <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top"
-              data-toggle="popover" title="title" data-content="content.">练</span>
-        <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top"
-              data-toggle="popover" title="title" data-content="content.">试</span>
-        <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top"
-              data-toggle="popover" title="title" data-content="content.">问</span>
-        <span class="lump-sm color-lump bg-primary mr5" data-container="body" data-trigger="hover" data-placement="top"
-              data-toggle="popover" title="title" data-content="content.">动</span>
-        <span class="lump-sm color-lump mr5" data-container="body" ddata-trigger="hover" ata-placement="top"
-              data-toggle="popover" title="title" data-container="body" data-content="content. ">疑</span>
-        <span class="lump-sm color-lump mr5" data-container="body" data-trigger="hover" data-placement="top"
-              data-toggle="popover" title="title" data-content="content.">业</span> #}
       </div>
-
       <div class="text-right">
         {% if member|default(false) %}
           <a class="btn btn-primary btn-lg" href="{{ path('my_course_show', {id: course.id}) }}">去学习</a>
         {% else %}
-          {% include 'course/header/header-for-guest-buy-btn.html.twig' %}
+          {% if classroom|default(null) %}
+            {% include 'course/header/header-for-classroom-info.html.twig' %}
+          {% else %}
+            {% include 'course/header/header-for-guest-buy-btn.html.twig' %}
+          {% endif %}
         {% endif %}
       </div>
     </div>

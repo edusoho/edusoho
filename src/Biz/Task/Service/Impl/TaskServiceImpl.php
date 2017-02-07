@@ -331,12 +331,12 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
     }
 
-    public function search($conditions, $orderBy, $start, $limit)
+    public function searchTasks($conditions, $orderBy, $start, $limit)
     {
         return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function count($conditions)
+    public function countTasks($conditions)
     {
         return $this->getTaskDao()->count($conditions);
     }
@@ -500,7 +500,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $taskConditions = array(
             'startTime_GT'     => time(),
-            'endTime_LT'       => strtotime(date('Y-m-d') . ' 23:59:59'),
+            'endTime_LT'       => strtotime(date('Y-m-d').' 23:59:59'),
             'type'             => 'live',
             'fromCourseSetIds' => ArrayToolkit::column($courseSetIds, 'id'),
             'status'           => 'published'
@@ -608,16 +608,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     }
 
     /**
-     *
-     * 自由式
-     * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第一个任务作为下一个学习任务，
-     * 2.如果不为空，则按照任务序列返回第一个作为下一个学习任务
-     * 任务式
-     * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第前三个作为任务，
-     * 2.如果不为空，则取关联的三个。
-     *
-     * 自由式和任务式的逻辑由任务策略完成
-     *
      * @param  $courseId
      *
      * @return array       tasks
@@ -626,35 +616,38 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         list($course) = $this->getCourseService()->tryTakeCourse($courseId);
         $toLearnTasks = $tasks = array();
-        if ($course['learnMode'] == 'freeMode') {
-            $toLearnTasks[] = $this->getToLearnTaskWithFreeMode($courseId);
-        } elseif ($course['learnMode'] == 'lockMode') {
-            list($tasks, $toLearnTasks) = $this->getToLearnTasksWithLockMode($courseId);
-        } else {
+
+        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
             return $toLearnTasks;
         }
 
-        $activityIds = ArrayToolkit::column($toLearnTasks, 'activityId');
-
-        $activities = $this->getActivityService()->findActivities($activityIds);
-        $activities = ArrayToolkit::index($activities, 'id');
-
-        $taskIds     = ArrayToolkit::column($toLearnTasks, 'id');
-        $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
-
-        //设置任务是否解锁
-        foreach ($toLearnTasks as &$task) {
-            $task['activity'] = $activities[$task['activityId']];
-            foreach ($taskResults as $key => $result) {
-                if ($result['courseTaskId'] != $task['id']) {
-                    continue;
-                }
-                $task['result'] = $result;
-            }
-            if ($course['learnMode'] == 'lockMode') {
-                $task = $this->setTaskLockStatus($tasks, $task);
-            }
+        if ($course['learnMode'] == 'freeMode') {
+            $toLearnTasks[] = $this->getToLearnTaskWithFreeMode($courseId);
         }
+        if ($course['learnMode'] == 'lockMode') {
+            list($tasks, $toLearnTasks) = $this->getToLearnTasksWithLockMode($courseId);
+        }
+
+        $toLearnTasks = $this->fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks);
+
+        return $toLearnTasks;
+    }
+
+    /**
+     * @param $courseId
+     * @return array|mixed
+     */
+    public function findToLearnTasksByCourseIdForMission($courseId)
+    {
+        list($course) = $this->getCourseService()->tryTakeCourse($courseId);
+        $toLearnTasks = $tasks = array();
+
+        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
+            return $toLearnTasks;
+        }
+        list($tasks, $toLearnTasks) = $this->getToLearnTasksWithLockMode($courseId);
+
+        $toLearnTasks = $this->fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks);
 
         return $toLearnTasks;
     }
@@ -668,7 +661,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         } else {
             $latestTaskResult = array_shift($taskResults);
             $latestLearnTask  = $this->getTask($latestTaskResult['courseTaskId']); //获取最新学习未学完的课程
-            $tasks            = $this->getTaskDao()->search(array('seq_GE' => $latestLearnTask['seq'], 'courseId' => $courseId), array('seq' => 'ASC'), 0, 2);
+            $conditions       = array(
+                'seq_GE'   => $latestLearnTask['seq'],
+                'courseId' => $courseId,
+            );
+            $tasks            = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 2);
             $toLearnTask      = array_pop($tasks); //如果当正在学习的是最后一个，则取当前在学的任务
         }
         return $toLearnTask;
@@ -819,5 +816,38 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @param $toLearnTasks
+     * @param $task
+     * @param $course
+     * @param $tasks
+     * @return mixed
+     */
+    protected function fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks)
+    {
+        $activityIds = ArrayToolkit::column($toLearnTasks, 'activityId');
+
+        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        $taskIds     = ArrayToolkit::column($toLearnTasks, 'id');
+        $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
+
+        //设置任务是否解锁
+        foreach ($toLearnTasks as &$task) {
+            $task['activity'] = $activities[$task['activityId']];
+            foreach ($taskResults as $key => $result) {
+                if ($result['courseTaskId'] != $task['id']) {
+                    continue;
+                }
+                $task['result'] = $result;
+            }
+            if ($course['learnMode'] == 'lockMode') {
+                $task = $this->setTaskLockStatus($tasks, $task);
+            }
+        }
+        return $toLearnTasks;
     }
 }

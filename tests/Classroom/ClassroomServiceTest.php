@@ -1352,7 +1352,7 @@ class ClassroomServiceTest extends BaseTestCase
      */
     private function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -1360,7 +1360,7 @@ class ClassroomServiceTest extends BaseTestCase
      */
     private function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -1368,7 +1368,7 @@ class ClassroomServiceTest extends BaseTestCase
      */
     private function getCourseSetService()
     {
-        return $this->getBiz()->service('Course:CourseSetService');
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
@@ -1376,7 +1376,7 @@ class ClassroomServiceTest extends BaseTestCase
      */
     private function getClassroomService()
     {
-        return $this->getBiz()->service('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     /**
@@ -1384,7 +1384,7 @@ class ClassroomServiceTest extends BaseTestCase
      */
     protected function getCourseMemberService()
     {
-        return $this->getBiz()->service('Course:MemberService');
+        return $this->createService('Course:MemberService');
     }
 
     private function createCourse($title)

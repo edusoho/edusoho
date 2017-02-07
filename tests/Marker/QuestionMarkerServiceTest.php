@@ -402,16 +402,16 @@ class QuestionMarkerServiceTest extends BaseTestCase
 
     protected function getQuestionMarkerService()
     {
-        return $this->getBiz()->service('Marker:QuestionMarkerService');
+        return $this->createService('Marker:QuestionMarkerService');
     }
 
     protected function getQuestionService()
     {
-        return $this->getBiz()->service('Question:QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 
     protected function getMarkerService()
     {
-        return $this->getBiz()->service('Marker:MarkerService');
+        return $this->createService('Marker:MarkerService');
     }
 }

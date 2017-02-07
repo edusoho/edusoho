@@ -7,10 +7,11 @@
     {% set courseCount = 15 %}
     {% for course in courses %}
       {% set courseCount = loop.length %}
+      {% set courseSet = data('CourseSet',{id:course.courseSetId}) %}
       <div class="course-item">
         <div class="course-img">
           <a target="_blank" href="{{ path('course_show', {id:course.id}) }}">
-            <img class="transform img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}">
+            <img class="transform img-responsive" src="{{ filepath(courseSet.cover.middle|default(null), 'course.png') }}">
           </a>
         </div>
         <div class="progress progress-xs">
@@ -20,7 +21,7 @@
         <div class="course-info">
           <div class="title">
             <a target="_blank" class="link-dark" href="{{ path('course_show', {id:course.id}) }}">
-              {{ course.title }}
+             {{ courseSet.title }}  ~ {{ course.title }}
             </a>
           </div>
         </div>
