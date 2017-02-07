@@ -4,10 +4,14 @@
 import swfobject from 'es-swfobject';
 import EsMessenger from '../../../common/messenger';
 import ActivityEmitter from '../../activity/activity-emitter';
+import DataReporter from '../data-reporter';
+
 class VideoPlay {
   constructor() {
     this.player = {};
     this.emitter = new ActivityEmitter();
+    
+    this.dataReporter = new DataReporter();
   }
 
   play() {
