@@ -23,7 +23,7 @@
 
   <div class="form-group">
     <div class="col-md-2 control-label"><label for="question-stem-field" class="control-label-required">{{ question_stem_label|default('题干'|trans) }}</label></div>
-    <div class="col-md-8 controls">
+    <div class="col-md-8 controls 11">
       <textarea class="form-control" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"  data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
       {% set question_stem_help = question_stem_help|default('') %}
       {% if question_stem_help %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
