@@ -110,7 +110,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findUserFollowingCount($userId)
     {
-        return $this->getFriendDao()->countByFromId($userId);
+        return $this->getFriendDao()->count(array('fromId' => $userId));
     }
 
     public function findUserFollowers($userId, $start, $limit)
@@ -122,7 +122,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findUserFollowerCount($userId)
     {
-        return $this->getFriendDao()->countByToId($userId);
+        return $this->getFriendDao()->count(array('toId' => $userId));
     }
 
     public function findAllUserFollower($userId)
