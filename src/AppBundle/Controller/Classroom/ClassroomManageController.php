@@ -68,7 +68,7 @@ class ClassroomManageController extends BaseController
         );
 
         $reviews = $this->getClassroomReviewService()->searchReviews(
-            array('classroomId' => $id),
+            array('classroomId' => $id, 'parentId' => 0),
             array('createdTime' => 'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
