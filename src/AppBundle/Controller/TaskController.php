@@ -37,7 +37,6 @@ class TaskController extends BaseController
             'course'       => $course,
             'task'         => $task,
             'taskResult'   => $taskResult,
-            'preview'      => $preview,
             'nextTask'     => empty($nextTask) ? array() : $nextTask,
             'finishedRate' => empty($finishedRate) ? 0 : $finishedRate
         ));
