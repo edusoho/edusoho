@@ -7,25 +7,22 @@ import postal from 'postal';
 class Choice extends QuestionFormBase {
   constructor($form) {
     super($form);
+    this.isSubmit =  false;
+    this.$submit = null;
     this.$questionOptions = $('#question-options');
     this.dataSource = this.$questionOptions.data('choices');
     this.dataAnswer = this.$questionOptions.data('answer');
     if(this.dataSource) {
-      this.dataSource = JSON.parse(this.$questionOptions.data('choices'));
+      this.dataSource = JSON.parse(this.dataSource);
+      this.dataAnswer = JSON.parse(this.dataAnswer);
     }else {
       this.dataSource = [];
-    }
-    if(this.dataAnswer) {
-      this.dataAnswer = JSON.parse(this.$questionOptions.data('answer'));
-    }else {
-      this.dataAnswer = [];
+      this.dataAnswer =[];
     }
     this.imageUploadUrl = this.$questionOptions.data('imageUploadUrl');
     this.imageDownloadUrl = this.$questionOptions.data('imageDownloadUrl');
     console.log(this.imageUploadUrl);
     console.log(this.imageDownloadUrl);
-    this.isSubmit =  false;
-    this.$submit = null;
     this.initTitleEditor();
     this.initAnalysisEditor();
     this.initOptions();
