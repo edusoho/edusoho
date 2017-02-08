@@ -386,7 +386,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 throw $this->createInvalidArgumentException("Param Required: expiryStartDate");
             }
             if (isset($course['expiryEndDate'])) {
-                $course['expiryEndDate'] = strtotime($course['expiryEndDate']);
+                $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
             } else {
                 throw $this->createInvalidArgumentException("Param Required: expiryEndDate");
             }
@@ -417,7 +417,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             return $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($course['id']);
         }
         return $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
-
     }
 
     public function tryManageCourse($courseId, $courseSetId = 0)
@@ -802,7 +801,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int $userId
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -823,7 +822,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count      = $this->searchCourseCount($conditions);
+        $count = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
