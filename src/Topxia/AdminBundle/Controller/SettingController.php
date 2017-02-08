@@ -358,11 +358,21 @@ class SettingController extends BaseController
         $mailer = array_merge($default, $mailer);
 
         if ($request->getMethod() == 'POST') {
-            $mailer = $request->request->all();
-            $this->getSettingService()->set('mailer', $mailer);
-            $mailerWithoutPassword             = $mailer;
-            $mailerWithoutPassword['password'] = '******';
-            $this->getLogService()->info('system', 'update_settings', '更新邮件服务器设置', $mailerWithoutPassword);
+            $settingStatus = $this->checkMailerStatus();
+            if ('cloud_email_crm' == $settingStatus) {
+                $name = $request->request->get('name', '');
+                $mailer = $this->getSettingService()->get('mailer', array());
+                $mailer['name'] = $name;
+                $info = array('name' => $name);
+                $this->getSettingService()->set('mailer', $mailer);
+                $this->getLogService()->info('system', 'update_settings', '更新邮件发送人名称', $info);
+            } else {
+                $mailer = $request->request->all();
+                $this->getSettingService()->set('mailer', $mailer);
+                $mailerWithoutPassword             = $mailer;
+                $mailerWithoutPassword['password'] = '******';
+                $this->getLogService()->info('system', 'update_settings', '更新邮件服务器设置', $mailerWithoutPassword);
+            }
             $this->setFlashMessage('success', $this->trans('电子邮件设置已保存！'));
         }
 
