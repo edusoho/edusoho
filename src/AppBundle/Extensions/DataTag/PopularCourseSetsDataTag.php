@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag;
+namespace AppBundle\Extensions\DataTag;
 
 
 class PopularCourseSetsDataTag extends CourseBaseDataTag implements DataTag

@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag\Test;
+namespace AppBundle\Extensions\DataTag\Test;
 
 use Biz\Article\Service\ArticleService;
 use Biz\BaseTestCase;;

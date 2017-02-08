@@ -1,8 +1,5 @@
 <?php
-namespace Org\OrgBundle\Extensions\DataTag;
-
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
-use Topxia\WebBundle\Extensions\DataTag\BaseDataTag;
+namespace AppBundle\Extensions\DataTag;
 
 class OrgTreeDataTag extends BaseDataTag implements DataTag
 {

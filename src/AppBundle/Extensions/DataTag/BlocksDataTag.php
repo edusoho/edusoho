@@ -1,7 +1,7 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag;
-use Topxia\WebBundle\Extensions\DataTag\DataTag; 
+namespace AppBundle\Extensions\DataTag;
+use AppBundle\Extensions\DataTag\DataTag;
 
 class BlocksDataTag extends BaseDataTag implements DataTag
 {

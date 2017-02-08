@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag;
+namespace AppBundle\Extensions\DataTag;
 
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;

@@ -1,10 +1,6 @@
 <?php
 
-namespace Org\OrgBundle\Extensions\DataTag;
-
-
-use Topxia\WebBundle\Extensions\DataTag\BaseDataTag;
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
+namespace AppBundle\Extensions\DataTag;
 
 class OrgDisplayDataTag extends BaseDataTag implements DataTag
 {

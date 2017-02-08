@@ -1,9 +1,9 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag\Test;
+namespace AppBundle\Extensions\DataTag\Test;
 
 use Biz\BaseTestCase;;
-use Topxia\WebBundle\Extensions\DataTag\CourseDataTag;
+use AppBundle\Extensions\DataTag\CourseDataTag;
 
 class CourseDataTagTest extends BaseTestCase
 {   

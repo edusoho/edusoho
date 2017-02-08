@@ -1,10 +1,10 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag\Test;
+namespace AppBundle\Extensions\DataTag\Test;
 
 use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Extensions\DataTag\LatestCourseReviewsDataTag;
+use AppBundle\Extensions\DataTag\LatestCourseReviewsDataTag;
 
 class LatestCourseReviewsDataTagTest extends BaseTestCase
 {   

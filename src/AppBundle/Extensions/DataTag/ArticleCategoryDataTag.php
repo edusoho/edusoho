@@ -1,8 +1,8 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag;
+namespace AppBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
+use AppBundle\Extensions\DataTag\DataTag;
 
 class ArticleCategoryDataTag extends BaseDataTag implements DataTag
 {

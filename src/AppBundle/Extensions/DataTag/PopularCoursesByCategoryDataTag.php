@@ -1,8 +1,8 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag;
+namespace AppBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
+use AppBundle\Extensions\DataTag\DataTag;
 
 /**
  * @todo  可去除，直接使用PopularCoursesDataTag

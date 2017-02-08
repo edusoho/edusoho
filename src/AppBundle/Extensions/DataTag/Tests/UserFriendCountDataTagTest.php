@@ -1,10 +1,10 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag\Test;
+namespace AppBundle\Extensions\DataTag\Test;
 
 use Biz\BaseTestCase;;
 use Topxia\Common\ArrayToolkit;
-use Topxia\WebBundle\Extensions\DataTag\UserFriendCountDataTag;
+use AppBundle\Extensions\DataTag\UserFriendCountDataTag;
 
 class UserFriendCountDataTagTest extends BaseTestCase
 {

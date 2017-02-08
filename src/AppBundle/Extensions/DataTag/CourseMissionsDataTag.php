@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag;
+namespace AppBundle\Extensions\DataTag;
 
 use Biz\Task\Dao\TaskResultDao;
 use Biz\Task\Service\TaskResultService;

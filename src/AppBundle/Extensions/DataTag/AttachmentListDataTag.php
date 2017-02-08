@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\WebBundle\Extensions\DataTag;
+namespace AppBundle\Extensions\DataTag;
 
 use Biz\File\Service\UploadFileService;
 use Topxia\Common\ArrayToolkit;

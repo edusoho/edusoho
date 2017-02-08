@@ -1,9 +1,9 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag;
+namespace AppBundle\Extensions\DataTag;
 
 use Biz\Article\Service\ArticleService;
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
+use AppBundle\Extensions\DataTag\DataTag;
 use Topxia\Common\ArrayToolkit;
 
 class PublishedArticlesDataTag extends CourseBaseDataTag implements DataTag  

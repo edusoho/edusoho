@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Topxia\WebBundle\Extensions\DataTag\Test;
+namespace AppBundle\Extensions\DataTag\Test;
 
 
 use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Extensions\DataTag\RecentLiveTasksDataTag;
+use AppBundle\Extensions\DataTag\RecentLiveTasksDataTag;
 
 class RecentLiveTasksDataTagTest extends BaseTestCase {
     public function testGetData()

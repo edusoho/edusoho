@@ -1,9 +1,9 @@
 <?php
 
-namespace Topxia\WebBundle\Extensions\DataTag;
+namespace AppBundle\Extensions\DataTag;
 
-use Topxia\WebBundle\Extensions\DataTag\DataTag;
-use Topxia\WebBundle\Extensions\DataTag\BaseDataTag;
+use AppBundle\Extensions\DataTag\DataTag;
+use AppBundle\Extensions\DataTag\BaseDataTag;
 
 class RoleDataTag extends BaseDataTag implements DataTag
 {
