@@ -1,5 +1,4 @@
 export const Card = () => {
-  console.log('Card');
   if (!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
     bindCardEvent('.js-card-content');
     $(".js-user-card").on("mouseenter", function () {
@@ -11,7 +10,6 @@ export const Card = () => {
 
         function callback(html) {
 
-          _this.popover('destroy');
 
           if ($('#user-card-' + userId).length == 0) {
             if ($('body').find('#user-card-store').length > 0) {
@@ -22,17 +20,22 @@ export const Card = () => {
             }
           }
 
-          _this.popover({
-            trigger: 'manual',
-            placement: 'auto top',
-            html: 'true',
-            content: function () {
-              return html;
-            },
-            template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
-            container: 'body',
-            animation: true
-          });
+          if(!_this.data('popover')) {
+            _this.popover('destroy');
+            _this.popover({
+              trigger: 'manual',
+              placement: 'auto top',
+              html: 'true',
+              content: function () {
+                return html;
+              },
+              template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
+              container: 'body',
+              animation: true
+            });
+          }
+
+         
 
           _this.popover("show");
 
