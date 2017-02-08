@@ -3,34 +3,37 @@
 {% block myStudyPlace %}
 {% if courses %}
   <!-- 课程 -->
-  <div class="course-list">
+  <ul class="course-grids">
     {% set courseCount = 15 %}
     {% for course in courses %}
       {% set courseCount = loop.length %}
       {% set courseSet = data('CourseSet',{id:course.courseSetId}) %}
-      <div class="course-item">
-        <div class="course-img">
-          <a target="_blank" href="{{ path('course_show', {id:course.id}) }}">
-            <img class="transform img-responsive" src="{{ filepath(courseSet.cover.middle|default(null), 'course.png') }}">
-          </a>
-        </div>
-        <div class="progress progress-xs">
-          <div class="progress-bar" role="progressbar" aria-valuenow="{{ course.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ course.percent }}%" data-toggle="tooltip" data-placement="right" title="" data-original-title="40%">
+      <li class="course-grid mt0">
+        <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body" style="width: auto">
+          <div class="course-grid-img">
+            <img src="{{ filepath(courseSet.cover.middle|default(null), 'course.png') }}" class="img-responsive thumb">
+            <div class="course-grid-mask">
+              <span class="btn btn-warning btn-sm course-grid-btn-learn">
+                继续学习
+              </span>
+            </div>
           </div>
-        </div>
-        <div class="course-info">
+          <div class="progress progress-sm mb0">
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{ course.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ course.percent }}%" data-toggle="tooltip" data-placement="right" title="" data-original-title="40%">
+            </div>
+          </div>
           <div class="title">
-            <a target="_blank" class="link-dark" href="{{ path('course_show', {id:course.id}) }}">
-             {{ courseSet.title }}  ~ {{ course.title }}
-            </a>
+             {{ courseSet.title|sub_text(6) }}
+             <span class="pull-right color-primary text-12"><span class="gray-light mrs">|</span>{{ course.title|sub_text(6) }}</span>
           </div>
-        </div>
-      </div>
+        </a>
+      
+      </li>
     {% endfor %}
-    {% if courseCount >= 15 %}
-      <p class="text-center"><a class="link-light" href="{{ path('my_courses_learning') }}" target="_blank">{{'更多'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></p>
-    {% endif %}
-  </div>
+  </ul>
+  {% if courseCount >= 15 %}
+    <p class="text-center"><a class="link-dark" href="{{ path('my_courses_learning') }}" target="_blank">{{'更多'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></p>
+  {% endif %}
 {% else %}
   <div class="empty">{{'暂无课程'|trans}}</div>
 {% endif %}

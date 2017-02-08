@@ -15,9 +15,7 @@ $('[data-toggle="popover"]').popover({
   html: true,
 });
 
-$('[data-toggle="tooltip"]').tooltip({
-  html: true,
-});
+$('[data-toggle="tooltip"]').tooltip();
 
 $(document).ajaxError(function (event, jqxhr, settings, exception) {
   if (jqxhr.responseText === 'LoginLimit') {
