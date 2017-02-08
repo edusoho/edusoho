@@ -65,7 +65,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         ));
     }
 
-    protected function onTaskNumberChange($event, $fields)
+    protected function onTaskNumberChange(Event $event, $fields)
     {
         $task = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($task['courseId'], $fields);
