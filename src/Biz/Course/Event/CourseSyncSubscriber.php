@@ -40,8 +40,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             //章节的更新和删除会比较麻烦，因为还涉及子节点（比如task的引用也要切换）的处理
             'course.chapter.update'  => 'onCourseChapterUpdate',
             'course.chapter.delete'  => 'onCourseChapterDelete',
-
-            'course.material.create' => 'onCourseMaterialCreate',
+            //同步新建的任务时同步新增material记录即可，这里无需处理
+            // 'course.material.create' => 'onCourseMaterialCreate',
             'course.material.update' => 'onCourseMaterialUpdate',
             'course.material.delete' => 'onCourseMaterialDelete'
         );
@@ -53,12 +53,12 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if ($courseSet['parentId'] > 0) {
             return;
         }
-        $copiedCourseSet = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($courseSet['id'], 1);
-        if (empty($copiedCourseSet)) {
+        $copiedCourseSets = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($courseSet['id'], 1);
+        if (empty($copiedCourseSets)) {
             return;
         }
-        foreach ($copiedCourseSet as $cc) {
-            $cc = $this->copyFields($cc, $courseSet, array(
+        foreach ($copiedCourseSets as $cc) {
+            $cc = $this->copyFields($courseSet, $cc, array(
                 'type',
                 'title',
                 'subtitle',
@@ -90,8 +90,9 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if (empty($copiedCourses)) {
             return;
         }
+
         foreach ($copiedCourses as $cc) {
-            $cc = $this->copyFields($cc, $course, array(
+            $cc = $this->copyFields($course, $cc, array(
                 'title',
                 'learnMode',
                 'expiryMode',
@@ -180,7 +181,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         $lockedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
         $copiedChapters  = $this->getChapterDao()->findChaptersByCopyIdAndLockedCourseIds($chapter['id'], $lockedCourseIds);
         foreach ($copiedChapters as $cc) {
-            $cc = $this->copyFields($cc, $chapter, array(
+            $cc = $this->copyFields($chapter, $cc, array(
                 'number',
                 'seq',
                 'title'
@@ -207,48 +208,6 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         }
     }
 
-    public function onCourseMaterialCreate(Event $event)
-    {
-        $material = $event->getSubject();
-        if ($material['copyId'] > 0) {
-            return;
-        }
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($material['courseId'], 1);
-        if (empty($copiedCourses)) {
-            return;
-        }
-
-        $copiedActivity = array();
-        if (!empty($material)) {
-            //xxx 注意opencourse没有对应的Activity？
-            $copiedActivities = $this->getActivityDao()->findByCopyId($material['lessonId']);
-            $copiedActivity   = $copiedActivities[0];
-        }
-
-        foreach ($copiedCourses as $cc) {
-            $newMaterial = $this->copyFields(array(), $material, array(
-                'title',
-                'description',
-                'link',
-                'fileId',
-                'fileUri',
-                'fileMime',
-                'fileSize',
-                'source',
-                'userId',
-                'type'
-            ));
-            $newMaterial['copyId']      = $material['id'];
-            $newMaterial['courseSetId'] = $cc['courseSetId'];
-            $newMaterial['courseId']    = $cc['id'];
-            if (!empty($copiedActivity)) {
-                $newMaterial['lessonId'] = $copiedActivity['id'];
-            }
-
-            $this->getMaterialDao()->create($newMaterial);
-        }
-    }
-
     public function onCourseMaterialUpdate(Event $event)
     {
         $material = $event->getSubject();
@@ -256,14 +215,14 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             return;
         }
 
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($chapter['courseId'], 1);
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($material['courseId'], 1);
         if (empty($copiedCourses)) {
             return;
         }
         $lockedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
         $copiedMaterials = $this->getMaterialDao()->findByCopyIdAndLockedCourseIds($material['id'], $lockedCourseIds);
         foreach ($copiedMaterials as $cm) {
-            $cm = $this->copyFields($cm, $material, array(
+            $cm = $this->copyFields($material, $cm, array(
                 'title',
                 'description',
                 'link',
@@ -283,7 +242,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if ($material['copyId'] > 0) {
             return;
         }
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($chapter['courseId'], 1);
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($material['courseId'], 1);
         if (empty($copiedCourses)) {
             return;
         }
@@ -348,5 +307,10 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         //fixme 不应该调用course模块之外的dao对象
         return $this->getBiz()->dao('Activity:ActivityDao');
+    }
+
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
     }
 }
