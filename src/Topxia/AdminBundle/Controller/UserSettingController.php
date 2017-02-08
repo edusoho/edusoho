@@ -154,20 +154,19 @@ class UserSettingController extends BaseController
         $loginConnect = array_merge($default, $loginConnect);
 
         if ($request->getMethod() == 'POST') {
-            $loginConnect = $request->request->all();
-            $loginConnect = ArrayToolkit::trim($loginConnect);
+            $requestLoginConnect = $request->request->all();
+            $requestLoginConnect = ArrayToolkit::trim($requestLoginConnect);
 
-            $formerLoginConnect = $this->getSettingService()->get('login_bind');
-            if ($loginConnect['enabled'] == 0 && $formerLoginConnect['enabled'] == 1) {
-                $loginConnect['weibo_enabled']   = 0;
-                $loginConnect['qq_enabled']    = 0;
-                $loginConnect['renren_enabled']   = 0;
-                $loginConnect['weixinweb_enabled'] = 0;
-                $loginConnect['weixinmob_enabled']    = 0;
+            if ($requestLoginConnect['enabled'] == 0) {
+                $requestLoginConnect['weibo_enabled']   = 0;
+                $requestLoginConnect['qq_enabled']    = 0;
+                $requestLoginConnect['renren_enabled']   = 0;
+                $requestLoginConnect['weixinweb_enabled'] = 0;
+                $requestLoginConnect['weixinmob_enabled']    = 0;
             }
 
             //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
-            $loginConnect = $this->isCloseLoginConnect($loginConnect);
+            $loginConnect = $this->responseLoginConnect($requestLoginConnect);
             $this->getSettingService()->set('login_bind', $loginConnect);
             $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
             $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
@@ -179,14 +178,13 @@ class UserSettingController extends BaseController
         ));
     }
 
-    public function isCloseLoginConnect($LoginConnect)
+    private function responseLoginConnect($LoginConnect)
     {
         $LoginConnects = ArrayToolkit::parts($LoginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
         $sum      = 0;
         foreach ($LoginConnects as $value) {
             $sum += $value;
         }
-
 
         if ($sum < 1) {
             if ($LoginConnect['enabled'] == 1) {
