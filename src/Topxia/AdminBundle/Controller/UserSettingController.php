@@ -157,9 +157,19 @@ class UserSettingController extends BaseController
             $loginConnect = $request->request->all();
             $loginConnect = ArrayToolkit::trim($loginConnect);
 
+            $formerLoginConnect = $this->getSettingService()->get('login_bind');
+            if ($loginConnect['enabled'] == 0 && $formerLoginConnect['enabled'] == 1) {
+                $loginConnect['weibo_enabled']   = 0;
+                $loginConnect['qq_enabled']    = 0;
+                $loginConnect['renren_enabled']   = 0;
+                $loginConnect['weixinweb_enabled'] = 0;
+                $loginConnect['weixinmob_enabled']    = 0;
+            }
+
+            //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
+            $loginConnect = $this->isCloseLoginConnect($loginConnect);
             $this->getSettingService()->set('login_bind', $loginConnect);
             $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
-            $this->setFlashMessage('success', $this->trans('登录设置已保存！'));
             $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
         }
 
@@ -167,6 +177,31 @@ class UserSettingController extends BaseController
             'loginConnect' => $loginConnect,
             'clients'      => $clients
         ));
+    }
+
+    public function isCloseLoginConnect($LoginConnect)
+    {
+        $LoginConnects = ArrayToolkit::parts($LoginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
+        $sum      = 0;
+        foreach ($LoginConnects as $value) {
+            $sum += $value;
+        }
+
+
+        if ($sum < 1) {
+            if ($LoginConnect['enabled'] == 1) {
+                $this->setFlashMessage('danger', $this->trans('您至少要开启一种第三方登陆！'));
+            }
+            if ($LoginConnect['enabled'] == 0) {
+                $this->setFlashMessage('success', $this->trans('您已关闭所有第三方登陆！'));
+            }
+            $LoginConnect['enabled'] = 0;
+        } else {
+            $LoginConnect['enabled'] = 1;
+            $this->setFlashMessage('success', $this->trans('登录设置已保存！'));
+        }
+
+        return $LoginConnect;
     }
 
     public function userCenterAction(Request $request)
