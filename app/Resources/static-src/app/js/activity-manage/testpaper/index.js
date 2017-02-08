@@ -108,7 +108,6 @@ class Testpaper {
 
   showRedoInterval(event) {
     let $this = $(event.currentTarget);
-    let self = this;
     if ($this.val() == 1) {
       $('#lesson-redo-interval-field').closest('.form-group').hide();
       $('.starttime-check-div').show();
@@ -130,7 +129,6 @@ class Testpaper {
       $('.starttime-input').addClass('hidden');
       $('input[name="startTime"]').val('0');
     }
-    console.log($('input[name="startTime"]').val());
   }
 
   changeEndTime(event) {
