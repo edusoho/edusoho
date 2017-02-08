@@ -248,7 +248,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourseMarketing($id, $fields)
     {
-        $this->tryManageCourse($id);
+        $oldCourse = $this->tryManageCourse($id);
 
         $fields = ArrayToolkit::parts($fields, array(
             'isFree',
@@ -284,11 +284,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
         }
 
-        // if (isset($fields['price'])) {
-        //     $fields['price'] = round(floatval($fields['price']) * 100, 0);
-        // }
+        $newCourse = $this->getCourseDao()->update($id, $fields);
 
-        return $this->getCourseDao()->update($id, $fields);
+        $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
+
+        return $newCourse;
     }
 
     protected function calculatePrice($id, $originPrice)
