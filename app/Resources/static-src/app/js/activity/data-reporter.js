@@ -17,6 +17,7 @@ class DataReported {
   }
 
   init() {
+    this.clear();
     this.serverInterval = setInterval(() => this.flush(),this.reportedTime * 1000);
   }
 
@@ -28,9 +29,7 @@ class DataReported {
     Object.assign(this.data, {
       type: data
     });
-    this.clear();
     this.flush();
-    this.init();
   }
 
   flush() {
