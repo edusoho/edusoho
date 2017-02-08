@@ -18,7 +18,6 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\Order\Service\OrderService;
 
 /**
  * Class MemberServiceImpl

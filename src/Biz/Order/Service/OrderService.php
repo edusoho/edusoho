@@ -7,8 +7,6 @@ interface OrderService
 
     const TARGETTYPE_COURSE = 'course';
 
-    const PAYMENT_SYSTEM = 'system';
-
     const SNPREFIX_C = 'C';
 
     public function getOrder($id);

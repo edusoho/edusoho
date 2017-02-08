@@ -155,15 +155,15 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function createSystemOrder($order)
     {
-        if (ArrayToolkit::requireds($order, array('userId', 'title', 'targetType', 'targetId', 'amount', 'totalPrice', 'snPrefix'))) {
+        if (!ArrayToolkit::requireds($order, array('userId', 'title', 'targetType', 'targetId', 'amount', 'totalPrice', 'snPrefix'))) {
             throw new InvalidArgumentException('Invalid arguments when create order');
         }
 
-        $order['payment'] = OrderService::PAYMENT_SYSTEM;
+        $order['payment'] = 'none';
 
-        $newOrder = $this->getOrderService()->createOrder($order);
+        $newOrder = $this->createOrder($order);
 
-        $this->getOrderService()->payOrder(array(
+        $this->payOrder(array(
             'sn'       => $newOrder['sn'],
             'status'   => 'success',
             'amount'   => $newOrder['amount'],
