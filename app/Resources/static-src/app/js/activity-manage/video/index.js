@@ -1,5 +1,4 @@
 import FileChooser from '../../file-chooser/file-choose';
-import {chooserUiOpen, chooserUiClose, showChooserType} from '../widget/chooser-ui.js';
 import SubtitleDialog from './subtitle/dialog';
 
 
@@ -15,9 +14,10 @@ jQuery.validator.addMethod("time_length", function (value, element) {
   return parseInt($("#minute").val()) + parseInt($("#second").val()) > 0
 }, "时长不能等于0");
 
-
-showChooserType($('[name="ext[mediaSource]"]'));
-
+$('#iframe-content').on('click', '.js-choose-trigger', (event) => {
+  FileChooser.openUI();
+  $('[name="ext[mediaSource]"]').val(null);
+});
 
 function _inItStep3from() {
 
@@ -95,7 +95,7 @@ const subtitleDialog = new SubtitleDialog('.js-subtitle-list');
 
 
 const onSelectFile = file => {
-  chooserUiClose();
+  FileChooser.closeUI();
   if (file.length && file.length > 0) {
     let minute = parseInt(file.length / 60);
     let second = Math.round(file.length % 60);
@@ -113,8 +113,6 @@ const onSelectFile = file => {
   //渲染字幕
   subtitleDialog.render(file);
 };
-
-
 
 // 完成条件是观看时长的情况
 if($("#finish-condition").children('option:selected').val() === 'time') {
