@@ -135,21 +135,21 @@
     },
     "cloud_search_banner":
     {
-        "title": "云搜索头部banner",
+        "title": "云搜索背景图",
         "category": "system",
         "templateName": "TopxiaWebBundle:Block:cloud_search_banner.template.html.twig",
         "items": {
             "posters": 
             {
-                "title": "轮播图",
-                "desc": "建议图片大小为1440*200，最多可设置1张图片。",
+                "title": "背景图",
+                "type": "poster",
+                "desc": "建议图片大小为1920*200，最多可设置1张图片。",
                 "count": 1,
-                "type": "imglink",
                 "default": [
                     {
                         "src": "\/assets\/img\/placeholder\/banner_search.jpg",
-                        "alt": "轮播图１的描述",
-                        "layout" : "limitWide",
+                        "alt": "背景图",
+                        "layout" : "tile",
                         "background" : "#2b9cf0",
                         "href" : "",
                         "html" : "",
