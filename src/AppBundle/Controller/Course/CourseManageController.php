@@ -182,8 +182,8 @@ class CourseManageController extends BaseController
             'courseId' => $courseId,
             'types'    => array('text', 'video', 'audio', 'flash', 'doc', 'ppt')
         );
-        $canFreeTaskCount = $this->getTaskService()->count($conditions);
-        $canFreeTasks     = $this->getTaskService()->search($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
+        $canFreeTaskCount = $this->getTaskService()->countTasks($conditions);
+        $canFreeTasks     = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
 
         return $this->render('course-manage/marketing.html.twig', array(
             'courseSet'    => $courseSet,

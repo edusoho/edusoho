@@ -2,11 +2,15 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
+
+;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Topxia\WebBundle\Extensions\DataTag\CourseLessonsDataTag;
 
-class CourseLessonsDataTagTest extends BaseTestCase
-{   
+class CourseTasksDataTagTest extends BaseTestCase
+{
 
     public function testGetData()
     {
@@ -16,13 +20,13 @@ class CourseLessonsDataTagTest extends BaseTestCase
         );
         $course = $this->getCourseService()->createCourse($course);
 
-        $lesson = array(
+        $task = array(
             'courseId' => $course['id'],
-            'title' => 'test lesson 1',
-            'content' => 'test lesson content 1',
-            'type' => 'text'
+            'title'    => 'test lesson 1',
+            'content'  => 'test lesson content 1',
+            'type'     => 'text'
         );
-        $lesson = $this->getCourseService()->createLesson($lesson);
+        $lesson = $this->getTaskService()->createTask($task);
 
         $datatag = new CourseLessonsDataTag();
         $lessons = $datatag->getData(array('courseId' => $course['id']));
@@ -37,6 +41,14 @@ class CourseLessonsDataTagTest extends BaseTestCase
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 
 

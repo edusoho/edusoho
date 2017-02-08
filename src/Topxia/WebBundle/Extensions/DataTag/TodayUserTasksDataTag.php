@@ -35,7 +35,7 @@ class TodayUserTasksDataTag extends BaseDataTag implements DataTag
             $conditions['batchId'] = $arguments['batchId'];
         }
 
-        $tasks = $this->getTaskService()->searchTasks($conditions,array('taskStartTime','ASC'), 0, $arguments['count']);
+        $tasks = $this->getTaskService()->searchTasks($conditions,array('taskStartTime'=>'ASC'), 0, $arguments['count']);
 
         $time = strtotime(date('Y-m-d').' 23:59:59');
         if ($tasks) {

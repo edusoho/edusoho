@@ -114,6 +114,14 @@ const onSelectFile = file => {
   subtitleDialog.render(file);
 };
 
+
+
+// 完成条件是观看时长的情况
+if($("#finish-condition").children('option:selected').val() === 'time') {
+  _inItStep3from();
+  $('.viewLength').removeClass('hidden');
+}
+
 $("#finish-condition").on('change', function (event) {
   if (event.target.value == 'time') {
     $('.viewLength').removeClass('hidden');

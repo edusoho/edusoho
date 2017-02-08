@@ -33,9 +33,9 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
                 'status'      => 'open'
             ),
             array(
-                array('isStick', 'DESC'),
-                array('postNum', 'DESC'),
-                array('createdTime', 'DESC'),
+                array('isStick'=> 'DESC'),
+                array('postNum'=> 'DESC'),
+                array('createdTime'=> 'DESC'),
             ), 0, $arguments['count']
         );
 

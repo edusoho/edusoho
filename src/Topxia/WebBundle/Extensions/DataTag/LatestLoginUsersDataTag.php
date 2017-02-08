@@ -20,7 +20,7 @@ class LatestLoginUsersDataTag extends CourseBaseDataTag implements DataTag
     {	
 
         $this->checkCount($arguments);
-    	$users = $this->getUserService()->searchUsers(array(), array('loginTime', 'DESC'), 0, $arguments['count']);
+    	$users = $this->getUserService()->searchUsers(array(), array('loginTime'=> 'DESC'), 0, $arguments['count']);
 
         return $this->unsetUserPasswords($users);
     }

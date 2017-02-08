@@ -174,21 +174,21 @@ class MarkerServiceTest extends BaseTestCase
 
     protected function getMarkerService()
     {
-        return $this->getBiz()->service('Marker:MarkerService');
+        return $this->createService('Marker:MarkerService');
     }
 
     protected function getUploadFileService()
     {
-        return $this->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     protected function getQuestionService()
     {
-        return $this->getBiz()->service('Question:QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 
     protected function getCourseService()
     {
-        return ServiceKernel::instance()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 }

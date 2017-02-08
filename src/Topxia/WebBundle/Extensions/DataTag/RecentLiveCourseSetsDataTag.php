@@ -43,7 +43,7 @@ class RecentLiveCourseSetsDataTag extends CourseBaseDataTag implements DataTag
             'type'       => 'live'
         );
 
-        $recentTasks = $this->getTaskService()->search(
+        $recentTasks = $this->getTaskService()->searchTasks(
             $recentTasksCondition,
             array('startTime' => 'ASC'),
             0,

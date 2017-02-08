@@ -232,7 +232,7 @@ class CourseServiceTest extends BaseTestCase
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -240,7 +240,7 @@ class CourseServiceTest extends BaseTestCase
      */
     protected function getMemberService()
     {
-        return $this->getBiz()->service('Course:MemberService');
+        return $this->createService('Course:MemberService');
     }
 
     /**
@@ -248,6 +248,6 @@ class CourseServiceTest extends BaseTestCase
      */
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

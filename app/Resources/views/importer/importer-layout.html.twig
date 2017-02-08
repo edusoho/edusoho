@@ -41,6 +41,7 @@
   {% block stylesheet %}
 
   {% endblock %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script type="text/javascript">
     seajs.use('topxiawebbundle/controller/importer/importer', function(module) {
       if ($.isFunction(module.run)) {

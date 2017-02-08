@@ -2,6 +2,9 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
 
 class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
@@ -13,7 +16,7 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
      *   count          班级数量
      *   missionCount   任务数量
      *
-     * @param  array $arguments                       参数
+     * @param  array $arguments 参数
      * @return array 按班级分组的任务列表
      */
     public function getData(array $arguments)
@@ -36,9 +39,9 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
             'locked' => 0,
             'role'   => 'student'
         );
-        $sort          = array('createdTime', 'DESC');
-        $classroomMems = $this->getClassroomService()->searchMembers($memberConditions, $sort, 0, $arguments['count']);
-        $classroomIds  = ArrayToolkit::column($classroomMems, 'classroomId');
+        $sort             = array('createdTime' => 'DESC');
+        $classroomMems    = $this->getClassroomService()->searchMembers($memberConditions, $sort, 0, $arguments['count']);
+        $classroomIds     = ArrayToolkit::column($classroomMems, 'classroomId');
 
         if (!empty($classroomIds)) {
             $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
@@ -65,48 +68,46 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
                         'userId'    => $userId,
                         'courseIds' => $courseIds
                     );
-                    $sort                = array('finishedTime', 'ASC');
-                    $learnedCount        = $this->getCourseService()->searchLearnCount($learnedConditions);
-                    $learneds            = $this->getCourseService()->searchLearns($learnedConditions, $sort, 0, $learnedCount);
-                    $learnedsGroupStatus = ArrayToolkit::group($learneds, 'status');
+                    $sort              = array('finishedTime' => 'ASC');
+                    $taskCount         = $this->getTaskResultService()->countTaskResults($learnedConditions);
+                    $tasks             = $this->getTaskResultService()->searchTaskResults($learnedConditions, $sort, 0, $taskCount);
+                    $taskGroupStatus   = ArrayToolkit::group($tasks, 'status');
 
-                    $finishs   = isset($learnedsGroupStatus['finished']) ? $learnedsGroupStatus['finished'] : array();
-                    $finishIds = ArrayToolkit::column($finishs, 'lessonId');
+                    $finishTasks   = isset($taskGroupStatus['finish']) ? $taskGroupStatus['finish'] : array();
+                    $finishTaskIds = ArrayToolkit::column($finishTasks, 'lessonId');
 
-                    $learnings    = isset($learnedsGroupStatus['learning']) ? $learnedsGroupStatus['learning'] : array();
-                    $learningsIds = ArrayToolkit::column($learnings, 'lessonId');
+                    $learningTasks   = isset($taskGroupStatus['learning']) ? $taskGroupStatus['learning'] : array();
+                    $learningTaskIds = ArrayToolkit::column($learningTasks, 'lessonId');
 
                     $notLearnedConditions = array(
-                        'status'        => 'published',
-                        'courseIds'     => $courseIds,
-                        'notLearnedIds' => $finishIds
+                        'status'     => 'published',
+                        'courseIds'  => $courseIds,
+                        'excludeIds' => $finishTaskIds
                     );
-                    $sort = array(
-                        'seq', 'ASC'
-                    );
-                    $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions, $sort, 0, $arguments['missionCount']);
+                    $sort                 = array('seq' => 'ASC');
+                    $notLearnedLessons    = $this->getTaskService()->searchTasks($notLearnedConditions, $sort, 0, $arguments['missionCount']);
 
-                    $classroomLessonNum = 0;
+                    $classroomTaskNum = 0;
 
                     foreach ($courses as $course) {
                         //迭代班级下课时总数
-                        $classroomLessonNum += $course['lessonNum'];
+                        $classroomTaskNum += $course['taskNum'];
                     }
 
                     if (empty($notLearnedLessons)) {
                         unset($sortedClassrooms[$key]);
                     } else {
                         foreach ($notLearnedLessons as &$notLearnedLesson) {
-                            if (in_array($notLearnedLesson['id'], $learningsIds)) {
+                            if (in_array($notLearnedLesson['id'], $learningTaskIds)) {
                                 $notLearnedLesson['isLearned'] = 'learning';
                             } else {
                                 $notLearnedLesson['isLearned'] = '';
                             }
                         }
 
-                        $classroom['lessons']          = $notLearnedLessons;
-                        $classroom['learnedLessonNum'] = count($finishIds);
-                        $classroom['allLessonNum']     = $classroomLessonNum;
+                        $classroom['tasks']          = $notLearnedLessons;
+                        $classroom['learnedTaskNum'] = count($finishTaskIds);
+                        $classroom['allTaskNum']     = $classroomTaskNum;
                     }
                 } else {
                     unset($sortedClassrooms[$key]);
@@ -122,8 +123,27 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
         return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskResultService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 }

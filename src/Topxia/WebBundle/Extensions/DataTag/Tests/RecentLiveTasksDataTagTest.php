@@ -6,9 +6,9 @@ namespace Topxia\WebBundle\Extensions\DataTag\Test;
 
 use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Extensions\DataTag\RecentLiveLessonsDataTag;
+use Topxia\WebBundle\Extensions\DataTag\RecentLiveTasksDataTag;
 
-class RecentLiveLessonsDataTagTest extends BaseTestCase {
+class RecentLiveTasksDataTagTest extends BaseTestCase {
     public function testGetData()
     {
         $this->getSettingService()->set('course',array('live_course_enabled' => 1));
@@ -74,7 +74,7 @@ class RecentLiveLessonsDataTagTest extends BaseTestCase {
 
         $this->getCourseMemberService()->becomeStudent($course1['id'],$user1['id']);
 
-        $datatag = new RecentLiveLessonsDataTag();
+        $datatag = new RecentLiveTasksDataTag();
         $lessons = $datatag->getData(array('count' => 2 , 'userId' => $user1['id']));
         $this->assertEquals('1',count($lessons));
 

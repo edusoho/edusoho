@@ -312,7 +312,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             } elseif ($field === 'taskNum') {
                 $updateFields['taskNum'] = $this->getTaskService()->countTasksByCourseId($id);
             } elseif ($field === 'publishedTaskNum') {
-                $updateFields['publishedTaskNum'] = $this->getTaskService()->count(array('courseId' => $id, 'status' => 'published'));
+                $updateFields['publishedTaskNum'] = $this->getTaskService()->countTasks(array('courseId' => $id, 'status' => 'published'));
             } elseif ($field === 'threadNum') {
                 $updateFields['threadNum'] = $this->countThreadsByCourseId($id);
             } elseif ($field === 'ratingNum') {
@@ -424,12 +424,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
-            $tasks = $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($course['id']);
-        } else {
-            $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
+            return $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($course['id']);
         }
+        return $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
-        return $tasks;
     }
 
     public function tryManageCourse($courseId, $courseSetId = 0)
@@ -689,7 +687,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $conditions['type'] = $filters["type"];
         }
         $members = $this->getMemberDao()->findLearningMembers($userId, $start, $limit);
-
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
 
@@ -808,8 +805,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    public function findUserLearnCourses($userId, $start, $limit)
+    {
+        return $this->getTaskService()->searchMembers(array('userId' => $userId), array(), $start, $limit);
+    }
+
+    public function countUserLearnCourse($userId)
+    {
+        return $this->getMemberService()->countMembers(array('userId' => $userId));
+    }
+
     /**
-     * @param  int     $userId
+     * @param  int $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -830,7 +837,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count = $this->searchCourseCount($conditions);
+        $count      = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 

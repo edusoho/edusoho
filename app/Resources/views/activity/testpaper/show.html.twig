@@ -23,6 +23,9 @@
 		          	{% if testpaperActivity.limitedTime %}
 		          		<div class="mt5">请在<span class="color-primary">{{ testpaperActivity.limitedTime }}分钟</span>内作答。</div>
 		          	{% endif %}
+		          	{% if testpaperActivity.doTimes %}
+									仅有<span class="color-danger">一次</span>考试机会。
+		          	{% endif %}
 		          </div>
 	          {% endif %}
 	        </div>

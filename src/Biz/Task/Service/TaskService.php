@@ -30,12 +30,12 @@ interface TaskService
 
     public function findTasksByActivityIds($activityIds);
 
-    public function search($conditions, $orderBy, $start, $limit);
+    public function searchTasks($conditions, $orderBy, $start, $limit);
 
-    public function count($conditions);
+    public function countTasks($conditions);
 
     /**
-     * @param  array   $ids
+     * @param  array $ids
      * @return array
      */
     public function findTasksByIds(array $ids);
@@ -88,6 +88,8 @@ interface TaskService
     public function isTaskLearned($taskId);
 
     public function getMaxSeqByCourseId($courseId);
+
+    public function getMaxNumberByCourseId($courseId);
 
     public function findTasksByChapterId($chapterId);
 
@@ -150,6 +152,13 @@ interface TaskService
      * @return array       tasks
      */
     public function findToLearnTasksByCourseId($courseId);
+
+    /**
+     * 侧边栏的任务中心不区分课程类型
+     * @param $courseId
+     * @return mixed
+     */
+    public function findToLearnTasksByCourseIdForMission($courseId);
 
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 

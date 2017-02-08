@@ -2,6 +2,9 @@
 
 namespace Topxia\WebBundle\Extensions\DataTag;
 
+use Biz\Task\Dao\TaskResultDao;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Topxia\Common\ArrayToolkit;
 
 class CourseMissionsDataTag extends BaseDataTag implements DataTag
@@ -13,7 +16,7 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
      *   count          课程数量
      *   missionCount   任务数量
      *
-     * @param  array $arguments                       参数
+     * @param  array $arguments 参数
      * @return array 按课程分组的任务列表
      */
     public function getData(array $arguments)
@@ -38,18 +41,18 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
             'role'        => 'student'
         );
 
-        $courseMem = $this->getCourseMemberService()->searchMembers($courseMemConditions, array('createdTime', 'DESC'), 0, 5);
-        $courseIds = ArrayToolkit::column($courseMem, 'courseId');
+        $searchMembers = $this->getCourseMemberService()->searchMembers($courseMemConditions, array('createdTime' => 'DESC'), 0, 5);
+        $courseIds     = ArrayToolkit::column($searchMembers, 'courseId');
 
         if (!empty($courseIds)) {
             $courseConditions = array(
                 'courseIds' => $courseIds,
                 'parentId'  => 0
             );
-            $courses = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, $arguments['count']);
-            $courses = ArrayToolkit::index($courses, 'id');
+            $courses          = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, $arguments['count']);
+            $courses          = ArrayToolkit::index($courses, 'id');
 
-            foreach ($courseMem as $member) {
+            foreach ($searchMembers as $member) {
                 if (empty($courses[$member['courseId']])) {
                     continue;
                 }
@@ -59,54 +62,19 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
             }
 
             foreach ($sortedCourses as $key => &$course) {
-                /**
-                 * 找出学过的课时
-                 */
 
-                $learnedConditions = array(
+                $conditions = array(
                     'userId'   => $userId,
-                    'status'   => 'finished',
-                    'courseId' => $course['id']
-                );
-                $sort     = array('finishedTime', 'ASC');
-                $learneds = $this->getCourseService()->findUserLearnedLessons($userId, $course['id']);
-                /**
-                 * 找出未学过的课时
-                 */
-                $learnedsGroupStatus = ArrayToolkit::group($learneds, 'status');
-
-                $finishs   = isset($learnedsGroupStatus['finished']) ? $learnedsGroupStatus['finished'] : array();
-                $finishIds = ArrayToolkit::column($finishs, 'lessonId');
-
-                $learnings    = isset($learnedsGroupStatus['learning']) ? $learnedsGroupStatus['learning'] : array();
-                $learningsIds = ArrayToolkit::column($learnings, 'lessonId');
-
-                $notLearnedConditions = array(
-                    'status'        => 'published',
-                    'courseId'      => $course['id'],
-                    'notLearnedIds' => $finishIds
+                    'courseId' => $course['id'],
+                    'status'   => 'finish'
                 );
 
-                $sort = array(
-                    'seq', 'ASC'
-                );
-                $notLearnedLessons = $this->getCourseService()->searchLessons($notLearnedConditions, $sort, 0, $arguments['missionCount']);
+                $finishTaskCount = $this->getTaskResultService()->countTaskResults($conditions);
 
-                if (empty($notLearnedLessons)) {
-                    unset($sortedCourses[$key]);
-                } else {
-                    foreach ($notLearnedLessons as &$notLearnedLesson) {
-                        if (in_array($notLearnedLesson['id'], $learningsIds)) {
-                            $notLearnedLesson['isLearned'] = 'learning';
-                        } else {
-                            $notLearnedLesson['isLearned'] = '';
-                        }
-                    }
+                $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseIdForMission($course['id']);
+                $course['tasks']         = $toLearnTasks;
+                $course['finishTaskNum'] = $finishTaskCount;
 
-                    $course['lessons']          = $notLearnedLessons;
-                    $course['learnedLessonNum'] = count($finishIds);
-                    $course['allLessonNum']     = $course['lessonNum'];
-                }
             }
         }
 
@@ -126,5 +94,21 @@ class CourseMissionsDataTag extends BaseDataTag implements DataTag
     protected function getCourseMemberService()
     {
         return $this->getServiceKernel()->createService('Course:MemberService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskResultService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskService');
     }
 }

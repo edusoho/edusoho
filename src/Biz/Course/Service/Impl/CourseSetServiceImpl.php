@@ -5,10 +5,10 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
-use Biz\System\Service\LogService;
-use Biz\User\Service\UserService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\User\Service\UserService;
+use Biz\System\Service\LogService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
@@ -244,8 +244,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         return $this->searchCourseSets(
             array(
-                'ids'    => $ids,
-                'status' => 'published'
+                'ids'      => $ids,
+                'status'   => 'published',
+                'parentId' => 0
             ),
             array(
                 'createdTime' => 'DESC'
