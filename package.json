@@ -43,7 +43,6 @@
     "jquery-jcrop": "0.9.13",
     "jquery-sortable": "0.9.13",
     "jquery-validation": "1.15.1",
-    "lavalamp": "^1.1.0",
     "lodash": "3.10.1",
     "moment": "2.16.0",
     "nouislider": "9.1.0",
