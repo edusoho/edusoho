@@ -1,0 +1,5 @@
+{% for imglink in posters|default(null) if imglink.src|default('') %}
+    {% if imglink.status == 1 and imglink.mode == "img" %}
+        <a href="{{ imglink.href|default('') }}"><img src="{{ imglink.src|default('') }}" alt="{{ imglink.alt|default('') }}"></a>
+    {% endif %} 
+{% endfor %}
