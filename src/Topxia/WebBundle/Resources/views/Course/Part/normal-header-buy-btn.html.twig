@@ -4,7 +4,7 @@
     {{'会员免费学'|trans}}<br/><br/>
   {% else %}
     {% if mobile %} 
-      <span class="wap-buyer">{{ '超过购买<br>截止日期'|trans|raw }}</span>
+      <span class="wap-buyer">{{ '该课程为<br>限制课程'|trans|raw }}</span>
     {% else %}
       {{'该课程为限制课程'|trans}}<br>{{'请联系客服'|trans}}
     {% endif %}
@@ -17,7 +17,7 @@
    {% endif %}
 {% elseif course.status != 'published' %}
   {% if mobile %}
-    <span class="wap-buyer">{{ '课程还未发布'|trans|raw }}</span>
+    <span class="wap-buyer">{{ '课程还未<br>发布'|trans|raw }}</span>
   {% else %} 
     {{ '课程还未发布<br>不允许加入和购买'|trans|raw }}
   {% endif %}
