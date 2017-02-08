@@ -488,6 +488,22 @@ admin:
                                 tab: trend
                                 analysisDateType: register
                             router_name: admin_operation_analysis_register
+                admin_operation_keyword:
+                    name: 敏感词管理
+                    parent: admin_operation
+                    group: 4
+                    children:
+                        admin_keyword:
+                            name: 敏感词列表
+                            disable: true
+                            children:
+                                admin_keyword_create:
+                                    name: 添加敏感词
+                                    mode: modal
+                                    group: topBtn
+                        admin_keyword_banlogs:
+                            name: 屏蔽记录
+                            disable: true
         admin_order:
             name: 订单
             children:
