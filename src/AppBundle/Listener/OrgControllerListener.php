@@ -1,6 +1,6 @@
 <?php
 
-namespace Org\OrgBundle\Listener;
+namespace AppBundle\Listener;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
