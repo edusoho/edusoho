@@ -735,6 +735,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
     }
 
+    public function analysisTaskDataByTime($startTime, $endTime)
+    {
+        return $this->getTaskDao()->analysisTaskDataByTime($startTime, $endTime);
+    }
+
     /**
      * @return TaskDao
      */
