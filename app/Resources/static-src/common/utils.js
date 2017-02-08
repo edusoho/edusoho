@@ -1,4 +1,4 @@
-let Browser = {};
+const Browser = {};
 let userAgent = navigator.userAgent.toLowerCase();
 let s;
 (s = userAgent.match(/rv:([\d.]+)\) like gecko/)) ? Browser.ie = s[1] :
@@ -14,4 +14,15 @@ if (Browser.chrome) console.log('Chrome: ' + Browser.chrome);
 if (Browser.opera) console.log('Opera: ' + Browser.opera);
 if (Browser.safari) console.log('Safari: ' + Browser.safari);
 
-export { Browser }
+
+const isMobileDevice = ()=> {
+   if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+    return true;
+   }else {
+     return false;
+   }
+}
+
+export { Browser,isMobileDevice }
+
+
