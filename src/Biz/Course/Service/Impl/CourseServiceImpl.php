@@ -249,6 +249,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateCourseMarketing($id, $fields)
     {
         $this->tryManageCourse($id);
+
         $fields = ArrayToolkit::parts($fields, array(
             'isFree',
             'originPrice',
@@ -262,15 +263,19 @@ class CourseServiceImpl extends BaseService implements CourseService
             'approval'
         ));
 
+        $fields = $this->mergeCourseDefaultAttribute($fields);
+
         $fields['price'] = $this->calculatePrice($id, $fields['originPrice']);
 
         if (!ArrayToolkit::requireds($fields, array('isFree', 'buyable', 'tryLookable'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
+
         if ($fields['isFree'] == 1) {
             $fields['price']      = 0;
             $fields['vipLevelId'] = 0;
         }
+
         if ($fields['tryLookable'] == 0) {
             $fields['tryLookLength'] = 0;
         }
@@ -1129,5 +1134,20 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * 当默认值未设置时，合并默认值
+     * @param $course
+     *
+     * @return array
+     */
+    protected function mergeCourseDefaultAttribute($course)
+    {
+        $default = array(
+            'tryLookable' => 0
+        );
+
+        return array_merge($default, $course);
     }
 }

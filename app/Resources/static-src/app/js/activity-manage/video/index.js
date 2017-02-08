@@ -116,8 +116,8 @@ const onSelectFile = file => {
 
 // 完成条件是观看时长的情况
 if($("#finish-condition").children('option:selected').val() === 'time') {
-  _inItStep3from();
   $('.viewLength').removeClass('hidden');
+  _inItStep3from();
 }
 
 $("#finish-condition").on('change', function (event) {
