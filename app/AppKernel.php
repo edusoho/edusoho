@@ -79,7 +79,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Classroom\ClassroomBundle\ClassroomBundle(),
             new MaterialLib\MaterialLibBundle\MaterialLibBundle(),
             new SensitiveWord\SensitiveWordBundle\SensitiveWordBundle(),
-            new Org\OrgBundle\OrgBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
