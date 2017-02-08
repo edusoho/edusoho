@@ -154,19 +154,19 @@ class UserSettingController extends BaseController
         $loginConnect = array_merge($default, $loginConnect);
 
         if ($request->getMethod() == 'POST') {
-            $requestLoginConnect = $request->request->all();
-            $requestLoginConnect = ArrayToolkit::trim($requestLoginConnect);
+            $loginConnect = $request->request->all();
+            $loginConnect = ArrayToolkit::trim($loginConnect);
 
-            if ($requestLoginConnect['enabled'] == 0) {
-                $requestLoginConnect['weibo_enabled']   = 0;
-                $requestLoginConnect['qq_enabled']    = 0;
-                $requestLoginConnect['renren_enabled']   = 0;
-                $requestLoginConnect['weixinweb_enabled'] = 0;
-                $requestLoginConnect['weixinmob_enabled']    = 0;
+            if ($loginConnect['enabled'] == 0) {
+                $loginConnect['weibo_enabled']   = 0;
+                $loginConnect['qq_enabled']    = 0;
+                $loginConnect['renren_enabled']   = 0;
+                $loginConnect['weixinweb_enabled'] = 0;
+                $loginConnect['weixinmob_enabled']    = 0;
             }
 
             //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
-            $loginConnect = $this->responseLoginConnect($requestLoginConnect);
+            $loginConnect = $this->loginConnectList($loginConnect);
             $this->getSettingService()->set('login_bind', $loginConnect);
             $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
             $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
@@ -178,7 +178,7 @@ class UserSettingController extends BaseController
         ));
     }
 
-    private function responseLoginConnect($LoginConnect)
+    private function loginConnectList($LoginConnect)
     {
         $LoginConnects = ArrayToolkit::parts($LoginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
         $sum      = 0;
