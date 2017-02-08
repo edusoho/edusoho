@@ -6,13 +6,10 @@ use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
 use Biz\Activity\Service\ActivityLearnLogService;
 
 class Exercise extends Activity
 {
-    private $testpaperCopy = null;
-
     protected function registerListeners()
     {
         return array();
@@ -32,16 +29,6 @@ class Exercise extends Activity
 
     public function copy($activity, $config = array())
     {
-        $newActivity = $config['newActivity'];
-
-        $newActivity['mediaId'] = $activity['mediaId'];
-
-        return $this->getTestpaperCopy()->copy($newActivity, array('isCopy' => 1));
-    }
-
-    public function sync($sourceActivity, $activity)
-    {
-        //todo
         return null;
     }
 
@@ -108,15 +95,6 @@ class Exercise extends Activity
         $filterFields['name']        = empty($filterFields['title']) ? '' : $filterFields['title'];
 
         return $filterFields;
-    }
-
-    protected function getTestpaperCopy()
-    {
-        if (!$this->testpaperCopy) {
-            $this->testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
-        }
-
-        return $this->testpaperCopy;
     }
 
     /**

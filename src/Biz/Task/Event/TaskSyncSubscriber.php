@@ -8,6 +8,7 @@ use Biz\Activity\Config\Activity;
 use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;
+use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
 
 class TaskSyncSubscriber extends CourseSyncSubscriber
 {
@@ -20,10 +21,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
             'course.task.publish'   => 'onCourseTaskUpdate',
             'course.task.unpublish' => 'onCourseTaskUpdate'
-
-//            'course.activity.create' => 'onCourseActivityCreate',
-            //            'course.activity.update' => 'onCourseActivityUpdate',
-            //            'course.activity.delete' => 'onCourseActivityDelete'
         );
     }
 
@@ -122,21 +119,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
     }
 
-//    public function onCourseActivityCreate(Event $event)
-    //    {
-    //
-    //    }
-    //
-    //    public function onCourseActivityUpdate(Event $event)
-    //    {
-    //
-    //    }
-    //
-    //    public function onCourseActivityDelete(Event $event)
-    //    {
-    //
-    //    }
-
     protected function createActivity($activity, $copiedCourse)
     {
         $ext         = $this->getActivityConfig($activity['mediaType'])->copy($activity, array());
@@ -159,6 +141,8 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         $newActivity = $this->getActivityDao()->create($newActivity);
         //create materials if exists
         $this->createMaterials($newActivity, $activity, $copiedCourse);
+        //create testpaper&questions if ref exists
+        $this->createTestpapers($newActivity, $activity, $copiedCourses);
         return $newActivity;
     }
 
@@ -192,6 +176,12 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
             $this->getMaterialDao()->create($newMaterial);
         }
+    }
+
+    protected function createTestpapers($newActivity, $activity, $copiedCourses)
+    {
+        $testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
+        $testpaperCopy->copy($activity, array('newActivity' => $newActivity, 'isCopy' => 1));
     }
 
     protected function updateActivity($activityId)

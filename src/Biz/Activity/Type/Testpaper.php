@@ -6,7 +6,6 @@ use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\TestpaperActivityService;
 
@@ -54,6 +53,24 @@ class Testpaper extends Activity
         );
 
         return $this->create($newExt);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceActivity = $this->getTestpaperActivityService()->getActivity($sourceActivity['mediaId']);
+        $activity       = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        $testpaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($sourceActivity['mediaId'], $activity['fromCourseSetId']);
+
+        $activity['mediaId']         = $testpaper['id'];
+        $activity['redoInterval']    = $sourceActivity['redoInterval'];
+        $activity['limitedTime']     = $sourceActivity['limitedTime'];
+        $activity['checkType']       = $sourceActivity['checkType'];
+        $activity['finishCondition'] = $sourceActivity['finishCondition'];
+        $activity['requireCredit']   = $sourceActivity['requireCredit'];
+        $activity['testMode']        = $sourceActivity['testMode'];
+
+        return $this->getTestpaperActivityService()->updateActivity($activity['id'], $activity);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -142,15 +159,6 @@ class Testpaper extends Activity
         $filterFields['finishCondition'] = $finishCondition;
 
         return $filterFields;
-    }
-
-    protected function getTestpaperCopy()
-    {
-        if (!$this->testpaperCopy) {
-            $this->testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
-        }
-
-        return $this->testpaperCopy;
     }
 
     /**
