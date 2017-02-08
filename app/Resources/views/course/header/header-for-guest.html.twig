@@ -20,7 +20,9 @@
            alt="{{ course.title }} ">
       <div class="image-overlay"></div>
       <div class="course-detail-remask">
-        <i class="es-icon es-icon-people"></i><span class="mhs">{{ course_set.studentNum|default(0) }}</span>人加入学习
+        {% if setting('course.show_student_num_enabled', '1') == 1 %}
+          <i class="es-icon es-icon-people"></i><span class="mhs">{{ course_set.studentNum|default(0) }}</span>人加入学习
+        {% endif %}
         <div class="score pull-right">
           {{ web_macro.star(course_set.rating|default(0)) }}
           <span class="vertical-middle">{{ course_set.ratingNum|default(0) }}</span>
