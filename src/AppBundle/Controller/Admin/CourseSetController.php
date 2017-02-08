@@ -327,7 +327,7 @@ class CourseSetController extends BaseController
         $classrooms = array();
 
         if ($filter == 'classroom') {
-            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courseSets, 'id'));
             $classrooms = ArrayToolkit::index($classrooms, 'courseId');
 
             foreach ($classrooms as $key => $classroom) {
@@ -414,13 +414,13 @@ class CourseSetController extends BaseController
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
         foreach ($tasks as $key => &$task) {
-            $finishedNum = $this->getCourseTaskResultService()->countTaskResults(array('status' => 'finish', 'courseTaskId' => $task['id']));
-            $studentNum = $this->getCourseTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
-            $learnedTime =  $this->getCourseTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
+            $finishedNum = $this->getTaskResultService()->countTaskResults(array('status' => 'finish', 'courseTaskId' => $task['id']));
+            $studentNum = $this->getTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
+            $learnedTime =  $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
             if (in_array($task['type'], array('video','audio'))) {
                 $activity = $this->getActivityService()->getActivity($task['activityId']);
                 $task['length'] = $activity['length'];
-                $task['watchTime'] = $this->getCourseTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
+                $task['watchTime'] = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
             }
 
             if ($task['type'] == 'testpaper') {
@@ -569,7 +569,7 @@ class CourseSetController extends BaseController
         return $this->createService('Task:TaskService');
     }
 
-    protected function getCourseTaskResultService()
+    protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
     }
