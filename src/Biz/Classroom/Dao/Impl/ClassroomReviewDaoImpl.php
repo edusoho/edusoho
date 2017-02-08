@@ -11,7 +11,7 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
     public function declares()
     {
         $declares['serializes'] = array(
-            'meta' => 'json',
+            'meta' => 'json'
         );
 
         $declares['orderbys'] = array(
@@ -21,8 +21,7 @@ class ClassroomReviewDaoImpl extends GeneralDaoImpl implements ClassroomReviewDa
         );
 
         $declares['timestamps'] = array(
-            'createdTime',
-            'updatedTime'
+            'createdTime'
         );
 
         $declares['conditions'] = array(

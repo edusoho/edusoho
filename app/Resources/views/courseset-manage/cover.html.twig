@@ -33,7 +33,7 @@
           {% if courseSet.type == 'open' or courseSet.type == 'liveOpen' %}
             data-goto-url="{{path('open_course_manage_picture_crop', {id:courseSet.id})}}"
           {% else %}
-            data-goto-url="{{path('course_set_manage_cover_crop', {id:courseSet.id})}}"
+            data-goto-url="{{path('course_manage_cover_crop', {id:courseSet.id})}}"
           {% endif %}
           
           >{{'选择要上传的图片'|trans}}</a>

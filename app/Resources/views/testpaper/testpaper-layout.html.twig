@@ -18,7 +18,7 @@
     {% block paper_content %}
       <div class="row">
         <div class="col-md-9 prevent-copy">
-          <div class="testpaper-body" >
+          <div class="testpaper-body js-testpaper-body" data-copy="{{setting('course.testpaperCopy_enabled',0)}}">
             {% block paper_header %}
               <div class="es-section testpaper-heading js-testpaper-heading">
                 <div class="testpaper-titlebar clearfix">

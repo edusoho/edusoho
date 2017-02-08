@@ -1,10 +1,10 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\User\Service\MessageService;
-use Biz\User\Service\UserService;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Biz\User\Service\UserService;
+use Biz\User\Service\MessageService;
 use Topxia\WebBundle\Form\MessageType;
 use Topxia\WebBundle\Form\MessageReplyType;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,11 +79,11 @@ class MessageController extends BaseController
             if ($form->isValid()) {
                 $message = $form->getData();
                 $message = $this->getMessageService()->sendMessage($user['id'], $conversation['fromId'], $message['content']);
-                $html    = $this->renderView('TopxiaWebBundle:Message:item.html.twig', array('message' => $message, 'conversation' => $conversation));
+                $html    = $this->renderView('message/item.html.twig', array('message' => $message, 'conversation' => $conversation));
                 return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
             }
         }
-        return $this->render('TopxiaWebBundle:Message:conversation-show.html.twig', array(
+        return $this->render('message/conversation-show.html.twig', array(
             'conversation' => $conversation,
             'messages'     => $messages,
             'receiver'     => $this->getUserService()->getUser($conversation['fromId']),
@@ -117,8 +117,8 @@ class MessageController extends BaseController
 
     public function sendAction(Request $request)
     {
-        $user     = $this->getCurrentUser();
-        $form     = $this->createForm(new MessageType());
+        $user = $this->getCurrentUser();
+        $form = $this->createForm(new MessageType());
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
@@ -232,5 +232,4 @@ class MessageController extends BaseController
     {
         return $this->getBiz()->service('User:UserService');
     }
-
 }

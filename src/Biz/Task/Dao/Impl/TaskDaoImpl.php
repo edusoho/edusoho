@@ -41,6 +41,13 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchColumn($sql, array($courseId)) ?: 0;
     }
 
+    public function getNumberSeqByCourseId($courseId)
+    {
+        $sql = "SELECT MAX(number) FROM {$this->table()} WHERE courseId = ? ";
+        return $this->db()->fetchColumn($sql, array($courseId)) ?: 0;
+    }
+
+
     public function getMinSeqByCourseId($courseId)
     {
         $sql = "SELECT MIN(seq) FROM {$this->table()} WHERE courseId = ? ";
@@ -106,7 +113,8 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     public function findPastLivedCourseSetIds()
     {
         $time = time();
-        $sql  = "SELECT fromCourseSetId, max(startTime) as startTime
+        $sql
+              = "SELECT fromCourseSetId, max(startTime) as startTime
                  FROM {$this->table()} 
                  WHERE endTime < {$time} AND status='published' AND type = 'live' 
                  GROUP BY fromCourseSetId 
@@ -142,8 +150,10 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
             'conditions' => array(
                 'id = :id',
                 'id IN ( :ids )',
+                'id NOT IN (:excludeIds)',
                 'courseId = :courseId',
                 'courseId IN ( :courseIds )',
+                'title LIKE :titleLike',
                 'fromCourseSetId = :fromCourseSetId',
                 'fromCourseSetId IN (:fromCourseSetIds)',
                 'status =:status',
@@ -155,8 +165,10 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'seq < :seq_LT',
                 'startTime >= :startTime_GE',
                 'startTime > :startTime_GT',
+                'startTime <= :startTime_LE',
                 'endTime > :endTime_GT',
-                'endTime < :endTime_LT'
+                'endTime < :endTime_LT',
+                'endTime <= :endTime_GE'
             )
         );
     }

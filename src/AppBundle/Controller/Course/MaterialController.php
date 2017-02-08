@@ -31,7 +31,7 @@ class MaterialController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        $tasks = $this->getTaskService()->search(array('courseId' => $course['id'], 'type' => 'download'), array(), 0, 100);
+        $tasks = $this->getTaskService()->searchTasks(array('courseId' => $course['id'], 'type' => 'download'), array(), 0, 100);
         $tasks = ArrayToolkit::index($tasks, 'activityId');
 
         return $this->render("course/tabs/material.html.twig", array(

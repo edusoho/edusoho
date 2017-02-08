@@ -13,6 +13,7 @@ use Biz\Task\Strategy\StrategyContext;
 use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Topxia\Common\Exception\InvalidArgumentException;
 
 class TaskManageController extends BaseController
