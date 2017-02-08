@@ -15,11 +15,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public static function getSubscribedEvents()
     {
         return array(
-            'course.join'        => array(
-                array('countStudentMember', 1),
-                array('countIncome', 2),
-                array('sendWelcomeMsg', 3)
-            ),
+            'course.join'        => 'onCourseJoin',
             'course.quit'        => 'onMemberDelete',
 
             'course.task.delete' => 'onTaskDelete',
@@ -27,7 +23,14 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         );
     }
 
-    public function countStudentMember(Event $event)
+    public function onCourseJoin(Event $event)
+    {
+        $this->countStudentMember($event);
+        $this->countIncome($event);
+        $this->sendWelcomeMsg($event);
+    }
+
+    private function countStudentMember(Event $event)
     {
         $course = $event->getSubject();
         $member = $event->getArgument('member');
@@ -38,7 +41,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         }
     }
 
-    public function countIncome(Event $event)
+    private function countIncome(Event $event)
     {
         $course = $event->getSubject();
 
@@ -46,7 +49,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $this->getCourseDao()->update($course['id'], array('income' => $income));
     }
 
-    public function sendWelcomeMsg(Event $event)
+    private function sendWelcomeMsg(Event $event)
     {
         $course = $event->getSubject();
         
@@ -100,9 +103,14 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         return $this->getBiz()->service('Course:CourseSetService');
     }
 
+    protected function getOrderService()
+    {
+        return $this->getBiz()->service('Order:OrderService');
+    }
+
     protected function getMessageService()
     {
-        return $this->createService('User:MessageService');
+        return $this->getBiz()->service('User:MessageService');
     }
 
     /**
@@ -123,7 +131,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     protected function getSettingService()
     {
-        return $this->getBiz()->createService('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
     /**
