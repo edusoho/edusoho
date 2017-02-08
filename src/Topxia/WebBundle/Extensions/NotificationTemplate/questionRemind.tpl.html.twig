@@ -5,7 +5,7 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-  	  {{'课程《%courseTitle%》有新问题'|trans({'%courseTitle%':data.courseTitle})}}
+  	  {{'教学计划《%courseTitle%》有新问题'|trans({'%courseTitle%':data.courseTitle})}}
   	  <a href='{{path('course_thread_show',{courseId:data.courseId,threadId:data.threadId})}}' target='_blank'>{{data.questionTitle}}</a>{{'，请及时回答。'|trans}}
     </div>
     <div class="notification-footer">

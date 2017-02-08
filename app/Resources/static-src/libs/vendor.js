@@ -36,7 +36,7 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
     location.href = '/login';
   }
   var json = jQuery.parseJSON(jqxhr.responseText);
-  error = json.error;
+  let error = json.error;
   if (!error) {
     return;
   }

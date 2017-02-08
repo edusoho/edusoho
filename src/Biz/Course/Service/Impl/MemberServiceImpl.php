@@ -810,6 +810,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->countPostsByCourseIdAndUserId($courseId, $userId);
     }
 
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
+    {
+        return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+    }
+
     /**
      * @return CourseMemberDao
      */

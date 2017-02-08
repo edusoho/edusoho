@@ -354,7 +354,7 @@ class AnalysisController extends BaseController
     public function taskAction(Request $request, $tab)
     {
         $data            = array();
-        $lessonStartDate = "";
+        $taskStartDate = "";
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
@@ -372,12 +372,12 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $lessonData = "";
+        $taskData = "";
 
         if ($tab == "trend") {
-            $lessonData = $this->getTaskService()->analysisTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $taskData = $this->getTaskService()->analysisTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
 
-            $data = $this->fillAnalysisData($condition, $lessonData);
+            $data = $this->fillAnalysisData($condition, $taskData);
         }
 
         $courseIds = ArrayToolkit::column($taskDetail, 'courseId');
