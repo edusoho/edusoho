@@ -674,6 +674,15 @@ admin:
                             name: 授权信息
                             router_name: admin_setting_cloud
                             disable: true
+                admin_cloud_file_manage:
+                    name: 云资源
+                    visable: (cloudStatus())
+                    parent: admin_app
+                    after: admin_app_center_show
+                    children:
+                        admin_cloud_file:
+                            name: 云资源
+                            disable: true
         admin_system:
             name: 系统
             router_name: admin_setting_site
