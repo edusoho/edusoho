@@ -1,15 +1,15 @@
 <?php
 namespace Biz\Article\Service\Impl;
 
-use Biz\Article\Dao\ArticleDao;
-use Biz\Article\Dao\ArticleLikeDao;
-use Biz\Article\Service\ArticleService;
-use Biz\Article\Service\CategoryService;
 use Biz\BaseService;
-use Biz\System\Service\LogService;
-use Biz\Taxonomy\Service\TagService;
-use Codeages\Biz\Framework\Event\Event;
+use Biz\Article\Dao\ArticleDao;
 use Topxia\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
+use Biz\Article\Dao\ArticleLikeDao;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Article\Service\ArticleService;
+use Codeages\Biz\Framework\Event\Event;
+use Biz\Article\Service\CategoryService;
 
 class ArticleServiceImpl extends BaseService implements ArticleService
 {
@@ -394,14 +394,14 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             }
         }
 
-        $self = $this;
+        $self             = $this;
         $relativeArticles = array_map(function ($articleId) use ($article, $self) {
             $conditions = array(
                 'articleId' => $articleId,
                 'hasThumb'  => true,
                 'status'    => 'published'
             );
-            $articles   = $self->searchArticles($conditions, 'normal', 0, PHP_INT_MAX);
+            $articles = $self->searchArticles($conditions, 'normal', 0, PHP_INT_MAX);
             return ArrayToolkit::index($articles, 'id');
         }, $articleIds);
 
@@ -471,7 +471,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     protected function filterSort($sort)
     {
         if (is_array($sort)) {
-            return array($sort);
+            return $sort;
         }
 
         switch ($sort) {

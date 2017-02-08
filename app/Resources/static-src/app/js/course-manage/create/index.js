@@ -81,7 +81,7 @@ class Creator {
         if ($('input[name="expiryMode"]:checked').val() !== 'date') {
           return true;
         }
-        return value && $(params).val() > value;
+        return value && $(params).val() >= value;
       },
       Translator.trans('开始日期应早于结束日期')
     );
@@ -92,7 +92,7 @@ class Creator {
         if ($('input[name="expiryMode"]:checked').val() !== 'date') {
           return true;
         }
-        return value && $(params).val() < value;
+        return value && $(params).val() <= value;
       },
       Translator.trans('结束日期应晚于开始日期')
     );
