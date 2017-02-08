@@ -75,6 +75,7 @@ class BlockToolkit
         if (empty($block['templateName']) || empty($block['data'])) {
             return '';
         }
+
         return $container->get('templating')->render($block['templateName'], $block['data']);
     }
 
