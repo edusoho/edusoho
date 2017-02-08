@@ -32,6 +32,15 @@ class Audio extends Activity
         return $this->getAudioActivityDao()->create($newAudio);
     }
 
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceAudio      = $this->getAudioActivityDao()->get($sourceActivity['mediaId']);
+        $audio            = $this->getAudioActivityDao()->get($activity['mediaId']);
+        $audio['mediaId'] = $sourceAudio['mediaId'];
+
+        return $this->getAudioActivityDao()->update($audio['id'], $audio);
+    }
+
     /**
      * @inheritdoc
      */

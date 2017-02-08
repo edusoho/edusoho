@@ -55,6 +55,8 @@ interface CourseService
 
     public function getNextNumberAndParentId($courseId);
 
+    public function getNextCourseItemSeq($courseId);
+
     public function tryTakeCourse($courseId);
 
     public function canTakeCourse($course);

@@ -39,6 +39,12 @@ class Exercise extends Activity
         return $this->getTestpaperCopy()->copy($newActivity, array('isCopy' => 1));
     }
 
+    public function sync($sourceActivity, $activity)
+    {
+        //todo
+        return null;
+    }
+
     public function update($targetId, &$fields, $activity)
     {
         $exercise = $this->get($targetId);

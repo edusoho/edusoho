@@ -1,69 +1,66 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: malianbo
- * Date: 17/2/5
- * Time: 16:31
- */
 
 namespace Biz\Task\Event;
 
+use Biz\Task\Dao\TaskDao;
+use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Task\Strategy\StrategyContext;
-use Biz\Task\Dao\TaskDao;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;
-use Topxia\Common\ArrayToolkit;
 
 class TaskSyncSubscriber extends CourseSyncSubscriber
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'course.task.create'     => 'onCourseTaskCreate',
-            'course.task.update'     => 'onCourseTaskUpdate',
-            'course.task.delete'     => 'onCourseTaskDelete'
+            'course.task.create'    => 'onCourseTaskCreate',
+            'course.task.update'    => 'onCourseTaskUpdate',
+            'course.task.delete'    => 'onCourseTaskDelete',
+
+            'course.task.publish'   => 'onCourseTaskUpdate',
+            'course.task.unpublish' => 'onCourseTaskUpdate'
 
 //            'course.activity.create' => 'onCourseActivityCreate',
-//            'course.activity.update' => 'onCourseActivityUpdate',
-//            'course.activity.delete' => 'onCourseActivityDelete'
+            //            'course.activity.update' => 'onCourseActivityUpdate',
+            //            'course.activity.delete' => 'onCourseActivityDelete'
         );
     }
-
 
     public function onCourseTaskCreate(Event $event)
     {
         $task = $event->getSubject();
-        if($task['copyId'] > 0){
+        if ($task['copyId'] > 0) {
             return;
         }
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-        if(empty($copiedCourses)){
+        if (empty($copiedCourses)) {
             return;
         }
         $activity = $this->getActivityDao()->get($task['activityId']);
-        foreach ($copiedCourses as $cc){
+        foreach ($copiedCourses as $cc) {
             $newActivity = $this->createActivity($activity, $cc);
 
             $newTask = array(
-                'courseId' => $cc['id'],
+                'courseId'        => $cc['id'],
                 'fromCourseSetId' => $cc['courseSetId'],
-                'seq' => $task['seq'],
-                'categoryId' => $task['categoryId'],
-                'activityId' => $newActivity['id'],
-                'title' => $task['title'],
-                'isFree' => $task['isFree'],
-                'isOptional' => $task['isOptional'],
-                'startTime' => $task['startTime'],
-                'endTime' => $task['endTime'],
-                'number' => $task['number'],
-                'mediaSource' => $task['mediaSource'],
-                'copyId' => $task['id'],
-                'maxOnlineNum' => $task['maxOnlineNum']
+                'seq'             => $task['seq'],
+                'categoryId'      => $task['categoryId'],
+                'activityId'      => $newActivity['id'],
+                'title'           => $task['title'],
+                'isFree'          => $task['isFree'],
+                'isOptional'      => $task['isOptional'],
+                'startTime'       => $task['startTime'],
+                'endTime'         => $task['endTime'],
+                'number'          => $task['number'],
+                'mediaSource'     => $task['mediaSource'],
+                'copyId'          => $task['id'],
+                'maxOnlineNum'    => $task['maxOnlineNum'],
+                'status'          => $task['status']
             );
 
-            if(!empty($task['mode'])){
-                $newChapter = $this->getChapterDao()->getByCopyIdAndLockedCourseId($task['categoryId'], $cc['id']);
+            if (!empty($task['mode'])) {
+                $newChapter            = $this->getChapterDao()->getByCopyIdAndLockedCourseId($task['categoryId'], $cc['id']);
                 $newTask['categoryId'] = $newChapter['id'];
             }
 
@@ -74,20 +71,20 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     public function onCourseTaskUpdate(Event $event)
     {
         $task = $event->getSubject();
-        if($task['copyId'] > 0){
+        if ($task['copyId'] > 0) {
             return;
         }
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-        if(empty($copiedCourses)){
+        if (empty($copiedCourses)) {
             return;
         }
 
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
+        $copiedTasks     = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
             $this->updateActivity($task['activityId']);
             $ct = $this->copyFields($task, $ct, array(
-                'seq' => $task['seq'],
+                'seq',
                 'title',
                 'isFree',
                 'isOptional',
@@ -95,7 +92,8 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
                 'endTime',
                 'number',
                 'mediaSource',
-                'maxOnlineNum'
+                'maxOnlineNum',
+                'status'
             ));
 
             $this->getTaskDao()->update($ct['id'], $ct);
@@ -105,54 +103,54 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     public function onCourseTaskDelete(Event $event)
     {
         $task = $event->getSubject();
-        if($task['copyId'] > 0){
+        if ($task['copyId'] > 0) {
             return;
         }
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-        if(empty($copiedCourses)){
+        if (empty($copiedCourses)) {
             return;
         }
 
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
         $copiedCourseMap = ArrayToolkit::index($copiedCourses, 'id');
-        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
+        $copiedTasks     = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
             $this->deleteTask($ct['id'], $copiedCourseMap[$ct['courseId']]);
         }
     }
 
 //    public function onCourseActivityCreate(Event $event)
-//    {
-//
-//    }
-//
-//    public function onCourseActivityUpdate(Event $event)
-//    {
-//
-//    }
-//
-//    public function onCourseActivityDelete(Event $event)
-//    {
-//
-//    }
+    //    {
+    //
+    //    }
+    //
+    //    public function onCourseActivityUpdate(Event $event)
+    //    {
+    //
+    //    }
+    //
+    //    public function onCourseActivityDelete(Event $event)
+    //    {
+    //
+    //    }
 
     protected function createActivity($activity, $copiedCourse)
     {
-        $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array());
+        $ext         = $this->getActivityConfig($activity['mediaType'])->copy($activity, array());
         $newActivity = array(
-            'title' => $activity['title'],
-            'remark' => $activity['remark'],
-            'mediaType' => $activity['mediaType'],
-            'content' => $activity['content'],
-            'length' => $activity['length'],
-            'fromCourseId' => $copiedCourse['id'],
+            'title'           => $activity['title'],
+            'remark'          => $activity['remark'],
+            'mediaType'       => $activity['mediaType'],
+            'content'         => $activity['content'],
+            'length'          => $activity['length'],
+            'fromCourseId'    => $copiedCourse['id'],
             'fromCourseSetId' => $copiedCourse['courseSetId'],
-            'fromUserId' => $activity['fromUserId'],
-            'startTime' => $activity['startTime'],
-            'endTime' => $activity['endTime'],
-            'copyId' => $activity['id']
+            'fromUserId'      => $activity['fromUserId'],
+            'startTime'       => $activity['startTime'],
+            'endTime'         => $activity['endTime'],
+            'copyId'          => $activity['id']
         );
-        if(!empty($ext)){
+        if (!empty($ext)) {
             $newActivity['mediaId'] = $ext['id'];
         }
         return $this->getActivityDao()->create($newActivity);
@@ -160,9 +158,9 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
     protected function updateActivity($activityId)
     {
-        $activity = $this->getActivityDao()->get($activityId);
+        $activity       = $this->getActivityDao()->get($activityId);
         $sourceActivity = $this->getActivityDao()->get($activity['copyId']);
-        $this->copyFields($sourceActivity, $activity, array(
+        $activity       = $this->copyFields($sourceActivity, $activity, array(
             'title',
             'remark',
             'content',
@@ -171,7 +169,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'endTime'
         ));
         $this->getActivityDao()->update($activity['id'], $activity);
-        $this->getActivityConfig($activity['mediaType'])->sync($activity);
+        $this->getActivityConfig($activity['mediaType'])->sync($sourceActivity, $activity);
     }
 
     protected function deleteTask($taskId, $course)
@@ -190,7 +188,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     }
 
     /**
-     * @param $type
+     * @param  $type
      * @return Activity
      */
     protected function getActivityConfig($type)

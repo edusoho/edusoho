@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
 use Topxia\Common\ArrayToolkit;
@@ -17,6 +18,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\MaterialService;
+use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Course\Service\CourseDeleteService;
@@ -187,12 +189,16 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields = $this->validateExpiryMode($fields);
         }
 
-        return $this->getCourseDao()->update($id, $fields);
+        $course = $this->getCourseDao()->update($id, $fields);
+        $this->dispatchEvent('course.update', new Event($course));
+        return $course;
     }
 
     public function updateMaxRate($id, $maxRate)
     {
-        return $this->getCourseDao()->update($id, array('maxRate' => $maxRate));
+        $course = $this->getCourseDao()->update($id, array('maxRate' => $maxRate));
+        $this->dispatchEvent('course.update', new Event($course));
+        return $course;
     }
 
     public function setCourseTeachers($courseId, $teachers)
@@ -283,7 +289,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         //     $fields['price'] = round(floatval($fields['price']) * 100, 0);
         // }
 
-        return $this->getCourseDao()->update($id, $fields);
+        $course = $this->getCourseDao()->update($id, $fields);
+        $this->dispatchEvent('course.update', new Event($course));
+        return $course;
     }
 
     protected function calculatePrice($id, $originPrice)
@@ -321,7 +329,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException('Invalid Arguments');
         }
 
-        return $this->getCourseDao()->update($id, $updateFields);
+        $course = $this->getCourseDao()->update($id, $updateFields);
+        $this->dispatchEvent('course.update', new Event($course));
+        return $course;
     }
 
     public function deleteCourse($id)
@@ -573,6 +583,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapter['seq']         = $this->getNextCourseItemSeq($chapter['courseId']);
         $chapter['createdTime'] = time();
         $chapter                = $this->getChapterDao()->create($chapter);
+
+        $this->dispatchEvent('course.chapter.create', new Event($chapter));
+
         return $chapter;
     }
 
@@ -613,7 +626,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
 
         $chapter = $this->getChapterDao()->update($chapterId, $fields);
-
+        $this->dispatchEvent('course.chapter.update', new Event($chapter));
         return $chapter;
     }
 
@@ -627,6 +640,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
         }
         $this->getChapterDao()->delete($deletedChapter['id']);
+        $this->dispatchEvent('course.chapter.delete', new Event($deletedChapter));
 
         $prevChapter = array('id' => 0);
 
@@ -1119,6 +1133,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('Course:CourseDeleteService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');

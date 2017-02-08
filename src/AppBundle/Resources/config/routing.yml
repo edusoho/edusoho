@@ -1956,7 +1956,7 @@ course_set_manage_cover:
   path: /course_set/{id}/manage/cover
   defaults: {_controller: AppBundle:Course/CourseSetManage:cover}
 
-course_manage_cover_crop:
+course_set_manage_cover_crop:
   path: /course_set/{id}/manage/cover_crop
   defaults: {_controller: AppBundle:Course/CourseSetManage:coverCrop}
 
