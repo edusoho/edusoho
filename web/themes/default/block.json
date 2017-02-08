@@ -33,29 +33,6 @@
                 ]
             }
         }
-    },
-    "default:cloud_search_banner":
-    {
-        "title": "云搜索头部banner",
-        "category": "default",
-        "templateName": "@theme/default/block/home_top_banner.template.html.twig",
-        "items": {
-            "carousel": 
-            {
-                "title": "轮播图",
-                "desc": "建议图片大小为1440*200，最多可设置1张图片。",
-                "count": 1,
-                "type": "imglink",
-                "default": [
-                    {
-                        "src": "/assets/img/placeholder/banner_search.jpg",
-                        "alt": "轮播图１的描述",
-                        "href": "#",
-                        "target": "_blank"
-                    }
-                ]
-            }
-        }
     }
  
 }
