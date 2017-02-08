@@ -2,10 +2,10 @@
 
 namespace Biz\Course\Copy\Impl;
 
-use Biz\Question\Service\QuestionService;
-use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Copy\AbstractEntityCopy;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
 
 class TestpaperCopy extends AbstractEntityCopy
 {
@@ -113,7 +113,7 @@ class TestpaperCopy extends AbstractEntityCopy
         $questions     = $this->getQuestionService()->findQuestionsByIds($diff);
         $questions     = $this->questionSort($questions);
 
-        // $questionMap = array();
+        $questionMap = array();
         foreach ($questions as $question) {
             $newQuestion = $this->filterQuestion($newCourseSetId, $question, $isCopy);
 
@@ -124,7 +124,7 @@ class TestpaperCopy extends AbstractEntityCopy
 
             $newQuestion = $this->getQuestionService()->create($newQuestion);
 
-            // $questionMap[$question['id']] = array($newQuestion['id'], $newQuestion['parentId']);
+            $questionMap[$question['id']] = array($newQuestion['id'], $newQuestion['parentId']);
         }
 
         // return $questionMap;

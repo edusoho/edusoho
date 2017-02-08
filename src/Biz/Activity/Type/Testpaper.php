@@ -11,8 +11,6 @@ use Biz\Activity\Service\TestpaperActivityService;
 
 class Testpaper extends Activity
 {
-    private $testpaperCopy = null;
-
     protected function registerListeners()
     {
         return array();
@@ -36,13 +34,10 @@ class Testpaper extends Activity
             return null;
         }
 
-        $newActivity = $config['newActivity'];
-        $ext         = $this->get($activity['mediaId']);
-
-        $testpaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($ext['mediaId'], $newActivity['fromCourseSetId']);
+        $ext = $this->get($activity['mediaId']);
 
         $newExt = array(
-            'mediaId'         => $testpaper['id'],
+            'mediaId'         => $config['testId'],
             'doTimes'         => $ext['doTimes'],
             'redoInterval'    => $ext['redoInterval'],
             'limitedTime'     => $ext['limitedTime'],
@@ -57,20 +52,21 @@ class Testpaper extends Activity
 
     public function sync($sourceActivity, $activity)
     {
-        $sourceActivity = $this->getTestpaperActivityService()->getActivity($sourceActivity['mediaId']);
-        $activity       = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $sourceExt = $this->getTestpaperActivityService()->getActivity($sourceActivity['mediaId']);
+        $ext       = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        $testpaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($sourceActivity['mediaId'], $activity['fromCourseSetId']);
+        // $testpaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($sourceExt['mediaId'], $activity['fromCourseSetId']);
 
-        $activity['mediaId']         = $testpaper['id'];
-        $activity['redoInterval']    = $sourceActivity['redoInterval'];
-        $activity['limitedTime']     = $sourceActivity['limitedTime'];
-        $activity['checkType']       = $sourceActivity['checkType'];
-        $activity['finishCondition'] = $sourceActivity['finishCondition'];
-        $activity['requireCredit']   = $sourceActivity['requireCredit'];
-        $activity['testMode']        = $sourceActivity['testMode'];
+        // $ext['mediaId']         = $testpaper['id'];
+        $ext['mediaId']         = $activity['testId'];
+        $ext['redoInterval']    = $sourceExt['redoInterval'];
+        $ext['limitedTime']     = $sourceExt['limitedTime'];
+        $ext['checkType']       = $sourceExt['checkType'];
+        $ext['finishCondition'] = $sourceExt['finishCondition'];
+        $ext['requireCredit']   = $sourceExt['requireCredit'];
+        $ext['testMode']        = $sourceExt['testMode'];
 
-        return $this->getTestpaperActivityService()->updateActivity($activity['id'], $activity);
+        return $this->getTestpaperActivityService()->updateActivity($ext['id'], $ext);
     }
 
     public function update($targetId, &$fields, $activity)

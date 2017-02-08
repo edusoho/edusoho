@@ -136,16 +136,20 @@ class TaskCopy extends AbstractEntityCopy
                     }
                 }
 
+                //create testpaper
                 $testId = 0;
                 if (in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
                     $activityTestpaperCopy = new ActivityTestpaperCopy($this->biz);
 
                     $testpaper = $activityTestpaperCopy->copy($activity, array(
-                        'newActivity' => $newActivity,
-                        'isCopy'      => $isCopy
+                        'newCourseId'    => $newCourseId,
+                        'newCourseSetId' => $courseSetId,
+                        'isCopy'         => $isCopy
                     ));
                     $testId = $testpaper['id'];
                 }
+
+                //create activity config
                 $config = $this->getActivityConfig($activity['mediaType']);
 
                 $ext = $config->copy($activity, array(
@@ -153,8 +157,13 @@ class TaskCopy extends AbstractEntityCopy
                     'testId'      => $testId,
                     'newActivity' => $newActivity
                 ));
+                //对于testpaper，mediaId指向testpaper_activity.id
                 if (!empty($ext)) {
                     $newActivity['mediaId'] = $ext['id'];
+                }
+                //对于exercise、homework，mediaId指向testpaper.id
+                if ($testId > 0) {
+                    $newActivity['mediaId'] = $testId;
                 }
                 if ($newActivity['mediaType'] == 'live') {
                     unset($newActivity['startTime']);

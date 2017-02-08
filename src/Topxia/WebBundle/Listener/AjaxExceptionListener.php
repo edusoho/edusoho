@@ -36,6 +36,9 @@ class AjaxExceptionListener
 
         $statusCode = $exception->getCode();
 
+        // var_dump($exception->getTraceAsString());
+        throw $exception;
+
         if (!array_key_exists($statusCode, Response::$statusTexts)) {
             $statusCode = 500;
         }

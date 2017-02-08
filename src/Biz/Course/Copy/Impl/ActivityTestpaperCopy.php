@@ -15,14 +15,14 @@ class ActivityTestpaperCopy extends TestpaperCopy
      * */
     protected function _copy($source, $config = array())
     {
-        return $this->doCopyTestpaper($source, $config['newActivity'], $config['isCopy']);
+        return $this->doCopyTestpaper($source, $config['newCourseSetId'], $config['newCourseId'], $config['isCopy']);
     }
 
-    public function doCopyTestpaper($activity, $newActivity, $isCopy)
+    public function doCopyTestpaper($activity, $newCourseSetId, $newCourseId, $isCopy)
     {
-        $mediaType   = $newActivity['mediaType'];
+        $mediaType   = $activity['mediaType'];
         $testpaperId = 0;
-        
+
         if ($mediaType == 'testpaper') {
             $testpaperActivity = $this->getActivityConfig($mediaType)->get($activity['mediaId']);
             $testpaperId       = $testpaperActivity['mediaId'];
@@ -34,14 +34,18 @@ class ActivityTestpaperCopy extends TestpaperCopy
             return null;
         }
 
-        $testpaper = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (empty($testpaper) || $testpaper['copyId'] > 0) {
             return null;
         }
 
+        $existed = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($testpaperId, $newCourseSetId);
+        if (!empty($existed)) {
+            return $existed; //已复制过，不要重复复制
+        }
         $newTestpaper                = $this->baseCopyTestpaper($testpaper, $isCopy);
-        $newTestpaper['courseSetId'] = $newActivity['fromCourseSetId'];
-        $newTestpaper['courseId']    = $newActivity['fromCourseId'];
+        $newTestpaper['courseSetId'] = $newCourseSetId;
+        $newTestpaper['courseId']    = $newCourseId;
 
         $newTestpaper = $this->getTestpaperService()->createTestpaper($newTestpaper);
 

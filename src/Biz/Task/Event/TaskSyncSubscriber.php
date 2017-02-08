@@ -82,7 +82,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
         $copiedTasks     = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
-            $this->updateActivity($ct['activityId']);
+            $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId']);
             $ct = $this->copyFields($task, $ct, array(
                 'seq',
                 'title',
@@ -121,7 +121,12 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
     protected function createActivity($activity, $copiedCourse)
     {
-        $ext         = $this->getActivityConfig($activity['mediaType'])->copy($activity, array());
+        //create testpaper&questions if ref exists
+        $testpaper = $this->syncTestpaper($activity, $copiedCourse);
+
+        $testId = empty($testpaper) ? 0 : $testpaper['id'];
+
+        $ext         = $this->getActivityConfig($activity['mediaType'])->copy($activity, array('testId' => $testId));
         $newActivity = array(
             'title'           => $activity['title'],
             'remark'          => $activity['remark'],
@@ -135,21 +140,26 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'endTime'         => $activity['endTime'],
             'copyId'          => $activity['id']
         );
+
         if (!empty($ext)) {
             $newActivity['mediaId'] = $ext['id'];
         }
+        if ($newActivity['mediaType'] == 'homework' || $newActivity['mediaType'] == 'exercise') {
+            $newActivity['mediaId'] = $testpaper['id'];
+        }
+
         $newActivity = $this->getActivityDao()->create($newActivity);
+
         //create materials if exists
         $this->createMaterials($newActivity, $activity, $copiedCourse);
-        //create testpaper&questions if ref exists
-        $this->createTestpapers($newActivity, $activity, $copiedCourses);
+
         return $newActivity;
     }
 
     protected function createMaterials($activity, $sourceActivity, $copiedCourse)
     {
         $materials = $this->getMaterialDao()->search(array('lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']), array(), 0, PHP_INT_MAX);
-        $this->getLogService()->info('TaskSync', 'createMaterials', count($materials));
+
         if (empty($materials)) {
             return;
         }
@@ -178,17 +188,25 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
     }
 
-    protected function createTestpapers($newActivity, $activity, $copiedCourses)
+    protected function syncTestpaper($activity, $copiedCourse)
     {
         $testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
-        $testpaperCopy->copy($activity, array('newActivity' => $newActivity, 'isCopy' => 1));
+
+        return $testpaperCopy->copy($activity, array(
+            'newCourseSetId' => $copiedCourse['courseSetId'],
+            'newCourseId'    => $copiedCourse['id'],
+            'isCopy'         => 1
+        ));
     }
 
-    protected function updateActivity($activityId)
+    protected function updateActivity($activityId, $courseSetId, $courseId)
     {
         $activity       = $this->getActivityDao()->get($activityId);
         $sourceActivity = $this->getActivityDao()->get($activity['copyId']);
-        $activity       = $this->copyFields($sourceActivity, $activity, array(
+
+        $testpaper = $this->syncTestpaper($sourceActivity, array('id' => $courseId, 'courseSetId' => $courseSetId));
+
+        $activity = $this->copyFields($sourceActivity, $activity, array(
             'title',
             'remark',
             'content',
@@ -196,16 +214,28 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'startTime',
             'endTime'
         ));
-        $this->getActivityDao()->update($activity['id'], $activity);
 
-        $this->getActivityConfig($activity['mediaType'])->sync($sourceActivity, $activity);
+        if (!empty($testpaper)) {
+            $sourceActivity['testId'] = $testpaper['id'];
+        }
+
+        $ext = $this->getActivityConfig($activity['mediaType'])->sync($sourceActivity, $activity);
+
+        if (!empty($ext)) {
+            $activity['mediaId'] = $ext['id'];
+        }
+
+        if ($activity['mediaType'] == 'homework' || $activity['mediaType'] == 'exercise') {
+            $activity['mediaId'] = $testpaper['id'];
+        }
+        $this->getActivityDao()->update($activity['id'], $activity);
     }
 
     protected function deleteTask($taskId, $course)
     {
         $strategy = StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->getBiz());
         //delete task and belongings
-        $strategy->deleteTask($taskId);
+        $strategy->deleteTask($this->getTaskDao()->get($taskId));
     }
 
     /**

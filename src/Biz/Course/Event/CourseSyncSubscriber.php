@@ -3,6 +3,7 @@
 namespace Biz\Course\Event;
 
 use Biz\Course\Dao\CourseDao;
+use Biz\System\Service\LogService;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Activity\Dao\ActivityDao;
@@ -309,6 +310,9 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         return $this->getBiz()->dao('Activity:ActivityDao');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
