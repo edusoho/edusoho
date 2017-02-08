@@ -41,7 +41,7 @@ class CourseCopy extends AbstractEntityCopy
         $new['locked']      = 0;
         $new['courseSetId'] = $courseSetId;
         $new['creator']     = $user['id'];
-        $new['status']      = 'published';
+        $new['status']      = 'draft';
         $new['teacherIds']  = array($user['id']);
 
         //course的自定义配置

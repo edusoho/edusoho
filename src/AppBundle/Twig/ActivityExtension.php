@@ -78,8 +78,7 @@ class ActivityExtension extends \Twig_Extension
         }
         $h = floor($len / 60);
         $m = fmod($len, 60);
-        //TODO 目前没考虑秒
-        return ($h < 10 ? '0'.$h : $h).':'.($m < 10 ? '0'.$m : $m).':00';
+        return ($h < 10 ? '0'.$h : $h).':'.($m < 10 ? '0'.$m : $m);
     }
 
     public function getName()

@@ -27,10 +27,10 @@ class CourseController extends CourseBaseController
 
     public function showAction(Request $request, $id, $tab = 'summary')
     {
-        $course = $this->getCourseService()->getCourse($id);
-        $user   = $this->getCurrentUser();
+        $course    = $this->getCourseService()->getCourse($id);
         return $this->render('course/course-show.html.twig', array(
-            'tab' => $tab,
+            'tab'       => $tab,
+            'course'    => $course,
         ));
     }
 
@@ -66,14 +66,16 @@ class CourseController extends CourseBaseController
         $member         = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
         $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']) : false;
         $isPreview      = $request->query->get('previewAs', false);
+        $classroom      = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
-        $previewTasks = $this->getTaskService()->search(array('courseId' => $course['id'], 'type' => 'video', 'isFree' => '1'), array('seq' => 'ASC'), 0, 1);
+        $previewTasks = $this->getTaskService()->searchTasks(array('courseId' => $course['id'], 'type' => 'video', 'isFree' => '1'), array('seq' => 'ASC'), 0, 1);
         return $this->render('course/header/header-for-guest.html.twig', array(
             'isUserFavorite' => $isUserFavorite,
             'member'         => $member,
             'courseSet'      => $courseSet,
             'courses'        => $courses,
             'course'         => $course,
+            'classroom'      => $classroom,
             'previewTask'    => empty($previewTasks) ? null : array_shift($previewTasks),
             'isPreview'      => $isPreview
         ));
@@ -181,7 +183,8 @@ class CourseController extends CourseBaseController
     public function tasksAction($course, $member = array())
     {
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
-        $files       = $this->findFiles($courseItems);
+
+        $files = $this->findFiles($courseItems);
         return $this->render('course/tabs/tasks.html.twig', array(
             'course'      => $course,
             'courseItems' => $courseItems,

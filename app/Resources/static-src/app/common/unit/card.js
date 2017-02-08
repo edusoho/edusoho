@@ -129,7 +129,7 @@ function bindMsgBtn($card, self) {
 function showFollowBtn($btn) {
   $btn.hide();
   $btn.siblings('.follow-btn').show();
-  $actualCard = $('#user-card-' + $btn.closest('.js-card-content').data('userId'));
+  let $actualCard = $('#user-card-' + $btn.closest('.js-card-content').data('userId'));
   $actualCard.find('.unfollow-btn').hide();
   $actualCard.find('.follow-btn').show();
 }
@@ -137,7 +137,7 @@ function showFollowBtn($btn) {
 function showUnfollowBtn($btn) {
   $btn.hide();
   $btn.siblings('.unfollow-btn').show();
-  $actualCard = $('#user-card-' + $btn.closest('.js-card-content').data('userId'));
+  let $actualCard = $('#user-card-' + $btn.closest('.js-card-content').data('userId'));
   $actualCard.find('.follow-btn').hide();
   $actualCard.find('.unfollow-btn').show();
 }

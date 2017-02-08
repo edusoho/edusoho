@@ -10,7 +10,7 @@
   {% for teacher in teachers %}
     {% set isFollowed = (teacher.id in Myfollowings)|default(false) %}
     {% set member = members[teacher.id] %}
-    {% include 'classroom/teacher:item.html.twig' %}
+    {% include 'classroom/teacher/item.html.twig' %}
   {% endfor %}
   </div>
 

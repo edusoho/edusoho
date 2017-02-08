@@ -12,7 +12,7 @@ class DoTestBase
     this.$form = $container.find('form');
     this._initEvent();
     this._initUsedTimer();
-    new CopyDeny();
+    this._isCopy();
     this._alwaysSave();
   }
 
@@ -26,6 +26,13 @@ class DoTestBase
     this.$container.on('click','.js-favorite',event=>this._favoriteToggle(event));
     this.$container.on('click','.js-analysis',event=>this._analysisToggle(event));
     this.$container.on('blur','[data-type="fill"]',event=>this.fillChange(event));
+  }
+
+  _isCopy() {
+    let isCopy = this.$container.find('.js-testpaper-body').data('copy');
+    if (isCopy) {
+      new CopyDeny();
+    }
   }
 
   fillChange(event) {

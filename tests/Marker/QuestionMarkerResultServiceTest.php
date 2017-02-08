@@ -120,7 +120,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
 
     protected function getQuestionMarkerResultService()
     {
-        return $this->getBiz()->service('Marker:QuestionMarkerResultService');
+        return $this->createService('Marker:QuestionMarkerResultService');
     }
 
 }

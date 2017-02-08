@@ -201,26 +201,26 @@ class ClassroomOrderServiceTest extends BaseTestCase
 
     private function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     private function getClassroomOrderService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomOrderService');
+        return $this->createService('Classroom:ClassroomOrderService');
     }
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->createService('Order:OrderService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 }

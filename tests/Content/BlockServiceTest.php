@@ -377,7 +377,7 @@ class BlockServiceTest extends BaseTestCase
      */
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -385,6 +385,6 @@ class BlockServiceTest extends BaseTestCase
      */
     protected function getBlockService()
     {
-        return $this->getBiz()->service('Content:BlockService');
+        return $this->createService('Content:BlockService');
     }
 }

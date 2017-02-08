@@ -31,7 +31,7 @@
           id="upload-picture-btn">{{'保存'|trans}}</button> #}
         {% else %}
          <button class="btn btn-fat btn-primary"
-          data-url="{{path('course_set_manage_cover_crop', {id: courseSet.id})}}"
+          data-url="{{path('course_manage_cover_crop', {id: courseSet.id})}}"
           data-goto-url="{{path('course_set_manage_cover',{id: courseSet.id})}}"
           id="upload-picture-btn">{{'保存'|trans}}</button>
         {% endif %}

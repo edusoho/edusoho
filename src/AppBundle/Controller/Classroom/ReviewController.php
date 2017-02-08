@@ -116,9 +116,10 @@ class ReviewController extends BaseController
         $post = $this->getClassroomReviewService()->saveReview($fields);
 
         return $this->render("review/widget/subpost-item.html.twig", array(
-            'post'      => $post,
-            'author'    => $this->getCurrentUser(),
-            'canAccess' => true
+            'post'       => $post,
+            'author'     => $this->getCurrentUser(),
+            'canAccess'  => true,
+            'targetType' => 'classroom'
         ));
     }
 

@@ -49,8 +49,8 @@
               {{'解锁式学习'|trans}}
             </label>
             {% endif %}
-            {% if course.learnMode|default('freeMode') == 'lockMode' %} <p class="help-block" id="learnFreeModeHelp" data-role="tab-content">{{'学习过程自由安排'|trans}}</p>{% endif %}
-            {% if course.learnMode|default('freeMode') == 'freeMode' %}<p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{'根据计划预定的顺序学习'|trans}}</p>{% endif %}
+            {% if course.learnMode|default('freeMode') == 'lockMode' %} <p class="help-block" id="learnFreeModeHelp" data-role="tab-content">{{'根据计划预定的顺序学习'|trans}}</p>{% endif %}
+            {% if course.learnMode|default('freeMode') == 'freeMode' %}<p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{'学习过程自由安排'|trans}}</p>{% endif %}
           </div>
         </div>
         <div class="form-group">
