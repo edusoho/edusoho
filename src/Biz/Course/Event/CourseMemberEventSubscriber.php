@@ -15,7 +15,11 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public static function getSubscribedEvents()
     {
         return array(
-            'course.join'        => 'onMemberCreate',
+            'course.join'        => array(
+                array('countStudentMember', 1),
+                array('countIncome', 2),
+                array('sendWelcomeMsg', 3)
+            ),
             'course.quit'        => 'onMemberDelete',
 
             'course.task.delete' => 'onTaskDelete',
@@ -23,7 +27,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         );
     }
 
-    public function onMemberCreate(Event $event)
+    public function countStudentMember(Event $event)
     {
         $course = $event->getSubject();
         $member = $event->getArgument('member');
@@ -31,6 +35,26 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         if ($member['role'] == 'student') {
             $this->getCourseService()->updateCourseStatistics($course['id'], array('studentNum'));
             $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('studentNum'));
+        }
+    }
+
+    public function countIncome(Event $event)
+    {
+        $course = $event->getSubject();
+
+        $income = $this->getOrderService()->sumOrderPriceByTarget('course', $course['id']);
+        $this->getCourseDao()->update($course['id'], array('income' => $income));
+    }
+
+    public function sendWelcomeMsg(Event $event)
+    {
+        $course = $event->getSubject();
+        
+        $setting = $this->getSettingService()->get('course', array());
+        $user = $this->getBiz()['user'];
+        if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
+            $message = $this->getWelcomeMessageBody($user, $course);
+            $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
         }
     }
 
@@ -59,12 +83,26 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $this->updateMemberLearnedNum($task['courseId'], $user['id']);
     }
 
+    protected function getWelcomeMessageBody($user, $course)
+    {
+        $setting            = $this->getSettingService()->get('course', array());
+        $valuesToBeReplace  = array('{{nickname}}', '{{course}}');
+        $valuesToReplace    = array($user['nickname'], $course['title']);
+        $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
+        return $welcomeMessageBody;
+    }
+
     /**
      * @return CourseSetService
      */
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    protected function getMessageService()
+    {
+        return $this->createService('User:MessageService');
     }
 
     /**
@@ -81,6 +119,11 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     protected function getTaskResultService()
     {
         return $this->getBiz()->service('Task:TaskResultService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getBiz()->createService('System:SettingService');
     }
 
     /**
@@ -103,5 +146,10 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $learnedNum = $this->getTaskResultService()->countTaskResults($conditions);
 
         $this->getCourseMemberService()->updateMember($member['id'], array('learnedNum' => $learnedNum));
+    }
+
+    protected function getCourseDao()
+    {
+        return $this->getBiz()->Dao('Course:CourseDao');
     }
 }

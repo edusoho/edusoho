@@ -35,16 +35,9 @@
             <input class="form-control width-150 mrs" id="course_price" type="text" name="originPrice" value="{{course.originPrice|default(0)}}" >{{'元'|trans}}
           </div>
         </div>
-        <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %}hidden{% endif %}">
-          <label class="col-sm-2 control-label">{{'会员规则设置'|trans}}</label>
-          <div class="col-sm-4">
-            <!-- TODO 需要从会员插件里提取会员列表，这里用select展示，实际存储level_id -->
-            <input class="form-control width-150 mrs" type="text" name="vipLevelId" value="{{course.vipLevelId|default('')}}">
-          </div>
-          <div class="col-sm-10 col-sm-offset-2">
-            <div class="help-block">{{'设置会员课程后，该会员及更高等级的会员，可免费学习。'|trans}}</div>
-          </div>
-        </div>
+
+        {{ slot('course.marketing.setting', {'course':course}) }}
+
         <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %}hidden{% endif %}">
           <label class="col-sm-2 control-label">{{'设置免费学习任务'|trans}}</label>
           <div class="col-sm-8">
