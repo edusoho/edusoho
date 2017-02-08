@@ -136,7 +136,7 @@
     "cloud_search_banner":
     {
         "title": "云搜索头部banner",
-        "category": "symtem",
+        "category": "system",
         "templateName": "TopxiaWebBundle:Block:cloud_search_banner.template.html.twig",
         "items": {
             "posters": 
