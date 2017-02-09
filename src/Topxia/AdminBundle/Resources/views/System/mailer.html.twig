@@ -47,6 +47,18 @@
           <div class="controls col-md-8 mts">
             <a href="{{ path('admin_edu_cloud_email') }}" class="prl">使用云邮件</a>
             <a href="http://open.edusoho.com/show/cloud/email" target="_blank">了解云邮件优势</a>
+            <p class="help-block">
+              {{ '不限制每日邮件发送量，想发多少发多少。'|trans}}
+            </p>
+            <p class="help-block">
+              {{ '99%到达率，毫秒级响应，让你快速安全的与学员保持沟通。'|trans }}
+            </p>
+            <p class="help-block">
+              {{ '完善的数据分析能力，让您更从容地管理邮件。'|trans }}
+            </p>
+            <p class="help-block">
+              {{ '与EduSoho无缝整合，无需技术对接即可享受高质量的EDM服务。'|trans }}
+            </p>
           </div>
         </div>
         <div class="row form-group">
@@ -122,7 +134,11 @@
           <label for="name" >{{'发信人名称'|trans}}</label>
         </div>
         <div class="controls col-md-8">
-          <input type="text" id="name" name="name" class="form-control" value="{{mailer.name}}">
+          {% if status == 'cloud_email_crm' %}
+            <input type="text" id="name" name="name" class="form-control" value="{{cloudMailName}}">
+          {% else %}
+            <input type="text" id="name" name="name" class="form-control" value="{{mailer.name}}">
+          {% endif %}
         </div>
       </div>
       <p></p>

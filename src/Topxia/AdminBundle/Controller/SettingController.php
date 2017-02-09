@@ -345,7 +345,6 @@ class SettingController extends BaseController
         }
 
         $mailer = $this->getSettingService()->get('mailer', array());
-
         $default = array(
             'enabled'  => 0,
             'host'     => '',
@@ -356,15 +355,14 @@ class SettingController extends BaseController
             'name'     => ''
         );
         $mailer = array_merge($default, $mailer);
-
         if ($request->getMethod() == 'POST') {
             $settingStatus = $this->checkMailerStatus();
             if ('cloud_email_crm' == $settingStatus) {
                 $name = $request->request->get('name', '');
-                $mailer = $this->getSettingService()->get('mailer', array());
-                $mailer['name'] = $name;
+                $cloudMail = $this->getSettingService()->get('cloud_email_crm', array());
+                $cloudMail['name'] = $name;
                 $info = array('name' => $name);
-                $this->getSettingService()->set('mailer', $mailer);
+                $this->getSettingService()->set('cloud_email_crm', $cloudMail);
                 $this->getLogService()->info('system', 'update_settings', '更新邮件发送人名称', $info);
             } else {
                 $mailer = $request->request->all();
@@ -377,10 +375,15 @@ class SettingController extends BaseController
         }
 
         $status = $this->checkMailerStatus();
-
+        $cloudMailName = '';
+        if ('cloud_email_crm' == $status) {
+            $cloudMailer = $this->getSettingService()->get('cloud_email_crm', array());
+            $cloudMailName = empty($cloudMailer['name']) ? '' : $cloudMailer['name'];
+        }
         return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array(
             'mailer' => $mailer,
-            'status' => $status
+            'status' => $status,
+            'cloudMailName' => $cloudMailName
         ));
     }
 

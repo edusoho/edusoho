@@ -606,14 +606,19 @@ class EduCloudController extends BaseController
                 $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
             }
             $status = $request->request->all();
+            $mailer = $this->getSettingService()->get('mailer', array());
             if (isset($status['email-open'])) {
                 $emailStatus['status'] = 'enable';
+                $emailStatus['name'] = empty($mailer['name']) ? '' : $mailer['name'];
                 $this->getSettingService()->set('cloud_email_crm', $emailStatus);
             }
 
             if (isset($status['email-close'])) {
+                $cloudMail = $this->getSettingService()->get('cloud_email_crm');
                 $emailStatus['status'] = 'disable';
                 $this->getSettingService()->set('cloud_email_crm', $emailStatus);
+                $mailer['name'] = empty($cloudMail['name']) ? '' : $cloudMail['name'];
+                $this->getSettingService()->set('mailer', $mailer);
             }
             return $this->redirect($this->generateUrl('admin_edu_cloud_email'));
         }
