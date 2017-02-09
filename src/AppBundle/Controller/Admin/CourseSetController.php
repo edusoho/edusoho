@@ -22,7 +22,7 @@ class CourseSetController extends BaseController
         }
 
         if ($filter == 'vip') {
-            $conditions['vipLevelIdGreaterThan'] = 1;
+            $conditions['isVip'] = 1;
             $conditions["parentId"]              = 0;
         }
 
@@ -48,7 +48,6 @@ class CourseSetController extends BaseController
         list($searchCourseSetsNum, $publishedCourseSetsNum, $closedCourseSetsNum, $unPublishedCourseSetsNum) = $this->getDifferentCourseSetsNum($conditions);
 
         $classrooms = array();
-        $vips       = array();
         if ($filter == 'classroom') {
             $classrooms = $this->getClassroomService()->findClassroomCourseByCourseSetIds($courseSetIds);
             $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
@@ -56,11 +55,6 @@ class CourseSetController extends BaseController
             foreach ($classrooms as $key => $classroom) {
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
-            }
-        } elseif ($filter == 'vip') {
-            if ($this->isPluginInstalled('Vip')) {
-                $vips = $this->getVipLevelService()->searchLevels(array(), 0, PHP_INT_MAX);
-                $vips = ArrayToolkit::index($vips, 'id');
             }
         }
 
@@ -87,7 +81,6 @@ class CourseSetController extends BaseController
             'default'                  => $default,
             'classrooms'               => $classrooms,
             'filter'                   => $filter,
-            'vips'                     => $vips,
             'searchCourseSetsNum'      => $searchCourseSetsNum,
             'publishedCourseSetsNum'   => $publishedCourseSetsNum,
             'closedCourseSetsNum'      => $closedCourseSetsNum,
