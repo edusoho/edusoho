@@ -170,7 +170,7 @@ class CourseManageController extends BaseController
                 unset($data['freeTaskIds']);
             }
 
-            $course = $this->getCourseService()->updateCourseMarketing($courseId, $data);
+            $this->getCourseService()->updateCourseMarketing($courseId, $data);
             return $this->redirect($this->generateUrl('course_set_manage_course_marketing', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
 
