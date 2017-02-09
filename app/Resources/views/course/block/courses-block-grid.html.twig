@@ -14,17 +14,16 @@
         <div class="course-grid-img">
           <img src="{{ filepath(courseSet.cover.large|default(null), 'course.png') }}"  class="img-responsive thumb">
 
-          {% if course.memberIsLearned is defined %}
           <div class="course-grid-mask">
             <span class="btn btn-warning btn-sm course-grid-btn-learn">
-              {% if course.memberIsLearned %}
+              {% if course.memberIsLearned|default(1) %}
                 {{'查看课程'|trans}}
               {% else %}
                 {{'继续学习'|trans}}
               {% endif %}
             </span>
           </div>
-        {% endif %}
+
         </div>
         <span class="course-label">
           {% if course.status == 'draft' %}
