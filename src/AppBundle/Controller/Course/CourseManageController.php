@@ -84,6 +84,13 @@ class CourseManageController extends BaseController
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $courseSetId,
+                'sideNav' => 'tasks'
+            ));
+        }
+
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
         $files = $this->prepareTaskActivityFiles($tasks);
@@ -143,7 +150,15 @@ class CourseManageController extends BaseController
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $courseSetId,
+                'sideNav' => 'info'
+            ));
+        }
+
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         return $this->render('course-manage/info.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $this->formatCourseDate($course)
@@ -176,7 +191,15 @@ class CourseManageController extends BaseController
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $courseSetId,
+                'sideNav' => 'marketing'
+            ));
+        }
+
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
         $conditions = array(
             'courseId' => $courseId,
@@ -208,7 +231,15 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_set_manage_course_teachers', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
 
-        $courseSet  = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $courseSetId,
+                'sideNav' => 'teachers'
+            ));
+        }
+
         $course     = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $teachers   = $this->getCourseService()->findTeachersByCourseId($courseId);
         $teacherIds = array();
