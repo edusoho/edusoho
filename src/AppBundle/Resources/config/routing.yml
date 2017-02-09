@@ -1695,6 +1695,18 @@ live_course_set_explore:
     path:  /live
     defaults: { _controller: AppBundle:Course/LiveCourseSet:explore }
 
+course_set_manage_sync:
+  path: /course_set/{id}/manage/sync
+  defaults: {_controller: AppBundle:Course/CourseSetManage:syncInfo}
+
+course_set_manage_unlock:
+  path: /course_set/{id}/manage/unlock
+  defaults: {_controller: AppBundle:Course/CourseSetManage:unlock}
+
+course_set_manage_unlock_confirm:
+  path: /course_set/{id}/manage/unlock_confirm
+  defaults: {_controller: AppBundle:Course/CourseSetManage:unlockConfirm}
+
 course_set_manage_courses:
   path: /course_set/{courseSetId}/manage/courses
   defaults: {_controller: AppBundle:Course/CourseManage:list}

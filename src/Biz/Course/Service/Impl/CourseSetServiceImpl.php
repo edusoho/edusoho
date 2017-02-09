@@ -587,6 +587,25 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
+    public function unlockCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        if ($courseSet['parentId'] <= 0 || $courseSet['locked'] == 0) {
+            throw $this->createAccessDeniedException('Invalid Operation');
+        }
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
+        try {
+            $this->beginTransaction();
+            $this->getCourseSetDao()->update($id, array('locked' => 0));
+            $this->getCourseDao()->update($courses[0]['id'], array('locked' => 0));
+            $this->commit();
+            return $courseSet;
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
+    }
+
     public function analysisCourseSetDataByTime($startTime, $endTime)
     {
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
