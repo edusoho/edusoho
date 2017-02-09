@@ -1,4 +1,4 @@
-class DataReported {
+class DataReporter {
   constructor(props) {
     this.datas = {};
     this.url = '';
@@ -190,4 +190,4 @@ class DataReported {
 //   // }
 // }
 
-export default DataReported;
+export default DataReporter;
