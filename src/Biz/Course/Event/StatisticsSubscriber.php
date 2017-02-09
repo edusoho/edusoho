@@ -28,19 +28,31 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.review.update' => 'onReviewNumberChange',
             'course.review.delete' => 'onReviewNumberChange',
 
-            'course.marketing.update' => 'onCourseMarketingChange'
+            'course.marketing.update' => 'onCourseMarketingChange',
+            'course.publish' => 'onCourseStatusChange',
+            'course.close' => 'onCourseStatusChange',
         );
+    }
+
+
+
+    private function updateCourseSetMinCoursePriceInPublishedCourses($course)
+    {
+        $price = $this->getCourseService()->getMinCoursePriceByCourseSetId($course['courseSetId']);
+        $this->getCourseSetService()->updateCourseSetMinCoursePrice($course['courseSetId'], $price);
     }
 
     public function onCourseMarketingChange(Event $event)
     {
+        $subject = $event->getSubject();
+        $course = $subject['newCourse'];
+        $this->updateCourseSetMinCoursePriceInPublishedCourses($course);
+    }
+
+    public function onCourseStatusChange(Event $event)
+    {
         $course = $event->getSubject();
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        if ($course['status'] != 'published' || $course['price'] == $courseSet['minCoursePrice']) {
-            return;
-        }
-        $price = $course['price'] < $courseSet['minCoursePrice'] ? $course['price'] : $this->getCourseService()->getMinCoursePriceByCourseSetId($course['courseSetId']);
-        $this->getCourseSetService()->updateCourseSetMinCoursePrice($course['courseSetId'], $price);
+        $this->updateCourseSetMinCoursePriceInPublishedCourses($course);
     }
 
     public function onTaskCreate(Event $event)

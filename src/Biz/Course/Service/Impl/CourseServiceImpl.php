@@ -361,7 +361,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         try {
             $this->beginTransaction();
-            $this->getCourseDao()->update($id, $course);
+            $course = $this->getCourseDao()->update($id, $course);
 
             $publishedCourses = $this->findPublishedCoursesByCourseSetId($course['courseSetId']);
             //如果课程下没有了已发布的教学计划，则关闭此课程
@@ -369,6 +369,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $this->getCourseSetDao()->update($course['courseSetId'], array('status' => 'closed'));
             }
             $this->commit();
+            $this->dispatchEvent('course.close', new Event($course));
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
@@ -378,10 +379,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function publishCourse($id)
     {
         $this->tryManageCourse($id);
-        $this->getCourseDao()->update($id, array(
+        $course = $this->getCourseDao()->update($id, array(
             'status' => 'published'
         ));
-        // $this->dispatchEvent('course.publish', $course);
+        $this->dispatchEvent('course.publish', $course);
     }
 
     protected function validateExpiryMode($course)
