@@ -2,10 +2,10 @@
 namespace Biz\Question\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Question\Service\QuestionService;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class QuestionServiceImpl extends BaseService implements QuestionService
 {

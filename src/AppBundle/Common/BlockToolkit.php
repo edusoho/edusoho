@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;

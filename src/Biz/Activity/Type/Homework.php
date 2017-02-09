@@ -2,13 +2,13 @@
 
 namespace Biz\Activity\Type;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
 use Biz\Activity\Service\ActivityLearnLogService;
-use Topxia\Common\Exception\InvalidArgumentException;
+use AppBundle\Common\Exception\InvalidArgumentException;
 
 class Homework extends Activity
 {

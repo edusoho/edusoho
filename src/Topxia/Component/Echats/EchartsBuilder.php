@@ -8,7 +8,7 @@
 namespace Topxia\Component\Echats;
 
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class EchartsBuilder
 {

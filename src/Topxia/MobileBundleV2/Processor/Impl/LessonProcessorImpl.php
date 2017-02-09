@@ -1,8 +1,8 @@
 <?php
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;

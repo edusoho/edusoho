@@ -5,8 +5,8 @@ use Biz\Content\Service\FileService;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Util\UploadToken;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class FileController extends BaseController
 {

@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
-use Topxia\Common\CurlToolkit;
+use AppBundle\Common\CurlToolkit;
 
 class SmsToolkit
 {

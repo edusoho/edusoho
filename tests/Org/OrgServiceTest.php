@@ -3,7 +3,7 @@
 namespace Org\Service\Org\Tests;
 
 use Biz\System\Service\SettingService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
 use Biz\BaseTestCase;

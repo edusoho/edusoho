@@ -1,11 +1,11 @@
 <?php
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\Common\EncryptionToolkit;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\SimpleValidator;
-use Topxia\Common\ExtensionManager;
+use AppBundle\Common\EncryptionToolkit;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\SimpleValidator;
+use AppBundle\Common\ExtensionManager;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\UserProcessor;

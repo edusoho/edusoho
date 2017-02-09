@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Finder;

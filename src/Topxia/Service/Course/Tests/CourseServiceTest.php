@@ -1791,7 +1791,7 @@ class CourseServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException AppBundle\Common\Exception\ResourceNotFoundException
      */
     public function testCanLearnLessonTwice()
     {
@@ -2970,7 +2970,7 @@ class CourseServiceTest extends BaseTestCase
 //=============是否可以管理课程,如果课程不存在，且当前操作用户为管理员时，返回true [end]==============
 
     /**
-     * @expectedException Topxia\Common\Exception\ResourceNotFoundException
+     * @expectedException AppBundle\Common\Exception\ResourceNotFoundException
      */
     public function testTryTakeCourse()
     {

@@ -3,7 +3,7 @@ namespace Biz\Article\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Article\Dao\ArticleDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Article\Dao\ArticleLikeDao;
 use Biz\Taxonomy\Service\TagService;

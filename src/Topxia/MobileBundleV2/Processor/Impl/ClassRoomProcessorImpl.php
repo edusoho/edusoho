@@ -2,7 +2,7 @@
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\ClassRoomProcessor;

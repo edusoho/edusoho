@@ -2,12 +2,12 @@
 namespace Topxia\WebBundle\Controller;
 
 use Biz\User\CurrentUser;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
-use Topxia\Common\Exception\InvalidArgumentException;
+use AppBundle\Common\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;

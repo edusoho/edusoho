@@ -1,8 +1,8 @@
 <?php
 
-namespace Topxia\Common\Tests;
+namespace AppBundle\Common\Tests;
 
-use Topxia\Common\CurlToolkit;
+use AppBundle\Common\CurlToolkit;
 use Biz\BaseTestCase;;
 
 class CurlTookitTest extends BaseTestCase

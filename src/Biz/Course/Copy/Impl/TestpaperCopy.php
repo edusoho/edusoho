@@ -2,7 +2,7 @@
 
 namespace Biz\Course\Copy\Impl;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Copy\AbstractEntityCopy;
 
 class TestpaperCopy extends AbstractEntityCopy

@@ -1,11 +1,11 @@
 <?php
 namespace Biz\Role\Util;
 
-use Topxia\Common\Tree;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Tree;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Finder;
-use Topxia\Common\PluginVersionToolkit;
+use AppBundle\Common\PluginVersionToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class PermissionBuilder

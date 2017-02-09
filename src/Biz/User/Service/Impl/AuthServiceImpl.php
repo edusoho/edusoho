@@ -3,7 +3,7 @@ namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
 use Biz\User\Service\AuthService;
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\SimpleValidator;
 use Topxia\Service\Common\ServiceKernel;
 
 class AuthServiceImpl extends BaseService implements AuthService

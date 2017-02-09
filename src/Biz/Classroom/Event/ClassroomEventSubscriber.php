@@ -1,7 +1,7 @@
 <?php
 namespace Biz\Classroom\Event;
 
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\StringToolkit;
 use Biz\Taxonomy\TagOwnerManager;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\User\Service\NotificationService;

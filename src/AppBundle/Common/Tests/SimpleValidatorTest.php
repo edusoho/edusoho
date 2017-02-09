@@ -1,10 +1,10 @@
 <?php
 
-namespace Topxia\Common\Tests;
+namespace AppBundle\Common\Tests;
 
 use Biz\BaseTestCase;;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\SimpleValidator;
 
 class SimpleValidatorTest extends BaseTestCase
 {

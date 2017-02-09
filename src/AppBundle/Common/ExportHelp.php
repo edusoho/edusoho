@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;

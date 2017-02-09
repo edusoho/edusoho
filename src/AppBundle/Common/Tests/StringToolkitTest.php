@@ -1,9 +1,9 @@
 <?php
 
-namespace Topxia\Common\Tests;
+namespace AppBundle\Common\Tests;
 
 use Biz\BaseTestCase;;
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\StringToolkit;
 
 class StringToolkitTest extends BaseTestCase
 {

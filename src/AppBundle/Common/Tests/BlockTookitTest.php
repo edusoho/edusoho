@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Common\Tests;
+namespace AppBundle\Common\Tests;
 
 use Biz\BaseTestCase;;
 

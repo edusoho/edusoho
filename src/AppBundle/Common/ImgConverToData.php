@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 class ImgConverToData{
         public $imgSrc;

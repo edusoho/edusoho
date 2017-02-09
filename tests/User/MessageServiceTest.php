@@ -2,7 +2,7 @@
 
 namespace Tests\User;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;;
 
 class MessageServiceTest extends BaseTestCase

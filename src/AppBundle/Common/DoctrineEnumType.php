@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;

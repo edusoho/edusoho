@@ -3,7 +3,7 @@ namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\BlockToolkit;
+use AppBundle\Common\BlockToolkit;
 
 class BlockExtension extends \Twig_Extension
 {

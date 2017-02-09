@@ -3,8 +3,8 @@ namespace AppBundle\Controller\Admin;
 
 use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 

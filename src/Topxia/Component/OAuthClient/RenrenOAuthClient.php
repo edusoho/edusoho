@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Component\OAuthClient;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class RenrenOAuthClient extends AbstractOAuthClient
 {

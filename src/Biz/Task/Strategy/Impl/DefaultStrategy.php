@@ -1,7 +1,7 @@
 <?php
 namespace Biz\Task\Strategy\Impl;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;

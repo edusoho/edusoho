@@ -7,7 +7,7 @@ use Biz\Card\DetailProcessor\DetailFactory;
 use Biz\Card\DetailProcessor\DetailProcessor;
 use Biz\Card\Service\CardService;
 use Biz\User\Service\UserService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 
 class CardServiceImpl extends BaseService implements CardService

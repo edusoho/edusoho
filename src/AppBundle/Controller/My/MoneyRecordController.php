@@ -3,7 +3,7 @@ namespace AppBundle\Controller\My;
 
 use Biz\Order\Service\MoneyService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 
 class MoneyRecordController extends BaseController

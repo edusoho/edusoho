@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Common\Exception;
+namespace AppBundle\Common\Exception;
 
 class AccessDeniedException extends BaseException
 {

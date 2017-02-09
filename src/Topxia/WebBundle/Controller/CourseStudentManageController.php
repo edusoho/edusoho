@@ -2,10 +2,10 @@
 namespace Topxia\WebBundle\Controller;
 
 use Biz\User\Service\NotificationService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\ExportHelp;
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ExportHelp;
+use AppBundle\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 

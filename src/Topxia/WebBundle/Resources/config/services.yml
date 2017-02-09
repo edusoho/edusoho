@@ -14,7 +14,7 @@ services:
         arguments: ['@biz']
 
     topxia.timemachine:
-        class:			Topxia\Common\TimeMachine
+        class:			AppBundle\Common\TimeMachine
         arguments:		['Asia/Shanghai']
 
     topxia.target_helper:

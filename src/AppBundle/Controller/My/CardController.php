@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\My;
 
 use Biz\Card\Service\CardService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;

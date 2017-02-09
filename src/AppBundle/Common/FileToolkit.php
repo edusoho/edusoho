@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;

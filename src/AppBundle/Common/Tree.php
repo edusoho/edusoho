@@ -1,11 +1,11 @@
 <?php
 
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 /**
  * Class Tree 多叉树 数据结构类
  * 对树的操作是递归的，如有特殊需求导致递归会爆栈 可以改用stack来实现递归的效果
- * @package Topxia\Common
+ * @package AppBundle\Common
  */
 class Tree
 {

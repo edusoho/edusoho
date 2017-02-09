@@ -4,7 +4,7 @@ namespace Biz\Activity\Type;
 
 use Biz\Activity\Dao\TextActivityDao;
 use Biz\Activity\Service\ActivityService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityLearnLogService;
 

@@ -4,7 +4,7 @@ namespace Biz\Activity\Config;
 
 use Biz\Activity\Listener\Listener;
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Common\Exception\UnexpectedValueException;
+use AppBundle\Common\Exception\UnexpectedValueException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;

@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\CurlToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\CurlToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Component\Echats\EchartsBuilder;

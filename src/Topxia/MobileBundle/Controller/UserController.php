@@ -5,8 +5,8 @@ namespace Topxia\MobileBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Common\SimpleValidator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\SimpleValidator;
+use AppBundle\Common\ArrayToolkit;
 
 class UserController extends MobileController
 {

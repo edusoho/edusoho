@@ -8,7 +8,7 @@ use Biz\Content\Dao\NavigationDao;
 use Biz\Content\Service\NavigationService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class NavigationServiceImpl extends BaseService implements NavigationService
 {

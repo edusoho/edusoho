@@ -2,7 +2,7 @@
 
 namespace Topxia\Component\MediaParser;
 
-use Topxia\Common\Exception\BaseException;
+use AppBundle\Common\Exception\BaseException;
 
 class ParseException extends BaseException
 {

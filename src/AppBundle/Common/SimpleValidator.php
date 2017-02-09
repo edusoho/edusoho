@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 /**
  * 一个简单的验证类

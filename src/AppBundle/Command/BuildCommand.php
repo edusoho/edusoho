@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Topxia\Common\BlockToolkit;
+use AppBundle\Common\BlockToolkit;
 use Topxia\System;
 
 class BuildCommand extends BaseCommand

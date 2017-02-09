@@ -3,11 +3,11 @@
 namespace AppBundle\Controller\Admin;
 
 use Biz\System\Service\SettingService;
-use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\BlockToolkit;
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\BlockToolkit;
+use AppBundle\Common\StringToolkit;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

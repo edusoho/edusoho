@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\FileToolkit;
-use Topxia\Common\JsonToolkit;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\JsonToolkit;
 use Biz\Common\Mail\MailFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\EdusohoLiveClient;

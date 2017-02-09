@@ -3,7 +3,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\TestpaperProcessor;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 
 class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor

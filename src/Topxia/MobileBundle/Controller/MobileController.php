@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\Service\TokenService;
 use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class MobileController extends BaseController
 {

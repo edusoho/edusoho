@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use Biz\System\Service\SettingService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Component\OAuthClient\OAuthClientFactory;

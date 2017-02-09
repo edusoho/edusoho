@@ -1,15 +1,15 @@
 <?php
 
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Finder;
-use Topxia\Common\ExtensionalBundle;
+use AppBundle\Common\ExtensionalBundle;
 use Topxia\Service\Common\ServiceKernel;
 
 /**
  * Class ExtensionManager
- * @package Topxia\Common
+ * @package AppBundle\Common
  * @deprecated since version 7.0 to be removed in 8.0, use codeages_plugin.dict_twig_extension twig extension
  */
 class ExtensionManager

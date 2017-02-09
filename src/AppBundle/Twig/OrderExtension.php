@@ -2,7 +2,7 @@
 namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Common\JoinPointToolkit;
+use AppBundle\Common\JoinPointToolkit;
 
 class OrderExtension extends \Twig_Extension
 {

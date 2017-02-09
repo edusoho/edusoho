@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller\Course;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\Task\Service\TaskService;
 use Topxia\Api\Resource\Classroom;

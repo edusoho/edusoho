@@ -1,8 +1,8 @@
 <?php
 
-namespace Topxia\Common\Tests;
+namespace AppBundle\Common\Tests;
 
-use Topxia\Common\Tree;
+use AppBundle\Common\Tree;
 use Biz\BaseTestCase;;
 
 class TreeTest extends BaseTestCase

@@ -1,8 +1,8 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Util\CloudClientFactory;

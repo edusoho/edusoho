@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 class NumberToolkit {
 	public static function roundUp($value, $precision=2) 

@@ -2,7 +2,7 @@
 namespace Biz\Order\OrderProcessor;
 
 use Exception;
-use Topxia\Common\NumberToolkit;
+use AppBundle\Common\NumberToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor

@@ -1,8 +1,8 @@
 <?php
 
-namespace Topxia\Common\Tests;
+namespace AppBundle\Common\Tests;
 
-use Topxia\Common\ConvertIpToolkit;
+use AppBundle\Common\ConvertIpToolkit;
 use Biz\BaseTestCase;;
 
 class ConvertIpToolkitTest extends BaseTestCase

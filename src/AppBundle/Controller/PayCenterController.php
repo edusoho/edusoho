@@ -9,7 +9,7 @@ use Biz\PayCenter\Service\PayCenterService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

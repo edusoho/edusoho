@@ -1,9 +1,9 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Common\Paginator;
+use AppBundle\Common\Paginator;
 use Biz\Util\EdusohoLiveClient;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;

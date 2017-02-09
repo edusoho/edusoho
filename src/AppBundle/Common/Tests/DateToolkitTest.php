@@ -1,8 +1,8 @@
 <?php
 
-namespace Topxia\Common\Tests;
+namespace AppBundle\Common\Tests;
 
-use Topxia\Common\DateToolkit;
+use AppBundle\Common\DateToolkit;
 use Biz\BaseTestCase;
 
 class DateTookitTest extends BaseTestCase

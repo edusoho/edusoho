@@ -2,7 +2,7 @@
 namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Common\ExtensionManager;
+use AppBundle\Common\ExtensionManager;
 
 class DataExtension extends \Twig_Extension
 {

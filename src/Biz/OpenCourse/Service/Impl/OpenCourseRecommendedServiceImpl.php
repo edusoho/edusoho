@@ -3,7 +3,7 @@
 namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\OpenCourse\Dao\RecommendedCourseDao;
 use Biz\OpenCourse\Processor\CourseProcessorFactory;
 use Biz\OpenCourse\Service\OpenCourseRecommendedService;

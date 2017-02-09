@@ -166,7 +166,7 @@ function install_step3($init_data = 0)
         $biz['db']->beginTransaction();
         $installLogFd = @fopen($biz['log_directory'] . '/install.log', 'w');
         $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
-        $initializer = new \Topxia\Common\SystemInitializer($output);
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
         try {
 
             if (!empty($init_data)) {

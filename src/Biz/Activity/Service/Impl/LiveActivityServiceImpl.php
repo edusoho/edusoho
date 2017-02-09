@@ -4,7 +4,7 @@ namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Util\EdusohoLiveClient;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
 use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;

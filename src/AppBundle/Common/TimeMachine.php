@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 use DateTime;
 use DateTimeZone;

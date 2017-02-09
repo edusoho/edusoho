@@ -8,7 +8,7 @@ use Biz\User\Service\StatusService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\StringToolkit;
 
 class ClassroomEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {

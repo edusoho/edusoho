@@ -5,7 +5,7 @@ use Biz\Content\Service\CommentService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\WebBundle\Form\CommentType;
 
 class CommentWidgetController extends BaseController

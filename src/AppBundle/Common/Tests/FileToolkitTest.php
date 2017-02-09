@@ -1,8 +1,8 @@
 <?php
 
-namespace Topxia\Common\Tests;
+namespace AppBundle\Common\Tests;
 
-use Topxia\Common\FileToolkit;
+use AppBundle\Common\FileToolkit;
 use Biz\BaseTestCase;;
 
 class FileTookitTest extends BaseTestCase

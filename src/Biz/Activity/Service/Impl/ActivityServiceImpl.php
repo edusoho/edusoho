@@ -3,7 +3,7 @@
 namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;

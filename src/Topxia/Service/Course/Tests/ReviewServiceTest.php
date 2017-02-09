@@ -5,7 +5,7 @@ use Biz\BaseTestCase;;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Course\ReviewService;
 use Topxia\Service\User\UserService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class ReviewServiceTest extends BaseTestCase
 {

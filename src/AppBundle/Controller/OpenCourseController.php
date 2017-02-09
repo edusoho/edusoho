@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserService;
 use Biz\User\Service\TokenService;

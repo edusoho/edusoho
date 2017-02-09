@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Topxia\Common;
+namespace AppBundle\Common;
 
 
 use Biz\Content\Service\BlockService;

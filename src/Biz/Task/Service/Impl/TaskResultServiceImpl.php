@@ -4,7 +4,7 @@ namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Task\Dao\TaskResultDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskResultService;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService

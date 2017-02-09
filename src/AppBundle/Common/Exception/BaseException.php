@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Common\Exception;
+namespace AppBundle\Common\Exception;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\Exception\HttpException;
