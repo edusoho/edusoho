@@ -68,12 +68,12 @@ class CourseSetManageController extends BaseController
 
     public function sidebarAction($courseSetId, $curCourse, $sideNav)
     {
-        $curUser = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
 
-        $courses = array_filter($courses, function ($course) use ($curUser) {
-            if (in_array($curUser['id'], $course['teacherIds'])) {
+        $courses = array_filter($courses, function ($course) use ($user) {
+            if (in_array($user['id'], $course['teacherIds'])) {
                 return true;
             } else {
                 return false;
