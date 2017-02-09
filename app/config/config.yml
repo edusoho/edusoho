@@ -36,6 +36,7 @@ twig:
         "%kernel.root_dir%/../web/customize": customize
         "%kernel.root_dir%/../src/Topxia/WebBundle/Resources/views": topxiaweb
         "%kernel.root_dir%/../web/themes": theme
+        "%kernel.root_dir%/../plugins": plugins
         "%kernel.root_dir%/../" : root
     globals:
         disabled_features: "%disabled_features%"

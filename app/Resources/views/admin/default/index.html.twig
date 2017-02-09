@@ -176,15 +176,15 @@
           <div class="pull-right">
             <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
             <div class="btn-group btn-group-xs">
-              <button type="button" class="btn btn-primary js-lesson-switch-button"
+              <button type="button" class="btn btn-primary js-task-switch-button"
                       data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_lesson_learn_statistic', {period: 'week'}) }}">{{ '最近7天'|trans }}</button>
-              <button type="button" class="btn btn-default js-lesson-switch-button"
+                      data-url="{{ path('admin_task_learn_statistic', {period: 'week'}) }}">{{ '最近7天'|trans }}</button>
+              <button type="button" class="btn btn-default js-task-switch-button"
                       data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
-                      data-url="{{ path('admin_lesson_learn_statistic', {period: 'month'}) }}">{{ '最近30天'|trans }}</button>
+                      data-url="{{ path('admin_task_learn_statistic', {period: 'month'}) }}">{{ '最近30天'|trans }}</button>
             </div>
           </div>
-          <h3 class="panel-title">{{ '课时完成数'|trans }}
+          <h3 class="panel-title">{{ '任务完成数'|trans }}
             <span data-toggle="popover"
                   class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
             <div class="popover-content hidden">
@@ -194,8 +194,8 @@
             </div>
           </h3>
         </div>
-        <div class="panel-body js-statistic-areas" id="study-lesson-count-statistic"
-             data-url="{{ path('admin_lesson_learn_statistic', {period: 'week'}) }}" style="height:360px;">
+        <div class="panel-body js-statistic-areas" id="study-task-count-statistic"
+             data-url="{{ path('admin_task_learn_statistic', {period: 'week'}) }}" style="height:360px;">
 
         </div>
       </div>

@@ -14,7 +14,7 @@
 				<input type="file" size="30" name="excel"/>
 			</div>
 			&nbsp;&nbsp;<a
-					href="{{ asset('bundles/classroom/example/classmember_import_example.xls') }}">{{ '点击下载示例说明文件'|trans }}</a>
+					href="{{ asset('bundles/topxiaweb/example/classmember_import_example.xls') }}">{{ '点击下载示例说明文件'|trans }}</a>
 			<br>
 			{{ '支持从Excel文件导入'|trans }}
 		</div>
@@ -47,7 +47,7 @@
 {% endblock %}
 
 {% block load_import_js %}
-	app.lazyLoad = function() { app.load('classroombundle/controller/classroom/manage/student-import'); };
+	app.lazyLoad = function() { app.load('topxiawebbundle/controller/classroom/manage/student-import'); };
 {% endblock %}
 
 {% block stylesheet %}

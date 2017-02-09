@@ -17,7 +17,7 @@ class OrgManageController extends BaseController
         $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
         $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('org-manage/index.html.twig', array(
+        return $this->render('admin/org-manage/index.html.twig', array(
             'orgs'         => $treeOrgs,
             'createdUsers' => $createdUsers
         ));
