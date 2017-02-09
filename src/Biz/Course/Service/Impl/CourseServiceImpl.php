@@ -282,8 +282,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         // if (isset($fields['price'])) {
         //     $fields['price'] = round(floatval($fields['price']) * 100, 0);
         // }
-
-        return $this->getCourseDao()->update($id, $fields);
+        $course = $this->getCourseDao()->update($id, $fields);
+        $this->dispatchEvent('course.marketing.update', $course);
+        return $course;
     }
 
     protected function calculatePrice($id, $originPrice)

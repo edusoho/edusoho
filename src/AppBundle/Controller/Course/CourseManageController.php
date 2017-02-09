@@ -23,7 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Framework\Event\Event;
 
 class CourseManageController extends BaseController
 {
@@ -172,8 +171,6 @@ class CourseManageController extends BaseController
             }
 
             $course = $this->getCourseService()->updateCourseMarketing($courseId, $data);
-            $this->dispatchEvent('course.marketing.update',
-                new Event($course));
             return $this->redirect($this->generateUrl('course_set_manage_course_marketing', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
 
