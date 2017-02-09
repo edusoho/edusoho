@@ -20,6 +20,8 @@ interface TaskDao extends GeneralDaoInterface
 
     public function getMaxSeqByCourseId($courseId);
 
+    public function getNumberSeqByCourseId($courseId);
+
     public function getNextTaskByCourseIdAndSeq($courseId, $seq);
 
     public function getPreTaskByCourseIdAndSeq($courseId, $seq);
@@ -52,6 +54,6 @@ interface TaskDao extends GeneralDaoInterface
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
-    
+
     public function analysisTaskDataByTime($startTime, $endTime);
 }

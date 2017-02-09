@@ -12,12 +12,12 @@
       <td>{{ loop.index }}</td>
       <td>
         <a class="link-primary"
-           target="_blank" href="{{ path('course_show',{id: memberCount.courseId}) }}">{{ courses[ memberCount.courseId].title }}</a>
+           target="_blank" href="{{ path('course_set_show',{id: memberCount.courseSetId}) }}">{{ courseSets[memberCount.courseSetId].title }}</a>
       </td>
       <td class="pull-right prl">{{ memberCount.count }}</td>
     </tr>
   {% else %}
-    <tr><td><div class="empty">{{'暂无课程'|trans}}</div></td></tr>
+    <tr><td colspan="3"><div class="empty">{{'暂无课程'|trans}}</div></td></tr>
   {% endfor %}
   </tbody>
 </table>

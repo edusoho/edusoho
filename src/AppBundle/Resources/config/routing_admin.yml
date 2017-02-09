@@ -22,9 +22,9 @@ admin_user_statistic:
     defaults: { _controller: AppBundle:Admin/Default:userStatistic }
     permissions: [admin]
 
-admin_lesson_learn_statistic:
-    path: /lesson/learn/statistic/{period}
-    defaults: { _controller: AppBundle:Admin/Default:lessonLearnStatistic }
+admin_task_learn_statistic:
+    path: /task/learn/statistic/{period}
+    defaults: { _controller: AppBundle:Admin/Default:completedTaskStatistic }
     permissions: [admin]
 
 admin_study_statistic:
@@ -2066,26 +2066,26 @@ admin_setting_cloud_edulive:
 
 #sensitive
 admin_keyword:
-    pattern:  /keyword/
+    path:  /keyword/
     defaults: { _controller: AppBundle:Admin/Sensitive:index }
 
 admin_keyword_create:
-    pattern:  /keyword/create
+    path:  /keyword/create
     defaults: { _controller: AppBundle:Admin/Sensitive:create }
 
 admin_keyword_delete:
-    pattern:  /keyword/{id}/delete
+    path:  /keyword/{id}/delete
     defaults: { _controller: AppBundle:Admin/Sensitive:delete }
     methods:  [POST]
     permissions: [admin_keyword]
 
 admin_keyword_change:
-    pattern:  /keyword/{id}/change
+    path:  /keyword/{id}/change
     defaults: { _controller: AppBundle:Admin/Sensitive:change }
     permissions: [admin_keyword]
 
 admin_keyword_banlogs:
-    pattern:  /keyword/banlogs
+    path:  /keyword/banlogs
     defaults: { _controller: AppBundle:Admin/Sensitive:banlogs }
 
 

@@ -101,6 +101,6 @@ class DiscoveryColumnServiceTest extends BaseTestCase
 
     protected function getDiscoveryColumnService()
     {
-        return $this->getBiz()->service('DiscoveryColumn:DiscoveryColumnService');
+        return $this->createService('DiscoveryColumn:DiscoveryColumnService');
     }
 }

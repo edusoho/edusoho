@@ -1,12 +1,17 @@
-const Browser = {};
+let Browser = {};
+let userAgent = navigator.userAgent.toLowerCase();
+let s;
+(s = userAgent.match(/rv:([\d.]+)\) like gecko/)) ? Browser.ie = s[1] :
+(s = userAgent.match(/msie ([\d.]+)/)) ? Browser.ie = s[1] :
+(s = userAgent.match(/firefox\/([\d.]+)/)) ? Browser.firefox = s[1] :
+(s = userAgent.match(/chrome\/([\d.]+)/)) ? Browser.chrome = s[1] :
+(s = userAgent.match(/opera.([\d.]+)/)) ? Browser.opera = s[1] :
+(s = userAgent.match(/version\/([\d.]+).*safari/)) ? Browser.safari = s[1] : 0;
 
-Browser.isMozilla = (typeof document.implementation != 'undefined') 
-  && (typeof document.implementation.createDocument != 'undefined')
-  && (typeof HTMLDocument != 'undefined');
-Browser.isIE = window.ActiveXObject ? true : false;
-Browser.isFirefox = (navigator.userAgent.toLowerCase().indexOf("firefox") != -1);
-Browser.isSafari = (navigator.userAgent.toLowerCase().indexOf("safari") != -1);
-Browser.isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != -1);
-Browser.isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != -1);
-Browser.isChrome = (navigator.userAgent.toLowerCase().indexOf("chrome") != -1);
+if (Browser.ie) console.log('IE: ' + Browser.ie);
+if (Browser.firefox) console.log('Firefox: ' + Browser.firefox);
+if (Browser.chrome) console.log('Chrome: ' + Browser.chrome);
+if (Browser.opera) console.log('Opera: ' + Browser.opera);
+if (Browser.safari) console.log('Safari: ' + Browser.safari);
+
 export { Browser }

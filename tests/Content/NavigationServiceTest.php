@@ -44,7 +44,7 @@ class NavigationServiceTest extends BaseTestCase
      */
     protected function getNavigationService()
     {
-        return $this->getServiceKernel()->createService('Content:NavigationService');
+        return $this->createService('Content:NavigationService');
     }
 
     /**
@@ -52,7 +52,7 @@ class NavigationServiceTest extends BaseTestCase
      */
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -60,7 +60,7 @@ class NavigationServiceTest extends BaseTestCase
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -68,6 +68,6 @@ class NavigationServiceTest extends BaseTestCase
      */
     protected function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course:MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 }

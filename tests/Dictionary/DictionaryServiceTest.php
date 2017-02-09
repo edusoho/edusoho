@@ -133,6 +133,6 @@ class DictionaryServiceTest extends BaseTestCase
 
     protected function getDictionaryService()
     {
-        return $this->getBiz()->service('Dictionary:DictionaryService');
+        return $this->createService('Dictionary:DictionaryService');
     }
 }

@@ -41,6 +41,13 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchColumn($sql, array($courseId)) ?: 0;
     }
 
+    public function getNumberSeqByCourseId($courseId)
+    {
+        $sql = "SELECT MAX(number) FROM {$this->table()} WHERE courseId = ? ";
+        return $this->db()->fetchColumn($sql, array($courseId)) ?: 0;
+    }
+
+
     public function getMinSeqByCourseId($courseId)
     {
         $sql = "SELECT MIN(seq) FROM {$this->table()} WHERE courseId = ? ";
@@ -106,7 +113,8 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     public function findPastLivedCourseSetIds()
     {
         $time = time();
-        $sql  = "SELECT fromCourseSetId, max(startTime) as startTime
+        $sql
+              = "SELECT fromCourseSetId, max(startTime) as startTime
                  FROM {$this->table()} 
                  WHERE endTime < {$time} AND status='published' AND type = 'live' 
                  GROUP BY fromCourseSetId 
@@ -133,8 +141,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     
     public function analysisTaskDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) AS count, from_unixtime(createdTime, '%Y-%m-%d') AS date FROM {$this->table}
-            WHERE createdTime >= ? AND createdTime <= ? GROUP BY date ORDER BY date ASC";
+        $sql = "SELECT count(id) AS count, from_unixtime(createdTime, '%Y-%m-%d') AS date FROM {$this->table} WHERE createdTime >= ? AND createdTime <= ? GROUP BY date ORDER BY date ASC";
 
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
@@ -154,6 +161,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
             'conditions' => array(
                 'id = :id',
                 'id IN ( :ids )',
+                'id NOT IN (:excludeIds)',
                 'courseId = :courseId',
                 'courseId IN ( :courseIds )',
                 'title LIKE :titleLike',

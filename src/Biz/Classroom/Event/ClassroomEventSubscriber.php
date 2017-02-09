@@ -1,15 +1,16 @@
 <?php
 namespace Biz\Classroom\Event;
 
-use Biz\Classroom\Service\ClassroomReviewService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\User\Service\NotificationService;
 use Topxia\Common\StringToolkit;
 use Biz\Taxonomy\TagOwnerManager;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\User\Service\NotificationService;
+use Biz\Classroom\Service\ClassroomService;
+use Codeages\PluginBundle\Event\EventSubscriber;
+use Biz\Classroom\Service\ClassroomReviewService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ClassroomEventSubscriber implements EventSubscriberInterface
+class ClassroomEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
