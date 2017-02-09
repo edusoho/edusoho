@@ -301,7 +301,7 @@ class EduCloudController extends BaseController
 
         $response = array(
             'path' => $path,
-            'url'  => $this->get('topxia.twig.web_extension')->getFileUrl($path)
+            'url'  => $this->get('web.twig.extension')->getFileUrl($path)
         );
 
         return new Response(json_encode($response));
@@ -342,7 +342,7 @@ class EduCloudController extends BaseController
 
         $response = array(
             'path' => $path,
-            'url'  => $this->get('topxia.twig.web_extension')->getFileUrl($path)
+            'url'  => $this->get('web.twig.extension')->getFileUrl($path)
         );
 
         return new Response(json_encode($response));
@@ -1462,7 +1462,7 @@ class EduCloudController extends BaseController
 
     private function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     protected function getSignEncoder()

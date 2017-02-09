@@ -308,7 +308,7 @@ class CourseLessonController extends BaseController
                     $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
 
                     if ($watchStatus['status'] == 'error') {
-                        $wathcLimitTime     = $this->container->get('topxia.twig.web_extension')->durationTextFilter($watchStatus['watchLimitTime']);
+                        $wathcLimitTime     = $this->container->get('web.twig.extension')->durationTextFilter($watchStatus['watchLimitTime']);
                         $json['mediaError'] = $this->trans('您的观看时长已到').'<strong>'.$wathcLimitTime.'</strong>，'.$this->trans('不能再观看').'。';
                     }
                 }

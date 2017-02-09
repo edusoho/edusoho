@@ -1,16 +1,25 @@
 <?php
-namespace Topxia\WebBundle\Twig\Extension;
+namespace AppBundle\Twig;
 
+use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Common\BlockToolkit;
 
 class BlockExtension extends \Twig_Extension
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
+    /**
+     * @var Biz
+     */
+    protected $biz;
 
-    public function __construct($container)
+    public function __construct($container, Biz $biz)
     {
         $this->container = $container;
+        $this->biz       = $biz;
     }
 
     public function getFilters()
@@ -28,7 +37,7 @@ class BlockExtension extends \Twig_Extension
 
     public function showBlock($code)
     {
-        $block = ServiceKernel::instance()->createService('Content:BlockService')->getBlockByCode($code);
+        $block = $this->biz->service('Content:BlockService')->getBlockByCode($code);
         if (empty($block)) {
             return '';
         }
@@ -41,7 +50,7 @@ class BlockExtension extends \Twig_Extension
             $content = BlockToolkit::render($block, $this->container);
         }
 
-        $content = $this->container->get('topxia.twig.web_extension')->cdn($content);
+        $content = $this->container->get('web.twig.extension')->cdn($content);
 
         return $content;
     }

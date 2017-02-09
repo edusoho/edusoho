@@ -229,9 +229,9 @@ class UserController extends MobileController
         $container = $this->container;
 
         return array_map(function($user) use ($container) {
-            $user['smallAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
-            $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
-            $user['largeAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+            $user['smallAvatar'] = $container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['mediumAvatar'] = $container->get('web.twig.extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
+            $user['largeAvatar'] = $container->get('web.twig.extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
             $user['createdTime'] = date('c', $user['createdTime']);
 
             $user['email'] = '';

@@ -176,7 +176,7 @@ class ArticleController extends BaseController
             $files   = $this->getArticleService()->changeIndexPicture($options["images"]);
 
             foreach ($files as $key => $file) {
-                $files[$key]["file"]['url'] = $this->get('topxia.twig.web_extension')->getFilePath($file["file"]['uri']);
+                $files[$key]["file"]['url'] = $this->get('web.twig.extension')->getFilePath($file["file"]['uri']);
             }
 
             return new JsonResponse($files);

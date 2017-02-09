@@ -1,10 +1,26 @@
 <?php
-namespace Topxia\WebBundle\Twig\Extension;
+namespace AppBundle\Twig;
 
-use Topxia\Service\Common\ServiceKernel;
+use Codeages\Biz\Framework\Context\Biz;
 
 class DictionaryExtension extends \Twig_Extension
 {
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+    /**
+     * @var Biz
+     */
+    protected $biz;
+
+    protected $pageScripts;
+
+    public function __construct($container, Biz $biz)
+    {
+        $this->container = $container;
+        $this->biz       = $biz;
+    }
 
     public function getFunctions()
     {
@@ -55,13 +71,8 @@ class DictionaryExtension extends \Twig_Extension
         return 'topxia_dictionary_twig';
     }
 
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
     protected function getDictionaryService()
     {
-        return $this->getServiceKernel()->createService('Dictionary:DictionaryService');
+        return $this->biz->service('Dictionary:DictionaryService');
     }
 }

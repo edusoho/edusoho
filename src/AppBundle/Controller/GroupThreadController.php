@@ -437,7 +437,7 @@ class GroupThreadController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $filename = $this->get('topxia.twig.web_extension')->getFilePath($file['uri']);
+        $filename = $this->get('web.twig.extension')->getFilePath($file['uri']);
 
         $filename = substr($filename, 1);
         $filename = explode("?", $filename);

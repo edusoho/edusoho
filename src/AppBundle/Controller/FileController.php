@@ -28,7 +28,7 @@ class FileController extends BaseController
         }
 
         $record        = $this->getFileService()->uploadFile($groupCode, $file);
-        $record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+        $record['url'] = $this->get('web.twig.extension')->getFilePath($record['uri']);
         $request->getSession()->set("fileId", $record["id"]);
         return $this->createJsonResponse($record);
     }

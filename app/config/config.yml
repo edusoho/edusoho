@@ -76,7 +76,7 @@ parameters:
 services:
 
     assets.path_package:
-        class: Topxia\WebBundle\Twig\Asset\PathPackage
+        class: AppBundle\Twig\Asset\PathPackage
         arguments: ["", "", "@assets.context"]
 
 
@@ -109,58 +109,6 @@ services:
         factory: ['Biz\Common\SessionHandlerFactory', getSessionHandler]
         arguments:
             - "@service_container"
-
-    topxia.twig.web_extension:
-        class: Topxia\WebBundle\Twig\Extension\WebExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.html_extension:
-        class: Topxia\WebBundle\Twig\Extension\HtmlExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.dictionary_extension:
-        class: Topxia\WebBundle\Twig\Extension\DictionaryExtension
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.data_extension:
-        class: Topxia\WebBundle\Twig\Extension\DataExtension
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.block_extension:
-        class: Topxia\WebBundle\Twig\Extension\BlockExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.uploader_extension:
-        class: Topxia\WebBundle\Twig\Extension\UploaderExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.theme_extension:
-        class: Topxia\WebBundle\Twig\Extension\ThemeExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.order_extension:
-        class: Topxia\WebBundle\Twig\Extension\OrderExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
-    topxia.twig.course_extension:
-        class: Topxia\WebBundle\Twig\Extension\CourseExtension
-        arguments:    ['@service_container', '@biz']
-        tags:
-            - { name: twig.extension }
 
     topxia.twig.file_cache:
         class: Biz\Common\FilesystemCache

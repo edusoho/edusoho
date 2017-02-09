@@ -209,7 +209,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             try {
                 $group  = $this->getParam("group", 'course');
                 $record = $this->getFileService()->uploadFile($group, $value);
-                $url    = $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+                $url    = $this->controller->get('web.twig.extension')->getFilePath($record['uri']);
             } catch (\Exception $e) {
                 $url = "error";
             }
@@ -580,9 +580,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         $isTeacherPost            = $this->controller->getThreadService()->findThreadElitePosts($course['id'], $thread['id'], 0, 100);
         $thread['isTeacherPost']  = empty($isTeacherPost) ? false : true;
-        $user['smallAvatar']      = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'course-large.png', true);
-        $user['mediumAvatar']     = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'course-large.png', true);
-        $user['largeAvatar']      = $this->controller->getContainer()->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'course-large.png', true);
+        $user['smallAvatar']      = $this->controller->getContainer()->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'course-large.png', true);
+        $user['mediumAvatar']     = $this->controller->getContainer()->get('web.twig.extension')->getFilePath($user['mediumAvatar'], 'course-large.png', true);
+        $user['largeAvatar']      = $this->controller->getContainer()->get('web.twig.extension')->getFilePath($user['largeAvatar'], 'course-large.png', true);
         $thread['user']           = $user;
         $thread['createdTime']    = date('c', $thread['createdTime']);
         $thread['latestPostTime'] = date('c', $thread['latestPostTime']);

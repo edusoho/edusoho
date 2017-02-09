@@ -1,16 +1,24 @@
 <?php
-namespace Topxia\WebBundle\Twig\Extension;
+namespace AppBundle\Twig;
 
-use Topxia\Service\Common\ServiceKernel;
+use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Common\JoinPointToolkit;
 
 class OrderExtension extends \Twig_Extension
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
+    /**
+     * @var Biz
+     */
+    protected $biz;
 
-    public function __construct($container)
+    public function __construct($container, Biz $biz)
     {
         $this->container = $container;
+        $this->biz       = $biz;
     }
 
     public function getFilters()
@@ -34,11 +42,6 @@ class OrderExtension extends \Twig_Extension
         return $orderType[$type]['order_show_template'];
       }
       return false;
-    }
-
-    private function createService($name)
-    {
-        return ServiceKernel::instance()->createService($name);
     }
 
     public function getName()

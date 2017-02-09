@@ -1,22 +1,29 @@
 <?php
-namespace Topxia\WebBundle\Twig\Extension;
+namespace AppBundle\Twig;
 
-use Topxia\Service\Common\ServiceKernel;
+
+use Codeages\Biz\Framework\Context\Biz;
 
 class ThemeExtension extends \Twig_Extension
 {
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
+    /**
+     * @var Biz
+     */
+    protected $biz;
 
-    public function __construct($container)
+    public function __construct($container, Biz $biz)
     {
         $this->container = $container;
+        $this->biz       = $biz;
     }
 
     public function getFilters()
     {
-        return array(
-
-        );
+        return array();
     }
 
     public function getFunctions()
@@ -32,14 +39,9 @@ class ThemeExtension extends \Twig_Extension
         return $currentTheme;
     }
 
-    private function createService($name)
-    {
-        return ServiceKernel::instance()->createService($name);
-    }
-
     private function getThemeService()
     {
-        return $this->createService('Theme:ThemeService');
+        return $this->biz->service('Theme:ThemeService');
     }
 
     public function getName()

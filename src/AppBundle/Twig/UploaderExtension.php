@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\WebBundle\Twig\Extension;
+namespace AppBundle\Twig;
 
 use Topxia\WebBundle\Util\UploaderToken;
 

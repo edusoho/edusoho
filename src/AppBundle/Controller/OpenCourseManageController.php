@@ -672,7 +672,7 @@ class OpenCourseManageController extends BaseController
 
     protected function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     /**

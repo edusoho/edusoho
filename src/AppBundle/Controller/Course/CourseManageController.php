@@ -218,7 +218,7 @@ class CourseManageController extends BaseController
                     'id'        => $teacher['userId'],
                     'isVisible' => $teacher['isVisible'],
                     'nickname'  => $teacher['nickname'],
-                    'avatar'    => $this->get('topxia.twig.web_extension')->getFilePath($teacher['smallAvatar'], 'avatar.png')
+                    'avatar'    => $this->get('web.twig.extension')->getFilePath($teacher['smallAvatar'], 'avatar.png')
                 );
             }
         }
@@ -700,11 +700,11 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @return \Topxia\WebBundle\Twig\Extension\WebExtension
+     * @return \AppBundle\Twig\WebExtension
      */
     protected function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     /**

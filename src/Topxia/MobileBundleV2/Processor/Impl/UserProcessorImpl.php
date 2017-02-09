@@ -41,7 +41,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         $host                  = $this->request->getSchemeAndHttpHost();
-        $record['url']         = $host . $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+        $record['url']         = $host . $this->controller->get('web.twig.extension')->getFilePath($record['uri']);
         $record['createdTime'] = date('c', $record['createdTime']);
         unset($record['uri']);
         return $record;

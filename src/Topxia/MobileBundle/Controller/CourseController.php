@@ -139,7 +139,7 @@ class CourseController extends MobileController
         $json['status']  = $lesson['status'];
 
         if ($lesson['length'] > 0 && in_array($lesson['type'], array('audio', 'video'))) {
-            $json['length'] = $this->container->get('topxia.twig.web_extension')->durationFilter($lesson['length']);
+            $json['length'] = $this->container->get('web.twig.extension')->durationFilter($lesson['length']);
         } else {
             $json['length'] = 0;
         }
@@ -458,9 +458,9 @@ class CourseController extends MobileController
         $self      = $this;
         $container = $this->container;
         return array_map(function ($course) use ($self, $container, $teachers) {
-            $course['smallPicture']  = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
-            $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
-            $course['largePicture']  = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
+            $course['smallPicture']  = $container->get('web.twig.extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
+            $course['middlePicture'] = $container->get('web.twig.extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
+            $course['largePicture']  = $container->get('web.twig.extension')->getFilePath($course['largePicture'], 'course-large.png', true);
             $course['about']         = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
 
             $course['teachers'] = array();
@@ -488,7 +488,7 @@ class CourseController extends MobileController
             $item['createdTime'] = date('c', $item['createdTime']);
 
             if (!empty($item['length']) && in_array($item['type'], array('audio', 'video'))) {
-                $item['length'] = $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
+                $item['length'] = $container->get('web.twig.extension')->durationFilter($item['length']);
             } else {
                 $item['length'] = 0;
             }

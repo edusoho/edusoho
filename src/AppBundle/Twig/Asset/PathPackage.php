@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Topxia\WebBundle\Twig\Asset;
+namespace AppBundle\Twig\Asset;
 
 use Topxia\WebBundle\Util\CdnUrl;
 use Symfony\Component\Asset\Package;

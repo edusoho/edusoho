@@ -160,7 +160,7 @@ class MobileController extends BaseController
                 'id'       => $user['id'],
                 'nickname' => $user['nickname'],
                 'title'    => $user['title'],
-                'avatar'   => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
+                'avatar'   => $this->container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
             );
         }
 

@@ -1,11 +1,25 @@
 <?php
-namespace Topxia\WebBundle\Twig\Extension;
+namespace AppBundle\Twig;
 
-use Topxia\Service\Common\ServiceKernel;
+use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Common\ExtensionManager;
 
 class DataExtension extends \Twig_Extension
 {
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+    /**
+     * @var Biz
+     */
+    protected $biz;
+
+    public function __construct($container, Biz $biz)
+    {
+        $this->container = $container;
+        $this->biz       = $biz;
+    }
 
     public function getFunctions()
     {
@@ -55,7 +69,7 @@ class DataExtension extends \Twig_Extension
      */
     public function callService($name, $method, $arguments)
     {
-        $service = $this->createService($name);
+        $service = $this->biz->service($name);
         $reflectionClass = new \ReflectionClass($service);
         return $reflectionClass->getMethod($method)->invokeArgs($service, $arguments);
     }
@@ -65,59 +79,13 @@ class DataExtension extends \Twig_Extension
         return $this->getEduCloudService()->isHiddenCloud();
     }
 
+    private function getEduCloudService()
+    {
+        return $this->biz->service('CloudPlatform:EduCloudService');
+    }
+
     public function getName ()
     {
         return 'topxia_data_twig';
-    }
-
-    private function getCourseData($conditions)
-    {
-        if (isset($conditions['id'])) {
-            return $this->getCourseService()->getCourse($conditions['id']);
-        }
-        return null;
-    }
-
-    private function getUserData($conditions)
-    {
-        if (isset($conditions['id'])) {
-            return $this->getUserService()->getUser($conditions['id']);
-        }
-        return null;
-    }
-
-    private function getCourseDatas($conditions, $sort, $start, $limit)
-    {
-        return $this->getCourseService()->searchCourses($conditions, $sort, $start, $limit);
-    }
-
-    private function getCourseDatasCount($conditions)
-    {
-        return $this->getCourseService()->searchCourseCount($conditions);
-    }
-
-    private function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    private function getEduCloudService()
-    {
-        return $this->getServiceKernel()->createService('CloudPlatform:EduCloudService');
-    }
-
-    private function getUserService()
-    {
-        return ServiceKernel::instance()->createService('User:UserService');
-    }
-
-
-    private function createService($name)
-    {
-        return ServiceKernel::instance()->createService($name);
-    }
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

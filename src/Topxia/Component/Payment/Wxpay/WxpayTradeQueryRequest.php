@@ -144,7 +144,7 @@ class WxpayTradeQueryRequest extends Request
 
     protected function setting($name, $default = null)
     {
-        return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
+        return $this->get('web.twig.extension')->getSetting($name, $default);
     }
 
     protected function getServiceKernel()

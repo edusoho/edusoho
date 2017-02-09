@@ -1,6 +1,7 @@
 <?php
-namespace Topxia\WebBundle\Twig\Extension;
+namespace AppBundle\Twig;
 
+use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
@@ -21,12 +22,17 @@ class WebExtension extends \Twig_Extension
      * @var ContainerInterface
      */
     protected $container;
+    /**
+     * @var Biz
+     */
+    protected $biz;
 
     protected $pageScripts;
 
-    public function __construct($container)
+    public function __construct($container, Biz $biz)
     {
         $this->container = $container;
+        $this->biz       = $biz;
     }
 
     public function getFilters()
@@ -164,7 +170,7 @@ class WebExtension extends \Twig_Extension
 
     public function getAdminRoles()
     {
-        return ServiceKernel::instance()->createService('Role:RoleService')->searchRoles(array(), 'created', 0, 1000);
+        return $this->createService('Role:RoleService')->searchRoles(array(), 'created', 0, 1000);
     }
 
     public function getCdn($type = 'default')
@@ -200,7 +206,7 @@ class WebExtension extends \Twig_Extension
         if (!(bool)$weixinmob_enabled) {
             return null;
         }
-        $jsApiTicket = ServiceKernel::instance()->createService('User:TokenService')->getTokenByType('jsapi.ticket');
+        $jsApiTicket = $this->createService('User:TokenService')->getTokenByType('jsapi.ticket');
 
         $key    = $this->getSetting('login_bind.weixinmob_key');
         $secret = $this->getSetting('login_bind.weixinmob_secret');
@@ -209,7 +215,7 @@ class WebExtension extends \Twig_Extension
             $weixinshare = new WeixinShare($config);
             $token       = $weixinshare->getJsApiTicket();
 
-            $jsApiTicket = ServiceKernel::instance()->createService('User:TokenService')->makeToken(
+            $jsApiTicket = $this->createService('User:TokenService')->makeToken(
                 'jsapi.ticket',
                 array('data' => $token, 'duration' => $token['expires_in'])
             );
@@ -254,7 +260,7 @@ class WebExtension extends \Twig_Extension
 
     public function getUserVipLevel($userId)
     {
-        return ServiceKernel::instance()->createService('Vip:Vip.VipService')->getMemberByUserId($userId);
+        return $this->createService('Vip:Vip.VipService')->getMemberByUserId($userId);
     }
 
     public function getParametersFromUrl($url)
@@ -360,7 +366,7 @@ class WebExtension extends \Twig_Extension
             'startTime' => $time
         );
 
-        return ServiceKernel::instance()->createService('Cash:CashService')->analysisAmount($condition);
+        return $this->createService('Cash:CashService')->analysisAmount($condition);
     }
 
     public function getInCash($userId, $timeType = "oneWeek")
@@ -372,17 +378,17 @@ class WebExtension extends \Twig_Extension
             'cashType'  => 'Coin',
             'startTime' => $time
         );
-        return ServiceKernel::instance()->createService('Cash:CashService')->analysisAmount($condition);
+        return $this->createService('Cash:CashService')->analysisAmount($condition);
     }
 
     private function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     public function getAccount($userId)
     {
-        return ServiceKernel::instance()->createService('Cash:CashAccountService')->getAccountByUserId($userId);
+        return $this->createService('Cash:CashAccountService')->getAccountByUserId($userId);
     }
 
     private function filterTime($type)
@@ -702,7 +708,7 @@ class WebExtension extends \Twig_Extension
             return '';
         }
 
-        $tags  = ServiceKernel::instance()->createService('Taxonomy:TagService')->findTagsByIds($tagIds);
+        $tags  = $this->createService('Taxonomy:TagService')->findTagsByIds($tagIds);
         $names = ArrayToolkit::column($tags, 'name');
 
         return join($names, ',');
@@ -734,7 +740,7 @@ class WebExtension extends \Twig_Extension
     public function locationTextFilter($districeId, $format = 'P C D')
     {
         $text  = '';
-        $names = ServiceKernel::instance()->createService('Taxonomy:LocationService')->getLocationFullName($districeId);
+        $names = $this->createService('Taxonomy:LocationService')->getLocationFullName($districeId);
 
         $len = strlen($format);
 
@@ -773,7 +779,7 @@ class WebExtension extends \Twig_Extension
     public function tagsHtmlFilter($tags, $class = '')
     {
         $links = array();
-        $tags  = ServiceKernel::instance()->createService('Taxonomy:TagService')->findTagsByIds($tags);
+        $tags  = $this->createService('Taxonomy:TagService')->findTagsByIds($tags);
 
         foreach ($tags as $tag) {
             $url     = $this->container->get('router')->generate('course_explore', array('tagId' => $tag['id']));
@@ -834,7 +840,7 @@ class WebExtension extends \Twig_Extension
             $publicUrlpath = 'assets/img/default/';
             $url           = $assets->getUrl($publicUrlpath.$size.$category);
 
-            $defaultSetting = ServiceKernel::instance()->createService('System:SettingService')->get('default', array());
+            $defaultSetting = $this->createService('System:SettingService')->get('default', array());
 
             $key      = 'default'.ucfirst($category);
             $fileName = $key.'FileName';
@@ -1110,9 +1116,9 @@ class WebExtension extends \Twig_Extension
 
     public function isHideThread($id)
     {
-        $need = ServiceKernel::instance()->createService('Group:ThreadService')->sumGoodsCoinsByThreadId($id);
+        $need = $this->createService('Group:ThreadService')->sumGoodsCoinsByThreadId($id);
 
-        $thread = ServiceKernel::instance()->createService('Group:ThreadService')->getThread($id);
+        $thread = $this->createService('Group:ThreadService')->getThread($id);
 
         $data = explode('[/hide]', $thread['content']);
 
@@ -1243,7 +1249,7 @@ class WebExtension extends \Twig_Extension
             return $default;
         }
 
-        $value = ServiceKernel::instance()->createService('System:SettingService')->get($name);
+        $value = $this->createService('System:SettingService')->get($name);
 
         if (!isset($value)) {
             return $default;
@@ -1268,7 +1274,7 @@ class WebExtension extends \Twig_Extension
 
     public function getOrderPayment($order, $default = null)
     {
-        $coinSettings = ServiceKernel::instance()->createService('System:SettingService')->get('coin', array());
+        $coinSettings = $this->createService('System:SettingService')->get('coin', array());
 
         if (!isset($coinSettings['price_type'])) {
             $coinSettings['price_type'] = "RMB";
@@ -1295,10 +1301,10 @@ class WebExtension extends \Twig_Extension
         $funcName = 'can'.$permission.'Classroom';
 
         if ($isStudentOrAuditor) {
-            return ServiceKernel::instance()->createService('Classroom:ClassroomService')->$funcName($classroomId, $isStudentOrAuditor);
+            return $this->createService('Classroom:ClassroomService')->$funcName($classroomId, $isStudentOrAuditor);
         }
 
-        return ServiceKernel::instance()->createService('Classroom:ClassroomService')->$funcName($classroomId);
+        return $this->createService('Classroom:ClassroomService')->$funcName($classroomId);
     }
 
     public function calculatePercent($number, $total)
@@ -1333,7 +1339,7 @@ class WebExtension extends \Twig_Extension
 
     public function getNextExecutedTime()
     {
-        return ServiceKernel::instance()->createService('Crontab:CrontabService')->getNextExcutedTime();
+        return $this->createService('Crontab:CrontabService')->getNextExcutedTime();
     }
 
     public function getUploadMaxFilesize($formated = true)
@@ -1380,14 +1386,14 @@ class WebExtension extends \Twig_Extension
         return ($head.'************'.$tail);
     }
 
-    protected function getServiceKernel()
+    protected function createService($alias)
     {
-        return ServiceKernel::instance();
+        return $this->biz->service($alias);
     }
 
     protected function getAppService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform:AppService');
+        return $this->createService('CloudPlatform:AppService');
     }
 
     public function getPurifyAndTrimHtml($html)

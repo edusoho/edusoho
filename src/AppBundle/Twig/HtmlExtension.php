@@ -1,5 +1,7 @@
 <?php
-namespace Topxia\WebBundle\Twig\Extension;
+namespace AppBundle\Twig;
+
+use Codeages\Biz\Framework\Context\Biz;
 
 class HtmlExtension extends \Twig_Extension
 {
@@ -9,9 +11,12 @@ class HtmlExtension extends \Twig_Extension
 
     protected $container;
 
-    public function __construct($container)
+    protected $biz;
+
+    public function __construct($container, Biz $biz)
     {
         $this->container = $container;
+        $this->biz       = $biz;
     }
 
     public function getFunctions()
