@@ -176,4 +176,6 @@ interface CourseSetService
     public function analysisCourseSetDataByTime($startTime, $endTime);
 
     public function batchUpdateOrg($courseSetIds, $orgCode);
+
+    public function unlockCourseSet($id);
 }

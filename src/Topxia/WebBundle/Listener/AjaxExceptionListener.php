@@ -2,11 +2,11 @@
 
 namespace Topxia\WebBundle\Listener;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
 class AjaxExceptionListener
 {
@@ -17,9 +17,9 @@ class AjaxExceptionListener
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        $problem = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+        $problem   = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
-        $request = $event->getRequest();
+        $request   = $event->getRequest();
 
         if (!$request->isXmlHttpRequest()) {
             return;
@@ -35,6 +35,9 @@ class AjaxExceptionListener
         }
 
         $statusCode = $exception->getCode();
+
+        // var_dump($exception->getTraceAsString());
+        throw $exception;
 
         if (!array_key_exists($statusCode, Response::$statusTexts)) {
             $statusCode = 500;
@@ -79,5 +82,4 @@ class AjaxExceptionListener
     {
         return ServiceKernel::instance();
     }
-
 }

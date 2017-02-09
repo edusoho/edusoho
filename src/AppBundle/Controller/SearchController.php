@@ -191,7 +191,7 @@ class SearchController extends BaseController
      */
     protected function getLevelService()
     {
-        return $this->getBiz()->service('Vip:Vip.LevelService');
+        return $this->getBiz()->service('VipPlugin:Vip:LevelService');
     }
 
     /**
@@ -199,7 +199,7 @@ class SearchController extends BaseController
      */
     protected function getVipService()
     {
-        return $this->getBiz()->service('Vip:Vip.VipService');
+        return $this->getBiz()->service('VipPlugin:Vip:VipService');
     }
 
     /**
