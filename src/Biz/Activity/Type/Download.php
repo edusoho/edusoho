@@ -2,7 +2,6 @@
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Dao\DownloadFileDao;
 use Biz\Activity\Dao\DownloadActivityDao;
 use Biz\Activity\Service\ActivityLearnLogService;
 
@@ -35,6 +34,16 @@ class Download extends Activity
             'fileIds'    => $download['fileIds']
         );
         return $this->getDownloadActivityDao()->create($newDownload);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceDownload         = $this->getDownloadActivityDao()->get($sourceActivity['mediaId']);
+        $download               = $this->getDownloadActivityDao()->get($activity['mediaId']);
+        $download['mediaCount'] = $sourceDownload['mediaCount'];
+        $download['fileIds']    = $sourceDownload['fileIds'];
+
+        return $this->getDownloadActivityDao()->update($download['id'], $download);
     }
 
     /**

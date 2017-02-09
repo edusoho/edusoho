@@ -20,6 +20,11 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
         return $this->findInField('id', $ids);
     }
 
+    public function getByCopyIdAndCourseId($copyId, $courseId)
+    {
+        return $this->getByFields(array('copyId' => $copyId, 'fromCourseId' => $courseId));
+    }
+
     public function declares()
     {
         $declares['conditions'] = array(

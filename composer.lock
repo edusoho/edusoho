@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "96cc987c98f8fa4abf38d29dde8643cb",
-    "content-hash": "34374af1825c96a01943f853d61d8a09",
+    "hash": "b706a8bf618c85b6b6224a76e4a6d2de",
+    "content-hash": "4a1afaed0fab6ec1d8c808f852ac123a",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -273,16 +273,16 @@
         },
         {
             "name": "codeages/plugin-bundle",
-            "version": "v0.1.4",
+            "version": "v0.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "e475c50b4fd3f77f870e546f3a47454bb76215db"
+                "reference": "a3a15620a464a0c67edbd793004eeb41d11c753c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/e475c50b4fd3f77f870e546f3a47454bb76215db",
-                "reference": "e475c50b4fd3f77f870e546f3a47454bb76215db",
+                "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/a3a15620a464a0c67edbd793004eeb41d11c753c",
+                "reference": "a3a15620a464a0c67edbd793004eeb41d11c753c",
                 "shasum": ""
             },
             "require": {
@@ -316,7 +316,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2017-01-19 04:33:24"
+            "time": "2017-02-07 03:41:06"
         },
         {
             "name": "codeages/rate-limiter",

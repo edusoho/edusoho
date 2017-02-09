@@ -6,14 +6,12 @@ use Topxia\Common\ArrayToolkit;
 use Biz\Common\Mail\MailFactory;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
-use Topxia\WebBundle\DataDict\UserRoleDict;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user   = $this->getUser();
         $fields = $request->query->all();
 
         $conditions = array(
@@ -311,8 +309,8 @@ class UserController extends BaseController
         $roleNames = array();
         $roles     = array_unique($roles);
 
-        $userRoleDict  = new UserRoleDict();
-        $userRoleDict  = $userRoleDict->getDict();
+        $userRoleDict =$this->get('codeages_plugin.dict_twig_extension')->getDict('userRole');
+
         $roleDictCodes = array_keys($userRoleDict);
 
         foreach ($roles as $role) {
