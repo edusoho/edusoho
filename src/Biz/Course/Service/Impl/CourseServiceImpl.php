@@ -3,7 +3,6 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
 use Topxia\Common\ArrayToolkit;
@@ -21,6 +20,7 @@ use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
 
 class CourseServiceImpl extends BaseService implements CourseService
@@ -254,7 +254,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourseMarketing($id, $fields)
     {
-        $this->tryManageCourse($id);
+        $oldCourse = $this->tryManageCourse($id);
 
         $fields = ArrayToolkit::parts($fields, array(
             'isFree',
@@ -290,13 +290,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
         }
 
-        // if (isset($fields['price'])) {
-        //     $fields['price'] = round(floatval($fields['price']) * 100, 0);
-        // }
+        $newCourse = $this->getCourseDao()->update($id, $fields);
 
-        $course = $this->getCourseDao()->update($id, $fields);
-        $this->dispatchEvent('course.update', new Event($course));
-        return $course;
+        $this->dispatchEvent('course.update', new Event($newCourse));
+        $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
+
+        return $newCourse;
     }
 
     protected function calculatePrice($id, $originPrice)
@@ -1154,8 +1153,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * 当默认值未设置时，合并默认值
-     * @param $course
-     *
+     * @param  $course
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)

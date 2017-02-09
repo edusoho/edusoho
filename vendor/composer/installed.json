@@ -3566,17 +3566,17 @@
     },
     {
         "name": "codeages/plugin-bundle",
-        "version": "v0.1.4",
-        "version_normalized": "0.1.4.0",
+        "version": "v0.1.5",
+        "version_normalized": "0.1.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/plugin-bundle.git",
-            "reference": "e475c50b4fd3f77f870e546f3a47454bb76215db"
+            "reference": "a3a15620a464a0c67edbd793004eeb41d11c753c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/e475c50b4fd3f77f870e546f3a47454bb76215db",
-            "reference": "e475c50b4fd3f77f870e546f3a47454bb76215db",
+            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/a3a15620a464a0c67edbd793004eeb41d11c753c",
+            "reference": "a3a15620a464a0c67edbd793004eeb41d11c753c",
             "shasum": ""
         },
         "require": {
@@ -3587,7 +3587,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.8|~5.0"
         },
-        "time": "2017-01-19 04:33:24",
+        "time": "2017-02-07 03:41:06",
         "type": "symfony-bundle",
         "installation-source": "dist",
         "autoload": {
