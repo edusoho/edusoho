@@ -25,3 +25,4 @@
         findLessonMaterials
         getMaterialCount
     
+    remove UserRoleDict use get('codeages_plugin.dict_twig_extension')->getDict('userRole')

@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\WebBundle\DataDict;
 
-use Topxia\WebBundle\DataDict\DataDictInterface;
 use Topxia\Service\Common\ServiceKernel;
 
 class MemberLevelDisct  implements DataDictInterface{
