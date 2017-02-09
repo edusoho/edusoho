@@ -112,7 +112,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         $marks = str_repeat('?,', count($statuses) - 1).'?';
         $sql   = "SELECT sum(amount) FROM {$this->table} WHERE targetType =? AND targetId = ? AND status in ({$marks})";
 
-        return $this->db()->fetchColumn($sql, array_merge(array($targetType, $targetId), $statuses));
+        return $this->db()->fetchColumn($sql, array_merge(array($targetType, $targetId), $statuses)) ? : 0;
     }
 
     public function sumCouponDiscountByOrderIds($orderIds)

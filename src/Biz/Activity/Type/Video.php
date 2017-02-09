@@ -4,9 +4,9 @@ namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\VideoActivityDao;
-use Biz\Activity\Service\ActivityLearnLogService;
-use Biz\Activity\Service\ActivityService;
 use Biz\File\Service\UploadFileService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class Video extends Activity
 {
@@ -39,6 +39,19 @@ class Video extends Activity
             'finishDetail' => $video['finishDetail']
         );
         return $this->getVideoActivityDao()->create($newVideo);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceVideo           = $this->getVideoActivityDao()->get($sourceActivity['mediaId']);
+        $video                 = $this->getVideoActivityDao()->get($activity['mediaId']);
+        $video['mediaSource']  = $sourceVideo['mediaSource'];
+        $video['mediaId']      = $sourceVideo['mediaId'];
+        $video['mediaUri']     = $sourceVideo['mediaUri'];
+        $video['finishType']   = $sourceVideo['finishType'];
+        $video['finishDetail'] = $sourceVideo['finishDetail'];
+
+        return $this->getVideoActivityDao()->update($video['id'], $video);
     }
 
     public function update($activityId, &$fields, $activity)

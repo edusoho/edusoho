@@ -54,6 +54,17 @@ class Flash extends Activity
         return $this->getFlashActivityDao()->create($newFlash);
     }
 
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceFlash           = $this->getFlashActivityDao()->get($sourceActivity['mediaId']);
+        $flash                 = $this->getFlashActivityDao()->get($activity['mediaId']);
+        $flash['mediaId']      = $sourceFlash['mediaId'];
+        $flash['finishType']   = $sourceFlash['finishType'];
+        $flash['finishDetail'] = $sourceFlash['finishDetail'];
+
+        return $this->getFlashActivityDao()->update($flash['id'], $flash);
+    }
+
     public function update($targetId, &$fields, $activity)
     {
         $updateFields = ArrayToolkit::parts($fields, array(

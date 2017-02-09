@@ -11,7 +11,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
 
     public function findCourseSetsByParentIdAndLocked($parentId, $locked)
     {
-        return $this->getByFields(array('parentId' => $parentId, 'locked' => $locked));
+        return $this->findByFields(array('parentId' => $parentId, 'locked' => $locked));
     }
 
     public function findByIds(array $ids)
@@ -70,6 +70,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'parentId > :parentId_GT',
                 'createdTime >= :startTime',
                 'createdTime <= :endTime',
+                'minCoursePrice = :minCoursePrice'
             ),
             'serializes' => array(
                 'tags'      => 'delimiter',

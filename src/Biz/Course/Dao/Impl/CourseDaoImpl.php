@@ -11,12 +11,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 
     public function findCoursesByParentIdAndLocked($parentId, $locked)
     {
-        if (empty($parentId)) {
-            return array();
-        }
-
-        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? AND locked = ?";
-        return $this->db()->fetchAll($sql, array($parentId, $locked));
+        return $this->findByFields(array('parentId' => $parentId, 'locked' => $locked));
     }
 
     public function findCoursesByCourseSetIdAndStatus($courseSetId, $status = null)
@@ -95,6 +90,12 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             group by from_unixtime(createdTime,'%Y-%m-%d') order by date ASC";
 
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
+    }
+
+    public function getMinPublishedCoursePriceByCourseSetId($courseSetId)
+    {
+        $sql = "SELECT ifnull(min(price),0) as price FROM `c2_course` WHERE courseSetId = {$courseSetId} and status = 'published'";
+        return $this->db()->fetchColumn($sql);
     }
 
     public function declares()

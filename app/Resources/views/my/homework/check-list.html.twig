@@ -9,10 +9,10 @@
     <div class="panel-body">
       <ul class="nav nav-pills mb15">
         <li {% if status == 'reviewing' %} class="active"{% endif %}>
-          <a href="{{ url('my_homework_check_list', {status:'reviewing'}) }}">未批改</a>
+          <a href="{{ url('my_homework_check_list', {status:'reviewing'}) }}">未批阅</a>
         </li>
         <li {% if status == 'finished' %} class="active"{% endif %}>
-          <a href="{{ url('my_homework_check_list', {status:'finished'}) }}">已批改</a>
+          <a href="{{ url('my_homework_check_list', {status:'finished'}) }}">已批阅</a>
         </li>
       </ul>
       {% include 'my/homework/check-table.html.twig' %}
