@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\WebBundle\Listener;
+namespace AppBundle\Listener;
 
 use Biz\User\Service\UserActiveService;
 use Symfony\Component\HttpFoundation\Request;

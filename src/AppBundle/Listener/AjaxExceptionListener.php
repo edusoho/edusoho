@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Listener;
+namespace AppBundle\Listener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

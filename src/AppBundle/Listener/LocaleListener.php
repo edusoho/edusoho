@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\WebBundle\Listener;
+namespace AppBundle\Listener;
 
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;

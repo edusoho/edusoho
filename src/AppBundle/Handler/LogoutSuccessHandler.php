@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Handler;
+namespace AppBundle\Handler;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;

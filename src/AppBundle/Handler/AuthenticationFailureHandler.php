@@ -1,12 +1,12 @@
 <?php
 
-namespace Topxia\WebBundle\Handler;
+namespace AppBundle\Handler;
 
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Topxia\WebBundle\Handler\AuthenticationHelper;
+use AppBundle\Handler\AuthenticationHelper;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Handler;
+namespace AppBundle\Handler;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Topxia\WebBundle\Handler;
+namespace AppBundle\Handler;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Topxia\Service\Common\ServiceKernel;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Handler;
+namespace AppBundle\Handler;
 
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;

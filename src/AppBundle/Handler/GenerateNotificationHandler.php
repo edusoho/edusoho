@@ -1,6 +1,6 @@
 <?php
  
-namespace Topxia\WebBundle\Handler;
+namespace AppBundle\Handler;
  
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\SecurityContext;

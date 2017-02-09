@@ -5,8 +5,8 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.xml }
+    - { resource: service_listener.yml }
     - { resource: "@AppBundle/Resources/config/services.yml" }
-
 framework:
     # esi:             ~
     translator:      { fallback: "%locale%", logging: false }
@@ -79,16 +79,8 @@ services:
         class: Topxia\WebBundle\Twig\Asset\PathPackage
         arguments: ["", "", "@assets.context"]
 
-    app.locale_listener:
-        class: Topxia\WebBundle\Listener\LocaleListener
-        arguments: ['%kernel.default_locale%']
-        tags:
-            - { name: kernel.event_subscriber }
-    app.user_locale_listener:
-        class: Topxia\WebBundle\Listener\UserLocaleListener
-        arguments: ['@session']
-        tags:
-            - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
+
+
     session.handler.pdo.connection:
         class: PDO
         calls:
@@ -100,7 +92,7 @@ services:
             password: "%database_password%"
 
     session.handler.pdo:
-        class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
+        class:     AppBundle\Handler\UserPdoSessionHandler
         arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage']
 
     session.handler.redis.factory:
@@ -109,7 +101,7 @@ services:
         arguments: ['@service_container']
 
     session.handler.redis:
-        class:     Topxia\WebBundle\Handler\RedisSessionHandler
+        class:     AppBundle\Handler\RedisSessionHandler
         arguments: ['@session.handler.redis.factory', '@security.token_storage']
 
     session.handler.factory:
@@ -117,30 +109,6 @@ services:
         factory: ['Biz\Common\SessionHandlerFactory', getSessionHandler]
         arguments:
             - "@service_container"
-
-    kernel.listener.ajax_exception_listener:
-        class: Topxia\WebBundle\Listener\AjaxExceptionListener
-        arguments:    ['@service_container']
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority:255 }
-
-    kernel.listener.kernel_request_listener:
-        class: Topxia\WebBundle\Listener\KernelRequestListener
-        arguments:    ['@service_container']
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
-
-#    kernel.listener.kernel_org_controller_listener:
-#        class: Org\OrgBundle\Listener\OrgControllerListener
-#        arguments:    ['@service_container']
-#        tags:
-#            - { name: kernel.event_listener, event: kernel.controller, method: onOrgController, priority:255 }
-
-    kernel.listener.kernel_response_listener:
-        class: Topxia\WebBundle\Listener\KernelResponseListener
-        arguments:    ['@service_container']
-        tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
 
     topxia.twig.web_extension:
         class: Topxia\WebBundle\Twig\Extension\WebExtension
@@ -194,7 +162,6 @@ services:
         tags:
             - { name: twig.extension }
 
-
     topxia.twig.file_cache:
         class: Biz\Common\FilesystemCache
         arguments:    ['@service_container']
@@ -213,12 +180,6 @@ services:
         tags:
             - { name: twig.extension }
 
-    kernel.listener.user_login_token_listener:
-        class: Topxia\WebBundle\Listener\UserLoginTokenListener
-        arguments:    ['@service_container']
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onGetUserLoginListener}
-
     ### permission
     permission.admin_voter:
         class: AppBundle\SfExtend\AdminVoter
@@ -231,18 +192,6 @@ services:
         arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
-
-    kernel.controller.permission_listener:
-        class: AppBundle\Listener\PermissionKernelControllerListener
-        arguments:    ['@service_container', '%permission.path_regular_expression%']
-        tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority:255 }
-
-    kernel.response.permission_listener:
-        class: AppBundle\Listener\PermissionKernelResponseListener
-        arguments:    ['@service_container']
-        tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
 
     routing.loader.yml:
         class: AppBundle\SfExtend\YamlFileLoader

@@ -36,3 +36,6 @@ services:
         class: AppBundle\Twig\LiveExtension
         tags:
             - { name: twig.extension }
+
+parameters:
+    security.authentication.provider.dao.class: AppBundle\Handler\AuthenticationProvider

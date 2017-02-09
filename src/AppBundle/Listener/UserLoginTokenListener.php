@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Listener;
+namespace AppBundle\Listener;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Cookie;

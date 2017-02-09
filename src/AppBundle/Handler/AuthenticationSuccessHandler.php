@@ -1,11 +1,11 @@
 <?php
 
-namespace Topxia\WebBundle\Handler;
+namespace AppBundle\Handler;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Topxia\WebBundle\Handler\AuthenticationHelper;
+use AppBundle\Handler\AuthenticationHelper;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler;

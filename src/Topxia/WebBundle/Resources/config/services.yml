@@ -1,6 +1,3 @@
-parameters:
-    security.authentication.provider.dao.class: Topxia\WebBundle\Handler\AuthenticationProvider
-
 services:
     form.type.default_category:
         class: Topxia\WebBundle\Form\Common\DefaultCategoryType
