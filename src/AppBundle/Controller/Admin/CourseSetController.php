@@ -270,7 +270,6 @@ class CourseSetController extends BaseController
     public function recommendListAction(Request $request)
     {
         $conditions                = $request->query->all();
-        $conditions['status']      = 'published';
         $conditions['recommended'] = 1;
 
         $conditions = $this->fillOrgCode($conditions);
