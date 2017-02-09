@@ -67,9 +67,9 @@
             {% for level in levels%}{% if (level.id == currentLevelId) %}{{level.name}}{% endif %}{% endfor %}
           </button>
           <ul class="dropdown-menu" role="menu">
-          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('course_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'全部'|trans}}</a></li>
+          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'全部'|trans}}</a></li>
           {% for level in levels %}
-            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('course_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
+            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('course_set_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
           {% endfor %}
           </ul>
         </div>
