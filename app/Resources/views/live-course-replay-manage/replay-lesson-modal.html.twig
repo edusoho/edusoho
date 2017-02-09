@@ -17,7 +17,7 @@
 	  		{% endif %}
 	  		<div class="form-group mbm" style="position: relative; padding-left:20px;height: 40px;line-height:40px">
 	  			<label style="position: absolute; top:0;left:0"><input type="checkbox" name="visibleReplaies[]" {% if replayLesson.hidden == 0 %}checked="checked" {% endif %} value="{{replayLesson.id}}"></label>
-	  			<a class="link-light text-overflow" style="width:150px" href="javascript:;" id="replay-name-span-{{replayLesson.id}}" role='replay-name-span' data-replay-id="{{replayLesson.id}}" >{{ replayLesson.title }}</a>
+	  			<a class="link-dark text-overflow" style="width:150px" href="javascript:;" id="replay-name-span-{{replayLesson.id}}" role='replay-name-span' data-replay-id="{{replayLesson.id}}" >{{ replayLesson.title }}</a>
 					<input class="form-control" style="width:150px; display:none" id="replay-name-input-{{replayLesson.id}}" data-replay-id="{{replayLesson.id}}" role='replay-name-input' data-url="{{ titleUpdateUrl }}" type="text" name="name" value="{{ replayLesson.title }}">
 	  		</div>
 	  	{% endfor %}
