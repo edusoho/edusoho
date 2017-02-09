@@ -8,6 +8,7 @@ import 'libs/js/jquery-lavalamp';
 import 'common/bootstrap-modal-hack';
 import 'common/script';
 import 'common/card';
+import { isMobileDevice } from 'common/utils';
 // 等待确认可删除Cookie
 // var Cookie = require('cookie');
 
@@ -94,7 +95,7 @@ if ($(".announcements-alert").length > 0) {
   });
 }
 
-if (!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+if (!isMobileDevice()) {
 
   $("body").on("mouseenter", "li.nav-hover", function (event) {
     $(this).addClass("open");
@@ -112,7 +113,7 @@ $(".js-search").focus(function () {
   $(this).prop("placeholder", Translator.trans('搜索')).removeClass("active");
 });
 
-if ($(".nav.nav-tabs").length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+if ($(".nav.nav-tabs").length > 0 && !isMobileDevice()) {
   // console.log(lavaLamp);
   console.log($(".nav.nav-tabs"));
   $(".nav.nav-tabs").lavaLamp();
