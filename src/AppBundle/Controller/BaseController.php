@@ -15,6 +15,7 @@ use Topxia\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Codeages\Biz\Framework\Event\Event;
 
 class BaseController extends Controller
 {
@@ -35,6 +36,23 @@ class BaseController extends Controller
     {
         $biz = $this->getBiz();
         return $biz['user'];
+    }
+
+    private function getDispatcher()
+    {
+        $biz = $this->getBiz();
+        return $biz['dispatcher'];
+    }
+
+    protected function dispatchEvent($eventName, $subject, $arguments = array())
+    {
+        if ($subject instanceof Event) {
+            $event = $subject;
+        } else {
+            $event = new Event($subject, $arguments);
+        }
+
+        return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
     /**

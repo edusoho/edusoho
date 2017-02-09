@@ -70,24 +70,24 @@ class SearchController extends BaseController
         } elseif ($filter == 'live') {
             $conditions['type'] = 'live';
         } elseif ($filter == 'free') {
-            $conditions['price'] = '0.00';
+            $conditions['minCoursePrice'] = '0.00';
         }
 
-        $count     = $this->getCourseService()->searchCourseCount($conditions);
+        $count     = $this->getCourseSetService()->countCourseSets($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $count
             , 12
         );
-        $courses = $this->getCourseService()->searchCourses(
+        $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            'latest',
+            array('updatedTime'=>'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         return $this->render('search/index.html.twig', array(
-            'courses'             => $courses,
+            'courseSets'             => $courseSets,
             'paginator'           => $paginator,
             'keywords'            => $keywords,
             'isShowVipSearch'     => $isShowVipSearch,
@@ -168,6 +168,11 @@ class SearchController extends BaseController
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 
     /**

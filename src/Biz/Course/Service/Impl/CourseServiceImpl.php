@@ -973,6 +973,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
 
+    public function getMinCoursePriceByCourseSetId($courseSetId)
+    {
+        return $this->getCourseDao()->getMinCoursePriceByCourseSetId($courseSetId);
+    }
+
     protected function _prepareCourseOrderBy($sort)
     {
         if (is_array($sort)) {

@@ -129,4 +129,6 @@ interface CourseService
     public function analysisCourseDataByTime($startTime, $endTime);
 
     public function countCourses(array $conditions);
+
+    public function getMinCoursePriceByCourseSetId($CourseSetId);
 }
