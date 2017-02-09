@@ -220,9 +220,9 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $orderInfo['snPrefix'] = 'M';
         } else {
             $orderInfo['title'] = ($fields['buyType'] == 'renew' ? '续费' : '购买');
-            $orderInfo['title'] .= "{$level['name']} x {$fields['duration']}";
-            $orderInfo['title'] .= "{$unitNames[$fields['unitType']]}";
-            $orderInfo['title'] .= "{$level['name']}".'会员';
+            $orderInfo['title'] .= $level['name'].'x'.$fields['duration'];
+            $orderInfo['title'] .= $unitNames[$fields['unitType']];
+            $orderInfo['title'] .= $level['name'].'会员';
 
             $orderInfo['snPrefix'] = 'V';
         }
@@ -259,7 +259,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             );
 
             $level   = $this->getLevelService()->getLevel($vip['levelId']);
-            $message = "您的 {$level['name']} 已成功续费，当前的有效期至：".date('Y-m-d', $vip['deadline']);
+            $message = '您的'.$level['name'].'已成功续费，当前的有效期至：'.date('Y-m-d', $vip['deadline']);
         } elseif ($order['data']['buyType'] == 'upgrade') {
             $vip = $this->getVipService()->upgradeMember(
                 $order['userId'],
@@ -268,7 +268,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             );
 
             $level   = $this->getLevelService()->getLevel($vip['levelId']);
-            $message = '您已经升级到'.$level['name'].'，点击查看'."<a href='/vip/course/level/{$level['id']}' target='_blank'>{$level['name']}</a>".'课程';
+            $message = '您已经升级到'.$level['name'].'，点击查看'."<a href='/vip/course_set/level/{$level['id']}' target='_blank'>{$level['name']}</a>".'课程';
         }
 
         $this->getNotificationService()->notify($order['userId'], 'default', $message);
