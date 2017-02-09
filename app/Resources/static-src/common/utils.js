@@ -16,11 +16,7 @@ if (Browser.safari) console.log('Safari: ' + Browser.safari);
 
 
 const isMobileDevice = ()=> {
-   if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
-    return true;
-   }else {
-     return false;
-   }
+   return navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i);
 }
 
 export { Browser,isMobileDevice }
