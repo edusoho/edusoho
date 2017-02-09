@@ -12,14 +12,6 @@ services:
         tags:
             - { name: form.type, alias: tags }
 
-    form.type.gender:
-        class: Topxia\WebBundle\Form\Common\GenderType
-        tags:
-            - { name: form.type, alias: gender }
-
-    topxia.data_dict.gender:
-        class: Topxia\WebBundle\DataDict\GenderDict
-
     authentication_handler:
         class: Biz\Common\LoginListener
         arguments: ['@biz']
