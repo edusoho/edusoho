@@ -16,13 +16,14 @@
 
           <div class="course-grid-mask">
             <span class="btn btn-warning btn-sm course-grid-btn-learn">
-              {% if course.memberIsLearned %}
+              {% if course.memberIsLearned|default(1) %}
                 {{'查看课程'|trans}}
               {% else %}
                 {{'继续学习'|trans}}
               {% endif %}
             </span>
           </div>
+
         </div>
         <span class="course-label">
           {% if course.status == 'draft' %}
