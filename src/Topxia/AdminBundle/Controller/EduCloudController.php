@@ -592,6 +592,10 @@ class EduCloudController extends BaseController
         }
     }
 
+    /*
+     * 云邮件开启时，同步本地邮件服务器发信人名称到云邮件
+     * 云邮件关闭时，同步云邮件发信人名称到本地邮件服务器
+     */
     public function emailSwitchAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
