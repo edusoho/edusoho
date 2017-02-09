@@ -3,7 +3,7 @@ namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Topxia\WebBundle\Util\AvatarAlert;
+use AppBundle\Util\AvatarAlert;
 
 class CourseExtension extends \Twig_Extension
 {

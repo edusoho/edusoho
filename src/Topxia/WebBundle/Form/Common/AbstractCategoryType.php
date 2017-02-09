@@ -3,7 +3,7 @@ namespace Topxia\WebBundle\Form\Common;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Topxia\WebBundle\Util\CategoryBuilder;
+use AppBundle\Util\CategoryBuilder;
 
 abstract class AbstractCategoryType extends AbstractType
 {

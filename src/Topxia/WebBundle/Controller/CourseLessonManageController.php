@@ -5,7 +5,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Util\UploaderToken;
+use AppBundle\Util\UploaderToken;
 
 class CourseLessonManageController extends BaseController
 {

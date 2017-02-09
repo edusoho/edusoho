@@ -3,7 +3,7 @@ namespace AppBundle\Controller\Course;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Util\AvatarAlert;
+use AppBundle\Util\AvatarAlert;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
 

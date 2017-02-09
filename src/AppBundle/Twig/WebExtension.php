@@ -6,14 +6,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\NumberToolkit;
-use Topxia\WebBundle\Util\CdnUrl;
+use AppBundle\Util\CdnUrl;
 use Topxia\Common\ConvertIpToolkit;
 use Topxia\Common\ExtensionManager;
-use Topxia\WebBundle\Util\UploadToken;
+use AppBundle\Util\UploadToken;
 use Topxia\Common\PluginVersionToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Component\ShareSdk\WeixinShare;
-use Topxia\WebBundle\Util\CategoryBuilder;
+use AppBundle\Util\CategoryBuilder;
 use Biz\Util\HTMLPurifierFactory;
 
 class WebExtension extends \Twig_Extension

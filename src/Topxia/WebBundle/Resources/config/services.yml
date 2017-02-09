@@ -18,5 +18,5 @@ services:
         arguments:		['Asia/Shanghai']
 
     topxia.target_helper:
-        class:          Topxia\WebBundle\Util\TargetHelper
+        class:          AppBundle\Util\TargetHelper
         arguments:      ['@service_container']

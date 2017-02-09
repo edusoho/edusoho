@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\WebBundle\Util\AvatarAlert;
+use AppBundle\Util\AvatarAlert;
 
 class MyController extends BaseController
 {

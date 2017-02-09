@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Util\AvatarAlert;
+use AppBundle\Util\AvatarAlert;
 
 class MyLiveCourseController extends BaseController
 {

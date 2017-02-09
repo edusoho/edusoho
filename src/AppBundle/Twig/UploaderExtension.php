@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Twig;
 
-use Topxia\WebBundle\Util\UploaderToken;
+use AppBundle\Util\UploaderToken;
 
 class UploaderExtension extends \Twig_Extension
 {

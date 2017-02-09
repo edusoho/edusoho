@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Util;
+namespace AppBundle\Util;
 
 class HTMLPurifierFactory {
     

@@ -1,23 +1,21 @@
 <?php
 
-namespace Topxia\WebBundle\Util;
+namespace AppBundle\Util;
 
 use Topxia\Service\Common\ServiceKernel;
 
-/**
- * 素材库文件上传Token
- */
-class UploaderToken
+class UploadToken
 {
 
-	public function make($targetType, $targetId, $bucket, $ttl = 86400)
-	{
-		$user = $this->getCurrentUser();
-		$deadline = time() + $ttl;
-		$key = "{$user['id']}|{$targetType}|{$targetId}|{$bucket}|{$deadline}";
-		$sign = md5("{$key}|{$user['salt']}");
-		return $this->base64Encode("{$key}|{$sign}");
-	}
+    public function make($group, $type = 'image', $duration = 18000)
+    {
+        $user = $this->getCurrentUser();
+        $deadline = time() + $duration;
+        $secret = $this->getServiceKernel()->getParameter('secret');
+        $key = "{$user['id']}|{$group}|{$type}|{$deadline}";
+        $sign = md5("{$key}|{$secret}");
+        return $this->base64Encode("{$key}|{$sign}");
+    }
 
     public function parse($token)
     {
@@ -25,26 +23,25 @@ class UploaderToken
         if (empty($token)) {
             return null;
         }
-
-        list($userId, $targetType, $targetId, $bucket, $deadline, $sign) =  explode('|', $token);
+        
+        list($userId, $group, $type, $deadline, $sign) =  explode('|', $token);
 
         if ($deadline < time()) {
             return null;
         }
 
-        $user = $this->getCurrentUser();
-
-        $expectedSign = md5("{$userId}|{$targetType}|{$targetId}|{$bucket}|{$deadline}|{$user['salt']}");
+        $secret = $this->getServiceKernel()->getParameter('secret');
+        $expectedSign = md5("{$userId}|{$group}|{$type}|{$deadline}|{$secret}");
         if ($sign != $expectedSign) {
             return null;
         }
 
         return array(
             'userId' => $userId,
-            'targetType' => $targetType,
-            'targetId' => $targetId,
-            'bucket' => $bucket,
+            'group' => $group,
+            'type' => $type,
         );
+
     }
 
     private function base64Encode($data) { 

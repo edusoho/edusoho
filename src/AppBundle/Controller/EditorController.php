@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 use Biz\Content\Service\FileService;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\FileToolkit;
-use Topxia\WebBundle\Util\UploadToken;
+use AppBundle\Util\UploadToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;

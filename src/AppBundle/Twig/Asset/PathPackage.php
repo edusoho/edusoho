@@ -11,7 +11,7 @@
 
 namespace AppBundle\Twig\Asset;
 
-use Topxia\WebBundle\Util\CdnUrl;
+use AppBundle\Util\CdnUrl;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
