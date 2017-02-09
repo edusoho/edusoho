@@ -6,7 +6,6 @@ use Biz\Activity\Dao\TextActivityDao;
 use Biz\Activity\Service\ActivityService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ActivityLearnLogService;
 
 class Text extends Activity
