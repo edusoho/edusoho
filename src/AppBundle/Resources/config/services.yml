@@ -11,12 +11,16 @@ services:
         tags:
             - { name: extension }
 
+    authentication_handler:
+            class: Biz\Common\LoginListener
+            arguments: ["@biz"]
+
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector
 
     web.twig.question_type_extension:
         class: AppBundle\Twig\QuestionTypeExtension
-        arguments:    ['@service_container','@biz']
+        arguments:    ['@service_container', '@biz']
         tags:
             - { name: twig.extension }
 
@@ -28,7 +32,7 @@ services:
 
     web.twig.activity_extension:
         class: AppBundle\Twig\ActivityExtension
-        arguments:    ['@service_container','@biz']
+        arguments:    ['@service_container', '@biz']
         tags:
             - { name: twig.extension }
 
@@ -39,7 +43,7 @@ services:
 
     web.twig.extension:
         class: AppBundle\Twig\WebExtension
-        arguments:    ['@service_container','@biz']
+        arguments:    ['@service_container', '@biz']
         tags:
             - { name: twig.extension }
 
@@ -51,19 +55,19 @@ services:
 
     web.twig.dictionary_extension:
         class: AppBundle\Twig\DictionaryExtension
-         arguments:    ['@service_container','@biz']
+        arguments:    ['@service_container', '@biz']
         tags:
             - { name: twig.extension }
 
     web.twig.data_extension:
         class: AppBundle\Twig\DataExtension
-        arguments:    ['@service_container','@biz']
+        arguments:    ['@service_container', '@biz']
         tags:
             - { name: twig.extension }
 
     web.twig.block_extension:
         class: AppBundle\Twig\BlockExtension
-        arguments:    ['@service_container','@biz']
+        arguments:    ['@service_container', '@biz']
         tags:
             - { name: twig.extension }
 
@@ -75,13 +79,13 @@ services:
 
     web.twig.theme_extension:
         class: AppBundle\Twig\ThemeExtension
-        arguments:    ['@service_container','@biz']
+        arguments:    ['@service_container', '@biz']
         tags:
             - { name: twig.extension }
 
     web.twig.order_extension:
         class: AppBundle\Twig\OrderExtension
-        arguments:    ['@service_container','@biz']
+        arguments:    ['@service_container', '@biz']
         tags:
             - { name: twig.extension }
 
@@ -91,5 +95,10 @@ services:
         tags:
             - { name: twig.extension }
 
-parameters:
-    security.authentication.provider.dao.class: AppBundle\Handler\AuthenticationProvider
+    topxia.timemachine:
+        class:			AppBundle\Common\TimeMachine
+        arguments:		['Asia/Shanghai']
+
+    topxia.target_helper:
+        class:          AppBundle\Util\TargetHelper
+        arguments:      ['@service_container']

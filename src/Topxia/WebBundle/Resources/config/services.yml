@@ -1,22 +1,2 @@
 services:
-    form.type.default_category:
-        class: Topxia\WebBundle\Form\Common\DefaultCategoryType
-        tags:
-            - { name: form.type, alias: default_category }
 
-    form.type.tags:
-        class: Topxia\WebBundle\Form\Common\TagsType
-        tags:
-            - { name: form.type, alias: tags }
-
-    authentication_handler:
-        class: Biz\Common\LoginListener
-        arguments: ['@biz']
-
-    topxia.timemachine:
-        class:			AppBundle\Common\TimeMachine
-        arguments:		['Asia/Shanghai']
-
-    topxia.target_helper:
-        class:          AppBundle\Util\TargetHelper
-        arguments:      ['@service_container']
