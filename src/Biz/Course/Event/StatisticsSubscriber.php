@@ -34,25 +34,17 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         );
     }
 
-
-
-    private function updateCourseSetMinCoursePriceInPublishedCourses($course)
-    {
-        $price = $this->getCourseService()->getMinCoursePriceByCourseSetId($course['courseSetId']);
-        $this->getCourseSetService()->updateCourseSetMinCoursePrice($course['courseSetId'], $price);
-    }
-
     public function onCourseMarketingChange(Event $event)
     {
         $subject = $event->getSubject();
         $course = $subject['newCourse'];
-        $this->updateCourseSetMinCoursePriceInPublishedCourses($course);
+        $this->getCourseSetService()->updateCourseSetMinPublishedCoursePrice($course['courseSetId']);
     }
 
     public function onCourseStatusChange(Event $event)
     {
         $course = $event->getSubject();
-        $this->updateCourseSetMinCoursePriceInPublishedCourses($course);
+        $this->getCourseSetService()->updateCourseSetMinPublishedCoursePrice($course['courseSetId']);
     }
 
     public function onTaskCreate(Event $event)

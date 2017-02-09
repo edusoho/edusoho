@@ -177,7 +177,7 @@ interface CourseSetService
 
     public function batchUpdateOrg($courseSetIds, $orgCode);
 
-    public function updateCourseSetMinCoursePrice($courseSetId, $price);
+    public function updateCourseSetMinPublishedCoursePrice($courseSetId);
 
     public function unlockCourseSet($id);
 }
