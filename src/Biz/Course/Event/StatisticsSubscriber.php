@@ -36,7 +36,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $course = $event->getSubject();
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        if ($course['price'] == $courseSet['minCoursePrice']) {
+        if ($course['status'] != 'published' || $course['price'] == $courseSet['minCoursePrice']) {
             return;
         }
         $price = $course['price'] < $courseSet['minCoursePrice'] ? $course['price'] : $this->getCourseService()->getMinCoursePriceByCourseSetId($course['courseSetId']);
