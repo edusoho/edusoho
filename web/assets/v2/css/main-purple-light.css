@@ -1915,6 +1915,7 @@ select:-webkit-autofill {
   height: 60px;
   border: none;
   padding: 0 20px;
+  z-index: 1000;
 }
 .es-header .container {
   position: relative;
