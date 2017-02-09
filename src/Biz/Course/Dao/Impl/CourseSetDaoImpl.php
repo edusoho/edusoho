@@ -60,6 +60,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
             'conditions' => array(
                 'id IN ( :ids )',
                 'status = :status',
+                'isVip = :isVip',
                 'categoryId = :categoryId',
                 'title LIKE :title',
                 'creator LIKE :creator',
