@@ -16,10 +16,12 @@
           </a>
         </div>
         <div class="metas clearfix">
-          <span class="num">
-            <i class="es-icon es-icon-people"></i>
-            {{ otherCourse.studentNum|default(0) }}
-          </span>
+          {% if setting('course.show_student_num_enabled', '1') == 1 %}
+            <span class="num">
+              <i class="es-icon es-icon-people"></i>
+              {{ otherCourse.studentNum|default(0) }}
+            </span>
+          {% endif %}
           <span class="comment">
             <i class="es-icon es-icon-textsms"></i>
             {{ otherCourse.threadNum|default(0) }}
