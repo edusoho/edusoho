@@ -4,6 +4,8 @@ namespace Biz\Course\Copy\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Copy\AbstractEntityCopy;
+use Biz\Question\Service\QuestionService;
+use Biz\Testpaper\Service\TestpaperService;
 
 class TestpaperCopy extends AbstractEntityCopy
 {
@@ -67,10 +69,10 @@ class TestpaperCopy extends AbstractEntityCopy
             return;
         }
 
-        //$this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseSetId'], $isCopy);
+        $copyQuestions = $this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseSetId'], $isCopy);
 
-        $copyQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($newTestpaper['courseSetId']);
-        $copyQuestions = ArrayToolkit::index($copyQuestions, 'copyId');
+        // $copyQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($newTestpaper['courseSetId']);
+        // $copyQuestions = ArrayToolkit::index($copyQuestions, 'copyId');
 
         foreach ($items as $item) {
             $question = empty($copyQuestions[$item['questionId']]) ? array() : $copyQuestions[$item['questionId']];
@@ -125,7 +127,8 @@ class TestpaperCopy extends AbstractEntityCopy
             $questionMap[$question['id']] = array($newQuestion['id'], $newQuestion['parentId']);
         }
 
-        return $questionMap;
+        // return $questionMap;
+        return $copyQuestions;
     }
 
     private function questionSort($questions)
@@ -163,11 +166,17 @@ class TestpaperCopy extends AbstractEntityCopy
         return $newQuestion;
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->biz->service('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return QuestionService
+     */
     protected function getQuestionService()
     {
         return $this->biz->service('Question:QuestionService');

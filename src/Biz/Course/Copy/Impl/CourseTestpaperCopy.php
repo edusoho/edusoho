@@ -2,6 +2,12 @@
 
 namespace Biz\Course\Copy\Impl;
 
+/**
+ * Class CourseTestpaperCopy
+ * @package Biz\Course\Copy\Impl
+ * @deprecated
+ * @see ActivityTestpaperCopy
+ */
 class CourseTestpaperCopy extends TestpaperCopy
 {
     public function __construct($biz)

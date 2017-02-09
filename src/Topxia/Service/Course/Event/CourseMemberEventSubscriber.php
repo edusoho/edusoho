@@ -10,10 +10,10 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.update'        => 'onCourseUpdate',
-            'course.lesson.create' => 'onCourseLessonCreate',
-            'course.lesson.delete' => 'onCourseLessonDelete',
-            'course.lesson_finish' => 'onLessonFinish'
+            // 'course.update'        => 'onCourseUpdate',
+            // 'course.lesson.create' => 'onCourseLessonCreate',
+            // 'course.lesson.delete' => 'onCourseLessonDelete',
+            // 'course.lesson_finish' => 'onLessonFinish'
         );
     }
 
