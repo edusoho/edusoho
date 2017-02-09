@@ -76,7 +76,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Topxia\AdminBundle\TopxiaAdminBundle(),
             new Topxia\MobileBundle\TopxiaMobileBundle(),
             new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),
-            new Classroom\ClassroomBundle\ClassroomBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
