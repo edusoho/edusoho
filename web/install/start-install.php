@@ -19,7 +19,7 @@ $twig   = new Twig_Environment($loader, array(
     'cache' => false
 ));
 
-$twig->addGlobal('edusho_version', \Topxia\System::VERSION);
+$twig->addGlobal('edusho_version', \AppBundle\System::VERSION);
 
 $step         = intval(empty($_GET['step']) ? 0 : $_GET['step']);
 $init_data    = intval(empty($_GET['init_data']) ? 0 : $_GET['init_data']);

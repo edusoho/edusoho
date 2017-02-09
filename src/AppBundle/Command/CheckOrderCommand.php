@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Command;
 
-use Topxia\System;
+use AppBundle\System;
 use AppBundle\Common\BlockToolkit;
 use Topxia\Component\Payment\Payment;
 use Biz\User\CurrentUser;

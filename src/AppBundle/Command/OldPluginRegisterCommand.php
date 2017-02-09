@@ -7,7 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use AppBundle\Common\BlockToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\PluginUtil;
-use Topxia\System;
+use AppBundle\System;
 
 class OldPluginRegisterCommand extends BaseCommand
 {

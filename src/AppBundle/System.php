@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia;
+namespace AppBundle;
 
 class System
 {

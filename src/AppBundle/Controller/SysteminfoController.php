@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\System;
+use AppBundle\System;
 
 class SysteminfoController extends BaseController
 {
