@@ -35,6 +35,11 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->findInField('id', $ids);
     }
 
+    public function findByCategoryId($categoryId)
+    {
+        return $this->findByFields(array('categoryId' => $categoryId));
+    }
+
     public function getMaxSeqByCourseId($courseId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table()} WHERE courseId = ? ";
@@ -46,7 +51,6 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         $sql = "SELECT MAX(number) FROM {$this->table()} WHERE courseId = ? ";
         return $this->db()->fetchColumn($sql, array($courseId)) ?: 0;
     }
-
 
     public function getMinSeqByCourseId($courseId)
     {
@@ -86,10 +90,9 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     /**
      * 统计当前时间以后每天的直播次数
      *
-     * @param $courseSetIds
-     * @param $limit
-     *
-     * @return array <string, int|string>
+     * @param  $courseSetIds
+     * @param  $limit
+     * @return array           <string, int|string>
      */
     public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit)
     {
@@ -114,10 +117,10 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     {
         $time = time();
         $sql
-              = "SELECT fromCourseSetId, max(startTime) as startTime
-                 FROM {$this->table()} 
-                 WHERE endTime < {$time} AND status='published' AND type = 'live' 
-                 GROUP BY fromCourseSetId 
+        = "SELECT fromCourseSetId, max(startTime) as startTime
+                 FROM {$this->table()}
+                 WHERE endTime < {$time} AND status='published' AND type = 'live'
+                 GROUP BY fromCourseSetId
                  ORDER BY startTime DESC
                  ";
         return $this->db()->fetchAll($sql);
@@ -131,6 +134,21 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     public function findByCourseIdAndIsFree($courseId, $isFree)
     {
         return $this->findByFields(array('courseId' => $courseId, 'isFree' => $isFree));
+    }
+
+    public function findByCopyIdAndLockedCourseIds($copyId, $courseIds)
+    {
+        if (empty($courseIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $parmaters = array_merge(array($copyId), $courseIds);
+
+        $sql = "SELECT * FROM {$this->table()} WHERE copyId= ? AND courseId IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, $parmaters) ?: array();
     }
 
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)

@@ -361,11 +361,11 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getTaskService()->count($timeRange),
+            $this->getTaskService()->countTasks($timeRange),
             20
         );
 
-        $taskDetail = $this->getTaskService()->search(
+        $taskDetail = $this->getTaskService()->searchTasks(
             $timeRange,
             array('createdTime' => "DESC"),
             $paginator->getOffsetCount(),
@@ -392,7 +392,7 @@ class AnalysisController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $taskStartData = $this->getTaskService()->search(array(), array('createdTime' => "ASC"), 0, 1);
+        $taskStartData = $this->getTaskService()->searchTasks(array(), array('createdTime' => "ASC"), 0, 1);
 
         if ($taskStartData) {
             $taskStartDate = date("Y-m-d", $taskStartData[0]['createdTime']);

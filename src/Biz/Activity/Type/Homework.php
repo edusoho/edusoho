@@ -6,14 +6,11 @@ use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Topxia\Common\Exception\InvalidArgumentException;
 
 class Homework extends Activity
 {
-    private $testpaperCopy = null;
-
     protected function registerListeners()
     {
         return array();
@@ -33,11 +30,7 @@ class Homework extends Activity
 
     public function copy($activity, $config = array())
     {
-        $newActivity = $config['newActivity'];
-
-        $newActivity['mediaId'] = $activity['mediaId'];
-
-        return $this->getTestpaperCopy()->copy($newActivity, array('isCopy' => 1));
+        return null;
     }
 
     public function update($targetId, &$fields, $activity)
@@ -113,15 +106,6 @@ class Homework extends Activity
         $filterFields['name']        = empty($filterFields['title']) ? '' : $filterFields['title'];
 
         return $filterFields;
-    }
-
-    protected function getTestpaperCopy()
-    {
-        if (!$this->testpaperCopy) {
-            $this->testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
-        }
-
-        return $this->testpaperCopy;
     }
 
     /**
