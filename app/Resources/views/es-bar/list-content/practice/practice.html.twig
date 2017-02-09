@@ -11,11 +11,15 @@
     {% set testCount = 10 %}
     {% for testPaperResult in testPaperResults %}
       {% set testCount = loop.length %}
-      <li><i class="es-icon es-icon-chevronright"></i><a target="_blank" href="{{ path('course_manage_test_results',{id:testPaperResult.id}) }}" class="link-dark">{{ testPaperResult.paperName }}</a></li>
+      {% set task = tasks[testPaperResult.lessonId]|default(null) %}
+      <li>
+       <i class="es-icon es-icon-chevronright"></i>
+       <a target="_blank" href="{{ path('testpaper_result_show',{resultId:testPaperResult.id,action:'result'}) }}" class="color-gray">{{ task.title|default('') }}</a>
+      </li>
     {% endfor %}
     {% if testCount >= 10 %}
       <li class="text-center">
-        <a class="link-dark" href="{{ path('my_quiz') }}" target="_blank">
+        <a class="color-gray" href="{{ path('my_testpaper_list') }}" target="_blank">
           {{'更多'|trans}}<i class="es-icon es-icon-angledoubleright"></i>
         </a>
       </li>
@@ -39,14 +43,14 @@
     {% set course = courses[homeworkResult.courseId] %}
     <li>
       <i class="es-icon es-icon-chevronright"></i>
-      <a target="_blank" class="link-dark" href="{{ path('course_homework_result', {courseId:course.id, homeworkId:homeworkResult.homeworkId, resultId:homeworkResult.id, userId:app.user.id}) }}">
-        {{'%title%第%number%课时'|trans({'%title%': '《' ~ course.title ~ '》','%number%': task.number}) }}
+      <a target="_blank" class="color-gray" href="{{ path('homework_result_show', {resultId:homeworkResult.id,action:'result'}) }}">
+        {{ task.title|default('') }}
       </a>
     </li>
   {% endfor %}
   {% if homeworkCount >= 10 %}
     <li class="text-center">
-      <a class="link-dark" href="{{ path('my_homework_list') }}" target="_blank">
+      <a class="color-gray" href="{{ path('my_homework_list') }}" target="_blank">
         {{'更多'|trans}}<i class="es-icon es-icon-angledoubleright"></i>
       </a>
     </li>

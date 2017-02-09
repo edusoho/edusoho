@@ -1,9 +1,9 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 
 {% set side_nav = 'base' %}
-{# {% set script_controller = 'classroombundle/controller/classroom/set-info' %} #}
-{% do load_script('classroombundle/controller/classroom/set-info') %}
-{% do load_script('classroombundle/controller/classroom-admin/classroom-create') %}
+{# {% set script_controller = 'topxiawebbundle/controller/classroom/set-info' %} #}
+{% do load_script('topxiawebbundle/controller/classroom/set-info') %}
+{% do load_script('topxiaadminbundle/controller/classroom/classroom-create') %}
 
 {% set script_arguments = {
 tagMatchUrl: path('tag_match'),
