@@ -361,7 +361,7 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getTaskService()->count($timeRange),
+            $this->getTaskService()->countTasks($timeRange),
             20
         );
 
