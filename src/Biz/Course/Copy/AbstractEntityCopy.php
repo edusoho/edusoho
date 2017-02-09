@@ -24,7 +24,7 @@ abstract class AbstractEntityCopy
         $this->biz  = $biz;
         $this->node = $node;
         $chain      = call_user_func($this->biz['course_copy.chains'], $node);
-        if (!empty($chain['children'])) {
+        if (!empty($chain) && !empty($chain['children'])) {
             $this->children = $chain['children'];
         } else {
             $this->children = array();

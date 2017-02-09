@@ -22,8 +22,8 @@ abstract class Activity
 
     /**
      * @param int   $targetId
-     * @param array $fields   fields  to update
-     * @param array $activity existed activity
+     * @param array $fields     fields to update
+     * @param array $activity   existed activity
      */
     public function update($targetId, &$fields, $activity)
     {
@@ -43,6 +43,17 @@ abstract class Activity
      * @return mixed
      */
     public function copy($activity, $config = array())
+    {
+        return null;
+    }
+
+    /**
+     * 实现Activity附属信息的同步
+     * @param  array   $sourceActivity 源activity
+     * @param  array   $activity       目标activity
+     * @return mixed
+     */
+    public function sync($sourceActivity, $activity)
     {
         return null;
     }
@@ -71,8 +82,7 @@ abstract class Activity
     abstract protected function registerListeners();
 
     /**
-     * @param  string $eventName
-     *
+     * @param  string     $eventName
      * @return Listener
      */
     final public function getListener($eventName)

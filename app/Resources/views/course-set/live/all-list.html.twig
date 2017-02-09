@@ -63,7 +63,7 @@
             {% if courseSet.course.teacherIds|default(null) %}
               {% set user = data('User',{ userId:course.teacherIds[0] }) %}
               {{ web_macro.user_avatar(user, 'mrm','avatar-xs') }}
-              {{ web_macro.user_link(user, 'link-light') }}
+              {{ web_macro.user_link(user, 'link-dark') }}
             {% endif %}
           </div>
           <div class="other">

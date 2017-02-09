@@ -9,11 +9,13 @@ class MessageServiceImpl extends BaseService implements MessageService
 {
     public function countMessages($conditions)
     {
+        $conditions = $this->filterMessageConditions($conditions);
         return $this->getMessageDao()->count($conditions);
     }
 
     public function searchMessages($conditions, $order, $start, $limit)
     {
+        $conditions = $this->filterMessageConditions($conditions);
         return $this->getMessageDao()->search($conditions, $order, $start, $limit);
     }
 
@@ -49,7 +51,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         $relation     = $this->getRelationDao()->getByConversationIdAndMessageId($conversationId, $messageId);
         $conversation = $this->getConversationDao()->get($conversationId);
 
-        if ($relation['isRead'] == MessageServiceImpl::RELATION_ISREAD_OFF) {
+        if ($relation['isRead'] == self::RELATION_ISREAD_OFF) {
             $this->safelyUpdateConversationMessageNum($conversation);
             $this->safelyUpdateConversationunreadNum($conversation);
         } else {
@@ -87,7 +89,8 @@ class MessageServiceImpl extends BaseService implements MessageService
 
     public function findUserConversations($userId, $start, $limit)
     {
-        return $this->getConversationDao()->searchByToId($userId, $start, $limit);
+        $conditions = array('toId' => $userId);
+        return $this->getConversationDao()->search($conditions, array('latestMessageTime' => 'DESC'), $start, $limit);
     }
 
     public function countUserConversations($userId)
@@ -255,6 +258,32 @@ class MessageServiceImpl extends BaseService implements MessageService
             }
         });
         return $messages;
+    }
+
+    protected function filterMessageConditions($conditions)
+    {
+        if (!empty($conditions['nickname'])) {
+            $conditions['fromIds'] = array(-1);
+
+            $userConditions = array('nickname' => trim($conditions['nickname']));
+            $userCount      = $this->getUserService()->searchUserCount($userConditions);
+            if ($userCount) {
+                $users                 = $this->getUserService()->searchUsers($userConditions, array('createdTime' => 'DESC'), 0, $userCount);
+                $conditions['fromIds'] = ArrayToolkit::column($users, 'id');
+            }
+        }
+
+        unset($conditions['nickname']);
+
+        if (!empty($conditions['startDate'])) {
+            $conditions['startDate'] = strtotime($conditions['startDate']);
+        }
+
+        if (!empty($conditions['endDate'])) {
+            $conditions['endDate'] = strtotime($conditions['endDate']);
+        }
+
+        return $conditions;
     }
 
     protected function getMessageDao()

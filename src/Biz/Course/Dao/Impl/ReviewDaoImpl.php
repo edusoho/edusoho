@@ -34,7 +34,9 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
             'serializes' => array(
                 'meta' => 'json'
             ),
-            'timestamps' => array('createdTime', 'updatedTime'),
+            'timestamps' => array(
+                'createdTime'
+            ),
             'orderbys'   => array(
                 'createdTime',
                 'updatedTime',

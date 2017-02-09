@@ -40,7 +40,7 @@
           </span>
         {% endif %}
 
-        {% if setting('courseSet.show_student_num_enabled', '1') == 1 %}
+        {% if setting('course.show_student_num_enabled', '1') == 1 %}
           <span class="divider"></span>
           <span class="text-muted mrm mls"><strong>{{ courseSet.studentNum }}</strong>{{ default.user_name|default('学员'|trans) }}</span>
         {% endif %}

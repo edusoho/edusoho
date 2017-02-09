@@ -52,9 +52,10 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     private function sendWelcomeMsg(Event $event)
     {
         $course = $event->getSubject();
-        
+
         $setting = $this->getSettingService()->get('course', array());
-        $user = $this->getBiz()['user'];
+        $biz     = $this->getBiz();
+        $user    = $biz['user'];
         if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
             $message = $this->getWelcomeMessageBody($user, $course);
             $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);

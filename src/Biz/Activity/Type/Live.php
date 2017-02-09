@@ -34,6 +34,12 @@ class Live extends Activity
         return $live;
     }
 
+    public function sync($sourceActivity, $activity)
+    {
+        //引用的是同一个直播教室，无需同步
+        return null;
+    }
+
     public function update($id, &$fields, $activity)
     {
         return $this->getLiveActivityService()->updateLiveActivity($id, $fields, $activity);

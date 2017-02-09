@@ -27,12 +27,12 @@
 
           {% if not task_lock  and   task.status == 'published' %}
             <a class="text-overflow title"
-               href="{{ path('course_task_show', {id:task.id,courseId:task.courseId, preview: preview}) }}">
+               href="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
               {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ task.number }}: {{ task.title }}
             </a>
           {% else %}
             <div class="text-overflow title"
-                 data-url="{{ path('course_task_show', {id:task.id,courseId:task.courseId, preview: preview}) }}">
+                 data-url="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
               {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ task.number }}: {{ task.title }}
             </div>
           {% endif %}

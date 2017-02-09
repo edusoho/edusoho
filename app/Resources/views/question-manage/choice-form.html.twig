@@ -2,7 +2,7 @@
 
 {% block question_extra_fields %}
   <div data-role="choices"></div>
-  <div id="ckeditor-config" style="display:none;" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"></div>
+  {#<div id="ckeditor-config" style="display:none;" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"></div>#}
   <div class="question-options" id="question-options"  data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" 
     data-choices="{% if question.metas.choices|default(null) %}
       {{question.metas.choices|json_encode}}

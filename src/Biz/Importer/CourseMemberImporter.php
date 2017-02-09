@@ -194,7 +194,7 @@ class CourseMemberImporter extends Importer
             }
 
             foreach ($fieldSort as $sort) {
-                $userData[$sort['fieldName']] = $columnsData[$sort['num']];
+                $userData[$sort['fieldName']] = trim($columnsData[$sort['num']]);
                 $fieldCol[$sort['fieldName']] = $sort['num'] + 1;
             }
 
@@ -392,7 +392,7 @@ class CourseMemberImporter extends Importer
     {
         $courseId = $request->query->get('courseId');
         $course   = $this->getCourseService()->getCourse($courseId);
-        return $this->render('TopxiaWebBundle:CourseStudentManage:import.html.twig', array(
+        return $this->render('course-manage/student/import.html.twig', array(
             'course'       => $course,
             'importerType' => $this->type
         ));
@@ -411,7 +411,7 @@ class CourseMemberImporter extends Importer
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     public function getNecessaryFields()
@@ -427,7 +427,7 @@ class CourseMemberImporter extends Importer
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->getServiceKernel()->createService('Order:OrderService');
     }
 
     protected function getNotificationService()

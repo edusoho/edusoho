@@ -12,7 +12,7 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
     public function getByUserIdAndTaskId($userId, $taskId)
     {
         return $this->getByFields(array(
-            'userId'   => $userId,
+            'userId' => $userId,
             'taskId' => $taskId,
         ));
     }
@@ -44,6 +44,7 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
     {
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
+            'orderbys'   => array('createdTime', 'updatedTime', 'likeNum'),
             'conditions' => array(
                 'courseId = :courseId',
                 'userId = :userId',
@@ -56,9 +57,6 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
                 'courseSetId IN (:courseSetIds)',
                 'courseSetId = :courseSetId'
             ),
-            'orderbys' => array(
-                'createdTime'
-            )
         );
     }
 }

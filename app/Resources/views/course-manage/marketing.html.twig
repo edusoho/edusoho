@@ -38,7 +38,7 @@
 
         {{ slot('course.marketing.setting', {'course':course}) }}
 
-        <div class="form-group js-is-free {% if course.isFree|default(0) == 1 %}hidden{% endif %}">
+        <div class="form-group js-is-free {% if course.isFree|default(0) == 1 or courseSet.type == 'live' %}hidden{% endif %}">
           <label class="col-sm-2 control-label">{{'设置免费学习任务'|trans}}</label>
           <div class="col-sm-8">
             <ul class="list-group mb0 pb10 js-task-price-setting task-price-setting-group">
@@ -83,13 +83,17 @@
             {{ radios('buyable', { '1': '学员自己加入学习，也可以由老师来添加学员。'|trans, '0': '只能由老师添加／移除学员，学员自己无法加入，常用于封闭型教学。'|trans }, course.buyable|default(1)) }}
           </div>
         </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">{{'开启视频试看'|trans}}</label>
-          <div class="col-sm-8 radios">
-            {{ radios('tryLookable', { '1': '是'|trans, '0': '否'|trans }, course.tryLookable|default(0)) }}
-            <div class="help-block">{{'常用于收费视频内容的前几分钟免费试看'|trans}}</div>
+
+        {% if courseSet.type|default('normal') != 'live' %}
+          <div class="form-group">
+            <label class="col-sm-2 control-label">{{'开启视频试看'|trans}}</label>
+            <div class="col-sm-8 radios">
+              {{ radios('tryLookable', { '1': '是'|trans, '0': '否'|trans }, course.tryLookable|default(0)) }}
+              <div class="help-block">{{'常用于收费视频内容的前几分钟免费试看'|trans}}</div>
+            </div>
           </div>
-        </div>
+        {% endif %}
+
         <div class="form-group js-enable-try-look {% if course.tryLookable|default(0) == 0 %}hidden{% endif %}">
           <label class="col-sm-2 control-label">{{'试看时长'|trans}}</label>
           <div class="col-sm-8 ">

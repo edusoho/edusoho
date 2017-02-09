@@ -22,7 +22,7 @@ class CourseSetController extends BaseController
         }
 
         if ($filter == 'vip') {
-            $conditions['vipLevelIdGreaterThan'] = 1;
+            $conditions['isVip'] = 1;
             $conditions["parentId"]              = 0;
         }
 
@@ -48,7 +48,6 @@ class CourseSetController extends BaseController
         list($searchCourseSetsNum, $publishedCourseSetsNum, $closedCourseSetsNum, $unPublishedCourseSetsNum) = $this->getDifferentCourseSetsNum($conditions);
 
         $classrooms = array();
-        $vips       = array();
         if ($filter == 'classroom') {
             $classrooms = $this->getClassroomService()->findClassroomCourseByCourseSetIds($courseSetIds);
             $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
@@ -56,11 +55,6 @@ class CourseSetController extends BaseController
             foreach ($classrooms as $key => $classroom) {
                 $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
-            }
-        } elseif ($filter == 'vip') {
-            if ($this->isPluginInstalled('Vip')) {
-                $vips = $this->getVipLevelService()->searchLevels(array(), 0, PHP_INT_MAX);
-                $vips = ArrayToolkit::index($vips, 'id');
             }
         }
 
@@ -87,7 +81,6 @@ class CourseSetController extends BaseController
             'default'                  => $default,
             'classrooms'               => $classrooms,
             'filter'                   => $filter,
-            'vips'                     => $vips,
             'searchCourseSetsNum'      => $searchCourseSetsNum,
             'publishedCourseSetsNum'   => $publishedCourseSetsNum,
             'closedCourseSetsNum'      => $closedCourseSetsNum,
@@ -327,7 +320,7 @@ class CourseSetController extends BaseController
         $classrooms = array();
 
         if ($filter == 'classroom') {
-            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courseSets, 'id'));
             $classrooms = ArrayToolkit::index($classrooms, 'courseId');
 
             foreach ($classrooms as $key => $classroom) {
@@ -343,9 +336,9 @@ class CourseSetController extends BaseController
             $courseSetId = $courseSet['id'];
             $courseCount = $this->getCourseService()->searchCourseCount(array('courseSetId' => $courseSetId));
             $isLearnedNum = $this->getMemberService()->countMembers(array('isLearned' => 1, 'courseSetId' => $courseSetId));
-            $taskCount = $this->getCourseTaskService()->count(array('fromCourseSetId' => $courseSetId));
+            $taskCount = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
 
-            $courseSet['learnedTime'] = $this->getCourseTaskService()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
+            $courseSet['learnedTime'] = $this->getTaskService()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
             $courseSet['income'] = $courseSetIncomes[$courseSetId]['income'];
             $courseSet['isLearnedNum'] = $isLearnedNum;
             $courseSet['taskCount']  = $taskCount;
@@ -367,7 +360,7 @@ class CourseSetController extends BaseController
         $courseId = $request->query->get('courseId');
 
         if (empty($courseId)) {
-            $courseId = $courses[0]['id'];            
+            $courseId = $courses[0]['id'];
         }
 
         $count     = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId));
@@ -409,20 +402,19 @@ class CourseSetController extends BaseController
         $courseId = $request->query->get('courseId');
 
         if (empty($courseId)) {
-            $courseId = $courses[0]['id'];            
+            $courseId = $courses[0]['id'];
         }
-        $tasks = $this->getCourseTaskService()->findTasksByCourseId($courseId);
+        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
         foreach ($tasks as $key => &$task) {
-
-            $finishedNum = $this->getCourseTaskResultService()->countTaskResults(array('status' => 'finish', 'courseTaskId' => $task['id']));
-            $studentNum = $this->getCourseTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
-            $learnedTime =  $this->getCourseTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
+            $finishedNum = $this->getTaskResultService()->countTaskResults(array('status' => 'finish', 'courseTaskId' => $task['id']));
+            $studentNum = $this->getTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
+            $learnedTime =  $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
             if (in_array($task['type'], array('video','audio'))) {
                 $activity = $this->getActivityService()->getActivity($task['activityId']);
                 $task['length'] = $activity['length'];
-                $task['watchTime'] = $this->getCourseTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
-            } 
+                $task['watchTime'] = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
+            }
 
             if ($task['type'] == 'testpaper') {
                 $activity = $this->getActivityService()->getActivity($task['activityId']);
@@ -565,12 +557,12 @@ class CourseSetController extends BaseController
         return $this->createService('Course:MemberService');
     }
 
-    protected function getCourseTaskService()
+    protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
     }
 
-    protected function getCourseTaskResultService()
+    protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
     }
