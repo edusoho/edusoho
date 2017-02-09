@@ -611,6 +611,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
     }
 
+    public function updateCourseSetMinPublishedCoursePrice($courseSetId)
+    {
+        $price = $this->getCourseService()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
+        return $this->getCourseSetDao()->update($courseSetId, array('minCoursePrice' => $price));
+    }
+
     protected function validateCourseSet($courseSet)
     {
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
