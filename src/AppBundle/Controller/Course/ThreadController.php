@@ -46,7 +46,7 @@ class ThreadController extends CourseBaseController
             ArrayToolkit::column($threads, 'userId'),
             ArrayToolkit::column($threads, 'latestPostUserId')
         );
-        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render("course/tabs/threads.html.twig", array(
             'courseSet' => $courseSet,
@@ -353,7 +353,7 @@ class ThreadController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $message   = array(
+            $message = array(
                 'courseId'   => $courseId,
                 'id'         => $threadId,
                 'title'      => $thread['title'],
@@ -374,7 +374,7 @@ class ThreadController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if ($user->isAdmin()) {
-            $message   = array(
+            $message = array(
                 'courseId'   => $courseId,
                 'id'         => $threadId,
                 'title'      => $thread['title'],
@@ -400,8 +400,8 @@ class ThreadController extends CourseBaseController
             }
         }
 
-        $thread      = $this->getThreadService()->getThread($course['id'], $threadId);
-        $form        = $this->createPostForm(array(
+        $thread = $this->getThreadService()->getThread($course['id'], $threadId);
+        $form   = $this->createPostForm(array(
             'courseId' => $thread['courseId'],
             'threadId' => $thread['id']
         ));
@@ -456,10 +456,13 @@ class ThreadController extends CourseBaseController
                     }
                 }
 
-                $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $threadId), true);
-                $threadUrl .= "?#post-".$post['id']; // add ? to fix chrome bug
-
-                return $this->redirect($threadUrl);
+                return $this->render('course/thread/post-list-item.html.twig', array(
+                    'course'    => $course,
+                    'thread'    => $thread,
+                    'post'      => $post,
+                    'author'    => $this->getUserService()->getUser($post['userId']),
+                    'isManager' => $this->getCourseService()->hasCourseManagerRole($course['id'])
+                ));
             } else {
                 return $this->createJsonResponse(false);
             }
@@ -508,7 +511,7 @@ class ThreadController extends CourseBaseController
             return $response;
         }
 
-        $post = $this->getThreadService()->getPost($courseId, $threadId);
+        $post = $this->getThreadService()->getPost($courseId, $postId);
 
         if (empty($post)) {
             throw $this->createNotFoundException();
@@ -519,7 +522,6 @@ class ThreadController extends CourseBaseController
         if ($user->isLogin() && $user->id == $post['userId']) {
             $course = $this->getCourseService()->getCourse($courseId);
         } else {
-            // $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_thread');
             $course = $this->getCourseService()->tryManageCourse($courseId);
         }
 
@@ -537,7 +539,7 @@ class ThreadController extends CourseBaseController
                 $attachment = $request->request->get('attachment');
                 $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
                 if ($user->isAdmin()) {
-                    $message         = array(
+                    $message = array(
                         'userId'     => $user['id'],
                         'userName'   => $user['nickname'],
                         'courseId'   => $courseId,
@@ -686,6 +688,11 @@ class ThreadController extends CourseBaseController
     protected function getTaskService()
     {
         return $this->getBiz()->service('Task:TaskService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function createPostForm($data = array())

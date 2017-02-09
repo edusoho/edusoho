@@ -13,6 +13,13 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'testpaper'
+            ));
+        }
+
         $conditions = array(
             'courseSetId' => $courseSet['id'],
             'type'        => 'testpaper'

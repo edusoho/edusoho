@@ -46,8 +46,15 @@ class CourseSetManageController extends BaseController
         ));
     }
 
-    public function indexAction(Request $request, $id)
+    public function indexAction($id)
     {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'tasks'
+            ));
+        }
         return $this->redirectToRoute('course_set_manage_courses', array(
             'courseSetId' => $id
         ));
@@ -77,6 +84,7 @@ class CourseSetManageController extends BaseController
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
         return $this->render('courseset-manage/sidebar.html.twig', array(
             'courseSet' => $courseSet,
             'curCourse' => $curCourse,
@@ -95,7 +103,14 @@ class CourseSetManageController extends BaseController
         }
 
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-        $tags      = array();
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'base'
+            ));
+        }
+
+        $tags = array();
         if (!empty($courseSet['tags'])) {
             $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
         }
@@ -119,7 +134,16 @@ class CourseSetManageController extends BaseController
             $this->getCourseSetService()->updateCourseSetDetail($id, $data);
             return $this->redirect($this->generateUrl('course_set_manage_detail', array('id' => $id)));
         }
+
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'detail'
+            ));
+        }
+
         return $this->render('courseset-manage/detail.html.twig', array(
             'courseSet' => $courseSet
         ));
@@ -137,6 +161,14 @@ class CourseSetManageController extends BaseController
         // if ($courseSet['cover']) {
         //     $courseSet['cover'] = json_decode($courseSet['cover'], true);
         // }
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'cover'
+            ));
+        }
+
         return $this->render('courseset-manage/cover.html.twig', array(
             'courseSet' => $courseSet
         ));
@@ -150,6 +182,13 @@ class CourseSetManageController extends BaseController
             $data = $request->request->all();
             $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], json_decode($data["images"], true));
             return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $courseSet['id'])));
+        }
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'cover'
+            ));
         }
 
         $fileId = $request->getSession()->get("fileId");
@@ -200,6 +239,74 @@ class CourseSetManageController extends BaseController
     {
         try {
             $this->getCourseSetService()->closeCourseSet($id);
+            return $this->createJsonResponse(array('success' => true));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
+    }
+
+    public function syncInfoAction(Request $request, $id)
+    {
+        $sideNav = $request->query->get('sideNav', '');
+        var_dump($sideNav);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        if (!$courseSet['locked']) {
+            throw new \Exception('CourseSet must be locked');
+        }
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
+
+        $menuPath  = '';
+        $menuTitle = '';
+
+        //同步的课程不允许操作的菜单列表
+        $lockedCourseSetMenus = array(
+            'base'      => '基本信息',
+            'detail'    => '详细信息',
+            'cover'     => '课程封面',
+            'question'  => '题目管理',
+            'testpaper' => '试卷管理',
+            'files'     => '课程文件'
+        );
+        $lockedCourseMenus = array(
+            'tasks'     => '计划任务',
+            'info'      => '计划设置',
+            'marketing' => '营销设置',
+            'teachers'  => '教师设置'
+        );
+        if (!empty($lockedCourseSetMenus[$sideNav])) {
+            $menuPath  = $this->generateUrl('course_set_manage_'.$sideNav, array('id' => $courseSet['parentId']));
+            $menuTitle = $lockedCourseSetMenus[$sideNav];
+        } elseif (!empty($lockedCourseMenus[$sideNav])) {
+            $menuPath  = $this->generateUrl('course_set_manage_course_'.$sideNav, array('courseSetId' => $courseSet['parentId'], 'courseId' => $courses[0]['parentId']));
+            $menuTitle = $lockedCourseMenus[$sideNav];
+        } else {
+            throw new \Exception('Invalid Menu Key');
+        }
+
+        $copyCourseSet = $this->getCourseSetService()->getCourseSet($courseSet['parentId']);
+
+        return $this->render('courseset-manage/locked.html.twig', array(
+            'id'            => $id,
+            'sideNav'       => $sideNav,
+            'courseSet'     => $courseSet,
+            'copyCourseSet' => $copyCourseSet,
+            'menuPath'      => $menuPath,
+            'menuTitle'     => $menuTitle
+        ));
+    }
+
+    public function unlockConfirmAction($id)
+    {
+        $this->getCourseSetService()->tryManageCourseSet($id);
+        return $this->render('courseset-manage/unlock-confirm.html.twig', array(
+            'id' => $id
+        ));
+    }
+
+    public function unlockAction($id)
+    {
+        try {
+            $this->getCourseSetService()->unlockCourseSet($id);
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));

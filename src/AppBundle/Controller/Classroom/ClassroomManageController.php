@@ -717,18 +717,8 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            $levels = $this->getLevelService()->findEnabledLevels();
-        } else {
-            $levels = array();
-        }
-
         if ($request->getMethod() == "POST") {
             $class = $request->request->all();
-
-            if (!isset($class['vipLevelId']) || $class['vipLevelId'] == "") {
-                $class['vipLevelId'] = 0;
-            }
 
             $this->setFlashMessage('success', '设置成功！');
 
@@ -749,7 +739,6 @@ class ClassroomManageController extends BaseController
         $courseNum = count($courses);
 
         return $this->render("classroom-manage/set-price.html.twig", array(
-            'levels'    => $this->makeLevelChoices($levels),
             'price'     => $price,
             'coinPrice' => $coinPrice,
             'courseNum' => $courseNum,
@@ -1059,17 +1048,6 @@ class ClassroomManageController extends BaseController
             'number'  => $learnedCoursesCount,
             'total'   => $coursesCount
         );
-    }
-
-    private function makeLevelChoices($levels)
-    {
-        $choices = array();
-
-        foreach ($levels as $level) {
-            $choices[$level['id']] = $level['name'];
-        }
-
-        return $choices;
     }
 
     private function getUserIds($keyword)

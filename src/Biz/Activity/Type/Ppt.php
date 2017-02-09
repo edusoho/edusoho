@@ -78,6 +78,17 @@ class Ppt extends Activity
         return $this->getPptActivityDao()->create($newPpt);
     }
 
+    public function sync($sourceActivity, $activity)
+    {
+        $sourcePpt           = $this->getPptActivityDao()->get($sourceActivity['mediaId']);
+        $ppt                 = $this->getPptActivityDao()->get($activity['mediaId']);
+        $ppt['mediaId']      = $sourcePpt['mediaId'];
+        $ppt['finishType']   = $sourcePpt['finishType'];
+        $ppt['finishDetail'] = $sourcePpt['finishDetail'];
+
+        return $this->getPptActivityDao()->update($ppt['id'], $ppt);
+    }
+
     public function update($targetId, &$fields, $activity)
     {
         $updateFields = ArrayToolkit::parts($fields, array(

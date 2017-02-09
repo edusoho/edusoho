@@ -16,7 +16,11 @@ interface TaskDao extends GeneralDaoInterface
 
     public function findByIds($ids);
 
+    public function findByCategoryId($categoryId);
+
     public function findByCourseIdAndIsFree($ids, $isFree);
+
+    public function findByCopyIdAndLockedCourseIds($copyId, $courseIds);
 
     public function getMaxSeqByCourseId($courseId);
 
@@ -37,10 +41,9 @@ interface TaskDao extends GeneralDaoInterface
     /**
      * 统计当前时间以后每天的直播次数
      *
-     * @param $courseSetIds
-     * @param $limit
-     *
-     * @return array <string, int|string>
+     * @param  $courseSetIds
+     * @param  $limit
+     * @return array           <string, int|string>
      */
     public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
 

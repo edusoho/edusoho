@@ -63,6 +63,17 @@ class Doc extends Activity
         return $this->getDocActivityDao()->create($newDoc);
     }
 
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceDoc           = $this->getDocActivityDao()->get($sourceActivity['mediaId']);
+        $doc                 = $this->getDocActivityDao()->get($activity['mediaId']);
+        $doc['mediaId']      = $sourceDoc['mediaId'];
+        $doc['finishType']   = $sourceDoc['finishType'];
+        $doc['finishDetail'] = $sourceDoc['finishDetail'];
+
+        return $this->getDocActivityDao()->update($doc['id'], $doc);
+    }
+
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);

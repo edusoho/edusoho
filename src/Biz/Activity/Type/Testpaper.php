@@ -6,14 +6,11 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\TestpaperActivityService;
 
 class Testpaper extends Activity
 {
-    private $testpaperCopy = null;
-
     protected function registerListeners()
     {
         return array();
@@ -37,13 +34,10 @@ class Testpaper extends Activity
             return null;
         }
 
-        $newActivity = $config['newActivity'];
-        $ext         = $this->get($activity['mediaId']);
-
-        $testpaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($ext['mediaId'], $newActivity['fromCourseSetId']);
+        $ext = $this->get($activity['mediaId']);
 
         $newExt = array(
-            'mediaId'         => $testpaper['id'],
+            'mediaId'         => $config['testId'],
             'doTimes'         => $ext['doTimes'],
             'redoInterval'    => $ext['redoInterval'],
             'limitedTime'     => $ext['limitedTime'],
@@ -54,6 +48,25 @@ class Testpaper extends Activity
         );
 
         return $this->create($newExt);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceExt = $this->getTestpaperActivityService()->getActivity($sourceActivity['mediaId']);
+        $ext       = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        // $testpaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($sourceExt['mediaId'], $activity['fromCourseSetId']);
+
+        // $ext['mediaId']         = $testpaper['id'];
+        $ext['mediaId']         = $activity['testId'];
+        $ext['redoInterval']    = $sourceExt['redoInterval'];
+        $ext['limitedTime']     = $sourceExt['limitedTime'];
+        $ext['checkType']       = $sourceExt['checkType'];
+        $ext['finishCondition'] = $sourceExt['finishCondition'];
+        $ext['requireCredit']   = $sourceExt['requireCredit'];
+        $ext['testMode']        = $sourceExt['testMode'];
+
+        return $this->getTestpaperActivityService()->updateActivity($ext['id'], $ext);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -142,15 +155,6 @@ class Testpaper extends Activity
         $filterFields['finishCondition'] = $finishCondition;
 
         return $filterFields;
-    }
-
-    protected function getTestpaperCopy()
-    {
-        if (!$this->testpaperCopy) {
-            $this->testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
-        }
-
-        return $this->testpaperCopy;
     }
 
     /**
