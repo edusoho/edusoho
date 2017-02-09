@@ -47,7 +47,7 @@ class SubtitleServiceTest extends BaseTestCase
         $fakeDownloadFile = array(
             'url' => 'www.edusoho.com'
         );
-        $this->mockBiz('File:UploadFileService', 'UploadFileService', array(
+        $this->mockBiz('File:UploadFileService', array(
             array('functionName' => 'getFile', 'runTimes' => 1, 'returnValue' => $fakeFile),
             array('functionName' => 'deleteFile', 'runTimes' => 1, 'returnValue' => true),
             array('functionName' => 'getDownloadMetas', 'runTimes' => 1, 'returnValue' => $fakeDownloadFile),
@@ -81,6 +81,6 @@ class SubtitleServiceTest extends BaseTestCase
 
     protected function getSubtitleService()
     {
-        return $this->getBiz()->service('Subtitle:SubtitleService');
+        return $this->createService('Subtitle:SubtitleService');
     }
 }

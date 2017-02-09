@@ -48,12 +48,12 @@ class NotificationServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getNotificationService()
     {
-        return $this->getBiz()->service('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 
 }

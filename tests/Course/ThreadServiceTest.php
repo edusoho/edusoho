@@ -375,11 +375,11 @@ class ThreadServiceTest extends BaseTestCase
 
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getThreadService()
     {
-        return $this->getBiz()->service('Course:ThreadService');
+        return $this->createService('Course:ThreadService');
     }
 }

@@ -10,6 +10,16 @@ use Topxia\Service\Common\ServiceKernel;
 
 class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 {
+    protected function createService($alias)
+    {
+        return $this->getBiz()->service($alias);
+    }
+
+    protected function createDao($alias)
+    {
+        return $this->getBiz()->Dao($alias);
+    }
+
     protected function getCurrentUser()
     {
         return $this->getServiceKernel()->getCurrentUser();
@@ -109,7 +119,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $newService = explode('.', $objectName);
         $mockObject = Mockery::mock($newService[1]);
 
-        foreach ($params as $key => $param) {
+        foreach ($params as $param) {
             $mockObject->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
         }
 
@@ -118,8 +128,10 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->setPool($pool);
     }
 
-    protected function mockBiz($alias, $className, $params = array())
+    protected function mockBiz($alias, $params = array())
     {
+        $aliasList = explode(':', $alias);
+        $className = end($aliasList);
         $mockObj = Mockery::mock($className);
 
         foreach ($params as $param) {
@@ -171,7 +183,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
                 $this->assertEquals($ary1[$key], $ary2[$key]);
             }
         } else {
-            foreach ($ary1 as $key => $value) {
+            foreach (array_keys($ary1) as $key) {
                 $this->assertEquals($ary1[$key], $ary2[$key]);
             }
         }

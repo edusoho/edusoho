@@ -220,17 +220,17 @@ class OrgServiceTest extends BaseTestCase
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     public function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org:OrgService');
+        return $this->createService('Org:OrgService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -238,12 +238,12 @@ class OrgServiceTest extends BaseTestCase
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getCourseSetService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseSetService');
+        return $this->createService('Course:CourseSetService');
     }
 
 }

@@ -285,17 +285,17 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getClassRoomReviewService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomReviewService');
+        return $this->createService('Classroom:ClassroomReviewService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     private function createStudentUser()

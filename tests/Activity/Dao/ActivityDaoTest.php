@@ -81,6 +81,6 @@ class ActivityDaoTest extends BaseDaoTestCase
 
 	protected function getActivityDao()
     {
-        return $this->getBiz()->dao('Activity:ActivityDao');
+        return $this->createDao('Activity:ActivityDao');
     }
 }

@@ -65,17 +65,17 @@ class CourseOrderProcessorTest extends BaseTestCase
 
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getMemberService()
     {
-        return $this->getBiz()->service('Course:MemberService');
+        return $this->createService('Course:MemberService');
     }
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getCourseOrderProcessor()

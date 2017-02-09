@@ -13,7 +13,6 @@ class ActivityServiceTest extends BaseTestCase
         parent::setUp();
         $this->mockBiz(
             'Course:CourseService',
-            'CourseService',
             array(
                 array(
                     'functionName' => 'tryManageCourse',
@@ -110,7 +109,6 @@ class ActivityServiceTest extends BaseTestCase
 
         $this->mockBiz(
             'Course:CourseService',
-            'CourseService',
             array(
                 array(
                     'functionName' => 'tryManageCourse',
@@ -207,7 +205,7 @@ class ActivityServiceTest extends BaseTestCase
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service('Activity:ActivityService');
+        return $this->createService('Activity:ActivityService');
     }
 
     /**
@@ -215,7 +213,7 @@ class ActivityServiceTest extends BaseTestCase
      */
     protected function getTaskService()
     {
-        return $this->getBiz()->service('Task:TaskService');
+        return $this->createService('Task:TaskService');
     }
 
     /**
@@ -223,6 +221,6 @@ class ActivityServiceTest extends BaseTestCase
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 }
