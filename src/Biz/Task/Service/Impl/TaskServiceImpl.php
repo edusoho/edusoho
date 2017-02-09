@@ -469,7 +469,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'fromCourseSetIds' => ArrayToolkit::column($courseSetIds, 'id'),
             'status'           => 'published'
         );
-        return $this->search($taskConditions, array('startTime' => 'ASC'), 0, $this->count($taskConditions));
+        return $this->searchTasks($taskConditions, array('startTime' => 'ASC'), 0, $this->countTasks($taskConditions));
     }
 
     /**
@@ -502,7 +502,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'fromCourseSetIds' => ArrayToolkit::column($courseSetIds, 'id'),
             'status'           => 'published'
         );
-        return $this->search($taskConditions, array('startTime' => 'ASC'), 0, $this->count($taskConditions));
+        return $this->searchTasks($taskConditions, array('startTime' => 'ASC'), 0, $this->countTasks($taskConditions));
     }
 
     /**
@@ -732,6 +732,11 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
     {
         return $this->getTaskDao()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
+    }
+
+    public function analysisTaskDataByTime($startTime, $endTime)
+    {
+        return $this->getTaskDao()->analysisTaskDataByTime($startTime, $endTime);
     }
 
     /**

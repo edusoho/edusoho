@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     exports.run = function() {
-        require('orgbundle/controller/org/org-tree-select').run();
+        require('topxiawebbundle/controller/org/org-tree-select').run();
 
         var validator = new Validator({
             element: '#user-edit-form',
