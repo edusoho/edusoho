@@ -182,6 +182,7 @@ class CourseManageController extends BaseController
             'courseId' => $courseId,
             'types'    => array('text', 'video', 'audio', 'flash', 'doc', 'ppt')
         );
+
         $canFreeTaskCount = $this->getTaskService()->countTasks($conditions);
         $canFreeTasks     = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
 
