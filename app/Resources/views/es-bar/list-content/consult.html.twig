@@ -12,13 +12,13 @@
         {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
           {% if qq.url|default(false) %}
             <div class="col-xs-6 mbm text-overflow">
-              <a class="link-light" href="{{ qq.url|raw }}" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
+              <a class="link-dark" href="{{ qq.url|raw }}" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
                 {{ qq.name }}
               </a>
             </div>
           {% else %}
             <div class="col-xs-6 mbm text-overflow">
-              <a class="link-light" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
+              <a class="link-dark" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
                 {{ qq.name }}
               </a>
             </div>
@@ -61,7 +61,7 @@
         <p class="mtm"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}:{{ phone.number }}</p>
       {% endfor %}
       {% if consult.email is not empty %}
-        <p class="mtm"><i class="es-icon es-icon-mail mrm"></i>{{'邮箱：'|trans}} <a class="link-light" href="mailto:{{consult.email}}">{{consult.email}}</a></p>
+        <p class="mtm"><i class="es-icon es-icon-mail mrm"></i>{{'邮箱：'|trans}} <a class="link-dark" href="mailto:{{consult.email}}">{{consult.email}}</a></p>
       {% endif %}
     </div>
 
