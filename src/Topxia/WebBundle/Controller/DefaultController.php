@@ -29,6 +29,7 @@ class DefaultController extends BaseController
         if ($this->getWebExtension()->isMicroMessenger()) {
             $url ="http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi";
         }
+
         return $this->render('TopxiaWebBundle:Default:Mobile/app-download.html.twig', array(
             'url' => $url
         ));
