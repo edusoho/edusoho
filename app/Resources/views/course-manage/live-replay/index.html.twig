@@ -3,6 +3,7 @@
 {% block title %}{{ '录播管理'|trans }} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'replay' %}
+{% do script(['app/js/course-manage/live-replay/index.js']) %}
 
 {% block main %}
   <div class="panel panel-default panel-col lesson-manage-panel">
