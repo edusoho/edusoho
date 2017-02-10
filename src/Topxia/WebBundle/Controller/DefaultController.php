@@ -5,6 +5,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class DefaultController extends BaseController
 {
@@ -18,6 +19,18 @@ class DefaultController extends BaseController
 
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks));
+    }
+
+    public function appDownloadAction() {
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+        $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);;
+        if ($this->getWebExtension()->isMicroMessenger()) {
+            $url ="http://mp.weixin.qq.com/mp/redirect?". http_build_query(array('url' => $url));
+        }
+        return $this->render('TopxiaWebBundle:Default:Mobile/app-download.html.twig', array(
+            'url' => $url
+        ));
     }
 
     public function userlearningAction()
@@ -256,5 +269,10 @@ class DefaultController extends BaseController
     private function getBlacklistService()
     {
         return $this->getServiceKernel()->createService('User.BlacklistService');
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }
