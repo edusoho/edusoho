@@ -21,6 +21,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         if (empty($task)) {
             return true;
         }
+
         try {
             $this->biz['db']->beginTransaction();
 
@@ -103,6 +104,10 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 
     public function sortCourseItems($courseId, array $itemIds)
     {
+        if (empty($itemIds)) {
+            return;
+        }
+
         $parentChapters = array(
             'lesson'  => array(),
             'unit'    => array(),
