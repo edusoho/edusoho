@@ -188,6 +188,6 @@ class OrderRefererLogServiceTest extends BaseTestCase
      */
     protected function getOrderRefererLogService()
     {
-        return $this->getBiz()->service('RefererLog:OrderRefererLogService');
+        return $this->createService('RefererLog:OrderRefererLogService');
     }
 }

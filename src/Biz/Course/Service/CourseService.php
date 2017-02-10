@@ -55,6 +55,8 @@ interface CourseService
 
     public function getNextNumberAndParentId($courseId);
 
+    public function getNextCourseItemSeq($courseId);
+
     public function tryTakeCourse($courseId);
 
     public function canTakeCourse($course);
@@ -113,9 +115,9 @@ interface CourseService
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
-    // public function findUserLearnCourses($userId, $start, $limit);
+    public function findUserLearnCourses($userId, $start, $limit);
 
-    //public function findUserLearnCourseCount($userId);
+    public function countUserLearnCourse($userId);
 
     //---end
     public function searchCourses($conditions, $sort, $start, $limit);
@@ -129,4 +131,6 @@ interface CourseService
     public function analysisCourseDataByTime($startTime, $endTime);
 
     public function countCourses(array $conditions);
+
+    public function getMinPublishedCoursePriceByCourseSetId($CourseSetId);
 }

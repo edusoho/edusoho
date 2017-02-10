@@ -397,7 +397,6 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'maxStudentNum'              => 10,
             'status'                     => 'published',
             'creator'                    => 1,
-            'copyCourseId'               => 1,
             'isFree'                     => 1,
             'price'                      => 1,
             'vipLevelId'                 => 1,
@@ -445,6 +444,6 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
     private function getCourseDao()
     {
-        return $this->getBiz()->dao('Course:CourseDao');
+        return $this->createDao('Course:CourseDao');
     }
 }

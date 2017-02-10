@@ -402,7 +402,7 @@ class LiveCourseController extends BaseController
 
     public function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getUploadFileService()

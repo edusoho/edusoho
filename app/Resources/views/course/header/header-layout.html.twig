@@ -31,13 +31,14 @@
       </span>
       {% block course_header_subtitle %}{% endblock %}
       <ul class="course-operation hidden-xs hidden-sm clearfix">
-        <li>
-          <span class="btn btn-xs">
-            <i class="es-icon es-icon-people text-16"></i>
-            <span class="mls">{{ course.studentNum }}人</span>
-          </span>
-        </li>
-
+        {% if setting('course.show_student_num_enabled', '1') == 1 %}
+          <li>
+            <span class="btn btn-xs">
+              <i class="es-icon es-icon-people text-16"></i>
+              <span class="mls">{{ course.studentNum }}人</span>
+            </span>
+          </li>
+        {% endif %}
         {% block course_member_exit %}{% endblock %}
 
         <li id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"

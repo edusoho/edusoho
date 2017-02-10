@@ -26,8 +26,25 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
 
             'course.review.add'    => 'onReviewNumberChange',
             'course.review.update' => 'onReviewNumberChange',
-            'course.review.delete' => 'onReviewNumberChange'
+            'course.review.delete' => 'onReviewNumberChange',
+
+            'course.marketing.update' => 'onCourseMarketingChange',
+            'course.publish' => 'onCourseStatusChange',
+            'course.close' => 'onCourseStatusChange',
         );
+    }
+
+    public function onCourseMarketingChange(Event $event)
+    {
+        $subject = $event->getSubject();
+        $course = $subject['newCourse'];
+        $this->getCourseSetService()->updateCourseSetMinPublishedCoursePrice($course['courseSetId']);
+    }
+
+    public function onCourseStatusChange(Event $event)
+    {
+        $course = $event->getSubject();
+        $this->getCourseSetService()->updateCourseSetMinPublishedCoursePrice($course['courseSetId']);
     }
 
     public function onTaskCreate(Event $event)
@@ -65,7 +82,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         ));
     }
 
-    protected function onTaskNumberChange($event, $fields)
+    protected function onTaskNumberChange(Event $event, $fields)
     {
         $task = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($task['courseId'], $fields);

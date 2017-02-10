@@ -56,8 +56,9 @@
     <div class="col-sm-10">
       <div class="col-sm-4">
         <select id="finish-condition" name="ext[finishType]" class="form-control">
-          <option value="end">观看到最后</option>
-          <option value="time">观看时长</option>
+          {% set finishType = activity.ext.finishType|default('end') %}
+          <option value="end" {% if finishType == 'end' %} selected {% endif %}>观看到最后</option>
+          <option value="time" {% if finishType == 'time' %} selected {% endif %}>观看时长</option>
         </select>
       </div>
     </div>

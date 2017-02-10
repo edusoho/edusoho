@@ -121,6 +121,6 @@ class TestpaperActivityServiceTest extends BaseTestCase
 
     protected function getTestpaperActivityService()
     {
-        return $this->getBiz()->service('Activity:TestpaperActivityService');
+        return $this->createService('Activity:TestpaperActivityService');
     }
 }

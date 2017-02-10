@@ -183,7 +183,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         try {
             $this->beginTransaction();
-            
+
             $this->getCourseService()->tryManageCourse($activity['fromCourseId']);
 
             $this->syncActivityMaterials($activity, array(), 'delete');
@@ -332,7 +332,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'endTime'
         ));
 
-        if (isset($fields['startTime']) && isset($fields['length']) && $fields['mediaType'] != 'testpaper') {
+        if (!empty($fields['startTime']) && !empty($fields['length']) && $fields['mediaType'] != 'testpaper') {
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
         }
 

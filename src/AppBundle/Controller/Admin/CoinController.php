@@ -877,7 +877,7 @@ class CoinController extends BaseController
 
     protected function getLevelService()
     {
-        return $this->createService('Vip:Vip.LevelService');
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getCashService()
@@ -903,10 +903,5 @@ class CoinController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    protected function getVipService()
-    {
-        return $this->createService('Vip:VipService');
     }
 }

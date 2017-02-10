@@ -1,12 +1,16 @@
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
-import { Card } from 'app/common/unit/card';
 import Swiper from 'swiper';
+import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
+
 let orderLearnSwiper = null;
 
-Card();
 chapterAnimate();
 initTaskLearnChart();
 triggerMemberExpired();
+
+if ($('.js-attachment-list').length > 0) {
+    new AttachmentActions($('.js-attachment-list'));
+}
 
 $('.js-task-show-type').on('click', 'a', function() {
     let $this = $(this).addClass('active');

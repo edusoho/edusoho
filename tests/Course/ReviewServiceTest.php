@@ -188,11 +188,11 @@ class ReviewServiceTest extends BaseTestCase
 
     protected function getReviewService()
     {
-        return $this->getBiz()->service('Course:ReviewService');
+        return $this->createService('Course:ReviewService');
     }
 
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 }

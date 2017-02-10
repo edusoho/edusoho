@@ -1,7 +1,7 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 
 {% set side_nav = "price" %}
-{% set script_controller = 'classroombundle/controller/classroom/set-price' %}
+{% set script_controller = 'topxiawebbundle/controller/classroom/set-price' %}
 
 {% block title %}{{'价格设置'|trans}} - {{ parent() }}{% endblock %}
 
@@ -27,19 +27,7 @@
       {% endif %}
       </div>
 
-      {% if setting('vip.enabled') %}
-
-      <div class="form-group">
-        <div class="col-md-2 control-label">
-          <label for="price">{{'会员免费学'|trans}}</label>
-        </div>
-        <div class="col-md-8 controls">
-          <select name="vipLevelId" class="form-control width-input width-input-large">
-            {{ select_options(levels, classroom.vipLevelId|default(0), '不支持'|trans) }}
-          </select>
-        </div>
-      </div>
-      {% endif %}
+      {{ slot('classroom.marketing.setting', {'classroom':classroom}) }}
 
       <div class="row form-group">
         <div class="col-md-2 control-label"></div>

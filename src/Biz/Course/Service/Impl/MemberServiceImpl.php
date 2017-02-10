@@ -63,23 +63,17 @@ class MemberServiceImpl extends BaseService implements MemberService
             $data['price'] = 0;
         }
 
-        $order = $this->getOrderService()->createOrder(array(
-            'userId'     => $user['id'],
-            'title'      => $orderTitle,
-            'targetType' => 'course',
-            'targetId'   => $course['id'],
-            'amount'     => $data['price'],
+        $systemOrder = array(
+            'userId' => $userId,
+            'title' => $orderTitle,
+            'targetType' => OrderService::TARGETTYPE_COURSE,
+            'targetId' => $courseId,
+            'amount' => $data['price'],
             'totalPrice' => $course['price'],
-            'payment'    => $payment,
-            'snPrefix'   => 'C'
-        ));
+            'snPrefix' => OrderService::SNPREFIX_C
+        );
 
-        $this->getOrderService()->payOrder(array(
-            'sn'       => $order['sn'],
-            'status'   => 'success',
-            'amount'   => $order['amount'],
-            'paidTime' => time()
-        ));
+        $order = $this->getOrderService()->createSystemOrder($systemOrder);
 
         $info = array(
             'orderId'         => $order['id'],
@@ -466,18 +460,6 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException("用户(#{$userId})已加入该教学计划！");
         }
 
-        $levelChecked = '';
-
-        if (!empty($info['becomeUseMember'])) {
-            $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
-
-            if ($levelChecked != 'ok') {
-                throw $this->createServiceException("用户(#{$userId})不能以会员身份加入教学计划！");
-            }
-
-            $userMember = $this->getVipService()->getMemberByUserId($user['id']);
-        }
-
         //按照教学计划有效期模式计算学员有效期
         $deadline = 0;
         if ($course['expiryMode'] == 'days' && $course['expiryDays'] > 0) {
@@ -510,7 +492,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'courseSetId' => $course['courseSetId'],
             'orderId'     => empty($order) ? 0 : $order['id'],
             'deadline'    => $deadline,
-            'levelId'     => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
+            'levelId'     => empty($info['levelId']) ? 0 : $info['levelId'],
             'role'        => 'student',
             'remark'      => empty($order['note']) ? '' : $order['note'],
             'learnedNum'  => $count,
@@ -523,40 +505,14 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $member = $this->getMemberDao()->create($fields);
 
-        $this->refreshMemberNoteNumber(
-            $courseId, $userId
-        );
+        $this->refreshMemberNoteNumber($courseId, $userId);
 
-        $setting = $this->getSettingService()->get('course', array());
-
-        if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
-            $message = $this->getWelcomeMessageBody($user, $course);
-            $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
-        }
-
-        $fields = array(
-            'studentNum' => $this->getCourseStudentCount($courseId)
-        );
-
-        if ($order) {
-            $fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('course', $courseId);
-        }
-
-        $this->getCourseDao()->update($courseId, $fields);
         $this->dispatchEvent(
             'course.join',
-            $course, array('userId' => $member['userId'], 'member' => $member)
+            $course,
+            array('userId' => $member['userId'], 'member' => $member)
         );
         return $member;
-    }
-
-    protected function getWelcomeMessageBody($user, $course)
-    {
-        $setting            = $this->getSettingService()->get('course', array());
-        $valuesToBeReplace  = array('{{nickname}}', '{{course}}');
-        $valuesToReplace    = array($user['nickname'], $course['title']);
-        $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
-        return $welcomeMessageBody;
     }
 
     public function removeStudent($courseId, $userId)
@@ -810,6 +766,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->countPostsByCourseIdAndUserId($courseId, $userId);
     }
 
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
+    {
+        return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+    }
+
     /**
      * @return CourseMemberDao
      */
@@ -832,14 +793,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
-    }
-
-    /**
-     * @return MessageService
-     */
-    protected function getMessageService()
-    {
-        return $this->createService('User:MessageService');
     }
 
     /**
@@ -879,7 +832,7 @@ class MemberServiceImpl extends BaseService implements MemberService
      */
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip.VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     /**

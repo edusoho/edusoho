@@ -10,40 +10,24 @@ class MessageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $fields     = $request->query->all();
+        $conditions = $request->query->all();
 
-        $conditions = array(
-            'content'   => '',
-            'nickname'  => '',
-            'startDate' => 0,
-            'endDate'   => 0,
+        $paginator = new Paginator(
+            $request,
+            $this->getMessageService()->countMessages($conditions),
+            20
         );
 
-        $conditions = array_merge($conditions, $fields);
+        $messages = $this->getMessageService()->searchMessages(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        $conditions = $this->convertConditions($fields);
-        if(isset($conditions['fromIds']) && empty($conditions['fromIds'])){
-            $paginator = new Paginator($request, 0, 20);
-            $messages = array();
-        }else{
-            $paginator = new Paginator(
-                $request,
-                $this->getMessageService()->countMessages($conditions),
-                20
-            );
+        $userIds = array_merge(ArrayToolkit::column($messages, 'fromId'), ArrayToolkit::column($messages, 'toId'));
 
-            $messages = $this->getMessageService()->searchMessages(
-                $conditions,
-                null,
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        }
-
-
-        $usersFromId = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'fromId'));
-        $usersToId   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'toId'));
-        $users       = ArrayToolkit::index(array_merge($usersFromId, $usersToId), 'id');
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('admin/message/index.html.twig', array(
             'users'     => $users,
@@ -61,33 +45,6 @@ class MessageController extends BaseController
         } else {
             return $this->createJsonResponse(array('status' => 'success'));
         }
-    }
-
-    protected function convertConditions($conditions)
-    {
-        if (!empty($conditions['nickname'])) {
-            $conditions['fromIds']= "";
-            
-            $userConditions = array('nickname' => trim($conditions['nickname']));
-            $userCount = $this->getUserService()->searchUserCount($userConditions);
-            if ($userCount) {
-                $users                 = $this->getUserService()->searchUsers($userConditions, array('createdTime'=>'DESC'), 0, $userCount);
-                $conditions['fromIds'] = ArrayToolkit::column($users, 'id');
-            }
-            
-        }
-
-        unset($conditions['nickname']);
-      
-        if (!empty($conditions['startDate'])  ) {
-            $conditions['startDate'] = strtotime($conditions['startDate']);
-        }
-
-        if (!empty($conditions['endDate'])) {
-            $conditions['endDate'] = strtotime($conditions['endDate']);
-        }
-
-        return $conditions;
     }
 
     public function deleteAction(Request $request, $id)

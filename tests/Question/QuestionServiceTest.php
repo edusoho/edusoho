@@ -426,6 +426,6 @@ class QuestionServiceTest extends BaseTestCase
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question:QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 }

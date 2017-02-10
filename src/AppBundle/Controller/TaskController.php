@@ -37,7 +37,6 @@ class TaskController extends BaseController
             'course'       => $course,
             'task'         => $task,
             'taskResult'   => $taskResult,
-            'preview'      => $preview,
             'nextTask'     => empty($nextTask) ? array() : $nextTask,
             'finishedRate' => empty($finishedRate) ? 0 : $finishedRate
         ));
@@ -270,7 +269,6 @@ class TaskController extends BaseController
             'userId'   => $user['id'],
             'status'   => 'finish'
         );
-
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
         $finishedRate = empty($course['publishedTaskNum']) ? 0 : intval($finishedCount / $course['publishedTaskNum'] * 100);

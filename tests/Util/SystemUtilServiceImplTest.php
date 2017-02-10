@@ -16,7 +16,7 @@ class SystemUtilServiceImplTest extends BaseTestCase
                 )
             )
         );
-        $this->mockBiz('Util:SystemUtilDao', 'SystemUtilDao', $params);
+        $this->mockBiz('Util:SystemUtilDao', $params);
 
         $params = array(
             array(
@@ -33,7 +33,7 @@ class SystemUtilServiceImplTest extends BaseTestCase
             )
         );
         
-        $this->mockBiz('File:UploadFileService', 'UploadFileService', $params);
+        $this->mockBiz('File:UploadFileService', $params);
 
         $test = $this->getSystemUtilService()->removeUnusedUploadFiles();
 
@@ -42,12 +42,12 @@ class SystemUtilServiceImplTest extends BaseTestCase
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     protected function getSystemUtilService()
     {
-        return $this->getServiceKernel()->createService('Util:SystemUtilService');
+        return $this->createService('Util:SystemUtilService');
     }
 
 }
