@@ -4,7 +4,18 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Activity\Service\ActivityService;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Taxonomy\Service\CategoryService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseDeleteService;
+use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class CourseSetController extends BaseController
@@ -22,8 +33,8 @@ class CourseSetController extends BaseController
         }
 
         if ($filter == 'vip') {
-            $conditions['isVip'] = 1;
-            $conditions["parentId"]              = 0;
+            $conditions['isVip']    = 1;
+            $conditions["parentId"] = 0;
         }
 
         $conditions = $this->fillOrgCode($conditions);
@@ -37,13 +48,7 @@ class CourseSetController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $courseSetIds   = ArrayToolkit::column($courseSets, 'id');
-        $defaultCourses = $this->getCourseService()->getDefaultCoursesByCourseSetIds($courseSetIds);
-        $defaultCourses = ArrayToolkit::index($defaultCourses, 'courseSetId');
-
-        foreach ($courseSets as &$courseSet) {
-            $courseSet['defaultCourse'] = $defaultCourses[$courseSet['id']];
-        }
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
 
         list($searchCourseSetsNum, $publishedCourseSetsNum, $closedCourseSetsNum, $unPublishedCourseSetsNum) = $this->getDifferentCourseSetsNum($conditions);
 
@@ -73,7 +78,6 @@ class CourseSetController extends BaseController
         return $this->render('admin/course-set/index.html.twig', array(
             'conditions'               => $conditions,
             'courseSets'               => $courseSets,
-            'defaultCourses'           => $defaultCourses,
             'users'                    => $users,
             'categories'               => $categories,
             'paginator'                => $paginator,
@@ -97,7 +101,6 @@ class CourseSetController extends BaseController
             PHP_INT_MAX
         );
 
-        $searchCourseSetsNum      = 0;
         $publishedCourseSetsNum   = 0;
         $closedCourseSetsNum      = 0;
         $unPublishedCourseSetsNum = 0;
@@ -154,7 +157,7 @@ class CourseSetController extends BaseController
         }
 
         if ($courseSet['status'] == 'draft') {
-            $result = $this->getCourseSetService()->deleteCourseSet($id);
+            $this->getCourseSetService()->deleteCourseSet($id);
             return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
         }
 
@@ -207,6 +210,7 @@ class CourseSetController extends BaseController
 
             return $this->createJsonResponse($response);
         }
+        throw new AccessDeniedException('Method Not Allowed');
     }
 
     public function publishAction(Request $request, $id)
@@ -233,7 +237,7 @@ class CourseSetController extends BaseController
             if ($ref == 'recommendList') {
                 return $this->render('admin/course-set/course-recommend-tr.html.twig', array(
                     'courseSet' => $courseSet,
-                    'user'   => $user
+                    'user'      => $user
                 ));
             }
 
@@ -242,22 +246,24 @@ class CourseSetController extends BaseController
 
         return $this->render('admin/course-set/course-recommend-modal.html.twig', array(
             'courseSet' => $courseSet,
-            'ref'    => $ref,
-            'filter' => $filter
+            'ref'       => $ref,
+            'filter'    => $filter
         ));
     }
 
     public function cancelRecommendAction(Request $request, $id, $target)
     {
-        $courseSet = $this->getCourseSetService()->cancelRecommendCourse($id);
+        $this->getCourseSetService()->cancelRecommendCourse($id);
 
         if ($target == 'recommend_list') {
-            return $this->createJsonResponse(array('success'=>1));
+            return $this->createJsonResponse(array('success' => 1));
         }
 
         if ($target == 'normal_index') {
             return $this->renderCourseTr($id, $request);
         }
+
+        throw new InvalidArgumentException('Invalid Target');
     }
 
     public function recommendListAction(Request $request)
@@ -276,7 +282,7 @@ class CourseSetController extends BaseController
 
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            array('recommendedSeq'=>'desc'),
+            array('recommendedSeq' => 'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -286,7 +292,7 @@ class CourseSetController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
 
         return $this->render('admin/course-set/course-recommend-list.html.twig', array(
-            'courseSets'    => $courseSets,
+            'courseSets' => $courseSets,
             'users'      => $users,
             'paginator'  => $paginator,
             'categories' => $categories
@@ -317,7 +323,7 @@ class CourseSetController extends BaseController
             $paginator->getPerPageCount()
         );
         $courseSetIds = ArrayToolkit::column($courseSets, 'id');
-        $classrooms = array();
+        $classrooms   = array();
 
         if ($filter == 'classroom') {
             $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courseSets, 'id'));
@@ -333,20 +339,24 @@ class CourseSetController extends BaseController
         $courseSetIncomes = ArrayToolkit::index($courseSetIncomes, 'courseSetId');
 
         foreach ($courseSets as $key => &$courseSet) {
-            $courseSetId = $courseSet['id'];
-            $courseCount = $this->getCourseService()->searchCourseCount(array('courseSetId' => $courseSetId));
+            $courseSetId  = $courseSet['id'];
+            $courseCount  = $this->getCourseService()->searchCourseCount(array('courseSetId' => $courseSetId));
             $isLearnedNum = $this->getMemberService()->countMembers(array('isLearned' => 1, 'courseSetId' => $courseSetId));
-            $taskCount = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
+            $taskCount    = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
 
             $courseSet['learnedTime'] = $this->getTaskService()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
-            $courseSet['income'] = $courseSetIncomes[$courseSetId]['income'];
+            if (!empty($courseSetIncomes[$courseSetId])) {
+                $courseSet['income'] = $courseSetIncomes[$courseSetId]['income'];
+            } else {
+                $courseSet['income'] = 0;
+            }
             $courseSet['isLearnedNum'] = $isLearnedNum;
-            $courseSet['taskCount']  = $taskCount;
-            $courseSet['courseCount'] = $courseCount;
+            $courseSet['taskCount']    = $taskCount;
+            $courseSet['courseCount']  = $courseCount;
         }
 
         return $this->render('admin/course-set/data.html.twig', array(
-            'courseSets'    => $courseSets,
+            'courseSets' => $courseSets,
             'paginator'  => $paginator,
             'filter'     => $filter,
             'classrooms' => $classrooms
@@ -356,41 +366,41 @@ class CourseSetController extends BaseController
     public function detailDataAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
-        $courseId = $request->query->get('courseId');
+        $courses   = $this->getCourseService()->findCoursesByCourseSetId($id);
+        $courseId  = $request->query->get('courseId');
 
         if (empty($courseId)) {
             $courseId = $courses[0]['id'];
         }
 
-        $count     = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId));
+        $count = $this->getMemberService()->countMembers(array('courseId' => $courseId));
 
         $paginator = new Paginator($this->get('request'), $count, 20);
 
-        $students = $this->getCourseMemberService()->findCourseStudents($courseId, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $students = $this->getMemberService()->findCourseStudents($courseId, $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         foreach ($students as $key => &$student) {
-            $user                       = $this->getUserService()->getUser($student['userId']);
+            $user                = $this->getUserService()->getUser($student['userId']);
             $student['nickname'] = $user['nickname'];
 
-            $questionCount                   = $this->getThreadService()->searchThreadCount(array('courseId' => $courseId, 'type' => 'question', 'userId' => $user['id']));
+            $questionCount            = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'question', 'userId' => $user['id']));
             $student['questionCount'] = $questionCount;
 
             if ($student['finishedTime'] > 0) {
-                $student['fininshDay'] = intval(($student['finishedTime']- $student['createdTime']) / (60 * 60 * 24));
+                $student['fininshDay'] = intval(($student['finishedTime'] - $student['createdTime']) / (60 * 60 * 24));
             } else {
-                $student['fininshDay'] = intval((time()- $student['createdTime']) / (60 * 60 * 24));
+                $student['fininshDay'] = intval((time() - $student['createdTime']) / (60 * 60 * 24));
             }
 
             $student['learnTime'] = intval($student['lastLearnTime'] - $student['createdTime']);
         }
 
         return $this->render('admin/course-set/course-data-modal.html.twig', array(
-            'courseSet'    => $courseSet,
+            'courseSet' => $courseSet,
             'courses'   => $courses,
             'paginator' => $paginator,
             'students'  => $students,
-            'courseId' => $courseId
+            'courseId'  => $courseId
         ));
     }
 
@@ -398,7 +408,7 @@ class CourseSetController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courses  = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
         $courseId = $request->query->get('courseId');
 
         if (empty($courseId)) {
@@ -408,11 +418,11 @@ class CourseSetController extends BaseController
 
         foreach ($tasks as $key => &$task) {
             $finishedNum = $this->getTaskResultService()->countTaskResults(array('status' => 'finish', 'courseTaskId' => $task['id']));
-            $studentNum = $this->getTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
-            $learnedTime =  $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
-            if (in_array($task['type'], array('video','audio'))) {
-                $activity = $this->getActivityService()->getActivity($task['activityId']);
-                $task['length'] = $activity['length'];
+            $studentNum  = $this->getTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
+            $learnedTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
+            if (in_array($task['type'], array('video', 'audio'))) {
+                $activity          = $this->getActivityService()->getActivity($task['activityId']);
+                $task['length']    = $activity['length'];
                 $task['watchTime'] = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
             }
 
@@ -425,16 +435,16 @@ class CourseSetController extends BaseController
             }
 
             $task['finishedNum'] = $finishedNum;
-            $task['studentNum'] = $studentNum;
+            $task['studentNum']  = $studentNum;
 
             $task['learnedTime'] = $learnedTime;
         }
- 
+
         return $this->render('admin/course-set/course-list-data-modal.html.twig', array(
-            'tasks'  => $tasks,
+            'tasks'     => $tasks,
             'courseSet' => $courseSet,
-            'courses' => $courses,
-            'courseId' => $courseId
+            'courses'   => $courses,
+            'courseId'  => $courseId
         ));
     }
 
@@ -448,12 +458,12 @@ class CourseSetController extends BaseController
 
     protected function renderCourseTr($courseId, $request)
     {
-        $fields     = $request->query->all();
-        $courseSet     = $this->getCourseSetService()->getCourseSet($courseId);
-        $courseSet['defaultCourse'] =  $this->getCourseService()->getDefaultCourseByCourseSetId($courseId);
-        $default    = $this->getSettingService()->get('default', array());
-        $classrooms = array();
-        $vips       = array();
+        $fields                     = $request->query->all();
+        $courseSet                  = $this->getCourseSetService()->getCourseSet($courseId);
+        $courseSet['defaultCourse'] = $this->getCourseService()->getDefaultCourseByCourseSetId($courseId);
+        $default                    = $this->getSettingService()->get('default', array());
+        $classrooms                 = array();
+        $vips                       = array();
 
         if ($fields['filter'] == 'classroom') {
             $classrooms = $this->getClassroomService()->findClassroomCourseByCourseSetIds(array($courseSet['id']));
@@ -473,7 +483,7 @@ class CourseSetController extends BaseController
         return $this->render('admin/course-set/tr.html.twig', array(
             'user'       => $this->getUserService()->getUser($courseSet['creator']),
             'category'   => isset($courseSet['categoryId']) ? $this->getCategoryService()->getCategory($courseSet['categoryId']) : array(),
-            'courseSet'     => $courseSet,
+            'courseSet'  => $courseSet,
             'default'    => $default,
             'classrooms' => $classrooms,
             'filter'     => $fields["filter"],
@@ -502,82 +512,121 @@ class CourseSetController extends BaseController
         }
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
     }
 
+    /**
+     * @return CourseDeleteService
+     */
     protected function getCourseSetDeleteService()
     {
         return $this->createService('Course:CourseSetDeleteService');
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
         return $this->createService('CloudPlatform:AppService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return MessageDigestPasswordEncoder
+     */
     protected function getPasswordEncoder()
     {
         return new MessageDigestPasswordEncoder('sha256');
     }
 
+    /**
+     * @return LevelService
+     */
     protected function getVipLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
     }
 
-    protected function getCourseMemberService()
-    {
-        return $this->createService('Course:MemberService');
-    }
-
+    /**
+     * @return MemberService
+     */
     protected function getMemberService()
     {
         return $this->createService('Course:MemberService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return TaskResultService
+     */
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
     }
 
+    /**
+     * @return ThreadService
+     */
     protected function getThreadService()
     {
         return $this->createService('Thread:ThreadService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
     }
 
-
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->createService('Activity:ActivityLearnLogService');
