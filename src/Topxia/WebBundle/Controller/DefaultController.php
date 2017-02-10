@@ -16,9 +16,13 @@ class DefaultController extends BaseController
         if (!empty($user['id'])) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
+        //判断是否是定制用户
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+        $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
 
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks));
+
+        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks, 'hasMobile' => $hasMobile));
     }
 
     public function appDownloadAction() {
