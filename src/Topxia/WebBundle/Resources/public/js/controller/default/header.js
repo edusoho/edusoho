@@ -17,6 +17,6 @@ define(function(require, exports, module){
   }
 
   $('.js-back').click(function(){
-    history.back();
+    history.go(-1);
   })
 })
