@@ -270,6 +270,7 @@ class CourseSetManageController extends BaseController
         $lockedCourseMenus = array(
             'tasks'     => '计划任务',
             'info'      => '计划设置',
+            'replay'    => '录播管理',
             'marketing' => '营销设置',
             'teachers'  => '教师设置'
         );
