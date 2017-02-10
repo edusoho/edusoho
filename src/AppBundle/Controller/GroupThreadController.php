@@ -11,9 +11,9 @@ use Biz\Group\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
-use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -437,7 +437,7 @@ class GroupThreadController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $filename = $this->get('topxia.twig.web_extension')->getFilePath($file['uri']);
+        $filename = $this->get('web.twig.extension')->getFilePath($file['uri']);
 
         $filename = substr($filename, 1);
         $filename = explode("?", $filename);

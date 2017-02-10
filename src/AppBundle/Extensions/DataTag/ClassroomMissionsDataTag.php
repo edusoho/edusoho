@@ -5,7 +5,7 @@ namespace AppBundle\Extensions\DataTag;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
 {

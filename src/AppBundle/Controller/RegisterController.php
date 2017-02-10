@@ -7,9 +7,9 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\MessageService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
-use Topxia\Common\SmsToolkit;
+use AppBundle\Common\SmsToolkit;
 use Biz\Common\Mail\MailFactory;
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -525,7 +525,7 @@ class RegisterController extends BaseController
 
     protected function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     //validate captcha

@@ -2,8 +2,8 @@
 namespace Biz\Order\OrderProcessor;
 
 use Exception;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\NumberToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\NumberToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class VipOrderProcessor extends BaseProcessor implements OrderProcessor

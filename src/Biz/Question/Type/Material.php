@@ -2,7 +2,7 @@
 
 namespace Biz\Question\Type;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class Material implements TypeInterface
 {

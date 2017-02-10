@@ -2,30 +2,29 @@
 
 namespace AppBundle\Controller\Classroom;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Vip\Service\Vip\VipService;
 use Biz\Sign\Service\SignService;
 use Biz\User\Service\AuthService;
 use Vip\Service\Vip\LevelService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
 use Biz\Order\Service\OrderService;
 use Biz\User\Service\StatusService;
-use Topxia\Common\ExtensionManager;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use AppBundle\Common\ExtensionManager;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\Cash\Service\CashOrdersService;
-use Codeages\Biz\Framework\Event\Event;
+use AppBundle\Controller\BaseController;
 use Biz\Cash\Service\CashAccountService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\WebBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomOrderService;
 use Biz\Classroom\Service\ClassroomReviewService;
 
@@ -234,9 +233,6 @@ class ClassroomController extends BaseController
             $layout = 'classroom/join-layout.html.twig';
         }
 
-        $this->dispatchEvent('classroom.view',
-            new Event($classroom, array('userId' => $user['id']))
-        );
         return $this->render("classroom/introduction.html.twig", array(
             'introduction'         => $introduction,
             'layout'               => $layout,

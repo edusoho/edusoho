@@ -31,10 +31,10 @@
       </a>
       <ul class="dropdown-menu pull-right">
         {% if testpaper.status in ['draft', 'closed'] %}
-          <li><a class="open-testpaper" href="javascript:" title="{{'发布试卷%name%'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_set_manage_testpaper_publish', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon--check-circle mrm"></span> {{'发布试卷'|trans}}</a></li>
+          <li><a class="open-testpaper" href="javascript:" title="{{'真的要发布%name%吗？ 试卷发布后无论是否关闭都将无法修改。'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_set_manage_testpaper_publish', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon--check-circle mrm"></span> {{'发布试卷'|trans}}</a></li>
         {% endif %}
         {% if testpaper.status == 'open' %}
-          <li><a class="close-testpaper" href="javascript:" title="{{'关闭试卷%name%'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_set_manage_testpaper_close', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon-close01 mrm"></span> {{'关闭试卷'|trans}}</a></li>
+          <li><a class="close-testpaper" href="javascript:" title="{% if testpaperActivities[testpaper.id]|default(null) %}该试卷已被任务引用，真的要关闭吗？{% else %}{{'真的要关闭试卷%name%吗？'|trans({'%name%': testpaper.name })}}{% endif %}" data-url="{{ path('course_set_manage_testpaper_close', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon-close01 mrm"></span> {{'关闭试卷'|trans}}</a></li>
         {% endif %}
 
         {% if testpaper.status == 'draft' %}

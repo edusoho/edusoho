@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Admin;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class TagGroupController extends BaseController
 {

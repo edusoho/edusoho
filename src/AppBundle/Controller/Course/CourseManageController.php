@@ -1,25 +1,24 @@
 <?php
 namespace AppBundle\Controller\Course;
 
-
-use Biz\Course\Service\LiveReplayService;
-use Biz\File\Service\UploadFileService;
-use Biz\System\Service\SettingService;
+use AppBundle\Common\Paginator;
 use Biz\Util\EdusohoLiveClient;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Strategy\StrategyContext;
+use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
+use Biz\Course\Service\LiveReplayService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,18 +63,27 @@ class CourseManageController extends BaseController
 
     public function replayAction(Request $request, $courseSetId, $courseId)
     {
-        $course    = $this->getCourseService()->tryManageCourse($courseId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $tasks     = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $courseSetId,
+                'sideNav' => 'replay'
+            ));
+        }
+
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
         $liveTasks = array_filter($tasks, function ($task) {
             return $task['type'] === 'live';
         });
 
         foreach ($liveTasks as $key => $task) {
-            $task["isEnd"]     = intval(time() - $task["endTime"]) > 0;
-            $task['file']      = $this->_getLiveReplayMedia($task);
-            $liveTasks[$key]       = $task;
+            $task["isEnd"]   = intval(time() - $task["endTime"]) > 0;
+            $task['file']    = $this->_getLiveReplayMedia($task);
+            $liveTasks[$key] = $task;
         }
 
         $default = $this->getSettingService()->get('default', array());
@@ -127,10 +135,10 @@ class CourseManageController extends BaseController
 
     public function editTaskReplayAction(Request $request, $courseId, $taskId)
     {
-        $course  = $this->getCourseService()->tryManageCourse($courseId);
-        $task    = $this->getTaskService()->getTask($taskId);
+        $course   = $this->getCourseService()->tryManageCourse($courseId);
+        $task     = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
+        $replays  = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
 
         if ($request->getMethod() == 'POST') {
             $ids = $request->request->get("visibleReplays");
@@ -380,7 +388,7 @@ class CourseManageController extends BaseController
                     'id'        => $teacher['userId'],
                     'isVisible' => $teacher['isVisible'],
                     'nickname'  => $teacher['nickname'],
-                    'avatar'    => $this->get('topxia.twig.web_extension')->getFilePath($teacher['smallAvatar'], 'avatar.png')
+                    'avatar'    => $this->get('web.twig.extension')->getFilePath($teacher['smallAvatar'], 'avatar.png')
                 );
             }
         }
@@ -861,11 +869,11 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @return \Topxia\WebBundle\Twig\Extension\WebExtension
+     * @return \AppBundle\Twig\WebExtension
      */
     protected function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     /**

@@ -3,7 +3,7 @@ namespace Biz\Order\OrderProcessor;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Exception;
-use Topxia\Common\NumberToolkit;
+use AppBundle\Common\NumberToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class BaseProcessor

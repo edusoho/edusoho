@@ -2,7 +2,7 @@
 
 namespace Topxia\MobileBundleV2\Controller;
 
-use Topxia\Component\Payment\Payment;
+use AppBundle\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Alipay\AlipayNotify;

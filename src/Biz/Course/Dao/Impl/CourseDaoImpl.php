@@ -95,7 +95,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
     public function getMinPublishedCoursePriceByCourseSetId($courseSetId)
     {
         $sql = "SELECT ifnull(min(price),0) as price FROM `c2_course` WHERE courseSetId = {$courseSetId} and status = 'published'";
-        return $this->db()->fetchColumn($sql);
+        return $this->db()->fetchAssoc($sql);
     }
 
     public function declares()

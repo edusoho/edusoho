@@ -5,7 +5,7 @@ use Biz\System\Service\LogService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
-use Topxia\Common\SmsToolkit;
+use AppBundle\Common\SmsToolkit;
 use Biz\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
 

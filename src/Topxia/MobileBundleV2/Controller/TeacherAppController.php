@@ -3,9 +3,9 @@
 namespace Topxia\MobileBundleV2\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Topxia\WebBundle\Controller\BaseController;
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class TeacherAppController extends MobileBaseController{
 

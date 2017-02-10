@@ -5,8 +5,8 @@ namespace AppBundle\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\FileToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 
 class MobileController extends BaseController

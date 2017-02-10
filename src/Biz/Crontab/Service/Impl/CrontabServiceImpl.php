@@ -6,7 +6,7 @@ use Biz\Crontab\Dao\JobDao;
 use Biz\System\Service\LogService;
 use Symfony\Component\Yaml\Yaml;
 use Biz\Crontab\Service\CrontabService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class CrontabServiceImpl extends BaseService implements CrontabService
 {

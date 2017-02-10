@@ -4,7 +4,7 @@ namespace Biz\User;
 use Biz\User\Service\UserService;
 use Biz\Role\Util\PermissionBuilder;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Handler\AuthenticationHelper;
+use AppBundle\Handler\AuthenticationHelper;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;

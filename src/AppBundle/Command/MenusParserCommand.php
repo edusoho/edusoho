@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Command;
 
-use Topxia\Common\BlockToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\BlockToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\StringInput;

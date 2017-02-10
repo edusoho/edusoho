@@ -4,14 +4,12 @@ namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Task\Dao\TaskDao;
-use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseSetService;
-use Biz\Activity\Service\ActivityService;
+use AppBundle\Common\ArrayToolkit;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
