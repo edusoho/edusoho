@@ -5,7 +5,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Common\BlockToolkit;
+use AppBundle\Common\BlockToolkit;
 use ZipArchive;
 
 class BuildThemeAppCommand extends BaseCommand

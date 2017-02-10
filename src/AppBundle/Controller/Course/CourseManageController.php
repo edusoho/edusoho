@@ -1,13 +1,11 @@
 <?php
 namespace AppBundle\Controller\Course;
 
-
-use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
 use Biz\Util\EdusohoLiveClient;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Order\Service\OrderService;
 use Biz\Course\Service\CourseService;
@@ -365,7 +363,7 @@ class CourseManageController extends BaseController
                     'id'        => $teacher['userId'],
                     'isVisible' => $teacher['isVisible'],
                     'nickname'  => $teacher['nickname'],
-                    'avatar'    => $this->get('topxia.twig.web_extension')->getFilePath($teacher['smallAvatar'], 'avatar.png')
+                    'avatar'    => $this->get('web.twig.extension')->getFilePath($teacher['smallAvatar'], 'avatar.png')
                 );
             }
         }
@@ -846,11 +844,11 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @return \Topxia\WebBundle\Twig\Extension\WebExtension
+     * @return \AppBundle\Twig\WebExtension
      */
     protected function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     /**

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\Service\TokenService;
 use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class MobileController extends BaseController
 {
@@ -160,7 +160,7 @@ class MobileController extends BaseController
                 'id'       => $user['id'],
                 'nickname' => $user['nickname'],
                 'title'    => $user['title'],
-                'avatar'   => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
+                'avatar'   => $this->container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true),
             );
         }
 

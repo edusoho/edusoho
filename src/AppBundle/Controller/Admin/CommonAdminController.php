@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\Common\ServiceKernel;

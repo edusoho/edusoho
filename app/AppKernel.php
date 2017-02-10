@@ -1,6 +1,6 @@
 <?php
 
-use Topxia\Common\ExtensionManager;
+use AppBundle\Common\ExtensionManager;
 use Biz\User\CurrentUser;
 use Symfony\Component\HttpKernel\Kernel;
 use Topxia\Service\Common\ServiceKernel;

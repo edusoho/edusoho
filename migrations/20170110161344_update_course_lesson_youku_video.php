@@ -1,7 +1,7 @@
 <?php
 
 use Phpmig\Migration\Migration;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class UpdateCourseLessonYoukuVideo extends Migration
 {

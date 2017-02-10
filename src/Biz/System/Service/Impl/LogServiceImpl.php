@@ -5,7 +5,7 @@ namespace Biz\System\Service\Impl;
 use Biz\BaseService;
 use Biz\System\Dao\LogDao;
 use Biz\User\Service\UserService;
-use Topxia\Common\PluginToolkit;
+use AppBundle\Common\PluginToolkit;
 use Biz\Common\Logger;
 use Biz\System\Service\LogService;
 

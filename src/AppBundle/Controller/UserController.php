@@ -15,8 +15,8 @@ use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Vip\Service\Vip\LevelService;
 use Vip\Service\Vip\VipService;
 

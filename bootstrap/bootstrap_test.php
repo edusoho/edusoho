@@ -4,7 +4,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Codeages\Biz\Framework\UnitTests\UnitTestsBootstrap;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\AppConnectionFactory;
+use AppBundle\Common\AppConnectionFactory;
 
 $loader = require __DIR__.'/../app/autoload.php';
 

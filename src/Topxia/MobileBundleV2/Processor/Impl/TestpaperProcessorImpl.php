@@ -3,7 +3,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\TestpaperProcessor;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 
 class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
@@ -177,7 +177,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 			$file = $this->request->files->get('file');
 			$group = $this->getParam("group", 'course');
 			$record = $this->getFileService()->uploadFile($group, $file);
-			$url = $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+			$url = $this->controller->get('web.twig.extension')->getFilePath($record['uri']);
 		} catch (\Exception $e) {
 			$url = "";
 		}
@@ -394,7 +394,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 		$ext = $this;
 		$baseUrl = $this->request->getSchemeAndHttpHost();
         		$stem = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function($matches) use ($baseUrl, $ext) {
-			$url = $ext->controller->get('topxia.twig.web_extension')->getFileUrl($matches[1]);
+			$url = $ext->controller->get('web.twig.extension')->getFileUrl($matches[1]);
 			$url = $baseUrl . $url;
             		return "<img src='{$url}' />";
        		 }, $stem);

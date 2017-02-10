@@ -11,7 +11,7 @@ throw $this->createServiceException('字段名称不能为空！');
 Good
 
 ```php
-use Topxia\Common\Exception\InvalidArgumentException;
+use AppBundle\Common\Exception\InvalidArgumentException;
 ```
 
 ```php

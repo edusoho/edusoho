@@ -6,8 +6,8 @@ use Biz\Role\Service\RoleService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\UnexpectedValueException;
 use Biz\Role\Util\PermissionBuilder;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Tree;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Tree;
 use Topxia\Service\Common\ServiceKernel;
 
 class RoleServiceImpl extends BaseService implements RoleService

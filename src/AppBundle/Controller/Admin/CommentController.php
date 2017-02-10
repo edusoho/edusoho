@@ -3,8 +3,8 @@
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CommentController extends BaseController

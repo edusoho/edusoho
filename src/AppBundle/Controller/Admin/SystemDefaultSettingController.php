@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class SystemDefaultSettingController extends BaseController

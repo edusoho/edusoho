@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Classroom;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\Sign\Service\SignService;
 use Biz\User\Service\AuthService;
@@ -11,7 +11,7 @@ use Vip\Service\Vip\LevelService;
 use Biz\User\Service\TokenService;
 use Biz\Order\Service\OrderService;
 use Biz\User\Service\StatusService;
-use Topxia\Common\ExtensionManager;
+use AppBundle\Common\ExtensionManager;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;

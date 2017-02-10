@@ -8,7 +8,7 @@ use Biz\Cash\Service\CashAccountService;
 use Biz\Cash\Service\CashService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class CashServiceImpl extends BaseService implements CashService
 {

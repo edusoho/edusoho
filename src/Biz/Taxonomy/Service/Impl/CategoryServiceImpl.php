@@ -9,8 +9,8 @@ use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Dao\CategoryDao;
 use Biz\Taxonomy\Dao\CategoryGroupDao;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\TreeToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\TreeToolkit;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {

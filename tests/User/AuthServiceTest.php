@@ -2,7 +2,7 @@
 
 namespace Tests\User;
 
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\SimpleValidator;
 use Biz\BaseTestCase;;
 
 // TODO

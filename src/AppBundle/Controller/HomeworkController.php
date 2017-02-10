@@ -3,7 +3,7 @@ namespace AppBundle\Controller;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class HomeworkController extends BaseController
 {

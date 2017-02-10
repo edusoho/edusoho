@@ -2,7 +2,7 @@
 namespace Topxia\Service\Course\Tests;
 
 use Biz\BaseTestCase;;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class LessonLearnDaoTest extends BaseTestCase
 {

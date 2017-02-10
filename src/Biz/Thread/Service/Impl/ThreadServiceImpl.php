@@ -5,7 +5,7 @@ namespace Biz\Thread\Service\Impl;
 use Biz\BaseService;
 use Biz\Util\TextHelper;
 use Biz\Thread\Dao\ThreadDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Thread\Dao\ThreadPostDao;
 use Biz\Thread\Dao\ThreadVoteDao;
 use Biz\User\Service\UserService;

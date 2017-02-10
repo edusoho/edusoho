@@ -1,7 +1,7 @@
 <?php
 namespace Biz\Sms\Event;
 
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\StringToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
