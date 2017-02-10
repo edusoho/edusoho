@@ -10,8 +10,8 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 
 class NotebookController extends BaseController
 {

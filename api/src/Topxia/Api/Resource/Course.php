@@ -3,7 +3,7 @@
 namespace Topxia\Api\Resource;
 
 use Topxia\Api\Util\TagUtil;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class Course extends BaseResource
 {

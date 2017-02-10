@@ -1,9 +1,9 @@
 <?php
 namespace Biz\Sms\SmsProcessor;
 
-use Topxia\Common\SmsToolkit;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\SmsToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\StringToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 

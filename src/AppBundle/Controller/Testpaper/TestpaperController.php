@@ -1,11 +1,11 @@
 <?php
 namespace AppBundle\Controller\Testpaper;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Exception\AccessDeniedException;
+use AppBundle\Common\Exception\AccessDeniedException;
 
 class TestpaperController extends BaseController
 {

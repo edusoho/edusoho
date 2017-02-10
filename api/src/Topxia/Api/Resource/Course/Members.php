@@ -5,7 +5,7 @@ namespace Topxia\Api\Resource\Course;
 use Topxia\Api\Resource\BaseResource;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class Members extends BaseResource

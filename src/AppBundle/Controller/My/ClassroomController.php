@@ -11,8 +11,8 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomController extends BaseController

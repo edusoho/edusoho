@@ -4,10 +4,10 @@ namespace AppBundle\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Topxia\Common\BlockToolkit;
+use AppBundle\Common\BlockToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\PluginUtil;
-use Topxia\System;
+use AppBundle\System;
 
 class OldPluginRegisterCommand extends BaseCommand
 {

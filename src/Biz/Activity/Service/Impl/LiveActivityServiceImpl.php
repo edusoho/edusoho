@@ -4,7 +4,7 @@ namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Util\EdusohoLiveClient;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
 use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
@@ -86,11 +86,10 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveActivity['mediaId']      = $liveActivity['fileId'];
             $liveActivity['replayStatus'] = LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS;
             unset($liveActivity['fileId']);
-        } else {
-            return $this->getLiveActivityDao()->get($id);
         }
 
         $liveActivity = $this->getLiveActivityDao()->update($id, $liveActivity);
+
         return $liveActivity;
     }
 

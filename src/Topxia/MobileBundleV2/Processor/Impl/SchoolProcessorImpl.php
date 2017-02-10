@@ -4,7 +4,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\SchoolProcessor;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 

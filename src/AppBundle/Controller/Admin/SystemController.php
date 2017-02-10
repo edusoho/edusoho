@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use Biz\User\AuthProvider\DiscuzAuthProvider;
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\StringToolkit;
 use Symfony\Component\Finder\Finder;
 use Biz\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Response;

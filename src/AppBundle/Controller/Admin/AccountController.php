@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Component\Echats\EchartsBuilder;
+use AppBundle\Component\Echats\EchartsBuilder;
 
 class AccountController extends BaseController
 {

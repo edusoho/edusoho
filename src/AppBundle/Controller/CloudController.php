@@ -98,7 +98,7 @@ class CloudController extends BaseController
 
     public function videoFingerprintAction(Request $request)
     {
-        return new Response($this->get('topxia.twig.web_extension')->getFingerprint());
+        return new Response($this->get('web.twig.extension')->getFingerprint());
     }
 
     public function docWatermarkAction(Request $request)
@@ -160,7 +160,7 @@ class CloudController extends BaseController
         $values = array_filter($values, function($value){
             return !is_array($value);
         });
-        return $this->get('topxia.twig.web_extension')->simpleTemplateFilter($pattern, $values);
+        return $this->get('web.twig.extension')->simpleTemplateFilter($pattern, $values);
     }
 
     protected function checkSign($server, $sign, $secretKey)

@@ -3,8 +3,8 @@ namespace AppBundle\Controller\Admin;
 
 use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -176,7 +176,7 @@ class ArticleController extends BaseController
             $files   = $this->getArticleService()->changeIndexPicture($options["images"]);
 
             foreach ($files as $key => $file) {
-                $files[$key]["file"]['url'] = $this->get('topxia.twig.web_extension')->getFilePath($file["file"]['uri']);
+                $files[$key]["file"]['url'] = $this->get('web.twig.extension')->getFilePath($file["file"]['uri']);
             }
 
             return new JsonResponse($files);

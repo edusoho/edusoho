@@ -53,8 +53,8 @@
 		{% endif %}
 
 		{% if task.status == 'published' and task.isEnd  %}
-			{% if task.canRecord|default(false) and activity.ext.replayStatus != 'videoGenerated' %}
-				<button class="btn btn-link replay-lesson-btn"
+			{% if live_can_record(activity.ext.liveId) and activity.ext.replayStatus != 'videoGenerated' %}
+				<button class="btn btn-link replay-lesson-btn js-generate-replay"
 				{% if activity.ext.replayStatus == 'ungenerated' %}
 				title="{{'录制'|trans}}"
 				{% else %}

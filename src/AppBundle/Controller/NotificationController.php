@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 use Biz\Course\Service\CourseService;
 use Biz\User\Service\BatchNotificationService;
 use Biz\User\Service\NotificationService;
-use Topxia\Common\Paginator;
+use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
 

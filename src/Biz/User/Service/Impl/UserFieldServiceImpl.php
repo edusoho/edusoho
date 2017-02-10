@@ -2,7 +2,7 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserFieldService;
 
 class UserFieldServiceImpl extends BaseService implements UserFieldService

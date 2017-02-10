@@ -1,7 +1,7 @@
 <?php
 namespace Biz\Importer;
 
-use Topxia\Common\JoinPointToolkit;
+use AppBundle\Common\JoinPointToolkit;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class ImporterFactory

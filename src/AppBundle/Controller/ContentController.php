@@ -4,8 +4,8 @@ namespace AppBundle\Controller;
 use Biz\Content\Service\ContentService;
 use Biz\Taxonomy\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 
 class ContentController extends BaseController
 {

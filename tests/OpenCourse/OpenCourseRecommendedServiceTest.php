@@ -4,7 +4,7 @@ namespace Tests\OpenCourseRecommendedServiceTest;
 
 use Biz\BaseTestCase;
 use Biz\OpenCourse\Service\OpenCourseRecommendedService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class OpenCourseRecommendedServiceTest extends BaseTestCase
 {

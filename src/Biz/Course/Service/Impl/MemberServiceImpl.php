@@ -4,7 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;

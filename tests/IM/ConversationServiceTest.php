@@ -2,7 +2,7 @@
 namespace Tests\IM;
 
 use Mockery;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;;
 use Biz\CloudPlatform\CloudAPIFactory;
 

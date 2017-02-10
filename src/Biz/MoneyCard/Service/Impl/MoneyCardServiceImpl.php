@@ -6,7 +6,7 @@ use Biz\BaseService;
 use Biz\MoneyCard\Dao\MoneyCardBatchDao;
 use Biz\MoneyCard\Dao\MoneyCardDao;
 use Biz\MoneyCard\Service\MoneyCardService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class MoneyCardServiceImpl extends BaseService implements MoneyCardService

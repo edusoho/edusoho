@@ -3,7 +3,7 @@
 namespace Biz\Util;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class EdusohoCloudClient extends BaseService implements CloudClient
 {

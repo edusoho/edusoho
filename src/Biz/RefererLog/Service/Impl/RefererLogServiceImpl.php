@@ -4,7 +4,7 @@ namespace Biz\RefererLog\Service\Impl;
 use Biz\BaseService;
 use Biz\RefererLog\Dao\OrderRefererDao;
 use Biz\RefererLog\Dao\RefererLogDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\RefererLog\Service\RefererLogService;
 use Topxia\Service\Common\ServiceKernel;
 

@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ExportHelp;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ExportHelp;
 use Biz\Util\EdusohoLiveClient;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
@@ -672,7 +672,7 @@ class OpenCourseManageController extends BaseController
 
     protected function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     /**

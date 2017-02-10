@@ -10,7 +10,7 @@ use Biz\User\CurrentUser;
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\BlockToolkit;
+use AppBundle\Common\BlockToolkit;
 use Symfony\Component\Console\Input\InputArgument;
 
 class CopyInstallFilesCommand extends BaseCommand

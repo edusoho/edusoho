@@ -3,7 +3,7 @@ namespace Biz\Order\Service\Impl;
 
 use Biz\MoneyCard\Dao\MoneyCardDao;
 use Biz\Order\Service\MoneyService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 
 class MoneyServiceImpl extends BaseService implements MoneyService

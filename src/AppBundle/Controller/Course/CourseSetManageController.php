@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Course;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
@@ -75,7 +75,18 @@ class CourseSetManageController extends BaseController
 
     public function sidebarAction($courseSetId, $curCourse, $sideNav)
     {
+        $user = $this->getCurrentUser();
+
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+
+        $courses = array_filter($courses, function ($course) use ($user) {
+            if (in_array($user['id'], $course['teacherIds'])) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
         if (empty($curCourse)) {
             $curCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
         }
@@ -270,6 +281,7 @@ class CourseSetManageController extends BaseController
         $lockedCourseMenus = array(
             'tasks'     => '计划任务',
             'info'      => '计划设置',
+            'replay'    => '录播管理',
             'marketing' => '营销设置',
             'teachers'  => '教师设置'
         );

@@ -5,7 +5,7 @@ namespace Biz\Activity\Event;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

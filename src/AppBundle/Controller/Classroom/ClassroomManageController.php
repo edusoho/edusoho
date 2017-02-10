@@ -1,11 +1,11 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ExportHelp;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ExportHelp;
+use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\LevelService;
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\SimpleValidator;
 use Biz\Order\Service\OrderService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
@@ -20,7 +20,7 @@ use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Classroom\Service\ClassroomReviewService;
-use Topxia\WebBundle\Twig\Extension\WebExtension;
+use AppBundle\Twig\WebExtension;
 
 class ClassroomManageController extends BaseController
 {
@@ -967,7 +967,7 @@ class ClassroomManageController extends BaseController
         $user = $this->getUser();
 
         if (empty($user)) {
-            throw $this->createMessageResponse('info', '用户不存在或者尚未登录，请先登录');
+            return  $this->createMessageResponse('info', '用户不存在或者尚未登录，请先登录');
         }
 
         $courses   = $this->getClassroomService()->findCoursesByClassroomId($id);
@@ -1172,7 +1172,7 @@ class ClassroomManageController extends BaseController
      */
     private function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     /**
