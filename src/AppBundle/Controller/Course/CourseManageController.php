@@ -290,6 +290,21 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function courseRuleAction(Request $request)
+    {
+        return $this->render('course-manage/rule.html.twig');
+    }
+
+    public function liveCapacityAction(Request $request, $courseSetId, $courseId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+
+        $client       = new EdusohoLiveClient();
+        $liveCapacity = $client->getCapacity();
+
+        return $this->createJsonResponse($liveCapacity);
+    }
+
     public function marketingAction(Request $request, $courseSetId, $courseId)
     {
         $freeTasks = $this->getTaskService()->findFreeTasksByCourseId($courseId);

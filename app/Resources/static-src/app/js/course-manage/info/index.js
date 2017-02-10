@@ -2,13 +2,18 @@ import {TabChange} from '../help';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import MultiInput from 'app/common/component/multi-input';
-import sortList from 'common/sortable';
 
 function renderMultiGroupComponent(elementId,name){
   let datas = $('#'+elementId).data('init-value');
   ReactDOM.render( <MultiInput dataSource= {datas} outputDataElement={name} />,
     document.getElementById(elementId)
 );
+}
+
+if($('#maxStudentNum-field').length > 0){
+  $.get($('#maxStudentNum-field').data('liveCapacityUrl')).done((liveCapacity) => {
+    $('#maxStudentNum-field').data('liveCapacity', liveCapacity.capacity);
+  })
 }
 
 renderMultiGroupComponent('course-goals', 'goals');
@@ -40,6 +45,17 @@ jQuery.validator.addMethod("max_year", function (value, element) {
   return this.optional(element) || value < 100000;
 }, "有效期最大值不能超过99,999天");
 
+jQuery.validator.addMethod("live_capacity", function (value, element) {
+  const maxCapacity = parseInt($(element).data('liveCapacity'));
+  if(value > maxCapacity){
+    const message = Translator.trans('网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。', {capacity: maxCapacity});
+    $(element).parent().siblings('.js-course-rule').find('p').html(message);
+  }else {
+    $(element).parent().siblings('.js-course-rule').find('p').html('');
+  }
+
+  return true;
+});
 
 let $form = $('#course-info-form');
 let validator = $form.validate({
@@ -51,6 +67,11 @@ let validator = $form.validate({
   rules: {
     title: {
       required: true
+    },
+    maxStudentNum: {
+      required: true,
+      live_capacity: true,
+      positive_integer: true
     },
     expiryDays: {
       required: '#expiryByDays:checked',
@@ -70,6 +91,9 @@ let validator = $form.validate({
   },
   messages: {
     title: Translator.trans('请输入教学计划课程标题'),
+    maxStudentNum: {
+      required: Translator.trans('请输入课程人数')
+    },
     expiryDays: {
       required: Translator.trans('请输入学习有效期'),
     },
