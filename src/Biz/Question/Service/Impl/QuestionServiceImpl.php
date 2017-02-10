@@ -129,7 +129,14 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function search($conditions, $sort, $start, $limit)
     {
         $conditions = $this->filterQuestionFields($conditions);
-        return $this->getQuestionDao()->search($conditions, $sort, $start, $limit);
+        $questions  = $this->getQuestionDao()->search($conditions, $sort, $start, $limit);
+
+        $that = $this;
+        array_walk($questions, function (&$question) use ($that) {
+            $question = $that->hasStemImg($question);
+        });
+
+        return $questions;
     }
 
     public function searchCount($conditions)
@@ -275,6 +282,17 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         });
 
         return ArrayToolkit::group($attachments, 'dkey');
+    }
+
+    protected function hasStemImg($question)
+    {
+        $question['includeImg'] = false;
+
+        if (preg_match('/<img (.*?)>/', $question['stem'])) {
+            $question['includeImg'] = true;
+        }
+
+        return $question;
     }
 
     protected function getQuestionDao()
