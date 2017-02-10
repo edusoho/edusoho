@@ -553,7 +553,7 @@ class WebExtension extends \Twig_Extension
             $location = ConvertIpToolkit::convertIp($ip);
 
             if ($location === 'INNA') {
-                return $this->getServiceKernel()->trans('未知区域');
+                return '未知区域';
             }
 
             return $location;
@@ -580,27 +580,27 @@ class WebExtension extends \Twig_Extension
         $diff = time() - $time;
 
         if ($diff < 0) {
-            return $this->getServiceKernel()->trans('未来');
+            return '未来';
         }
 
         if ($diff == 0) {
-            return $this->getServiceKernel()->trans('刚刚');
+            return '刚刚';
         }
 
         if ($diff < 60) {
-            return $diff.$this->getServiceKernel()->trans('秒前');
+            return $diff.'秒前';
         }
 
         if ($diff < 3600) {
-            return round($diff / 60).$this->getServiceKernel()->trans('分钟前');
+            return round($diff / 60).'分钟前';
         }
 
         if ($diff < 86400) {
-            return round($diff / 3600).$this->getServiceKernel()->trans('小时前');
+            return round($diff / 3600).'小时前';
         }
 
         if ($diff < 2592000) {
-            return round($diff / 86400).$this->getServiceKernel()->trans('天前');
+            return round($diff / 86400).'天前';
         }
 
         if ($diff < 31536000) {
@@ -616,18 +616,18 @@ class WebExtension extends \Twig_Extension
         $remain     = $value - time();
 
         if ($remain <= 0 && empty($timeType)) {
-            return $remainTime['second'] = $this->getServiceKernel()->trans('0分钟');
+            return $remainTime['second'] = '0分钟';
         }
 
         if ($remain <= 3600 && empty($timeType)) {
-            return $remainTime['minutes'] = round($remain / 60).$this->getServiceKernel()->trans('分钟');
+            return $remainTime['minutes'] = round($remain / 60).'分钟';
         }
 
         if ($remain < 86400 && empty($timeType)) {
-            return $remainTime['hours'] = round($remain / 3600).$this->getServiceKernel()->trans('小时');
+            return $remainTime['hours'] = round($remain / 3600).'小时';
         }
 
-        $remainTime['day'] = round(($remain < 0 ? 0 : $remain) / 86400).$this->getServiceKernel()->trans('天');
+        $remainTime['day'] = round(($remain < 0 ? 0 : $remain) / 86400).'天';
 
         if (!empty($timeType)) {
             return $remainTime[$timeType];
@@ -673,10 +673,10 @@ class WebExtension extends \Twig_Extension
         $seconds = $value - $minutes * 60;
 
         if ($minutes === 0) {
-            return $seconds.$this->getServiceKernel()->trans('秒');
+            return $seconds.'秒';
         }
 
-        return $this->getServiceKernel()->trans('%minutes%分钟%seconds%秒', array('%minutes%' => $minutes, '%seconds%' => $seconds));
+        return printf('%s分钟%s秒', $minutes, $seconds);
     }
 
     public function timeRangeFilter($start, $end)
@@ -751,7 +751,7 @@ class WebExtension extends \Twig_Extension
                     break;
 
                 case 'p':
-                    $text .= $this->mb_trim($names['province'], $this->getServiceKernel()->trans('省'));
+                    $text .= $this->mb_trim($names['province'], '省');
                     break;
 
                 case 'C':
@@ -759,7 +759,7 @@ class WebExtension extends \Twig_Extension
                     break;
 
                 case 'c':
-                    $text .= $this->mb_trim($names['city'], $this->getServiceKernel()->trans('市'));
+                    $text .= $this->mb_trim($names['city'], '市');
                     break;
 
                 case 'D':
