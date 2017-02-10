@@ -2507,7 +2507,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip.VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     protected function getLogService()

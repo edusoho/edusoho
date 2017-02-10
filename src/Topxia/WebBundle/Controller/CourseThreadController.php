@@ -628,7 +628,7 @@ class CourseThreadController extends CourseBaseController
 
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:VipService');
     }
 
     protected function getClassroomService()

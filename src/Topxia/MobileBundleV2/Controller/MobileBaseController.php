@@ -585,12 +585,12 @@ class MobileBaseController extends BaseController
 
     public function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:VipService');
     }
 
     public function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:LevelService');
     }
 
     public function getTokenService()

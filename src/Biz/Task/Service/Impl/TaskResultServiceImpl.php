@@ -127,7 +127,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException('unlogin');
         }
-        $conditions  = array(
+        $conditions = array(
             'userId'   => $user->getId(),
             'status'   => 'finish',
             'courseId' => $courseId
@@ -143,6 +143,9 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException('unlogin');
+        }
+        if (empty($taskIds)) {
+            return array();
         }
         return $this->getTaskResultDao()->findByTaskIdsAndUserId($taskIds, $user->getId());
     }

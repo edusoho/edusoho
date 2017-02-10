@@ -3,17 +3,20 @@ import 'jquery-sortable';
 
 export const closeCourse = () => {
   $('body').on('click', '.js-close-course', function(evt) {
+    let $target = $(evt.currentTarget);
     if (!confirm(Translator.trans('是否确定关闭该教学计划？'))) {
       return;
     }
 
-    $.post($(evt.currentTarget).data('check-url'), function(data) {
+    $.post($target.data('check-url'), function(data) {
+
       if (data.warn) {
         if (!confirm(Translator.trans(data.message))) {
           return;
         }
       }
-      $.post($(evt.currentTarget).data('url'), function(data) {
+
+      $.post($target.data('url'), function(data) {
         if (data.success) {
           notify('success', '关闭成功');
           location.reload();

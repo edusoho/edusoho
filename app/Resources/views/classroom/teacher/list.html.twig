@@ -2,7 +2,7 @@
 
 {% set nav = 'teachers' %}
 {% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
-{% do load_script('classroombundle/controller/classroom/detail/teacher-list') %}
+{% do load_script('topxiawebbundle/controller/classroom/detail/teacher-list') %}
 
 {% block main %}
 
