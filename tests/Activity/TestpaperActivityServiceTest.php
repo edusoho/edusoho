@@ -28,6 +28,18 @@ class TestpaperActivityServiceTest extends BaseTestCase
         $this->assertEquals(2, count($activities));
     }
 
+    public function testFindActivitiesByMediaIds()
+    {
+        $activity1 = $this->createActivity();
+        $activity2 = $this->createActivity2();
+        $activity3 = $this->createActivity4();
+
+        $mediaIds   = array($activity1['mediaId'], $activity2['mediaId'], $activity3['mediaId']);
+        $activities = $this->getTestpaperActivityService()->findActivitiesByIds($mediaIds);
+
+        $this->assertEquals(2, count($activities));
+    }
+
     public function testCreateActivity()
     {
         $fields = array(
@@ -107,6 +119,22 @@ class TestpaperActivityServiceTest extends BaseTestCase
     {
         $fields = array(
             'mediaId'         => 1,
+            'doTimes'         => 1,
+            'redoInterval'    => 0,
+            'limitedTime'     => 5,
+            'checkType'       => 'score',
+            'finishCondition' => array(
+                'type' => 'score'
+            ),
+            'testMode'        => 'normal'
+        );
+        return $this->getTestpaperActivityService()->createActivity($fields);
+    }
+
+    protected function createActivity4()
+    {
+        $fields = array(
+            'mediaId'         => 2,
             'doTimes'         => 1,
             'redoInterval'    => 0,
             'limitedTime'     => 5,
