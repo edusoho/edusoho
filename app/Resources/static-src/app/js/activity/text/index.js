@@ -1,6 +1,5 @@
 import Emitter from "common/es-event-emitter";
 import ActivityEmitter from "../activity-emitter";
-import DataReporter from '../data-reporter';
 
 class Text extends Emitter  {
   constructor({element}) {
@@ -19,7 +18,6 @@ class Text extends Emitter  {
         this.emitter.emit('finish');
       }
     })
-    let dataReporter = new DataReporter();
   }
 
 }
