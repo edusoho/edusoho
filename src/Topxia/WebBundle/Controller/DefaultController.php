@@ -27,7 +27,7 @@ class DefaultController extends BaseController
         $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
 
         if ($this->getWebExtension()->isMicroMessenger()) {
-            $url ="http://mp.weixin.qq.com/mp/redirect?". http_build_query(array('url' => $url));
+            $url ="http://mp.weixin.qq.com/mp/redirect?url=". $url;
         }
         return $this->render('TopxiaWebBundle:Default:Mobile/app-download.html.twig', array(
             'url' => $url
