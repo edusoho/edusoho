@@ -743,6 +743,14 @@ content_page_list:
     path: /page
     defaults: {_controller: AppBundle:Content:pageList }
 
+content_course_rule:
+    path: /courserule
+    defaults: {_controller: AppBundle:Course/CourseManage:courseRule }
+
+course_set_live_capacity:
+    path: /course_set/{courseSetId}/manage/course/{courseId}/live_capacity
+    defaults: { _controller: AppBundle:Course/CourseManage:liveCapacity }
+
 teacher:
     path: /teacher
     defaults: {_controller: AppBundle:Teacher:index }

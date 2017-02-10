@@ -220,6 +220,11 @@ class CourseSetManageController extends BaseController
 
             if ($courseSet['type'] == 'live') {
                 $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+
+                if(empty($course['maxStudentNum'])){
+                    throw $this->createAccessDeniedException('直播课程发布前需要在计划设置中设置课程人数');
+                }
+
                 $this->getCourseService()->publishCourse($course['id']);
             }
 
