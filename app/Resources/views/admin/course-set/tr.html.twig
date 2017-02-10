@@ -44,7 +44,6 @@
     {% if filter == 'vip' %}
         {% set vip = vips[courseSet.vipLevelId]|default(null) %}
         <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
-   
     {% endif %}
   {% endif %}
 
@@ -60,7 +59,7 @@
         <a class="btn btn-default btn-sm" href="{{ path('course_set_manage_course_tasks', {courseSetId:courseSet.id, courseId: courseSet.defaultCourse.id|default(1)}) }}" target="_blank">{{'管理'|trans}}</a>
       {% endif %}
 
-      {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', course: courseSet} %}
+      {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', courseSet: courseSet, courseId: courseSet.defaultCourse.id|default(1) } %}
     </div>
   </td>
 </tr>
