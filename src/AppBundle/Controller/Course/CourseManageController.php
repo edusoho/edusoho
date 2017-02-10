@@ -60,6 +60,34 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function replayAction(Request $request, $courseSetId, $courseId)
+    {
+        $course    = $this->getCourseService()->tryManageCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $tasks     = $this->getTaskService()->findTasksByCourseId($course['id']);
+
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        foreach ($tasks as $key => $task) {
+            $task["isEnd"]     = intval(time() - $task["endTime"]) > 0;
+            $activity = $activities[$task['activityId']];
+            $task["canRecord"] = $activity['ext']['replayStatus'] != 'videoGenerated' && $this->_canRecord($activity['ext']['liveId']);
+            $task['file']      = $this->_getLiveReplayMedia($task);
+            $task['activity']  = $activity;
+            $tasks[$key]       = $task;
+        }
+
+        $default = $this->getSettingService()->get('default', array());
+        return $this->render('course-manage/live-replay/index.html.twig', array(
+            'courseSet' => $courseSet,
+            'course'    => $course,
+            'tasks'     => $tasks,
+            'default'   => $default
+        ));
+    }
+
     public function listAction(Request $request, $courseSetId)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
@@ -325,7 +353,7 @@ class CourseManageController extends BaseController
 
     public function courseItemsSortAction(Request $request, $courseId)
     {
-        $ids = $request->request->get("ids");
+        $ids = $request->request->get('ids', array());
         $this->getCourseService()->sortCourseItems($courseId, $ids);
         return $this->createJsonResponse(array('result' => true));
     }

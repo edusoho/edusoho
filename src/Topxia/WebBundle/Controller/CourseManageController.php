@@ -711,7 +711,7 @@ class CourseManageController extends BaseController
 
     protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getFileService()

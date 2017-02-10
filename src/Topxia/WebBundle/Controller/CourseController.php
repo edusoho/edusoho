@@ -759,7 +759,7 @@ class CourseController extends CourseBaseController
 
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:VipService');
     }
 
     protected function getCategoryService()
@@ -804,7 +804,7 @@ class CourseController extends CourseBaseController
 
     public function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getOrderService()

@@ -77,6 +77,11 @@ class Testpaper extends Activity
             throw $this->createNotFoundException('教学活动不存在');
         }
 
+        //引用传递，当考试时间设置改变时，时间值也改变
+        if ($fields['testMode'] == 'normal') {
+            $fields['startTime'] = 0;
+        }
+
         $filterFields = $this->filterFields($fields);
 
         return $this->getTestpaperActivityService()->updateActivity($activity['id'], $filterFields);
