@@ -226,8 +226,12 @@ class PermissionBuilder
             $finder->in($rootDir.'/src/*/*/Resources');
         }
 
+        if (glob($rootDir.'/src/*/Resources', GLOB_ONLYDIR)) {
+            $finder->in($rootDir.'/src/*/Resources');
+        }
         foreach ($finder as $dir) {
             $filepath = $dir->getRealPath()."/menus_{$position}.yml";
+
             if (file_exists($filepath)) {
                 $configPaths[] = $filepath;
             }
