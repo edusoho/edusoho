@@ -1610,20 +1610,20 @@ course_manage_task_delete:
 
 course_manage_task_replay_edit:
   path: /course/{courseId}/task/{taskId}/replay/edit
-  defaults: { _controller: AppBundle:TaskManage:editTaskReplay }
+  defaults: { _controller: AppBundle:Course/CourseManage:editTaskReplay }
 
 course_manage_task_replay_title_update:
   path:  /course/{courseId}/task/{taskId}/replay/{replayId}/update_title
-  defaults: { _controller: AppBundle:TaskManage:updateTaskReplayTitle }
+  defaults: { _controller: AppBundle:Course/CourseManage:updateTaskReplayTitle }
   methods: [POST]
 
 course_manage_task_replay_upload:
   path:  /course/{courseId}/task/{taskId}/replay/upload
-  defaults: { _controller: AppBundle:TaskManage:uploadReplay }
+  defaults: { _controller: AppBundle:Course/CourseManage:uploadReplay }
 
 course_manage_task_replay_create:
   path:  /course/{courseId}/task/{taskId}/replay/create
-  defaults: { _controller: AppBundle:TaskManage:createReplay }
+  defaults: { _controller: AppBundle:Course/CourseManage:createReplay }
   methods: [POST]
 
 task_live_entry:
