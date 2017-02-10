@@ -3,10 +3,10 @@
 namespace Biz\Course\Event;
 
 use Biz\Course\Dao\CourseDao;
-use Biz\System\Service\LogService;
-use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Activity\Dao\ActivityDao;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseMaterialDao;
 use Codeages\Biz\Framework\Event\Event;

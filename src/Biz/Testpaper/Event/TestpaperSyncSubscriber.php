@@ -2,7 +2,7 @@
 
 namespace Biz\Testpaper\Event;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Testpaper\Dao\TestpaperItemDao;
 use Codeages\Biz\Framework\Event\Event;
