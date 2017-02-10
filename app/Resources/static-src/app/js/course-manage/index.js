@@ -1,7 +1,6 @@
 import {closeCourse, deleteCourse, showSettings, deleteTask, publishTask, unpublishTask} from './help';
 import sortable from 'common/sortable';
 import 'store';
-import {generateReplay} from './help';
 const COURSE_FUNCTION_REMASK = 'COURSE-FUNCTION-REMASK'; //课程改版功能提醒
 
 if ($('#sortable-list').length) {
@@ -16,7 +15,6 @@ if(!store.get(COURSE_FUNCTION_REMASK)) {
   $('#course-function-modal').modal('show');
 }
 
-generateReplay();
 closeCourse();
 deleteCourse(store);
 deleteTask();
