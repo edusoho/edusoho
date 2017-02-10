@@ -6,7 +6,9 @@ imports:
     - { resource: security.yml }
     - { resource: services.xml }
     - { resource: service_listener.yml }
+    - { resource: theme_jianmo_parameters.yml }
     - { resource: "@AppBundle/Resources/config/services.yml" }
+
 framework:
     # esi:             ~
     translator:      { fallback: "%locale%", logging: false }
