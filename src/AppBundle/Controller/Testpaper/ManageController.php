@@ -47,12 +47,14 @@ class ManageController extends BaseController
         $userIds = ArrayToolkit::column($testpapers, 'updatedUserId');
         $users   = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('testpaper/manage/index.html.twig', array(
-            'courseSet'  => $courseSet,
-            'testpapers' => $testpapers,
-            'users'      => $users,
-            'paginator'  => $paginator
+        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByMediaIds(ArrayToolkit::column($testpapers, 'id'));
 
+        return $this->render('testpaper/manage/index.html.twig', array(
+            'courseSet'           => $courseSet,
+            'testpapers'          => $testpapers,
+            'users'               => $users,
+            'paginator'           => $paginator,
+            'testpaperActivities' => $testpaperActivities
         ));
     }
 
@@ -511,6 +513,11 @@ class ManageController extends BaseController
     public function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function getTestpaperActivityService()
+    {
+        return $this->createService('Activity:TestpaperActivityService');
     }
 
     protected function getServiceKernel()
