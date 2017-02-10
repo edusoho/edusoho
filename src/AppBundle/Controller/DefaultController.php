@@ -11,7 +11,7 @@ use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Theme\Service\ThemeService;
 use Biz\User\Service\BatchNotificationService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

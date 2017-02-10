@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Common\Mail\MailFactory;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;

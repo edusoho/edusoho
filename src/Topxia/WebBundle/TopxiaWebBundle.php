@@ -2,7 +2,7 @@
 
 namespace Topxia\WebBundle;
 
-use Topxia\Common\ExtensionalBundle;
+use AppBundle\Common\ExtensionalBundle;
 
 class TopxiaWebBundle extends ExtensionalBundle
 {

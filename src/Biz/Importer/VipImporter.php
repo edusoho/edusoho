@@ -1,8 +1,8 @@
 <?php
 namespace Biz\Importer;
 
-use Topxia\Common\FileToolkit;
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 
 class VipImporter extends Importer
@@ -453,7 +453,7 @@ class VipImporter extends Importer
 
     protected function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:VipService');
     }
 
     protected function getMessageService()
@@ -468,7 +468,7 @@ class VipImporter extends Importer
 
     protected function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getSettingService()

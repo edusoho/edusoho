@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Classroom;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\Sign\Service\SignService;
 use Biz\User\Service\AuthService;
@@ -11,7 +11,7 @@ use Vip\Service\Vip\LevelService;
 use Biz\User\Service\TokenService;
 use Biz\Order\Service\OrderService;
 use Biz\User\Service\StatusService;
-use Topxia\Common\ExtensionManager;
+use AppBundle\Common\ExtensionManager;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -25,7 +25,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\WebBundle\Controller\BaseController;
+use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomOrderService;
 use Biz\Classroom\Service\ClassroomReviewService;
 
@@ -671,7 +671,7 @@ class ClassroomController extends BaseController
             && $this->setting('vip.enabled')
             && !empty($classroom['vipLevelId'])
             && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) == 'ok') {
-            return $this->forward("classroom/becomeStudent", array(
+            return $this->forward("AppBundle:Classroom/Classroom:becomeStudent", array(
                 'request' => $request,
                 'id'      => $classroom['id']
             ));

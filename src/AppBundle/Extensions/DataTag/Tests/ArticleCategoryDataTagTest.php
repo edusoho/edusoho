@@ -3,7 +3,7 @@
 namespace AppBundle\Extensions\DataTag\Test;
 
 use Biz\BaseTestCase;;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Extensions\DataTag\ArticleCategoryDataTag;
 
 class ArticleCategoryDataTagTest extends BaseTestCase

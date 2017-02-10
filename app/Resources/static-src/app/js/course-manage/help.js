@@ -137,21 +137,3 @@ export const TabChange = () => {
     $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
   });
 };
-
-export const generateReplay = () => {
-  $('.js-generate-replay').on('click', (event) => {
-    const $this = $(event.currentTarget);
-    const url = $this.data('url');
-    if(!url) return;
-    Promise.resolve($.post(url))
-      .then(success => {
-        notify('success', '生成录制回放成功');
-      })
-      .catch(response => {
-        const error = JSON.parse(response.responseText);
-        const code = error.code;
-        const message = error.error;
-        notify('danger', message);
-      });
-  })
-};

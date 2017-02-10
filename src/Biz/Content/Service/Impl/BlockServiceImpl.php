@@ -10,7 +10,7 @@ use Biz\Content\Dao\BlockTemplateDao;
 use Biz\Content\Service\BlockService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class BlockServiceImpl extends BaseService implements BlockService
 {

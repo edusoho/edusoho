@@ -5,7 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -347,6 +347,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $subCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
             throw $this->createAccessDeniedException('该教学计划在班级下存在引用，请先删除相关引用');
+        }
+        $courseCount = $this->getCourseDao()->count(array('courseSetId' => $course['courseSetId']));
+        if($courseCount <= 1){
+            throw $this->createAccessDeniedException('课程下至少需保留一个教学计划');
         }
         return $this->getCourseDeleteService()->deleteCourse($id);
     }

@@ -7,7 +7,7 @@ use Biz\Content\Service\FileService;
 use Biz\File\Service\UploadFileService;
 use Biz\Group\Dao\GroupDao;
 use Biz\Group\Dao\MemberDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Group\Service\GroupService;
 use Codeages\Biz\Framework\Event\Event;
 

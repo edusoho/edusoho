@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\Course;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ExportHelp;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ExportHelp;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\SimpleValidator;
 use Biz\Order\Service\OrderService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;

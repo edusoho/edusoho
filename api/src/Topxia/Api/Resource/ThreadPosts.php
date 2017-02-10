@@ -3,7 +3,7 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class ThreadPosts extends BaseResource

@@ -3,8 +3,8 @@
 namespace AppBundle\Controller;
 
 use Biz\Task\Service\TaskService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseNoteService;
 use Symfony\Component\HttpFoundation\Request;

@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Command;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\CloudClientFactory;

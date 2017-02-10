@@ -4,7 +4,7 @@ namespace Topxia\Api\Resource\User;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Api\Util\SmsUtil;
 use Topxia\Api\Resource\BaseResource;
 use Topxia\Service\Common\ServiceKernel;

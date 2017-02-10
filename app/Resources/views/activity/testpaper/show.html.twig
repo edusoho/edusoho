@@ -9,7 +9,7 @@
 	          <i class="es-icon es-icon-xinxi color-info"></i>{{'考试说明'|trans}}
 	        </div>
 	        <div class="content">
-	        	{% if activity.startTime and activity.startTime > "now"|date("U") %}
+	        	{% if testpaperActivity.testMode == 'realTime' and activity.startTime and activity.startTime > "now"|date("U") %}
 		          <div class="text-16 ">
 		          	考试未开始，请在{{ activity.startTime|date('Y-m-d H:i:s') }}之后再来
 		          </div>

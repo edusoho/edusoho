@@ -2,11 +2,11 @@
 
 namespace Topxia\MobileBundleV2\Controller;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Api\Util\TagUtil;
 
@@ -63,7 +63,7 @@ class MobileBaseController extends BaseController
 
     public function setting($name, $default = null)
     {
-        return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
+        return $this->get('web.twig.extension')->getSetting($name, $default);
     }
 
     public function getContainer()
@@ -178,7 +178,7 @@ class MobileBaseController extends BaseController
                 'title'     => $user['title'],
                 'following' => $controller->getUserService()->findUserFollowingCount($user['id']),
                 'follower'  => $controller->getUserService()->findUserFollowerCount($user['id']),
-                'avatar'    => $this->container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true)
+                'avatar'    => $this->container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true)
             );
         }
 
@@ -268,9 +268,9 @@ class MobileBaseController extends BaseController
         $self        = $this;
         $container   = $this->container;
         return array_map(function ($course) use ($self, $container, $teachers, $coinSetting) {
-            $course['smallPicture']  = $container->get('topxia.twig.web_extension')->getFurl($course['smallPicture'], 'course.png');
-            $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFurl($course['middlePicture'], 'course.png');
-            $course['largePicture']  = $container->get('topxia.twig.web_extension')->getFurl($course['largePicture'], 'course.png');
+            $course['smallPicture']  = $container->get('web.twig.extension')->getFurl($course['smallPicture'], 'course.png');
+            $course['middlePicture'] = $container->get('web.twig.extension')->getFurl($course['middlePicture'], 'course.png');
+            $course['largePicture']  = $container->get('web.twig.extension')->getFurl($course['largePicture'], 'course.png');
             $course['about']         = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
             $course['createdTime']   = date("c", $course['createdTime']);
 
@@ -329,7 +329,7 @@ class MobileBaseController extends BaseController
             $item['createdTime'] = date('c', $item['createdTime']);
 
             if (!empty($item['length']) && in_array($item['type'], array('audio', 'video'))) {
-                $item['length'] = $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
+                $item['length'] = $container->get('web.twig.extension')->durationFilter($item['length']);
             } else {
                 $item['length'] = "";
             }
@@ -352,7 +352,7 @@ class MobileBaseController extends BaseController
 
     public function coverPath($path, $coverPath)
     {
-        return $this->container->get('topxia.twig.web_extension')->getFilePath($path, $coverPath, true);
+        return $this->container->get('web.twig.extension')->getFilePath($path, $coverPath, true);
     }
 
     public function filterUsers($users)
@@ -365,9 +365,9 @@ class MobileBaseController extends BaseController
 
         $controller = $this;
         return array_map(function ($user) use ($container, $controller) {
-            $user['smallAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
-            $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
-            $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+            $user['smallAvatar']  = $container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['mediumAvatar'] = $container->get('web.twig.extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
+            $user['largeAvatar']  = $container->get('web.twig.extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
             $user['createdTime']  = date('c', $user['createdTime']);
 
             if (!empty($user['verifiedMobile'])) {
@@ -585,12 +585,12 @@ class MobileBaseController extends BaseController
 
     public function getVipService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:VipService');
     }
 
     public function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:LevelService');
     }
 
     public function getTokenService()

@@ -7,7 +7,7 @@ namespace AppBundle\Controller\My;
 use AppBundle\Controller\BaseController;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
+use AppBundle\Common\Paginator;
 
 class OpenCourseController extends BaseController
 {

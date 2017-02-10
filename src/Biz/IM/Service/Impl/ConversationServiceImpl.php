@@ -3,7 +3,7 @@
 namespace Biz\IM\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\CloudPlatform\IMAPIFactory;
 use Biz\IM\Service\ConversationService;
 

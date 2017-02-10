@@ -2,7 +2,7 @@
 
 namespace Biz\Activity\Type;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
@@ -75,6 +75,11 @@ class Testpaper extends Activity
 
         if (!$activity) {
             throw $this->createNotFoundException('教学活动不存在');
+        }
+
+        //引用传递，当考试时间设置改变时，时间值也改变
+        if ($fields['testMode'] == 'normal') {
+            $fields['startTime'] = 0;
         }
 
         $filterFields = $this->filterFields($fields);

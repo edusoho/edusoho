@@ -4,9 +4,9 @@ namespace AppBundle\Controller;
 use Biz\Content\Service\FileService;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Util\UploadToken;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Util\UploadToken;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class FileController extends BaseController
 {
@@ -28,7 +28,7 @@ class FileController extends BaseController
         }
 
         $record        = $this->getFileService()->uploadFile($groupCode, $file);
-        $record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+        $record['url'] = $this->get('web.twig.extension')->getFilePath($record['uri']);
         $request->getSession()->set("fileId", $record["id"]);
         return $this->createJsonResponse($record);
     }

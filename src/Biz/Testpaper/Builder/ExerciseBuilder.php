@@ -1,7 +1,7 @@
 <?php
 namespace Biz\Testpaper\Builder;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 

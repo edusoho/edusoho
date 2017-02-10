@@ -2,7 +2,7 @@
 
 namespace AppBundle\Command;
 
-use Topxia\Common\BlockToolkit;
+use AppBundle\Common\BlockToolkit;
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;

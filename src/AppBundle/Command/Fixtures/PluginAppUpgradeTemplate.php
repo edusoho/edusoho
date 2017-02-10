@@ -1,7 +1,7 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Common\BlockToolkit;
+use AppBundle\Common\BlockToolkit;
 
  class EduSohoUpgrade
  {

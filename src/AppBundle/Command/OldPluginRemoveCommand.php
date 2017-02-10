@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Util\PluginUtil;
 
 class OldPluginRemoveCommand extends BaseCommand
