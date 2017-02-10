@@ -72,7 +72,7 @@ class MessageController extends BaseController
         );
 
         if ($request->getMethod() == 'POST') {
-            $message = $request->request->all();
+            $message = $request->request->get('message_reply');
             $message = $this->getMessageService()->sendMessage($user['id'], $conversation['fromId'], $message['content']);
             $html    = $this->renderView('message/item.html.twig', array('message' => $message, 'conversation' => $conversation));
             return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
@@ -91,7 +91,7 @@ class MessageController extends BaseController
         $receiver = $this->getUserService()->getUser($toId);
         $message  = array('receiver' => $receiver['nickname']);
         if ($request->getMethod() == 'POST') {
-            $message  = $request->request->all();
+            $message  = $request->request->get('message');
             $nickname = $message['receiver'];
             $receiver = $this->getUserService()->getUserByNickname($nickname);
             if (empty($receiver)) {
@@ -109,7 +109,7 @@ class MessageController extends BaseController
     {
         $user = $this->getCurrentUser();
         if ($request->getMethod() == 'POST') {
-            $message  = $request->request->all();
+            $message  = $request->request->get('message');
             $nickname = $message['receiver'];
             $receiver = $this->getUserService()->getUserByNickname($nickname);
             if (empty($receiver)) {
@@ -127,7 +127,7 @@ class MessageController extends BaseController
         $user     = $this->getCurrentUser();
         $message  = array('receiver' => $receiver['nickname']);
         if ($request->getMethod() == 'POST') {
-            $message  = $request->request->all();
+            $message  = $request->request->get('message');
             $nickname = $message['receiver'];
             $receiver = $this->getUserService()->getUserByNickname($nickname);
             if (empty($receiver)) {
