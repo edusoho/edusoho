@@ -628,7 +628,7 @@ class CourseController extends BaseController
 
     protected function getVipLevelService()
     {
-        return $this->createService('Vip:Vip.LevelService');
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getCourseMemberService()

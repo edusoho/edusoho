@@ -54,7 +54,8 @@
     <div class="bar-task">
       <div class="bar-task-header">
         <div class="title">
-          {{'课程:%title%'|trans({'%title%': course.title}) }}
+            {% set courseSet = data('CourseSet',{id: course.courseSetId}) %}
+            {{'课程:%title%'|trans({'%title%': courseSet.title}) }}
           <span>{{ course.finishTaskNum ~ '/' ~ course.taskNum }}</span>
         </div>
       </div>
@@ -77,7 +78,7 @@
             {% if task_lock is empty%}
               <a class="link-dark" href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}" title="{{ task.title }}" target="_blank">{{'课时%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</a></li>
             {% else  %}
-             {{'课时%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</li>
+             {{'任务%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</li>
             {% endif %}
           {% endfor %}
         {% endif %}
@@ -85,6 +86,6 @@
     </div>
   {% endfor %}
 {% else %}
-  <span class=""></span>{{'暂未发现还有未学习课时。'|trans}}<a href="{{ path('course_set_explore') }}">{{'去逛逛'|trans}}>></a>
+  <span class=""></span>{{'暂未发现还有未学习任务。'|trans}}<a href="{{ path('course_set_explore') }}">{{'去逛逛'|trans}}>></a>
 
 {% endif %}

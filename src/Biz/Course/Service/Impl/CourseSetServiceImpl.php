@@ -7,6 +7,8 @@ use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\User\Service\UserService;
+use Biz\System\Service\LogService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
@@ -29,7 +31,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function recommendCourse($id, $number)
     {
-        $course = $this->tryManageCourseSet($id);
+        $this->tryManageCourseSet($id);
         if (!is_numeric($number)) {
             throw $this->createAccessDeniedException('recmendNum should be number!');
         }
@@ -405,7 +407,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'audiences'
         ));
 
-        return $this->getCourseSetDao()->update($courseSet['id'], $fields);
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
+        $this->dispatchEvent('course-set.update', new Event($courseSet));
+        return $courseSet;
     }
 
     public function changeCourseSetCover($id, $coverArray)
@@ -420,7 +424,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $covers[$cover['type']] = $file['uri'];
         }
 
-        return $this->getCourseSetDao()->update($courseSet['id'], array('cover' => $covers));
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('cover' => $covers));
+        $this->dispatchEvent('course-set.update', new Event($courseSet));
+        return $courseSet;
     }
 
     public function deleteCourseSet($id)
@@ -495,14 +501,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             }
         }
 
-        return $this->getCourseSetDao()->update($id, $updateFields);
+        $courseSet = $this->getCourseSetDao()->update($id, $updateFields);
+        $this->dispatchEvent('course-set.update', new Event($courseSet));
+        return $courseSet;
     }
 
     public function publishCourseSet($id)
     {
         $courseSet = $this->tryManageCourseSet($id);
-        $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
-        $this->dispatchEvent('course-set.publish', $courseSet);
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'published'));
+        $this->dispatchEvent('course-set.publish', new Event($courseSet));
     }
 
     public function closeCourseSet($id)
@@ -511,8 +519,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if ($courseSet['status'] != 'published') {
             throw $this->createAccessDeniedException('CourseSet has not bean published');
         }
-        $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
-        $this->dispatchEvent('course-set.closed', $courseSet);
+        $courseSet = $this->getCourseSetDao()->update($courseSet['id'], array('status' => 'closed'));
+        $this->dispatchEvent('course-set.closed', new Event($courseSet));
     }
 
     /**
@@ -575,13 +583,38 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $fields = $this->fillOrgId(array('orgCode' => $orgCode));
 
         foreach ($courseSetIds as $courseSetId) {
-            $user = $this->getCourseSetDao()->update($courseSetId, $fields);
+            $this->getCourseSetDao()->update($courseSetId, $fields);
+        }
+    }
+
+    public function unlockCourseSet($id)
+    {
+        $courseSet = $this->tryManageCourseSet($id);
+        if ($courseSet['parentId'] <= 0 || $courseSet['locked'] == 0) {
+            throw $this->createAccessDeniedException('Invalid Operation');
+        }
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
+        try {
+            $this->beginTransaction();
+            $this->getCourseSetDao()->update($id, array('locked' => 0));
+            $this->getCourseDao()->update($courses[0]['id'], array('locked' => 0));
+            $this->commit();
+            return $courseSet;
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
         }
     }
 
     public function analysisCourseSetDataByTime($startTime, $endTime)
     {
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
+    }
+
+    public function updateCourseSetMinPublishedCoursePrice($courseSetId)
+    {
+        $price = $this->getCourseService()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
+        return $this->getCourseSetDao()->update($courseSetId, array('minCoursePrice' => $price));
     }
 
     protected function validateCourseSet($courseSet)
@@ -694,11 +727,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->biz->dao('Course:FavoriteDao');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->createService('System:LogService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
@@ -728,7 +767,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $defaultCourse = array(
             'courseSetId'   => $created['id'],
-            'title'         => '默认教学计划',
+            'title'         => $created['title'],
             'expiryMode'    => 'days',
             'expiryDays'    => 0,
             'learnMode'     => 'freeMode',

@@ -1,10 +1,8 @@
 <?php
 namespace AppBundle\Controller\Course;
 
-use Biz\File\Service\UploadFileService;
-use Biz\System\Service\SettingService;
-use Biz\Util\EdusohoLiveClient;
 use Topxia\Common\Paginator;
+use Biz\Util\EdusohoLiveClient;
 use Topxia\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Order\Service\OrderService;
@@ -12,7 +10,9 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Strategy\StrategyContext;
+use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
@@ -112,6 +112,13 @@ class CourseManageController extends BaseController
         $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $courseSetId,
+                'sideNav' => 'tasks'
+            ));
+        }
+
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
 
         $files = $this->prepareTaskActivityFiles($tasks);
@@ -171,7 +178,15 @@ class CourseManageController extends BaseController
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $courseSetId,
+                'sideNav' => 'info'
+            ));
+        }
+
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         return $this->render('course-manage/info.html.twig', array(
             'courseSet' => $courseSet,
             'course'    => $this->formatCourseDate($course)
@@ -199,14 +214,21 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
-
             return $this->redirect($this->generateUrl('course_set_manage_course_marketing', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $conditions       = array(
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $courseSetId,
+                'sideNav' => 'marketing'
+            ));
+        }
+
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+
+        $conditions = array(
             'courseId' => $courseId,
             'types'    => array('text', 'video', 'audio', 'flash', 'doc', 'ppt')
         );
@@ -236,7 +258,15 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_set_manage_course_teachers', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
         }
 
-        $courseSet  = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $courseSetId,
+                'sideNav' => 'teachers'
+            ));
+        }
+
         $course     = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $teachers   = $this->getCourseService()->findTeachersByCourseId($courseId);
         $teacherIds = array();
@@ -330,7 +360,6 @@ class CourseManageController extends BaseController
 
     /**
      * @param  $tasks
-     *
      * @return array
      */
     public function prepareTaskActivityFiles($tasks)
@@ -418,7 +447,7 @@ class CourseManageController extends BaseController
             throw $this->createAccessDeniedException('查询订单已关闭，请联系管理员');
         }
 
-        $status  = array(
+        $status = array(
             'created'   => '未付款',
             'paid'      => '已付款',
             'refunding' => '退款中',
@@ -474,24 +503,24 @@ class CourseManageController extends BaseController
 
         foreach ($orders as $key => $order) {
             $column = "";
-            $column .= $order['sn'] . ",";
-            $column .= $status[$order['status']] . ",";
-            $column .= $order['title'] . ",";
-            $column .= "《" . $course['title'] . "》" . ",";
-            $column .= $order['totalPrice'] . ",";
+            $column .= $order['sn'].",";
+            $column .= $status[$order['status']].",";
+            $column .= $order['title'].",";
+            $column .= "《".$course['title']."》".",";
+            $column .= $order['totalPrice'].",";
 
             if (!empty($order['coupon'])) {
-                $column .= $order['coupon'] . ",";
+                $column .= $order['coupon'].",";
             } else {
-                $column .= '无' . ",";
+                $column .= '无'.",";
             }
 
-            $column .= $order['couponDiscount'] . ",";
-            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate']) . "," : '0,';
-            $column .= $order['amount'] . ",";
-            $column .= $payment[$order['payment']] . ",";
-            $column .= $users[$order['userId']]['nickname'] . ",";
-            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'] . "," : "-" . ",";
+            $column .= $order['couponDiscount'].",";
+            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate'])."," : '0,';
+            $column .= $order['amount'].",";
+            $column .= $payment[$order['payment']].",";
+            $column .= $users[$order['userId']]['nickname'].",";
+            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
 
             if (preg_match('/管理员添加/', $order['title'])) {
                 $column .= '管理员添加,';
@@ -499,7 +528,7 @@ class CourseManageController extends BaseController
                 $column .= "-,";
             }
 
-            $column .= date('Y-n-d H:i:s', $order['createdTime']) . ",";
+            $column .= date('Y-n-d H:i:s', $order['createdTime']).",";
 
             if ($order['paidTime'] != 0) {
                 $column .= date('Y-n-d H:i:s', $order['paidTime']);
@@ -511,13 +540,13 @@ class CourseManageController extends BaseController
         }
 
         $str .= implode("\r\n", $results);
-        $str = chr(239) . chr(187) . chr(191) . $str;
+        $str = chr(239).chr(187).chr(191).$str;
 
         $filename = sprintf("%s-订单-(%s).csv", $course['title'], date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 

@@ -5,6 +5,12 @@ namespace Biz\Course\Copy\Impl;
 use Topxia\Common\ArrayToolkit;
 use Biz\Course\Copy\AbstractEntityCopy;
 
+/**
+ * Class QuestionCopy
+ * @package Biz\Course\Copy\Impl
+ * @deprecated
+ * @see TestpaperCopy
+ */
 class QuestionCopy extends AbstractEntityCopy
 {
     /**
