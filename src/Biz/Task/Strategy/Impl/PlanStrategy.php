@@ -18,7 +18,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 
     public function deleteTask($task)
     {
-        try{
+        try {
             $this->biz['db']->beginTransaction();
 
             $this->getTaskDao()->delete($task['id']);
@@ -26,7 +26,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             $this->getActivityService()->deleteActivity($task['activityId']); //删除该课时
 
             $this->biz['db']->commit();
-        }catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->biz['db']->rollback();
             throw $e;
         }
@@ -100,6 +100,10 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 
     public function sortCourseItems($courseId, array $itemIds)
     {
+        if (empty($itemIds)) {
+            return;
+        }
+
         $parentChapters = array(
             'lesson'  => array(),
             'unit'    => array(),
