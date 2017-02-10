@@ -260,7 +260,7 @@ class WebExtension extends \Twig_Extension
 
     public function getUserVipLevel($userId)
     {
-        return $this->createService('Vip:Vip.VipService')->getMemberByUserId($userId);
+        return $this->createService('VipPlugin:Vip:VipService')->getMemberByUserId($userId);
     }
 
     public function getParametersFromUrl($url)

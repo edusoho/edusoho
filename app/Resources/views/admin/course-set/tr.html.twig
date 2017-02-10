@@ -41,11 +41,6 @@
     {% else %}
       <td>{{ courseSet.studentNum }}</td>
     {% endif %}
-    {% if filter == 'vip' %}
-        {% set vip = vips[courseSet.vipLevelId]|default(null) %}
-        <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
-   
-    {% endif %}
   {% endif %}
 
   <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>

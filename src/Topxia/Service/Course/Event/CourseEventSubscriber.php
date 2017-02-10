@@ -1,0 +1,368 @@
+<?php
+namespace Topxia\Service\Course\Event;
+
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\StringToolkit;
+use Codeages\Biz\Framework\Event\Event;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Taxonomy\TagOwnerManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+class CourseEventSubscriber implements EventSubscriberInterface
+{
+    public static function getSubscribedEvents()
+    {
+        return array(
+            // 'course.join'            => 'onCourseJoin',
+            // 'course.favorite'        => 'onCourseFavorite',
+            // 'course.update'          => 'onCourseUpdate',
+            // 'course.teacher.update'  => 'onCourseTeacherUpdate',
+            // 'course.price.update'    => 'onCoursePriceUpdate',
+            // 'course.picture.update'  => 'onCoursePictureUpdate',
+            // 'user.role.change'       => 'onRoleChange',
+            // 'announcement.create'    => 'onAnnouncementCreate',
+            // 'announcement.update'    => 'onAnnouncementUpdate',
+            // 'announcement.delete'    => 'onAnnouncementDelete',
+            // 'courseReview.add'       => 'onCourseReviewCreate'
+        );
+    }
+
+    public function onRoleChange(Event $event)
+    {
+        $user = $event->getSubject();
+        if (!in_array('ROLE_TEACHER', $user['roles'])) {
+            $this->getCourseMemberService()->cancelTeacherInAllCourses($user['id']);
+        }
+    }
+
+    public function onCourseJoin(Event $event)
+    {
+        $course  = $event->getSubject();
+        $private = $course['status'] == 'published' ? 0 : 1;
+
+        if ($course['parentId']) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+
+            if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
+                $private = 0;
+            } else {
+                $private = 1;
+            }
+        }
+
+        $userId = $event->getArgument('userId');
+        $this->getStatusService()->publishStatus(array(
+            'type'       => 'become_student',
+            'courseId'   => $course['id'],
+            'objectType' => 'course',
+            'objectId'   => $course['id'],
+            'private'    => $private,
+            'userId'     => $userId,
+            'properties' => array(
+                'course' => $this->simplifyCousrse($course)
+            )
+        ));
+    }
+
+    public function onCourseFavorite(Event $event)
+    {
+        $course  = $event->getSubject();
+        $private = $course['status'] == 'published' ? 0 : 1;
+
+        if ($course['parentId']) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+
+            if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
+                $private = 0;
+            } else {
+                $private = 1;
+            }
+        }
+
+        $this->getStatusService()->publishStatus(array(
+            'type'       => 'favorite_course',
+            'courseId'   => $course['id'],
+            'objectType' => 'course',
+            'objectId'   => $course['id'],
+            'private'    => $private,
+            'properties' => array(
+                'course' => $this->simplifyCousrse($course)
+            )
+        ));
+    }
+
+    public function onCourseTeacherUpdate(Event $event)
+    {
+        $context = $event->getSubject();
+
+        $courseId = $context["courseId"];
+
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($courseId, 1), 'id');
+
+        $findClassroomsByCourseIds = $this->getClassroomService()->findClassroomIdsByCourseId($courseId);
+
+        foreach ($findClassroomsByCourseIds as $findClassroomsByCourseId) {
+            $this->getClassroomService()->updateClassroomTeachers($findClassroomsByCourseId);
+        }
+
+        if ($courseIds) {
+            $course = $context['course'];
+
+            $teachers = $context['teachers'];
+
+            foreach ($courseIds as $courseId) {
+                $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
+            }
+        }
+    }
+
+    public function onCourseUpdate(Event $event)
+    {
+        $context = $event->getSubject();
+
+        $argument = $context['argument'];
+        $course   = $context['course'];
+        $tagIds   = $context['tagIds'];
+        $userId   = $context['userId'];
+        $argument = $context['argument'];
+        $course   = $context['course'];
+        $userId   = $context['userId'];
+
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+
+        if ($courseIds && $argument) {
+            foreach ($courseIds as $key => $courseId) {
+                unset($argument['expiryMode']);
+                unset($argument['expiryDay']);
+                $this->getCourseService()->updateCourse($courseIds[$key], $argument);
+            }
+        }
+
+        if (isset($context['tagIds'])) {
+            $tagOwnerManager = new TagOwnerManager('course', $course['id'], $context['tagIds'], $userId);
+            $tagOwnerManager->update();
+        }
+    }
+
+    public function onCoursePriceUpdate(Event $event)
+    {
+        $context   = $event->getSubject();
+        $currency  = $context['currency'];
+        $course    = $context['course'];
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+
+        if ($courseIds) {
+            foreach ($courseIds as $courseId) {
+                $this->getCourseService()->setCoursePrice($courseId, $currency, $course['price']);
+            }
+        }
+    }
+
+    public function onCoursePictureUpdate(Event $event)
+    {
+        $context   = $event->getSubject();
+        $argument  = $context['argument'];
+        $course    = $context['course'];
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+
+        if ($courseIds) {
+            foreach ($courseIds as $courseId) {
+                $this->getCourseService()->changeCoursePicture($courseId, $argument);
+            }
+        }
+    }
+
+    public function onAnnouncementCreate(Event $event)
+    {
+        $announcement = $event->getSubject();
+
+        if ($announcement['targetType'] != 'course') {
+            return false;
+        }
+
+        $course = $this->getCourseService()->getCourse($announcement['targetId']);
+        if ($course['parentId'] != 0) {
+            return false;
+        }
+
+        //@TODO course2.0后 应改为教学计划的复制
+        /*        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+
+        if ($courseIds) {
+        $fields           = ArrayToolkit::parts($announcement, array('userId', 'targetType', 'url', 'startTime', 'endTime', 'content'));
+        $fields['copyId'] = $announcement['id'];
+
+        foreach ($courseIds as $courseId) {
+        $fields['targetId']    = $courseId;
+        $fields['createdTime'] = time();
+
+        $this->getAnnouncementService()->createAnnouncement($fields);
+        }
+        }*/
+
+        return true;
+    }
+
+    public function onAnnouncementUpdate(Event $event)
+    {
+        $announcement = $event->getSubject();
+
+        if ($announcement['targetType'] != 'course') {
+            return false;
+        }
+
+        $course = $this->getCourseService()->getCourse($announcement['targetId']);
+        if ($course['parentId'] != 0) {
+            return false;
+        }
+
+        //@TODO course2.0后 应改为教学计划的复制
+        /*
+        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+
+        if ($courseIds) {
+        $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
+        array(
+        'targetType' => 'course',
+        'targetIds'  => $courseIds,
+        'copyId'     => $announcement['id']
+        ),
+        array('createdTime' => 'DESC'),
+        0, PHP_INT_MAX
+        );
+
+        $fields = ArrayToolkit::parts($announcement, array('url', 'startTime', 'endTime', 'content'));
+
+        foreach ($copyAnnouncements as $copyAnnouncement) {
+        $fields['updatedTime'] = time();
+
+        $this->getAnnouncementService()->updateAnnouncement($copyAnnouncement['id'], $fields);
+        }
+        }*/
+
+        return true;
+    }
+
+    public function onAnnouncementDelete(Event $event)
+    {
+        $announcement = $event->getSubject();
+
+        if ($announcement['targetType'] != 'course') {
+            return false;
+        }
+
+        $course = $this->getCourseService()->getCourse($announcement['targetId']);
+        if ($course['parentId'] != 0) {
+            return false;
+        }
+
+        //@TODO course2.0后 应改为教学计划的复制
+        /*$courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'], 1), 'id');
+
+        if ($courseIds) {
+        $copyAnnouncements = $this->getAnnouncementService()->searchAnnouncements(
+        array(
+        'targetType' => 'course',
+        'targetIds'  => $courseIds,
+        'copyId'     => $announcement['id']
+        ),
+        array('createdTime' => 'DESC'),
+        0, PHP_INT_MAX
+        );
+
+        foreach ($copyAnnouncements as $copyAnnouncement) {
+        $this->getAnnouncementService()->deleteAnnouncement($copyAnnouncement['id']);
+        }
+        }*/
+
+        return true;
+    }
+
+    public function onCourseReviewCreate(Event $event)
+    {
+        $review = $event->getSubject();
+
+        if ($review['parentId'] > 0) {
+            $course = $this->getCourseService()->getCourse($review['courseId']);
+
+            $parentReview = $this->getReviewService()->getReview($review['parentId']);
+
+            if (!$parentReview) {
+                return false;
+            }
+
+            $message = array(
+                'title'      => $course['title'],
+                'targetId'   => $review['courseId'],
+                'targetType' => 'course',
+                'userId'     => $review['userId']
+            );
+            $this->getNotificationService()->notify($parentReview['userId'], 'comment-post',
+                $message);
+        }
+    }
+
+    protected function simplifyCousrse($course)
+    {
+        return array(
+            'id'     => $course['id'],
+            'title'  => $course['title'],
+            'type'   => $course['type'],
+            'rating' => $course['rating'],
+            'price'  => $course['price']
+        );
+    }
+
+    protected function simplifyLesson($lesson)
+    {
+        return array(
+            'id'      => $lesson['id'],
+            'number'  => $lesson['number'],
+            'type'    => $lesson['type'],
+            'title'   => $lesson['title'],
+            'summary' => StringToolkit::plain($lesson['summary'], 100)
+        );
+    }
+
+    protected function getStatusService()
+    {
+        return ServiceKernel::instance()->createService('User:StatusService');
+    }
+
+    protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course:CourseService');
+    }
+
+    protected function getClassroomService()
+    {
+        return ServiceKernel::instance()->createService('Classroom:ClassroomService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return ServiceKernel::instance()->createService('File:UploadFileService');
+    }
+
+    protected function getAnnouncementService()
+    {
+        return ServiceKernel::instance()->createService('Announcement:AnnouncementService');
+    }
+
+    protected function getReviewService()
+    {
+        return ServiceKernel::instance()->createService('Course:ReviewService');
+    }
+
+    protected function getNotificationService()
+    {
+        return ServiceKernel::instance()->createService('User:NotificationService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return ServiceKernel::instance()->createService('Course:MemberService');
+    }
+}

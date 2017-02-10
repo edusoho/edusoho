@@ -885,6 +885,6 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 
     private function getLevelService()
     {
-        return $this->controller->getService('Vip:Vip.LevelService');
+        return $this->controller->getService('VipPlugin:Vip:LevelService');
     }
 }

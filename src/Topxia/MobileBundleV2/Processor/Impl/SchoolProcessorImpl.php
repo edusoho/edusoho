@@ -547,7 +547,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getLevelService()
     {
-        return $this->controller->getService('Vip:Vip.LevelService');
+        return $this->controller->getService('VipPlugin:Vip:LevelService');
     }
 }
 

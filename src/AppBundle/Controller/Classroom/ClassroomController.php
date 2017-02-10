@@ -671,7 +671,7 @@ class ClassroomController extends BaseController
             && $this->setting('vip.enabled')
             && !empty($classroom['vipLevelId'])
             && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) == 'ok') {
-            return $this->forward("classroom/becomeStudent", array(
+            return $this->forward("AppBundle:Classroom/Classroom:becomeStudent", array(
                 'request' => $request,
                 'id'      => $classroom['id']
             ));

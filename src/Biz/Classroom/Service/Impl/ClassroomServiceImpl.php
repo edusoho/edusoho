@@ -1606,7 +1606,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip.VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     /**
