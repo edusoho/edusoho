@@ -3,8 +3,8 @@
 namespace Biz\Task\Event;
 
 use Biz\Task\Dao\TaskDao;
-use Topxia\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;

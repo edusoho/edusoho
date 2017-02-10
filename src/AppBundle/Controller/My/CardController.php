@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\My;
 
 use Biz\Card\Service\CardService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
@@ -182,6 +182,6 @@ class CardController extends BaseController
 
     private function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 }

@@ -3,7 +3,7 @@ namespace AppBundle\Command;
 
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
-use Topxia\Common\AppConnectionFactory;
+use AppBundle\Common\AppConnectionFactory;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 

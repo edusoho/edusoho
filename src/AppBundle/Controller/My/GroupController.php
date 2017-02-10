@@ -6,8 +6,8 @@ namespace AppBundle\Controller\My;
 
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 
 class GroupController extends BaseController
 {

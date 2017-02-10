@@ -2,7 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
 {

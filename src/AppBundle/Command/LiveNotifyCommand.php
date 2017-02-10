@@ -6,7 +6,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class LiveNotifyCommand extends BaseCommand
 {

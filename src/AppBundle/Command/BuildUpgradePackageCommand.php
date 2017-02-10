@@ -283,7 +283,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $zipPath = "{$buildDir}/{$filename}.zip";
 
-        $this->output->writeln('<comment>ZIP包大小：'.$this->getContainer()->get('topxia.twig.web_extension')->fileSizeFilter(filesize($zipPath)));
+        $this->output->writeln('<comment>ZIP包大小：'.$this->getContainer()->get('web.twig.extension')->fileSizeFilter(filesize($zipPath)));
     }
 
     private function printChangeLog()

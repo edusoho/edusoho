@@ -9,7 +9,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class OpenCourses extends BaseResource
 {

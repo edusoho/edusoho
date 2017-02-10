@@ -4,8 +4,8 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Service\CourseOrderService;
 use Biz\Course\Service\MemberService;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\StringToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class CourseOrderServiceImpl extends BaseService implements CourseOrderService

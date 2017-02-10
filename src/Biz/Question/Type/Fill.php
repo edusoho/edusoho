@@ -2,8 +2,8 @@
 
 namespace Biz\Question\Type;
 
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Exception\UnexpectedValueException;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Exception\UnexpectedValueException;
 
 class Fill implements TypeInterface
 {

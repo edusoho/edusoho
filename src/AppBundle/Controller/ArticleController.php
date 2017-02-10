@@ -6,8 +6,8 @@ use Biz\Article\Service\CategoryService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Thread\Service\ThreadService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class ArticleController extends BaseController

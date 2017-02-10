@@ -1,11 +1,11 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\CurlToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\CurlToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Topxia\Component\Echats\EchartsBuilder;
+use AppBundle\Component\Echats\EchartsBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends BaseController
@@ -567,7 +567,7 @@ class DefaultController extends BaseController
 
     private function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     protected function getUpgradeNoticeService()
@@ -605,6 +605,6 @@ class DefaultController extends BaseController
 
     protected function isPluginInstalled($name)
     {
-        return $this->get('topxia.twig.web_extension')->isPluginInstalled($name);
+        return $this->get('web.twig.extension')->isPluginInstalled($name);
     }
 }

@@ -9,7 +9,7 @@ use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class BaseStrategy
 {

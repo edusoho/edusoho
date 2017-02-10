@@ -7,13 +7,13 @@ use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserFieldService;
-use Topxia\Common\SmsToolkit;
-use Topxia\Common\CurlToolkit;
-use Topxia\Common\FileToolkit;
+use AppBundle\Common\SmsToolkit;
+use AppBundle\Common\CurlToolkit;
+use AppBundle\Common\FileToolkit;
 use Biz\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class SettingsController extends BaseController
@@ -1139,7 +1139,7 @@ class SettingsController extends BaseController
 
     private function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     protected function downloadImg($url)

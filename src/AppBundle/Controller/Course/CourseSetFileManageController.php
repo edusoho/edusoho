@@ -1,9 +1,9 @@
 <?php
 namespace AppBundle\Controller\Course;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;

@@ -4,7 +4,7 @@ namespace Biz\Order\OrderProcessor;
 use Biz\Course\Service\CourseOrderService;
 use Biz\Course\Service\CourseService;
 use Exception;
-use Topxia\Common\NumberToolkit;
+use AppBundle\Common\NumberToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class CourseOrderProcessor extends BaseProcessor implements OrderProcessor

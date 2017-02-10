@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\ImgConverToData;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ImgConverToData;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserApprovalController extends BaseController

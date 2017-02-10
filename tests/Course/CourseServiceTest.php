@@ -104,11 +104,12 @@ class CourseServiceTest extends BaseTestCase
             'expiryDays'  => 0
         );
 
+        $this->getCourseService()->createCourse($course);
         $result = $this->getCourseService()->createCourse($course);
 
         $deleted = $this->getCourseService()->deleteCourse($result['id']);
 
-        $this->assertEquals($deleted, 1);
+        $this->assertEquals($deleted, 2);
     }
 
     public function testCloseCourse()

@@ -5,7 +5,7 @@ namespace Biz\Org\Service\Impl;
 use Biz\BaseService;
 use Biz\Org\Dao\OrgDao;
 use Biz\Org\Service\OrgService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Org\Service\OrgBatchUpdateFactory;
 

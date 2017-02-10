@@ -3,7 +3,7 @@ namespace Biz\RefererLog\Service\Impl;
 
 use Biz\BaseService;
 use Biz\RefererLog\Dao\OrderRefererLogDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\RefererLog\Service\OrderRefererLogService;
 
 class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogService
