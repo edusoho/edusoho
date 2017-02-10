@@ -55,7 +55,7 @@ jQuery.validator.addMethod("live_capacity", function (value, element) {
   }
 
   return true;
-}, "有效期最大值不能超过99,999天");
+});
 
 let $form = $('#course-info-form');
 let validator = $form.validate({
