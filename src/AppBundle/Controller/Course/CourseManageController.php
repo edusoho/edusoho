@@ -353,7 +353,7 @@ class CourseManageController extends BaseController
 
     public function courseItemsSortAction(Request $request, $courseId)
     {
-        $ids = $request->request->get("ids");
+        $ids = $request->request->get('ids', array());
         $this->getCourseService()->sortCourseItems($courseId, $ids);
         return $this->createJsonResponse(array('result' => true));
     }

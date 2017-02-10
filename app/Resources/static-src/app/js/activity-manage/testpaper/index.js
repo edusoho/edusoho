@@ -115,7 +115,6 @@ class Testpaper {
     } else {
       $('#lesson-redo-interval-field').closest('.form-group').show();
       $('.starttime-check-div').hide();
-      $('input[name="startTime"]').val(0);
     }
   }
 
@@ -127,7 +126,7 @@ class Testpaper {
       this.dateTimePicker();
     } else {
       $('.starttime-input').addClass('hidden');
-      $('input[name="startTime"]').val('0');
+      //$('input[name="startTime"]').val('0');
     }
   }
 
