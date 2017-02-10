@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Controller\EsBar;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use AppBundle\Controller\BaseController;
 use Biz\Testpaper\Service\TestpaperService;

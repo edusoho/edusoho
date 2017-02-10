@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;

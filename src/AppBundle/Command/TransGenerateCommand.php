@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Command;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\FInder;
 use Symfony\Component\Console\Input\InputArgument;

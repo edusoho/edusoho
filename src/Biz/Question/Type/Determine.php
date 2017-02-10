@@ -2,7 +2,7 @@
 
 namespace Biz\Question\Type;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class Determine implements TypeInterface
 {

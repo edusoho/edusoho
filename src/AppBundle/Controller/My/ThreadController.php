@@ -11,8 +11,8 @@ use Biz\Course\Service\ThreadService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 
 class ThreadController extends BaseController
 {

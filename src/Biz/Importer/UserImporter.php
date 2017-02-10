@@ -1,8 +1,8 @@
 <?php
 namespace Biz\Importer;
 
-use Topxia\Common\FileToolkit;
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 

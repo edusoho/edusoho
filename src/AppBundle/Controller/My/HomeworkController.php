@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\My;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 

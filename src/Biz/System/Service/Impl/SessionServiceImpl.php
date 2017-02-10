@@ -3,7 +3,7 @@
 namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SessionService;
 
 class SessionServiceImpl extends BaseService implements SessionService

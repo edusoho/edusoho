@@ -3,8 +3,8 @@
 namespace Tests\Role;
 
 use Biz\Role\Service\RoleService;
-use Topxia\Common\Tree;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Tree;
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Role\Util\PermissionBuilder;
 

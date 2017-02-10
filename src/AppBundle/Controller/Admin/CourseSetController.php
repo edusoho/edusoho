@@ -1,13 +1,8 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Biz\Task\Service\TaskService;
-use Vip\Service\Vip\LevelService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MemberService;
-use Biz\Course\Service\ThreadService;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseSetService;
@@ -347,6 +342,7 @@ class CourseSetController extends BaseController
             $courseSetId  = $courseSet['id'];
             $courseCount  = $this->getCourseService()->searchCourseCount(array('courseSetId' => $courseSetId));
             $isLearnedNum = $this->getMemberService()->countMembers(array('isLearned' => 1, 'courseSetId' => $courseSetId));
+
             $taskCount    = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
 
             $courseSet['learnedTime'] = $this->getTaskService()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);

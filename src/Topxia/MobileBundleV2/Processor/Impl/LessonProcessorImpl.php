@@ -1,8 +1,8 @@
 <?php
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
@@ -423,7 +423,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $mediaSource = $lesson['mediaSource'];
         $mediaUri    = $lesson['mediaUri'];
         if ($lesson['length'] > 0) {
-            $lesson['length'] = $this->getContainer()->get('topxia.twig.web_extension')->durationFilter($lesson['length']);
+            $lesson['length'] = $this->getContainer()->get('web.twig.extension')->durationFilter($lesson['length']);
         } else {
             $lesson['length'] = '';
         }

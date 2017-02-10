@@ -3,7 +3,7 @@
 namespace Biz\DiscoveryColumn\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\DiscoveryColumn\Service\DiscoveryColumnService;
 
 class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnService

@@ -1,7 +1,7 @@
 <?php
 namespace Biz\CloudPlatform\Client;
 
-use Topxia\System;
+use AppBundle\System;
 
 class EduSohoAppClient implements AppClient
 {

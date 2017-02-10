@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Command;
 
-use Topxia\Common\BlockToolkit;
+use AppBundle\Common\BlockToolkit;
 use Biz\Util\PluginUtil;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputArgument;

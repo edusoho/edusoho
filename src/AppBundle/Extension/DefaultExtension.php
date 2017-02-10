@@ -17,7 +17,7 @@ use Biz\Activity\Type\Download;
 use Biz\Activity\Type\Exercise;
 use Biz\Activity\Type\Homework;
 use Biz\Question\Type\Material;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Type\Testpaper;
 use Biz\Question\Type\Determine;
 use Biz\Question\Type\SingleChoice;

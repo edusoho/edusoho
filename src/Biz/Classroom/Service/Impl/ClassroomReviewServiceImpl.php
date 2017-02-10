@@ -3,7 +3,7 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use Biz\Classroom\Dao\ClassroomDao;

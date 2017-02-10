@@ -3,7 +3,7 @@
 namespace Biz\Testpaper\Tests;
 
 use Biz\BaseTestCase;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class TestpaperServiceTest extends BaseTestCase
 {

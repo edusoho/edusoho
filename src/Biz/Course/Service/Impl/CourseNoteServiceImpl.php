@@ -14,7 +14,7 @@ use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class CourseNoteServiceImpl extends BaseService implements CourseNoteService
 {

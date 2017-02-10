@@ -4,8 +4,8 @@ namespace AppBundle\Extensions\DataTag;
 
 use Biz\Course\Service\CourseService;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\ExtensionManager;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ExtensionManager;
 
 class LatestStatusesDataTag extends BaseDataTag implements DataTag  
 {

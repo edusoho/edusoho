@@ -1,11 +1,11 @@
 <?php
 namespace Biz\Role\Util;
 
-use Topxia\Common\Tree;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Tree;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Finder;
-use Topxia\Common\PluginVersionToolkit;
+use AppBundle\Common\PluginVersionToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class PermissionBuilder
@@ -226,8 +226,12 @@ class PermissionBuilder
             $finder->in($rootDir.'/src/*/*/Resources');
         }
 
+        if (glob($rootDir.'/src/*/Resources', GLOB_ONLYDIR)) {
+            $finder->in($rootDir.'/src/*/Resources');
+        }
         foreach ($finder as $dir) {
             $filepath = $dir->getRealPath()."/menus_{$position}.yml";
+
             if (file_exists($filepath)) {
                 $configPaths[] = $filepath;
             }

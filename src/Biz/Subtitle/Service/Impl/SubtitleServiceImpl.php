@@ -4,7 +4,7 @@ namespace Biz\Subtitle\Service\Impl;
 use Biz\BaseService;
 use Biz\File\Service\UploadFileService;
 use Biz\Subtitle\Dao\SubtitleDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Subtitle\Service\SubtitleService;
 
 class SubtitleServiceImpl extends BaseService implements SubtitleService

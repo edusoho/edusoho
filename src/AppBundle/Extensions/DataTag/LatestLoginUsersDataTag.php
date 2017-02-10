@@ -2,9 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-
-class LatestLoginUsersDataTag extends CourseBaseDataTag implements DataTag  
+class LatestLoginUsersDataTag extends CourseBaseDataTag implements DataTag
 {
 
     /**

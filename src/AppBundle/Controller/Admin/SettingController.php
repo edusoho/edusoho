@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\FileToolkit;
-use Topxia\Common\JsonToolkit;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\JsonToolkit;
 use Biz\Common\Mail\MailFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\EdusohoLiveClient;
@@ -733,6 +733,6 @@ class SettingController extends BaseController
 
     private function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 }
