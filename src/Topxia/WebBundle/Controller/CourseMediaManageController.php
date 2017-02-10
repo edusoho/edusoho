@@ -3,7 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Component\MediaParser\ParserProxy;
+use AppBundle\Component\MediaParser\ParserProxy;
 
 class CourseMediaManageController extends BaseController
 {

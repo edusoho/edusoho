@@ -3,7 +3,7 @@ namespace AppBundle\Command;
 
 use AppBundle\System;
 use AppBundle\Common\BlockToolkit;
-use Topxia\Component\Payment\Payment;
+use AppBundle\Component\Payment\Payment;
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 

@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
 
 class LoginController extends BaseController
 {

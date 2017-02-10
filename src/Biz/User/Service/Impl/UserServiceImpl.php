@@ -25,7 +25,7 @@ use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\NotificationService;
 use Biz\System\Service\IpBlacklistService;
 use Symfony\Component\HttpFoundation\File\File;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 

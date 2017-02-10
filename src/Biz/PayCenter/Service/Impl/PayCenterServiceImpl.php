@@ -3,7 +3,7 @@
 namespace Biz\PayCenter\Service\Impl;
 
 use Biz\Order\Service\OrderService;
-use Topxia\Component\Payment\Payment;
+use AppBundle\Component\Payment\Payment;
 use Biz\BaseService;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;

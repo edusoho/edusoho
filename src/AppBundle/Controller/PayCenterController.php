@@ -10,7 +10,7 @@ use Biz\System\Service\LogService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Component\Payment\Payment;
+use AppBundle\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\CloudClientFactory;
 

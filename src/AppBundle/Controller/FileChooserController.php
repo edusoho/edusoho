@@ -12,7 +12,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\File\Service\UploadFileService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Component\MediaParser\ParserProxy;
+use AppBundle\Component\MediaParser\ParserProxy;
 
 /**
  * Class MediaProccessController

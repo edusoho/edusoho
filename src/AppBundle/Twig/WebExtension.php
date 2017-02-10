@@ -12,7 +12,7 @@ use AppBundle\Common\ExtensionManager;
 use AppBundle\Util\UploadToken;
 use AppBundle\Common\PluginVersionToolkit;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Component\ShareSdk\WeixinShare;
+use AppBundle\Component\ShareSdk\WeixinShare;
 use AppBundle\Util\CategoryBuilder;
 use Biz\Util\HTMLPurifierFactory;
 

@@ -5,7 +5,7 @@ use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Topxia\Component\Echats\EchartsBuilder;
+use AppBundle\Component\Echats\EchartsBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends BaseController

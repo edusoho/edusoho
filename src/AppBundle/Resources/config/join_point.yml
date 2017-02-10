@@ -15,5 +15,5 @@ order:
   coin:
     processor: Biz\Order\OrderProcessor\CoinOrderProcessor
   groupSell:
-    processor: Topxia\Service\Order\OrderProcessor\GroupSellOrderProcessor
+    processor: Biz\Order\OrderProcessor\GroupSellOrderProcessor
     order_show_template: GroupSellBundle:GroupSell:Order/group_sell.html.twig

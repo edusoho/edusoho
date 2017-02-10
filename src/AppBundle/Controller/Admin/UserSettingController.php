@@ -6,7 +6,7 @@ use Biz\System\Service\SettingService;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\Common\ServiceKernel;
 

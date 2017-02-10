@@ -13,7 +13,7 @@ use AppBundle\Common\FileToolkit;
 use Biz\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class SettingsController extends BaseController

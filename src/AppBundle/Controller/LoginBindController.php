@@ -8,7 +8,7 @@ use Biz\User\Service\AuthService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
 
 class LoginBindController extends BaseController
 {

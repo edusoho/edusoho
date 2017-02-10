@@ -1,14 +1,6 @@
 <?php
 namespace AppBundle\Command;
 
-use AppBundle\System;
-use AppBundle\Common\BlockToolkit;
-use Topxia\Component\Payment\Payment;
-use Biz\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
-
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
