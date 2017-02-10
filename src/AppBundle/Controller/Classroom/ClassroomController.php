@@ -25,7 +25,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\WebBundle\Controller\BaseController;
+use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomOrderService;
 use Biz\Classroom\Service\ClassroomReviewService;
 

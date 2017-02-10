@@ -6,7 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Topxia\Api\Util\TagUtil;
 

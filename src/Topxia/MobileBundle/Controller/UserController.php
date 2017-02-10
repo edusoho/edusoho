@@ -4,7 +4,7 @@ namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Controller\BaseController;
+use AppBundle\Controller\BaseController;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ArrayToolkit;
 

@@ -3,7 +3,7 @@
 namespace Topxia\MobileBundleV2\Controller;
 
 use AppBundle\System;
-use Topxia\WebBundle\Controller\BaseController;
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

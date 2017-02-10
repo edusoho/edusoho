@@ -3,7 +3,7 @@
 namespace Topxia\MobileBundleV2\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use AppBundle\Controller\BaseController;
 
 class MobileApiController extends MobileBaseController
 {

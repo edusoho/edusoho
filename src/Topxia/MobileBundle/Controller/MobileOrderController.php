@@ -3,7 +3,7 @@
 namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
+use AppBundle\Controller\BaseController;
 use AppBundle\Common\ArrayToolkit;
 use Topxia\MobileBundle\Alipay\MobileAlipayConfig;
 use Symfony\Component\HttpFoundation\Response;
