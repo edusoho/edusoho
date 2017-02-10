@@ -48,6 +48,13 @@ class CourseSetManageController extends BaseController
 
     public function indexAction($id)
     {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'tasks'
+            ));
+        }
         return $this->redirectToRoute('course_set_manage_courses', array(
             'courseSetId' => $id
         ));
@@ -96,7 +103,14 @@ class CourseSetManageController extends BaseController
         }
 
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-        $tags      = array();
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'base'
+            ));
+        }
+
+        $tags = array();
         if (!empty($courseSet['tags'])) {
             $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
         }
@@ -120,7 +134,16 @@ class CourseSetManageController extends BaseController
             $this->getCourseSetService()->updateCourseSetDetail($id, $data);
             return $this->redirect($this->generateUrl('course_set_manage_detail', array('id' => $id)));
         }
+
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'detail'
+            ));
+        }
+
         return $this->render('courseset-manage/detail.html.twig', array(
             'courseSet' => $courseSet
         ));
@@ -138,6 +161,14 @@ class CourseSetManageController extends BaseController
         // if ($courseSet['cover']) {
         //     $courseSet['cover'] = json_decode($courseSet['cover'], true);
         // }
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'cover'
+            ));
+        }
+
         return $this->render('courseset-manage/cover.html.twig', array(
             'courseSet' => $courseSet
         ));
@@ -151,6 +182,13 @@ class CourseSetManageController extends BaseController
             $data = $request->request->all();
             $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], json_decode($data["images"], true));
             return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $courseSet['id'])));
+        }
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'cover'
+            ));
         }
 
         $fileId = $request->getSession()->get("fileId");
@@ -209,7 +247,8 @@ class CourseSetManageController extends BaseController
 
     public function syncInfoAction(Request $request, $id)
     {
-        $sideNav   = $request->query->get('sideNav', '');
+        $sideNav = $request->query->get('sideNav', '');
+        var_dump($sideNav);
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         if (!$courseSet['locked']) {
             throw new \Exception('CourseSet must be locked');

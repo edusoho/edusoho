@@ -832,7 +832,7 @@ class MemberServiceImpl extends BaseService implements MemberService
      */
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip.VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     /**

@@ -22,7 +22,7 @@
             <ul class="nav nav-tabs" role="tablist">
               {% for key, tab in metas.tabs %}
                 <li role="presentation"
-                    class="{% if app.request.attributes.get('_route_params').tab|default('') == key %}active{% endif %}">
+                    class="{% if app.request.attributes.get('_route_params').tab|default('') == key  or nav|default('') == key %}active{% endif %}">
                   <a
                       {% if member|default(false) %}
                         href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"

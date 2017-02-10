@@ -54,12 +54,8 @@
     <div class="bar-task">
       <div class="bar-task-header">
         <div class="title">
-            {% if course.title == '默认教学计划' %}
-                {% set courseSet = data('CourseSet',{id: course.courseSetId}) %}
-                {{'课程:%title%'|trans({'%title%': courseSet.title}) }}
-            {% else %}
-                {{'课程:%title%'|trans({'%title%': course.title}) }}
-            {% endif %}
+            {% set courseSet = data('CourseSet',{id: course.courseSetId}) %}
+            {{'课程:%title%'|trans({'%title%': courseSet.title}) }}
           <span>{{ course.finishTaskNum ~ '/' ~ course.taskNum }}</span>
         </div>
       </div>
