@@ -24,7 +24,8 @@ class DefaultController extends BaseController
     public function appDownloadAction() {
         $result = CloudAPIFactory::create('leaf')->get('/me');
         $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
-        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);;
+        $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
+
         if ($this->getWebExtension()->isMicroMessenger()) {
             $url ="http://mp.weixin.qq.com/mp/redirect?". http_build_query(array('url' => $url));
         }
