@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller\My;
-
 
 use AppBundle\Controller\Course\CourseBaseController;
 use Biz\System\Service\SettingService;
@@ -75,7 +73,12 @@ class CourseSetController extends CourseBaseController
         $classrooms = array();
 
         if ($filter == 'classroom') {
-            $classrooms = $this->getClassroomService()->findClassroomsByCourseIds(ArrayToolkit::column());
+            $classrooms = $this->getClassroomService()->findClassroomsByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+            $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
+
+            foreach ($classrooms as &$classroom) {
+                $classroom['classroomTitle'] = $this->getClassroomService()->getClassroom($classroom['classroomId'])['title'];
+            }
         }
 
         return $this->render('my/teaching/course-sets.html.twig', array(
