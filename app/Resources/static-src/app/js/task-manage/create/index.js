@@ -97,7 +97,6 @@ class Editor {
     let postData = $('#step1-form').serializeArray()
       .concat(this.$iframe_body.find('#step2-form').serializeArray())
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
-
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
         this.$element.modal('hide');

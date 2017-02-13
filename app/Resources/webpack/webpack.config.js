@@ -19,7 +19,6 @@ const config = {
     "iframe-resizer-contentWindow":['libs/js/iframe-resizer-contentWindow.js'],
     "es-webuploader":['libs/js/es-webuploader.js'],
     "es-image-crop":['libs/js/es-image-crop.js'],
-    "easy-pie-chart":['libs/js/easy-pie-chart.js'],
     'jquery-timer':['libs/js/jquery-timer.js'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation

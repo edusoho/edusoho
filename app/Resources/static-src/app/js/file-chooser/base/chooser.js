@@ -1,5 +1,5 @@
-import Emitter from 'es6-event-emitter';
-
+// import Emitter from 'es6-event-emitter';
+import Emitter from "component-emitter";
 class Chooser extends Emitter {
   constructor() {
     super();

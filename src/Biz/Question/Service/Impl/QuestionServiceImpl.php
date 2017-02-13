@@ -284,7 +284,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return ArrayToolkit::group($attachments, 'dkey');
     }
 
-    protected function hasStemImg($question)
+    public function hasStemImg($question)
     {
         $question['includeImg'] = false;
 
