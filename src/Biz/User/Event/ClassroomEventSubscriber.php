@@ -1,14 +1,14 @@
 <?php
 
-
 namespace Biz\User\Event;
 
-
+use AppBundle\Common\StringToolkit;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\MemberService;
 use Biz\User\Service\StatusService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use AppBundle\Common\StringToolkit;
 
 class ClassroomEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -19,15 +19,15 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         return array(
             'classroom.join'         => 'onClassroomJoin',
-            'classroom.auditor_join' => 'onClassroomGuest',
+            'classroom.auditor_join' => 'onClassroomGuest'
         );
     }
 
     public function onClassroomJoin(Event $event)
     {
-        $classroom         = $event->getSubject();
-        $userId            = $event->getArgument('userId');
-        $status            = array(
+        $classroom = $event->getSubject();
+        $userId    = $event->getArgument('userId');
+        $status    = array(
             'type'        => 'become_student',
             'classroomId' => $classroom['id'],
             'objectType'  => 'classroom',
@@ -47,7 +47,41 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
-        $status    = array(
+        // publish status
+        $this->publishJoinStatus($classroom, $userId);
+        //add user to classroom courses
+        $this->syncCourseStudents($classroom, $userId);
+    }
+
+    private function simplifyClassroom($classroom)
+    {
+        return array(
+            'id'      => $classroom['id'],
+            'title'   => $classroom['title'],
+            'picture' => $classroom['middlePicture'],
+            'about'   => StringToolkit::plain($classroom['about'], 100),
+            'price'   => $classroom['price']
+        );
+    }
+
+    private function syncCourseStudents($classroom, $userId)
+    {
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+        if(empty($courses)){
+            return;
+        }
+
+        foreach ($courses as $course){
+            $member = $this->getMemberService()->getCourseMember($course['id'], $userId);
+            if(empty($member)){
+                $this->getMemberService()->becomeStudentByClassroomJoined($course['id'], $userId);
+            }
+        }
+    }
+
+    private function publishJoinStatus($classroom, $userId)
+    {
+        $status = array(
             'type'        => 'become_auditor',
             'classroomId' => $classroom['id'],
             'objectType'  => 'classroom',
@@ -63,22 +97,27 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         $this->getStatusService()->publishStatus($status);
     }
 
-    private function simplifyClassroom($classroom)
-    {
-        return array(
-            'id'      => $classroom['id'],
-            'title'   => $classroom['title'],
-            'picture' => $classroom['middlePicture'],
-            'about'   => StringToolkit::plain($classroom['about'], 100),
-            'price'   => $classroom['price']
-        );
-    }
-
     /**
      * @return StatusService
      */
     protected function getStatusService()
     {
         return $this->getBiz()->service('User:StatusService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 }

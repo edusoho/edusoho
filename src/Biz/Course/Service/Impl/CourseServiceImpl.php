@@ -168,7 +168,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'goals',
             'audiences',
             'enableFinish',
-            'serializeMode'
+            'serializeMode',
+            'maxStudentNum'
         ));
 
         if ($course['status'] == 'published') {

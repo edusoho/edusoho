@@ -2,7 +2,7 @@
 namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\TestpaperActivityDao;
 use Biz\Activity\Service\TestpaperActivityService;
 

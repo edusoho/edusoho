@@ -37,7 +37,7 @@ class CourseCopy extends AbstractEntityCopy
         $new['isDefault'] = $courseSetId == $source['courseSetId'] ? 0 : $source['isDefault'];
         //标记是否是从默认教学计划转成非默认的，如果是则需要对chapter-task结构进行调整
         $modeChange         = $new['isDefault'] != $source['isDefault'];
-        $new['parentId']    = $source['id'];
+        $new['parentId']    = 0;
         $new['locked']      = 0;
         $new['courseSetId'] = $courseSetId;
         $new['creator']     = $user['id'];

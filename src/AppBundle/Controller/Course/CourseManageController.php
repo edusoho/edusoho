@@ -116,7 +116,7 @@ class CourseManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fileId = $request->request->get('fileId', 0);
             $this->getActivityService()->updateActivity($activity['id'], array('fileId' => $fileId));
-            return $this->redirect($this->generateUrl('course_set_manage_course_tasks', array(
+            return $this->redirect($this->generateUrl('course_set_manage_course_replay', array(
                 'courseSetId' => $course['courseSetId'],
                 'courseId'    => $course['id']
             )));
@@ -288,6 +288,21 @@ class CourseManageController extends BaseController
             'courseSet' => $courseSet,
             'course'    => $this->formatCourseDate($course)
         ));
+    }
+
+    public function courseRuleAction(Request $request)
+    {
+        return $this->render('course-manage/rule.html.twig');
+    }
+
+    public function liveCapacityAction(Request $request, $courseSetId, $courseId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+
+        $client       = new EdusohoLiveClient();
+        $liveCapacity = $client->getCapacity();
+
+        return $this->createJsonResponse($liveCapacity);
     }
 
     public function marketingAction(Request $request, $courseSetId, $courseId)
