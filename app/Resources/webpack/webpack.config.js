@@ -21,6 +21,7 @@ const config = {
     "es-image-crop":['libs/js/es-image-crop.js'],
     "easy-pie-chart":['libs/js/easy-pie-chart.js'],
     'jquery-timer':['libs/js/jquery-timer.js'],
+    'echo-js': ['echo-js']
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
@@ -40,7 +41,8 @@ const config = {
     'moment/moment.js',
     'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
     'jquery-sortable/source/js/jquery-sortable.js',
-    'nouislider/distribute/nouislider.js'
+    'nouislider/distribute/nouislider.js',
+    'echo-js/dist/echo.js'
   ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {

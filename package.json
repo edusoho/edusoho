@@ -31,6 +31,7 @@
     "console-polyfill": "0.2.3",
     "easy-pie-chart": "2.1.7",
     "echarts": "3.3.1",
+    "echo-js": "1.7.3",
     "es-ckeditor": "latest",
     "es-messenger": "latest",
     "es-swfobject": "latest",
