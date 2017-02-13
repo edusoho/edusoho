@@ -116,7 +116,7 @@ class CourseManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fileId = $request->request->get('fileId', 0);
             $this->getActivityService()->updateActivity($activity['id'], array('fileId' => $fileId));
-            return $this->redirect($this->generateUrl('course_set_manage_course_tasks', array(
+            return $this->redirect($this->generateUrl('course_set_manage_course_replay', array(
                 'courseSetId' => $course['courseSetId'],
                 'courseId'    => $course['id']
             )));
