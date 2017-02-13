@@ -38,7 +38,7 @@
           </div>
           <div class="metas clearfix">
             <span class="finished-percentage text-sm color-gray">完成课时: <span class="gray-dark">{{ course.memberLearnedNum }}/{{ course.lessonNum }}</span></span>
-            <span class="btn btn-primary btn-xs pull-right">继续学习</span>
+            <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><span class="btn btn-primary btn-xs pull-right">继续学习</span></a>
           </div>
         </div>
       </div>
