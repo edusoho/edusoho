@@ -15,7 +15,6 @@ class CloudMail extends Mail
         $cloudConfig = $this->setting('cloud_email_crm', array());
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            $config = $this->setting('mailer', array());
             $options = $this->options;
             $template = $this->parseTemplate($options);
             $format = isset($options['format']) && $options['format'] == 'html' ? 'html' : 'text';
@@ -26,7 +25,7 @@ class CloudMail extends Mail
                'format' => $format,
                'template'=>'email_default',
                'sourceFrom' => empty($options['sourceFrom']) ? '' : $options['sourceFrom'],
-               'nickname' => $config['name']
+               'nickname' => $cloudConfig['name']
             );
             if (!empty($options['sendedSn'])) {
                 $params['sendedSn'] = $options['sendedSn'];
