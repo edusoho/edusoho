@@ -30,7 +30,7 @@ define(function(require, exports, module) {
             }
         });
 
-        var editor = CKEDITOR.replace('title', {
+        var editor = CKEDITOR.replace('content-filed', {
             toolbar: 'SimpleMini'
         });
 

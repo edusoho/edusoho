@@ -10,8 +10,8 @@
     <div class="col-md-2 control-label">
       <label for="title">{{'公告内容'|trans}}</label>
     </div>
-    <div class="col-md-9 controls">
-      <textarea class="form-control" id="title" name="content" data-display="{{'公告内容'|trans}}" >{% if announcement|default(null) %}{{announcement.content}}{% endif %}</textarea>
+    <div class="col-md-8 controls">
+      <textarea class="form-control" id="content-filed" name="content" data-display="{{'公告内容'|trans}}" >{% if announcement|default(null) %}{{announcement.content}}{% endif %}</textarea>
     </div>
   </div>
   {% if announcement.url | default('') %}
