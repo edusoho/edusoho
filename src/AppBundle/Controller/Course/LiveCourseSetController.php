@@ -315,4 +315,12 @@ class LiveCourseSetController extends CourseBaseController
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return LevelService
+     */  
+    protected function getLevelService()
+    {
+        return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
 }
