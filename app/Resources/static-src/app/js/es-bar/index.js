@@ -1,4 +1,4 @@
-import { Browser } from 'common/utils';
+import { Browser, isLogin } from 'common/utils';
 
 class EsBar {
   constructor(prop) {
@@ -7,7 +7,6 @@ class EsBar {
   }
 
   init() {
-    console.log(123);
     this.initEvent();
 
     if (Browser.ie10 || Browser.ie11 || Browser.edge) {
@@ -57,9 +56,9 @@ class EsBar {
     const $this = $(e.currentTarget);
 
     // 判断是否登录
-    if($("meta[name='is-login']").attr("content")==0){
-        this.isNotLogin();
-        return;
+    if(!isLogin){
+      this.isNotLogin();
+      return;
     }
 
     this.ele.find(".bar-main-body").perfectScrollbar({wheelSpeed:50});
