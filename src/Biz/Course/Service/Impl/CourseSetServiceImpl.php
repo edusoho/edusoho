@@ -611,10 +611,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
     }
 
-    public function updateCourseSetMinPublishedCoursePrice($courseSetId)
+    public function updateCourseSetMinAndMaxPublishedCoursePrice($courseSetId)
     {
-        $price = $this->getCourseService()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
-        return $this->getCourseSetDao()->update($courseSetId, array('minCoursePrice' => $price['price']));
+        $price = $this->getCourseService()->getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
+        return $this->getCourseSetDao()->update($courseSetId, array('minCoursePrice' => $price['minPrice'], 'maxCoursePrice' => $price['maxPrice']));
+    }
+
+    public function updateMaxRate($id, $maxRate)
+    {
+        $courseSet = $this->getCourseSetDao()->update($id, array('maxRate' => $maxRate));
+        $this->dispatchEvent('course-set.maxRate.update', new Event(array('courseSet' => $courseSet, 'maxRate' => $maxRate)));
+        return $courseSet;
     }
 
     protected function validateCourseSet($courseSet)

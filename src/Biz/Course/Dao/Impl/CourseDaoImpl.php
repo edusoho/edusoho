@@ -33,8 +33,8 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE isDefault=1 AND courseSetId IN ({$marks});";
+        $marks = str_repeat('?,', count($courseSetIds) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE isDefault=1 AND courseSetId IN ({$marks});";
 
         return $this->db()->fetchAll($sql, $courseSetIds);
     }
@@ -54,7 +54,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         if (empty($courseSetIds)) {
             return array();
         }
-        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
+        $marks = str_repeat('?,', count($courseSetIds) - 1) . '?';
 
         $sql = "SELECT MIN(price) AS minPrice, MAX(price) AS maxPrice,courseSetId FROM {$this->table} WHERE courseSetId IN ({$marks}) GROUP BY courseSetId";
         return $this->db()->fetchAll($sql, $courseSetIds) ?: null;
@@ -78,8 +78,8 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
-        $sql   = "SELECT courseSetId,sum(`income`) as income FROM {$this->table} WHERE courseSetId IN ({$marks}) group by courseSetId;";
+        $marks = str_repeat('?,', count($courseSetIds) - 1) . '?';
+        $sql = "SELECT courseSetId,sum(`income`) as income FROM {$this->table} WHERE courseSetId IN ({$marks}) group by courseSetId;";
 
         return $this->db()->fetchAll($sql, $courseSetIds);
     }
@@ -92,10 +92,15 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
-    public function getMinPublishedCoursePriceByCourseSetId($courseSetId)
+    public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
     {
-        $sql = "SELECT ifnull(min(price),0) as price FROM `c2_course` WHERE courseSetId = {$courseSetId} and status = 'published'";
+        $sql = "SELECT ifnull(min(price),0) as minPrice, ifnull(max(price),0) as maxPrice FROM {$this->table} WHERE courseSetId = {$courseSetId} and status = 'published'";
         return $this->db()->fetchAssoc($sql);
+    }
+
+    public function updateMaxRateByCourseSetId($courseSetId, $updateFields)
+    {
+        return $this->db()->update($this->table, $updateFields, array('courseSetId' => $courseSetId));
     }
 
     public function declares()

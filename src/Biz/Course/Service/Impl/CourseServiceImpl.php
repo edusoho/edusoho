@@ -201,6 +201,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
+    public function updateMaxRateByCourseSetId($courseSetId, $maxRate)
+    {
+        $course = $this->getCourseDao()->updateMaxRateByCourseSetId($courseSetId, array('updatedTime' => time(), 'maxRate' => $maxRate));
+        return $course;
+    }
+
     public function setCourseTeachers($courseId, $teachers)
     {
         $teacherMembers = array();
@@ -998,6 +1004,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function getMinPublishedCoursePriceByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
+    }
+
+    public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
+    {
+        return $this->getCourseDao()->getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
     }
 
     protected function _prepareCourseOrderBy($sort)
