@@ -4,6 +4,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require("jquery.bootstrap-datetimepicker");
     require('common/validator-rules').inject(Validator);
+    require('es-ckeditor');
     exports.run = function() {
         require('orgbundle/controller/org/org-tree-select').run();
         var $modal = $('#announcement-create-form').parents('.modal');
@@ -29,6 +30,14 @@ define(function(require, exports, module) {
             }
         });
 
+        var editor = CKEDITOR.replace('title', {
+            toolbar: 'SimpleMini'
+        });
+
+        validator.on('formValidate', function(elemetn, event) {
+            editor.updateElement();
+        });
+
         Validator.addRule(
             'time_check',
             /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/,
@@ -48,16 +57,18 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name=url]',
-            rule: 'url'
-        });
-
-        validator.addItem({
             element: '[name=endTime]',
             required: true,
             rule: 'time_check date_check'
         });
 
+        var url = $("#url").val();
+        if (url){
+            validator.addItem({
+                element: '[name=url]',
+                rule: 'url'
+            });
+        }
 
         var now = new Date();
 
@@ -86,7 +97,6 @@ define(function(require, exports, module) {
 
             $('[name=startTime]').datetimepicker('setEndDate', $('[name=endTime]').val().substring(0, 16));
         });
-
     };
 
 });
