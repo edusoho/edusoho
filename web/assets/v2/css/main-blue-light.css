@@ -15537,6 +15537,12 @@ textarea {
   width: auto;
   float: none;
 }
+.es-mobile .buy .wap-buyer {
+  padding: 0;
+  top: -7px;
+  position: relative;
+  right: 14px;
+}
 .es-mobile .course-detail-header .course-data {
   position: fixed;
   bottom: 0;

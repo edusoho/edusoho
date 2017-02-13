@@ -16,7 +16,9 @@
 {% set consultDisplay = true %}
 
 {% block full_content %}
-    {% include 'TopxiaWebBundle:Default:Mobile/app-download.html.twig' %}
+  {% if not hasMobile | default(0) %}
+    {{ render(controller('TopxiaWebBundle:Default:appDownload')) }}
+  {% endif %}
     {% cache 'jianmo/home/top/banner' 600 %}
       {{ block_show('jianmo:home_top_banner') }}
     {% endcache %}
