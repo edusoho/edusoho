@@ -1225,7 +1225,7 @@ announcement_show:
     defaults: { _controller: TopxiaWebBundle:Announcement:show }
 
 announcement_global_show:
-    path:  /announcement/{id}/global/show
+    path:  /announcement/{id}/opreate/global/show
     defaults: { _controller: TopxiaWebBundle:Announcement:globalShow }
 
 announcement_manage:

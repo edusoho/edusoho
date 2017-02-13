@@ -29,7 +29,7 @@
       {% for announcement in announcements %}
         <tr announcement-table-tr-{{ announcement.id }}>
           {% include 'OrgBundle:Org/Parts:table-body-checkbox.html.twig' %}
-          <td><a href="{{ announcement.url }}" target="_content">{{ announcement.content }}</td>
+          <td><a href="{{ announcement.url }}" target="_content">{{ announcement.content | raw }}</td>
           {% include 'OrgBundle:Org/Parts:table-body-td.html.twig' with {orgCode: announcement.orgCode}%}
           <td>{{ announcement.startTime|date('Y-m-d H:i') }}</td>
           <td>{{ announcement.endTime|date('Y-m-d H:i') }}</td>
