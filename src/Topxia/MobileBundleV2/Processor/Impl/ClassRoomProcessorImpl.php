@@ -187,7 +187,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         		throw $this->createErrorResponse('error', '您不是班级的学员。');
     		}
 
-    		if (!in_array($member["role"], array("auditor", "student"))) {
+    		if (!array_intersect($member["role"], array("auditor", "student"))) {
     			return $this->createErrorResponse('error', "您不是班级的学员。");
     		}
 

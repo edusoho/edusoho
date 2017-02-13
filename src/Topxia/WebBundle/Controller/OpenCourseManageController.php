@@ -291,18 +291,19 @@ class OpenCourseManageController extends BaseController
 
     public function searchAction(Request $request, $id, $filter)
     {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
-        $conditions = array("title" => $request->request->get('key'));
-
+        $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $key = $request->query->get('key');
+        $conditions = array("title" => $key);
         list($paginator, $courses) = $this->_getPickCourseData($request, $id, $conditions);
-
         $users = $this->_getTeacherUsers($courses);
 
-        return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
+        return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-pick-modal.html.twig', array(
             'users'   => $users,
             'courses' => $courses,
-            'filter'  => $filter
+            'filter'  => $filter,
+            'courseId'  => $id,
+            'title' => $key,
+            'paginator' => $paginator
         ));
     }
 

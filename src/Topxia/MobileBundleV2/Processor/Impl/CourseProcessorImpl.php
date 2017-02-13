@@ -998,7 +998,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
                 $member = null;
             }
         }
-
+        $this->updateMemberLastViewTime($member);
         $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->hasFavoritedCourse($courseId) : false;
         $vipLevels     = array();
 
@@ -1641,6 +1641,14 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     protected function getDiscountService()
     {
         return $this->controller->getService('Discount:Discount.DiscountService');
+    }
+
+    protected function updateMemberLastViewTime($member)
+    {
+        if (!empty($member)) {
+            $fields['lastViewTime'] = time();
+            $this->getCourseService()->updateCourseMember($member['id'], $fields);
+        }
     }
 
     private function getClassroomService()

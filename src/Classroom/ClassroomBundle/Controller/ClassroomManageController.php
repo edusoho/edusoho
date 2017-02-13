@@ -74,7 +74,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function menuAction($classroom, $sideNav, $context)
+    public function menuAction(Request $request, $classroom, $sideNav, $context)
     {
         $user = $this->getCurrentUser();
 
