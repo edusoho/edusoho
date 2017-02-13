@@ -26,8 +26,11 @@
       		{% for course in courses %}
       		<tr>
       			<td>{{course.title}}
-              <span class="label label-warning mll">{{'会员免费'|trans}}</span>
-              <span class="label label-warning mll">{{'6折'|trans}}</span>
+              {% if course.status == 'published' %}
+                <span class="label label-success">{{'已发布'|trans}}</span>
+              {% endif %}
+              <span class="label label-warning">{{'会员免费'|trans}}</span>
+              <span class="label label-warning">{{'6折'|trans}}</span>
             </td>
       			<td>{{course.taskNum|default(0)}}</td>
       			<td>{{course.studentNum|default(0)}}</td>

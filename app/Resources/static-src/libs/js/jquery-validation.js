@@ -158,6 +158,9 @@ $.validator.addMethod("idcardNumber", function (value, element, params) {
 }, "请正确输入您的身份证号码");
 
 jQuery.validator.addMethod("visible_character", function (value, element, params) {
-
   return this.optional(element) || $.trim(value).length > 0;
 }, jQuery.validator.format("{0}请输入可见性字符"));
+
+$.validator.addMethod('positive_integer', function(value, element) {
+  return this.optional(element) || parseInt(value) > 0;
+}, jQuery.validator.format("请输入正整数"));

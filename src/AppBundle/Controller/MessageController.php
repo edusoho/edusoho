@@ -2,8 +2,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\MessageService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,8 +12,8 @@ class MessageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user          = $this->getCurrentUser();
-        $paginator     = new Paginator(
+        $user      = $this->getCurrentUser();
+        $paginator = new Paginator(
             $request,
             $this->getMessageService()->countUserConversations($user->id),
             10
@@ -101,8 +101,8 @@ class MessageController extends BaseController
             return $this->redirect($this->generateUrl('message'));
         }
         return $this->render('message/send-message-modal.html.twig', array(
-            '$message' => $message,
-            'userId'   => $toId));
+            'message' => $message,
+            'userId'  => $toId));
     }
 
     public function sendAction(Request $request)
@@ -178,7 +178,7 @@ class MessageController extends BaseController
             array('createdTime' => 'DESC'),
             0,
             10);
-        $findedFollowingIds    = $this->getUserService()->filterFollowingIds($currentUser['id'],
+        $findedFollowingIds = $this->getUserService()->filterFollowingIds($currentUser['id'],
             ArrayToolkit::column($findedUsersByNickname, 'id'));
 
         $filterFollowingUsers = $this->getUserService()->findUsersByIds($findedFollowingIds);
