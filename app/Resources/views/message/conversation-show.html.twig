@@ -15,12 +15,11 @@
       <form id="message-reply-form" class="message-reply-form clearfix" method="post"
       action="{{ path('message_conversation_show', {conversationId:conversation.id}) }}">
         <div class="form-group">
-          {{ form_widget(form.content, {attr:{class:'form-control', rows:3, placeholder:'请输入私信内容'|trans}}) }}
+          <textarea id="message_reply_content" name="message_reply[content]" required="required" class="form-control" rows="3" placeholder="请输入私信内容"></textarea>
         </div>
 
         <div class="form-group">
-          {{ form_rest(form) }}
-          <button id="course-reply-btn" class="btn btn-primary pull-right disabled">{{'发送'|trans}}</button>
+          <button id="course-reply-btn" class="btn btn-primary pull-right">{{'发送'|trans}}</button>
         </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

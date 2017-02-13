@@ -162,8 +162,6 @@ pluginDir/
 ```
 import '!style!css!less!xxx.less';
 ```
-- 在服务启动后，新增的index.js如果要在页面运用，需要先中断服务(<code>ctrl + c</code>)，并重启服务（<code>npm start</code>）才生效
-
 ### 最佳实践
 
 1. 在js引入资源的时候，建议用全局root目录(app/Resources/static-src)下的目录取代较长的相对路径
@@ -194,6 +192,15 @@ import QuestionOperate from 'app/common/component/question-operate';
 import xxx from 'xxxplugin/xx/xxx.js';
 ```
 
+### 重要更新记录
+* 引入nodemon (2017-01-19) <br>
+开发环境下，利用nodemon来重启node服务（当根目录下nodemon.json文件中的watch值里的目录或文件发生变化时）<br>
+例如watch值中有<code>app/Resources/webpack</code> 则，该目录下的文件改动，会使node服务重启
+
+* 对新增入口文件的支持 (2017-01-19) <br>
+开发环境下，当node服务启动后，新增入口文件，会自动重启node服务。<br>
+不过因为是重启，编译的时间较文件改动的时间长一些。
+
 
 ### 已实现功能
 总：可处理所有前端资源
@@ -204,5 +211,3 @@ import xxx from 'xxxplugin/xx/xxx.js';
 * 分app、libs、plugins输出
 * 字体图标、图像、swf等纳入编译流
 
-### 待改进
-* dev模式下添加新入口文件(index.js)以及libs下的文件无法监听的问题

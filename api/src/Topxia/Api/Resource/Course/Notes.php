@@ -9,7 +9,7 @@ use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Api\Resource\BaseResource;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class Notes extends BaseResource
 {

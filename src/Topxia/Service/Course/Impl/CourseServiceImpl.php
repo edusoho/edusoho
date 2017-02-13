@@ -5,14 +5,14 @@ use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseLessonReplayDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\FavoriteDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use AppBundle\Common\Exception\ResourceNotFoundException;
 
 /**
  * Class CourseServiceImpl

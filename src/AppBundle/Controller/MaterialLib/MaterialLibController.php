@@ -4,8 +4,8 @@ namespace AppBundle\Controller\MaterialLib;
 
 use Biz\File\Service\UploadFileService;
 use Biz\File\Service\UploadFileShareHistoryService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 

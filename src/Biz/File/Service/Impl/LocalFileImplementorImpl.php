@@ -4,7 +4,7 @@ namespace Biz\File\Service\Impl;
 use Biz\BaseService;
 use Biz\File\Dao\UploadFileDao;
 use Biz\File\Service\FileImplementor;
-use Topxia\Common\FileToolkit;
+use AppBundle\Common\FileToolkit;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Biz\User\Service\UserService;

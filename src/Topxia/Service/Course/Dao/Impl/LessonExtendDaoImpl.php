@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\Course\Dao\Impl;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseDao;
 use Topxia\Service\Course\Dao\LessonExtendDao;
 

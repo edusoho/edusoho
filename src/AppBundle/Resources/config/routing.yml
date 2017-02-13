@@ -743,6 +743,14 @@ content_page_list:
     path: /page
     defaults: {_controller: AppBundle:Content:pageList }
 
+content_course_rule:
+    path: /courserule
+    defaults: {_controller: AppBundle:Course/CourseManage:courseRule }
+
+course_set_live_capacity:
+    path: /course_set/{courseSetId}/manage/course/{courseId}/live_capacity
+    defaults: { _controller: AppBundle:Course/CourseManage:liveCapacity }
+
 teacher:
     path: /teacher
     defaults: {_controller: AppBundle:Teacher:index }
@@ -1602,20 +1610,20 @@ course_manage_task_delete:
 
 course_manage_task_replay_edit:
   path: /course/{courseId}/task/{taskId}/replay/edit
-  defaults: { _controller: AppBundle:TaskManage:editTaskReplay }
+  defaults: { _controller: AppBundle:Course/CourseManage:editTaskReplay }
 
 course_manage_task_replay_title_update:
   path:  /course/{courseId}/task/{taskId}/replay/{replayId}/update_title
-  defaults: { _controller: AppBundle:TaskManage:updateTaskReplayTitle }
+  defaults: { _controller: AppBundle:Course/CourseManage:updateTaskReplayTitle }
   methods: [POST]
 
 course_manage_task_replay_upload:
   path:  /course/{courseId}/task/{taskId}/replay/upload
-  defaults: { _controller: AppBundle:TaskManage:uploadReplay }
+  defaults: { _controller: AppBundle:Course/CourseManage:uploadReplay }
 
 course_manage_task_replay_create:
   path:  /course/{courseId}/task/{taskId}/replay/create
-  defaults: { _controller: AppBundle:TaskManage:createReplay }
+  defaults: { _controller: AppBundle:Course/CourseManage:createReplay }
   methods: [POST]
 
 task_live_entry:
@@ -1726,6 +1734,10 @@ course_set_manage_course_info:
 course_set_manage_course_tasks:
   path: /course_set/{courseSetId}/manage/course/{courseId}/tasks
   defaults: {_controller: AppBundle:Course/CourseManage:tasks}
+
+course_set_manage_course_replay:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/replay
+  defaults: { _controller: AppBundle:Course/CourseManage:replay }
 
 course_set_manage_course_marketing:
   path: /course_set/{courseSetId}/manage/course/{courseId}/marketing

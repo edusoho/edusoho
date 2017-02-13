@@ -1,11 +1,11 @@
 <?php
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Topxia\Common\EncryptionToolkit;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\SimpleValidator;
-use Topxia\Common\ExtensionManager;
+use AppBundle\Common\EncryptionToolkit;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\SimpleValidator;
+use AppBundle\Common\ExtensionManager;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\UserProcessor;
@@ -41,7 +41,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
 
         $host                  = $this->request->getSchemeAndHttpHost();
-        $record['url']         = $host . $this->controller->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+        $record['url']         = $host . $this->controller->get('web.twig.extension')->getFilePath($record['uri']);
         $record['createdTime'] = date('c', $record['createdTime']);
         unset($record['uri']);
         return $record;

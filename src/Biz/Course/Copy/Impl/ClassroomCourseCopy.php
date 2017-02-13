@@ -3,7 +3,7 @@
 namespace Biz\Course\Copy\Impl;
 
 use Biz\Course\Dao\CourseDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Classroom\Dao\ClassroomMemberDao;

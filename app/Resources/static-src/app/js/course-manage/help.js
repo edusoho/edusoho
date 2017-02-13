@@ -3,17 +3,20 @@ import 'jquery-sortable';
 
 export const closeCourse = () => {
   $('body').on('click', '.js-close-course', function(evt) {
+    let $target = $(evt.currentTarget);
     if (!confirm(Translator.trans('是否确定关闭该教学计划？'))) {
       return;
     }
 
-    $.post($(evt.currentTarget).data('check-url'), function(data) {
+    $.post($target.data('check-url'), function(data) {
+
       if (data.warn) {
         if (!confirm(Translator.trans(data.message))) {
           return;
         }
       }
-      $.post($(evt.currentTarget).data('url'), function(data) {
+
+      $.post($target.data('url'), function(data) {
         if (data.success) {
           notify('success', '关闭成功');
           location.reload();
@@ -133,22 +136,4 @@ export const TabChange = () => {
     let $this = $(this);
     $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
   });
-};
-
-export const generateReplay = () => {
-  $('.js-generate-replay').on('click', (event) => {
-    const $this = $(event.currentTarget);
-    const url = $this.data('url');
-    if(!url) return;
-    Promise.resolve($.post(url))
-      .then(success => {
-        notify('success', '生成录制回放成功');
-      })
-      .catch(response => {
-        const error = JSON.parse(response.responseText);
-        const code = error.code;
-        const message = error.error;
-        notify('danger', message);
-      });
-  })
 };

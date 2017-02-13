@@ -2,7 +2,7 @@
 
 namespace Biz\Activity\Type;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\DocActivityDao;
 use Biz\File\Service\UploadFileService;

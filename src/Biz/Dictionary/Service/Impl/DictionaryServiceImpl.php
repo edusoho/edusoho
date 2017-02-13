@@ -2,7 +2,7 @@
 namespace Biz\Dictionary\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Dictionary\Dao\DictionaryDao;
 use Biz\Dictionary\Service\DictionaryService;
 

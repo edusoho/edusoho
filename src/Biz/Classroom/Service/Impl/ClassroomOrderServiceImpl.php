@@ -2,8 +2,8 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\StringToolkit;
 use Biz\Cash\Service\CashService;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;

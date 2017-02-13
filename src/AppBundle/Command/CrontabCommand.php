@@ -9,7 +9,7 @@ use Biz\User\CurrentUser;
 use Symfony\Component\ClassLoader\ApcClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\BlockToolkit;
+use AppBundle\Common\BlockToolkit;
 
 class CrontabCommand extends BaseCommand
 {

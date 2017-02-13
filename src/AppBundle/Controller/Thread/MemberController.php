@@ -2,8 +2,8 @@
 namespace AppBundle\Controller\Thread;
 
 use AppBundle\Controller\BaseController;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\PHPExcelToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\PHPExcelToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 

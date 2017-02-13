@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Impl;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;

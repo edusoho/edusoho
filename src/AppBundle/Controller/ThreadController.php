@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Thread\Service\ThreadService;
 use Biz\File\Service\UploadFileService;
 use Biz\User\Service\NotificationService;

@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\JsonToolkit;
+use AppBundle\Common\JsonToolkit;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 

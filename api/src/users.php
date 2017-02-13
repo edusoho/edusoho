@@ -1,13 +1,13 @@
 <?php
 
 use Topxia\Api\Util\UserUtil;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Exception\RuntimeException;
-use Topxia\Common\Exception\ResourceNotFoundException;
-use Topxia\Common\Exception\AccessDeniedException;
-use Topxia\Common\Exception\InvalidArgumentException;
+use AppBundle\Common\Exception\RuntimeException;
+use AppBundle\Common\Exception\ResourceNotFoundException;
+use AppBundle\Common\Exception\AccessDeniedException;
+use AppBundle\Common\Exception\InvalidArgumentException;
 
 $api = $app['controllers_factory'];
 

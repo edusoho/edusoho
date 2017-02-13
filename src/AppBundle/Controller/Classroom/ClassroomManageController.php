@@ -1,11 +1,11 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ExportHelp;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ExportHelp;
+use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\LevelService;
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\SimpleValidator;
 use Biz\Order\Service\OrderService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
@@ -20,7 +20,7 @@ use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Classroom\Service\ClassroomReviewService;
-use Topxia\WebBundle\Twig\Extension\WebExtension;
+use AppBundle\Twig\WebExtension;
 
 class ClassroomManageController extends BaseController
 {
@@ -717,18 +717,8 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            $levels = $this->getLevelService()->findEnabledLevels();
-        } else {
-            $levels = array();
-        }
-
         if ($request->getMethod() == "POST") {
             $class = $request->request->all();
-
-            if (!isset($class['vipLevelId']) || $class['vipLevelId'] == "") {
-                $class['vipLevelId'] = 0;
-            }
 
             $this->setFlashMessage('success', '设置成功！');
 
@@ -749,7 +739,6 @@ class ClassroomManageController extends BaseController
         $courseNum = count($courses);
 
         return $this->render("classroom-manage/set-price.html.twig", array(
-            'levels'    => $this->makeLevelChoices($levels),
             'price'     => $price,
             'coinPrice' => $coinPrice,
             'courseNum' => $courseNum,
@@ -978,7 +967,7 @@ class ClassroomManageController extends BaseController
         $user = $this->getUser();
 
         if (empty($user)) {
-            throw $this->createMessageResponse('info', '用户不存在或者尚未登录，请先登录');
+            return  $this->createMessageResponse('info', '用户不存在或者尚未登录，请先登录');
         }
 
         $courses   = $this->getClassroomService()->findCoursesByClassroomId($id);
@@ -1059,17 +1048,6 @@ class ClassroomManageController extends BaseController
             'number'  => $learnedCoursesCount,
             'total'   => $coursesCount
         );
-    }
-
-    private function makeLevelChoices($levels)
-    {
-        $choices = array();
-
-        foreach ($levels as $level) {
-            $choices[$level['id']] = $level['name'];
-        }
-
-        return $choices;
     }
 
     private function getUserIds($keyword)
@@ -1194,7 +1172,7 @@ class ClassroomManageController extends BaseController
      */
     private function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     /**

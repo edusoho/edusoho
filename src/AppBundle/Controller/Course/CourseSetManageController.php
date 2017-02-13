@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Course;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
@@ -48,6 +48,13 @@ class CourseSetManageController extends BaseController
 
     public function indexAction($id)
     {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'tasks'
+            ));
+        }
         return $this->redirectToRoute('course_set_manage_courses', array(
             'courseSetId' => $id
         ));
@@ -68,7 +75,18 @@ class CourseSetManageController extends BaseController
 
     public function sidebarAction($courseSetId, $curCourse, $sideNav)
     {
+        $user = $this->getCurrentUser();
+
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+
+        $courses = array_filter($courses, function ($course) use ($user) {
+            if (in_array($user['id'], $course['teacherIds'])) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
         if (empty($curCourse)) {
             $curCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
         }
@@ -96,7 +114,14 @@ class CourseSetManageController extends BaseController
         }
 
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-        $tags      = array();
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'base'
+            ));
+        }
+
+        $tags = array();
         if (!empty($courseSet['tags'])) {
             $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
         }
@@ -120,7 +145,16 @@ class CourseSetManageController extends BaseController
             $this->getCourseSetService()->updateCourseSetDetail($id, $data);
             return $this->redirect($this->generateUrl('course_set_manage_detail', array('id' => $id)));
         }
+
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'detail'
+            ));
+        }
+
         return $this->render('courseset-manage/detail.html.twig', array(
             'courseSet' => $courseSet
         ));
@@ -138,6 +172,14 @@ class CourseSetManageController extends BaseController
         // if ($courseSet['cover']) {
         //     $courseSet['cover'] = json_decode($courseSet['cover'], true);
         // }
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'cover'
+            ));
+        }
+
         return $this->render('courseset-manage/cover.html.twig', array(
             'courseSet' => $courseSet
         ));
@@ -151,6 +193,13 @@ class CourseSetManageController extends BaseController
             $data = $request->request->all();
             $this->getCourseSetService()->changeCourseSetCover($courseSet['id'], json_decode($data["images"], true));
             return $this->redirect($this->generateUrl('course_set_manage_cover', array('id' => $courseSet['id'])));
+        }
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'cover'
+            ));
         }
 
         $fileId = $request->getSession()->get("fileId");
@@ -182,6 +231,11 @@ class CourseSetManageController extends BaseController
 
             if ($courseSet['type'] == 'live') {
                 $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+
+                if(empty($course['maxStudentNum'])){
+                    throw $this->createAccessDeniedException('直播课程发布前需要在计划设置中设置课程人数');
+                }
+
                 $this->getCourseService()->publishCourse($course['id']);
             }
 
@@ -209,7 +263,8 @@ class CourseSetManageController extends BaseController
 
     public function syncInfoAction(Request $request, $id)
     {
-        $sideNav   = $request->query->get('sideNav', '');
+        $sideNav = $request->query->get('sideNav', '');
+        var_dump($sideNav);
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         if (!$courseSet['locked']) {
             throw new \Exception('CourseSet must be locked');
@@ -231,6 +286,7 @@ class CourseSetManageController extends BaseController
         $lockedCourseMenus = array(
             'tasks'     => '计划任务',
             'info'      => '计划设置',
+            'replay'    => '录播管理',
             'marketing' => '营销设置',
             'teachers'  => '教师设置'
         );

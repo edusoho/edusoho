@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller\Testpaper;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +12,13 @@ class ManageController extends BaseController
     public function indexAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'testpaper'
+            ));
+        }
 
         $conditions = array(
             'courseSetId' => $courseSet['id'],
@@ -40,12 +47,14 @@ class ManageController extends BaseController
         $userIds = ArrayToolkit::column($testpapers, 'updatedUserId');
         $users   = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('testpaper/manage/index.html.twig', array(
-            'courseSet'  => $courseSet,
-            'testpapers' => $testpapers,
-            'users'      => $users,
-            'paginator'  => $paginator
+        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByMediaIds(ArrayToolkit::column($testpapers, 'id'));
 
+        return $this->render('testpaper/manage/index.html.twig', array(
+            'courseSet'           => $courseSet,
+            'testpapers'          => $testpapers,
+            'users'               => $users,
+            'paginator'           => $paginator,
+            'testpaperActivities' => $testpaperActivities
         ));
     }
 
@@ -504,6 +513,11 @@ class ManageController extends BaseController
     public function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function getTestpaperActivityService()
+    {
+        return $this->createService('Activity:TestpaperActivityService');
     }
 
     protected function getServiceKernel()

@@ -6,9 +6,9 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Sms\Service\SmsService;
 use Biz\System\Service\SettingService;
-use Topxia\Common\SmsToolkit;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\SmsToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\StringToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class SmsController extends BaseController

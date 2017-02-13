@@ -5,7 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
@@ -611,6 +611,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
     }
 
+    public function updateCourseSetMinPublishedCoursePrice($courseSetId)
+    {
+        $price = $this->getCourseService()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
+        return $this->getCourseSetDao()->update($courseSetId, array('minCoursePrice' => $price['price']));
+    }
+
     protected function validateCourseSet($courseSet)
     {
         if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
@@ -761,7 +767,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $defaultCourse = array(
             'courseSetId'   => $created['id'],
-            'title'         => '默认教学计划',
+            'title'         => $created['title'],
             'expiryMode'    => 'days',
             'expiryDays'    => 0,
             'learnMode'     => 'freeMode',

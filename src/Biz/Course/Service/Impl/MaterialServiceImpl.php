@@ -2,7 +2,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Content\Service\FileService;
 use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Service\CourseService;

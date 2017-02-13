@@ -4,8 +4,8 @@ namespace Topxia\Api\Resource\User;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\EncryptionToolkit;
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\EncryptionToolkit;
+use AppBundle\Common\SimpleValidator;
 use Topxia\Api\Resource\BaseResource;
 use Topxia\Api\Util\SmsUtil;
 use Topxia\Service\Common\ServiceKernel;

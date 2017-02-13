@@ -2,7 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class RecentLiveCourseSetsDataTag extends CourseBaseDataTag implements DataTag

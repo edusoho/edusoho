@@ -7,10 +7,10 @@ use Biz\CloudPlatform\Service\AppService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Course\Service\CourseService;
 use Biz\Order\Service\OrderService;
-use Topxia\Common\SmsToolkit;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\NumberToolkit;
-use Topxia\Common\JoinPointToolkit;
+use AppBundle\Common\SmsToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\NumberToolkit;
+use AppBundle\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
 

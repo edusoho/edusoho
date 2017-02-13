@@ -5,7 +5,7 @@ use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
 use Biz\Subtitle\Service\SubtitleService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class SubtitleController extends BaseController
 {

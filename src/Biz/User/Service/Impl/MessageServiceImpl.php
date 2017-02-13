@@ -2,7 +2,7 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\MessageService;
 
 class MessageServiceImpl extends BaseService implements MessageService

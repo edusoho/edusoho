@@ -3,7 +3,7 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\ThreadDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
@@ -395,12 +395,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function prepareThreadSearchConditions($conditions)
     {
-        foreach ($conditions as $key => $value) {
-            if (empty($value)) {
-                unset($conditions[$key]);
-            }
-        }
-
         if (isset($conditions['threadType'])) {
             $conditions[$conditions['threadType']] = 1;
         }

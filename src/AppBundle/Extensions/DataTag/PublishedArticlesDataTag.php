@@ -4,7 +4,7 @@ namespace AppBundle\Extensions\DataTag;
 
 use Biz\Article\Service\ArticleService;
 use AppBundle\Extensions\DataTag\DataTag;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class PublishedArticlesDataTag extends CourseBaseDataTag implements DataTag  
 {

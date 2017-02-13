@@ -4,8 +4,8 @@ namespace AppBundle\Controller;
 use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
