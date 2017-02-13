@@ -16,6 +16,12 @@ if (Browser.chrome) console.info('Chrome: ' + Browser.chrome);
 if (Browser.opera) console.info('Opera: ' + Browser.opera);
 if (Browser.safari) console.info('Safari: ' + Browser.safari);
 
+Browser.ie10 = /MSIE\s+10.0/i.test(navigator.userAgent)
+                && (() => {"use strict";return this === undefined;})();
+Browser.ie11 = (/Trident\/7\./).test(navigator.userAgent);
+Browser.edge = /Edge\/13./i.test(navigator.userAgent);
+
+
 const isMobileDevice = () => {
   return navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i);
 };
@@ -23,6 +29,7 @@ const isMobileDevice = () => {
 const delHtmlTag = (str) => {
   return str.replace(/<[^>]+>/g, '').replace(/&nbsp;/ig, '');
 }
+
 
 const initTooltips = () => {
   $('[data-toggle="tooltip"]').tooltip({
@@ -42,4 +49,5 @@ export {
   isMobileDevice,
   delHtmlTag,
   initTooltips,
+  initPopover,
 };
