@@ -15,6 +15,12 @@ if (Browser.opera) console.log('Opera: ' + Browser.opera);
 if (Browser.safari) console.log('Safari: ' + Browser.safari);
 
 
+Browser.ie10 = /MSIE\s+10.0/i.test(navigator.userAgent)
+                && (() => {"use strict";return this === undefined;})();
+Browser.ie11 = (/Trident\/7\./).test(navigator.userAgent);
+Browser.edge = /Edge\/13./i.test(navigator.userAgent);
+
+
 const isMobileDevice = ()=> {
    return navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i);
 }
