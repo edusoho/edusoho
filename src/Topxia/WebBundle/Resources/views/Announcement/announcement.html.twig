@@ -12,10 +12,12 @@
           </a>
         </div>
         {% else %}
-        <div class="swiper-slide">
-          <i class="es-icon es-icon-infooutline mrm"></i>
-          {{announcement.content|sub_text(50)}}
-        </div>
+          <div class="swiper-slide">
+            <i class="es-icon es-icon-infooutline mrm"></i>
+            <a style="color:#ff5e06" class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('announcement_operate_global_show', {id:announcement.id}) }}" >
+              {{announcement.content|sub_text(50)}}
+            </a>
+          </div>
         {% endif %}
       {% endfor %}
 
