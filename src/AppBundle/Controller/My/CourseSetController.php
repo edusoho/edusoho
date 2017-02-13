@@ -45,7 +45,8 @@ class CourseSetController extends CourseBaseController
         }
 
         $conditions = array(
-            'type' => 'normal'
+            'type'     => 'normal',
+            'parentId' => 0
         );
 
         if ($filter == 'live') {
