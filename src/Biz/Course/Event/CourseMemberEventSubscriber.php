@@ -52,12 +52,14 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     private function sendWelcomeMsg(Event $event)
     {
         $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $user   = $this->getUserService()->getUser($userId);
 
         $setting = $this->getSettingService()->get('course', array());
-        $biz     = $this->getBiz();
-        $user    = $biz['user'];
+
         if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
             $message = $this->getWelcomeMessageBody($user, $course);
+
             $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
         }
     }
@@ -133,6 +135,11 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 
     /**
