@@ -1224,6 +1224,10 @@ announcement_show:
     path:  /announcement/{id}/{targetId}/show
     defaults: { _controller: TopxiaWebBundle:Announcement:show }
 
+announcement_global_show:
+    path:  /announcement/{id}/global/show
+    defaults: { _controller: TopxiaWebBundle:Announcement:globalShow }
+
 announcement_manage:
     path:  /announcement/{targetType}/{targetId}/manage
     defaults: { _controller: TopxiaWebBundle:Announcement:manage }
