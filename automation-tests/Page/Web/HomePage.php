@@ -4,9 +4,22 @@ namespace EduSoho\AT\Page\Web;
 
 use EduSoho\AT\Page\Page;
 use EduSoho\AT\Page\Web\LoginPage;
+use Facebook\WebDriver\WebDriverBy;
 
 class HomePage extends Page
 {
+
+    public function isShowUserAvatarVisible()
+    {
+        try {
+            $element = $this->driver->findElement(WebDriverBy::xpath('//li[@class="user-avatar-li nav-hover"]'));
+        } catch (\Exception $exception) {
+            return false;
+        }
+
+        return $element->isDisplayed();
+    }
+
     /**
      * Open the home page
      */
@@ -23,8 +36,8 @@ class HomePage extends Page
     public function clickLogin()
     {
         /** @var \WebDriverLocatable|\WebDriverElement $element */
-        $element = $this->driver->findElement(\WebDriverBy::xpath('//a[@href="//login"]'));
-        $this->driver->getMouse()->click($element->getCoordinates());
+        $element = $this->driver->findElement(WebDriverBy::xpath('//li[@class="hidden-xs"]//a[@href="/login?goto=/"]'));
+        $element->click();
         return new LoginPage($this->driver);
     }
 }

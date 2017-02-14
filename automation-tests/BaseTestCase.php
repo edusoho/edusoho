@@ -20,6 +20,6 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        //$this->driver->quit();
+        $this->driver->quit();
     }
 }

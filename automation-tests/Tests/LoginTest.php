@@ -13,5 +13,7 @@ class LoginTest extends BaseTestCase
         $homepage->open();
         $loginPage = $homepage->clickLogin();
         $loginPage->login('test@edusoho.com', 'kaifazhe');
+
+        $this->assertTrue($homepage->isShowUserAvatarVisible());
     }
 }
