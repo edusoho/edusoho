@@ -126,18 +126,15 @@ class UserSettingController extends BaseController
 
     public function loginConnectAction(Request $request)
     {
-        $loginConnect = $this->getSettingService()->get('login_bind', array());
         $clients = OAuthClientFactory::clients();
-        $default = $this->settingDefaultLoginConnect($clients);
+        $default = $this->getDefaultLoginConnect($clients);
+        $loginConnect = $this->getSettingService()->get('login_bind', array());
         $loginConnect = array_merge($default, $loginConnect);
 
         if ($request->getMethod() == 'POST') {
             $loginConnect = $request->request->all();
             $loginConnect = ArrayToolkit::trim($loginConnect);
-            $loginConnect = $this->settingProcessLoginConnect($loginConnect);
-
-            //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
-            $loginConnect = $this->loginConnectList($loginConnect);
+            $loginConnect = $this->decideEnabledLoginConnect($loginConnect);
             $this->getSettingService()->set('login_bind', $loginConnect);
             $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
             $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
@@ -149,7 +146,7 @@ class UserSettingController extends BaseController
         ));
     }
 
-    private function settingDefaultLoginConnect($clients)
+    private function getDefaultLoginConnect($clients)
     {
         $default = array(
             'login_limit'                     => 0,
@@ -175,7 +172,7 @@ class UserSettingController extends BaseController
         return $default;
     }
 
-    private function settingProcessLoginConnect($loginConnect)
+    private function decideEnabledLoginConnect($loginConnect)
     {
         if ($loginConnect['enabled'] == 0) {
             $loginConnect['weibo_enabled']   = 0;
@@ -184,32 +181,27 @@ class UserSettingController extends BaseController
             $loginConnect['weixinweb_enabled'] = 0;
             $loginConnect['weixinmob_enabled']    = 0;
         }
-
-        return $loginConnect;
-    }
-
-    private function loginConnectList($LoginConnect)
-    {
-        $LoginConnects = ArrayToolkit::parts($LoginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
+        //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
+        $loginConnects = ArrayToolkit::parts($loginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
         $sum      = 0;
-        foreach ($LoginConnects as $value) {
+        foreach ($loginConnects as $value) {
             $sum += $value;
         }
 
         if ($sum < 1) {
-            if ($LoginConnect['enabled'] == 1) {
+            if ($loginConnect['enabled'] == 1) {
                 $this->setFlashMessage('danger', $this->trans('您至少要开启一种第三方登陆！'));
             }
-            if ($LoginConnect['enabled'] == 0) {
+            if ($loginConnect['enabled'] == 0) {
                 $this->setFlashMessage('success', $this->trans('您已关闭所有第三方登陆！'));
             }
-            $LoginConnect['enabled'] = 0;
+            $loginConnect['enabled'] = 0;
         } else {
-            $LoginConnect['enabled'] = 1;
+            $loginConnect['enabled'] = 1;
             $this->setFlashMessage('success', $this->trans('登录设置已保存！'));
         }
 
-        return $LoginConnect;
+        return $loginConnect;
     }
 
     public function userCenterAction(Request $request)
