@@ -18,6 +18,7 @@ use Biz\Course\Service\ReviewService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
@@ -118,7 +119,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $created     = $this->getCourseDao()->create($course);
             $currentUser = $this->getCurrentUser();
             //set default teacher
-            $this->setCourseTeachers($created['id'], array(
+            $this->getMemberService()->setCourseTeachers($created['id'], array(
                 array(
                     'id'        => $currentUser['id'],
                     'isVisible' => 1
@@ -206,57 +207,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourseDao()->updateMaxRateByCourseSetId($courseSetId, array('updatedTime' => time(), 'maxRate' => $maxRate));
         return $course;
-    }
-
-    public function setCourseTeachers($courseId, $teachers)
-    {
-        $teacherMembers = array();
-        $course         = $this->getCourse($courseId);
-        foreach (array_values($teachers) as $index => $teacher) {
-            if (empty($teacher['id'])) {
-                throw $this->createInvalidArgumentException('Teacher ID Required');
-            }
-
-            $user = $this->getUserService()->getUser($teacher['id']);
-
-            if (empty($user)) {
-                throw $this->createInvalidArgumentException('No Such Teacher');
-            }
-
-            $teacherMembers[] = array(
-                'courseId'    => $courseId,
-                'courseSetId' => $course['courseSetId'],
-                'userId'      => $user['id'],
-                'role'        => 'teacher',
-                'seq'         => $index,
-                'isVisible'   => empty($teacher['isVisible']) ? 0 : 1
-            );
-        }
-
-        $existTeachers = $this->findTeachersByCourseId($courseId);
-
-        foreach ($existTeachers as $member) {
-            $this->getMemberDao()->delete($member['id']);
-        }
-
-        $visibleTeacherIds = array();
-
-        foreach ($teacherMembers as $member) {
-            $existMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $member['userId']);
-
-            if ($existMember) {
-                $this->getMemberDao()->delete($existMember['id']);
-            }
-
-            $member = $this->getMemberDao()->create($member);
-
-            if ($member['isVisible']) {
-                $visibleTeacherIds[] = $member['userId'];
-            }
-        }
-
-        $fields = array('teacherIds' => $visibleTeacherIds);
-        return $this->getCourseDao()->update($courseId, $fields);
     }
 
     public function updateCourseMarketing($id, $fields)
@@ -1105,6 +1055,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course:ThreadDao');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
