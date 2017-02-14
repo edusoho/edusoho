@@ -108,6 +108,12 @@ class CloudController extends BaseController
     {
         return $this->redirectUrl('service_storage_chart');
     }
+    //和buyAction重复将会被弃用
+    public function emailBuyAction(Request $request, $type)
+    {
+        $params = array('type' => $type);
+        return $this->redirectUrl('edu_cloud_buy_custom', $params);
+    }
 
     public function tlpAction(Request $request)
     {
