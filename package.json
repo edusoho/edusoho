@@ -43,6 +43,7 @@
     "iframe-resizer": "3.5.5",
     "intro.js": "2.4.0",
     "jquery": "1.12.4",
+    "jquery-blurr": "0.1.2",
     "jquery-form": "3.50.0",
     "jquery-jcrop": "0.9.13",
     "jquery-sortable": "0.9.13",
