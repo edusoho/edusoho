@@ -149,7 +149,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         );
     }
 
-    protected function _createSearchQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
