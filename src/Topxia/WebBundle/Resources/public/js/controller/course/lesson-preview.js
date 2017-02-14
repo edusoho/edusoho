@@ -30,7 +30,7 @@ define(function(require, exports, module) {
                 });
 
                 messenger.on("ended", function(){
-                    lessonVideoDiv.html($('.js-time-limit-dev').html());
+                    // lessonVideoDiv.html($('.js-time-limit-dev').html());
                 });
             }
     	}

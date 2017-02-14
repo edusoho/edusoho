@@ -74,8 +74,8 @@ class CoinController extends BaseController
 
         $image = $rawImage->copy();
         $image->resize(new Box($size, $size));
-        $filePath  = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$size}*{$size}.{$pathinfo['extension']}";
-        $imageName = "{$pathinfo['filename']}_{$size}*{$size}.{$pathinfo['extension']}";
+        $filePath  = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$size}-{$size}.{$pathinfo['extension']}";
+        $imageName = "{$pathinfo['filename']}_{$size}-{$size}.{$pathinfo['extension']}";
         $image     = $image->save($filePath, array('quality' => 100));
 
         $coin = $this->getSettingService()->get('coin', array());
