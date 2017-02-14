@@ -6,7 +6,7 @@ use Facebook\WebDriver\Remote\RemoteWebdriver;
 use Facebook\WebDriver\Remote\WebDriverCapabilityType;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 
-class BaseTestCase extends \PHPUnit_Framework_TestCase
+abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
     protected $driver;
 
@@ -14,7 +14,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->driver = RemoteWebDriver::create(
             getenv('HUB_URL'),
-            DesiredCapabilities::firefox()
+            DesiredCapabilities::chrome()
         );
     }
 

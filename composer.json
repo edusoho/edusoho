@@ -13,7 +13,7 @@
 		"psr-4": {
 			"Topxia\\Api\\" : "api/src/Topxia/Api",
 			"Tests\\": "tests",
-			"EduSoho\\AT\\": "automation-tests/"
+			"EduSoho\\AT\\": "automation-tests"
 		},
 		"files": [ "app/AppKernel.php" ]
 	},
