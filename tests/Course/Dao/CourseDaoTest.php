@@ -47,6 +47,23 @@ class CourseDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($resultResult, $result);
     }
 
+    public function testGetMinAndMaxPublishedCoursePriceByCourseSetId()
+    {
+        $this->mockDataObject(array('courseSetId'=> 2, 'price'=>0, 'status'=>'published'));
+        $this->mockDataObject(array('price'=> 1));
+        $this->mockDataObject(array('price'=> 2, 'status'=>'published'));
+        $this->mockDataObject(array('price'=> 3, 'status'=>'published'));
+
+        $price = $this->getDao()->getMinAndMaxPublishedCoursePriceByCourseSetId(1);
+        $this->assertEquals(2, $price['minPrice']);
+
+        $this->mockDataObject(array('price'=> 0, 'status'=>'published'));
+        $price = $this->getDao()->getMinAndMaxPublishedCoursePriceByCourseSetId(1);
+        $this->assertEquals(0, $price['minPrice']);
+        $this->assertEquals(3, $price['maxPrice']);
+
+    }
+
     protected function getDefaultMockFields()
     {
         return array(

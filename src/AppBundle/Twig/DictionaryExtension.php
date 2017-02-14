@@ -34,14 +34,14 @@ class DictionaryExtension extends \Twig_Extension
     {
         $dictionaryItems = $this->getDictionaryService()->findDictionaryItemByType($type);
         if ($type == 'refund_reason') {
-            $choices['reason'] = $this->getServiceKernel()->trans('--请选择退学原因--');
+            $choices['reason'] = '--请选择退学原因--';
             $selected = 'reason';
         }
 
         foreach ($dictionaryItems as $key => $value) {
-            $choices[$key] = $this->getServiceKernel()->trans($value['name']);
+            $choices[$key] = $value['name'];
         }
-        $choices['other'] = $this->getServiceKernel()->trans('其他');
+        $choices['other'] = '其他';
 
         $html = '';
         if (!is_null($empty)) {

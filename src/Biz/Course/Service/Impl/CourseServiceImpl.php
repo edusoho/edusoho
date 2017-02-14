@@ -5,10 +5,10 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Copy\Impl\CourseCopy;
 use Biz\Course\Dao\CourseChapterDao;
@@ -18,6 +18,7 @@ use Biz\Course\Service\ReviewService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\MaterialService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
@@ -118,7 +119,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $created     = $this->getCourseDao()->create($course);
             $currentUser = $this->getCurrentUser();
             //set default teacher
-            $this->setCourseTeachers($created['id'], array(
+            $this->getMemberService()->setCourseTeachers($created['id'], array(
                 array(
                     'id'        => $currentUser['id'],
                     'isVisible' => 1
@@ -202,55 +203,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
-    public function setCourseTeachers($courseId, $teachers)
+    public function updateMaxRateByCourseSetId($courseSetId, $maxRate)
     {
-        $teacherMembers = array();
-        $course         = $this->getCourse($courseId);
-        foreach (array_values($teachers) as $index => $teacher) {
-            if (empty($teacher['id'])) {
-                throw $this->createInvalidArgumentException('Teacher ID Required');
-            }
-
-            $user = $this->getUserService()->getUser($teacher['id']);
-
-            if (empty($user)) {
-                throw $this->createInvalidArgumentException('No Such Teacher');
-            }
-
-            $teacherMembers[] = array(
-                'courseId'    => $courseId,
-                'courseSetId' => $course['courseSetId'],
-                'userId'      => $user['id'],
-                'role'        => 'teacher',
-                'seq'         => $index,
-                'isVisible'   => empty($teacher['isVisible']) ? 0 : 1
-            );
-        }
-
-        $existTeachers = $this->findTeachersByCourseId($courseId);
-
-        foreach ($existTeachers as $member) {
-            $this->getMemberDao()->delete($member['id']);
-        }
-
-        $visibleTeacherIds = array();
-
-        foreach ($teacherMembers as $member) {
-            $existMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $member['userId']);
-
-            if ($existMember) {
-                $this->getMemberDao()->delete($existMember['id']);
-            }
-
-            $member = $this->getMemberDao()->create($member);
-
-            if ($member['isVisible']) {
-                $visibleTeacherIds[] = $member['userId'];
-            }
-        }
-
-        $fields = array('teacherIds' => $visibleTeacherIds);
-        return $this->getCourseDao()->update($courseId, $fields);
+        $course = $this->getCourseDao()->updateMaxRateByCourseSetId($courseSetId, array('updatedTime' => time(), 'maxRate' => $maxRate));
+        return $course;
     }
 
     public function updateCourseMarketing($id, $fields)
@@ -350,7 +306,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException('该教学计划在班级下存在引用，请先删除相关引用');
         }
         $courseCount = $this->getCourseDao()->count(array('courseSetId' => $course['courseSetId']));
-        if($courseCount <= 1){
+        if ($courseCount <= 1) {
             throw $this->createAccessDeniedException('课程下至少需保留一个教学计划');
         }
         return $this->getCourseDeleteService()->deleteCourse($id);
@@ -993,12 +949,18 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
         $orderBy    = $this->_prepareCourseOrderBy($sort);
+
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function getMinPublishedCoursePriceByCourseSetId($courseSetId)
     {
         return $this->getCourseDao()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
+    }
+
+    public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
+    {
+        return $this->getCourseDao()->getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
     }
 
     protected function _prepareCourseOrderBy($sort)
@@ -1093,6 +1055,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createDao('Course:ThreadDao');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');

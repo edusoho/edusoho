@@ -28,7 +28,7 @@
           {% else %}
             <a href="{{ path('course_set_show',{id: courseSet.id}) }}" title="{{ courseSet.title }}" target="_blank">
           {% endif %}
-            {{ lazy_img(filepath(courseSet.cover.middle, 'course.png'), 'img-responsive', courseSet.title) }}
+            {{ lazy_img(filepath(courseSet.cover.middle|default(), 'course.png'), 'img-responsive', courseSet.title) }}
             {% if courseSet.recommended %}
               <span class="re-live"></span>
             {% endif %}
@@ -61,15 +61,16 @@
           </div>
           <div class="user">
             {% if courseSet.course.teacherIds|default(null) %}
-              {% set user = data('User',{ userId:course.teacherIds[0] }) %}
+              {% set user = data('User',{ userId:courseSet.course.teacherIds[0] }) %}
               {{ web_macro.user_avatar(user, 'mrm','avatar-xs') }}
               {{ web_macro.user_link(user, 'link-dark') }}
             {% endif %}
           </div>
           <div class="other">
+            {% set course = courseSet.course %}
             {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
 
-            {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
+            {% if ("now"|date("U") >= courseSet.liveStartTime and "now"|date("U") <= courseSet.liveEndTime) %}
               <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" class="btn btn-warning" target="_blank">
                 {{'进入直播'|trans}}
               </a>
