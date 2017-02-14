@@ -10,7 +10,7 @@ define(function(require, exports, module) {
 
     $('body').on('click', '.check-account', function() {
       var url = $(this).data('url');
-      window.location.href(url);
+      window.location.href = url;
     });
   };
 });
