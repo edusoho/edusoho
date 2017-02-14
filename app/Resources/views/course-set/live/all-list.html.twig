@@ -67,6 +67,7 @@
             {% endif %}
           </div>
           <div class="other">
+            {% set course = courseSet.course %}
             {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
 
             {% if ("now"|date("U") >= courseSet.liveStartTime and "now"|date("U") <= courseSet.liveEndTime) %}
