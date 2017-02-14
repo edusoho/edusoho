@@ -86,13 +86,7 @@ class ClassroomThreadController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $thread = $this->getThreadService()->getThread($threadId);
         $user   = $this->getCurrentUser();
-
-        if (!($user->isAdmin()
-                || $this->getClassroomService()->canManageClassroom($classroomId))
-            && ($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] != $user['id'])
-        ) {
-            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
-        }
+        $this->validateAuthority($user, $classroomId, $thread, $classroomSetting);
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
@@ -150,6 +144,16 @@ class ClassroomThreadController extends BaseController
             'filter'    => $filter,
             'canLook'   => $canLook
         ));
+    }
+
+    private function validateAuthority($user, $classroomId, $thread, $classroomSetting)
+    {
+        if (!($user->isAdmin()
+                || $this->getClassroomService()->canManageClassroom($classroomId))
+            && ($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] != $user['id'])
+        ) {
+            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
+        }
     }
 
     private function getThreadSearchFilters($request)
