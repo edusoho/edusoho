@@ -2559,17 +2559,13 @@ classroom_teacherIds_catch:
     path: /classroom/{classroomId}/teacherIds/catch
     defaults: { _controller: AppBundle:Classroom/Teacher:catchIds }
 
-classroom_course_lessons_preview:
-    path: /classroom/{classroomId}/course/{courseId}/lessons/preview
-    defaults: { _controller: AppBundle:Classroom/CourseLesson:preview }
-
 classroom_buy_hint:
     path: /classroom/courses/{courseId}/buy/hint
-    defaults: { _controller: AppBundle:Classroom/CourseLesson:buyHint }
+    defaults: { _controller: AppBundle:Classroom/CourseTask:buyHint }
 
-classrom_course_lessons_list:
-    path: /classroom/{classroomId}/course/{courseId}/lessons/list
-    defaults: { _controller: AppBundle:Classroom/CourseLesson:list }
+classrom_course_tasks_list:
+    path: /classroom/{classroomId}/course/{courseId}/tasks/list
+    defaults: { _controller: AppBundle:Classroom/CourseTask:list }
 
 #material_lib
 material_lib_browsing:
