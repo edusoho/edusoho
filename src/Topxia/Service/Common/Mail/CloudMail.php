@@ -25,8 +25,11 @@ class CloudMail extends Mail
                'format' => $format,
                'template'=>'email_default',
                'sourceFrom' => empty($options['sourceFrom']) ? '' : $options['sourceFrom'],
-               'nickname' => $cloudConfig['name']
             );
+
+            if (!empty($cloudConfig['name'])) {
+                $params['nickname'] = $cloudConfig['name'];
+            }
             if (!empty($options['sendedSn'])) {
                 $params['sendedSn'] = $options['sendedSn'];
             }
