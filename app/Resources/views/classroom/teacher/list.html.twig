@@ -2,9 +2,10 @@
 
 {% set nav = 'teachers' %}
 {% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
-{% do load_script('topxiawebbundle/controller/classroom/detail/teacher-list') %}
 
 {% block main %}
+  {% do load_script('topxiawebbundle/controller/classroom/detail/teacher-list') %}
+  {% include 'seajs_loader_compatible.html.twig' with {'topxiawebbundle':true} %}
 
   <div class="teacher-list no-shadow row">
   {% for teacher in teachers %}

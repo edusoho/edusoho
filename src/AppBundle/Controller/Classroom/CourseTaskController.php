@@ -1,40 +1,41 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
+use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseLessonController extends BaseController
+class CourseTaskController extends BaseController
 {
     public function previewAction(Request $request, $classroomId, $courseId)
     {
-        $lessonId  = $request->query->get('lessonId', 0);
+        $taskId    = $request->query->get('taskId', 0);
         $course    = $this->getCourseService()->getCourse($courseId);
-        $lesson    = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $task      = $this->getTaskService()->getTask($taskId);
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $user      = $this->getCurrentUser();
         $member    = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$user->isLogin()) {
-            return $this->forward('AppBundle:CourseLesson:preview', array(
+            return $this->forward('AppBundle:CourseTask:preview', array(
                 'courseId' => $courseId,
-                'lessonId' => $lessonId
+                'lessonId' => $taskId
             ));
         }
 
-        if ($lesson['free'] || $course['tryLookable'] || ($member && !$member['locked'])) {
-            return $this->forward('AppBundle:CourseLesson:preview', array(
+        if ($task['free'] || $course['tryLookable'] || ($member && !$member['locked'])) {
+            return $this->forward('AppBundle:CourseTask:preview', array(
                 'courseId' => $courseId,
-                'lessonId' => $lessonId
+                'lessonId' => $taskId
             ));
         }
 
         return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
     }
 
-    public function buyHintAction(Request $request, $courseId)
+    public function buyHintAction($courseId)
     {
         $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
@@ -43,11 +44,13 @@ class CourseLessonController extends BaseController
         ));
     }
 
-    public function listAction(Request $request, $classroomId, $courseId)
+    public function listAction($classroomId, $courseId)
     {
         $user   = $this->getCurrentUser();
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroomId, $user['id']) : null;
-        return $this->render('classroom/course/lessons-list.html.twig', array(
+        var_dump($classroomId);
+        var_dump($courseId);exit;
+        return $this->render('classroom/course/tasks-list.html.twig', array(
             'classroomId' => $classroomId,
             'courseId'    => $courseId,
             'member'      => $member
@@ -68,5 +71,13 @@ class CourseLessonController extends BaseController
     private function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    private function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }
