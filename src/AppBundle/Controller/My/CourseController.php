@@ -127,7 +127,10 @@ class CourseController extends CourseBaseController
     {
         $course = $this->getCourseService()->getCourse($id);
         $member = $this->getCourseMember($request, $course);
-
+        $preView = $request->query->get('previewAs', false);
+        if ($preView == 'member' && empty($member)) {
+            $member = array('courseId' => $course['id'], 'deadline' => time(), 'userId' => 1, 'role' => 'User');
+        }
         if (empty($member)) {
             return $this->redirect($this->generateUrl('course_show', array(
                 'id'  => $id,

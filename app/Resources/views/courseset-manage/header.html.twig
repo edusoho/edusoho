@@ -49,7 +49,7 @@
     <div class="btn-group">
       <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">{{'预览'|trans}} <span class="caret"></span></button>
       <ul class="dropdown-menu pull-right">
-        <li><a href="{{ basepath ~ '?previewAs=member' }}" target="_blank">{{'作为 已购买用户'|trans}}</a></li>
+        <li><a href="{{ path('my_course_show', {id:course.id, previewAs: 'member'}) }}" target="_blank">{{'作为 已购买用户'|trans}}</a></li>
         <li><a href="{{ basepath ~ '?previewAs=guest' }}" target="_blank">{{'作为 未购买用户'|trans}}</a></li>
       </ul>
     </div>

@@ -55,7 +55,7 @@
               {% set current_course = course %}
               {% for course in  courses %}
                 <li {% if current_course.id == course.id %}class="mb10 mr10 active" {% endif %}>
-                  <a href="{{ path('course_show',{id: course.id}) }}">{{ course.title }}</a>
+                  <a href="{{ path('course_show',{id: course.id, previewAs: isPreview}) }}">{{ course.title }}</a>
                 </li>
               {% endfor %}
             </ul>
@@ -87,7 +87,7 @@
 
       </div>
       <div class="text-right">
-        {% if member|default(false) %}
+        {% if member|default(false) and isPreview != 'guest' %}
           <a class="btn btn-primary btn-lg" href="{{ path('my_course_show', {id: course.id}) }}">去学习</a>
         {% else %}
           {% if classroom|default(null) %}

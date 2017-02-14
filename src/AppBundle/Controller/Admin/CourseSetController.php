@@ -49,6 +49,8 @@ class CourseSetController extends BaseController
             $paginator->getPerPageCount()
         );
         $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+        $defaultCourses = $this->getCourseService()->getDefaultCoursesByCourseSetIds($courseSetIds);
+        $defaultCourses = ArrayToolkit::index($defaultCourses, 'courseSetId');
 
         list($searchCourseSetsNum, $publishedCourseSetsNum, $closedCourseSetsNum, $unPublishedCourseSetsNum) = $this->getDifferentCourseSetsNum($conditions);
 
@@ -78,6 +80,7 @@ class CourseSetController extends BaseController
         return $this->render('admin/course-set/index.html.twig', array(
             'conditions'               => $conditions,
             'courseSets'               => $courseSets,
+            'defaultCourses'          => $defaultCourses,
             'users'                    => $users,
             'categories'               => $categories,
             'paginator'                => $paginator,
