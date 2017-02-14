@@ -43,14 +43,20 @@ define(function(require, exports, module) {
 
         $('body').on('click', '#live', function(){
             $('.order-form').addClass('hide');
+            $('.course-category').removeClass('hide');
+            $('.classroom-category').addClass('hide');
         });
         
         $('body').on('click', '#course', function(){
             $('.order-form').removeClass('hide');
+            $('.course-category').removeClass('hide');
+            $('.classroom-category').addClass('hide');
         });
 
         $('body').on('click', '#classroom', function(){
             $('.order-form').removeClass('hide');
+            $('.course-category').addClass('hide');
+            $('.classroom-category').removeClass('hide');
         })
     };
 
