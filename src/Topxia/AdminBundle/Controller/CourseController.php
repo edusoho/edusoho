@@ -5,6 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Common\ExportHelp;
 
 class CourseController extends BaseController
 {
@@ -461,7 +462,15 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id, 'admin_course_data');
 
-        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $id), array('createdTime', 'ASC'), 0, 1000);
+        return $this->render('TopxiaAdminBundle:Course:lesson-data.html.twig', array(
+            'course'  => $course,
+            'lessons' => $this->makeLessonsDatasByCourseId($id)
+        ));
+    }
+
+    protected function makeLessonsDatasByCourseId($courseId, $start = 0, $limit = 1000)
+    {
+        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $courseId), array('createdTime', 'ASC'), $start, $limit);
 
         foreach ($lessons as $key => $value) {
             $lessonLearnedNum = $this->getCourseService()->findLearnsCountByLessonId($value['id']);
@@ -489,10 +498,68 @@ class CourseController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:Course:lesson-data.html.twig', array(
-            'course'  => $course,
-            'lessons' => $lessons
-        ));
+        return $lessons;
+    }
+
+    public function prepareForExportLessonsDatasAction(Request $request, $courseId)
+    {
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($title, $lessons, $courseLessonsCount) = $this->getExportLessonsDatas($courseId, $start, $limit, $exportAllowCount);
+
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request,'course_lessons', $title);
+        }
+
+        $content = implode("\r\n", $lessons);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+
+        $status = ExportHelp::getNextMethod($start+$limit, $courseLessonsCount);
+
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start+$limit
+            )
+        );
+    }
+
+    protected function getExportLessonsDatas($courseId, $start, $limit, $exportAllowCount)
+    {   
+        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_data');
+
+        $conditions = array(
+            'courseId' => $courseId
+        );
+        $courseLessonsCount = $this->getCourseService()->searchLessonCount($conditions);
+
+        $titles = $this->getServiceKernel()->trans('课时名,课时学习人数,课时完成人数,课时平均学习时长(分),音视频时长(分),音视频平均观看时长(分),测试平均得分');
+
+        $originaLessons = $this->makeLessonsDatasByCourseId($courseId, $start, $limit);
+
+        $exportLessons = array();
+        foreach ($originaLessons as $lesson) {
+            $exportLesson = '';
+            $exportLesson .= $lesson['title'] ? $lesson['title']."," : "-".",";
+            $exportLesson .= $lesson['LearnedNum'] ? $lesson['LearnedNum']."," : "-".",";
+            $exportLesson .= $lesson['length'] ? $lesson['length']."," : "-".",";
+            $exportLesson .= $lesson['finishedNum'] ? $lesson['finishedNum']."," : "-".",";
+            $exportLesson .= $lesson['learnTime'] ? $lesson['learnTime']."," : "-".",";
+            $exportLesson .= $lesson['watchTime'] ? $lesson['watchTime']."," : "-".",";
+            $exportLesson .= $lesson['finishedNum'] ? $lesson['finishedNum']."," : "-".",";
+
+            $exportLessons[] = $exportLesson;
+        }
+
+        return array($titles, $exportLessons, $courseLessonsCount);
+    }
+
+    public function exportLessonsDatasAction(Request $request, $courseId)
+    {
+        $fileName = sprintf("course-%s-students-(%s).csv", $courseId, date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
     }
 
     public function chooserAction(Request $request)
