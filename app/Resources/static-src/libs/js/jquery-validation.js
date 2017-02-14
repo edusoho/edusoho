@@ -86,7 +86,7 @@ $.extend($.validator.prototype, {
         }
       }
 
-      name = $(element).attr("name");
+      name = $(element).data('display') || $(element).attr("name");
       message = message.replace(displayregex, labeltext || name)
     }
 
