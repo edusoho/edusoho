@@ -280,7 +280,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $conditions = array_merge($conditions, array('ids' => $ids));
-        var_dump($conditions);
         return $this->searchCourseSets($conditions, array('createdTime' => 'DESC'), $start, $limit);
     }
 
