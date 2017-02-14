@@ -17,9 +17,10 @@ class JoinPointToolkit
         } else {
             $finder = new Finder();
             $finder->directories()->depth('== 0');
-
             foreach (ServiceKernel::instance()->getModuleDirectories() as $dir) {
-                if (glob($dir.'/*/*/Resources', GLOB_ONLYDIR)) {
+                if (glob($dir.'/*/Resources', GLOB_ONLYDIR)) {
+                    $finder->in($dir.'/*/Resources');
+                } elseif (glob($dir.'/*/*/Resources', GLOB_ONLYDIR)) {
                     $finder->in($dir.'/*/*/Resources');
                 }
             }

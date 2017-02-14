@@ -42,12 +42,15 @@ class CourseSetController extends CourseBaseController
             return $this->createMessageResponse('error', '您不是老师，不能查看此页面！');
         }
 
+        $conditions = array(
+            'type' => $filter
+        );
+
         if ($filter == 'classroom') {
+            $conditions['type'] = 'normal';
             $conditions['parentId_GT'] = 0;
-        } elseif (in_array($filter, array('normal', 'live'))) {
-            // todo:
-            // what if a classroom type course is also normal type?
-            $conditions['type'] = $filter;
+        } elseif ($filter == 'normal') {
+            $conditions['parentId'] = 0;
         }
 
         $paginator = new Paginator(

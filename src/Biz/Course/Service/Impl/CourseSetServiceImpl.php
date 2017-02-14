@@ -5,9 +5,9 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
@@ -280,6 +280,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         $conditions = array_merge($conditions, array('ids' => $ids));
+        var_dump($conditions);
         return $this->searchCourseSets($conditions, array('createdTime' => 'DESC'), $start, $limit);
     }
 
@@ -346,7 +347,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         //$courseSet = $this->tryManageCourseSet($courseSetId);
         $courseSet  = $this->getCourseSet($courseSetId);
         $entityCopy = new ClassroomCourseCopy($this->biz);
-        return $entityCopy->copy($courseSet, array('courseId' => $courseId, 'classroomId' => $classroomId));
+
+        $newCourse = $entityCopy->copy($courseSet, array('courseId' => $courseId, 'classroomId' => $classroomId));
+
+        $this->dispatchEvent('classroom.course.copy', new Event($newCourse, array('classroomId' => $classroomId, 'courseSetId' => $courseSetId, 'courseId' => $courseId)));
+
+        return $newCourse;
     }
 
     public function updateCourseSet($id, $fields)
