@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\FIle\FireWall;
+namespace Topxia\Service\File\FireWall;
 
 use Topxia\Service\Common\ServiceKernel;
 
