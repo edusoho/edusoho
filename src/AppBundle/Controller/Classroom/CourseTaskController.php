@@ -48,11 +48,10 @@ class CourseTaskController extends BaseController
     {
         $user   = $this->getCurrentUser();
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroomId, $user['id']) : null;
-        var_dump($classroomId);
-        var_dump($courseId);exit;
+        $course = $this->getCourseService()->getCourse($courseId);
         return $this->render('classroom/course/tasks-list.html.twig', array(
             'classroomId' => $classroomId,
-            'courseId'    => $courseId,
+            'course'      => $course,
             'member'      => $member
         ));
     }
