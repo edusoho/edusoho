@@ -1,4 +1,5 @@
-import Emitter from 'es6-event-emitter';
+// import Emitter from 'es6-event-emitter';
+import Emitter from "component-emitter";
 
 export default class TaskSidebar extends Emitter{
   constructor({element, url}){
@@ -18,7 +19,6 @@ export default class TaskSidebar extends Emitter{
       this.bindEvent();
     })
     .fail(error => {
-      console.log(error);
     });
   }
 
@@ -70,7 +70,7 @@ export default class TaskSidebar extends Emitter{
       $.get(url)
           .then(html => {
             $pane.html(html);
-            $pane.perfectScrollbar();
+            // $pane.perfectScrollbar();
             $btn.data('loaded', true);
             this.operationContent($btn);
           });
@@ -94,7 +94,7 @@ export default class TaskSidebar extends Emitter{
     let side_right = '0px';
     let content_right = '379px';
 
-    this.trigger('popup', content_right, time);
+    this.emit('popup', content_right, time);
     this.element.animate({
       right: side_right
     }, time);
@@ -104,7 +104,7 @@ export default class TaskSidebar extends Emitter{
     let side_right = '-' + this.element.width() + 'px';
     let content_right = '26px';
 
-    this.trigger('fold', content_right, time);
+    // this.emit('fold', content_right, time);
     this.element.animate({
       right: side_right
     }, time);

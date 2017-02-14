@@ -8,6 +8,7 @@ import 'libs/js/jquery-lavalamp';
 import 'common/bootstrap-modal-hack';
 import 'common/script';
 import 'common/card';
+import 'common/es-polyfill';
 import { isMobileDevice } from 'common/utils';
 // 等待确认可删除Cookie
 // var Cookie = require('cookie');

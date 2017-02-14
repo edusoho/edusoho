@@ -36,7 +36,7 @@
     "es-messenger": "latest",
     "es-swfobject": "latest",
     "es5-shim": "4.5.9",
-    "es6-event-emitter": "1.5.2",
+    "es6-promise": "^4.0.5",
     "fetch-ie8": "1.4.3",
     "font-awesome": "4.6.3",
     "html5shiv": "3.7.3",

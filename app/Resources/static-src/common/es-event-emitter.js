@@ -1,4 +1,5 @@
-import Emitter from "es6-event-emitter";
+import Emitter from "component-emitter";
+// import Emitter from "es6-event-emitter";
 
 export default class EsEmitter extends Emitter {
   constructor() {
@@ -6,6 +7,7 @@ export default class EsEmitter extends Emitter {
   }
 
   delay(event, cb, time) {
+    alert('delay delay');
     time = time || 0;
 
     let delayCb = function () {
