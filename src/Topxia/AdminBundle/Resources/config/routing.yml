@@ -1064,7 +1064,7 @@ admin_cloud_video_switch:
 admin_cloud_show:
     path:  /cloud/{type}/show
     defaults: { _controller: TopxiaAdminBundle:Cloud:cloudShow , type: 'video'}
-
+#路由和admin_cloud_buy重复将会被弃用
 admin_cloud_email_buy:
     path:  /cloud/{type}/buy/show
     defaults: { _controller: TopxiaAdminBundle:Cloud:emailBuy }
