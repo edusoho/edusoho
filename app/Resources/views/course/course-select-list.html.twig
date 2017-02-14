@@ -71,7 +71,7 @@
           </div>
         {% endif %}
       {% else %}
-        <div class="course-about ellipsis">{{ courseSet.summary }}</div>
+        <div class="course-about ellipsis">{{ courseSet.summary|raw }}</div>
       {% endif %}
 
       <div class="course-footer clearfix">
