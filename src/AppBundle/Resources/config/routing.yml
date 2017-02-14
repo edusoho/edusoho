@@ -2559,10 +2559,6 @@ classroom_teacherIds_catch:
     path: /classroom/{classroomId}/teacherIds/catch
     defaults: { _controller: AppBundle:Classroom/Teacher:catchIds }
 
-classroom_course_tasks_preview:
-    path: /classroom/{classroomId}/course/{courseId}/tasks/preview
-    defaults: { _controller: AppBundle:Classroom/CourseTask:preview }
-
 classroom_buy_hint:
     path: /classroom/courses/{courseId}/buy/hint
     defaults: { _controller: AppBundle:Classroom/CourseTask:buyHint }
