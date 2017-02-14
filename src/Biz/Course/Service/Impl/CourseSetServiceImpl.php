@@ -620,7 +620,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function updateMaxRate($id, $maxRate)
     {
         $courseSet = $this->getCourseSetDao()->update($id, array('maxRate' => $maxRate));
-        $this->dispatchEvent('course-set.maxRate.update', new Event(array('courseSet' => $courseSet, 'maxRate' => $maxRate)));
+        $this->dispatchEvent('courseSet.maxRate.update', new Event(array('courseSet' => $courseSet, 'maxRate' => $maxRate)));
         return $courseSet;
     }
 

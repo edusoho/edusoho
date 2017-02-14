@@ -11,7 +11,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     public static function getSubscribedEvents()
     {
         return array(
-            'course-set.maxRate.update'          => 'onCourseSetMaxRateUpdate',
+            'courseSet.maxRate.update'          => 'onCourseSetMaxRateUpdate',
         );
     }
 
