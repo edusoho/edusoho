@@ -264,7 +264,6 @@ class CourseSetManageController extends BaseController
     public function syncInfoAction(Request $request, $id)
     {
         $sideNav = $request->query->get('sideNav', '');
-        var_dump($sideNav);
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         if (!$courseSet['locked']) {
             throw new \Exception('CourseSet must be locked');

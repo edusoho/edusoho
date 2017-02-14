@@ -1,0 +1,8 @@
+<li class="mll">
+  {% if course.expiryMode == 'days' and member.role == 'teacher' %}
+      共<span class="mls color-warning"> {{ course.expiryDays }}天</span>
+  {% else %}
+    {{ member.deadline|date('Y-m-d') }}
+      <span class="mls color-warning">剩余 {{ member.deadline|time_diff }} 天</span>
+  {% endif %}
+</li>

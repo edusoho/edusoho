@@ -46,7 +46,7 @@ class ClassroomReviewController extends BaseController
         $users      = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($reviews, 'classroomId'));
 
-        return $this->render('classroom-Review/index.html.twig', array(
+        return $this->render('classroom-review/index.html.twig', array(
             'reviews'    => $reviews,
             'users'      => $users,
             'classrooms' => $classrooms,

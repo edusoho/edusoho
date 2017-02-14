@@ -5,10 +5,10 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Copy\Impl\CourseCopy;
 use Biz\Course\Dao\CourseChapterDao;
@@ -350,7 +350,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException('该教学计划在班级下存在引用，请先删除相关引用');
         }
         $courseCount = $this->getCourseDao()->count(array('courseSetId' => $course['courseSetId']));
-        if($courseCount <= 1){
+        if ($courseCount <= 1) {
             throw $this->createAccessDeniedException('课程下至少需保留一个教学计划');
         }
         return $this->getCourseDeleteService()->deleteCourse($id);
@@ -993,6 +993,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
         $orderBy    = $this->_prepareCourseOrderBy($sort);
+
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
 
