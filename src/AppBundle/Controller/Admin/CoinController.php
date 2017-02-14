@@ -104,7 +104,7 @@ class CoinController extends BaseController
                 goto response;
             }
 
-            $courseSets = $this->getCourseSetService()->searchCourseSets(array('parentId' => 0), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
+            $courseSets = $this->getCourseSetService()->searchCourseSets(array('parentId' => 0, 'maxCoursePrice_GT' => 0), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
             return $this->render('admin/coin/coin-course-set.html.twig', array(
                 'set'   => $set,
                 'items' => $courseSets
@@ -128,10 +128,11 @@ class CoinController extends BaseController
         $set        = $conditions['set'];
 
         if ($type == 'course') {
-            $items = $this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00', 'parentId' => 0), 'latest', 0, PHP_INT_MAX);
+            $items = $this->getCourseSetService()->searchCourseSets(array('maxCoursePrice_GT' => '0.00', 'parentId' => 0), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
         } elseif ($type == 'classroom') {
             $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         } elseif ($type == 'vip') {
+            // todo
             $items = $this->getLevelService()->searchLevels(array('enable' => 1), 0, PHP_INT_MAX);
         }
 
