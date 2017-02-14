@@ -6,13 +6,12 @@ define(function(require, exports, module) {
 
       $('.lesson-export').button('loading');
       $.get(prepare_url, {start:0}, function(response) {
-          if (response.status === 'getData') {
+          if (response.method === 'getData') {
               exportCoursesLessons(response.start, response.fileName);
           } else {
               $('.lesson-export').button('reset');
-              location.href = export_url +'&fileName='+response.fileName;
+              location.href = $('.lesson-export').data('export-url') +'?fileName='+response.fileName;
           }
-          console.log(response);
       });
 
     });
@@ -21,12 +20,12 @@ define(function(require, exports, module) {
         var start = start || 0,
             fileName = fileName || '';
 
-        $.get($('.lesson-export').data('datasUrl'), {start:start, fileName:fileName}, function(response) {
-            if (response.status === 'getData') {
+        $.get($('.lesson-export').data('prepare-url'), {start:start, fileName:fileName}, function(response) {
+            if (response.method === 'getData') {
                 exportCoursesLessons(response.start, response.fileName);
             } else {
                 $('.lesson-export').button('reset');
-                location.href = $('.lesson-export').data('url')+'&fileName='+response.fileName;
+                location.href = $('.lesson-export').data('export-url')+'?fileName='+response.fileName;
             }
         });
     }

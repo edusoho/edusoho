@@ -512,16 +512,16 @@ class CourseController extends BaseController
             $file = ExportHelp::addFileTitle($request,'course_lessons', $title);
         }
 
-        $content = implode("\r\n", $lessons);
-        $file = ExportHelp::saveToTempFile($request, $content, $file);
+        $datas = implode("\r\n", $lessons);
+        $fileName = ExportHelp::saveToTempFile($request, $datas, $file);
 
-        $status = ExportHelp::getNextMethod($start+$limit, $courseLessonsCount);
+        $method = ExportHelp::getNextMethod($start+$limit, $courseLessonsCount);
 
         return $this->createJsonResponse(
             array(
-                'status' => $status,
-                'fileName' => $file,
-                'start' => $start+$limit
+                'method'   => $method,
+                'fileName' => $fileName,
+                'start'    => $start+$limit
             )
         );
     }
@@ -544,11 +544,29 @@ class CourseController extends BaseController
             $exportLesson = '';
             $exportLesson .= $lesson['title'] ? $lesson['title']."," : "-".",";
             $exportLesson .= $lesson['LearnedNum'] ? $lesson['LearnedNum']."," : "-".",";
-            $exportLesson .= $lesson['length'] ? $lesson['length']."," : "-".",";
             $exportLesson .= $lesson['finishedNum'] ? $lesson['finishedNum']."," : "-".",";
-            $exportLesson .= $lesson['learnTime'] ? $lesson['learnTime']."," : "-".",";
-            $exportLesson .= $lesson['watchTime'] ? $lesson['watchTime']."," : "-".",";
-            $exportLesson .= $lesson['finishedNum'] ? $lesson['finishedNum']."," : "-".",";
+
+            $learnTime = $lesson['learnTime'] ? $lesson['learnTime'] / 60 : 0;
+            $exportLesson .= $learnTime ? $learnTime ."," : "-".",";
+
+            if ($lesson['type'] =='audio' or $lesson['type'] =='video') {
+                $exportLesson .= $lesson['length'] ? $lesson['length']."," : "-".",";
+            } else {
+                $exportLesson .= "-".",";
+            }
+
+            if ($lesson['type'] =='audio' or $lesson['type'] =='video') {
+                $watchTime = $lesson['watchTime'] ? $lesson['watchTime'] / 60 : 0;
+                $exportLesson .= $watchTime ? $watchTime ."," : "-".",";
+            } else {
+                $exportLesson .= "-".",";
+            }
+
+            if ($lesson['type'] == 'testpaper') {
+                $exportLesson .= $lesson['score'] ? $lesson['score']."," : "-".",";
+            } else {
+                $exportLesson .= "-".",";
+            }
 
             $exportLessons[] = $exportLesson;
         }
