@@ -75,11 +75,13 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         'F' => 
         array (
             'Flexihash\\' => 10,
+            'Facebook\\WebDriver\\' => 19,
         ),
         'E' => 
         array (
             'Endroid\\QrCode\\' => 15,
             'Endroid\\Bundle\\QrCodeBundle\\' => 28,
+            'EduSoho\\AT\\' => 11,
         ),
         'D' => 
         array (
@@ -215,6 +217,10 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         array (
             0 => __DIR__ . '/..' . '/flexihash/flexihash/src',
         ),
+        'Facebook\\WebDriver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/facebook/webdriver/lib',
+        ),
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qrcode/src',
@@ -222,6 +228,10 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         'Endroid\\Bundle\\QrCodeBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qrcode-bundle/src',
+        ),
+        'EduSoho\\AT\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/automation-tests',
         ),
         'Doctrine\\Common\\Cache\\' => 
         array (

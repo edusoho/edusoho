@@ -3612,5 +3612,56 @@
             "plugin",
             "theme"
         ]
+    },
+    {
+        "name": "facebook/webdriver",
+        "version": "1.3.0",
+        "version_normalized": "1.3.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/facebook/php-webdriver.git",
+            "reference": "77300c4ab2025d4316635f592ec849ca7323bd8c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://packagist.phpcomposer.com/files/facebook/php-webdriver/77300c4ab2025d4316635f592ec849ca7323bd8c.zip",
+            "reference": "77300c4ab2025d4316635f592ec849ca7323bd8c",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "php": "^5.5 || ~7.0",
+            "symfony/process": "^2.8 || ^3.1"
+        },
+        "require-dev": {
+            "friendsofphp/php-cs-fixer": "^1.11",
+            "php-mock/php-mock-phpunit": "^1.1",
+            "phpunit/phpunit": "4.6.* || ~5.0",
+            "satooshi/php-coveralls": "^1.0",
+            "squizlabs/php_codesniffer": "^2.6"
+        },
+        "suggest": {
+            "phpdocumentor/phpdocumentor": "2.*"
+        },
+        "time": "2017-01-13 15:48:08",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Facebook\\WebDriver\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": "A PHP client for WebDriver",
+        "homepage": "https://github.com/facebook/php-webdriver",
+        "keywords": [
+            "facebook",
+            "php",
+            "selenium",
+            "webdriver"
+        ]
     }
 ]
