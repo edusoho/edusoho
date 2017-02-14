@@ -146,7 +146,7 @@ class UserSettingController extends BaseController
             $loginConnect = $request->request->all();
             $loginConnect = ArrayToolkit::trim($loginConnect);
             $loginConnect = $this->settingProcessLoginConnect($loginConnect);
-            
+
             //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
             $loginConnect = $this->loginConnectList($loginConnect);
             $this->getSettingService()->set('login_bind', $loginConnect);
@@ -175,6 +175,7 @@ class UserSettingController extends BaseController
 
         return $default;
     }
+
     private function settingProcessLoginConnect($loginConnect)
     {
         if ($loginConnect['enabled'] == 0) {
