@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller\My;
 
-use AppBundle\Controller\Course\CourseBaseController;
-use Biz\System\Service\SettingService;
-use Biz\Task\Service\TaskService;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\SettingService;
+use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Controller\Course\CourseBaseController;
 
 class CourseSetController extends CourseBaseController
 {
@@ -20,7 +20,6 @@ class CourseSetController extends CourseBaseController
             $this->getCourseSetService()->countUserFavorites($user['id']),
             12
         );
-
 
         $courseFavorites = $this->getCourseSetService()->searchUserFavorites(
             $user['id'],
@@ -47,7 +46,7 @@ class CourseSetController extends CourseBaseController
         );
 
         if ($filter == 'classroom') {
-            $conditions['type'] = 'normal';
+            $conditions['type']        = 'normal';
             $conditions['parentId_GT'] = 0;
         } elseif ($filter == 'normal') {
             $conditions['parentId'] = 0;
@@ -66,8 +65,8 @@ class CourseSetController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        $service = $this->getCourseService();
-        $courseSets    = array_map(function ($set) use ($user, $service) {
+        $service    = $this->getCourseService();
+        $courseSets = array_map(function ($set) use ($user, $service) {
             $set['canManage'] = $set['creator'] == $user['id'];
             $set['courses']   = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
             return $set;
@@ -80,7 +79,8 @@ class CourseSetController extends CourseBaseController
             $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
 
             foreach ($classrooms as &$classroom) {
-                $classroom['classroomTitle'] = $this->getClassroomService()->getClassroom($classroom['classroomId'])['title'];
+                $_classroom                  = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+                $classroom['classroomTitle'] = $_classroom['title'];
             }
         }
 
