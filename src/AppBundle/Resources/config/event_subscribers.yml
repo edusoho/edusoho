@@ -89,6 +89,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    course_set_event_subscriber:
+        class: Biz\Course\Event\CourseSetSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     course_sync_event_subscriber:
         class: Biz\Course\Event\CourseSyncSubscriber
         arguments: ['@biz']

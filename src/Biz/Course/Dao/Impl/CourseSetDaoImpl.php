@@ -71,7 +71,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'parentId > :parentId_GT',
                 'createdTime >= :startTime',
                 'createdTime <= :endTime',
-                'minCoursePrice = :minCoursePrice'
+                'minCoursePrice = :minCoursePrice',
+                'maxCoursePrice > :maxCoursePrice_GT'
             ),
             'serializes' => array(
                 'tags'      => 'delimiter',
