@@ -5,7 +5,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ThreadDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -17,8 +17,10 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
 use Biz\Task\Strategy\StrategyContext;
 use Biz\Course\Service\MaterialService;
+use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
 
 class CourseServiceImpl extends BaseService implements CourseService
@@ -166,7 +168,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'goals',
             'audiences',
             'enableFinish',
-            'serializeMode'
+            'serializeMode',
+            'maxStudentNum'
         ));
 
         if ($course['status'] == 'published') {
@@ -187,12 +190,16 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields = $this->validateExpiryMode($fields);
         }
 
-        return $this->getCourseDao()->update($id, $fields);
+        $course = $this->getCourseDao()->update($id, $fields);
+        $this->dispatchEvent('course.update', new Event($course));
+        return $course;
     }
 
     public function updateMaxRate($id, $maxRate)
     {
-        return $this->getCourseDao()->update($id, array('maxRate' => $maxRate));
+        $course = $this->getCourseDao()->update($id, array('maxRate' => $maxRate));
+        $this->dispatchEvent('course.update', new Event($course));
+        return $course;
     }
 
     public function setCourseTeachers($courseId, $teachers)
@@ -248,7 +255,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function updateCourseMarketing($id, $fields)
     {
-        $this->tryManageCourse($id);
+        $oldCourse = $this->tryManageCourse($id);
 
         $fields = ArrayToolkit::parts($fields, array(
             'isFree',
@@ -284,11 +291,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
         }
 
-        // if (isset($fields['price'])) {
-        //     $fields['price'] = round(floatval($fields['price']) * 100, 0);
-        // }
+        $newCourse = $this->getCourseDao()->update($id, $fields);
 
-        return $this->getCourseDao()->update($id, $fields);
+        $this->dispatchEvent('course.update', new Event($newCourse));
+        $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
+
+        return $newCourse;
     }
 
     protected function calculatePrice($id, $originPrice)
@@ -326,7 +334,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException('Invalid Arguments');
         }
 
-        return $this->getCourseDao()->update($id, $updateFields);
+        $course = $this->getCourseDao()->update($id, $updateFields);
+        $this->dispatchEvent('course.update', new Event($course));
+        return $course;
     }
 
     public function deleteCourse($id)
@@ -338,6 +348,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $subCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
             throw $this->createAccessDeniedException('该教学计划在班级下存在引用，请先删除相关引用');
+        }
+        $courseCount = $this->getCourseDao()->count(array('courseSetId' => $course['courseSetId']));
+        if($courseCount <= 1){
+            throw $this->createAccessDeniedException('课程下至少需保留一个教学计划');
         }
         return $this->getCourseDeleteService()->deleteCourse($id);
     }
@@ -352,7 +366,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         try {
             $this->beginTransaction();
-            $this->getCourseDao()->update($id, $course);
+            $course = $this->getCourseDao()->update($id, $course);
 
             $publishedCourses = $this->findPublishedCoursesByCourseSetId($course['courseSetId']);
             //如果课程下没有了已发布的教学计划，则关闭此课程
@@ -360,6 +374,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $this->getCourseSetDao()->update($course['courseSetId'], array('status' => 'closed'));
             }
             $this->commit();
+            $this->dispatchEvent('course.close', new Event($course));
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
@@ -369,10 +384,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function publishCourse($id)
     {
         $this->tryManageCourse($id);
-        $this->getCourseDao()->update($id, array(
+        $course = $this->getCourseDao()->update($id, array(
             'status' => 'published'
         ));
-        // $this->dispatchEvent('course.publish', $course);
+        $this->dispatchEvent('course.publish', $course);
     }
 
     protected function validateExpiryMode($course)
@@ -575,6 +590,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapter['seq']         = $this->getNextCourseItemSeq($chapter['courseId']);
         $chapter['createdTime'] = time();
         $chapter                = $this->getChapterDao()->create($chapter);
+
+        $this->dispatchEvent('course.chapter.create', new Event($chapter));
+
         return $chapter;
     }
 
@@ -615,7 +633,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
 
         $chapter = $this->getChapterDao()->update($chapterId, $fields);
-
+        $this->dispatchEvent('course.chapter.update', new Event($chapter));
         return $chapter;
     }
 
@@ -629,6 +647,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
         }
         $this->getChapterDao()->delete($deletedChapter['id']);
+        $this->dispatchEvent('course.chapter.delete', new Event($deletedChapter));
 
         $prevChapter = array('id' => 0);
 
@@ -977,6 +996,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
 
+    public function getMinPublishedCoursePriceByCourseSetId($courseSetId)
+    {
+        return $this->getCourseDao()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
+    }
+
     protected function _prepareCourseOrderBy($sort)
     {
         if (is_array($sort)) {
@@ -1130,6 +1154,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->createService('Course:CourseDeleteService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
@@ -1137,8 +1164,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * 当默认值未设置时，合并默认值
-     * @param $course
-     *
+     * @param  $course
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)

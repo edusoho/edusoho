@@ -27,7 +27,7 @@
                   </div>
                   <div class="media-body">
                     <div class="title">
-                      <a class="link-light" href="{{ path('group_show',{id:group.id}) }}">
+                      <a class="link-dark" href="{{ path('group_show',{id:group.id}) }}">
                         {{ group.title }}
                       </a>
                     </div>
@@ -100,9 +100,9 @@
               </div>
               <div class="media-body">
                 <div class="title text-sm">
-                  {{ web_macro.user_link(author,'link-light') }}
+                  {{ web_macro.user_link(author,'link-dark') }}
                   <span class="score">{{web_macro.star(review.rating) }}</span>
-                  {{'发布于'|trans}} <a class="link-light" href="{{ path('course_set_show', {id:course.id}) }}">《{{ course.title|plain_text(10) }}》</a>
+                  {{'发布于'|trans}} <a class="link-dark" href="{{ path('course_set_show', {id:course.id}) }}">《{{ course.title|plain_text(10) }}》</a>
                 </div>
                 <div class="content gray-darker">
                   {{ review.content|plain_text(30) }}

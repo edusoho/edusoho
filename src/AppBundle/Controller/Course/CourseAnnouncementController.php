@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Controller\Course;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 

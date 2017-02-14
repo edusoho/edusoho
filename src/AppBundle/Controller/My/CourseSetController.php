@@ -8,8 +8,8 @@ use AppBundle\Controller\Course\CourseBaseController;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 
 class CourseSetController extends CourseBaseController
 {
@@ -45,7 +45,8 @@ class CourseSetController extends CourseBaseController
         }
 
         $conditions = array(
-            'type' => 'normal'
+            'type'     => 'normal',
+            'parentId' => 0
         );
 
         if ($filter == 'live') {

@@ -2,8 +2,14 @@
 
 namespace Biz\Course\Copy\Impl;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
+/**
+ * Class CourseSetTestpaperCopy
+ * @package Biz\Course\Copy\Impl
+ * @deprecated
+ * @see ActivityTestpaperCopy
+ */
 class CourseSetTestpaperCopy extends TestpaperCopy
 {
     public function __construct($biz)

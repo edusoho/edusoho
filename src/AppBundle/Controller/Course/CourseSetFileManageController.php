@@ -1,22 +1,30 @@
 <?php
 namespace AppBundle\Controller\Course;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
+use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseSetService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use AppBundle\Controller\BaseController;
 
 class CourseSetFileManageController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        $courseSet  = $this->getCourseSetService()->tryManageCourseSet($id);
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
+
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'files'
+            ));
+        }
+
         $conditions = array(
             'courseSetId' => $courseSet['id'],
             'type'        => 'course'

@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\MobileBundle\Alipay;
 
-use Topxia\Component\Payment\Response;
+use AppBundle\Component\Payment\Response;
 
 class MobileAlipayResponse extends Response
 {

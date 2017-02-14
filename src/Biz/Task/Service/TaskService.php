@@ -52,6 +52,8 @@ interface TaskService
      */
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId);
 
+    public function isPreTasksIsFinished($preTasks);
+
     public function startTask($taskId);
 
     public function doTask($taskId, $time = self::LEARN_TIME_STEP);
@@ -100,9 +102,8 @@ interface TaskService
     /**
      * 设置当前任务最大可同时进行的人数  如直播任务等
      *
-     * @param $taskId
-     * @param $maxNum
-     *
+     * @param  $taskId
+     * @param  $maxNum
      * @return mixed
      */
     public function setTaskMaxOnlineNum($taskId, $maxNum);
@@ -110,10 +111,9 @@ interface TaskService
     /**
      * 统计当前时间以后每天的直播次数
      *
-     * @param $courseSetIds
-     * @param $limit
-     *
-     * @return array <string, int|string>
+     * @param  $courseSetIds
+     * @param  $limit
+     * @return array           <string, int|string>
      */
     public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
 

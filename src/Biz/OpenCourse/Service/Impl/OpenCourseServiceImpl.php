@@ -4,7 +4,7 @@ namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\FavoriteDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\OpenCourse\Dao\OpenCourseDao;
 use Codeages\Biz\Framework\Event\Event;

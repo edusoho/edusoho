@@ -2,7 +2,7 @@
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\ClassRoomProcessor;
@@ -445,9 +445,9 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
 		return array_map(function($classroom) use ($self, $container, $isList, $coinSetting) {
 
-			$classroom['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['smallPicture'], 'course-large.png', true);
-            $classroom['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['middlePicture'], 'course-large.png', true);
-            $classroom['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($classroom['largePicture'], 'course-large.png', true);
+			$classroom['smallPicture'] = $container->get('web.twig.extension')->getFilePath($classroom['smallPicture'], 'course-large.png', true);
+            $classroom['middlePicture'] = $container->get('web.twig.extension')->getFilePath($classroom['middlePicture'], 'course-large.png', true);
+            $classroom['largePicture'] = $container->get('web.twig.extension')->getFilePath($classroom['largePicture'], 'course-large.png', true);
 			
 			$classroom['recommendedTime'] = date("c", $classroom['recommendedTime']);
 			$classroom['createdTime'] = date("c", $classroom['createdTime']);

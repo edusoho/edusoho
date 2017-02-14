@@ -19,7 +19,7 @@ $twig   = new Twig_Environment($loader, array(
     'cache' => false
 ));
 
-$twig->addGlobal('edusho_version', \Topxia\System::VERSION);
+$twig->addGlobal('edusho_version', \AppBundle\System::VERSION);
 
 $step         = intval(empty($_GET['step']) ? 0 : $_GET['step']);
 $init_data    = intval(empty($_GET['init_data']) ? 0 : $_GET['init_data']);
@@ -166,7 +166,7 @@ function install_step3($init_data = 0)
         $biz['db']->beginTransaction();
         $installLogFd = @fopen($biz['log_directory'] . '/install.log', 'w');
         $output = new \Symfony\Component\Console\Output\StreamOutput($installLogFd);
-        $initializer = new \Topxia\Common\SystemInitializer($output);
+        $initializer = new \AppBundle\Common\SystemInitializer($output);
         try {
 
             if (!empty($init_data)) {

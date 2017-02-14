@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -46,7 +46,7 @@ class ClassroomReviewController extends BaseController
         $users      = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($reviews, 'classroomId'));
 
-        return $this->render('classroom-Review/index.html.twig', array(
+        return $this->render('classroom-review/index.html.twig', array(
             'reviews'    => $reviews,
             'users'      => $users,
             'classrooms' => $classrooms,

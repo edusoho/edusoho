@@ -15,8 +15,8 @@ use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Vip\Service\Vip\LevelService;
 use Vip\Service\Vip\VipService;
 
@@ -628,7 +628,7 @@ class UserController extends BaseController
      */
     protected function getLevelService()
     {
-        return $this->getBiz()->service('Vip:Vip.LevelService');
+        return $this->getBiz()->service('VipPlugin:Vip:LevelService');
     }
 
     /**
@@ -636,7 +636,7 @@ class UserController extends BaseController
      */
     protected function getVipService()
     {
-        return $this->getBiz()->service('Vip:Vip.VipService');
+        return $this->getBiz()->service('VipPlugin:Vip:VipService');
     }
 
     /**

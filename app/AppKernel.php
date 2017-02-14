@@ -1,6 +1,6 @@
 <?php
 
-use Topxia\Common\ExtensionManager;
+use AppBundle\Common\ExtensionManager;
 use Biz\User\CurrentUser;
 use Symfony\Component\HttpKernel\Kernel;
 use Topxia\Service\Common\ServiceKernel;
@@ -76,7 +76,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Topxia\AdminBundle\TopxiaAdminBundle(),
             new Topxia\MobileBundle\TopxiaMobileBundle(),
             new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),
-            new Classroom\ClassroomBundle\ClassroomBundle(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
@@ -151,7 +150,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $currentUser->fromArray(array(
                 'id'        => 0,
                 'nickname'  => '游客',
-                'currentIp' => $this->request->getClientIp(),
+                'currentIp' => $this->request->getClientIp() ? : '127.0.0.1',
                 'roles'     => array()
             ));
 

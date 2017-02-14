@@ -7,8 +7,8 @@ use Monolog\Handler\StreamHandler;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Util\HTMLPurifierFactory;
-use Topxia\Common\Exception\AccessDeniedException;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use AppBundle\Common\Exception\AccessDeniedException;
+use AppBundle\Common\Exception\ResourceNotFoundException;
 
 abstract class BaseService
 {
@@ -73,7 +73,7 @@ abstract class BaseService
     }
 
     /**
-     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
+     * @deprecated this is deprecated and will be removed. Please use use `throw new AppBundle\Common\Exception\XXXException(...)` instead.
      */
     protected function createServiceException($message = 'Service Exception', $code = 0)
     {
@@ -81,7 +81,7 @@ abstract class BaseService
     }
 
     /**
-     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
+     * @deprecated this is deprecated and will be removed. Please use use `throw new AppBundle\Common\Exception\XXXException(...)` instead.
      */
     protected function createAccessDeniedException($message = 'Access Denied', $code = 0)
     {
@@ -89,7 +89,7 @@ abstract class BaseService
     }
 
     /**
-     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
+     * @deprecated this is deprecated and will be removed. Please use use `throw new AppBundle\Common\Exception\XXXException(...)` instead.
      */
     protected function createNotFoundException($message = 'Not Found', $code = 0)
     {

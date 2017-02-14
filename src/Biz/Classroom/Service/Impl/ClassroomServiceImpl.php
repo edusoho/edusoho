@@ -3,7 +3,7 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\Course\Dao\CourseNoteDao;
 use Biz\User\Service\UserService;
@@ -1606,7 +1606,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip.VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     /**

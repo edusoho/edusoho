@@ -7,7 +7,7 @@ use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
 use Biz\File\Service\UploadFileTagService;
 use Biz\User\Service\UserService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\CloudFile\Service\CloudFileService;
 use Topxia\Service\Common\ServiceKernel;
 

@@ -11,8 +11,8 @@ use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\FileToolkit;
 
 class FileServiceImpl extends BaseService implements FileService
 {

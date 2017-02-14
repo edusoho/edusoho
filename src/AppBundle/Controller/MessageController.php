@@ -1,12 +1,10 @@
 <?php
 namespace AppBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\MessageService;
-use Topxia\WebBundle\Form\MessageType;
-use Topxia\WebBundle\Form\MessageReplyType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -73,21 +71,16 @@ class MessageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $form = $this->createForm(new MessageReplyType());
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $message = $form->getData();
-                $message = $this->getMessageService()->sendMessage($user['id'], $conversation['fromId'], $message['content']);
-                $html    = $this->renderView('message/item.html.twig', array('message' => $message, 'conversation' => $conversation));
-                return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
-            }
+            $message = $request->request->get('message_reply');
+            $message = $this->getMessageService()->sendMessage($user['id'], $conversation['fromId'], $message['content']);
+            $html    = $this->renderView('message/item.html.twig', array('message' => $message, 'conversation' => $conversation));
+            return $this->createJsonResponse(array('status' => 'ok', 'html' => $html));
         }
         return $this->render('message/conversation-show.html.twig', array(
             'conversation' => $conversation,
             'messages'     => $messages,
             'receiver'     => $this->getUserService()->getUser($conversation['fromId']),
-            'form'         => $form->createView(),
             'paginator'    => $paginator
         ));
     }
@@ -96,66 +89,54 @@ class MessageController extends BaseController
     {
         $user     = $this->getCurrentUser();
         $receiver = $this->getUserService()->getUser($toId);
-        $form     = $this->createForm(new MessageType(), array('receiver' => $receiver['nickname']));
+        $message  = array('receiver' => $receiver['nickname']);
         if ($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $message  = $form->getData();
-                $nickname = $message['receiver'];
-                $receiver = $this->getUserService()->getUserByNickname($nickname);
-                if (empty($receiver)) {
-                    throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
-                }
-                $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
-                return $this->redirect($this->generateUrl('message'));
+            $message  = $request->request->get('message');
+            $nickname = $message['receiver'];
+            $receiver = $this->getUserService()->getUserByNickname($nickname);
+            if (empty($receiver)) {
+                throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
             }
+            $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
+            return $this->redirect($this->generateUrl('message'));
         }
         return $this->render('message/send-message-modal.html.twig', array(
-            'form'   => $form->createView(),
-            'userId' => $toId));
+            'message' => $message,
+            'userId'  => $toId));
     }
 
     public function sendAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        $form = $this->createForm(new MessageType());
         if ($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $message  = $form->getData();
-                $nickname = $message['receiver'];
-                $receiver = $this->getUserService()->getUserByNickname($nickname);
-                if (empty($receiver)) {
-                    throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
-                }
-                $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
+            $message  = $request->request->get('message');
+            $nickname = $message['receiver'];
+            $receiver = $this->getUserService()->getUserByNickname($nickname);
+            if (empty($receiver)) {
+                throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
             }
+            $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
             return $this->redirect($this->generateUrl('message'));
         }
-        return $this->render('message/create.html.twig', array(
-            'form' => $form->createView()));
+        return $this->render('message/create.html.twig');
     }
 
     public function sendToAction(Request $request, $receiverId)
     {
         $receiver = $this->getUserService()->getUser($receiverId);
         $user     = $this->getCurrentUser();
-        $form     = $this->createForm(new MessageType(), array('receiver' => $receiver['nickname']));
+        $message  = array('receiver' => $receiver['nickname']);
         if ($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $message  = $form->getData();
-                $nickname = $message['receiver'];
-                $receiver = $this->getUserService()->getUserByNickname($nickname);
-                if (empty($receiver)) {
-                    throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
-                }
-                $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
+            $message  = $request->request->get('message');
+            $nickname = $message['receiver'];
+            $receiver = $this->getUserService()->getUserByNickname($nickname);
+            if (empty($receiver)) {
+                throw $this->createNotFoundException('抱歉，该收信人尚未注册!');
             }
+            $this->getMessageService()->sendMessage($user['id'], $receiver['id'], $message['content']);
             return $this->redirect($this->generateUrl('message'));
         }
-        return $this->render('message/create.html.twig', array(
-            'form' => $form->createView()));
+        return $this->render('message/create.html.twig', array('message' => $message));
     }
 
     public function deleteConversationAction(Request $request, $conversationId)
@@ -214,7 +195,7 @@ class MessageController extends BaseController
 
     protected function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     /**

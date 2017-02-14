@@ -9,7 +9,7 @@ use Biz\Content\Type\ContentTypeFactory;
 use Biz\System\Service\LogService;
 use Biz\Taxonomy\Service\CategoryService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class ContentServiceImpl extends BaseService implements ContentService
 {

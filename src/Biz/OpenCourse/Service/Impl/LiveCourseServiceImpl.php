@@ -3,7 +3,7 @@ namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Util\EdusohoLiveClient;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\OpenCourse\Service\LiveCourseService;
 

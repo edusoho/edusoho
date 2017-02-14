@@ -25,3 +25,8 @@
         findLessonMaterials
         getMaterialCount
     
+    remove UserRoleDict use get('codeages_plugin.dict_twig_extension')->getDict('userRole')
+    remove MemberLevelDisct no useage found
+    
+    remove topxia.data_dict.gender:
+                   class: Topxia\WebBundle\DataDict\GenderDict no useage found

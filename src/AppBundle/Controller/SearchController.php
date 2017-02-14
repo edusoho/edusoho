@@ -7,8 +7,8 @@ use Biz\Course\Service\ThreadService;
 use Biz\Search\Service\SearchService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Vip\Service\Vip\LevelService;
 use Vip\Service\Vip\VipService;
@@ -70,24 +70,24 @@ class SearchController extends BaseController
         } elseif ($filter == 'live') {
             $conditions['type'] = 'live';
         } elseif ($filter == 'free') {
-            $conditions['price'] = '0.00';
+            $conditions['minCoursePrice'] = '0.00';
         }
 
-        $count     = $this->getCourseService()->searchCourseCount($conditions);
+        $count     = $this->getCourseSetService()->countCourseSets($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $count
             , 12
         );
-        $courses = $this->getCourseService()->searchCourses(
+        $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            'latest',
+            array('updatedTime'=>'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         return $this->render('search/index.html.twig', array(
-            'courses'             => $courses,
+            'courseSets'             => $courseSets,
             'paginator'           => $paginator,
             'keywords'            => $keywords,
             'isShowVipSearch'     => $isShowVipSearch,
@@ -170,6 +170,11 @@ class SearchController extends BaseController
         return $this->getBiz()->service('Course:CourseService');
     }
 
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
+    }
+
     /**
      * @return ThreadService
      */
@@ -191,7 +196,7 @@ class SearchController extends BaseController
      */
     protected function getLevelService()
     {
-        return $this->getBiz()->service('Vip:Vip.LevelService');
+        return $this->getBiz()->service('VipPlugin:Vip:LevelService');
     }
 
     /**
@@ -199,7 +204,7 @@ class SearchController extends BaseController
      */
     protected function getVipService()
     {
-        return $this->getBiz()->service('Vip:Vip.VipService');
+        return $this->getBiz()->service('VipPlugin:Vip:VipService');
     }
 
     /**

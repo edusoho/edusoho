@@ -8,8 +8,8 @@ use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 
 class ExploreController extends BaseController
 {
@@ -502,7 +502,7 @@ class ExploreController extends BaseController
 
     protected function getLevelService()
     {
-        return $this->createService('Vip:Vip:LevelService');
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     /**

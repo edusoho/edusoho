@@ -4,33 +4,36 @@
 
 {% block body %}
   <form id="message-create-form" class="form-horizontal" method="post" action="{{ path('message_create', {toId:userId}) }}">
-    {# {{ form_errors(form) }} #}
-
     <div class="form-group">
-      <div class="col-md-2 control-label">{{ form_label(form.receiver, '收件人'|trans) }}</div>
+      <div class="col-md-2 control-label">
+        <label for="message_receiver" class="required">{{ '收件人'|trans }}</label>
+      </div>
       <div class="col-md-8 controls">
-        {{ form_widget(form.receiver, {attr:{class:'form-control', rows:1,'data-url':path('message_check_receiver') }})  }}
+        <input type="text" id="message_receiver" name="message[receiver]" required="required" class="form-control" rows="1" data-url="{{ path('message_check_receiver') }}" value="{{ message.receiver }}">
       </div>
     </div>
 
     <div class="form-group">
-      <div class="col-md-2 control-label">{{ form_label(form.content, '内容'|trans) }}</div>
+      <div class="col-md-2 control-label">
+        <label for="message_content" class="required">{{ '内容'|trans }}</label>
+      </div>
       <div class="col-md-8 controls">
-        {{ form_widget(form.content, {attr:{class:'form-control',rows:5}}) }}
+        <textarea id="message_content" name="message[content]" required="required" class="form-control" rows="5"></textarea>
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-offset-2 col-md-8 controls">
-        {{ form_rest(form) }}
         <button class="btn btn-primary" type="submit" data-loading-text="{{'发送中...'|trans}}">{{'发送'|trans}}</button>
       </div>
     </div>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
-
-  <script> app.load('user/message-send-modal'); </script>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script>
+    app.lazyLoad = function() { app.load('user/message-send-modal') };
+  </script>
 {% endblock %}
 
 {% set hide_footer = true %}

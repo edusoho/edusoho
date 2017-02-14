@@ -4,7 +4,7 @@ namespace Biz\Course\Service\Impl;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Util\EdusohoLiveClient;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\LiveReplayService;
 
 class LiveReplayServiceImpl extends BaseService implements LiveReplayService

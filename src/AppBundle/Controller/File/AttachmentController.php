@@ -3,7 +3,7 @@ namespace AppBundle\Controller\File;
 
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\WebBundle\Util\UploaderToken;
+use AppBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
 
 class AttachmentController extends BaseController

@@ -2,8 +2,8 @@
 namespace Biz\Order\OrderProcessor;
 
 use Exception;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\NumberToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\NumberToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class VipOrderProcessor extends BaseProcessor implements OrderProcessor
@@ -35,7 +35,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         $level = $this->getLevelService()->getLevel($fields['targetId']);
 
         if (empty($level)) {
-            throw new Exception($this->getKernel()->trans('找不到会员等级!'));
+            throw new Exception('找不到会员等级!');
         }
 
         $member = $this->getVipService()->getMemberByUserId($user->id);
@@ -61,7 +61,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($user->id, $level['id']);
         } else {
             if (!ArrayToolkit::requireds($fields, array("unit", "duration"))) {
-                throw new Exception($this->getKernel()->trans('参数不正确!'));
+                throw new Exception('参数不正确');
             }
 
             $unitType  = $fields['unit'];
@@ -117,33 +117,33 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $orderData)
     {
         if (!ArrayToolkit::requireds($orderData, array('buyType', 'targetId', 'unitType', 'duration'))) {
-            throw new Exception($this->getKernel()->trans('订单数据缺失，创建会员订单失败。'));
+            throw new Exception('订单数据缺失，创建会员订单失败。');
         }
 
         if (!in_array($orderData['buyType'], array('new', 'renew', 'upgrade'))) {
-            throw new Exception($this->getKernel()->trans('购买类型不正确，创建会员订单失败。'));
+            throw new Exception('购买类型不正确，创建会员订单失败。');
         }
 
         if (!(array_key_exists("buyType", $orderData) && $orderData["buyType"] == "upgrade")) {
             $orderData['duration'] = intval($orderData['duration']);
 
             if (empty($orderData['duration'])) {
-                throw new Exception($this->getKernel()->trans('会员开通时长不正确，创建会员订单失败。'));
+                throw new Exception('会员开通时长不正确，创建会员订单失败。');
             }
 
             if (!in_array($orderData['unitType'], array('month', 'year'))) {
-                throw new Exception($this->getKernel()->trans('付费方式不正确，创建会员订单失败。'));
+                throw new Exception('付费方式不正确，创建会员订单失败。');
             }
         }
 
         $level = $this->getLevelService()->getLevel($orderData['targetId']);
 
         if (empty($level)) {
-            throw new Exception($this->getKernel()->trans('会员等级不存在，创建会员订单失败。'));
+            throw new Exception('会员等级不存在，创建会员订单失败。');
         }
 
         if (empty($level['enabled'])) {
-            throw new Exception($this->getKernel()->trans('会员等级已关闭，创建会员订单失败。'));
+            throw new Exception('会员等级已关闭，创建会员订单失败。');
         }
 
         $currentUser = $this->getLevelService()->getCurrentUser();
@@ -213,16 +213,16 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         $level = $this->getLevelService()->getLevel($orderInfo['targetId']);
 
-        $unitNames = array('month' => $this->getKernel()->trans('个月'), 'year' => $this->getKernel()->trans('年'));
+        $unitNames = array('month' => '个月', 'year' => '年');
 
         if (array_key_exists("buyType", $fields) && $fields["buyType"] == "upgrade") {
-            $orderInfo['title']    = $this->getKernel()->trans('升级会员到 %level%', array('%level%' => $level['name']));
+            $orderInfo['title']    = '升级会员到'.$level['name'];
             $orderInfo['snPrefix'] = 'M';
         } else {
-            $orderInfo['title'] = ($fields['buyType'] == 'renew' ? $this->getKernel()->trans('续费') : $this->getKernel()->trans('购买'));
-            $orderInfo['title'] .= "{$level['name']} x {$fields['duration']}";
-            $orderInfo['title'] .= "{$unitNames[$fields['unitType']]}";
-            $orderInfo['title'] .= "{$level['name']}".$this->getKernel()->trans('会员');
+            $orderInfo['title'] = ($fields['buyType'] == 'renew' ? '续费' : '购买');
+            $orderInfo['title'] .= $level['name'].' x '.$fields['duration'];
+            $orderInfo['title'] .= $unitNames[$fields['unitType']];
+            $orderInfo['title'] .= $level['name'].'会员';
 
             $orderInfo['snPrefix'] = 'V';
         }
@@ -249,7 +249,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             );
 
             $level   = $this->getLevelService()->getLevel($vip['levelId']);
-            $message = $this->getKernel()->trans('您已经成功加入 %level% ，点击查看', array('%level%' => $level['name']))."<a href='/vip/course/level/{$level['id']}' target='_blank'>{$level['name']}</a>".$this->getKernel()->trans('课程');
+            $message = '您已经成功加入'.$level['name'].'，点击查看'."<a href='/vip/course_set/level/{$level['id']}' target='_blank'>{$level['name']}</a>".'课程';
         } elseif ($order['data']['buyType'] == 'renew') {
             $vip = $this->getVipService()->renewMember(
                 $order['userId'],
@@ -259,7 +259,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             );
 
             $level   = $this->getLevelService()->getLevel($vip['levelId']);
-            $message = $this->getKernel()->trans('您的 %level% 已成功续费，当前的有效期至：', array('%level%' => $level['name'])).date('Y-m-d', $vip['deadline']);
+            $message = '您的'.$level['name'].'已成功续费，当前的有效期至：'.date('Y-m-d', $vip['deadline']);
         } elseif ($order['data']['buyType'] == 'upgrade') {
             $vip = $this->getVipService()->upgradeMember(
                 $order['userId'],
@@ -268,7 +268,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             );
 
             $level   = $this->getLevelService()->getLevel($vip['levelId']);
-            $message = $this->getKernel()->trans('您已经升级到 %level% ，点击查看', array('%level%' => $level['name']))."<a href='/vip/course/level/{$level['id']}' target='_blank'>{$level['name']}</a>".$this->getKernel()->trans('课程');
+            $message = '您已经升级到'.$level['name'].'，点击查看'."<a href='/vip/course_set/level/{$level['id']}' target='_blank'>{$level['name']}</a>".'课程';
         }
 
         $this->getNotificationService()->notify($order['userId'], 'default', $message);
@@ -318,7 +318,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderInfoTemplate()
     {
-        return "VipBundle:Vip:orderInfo";
+        return "VipPlugin:Vip:orderInfo";
     }
 
     public function isTargetExist($targetId)
@@ -344,12 +344,12 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getLevelService()
     {
-        return $this->getBiz()->service("Vip:Vip.LevelService");
+        return $this->getBiz()->service("VipPlugin:Vip:LevelService");
     }
 
     protected function getVipService()
     {
-        return $this->getBiz()->service('Vip:Vip.VipService');
+        return $this->getBiz()->service('VipPlugin:Vip:VipService');
     }
 
     protected function getOrderService()

@@ -53,9 +53,9 @@ class BaseProcessor
                 }
             }
 
-            $user['smallAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
-            $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
-            $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+            $user['smallAvatar']  = $container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['mediumAvatar'] = $container->get('web.twig.extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
+            $user['largeAvatar']  = $container->get('web.twig.extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
 
             return $user;
         }, $users);
@@ -67,7 +67,7 @@ class BaseProcessor
     protected function coverPic($src, $srcType)
     {
         $container = $this->controller->getContainer();
-        return $container->get('topxia.twig.web_extension')->getFilePath($src, $srcType, true);
+        return $container->get('web.twig.extension')->getFilePath($src, $srcType, true);
     }
 
     protected function log($action, $message, $data)

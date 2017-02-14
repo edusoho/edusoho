@@ -1,9 +1,9 @@
 <?php
 namespace AppBundle\Controller;
 
-use Topxia\Common\Paginator;
+use AppBundle\Common\Paginator;
 use Biz\Util\EdusohoLiveClient;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -402,7 +402,7 @@ class LiveCourseController extends BaseController
 
     public function getLevelService()
     {
-        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+        return $this->getServiceKernel()->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getUploadFileService()

@@ -1,8 +1,9 @@
 <?php
 namespace Biz\Activity\Service\Impl;
 
-use Biz\Activity\Dao\TestpaperActivityDao;
 use Biz\BaseService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Dao\TestpaperActivityDao;
 use Biz\Activity\Service\TestpaperActivityService;
 
 class TestpaperActivityServiceImpl extends BaseService implements TestpaperActivityService
@@ -15,6 +16,12 @@ class TestpaperActivityServiceImpl extends BaseService implements TestpaperActiv
     public function findActivitiesByIds($ids)
     {
         return $this->getTestpaperActivityDao()->findActivitiesByIds($ids);
+    }
+
+    public function findActivitiesByMediaIds($mediaIds)
+    {
+        $activities = $this->getTestpaperActivityDao()->findActivitiesByMediaIds($mediaIds);
+        return ArrayToolkit::index($activities, 'mediaId');
     }
 
     public function createActivity($fields)

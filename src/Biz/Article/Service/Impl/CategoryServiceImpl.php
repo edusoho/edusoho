@@ -5,8 +5,8 @@ use Biz\Article\Dao\CategoryDao;
 use Biz\Article\Service\CategoryService;
 use Biz\BaseService;
 use Biz\System\Service\LogService;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\TreeToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\TreeToolkit;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {

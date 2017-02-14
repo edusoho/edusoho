@@ -5,7 +5,7 @@ namespace AppBundle\Controller\My;
 
 
 use AppBundle\Controller\BaseController;
-use Topxia\WebBundle\Util\AvatarAlert;
+use AppBundle\Util\AvatarAlert;
 
 class UserController extends BaseController
 {

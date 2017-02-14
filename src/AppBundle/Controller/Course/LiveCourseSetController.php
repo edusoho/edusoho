@@ -7,8 +7,8 @@ namespace AppBundle\Controller\Course;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 
 class LiveCourseSetController extends CourseBaseController
 {
@@ -313,6 +313,14 @@ class LiveCourseSetController extends CourseBaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return LevelService
+     */  
+    protected function getLevelService()
+    {
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
 }

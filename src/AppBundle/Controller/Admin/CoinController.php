@@ -4,9 +4,9 @@ namespace AppBundle\Controller\Admin;
 
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
-use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -877,7 +877,7 @@ class CoinController extends BaseController
 
     protected function getLevelService()
     {
-        return $this->createService('Vip:Vip.LevelService');
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getCashService()
@@ -903,10 +903,5 @@ class CoinController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    protected function getVipService()
-    {
-        return $this->createService('Vip:VipService');
     }
 }
