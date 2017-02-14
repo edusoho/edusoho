@@ -127,18 +127,7 @@ class UserSettingController extends BaseController
     public function loginConnectAction(Request $request)
     {
         $loginConnect = $this->getSettingService()->get('login_bind', array());
-
-        $default = array(
-            'login_limit'                     => 0,
-            'enabled'                         => 0,
-            'verify_code'                     => '',
-            'captcha_enabled'                 => 0,
-            'temporary_lock_enabled'          => 0,
-            'temporary_lock_allowed_times'    => 5,
-            'ip_temporary_lock_allowed_times' => 20,
-            'temporary_lock_minutes'          => 20
-        );
-
+        $default = $this->settingDefaultLoginConnect();
         $clients = OAuthClientFactory::clients();
 
         foreach ($clients as $type => $client) {
@@ -156,15 +145,8 @@ class UserSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $loginConnect = $request->request->all();
             $loginConnect = ArrayToolkit::trim($loginConnect);
-
-            if ($loginConnect['enabled'] == 0) {
-                $loginConnect['weibo_enabled']   = 0;
-                $loginConnect['qq_enabled']    = 0;
-                $loginConnect['renren_enabled']   = 0;
-                $loginConnect['weixinweb_enabled'] = 0;
-                $loginConnect['weixinmob_enabled']    = 0;
-            }
-
+            $loginConnect = $this->settingProcessLoginConnect($loginConnect);
+            
             //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
             $loginConnect = $this->loginConnectList($loginConnect);
             $this->getSettingService()->set('login_bind', $loginConnect);
@@ -176,6 +158,34 @@ class UserSettingController extends BaseController
             'loginConnect' => $loginConnect,
             'clients'      => $clients
         ));
+    }
+
+    private function settingDefaultLoginConnect()
+    {
+        $default = array(
+            'login_limit'                     => 0,
+            'enabled'                         => 0,
+            'verify_code'                     => '',
+            'captcha_enabled'                 => 0,
+            'temporary_lock_enabled'          => 0,
+            'temporary_lock_allowed_times'    => 5,
+            'ip_temporary_lock_allowed_times' => 20,
+            'temporary_lock_minutes'          => 20
+        );
+
+        return $default;
+    }
+    private function settingProcessLoginConnect($loginConnect)
+    {
+        if ($loginConnect['enabled'] == 0) {
+            $loginConnect['weibo_enabled']   = 0;
+            $loginConnect['qq_enabled']    = 0;
+            $loginConnect['renren_enabled']   = 0;
+            $loginConnect['weixinweb_enabled'] = 0;
+            $loginConnect['weixinmob_enabled']    = 0;
+        }
+
+        return $loginConnect;
     }
 
     private function loginConnectList($LoginConnect)
