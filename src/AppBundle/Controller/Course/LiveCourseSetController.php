@@ -197,7 +197,7 @@ class LiveCourseSetController extends CourseBaseController
 
         if (!empty($futureLiveCourseSetIds)) {
             $pageCourseSetIds         = array_slice($futureLiveCourseSetIds, $paginator->getOffsetCount(), $paginator->getPerPageCount());
-            $pageFutureLiveCourseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($pageCourseSetIds);
+            $pageFutureLiveCourseSets = $this->getCourseSetService()->findCourseSetsByIds($pageCourseSetIds);
 
             $pageFutureLiveCourseSets = ArrayToolkit::index($pageFutureLiveCourseSets, 'id');
             $pageFutureLiveCourseSets = $this->_fillLiveCourseSetAttribute($futureLiveCourseSetIds, $pageFutureLiveCourseSets, 'future');
