@@ -19,7 +19,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $this->validateTaskMode($field);
 
         if ($field['mode'] == 'lesson') {
-            $chapter = array(
+            $chapter             = array(
                 'courseId' => $field['fromCourseId'],
                 'title'    => $field['title'],
                 'type'     => 'lesson'
@@ -64,8 +64,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $this->biz['db']->beginTransaction();
             $allTasks = array();
             if ($task['mode'] == 'lesson') {
-                $allTasks   = $this->getTaskDao()->findByCategoryId($task['categoryId']);
-                $allTasks[] = $task;
+                $allTasks = $this->getTaskDao()->findByCategoryId($task['categoryId']);
             }
             foreach ($allTasks as $_task) {
                 $this->getTaskDao()->delete($_task['id']);
