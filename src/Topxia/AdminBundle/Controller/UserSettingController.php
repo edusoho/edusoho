@@ -126,8 +126,28 @@ class UserSettingController extends BaseController
 
     public function loginConnectAction(Request $request)
     {
+        $clients = OAuthClientFactory::clients();
+        $default = $this->getDefaultLoginConnect($clients);
         $loginConnect = $this->getSettingService()->get('login_bind', array());
+        $loginConnect = array_merge($default, $loginConnect);
 
+        if ($request->getMethod() == 'POST') {
+            $loginConnect = $request->request->all();
+            $loginConnect = ArrayToolkit::trim($loginConnect);
+            $loginConnect = $this->decideEnabledLoginConnect($loginConnect);
+            $this->getSettingService()->set('login_bind', $loginConnect);
+            $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
+            $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
+        }
+
+        return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
+            'loginConnect' => $loginConnect,
+            'clients'      => $clients
+        ));
+    }
+
+    private function getDefaultLoginConnect($clients)
+    {
         $default = array(
             'login_limit'                     => 0,
             'enabled'                         => 0,
@@ -139,8 +159,6 @@ class UserSettingController extends BaseController
             'temporary_lock_minutes'          => 20
         );
 
-        $clients = OAuthClientFactory::clients();
-
         foreach ($clients as $type => $client) {
             $default["{$type}_enabled"]          = 0;
             $default["{$type}_key"]              = '';
@@ -151,22 +169,39 @@ class UserSettingController extends BaseController
             }
         }
 
-        $loginConnect = array_merge($default, $loginConnect);
+        return $default;
+    }
 
-        if ($request->getMethod() == 'POST') {
-            $loginConnect = $request->request->all();
-            $loginConnect = ArrayToolkit::trim($loginConnect);
-
-            $this->getSettingService()->set('login_bind', $loginConnect);
-            $this->getLogService()->info('system', 'update_settings', "更新登录设置", $loginConnect);
-            $this->setFlashMessage('success', $this->trans('登录设置已保存！'));
-            $this->updateWeixinMpFile($loginConnect['weixinmob_mp_secret']);
+    private function decideEnabledLoginConnect($loginConnect)
+    {
+        if ($loginConnect['enabled'] == 0) {
+            $loginConnect['weibo_enabled']   = 0;
+            $loginConnect['qq_enabled']    = 0;
+            $loginConnect['renren_enabled']   = 0;
+            $loginConnect['weixinweb_enabled'] = 0;
+            $loginConnect['weixinmob_enabled']    = 0;
+        }
+        //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
+        $loginConnects = ArrayToolkit::parts($loginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
+        $sum      = 0;
+        foreach ($loginConnects as $value) {
+            $sum += $value;
         }
 
-        return $this->render('TopxiaAdminBundle:System:login-connect.html.twig', array(
-            'loginConnect' => $loginConnect,
-            'clients'      => $clients
-        ));
+        if ($sum < 1) {
+            if ($loginConnect['enabled'] == 1) {
+                $this->setFlashMessage('danger', $this->trans('您至少要开启一种第三方登陆！'));
+            }
+            if ($loginConnect['enabled'] == 0) {
+                $this->setFlashMessage('success', $this->trans('您已关闭所有第三方登陆！'));
+            }
+            $loginConnect['enabled'] = 0;
+        } else {
+            $loginConnect['enabled'] = 1;
+            $this->setFlashMessage('success', $this->trans('登录设置已保存！'));
+        }
+
+        return $loginConnect;
     }
 
     public function userCenterAction(Request $request)
