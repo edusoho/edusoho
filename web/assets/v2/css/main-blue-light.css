@@ -11218,9 +11218,13 @@ textarea {
 .course-filter.search-filter .btn-group > .dropdown-menu > li > a {
   text-align: center;
 }
+.cloud-search-box {
+  position: absolute;
+  padding-left: 90px;
+}
 .search-banner {
-  background: url('../img/banner_search.jpg') top center no-repeat;
   height: 200px;
+  text-align: center;
 }
 .search-banner .search-input-group {
   margin: 75px 20%;
