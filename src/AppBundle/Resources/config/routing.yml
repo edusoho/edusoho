@@ -2723,7 +2723,7 @@ course_member_expired:
 
 course_member_deadline_reach:
     path:  /course/{id}/member/deadline/reach
-    defaults: { _controller: TopxiaWebBundle:Course:deadlineReach }
+    defaults: { _controller: AppBundle:Course/Course:deadlineReach }
 
 course_buy:
     path: /course/{id}/buy
