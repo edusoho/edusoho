@@ -4,7 +4,7 @@
 	    {{'文章评论'|trans}}<span class="badge badge-primary thread-post-num">{{ article.postNum }}</span>
 	  </div>
 	  
-	  <textarea class="form-control form-control-o" rows="6" placeholder="{{'您的想法'|trans}}" name="content"></textarea>
+	  <textarea class="form-control form-control-o" rows="6" placeholder="{{'您的想法'|trans}}" name="content" data-display="{{'您的想法'|trans}}"></textarea>
 		 	
 	  <div class="form-group clearfix">
 	    <button type="submit" class="btn btn-default pull-right {% if not app.user %}disabled{% endif %}" data-loading-text="{{'正在评论'|trans}}">{{'发表评论'|trans}}</button>
