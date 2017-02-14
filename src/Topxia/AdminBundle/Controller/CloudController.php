@@ -109,12 +109,6 @@ class CloudController extends BaseController
         return $this->redirectUrl('service_storage_chart');
     }
 
-    public function emailBuyAction(Request $request, $type)
-    {
-        $params = array('type' => $type);
-        return $this->redirectUrl('edu_cloud_buy_custom', $params);
-    }
-
     public function tlpAction(Request $request)
     {
         $params = array('type' => 'tlp');
