@@ -1,0 +1,11 @@
+{% autoescape %}
+{% if courseVip %}
+  {% if userVipStatus == 'ok' %}
+    {{ courseVip.name }}{{'免费学'|trans}}
+  {% elseif userVipStatus == 'level_low' %}
+    {{ courseVip.name }}{{'免费学'|trans}} {{ '<a href="%href%" target="_blank">升级会员</a>'|trans|raw|replace({'%href%': path('vip') })|e('html') }}
+  {% else %}
+    {{ courseVip.name }}{{'免费学'|trans}} {{ '<a href="%href%" target="_blank">加入会员</a>'|trans|raw|replace({'%href%': path('vip') })|e('html') }}
+  {% endif %}
+{% endif %}
+{% endautoescape %}
