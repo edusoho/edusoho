@@ -127,19 +127,8 @@ class UserSettingController extends BaseController
     public function loginConnectAction(Request $request)
     {
         $loginConnect = $this->getSettingService()->get('login_bind', array());
-        $default = $this->settingDefaultLoginConnect();
         $clients = OAuthClientFactory::clients();
-
-        foreach ($clients as $type => $client) {
-            $default["{$type}_enabled"]          = 0;
-            $default["{$type}_key"]              = '';
-            $default["{$type}_secret"]           = '';
-            $default["{$type}_set_fill_account"] = 0;
-            if ($type == 'weixinmob') {
-                $default['weixinmob_mp_secret'] = '';
-            }
-        }
-
+        $default = $this->settingDefaultLoginConnect($clients);
         $loginConnect = array_merge($default, $loginConnect);
 
         if ($request->getMethod() == 'POST') {
@@ -160,7 +149,7 @@ class UserSettingController extends BaseController
         ));
     }
 
-    private function settingDefaultLoginConnect()
+    private function settingDefaultLoginConnect($clients)
     {
         $default = array(
             'login_limit'                     => 0,
@@ -172,6 +161,16 @@ class UserSettingController extends BaseController
             'ip_temporary_lock_allowed_times' => 20,
             'temporary_lock_minutes'          => 20
         );
+
+        foreach ($clients as $type => $client) {
+            $default["{$type}_enabled"]          = 0;
+            $default["{$type}_key"]              = '';
+            $default["{$type}_secret"]           = '';
+            $default["{$type}_set_fill_account"] = 0;
+            if ($type == 'weixinmob') {
+                $default['weixinmob_mp_secret'] = '';
+            }
+        }
 
         return $default;
     }
