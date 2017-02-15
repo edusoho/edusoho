@@ -247,11 +247,13 @@ class OpenCourseManageController extends BaseController
         }
 
         $recommends = $this->getOpenCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($id);
-
         $recommendedCourses = array();
 
         foreach ($recommends as $key => $recommend) {
-            $recommendedCourses[$recommend['id']] = $this->getTypeCourseService($recommend['type'])->getCourse($recommend['recommendCourseId']);
+            $recommendCourse =  $this->getTypeCourseService($recommend['type'])->getCourse($recommend['recommendCourseId']);
+            if (!empty($recommendCourse)) {
+                $recommendedCourses[$recommend['id']] = $recommendCourse;
+            }
         }
 
         $users = $this->_getTeacherUsers($recommendedCourses);
@@ -519,7 +521,9 @@ class OpenCourseManageController extends BaseController
         $userIds = array();
 
         foreach ($courses as &$course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
+            if (!empty($course)) {
+                $userIds = array_merge($userIds, $course['teacherIds']);
+            }
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
