@@ -75,17 +75,12 @@ function triggerMemberExpired() {
 }
 
 function initSwiper() {
- 
   orderLearnSwiper = $('.swiper-container').swiper({
     pagination: '.swiper-pager',
     loop:true,
     grabCursor: true,
     paginationClickable: true,
-    // slidesPerView: 2,
   })
-  console.log(orderLearnSwiper);
-  console.dir(orderLearnSwiper);
-
   // console.(orderLearnSwiper);
   // orderLearnSwiper = new Swiper('.swiper-container',{
   //   pagination: '.swiper-pager',
