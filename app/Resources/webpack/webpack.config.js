@@ -21,7 +21,8 @@ const config = {
     'es-image-crop':['libs/js/es-image-crop.js'],
     'easy-pie-chart':['libs/js/easy-pie-chart.js'],
     'jquery-timer':['libs/js/jquery-timer.js'],
-    'echo-js': ['echo-js']
+    'echo-js': ['echo-js'],
+    'jquery-waypoints': ['jquery-waypoints']
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
@@ -43,7 +44,8 @@ const config = {
     'jquery-sortable/source/js/jquery-sortable.js',
     'nouislider/distribute/nouislider.js',
     'echo-js/dist/echo.js',
-    'jquery-blurr/dist/jquery.blurr.js'
+    'jquery-blurr/dist/jquery.blurr.js',
+    'jquery-waypoints/waypoints.js'
   ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {

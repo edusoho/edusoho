@@ -24,6 +24,7 @@ const options = {
     'excanvas-compiled':['libs/js/excanvas-compiled.js'],
     'echo-js': ['echo-js'],
     'jquery-blurr':['jquery-blurr'],
+    'jquery-waypoints': ['jquery-waypoints'],
     // 样式
     'app-bootstrap': ['libs/app-bootstrap/less/bootstrap.less']
   },
@@ -47,6 +48,7 @@ const options = {
     'jquery.cycle2/src/jquery.cycle2.min.js',
     'nouislider/distribute/nouislider.js',
     'echo-js/dist/echo.js',
+    'jquery-waypoints/waypoints.js'
   ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
