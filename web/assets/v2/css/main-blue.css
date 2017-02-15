@@ -15560,6 +15560,7 @@ textarea {
   left: 0;
   z-index: 9999;
   padding: 0;
+  width: 60%;
 }
 .es-mobile .course-detail-header .course-data > li {
   width: auto;
