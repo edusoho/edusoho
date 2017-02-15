@@ -15813,15 +15813,6 @@ textarea {
 .es-mobile .course-detail-header.after .es-share.top .dropdown-menu:after {
   left: 20%;
 }
-.es-mobile body.homepage.has-app .es-wrap,
-.es-mobile body.course-list-page.has-app .es-wrap,
-.es-mobile body.open-course-list.has-app .es-wrap,
-.es-mobile body.course-dashboard-page.has-app .es-wrap,
-.es-mobile body.login.has-app .es-wrap,
-.es-mobile body.register.has-app .es-wrap,
-.es-mobile body.my-course.has-app .es-wrap {
-  padding-top: 110px;
-}
 .es-mobile body.homepage .es-wrap,
 .es-mobile body.course-list-page .es-wrap,
 .es-mobile body.open-course-list .es-wrap,
