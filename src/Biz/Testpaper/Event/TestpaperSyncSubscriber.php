@@ -60,10 +60,9 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
         }
     }
 
-//    public function onTestpaperDelete(Event $event)
-    //    {
-    //
-    //    }
+    public function onTestpaperDelete(Event $event)
+    {
+    }
 
     public function onTestpaperItemCreate(Event $event)
     {

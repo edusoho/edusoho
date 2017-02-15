@@ -631,25 +631,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function countUserLearningCourses($userId, $filters = array())
     {
-        $conditions = array(
-            'userId' => $userId,
-            'role'   => 'student'
-        );
-        if (isset($filters["type"])) {
-            $conditions['type'] = $filters["type"];
-        }
         return $this->getMemberDao()->countLearningMembersByUserId($userId);
     }
 
     public function findUserLearningCourses($userId, $start, $limit, $filters = array('type' => ''))
     {
-        $conditions = array(
-            'userId' => $userId,
-            'role'   => 'student'
-        );
-        if (isset($filters["type"])) {
-            $conditions['type'] = $filters["type"];
-        }
         $members = $this->getMemberDao()->findLearningMembers($userId, $start, $limit);
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
@@ -672,28 +658,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function countUserLearnedCourses($userId, $filters = array())
     {
-        $conditions = array(
-            'userId'         => $userId,
-            'role'           => 'student',
-            'serializeModes' => array('none', 'finished')
-        );
-        //TODO 不同类型的课程
-        if (isset($filters["type"])) {
-            $conditions['type'] = $filters["type"];
-        }
         return $this->getMemberDao()->countLearnedMembersByUserId($userId);
     }
 
     public function findUserLearnedCourses($userId, $start, $limit, $filters = array())
     {
-        $conditions = array(
-            'userId'         => $userId,
-            'role'           => 'student',
-            'serializeModes' => array('none', 'finished')
-        );
-        if (isset($filters["type"])) {
-            $conditions['type'] = $filters["type"];
-        }
         $members = $this->getMemberDao()->findLearnedMembers($userId, $start, $limit);
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
