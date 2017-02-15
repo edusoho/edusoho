@@ -34,7 +34,7 @@ Unit Test With PHP 5.5:
     - mysql:5.5
     - selenium/standalone-chrome
   script:
-    - phpunit -c tests/functional
+    - phpunit -c app
 
 Unit Test With PHP 7.0:
   stage: test
