@@ -29,6 +29,7 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         'T' => 
         array (
             'Topxia\\Api\\' => 11,
+            'Tests\\Functional\\' => 17,
             'Tests\\' => 6,
         ),
         'S' => 
@@ -81,7 +82,6 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         array (
             'Endroid\\QrCode\\' => 15,
             'Endroid\\Bundle\\QrCodeBundle\\' => 28,
-            'EduSoho\\AT\\' => 11,
         ),
         'D' => 
         array (
@@ -104,6 +104,10 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         'Topxia\\Api\\' => 
         array (
             0 => __DIR__ . '/../..' . '/api/src/Topxia/Api',
+        ),
+        'Tests\\Functional\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests/functional',
         ),
         'Tests\\' => 
         array (
@@ -228,10 +232,6 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         'Endroid\\Bundle\\QrCodeBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qrcode-bundle/src',
-        ),
-        'EduSoho\\AT\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/automation-tests',
         ),
         'Doctrine\\Common\\Cache\\' => 
         array (
