@@ -27,7 +27,8 @@ class EsWebUploader
 
 	  	let ele = $(config.element);
 	  	let uploader = WebUploader.create({
-	  		swf: SWF_PATH,
+        runtimeOrder: 'flash',
+	  		swf: 'http://fex.baidu.com/webuploader/js/Uploader.swf',
 	  		server: app.uploadUrl, // 配置参见script_boot.html.twig
 	  		pick: {
 	  			id: '#' + ele.attr("id"),
@@ -42,6 +43,9 @@ class EsWebUploader
 	  		fileNumLimit: 1,
 	  		fileSizeLimit: config.fileSizeLimit
 	  	});
+
+      console.log(uploader);
+
 	  	uploader.on( 'fileQueued', function( file ) {
 	  		console.log('fileQueued :', file);
 		    self.onFileQueued(file);

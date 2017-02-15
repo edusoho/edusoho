@@ -82,7 +82,7 @@
         <div class="swiper-pager"></div>
       </div>
     {% endif %}
-    <ul class="task-list task-list-md task-list-hover task-list-gray js-task-list-ul">
+    <ul class="task-list task-list-md task-list-hover task-list-gray js-task-list-ul ">
       {% for task in toLearnTasks %}
         {% set meta = activity_meta(task.activity.mediaType|default(null)) %}
         {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}

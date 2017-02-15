@@ -5,7 +5,8 @@ class Text extends Emitter  {
   constructor({element}) {
     super();
     this.element = $(element);
-
+    console.log(this.element);
+    this.element.perfectScrollbar();
     this.emitter = new ActivityEmitter();
     this.emitter.receive('doing', (data) => {
       let finishTime = parseInt(this.element.data('finishTime'));
@@ -19,6 +20,7 @@ class Text extends Emitter  {
       }
     })
   }
+  
 
 }
 

@@ -11,8 +11,9 @@ const config = {
     "jquery-insertAtCaret": ['libs/js/jquery-insertAtCaret.js'],
     "jquery-form": ['jquery-form'],
     "jquery-nouislider":['nouislider'],
-    "perfect-scrollbar":['perfect-scrollbar'],
     "jquery-sortable":['jquery-sortable'],
+    'swiper':['swiper'],
+    'perfect-scrollbar':['libs/js/perfect-scrollbar.js'],
     "jquery-validation": ['libs/js/jquery-validation.js'],
     'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
     "iframe-resizer":['libs/js/iframe-resizer.js'],
@@ -20,6 +21,7 @@ const config = {
     "es-webuploader":['libs/js/es-webuploader.js'],
     "es-image-crop":['libs/js/es-image-crop.js'],
     'jquery-timer':['libs/js/jquery-timer.js'],
+    'excanvas-compiled':['libs/js/excanvas-compiled.js']
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',

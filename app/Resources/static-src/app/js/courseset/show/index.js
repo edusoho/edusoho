@@ -1,13 +1,14 @@
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
-import Swiper from 'swiper';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
+
 
 let orderLearnSwiper = null;
 
 chapterAnimate();
 initTaskLearnChart();
 triggerMemberExpired();
+// initSwiper();
 
 if ($('.js-attachment-list').length > 0) {
     new AttachmentActions($('.js-attachment-list'));
@@ -74,19 +75,34 @@ function triggerMemberExpired() {
 }
 
 function initSwiper() {
-  orderLearnSwiper = new Swiper('.swiper-container',{
+ 
+  orderLearnSwiper = $('.swiper-container').swiper({
     pagination: '.swiper-pager',
     loop:true,
     grabCursor: true,
-    paginationClickable: true
+    paginationClickable: true,
+    // slidesPerView: 2,
   })
+  console.log(orderLearnSwiper);
+  console.dir(orderLearnSwiper);
+
+  // console.(orderLearnSwiper);
+  // orderLearnSwiper = new Swiper('.swiper-container',{
+  //   pagination: '.swiper-pager',
+  //   loop:true,
+  //   grabCursor: true,
+  //   paginationClickable: true
+  // })
   $('.arrow-left').on('click', function(e){
     e.preventDefault()
-    orderLearnSwiper.swipePrev()
+    console.log(orderLearnSwiper.swipePrev());
+    orderLearnSwiper.swipePrev();
   })
   $('.arrow-right').on('click', function(e){
     e.preventDefault()
-    orderLearnSwiper.swipeNext()
+    console.log('swipeNext');
+     console.log(orderLearnSwiper.swipeNext());
+    orderLearnSwiper.swipeNext();
   })
 
   // $('data-toggle="tooltip"').tooTip()
