@@ -95,7 +95,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         $sql .= "(m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized') ";
         $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-
+        var_dump($sql, $params, $conditions);
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
 
@@ -275,7 +275,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
      */
     protected function applySqlParams($conditions, $sql)
     {
-        $params = array();
+        $params     = array();
         $conditions = array_filter($conditions, function ($value) {
             return !empty($value);
         });
