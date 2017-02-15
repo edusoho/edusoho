@@ -7,6 +7,7 @@ use Biz\Course\Dao\CourseSetDao;
 use Biz\Activity\Dao\ActivityDao;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
+use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseMaterialDao;
 use Codeages\Biz\Framework\Event\Event;
@@ -36,6 +37,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'course-set.update'      => 'onCourseSetUpdate',
 
             'course.update'          => 'onCourseUpdate',
+
+            'course.teachers.update' => 'onCourseTeachersChange',
 
             'course.chapter.create'  => 'onCourseChapterCreate',
             //章节的更新和删除会比较麻烦，因为还涉及子节点（比如task的引用也要切换）的处理
@@ -136,6 +139,23 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
                 'materialNum'
             ));
             $this->getCourseDao()->update($cc['id'], $cc);
+        }
+    }
+
+    public function onCourseTeachersChange(Event $event)
+    {
+        $course   = $event->getSubject();
+        $teachers = $event->getArgument('teachers');
+        if ($course['parentId'] > 0) {
+            return;
+        }
+
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($course['id'], 1);
+        if (empty($copiedCourses)) {
+            return;
+        }
+        foreach ($copiedCourses as $cc) {
+            $this->setCourseTeachers($cc, $teachers);
         }
     }
 
@@ -255,6 +275,46 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         }
     }
 
+    protected function setCourseTeachers($course, $teachers)
+    {
+        $teacherMembers = array();
+        foreach (array_values($teachers) as $index => $teacher) {
+            $teacherMembers[] = array(
+                'courseId'    => $course['id'],
+                'courseSetId' => $course['courseSetId'],
+                'userId'      => $teacher['id'],
+                'role'        => 'teacher',
+                'seq'         => $index,
+                'isVisible'   => empty($teacher['isVisible']) ? 0 : 1
+            );
+        }
+
+        $existTeachers = $this->getMemberDao()->findByCourseIdAndRole($course['id'], 'teacher');
+
+        foreach ($existTeachers as $member) {
+            $this->getMemberDao()->delete($member['id']);
+        }
+
+        $visibleTeacherIds = array();
+
+        foreach ($teacherMembers as $member) {
+            $existMember = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $member['userId']);
+
+            if ($existMember) {
+                $this->getMemberDao()->delete($existMember['id']);
+            }
+
+            $member = $this->getMemberDao()->create($member);
+
+            if ($member['isVisible']) {
+                $visibleTeacherIds[] = $member['userId'];
+            }
+        }
+
+        $fields = array('teacherIds' => $visibleTeacherIds);
+        return $this->getCourseDao()->update($course['id'], $fields);
+    }
+
     protected function copyFields($source, $target, $fields)
     {
         if (empty($fields)) {
@@ -283,6 +343,14 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getCourseSetDao()
     {
         return $this->getBiz()->dao('Course:CourseSetDao');
+    }
+
+    /**
+     * @return CourseMemberDao
+     */
+    protected function getMemberDao()
+    {
+        return $this->getBiz()->dao('Course:CourseMemberDao');
     }
 
     /**

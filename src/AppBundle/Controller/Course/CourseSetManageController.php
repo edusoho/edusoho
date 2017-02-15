@@ -79,13 +79,15 @@ class CourseSetManageController extends BaseController
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
 
-        $courses = array_filter($courses, function ($course) use ($user) {
-            if (in_array($user['id'], $course['teacherIds'])) {
-                return true;
-            } else {
-                return false;
-            }
-        });
+        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
+            $courses = array_filter($courses, function ($course) use ($user) {
+                if (in_array($user['id'], $course['teacherIds'])) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        }
 
         if (empty($curCourse)) {
             $curCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
@@ -232,7 +234,7 @@ class CourseSetManageController extends BaseController
             if ($courseSet['type'] == 'live') {
                 $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
-                if(empty($course['maxStudentNum'])){
+                if (empty($course['maxStudentNum'])) {
                     throw $this->createAccessDeniedException('直播课程发布前需要在计划设置中设置课程人数');
                 }
 
@@ -263,7 +265,7 @@ class CourseSetManageController extends BaseController
 
     public function syncInfoAction(Request $request, $id)
     {
-        $sideNav = $request->query->get('sideNav', '');
+        $sideNav   = $request->query->get('sideNav', '');
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         if (!$courseSet['locked']) {
             throw new \Exception('CourseSet must be locked');

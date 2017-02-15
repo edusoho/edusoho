@@ -10,6 +10,7 @@
   <div class="panel-body">
   	{% for courseSet in recommendCourseSets if courseSet %}
       {% set course = data('CourseByCourseSet', {courseSetId: courseSet.id}) %}
+        {% set courseSet = courseSet|merge({'course' : course}) %}
 	    <div class="media">
 	      <div class="media-left">
 	      	<a href="{{ path('course_set_show',{id: courseSet.id}) }}" title="{{ courseSet.title }}" target="_blank">

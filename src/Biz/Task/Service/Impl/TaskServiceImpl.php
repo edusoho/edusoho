@@ -493,7 +493,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'startTime_GT'     => time(),
             'endTime_LT'       => strtotime(date('Y-m-d').' 23:59:59'),
             'type'             => 'live',
-            'fromCourseSetIds' => ArrayToolkit::column($courseSetIds, 'id'),
+            'fromCourseSetIds' => $courseSetIds,
             'status'           => 'published'
         );
         return $this->searchTasks($taskConditions, array('startTime' => 'ASC'), 0, $this->countTasks($taskConditions));
