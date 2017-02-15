@@ -15814,6 +15814,9 @@ textarea {
 .es-mobile .course-detail-header.after .es-share.top .dropdown-menu:after {
   left: 20%;
 }
+.es-mobile .modal {
+  z-index: 9999;
+}
 .es-mobile body.homepage .es-wrap,
 .es-mobile body.course-list-page .es-wrap,
 .es-mobile body.open-course-list .es-wrap,
