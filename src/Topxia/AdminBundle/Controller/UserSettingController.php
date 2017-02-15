@@ -190,10 +190,10 @@ class UserSettingController extends BaseController
 
         if ($sum < 1) {
             if ($loginConnect['enabled'] == 1) {
-                $this->setFlashMessage('danger', $this->trans('您至少要开启一种第三方登陆！'));
+                $this->setFlashMessage('danger', $this->trans('请至少开启一种您需要的第三方登录方式！'));
             }
             if ($loginConnect['enabled'] == 0) {
-                $this->setFlashMessage('success', $this->trans('您已关闭所有第三方登陆！'));
+                $this->setFlashMessage('success', $this->trans('登录设置已保存！'));
             }
             $loginConnect['enabled'] = 0;
         } else {
