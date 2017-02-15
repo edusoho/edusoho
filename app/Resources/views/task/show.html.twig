@@ -9,6 +9,8 @@
 {% block body %}
   {% set preview = app.request.query.get('preview') %}
   <div id="js-hidden-data">
+    <input type="hidden" name="current-timestamp" value="{{ date().timestamp }}">
+    <input type="hidden" name="report-url" value="{{ path('course_task_report', {courseId: task.courseId, id: task.id}) }}">
     <input type="hidden" name="course-id" value="{{ task.courseId }}">
     <input type="hidden" name="task-id" value="{{ task.id }}">
     <input type="hidden" name="task-result-status" value="{{ taskResult.status }}">
