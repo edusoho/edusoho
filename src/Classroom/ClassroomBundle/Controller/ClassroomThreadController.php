@@ -148,12 +148,21 @@ class ClassroomThreadController extends BaseController
 
     private function validateAuthority($user, $classroomId, $thread, $classroomSetting)
     {
-        if (!($user->isAdmin()
-                || $this->getClassroomService()->canManageClassroom($classroomId))
-            && ($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] != $user['id'])
-        ) {
-            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
+
+        if ($user->isAdmin()) {
+            return true;
         }
+
+        if ($this->getClassroomService()->canManageClassroom($classroomId)) {
+            return true;
+        }
+
+        if (($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] != $user['id']))
+        {
+          return true;
+        }
+
+        return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
     }
 
     private function getThreadSearchFilters($request)
