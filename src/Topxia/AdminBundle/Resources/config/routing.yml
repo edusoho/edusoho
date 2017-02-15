@@ -520,7 +520,7 @@ admin_course_lesson_data_export_prepare:
     permissions: [admin_course_data]
 
 admin_course_lesson_data_export:
-    path: /course/{name}/lessons/datas/export
+    path: /course/{courseId}/lessons/datas/export
     defaults: { _controller: TopxiaAdminBundle:Course:exportLessonsDatas}
     permissions: [admin_course_data]
 # admin_course_disk:
