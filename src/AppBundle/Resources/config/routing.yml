@@ -2313,6 +2313,10 @@ classroom_manage_courses:
     path: /classroom/{id}/manage/courses
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:courses }
 
+classroom_manage_course_remove:
+    path: /classroom/{id}/manage/course/{courseId}/remove
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:removeCourse }
+
 classroom_courses_select:
     path: /classroom/{id}/courses/select
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:coursesSelect }
