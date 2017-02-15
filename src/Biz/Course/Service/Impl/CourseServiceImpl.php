@@ -641,6 +641,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
 
         $members = $this->getMemberDao()->findLearningMembers($conditions, $start, $limit);
+
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
 
@@ -664,6 +665,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
         return $this->getMemberDao()->countLearnedMembers($conditions);
+
     }
 
     public function findUserLearnedCourses($userId, $start, $limit, $filters = array())
