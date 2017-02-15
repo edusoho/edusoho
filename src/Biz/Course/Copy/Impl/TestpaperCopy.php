@@ -71,9 +71,6 @@ class TestpaperCopy extends AbstractEntityCopy
 
         $copyQuestions = $this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseSetId'], $isCopy);
 
-        // $copyQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($newTestpaper['courseSetId']);
-        // $copyQuestions = ArrayToolkit::index($copyQuestions, 'copyId');
-
         foreach ($items as $item) {
             $question = empty($copyQuestions[$item['questionId']]) ? array() : $copyQuestions[$item['questionId']];
 
@@ -102,16 +99,16 @@ class TestpaperCopy extends AbstractEntityCopy
     {
         $copyQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($newCourseSetId);
 
+        $copyQuestions   = ArrayToolkit::index($copyQuestions, 'copyId');
         $copyQuestionIds = ArrayToolkit::column($copyQuestions, 'copyId');
 
         $diff = array_values(array_diff($ids, $copyQuestionIds));
         if (empty($diff)) {
-            return array();
+            return $copyQuestions;
         }
 
-        $copyQuestions = ArrayToolkit::index($copyQuestions, 'copyId');
-        $questions     = $this->getQuestionService()->findQuestionsByIds($diff);
-        $questions     = $this->questionSort($questions);
+        $questions = $this->getQuestionService()->findQuestionsByIds($diff);
+        $questions = $this->questionSort($questions);
 
         $questionMap = array();
         foreach ($questions as $question) {
@@ -124,10 +121,9 @@ class TestpaperCopy extends AbstractEntityCopy
 
             $newQuestion = $this->getQuestionService()->create($newQuestion);
 
-            $questionMap[$question['id']] = array($newQuestion['id'], $newQuestion['parentId']);
+            $copyQuestions[$newQuestion['copyId']] = $newQuestion;
         }
 
-        // return $questionMap;
         return $copyQuestions;
     }
 
