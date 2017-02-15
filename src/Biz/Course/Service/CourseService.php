@@ -107,6 +107,14 @@ interface CourseService
     //---start 前两个已经重构了，后面的四个也需要重构，目前还没有用到，用到的时候在重构
     public function countUserLearningCourses($userId, $filters = array());
 
+    /**
+     * filter 支持 type classroomId locked ...
+     * @param $userId
+     * @param $start
+     * @param $limit
+     * @param array $filters
+     * @return mixed
+     */
     public function findUserLearningCourses($userId, $start, $limit, $filters = array());
 
     public function countUserLearnedCourses($userId, $filters = array());
