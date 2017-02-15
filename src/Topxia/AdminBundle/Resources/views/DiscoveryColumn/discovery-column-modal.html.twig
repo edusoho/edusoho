@@ -35,15 +35,23 @@
         <label for="classroom">{{'班级'|trans}}</label>
     	</div>
     </div>
+  
 
 		<div class="form-group">
       <label class="col-md-3 control-label">{{'分类'|trans}}</label>
-      <div class="col-md-8 controls">
-        <select id="" name="categoryId" required="required" class="form-control width-input width-input-large">
-					{{ select_options(category_choices('course'), categoryId, '分类'|trans) }}
-        </select>
-        <div class="help-block" style="display:none;"></div>
-      </div>
+        <div class="col-md-8 controls course-category {% if discoveryColumn %}{% if discoveryColumn.type == 'course' or discoveryColumn.type == 'live' %}{% else %}hide{% endif %}{% else %}{% endif %}">
+          <select id="" name="categoryId" required="required" class="form-control width-input width-input-large">
+  					{{ select_options(category_choices('course'), categoryId, '分类'|trans) }}
+          </select>
+          <div class="help-block" style="display:none;"></div>
+        </div>
+
+        <div class="col-md-8 controls classroom-category {% if discoveryColumn %}{% if discoveryColumn.type == 'classroom' %}{% else %}hide{% endif %}{% else %}hide{% endif %}">
+          <select id="" name="categoryId" required="required" class="form-control width-input width-input-large">
+            {{ select_options(category_choices('classroom'), categoryId, '分类'|trans) }}
+          </select>
+          <div class="help-block" style="display:none;"></div>
+        </div>
     </div>
 
 		<div {% if discoveryColumn and discoveryColumn.type == 'live' %}class="form-group order-form hide" {% else %}class="form-group order-form" {% endif %}>
