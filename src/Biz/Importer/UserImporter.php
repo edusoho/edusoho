@@ -96,7 +96,7 @@ class UserImporter extends Importer
                     //添加同时生成订单
                     $order = $this->getOrderService()->createOrder(array(
                         'userId'     => $user['id'],
-                        'title'      => $this->getKernel()->trans('购买班级《%title%》(管理员添加)', array('%title%' => $classroom['title'])),
+                        'title'      => $this->getServiceKernel()->trans('购买班级《%title%》(管理员添加)', array('%title%' => $classroom['title'])),
                         'targetType' => 'classroom',
                         'targetId'   => $classroom['id'],
                         'amount'     => '0.00', //暂时默认为0
@@ -150,14 +150,14 @@ class UserImporter extends Importer
         if (!is_object($excel)) {
             return array(
                 'status'  => self::DANGER_STATUS,
-                'message' => $this->getKernel()->trans('请选择上传的文件')
+                'message' => $this->getServiceKernel()->trans('请选择上传的文件')
             );
         }
 
         if (FileToolkit::validateFileExtension($excel, 'xls xlsx')) {
             return array(
                 'status'  => self::DANGER_STATUS,
-                'message' => $this->getKernel()->trans('Excel格式不正确')
+                'message' => $this->getServiceKernel()->trans('Excel格式不正确')
             );
         }
 
@@ -171,7 +171,7 @@ class UserImporter extends Importer
         if ($highestRow > 1000) {
             return array(
                 'status'  => self::DANGER_STATUS,
-                'message' => $this->getKernel()->trans('Excel超过1000行数据')
+                'message' => $this->getServiceKernel()->trans('Excel超过1000行数据')
             );
         }
 
@@ -187,7 +187,7 @@ class UserImporter extends Importer
         if (!$this->checkNecessaryFields($excelField)) {
             return array(
                 'status'  => self::DANGER_STATUS,
-                'message' => $this->getKernel()->trans('缺少必要的字段')
+                'message' => $this->getServiceKernel()->trans('缺少必要的字段')
             );
         }
 
@@ -234,16 +234,16 @@ class UserImporter extends Importer
                     $isClassroomExit = $this->getClassroomService()->getClassroom($classroomId);
 
                     if ($isClassroomExit && $isClassroomExit['status'] != 'published') {
-                        $errorInfo[] = $this->getKernel()->trans('第%row%行班级号为%classroomId%的班级未发布，请检查。', array('%row%' => $row, '%classroomId%' => $classroomId));
+                        $errorInfo[] = $this->getServiceKernel()->trans('第%row%行班级号为%classroomId%的班级未发布，请检查。', array('%row%' => $row, '%classroomId%' => $classroomId));
                     } elseif (!$isClassroomExit) {
-                        $errorInfo[] = $this->getKernel()->trans('第%row%行班级号为%classroomId%的班级不存在，请检查。', array('%row%' => $row, '%classroomId%' => $classroomId));
+                        $errorInfo[] = $this->getServiceKernel()->trans('第%row%行班级号为%classroomId%的班级不存在，请检查。', array('%row%' => $row, '%classroomId%' => $classroomId));
                     }
                 }
             }
             if (!empty($userData['orgCode'])) {
                 $org = $this->getOrgService()->getOrgByCode($userData['orgCode']);
                 if (empty($org)) {
-                    $errorInfo[] = $this->getKernel()->trans('第%row%行组织机编码为%orgCode%的组织机构不存在，请检查。', array('%row%' => $row, '%orgCode%' => $userData['orgCode']));
+                    $errorInfo[] = $this->getServiceKernel()->trans('第%row%行组织机编码为%orgCode%的组织机构不存在，请检查。', array('%row%' => $row, '%orgCode%' => $userData['orgCode']));
                 }
             }
 
@@ -255,11 +255,11 @@ class UserImporter extends Importer
                     $isCourseExit = $this->getCourseService()->getCourse($courseId);
 
                     if ($isCourseExit && $isCourseExit['status'] != 'published') {
-                        $errorInfo[] = $this->getKernel()->trans('第%row%行课程号为的%courseId%的课程未发布，请检查。', array('%row%' => $row, '%courseId%' => $courseId));
+                        $errorInfo[] = $this->getServiceKernel()->trans('第%row%行课程号为的%courseId%的课程未发布，请检查。', array('%row%' => $row, '%courseId%' => $courseId));
                     } elseif ($isCourseExit && $isCourseExit['parentId'] != '0') {
-                        $errorInfo[] = $this->getKernel()->trans('第%row%行课程号为的%courseId%的课程课程属于班级课程,无法加入', array('%row%' => $row, '%courseId%' => $courseId));
+                        $errorInfo[] = $this->getServiceKernel()->trans('第%row%行课程号为的%courseId%的课程课程属于班级课程,无法加入', array('%row%' => $row, '%courseId%' => $courseId));
                     } elseif (!$isCourseExit) {
-                        $errorInfo[] = $this->getKernel()->trans('第%row%行课程号为的%courseId%的课程不存在，请检查。', array('%row%' => $row, '%courseId%' => $courseId));
+                        $errorInfo[] = $this->getServiceKernel()->trans('第%row%行课程号为的%courseId%的课程不存在，请检查。', array('%row%' => $row, '%courseId%' => $courseId));
                     }
                 }
             }
@@ -267,7 +267,7 @@ class UserImporter extends Importer
             $emptyData = array_count_values($userData);
 
             if (isset($emptyData[""]) && count($userData) == $emptyData[""]) {
-                $checkInfo[] = $this->getKernel()->trans('第%row%行为空行，已跳过', array('%row%' => $row));
+                $checkInfo[] = $this->getServiceKernel()->trans('第%row%行为空行，已跳过', array('%row%' => $row));
                 continue;
             }
 
@@ -283,12 +283,12 @@ class UserImporter extends Importer
 
             if (!empty($userData['nickname']) && !$this->checkFieldWithThirdPartyAuth($userData['nickname'], 'nickname')) {
                 if ($checkType == "ignore") {
-                    $checkInfo[] = $this->getKernel()->trans('第%row%行的用户已存在，已略过', array('%row%' => $row));
+                    $checkInfo[] = $this->getServiceKernel()->trans('第%row%行的用户已存在，已略过', array('%row%' => $row));
                     continue;
                 }
 
                 if ($checkType == "update") {
-                    $checkInfo[] = $this->getKernel()->trans('第%row%行的用户已存在，将会更新', array('%row%' => $row));
+                    $checkInfo[] = $this->getServiceKernel()->trans('第%row%行的用户已存在，将会更新', array('%row%' => $row));
                 }
 
                 $userCount    = $userCount + 1;
@@ -298,12 +298,12 @@ class UserImporter extends Importer
 
             if (!empty($userData['email']) && !$this->checkFieldWithThirdPartyAuth($userData['email'], 'email')) {
                 if ($checkType == "ignore") {
-                    $checkInfo[] = $this->getKernel()->trans('第%row%行的用户已存在，已略过', array('%row%' => $row));
+                    $checkInfo[] = $this->getServiceKernel()->trans('第%row%行的用户已存在，已略过', array('%row%' => $row));
                     continue;
                 };
 
                 if ($checkType == "update") {
-                    $checkInfo[] = $this->getKernel()->trans('第%row%行的用户已存在，将会更新', array('%row%' => $row));
+                    $checkInfo[] = $this->getServiceKernel()->trans('第%row%行的用户已存在，将会更新', array('%row%' => $row));
                 }
 
                 $userCount    = $userCount + 1;
@@ -314,12 +314,12 @@ class UserImporter extends Importer
             if (!empty($userData['mobile']) && !$this->checkFieldWithThirdPartyAuth($userData['mobile'], 'mobile')) {
                 if (!$this->getUserService()->isMobileAvaliable($userData['mobile'])) {
                     if ($checkType == "ignore") {
-                        $checkInfo[] = $this->getKernel()->trans('第%row%行的用户已存在，已略过', array('%row%' => $row));
+                        $checkInfo[] = $this->getServiceKernel()->trans('第%row%行的用户已存在，已略过', array('%row%' => $row));
                         continue;
                     };
 
                     if ($checkType == "update") {
-                        $checkInfo[] = $this->getKernel()->trans('第%row%行的用户已存在，将会更新', array('%row%' => $row));
+                        $checkInfo[] = $this->getServiceKernel()->trans('第%row%行的用户已存在，将会更新', array('%row%' => $row));
                     }
 
                     $userCount    = $userCount + 1;
@@ -351,16 +351,16 @@ class UserImporter extends Importer
 
     public function getTemplate(Request $request)
     {
-        return $this->render("UserImporterBundle:UserImporter:userinfo.excel.html.twig", array(
+        return $this->render("UserImporterPlugin:UserImporter:userinfo.excel.html.twig", array(
             'importerType' => $this->type
         ));
     }
 
     public function tryImport(Request $request)
     {
-        $user = $this->getServiceKernel()->getCurrentUser();
+        $user = $this->biz['user'];
         if (!$user->isAdmin()) {
-            throw new AccessDeniedException($this->getKernel()->trans('当前用户没有导入用户权限'));
+            throw new AccessDeniedException($this->getServiceKernel()->trans('当前用户没有导入用户权限'));
         }
     }
 
@@ -430,11 +430,11 @@ class UserImporter extends Importer
 
         foreach ($repeatArrayCount as $key => $repeatCount) {
             if ($repeatCount > 1) {
-                $repeatRow .= $this->getKernel()->trans('重复:').'<br>';
+                $repeatRow .= $this->getServiceKernel()->trans('重复:').'<br>';
 
                 for ($i = 1; $i <= $repeatCount; $i++) {
                     $row = array_search($key, $array) + 3;
-                    $repeatRow .= $this->getKernel()->trans('第%row%行    %key%', array('%row%' => $row, '%key%' => $key)).'<br>';
+                    $repeatRow .= $this->getServiceKernel()->trans('第%row%行    %key%', array('%row%' => $row, '%key%' => $key)).'<br>';
                     unset($array[$row - 3]);
                 }
             }
@@ -445,7 +445,7 @@ class UserImporter extends Importer
 
     private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->biz->service('Course:CourseService');
     }
 
     private function validFields($userData, $row, $fieldCol)
@@ -459,20 +459,20 @@ class UserImporter extends Importer
             case 'email_or_mobile':
                 if (isset($userData['email']) && !empty($userData['email'])) {
                     if (!SimpleValidator::email($userData['email'])) {
-                        $errorInfo[] = $this->getKernel()->trans('根据网校当前注册模式，第 %row%行%email% 列 的数据存在问题，请检查。', array(
+                        $errorInfo[] = $this->getServiceKernel()->trans('根据网校当前注册模式，第 %row%行%email% 列 的数据存在问题，请检查。', array(
                             '%row%'   => $row,
                             '%email%' => $fieldCol['email']
                         ));
                     }
                 } elseif (isset($userData['mobile']) && !empty($userData['mobile'])) {
                     if (!SimpleValidator::mobile($userData['mobile'])) {
-                        $errorInfo[] = $errorInfo[] = $this->getKernel()->trans('根据网校当前注册模式，第 %row%行%mobile% 列 的数据存在问题，请检查。', array(
+                        $errorInfo[] = $errorInfo[] = $this->getServiceKernel()->trans('根据网校当前注册模式，第 %row%行%mobile% 列 的数据存在问题，请检查。', array(
                             '%row%'    => $row,
                             '%mobile%' => $fieldCol['mobile']
                         ));
                     }
                 } else {
-                    $errorInfo[] = $this->getKernel()->trans('根据网校当前注册模式，第 %row%行%email% 或者%mobile%列 的数据不能均为空，请检查。', array(
+                    $errorInfo[] = $this->getServiceKernel()->trans('根据网校当前注册模式，第 %row%行%email% 或者%mobile%列 的数据不能均为空，请检查。', array(
                         '%row%'    => $row,
                         '%email%'  => $fieldCol['email'],
                         '%mobile%' => $fieldCol['mobile']
@@ -483,13 +483,13 @@ class UserImporter extends Importer
             case 'email':
                 if (isset($userData['email']) && !empty($userData['email'])) {
                     if (!SimpleValidator::email($userData['email'])) {
-                        $errorInfo[] = $this->getKernel()->trans('根据网校当前注册模式，第 %row%行%email% 列 的数据存在问题，请检查。', array(
+                        $errorInfo[] = $this->getServiceKernel()->trans('根据网校当前注册模式，第 %row%行%email% 列 的数据存在问题，请检查。', array(
                             '%row%'   => $row,
                             '%email%' => $fieldCol['email']
                         ));
                     }
                 } else {
-                    $errorInfo[] = $this->getKernel()->trans('根据网校当前注册模式，第 %row%行%email% 列 的数据不能为空，请检查。', array(
+                    $errorInfo[] = $this->getServiceKernel()->trans('根据网校当前注册模式，第 %row%行%email% 列 的数据不能为空，请检查。', array(
                         '%row%'   => $row,
                         '%email%' => $fieldCol['email']
                     ));
@@ -499,12 +499,12 @@ class UserImporter extends Importer
             case 'mobile':
                 if (isset($userData['mobile']) && !empty($userData['mobile'])) {
                     if (!SimpleValidator::mobile($userData['mobile'])) {
-                        $errorInfo[] = $this->getKernel()->trans('根据网校当前注册模式，第 %row%行%mobile% 列 的数据存在问题，请检查。', array(
+                        $errorInfo[] = $this->getServiceKernel()->trans('根据网校当前注册模式，第 %row%行%mobile% 列 的数据存在问题，请检查。', array(
                             '%row%'    => $row,
                             '%mobile%' => $fieldCol['mobile']
                         ));}
                 } else {
-                    $errorInfo[] = $this->getKernel()->trans('根据网校当前注册模式，第 %row%行%mobile% 列 的数据不能为空，请检查。', array(
+                    $errorInfo[] = $this->getServiceKernel()->trans('根据网校当前注册模式，第 %row%行%mobile% 列 的数据不能为空，请检查。', array(
                         '%row%'    => $row,
                         '%mobile%' => $fieldCol['mobile']
                     ));
@@ -515,20 +515,20 @@ class UserImporter extends Importer
 
                 if (isset($userData['email']) && !empty($userData['email'])) {
                     if (!SimpleValidator::email($userData['email'])) {
-                        $errorInfo[] = $this->getKernel()->trans('第 %row%行%email% 列 的数据存在问题，请检查。', array(
+                        $errorInfo[] = $this->getServiceKernel()->trans('第 %row%行%email% 列 的数据存在问题，请检查。', array(
                             '%row%'   => $row,
                             '%email%' => $fieldCol['email']
                         ));
                     }
                 } elseif (isset($userData['mobile']) && !empty($userData['mobile'])) {
                     if (!SimpleValidator::mobile($userData['mobile'])) {
-                        $errorInfo[] = $this->getKernel()->trans('第 %row%行%mobile% 列 的数据存在问题，请检查。', array(
+                        $errorInfo[] = $this->getServiceKernel()->trans('第 %row%行%mobile% 列 的数据存在问题，请检查。', array(
                             '%row%'    => $row,
                             '%mobile%' => $fieldCol['mobile']
                         ));
                     }
                 } else {
-                    $errorInfo[] = $this->getKernel()->trans('第 %row%行%email% 或者%mobile%列 的数据不能均为空，请检查。', array(
+                    $errorInfo[] = $this->getServiceKernel()->trans('第 %row%行%email% 或者%mobile%列 的数据不能均为空，请检查。', array(
                         '%row%'    => $row,
                         '%email%'  => $fieldCol['email'],
                         '%mobile%' => $fieldCol['mobile']
@@ -541,19 +541,19 @@ class UserImporter extends Importer
         $array = array(
             array(
                 'key'      => 'password',
-                'callback' => array('Topxia\\Common\\SimpleValidator', 'password')
+                'callback' => array('AppBundle\\Common\\SimpleValidator', 'password')
             ),
             array(
                 'key'      => 'nickname',
-                'callback' => array('Topxia\\Common\\SimpleValidator', 'nickname')
+                'callback' => array('AppBundle\\Common\\SimpleValidator', 'nickname')
             ),
             array(
                 'key'      => 'truename',
-                'callback' => array('Topxia\\Common\\SimpleValidator', 'truename')
+                'callback' => array('AppBundle\\Common\\SimpleValidator', 'truename')
             ),
             array(
                 'key'      => 'idcard',
-                'callback' => array('Topxia\\Common\\SimpleValidator', 'idcard')
+                'callback' => array('AppBundle\\Common\\SimpleValidator', 'idcard')
             ),
             array(
                 'key'      => 'gender',
@@ -565,23 +565,23 @@ class UserImporter extends Importer
             ),
             array(
                 'key'      => 'qq',
-                'callback' => array('Topxia\\Common\\SimpleValidator', 'qq')
+                'callback' => array('AppBundle\\Common\\SimpleValidator', 'qq')
             ),
             array(
                 'key'      => 'classroomId',
-                'callback' => array('Topxia\\Common\\SimpleValidator', 'numbers')
+                'callback' => array('AppBundle\\Common\\SimpleValidator', 'numbers')
             ),
             array(
                 'key'      => 'courseId',
-                'callback' => array('Topxia\\Common\\SimpleValidator', 'numbers')
+                'callback' => array('AppBundle\\Common\\SimpleValidator', 'numbers')
             ),
             array(
                 'key'      => 'site',
-                'callback' => array('Topxia\\Common\\SimpleValidator', 'site')
+                'callback' => array('AppBundle\\Common\\SimpleValidator', 'site')
             ),
             array(
                 'key'      => 'weibo',
-                'callback' => array('Topxia\\Common\\SimpleValidator', 'site')
+                'callback' => array('AppBundle\\Common\\SimpleValidator', 'site')
             )
         );
 
@@ -750,46 +750,46 @@ class UserImporter extends Importer
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:AuthService');
+        return $this->biz->service('User:AuthService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->biz->service('Classroom:ClassroomService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:UserService');
+        return $this->biz->service('User:UserService');
     }
 
     protected function getUserImporterService()
     {
-        return $this->getServiceKernel()->createService('UserImporter:UserImporter.UserImporterService');
+        return $this->biz->service('UserImporterPlugin:UserImporter:UserImporterService');
     }
 
     protected function getUserFieldService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:UserFieldService');
+        return $this->biz->service('User:UserFieldService');
     }
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->getBiz()->service('System:SettingService');
+        return $this->biz->service('System:SettingService');
     }
 
     protected function getCourseMemberService()
     {
-        return $this->getServiceKernel()->createService('Course:MemberService');
+        return $this->biz->service('Course:MemberService');
     }
 
     protected function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org:OrgService');
+        return $this->biz->service('Org:OrgService');
     }
 
     private function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->biz->service('Order:OrderService');
     }
 }

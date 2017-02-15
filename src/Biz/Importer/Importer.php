@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Importer;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -11,6 +12,8 @@ abstract class Importer
     const ERROR_STATUS   = 'error';
     const SUCCESS_STATUS = 'success';
 
+    protected $biz;
+
     abstract public function import(Request $request);
 
     abstract public function check(Request $request);
@@ -22,6 +25,11 @@ abstract class Importer
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    public function __construct($biz)
+    {
+        $this->biz = $biz;
     }
 
     protected function render($view, $params = array())
