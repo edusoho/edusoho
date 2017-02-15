@@ -576,7 +576,9 @@ class CourseController extends BaseController
 
     public function exportLessonsDatasAction(Request $request, $courseId)
     {
-        $fileName = sprintf("course-%s-lessons-(%s).csv", $courseId, date('Y-n-d'));
+        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_data');
+
+        $fileName = sprintf("%s-(%s).csv", $course['title'], date('Y-n-d'));
         return ExportHelp::exportCsv($request, $fileName);
     }
 
