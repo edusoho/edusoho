@@ -22,7 +22,7 @@
     {% if mobile %}
       <span class="text-sm es-mobile-teacher">
       {% set teacherId = course.teacherIds[0]|default(0) %}
-      {% if teacherId != 0 %}
+      {% if teacherId %}
         {% set teacher = data('User',{userId:teacherId}) %}
       {% endif %}
       {{teacher.nickname|default('暂无老师')}}
