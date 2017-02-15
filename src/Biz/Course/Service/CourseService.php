@@ -106,6 +106,14 @@ interface CourseService
 
     public function countUserLearningCourses($userId, $filters = array());
 
+    /**
+     * filter 支持 type classroomId locked ...
+     * @param $userId
+     * @param $start
+     * @param $limit
+     * @param array $filters
+     * @return mixed
+     */
     public function findUserLearningCourses($userId, $start, $limit, $filters = array());
 
     public function countUserLearnedCourses($userId, $filters = array());
