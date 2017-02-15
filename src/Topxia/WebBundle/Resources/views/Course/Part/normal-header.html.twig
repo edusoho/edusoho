@@ -214,8 +214,10 @@
 {% endmacro %}
 
 {% macro vip_btn(userVipStatus) %}
-  <li class="color-warning icon-vip">
-    <p><i class="es-icon es-icon-crown"></i></p>
-    <p>{{'会员'|trans}}</p>
-  </li>
+  {% if userVipStatus %}
+    <li class="color-warning icon-vip">
+      <p><i class="es-icon es-icon-crown"></i></p>
+      <p>{{'会员'|trans}}</p>
+    </li>
+  {% endif %}
 {% endmacro %}
