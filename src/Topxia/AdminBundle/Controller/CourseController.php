@@ -574,9 +574,9 @@ class CourseController extends BaseController
         return array($titles, $exportLessons, $courseLessonsCount);
     }
 
-    public function exportLessonsDatasAction(Request $request, $courseId)
+    public function exportLessonsDatasAction(Request $request, $name)
     {
-        $fileName = sprintf("course-%s-lessons-(%s).csv", $courseId, date('Y-n-d'));
+        $fileName = sprintf("%s-(%s).csv", $name, date('Y-n-d'));
         return ExportHelp::exportCsv($request, $fileName);
     }
 
