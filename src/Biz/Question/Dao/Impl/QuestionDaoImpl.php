@@ -55,10 +55,12 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
             'subCount <> :subCount',
             'id NOT IN ( :excludeIds )',
             'courseId = :courseId',
+            'courseId IN (:courseIds)',
             'lessonId = :lessonId',
             'lessonId >= :lessonIdGT',
             'lessonId <= :lessonIdLT',
             'lessonId IN ( :lessonIds)',
+            'copyId = :copyId',
             'copyId IN (:copyIds)'
         );
 
