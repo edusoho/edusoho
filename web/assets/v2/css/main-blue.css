@@ -3253,7 +3253,7 @@ Basic Swiper Styles
 .arrow-right {
   position: absolute;
   top: 50%;
-  margin-top: -25px;
+  margin-top: -24.99999999px;
   color: #dbdbdb;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -15815,15 +15815,6 @@ textarea {
 }
 .es-mobile .modal {
   z-index: 9999;
-}
-.es-mobile body.homepage.has-app .es-wrap,
-.es-mobile body.course-list-page.has-app .es-wrap,
-.es-mobile body.open-course-list.has-app .es-wrap,
-.es-mobile body.course-dashboard-page.has-app .es-wrap,
-.es-mobile body.login.has-app .es-wrap,
-.es-mobile body.register.has-app .es-wrap,
-.es-mobile body.my-course.has-app .es-wrap {
-  padding-top: 110px;
 }
 .es-mobile body.homepage .es-wrap,
 .es-mobile body.course-list-page .es-wrap,
