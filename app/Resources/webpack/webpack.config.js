@@ -6,8 +6,9 @@ const config = {
   },
   libs: {
 
-    vendor: ['libs/vendor.js'], //可以是一个js文件
-    "fix-ie": ['console-polyfill','html5shiv', 'respond-js'], //也可以是一个npm依赖包
+    vendor: ['libs/vendor.js'], //可以是一个js文件,
+    "html5shiv": ['html5shiv'],
+    "fix-ie": ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     "jquery-insertAtCaret": ['libs/js/jquery-insertAtCaret.js'],
     "jquery-form": ['jquery-form'],
     "jquery-nouislider":['nouislider'],
