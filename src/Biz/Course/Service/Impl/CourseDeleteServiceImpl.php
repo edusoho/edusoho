@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\User\Dao\StatusDao;
 use Biz\Course\Dao\CourseDao;
@@ -49,6 +50,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
             return $courseSetId;
         } catch (\Exception $e) {
+            var_dump($e->getTraceAsString());
             $this->rollback();
             throw $e;
         }
@@ -75,10 +77,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             $this->getMemberDao()->deleteByCourseId($courseId);
             //delete task & activity & activityConfig
             $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
+
             if (!empty($tasks)) {
                 foreach ($tasks as $task) {
                     //delete task and activity
-                    $this->getTaskService()->deleteTask($task['id']);
+                    $existTask = $this->getTaskService()->getTask($task['id']);
+                    if ($existTask) {
+                        $this->getTaskService()->deleteTask($task['id']);
+                    }
                 }
             }
             //delete question
