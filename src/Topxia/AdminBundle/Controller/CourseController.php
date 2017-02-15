@@ -542,11 +542,25 @@ class CourseController extends BaseController
         $exportLessons = array();
         foreach ($originaLessons as $lesson) {
             $exportLesson = '';
-            $exportLesson .= $lesson['title'] ? $lesson['title']."," : "-".",";
+
+            if ($lesson['type'] == 'text') {
+                $exportLesson .= $lesson['title']."(图文)"? $lesson['title']."," : "-".",";
+            } elseif ($lesson['type'] == 'video') {
+                $exportLesson .= $lesson['title']."(视频)"? $lesson['title']."," : "-".",";
+            } elseif ($lesson['type'] == 'audio') {
+                $exportLesson .= $lesson['title']."(音频)"? $lesson['title']."," : "-".",";
+            } elseif ($lesson['type'] == 'testpaper') {
+                $exportLesson .= $lesson['title']."(试卷)"? $lesson['title']."," : "-".",";
+            } elseif ($lesson['type'] == 'ppt') {
+                $exportLesson .= $lesson['title']."(ppt)"? $lesson['title']."," : "-".",";
+            } else {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."," : "-".",";
+            }
+
             $exportLesson .= $lesson['LearnedNum'] ? $lesson['LearnedNum']."," : "-".",";
             $exportLesson .= $lesson['finishedNum'] ? $lesson['finishedNum']."," : "-".",";
 
-            $learnTime = $lesson['learnTime'] ? $lesson['learnTime'] / 60 : 0;
+            $learnTime = intval($lesson['learnTime'] ? $lesson['learnTime'] / 60 : 0);
             $exportLesson .= $learnTime ? $learnTime ."," : "-".",";
 
             if ($lesson['type'] =='audio' or $lesson['type'] =='video') {
@@ -556,7 +570,7 @@ class CourseController extends BaseController
             }
 
             if ($lesson['type'] =='audio' or $lesson['type'] =='video') {
-                $watchTime = $lesson['watchTime'] ? $lesson['watchTime'] / 60 : 0;
+                $watchTime = intval($lesson['watchTime'] ? $lesson['watchTime'] / 60 : 0);
                 $exportLesson .= $watchTime ? $watchTime ."," : "-".",";
             } else {
                 $exportLesson .= "-".",";
