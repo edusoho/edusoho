@@ -147,7 +147,7 @@ pluginDir/
   less/
     main.less
 
-# 其它说明
+# 其它说明--必读
 - 每个具有main.js的目录，编译时都会在同目录下生成common.js
 
 - 以app的layout.html.twig为例：
@@ -156,6 +156,10 @@ pluginDir/
   更多代码示例可参考：https://github.com/ketuzhong/biz-symfony-starter
 
 - 约定index.js 为每个页面的打包入口文件，其它文件名仅作为片段、模块被其它js文件引入（import）
+
+— vendor.js vendor.less 为前后台页面都需要引入的资源，如果只是前台页面用到则放到main.js
+
+- 理解清楚libs与common目录下的资源差异
 ```
 
 ### 最佳实践
