@@ -34,7 +34,7 @@
       {{ header_macro.share_btn(course) }}
       {% if courseVip and course.parentId == '0' %}
       {% if mobile %}
-         {% include 'TopxiaWebBundle:Course:Mobile/normal-header-vip.html.twig' %}
+        {{ header_macro.vip_btn(userVipStatus) }}
       {% else %}
           <li class="hidden-xs color-warning icon-vip" title="{{'会员课程'|trans}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
             <i class="es-icon es-icon-crown"></i><br>

@@ -3253,7 +3253,7 @@ Basic Swiper Styles
 .arrow-right {
   position: absolute;
   top: 50%;
-  margin-top: -25px;
+  margin-top: -24.99999999px;
   color: #dbdbdb;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -15560,6 +15560,7 @@ textarea {
   left: 0;
   z-index: 9999;
   padding: 0;
+  width: 60%;
 }
 .es-mobile .course-detail-header .course-data > li {
   width: auto;
