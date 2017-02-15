@@ -13,7 +13,7 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
     public static function getSubscribedEvents()
     {
         return array(
-            'testpaper.create'      => 'onTestpaperCreate',
+            // 'testpaper.create'      => 'onTestpaperCreate',
             'testpaper.update'      => 'onTestpaperUpdate',
             'testpaper.delete'      => 'onTestpaperDelete',
 
@@ -21,24 +21,6 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
             'testpaper.item.update' => 'onTestpaperItemUpdate',
             'testpaper.item.delete' => 'onTestpaperItemDelete'
         );
-    }
-
-    public function onTestpaperCreate(Event $event)
-    {
-        $testpaper = $event->getSubject();
-        if ($testpaper['copyId'] > 0) {
-            return;
-        }
-//        $copiedCourseSets = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($testpaper['courseSetId'], 1);
-        //        if(empty($copiedCourseSets)){
-        //            return;
-        //        }
-        //        $copiedCourseSetIds = ArrayToolkit::column($copiedCourseSets, 'id');
-        //        $copiedTestpapers = $this->getTestpaperDao()->findTestpapersByCopyIdAndLockedCourseSetIds($testpaper['copyId'], $copiedCourseSetIds);
-        //        if(empty($copiedTestpapers)){
-        //           return;
-        //        }
-        //        foreach ($copiedTestpapers)
     }
 
     public function onTestpaperUpdate(Event $event)
@@ -78,10 +60,9 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
         }
     }
 
-//    public function onTestpaperDelete(Event $event)
-    //    {
-    //
-    //    }
+    public function onTestpaperDelete(Event $event)
+    {
+    }
 
     public function onTestpaperItemCreate(Event $event)
     {

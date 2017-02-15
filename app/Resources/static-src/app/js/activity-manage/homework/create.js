@@ -17,10 +17,11 @@ export default class Homework {
   initEvent() {
     this.$element.on('click', '[data-role="pick-item"]',event=>this.showPickQuestion(event));
     this.$questionPickedModal.on('shown.bs.modal',()=>{
-      this.$homeworkModal.hide()
+      this.$homeworkModal.hide();
     });
     this.$questionPickedModal.on('hidden.bs.modal',()=>{
       this.$homeworkModal.show();
+      this.$questionPickedModal.html('');
     });
   }
 

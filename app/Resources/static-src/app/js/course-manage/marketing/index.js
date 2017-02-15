@@ -15,8 +15,10 @@ class Marketing {
 		let validator = $form.validate({
 			onkeyup: false,
 			rules: {
-				price: {
-					required: '#chargeMode:checked',
+        originPrice: {
+					required: function() {
+            return $("[name=isFree]:checked").val() == 0;
+          },
 					currency: true
 				},
 				tryLookLength: {
@@ -29,7 +31,7 @@ class Marketing {
 				}
 			},
 			messages: {
-				price: {
+        originPrice: {
 					required: Translator.trans('请输入价格'),
 					currency: Translator.trans('请输入价格，最多两位小数')
 				},
@@ -39,7 +41,7 @@ class Marketing {
 		});
 
 		$.validator.addMethod("currency",function(value, element, params) {
-        return this.optional(element) || /^\d{0,8}(\.\d{0,2})?$/.test(value);
+      return this.optional(element) || /^[1-9]{0,8}(\.\d{0,2})?$/.test(value);
     },Translator.trans('请输入价格，最多两位小数'));
 
     $('.js-task-price-setting').on('click','li',function(event){

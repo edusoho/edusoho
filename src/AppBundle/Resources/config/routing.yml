@@ -1572,6 +1572,10 @@ course_task_trigger:
     path:  /course/{courseId}/task/{id}/trigger
     defaults: { _controller: AppBundle:Task:trigger }
 
+course_task_report:
+    path:  /course/{courseId}/task/{id}/report
+    defaults: { _controller: AppBundle:Task:report }
+
 course_task_finish:
     path:  /course/{courseId}/task/{id}/finish
     defaults: { _controller: AppBundle:Task:finish }
@@ -2308,6 +2312,10 @@ classroom_manage:
 classroom_manage_courses:
     path: /classroom/{id}/manage/courses
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:courses }
+
+classroom_manage_course_remove:
+    path: /classroom/{id}/manage/course/{courseId}/remove
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:removeCourse }
 
 classroom_courses_select:
     path: /classroom/{id}/courses/select

@@ -61,11 +61,9 @@ define(function(require, exports, module) {
         $('#all-courses').on('click',function(){
 
             $.post($(this).data('url'),$('.form-search').serialize(),function(data){
-
                 $('#modal').html(data);
             });
 
-            
         });
 
         $('.js-course-select').on('change', function(){
@@ -80,38 +78,31 @@ define(function(require, exports, module) {
             }
         });
 
-        $('.row').on('click',".course-item ",function(){
+        $('.row').on('click',".course-item-cbx",function(){
 
-            var sid=$(this).data('id');//courseSet.id
+            var $course = $(this).parent();
+            var sid = $course.data('id');//courseSet.id
 
-            if($(this).hasClass('enabled')){
+            if($course.hasClass('enabled')){
                 return;
             }
             var id = $('#course-select-'+sid).val();
-            if($(this).hasClass('select')){
-
-                $(this).removeClass('select');
-                $('.course-metas-'+sid).hide();
+            if($course.hasClass('select')){
+                $course.removeClass('select');
+                // $('.course-metas-'+sid).hide();
 
                 ids = $.grep(ids, function(val, key) {
 
                     if(val != sid + ":" + id )
                         return true;
                 }, false);
-
             }else{
-                $(this).addClass('select');
+                $course.addClass('select');
                 
-                $('.course-metas-'+sid).show();
+                // $('.course-metas-'+sid).show();
 
                 ids.push(sid + ':' + id);
-
             }
-
         });
-
-
     };
-
-    
 });

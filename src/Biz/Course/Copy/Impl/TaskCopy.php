@@ -163,7 +163,7 @@ class TaskCopy extends AbstractEntityCopy
                     $newActivity['mediaId'] = $ext['id'];
                 }
                 //对于exercise、homework，mediaId指向testpaper.id
-                if ($testId > 0) {
+                if ($testId > 0 && in_array($activity['mediaType'], array('homework', 'exercise'))) {
                     $newActivity['mediaId'] = $testId;
                 }
                 if ($newActivity['mediaType'] == 'live') {
