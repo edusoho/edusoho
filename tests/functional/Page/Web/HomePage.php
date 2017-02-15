@@ -1,9 +1,9 @@
 <?php
 
-namespace EduSoho\AT\Page\Web;
+namespace Tests\Functional\Page\Web;
 
-use EduSoho\AT\Page\Page;
-use EduSoho\AT\Page\Web\LoginPage;
+use Tests\Functional\Page\Page;
+use Tests\Functional\Page\Web\LoginPage;
 use Facebook\WebDriver\WebDriverBy;
 
 class HomePage extends Page

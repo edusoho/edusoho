@@ -1,8 +1,8 @@
 <?php
 
-namespace EduSoho\AT\Page\Web;
+namespace Tests\Functional\Page\Web;
 
-use EduSoho\AT\Page\Page;
+use Tests\Functional\Page\Page;
 use Facebook\WebDriver\WebDriverBy;
 
 class LoginPage extends Page

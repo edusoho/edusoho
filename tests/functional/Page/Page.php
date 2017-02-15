@@ -1,6 +1,6 @@
 <?php
 
-namespace EduSoho\AT\Page;
+namespace Tests\Functional\Page;
 
 use Facebook\WebDriver\Remote\RemoteWebdriver;
 

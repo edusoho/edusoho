@@ -1,6 +1,6 @@
 <?php
 
-namespace EduSoho\AT;
+namespace Tests\Functional;
 
 use Facebook\WebDriver\Remote\RemoteWebdriver;
 use Facebook\WebDriver\Remote\WebDriverCapabilityType;
@@ -13,7 +13,7 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->driver = RemoteWebDriver::create(
-            getenv('HUB_URL'),
+            getenv('SELENIUM_SERVER_URL'),
             DesiredCapabilities::chrome()
         );
     }

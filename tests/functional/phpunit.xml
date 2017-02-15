@@ -3,9 +3,8 @@
         <directory>Tests/</directory>
     </testsuite>
     <php>
-        <env name="HUB_URL" value="http://localhost:4444/wd/hub" />
+        <env name="SELENIUM_SERVER_URL" value="http://localhost:4444/wd/hub" />
         <env name="TEST_SITE_HOST" value="http://www.esdev.com" />
-        <env name="BROWSER_FIRFOX" value="firefox" />
-        <env name="BROWSER_CHROME" value="chrome" />
+        <env name="BROWSER_NAME" value="chrome" />
     </php>
 </phpunit>

@@ -1,9 +1,9 @@
 <?php
 
-namespace EduSoho\AT\Tests;
+namespace Tests\Functional\Tests;
 
-use EduSoho\AT\BaseTestCase;
-use EduSoho\AT\Page\Web\HomePage;
+use Tests\Functional\BaseTestCase;
+use Tests\Functional\Page\Web\HomePage;
 
 class LoginTest extends BaseTestCase
 {
