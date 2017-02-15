@@ -15813,6 +15813,9 @@ textarea {
 .es-mobile .course-detail-header.after .es-share.top .dropdown-menu:after {
   left: 20%;
 }
+.es-mobile .modal {
+  z-index: 9999;
+}
 .es-mobile body.homepage.has-app .es-wrap,
 .es-mobile body.course-list-page.has-app .es-wrap,
 .es-mobile body.open-course-list.has-app .es-wrap,
