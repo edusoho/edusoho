@@ -107,7 +107,7 @@ class CardServiceTest extends BaseTestCase
 
     protected function getCouponService()
     {
-        return $this->createService('Coupon.CouponService');
+        return $this->createService('CouponPlugin:Coupon:CouponService');
     }
 
     /**
