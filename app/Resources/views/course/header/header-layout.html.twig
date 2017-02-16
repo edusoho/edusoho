@@ -21,8 +21,8 @@
           <span class="tag-finished"></span>
         {% endif %}
       </span>
-      <span
-          class="text-overflow vertical-top inline-block gray-darker text-24 course-detail-heading">{{ course.title }}</span>
+      <span class="text-overflow vertical-top inline-block gray-darker text-24 course-detail-heading">{{ course.title }}</span>
+      <!--加入后显示-->
       <span class="es-qrcode top" data-url="{{ path('course_qrcode', { id: course.id }) }}">
         <i class="es-icon es-icon-qrcode"></i>
         <span class="qrcode-popover">
@@ -32,6 +32,8 @@
       </span>
       {% block course_header_subtitle %}{% endblock %}
       <ul class="course-operation hidden-xs hidden-sm clearfix">
+        <!--加入后显示-->
+
         {% if setting('course.show_student_num_enabled', '1') == 1 %}
         <li>
             <span class="btn btn-xs">
