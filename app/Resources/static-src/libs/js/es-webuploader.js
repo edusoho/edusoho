@@ -27,8 +27,7 @@ class EsWebUploader
 
 	  	let ele = $(config.element);
 	  	let uploader = WebUploader.create({
-        runtimeOrder: 'flash',
-	  		swf: 'http://fex.baidu.com/webuploader/js/Uploader.swf',
+	  		swf: SWF_PATH,
 	  		server: app.uploadUrl, // 配置参见script_boot.html.twig
 	  		pick: {
 	  			id: '#' + ele.attr("id"),
