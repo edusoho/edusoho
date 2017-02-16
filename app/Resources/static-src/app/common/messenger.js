@@ -29,7 +29,6 @@ export default class EsMessenger extends Emitter {
 
     messenger.listen(function (msg) {
       msg = JSON.parse(msg);
-      console.log('trigger', msg.eventName)
       self.trigger(msg.eventName, msg.args);
     });
     this.messenger = messenger;
