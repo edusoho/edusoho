@@ -1,5 +1,18 @@
-
 {% set canAccess = (member|default(false) and 'teacher' in member.role) or 'ROLE_SUPER_ADMIN' in app.user.roles|default('') or 'ROLE_ADMIN' in app.user.roles|default('') %}
 {% set reviewSaveUrl = path('course_review_create',{id:course.id}) %}
+
+{% do script(['app/js/course/widgets/choice-course/index.js']) %}
+
+<select class="form-control js-choice-course">
+  {% if member %}
+    {% set route = 'my_course_show' %}
+  {% else %}
+    {% set route = 'course_show' %}
+  {% endif %}
+  {% for selectCourse in courses %}
+    <option value="{{ path(route, {id: course.id, selectedCourse: selectCourse.id, tab: 'reviews'}) }}#reviews" {% if selectCourse.id == selectedCourseId %}selected{% endif %}>{{ selectCourse.title }}</option>
+  {% endfor %}
+  <option value="{{ path(route, {id: course.id, tab: 'reviews'}) }}#reviews" {% if 0 == selectedCourseId %}selected{% endif %}>{{ '全部教学计划'|trans }}</option>
+</select>
 
 {% include 'review/widget/list.html.twig' %}
