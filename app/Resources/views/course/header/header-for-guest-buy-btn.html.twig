@@ -1,3 +1,5 @@
+
+
 {% if course.buyable|default(true) == false and not is_plugin_installed('Vip') %}
   {{'该课程为限制课程'|trans}}<br>{{'请联系客服'|trans}}
 {% else %}
@@ -6,8 +8,9 @@
 
   {% if course.buyable|default(true) %}
     <a class="btn btn-primary btn-lg"
-      {% if course.status != 'published' or isPreview %}
+      {% if course.status != 'published' %}
         disabled="disabled"
+          title ="课程还未发布,不允许加入和购买"
       {% else %}
         {% if is_buy_course_from_modal(course.id) %}
           href="#modal"

@@ -7,17 +7,7 @@
 
 {% block main %}
   <div class="panel panel-default">
-    {% if courseSet.type != 'live' %}
-      <div class="panel-heading">
-        {{ course.title }}<span class="mh5">／</span>{{'营销设置'|trans}}
-        {% if course.status != 'published' %}
-          <button class="btn btn-success btn-sm pull-right js-publish-course" 
-            data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
-            {{ '发布计划'|trans }}
-          </button>
-        {% endif %}
-      </div>
-    {% endif %}
+      {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
       <form id="course-marketing-form" class="form-horizontal"
         action="{{path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">

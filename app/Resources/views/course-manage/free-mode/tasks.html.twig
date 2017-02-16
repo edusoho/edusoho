@@ -5,17 +5,7 @@
 
 {% block main %}
   <div class="panel panel-default">
-    {% if courseSet.type != 'live' %}
-      <div class="panel-heading">
-        {{ course.title }}<span class="mh5">／</span>{{'计划任务'|trans}}
-        {% if course.status != 'published' %}
-          <button class="btn btn-success btn-sm pull-right js-publish-course"
-            data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
-            {{ '发布计划'|trans }}
-          </button>
-        {% endif %}
-      </div>
-    {% endif %}
+    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
       <div class="task-list-header clearfix">
         任务总数：<span class="color-warning space">{{ taskNum }}</span>  {% if taskPerDay|default(false) %}日均约需完成：<span class="color-warning">{{ taskPerDay }}</span> 个任务{% endif %}
