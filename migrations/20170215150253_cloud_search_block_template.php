@@ -31,6 +31,6 @@ class CloudSearchBlockTemplate extends Migration
      */
     public function down()
     {
-
+        
     }
 }
