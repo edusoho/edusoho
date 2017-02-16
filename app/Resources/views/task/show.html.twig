@@ -52,8 +52,7 @@
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
             </span>
         </div>
-
-        {% if course.enableFinish|default(1) %}
+        {% if course.enableFinish|default(1) == 0 %}
           <a type="button" href="javascript:;"
             {% if taskResult.status != 'finish' %}
               class="btn btn-transparent btn-learn js-btn-learn"
