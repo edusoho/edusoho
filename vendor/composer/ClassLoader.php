@@ -364,7 +364,7 @@ class ClassLoader
         }
                     foreach ($this->prefixDirsPsr4[$prefix] as $dir) {
                         if ($class=='Facebook\WebDriver\Remote\RemoteWebdriver') {
-            var_dump(ile_exists($file = $dir . DIRECTORY_SEPARATOR . substr($logicalPathPsr4, $length)), $class);
+            var_dump(file_exists($file = $dir . DIRECTORY_SEPARATOR . substr($logicalPathPsr4, $length)), $class, $file);
         }
                         if (file_exists($file = $dir . DIRECTORY_SEPARATOR . substr($logicalPathPsr4, $length))) {
                             if ($class=='Facebook\WebDriver\Remote\RemoteWebdriver') {
