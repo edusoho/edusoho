@@ -1,7 +1,6 @@
 import postal from 'postal';
 import 'postal.federation';
 import 'postal.xframe';
-import 'es6-promise/auto';
 
 export default class TaskEventEmitter {
   constructor(element) {

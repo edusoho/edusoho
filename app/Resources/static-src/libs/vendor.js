@@ -4,6 +4,7 @@ import 'jquery';
 import 'bootstrap';
 import 'swiper';
 // import 'placeholder'; 
+import 'es6-promise/auto';
 import 'libs/js/jquery-lavalamp';
 import 'common/bootstrap-modal-hack';
 import 'common/script';
