@@ -5,7 +5,7 @@ define(function(require, exports, module) {
       if ($('a').hasClass('money-card-use')) {
           var url = $('.money-card-use').data('url');
           var target_url = $('.money-card-use').data('target-url');
-          var coin = $('.money-card-use').prev().text();
+          var coin = $('.card-coin-val').val();
 
           $.post(url, function(response){
             Notify.success(Translator.trans('学习卡已使用，充值'+ coin +'虚拟币成功，可前往【账户中心】-【我的账户】查看充值情况。'), 2);
