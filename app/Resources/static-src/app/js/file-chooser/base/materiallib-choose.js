@@ -107,7 +107,7 @@ class MaterialLibChoose extends Chooser {
     var file = $that.data();
     $('[data-role="placeholder"]').html(file.name);
 
-    this.trigger('select', file);
+    this.emit('select', file);
     // this._close();
   }
 
