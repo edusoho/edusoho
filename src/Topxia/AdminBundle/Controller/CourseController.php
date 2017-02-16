@@ -544,15 +544,15 @@ class CourseController extends BaseController
             $exportLesson = '';
 
             if ($lesson['type'] == 'text') {
-                $exportLesson .= $lesson['title']."(图文)"? $lesson['title']."," : "-".",";
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(图文)," : "-".",";
             } elseif ($lesson['type'] == 'video') {
-                $exportLesson .= $lesson['title']."(视频)"? $lesson['title']."," : "-".",";
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(视频)," : "-".",";
             } elseif ($lesson['type'] == 'audio') {
-                $exportLesson .= $lesson['title']."(音频)"? $lesson['title']."," : "-".",";
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(音频)," : "-".",";
             } elseif ($lesson['type'] == 'testpaper') {
-                $exportLesson .= $lesson['title']."(试卷)"? $lesson['title']."," : "-".",";
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(试卷)," : "-".",";
             } elseif ($lesson['type'] == 'ppt') {
-                $exportLesson .= $lesson['title']."(ppt)"? $lesson['title']."," : "-".",";
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(ppt)," : "-".",";
             } else {
                 $exportLesson .= $lesson['title'] ? $lesson['title']."," : "-".",";
             }
