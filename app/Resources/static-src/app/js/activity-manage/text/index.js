@@ -8,7 +8,6 @@ class Text {
   _init() {
     this._inItStep2form();
     this._inItStep3form();
-    initEditor($('[name="content"]'));
   }
 
   _inItStep2form() {
@@ -21,9 +20,12 @@ class Text {
           required: true,
           maxlength: 50,
         },
-        content: 'required',
+        content: {
+          required:true,
+        }
       },
     });
+    initEditor($('[name="content"]'),validator);
   }
 
   _inItStep3form() {

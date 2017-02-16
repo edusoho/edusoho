@@ -7,7 +7,6 @@ class TestpaperForm{
     this.validator = null;
     this.difficultySlider = null;
     this._initEvent();
-    this._initEditor();
     this._initValidate();
     this._initSortList();
     this.scoreSlider = null;
@@ -91,7 +90,7 @@ class TestpaperForm{
     }
   }
 
-  _initEditor() {
+  _initEditor(validator) {
     let editor = CKEDITOR.replace(this.$description.attr('id'), {
       toolbar: 'Simple',
       filebrowserImageUploadUrl: this.$description.data('imageUploadUrl'),
@@ -99,6 +98,9 @@ class TestpaperForm{
     });
     editor.on( 'change', () => {    
       this.$description.val(editor.getData());
+    });
+    editor.on('blur', function() {
+      validator.form();
     });
   }
 
@@ -169,7 +171,7 @@ class TestpaperForm{
         })
       }
     })
-
+    this._initEditor(this.validator);
   }
 
   _initSortList() {
