@@ -535,6 +535,8 @@ class CourseController extends BaseController
         );
         $courseLessonsCount = $this->getCourseService()->searchLessonCount($conditions);
 
+        $courseLessonsCount = ($courseLessonsCount>$exportAllowCount) ? $exportAllowCount:$courseLessonsCount;  
+
         $titles = $this->getServiceKernel()->trans('课时名,课时学习人数,课时完成人数,课时平均学习时长(分),音视频时长(分),音视频平均观看时长(分),测试平均得分');
 
         $originaLessons = $this->makeLessonsDatasByCourseId($courseId, $start, $limit);
