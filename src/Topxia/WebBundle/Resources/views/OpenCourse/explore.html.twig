@@ -22,7 +22,9 @@
       </div>
     </div>
   </div>
-  {% include 'TopxiaWebBundle:Course:search-mobile.html.twig'%}
+  {% if mobile %}
+    {% include 'TopxiaWebBundle:Course:search-mobile.html.twig'%}
+  {% endif %}
 {% endblock %}
 {% block content %}
   <div class="open-course-list">
