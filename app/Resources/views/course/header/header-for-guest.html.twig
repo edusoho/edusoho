@@ -1,7 +1,7 @@
 {% extends 'course/header/header-layout.html.twig' %}
 {% if previewAs == 'guest' %}
   {% set member = null %}
-
+  {% set courses = data('CoursesByCourseSetId',{courseSetId: courseSet.id}) %}
 {% endif %}
 
 

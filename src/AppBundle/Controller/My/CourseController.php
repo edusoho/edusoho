@@ -82,7 +82,7 @@ class CourseController extends CourseBaseController
         $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
         $user = $this->getUser();
-        if ($taskCount) {
+        if ($taskCount && !$member['previewAs']) {
             //学习记录
             $taskResultCount = $this->getTaskResultService()->countTaskResults(array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id']));
 
@@ -127,10 +127,7 @@ class CourseController extends CourseBaseController
     {
         $course = $this->getCourseService()->getCourse($id);
         $member = $this->getCourseMember($request, $course);
-        $preView = $request->query->get('previewAs', false);
-        if ($preView == 'member' && empty($member)) {
-            $member = array('courseId' => $course['id'], 'deadline' => time(), 'userId' => 1, 'role' => 'User');
-        }
+
         if (empty($member)) {
             return $this->redirect($this->generateUrl('course_show', array(
                 'id'  => $id,
