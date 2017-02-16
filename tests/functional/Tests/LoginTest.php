@@ -2,7 +2,6 @@
 
 namespace Tests\Functional\Tests;
 
-use Tests\Functional\BaseTestCase;
 use Tests\Functional\Page\Web\HomePage;
 
 class LoginTest extends BaseTestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Functional;
+namespace Tests\Functional\Tests;;
 
 use Facebook\WebDriver\Remote\RemoteWebdriver;
 use Facebook\WebDriver\Remote\WebDriverCapabilityType;
