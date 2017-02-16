@@ -128,35 +128,31 @@
           </div>
         </div>
         <p></p>
-      {% endif %}
-      <div class="row form-group">
-        <div class="col-md-3 control-label">
-          <label for="name" >{{'发信人名称'|trans}}</label>
-        </div>
-        <div class="controls col-md-8">
-          {% if status == 'cloud_email_crm' %}
-            <input type="text" id="name" name="name" class="form-control" value="{{cloudMailName}}">
-          {% else %}
-            <input type="text" id="name" name="name" class="form-control" value="{{mailer.name}}">
-          {% endif %}
-        </div>
-      </div>
-      <p></p>
-      <div class="row form-group">
-        <div class="col-md-3 control-label"></div>
-        <div class="controls col-md-8">
-          <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
-          {% if mailer.enabled and status == 'mailer'%}
-            <a class="btn btn-primary js-self-test" data-url="{{ path('admin_setting_mailer_test') }}" href="javascript:;">{{'验证'|trans}}</a>
-            <div class="mtl ptm">
-              <div class="alert alert-info" role="alert">
-                {{'验证时会给当前用户发送验证邮件，请确保当前用户邮箱为正确邮箱且邮箱服务器设置已提交保存。'|trans}}
-              </div>
-            </div>
-          {% endif %}
-        </div>
-      </div>
 
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="name" >{{'发信人名称'|trans}}</label>
+          </div>
+          <div class="controls col-md-8">
+            <input type="text" id="name" name="name" class="form-control" value="{{mailer.name}}">
+          </div>
+        </div>
+        <p></p>
+        <div class="row form-group">
+          <div class="col-md-3 control-label"></div>
+          <div class="controls col-md-8">
+            <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+            {% if mailer.enabled and status == 'mailer'%}
+              <a class="btn btn-primary js-self-test" data-url="{{ path('admin_setting_mailer_test') }}" href="javascript:;">{{'验证'|trans}}</a>
+              <div class="mtl ptm">
+                <div class="alert alert-info" role="alert">
+                  {{'验证时会给当前用户发送验证邮件，请确保当前用户邮箱为正确邮箱且邮箱服务器设置已提交保存。'|trans}}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
       <input type="hidden" name="email-setting-status" value="{{status}}">
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>

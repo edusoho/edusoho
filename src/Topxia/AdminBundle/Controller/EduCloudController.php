@@ -583,19 +583,15 @@ class EduCloudController extends BaseController
         }
         try {
             $api         = CloudAPIFactory::create('root');
-            $overview        = $api->get('/me/email/overview');
+            $account        = $api->get('/me/email_account');
             return $this->render('TopxiaAdminBundle:EduCloud/Email:setting.html.twig', array(
-                'account' => $overview['account']
+                'account' => $account
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
         }
     }
 
-    /*
-     * 云邮件开启时，同步本地邮件服务器发信人名称到云邮件
-     * 云邮件关闭时，同步云邮件发信人名称到本地邮件服务器
-     */
     public function emailSwitchAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
@@ -610,19 +606,14 @@ class EduCloudController extends BaseController
                 $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您还未购买,非法请求！'));
             }
             $status = $request->request->all();
-            $mailer = $this->getSettingService()->get('mailer', array());
             if (isset($status['email-open'])) {
                 $emailStatus['status'] = 'enable';
-                $emailStatus['name'] = empty($mailer['name']) ? '' : $mailer['name'];
                 $this->getSettingService()->set('cloud_email_crm', $emailStatus);
             }
 
             if (isset($status['email-close'])) {
-                $cloudMail = $this->getSettingService()->get('cloud_email_crm');
                 $emailStatus['status'] = 'disable';
                 $this->getSettingService()->set('cloud_email_crm', $emailStatus);
-                $mailer['name'] = empty($cloudMail['name']) ? '' : $cloudMail['name'];
-                $this->getSettingService()->set('mailer', $mailer);
             }
             return $this->redirect($this->generateUrl('admin_edu_cloud_email'));
         }
