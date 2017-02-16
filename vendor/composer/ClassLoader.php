@@ -343,7 +343,7 @@ class ClassLoader
 
     private function findFileWithExtension($class, $ext)
     {
-        file_exists("/builds/root/edusoho/tests/functional/Tests/BaseTestCase.php", 'test');
+        var_dump(file_exists("/builds/root/edusoho/tests/functional/Tests/BaseTestCase.php"),'test'));
         // PSR-4 lookup
         $logicalPathPsr4 = strtr($class, '\\', DIRECTORY_SEPARATOR) . $ext;
 
