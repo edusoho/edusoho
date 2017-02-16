@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Functional\Tests;;
+namespace Tests\Functional\Tests;
 
 use Facebook\WebDriver\Remote\RemoteWebdriver;
 use Facebook\WebDriver\Remote\WebDriverCapabilityType;
@@ -12,16 +12,15 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        var_dump(RemoteWebdriver::class);
-        // $browserName = getenv('BROWSER_NAME');
-        // $this->driver = RemoteWebDriver::create(
-        //     getenv('SELENIUM_SERVER_URL'),
-        //     DesiredCapabilities::$browserName()
-        // );
+        $browserName = getenv('BROWSER_NAME');
+        $this->driver = RemoteWebDriver::create(
+            getenv('SELENIUM_SERVER_URL'),
+            DesiredCapabilities::$browserName()
+        );
     }
 
     protected function tearDown()
     {
-        //$this->driver->quit();
+        $this->driver->quit();
     }
 }
