@@ -8214,9 +8214,8 @@ textarea {
   left: 20%;
 }
 .card-pack-item .price {
-  position: absolute;
-  top: 35%;
-  left: 35%;
+  margin-bottom: 18px;
+  margin-top: 10px;
 }
 .card-pack-item .price strong {
   font-size: 30px;
