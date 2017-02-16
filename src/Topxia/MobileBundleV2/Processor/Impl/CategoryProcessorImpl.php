@@ -115,7 +115,7 @@ class CategoryProcessorImpl extends BaseProcessor implements CategoryProcessor
         return array(
             "realityDepth"=>$realityDepth,
             "depth"=>$group["depth"],
-            "data"=>$coverCategorys[0]
+            "data"=>$coverCategorys
             );
         return $coverCategorys;
     }
