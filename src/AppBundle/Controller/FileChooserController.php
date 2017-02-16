@@ -102,7 +102,7 @@ class FileChooserController extends BaseController
         ));
     }
 
-    public function importAction(Request $request)
+    public function importAction(Request $request, $courseId)
     {
         $url = $request->query->get('url');
 
