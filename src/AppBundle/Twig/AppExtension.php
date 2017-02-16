@@ -64,8 +64,8 @@ class AppExtension extends \Twig_Extension
         $tags = array(
             array(
                 'short_name' => '练',
-                'full_name'  => '24小时作业批改',
-                'summary'    => '24小时内完成作业批改，即时反馈并巩固您的学习效果',
+                'full_name'  => '24小时作业批阅',
+                'summary'    => '24小时内完成作业批阅，即时反馈并巩固您的学习效果',
                 'active'     => 0
             ),
             array(

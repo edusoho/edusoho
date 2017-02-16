@@ -30,7 +30,7 @@
           </td>
           <td>
             {% if status == 'reviewing' %}
-              <a href="{{ path('course_manage_homework_check', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0),action:'check' }) }}" target="_blank">{{'批改'|trans}}</a>
+              <a href="{{ path('course_manage_homework_check', {id:paperResult.courseId,resultId:paperResult.id,source:source|default('course'),targetId:targetId|default(0),action:'check' }) }}" target="_blank">{{'批阅'|trans}}</a>
             {% else %}
               <a href="{{ path('homework_result_show',{resultId:paperResult.id,action:'check' }) }}" target="_blank" >{{'查看'|trans}}</a>
             {% endif %}
@@ -39,9 +39,9 @@
       {% endfor %}
     {% else %}
       {% if status == 'reviewing' %}
-        <div class="empty">{{'没有需要批改的作业'|trans}}</div>
+        <div class="empty">{{'没有需要批阅的作业'|trans}}</div>
       {% else %}
-        <div class="empty">{{'没有已批改的作业'|trans}}</div>
+        <div class="empty">{{'没有已批阅的作业'|trans}}</div>
       {% endif %}
     {% endif  %}
   </tbody>
