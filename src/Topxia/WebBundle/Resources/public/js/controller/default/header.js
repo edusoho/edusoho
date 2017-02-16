@@ -17,6 +17,10 @@ define(function(require, exports, module){
   }
 
   $('.js-back').click(function(){
-    history.go(-1);
+    if(history.length !== 1){
+      history.go(-1);
+    } else {
+      location.href = '/';
+    }
   })
 })
