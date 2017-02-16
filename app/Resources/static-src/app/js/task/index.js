@@ -2,6 +2,7 @@ import TaskSidebar from "./widget/sidebar";
 import TaskUi from "./widget/task-ui";
 import TaskEventEmitter from "./widget/task-event-emitter";
 import Emitter from "common/es-event-emitter";
+import DataReporter from './widget/data-reporter';
 
 class TaskShow extends Emitter {
   constructor({element, courseId, taskId, mode}) {
@@ -49,6 +50,7 @@ class TaskShow extends Emitter {
         learnedTime: learnedTime,
         taskId: this.taskId
       };
+      console.log('eventData',eventData);
       this.eventEmitter.emit('doing', eventData)
           .then(response => {
             this.receiveFinish(response);

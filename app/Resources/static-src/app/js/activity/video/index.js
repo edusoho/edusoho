@@ -4,10 +4,12 @@
 import swfobject from 'es-swfobject';
 import EsMessenger from '../../../common/messenger';
 import ActivityEmitter from '../../activity/activity-emitter';
+
 class VideoPlay {
   constructor() {
     this.player = {};
     this.emitter = new ActivityEmitter();
+    
   }
 
   play() {
