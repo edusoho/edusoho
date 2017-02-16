@@ -86,10 +86,13 @@ class ClassroomThreadController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $thread = $this->getThreadService()->getThread($threadId);
         $user   = $this->getCurrentUser();
-        $this->validateAuthority($user, $classroomId, $thread, $classroomSetting);
+        $auth = $this->validateAuthority($user, $classroomId, $thread);
+
+        if (!$auth){
+            return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
+        }
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
@@ -146,7 +149,7 @@ class ClassroomThreadController extends BaseController
         ));
     }
 
-    private function validateAuthority($user, $classroomId, $thread, $classroomSetting)
+    private function validateAuthority($user, $classroomId, $thread)
     {
 
         if ($user->isAdmin()) {
@@ -157,12 +160,12 @@ class ClassroomThreadController extends BaseController
             return true;
         }
 
-        if (($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] != $user['id']))
+        if (($this->getClassroomService()->canTakeClassroom($classroomId, true) && $thread['userId'] == $user['id']))
         {
           return true;
         }
 
-        return $this->createMessageResponse('info', $this->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服', array('%name%' => $classroomSetting['name'])), '', 3, $this->generateUrl('homepage'));
+        return false;
     }
 
     private function getThreadSearchFilters($request)
