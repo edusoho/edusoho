@@ -1,4 +1,3 @@
-// import Emitter from 'es6-event-emitter';
 import Emitter from "component-emitter";
 class Chooser extends Emitter {
   constructor() {
@@ -13,5 +12,4 @@ class Chooser extends Emitter {
     $('.file-chooser-bar').removeClass('hidden');
   }
 }
-
 export default Chooser;
