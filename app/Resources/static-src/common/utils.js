@@ -20,5 +20,3 @@ const isMobileDevice = ()=> {
 }
 
 export { Browser,isMobileDevice }
-
-

@@ -2,19 +2,17 @@ import MaterialLibChoose from './base/materiallib-choose';
 import VideoImport from './base/import-video';
 import CourseFileChoose from './base/coursefile-choose';
 import UploadChooser from './base/upload-chooser';
-import Emitter from 'es6-event-emitter';
+import Emitter from "component-emitter";
 
-class FileChooser extends Emitter {
-
+class FileChooser extends Emitter{
   constructor(options) {
     super();
     this.init();
-
   }
 
   init() {
-    this.initFileChooser();
     this.initTab();
+    this.initFileChooser();
   }
 
   initTab() {
@@ -39,7 +37,7 @@ class FileChooser extends Emitter {
   }
 
   fileSelect(file) {
-    this.trigger('select', file);
+    this.emit('select', file);
   }
 
   static openUI() {
