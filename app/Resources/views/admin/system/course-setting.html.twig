@@ -99,11 +99,11 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'允许'|trans}}{{'%user_name%下载课时的音视频'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</label>
+        <label >{{'允许'|trans}}{{'%user_name%下载任务的音视频'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('student_download_media', {0:'不允许'|trans, 1:'允许'|trans}, courseSetting.student_download_media) }}
-        <div class="help-block">{{'开启此项设置后，'|trans}}{{'%user_name%可在课时学习界面侧栏的"资料"面板中下载。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</div>
+        <div class="help-block">{{'开启此项设置后，'|trans}}{{'%user_name%可在任务学习界面侧栏的"资料"面板中下载。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</div>
       </div>
     </div>
 
@@ -119,7 +119,7 @@
 
      <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>{{'图文、文档课时防复制'|trans}}</label>
+        <label>{{'图文、文档任务防复制'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('copy_enabled', {1:'开启'|trans, 0:'关闭'|trans}, courseSetting.copy_enabled) }}
@@ -144,11 +144,11 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>免费试看/免费课时允许未登录用户观看</label>
+        <label>免费试看/免费任务允许未登录用户观看</label>
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('allowAnonymousPreview', {1:'允许', 0:'不允许'}, courseSetting.allowAnonymousPreview) }}
-        <div class="help-block">如果允许此项设置，未登录用户（游客）可观看免费试看/免费课时</div>
+        <div class="help-block">如果允许此项设置，未登录用户（游客）可观看免费试看/免费任务</div>
       </div>
     </div>
 
@@ -167,7 +167,7 @@
       <div id="show_course_chapter_name">
         <div class="form-group">
           <div class="col-md-3 control-label">
-              <label for="chapter_name">{{'课程章名称'|trans}}</label>
+              <label for="chapter_name">{{'任务章名称'|trans}}</label>
           </div>
           <div class="controls col-md-4">
             <input  type="text" id="chapter_name" name="chapter_name" class="form-control" value="{{ defaultSetting.chapter_name|default('章') }}">
@@ -176,7 +176,7 @@
 
         <div class="row form-group">
           <div class="col-md-3 control-label">
-              <label for="part_name">{{'课程节名称'|trans}}</label>
+              <label for="part_name">{{'任务节名称'|trans}}</label>
           </div>
           <div class="controls col-md-4">
             <input  type="text" id="part_name" name="part_name" class="form-control" value="{{ defaultSetting.part_name|default('节') }}">

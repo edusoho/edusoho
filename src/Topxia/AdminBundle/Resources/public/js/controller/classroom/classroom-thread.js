@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-    alert()
     exports.run = function() {
         var $element = $('#thread-table-container');
         require('../../../../topxiaadmin/js/util/short-long-text')($element);
