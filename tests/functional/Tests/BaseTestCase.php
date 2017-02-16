@@ -12,7 +12,7 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        RemoteWebdriver::class;
+        var_dump(RemoteWebdriver::class);
         // $browserName = getenv('BROWSER_NAME');
         // $this->driver = RemoteWebDriver::create(
         //     getenv('SELENIUM_SERVER_URL'),
@@ -22,6 +22,6 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->driver->quit();
+        //$this->driver->quit();
     }
 }
