@@ -16,6 +16,8 @@ class TaskShow extends Emitter {
       element: '.js-task-dashboard-page'
     });
 
+    this.dataReporter = new DataReporter();
+
     this.init();
   }
 

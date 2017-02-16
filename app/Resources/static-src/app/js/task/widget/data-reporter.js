@@ -1,18 +1,20 @@
 class DataReporter {
   constructor(props) {
     this.datas = {};
-    this.url = '';
+    this.url = $("#js-hidden-data input[name ='report-url']").val();
 
-    this.reportedTime = props.reportedTime || 120;
+    this.reportedTime = props && props.reportedTime || 120;
     this.serverInterval = null;
     
-    this.startTime = 1486455374420; // 页面上获取
+    this.startTime = $("#js-hidden-data input[name ='current-timestamp']").val(); // 页面上获取
 
     this.init();
 
     window.onbeforeunload = () => {  
+      
       this.clear(); 
       this.flush();
+      localStorage.data = this.startTime;
     } 
   }
 
@@ -26,22 +28,23 @@ class DataReporter {
   }
 
   set(type,data) {
-    Object.assign(this.data, {
+    Object.assign(this.datas, {
       type: data
     });
     this.flush();
   }
 
   flush() {
-    Object.assign(this.data, {
+    Object.assign(this.datas, {
       'stayTime': {
         'startTime': this.startTime
       }
     });
-
+    // console.log(this.url,this.datas.stayTime.startTime)
     $.post(this.url,this.datas)
-      .done((data)=> {
-        this.startTime = 1486450420202;
+      .done((data) => {
+        // console.log('data',data);
+        this.startTime = data.time;
         console.log('上报成功');
       })
       .fail((error) => {
