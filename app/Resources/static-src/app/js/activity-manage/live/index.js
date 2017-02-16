@@ -6,9 +6,22 @@ class Live {
   }
   _init() {
     initEditor($('[name="remark"]'));
+    this._extendValidator();
     this._dateTimePicker();
     this._initStep2Form();
   }
+
+  _extendValidator() {
+    $.validator.addMethod(
+      "after",
+      function(value, element, params) {
+        var now = new Date();
+        return value && now < new Date(value);
+      },
+      Translator.trans('开始时间应晚于当前时间')
+    );
+  }
+
   _initEditorContent() {
     var editor = CKEDITOR.replace('text-content-field', {
       toolbar: 'Full',
@@ -33,7 +46,8 @@ class Live {
         },
         startTime: {
           required: true,
-          date: true
+          date: true,
+          after: true
         },
         length: {
           required: true,
