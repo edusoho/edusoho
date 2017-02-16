@@ -13,8 +13,6 @@ before_script:
   - mkdir web/files
   - mkdir app/data/private_files
   - touch app/config/routing_plugins.yml
-  - chmod 777 /tmp
-  - chmod 777 /run/mysqld
 
 Unit Test With PHP 5.3:
   stage: test
