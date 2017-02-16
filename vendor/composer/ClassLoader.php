@@ -343,34 +343,15 @@ class ClassLoader
 
     private function findFileWithExtension($class, $ext)
     {
-        var_dump(file_exists("/builds/root/edusoho/tests/functional/Tests/BaseTestCase.php"), 'test');
         // PSR-4 lookup
         $logicalPathPsr4 = strtr($class, '\\', DIRECTORY_SEPARATOR) . $ext;
 
         $first = $class[0];
-        if ($class=='Facebook\WebDriver\Remote\RemoteWebdriver') {
-            var_dump("1");
-        }
         if (isset($this->prefixLengthsPsr4[$first])) {
-            if ($class=='Facebook\WebDriver\Remote\RemoteWebdriver') {
-            var_dump("2");
-        }
             foreach ($this->prefixLengthsPsr4[$first] as $prefix => $length) {
-                if ($class=='Facebook\WebDriver\Remote\RemoteWebdriver') {
-            var_dump("3");
-        }
                 if (0 === strpos($class, $prefix)) {
-                    if ($class=='Facebook\WebDriver\Remote\RemoteWebdriver') {
-            var_dump("4");
-        }
                     foreach ($this->prefixDirsPsr4[$prefix] as $dir) {
-                        if ($class=='Facebook\WebDriver\Remote\RemoteWebdriver') {
-            var_dump(file_exists($file = $dir . DIRECTORY_SEPARATOR . substr($logicalPathPsr4, $length)), $class, $file);
-        }
                         if (file_exists($file = $dir . DIRECTORY_SEPARATOR . substr($logicalPathPsr4, $length))) {
-                            if ($class=='Facebook\WebDriver\Remote\RemoteWebdriver') {
-            var_dump("6");
-        }
                             return $file;
                         }
                     }
