@@ -124,6 +124,23 @@ class StudentManageController extends BaseController
         ));
     }
 
+    public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)
+    {
+        $user   = $this->getUserService()->getUser($userId);
+        $course = $this->getCourseService()->getCourse($courseId);
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            $this->getCourseMemberService()->addMemberExpiryDays($courseId, $userId, $fields['expiryDay']);
+            return $this->createJsonResponse(true);
+        }
+        $default = $this->getSettingService()->get('default', array());
+        return $this->render('course-manage/student/set-expiryday-modal.html.twig', array(
+            'course'  => $course,
+            'user'    => $user,
+            'default' => $default
+        ));
+    }
+
     public function checkStudentAction(Request $request, $courseSetId, $courseId)
     {
         $keyword = $request->query->get('value');

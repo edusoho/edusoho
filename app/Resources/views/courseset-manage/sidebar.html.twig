@@ -1,5 +1,9 @@
 {% block side %}
   {% set side_nav = side_nav|default(null) %}
+  {% set menuType = 'course' %}
+  {% if side_nav in ['base', 'detail', 'cover', 'question', 'testpaper', 'files'] %}
+  {% set menuType = 'courseSet' %}
+  {% endif %}
   <div class="sidenav locked">
     <ul class="list-group">
       <li class="list-group-heading">{{ '课程设置'|trans }}</li>

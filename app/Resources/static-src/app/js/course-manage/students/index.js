@@ -2,7 +2,10 @@ import notify from 'common/notify';
 
 class Students {
   constructor() {
-    this.init();
+    this.initTooltips();
+    this.initDeleteActions();
+    this.initFollowActions();
+    this.initExportActions();
   }
 
   initTooltips(){
@@ -58,10 +61,6 @@ class Students {
             }
         });
     });
-  }
-
-  initRemarkActions(){
-    
   }
 }
 

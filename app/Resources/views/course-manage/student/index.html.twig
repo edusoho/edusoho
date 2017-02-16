@@ -93,7 +93,7 @@
                       <a class="unfollow-student-btn" href="javascript:;" data-url="{{path('user_unfollow', {id : student.userId})}}" style="display:none;">已关注</a>
                     </li>
                    <li>
-                      <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/set_expiryday/{{student.userId}}">增加有效期</a>
+                      <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_expiryday', {courseSetId: course.courseSetId, courseId: course.id, userId: student.userId})}}">增加有效期</a>
                     </li>
 
                     {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}
