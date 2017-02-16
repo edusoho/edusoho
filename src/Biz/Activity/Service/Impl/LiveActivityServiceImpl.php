@@ -4,8 +4,8 @@ namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Util\EdusohoLiveClient;
-use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Course\Service\LiveReplayService;
@@ -30,7 +30,16 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         //创建直播室
-        $live = $this->createLiveroom($activity);
+        if (empty($activity['startTime'])
+            || $activity['startTime'] <= time()) {
+            //此时不创建直播教室
+            $live = array(
+                'id'       => 0,
+                'provider' => 0
+            );
+        } else {
+            $live = $this->createLiveroom($activity);
+        }
 
         if (empty($live)) {
             throw $this->createNotFoundException('云直播创建失败，请重试！');
@@ -47,6 +56,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'liveId'       => $live['id'],
             'liveProvider' => $live['provider']
         );
+        $liveActivity['roomCreated'] = $live['id'] > 0 ? 1 : 0;
         return $this->getLiveActivityDao()->create($liveActivity);
     }
 
@@ -57,38 +67,43 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($liveActivity)) {
             return array();
         }
+        $fields = array_merge($activity, $fields);
+        if (!$liveActivity['roomCreated']) {
+            if ($fields['startTime'] > time()) {
+                $live                         = $this->createLiveroom($fields);
+                $liveActivity['liveId']       = $live['id'];
+                $liveActivity['liveProvider'] = $live['provider'];
+                $liveActivity['roomCreated']  = 1;
 
-        $fields = array_merge($liveActivity, $fields);
-
-        //直播还未结束的情况下才更新直播房间信息
-        if ($activity['endTime'] > time()) {
+                $liveActivity = $this->getLiveActivityDao()->update($id, $liveActivity);
+            }
+        } elseif ($fields['endTime'] > time()) {
+            //直播还未结束的情况下才更新直播房间信息
             $liveParams = array(
-                'liveId'  => $fields['liveId'],
+                'liveId'  => $liveActivity['liveId'],
                 'summary' => empty($fields['remark']) ? '' : $fields['remark'],
                 'title'   => $fields['title']
             );
-
-            $liveParams['startTime'] = $activity['startTime'];
-            $liveParams['endTime']   = (string) ($activity['startTime'] + $fields['length'] * 60);
-
             //直播开始后不更新开始时间和直播时长
-            if (empty($activity['startTime']) || $activity['startTime'] <= time()) {
-                unset($liveParams['startTime']);
-                unset($liveParams['endTime']);
+            if ($fields['startTime'] > time()) {
+                $liveParams['startTime'] = $fields['startTime'];
+                $liveParams['endTime']   = (string) ($fields['startTime'] + $fields['length'] * 60);
             }
 
             $this->getEdusohoLiveClient()->updateLive($liveParams);
         }
 
-        $liveActivity = ArrayToolkit::parts($fields, array('replayStatus', 'fileId'));
+        $live = ArrayToolkit::parts($fields, array('replayStatus', 'fileId'));
 
-        if (!empty($liveActivity['fileId'])) {
-            $liveActivity['mediaId']      = $liveActivity['fileId'];
-            $liveActivity['replayStatus'] = LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS;
-            unset($liveActivity['fileId']);
+        if (!empty($live['fileId'])) {
+            $live['mediaId']      = $live['fileId'];
+            $live['replayStatus'] = LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS;
+            unset($live['fileId']);
         }
 
-        $liveActivity = $this->getLiveActivityDao()->update($id, $liveActivity);
+        if (!empty($live)) {
+            $liveActivity = $this->getLiveActivityDao()->update($id, $live);
+        }
 
         return $liveActivity;
     }
@@ -102,7 +117,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         $this->getLiveActivityDao()->delete($id);
-        $result = $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
+        if (!empty($liveActivity['liveId'])) {
+            $this->getEdusohoLiveClient()->deleteLive($liveActivity['liveId'], $liveActivity['liveProvider']);
+        }
     }
 
     protected function getLiveActivityDao()
@@ -156,8 +173,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $liveLogo    = $this->getSettingService()->get('course');
         $liveLogoUrl = "";
 
+        $baseUrl = $this->getServiceKernel()->getEnvVariable('baseUrl');
         if (!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])) {
-            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
+            $liveLogoUrl = $baseUrl."/".$liveLogo["live_logo"];
         }
 
         $live = $this->getEdusohoLiveClient()->createLive(array(
@@ -166,9 +184,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'speaker'     => $speaker,
             'startTime'   => $activity['startTime'].'',
             'endTime'     => ($activity['startTime'] + $activity['length'] * 60).'',
-            //FIXME 如果上面的baseUrl和下面的$activity['_base_url']等效，则不使用下面的（因为下面的参数来自controller，应避免这种依赖）
-            'authUrl'     => $activity['_base_url'].'/live/auth',
-            'jumpUrl'     => $activity['_base_url'].'/live/jump?id='.$activity['fromCourseId'],
+            'authUrl'     => $baseUrl.'/live/auth',
+            'jumpUrl'     => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
             'liveLogoUrl' => $liveLogoUrl
         ));
         return $live;
