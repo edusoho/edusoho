@@ -40,7 +40,8 @@ class Lesson extends BaseResource
         if ($line = $request->query->get('line')) {
             $lesson['hlsLine'] = $line;
         }
-        if (!empty($request->query->get('hls_encryption'))) {
+        $hls_encryption = $request->query->get('hls_encryption');
+        if (!empty($hls_encryption)) {
             $lesson['hlsEncryption'] = true;
         }
 
