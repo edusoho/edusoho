@@ -17,7 +17,7 @@
     {% endif %}
     <div class="panel-body">
       {% if isTeacher is defined and not isTeacher %}
-        <span class="color-danger">{{'当前用户不是本课程教师，没有批改作业的权限。'|trans}}</span>
+        <span class="color-danger">{{'当前用户不是本课程教师，没有批阅作业的权限。'|trans}}</span>
       {% endif %}
 
       {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:course.id,type:'homework',testpaperIds:homeworkIds})) }}

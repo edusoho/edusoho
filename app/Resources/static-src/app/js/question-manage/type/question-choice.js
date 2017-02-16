@@ -23,7 +23,7 @@ class Choice extends QuestionFormBase {
     this.imageDownloadUrl = this.$questionOptions.data('imageDownloadUrl');
     console.log(this.imageUploadUrl);
     console.log(this.imageDownloadUrl);
-    this.initTitleEditor();
+    this.initTitleEditor(this.validator);
     this.initAnalysisEditor();
     this.initOptions();
     this.subscriptionMessage();

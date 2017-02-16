@@ -53,7 +53,7 @@ export default class UploaderChooser extends Chooser {
       $('[data-role="placeholder"]').html(name);
     };
 
-    this.trigger('select', file);
+    this.emit('select', file);
 
     let placeMediaAttr = (file) => {
       if (file.length !== 0 && file.length !== undefined) {

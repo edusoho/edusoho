@@ -3,12 +3,13 @@ namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ExportHelp;
-use AppBundle\Common\ArrayToolkit;
+use AppBundle\Twig\WebExtension;
 use Vip\Service\Vip\LevelService;
-use AppBundle\Common\SimpleValidator;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
+use AppBundle\Common\SimpleValidator;
 use Biz\Course\Service\CourseService;
 use Biz\Thread\Service\ThreadService;
 use Biz\System\Service\SettingService;
@@ -20,7 +21,6 @@ use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Classroom\Service\ClassroomReviewService;
-use AppBundle\Twig\WebExtension;
 
 class ClassroomManageController extends BaseController
 {
@@ -781,6 +781,17 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    public function removeCourseAction(Request $request, $id, $courseId)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        try {
+            $this->getClassroomService()->deleteClassroomCourses($id, array($courseId));
+            return $this->createJsonResponse(array('success' => true));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
+    }
+
     public function coursesAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
@@ -967,7 +978,7 @@ class ClassroomManageController extends BaseController
         $user = $this->getUser();
 
         if (empty($user)) {
-            return  $this->createMessageResponse('info', '用户不存在或者尚未登录，请先登录');
+            return $this->createMessageResponse('info', '用户不存在或者尚未登录，请先登录');
         }
 
         $courses   = $this->getClassroomService()->findCoursesByClassroomId($id);

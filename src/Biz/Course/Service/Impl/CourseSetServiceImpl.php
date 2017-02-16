@@ -601,7 +601,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
         try {
             $this->beginTransaction();
-            $this->getCourseSetDao()->update($id, array('locked' => 0));
+            $courseSet = $this->getCourseSetDao()->update($id, array('locked' => 0));
             $this->getCourseDao()->update($courses[0]['id'], array('locked' => 0));
             $this->commit();
             return $courseSet;

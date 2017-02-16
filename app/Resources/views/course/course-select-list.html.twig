@@ -15,6 +15,7 @@
   {% if courseSets|default(null) %}
   {% for courseSet in courseSets %}
   <li class="course-item clearfix" data-id="{{courseSet.id}}" >
+    <input class="course-item-cbx" style="float:left;" type="checkbox" name="course-{{courseSet.id}}">
     <a class="course-picture-link" href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">
       <img class="course-picture" src="{{ filepath(courseSet.cover['middle']|default(null), 'courseSet.png') }}" alt="{{ courseSet.title }}">
     </a>
