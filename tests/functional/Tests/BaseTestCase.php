@@ -12,19 +12,21 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        var_dump(file_exists('/builds/root/edusoho/vendor/facebook/webdriver/lib/Remote/RemoteWebDriver.php'), 1);
+        var_dump(file_exists('/builds/root/edusoho/vendor/facebook/webdriver/lib/Remote/RemoteWebdriver.php'), 1);
         var_dump(file_exists('/builds/root/edusoho/vendor'), 2);
         var_dump(file_exists('/builds/root/edusoho/vendor/facebook'), 3);
         var_dump(file_exists('/builds/root/edusoho/vendor/facebook/webdriver/lib'), 4);
         $browserName = getenv('BROWSER_NAME');
-        $this->driver = RemoteWebDriver::create(
-            getenv('SELENIUM_SERVER_URL'),
-            DesiredCapabilities::$browserName()
-        );
+        // $this->driver = RemoteWebDriver::create(
+        //     getenv('SELENIUM_SERVER_URL'),
+        //     DesiredCapabilities::$browserName()
+        // );
+
+        var_dump(DesiredCapabilities::$browserName());
     }
 
     protected function tearDown()
     {
-        $this->driver->quit();
+        //$this->driver->quit();
     }
 }
