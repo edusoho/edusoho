@@ -8,7 +8,6 @@ export default class EsMessenger extends Emitter {
     this.name = options.name;
     this.project = options.project;
     this.children = options.children;
-    this.partner = options.partner;
     this.type = options.type; //enum: parent,child
     this.setup();
   }

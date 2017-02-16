@@ -113,8 +113,7 @@ class Show {
     return new EsMessenger({
       name: 'parent',
       project: 'PlayerProject',
-      type: 'child',
-      partner: true
+      type: 'child'
     });
   }
 
@@ -124,7 +123,6 @@ class Show {
 
   initEvent() {
     let player = this.initPlayer();
-    console.log(player)
     let messenger = this.initMesseger();
     player.on("ready", () => {
       messenger.sendToParent("ready", {pause: true, currentTime: player.getCurrentTime()});
