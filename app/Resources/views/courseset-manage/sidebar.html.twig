@@ -164,12 +164,12 @@
           <a href="{{ path('course_set_manage_course_dashboard',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">
             <span></span>{{ '学习数据'|trans }}</a>
         </li>
-        {# {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %} #}
+         {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
         <li class="list-group-item {% if side_nav == 'orders' %}active{% endif %}">
           <a href="{{ path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: curCourse.id}) }}"><span></span>{{ '订单查询'|trans }}
           </a>
         </li>
-        {# {% endif %} #}
+         {% endif %}
       </ul>
     {% endif %}
     {% if courseSet.type != 'live' and courseSet.parentId|default(0) <= 0 %}

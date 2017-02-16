@@ -50,7 +50,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, $fields);
 
-        $this->dispatchEvent('testpaper.update', array('argument' => $argument, 'testpaper' => $testpaper));
+        $this->dispatchEvent('testpaper.update', $testpaper, array('argument' => $argument));
 
         return $testpaper;
     }

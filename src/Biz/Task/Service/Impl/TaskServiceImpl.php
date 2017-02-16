@@ -170,7 +170,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function deleteTask($id)
     {
         $task = $this->getTask($id);
-
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException('无权删除任务');
         }
