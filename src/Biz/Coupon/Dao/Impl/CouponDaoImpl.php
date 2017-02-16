@@ -30,7 +30,8 @@ class CouponDaoImpl extends GeneralDaoImpl implements CouponDao
             ),
             'orderbys' => array(
                 'createdTime',
-                'orderTime'
+                'orderTime',
+                'id'
             )
         );
     }
