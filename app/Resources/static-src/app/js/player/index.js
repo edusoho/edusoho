@@ -110,7 +110,8 @@ class Show {
   }
 
   initMesseger() {
-    return new EsMessenger({
+    return new 
+    ({
       name: 'parent',
       project: 'PlayerProject',
       type: 'child'
