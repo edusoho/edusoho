@@ -88,22 +88,22 @@ class Show {
   transToTextrack(subtitles) {
     let textTracks = [];
     if (subtitles) {
-        for (let i in subtitles) {
-            let item = {
-                label: subtitles[i].name,
-                src: subtitles[i].url,
-                'default': ("default" in subtitles[i]) ? subtitles[i]['default'] : false
-            }
-            textTracks.push(item);
+      for (let i in subtitles) {
+        let item = {
+          label: subtitles[i].name,
+          src: subtitles[i].url,
+          'default': ("default" in subtitles[i]) ? subtitles[i]['default'] : false
         }
+        textTracks.push(item);
+      }
     }
 
     // set first item to default if no default
     for (let i in textTracks) {
-        if (textTracks[i]['default']) {
-            return;
-        }
-        textTracks[0]['default'] = true;
+      if (textTracks[i]['default']) {
+        return;
+      }
+      textTracks[0]['default'] = true;
     }
 
     return textTracks;
@@ -125,7 +125,7 @@ class Show {
     let player = this.initPlayer();
     let messenger = this.initMesseger();
     player.on("ready", () => {
-      messenger.sendToParent("ready", { pause: true, currentTime: player.getCurrentTime() });
+      messenger.sendToParent("ready", {pause: true, currentTime: player.getCurrentTime()});
       if (!this.isCloudPalyer()) {
         let time = DurationStorage.get(this.userId, this.fileId);
         if (time > 0) {
@@ -134,28 +134,28 @@ class Show {
         player.play();
       } else if (this.isCloudPalyer()) {
         if (this.markerUrl) {
-          $.getJSON(this.markerUrl, function(questions) {
+          $.getJSON(this.markerUrl, function (questions) {
             player.setQuestions(questions);
           });
         }
       }
     });
 
-    player.on('answered', function(data) {
+    player.on('answered', function (data) {
       // @todo delete lessonId
       var finishUrl = '/course/lesson/marker/' + data.markerId + '/question_marker/' + data.id + '/finish';
       $.post(finishUrl, {
         "answer": data.answer,
         "type": data.type,
         "lessonId": lessonId
-      }, function(result) {
+      }, function (result) {
 
       }, 'json');
 
     });
 
     player.on("timechange", (data) => {
-      messenger.sendToParent("timechange", { pause: true, currentTime: player.getCurrentTime() });
+      messenger.sendToParent("timechange", {pause: true, currentTime: player.getCurrentTime()});
       if (!this.isCloudPalyer()) {
         if (parseInt(player.getCurrentTime()) != parseInt(player.getDuration())) {
           DurationStorage.set(this.userId, this.fileId, player.getCurrentTime());
@@ -164,15 +164,15 @@ class Show {
     });
 
     player.on("paused", () => {
-      messenger.sendToParent("paused", { pause: true, currentTime: player.getCurrentTime() });
+      messenger.sendToParent("paused", {pause: true, currentTime: player.getCurrentTime()});
     });
 
     player.on("playing", () => {
-      messenger.sendToParent("playing", { pause: false, currentTime: player.getCurrentTime() });
+      messenger.sendToParent("playing", {pause: false, currentTime: player.getCurrentTime()});
     });
 
     player.on("ended", () => {
-      messenger.sendToParent("ended", { stop: true });
+      messenger.sendToParent("ended", {stop: true});
       if (!this.isCloudPalyer()) {
         DurationStorage.del(this.userId, this.fileId);
       }

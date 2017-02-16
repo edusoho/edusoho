@@ -31,7 +31,6 @@ class LocalVideoPlayer extends Emitter {
     player.src(this.options.url);
 
     player.on('error', error => {
-      console.log(error)
       this.set("hasPlayerError", true);
       var message = Translator.trans('您的浏览器不能播放当前视频。');
       Notify.danger(message, 60);
