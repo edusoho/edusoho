@@ -99,6 +99,7 @@ class Editor {
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
+        console.log(response);
         this.$element.modal('hide');
         if (response && response.append !== undefined && response.append === false) {
           let data = $('#sortable-list').sortable("serialize").get();
@@ -170,7 +171,6 @@ class Editor {
   }
 
   _switchPage() {
-    console.log('_switchPage');
     this._renderStep(this.step);
     this._renderContent(this.step);
     this._rendStepIframe(this.step);
