@@ -31,8 +31,6 @@ Unit Test With PHP 5.5:
   stage: test
   image: codeages/ci-php:5.5-3
   services:
-    - mysql:5.5
-    - selenium/standalone-chrome
   script:
     - phpunit -c tests/functional
 
