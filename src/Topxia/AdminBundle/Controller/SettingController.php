@@ -104,7 +104,6 @@ class SettingController extends BaseController
             $this->getLogService()->info('system', 'update_settings', '更新IOS内购产品设置', $products);
             $this->setFlashMessage('success', $this->trans('IOS内购产品设置已保存'));
             return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
-            
         }
 
         return $this->render('TopxiaAdminBundle:System:mobile-iap-product.html.twig', array(
@@ -356,30 +355,16 @@ class SettingController extends BaseController
         );
         $mailer = array_merge($default, $mailer);
         if ($request->getMethod() == 'POST') {
-            $settingStatus = $this->checkMailerStatus();
-            if ('cloud_email_crm' == $settingStatus) {
-                $name = $request->request->get('name', '');
-                $cloudMail = $this->getSettingService()->get('cloud_email_crm', array());
-                $cloudMail['name'] = $name;
-                $info = array('name' => $name);
-                $this->getSettingService()->set('cloud_email_crm', $cloudMail);
-                $this->getLogService()->info('system', 'update_settings', '更新邮件发送人名称', $info);
-            } else {
-                $mailer = $request->request->all();
-                $this->getSettingService()->set('mailer', $mailer);
-                $mailerWithoutPassword             = $mailer;
-                $mailerWithoutPassword['password'] = '******';
-                $this->getLogService()->info('system', 'update_settings', '更新邮件服务器设置', $mailerWithoutPassword);
-            }
+            $mailer = $request->request->all();
+            $this->getSettingService()->set('mailer', $mailer);
+            $mailerWithoutPassword             = $mailer;
+            $mailerWithoutPassword['password'] = '******';
+            $this->getLogService()->info('system', 'update_settings', '更新邮件服务器设置', $mailerWithoutPassword);
             $this->setFlashMessage('success', $this->trans('电子邮件设置已保存！'));
         }
 
         $status = $this->checkMailerStatus();
         $cloudMailName = '';
-        if ('cloud_email_crm' == $status) {
-            $cloudMailer = $this->getSettingService()->get('cloud_email_crm', array());
-            $cloudMailName = empty($cloudMailer['name']) ? '' : $cloudMailer['name'];
-        }
         return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array(
             'mailer' => $mailer,
             'status' => $status,
@@ -516,9 +501,9 @@ class SettingController extends BaseController
                 $settingService->set('whitelist_ip', $whiteListIps);
             }
 
-            $logService->info('system', 'update_settings', '更新IP黑名单/白名单', 
-                array('blacklist_ip' => $blackListIps['ips'], 
-                    'whitelist_ip' => $whiteListIps['ips']));
+            $logService->info('system', 'update_settings', '更新IP黑名单/白名单',
+                array('blacklist_ip' => $blackListIps['ips'],
+                      'whitelist_ip' => $whiteListIps['ips']));
 
             $this->setFlashMessage('success', $this->trans('保存成功！'));
         }
