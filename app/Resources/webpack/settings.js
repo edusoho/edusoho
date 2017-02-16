@@ -9,6 +9,7 @@
 const settings = {
   imglimit: 1024,
   fontlimit: 1024,
+  devtool: 'source-map', // 可设置为 'source-map'，
   openModule: ['lib','app','admin','plugin','copy'], // 可以选择监听哪几种资源文件
 };
 
