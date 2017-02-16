@@ -43,8 +43,6 @@ class EsWebUploader
 	  		fileSizeLimit: config.fileSizeLimit
 	  	});
 
-      console.log(uploader);
-
 	  	uploader.on( 'fileQueued', function( file ) {
 	  		console.log('fileQueued :', file);
 		    self.onFileQueued(file);
