@@ -12,6 +12,8 @@
       </label>
       <input class="status-value" type="hidden" name="data[{{ code }}][{{ dataId }}][status]" value="{{ data.status }}">
     </div>
+    {% else %}
+    <input type="hidden" name="status" value="{{ data.status|default() }}">
     {% endif %}
     <div class="form-group">
       <label class="col-sm-2 control-label">{{'布局模式'|trans}}</label>
