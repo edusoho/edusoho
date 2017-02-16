@@ -2,7 +2,6 @@
 
 namespace Tests\Functional\Tests;
 
-use Facebook\WebDriver\Remote\RemoteWebdriver;
 use Facebook\WebDriver\Remote\WebDriverCapabilityType;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 
@@ -12,7 +11,6 @@ abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        var_dump(RemoteWebdriver::getAllSessions());
         $browserName = getenv('BROWSER_NAME');
         $this->driver = RemoteWebDriver::create(
             getenv('SELENIUM_SERVER_URL'),
