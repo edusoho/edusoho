@@ -67,7 +67,7 @@ class Editor {
     this.contentUrl = $this.data('contentUrl');
     this.type !== type ? (this.loaded = false) : (this.loaded = true);
     this.type = type;
-    this._renderNext(true);
+    this._onNext(event);
   }
 
   _askSave(){
