@@ -5,15 +5,16 @@ class Students {
     this.init();
   }
 
-  init() {
-
+  initTooltips(){
     $("#refund-coin-tips").popover({
         html: true,
         trigger: 'hover',//'hover','click'
         placement: 'left',//'bottom',
         content: $("#refund-coin-tips-html").html()
     });
-    
+  }
+
+  initDeleteActions(){
     $('body').on('click', '.js-remove-student', function(evt) {
       if (!confirm(Translator.trans('是否确定删除该学员？'))) {
         return;
@@ -27,7 +28,24 @@ class Students {
         }
       });
     });
+  }
 
+  initFollowActions(){
+    $("#course-student-list").on('click', '.follow-student-btn, .unfollow-student-btn', function() {
+        var $this = $(this);
+        $.post($this.data('url'), function(){
+            $this.hide();
+            if ($this.hasClass('follow-student-btn')) {
+                $this.parent().find('.unfollow-student-btn').show();
+            } else {
+                $this.parent().find('.follow-student-btn').show();
+            }
+        });
+        
+    });
+  }
+
+  initExportActions(){
     $('#export-students-btn').on('click', function(){
         $(this).button('loading');
         var self = $(this);
@@ -40,6 +58,10 @@ class Students {
             }
         });
     });
+  }
+
+  initRemarkActions(){
+    
   }
 }
 
