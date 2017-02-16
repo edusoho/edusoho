@@ -170,6 +170,7 @@ class Editor {
   }
 
   _switchPage() {
+    console.log('_switchPage');
     this._renderStep(this.step);
     this._renderContent(this.step);
     this._rendStepIframe(this.step);

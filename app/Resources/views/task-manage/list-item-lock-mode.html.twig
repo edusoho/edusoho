@@ -26,7 +26,7 @@
     {% endif %}
   </div>
   <div class="item-actions">
-    <a class="btn btn-gray" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
+    <a class="btn gray-darker" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
       data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}"><i
         class="es-icon es-icon-edit mrs"></i>编辑</a>
     <a class="btn btn-gray" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}"
