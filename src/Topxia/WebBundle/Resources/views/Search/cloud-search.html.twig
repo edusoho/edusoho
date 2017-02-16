@@ -7,7 +7,7 @@
   {% cache 'live/top/banner' 600 %}
     <section class="search-banner es-live-poster swiper-container">
       {% set banner = block_show('cloud_search_banner') %}
-      {% if not  banner %}
+      {% if  banner %}
         {{ block_show('cloud_search_banner') }}
       {% else %}
         <div class="swiper-slide swiper-hidden" style="background: #ffffff url({{asset('/assets/img/placeholder/banner_search.jpg')}}) no-repeat; background-size: cover;">
