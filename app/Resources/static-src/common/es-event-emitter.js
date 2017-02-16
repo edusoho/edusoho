@@ -1,4 +1,5 @@
-import Emitter from "es6-event-emitter";
+import Emitter from "component-emitter";
+// import Emitter from "es6-event-emitter";
 
 export default class EsEmitter extends Emitter {
   constructor() {

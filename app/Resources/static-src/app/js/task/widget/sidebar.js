@@ -1,4 +1,5 @@
-import Emitter from 'es6-event-emitter';
+// import Emitter from 'es6-event-emitter';
+import Emitter from "component-emitter";
 
 export default class TaskSidebar extends Emitter{
   constructor({element, url}){
@@ -18,7 +19,6 @@ export default class TaskSidebar extends Emitter{
       this.bindEvent();
     })
     .fail(error => {
-      console.log(error);
     });
   }
 
@@ -46,7 +46,7 @@ export default class TaskSidebar extends Emitter{
 
   renderPane() {
     let html = this.plugins.reduce((html, plugin) => {
-      return html += `<div data-pane="${plugin.code}" class="js-sidebar-pane ${plugin.code}-pane"></div>`;
+      return html += `<div data-pane="${plugin.code}" class=" ${plugin.code}-pane"><div class="${plugin.code}-pane-body js-sidebar-pane-body"></div></div>`;
     }, '');
     this.element.append(html);
   }
@@ -56,8 +56,8 @@ export default class TaskSidebar extends Emitter{
       let $btn = $(event.currentTarget);
       let pluginCode = $btn.data('plugin');
       let url = $btn.data('url');
-      let $pane = this.element.find(`[data-pane="${pluginCode}"]`);
-
+      let $pane = this.element.find(`[data-pane="${pluginCode}"]`)
+      let $paneBody = $pane.find('.js-sidebar-pane-body');
       if(pluginCode === undefined || url === undefined){
         return;
       }
@@ -69,7 +69,7 @@ export default class TaskSidebar extends Emitter{
 
       $.get(url)
           .then(html => {
-            $pane.html(html);
+            $paneBody.html(html);
             $pane.perfectScrollbar();
             $btn.data('loaded', true);
             this.operationContent($btn);
@@ -94,7 +94,7 @@ export default class TaskSidebar extends Emitter{
     let side_right = '0px';
     let content_right = '379px';
 
-    this.trigger('popup', content_right, time);
+    this.emit('popup', content_right, time);
     this.element.animate({
       right: side_right
     }, time);
@@ -104,7 +104,7 @@ export default class TaskSidebar extends Emitter{
     let side_right = '-' + this.element.width() + 'px';
     let content_right = '26px';
 
-    this.trigger('fold', content_right, time);
+    this.emit('fold', content_right, time);
     this.element.animate({
       right: side_right
     }, time);
