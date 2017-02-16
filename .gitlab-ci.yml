@@ -32,9 +32,7 @@ Unit Test With PHP 5.5:
   image: codeages/ci-php:5.5-3
   services:
     - mysql:5.5
-    - selenium/standalone-chrome:latest
   script:
-    - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/functional
     - phpunit -c app/
 
 Unit Test With PHP 7.0:
@@ -51,3 +49,20 @@ Unit Test With PHP 7.0:
     - develop
     - master
     - trigger
+
+Functional Test With 5.5:
+  stage: test
+  image: codeages/ci-php:5.5-5
+  services:
+    - mysql:5.5
+    - selenium/standalone-chrome:latest
+  script:
+    - tests/functional/start-web.sh
+    - tests/functional/init-database.sh "edusoho-dev" "root" ""
+    - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/functional
+    only:
+      - feature/x8-function-test
+      - tags
+      - develop
+      - master
+      - trigger
