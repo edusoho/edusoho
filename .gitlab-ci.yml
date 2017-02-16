@@ -57,8 +57,8 @@ Functional Test With 5.5:
     - mysql:5.5
     - selenium/standalone-chrome:latest
   script:
-    - tests/functional/start-web.sh
-    - tests/functional/init-database.sh "edusoho-dev" "root" ""
+    - tests/functional/start.sh
+    - tests/functional/init.sh "edusoho-dev" "root" ""
     - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/functional
     only:
       - feature/x8-function-test
