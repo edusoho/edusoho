@@ -6,7 +6,6 @@ use Pimple\Container;
 use Biz\Common\HTMLHelper;
 use Pimple\ServiceProviderInterface;
 use Biz\File\FireWall\FireWallFactory;
-use Biz\Importer\UserImporter;
 use Biz\Importer\CourseMemberImporter;
 use Biz\Importer\ClassroomMemberImporter;
 use Biz\Testpaper\Builder\ExerciseBuilder;
@@ -93,10 +92,6 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['importer.classroom-member'] = function ($biz) {
             return new ClassroomMemberImporter($biz);
-        };
-
-        $biz['importer.user'] = function ($biz) {
-            return new UserImporter($biz);
         };
     }
 }
