@@ -1,8 +1,12 @@
 {% extends 'course/header/header-layout.html.twig' %}
 
+{% block course_header_qrcode %}{% endblock %}
+
 {% block course_header_subtitle %}
   <p class="mt10  text-overflow  mb20">{{ courseSet.subtitle }}</p>
 {% endblock %}
+
+{% block course_header_people_num %}{% endblock %}
 
 {% block course_member_count %}
   {{ courseSet.studentNum }}人

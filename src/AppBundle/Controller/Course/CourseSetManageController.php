@@ -31,7 +31,7 @@ class CourseSetManageController extends BaseController
                 ));
             } else {
                 $courseSet = $this->getCourseSetService()->createCourseSet($data);
-                return $this->redirect($this->generateUrl('course_set_manage', array(
+                return $this->redirect($this->generateUrl('course_set_manage_base', array(
                     'id' => $courseSet['id']
                 )));
             }
