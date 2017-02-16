@@ -68,7 +68,6 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             return array();
         }
         $fields = array_merge($activity, $fields);
-
         if (!$liveActivity['roomCreated']) {
             if ($fields['startTime'] > time()) {
                 $live                         = $this->createLiveroom($fields);
@@ -94,16 +93,16 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $this->getEdusohoLiveClient()->updateLive($liveParams);
         }
 
-        $liveActivity = ArrayToolkit::parts($fields, array('replayStatus', 'fileId'));
+        $live = ArrayToolkit::parts($fields, array('replayStatus', 'fileId'));
 
-        if (!empty($liveActivity['fileId'])) {
-            $liveActivity['mediaId']      = $liveActivity['fileId'];
-            $liveActivity['replayStatus'] = LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS;
-            unset($liveActivity['fileId']);
+        if (!empty($live['fileId'])) {
+            $live['mediaId']      = $live['fileId'];
+            $live['replayStatus'] = LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS;
+            unset($live['fileId']);
         }
 
-        if (!empty($liveActivity)) {
-            $liveActivity = $this->getLiveActivityDao()->update($id, $liveActivity);
+        if (!empty($live)) {
+            $liveActivity = $this->getLiveActivityDao()->update($id, $live);
         }
 
         return $liveActivity;
