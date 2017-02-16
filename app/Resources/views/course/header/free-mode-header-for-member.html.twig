@@ -25,9 +25,7 @@
             {% if course.expiryMode == 'days' and course.expiryDays == 0 %}
             不限
             {% else %}
-            <li class="mll">{{ member.deadline|date('Y-m-d') }}
-              <span class="mls color-warning">剩余 {{ member.deadline|time_diff }} 天</span>
-            </li>
+              {% include 'course/header/parts/member-deadline-info.html.twig' %}
             {% endif %}
            </span>
           </li>

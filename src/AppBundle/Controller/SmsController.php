@@ -10,6 +10,7 @@ use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\StringToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class SmsController extends BaseController
 {
@@ -20,6 +21,7 @@ class SmsController extends BaseController
         $mobileNeedVerified = false;
         $url                = '';
         $smsType            = 'sms_'.$targetType.'_publish';
+        $smsInfo = $this->getCloudSmsInfo();
 
         if ($targetType == 'classroom') {
             $item      = $this->getClassroomService()->getClassroom($id);
@@ -47,7 +49,8 @@ class SmsController extends BaseController
             'url'        => $url,
             'count'      => $mobileNum,
             'index'      => 1,
-            'isOpen'     => $this->getSmsService()->isOpen($smsType)
+            'isOpen'     => $this->getSmsService()->isOpen($smsType),
+            'smsInfo'    => $smsInfo
         ));
     }
 
@@ -120,6 +123,12 @@ class SmsController extends BaseController
         $url      = empty($shortUrl) ? 'http://'.$url : $shortUrl;
 
         return $this->createJsonResponse(array('url' => $url.' '));
+    }
+
+    private function getCloudSmsInfo(){
+        $api  = CloudAPIFactory::create('root');
+        $smsInfo   = $api->get('/me/sms_account');
+        return $smsInfo;
     }
 
     /**

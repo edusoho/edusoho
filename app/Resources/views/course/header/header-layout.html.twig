@@ -5,7 +5,7 @@
 <div class="container">
   <ol class="breadcrumb breadcrumb-o">
     <li>
-      <a href="{{path('homepage')}}">首页</a>
+      <a href="{{ path('homepage') }}">首页</a>
     </li>
     <li class="active">{{ courseSet.title }} </li>
   </ol>
@@ -16,12 +16,13 @@
     <div class="course-detail-top clearfix">
       <span class="tags mrm">
         {% if courseSet.serializeMode == 'serialized' %}
-        <span class="tag-serialing"></span>
+          <span class="tag-serialing"></span>
         {% elseif courseSet.serializeMode == 'finished' %}
-        <span class="tag-finished"></span>
+          <span class="tag-finished"></span>
         {% endif %}
       </span>
-      <span class="text-overflow vertical-top inline-block gray-darker text-24 course-detail-heading">{{ course.title }}</span>
+      <span
+          class="text-overflow vertical-top inline-block gray-darker text-24 course-detail-heading">{{ course.title }}</span>
       <span class="es-qrcode top" data-url="{{ path('course_qrcode', { id: course.id }) }}">
         <i class="es-icon es-icon-qrcode"></i>
         <span class="qrcode-popover">
@@ -32,24 +33,26 @@
       {% block course_header_subtitle %}{% endblock %}
       <ul class="course-operation hidden-xs hidden-sm clearfix">
         {% if setting('course.show_student_num_enabled', '1') == 1 %}
-          <li>
+        <li>
             <span class="btn btn-xs">
               <i class="es-icon es-icon-people text-16"></i>
-              <span class="mls">{{ course.studentNum }}人</span>
+              <span class="mls">{% block course_member_count %}{{ course.studentNum }}人 {% endblock %}</span>
             </span>
-          </li>
+        </li>
         {% endif %}
         {% block course_member_exit %}{% endblock %}
 
         <li id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
             {% if not isUserFavorite %}style="display: none" {% endif %}>
-          <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="已收藏" data-trigger="hover"> <i class="es-icon es-icon-bookmark"></i>
+          <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="已收藏"
+             data-trigger="hover"> <i class="es-icon es-icon-bookmark"></i>
           </a>
         </li>
 
         <li id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
             {% if isUserFavorite %}style="display: none"{% endif %}>
-          <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="收藏" data-trigger="hover"> <i class="es-icon es-icon-bookmarkoutline" ></i>
+          <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="收藏"
+             data-trigger="hover"> <i class="es-icon es-icon-bookmarkoutline"></i>
           </a>
         </li>
 
@@ -62,7 +65,8 @@
         {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
         {% if canManage %}
           <li class="pull-left">
-            <a class="btn btn-default btn-xs " href="{{ path('course_set_manage_course_tasks', {courseSetId: course.courseSetId, courseId: course.id }) }}"
+            <a class="btn btn-default btn-xs "
+               href="{{ path('course_set_manage_course_tasks', {courseSetId: course.courseSetId, courseId: course.id }) }}"
                title="课程管理">
               <i class="es-icon es-icon-setting"></i>
             </a>

@@ -1572,6 +1572,10 @@ course_task_trigger:
     path:  /course/{courseId}/task/{id}/trigger
     defaults: { _controller: AppBundle:Task:trigger }
 
+course_task_report:
+    path:  /course/{courseId}/task/{id}/report
+    defaults: { _controller: AppBundle:Task:report }
+
 course_task_finish:
     path:  /course/{courseId}/task/{id}/finish
     defaults: { _controller: AppBundle:Task:finish }
@@ -2309,6 +2313,10 @@ classroom_manage_courses:
     path: /classroom/{id}/manage/courses
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:courses }
 
+classroom_manage_course_remove:
+    path: /classroom/{id}/manage/course/{courseId}/remove
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:removeCourse }
+
 classroom_courses_select:
     path: /classroom/{id}/courses/select
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:coursesSelect }
@@ -2559,17 +2567,13 @@ classroom_teacherIds_catch:
     path: /classroom/{classroomId}/teacherIds/catch
     defaults: { _controller: AppBundle:Classroom/Teacher:catchIds }
 
-classroom_course_lessons_preview:
-    path: /classroom/{classroomId}/course/{courseId}/lessons/preview
-    defaults: { _controller: AppBundle:Classroom/CourseLesson:preview }
-
 classroom_buy_hint:
     path: /classroom/courses/{courseId}/buy/hint
-    defaults: { _controller: AppBundle:Classroom/CourseLesson:buyHint }
+    defaults: { _controller: AppBundle:Classroom/CourseTask:buyHint }
 
-classrom_course_lessons_list:
-    path: /classroom/{classroomId}/course/{courseId}/lessons/list
-    defaults: { _controller: AppBundle:Classroom/CourseLesson:list }
+classrom_course_tasks_list:
+    path: /classroom/{classroomId}/course/{courseId}/tasks/list
+    defaults: { _controller: AppBundle:Classroom/CourseTask:list }
 
 #material_lib
 material_lib_browsing:
@@ -2727,7 +2731,7 @@ course_member_expired:
 
 course_member_deadline_reach:
     path:  /course/{id}/member/deadline/reach
-    defaults: { _controller: TopxiaWebBundle:Course:deadlineReach }
+    defaults: { _controller: AppBundle:Course/Course:deadlineReach }
 
 course_buy:
     path: /course/{id}/buy

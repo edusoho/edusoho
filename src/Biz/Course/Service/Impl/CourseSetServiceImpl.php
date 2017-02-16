@@ -601,7 +601,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
         try {
             $this->beginTransaction();
-            $this->getCourseSetDao()->update($id, array('locked' => 0));
+            $courseSet = $this->getCourseSetDao()->update($id, array('locked' => 0));
             $this->getCourseDao()->update($courses[0]['id'], array('locked' => 0));
             $this->commit();
             return $courseSet;
@@ -616,10 +616,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
     }
 
-    public function updateCourseSetMinPublishedCoursePrice($courseSetId)
+    public function updateCourseSetMinAndMaxPublishedCoursePrice($courseSetId)
     {
-        $price = $this->getCourseService()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
-        return $this->getCourseSetDao()->update($courseSetId, array('minCoursePrice' => $price['price']));
+        $price = $this->getCourseService()->getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
+        return $this->getCourseSetDao()->update($courseSetId, array('minCoursePrice' => $price['minPrice'], 'maxCoursePrice' => $price['maxPrice']));
+    }
+
+    public function updateMaxRate($id, $maxRate)
+    {
+        $courseSet = $this->getCourseSetDao()->update($id, array('maxRate' => $maxRate));
+        $this->dispatchEvent('courseSet.maxRate.update', new Event(array('courseSet' => $courseSet, 'maxRate' => $maxRate)));
+        return $courseSet;
     }
 
     protected function validateCourseSet($courseSet)

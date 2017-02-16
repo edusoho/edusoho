@@ -110,7 +110,7 @@
       </ul>
       <form class="navbar-form navbar-right hidden-xs hidden-sm" action="{{ path('search') }}" method="get">
         <div class="form-group">
-          <input class="form-control js-search" name="q" placeholder="{{'搜索'|trans}}">
+          <input class="form-control js-search" value="{{ app.request.get('q')|default() }}" name="q" placeholder="{{'搜索'|trans}}">
           <button class="button es-icon es-icon-search"></button>
         </div>
       </form>

@@ -49,8 +49,9 @@ class TaskCopy extends AbstractEntityCopy
         $activityMap    = $this->doCopyActivities($source['id'], $newCourse['id'], $newCourseSetId, $config['isCopy']);
 
         foreach ($tasks as $task) {
-            $newTask             = $this->doCopyTask($task, $config['isCopy']);
-            $newTask['courseId'] = $newCourse['id'];
+            $newTask                    = $this->doCopyTask($task, $config['isCopy']);
+            $newTask['courseId']        = $newCourse['id'];
+            $newTask['fromCourseSetId'] = $newCourseSetId;
             if (!empty($task['categoryId'])) {
                 $newChapter = $chapterMap[$task['categoryId']];
                 //如果是从默认教学计划复制，则删除type=lesson的chapter，并将对应task的categoryId指向该chapter的父级
@@ -162,7 +163,7 @@ class TaskCopy extends AbstractEntityCopy
                     $newActivity['mediaId'] = $ext['id'];
                 }
                 //对于exercise、homework，mediaId指向testpaper.id
-                if ($testId > 0) {
+                if ($testId > 0 && in_array($activity['mediaType'], array('homework', 'exercise'))) {
                     $newActivity['mediaId'] = $testId;
                 }
                 if ($newActivity['mediaType'] == 'live') {
