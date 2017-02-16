@@ -50,7 +50,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
             return $courseSetId;
         } catch (\Exception $e) {
-            var_dump($e->getTraceAsString());
             $this->rollback();
             throw $e;
         }
