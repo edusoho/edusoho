@@ -1772,6 +1772,14 @@ course_set_manage_course_students_remove:
   defaults: {_controller: AppBundle:Course/StudentManage:removeCourseStudent}
   methods: [POST]
 
+course_set_manage_course_students_remark:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/remark
+  defaults: { _controller: AppBundle:Course/StudentManage:remark }
+
+course_set_manage_course_students_expiryday:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/expiryday
+  defaults: { _controller: AppBundle:Course/StudentManage:addMemberExpiryDays }
+
 course_set_manage_course_student_export_csv:
    path:  /course_set/{courseSetId}/manage/course/{courseId}/student/export
    defaults: { _controller: AppBundle:Course/StudentManage:exportCsv }
