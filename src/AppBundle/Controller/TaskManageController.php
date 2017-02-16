@@ -4,16 +4,13 @@ namespace AppBundle\Controller;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\StrategyContext;
-use Biz\Util\EdusohoLiveClient;
+use AppBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
 use AppBundle\Common\Exception\InvalidArgumentException;
 
 class TaskManageController extends BaseController
@@ -25,7 +22,7 @@ class TaskManageController extends BaseController
         $chapterId  = $request->query->get('chapterId');
         $taskMode   = $request->query->get('type');
         if ($request->isMethod('POST')) {
-            $task                    = $request->request->all();
+            $task               = $request->request->all();
             $task['_base_url']       = $request->getSchemeAndHttpHost();
             $task['fromUserId']      = $this->getUser()->getId();
             $task['fromCourseSetId'] = $course['courseSetId'];
@@ -49,6 +46,24 @@ class TaskManageController extends BaseController
             'categoryId' => $categoryId,
             'chapterId'  => $chapterId,
             'taskMode'   => $taskMode,
+        ));
+    }
+
+    public function batchTaskModalAction(Request $request, $courseId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $token  = $request->query->get('token');
+        $parser = new UploaderToken();
+        $params = $parser->parse($token);
+
+        if (!$params) {
+            return $this->createJsonResponse(array('error' => 'bad token'));
+        }
+
+        return $this->render('course-manage/batch-create/batch-create-modal.html.twig', array(
+            'token'      => $token,
+            'targetType' => $params['targetType'],
+            'courseId' => $courseId
         ));
     }
 
