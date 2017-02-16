@@ -28,7 +28,7 @@ class CoursesByCourseSetIdDataTag extends CourseBaseDataTag implements DataTag
             $conditions,
             'createdTimeByAsc',
             0,
-            10
+            PHP_INT_MAX
         );
 
         return $set;
