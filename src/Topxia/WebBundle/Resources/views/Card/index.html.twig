@@ -5,7 +5,7 @@
 
 {% block main_body %}
   {% if app.request.cookies.get('modalOpened') == 1 %}
-    <a href="#modal" class="receive-modal hidden" data-toggle="modal" data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" ><span class=""></span></a>
+    <a href="#modal" class="receive-modal hidden" data-toggle="modal" data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}"><span class=""></span></a>
   {% endif %}
   <div class="clearfix mbl">
     <ul class="nav nav-pills inline-block">

@@ -345,7 +345,6 @@ class SettingController extends BaseController
         }
 
         $mailer = $this->getSettingService()->get('mailer', array());
-
         $default = array(
             'enabled'  => 0,
             'host'     => '',
@@ -356,20 +355,35 @@ class SettingController extends BaseController
             'name'     => ''
         );
         $mailer = array_merge($default, $mailer);
-
         if ($request->getMethod() == 'POST') {
-            $mailer = $request->request->all();
-            $this->getSettingService()->set('mailer', $mailer);
-            $mailerWithoutPassword             = $mailer;
-            $mailerWithoutPassword['password'] = '******';
-            $this->getLogService()->info('system', 'update_settings', '更新邮件服务器设置', $mailerWithoutPassword);
+            $settingStatus = $this->checkMailerStatus();
+            if ('cloud_email_crm' == $settingStatus) {
+                $name = $request->request->get('name', '');
+                $cloudMail = $this->getSettingService()->get('cloud_email_crm', array());
+                $cloudMail['name'] = $name;
+                $info = array('name' => $name);
+                $this->getSettingService()->set('cloud_email_crm', $cloudMail);
+                $this->getLogService()->info('system', 'update_settings', '更新邮件发送人名称', $info);
+            } else {
+                $mailer = $request->request->all();
+                $this->getSettingService()->set('mailer', $mailer);
+                $mailerWithoutPassword             = $mailer;
+                $mailerWithoutPassword['password'] = '******';
+                $this->getLogService()->info('system', 'update_settings', '更新邮件服务器设置', $mailerWithoutPassword);
+            }
             $this->setFlashMessage('success', $this->trans('电子邮件设置已保存！'));
         }
 
         $status = $this->checkMailerStatus();
+        $cloudMailName = '';
+        if ('cloud_email_crm' == $status) {
+            $cloudMailer = $this->getSettingService()->get('cloud_email_crm', array());
+            $cloudMailName = empty($cloudMailer['name']) ? '' : $cloudMailer['name'];
+        }
         return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array(
             'mailer' => $mailer,
-            'status' => $status
+            'status' => $status,
+            'cloudMailName' => $cloudMailName
         ));
     }
 
@@ -394,14 +408,17 @@ class SettingController extends BaseController
         }
     }
 
+    /*
+     * 当前云邮件字段为cloud_email_crm
+     */
     protected function checkMailerStatus()
     {
-        $cloudEmail = $this->getSettingService()->get('cloud_email', array());
+        $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
         $mailer     = $this->getSettingService()->get('mailer', array());
         $status     = "";
 
         if (!empty($cloudEmail) && $cloudEmail['status'] == 'enable') {
-            return $status = "cloud_email";
+            return $status = "cloud_email_crm";
         }
 
         if (!empty($mailer) && $mailer['enabled'] == 1) {

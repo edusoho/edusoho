@@ -5,7 +5,12 @@
   <div class="modal-content">
     <div class="modal-body">
       <div class="modal-info">
-        {{'您领取了一张'|trans}}{% if cardType is defined and cardType == "coupon" %}{{'优惠券'|trans}}{% endif %}{% if cardType is defined and cardType == "moneyCard" %}{{'学习卡'|trans}}{% endif %}，{{'已添加至“我的卡包“'|trans}}
+        {% if cardType is defined and cardType == "coupon" %}
+          {{'您领取了一张优惠券，已添加至“我的卡包“'|trans}}
+        {% endif %}
+        {% if cardType is defined and cardType == "moneyCard" %}
+          {{'您领取了一张学习卡，已充值到我的账户'|trans}}
+        {% endif %}
       </div>
       {#卡券内容#}
       {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}

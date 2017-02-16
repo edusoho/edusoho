@@ -37,7 +37,12 @@ class CourseLessonController extends BaseController
         $context['lessonId'] = $lessonId;
 
         if ($isPreview && !empty($course['tryLookable'])) {
-            $context['watchTimeLimit'] = $course['tryLookTime'] * 60;
+           if($lesson['length'] < $course['tryLookTime'] * 60 ){
+                $context['watchTimeLimit'] = $lesson['length']-1;
+           }else{
+                $context['watchTimeLimit'] = $course['tryLookTime'] * 60;
+           }
+           
             return $this->forward('TopxiaWebBundle:Player:show', array(
                 'id'      => $lesson["mediaId"],
                 'context' => $context
