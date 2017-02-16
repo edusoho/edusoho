@@ -70,7 +70,7 @@
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "babel-node  ./node_modules/es-webpack-engine/dist/chokidar-watch.js && NODE_ENV=development nodemon ./app/Resources/webpack/webpack.dev.js --exec babel-node ",
+    "dev": "babel-node  ./node_modules/es-webpack-engine/dist/chokidar-watch.js && NODE_ENV=development nodemon ./app/Resources/webpack/webpack.dev.js --exec babel-node --max_old_space_size=4096",
     "compile": "NODE_ENV=production babel-node --max_old_space_size=4096 ./node_modules/.bin/webpack --progress --config ./app/Resources/webpack/webpack.js",
     "compile:debug": "npm run compile -- --debugMode=true",
     "compile:debug-compress": "npm run compile -- --debugMode=true --compress=true",
