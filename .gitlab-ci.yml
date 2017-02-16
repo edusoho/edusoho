@@ -35,6 +35,7 @@ Unit Test With PHP 5.5:
     - selenium/standalone-chrome:latest
   script:
     - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/functional
+    - phpunit -c app/
 
 Unit Test With PHP 7.0:
   stage: test
