@@ -774,6 +774,21 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
     }
 
+    public function addMemberExpiryDays($courseId, $userId, $day)
+    {
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+
+        if ($member['deadline'] > 0) {
+            $deadline = $day * 24 * 60 * 60 + $member['deadline'];
+        } else {
+            $deadline = $day * 24 * 60 * 60 + time();
+        }
+
+        return $this->getMemberDao()->update($member['id'], array(
+            'deadline' => $deadline
+        ));
+    }
+
     /**
      * @return CourseMemberDao
      */
