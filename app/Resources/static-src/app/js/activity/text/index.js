@@ -5,25 +5,19 @@ class Text extends Emitter  {
   constructor({element}) {
     super();
     this.element = $(element);
-    console.log(this.element);
     this.element.perfectScrollbar();
     this.emitter = new ActivityEmitter();
     this.emitter.receive('doing', (data) => {
       let finishTime = parseInt(this.element.data('finishTime'));
-
       if(!finishTime){
         return;
       }
-
       if(data.learnedTime >= finishTime){
         this.emitter.emit('finish');
       }
     })
   }
-  
-
 }
-
 
 new Text({
   element: '#text-activity'
