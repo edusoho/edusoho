@@ -32,7 +32,7 @@ class TaskManageController extends BaseController
             'courseSet'  => $courseSet,
             'categoryId' => $categoryId,
             'chapterId'  => $chapterId,
-            'taskMode'   => $taskMode,
+            'taskMode'   => $taskMode
         ));
     }
 
@@ -123,8 +123,7 @@ class TaskManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $task              = $request->request->all();
-            $task['_base_url'] = $request->getSchemeAndHttpHost();
+            $task = $request->request->all();
             $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
             return $this->createJsonResponse(array('append' => false));
         }
@@ -137,7 +136,7 @@ class TaskManageController extends BaseController
             'course'      => $course,
             'courseSet'   => $courseSet,
             'task'        => $task,
-            'taskMode'    => $taskMode,
+            'taskMode'    => $taskMode
         ));
     }
 
@@ -225,7 +224,6 @@ class TaskManageController extends BaseController
 
     /**
      * @param  $type
-     *
      * @return mixed
      */
     protected function getActivityActionConfig($type)
@@ -235,8 +233,7 @@ class TaskManageController extends BaseController
     }
 
     /**
-     * @param $course
-     *
+     * @param  $course
      * @return BaseStrategy|CourseStrategy
      */
     protected function createCourseStrategy($course)

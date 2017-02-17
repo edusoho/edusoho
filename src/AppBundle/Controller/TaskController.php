@@ -190,6 +190,13 @@ class TaskController extends BaseController
         ));
     }
 
+    public function reportAction(Request $request, $courseId, $id)
+    {
+        return $this->createJsonResponse(array(
+            'time' => time()
+        ));
+    }
+
     public function triggerAction(Request $request, $courseId, $id)
     {
         $this->getCourseService()->tryTakeCourse($courseId);

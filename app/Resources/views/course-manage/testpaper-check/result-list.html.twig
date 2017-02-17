@@ -24,7 +24,7 @@
     </div>
     <div class="panel-body">
       {% if isTeacher is defined and not isTeacher %}
-        <span class="color-danger">{{'当前用户不是本课程教师，没有批改%typeName%的权限。'|trans({'%typeName%':typeName}) }}</span>
+        <span class="color-danger">{{'当前用户不是本课程教师，没有批阅%typeName%的权限。'|trans({'%typeName%':typeName}) }}</span>
       {% endif %}
       {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id})) }}
     </div>

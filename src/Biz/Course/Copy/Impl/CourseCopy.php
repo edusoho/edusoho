@@ -133,12 +133,15 @@ class CourseCopy extends AbstractEntityCopy
             $teacherIds = array();
             foreach ($members as $member) {
                 $member = array(
-                    'courseId'    => $newCourse['id'],
-                    'courseSetId' => $newCourse['courseSetId'],
-                    'userId'      => $member['userId'],
-                    'role'        => 'teacher',
-                    'seq'         => $member['seq'],
-                    'isVisible'   => $member['isVisible']
+                    'courseId'         => $newCourse['id'],
+                    'courseSetId'      => $newCourse['courseSetId'],
+                    'userId'           => $member['userId'],
+                    'role'             => 'teacher',
+                    'seq'              => $member['seq'],
+                    'isVisible'        => $member['isVisible'],
+                    'remark'           => $member['remark'],
+                    'deadline'         => $member['deadline'],
+                    'deadlineNotified' => $member['deadlineNotified']
                 );
                 if ($member['isVisible']) {
                     $teacherIds[] = $member['userId'];

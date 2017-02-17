@@ -631,26 +631,17 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function countUserLearningCourses($userId, $filters = array())
     {
-        $conditions = array(
-            'userId' => $userId,
-            'role'   => 'student'
-        );
-        if (isset($filters["type"])) {
-            $conditions['type'] = $filters["type"];
-        }
-        return $this->getMemberDao()->countLearningMembersByUserId($userId);
+        $conditions = $this->prepareUserLearnCondition($userId, $filters);
+
+        return $this->getMemberDao()->countLearningMembers($conditions);
     }
 
-    public function findUserLearningCourses($userId, $start, $limit, $filters = array('type' => ''))
+    public function findUserLearningCourses($userId, $start, $limit, $filters = array())
     {
-        $conditions = array(
-            'userId' => $userId,
-            'role'   => 'student'
-        );
-        if (isset($filters["type"])) {
-            $conditions['type'] = $filters["type"];
-        }
-        $members = $this->getMemberDao()->findLearningMembers($userId, $start, $limit);
+        $conditions = $this->prepareUserLearnCondition($userId, $filters);
+
+        $members = $this->getMemberDao()->findLearningMembers($conditions, $start, $limit);
+
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
 
@@ -672,29 +663,15 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function countUserLearnedCourses($userId, $filters = array())
     {
-        $conditions = array(
-            'userId'         => $userId,
-            'role'           => 'student',
-            'serializeModes' => array('none', 'finished')
-        );
-        //TODO 不同类型的课程
-        if (isset($filters["type"])) {
-            $conditions['type'] = $filters["type"];
-        }
-        return $this->getMemberDao()->countLearnedMembersByUserId($userId);
+        $conditions = $this->prepareUserLearnCondition($userId, $filters);
+        return $this->getMemberDao()->countLearnedMembers($conditions);
+
     }
 
     public function findUserLearnedCourses($userId, $start, $limit, $filters = array())
     {
-        $conditions = array(
-            'userId'         => $userId,
-            'role'           => 'student',
-            'serializeModes' => array('none', 'finished')
-        );
-        if (isset($filters["type"])) {
-            $conditions['type'] = $filters["type"];
-        }
-        $members = $this->getMemberDao()->findLearnedMembers($userId, $start, $limit);
+        $conditions = $this->prepareUserLearnCondition($userId, $filters);
+        $members    = $this->getMemberDao()->findLearnedMembers($conditions, $start, $limit);
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
@@ -780,7 +757,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int     $userId
+     * @param  int $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -801,7 +778,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count = $this->searchCourseCount($conditions);
+        $count      = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
@@ -1133,10 +1110,45 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function mergeCourseDefaultAttribute($course)
     {
+        $course = array_filter($course, function ($value) {
+            if ($value === '' || $value === null) {
+                return false;
+            }
+
+            return true;
+        });
+
         $default = array(
-            'tryLookable' => 0
+            'tryLookable' => 0,
+            'originPrice' => 0.00
         );
 
         return array_merge($default, $course);
+    }
+
+    /**
+     * used for search userLearn userLearning userLearned
+     * @param $userId
+     * @param $filters
+     * @return array
+     */
+    protected function prepareUserLearnCondition($userId, $filters)
+    {
+        $filters    = ArrayToolkit::parts($filters, array('type', 'classroomId', 'locked'));
+        $conditions = array(
+            'm.userId' => $userId,
+            'm.role'   => 'student'
+        );
+        if (!empty($filters["type"])) {
+            $conditions['c.type'] = $filters["type"];
+        }
+        if (!empty($filters["classroomId"])) {
+            $conditions['m.classroomId'] = $filters["classroomId"];
+        }
+
+        if (!empty($filters["locked"])) {
+            $conditions['m.locked'] = $filters["locked"];
+        }
+        return $conditions;
     }
 }

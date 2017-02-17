@@ -39,8 +39,6 @@ class TaskShow extends Emitter {
     let learnedTime = 0;
     let minute = 60 * 1000;
     let timeStep = 1; // 分钟
-
-
     //注册doing延时监听
     this.delay('doing', (timeStep) => {
       learnedTime = parseInt(timeStep) + parseInt(learnedTime);
@@ -50,18 +48,17 @@ class TaskShow extends Emitter {
         taskId: this.taskId
       };
       this.eventEmitter.emit('doing', eventData)
-          .then(response => {
+          .then(undefined, response => {
             this.receiveFinish(response);
           })
-          .catch(() => {
-            //
+          ['catch'](() => {
           })
-          .then(() => { //always
-            this.trigger('doing', timeStep);
+          .then(undefined, () => { //always
+            this.emit('doing', timeStep);
           });
     }, timeStep * minute);
 
-    this.trigger('doing', timeStep);
+    this.emit('doing', timeStep);
 
     this.element.on('click', '#learn-btn', event => {
       $.post($('#learn-btn').data('url'), response => {

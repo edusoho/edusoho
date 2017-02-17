@@ -97,6 +97,7 @@
     bottom: 0;
     width: 360px;
     right: -360px;
+    background-color: #333333;
   }
   .dashboard-toolbar {
     position: absolute;
@@ -137,20 +138,26 @@
   }
   .task-list-pane {
     background-color: #333333;
-    padding: 15px 17px;
+    // padding: 15px 17px;
     position: absolute;
     top: 0;
     bottom: 0;
     width: 100%;
     overflow-y: hidden;
     overflow-x: hidden;
+    .task-list-pane-body {
+      padding: 15px 17px;
+    }
   }
   .note-pane {
-    padding: 20px 15px;
+    // padding: 20px 15px;
     height: 100%;
     overflow: hidden;
     .task-note-plugin-form {
       background-color: #333;
+    }
+    .note-pane-body {
+      padding: 20px 15px;
     }
   }
   .question-pane {
