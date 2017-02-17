@@ -8,7 +8,7 @@
         <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> 有更新</a>
       {% else %}
         <span class="glyphicon glyphicon-ok-sign text-success"></span>
-        <span class="text-lg">{{ constant('Topxia\\System::VERSION') }}</span>
+        <span class="text-lg">{{ constant('AppBundle\\System::VERSION') }}</span>
       {% endif %}
     </div>
   </li>

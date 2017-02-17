@@ -9,8 +9,7 @@ export default class Homework {
   }
 
   init() {
-    this.initEvent();
-    this.initCkeditor();
+    this.initEvent();  
     this.setValidateRule();
     this.inItStep2form();
   }
@@ -18,20 +17,24 @@ export default class Homework {
   initEvent() {
     this.$element.on('click', '[data-role="pick-item"]',event=>this.showPickQuestion(event));
     this.$questionPickedModal.on('shown.bs.modal',()=>{
-      this.$homeworkModal.hide()
+      this.$homeworkModal.hide();
     });
     this.$questionPickedModal.on('hidden.bs.modal',()=>{
       this.$homeworkModal.show();
+      this.$questionPickedModal.html('');
     });
   }
 
-  initCkeditor() {
+  initCkeditor(validator) {
     let editor = CKEDITOR.replace('homework-about-field', {
       toolbar: 'Minimal',
       filebrowserImageUploadUrl: $('#homework-about-field').data('imageUploadUrl'),
     });
     editor.on( 'change', () => {    
       $('#homework-about-field').val(editor.getData());
+    });
+    editor.on('blur', function() {
+      validator.form();
     });
   }
 
@@ -60,6 +63,7 @@ export default class Homework {
         description: {
           required:true
         },
+        content: 'required',
         'questionLength':{
           required:true
         },
@@ -68,6 +72,7 @@ export default class Homework {
         'questionLength':"请选择题目",
       },
     });
+    this.initCkeditor(validator);
     this.$step2_form.data('validator',validator);
   }
 

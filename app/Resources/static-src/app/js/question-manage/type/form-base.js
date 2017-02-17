@@ -57,9 +57,10 @@ class QuestionFormBase {
         }
     });
     this.validator = validator;
+    // this.initTitleEditor(this.validator);
   }
 
-  initTitleEditor() {
+  initTitleEditor(validator) {
     let $target = $('#'+this.titleFieldId);
     let editor = CKEDITOR.replace(this.titleFieldId, {
       toolbar: this.titleEditorToolBarName,
@@ -69,6 +70,9 @@ class QuestionFormBase {
 
     editor.on( 'change', () => {    
       $target.val(editor.getData());
+    });
+    editor.on('blur', function() {
+      validator.form();
     });
   }
 

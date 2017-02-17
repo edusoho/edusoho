@@ -1,22 +1,21 @@
 {% import "macro.html.twig" as web_macro %}
 <style>
 .course-wide-list .enabled:hover{
-
     background: #eee;
     border-color: #ddd;
 }
 
 .course-wide-list .enabled{
-
     cursor: default;
     background: #eee;
 }
 
 </style>
 <ul class="course-wide-list">
-  {% if courseSets %}
+  {% if courseSets|default(null) %}
   {% for courseSet in courseSets %}
-  <li class="course-item clearfix"   data-id="{{courseSet.id}}" >
+  <li class="course-item clearfix" data-id="{{courseSet.id}}" >
+    <input class="course-item-cbx" style="float:left;" type="checkbox" name="course-{{courseSet.id}}">
     <a class="course-picture-link" href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">
       <img class="course-picture" src="{{ filepath(courseSet.cover['middle']|default(null), 'courseSet.png') }}" alt="{{ courseSet.title }}">
     </a>
@@ -73,7 +72,7 @@
           </div>
         {% endif %}
       {% else %}
-        <div class="course-about ellipsis">{{ courseSet.summary }}</div>
+        <div class="course-about ellipsis">{{ courseSet.summary|raw }}</div>
       {% endif %}
 
       <div class="course-footer clearfix">

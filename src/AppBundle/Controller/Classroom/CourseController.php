@@ -27,6 +27,10 @@ class CourseController extends BaseController
             'excludeIds' => $excludeIds
         );
 
+        $user = $this->getCurrentUser();
+        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
+            $conditions['creator'] = $user['id'];
+        }
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseSetService()->countCourseSets($conditions),
@@ -113,27 +117,27 @@ class CourseController extends BaseController
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $key = $request->request->get("key");
 
-        $conditions             = array("title" => $key);
+        $conditions             = array("title" => "%{$key}%");
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
         $paginator              = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions),
+            $this->getCourseSetService()->countCourseSets($conditions),
             5
         );
 
-        $courses = $this->getCourseService()->searchCourses(
+        $courseSets = $this->searchCourseSetWithCourses(
             $conditions,
-            'latest',
+            array('updatedTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUsers($courses);
+        $users = $this->getUsers($courseSets);
 
         return $this->render('course/course-select-list.html.twig', array(
             'users'       => $users,
-            'courses'     => $courses,
+            'courseSets'  => $courseSets,
             'paginator'   => $paginator,
             'classroomId' => $classroomId,
             'type'        => 'ajax_pagination'

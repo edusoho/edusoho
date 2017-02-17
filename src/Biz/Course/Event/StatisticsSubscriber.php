@@ -38,13 +38,13 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $subject = $event->getSubject();
         $course = $subject['newCourse'];
-        $this->getCourseSetService()->updateCourseSetMinPublishedCoursePrice($course['courseSetId']);
+        $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($course['courseSetId']);
     }
 
     public function onCourseStatusChange(Event $event)
     {
         $course = $event->getSubject();
-        $this->getCourseSetService()->updateCourseSetMinPublishedCoursePrice($course['courseSetId']);
+        $this->getCourseSetService()->updateCourseSetMinAndMaxPublishedCoursePrice($course['courseSetId']);
     }
 
     public function onTaskCreate(Event $event)

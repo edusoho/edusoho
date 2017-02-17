@@ -31,7 +31,7 @@ class CourseSetManageController extends BaseController
                 ));
             } else {
                 $courseSet = $this->getCourseSetService()->createCourseSet($data);
-                return $this->redirect($this->generateUrl('course_set_manage', array(
+                return $this->redirect($this->generateUrl('course_set_manage_base', array(
                     'id' => $courseSet['id']
                 )));
             }
@@ -230,7 +230,7 @@ class CourseSetManageController extends BaseController
             if ($courseSet['type'] == 'live') {
                 $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
-                if(empty($course['maxStudentNum'])){
+                if (empty($course['maxStudentNum'])) {
                     throw $this->createAccessDeniedException('直播课程发布前需要在计划设置中设置课程人数');
                 }
 
@@ -261,8 +261,7 @@ class CourseSetManageController extends BaseController
 
     public function syncInfoAction(Request $request, $id)
     {
-        $sideNav = $request->query->get('sideNav', '');
-        var_dump($sideNav);
+        $sideNav   = $request->query->get('sideNav', '');
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
         if (!$courseSet['locked']) {
             throw new \Exception('CourseSet must be locked');

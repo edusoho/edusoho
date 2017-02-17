@@ -1,19 +1,15 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\LiveReplayService;
-use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\BaseStrategy;
+use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\StrategyContext;
-use Biz\Util\EdusohoLiveClient;
+use Biz\File\Service\UploadFileService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
 use AppBundle\Common\Exception\InvalidArgumentException;
 
 class TaskManageController extends BaseController
@@ -48,7 +44,7 @@ class TaskManageController extends BaseController
             'courseSet'  => $courseSet,
             'categoryId' => $categoryId,
             'chapterId'  => $chapterId,
-            'taskMode'   => $taskMode,
+            'taskMode'   => $taskMode
         ));
     }
 
@@ -71,8 +67,7 @@ class TaskManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $task              = $request->request->all();
-            $task['_base_url'] = $request->getSchemeAndHttpHost();
+            $task = $request->request->all();
             $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
             return $this->createJsonResponse(array('append' => false));
         }
@@ -85,7 +80,7 @@ class TaskManageController extends BaseController
             'course'      => $course,
             'courseSet'   => $courseSet,
             'task'        => $task,
-            'taskMode'    => $taskMode,
+            'taskMode'    => $taskMode
         ));
     }
 
@@ -173,7 +168,6 @@ class TaskManageController extends BaseController
 
     /**
      * @param  $type
-     *
      * @return mixed
      */
     protected function getActivityActionConfig($type)
@@ -183,8 +177,7 @@ class TaskManageController extends BaseController
     }
 
     /**
-     * @param $course
-     *
+     * @param  $course
      * @return BaseStrategy|CourseStrategy
      */
     protected function createCourseStrategy($course)

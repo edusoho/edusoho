@@ -1,4 +1,4 @@
-import Emitter from 'es6-event-emitter';
+import Emitter from 'component-emitter';
 import swfobject from 'es-swfobject';
 
 class BalloonCloudVideoPlayer extends Emitter {
@@ -99,31 +99,31 @@ class BalloonCloudVideoPlayer extends Emitter {
     var player = new VideoPlayerSDK(extConfig);
 
     player.on('ready', function(e) {
-      self.trigger("ready", e);
+      self.emit("ready", e);
     });
 
     player.on("timeupdate", function(e) {
       //    player.__events get all the event;
-      self.trigger("timechange", e);
+      self.emit("timechange", e);
     });
 
     player.on("ended", function(e) {
-      self.trigger("ended", e);
+      self.emit("ended", e);
     });
 
     player.on("playing", function(e) {
-      self.trigger("playing", e);
+      self.emit("playing", e);
     });
 
     player.on("paused", function(e) {
-      self.trigger("paused", e);
+      self.emit("paused", e);
     });
 
     player.on("answered", function(e) {
       var data = e.data;
       data['answer'] = data.result.choosed;
       data['type'] = self.convertQuestionType(data.type, 'cloud');
-      self.trigger("answered", data);
+      self.emit("answered", data);
     });
 
     this.player = player;

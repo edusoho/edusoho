@@ -5,6 +5,7 @@
 {% do load_script('topxiawebbundle/controller/classroom/classroom-join') %}
 
 {% block top_content %}
+{% include 'seajs_loader_compatible.html.twig' with {'topxiawebbundle':true} %}
 
 {{ render(controller('AppBundle:Classroom/Classroom:header',{classroomId:classroom.id,previewAs:app.request.get('previewAs')|default("")})) }}
 

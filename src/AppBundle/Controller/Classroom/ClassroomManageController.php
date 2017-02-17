@@ -3,24 +3,27 @@ namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ExportHelp;
-use AppBundle\Common\ArrayToolkit;
+use AppBundle\Twig\WebExtension;
 use Vip\Service\Vip\LevelService;
-use AppBundle\Common\SimpleValidator;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
 use Biz\Content\Service\FileService;
 use Biz\Taxonomy\Service\TagService;
+use AppBundle\Common\SimpleValidator;
 use Biz\Course\Service\CourseService;
 use Biz\Thread\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
+use Biz\Task\Service\TaskResultService;
 use AppBundle\Controller\BaseController;
+use Biz\Activity\Service\ActivityService;
 use Biz\User\Service\NotificationService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Classroom\Service\ClassroomReviewService;
-use AppBundle\Twig\WebExtension;
+use Biz\Activity\Service\TestpaperActivityService;
 
 class ClassroomManageController extends BaseController
 {
@@ -30,8 +33,8 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-//        $courseIds = ArrayToolkit::column($courses, 'id');
+        $courses   = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
+        $courseIds = ArrayToolkit::column($courses, 'id');
 
         $currentTime    = time();
         $todayTimeStart = strtotime(date("Y-m-d", $currentTime));
@@ -40,12 +43,8 @@ class ClassroomManageController extends BaseController
         $yesterdayTimeStart = strtotime(date("Y-m-d", $currentTime - 24 * 3600));
         $yesterdayTimeEnd   = strtotime(date("Y-m-d", $currentTime));
 
-        //是否可以直接根据courseId查询，取决于classroom对course是【引用】还是【复制】
-        //TODO
-        $todayFinishedLessonNum     = 0;
-        $yesterdayFinishedLessonNum = 0;
-//        $todayFinishedLessonNum     = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "finished"));
-        //        $yesterdayFinishedLessonNum = $this->getCourseService()->searchLearnCount(array("targetType" => "classroom", "courseIds" => $courseIds, "startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "finished"));
+        $todayFinishedTaskNum     = $this->getTaskResultService()->countTaskResults(array('courseIds' => $courseIds, "finishedTime_GE" => $todayTimeStart, "finishedTime_LE" => $todayTimeEnd, 'status' => 'finish'));
+        $yesterdayFinishedTaskNum = $this->getTaskResultService()->countTaskResults(array('courseIds' => $courseIds, "finishedTime_GE" => $yesterdayTimeStart, "finishedTime_LE" => $yesterdayTimeEnd, 'status' => 'finish'));
 
         $todayThreadCount     = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $id, 'type' => 'discussion', "startTime" => $todayTimeStart, "endTime" => $todayTimeEnd, "status" => "open"));
         $yesterdayThreadCount = $this->getThreadService()->searchThreadCount(array('targetType' => 'classroom', 'targetId' => $id, 'type' => 'discussion', "startTime" => $yesterdayTimeStart, "endTime" => $yesterdayTimeEnd, "status" => "open"));
@@ -77,17 +76,17 @@ class ClassroomManageController extends BaseController
         $userIds     = ArrayToolkit::column($reviews, 'userId');
         $reviewUsers = $this->getUserService()->findUsersByIds($userIds);
         return $this->render("classroom-manage/index.html.twig", array(
-            'classroom'                  => $classroom,
-            'studentCount'               => $studentCount,
-            'yestodayStudentCount'       => $yestodayStudentCount,
-            'allCount'                   => $allCount,
-            'yestodayAllCount'           => $yestodayAllCount,
-            'reviews'                    => $reviews,
-            'reviewUsers'                => $reviewUsers,
-            'todayFinishedLessonNum'     => $todayFinishedLessonNum,
-            'yesterdayFinishedLessonNum' => $yesterdayFinishedLessonNum,
-            'todayThreadCount'           => $todayThreadCount,
-            'yesterdayThreadCount'       => $yesterdayThreadCount
+            'classroom'                => $classroom,
+            'studentCount'             => $studentCount,
+            'yestodayStudentCount'     => $yestodayStudentCount,
+            'allCount'                 => $allCount,
+            'yestodayAllCount'         => $yestodayAllCount,
+            'reviews'                  => $reviews,
+            'reviewUsers'              => $reviewUsers,
+            'todayFinishedTaskNum'     => $todayFinishedTaskNum,
+            'yesterdayFinishedTaskNum' => $yesterdayFinishedTaskNum,
+            'todayThreadCount'         => $todayThreadCount,
+            'yesterdayThreadCount'     => $yesterdayThreadCount
         ));
     }
 
@@ -781,6 +780,17 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    public function removeCourseAction($id, $courseId)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        try {
+            $this->getClassroomService()->deleteClassroomCourses($id, array($courseId));
+            return $this->createJsonResponse(array('success' => true));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
+    }
+
     public function coursesAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
@@ -914,12 +924,10 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function testpaperAction(Request $request, $id)
+    public function testpaperAction($id)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
-        $user      = $this->getUser();
         $classroom = $this->getClassroomService()->getClassroom($id);
-        // $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
         $courses   = $this->getClassroomService()->findCoursesByClassroomId($id);
         $courseIds = ArrayToolkit::column($courses, 'id');
 
@@ -939,12 +947,10 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function testpaperResultListAction(Request $request, $id, $testpaperId)
+    public function testpaperResultListAction($id, $testpaperId)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
-
-        $user = $this->getUser();
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
@@ -967,7 +973,7 @@ class ClassroomManageController extends BaseController
         $user = $this->getUser();
 
         if (empty($user)) {
-            return  $this->createMessageResponse('info', '用户不存在或者尚未登录，请先登录');
+            return $this->createMessageResponse('info', '用户不存在或者尚未登录，请先登录');
         }
 
         $courses   = $this->getClassroomService()->findCoursesByClassroomId($id);
@@ -1191,13 +1197,27 @@ class ClassroomManageController extends BaseController
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return TestpaperActivityService
+     */
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 }

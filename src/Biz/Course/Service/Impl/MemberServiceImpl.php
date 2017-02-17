@@ -4,17 +4,17 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
-use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Order\Service\OrderService;
-use Biz\User\Service\MessageService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
+use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
@@ -64,13 +64,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $systemOrder = array(
-            'userId' => $userId,
-            'title' => $orderTitle,
+            'userId'     => $userId,
+            'title'      => $orderTitle,
             'targetType' => OrderService::TARGETTYPE_COURSE,
-            'targetId' => $courseId,
-            'amount' => $data['price'],
+            'targetId'   => $courseId,
+            'amount'     => $data['price'],
             'totalPrice' => $course['price'],
-            'snPrefix' => OrderService::SNPREFIX_C
+            'snPrefix'   => OrderService::SNPREFIX_C
         );
 
         $order = $this->getOrderService()->createSystemOrder($systemOrder);
@@ -335,11 +335,14 @@ class MemberServiceImpl extends BaseService implements MemberService
         $fields = array('teacherIds' => $visibleTeacherIds);
         $course = $this->getCourseDao()->update($courseId, $fields);
 
-        $this->dispatchEvent("course.teacher.update", array(
-            "courseId" => $courseId,
-            "course"   => $course,
-            'teachers' => $teachers
-        ));
+        $this->dispatchEvent('course.teachers.update', new Event($course, array('teachers' => $teachers)));
+
+        //@deprecated to be deleted
+        // $this->dispatchEvent("course.teacher.update", array(
+        //     "courseId" => $courseId,
+        //     "course"   => $course,
+        //     'teachers' => $teachers
+        // ));
     }
 
     /**
@@ -769,6 +772,21 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
     {
         return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+    }
+
+    public function addMemberExpiryDays($courseId, $userId, $day)
+    {
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+
+        if ($member['deadline'] > 0) {
+            $deadline = $day * 24 * 60 * 60 + $member['deadline'];
+        } else {
+            $deadline = $day * 24 * 60 * 60 + time();
+        }
+
+        return $this->getMemberDao()->update($member['id'], array(
+            'deadline' => $deadline
+        ));
     }
 
     /**
