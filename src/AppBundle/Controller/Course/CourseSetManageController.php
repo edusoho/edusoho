@@ -109,6 +109,7 @@ class CourseSetManageController extends BaseController
     //基础信息
     public function baseAction(Request $request, $id)
     {
+
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);
