@@ -13,7 +13,6 @@ export default class EsMessenger extends Emitter {
   }
 
   setup() {
-    let self = this;
     var messenger = new Messenger(this.name, this.project);
     if (this.type == 'child') { //同时广播同域和者跨域
       messenger.addTarget(window.parent, 'parent');
@@ -26,9 +25,9 @@ export default class EsMessenger extends Emitter {
       }
     }
 
-    messenger.listen(function (msg) {
+    messenger.listen((msg) => {
       msg = JSON.parse(msg);
-      self.trigger(msg.eventName, msg.args);
+      this.emit(msg.eventName, msg.args);
     });
     this.messenger = messenger;
 
