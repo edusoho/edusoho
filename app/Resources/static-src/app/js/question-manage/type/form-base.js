@@ -33,31 +33,30 @@ class QuestionFormBase {
 
   _initValidate() {
     let validator = this.$form.validate({
-        onkeyup: false,
-        rules: {
-          '[data-role="target"]': {
-            required: true,
-          },
-          difficulty: {
-            required: true,
-          },
-          stem: {
-            required: true,
-          },
-          score: {
-            required: true,
-            number:true,
-            max:999,
-            min:0
-          }
+      onkeyup: false,
+      rules: {
+        '[data-role="target"]': {
+          required: true,
         },
-        messages: {
-          '[data-role="target"]': "请选择从属",
-          difficulty : "请选择难度"
+        difficulty: {
+          required: true,
+        },
+        stem: {
+          required: true,
+        },
+        score: {
+          required: true,
+          number:true,
+          max:999,
+          min:0
         }
+      },
+      messages: {
+        '[data-role="target"]': "请选择从属",
+        difficulty : "请选择难度"
+      }
     });
     this.validator = validator;
-    // this.initTitleEditor(this.validator);
   }
 
   initTitleEditor(validator) {
