@@ -5,6 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Topxia\Common\ExportHelp;
 
 class CourseController extends BaseController
 {
@@ -461,7 +462,15 @@ class CourseController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id, 'admin_course_data');
 
-        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $id), array('createdTime', 'ASC'), 0, 1000);
+        return $this->render('TopxiaAdminBundle:Course:lesson-data.html.twig', array(
+            'course'  => $course,
+            'lessons' => $this->makeLessonsDatasByCourseId($id)
+        ));
+    }
+
+    protected function makeLessonsDatasByCourseId($courseId, $start = 0, $limit = 1000)
+    {
+        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $courseId), array('createdTime', 'ASC'), $start, $limit);
 
         foreach ($lessons as $key => $value) {
             $lessonLearnedNum = $this->getCourseService()->findLearnsCountByLessonId($value['id']);
@@ -489,10 +498,104 @@ class CourseController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:Course:lesson-data.html.twig', array(
-            'course'  => $course,
-            'lessons' => $lessons
-        ));
+        return $lessons;
+    }
+
+    public function prepareForExportLessonsDatasAction(Request $request, $courseId)
+    {
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($title, $lessons, $courseLessonsCount) = $this->getExportLessonsDatas($courseId, $start, $limit, $exportAllowCount);
+
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request,'course_lessons', $title);
+        }
+
+        $datas = implode("\r\n", $lessons);
+        $fileName = ExportHelp::saveToTempFile($request, $datas, $file);
+
+        $method = ExportHelp::getNextMethod($start+$limit, $courseLessonsCount);
+
+        return $this->createJsonResponse(
+            array(
+                'method'   => $method,
+                'fileName' => $fileName,
+                'start'    => $start+$limit
+            )
+        );
+    }
+
+    protected function getExportLessonsDatas($courseId, $start, $limit, $exportAllowCount)
+    {   
+        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_data');
+
+        $conditions = array(
+            'courseId' => $courseId
+        );
+        $courseLessonsCount = $this->getCourseService()->searchLessonCount($conditions);
+
+        $courseLessonsCount = ($courseLessonsCount>$exportAllowCount) ? $exportAllowCount:$courseLessonsCount;  
+
+        $titles = $this->getServiceKernel()->trans('课时名,课时学习人数,课时完成人数,课时平均学习时长(分),音视频时长(分),音视频平均观看时长(分),测试平均得分');
+
+        $originaLessons = $this->makeLessonsDatasByCourseId($courseId, $start, $limit);
+
+        $exportLessons = array();
+        foreach ($originaLessons as $lesson) {
+            $exportLesson = '';
+
+            if ($lesson['type'] == 'text') {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(图文)," : "-".",";
+            } elseif ($lesson['type'] == 'video') {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(视频)," : "-".",";
+            } elseif ($lesson['type'] == 'audio') {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(音频)," : "-".",";
+            } elseif ($lesson['type'] == 'testpaper') {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(试卷)," : "-".",";
+            } elseif ($lesson['type'] == 'ppt') {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."(ppt)," : "-".",";
+            } else {
+                $exportLesson .= $lesson['title'] ? $lesson['title']."," : "-".",";
+            }
+
+            $exportLesson .= $lesson['LearnedNum'] ? $lesson['LearnedNum']."," : "-".",";
+            $exportLesson .= $lesson['finishedNum'] ? $lesson['finishedNum']."," : "-".",";
+
+            $learnTime = intval($lesson['learnTime'] ? $lesson['learnTime'] / 60 : 0);
+            $exportLesson .= $learnTime ? $learnTime ."," : "-".",";
+
+            if ($lesson['type'] =='audio' or $lesson['type'] =='video') {
+                $exportLesson .= $lesson['length'] ? $lesson['length']."," : "-".",";
+            } else {
+                $exportLesson .= "-".",";
+            }
+
+            if ($lesson['type'] =='audio' or $lesson['type'] =='video') {
+                $watchTime = intval($lesson['watchTime'] ? $lesson['watchTime'] / 60 : 0);
+                $exportLesson .= $watchTime ? $watchTime ."," : "-".",";
+            } else {
+                $exportLesson .= "-".",";
+            }
+
+            if ($lesson['type'] == 'testpaper') {
+                $exportLesson .= $lesson['score'] ? $lesson['score']."," : "-".",";
+            } else {
+                $exportLesson .= "-".",";
+            }
+
+            $exportLessons[] = $exportLesson;
+        }
+
+        return array($titles, $exportLessons, $courseLessonsCount);
+    }
+
+    public function exportLessonsDatasAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_data');
+
+        $fileName = sprintf("%s-(%s).csv", $course['title'], date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
     }
 
     public function chooserAction(Request $request)

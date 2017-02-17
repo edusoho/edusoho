@@ -583,9 +583,9 @@ class EduCloudController extends BaseController
         }
         try {
             $api         = CloudAPIFactory::create('root');
-            $overview        = $api->get('/me/email/overview');
+            $account        = $api->get('/me/email_account');
             return $this->render('TopxiaAdminBundle:EduCloud/Email:setting.html.twig', array(
-                'account' => $overview['account']
+                'account' => $account
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());

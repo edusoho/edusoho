@@ -514,6 +514,15 @@ admin_course_lesson_data:
     defaults: { _controller: TopxiaAdminBundle:Course:lessonData }
     permissions: [admin_course_data]
 
+admin_course_lesson_data_export_prepare:
+    path: /course/{courseId}/lessons/datas/export/prepare
+    defaults: { _controller: TopxiaAdminBundle:Course:prepareForExportLessonsDatas}
+    permissions: [admin_course_data]
+
+admin_course_lesson_data_export:
+    path: /course/{courseId}/lessons/datas/export
+    defaults: { _controller: TopxiaAdminBundle:Course:exportLessonsDatas}
+    permissions: [admin_course_data]
 # admin_course_disk:
 #     path: /course/disk
 #     defaults: { _controller: TopxiaAdminBundle:CourseDisk:index }
@@ -1066,7 +1075,7 @@ admin_cloud_show:
     defaults: { _controller: TopxiaAdminBundle:Cloud:cloudShow , type: 'video'}
 
 admin_cloud_email_buy:
-    path:  /cloud/{type}/buy/show
+    path:  /cloud/{type}/buy/custom
     defaults: { _controller: TopxiaAdminBundle:Cloud:emailBuy }
 
 admin_cloud_sms_sign:
