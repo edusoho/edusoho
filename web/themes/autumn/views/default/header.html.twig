@@ -14,7 +14,7 @@
       {% endif %}
     </div>
     <div class="navbar-collapse collapse">
-      {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
+      {{ render(controller('AppBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
       <ul class="nav navbar-nav navbar-right">      
         {% if app.user %}
           <li class="hidden-xs hidden-sm hidden-md"><a href="{{ path('my') }}"> {% if 'ROLE_TEACHER' in app.user.roles %}{{'我的教学'|trans}}{% else %}{{'我的学习'|trans}}{% endif %} </a></li>

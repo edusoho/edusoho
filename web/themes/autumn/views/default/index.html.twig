@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% set bodyClass = 'homepage' %}
 {% set script_controller = 'theme/index' %}
@@ -18,9 +18,9 @@
       <a class="right carousel-control hidden-xs" href="#autumn-carousel" data-slide="next">
         <span class="glyphicon glyphicon-chevron-right"></span>
       </a>
-    </div>      
+    </div>
   {% endif %}
-  
+
   <div class="row">
     <div class="col-md-8">
       {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
@@ -52,9 +52,9 @@
                                <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
                              {% endif %}
                           {% endfor %}
-                        {% endif %} 
+                        {% endif %}
                       </span>
-               
+
                       <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }}</span>
                       <span class="class-price">
                           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -83,7 +83,7 @@
             </div>
           </div>
           {% endif %}
-          
+
 
 
       {# 推荐课程 #}
@@ -95,7 +95,7 @@
             <a class="pull-right more-autumn-primary" href="{{ path('course_explore', {'sort':'recommendedSeq'}) }}">More&gt;</a>
           </div>
           <div class="panel-body">
-            <ul class="autumn-grids clearfix">             
+            <ul class="autumn-grids clearfix">
               {% for course in recommendCourses %}
                 {% include 'TopxiaWebBundle:Default:course-grid.html.twig' %}
               {% endfor %}
@@ -137,7 +137,7 @@
                 {% for course in recentLiveCourses %}
                   {% set lesson = course.lesson %}
                   {% if course %}
-                    {% include 'TopxiaWebBundle:Default:live-course-grid.html.twig' %}                    
+                    {% include 'TopxiaWebBundle:Default:live-course-grid.html.twig' %}
                   {% else %}
                     <div class="empty">{{'无推荐课程，请在后台课程管理设置。'|trans}}</div>
                   {% endif %}
@@ -157,7 +157,7 @@
             <a class="pull-right more-autumn-primary" href="{{ path('open_course_explore') }}">More&gt;</a>
           </div>
           <div class="panel-body">
-            <ul class="autumn-grids clearfix">             
+            <ul class="autumn-grids clearfix">
               {% for course in openCourses %}
                 {% include 'TopxiaWebBundle:Default:open-course-grid.html.twig' %}
               {% endfor %}
@@ -271,8 +271,8 @@
             <div class="panel-body">
                <ul class="list-unstyled row">
                 {% for group in groups %}
-                  {% if group.status=='open' %} 
-                    <li class="col-md-6"> 
+                  {% if group.status=='open' %}
+                    <li class="col-md-6">
                       <div class="panel">
                          <div class="media">
                             <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
@@ -288,7 +288,7 @@
                                 {{'%memberNum%个成员'|trans({'%memberNum%': group.memberNum})}}&nbsp;
                                 {{'%threadNum%个话题'|trans({'%threadNum%': group.threadNum})}}
                               </div>
-                            </div> 
+                            </div>
                           </div>
                         </div>
                       </li>
@@ -308,7 +308,7 @@
         {#{% include 'TopxiaWebBundle:Default:member-recently-learned.html.twig' %}#}
         {% include 'TopxiaWebBundle:Default:user-learning.html.twig' %}
       {% endif %}
-      
+
       {# 热门标签 #}
       {% set tags = data('Tags',{'count':5}) %}
       {% if tags %}
@@ -319,7 +319,7 @@
           <div class="panel-body">
             <div class="tag-list">
                 {% for tag in tags %}
-                  {% if tag %} 
+                  {% if tag %}
                     <a href="{{ path('tag_show', {name:tag.name}) }}"> {{ tag.name }}</a>
                   {% endif %}
                 {% endfor %}
@@ -361,7 +361,7 @@
           </div>
           <div class="panel-body">
             <ul class="media-list">
-            {% for status in statuses %}    
+            {% for status in statuses %}
               <li class="media">
               <div class="media-left">
                 {{ web_macro.user_avatar(status.user, '','avatar-sm',true) }}
