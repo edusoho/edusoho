@@ -1,22 +1,22 @@
 import TaskSidebar from "./widget/sidebar";
 import TaskUi from "./widget/task-ui";
 import TaskEventEmitter from "./widget/task-event-emitter";
-import Emitter from "common/es-event-emitter";
-import DataReporter from './widget/data-reporter';
 
-class TaskShow extends Emitter {
-  constructor({element, courseId, taskId, mode}) {
-    super();
+class TaskShow {
+  constructor({element, courseId, taskId, mode, startTime, timeStep}) {
     this.element = $(element);
     this.courseId = courseId;
     this.taskId = taskId;
     this.mode = mode;
-    this.eventEmitter = new TaskEventEmitter(this.element.find('#task-content-iframe'));
+    this.eventEmitter = new TaskEventEmitter({
+      element: this.element.find('#task-content-iframe'),
+      startTime: startTime,
+      timeStep: timeStep,
+      dataName: 'dataReporter'
+    });
     this.ui = new TaskUi({
       element: '.js-task-dashboard-page'
     });
-
-    this.dataReporter = new DataReporter();
 
     this.init();
   }
@@ -30,42 +30,7 @@ class TaskShow extends Emitter {
     }
   }
 
-  initPlugin() {
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]').popover({
-      html: true,
-      trigger: 'hover'
-    });
-  }
-
   bindEvent() {
-    let learnedTime = 0;
-    let minute = 60 * 1000;
-    let timeStep = 1; // 分钟
-
-
-    //注册doing延时监听
-    this.delay('doing', (timeStep) => {
-      learnedTime = parseInt(timeStep) + parseInt(learnedTime);
-      let eventData = {
-        timeStep: timeStep,
-        learnedTime: learnedTime,
-        taskId: this.taskId
-      };
-      console.log('eventData',eventData);
-      this.eventEmitter.emit('doing', eventData)
-          .then(response => {
-            this.receiveFinish(response);
-          })
-          .catch(() => {
-            //
-          })
-          .then(() => { //always
-            this.trigger('doing', timeStep);
-          });
-    }, timeStep * minute);
-
-    this.trigger('doing', timeStep);
 
     this.element.on('click', '#learn-btn', event => {
       $.post($('#learn-btn').data('url'), response => {
@@ -96,6 +61,14 @@ class TaskShow extends Emitter {
     }
   }
 
+  initPlugin() {
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover({
+      html: true,
+      trigger: 'hover'
+    });
+  }
+
   initSidebar() {
     this.sidebar = new TaskSidebar({
       element: this.element.find('#dashboard-sidebar'),
@@ -117,7 +90,9 @@ class TaskShow extends Emitter {
 
 new TaskShow({
   element: $('body'),
-  courseId: $('body').find('#js-hidden-data [name="course-id"]').val(),
-  taskId: $('body').find('#js-hidden-data [name="task-id"]').val(),
-  mode: $('body').find('#js-hidden-data [name="mode"]').val()
+  courseId: $('#js-hidden-data [name="course-id"]').val(),
+  taskId: $('#js-hidden-data [name="task-id"]').val(),
+  mode: $('#js-hidden-data [name="mode"]').val(),
+  startTime: $("#js-hidden-data input[name ='current-timestamp']").val(),
+  timeStep: 1
 });
