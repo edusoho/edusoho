@@ -8208,11 +8208,6 @@ textarea {
   white-space: nowrap;
   word-wrap: normal;
 }
-.card-pack-item .deadline {
-  position: absolute;
-  top: 83%;
-  left: 20%;
-}
 .card-pack-item .price {
   margin-bottom: 18px;
   margin-top: 10px;
@@ -15862,14 +15857,7 @@ textarea {
 .es-mobile body.course-dashboard-page .footer-tool-bar,
 .es-mobile body.login .footer-tool-bar,
 .es-mobile body.register .footer-tool-bar,
-.es-mobile body.my-course .footer-tool-bar,
-.es-mobile body.homepage .es-footer-mobile,
-.es-mobile body.course-list-page .es-footer-mobile,
-.es-mobile body.open-course-list .es-footer-mobile,
-.es-mobile body.course-dashboard-page .es-footer-mobile,
-.es-mobile body.login .es-footer-mobile,
-.es-mobile body.register .es-footer-mobile,
-.es-mobile body.my-course .es-footer-mobile {
+.es-mobile body.my-course .footer-tool-bar {
   display: block;
 }
 .es-mobile body.homepage .course-list-section .course-filter,
@@ -16024,28 +16012,6 @@ textarea {
 }
 .footer-tool-bar > div.active a .es-icon-write::before {
   content: "\e760";
-}
-.es-footer-mobile {
-  display: none;
-  height: 40px;
-  background-color: #212121;
-  position: relative;
-  color: #919191;
-  font-size: 12px;
-}
-.es-footer-mobile .ICP {
-  margin-right: 80px;
-  text-align: center;
-  line-height: 40px;
-}
-.es-footer-mobile .pc-version-button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  text-align: center;
-  width: 80px;
-  line-height: 40px;
-  background-color: #313131;
 }
 .app-download {
   display: none;
