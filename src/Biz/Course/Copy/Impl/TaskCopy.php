@@ -233,13 +233,15 @@ class TaskCopy extends AbstractEntityCopy
             'number',
             'type',
             'mediaSource'
-            // 'status'
+            'status'
         );
 
         $new = array(
-            'copyId' => $isCopy ? $task['id'] : 0,
-            'status' => $isCopy ? $task['status'] : 'create'
+            'copyId' => $isCopy ? $task['id'] : 0
         );
+        if($task['type'] == 'live' && !$isCopy){
+            $new['status'] = 'create';
+        }
         foreach ($fields as $field) {
             if (!empty($task[$field]) || $task[$field] == 0) {
                 $new[$field] = $task[$field];
