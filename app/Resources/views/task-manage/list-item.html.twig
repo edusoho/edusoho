@@ -6,8 +6,7 @@
   <div class="item-content  js-item-content text-overflow">
     <i class="es-icon {% if activity_metas(task.activity.mediaType) %} {{ activity_metas(task.activity.mediaType).icon }}  {% endif %} mrm"></i>
     {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
-    </i>课时<span class="number">{{ task.number }}</span>：  {{ task.title }}  {% if task.status != 'published' %}<span
-      class="color-warning"> (未发布)</span> {% endif %}
+    </i>课时<span class="number">{{ task.number }}</span>：  {{ task.title }}  
     {% if task.activity.mediaType is same as('live') %}
       {% if not task.activity.ext.roomCreated|default(true) %}
         <span class="text-muted color-warning">{{ '编辑以创建直播教室'|trans }}</span>
@@ -17,20 +16,21 @@
         <span class="color-success mls">
         {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
       {% endif %}
-
     {% else %}
       {% if task.activity.length|activity_length_format %}<span class="color-gray mls">
         （{{ task.activity.length|activity_length_format }}）</span>{% endif %}
     {% endif %}
+    {% if task.status != 'published' %}
+    <span class="color-warning"> (未发布)</span> {% endif %}
   </div>
   <div class="item-actions">
-    <a class="btn btn-gray" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
+    <a class="btn gray-darker" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
       data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}"><i
         class="es-icon es-icon-edit mrs"></i>编辑</a>
-    <a class="btn btn-gray" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}"
+    <a class="btn gray-darker" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}"
       target="_blank"><i class="es-icon es-icon-removeredeye mrs"></i>预览</a>
     <span class="dropdown">
-      <a class="dropdown-toggle dropdown-more btn btn-gray" id="dropdown-more" data-toggle="dropdown" href="#">
+      <a class="dropdown-toggle dropdown-more btn gray-darker" id="dropdown-more" data-toggle="dropdown" href="#">
         <i class="es-icon es-icon-keyboardarrowdown mrs" aria-haspopup="true" aria-expanded="false"></i>{{ '更多'|trans }}
       </a>
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px"
@@ -73,7 +73,8 @@
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
     <div class="settings-item js-settings-item active">
-      <a href="javascript:;">
+      <a href="javascript:;" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
+      data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}">
         <i class="es-icon es-icon-book mrm"></i>
         课时学习
       </a>
