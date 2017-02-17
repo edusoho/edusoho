@@ -105,7 +105,8 @@ class Editor {
           let data = $('#sortable-list').sortable("serialize").get();
           $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
             if (response) {
-              showDefaultSetting();
+              this.showDefaultSetting();
+              // @TODO去除reload;
               document.location.reload();
             }
           });
@@ -117,6 +118,7 @@ class Editor {
 
         var add = 0;
         let $parent = $('#' + chapterId.value);
+        let $item = null;
 
         if ($parent.length) {
           $parent.nextAll().each(function () {
@@ -132,14 +134,16 @@ class Editor {
             }
           });
           if (add != 1) {
-            $("#sortable-list").append(html);
+            $item = $(html);
+            $("#sortable-list").append($item);
             add = 1;
           }
         } else {
-          $("#sortable-list").append(html);
+          $item = $(html);
+          $("#sortable-list").append($item);
         }
         // 最后一个
-        showDefaultSetting();
+        this.showDefaultSetting($item);
         let data = $('#sortable-list').sortable("serialize").get();
         $.post($('#sortable-list').data('sortUrl'), {ids: data});
       })
@@ -154,9 +158,11 @@ class Editor {
       });
   }
 
-
-  showDefaultSetting() {
-
+  showDefaultSetting($item) {
+    if($item.hasClass('js-task-manage-item')) {
+      $('.js-task-manage-item').removeClass('active').find('.js-settings-list').slideUp();;
+      $item.addClass('active').find('.js-settings-list').slideDown();
+    }
   }
 
   _onDelete(event) {

@@ -71,7 +71,8 @@
       <i class="es-icon es-icon-angledoubleright after"></i>
     </div>
     <div class="settings-item js-settings-item active">
-      <a href="javascript:;">
+      <a href="javascript:;" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal"
+      data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId, type:'lesson'}) }}">
         <i class="es-icon es-icon-book mrm"></i>
         课时学习
       </a>
