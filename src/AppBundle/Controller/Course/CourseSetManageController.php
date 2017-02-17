@@ -79,13 +79,11 @@ class CourseSetManageController extends BaseController
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
 
-        $courses = array_filter($courses, function ($course) use ($user) {
-            if (in_array($user['id'], $course['teacherIds'])) {
-                return true;
-            } else {
-                return false;
-            }
-        });
+        if (!$user->isAdmin()) {
+            $courses = array_filter($courses, function ($course) use ($user) {
+                return in_array($user->getId(), $course['teacherIds']);
+            });
+        }
 
         if (empty($curCourse)) {
             $curCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSetId);
