@@ -67,7 +67,7 @@
   </div>
 {% endblock %}
 {% block footer %}
-  {% if task|default(false) %}
+  {% if task|default(false) and taskMode|default('') and taskMode != 'lesson' %}
     <button id="course-tasks-delete" type="submit" class="btn btn-danger pull-left delete-task"
             data-url="{{ path('course_manage_task_delete', {taskId:task.id, courseId:task.courseId}) }}">
       <i class="es-icon es-icon-delete"></i>{{ '删除'|trans }}</button>
