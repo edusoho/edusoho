@@ -26,24 +26,20 @@
       	<tbody>
       		{% for course in courses %}
       		<tr>
-      			<td>{{course.title}}
-              {% if course.status == 'published' %}
-                <span class="label label-success">{{'已发布'|trans}}</span>
-              {% endif %}
-            </td>
+      			<td>{{course.title}}</td>
       			<td>{{course.taskNum|default(0)}}</td>
       			<td>{{course.studentNum|default(0)}}</td>
       			<td>{{course.price|currency}}{{'元'|trans}}            
             <span class="ml5 text-12 color-warning">{{'会员免费'|trans}}</span>
             <span class="ml5 text-12 color-warning">{{'6折'|trans}}</span></td> {# 货币国际化？ #}
       			<td>
-              {% if course.status == 'published' %}
+             {% if course.status == 'published' %}
               <span class="color-success">{{'已发布'|trans}}</span>
               {% elseif course.status=='closed'%}             
               <span class="color-danger">{{'已关闭'|trans}}</span>
               {% else %}
               <span class="text-muted">{{'未发布'|trans}}</span>
-              {% endif %}
+              {% endif %}   
             </td>
             <td>
       				<div class="btn-group">
