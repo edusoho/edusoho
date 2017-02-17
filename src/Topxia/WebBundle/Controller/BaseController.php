@@ -128,6 +128,14 @@ abstract class BaseController extends Controller
         return new JsonResponse($data);
     }
 
+    private function isSelfHost($request,$url)
+    {
+        $host = $request->getHost();
+        preg_match("/^(http[s]:\/\/)?([^\/]+)/i",$url, $matches);
+        $ulrHost = $matches[2];
+        return $host == $ulrHost;
+    }
+
     protected function getTargetPath($request)
     {
         if ($request->query->get('goto')) {
@@ -136,6 +144,9 @@ abstract class BaseController extends Controller
             $targetPath = $request->getSession()->get('_target_path');
         } else {
             $targetPath = $request->headers->get('Referer');
+            if($this->isSelfHost($request,$targetPath) === false){
+                $targetPath = '';
+            }
         }
 
         if ($targetPath == $this->generateUrl('login', array(), true)) {

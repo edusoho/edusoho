@@ -16,27 +16,42 @@
 
 {% block main %}
   <!-- 设置 -->
-<div class="page-heading">
-  云邮件开关
-</div>
-<form class="form-horizontal" method="post" action="{{ path('admin_edu_cloud_email_switch') }}">
-  <div class="form-group">
-    <label for="" class="col-sm-3 control-label">启用云邮件：</label>
-    <div class="controls col-md-9 radios">
-      <div>
-        <span class="text-success">{{'已启用'|trans}}</span>
+  <div class="page-heading">
+    云邮件开关
+  </div>
+  <form class="form-horizontal" method="post" action="{{ path('admin_edu_cloud_email_switch') }}">
+    <div class="form-group">
+      <label for="" class="col-sm-3 control-label">启用云邮件：</label>
+      <div class="controls col-md-9 radios">
+        <div>
+          <span class="text-success">{{'已启用'|trans}}</span>
           <button class="btn btn-default btn-sm mlm" name="email-close">
             <span class="text-muted">{{'关闭'|trans}}</span>
           </button>
-      </div>
-      <div class="help-block">
-        邮件营销，本应如此简单。<a href="{{ path('admin_cloud_show',{'type': 'email'}) }}" target="_blank">点击这里</a>了解云邮件。
-      </div>
-      <div class="help-block">
-        注：目前云邮件仅为CRM模块提供服务
+        </div>
+        <div class="help-block">
+          邮件营销，本应如此简单。<a href="{{ path('admin_cloud_show',{'type': 'email'}) }}" target="_blank">点击这里</a>了解云邮件。
+        </div>
       </div>
     </div>
-  </div>
-  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-</form>
+
+    <div class="form-group">
+      <div class="col-sm-3 control-label">
+        <label for="" >发件人名称：</label>
+      </div>
+      <div class="controls col-md-8 mts">
+        <div>
+          {% if account.nickname != '' %}
+            {{ account.nickname }}
+          {% else %}
+            尚未设置
+          {% endif %}
+        </div>
+        <div class="help-block">
+          <a href="http://open.edusoho.com/service/email/sender-name" target="_blank">点击这里</a>设置发件人名称。
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
 {% endblock %}

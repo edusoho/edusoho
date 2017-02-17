@@ -52,7 +52,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
             return $prepared;
         };
-        $data       = $this->findCategories($groupId);
+
         $categories = $prepare($this->findCategories($groupId));
 
         $tree = array();

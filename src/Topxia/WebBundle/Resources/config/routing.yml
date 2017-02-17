@@ -2,6 +2,10 @@ homepage:
     path:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
+#app_download:
+#    path: /app/download
+#    defaults: { _controller: TopxiaWebBundle:Default:appDownload }
+
 switch_language:
     path: /switch/language
     defaults: { _controller: TopxiaWebBundle:Default:translate }
@@ -1223,6 +1227,10 @@ announcement_add:
 announcement_show:
     path:  /announcement/{id}/{targetId}/show
     defaults: { _controller: TopxiaWebBundle:Announcement:show }
+
+announcement_global_show:
+    path:  /announcement/{id}/opreate/global/show
+    defaults: { _controller: TopxiaWebBundle:Announcement:globalShow }
 
 announcement_manage:
     path:  /announcement/{targetType}/{targetId}/manage

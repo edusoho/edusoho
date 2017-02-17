@@ -5,6 +5,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class DefaultController extends BaseController
 {
@@ -15,10 +16,29 @@ class DefaultController extends BaseController
         if (!empty($user['id'])) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
+        //判断是否是定制用户
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+        $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
 
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks));
+
+        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks, 'hasMobile' => $hasMobile));
     }
+
+//    public function appDownloadAction() {
+//        $result = CloudAPIFactory::create('leaf')->get('/me');
+//        $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+//
+//        if ($this->getWebExtension()->isMicroMessenger()) {
+//            $url ="http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi";
+//        } else {
+//            $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
+//        }
+//
+//        return $this->render('TopxiaWebBundle:Default:Mobile/app-download.html.twig', array(
+//            'url' => $url
+//        ));
+//    }
 
     public function userlearningAction()
     {
@@ -256,5 +276,10 @@ class DefaultController extends BaseController
     private function getBlacklistService()
     {
         return $this->getServiceKernel()->createService('User.BlacklistService');
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

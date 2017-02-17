@@ -2,6 +2,7 @@
 namespace Topxia\Service\Announcement\AnnouncementProcessor;
 
 use Topxia\Service\Announcement\AnnouncementProcessor\AnnouncementProcessor;
+use Topxia\Service\Common\ServiceKernel;
 
 class AnnouncementProcessorFactory
 {
@@ -16,7 +17,7 @@ class AnnouncementProcessorFactory
         return new $class();
     }
 
-    protected function getKernel()
+    protected static function getKernel()
     {
         return ServiceKernel::instance();
     }
