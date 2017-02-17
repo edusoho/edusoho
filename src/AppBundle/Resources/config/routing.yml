@@ -1572,6 +1572,10 @@ course_task_trigger:
     path:  /course/{courseId}/task/{id}/trigger
     defaults: { _controller: AppBundle:Task:trigger }
 
+course_task_report:
+    path:  /course/{courseId}/task/{id}/report
+    defaults: { _controller: AppBundle:Task:report }
+
 course_task_finish:
     path:  /course/{courseId}/task/{id}/finish
     defaults: { _controller: AppBundle:Task:finish }
@@ -1767,6 +1771,14 @@ course_set_manage_course_students_remove:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/remove
   defaults: {_controller: AppBundle:Course/StudentManage:removeCourseStudent}
   methods: [POST]
+
+course_set_manage_course_students_remark:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/remark
+  defaults: { _controller: AppBundle:Course/StudentManage:remark }
+
+course_set_manage_course_students_expiryday:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/expiryday
+  defaults: { _controller: AppBundle:Course/StudentManage:addMemberExpiryDays }
 
 course_set_manage_course_student_export_csv:
    path:  /course_set/{courseSetId}/manage/course/{courseId}/student/export
@@ -2308,6 +2320,10 @@ classroom_manage:
 classroom_manage_courses:
     path: /classroom/{id}/manage/courses
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:courses }
+
+classroom_manage_course_remove:
+    path: /classroom/{id}/manage/course/{courseId}/remove
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:removeCourse }
 
 classroom_courses_select:
     path: /classroom/{id}/courses/select

@@ -19,7 +19,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $this->validateTaskMode($field);
 
         if ($field['mode'] == 'lesson') {
-            $chapter             = array(
+            $chapter = array(
                 'courseId' => $field['fromCourseId'],
                 'title'    => $field['title'],
                 'type'     => 'lesson'
@@ -170,7 +170,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 }
             }
 
-            $chapter = $this->getChapterDao()->update($id, $fields);
+            $chapter = $this->getCourseService()->updateChapter($courseId, $id, $fields);
             if ($chapter['type'] == 'lesson') {
                 array_push($lessonChapterTypes, $chapter);
             }

@@ -27,6 +27,10 @@ class CourseController extends BaseController
             'excludeIds' => $excludeIds
         );
 
+        $user = $this->getCurrentUser();
+        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
+            $conditions['creator'] = $user['id'];
+        }
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseSetService()->countCourseSets($conditions),
