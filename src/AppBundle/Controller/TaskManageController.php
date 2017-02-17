@@ -45,11 +45,20 @@ class TaskManageController extends BaseController
         }
     }
 
-    public function batchTaskModalAction(Request $request, $courseId)
+    public function batchCreateTasksAction(Request $request, $courseId)
     {
         $this->getCourseService()->tryManageCourse($courseId);
-        $token  = $request->query->get('token');
         $mode = $request->query->get('mode');
+        if ($request->isMethod('POST')) {
+            $fileId = $request->request->get('fileId');
+            $course = $this->getCourseService()->getCourse($courseId);
+
+            $task = $this->createTaskByFileIdAndCourseId($fileId, $course);
+            $task['mode'] = $mode;
+            return $this->createTask($request, $task, $course);
+        }
+
+        $token  = $request->query->get('token');
         $parser = new UploaderToken();
         $params = $parser->parse($token);
 
@@ -63,18 +72,6 @@ class TaskManageController extends BaseController
             'courseId' => $courseId,
             'mode' => $mode
         ));
-    }
-
-    public function createFromFileAction(Request $request, $courseId)
-    {
-        $fileId = $request->request->get('fileId');
-        $mode = $request->query->get('mode');
-        $course = $this->getCourseService()->getCourse($courseId);
-        $task = $this->createTaskByFileIdAndCourseId($fileId, $course);
-        if (!empty($mode)) {
-            $task['mode'] = $mode;
-        }
-        return $this->createTask($request, $task, $course);
     }
 
     private function createTaskByFileIdAndCourseId($fileId, $course)
@@ -92,6 +89,10 @@ class TaskManageController extends BaseController
             'courseSetType' => 'normal',
             'ext' => array('mediaSource' => 'self','mediaId' => $fileId)
         );
+        if ($file['type'] == 'document') {
+            $task['type'] = 'doc';
+            $task['mediaType'] = 'doc';
+        }
         return $task;
     }
 

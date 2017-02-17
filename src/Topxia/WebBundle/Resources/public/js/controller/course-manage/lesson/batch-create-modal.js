@@ -85,7 +85,7 @@ define(function(require, exports, module) {
             });
 
             if (isLast) {
-               // window.location.reload();
+                $('#modal').modal('hide');
             }
         }
     };

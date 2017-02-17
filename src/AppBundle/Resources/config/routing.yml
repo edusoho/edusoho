@@ -1592,13 +1592,9 @@ course_manage_task_create:
     path:  /course/{courseId}/task
     defaults: { _controller: AppBundle:TaskManage:create }
 
-course_manage_task_batch_modal:
+course_manage_task_batch_create:
     path:  /course/{courseId}/task/batch/modal
-    defaults: { _controller: AppBundle:TaskManage:batchTaskModal }
-
-course_manage_task_create_from_file:
-    path:  /course/{courseId}/manage/lesson/create/from/file
-    defaults: { _controller: AppBundle:TaskManage:createFromFile }
+    defaults: { _controller: AppBundle:TaskManage:batchCreateTasks }
 
 course_manage_task_publish:
     path:  /course/{courseId}/task/{id}/publish

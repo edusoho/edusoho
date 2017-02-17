@@ -222,7 +222,7 @@
 
     <div class="alert alert-info">
         <ul>
-            <li>{{'批量添加课时支持多种文件格式上传，单个文件大小上限<strong>2GB</strong>。'|trans|raw}}</li>
+            <li>{{'批量添加支持上传视频、音频、PPT、Flash、DOC、PDF的文件格式，单个文件大小上限<strong>2GB</strong>。'|trans|raw}}</li>
             <li>{{'视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。'|trans|raw}}</li>
             <li>{{'支持<strong>断点续传</strong>（仅支持HTML5浏览器）。'|trans|raw}}</li>
         </ul>
@@ -232,6 +232,6 @@
 {% endblock %}
 {% block footer %}
     <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
-    <button type="button" class="btn btn-primary js-batch-create-lesson-btn" data-url="{{ path('course_manage_task_create_from_file', {courseId:courseId, mode: mode}) }}" data-loading-text="{{ '正在创建课时,请不要关闭窗口'|trans }}">{{'添加'|trans}}</button>
+    <button type="button" class="btn btn-primary js-batch-create-lesson-btn" data-url="{{ path('course_manage_task_batch_create', {courseId:courseId, mode: mode}) }}" data-loading-text="{{ '正在创建课时,请不要关闭窗口'|trans }}">{{'添加'|trans}}</button>
 {% endblock %}
 
