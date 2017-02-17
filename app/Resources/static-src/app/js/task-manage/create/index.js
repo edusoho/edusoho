@@ -65,7 +65,7 @@ class Editor {
     let type = $this.data('type');
     $('[name="mediaType"]').val(type);
     this.contentUrl = $this.data('contentUrl');
-    this.type !== type ? (this.loaded = false) : (this.loaded = true);
+    this.loaded = this.type === type;
     this.type = type;
     this._onNext(event);
   }
@@ -105,6 +105,7 @@ class Editor {
           let data = $('#sortable-list').sortable("serialize").get();
           $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
             if (response) {
+              showDefaultSetting();
               document.location.reload();
             }
           });
@@ -137,7 +138,8 @@ class Editor {
         } else {
           $("#sortable-list").append(html);
         }
-
+        // 最后一个
+        showDefaultSetting();
         let data = $('#sortable-list').sortable("serialize").get();
         $.post($('#sortable-list').data('sortUrl'), {ids: data});
       })
@@ -150,6 +152,11 @@ class Editor {
         notify('warning', '保存出错: ' + msg);
         $("#course-tasks-submit").attr('disabled', null);
       });
+  }
+
+
+  showDefaultSetting() {
+
   }
 
   _onDelete(event) {
