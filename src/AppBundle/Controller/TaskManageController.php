@@ -23,20 +23,7 @@ class TaskManageController extends BaseController
         $taskMode   = $request->query->get('type');
         if ($request->isMethod('POST')) {
             $task               = $request->request->all();
-            $task['_base_url']       = $request->getSchemeAndHttpHost();
-            $task['fromUserId']      = $this->getUser()->getId();
-            $task['fromCourseSetId'] = $course['courseSetId'];
-
-            $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
-
-            if ($course['isDefault'] && isset($task['mode']) && $task['mode'] != 'lesson') {
-                return $this->createJsonResponse(array('append' => false));
-            }
-
-            return $this->render($this->getTaskItemTemplate($course), array(
-                'course' => $course,
-                'task'   => $task
-            ));
+            return $this->createTask($request, $task, $course);
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         return $this->render('task-manage/modal.html.twig', array(
@@ -49,10 +36,20 @@ class TaskManageController extends BaseController
         ));
     }
 
+    protected function getTaskItemTemplate($course)
+    {
+        if ($course['isDefault']) {
+            return 'task-manage/list-item.html.twig';
+        } else {
+            return 'task-manage/list-item-lock-mode.html.twig';
+        }
+    }
+
     public function batchTaskModalAction(Request $request, $courseId)
     {
         $this->getCourseService()->tryManageCourse($courseId);
         $token  = $request->query->get('token');
+        $mode = $request->query->get('mode');
         $parser = new UploaderToken();
         $params = $parser->parse($token);
 
@@ -63,17 +60,57 @@ class TaskManageController extends BaseController
         return $this->render('course-manage/batch-create/batch-create-modal.html.twig', array(
             'token'      => $token,
             'targetType' => $params['targetType'],
-            'courseId' => $courseId
+            'courseId' => $courseId,
+            'mode' => $mode
         ));
     }
 
-    protected function getTaskItemTemplate($course)
+    public function createFromFileAction(Request $request, $courseId)
     {
-        if ($course['isDefault']) {
-            return 'task-manage/list-item.html.twig';
-        } else {
-            return 'task-manage/list-item-lock-mode.html.twig';
+        $fileId = $request->request->get('fileId');
+        $mode = $request->query->get('mode');
+        $course = $this->getCourseService()->getCourse($courseId);
+        $task = $this->createTaskByFileIdAndCourseId($fileId, $course);
+        if (!empty($mode)) {
+            $task['mode'] = $mode;
         }
+        return $this->createTask($request, $task, $course);
+    }
+
+    private function createTaskByFileIdAndCourseId($fileId, $course)
+    {
+        $file = $this->getUploadFileService()->getFile($fileId);
+        $task = array(
+            'mediaType' => $file['type'],
+            'fromCourseId' => $course['id'],
+            'courseSetType' => 'normal',
+            'media'    => json_encode(array('source' => 'self', 'id' => $fileId, 'name' => $file['filename'])),
+            'mediaId'  => $fileId,
+            'type'     => $file['type'],
+            'length'   => $file['length'],
+            'title'    => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
+            'courseSetType' => 'normal',
+            'ext' => array('mediaSource' => 'self','mediaId' => $fileId)
+        );
+        return $task;
+    }
+
+    private function createTask(Request $request, $task, $course)
+    {
+        $task['_base_url']       = $request->getSchemeAndHttpHost();
+        $task['fromUserId']      = $this->getUser()->getId();
+        $task['fromCourseSetId'] = $course['courseSetId'];
+
+        $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
+
+        if ($course['isDefault'] && isset($task['mode']) && $task['mode'] != 'lesson') {
+            return $this->createJsonResponse(array('append' => false));
+        }
+
+        return $this->render($this->getTaskItemTemplate($course), array(
+            'course' => $course,
+            'task'   => $task
+        ));
     }
 
     public function updateAction(Request $request, $courseId, $id)

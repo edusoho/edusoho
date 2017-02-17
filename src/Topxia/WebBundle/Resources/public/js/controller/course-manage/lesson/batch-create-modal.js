@@ -53,7 +53,7 @@ define(function(require, exports, module) {
 
             var fileStatus = esuploader.uploader.getStats();
             var cancelledFiles = esuploader.uploader.getFiles('cancelled');
-            
+
             if (fileStatus.progressNum > 0 || cancelledFiles.length > 0) {
                 Notify.danger(Translator.trans('还有文件未上传，请全部上传后再继续操作。'));
             } else if (fileStatus.successNum == 0) {
@@ -77,15 +77,15 @@ define(function(require, exports, module) {
                 url: $('.js-batch-create-lesson-btn').data('url'),
                 data: {fileId:file.resFile.id},
                 success: function(resp) {
-                    $statusCol.addClass('text-success').html(Translator.trans('创建课时成功'));
+                    $statusCol.addClass('text-success').html(Translator.trans('创建任务成功'));
                 },
                 error: function(resp) {
-                    $statusCol.addClass('text-danger').html(Translator.trans('创建课时失败'));
+                    $statusCol.addClass('text-danger').html(Translator.trans('创建任务失败'));
                 }
             });
 
             if (isLast) {
-                window.location.reload();
+               // window.location.reload();
             }
         }
     };
