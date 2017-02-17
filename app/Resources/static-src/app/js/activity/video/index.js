@@ -31,7 +31,7 @@ class VideoPlay {
 
   _playVideo() {
     var messenger = new EsMessenger({
-      name: 'parent',
+      name: 'partner',
       project: 'PlayerProject',
       children: [],
       type: 'parent'

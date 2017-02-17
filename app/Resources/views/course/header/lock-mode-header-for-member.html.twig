@@ -86,7 +86,7 @@
         <div class="swiper-pager"></div>
       </div>
     {% endif %}
-    <ul class="task-list task-list-md task-list-hover task-list-gray js-task-list-ul">
+    <ul class="task-list task-list-md task-list-hover task-list-gray js-task-list-ul ">
       {% for task in toLearnTasks %}
         {% set meta = activity_meta(task.activity.mediaType|default(null)) %}
         {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
@@ -110,8 +110,7 @@
           {% endif %}
           <span class="right-menu mouse-leave">
           {{ task.activity.length|activity_length_format }} <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
-                                                               data-toggle="tooltip" data-placement="top"
-                                                               title="{{ meta.name|default(null) }}任务"></i>
+          data-toggle="tooltip" data-placement="top" title="{{ meta.name|default(null) }}任务"></i>
         </span>
           {% if  task_lock is empty %}
             <span class="right-menu mouse-enter">

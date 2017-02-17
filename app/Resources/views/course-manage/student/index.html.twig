@@ -77,28 +77,28 @@
                 <a class="btn link-gray" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}"><span class="color-primary">{{processes[student.userId]|default(0)}}%</span><span class="text-xs">（查看详情）</span></a>
               </td>
               <td>
-                <a class="mrm" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">发私信</a>
-                <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">查看资料</a>
+                <a class="mrm" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'发私信'|trans}}</a>
+                <a class="mrm" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'查看资料'|trans}}</a>
                 <div class="btn-group">
                   <a href="#" class="mrm dropdown-toggle" data-toggle="dropdown">
-                    更多
+                    {{'更多'|trans}}
                     <span class="caret mls"></span>
                   </a>
                   <ul class="dropdown-menu pull-right">
                     <li>
-                      <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/manage/student/{{student.userId}}/remark">备注</a>
+                      <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_remark', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}">{{'备注'|trans}}</a>
                     </li>
-                    {# <li>
-                      <a class="follow-student-btn" href="javascript:;" data-url="/user/{{student.userId}}/follow">关注</a>
-                      <a class="unfollow-student-btn" href="javascript:;" data-url="/user/{{student.userId}}/unfollow" style="display:none;">已关注</a>
-                    </li> #}
-                  {#  <li>
-                      <a class="" href="" data-toggle="modal" data-target="#modal" data-url="/course/{{course.id}}/set_expiryday/{{student.userId}}">增加有效期</a>
-                    </li> #}
+                    <li>
+                      <a class="follow-student-btn" href="javascript:;" data-url="{{path('user_follow', {id : student.userId})}}">{{'关注'|trans}}</a>
+                      <a class="unfollow-student-btn" href="javascript:;" data-url="{{path('user_unfollow', {id : student.userId})}}" style="display:none;">{{'取消关注'|trans}}</a>
+                    </li>
+                   <li>
+                      <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_expiryday', {courseSetId: course.courseSetId, courseId: course.id, userId: student.userId})}}">{{'增加有效期'|trans}}</a>
+                    </li>
 
                     {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}
                       <li>
-                        <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="学员">移除</a>
+                        <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="学员">{{'移除'|trans}}</a>
                       </li>
                     {% endif %}
 

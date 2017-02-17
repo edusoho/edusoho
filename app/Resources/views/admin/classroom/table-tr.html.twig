@@ -52,10 +52,10 @@
 
     <td>
     {% if classroom.status=='published' %}
-    <span style="color: #090;">{{'已发布'|trans}}</span>
+    <span class="color-success">{{'已发布'|trans}}</span>
     {% elseif classroom.status=='closed'%}
     
-    <span style="color: #900;">{{'已关闭'|trans}}</span>
+    <span class="color-danger">{{'已关闭'|trans}}</span>
     {% else %}
     {{'未发布'|trans}}
     {% endif %}
