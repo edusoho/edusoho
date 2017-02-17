@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\System\Service\LogService;
 use Biz\User\CurrentUser;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
@@ -288,6 +289,9 @@ class BaseController extends Controller
         return $this->getBiz()->service('User:UserService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
