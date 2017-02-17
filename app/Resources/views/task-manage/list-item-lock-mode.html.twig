@@ -14,7 +14,9 @@
     {% endif %}
 
     {% if task.activity.mediaType is same as('live') %}
-      {% if task.activity.endTime < date().timestamp %}
+      {% if not task.activity.ext.roomCreated|default(true) %}
+        <span class="text-muted color-warning">{{ '编辑以创建直播教室'|trans }}</span>
+      {% elseif task.activity.endTime < date().timestamp %}
         <span class="text-muted">{{ '直播已经结束'|trans }}</span>
       {% else %}
         <span class="color-success mls">
