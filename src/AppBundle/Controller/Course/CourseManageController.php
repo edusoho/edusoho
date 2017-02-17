@@ -192,9 +192,11 @@ class CourseManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
         $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
 
-        $courses = array_filter($courses, function ($course) use ($user) {
-            return in_array($user->getId(), $course['teacherIds']);
-        });
+        if (!$user->isAdmin()) {
+            $courses = array_filter($courses, function ($course) use ($user) {
+                return in_array($user->getId(), $course['teacherIds']);
+            });
+        }
 
         if ($courseSet['type'] == 'live') {
             $course = current($courses);
