@@ -18,15 +18,20 @@ class DefaultController extends BaseController
         }
         //判断是否是定制用户
         $result = CloudAPIFactory::create('leaf')->get('/me');
-        $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
+        $custom = $this->canCustom($result);
 
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks, 'hasMobile' => $hasMobile));
+        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom));
     }
 
     public function appDownloadAction() {
         $result = CloudAPIFactory::create('leaf')->get('/me');
+        $custom = $this->canCustom($result);
+        if ($custom) {
+            return $this->render('TopxiaWebBundle:Default:404.html.twig');
+        }
+
         $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
 
         if ($this->getWebExtension()->isMicroMessenger()) {
@@ -38,6 +43,13 @@ class DefaultController extends BaseController
         return $this->render('TopxiaWebBundle:Default:Mobile/app-download.html.twig', array(
             'url' => $url
         ));
+    }
+
+    private function canCustom($result)
+    {
+        $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
+
+        return $hasMobile;
     }
 
     public function userlearningAction()
