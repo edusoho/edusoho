@@ -54,6 +54,9 @@ class TaskManageController extends BaseController
             $course = $this->getCourseService()->getCourse($courseId);
 
             $task = $this->createTaskByFileIdAndCourseId($fileId, $course);
+            if (!in_array($task['mediaType'],array('doc', 'video', 'audio', 'ppt', 'flash'))) {
+                throw $this->createAccessDeniedException('不支持的文件类型');
+            }
             $task['mode'] = $mode;
             return $this->createTask($request, $task, $course);
         }
