@@ -2,12 +2,7 @@
 
 namespace Biz\Course\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
-use Biz\Announcement\Service\AnnouncementService;
 use Biz\BaseService;
-use Biz\IM\Service\ConversationService;
-use Biz\Question\Service\QuestionService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\ReviewDao;
 use Biz\Course\Dao\ThreadDao;
@@ -16,12 +11,17 @@ use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\CourseNoteDao;
 use Biz\Course\Dao\ThreadPostDao;
 use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;
+use Biz\User\Service\StatusService;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Dao\CourseNoteLikeDao;
+use Biz\IM\Service\ConversationService;
+use Biz\Question\Service\QuestionService;
 use Biz\Course\Service\CourseDeleteService;
-use Biz\User\Service\StatusService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\Announcement\Service\AnnouncementService;
 
 class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 {
@@ -36,7 +36,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
             //delete testpaper
             $testpapers = $this->getTestpaperService()->searchTestpapers(array('courseSetId' => $courseSetId), array(), 0, PHP_INT_MAX);
-            if(!empty($testpapers)){
+            if (!empty($testpapers)) {
                 $testpaperIds = ArrayToolkit::column($testpapers, 'id');
                 $this->getTestpaperService()->deleteTestpapers($testpaperIds);
             }
@@ -116,8 +116,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
             //delete course_announcement
             $announcements = $this->getAnnouncementService()->searchAnnouncements(array('targetType' => 'course', 'targetId' => $courseId), array(), 0, PHP_INT_MAX);
-            if(!empty($announcements)){
-                foreach ($announcements as $announcement){
+            if (!empty($announcements)) {
+                foreach ($announcements as $announcement) {
                     $this->getAnnouncementService()->deleteAnnouncement($announcement['id']);
                 }
             }
@@ -176,9 +176,9 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     }
 
 //    protected function getTestpaperItemDao()
-//    {
-//        return $this->createDao('Testpaper:TestpaperItemDao');
-//    }
+    //    {
+    //        return $this->createDao('Testpaper:TestpaperItemDao');
+    //    }
 
     /**
      * @return CourseChapterDao
