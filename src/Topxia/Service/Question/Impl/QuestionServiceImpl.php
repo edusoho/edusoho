@@ -311,6 +311,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->getQuestionCountGroupByTypes($conditions);
     }
 
+    public function findQuestionsByParentIdAndTarget($parentId, $target)
+    {
+        return $this->getQuestionDao()->findQuestionsByParentIdAndTarget($parentId, $target);
+    }
+
     protected function getQuestionDao()
     {
         return $this->createDao('Question.QuestionDao');

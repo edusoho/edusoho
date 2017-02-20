@@ -1373,6 +1373,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getLessonDao()->deleteLesson($lessonId);
         $this->getLessonExtendDao()->deleteLesson($lessonId);
+        $this->changeQuestionTarget($courseId, $lessonId);
 
         // 更新课时序号
         $this->updateCourseCounter($course['id'], array(
@@ -2940,6 +2941,21 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $learnProgress;
     }
 
+    protected function changeQuestionTarget($courseId, $lessonId)
+    {
+        $oldTarget = "course-{$courseId}/lesson-{$lessonId}";
+        $questions = $this->getQuestionService()->findQuestionsByParentIdAndTarget(0, $oldTarget);
+        foreach ($questions as $question) {
+            $question['target'] = "course-{$courseId}";
+            $question['choices'] = empty($question['metas']['choices']) ? array() : $question['metas']['choices'];
+            if ($question['type'] == 'uncertain_choice') {
+                $question['uncertain'] = 'uncertain_choice';
+            }
+            unset($question['copyId']);
+            $this->getQuestionService()->updateQuestion($question['id'], $question);
+        }
+    }
+
     protected function isClassroomMember($course, $userId)
     {
         $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
@@ -3058,6 +3074,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getChapterDao()
     {
         return $this->createDao('Course.CourseChapterDao');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->createService('Question.QuestionService');
     }
 
     protected function getCategoryService()

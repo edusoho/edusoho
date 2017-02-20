@@ -149,6 +149,13 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->fetchColumn($sql, array($parentId));
     }
 
+    public function findQuestionsByParentIdAndTarget($parentId, $target)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? and target = ?";
+        $questions = $this->getConnection()->fetchAll($sql, array($parentId, $target));
+        return $this->createSerializer()->unserializes($questions, $this->serializeFields);
+    }
+
     public function addQuestion($fields)
     {
         $fields   = $this->createSerializer()->serialize($fields, $this->serializeFields);

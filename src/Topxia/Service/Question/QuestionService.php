@@ -88,4 +88,6 @@ interface QuestionService
     public function sortCategories($target, array $sortedIds);
 
     public function getQuestionCountGroupByTypes($conditions);
+
+    public function findQuestionsByParentIdAndTarget($parentId, $target);
 }
