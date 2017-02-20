@@ -85,6 +85,13 @@
           {% endif %}
           </li>
         {% endif %}
+        {% if course.vipLevelId != 0 %}
+          <li id="favorite-btn">
+            <a class="btn btn-default btn-xs" href="{{ path('vip') }}" data-toggle="tooltip" data-placement="top" title="会员课程"
+               data-trigger="hover"> <i class="es-icon es-icon-crown"></i>
+            </a>
+          </li>
+        {% endif %}
       </ul>
     </div>
     {% block course_heard_content %}{% endblock %}
