@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller;
 
-use Biz\System\Service\LogService;
 use Biz\User\CurrentUser;
-use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
 use Biz\CloudPlatform\Service\AppService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -223,6 +223,14 @@ class BaseController extends Controller
     {
         $response = $this->createJsonResponse($data, $status, $headers);
         return $response->setCallback($callback);
+    }
+
+    //@todo 此方法是为了和旧的调用兼容，考虑清理掉
+    protected function createErrorResponse($request, $name, $message)
+    {
+        $error = array('error' => array('name' => $name, 'message' => $message));
+
+        return new JsonResponse($error, '200');
     }
 
     /**
