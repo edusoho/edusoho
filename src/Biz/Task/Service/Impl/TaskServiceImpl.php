@@ -732,6 +732,25 @@ class TaskServiceImpl extends BaseService implements TaskService
     }
 
     /**
+     * 获取用户最近进行的一个任务
+     *
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function getUserRecentlyStartTask($userId)
+    {
+        $results = $this->getTaskResultService()->searchTaskResults(array(), array(), 0, 1);
+        $result = array_shift($results);
+        if(empty($result)){
+           return array();
+        }
+        $task = $this->getTask($result['courseTaskId']);
+        return $task;
+    }
+
+
+    /**
      * @return TaskDao
      */
     protected function getTaskDao()

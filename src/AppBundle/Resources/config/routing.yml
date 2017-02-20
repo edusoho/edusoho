@@ -2750,6 +2750,18 @@ course_show:
   path: /course/{id}/{tab}
   defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }
 
+course_set_archive:
+  path: /archive/course # 学习引擎2.0版本前该页面有SEO
+  defaults: { _controller: AppBundle:Course/CourseSet:archive }
+
+course_set_archive_show:
+  path: /archive/course/{courseSetId} # 学习引擎2.0版本前该页面有SEO
+  defaults: { _controller: AppBundle:Course/CourseSet:archiveDetail }
+
+course_set_archive_task:
+  path: /archive/course/{courseSetId}/lesson/{taskId} # 学习引擎2.0版本前该页面有SEO
+  defaults: { _controller: AppBundle:Course/CourseSet:archiveTask }
+
 #更新日志列表
 changelog_list:
     path: /changelog/list
