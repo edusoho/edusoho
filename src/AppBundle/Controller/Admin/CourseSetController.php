@@ -3,11 +3,15 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
 use Biz\CloudPlatform\Service\AppService;
+use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
@@ -17,6 +21,7 @@ use Biz\Activity\Service\ActivityLearnLogService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Vip\Service\Vip\LevelService;
 
 class CourseSetController extends BaseController
 {
@@ -639,7 +644,7 @@ class CourseSetController extends BaseController
      */
     protected function getThreadService()
     {
-        return $this->createService('Thread:ThreadService');
+        return $this->createService('Course:ThreadService');
     }
 
     /**
