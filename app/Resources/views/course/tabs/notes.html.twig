@@ -1,9 +1,20 @@
-
-{% do script(['app/js/courseset/show/notes/index.js']) %}
+{% do script(['app/js/courseset/show/notes/index.js', 'app/js/course/widgets/choice-course/index.js']) %}
 
 {% set nav = 'note' %}
 
 {% block detail_content %}
+  <select class="form-control js-choice-course">
+    {% if member %}
+      {% set route = 'my_course_show' %}
+    {% else %}
+      {% set route = 'course_show' %}
+    {% endif %}
+    {% for selectCourse in courses %}
+      <option value="{{ path(route, {id: course.id, selectedCourse: selectCourse.id, tab: 'notes'}) }}#notes" {% if selectCourse.id == selectedCourseId %}selected{% endif %}>{{ selectCourse.title }}</option>
+    {% endfor %}
+    <option value="{{ path(route, {id: course.id, tab: 'notes'}) }}#notes" {% if 0 == selectedCourseId %}selected{% endif %}>{{ '全部教学计划'|trans }}</option>
+  </select>
+
   <div class="note-list" id="note-list">
     {% for note in notes %}
       {% set author = users[note.userId] %}

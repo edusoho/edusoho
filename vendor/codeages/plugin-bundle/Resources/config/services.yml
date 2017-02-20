@@ -45,6 +45,12 @@ services:
         class:          Codeages\PluginBundle\Locator\ThemeFileLocator
         arguments:      ['@kernel', '%kernel.root_dir%/Resources']
 
+    codeages_plugin.theme.twig_loader:
+        class: Codeages\PluginBundle\Loader\ThemeTwigLoader
+        arguments: ['@kernel', '@codeages_plugin.theme.file_locator', '@templating.name_parser']
+        tags:
+            - { name: twig.loader, priority: 255 }
+
     codeages_plugin.theme.templating.locator:
         class:          "%templating.locator.class%"
         arguments:      ['@codeages_plugin.theme.file_locator', '%kernel.cache_dir%']

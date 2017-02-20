@@ -1,5 +1,5 @@
 import videojs from 'video.js'
-import Emitter from 'es6-event-emitter';
+import Emitter from "component-emitter";
 let videoSwf = require('video.js/dist/video-js/video-js.swf');
 
 class LocalVideoPlayer extends Emitter {
@@ -44,24 +44,24 @@ class LocalVideoPlayer extends Emitter {
     });
 
     player.on('ended', (e) => {
-      this.trigger('ended', e);
+      this.emit('ended', e);
       this._onEnded(e);
     });
 
     player.on('timeupdate', (e) => {
-      this.trigger('timechange', e);
+      this.emit('timechange', e);
     });
 
     player.on('loadedmetadata', (e) => {
-      that.trigger('ready', e);
+      that.emit('ready', e);
     });
 
     player.on("play", (e) => {
-      that.trigger("playing", e);
+      that.emit("playing", e);
     });
 
     player.on("pause", (e) => {
-      that.trigger("paused", e);
+      that.emit("paused", e);
     });
 
     this.player = player;

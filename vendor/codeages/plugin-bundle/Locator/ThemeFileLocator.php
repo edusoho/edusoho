@@ -4,8 +4,9 @@ namespace Codeages\PluginBundle\Locator;
 
 use Symfony\Component\Config\FileLocator as BaseFileLocator;
 use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
+use Symfony\Component\Templating\TemplateReference;
 
-class ThemeFileLocator extends BaseFileLocator
+class ThemeFileLocator extends BaseFileLocator// implements \Twig_LoaderInterface
 {
     private $kernel;
     private $path;
@@ -93,5 +94,15 @@ class ThemeFileLocator extends BaseFileLocator
         }
 
         throw new \InvalidArgumentException(sprintf('Unable to find file "%s".', $name));
+    }
+
+    /**
+     * @param $file
+     *
+     * @return bool
+     */
+    protected function isAppResource($file)
+    {
+        return strpos((string) $file, 'views') === 0;
     }
 }

@@ -170,7 +170,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function deleteTask($id)
     {
         $task = $this->getTask($id);
-
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException('无权删除任务');
         }
@@ -731,6 +730,25 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         return $this->getTaskDao()->analysisTaskDataByTime($startTime, $endTime);
     }
+
+    /**
+     * 获取用户最近进行的一个任务
+     *
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function getUserRecentlyStartTask($userId)
+    {
+        $results = $this->getTaskResultService()->searchTaskResults(array(), array(), 0, 1);
+        $result = array_shift($results);
+        if(empty($result)){
+           return array();
+        }
+        $task = $this->getTask($result['courseTaskId']);
+        return $task;
+    }
+
 
     /**
      * @return TaskDao

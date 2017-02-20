@@ -274,7 +274,7 @@ threadProperty:
     isElite: 加精
 
 classroomService:
-    homeworkReview: 作业快速批改
+    homeworkReview: 作业快速批阅
     testpaperReview: 试卷阅卷
     teacherAnswer: 教师答疑
     event: 活动组织

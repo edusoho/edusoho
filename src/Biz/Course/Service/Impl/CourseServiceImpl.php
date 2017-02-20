@@ -1110,8 +1110,17 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     protected function mergeCourseDefaultAttribute($course)
     {
+        $course = array_filter($course, function ($value) {
+            if ($value === '' || $value === null) {
+                return false;
+            }
+
+            return true;
+        });
+
         $default = array(
-            'tryLookable' => 0
+            'tryLookable' => 0,
+            'originPrice' => 0.00
         );
 
         return array_merge($default, $course);

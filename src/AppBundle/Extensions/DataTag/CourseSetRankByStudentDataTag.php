@@ -2,9 +2,8 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
 
-class CourseRankByStudentDataTag extends CourseBaseDataTag implements DataTag  
+class CourseSetRankByStudentDataTag extends CourseBaseDataTag implements DataTag
 {
 
     /**
@@ -24,9 +23,9 @@ class CourseRankByStudentDataTag extends CourseBaseDataTag implements DataTag
         $conditions = array('status' => 'published');
         $conditions['parentId'] = 0;
 
-    	$courses = $this->getCourseService()->searchCourses($conditions,'studentNum', 0, $arguments['count']);
+    	$courseSets = $this->getCourseSetService()->searchCourseSets($conditions,'studentNum', 0, $arguments['count']);
         
-        return $this->getCourseTeachersAndCategories($courses);    
+        return $this->fillCourseSetTeachersAndCategoriesAttribute($courseSets);
     }
 
 }

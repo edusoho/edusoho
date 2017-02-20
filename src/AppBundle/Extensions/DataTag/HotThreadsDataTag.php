@@ -3,6 +3,7 @@
 namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Group\Service\ThreadService;
 use Topxia\Service\Common\ServiceKernel;
 
 class HotThreadsDataTag extends BaseDataTag implements DataTag
@@ -22,21 +23,23 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $groupSetting = $this->getSettingService()->get('group', array());
-        $time         = 7 * 24 * 60 * 60;
+        $timeRange    = 7 * 24 * 60 * 60;
         if (isset($groupSetting['threadTime_range'])) {
-            $time = $groupSetting['threadTime_range'] * 24 * 60 * 60;
+            $timeRange = $groupSetting['threadTime_range'] * 24 * 60 * 60;
         }
 
         $hotThreads = $this->getThreadService()->searchThreads(
             array(
-                'createdTime' => time() - $time,
+                'createdTime' => time() - $timeRange,
                 'status'      => 'open'
             ),
             array(
-                array('isStick'=> 'DESC'),
-                array('postNum'=> 'DESC'),
-                array('createdTime'=> 'DESC'),
-            ), 0, $arguments['count']
+                'isStick'     => 'DESC',
+                'postNum'     => 'DESC',
+                'createdTime' => 'DESC'
+            ),
+            0,
+            $arguments['count']
         );
 
         $ownerIds = ArrayToolkit::column($hotThreads, 'userId');
@@ -67,6 +70,9 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
         return $hotThreads;
     }
 
+    /**
+     * @return ThreadService
+     */
     private function getThreadService()
     {
         return $this->getServiceKernel()->createService('Group:ThreadService');
