@@ -94,10 +94,6 @@ class ClassroomManageController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if (!$user->isLogin()) {
-            return $this->createErrorResponse($request, 'not_login', '用户未登录，创建班级失败。');
-        }
-
         $canManage = $this->getClassroomService()->canManageClassroom($classroom['id']);
         $canHandle = $this->getClassroomService()->canHandleClassroom($classroom['id']);
 
