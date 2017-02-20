@@ -2,6 +2,8 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
+use Biz\Task\Service\TaskService;
+use Vip\Service\Vip\LevelService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -11,7 +13,6 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
 use Biz\CloudPlatform\Service\AppService;
-use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
@@ -21,7 +22,6 @@ use Biz\Activity\Service\ActivityLearnLogService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
-use Vip\Service\Vip\LevelService;
 
 class CourseSetController extends BaseController
 {
