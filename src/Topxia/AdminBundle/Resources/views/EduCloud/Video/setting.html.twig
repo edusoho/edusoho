@@ -247,6 +247,7 @@
       {{ radios('video_audio_quality', {'low':'流畅'|trans, 'normal':'标准'|trans, 'high': '高品'|trans}, storageSetting.video_audio_quality) }}
     </div>
   </div>
+
   <div class="row form-group">
     <div class="col-md-3 control-label">
       <label for="enable_playback_rates">倍速播放：</label>
@@ -259,6 +260,15 @@
     </div>
   </div>
   <div class="upload-mode">
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="video_auto_play">云视频自动播放：</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('video_auto_play', {'true':'开启', 'false':'关闭'}, storageSetting.video_auto_play) }}
+    </div>
   </div>
 
   <div class="row form-group">

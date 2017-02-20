@@ -46,6 +46,9 @@
             {% if setting('storage.cloud_access_key') %}
               data-access-key="{{ setting('storage.cloud_access_key') }}"
             {% endif %}
+            {% if setting('storage.video_auto_play') %}
+              data-autoplay="{{ setting('storage.video_auto_play') }}"
+            {% endif %}
             {% if setting('storage.video_fingerprint') and app.user %}
               data-fingerprint="{{ finger_print() }}"
               data-fingerprint-src="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"

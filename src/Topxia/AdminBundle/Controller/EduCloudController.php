@@ -240,7 +240,8 @@ class EduCloudController extends BaseController
             'video_watermark_position'    => 'topright',
             'video_fingerprint'           => 0,
             'video_fingerprint_time'      => 0.5,
-            'video_header'                => null
+            'video_header'                => null,
+            'video_auto_play'             => false
         );
 
         if ($request->getMethod() == 'POST') {
