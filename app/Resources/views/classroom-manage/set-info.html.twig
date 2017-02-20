@@ -1,7 +1,7 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 
 {% set side_nav = 'base' %}
-{% do script(['libs/jquery-validation.js','libs/es-ckidtor','app/js/classroom/set-info/index.js']) %}
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/classroom/set-info/index.js']) %}
 {#{% do load_script('topxiawebbundle/controller/classroom/set-info') %}
 {% do load_script('topxiaadminbundle/controller/classroom/classroom-create') %}#}
 
@@ -95,7 +95,7 @@ tagMatchUrl: path('tag_match'),
       <div class="row form-group">
         <div class="col-md-2 control-label"></div>
         <div class="controls col-md-8">
-          <button type="submit" class="btn btn-primary" id="classroom-save">{{'提交'|trans}}</button>  
+          <button class="btn btn-primary" id="classroom-save">{{'提交'|trans}}</button>  
         </div>
       </div>
 

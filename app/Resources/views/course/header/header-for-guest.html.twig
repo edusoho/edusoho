@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="course-detail-info text-12 color-gray">
-      <div class="mb10">
+      <div class="mb20">
           {% include 'course/header/header-for-price.html.twig' %}
       </div>
       <!-- 有活动显示  -->
@@ -56,7 +56,7 @@
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent inline-block ml5">
               {% set current_course = course %}
               {% for course in  courses %}
-                <li {% if current_course.id == course.id %}class="mb10 mr10 active" {% endif %}>
+                <li class="mb10 mr10 {% if current_course.id == course.id %} active {% endif %}">
                   <a href="{{ path('course_show',{id: course.id}) }}">{{ course.title }}</a>
                 </li>
               {% endfor %}
