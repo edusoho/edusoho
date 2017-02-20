@@ -18,7 +18,7 @@ class DefaultController extends BaseController
         }
         //判断是否是定制用户
         $result = CloudAPIFactory::create('leaf')->get('/me');
-        $custom = $this->canCustom($result);
+        $custom = $this->isCustom($result);
 
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
@@ -27,9 +27,10 @@ class DefaultController extends BaseController
 
     public function appDownloadAction() {
         $result = CloudAPIFactory::create('leaf')->get('/me');
-        $custom = $this->canCustom($result);
+        $custom = $this->isCustom($result);
+
         if ($custom) {
-            return $this->render('TopxiaWebBundle:Default:404.html.twig');
+            return $this->createMessageResponse('warning', '非法请求');
         }
 
         $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
@@ -45,7 +46,7 @@ class DefaultController extends BaseController
         ));
     }
 
-    private function canCustom($result)
+    private function isCustom($result)
     {
         $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
 
