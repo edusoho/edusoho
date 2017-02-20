@@ -142,7 +142,7 @@
         </div>
 
         {% if courses %}
-        <div class="alert alert-warning pull-right">{{'若%name%课程被移除，则该课程内所有学习数据将被清空。'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
+        <div class="alert alert-warning">{{'若%name%课程被移除，则该课程内所有学习数据将被清空。'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
         <div class="form-group">
           <div class="col-md-offset-9 col-md-3 controls">
             <div class="mbl pull-right">{{'共计:'|trans}} &nbsp; &nbsp;

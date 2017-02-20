@@ -1,9 +1,9 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 
 {% set side_nav = 'base' %}
-{# {% set script_controller = 'topxiawebbundle/controller/classroom/set-info' %} #}
-{% do load_script('topxiawebbundle/controller/classroom/set-info') %}
-{% do load_script('topxiaadminbundle/controller/classroom/classroom-create') %}
+{% do script(['libs/jquery-validation.js','libs/es-ckidtor','app/js/classroom/set-info/index.js']) %}
+{#{% do load_script('topxiawebbundle/controller/classroom/set-info') %}
+{% do load_script('topxiaadminbundle/controller/classroom/classroom-create') %}#}
 
 {% set script_arguments = {
 tagMatchUrl: path('tag_match'),
@@ -12,7 +12,7 @@ tagMatchUrl: path('tag_match'),
 {% block title %}{{'基本信息'|trans}} - {{ parent() }}{% endblock %}
 
 {% block main %}
-<div class="panel panel-default panel-col">
+<div class="panel panel-default" role="classroom-manage-base">
   <div class="panel-heading">{{'基本信息'|trans}}</div>
   <div class="panel-body">
     {{ web_macro.flash_messages() }}

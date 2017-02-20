@@ -11,7 +11,90 @@
 }
 
 </style>
-<ul class="course-wide-list">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th width="10%" ><input class="course-item-cbx" style="float:left;" type="checkbox" ></th>
+      <th width="30%">课程名称</th>
+      <th width="30%">教学计划名称</th>
+      <th>教师名称</th>
+      <th>价格</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if courseSets|default(null) %}
+    {% for courseSet in courseSets %}
+    <tr>
+      <td class="vertical-middle" data-id="{{courseSet.id}}">
+        <input class="course-item-cbx" style="float:left;" type="checkbox" name="course-{{courseSet.id}}">
+      </td>
+      <td>
+        <a class="pull-left mr5" href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">
+          <img class="course-picture" src="{{ filepath(courseSet.cover['middle']|default(null), 'courseSet.png') }}" alt="{{ courseSet.title }}" width="100">
+        </a>
+        <div class="mlm">
+          <a href="{{ path('course_set_show',{id:courseSet.id}) }}">{{ courseSet.title }}</a>
+        </div>
+      </td>
+      <td>
+        {% if courseSet.courses|length == 1 %}
+          {% for course in courseSet.courses %}
+            {{course.title}}
+          {% endfor %}
+          <select class="form-control js-course-select width-150 hidden" id="course-select-{{courseSet.id}}" style="width:80%;display: inline-block;">
+            {% if courseSet.courses %}
+              {% for course in courseSet.courses %}
+                  {{course.title}}
+                  <option value="{{course.id}}">{{course.title}}</option>
+              {% endfor %}
+            {% endif %}
+          </select>
+        {% else %}
+          <select class="form-control js-course-select width-150" id="course-select-{{courseSet.id}}" style="width:80%;display: inline-block;">
+            {% if courseSet.courses %}
+              {% for course in courseSet.courses %}
+                  {{course.title}}
+                  <option value="{{course.id}}">{{course.title}}</option>
+              {% endfor %}
+            {% endif %}
+          </select>
+          <a class="color-gray" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="课程下包含多个教学计划，请选择需要复制的教学计划！"><i class="es-icon es-icon-help"></i></a>
+        {% endif %}
+      </td>
+      <td>
+        {% set teacher = users[courseSet.creator]|default(null) %}
+        {% if teacher %}
+          <div class="teacher">
+            <a class="teacher-nickname ellipsis" target="_blank"  href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+          </div>
+        {% endif %}
+      </td>
+      <td>
+        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+          <span class="course-price" style="display:inline">
+            {% if courseSet.price|default(0) > 0 %}
+               {{'价格：'|trans}} {{ courseSet.price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}
+            {% else %}
+              {{'免费'|trans}}
+            {% endif %}
+          </span>
+        {% else %}
+          <span class="course-price">
+            {% if courseSet.price|default(0) > 0 %}
+               {{'价格 : %price%元'|trans({'%price%': courseSet.price })}}
+            {% else %}
+              {{'免费'|trans}}
+            {% endif %}
+          </span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+  </tbody>
+</table>
+<label class="ml10"><input type="checkbox" class="ml10"/>全选</label>
+{#<ul class="course-wide-list test">
   {% if courseSets|default(null) %}
   {% for courseSet in courseSets %}
   <li class="course-item clearfix" data-id="{{courseSet.id}}" >
@@ -76,7 +159,6 @@
       {% endif %}
 
       <div class="course-footer clearfix">
-        {# {% set teacher = users[courseSet.teacherIds|default([])|first]|default(null) %} #}
         {% set teacher = users[courseSet.creator]|default(null) %}
         {% if teacher %}
           <div class="teacher">
@@ -86,7 +168,6 @@
           </div>
         {% endif %}
         <div class="pull-right">
-          {# <label>{{'选择教学计划'|trans}}</label> #}
           <select class="form-control js-course-select" id="course-select-{{courseSet.id}}">
             {% if courseSet.courses %}
               {% for course in courseSet.courses %}
@@ -106,7 +187,7 @@
   {% else %}
   <div class="empty">{{'找不到相关课程！'|trans}}</div>
   {% endif %}
-</ul>
+</ul>#}
 
 {% if type|default('') == 'ajax_pagination' %}
 {{ web_macro.ajax_paginator(paginator) }}

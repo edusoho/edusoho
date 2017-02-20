@@ -1,15 +1,10 @@
 {% extends 'classroom-manage/layout.html.twig' %}
-
 {% block title %}{{ setting('classroom.name')|default("班级"|trans) }}{{'管理'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'main' %}
-{% set script_controller = 'topxiawebbundle/controller/classroom/index' %}
 
 {% block main %}
-
 {% set unsetted = "" %}
-
-<div class="panel panel-default panel-col">
+<div class="panel panel-default" role="classroom-manage-index">
   <div class="panel-body">
     {{ web_macro.flash_messages() }}
     <div class="row">
@@ -177,5 +172,4 @@
     {% endif %}
   </div>
 </div>
-
 {% endblock %}
