@@ -65,7 +65,7 @@ class Editor {
     let type = $this.data('type');
     $('[name="mediaType"]').val(type);
     this.contentUrl = $this.data('contentUrl');
-    this.type !== type ? (this.loaded = false) : (this.loaded = true);
+    this.loaded = this.type === type;
     this.type = type;
     this._onNext(event);
   }
@@ -99,11 +99,14 @@ class Editor {
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
+        console.log(response);
         this.$element.modal('hide');
         if (response && response.append !== undefined && response.append === false) {
           let data = $('#sortable-list').sortable("serialize").get();
           $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
             if (response) {
+              this.showDefaultSetting();
+              // @TODO去除reload;
               document.location.reload();
             }
           });
@@ -115,6 +118,7 @@ class Editor {
 
         var add = 0;
         let $parent = $('#' + chapterId.value);
+        let $item = null;
 
         if ($parent.length) {
           $parent.nextAll().each(function () {
@@ -130,13 +134,16 @@ class Editor {
             }
           });
           if (add != 1) {
-            $("#sortable-list").append(html);
+            $item = $(html);
+            $("#sortable-list").append($item);
             add = 1;
           }
         } else {
-          $("#sortable-list").append(html);
+          $item = $(html);
+          $("#sortable-list").append($item);
         }
-
+        // 最后一个
+        this.showDefaultSetting($item);
         let data = $('#sortable-list').sortable("serialize").get();
         $.post($('#sortable-list').data('sortUrl'), {ids: data});
       })
@@ -149,6 +156,13 @@ class Editor {
         notify('warning', '保存出错: ' + msg);
         $("#course-tasks-submit").attr('disabled', null);
       });
+  }
+
+  showDefaultSetting($item) {
+    if($item.hasClass('js-task-manage-item')) {
+      $('.js-task-manage-item').removeClass('active').find('.js-settings-list').slideUp();;
+      $item.addClass('active').find('.js-settings-list').slideDown();
+    }
   }
 
   _onDelete(event) {

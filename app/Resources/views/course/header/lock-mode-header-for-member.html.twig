@@ -110,8 +110,7 @@
           {% endif %}
           <span class="right-menu mouse-leave">
           {{ task.activity.length|activity_length_format }} <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
-                                                               data-toggle="tooltip" data-placement="top"
-                                                               title="{{ meta.name|default(null) }}任务"></i>
+          data-toggle="tooltip" data-placement="top" title="{{ meta.name|default(null) }}任务"></i>
         </span>
           {% if  task_lock is empty %}
             <span class="right-menu mouse-enter">
