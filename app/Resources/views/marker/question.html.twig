@@ -1,13 +1,14 @@
+{% set file = video.ext.file|default(null) %}
 <div class="pane-question-content js-pane-question-content show-introhelp"
 	data-marker-metas-url="
-	{{path('course_lesson_marker_metas',{'mediaId':lesson.mediaId})}}"
-	data-queston-marker-add-url="{{path('course_lesson_question_marker_add',{'courseId':course.id,'lessonId':lesson.id})}}"
-	data-queston-marker-delete-url="{{path('course_lesson_question_marker_delete',{'courseId':course.id,'lessonId':lesson.id})}}"
-	data-marker-merge-url="{{path('course_lesson_marker_merge',{'courseId':course.id,'lessonId':lesson.id})}}"
-	data-marker-update-url="{{path('course_lesson_marker_update',{'courseId':course.id,'lessonId':lesson.id})}}"
-	data-queston-marker-sort-url="{{path('course_lesson_question_marker_sort',{'courseId':course.id,'lessonId':lesson.id})}}"
+	{{path('course_task_marker_metas',{'mediaId':file.id})}}"
+	data-queston-marker-add-url="{{path('course_task_question_marker_add',{'courseId':course.id,'taskId':task.id})}}"
+	data-queston-marker-delete-url="{{path('course_task_question_marker_delete',{'courseId':course.id,'taskId':task.id})}}"
+	data-marker-merge-url="{{path('course_task_marker_merge',{'courseId':course.id,'taskId':task.id})}}"
+	data-marker-update-url="{{path('course_task_marker_update',{'courseId':course.id,'taskId':task.id})}}"
+	data-queston-marker-sort-url="{{path('course_task_question_marker_sort',{'courseId':course.id,'taskId':task.id})}}"
 	>
-		<form class="form-horizontal js-mark-from mrl" action="{{path('course_lesson_question_marker_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
+		<form class="form-horizontal js-mark-from mrl" action="{{path('course_task_question_marker_search',{courseId:course.id,taskId:task.id})}}" method="post" novalidate>
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 			<div class="form-group">
 				<div class="col-xs-5">
@@ -50,7 +51,7 @@
 				</div>
 			</div>
 		</div>
-		<ul class="lesson-list gruop-lesson-list " id="subject-lesson-list" data-intro-img=  ></ul>
+		<ul class="task-list gruop-task-list " id="subject-task-list" data-intro-img=  ></ul>
 </div>
 {% do load_script('marker/question') %}
 {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}

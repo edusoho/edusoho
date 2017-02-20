@@ -12954,13 +12954,13 @@ textarea {
 .marker-manage .breadcrumb li.active {
   color: #fff;
 }
-.marker-manage .lesson-list {
+.marker-manage .task-list {
   border: 0;
   margin: 0;
   overflow: auto;
   padding-right: 15px;
 }
-.marker-manage .lesson-list .item-lesson {
+.marker-manage .task-list .item-task {
   position: relative;
   background-color: transparent;
   border: none;
@@ -12969,50 +12969,50 @@ textarea {
   margin-left: 0;
   cursor: move;
 }
-.marker-manage .lesson-list .item-lesson .btn-preview {
+.marker-manage .task-list .item-task .btn-preview {
   top: 0;
   right: 0;
   color: #919191;
 }
-.marker-manage .lesson-list .item-lesson .btn-preview:hover {
+.marker-manage .task-list .item-task .btn-preview:hover {
   color: #46c37b;
 }
-.marker-manage .lesson-list .item-lesson .sqe-number {
+.marker-manage .task-list .item-task .sqe-number {
   display: none;
 }
-.marker-manage .lesson-list .item-lesson .icon-drag {
+.marker-manage .task-list .item-task .icon-drag {
   vertical-align: middle;
   margin-right: 10px;
   font-size: 16px;
 }
-.marker-manage .lesson-list .item-lesson .question-remove {
+.marker-manage .task-list .item-task .question-remove {
   position: absolute;
   top: 12px;
   right: 5px;
 }
-.marker-manage .lesson-list .item-lesson .info {
+.marker-manage .task-list .item-task .info {
   display: inline-block;
   max-width: 60%;
   vertical-align: middle;
 }
-.marker-manage .lesson-list .item-lesson.dragged {
+.marker-manage .task-list .item-task.dragged {
   border: 1px dashed #919191;
   position: absolute;
   width: 220px!important;
   padding-left: 15px;
 }
-.marker-manage .lesson-list .item-lesson.dragged .btn-preview {
+.marker-manage .task-list .item-task.dragged .btn-preview {
   display: none;
 }
-.marker-manage .lesson-list .item-lesson.disdragg {
+.marker-manage .task-list .item-task.disdragg {
   opacity: 0.3;
   filter: alpha(opacity=30);
   cursor: default;
 }
-.marker-manage .lesson-list .placeholder {
+.marker-manage .task-list .placeholder {
   position: relative;
 }
-.marker-manage .lesson-list .more-questions {
+.marker-manage .task-list .more-questions {
   position: absolute;
   right: 15px;
   bottom: -15px;
@@ -13021,20 +13021,20 @@ textarea {
   color: #919191;
   font-size: 12px;
 }
-.marker-manage .lesson-list .more-questions .loading {
+.marker-manage .task-list .more-questions .loading {
   display: none;
 }
-.marker-manage .lesson-list .more-questions .loading img {
+.marker-manage .task-list .more-questions .loading img {
   height: 30px;
   margin-right: 10px;
 }
-.marker-manage .lesson-list .more-questions.loading .loading {
+.marker-manage .task-list .more-questions.loading .loading {
   display: inline;
 }
-.marker-manage .lesson-list .more-questions a {
+.marker-manage .task-list .more-questions a {
   color: #919191;
 }
-.marker-manage .lesson-list .more-questions a:hover {
+.marker-manage .task-list .more-questions a:hover {
   color: #46c37b;
 }
 .marker-manage-content {

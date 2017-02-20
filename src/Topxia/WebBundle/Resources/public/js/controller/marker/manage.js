@@ -5,21 +5,21 @@ define(function (require, exports, module) {
 
     var DraggableWidget = Widget.extend({
         attrs: {
-            item: '.item-lesson',
+            item: '.item-task',
             placeholder: '.placeholder',
             _video_time: '18', //视频总时长
             messenger: {},
             editbox: '.editbox',
             scalebox: '.js-scalebox',
             timepartnum: '6',
-            subject_lesson_list: '#subject-lesson-list',
-            editbox_lesson_list: "#editbox-lesson-list",
-            group_list: ".gruop-lesson-list",
+            subject_task_list: '#subject-task-list',
+            editbox_task_list: "#editbox-task-list",
+            group_list: ".gruop-task-list",
             isDraggable: false, //拖动时阻止滑动事件响应
             initMarkerArry: [], //初始化数据
             updateSqeArry: [],
             markers_array: new Array(), //所有标记好的时间集合
-            courseId: $('#lesson-dashboard').data("course-id"),
+            courseId: $('#task-dashboard').data("course-id"),
             addScale: function (markerJson, $marker, markers_array) {
                 return markerJson;
             },
@@ -37,12 +37,12 @@ define(function (require, exports, module) {
             }
         },
         events: {
-            'mousedown .gruop-lesson-list .drag': 'itemDraggable',
-            'click .lesson-list [data-role="question-remove"]': 'itemRmove',
-            'click #subject-lesson-list .item-lesson': 'stopEvent',
+            'mousedown .gruop-task-list .drag': 'itemDraggable',
+            'click .task-list [data-role="question-remove"]': 'itemRmove',
+            'click #subject-task-list .item-task': 'stopEvent',
             'mousedown .scale-blue': 'slideScale',
             'mouseenter .scale-blue': 'hoverScale',
-            'mousedown .scale-blue .item-lesson': 'previewQuestion',
+            'mousedown .scale-blue .item-task': 'previewQuestion',
             'mousedown .js-question-preview': 'previewMouseDown',
 
         },
@@ -57,7 +57,7 @@ define(function (require, exports, module) {
             messenger = this.get('messenger');
             var _self = this;
             var changeleft = true;
-            var $editbox_list = $('#editbox-lesson-list');
+            var $editbox_list = $('#editbox-task-list');
             messenger.on("timechange", function (data) {
                 if (changeleft) {
                     $('.scale-white').css('left', _self._getleft(data.currentTime));
@@ -122,7 +122,7 @@ define(function (require, exports, module) {
                 _move_time = null;
 
             var $dragingitem = $(e.currentTarget),
-                $editbox_list = $('#editbox-lesson-list'),
+                $editbox_list = $('#editbox-task-list'),
                 $scale_red = $('[data-role="scale-red"]'),
                 $scale_red_details = $scale_red.find('[data-role="scale-red-details"]'),
                 $dragingitemcopy = $dragingitem.clone().removeClass('drag').addClass('disdragg');
@@ -168,7 +168,7 @@ define(function (require, exports, module) {
                 $scale_red.addClass('hidden');
                 $editbox_list.removeClass('highlight');
                 //未拖动
-                var $moveeditem = $editbox_list.find('.item-lesson');
+                var $moveeditem = $editbox_list.find('.item-task');
                 if ($moveeditem.length <= 0) {
                     $scale_red.addClass('hidden');
                     $editbox_list.removeClass('highlight');
@@ -201,7 +201,7 @@ define(function (require, exports, module) {
                 _mover_left = null,
                 _move_time = null;
             var $moveitem = $(e.currentTarget),
-                $editbox_list = $('#editbox-lesson-list'),
+                $editbox_list = $('#editbox-task-list'),
                 _oldleft = $moveitem.css('left');
             _self._maskShow(true);
             $('.marker-manage').addClass('slideing');
@@ -252,24 +252,24 @@ define(function (require, exports, module) {
         },
         _initSortable: function () {
             var _obj = this;
-            $("#subject-lesson-list").sortable({
+            $("#subject-task-list").sortable({
                 group: 'no-drop',
                 drop: false,
                 delay: 500,
                 handle: '.drag',
                 onDrop: function ($item, container, _super) {
-                    if ($item.hasClass('item-lesson')) {
+                    if ($item.hasClass('item-task')) {
                         _super($item, container);
                         var $_scale = $item.closest('.scale.blue');
-                        if ($_scale.find('.lesson-list .item-lesson').length > 0) {
-                            _obj._sortList($_scale.find('.lesson-list'));
-                            _obj._addScale($_scale, $_scale.find('.time').html(), $_scale.css("left"), $_scale.find('.lesson-list').children().length);
+                        if ($_scale.find('.task-list .item-task').length > 0) {
+                            _obj._sortList($_scale.find('.task-list'));
+                            _obj._addScale($_scale, $_scale.find('.time').html(), $_scale.css("left"), $_scale.find('.task-list').children().length);
                         }
                     }
                 }
             });
             
-            $("#editbox-lesson-list").sortable({
+            $("#editbox-task-list").sortable({
                 group: 'no-drop',
                 drag: false
             });
@@ -326,7 +326,7 @@ define(function (require, exports, module) {
         },
         _sortList: function ($list) {
             var num = 1;
-            $list.find('.item-lesson').each(function () {
+            $list.find('.item-task').each(function () {
                 $(this).find('[data-role="sqe-number"]').text(num);
                 num++;
             });
@@ -335,7 +335,7 @@ define(function (require, exports, module) {
             var _self = this;
             $list.sortable({
                 delay: 500,
-                itemSelector: '.item-lesson',
+                itemSelector: '.item-task',
                 onDrop: function ($item, container, _super) {
                     _super($item, container);
                     _self._maskShow(false);
@@ -409,13 +409,13 @@ define(function (require, exports, module) {
             $.extend(this.get("updateSeq")($scale, markerJson));
         },
         _getleft: function (time) {
-            var _width = $('#editbox-lesson-list').width();
+            var _width = $('#editbox-task-list').width();
             var _totaltime = parseInt(this.get("_video_time"));
             var _left = time * _width / _totaltime;
             return _left + 20;
         },
         _gettime: function (left) {
-            return Math.round((left - 20) * this.get('_video_time') / $('#editbox-lesson-list').width());
+            return Math.round((left - 20) * this.get('_video_time') / $('#editbox-task-list').width());
         },
     });
     

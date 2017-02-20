@@ -1,6 +1,6 @@
 {% import "macro.html.twig" as web_macro %}
   {% for question in questions %}
-    <li class=" item-lesson {% if question.exist|default(false) %}disdragg {% else %} drag {% endif %}" id="" question-id="{{question.id}}" data-role="scale-blue-item" data-url="{{ path('course_question_marker_preview', {id:question.id, courseId:course.id}) }}"  data-toggle="modal" data-target=".modal">
+    <li class=" item-task {% if question.exist|default(false) %}disdragg {% else %} drag {% endif %}" id="" question-id="{{question.id}}" data-role="scale-blue-item" data-url="{{ path('course_question_marker_preview', {id:question.id, courseId:course.id}) }}"  data-toggle="modal" data-target=".modal">
       <span class="sqe-number"><i class="question-remove es-icon es-icon-icon_close_circle" data-role="question-remove"></i><span data-role="sqe-number">1</span>、</span>
       <span class="title">
         <i class="icon-drag es-icon es-icon-yidong {% if loop.index == 1 %}introhelp-icon-drag{% endif %}"></i>
@@ -13,8 +13,8 @@
     <div class="empty">{{'暂无题目'|trans}}</div>
   {% endfor %}
   {% if paginator.lastPage > 1 %}
-  <li class="more-questions" data-last-page="{{ paginator.lastPage }}" data-current-page="{{ paginator.currentPage }}" data-url='/course/{{ course.id }}/lesson/{{ lesson.id }}/question_marker/search?page='>
-    <span class="loading">
+  <li class="more-questions" data-last-page="{{ paginator.lastPage }}" data-current-page="{{ paginator.currentPage }}" data-url="{{ path('course_task_question_marker_search',{courseId: course.id, taskId: task.id, page: ''}) }}">
+    <span class="loading hidden">
       <img src="{{ asset('assets/img/default/loading.gif') }} ">正在加载...
     </span>
     <a class="js-more-questions" href="javascript:;" >
