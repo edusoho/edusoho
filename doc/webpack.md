@@ -1,4 +1,4 @@
-## webpack前端方案初始化（需安装nodejs环境）
+## webpack前端方案初始化（需安装nodejs环境，推荐node版本为5.12.0）
 
 ### 前言
 
@@ -48,7 +48,7 @@ location ~ ^/static-dist {
   }
 }
 
-其中3030可修改，static-dist为settings.js文件中config.output.publicPath的值
+其中3030可修改，static-dist为webpack.config.js文件中config.output.publicPath的值
 ```
 
 ### 开发模式
@@ -61,7 +61,7 @@ openModule=lib,app,admin,plugin,copy npm start #可以选择监听哪几个模�
 
 ```
 # 此命令默认会绑定到3030端口，但不会生成真实文件，但可以通过http://127.0.0.1:3030/static-dist 浏览到文件目录，
-其中static-dist为settings.js文件中config.output.publicPath的值
+其中static-dist为swebpack.config.js文件中config.output.publicPath的值
 ```
 
 ### 最终编译
@@ -147,7 +147,7 @@ pluginDir/
   less/
     main.less
 
-# 其它说明
+# 其它说明--必读
 - 每个具有main.js的目录，编译时都会在同目录下生成common.js
 
 - 以app的layout.html.twig为例：
@@ -156,6 +156,10 @@ pluginDir/
   更多代码示例可参考：https://github.com/ketuzhong/biz-symfony-starter
 
 - 约定index.js 为每个页面的打包入口文件，其它文件名仅作为片段、模块被其它js文件引入（import）
+
+— vendor.js vendor.less 为前后台页面都需要引入的资源，如果只是前台页面用到则放到main.js
+
+- 理解清楚libs与common目录下的资源差异
 ```
 
 ### 最佳实践
@@ -245,6 +249,32 @@ Security context: 0xf2e91fe3ac1 <JS Object>
 FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed - process out of memory
 ```
 解决方法：重新执行编译命令，如开发环境下执行<code>npm start</code>
+
+3.端口被占用
+```
+events.js:154
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE 0.0.0.0:3030
+    at Object.exports._errnoException (util.js:893:11)
+    at exports._exceptionWithHostPort (util.js:916:20)
+    at Server.__dirname.Server.Server._listen2 (net.js:1246:14)
+    at listen (net.js:1282:10)
+    at net.js:1391:9
+    at _combinedTickCallback (internal/process/next_tick.js:77:11)
+    at process._tickDomainCallback (internal/process/next_tick.js:122:9)
+    at Function.Module.runMain (module.js:449:11)
+    at /Users/ketu/Sites/edudemo/node_modules/.6.18.0@babel-cli/lib/_babel-node.js:159:24
+    at Object.<anonymous> (/Users/ketu/Sites/edudemo/node_modules/.6.18.0@babel-cli/lib/_babel-node.js:160:7)
+    at Module._compile (module.js:413:34)
+    at Object.Module._extensions..js (module.js:422:10)
+    at Module.load (module.js:357:32)
+    at Function.Module._load (module.js:314:12)
+    at Function.Module.runMain (module.js:447:10)
+    at startup (node.js:148:18)
+```
+解决方法：该错误表明你已经开启了一个端口号为3030的服务，需要先把那个服务关掉
 
 
 
