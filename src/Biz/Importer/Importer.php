@@ -5,6 +5,7 @@ namespace Biz\Importer;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
+use Codeages\Biz\Framework\Context\Biz;
 
 abstract class Importer
 {
@@ -27,7 +28,7 @@ abstract class Importer
         return ServiceKernel::instance();
     }
 
-    public function __construct($biz)
+    public function __construct(Biz $biz)
     {
         $this->biz = $biz;
     }
