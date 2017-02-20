@@ -496,6 +496,48 @@ class CourseSetController extends BaseController
         }
     }
 
+    public function chooserAction(Request $request)
+    {
+        $conditions             = $request->query->all();
+        $conditions["parentId"] = 0;
+
+        if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
+            unset($conditions["categoryId"]);
+        }
+
+        if (isset($conditions["status"]) && $conditions["status"] == "") {
+            unset($conditions["status"]);
+        }
+
+        if (isset($conditions["title"]) && $conditions["title"] == "") {
+            unset($conditions["title"]);
+        }
+
+        if (isset($conditions["creator"]) && $conditions["creator"] == "") {
+            unset($conditions["creator"]);
+        }
+
+        $count = $this->getCourseSetService()->countCourseSets($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $courseSets = $this->getCourseSetService()->searchCourseSets(
+            $conditions,
+            null,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
+
+        return $this->render('admin/course/course-set-chooser.html.twig', array(
+            'conditions' => $conditions,
+            'courseSets' => $courseSets,
+            'categories' => $categories,
+            'paginator'  => $paginator
+        ));
+    }
+
     /**
      * @return CourseService
      */
