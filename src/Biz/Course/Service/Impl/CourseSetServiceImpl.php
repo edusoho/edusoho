@@ -185,13 +185,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return false;
         }
 
-        if($courseSet['creator'] == $user->getId()) {
+        if ($courseSet['creator'] == $user->getId()) {
             return true;
         }
 
         $courses = $this->findCoursesByCourseSetId($courseSetId);
         foreach ($courses as $key => $course) {
-            if($this->canManageCourse($course['id'])) {
+            if ($this->canManageCourse($course['id'])) {
                 return true;
             }
         }
@@ -796,6 +796,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'expiryDays'    => 0,
             'learnMode'     => 'freeMode',
             'isDefault'     => 1,
+            'isFree'        => 1,
             'serializeMode' => $created['serializeMode'],
             'status'        => 'draft'
         );

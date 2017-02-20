@@ -164,7 +164,7 @@ class BaseProcessor
 
     protected function getCouponService()
     {
-        return $this->controller->getService('Coupon.CouponService');
+        return $this->controller->getService('Coupon:CouponService');
     }
 
     protected function getQuestionService()
