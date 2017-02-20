@@ -172,13 +172,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getTestpaperService()
     {
-        return $this->createDao('Testpaper:TestpaperService');
+        return $this->createService('Testpaper:TestpaperService');
     }
-
-//    protected function getTestpaperItemDao()
-    //    {
-    //        return $this->createDao('Testpaper:TestpaperItemDao');
-    //    }
 
     /**
      * @return CourseChapterDao
@@ -209,7 +204,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
      */
     protected function getQuestionService()
     {
-        return $this->createDao('Question:QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 
     /**
