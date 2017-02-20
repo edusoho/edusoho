@@ -87,13 +87,11 @@ class DefaultServiceProvider implements ServiceProviderInterface
         };
 
         $biz['importer.course-member'] = function ($biz) {
-            return new CourseMemberImporter();
+            return new CourseMemberImporter($biz);
         };
 
         $biz['importer.classroom-member'] = function ($biz) {
-            return new ClassroomMemberImporter();
+            return new ClassroomMemberImporter($biz);
         };
-
     }
-
 }
