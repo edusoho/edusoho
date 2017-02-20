@@ -25,20 +25,20 @@ class DefaultController extends BaseController
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks, 'hasMobile' => $hasMobile));
     }
 
-//    public function appDownloadAction() {
-//        $result = CloudAPIFactory::create('leaf')->get('/me');
-//        $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
-//
-//        if ($this->getWebExtension()->isMicroMessenger()) {
-//            $url ="http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi";
-//        } else {
-//            $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
-//        }
-//
-//        return $this->render('TopxiaWebBundle:Default:Mobile/app-download.html.twig', array(
-//            'url' => $url
-//        ));
-//    }
+    public function appDownloadAction() {
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+        $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+
+        if ($this->getWebExtension()->isMicroMessenger()) {
+            $url ="http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi";
+        } else {
+            $url = $this->generateUrl('mobile_download', array('from' => 'qrcode', 'code' => $mobileCode), true);
+        }
+
+        return $this->render('TopxiaWebBundle:Default:Mobile/app-download.html.twig', array(
+            'url' => $url
+        ));
+    }
 
     public function userlearningAction()
     {

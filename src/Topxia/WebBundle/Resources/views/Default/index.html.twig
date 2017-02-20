@@ -17,7 +17,7 @@
 
 {% block full_content %}
   {% if not hasMobile | default(0) %}
-    {#{{ render(controller('TopxiaWebBundle:Default:appDownload')) }}#}
+    {{ render(controller('TopxiaWebBundle:Default:appDownload')) }}
   {% endif %}
     {% cache 'jianmo/home/top/banner' 600 %}
       {{ block_show('jianmo:home_top_banner') }}

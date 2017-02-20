@@ -2,9 +2,9 @@ homepage:
     path:  /
     defaults: { _controller: TopxiaWebBundle:Default:index }
 
-#app_download:
-#    path: /app/download
-#    defaults: { _controller: TopxiaWebBundle:Default:appDownload }
+app_download:
+    path: /app/download
+    defaults: { _controller: TopxiaWebBundle:Default:appDownload }
 
 switch_language:
     path: /switch/language
