@@ -3,19 +3,11 @@
 
 {% do script(['app/js/course/widgets/choice-course/index.js']) %}
 
-{% if courseSet.type != 'live' %}
-  <select class="form-control js-choice-course">
-    {% if member %}
-      {% set route = 'my_course_show' %}
-    {% else %}
-      {% set route = 'course_show' %}
-    {% endif %}
-    {% for selectCourse in courses %}
-      <option value="{{ path(route, {id: course.id, selectedCourse: selectCourse.id, tab: 'reviews'}) }}#reviews"
-        {% if selectCourse.id == selectedCourseId %}selected{% endif %}>{{ selectCourse.title }}</option>
-    {% endfor %}
-    <option value="{{ path(route, {id: course.id, tab: 'reviews'}) }}#reviews"
-      {% if 0 == selectedCourseId %}selected{% endif %}>{{ '全部教学计划'|trans }}</option>
-  </select>
-{% endif %}
+{% include 'course/tabs/widget/course-choice.html.twig' with {
+courses: courses,
+selectedCourseId: selectedCourseId,
+courseSet: courseSet,
+tab: 'reviews'
+} %}
+
 {% include 'review/widget/list.html.twig' %}
