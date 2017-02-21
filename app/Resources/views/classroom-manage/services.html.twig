@@ -4,7 +4,7 @@
 {% do script(['app/js/classroom/set-services/index.js']) %}
 
 {% block main %}
-<div class="panel panel-default" role="">
+<div class="panel panel-default" role="classroom-set-services">
   <div class="panel-heading">{{'服务设置'|trans}}</div>
   <div class="panel-body">
     <form id="services-form" class="form-horizontal" method="post">
@@ -47,7 +47,7 @@
       <div class="form-group">
         <div class="col-md-offset-2 col-md-8 controls">
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          <button class="btn btn-fat btn-primary">{{'保存'|trans}}</button>
+          <a class="btn btn-fat btn-primary">{{'保存'|trans}}</a>
         </div>
       </div>
       </div>  

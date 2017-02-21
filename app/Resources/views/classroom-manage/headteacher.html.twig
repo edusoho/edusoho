@@ -1,40 +1,10 @@
 {% extends 'classroom-manage/layout.html.twig' %}
-
 {% block title %}{{'班主任设置'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'headTeacher' %}
-{% set script_controller = 'topxiawebbundle/controller/classroom/manage/headteacher' %}
+{% do script(['app/js/classroom-manage/set-head-teacher.js']) %}
+{#{% set script_controller = 'topxiawebbundle/controller/classroom/manage/headteacher' %}#}
 
 {% block main %}
-
-<style>
-
-.ui-autocomplete {
-    border:1px solid #ccc;
-    background-color: #FFFFFF;
-    box-shadow: 2px 2px 3px #EEEEEE;
-}
-.ui-autocomplete-ctn{
-    margin:0;
-    padding:0;
-}
-.ui-autocomplete-item {
-    width: 180px;
-    overflow:hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 30px;
-    padding:0 10px 0 10px;
-    cursor: default;
-}
-.ui-autocomplete-item-hover {
-    background:#f2f2f2;
-}
-.ui-autocomplete-item-hl {
-    background:#F6FF94;
-}
-
-</style>
        
 <div class="panel panel-default panel-col">
   <div class="panel-heading">{{'班主任设置'|trans}}</div>
@@ -69,15 +39,12 @@
 
         </div>  
       </div>
-
       <div class="form-group">
         <div class="col-md-offset-2 col-md-8 controls">
           <button type="submit" class="btn btn-fat btn-primary">{{'保存'|trans}}</button>
         </div>  
       </div>
-
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-
     </form>
   </div>
 </div>
