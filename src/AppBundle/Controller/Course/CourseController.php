@@ -190,6 +190,10 @@ class CourseController extends CourseBaseController
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
         $files = $this->findFiles($courseItems);
+        if (empty($member)) {
+            $user   = $this->getCurrentUser();
+            $member = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
+        }
         return $this->render('course/tabs/tasks.html.twig', array(
             'course'      => $course,
             'courseItems' => $courseItems,
