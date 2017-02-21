@@ -41,17 +41,25 @@ define(function(require, exports, module) {
             rule: 'minlength{min:1} maxlength{max:10} remote'
         });
 
-        $('body').on('click', '#live', function(){
-            $('.order-form').addClass('hide');
-        });
-        
-        $('body').on('click', '#course', function(){
-            $('.order-form').removeClass('hide');
-        });
+        $('.radios').on('click', "input[name=type]", function() {
+            var selectedValue = $(this).attr('value');
 
-        $('body').on('click', '#classroom', function(){
-            $('.order-form').removeClass('hide');
-        })
+            if (selectedValue == 'classroom') {
+                $('.order-form').removeClass('hide');
+                $('.course-category').addClass('hide');
+                $('.classroom-category').removeClass('hide');
+            }
+            if (selectedValue == 'live') {
+                $('.order-form').addClass('hide');
+                $('.classroom-category').addClass('hide');
+                $('.course-category').removeClass('hide');
+            }
+            if (selectedValue == 'course') {
+                $('.order-form').removeClass('hide');
+                $('.classroom-category').addClass('hide');
+                $('.course-category').removeClass('hide');
+            }
+        });
     };
 
 });

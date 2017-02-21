@@ -1,0 +1,53 @@
+{{ load_script('my/learning') }}
+
+<div class="my-course-section mobile">
+  <h4 class="title">我的课程</h3>
+  <div class="row my-course-list">
+    {% for course in courses %}
+      <div class="col-xs-6 course-list">
+        <div class="course-item">
+          <div class="course-img">
+            <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+              {% if course.discountId > 0 %}
+                {% if course.discount == 0 %}
+                  <!-- 限免 -->
+                  <span class="tag-discount free"></span>
+                {% else %}
+                  <!-- 折扣 -->
+                  <span class="tag-discount"></span>
+                {% endif %}
+              {% endif %}
+              {% if course.serializeMode == 'serialize' %}
+                <span class="tags"><span class="tag-serialing"></span></span>
+              {% elseif course.serializeMode == 'finished' %}
+                <span class="tags"><span class="tag-finished"></span></span>
+              {% endif %}
+              {% if course.type == 'live' %}
+                <span class="tags">
+                  <span class="tag-live"></span>
+                </span>
+              {% endif %}
+              {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+            </a>
+          </div>
+          <div class="course-info">
+            <div class="title">
+              <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+                {{ course.title }}
+              </a>
+            </div>
+            <div class="metas clearfix">
+              <span class="finished-percentage text-sm color-gray">完成课时: <span class="gray-dark">{{ course.memberLearnedNum }}/{{ course.lessonNum }}</span></span>
+              <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><span class="btn btn-primary btn-xs pull-right">继续学习</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="empty">{{'暂无学习中的课程'|trans}}</div>
+    {% endfor %}
+    {{ web_macro.paginator(paginator) }}
+  </div>
+</div>
+
+

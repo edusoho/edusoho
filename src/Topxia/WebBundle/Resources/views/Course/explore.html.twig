@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% set bodyClass = 'course-list-page ' %}
+{% set mobile = is_show_mobile_page() %}
+{% set bodyClass = 'course-list-page' %}
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'course/explore' %}
 
@@ -30,6 +31,9 @@
       </div>
     </div>
   </div>
+  {% if mobile %}
+    {% include 'TopxiaWebBundle:Course:search-mobile.html.twig'%}
+  {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -79,7 +83,6 @@
       </label>
     </div>
   </div>
-
   <div class="course-list">
     <div class="row">
       {% if courses %}
@@ -93,5 +96,11 @@
       {% endif %}
     </div>
   </div>
-  <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+  {% if not mobile %}
+    <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+  {% endif %}
+{% endblock %}
+
+{% block bottom %}
+  {% include 'TopxiaWebBundle:Default:Mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'course' }%}
 {% endblock %}
