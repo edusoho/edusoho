@@ -3,7 +3,11 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}
-    {{'批量添加课时'|trans}}
+    {% if mode|default() == 'lesson' %}
+        {{'批量添加课时'|trans}}
+    {% else %}
+        {{'批量添加任务'|trans}}
+    {% endif %}
 {% endblock %}
 
 {% block body %}
