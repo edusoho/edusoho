@@ -24,7 +24,7 @@ class DetailFactory
         }
 
         if ($cardType == "moneyCard") {
-            $class = "Topxia\\Service\\MoneyCard\\MoneyCardProcessor\\MoneyCardDetailProcessor";
+            $class = "Biz\\MoneyCard\\MoneyCardProcessor\\MoneyCardDetailProcessor";
         }
 
         return new $class();
