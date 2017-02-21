@@ -112,11 +112,10 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         ));
         $batch['token'] = $token['token'];
         $batch          = $this->getMoneyCardBatchDao()->create($batch);
-        $moneyCards     = array();
 
         foreach ($moneyCardIds as $cardid => $cardPassword) {
             $this->getMoneyCardDao()->create(
-                $moneyCards[] = array(
+                array(
                     'cardId'     => $cardid,
                     'password'   => $cardPassword,
                     'deadline'   => date('Y-m-d', strtotime($moneyCardData['deadline'])),
