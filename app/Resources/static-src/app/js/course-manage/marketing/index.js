@@ -76,7 +76,8 @@ class Marketing {
 			format: 'yyyy-mm-dd',
 			language: "zh",
 			minView: 2, //month
-			autoclose: true
+			autoclose: true,
+			endDate: new Date(Date.now() + 86400*365*100*1000)
 		});
 
 	    $('input[name="tryLookable"]').on('change', function(event){
