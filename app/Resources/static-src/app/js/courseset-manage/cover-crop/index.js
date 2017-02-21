@@ -1,4 +1,4 @@
-import EsImageCrop from 'libs/js/es-image-crop.js';
+import EsImageCrop from 'common/es-image-crop.js';
 
 class CoverCrop {
   constructor() {

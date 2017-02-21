@@ -1,9 +1,7 @@
 {% extends 'classroom-manage/layout.html.twig' %}
-
 {% block title %}{{'封面图片'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'picture' %}
-{% set script_controller = 'topxiawebbundle/controller/classroom/picture-crop' %}
+{% do script(['app/js/classroom/set-picture-crop/index.js']) %}
 
 {% block main %}
 <div class="panel panel-default panel-col">

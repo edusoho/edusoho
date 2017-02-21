@@ -67,15 +67,7 @@
             <input type="text" class="form-control width-input width-input-large" name="buyExpiryTime" value="{% if course.buyExpiryTime > 0 %}{{course.buyExpiryTime|date_format('Y-m-d')}}{% endif %}">
           </div>
         </div>
-
-        {# <div class="form-group">
-          <label class="col-sm-2 control-label">{{'学习有效期'|trans}}</label>
-          <div class="col-sm-4">
-            <input class="form-control" type="" name="">
-          </div>
-          <div class="col-sm-4 form-control-static">天</div>
-          <div class="col-sm-8 col-sm-offset-2"><div class="help-block">{{'从加入的当前起，学员可在此有效期内学习，过期后无法学习。系统会在到期前10天提醒学员。设置为0则无时间限制'|trans}}</div></div>
-        </div> #}
+        
         <div class="form-group">
           <label class="col-sm-2 control-label">{{'加入方式'|trans}}</label>
           <div class="col-sm-10 radios">
@@ -120,14 +112,10 @@
           <div class="col-sm-8 form-control-static">
             {% set serviceTags = services(course.services|default([])) %}
             {% for tag in serviceTags %}
-            <a
-              class="label label-md js-service-item {% if tag.active %}label-primary{% else %}label-default{% endif %}"data-container="body"
-              data-toggle="popover"
-              data-trigger="hover"
-              data-placement="top"
-              data-content="{{tag.summary}}"
-            >{{ tag.full_name }}</a>
-            &nbsp;
+              <a class="label label-md js-service-item {% if tag.active %} label-primary {% else %} label-default {% endif %} mr10" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{tag.summary}}"
+              >
+                {{ tag.full_name }}
+              </a>
             {% endfor %}
             <input type="hidden" id="course_services" name="services" value="{{course.services|default([])|json_encode_utf8()}}">
           </div>
@@ -143,11 +131,5 @@
   </div>
 {% endblock %}
 
-
-
 {% block course %}
-
 {% endblock %}
-
-
-

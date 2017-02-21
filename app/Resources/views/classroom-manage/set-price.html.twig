@@ -1,12 +1,11 @@
 {% extends 'classroom-manage/layout.html.twig' %}
-
-{% set side_nav = "price" %}
-{% set script_controller = 'topxiawebbundle/controller/classroom/set-price' %}
-
 {% block title %}{{'价格设置'|trans}} - {{ parent() }}{% endblock %}
 
+{% set side_nav = "price" %}
+{% do script(['libs/jquery-validation.js','app/js/classroom/set-price/index.js']) %}
+
 {% block main %}
-<div class="panel panel-default panel-col">
+<div class="panel panel-default" role="classroom-set-price">
   <div class="panel-heading">{{'价格设置'|trans}}</div>
   <div class="panel-body">
   {{ web_macro.flash_messages() }}
@@ -32,7 +31,7 @@
       <div class="row form-group">
         <div class="col-md-2 control-label"></div>
         <div class="controls col-md-8">
-          <button type="submit" class="btn btn-primary" id="classroom-save">{{'提交'|trans}}</button>  
+          <button class="btn btn-primary" id="classroom-save">{{'提交'|trans}}</button>  
         </div>
       </div>
 

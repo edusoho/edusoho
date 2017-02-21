@@ -1,15 +1,9 @@
 {% extends 'classroom-manage/layout.html.twig' %}
-
-{% set side_nav = 'base' %}
-{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/classroom/set-info/index.js']) %}
-{#{% do load_script('topxiawebbundle/controller/classroom/set-info') %}
-{% do load_script('topxiaadminbundle/controller/classroom/classroom-create') %}#}
-
-{% set script_arguments = {
-tagMatchUrl: path('tag_match'),
-} %}
-
 {% block title %}{{'基本信息'|trans}} - {{ parent() }}{% endblock %}
+{% set script_arguments = { tagMatchUrl: path('tag_match'),} %}
+{% set side_nav = 'base' %}
+
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/classroom/set-info/index.js']) %}
 
 {% block main %}
 <div class="panel panel-default" role="classroom-manage-base">
@@ -103,5 +97,4 @@ tagMatchUrl: path('tag_match'),
     </form>
   </div>
 </div>
-
 {% endblock %}

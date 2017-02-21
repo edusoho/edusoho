@@ -1,5 +1,3 @@
-import 'select2';
-
 const initCategorySelect = () => {
   $('[data-role="tree-select"], [name="categoryId"]').select2({
     treeview: true,
@@ -11,5 +9,3 @@ const initCategorySelect = () => {
 }
 
 export default initCategorySelect();
-
-

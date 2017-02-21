@@ -1,6 +1,6 @@
-import EsWebUploader from 'libs/js/es-webuploader.js';
+import EsWebUploader from 'common/es-webuploader.js';
 import notify from 'common/notify';
-console.log('test');
+
 new EsWebUploader({
 	element: '#group-save-btn',
 	onUploadSuccess: function(file, response) {
