@@ -177,7 +177,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (empty($courseSetId)) {
-            return false;
+            return $user->isTeacher();
         }
 
         $courseSet = $this->getCourseSetDao()->get($courseSetId);
