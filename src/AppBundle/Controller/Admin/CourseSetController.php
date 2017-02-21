@@ -161,12 +161,6 @@ class CourseSetController extends BaseController
                 return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
             }
 
-            $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
-
-            if ($classroomCourse) {
-                return $this->createJsonResponse(array('code' => 3, 'message' => '当前课程未移除,请先移除班级课程'));
-            }
-
             $isCheckPassword = $request->getSession()->get('checkPassword');
             if (!$isCheckPassword) {
                 return $this->render('admin/course/delete.html.twig', array('courseSet' => $courseSet));
