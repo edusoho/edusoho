@@ -23,6 +23,10 @@
           <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id,type:'lesson'}) }}"> <i class="es-icon es-icon-anonymous-iconfont"></i>
             任务
           </button>
+          <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:'lesson', token:uploader_token('cours-task', app.user.id, 'private')}) }}">
+            <i class="es-icon es-icon-anonymous-iconfont"></i>
+            批量添加
+          </button>
           <div class="btn-group">
             <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
               <i class="es-icon es-icon-anonymous-iconfont"></i>
