@@ -4,6 +4,7 @@ namespace Topxia\Api\Resource\Course;
 
 use Silex\Application;
 use Topxia\Api\Resource\BaseResource;
+use Topxia\Common\SettingToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,6 +23,7 @@ class Lesson extends BaseResource
         }
 
         $currentUser = $this->getCurrentUser();
+
         if (!$currentUser->isLogin()) {
             $courseSetting = $this->getSettingService()->get('course');
             if (empty($courseSetting['allowAnonymousPreview']) || !$lesson['free']) {
@@ -43,7 +45,15 @@ class Lesson extends BaseResource
 
         $ssl = $request->isSecure() ? true : false;
 
-        return $this->filter($this->convertLessonContent($lesson, $ssl));
+        $lesson = $this->filter($this->convertLessonContent($lesson, $ssl));
+
+        $hasRemainTime = $this->hasRemainTime($lesson);
+        if ($hasRemainTime) {
+            $remainTime = $this->getRemainTime($currentUser, $lesson);
+            $lesson['remainTime'] = $remainTime;
+        }
+
+        return $lesson;
     }
 
     public function filter($lesson)
@@ -310,6 +320,25 @@ class Lesson extends BaseResource
         $lesson['startTime'] = $res['startTime'];
         $lesson['endTime'] = $res['endTime'];
         return $lesson;
+    }
+
+    protected function hasRemainTime($lesson)
+    {
+        $isLimit = SettingToolkit::getSetting('magic.lesson_watch_limit');
+        $course = $this->getCourseService()->getCourse($lesson['courseId']);
+        if ('video' == $lesson['type'] && $isLimit && $course['watchLimit']) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    protected function getRemainTime($user, $lesson)
+    {
+        $lessonLearn = $this->getCourseService()->getLearnByUserIdAndLessonId($user['id'], $lesson['id']);
+        $course = $this->getCourseService()->getCourse($lesson['courseId']);
+        $remainTime = ($course['watchLimit'] * $lesson['length']) - $lessonLearn['watchTime'];
+        return $remainTime;
     }
 
     protected function getCourseService()

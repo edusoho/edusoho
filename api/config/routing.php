@@ -126,3 +126,5 @@ $app->post(_u('/sms_codes'), 'res.SmsCodes:post');
 $app->get(_u('/my/learning'), 'res.MyLearning:get');
 
 $app->get(_u('/courses_learn_progress'), 'res.CoursesLearnProgress:get');
+
+$app->post(_u('/lesson/watch_time'), 'res.LessonWatchTime:post');
