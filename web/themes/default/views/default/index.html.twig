@@ -112,11 +112,11 @@
             <div class="es-box-heading">
               <h2>{{'最新直播'|trans}}</h2>
               {% if recentLiveCourses|length >= 1 %}
-                <a class="pull-right" href="{{ path('course_set_explore') }}">{{'更多'|trans}}&gt;</a>
+                <a class="pull-right" href="{{ path('live_course_set_explore') }}">{{'更多'|trans}}&gt;</a>
               {% endif %} 
             </div>
             <div class="es-box-body">
-              {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', { courses:recentLiveCourses, view: 'list'})) }}
+              {{ render(controller('AppBundle:Course/LiveCourseSet:coursesBlock', { courses:recentLiveCourses, view: 'list'})) }}
             </div>
           </div>
         {% endif %}

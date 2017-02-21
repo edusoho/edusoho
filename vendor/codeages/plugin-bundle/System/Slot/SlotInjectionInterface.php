@@ -5,5 +5,5 @@ interface SlotInjectionInterface
 {
     public function inject();
 
-    public function setArgements($argements = array());
+    public function setArguments($arguments = array());
 }

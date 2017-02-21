@@ -1,13 +1,24 @@
 <?php
 namespace Codeages\PluginBundle\System\Slot;
 
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class SlotManager
 {
-    protected $dispatcher;
+    protected $cache;
 
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var SlotInjectionCollector
+     */
     protected $collector;
 
-    public function __construct($collector, $container)
+    public function __construct(SlotInjectionCollector $collector, ContainerInterface $container)
     {
         $this->collector = $collector;
         $this->container = $container;
@@ -15,6 +26,9 @@ class SlotManager
 
     public function fire($name, $args)
     {
+        if(isset($this->cache[$name])){
+            return $this->cache[$name];
+        }
 
         $injections = $this->collector->getInjections($name);
         if (empty($injections)) {
@@ -34,6 +48,6 @@ class SlotManager
             $contents[] = $injection->inject();
         }
 
-        return implode('', $contents);
+        return $this->cache[$name] = implode('', $contents);
     }
 }

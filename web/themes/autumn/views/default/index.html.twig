@@ -34,7 +34,7 @@
               <ul class="home-class-list clearfix">
                 {% for classroom in classrooms %}
                  {% set teachers = classroom.users|default(null) %}
-                 {% if loop.index <= 5%}
+                 {% if loop.index <= 5 %}
                 <li class="class-item">
                   <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
                     {{ lazy_img(filepath(classroom.largePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
@@ -54,7 +54,6 @@
                           {% endfor %}
                         {% endif %}
                       </span>
-
                       <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }}</span>
                       <span class="class-price">
                           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
@@ -67,7 +66,7 @@
                               {% if classroom.price > 0 %}
                                 {{ '%classroom.price% 元'|trans({'%classroom.price%': classroom.price})}}
                               {% else %}
-                                {{'免费'|trans}}'
+                                {{'免费'|trans}}
                               {% endif %}
                           {% endif %}
 
