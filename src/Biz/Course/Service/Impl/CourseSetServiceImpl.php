@@ -186,16 +186,19 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return false;
         }
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        if ($courseSet['creator'] == $user->getId()) {
+            return true;
+        }
 
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
         foreach ($courses as $course) {
             if (in_array($user->getId(), $course['teacherIds'])) {
-                $this->getCourseService()->tryManageCourse($course['id'], $courseSetId);
+                $this->getCourseService()->hasCourseManagerRole($course['id']);
                 return true;
             }
         }
 
-        return $courseSet['creator'] == $user->getId();
+        return false;
     }
 
     protected function hasAdminRole()
@@ -795,6 +798,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'expiryDays'    => 0,
             'learnMode'     => 'freeMode',
             'isDefault'     => 1,
+            'isFree'        => 1,
             'serializeMode' => $created['serializeMode'],
             'status'        => 'draft'
         );

@@ -27,6 +27,9 @@ class Essay extends QuestionFormBase {
     editor.on( 'change', () => {    
       this.$answerField.val(editor.getData());
     });
+    // editor.on('blur', function() {
+    //   validator.form();
+    // });
   }
 }
 
