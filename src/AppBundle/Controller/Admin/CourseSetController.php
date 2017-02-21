@@ -54,6 +54,8 @@ class CourseSetController extends BaseController
             $paginator->getPerPageCount()
         );
         $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+        $defaultCourses = $this->getCourseService()->getDefaultCoursesByCourseSetIds($courseSetIds);
+        $defaultCourses = ArrayToolkit::index($defaultCourses, 'courseSetId');
 
         list($searchCourseSetsNum, $publishedCourseSetsNum, $closedCourseSetsNum, $unPublishedCourseSetsNum) = $this->getDifferentCourseSetsNum($conditions);
 
@@ -83,6 +85,7 @@ class CourseSetController extends BaseController
         return $this->render('admin/course-set/index.html.twig', array(
             'conditions'               => $conditions,
             'courseSets'               => $courseSets,
+            'defaultCourses'          => $defaultCourses,
             'users'                    => $users,
             'categories'               => $categories,
             'paginator'                => $paginator,
@@ -159,12 +162,6 @@ class CourseSetController extends BaseController
             if ($courseSet['status'] == 'draft') {
                 $this->getCourseSetService()->deleteCourseSet($id);
                 return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
-            }
-
-            $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
-
-            if ($classroomCourse) {
-                return $this->createJsonResponse(array('code' => 3, 'message' => '当前课程未移除,请先移除班级课程'));
             }
 
             $isCheckPassword = $request->getSession()->get('checkPassword');

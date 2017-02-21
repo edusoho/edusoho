@@ -460,7 +460,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if ($member) {
-            throw $this->createServiceException("用户(#{$userId})已加入该教学计划！");
+            if ($member['role'] == 'teacher') {
+                return $member;
+            } else {
+                throw $this->createServiceException("用户(#{$userId})已加入该教学计划！");
+            }
         }
 
         //按照教学计划有效期模式计算学员有效期

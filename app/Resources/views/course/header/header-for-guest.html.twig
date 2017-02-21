@@ -1,4 +1,9 @@
 {% extends 'course/header/header-layout.html.twig' %}
+{% if previewAs == 'guest' %}
+  {% set member = null %}
+  {% set courses = data('CoursesByCourseSetId',{courseSetId: courseSet.id}) %}
+{% endif %}
+
 
 {% set page_type = 'guest' %}
 {% block course_header_qrcode %}{% endblock %}
@@ -57,7 +62,7 @@
               {% set current_course = course %}
               {% for course in  courses %}
                 <li class="mb10 mr10 {% if current_course.id == course.id %} active {% endif %}">
-                  <a href="{{ path('course_show',{id: course.id}) }}">{{ course.title }}</a>
+                  <a href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}">{{ course.title }}</a>
                 </li>
               {% endfor %}
             </ul>
