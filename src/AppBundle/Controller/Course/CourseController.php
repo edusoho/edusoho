@@ -113,7 +113,7 @@ class CourseController extends CourseBaseController
         $likes       = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
         $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSet['id']);
 
         return $this->render('course/tabs/notes.html.twig', array(
             'course'           => $course,
@@ -167,7 +167,7 @@ class CourseController extends CourseBaseController
         }
 
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSet['id']);
 
         return $this->render('course/tabs/reviews.html.twig', array(
             'courseSet'        => $courseSet,
