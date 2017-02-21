@@ -16,6 +16,8 @@ export const initEditor = ($item,validator) => {
   });
 
   editor.on('blur', function() {
-    validator.form();
+    if(validator) {
+      validator.form();
+    }
   });
 }
