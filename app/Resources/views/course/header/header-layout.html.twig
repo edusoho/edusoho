@@ -62,7 +62,7 @@
         </li>
 
         <li class="es-share top">
-          <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown">
+          <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown" title="课程分享">
             <i class="es-icon es-icon-share"></i>
           </a>
           {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
@@ -83,6 +83,13 @@
               <i class="es-icon es-icon-setting"></i>
             </a>
           {% endif %}
+          </li>
+        {% endif %}
+        {% if is_plugin_installed('vip') and course.vipLevelId != 0 %}
+          <li id="favorite-btn">
+            <a class="btn btn-default btn-xs" href="{{ path('vip') }}" data-toggle="tooltip" data-placement="top" title="会员课程"
+               data-trigger="hover"> <i class="es-icon es-icon-crown"></i>
+            </a>
           </li>
         {% endif %}
       </ul>

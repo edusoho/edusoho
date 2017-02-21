@@ -36,6 +36,14 @@ class TaskManageController extends BaseController
         ));
     }
 
+    private function buildCourseLessonTask($task) {
+        $chapter          = $this->getChapterDao()->get($task['categoryId']);
+        $tasks            = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
+        $chapter['tasks'] = $tasks;
+        $chapter['mode']  = $task['mode'];
+        return $chapter;
+    }
+
     protected function getTaskItemTemplate($course)
     {
         if ($course['isDefault']) {
@@ -271,5 +279,10 @@ class TaskManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    protected function getChapterDao()
+    {
+        return $this->getBiz()->dao('Course:CourseChapterDao');
     }
 }
