@@ -79,13 +79,13 @@
                   {% endif %}</span>
               </div>
             {% endif %}
-            <p class="expiry-date hidden-sm">
+            <p class="hidden-sm black">
               {% if classroom.expiryMode == 'date' %}
                 <span class="mrm">班级有效期</span>
                 <span>{{ classroom.expiryDay|date('Y-n-d') }}</span>
               {% else %}
-                <span class="mrm">班级有效天数</span>
-                <span>{{ classroom.expiryDay }}天</span>
+                <span class="mrm">班级有效期</span>
+                <span>{{ member.deadline|date('Y-n-d') }}</span>
               {% endif %}
             </p>
           </div>
@@ -112,6 +112,14 @@
                 {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
               </span>
             </li>
+            {% if date(member.deadline) < date() %}
+              {% if classroom.expiryMode == 'date'%}
+                <li class="alert alert-warning">你的班级已过有效期，无法继续学习</li>
+              {% elseif classroom.expiryMode == 'days' %}
+                <li class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_introductions', {id:classroom.id}) }}">重新购买</a></li>
+              {% endif %}
+            {% endif %}
+
             {% if 'auditor' in member.role and classroomMemberLevel and  classroom.showable %}
               <li class="hidden-xs color-warning icon-vip" title="会员{{setting("classroom.name")|default("班级")}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员{{setting("classroom.name")|default("班级")}}">
                 <i class="es-icon es-icon-crown"></i><br>

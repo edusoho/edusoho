@@ -201,9 +201,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，更新失败！'));
         }
 
-        $fields = $this->_filterClassroomFields($fields);
-
         $classroom = $this->getClassroom($id);
+
+        $fields = $this->_filterClassroomFields($fields, $classroom);
 
         if (!$this->canSetClassroomExpiryDate($fields, $classroom)) {
             throw $this->createServiceException($this->getKernel()->trans('已发布的班级不允许修改班级原先的有效期模式'));
@@ -230,10 +230,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return true;
     }
 
-    protected function _filterClassroomFields($fields)
+    protected function _filterClassroomFields($fields, $classroom)
     {
-        if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
-            $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
+        if (isset($fields['expiryMode'])) {
+            if ($fields['expiryMode'] == 'date') {
+                $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
+                $fields['deadline']  = $fields['expiryDay'];
+            } 
+
+            if ($fields['expiryMode'] == 'days') {
+                $fields['deadline'] = $classroom['createdTime'] + $fields['expiryDay'] * 24 * 60 * 60;
+            }
         }
 
         return $fields;

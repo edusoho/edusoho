@@ -69,7 +69,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
     {
         $studentsIds = $this->getClassroomService()->findMemberUserIdsByClassroomId($classroomId);
 
-        if ($expiryMode == 'days') {
+        if ($expiryDate['expiryMode'] == 'days') {
             $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
             $expiryDate['expiryDay'] = $classroom['createdTime'] + $expiryDate['expiryDay'] * 24 * 60 * 60;
