@@ -61,8 +61,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
             'number',
             'note',
             'deadline',
-            'batchName',
-            'passwordLength'
+            'batchName'
         ));
 
         if (isset($batch['money'])) {
@@ -116,16 +115,16 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         $moneyCards     = array();
 
         foreach ($moneyCardIds as $cardid => $cardPassword) {
-            $moneyCards[] = array(
-                'cardId'     => $cardid,
-                'password'   => $cardPassword,
-                'deadline'   => date('Y-m-d', strtotime($moneyCardData['deadline'])),
-                'cardStatus' => 'normal',
-                'batchId'    => $batch['id']
+            $this->getMoneyCardDao()->create(
+                $moneyCards[] = array(
+                    'cardId'     => $cardid,
+                    'password'   => $cardPassword,
+                    'deadline'   => date('Y-m-d', strtotime($moneyCardData['deadline'])),
+                    'cardStatus' => 'normal',
+                    'batchId'    => $batch['id']
+                )
             );
         }
-
-        $this->getMoneyCardDao()->create($moneyCards);
 
         $this->getLogService()->info('money_card', 'batch_create', "创建新批次充值卡,卡号前缀为({$batch['cardPrefix']}),批次为({$batch['id']})");
 
@@ -236,7 +235,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                 'batchId'    => $batch['id'],
                 'cardStatus' => 'receive'
             ),
-            array('id', 'ASC'),
+            array('id' => 'ASC'),
             0,
             1000
         );
@@ -280,7 +279,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                 'batchId'    => $batch['id'],
                 'cardStatus' => 'invalid'
             ),
-            array('id', 'ASC'),
+            array('id' => 'ASC'),
             0,
             1000
         );
@@ -320,7 +319,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
             throw $this->createServiceException(sprintf('学习卡批次不存在或已被删除'));
         }
 
-        $moneyCards = $this->getMoneyCardDao()->search(array('batchId' => $id), array('id', 'ASC'), 0, 1000);
+        $moneyCards = $this->getMoneyCardDao()->search(array('batchId' => $id), array('id' => 'ASC'), 0, 1000);
 
         $this->getMoneyCardBatchDao()->delete($id);
         $this->getMoneyCardDao()->deleteMoneyCardsByBatchId($id);
@@ -524,7 +523,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                     'batchId'        => $batch['id']
                 );
 
-                $moneyCard = $this->getMoneyCardDao()->search($conditions, array('id', 'DESC'), 0, 1);
+                $moneyCard = $this->getMoneyCardDao()->search($conditions, array('id' => 'DESC'), 0, 1);
 
                 if (!empty($moneyCard)) {
                     $this->biz['db']->commit();
@@ -541,7 +540,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
                 'cardStatus'     => 'normal',
                 'batchId'        => $batch['id']
             );
-            $moneyCards = $this->getMoneyCardDao()->search($conditions, array('id', 'ASC'), 0, 1);
+            $moneyCards = $this->getMoneyCardDao()->search($conditions, array('id' => 'ASC'), 0, 1);
 
             if (empty($moneyCards)) {
                 $this->biz['db']->commit();
@@ -604,7 +603,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
     protected function getCardService()
     {
-        return $this->getKernel()->createService('Card:CardService');
+        return $this->createService('Card:CardService');
     }
 
     /**
@@ -622,7 +621,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
 
     protected function getCashService()
     {
-        return $this->getKernel()->createService('Cash:CashService');
+        return $this->createService('Cash:CashService');
     }
 
     private function getTokenService()
