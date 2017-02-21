@@ -604,6 +604,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $order = null;
         }
 
+        if ($classroom['expiryMode'] == 'days') {
+            $expiryDay = $classroom['createdTime'] + $fields['expiryDay'] * 24 * 60 * 60;
+        } else {
+            $expiryDay = $classroom['expiryDay'];
+        }
+
         $fields = array(
             'classroomId' => $classroomId,
             'userId'      => $userId,
@@ -611,6 +617,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'levelId'     => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
             'role'        => '|student|',
             'remark'      => empty($order['note']) ? '' : $order['note'],
+            'deadline'    => $expiryDay
         );
 
         if (empty($fields['remark'])) {
