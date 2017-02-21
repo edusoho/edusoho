@@ -2953,7 +2953,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function findCopyQuestions($sourceQuestions)
     {
-        $copyIds = ArrayToolkit::column($sourceQuestions, 'copyId');
+        $copyIds = ArrayToolkit::column($sourceQuestions, 'id');
         $copyIds = array_unique($copyIds);
         $copyIds = array_filter($copyIds);
         $copyIds = array_values($copyIds);
