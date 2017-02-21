@@ -35,12 +35,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
 
         $task = parent::createTask($field);
-
-        $chapter          = $this->getChapterDao()->get($task['categoryId']);
-        $tasks            = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
-        $chapter['tasks'] = $tasks;
-        $chapter['mode']  = $field['mode'];
-        return $chapter;
+        return $task;
     }
 
     public function updateTask($id, $fields)
