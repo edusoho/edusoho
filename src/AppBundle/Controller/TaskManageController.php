@@ -59,12 +59,14 @@ class TaskManageController extends BaseController
         $mode = $request->query->get('mode');
         if ($request->isMethod('POST')) {
             $fileId = $request->request->get('fileId');
-            $course = $this->getCourseService()->getCourse($courseId);
+            $file = $this->getUploadFileService()->getFile($fileId);
 
-            $task = $this->createTaskByFileIdAndCourse($fileId, $course);
-            if (!in_array($task['mediaType'],array('doc', 'video', 'audio', 'ppt', 'flash'))) {
+            if (!in_array($file['type'], array('document', 'video', 'audio', 'ppt', 'flash'))) {
                 throw $this->createAccessDeniedException('不支持的文件类型');
             }
+
+            $course = $this->getCourseService()->getCourse($courseId);
+            $task = $this->createTaskByFileAndCourse($file, $course);
             $task['mode'] = $mode;
             return $this->createTask($request, $task, $course);
         }
@@ -85,20 +87,19 @@ class TaskManageController extends BaseController
         ));
     }
 
-    private function createTaskByFileIdAndCourse($fileId, $course)
+    private function createTaskByFileAndCourse($file, $course)
     {
-        $file = $this->getUploadFileService()->getFile($fileId);
         $task = array(
             'mediaType' => $file['type'],
             'fromCourseId' => $course['id'],
             'courseSetType' => 'normal',
-            'media'    => json_encode(array('source' => 'self', 'id' => $fileId, 'name' => $file['filename'])),
-            'mediaId'  => $fileId,
+            'media'    => json_encode(array('source' => 'self', 'id' => $file['id'], 'name' => $file['filename'])),
+            'mediaId'  => $file['id'],
             'type'     => $file['type'],
             'length'   => $file['length'],
             'title'    => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
             'courseSetType' => 'normal',
-            'ext' => array('mediaSource' => 'self','mediaId' => $fileId)
+            'ext' => array('mediaSource' => 'self','mediaId' => $file['id'])
         );
         if ($file['type'] == 'document') {
             $task['type'] = 'doc';
