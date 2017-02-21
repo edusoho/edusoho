@@ -35,7 +35,7 @@
       </div>
 
       <div class="dashboard-footer ">
-        <div class="state-opration ">
+        <div class="state-opration js-state-opration" data-learnmode="{{course.learnMode|default('freeMode')}}">
           {% if course.learnMode|default('freeMode') == 'lockMode' %}
           <a class="btn btn-gray text-sm js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
             href="javascript:;" data-container=".js-learn-prompt" data-toggle="popover"
