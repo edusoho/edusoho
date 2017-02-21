@@ -9,6 +9,8 @@ use Topxia\Service\Common\ServiceKernel;
 
 class ChangeQuestionTargetCommand extends BaseCommand
 {
+    protected $num = 1000;
+
     protected function configure()
     {
         $this->setName('unit:change-question-target');
@@ -19,15 +21,20 @@ class ChangeQuestionTargetCommand extends BaseCommand
         $output->writeln('<info>变更试题从属关系...</info>');
 
         $sourceQuestionCount = $this->searchSourceQuestionCount();
-        for ($i=0; $i < $sourceQuestionCount/1000 ; $i++) { 
-            $sourceQuestions = $this->getQuestionService()->searchQuestions(array('copy' => 0), array('createdTime', 'DESC'), 0, $i*1000+1000);
+        for ($i=0; $i < $sourceQuestionCount/$this->num; $i++) { 
+            $sourceQuestions = $this->getQuestionService()->searchQuestions(
+                array('copyId' => 0), 
+                array('createdTime', 'DESC'), 
+                0, 
+                $this->num*($i + 1)
+            );
 
             foreach ($sourceQuestions as $sourceQuestion) {
                 $questionTarget = explode('/', $sourceQuestion['target']);
                 $num = count($questionTarget);
                 //只有课时题目做处理
                 if ($num > 1) {
-                    $questionLessonTarget = explode('-',$questionTarget[1]);
+                    $questionLessonTarget = explode('-', $questionTarget[1]);
                     $lessonId = $questionLessonTarget[1];
                     $lesson = $this->getLesson($lessonId);
 
