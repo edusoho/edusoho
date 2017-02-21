@@ -49,7 +49,7 @@ define(function(require, exports, module) {
         [
             'phone', 
             /^1\d{10}$/,
-            Translator.trans('请输入有效的%display%', {display: '{{display}}'})
+            Translator.trans('目前仅支持中国大陆手机号，请输入有效的%display%', {display: '{{display}}'})
         ],
         [
             'chinese_alphanumeric',
