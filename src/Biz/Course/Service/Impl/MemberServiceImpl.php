@@ -461,7 +461,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         if ($member) {
             if ($member['role'] == 'teacher') {
-                throw $this->createServiceException("用户(#{$userId})是该教学计划的教师！");
+                return $member;
             } else {
                 throw $this->createServiceException("用户(#{$userId})已加入该教学计划！");
             }
