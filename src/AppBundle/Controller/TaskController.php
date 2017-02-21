@@ -64,15 +64,16 @@ class TaskController extends BaseController
             return $this->render('task/preview-notice-modal.html.twig', array('course' => $course));
         }
 
-        //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
+        //课时不免费并且不满足：
+        // 1. 有时间限制设置
+        // 2. 课时为视频课时
+        // 3. 视频课时非优酷等外链视频时提示购买
         if (empty($task['isFree']) && !(!empty($course['tryLookable']) && $task['type'] == 'video' && $task['mediaSource'] == 'self')) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
-
             if ($course["parentId"] > 0) {
-                //TODO 复制课程的预览逻辑
-                //return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
+                return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
             }
 
             return $this->forward('AppBundle:Course/CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $task['id']));

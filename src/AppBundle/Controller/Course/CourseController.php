@@ -70,10 +70,11 @@ class CourseController extends CourseBaseController
         $user           = $this->getCurrentUser();
         $member         = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
         $isUserFavorite = $user->isLogin() ? $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']) : false;
-        $isPreview      = $request->query->get('previewAs', false);
+        $previewAs      = $request->query->get('previewAs', false);
         $classroom      = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
         $previewTasks = $this->getTaskService()->searchTasks(array('courseId' => $course['id'], 'type' => 'video', 'isFree' => '1'), array('seq' => 'ASC'), 0, 1);
+
         return $this->render('course/header/header-for-guest.html.twig', array(
             'isUserFavorite' => $isUserFavorite,
             'member'         => $member,
@@ -82,7 +83,7 @@ class CourseController extends CourseBaseController
             'course'         => $course,
             'classroom'      => $classroom,
             'previewTask'    => empty($previewTasks) ? null : array_shift($previewTasks),
-            'isPreview'      => $isPreview
+            'previewAs'      => $previewAs
         ));
     }
 
@@ -113,7 +114,7 @@ class CourseController extends CourseBaseController
         $likes       = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
         $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSet['id']);
 
         return $this->render('course/tabs/notes.html.twig', array(
             'course'           => $course,
@@ -167,7 +168,7 @@ class CourseController extends CourseBaseController
         }
 
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSet['id']);
 
         return $this->render('course/tabs/reviews.html.twig', array(
             'courseSet'        => $courseSet,
@@ -212,6 +213,10 @@ class CourseController extends CourseBaseController
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
         $files = $this->findFiles($courseItems);
+        if (empty($member)) {
+            $user   = $this->getCurrentUser();
+            $member = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
+        }
         return $this->render('course/tabs/tasks.html.twig', array(
             'course'      => $course,
             'courseItems' => $courseItems,

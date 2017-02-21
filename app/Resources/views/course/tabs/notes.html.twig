@@ -1,19 +1,14 @@
-{% do script(['app/js/courseset/show/notes/index.js', 'app/js/course/widgets/choice-course/index.js']) %}
+{% do script(['app/js/courseset/show/notes/index.js']) %}
 
 {% set nav = 'note' %}
 
 {% block detail_content %}
-  <select class="form-control js-choice-course">
-    {% if member %}
-      {% set route = 'my_course_show' %}
-    {% else %}
-      {% set route = 'course_show' %}
-    {% endif %}
-    {% for selectCourse in courses %}
-      <option value="{{ path(route, {id: course.id, selectedCourse: selectCourse.id, tab: 'notes'}) }}#notes" {% if selectCourse.id == selectedCourseId %}selected{% endif %}>{{ selectCourse.title }}</option>
-    {% endfor %}
-    <option value="{{ path(route, {id: course.id, tab: 'notes'}) }}#notes" {% if 0 == selectedCourseId %}selected{% endif %}>{{ '全部教学计划'|trans }}</option>
-  </select>
+  {% include 'course/tabs/widget/course-choice.html.twig' with {
+  courses: courses,
+  selectedCourseId: selectedCourseId,
+  courseSet: courseSet,
+  tab: 'notes'
+  } %}
 
   <div class="note-list" id="note-list">
     {% for note in notes %}
@@ -22,7 +17,7 @@
       <div class="media note-item">
         <div class="media-left">
           <a class=" js-user-card" href="{{ path('user_show', {'id': author.id }) }}"
-             data-card-url="{{ path('user_card_show', {'userId': author.id}) }}" data-user-id="{{ author.id }}">
+            data-card-url="{{ path('user_card_show', {'userId': author.id}) }}" data-user-id="{{ author.id }}">
             <img class="avatar-sm" src="{{ filepath(author.smallAvatar, 'avatar.png') }}">
           </a>
         </div>
@@ -36,22 +31,23 @@
             · <span>{{ note.createdTime|smart_time }}</span>
             {% if task %}
               · {% if member %}
-                  <a href="{{ path('course_task_show', {'courseId': course.id, 'id': note.taskId}) }}" class="period" target="_blank">
-                    {{ task.title }}
-                  </a>
-                {% else %}
-                  <a href="javascript:;" class="period">
-                    {{ task.title }}
-                  </a>
-                {% endif %}
+              <a href="{{ path('course_task_show', {'courseId': course.id, 'id': note.taskId}) }}" class="period"
+                target="_blank">
+                {{ task.title }}
+              </a>
+            {% else %}
+              <a href="javascript:;" class="period">
+                {{ task.title }}
+              </a>
+            {% endif %}
             {% else %}
               · 该任务已被删除
             {% endif %}
             <span class="metas-sns">
               <span class="icon-favour">
                 <a href="javascript:;" class="js-like {% if note.id in likeNoteIds %}color-primary{% endif %}"
-                   data-like-url="{{ path('note_like', {id: note.id}) }}"
-                   data-cancel-like-url="{{ path('note_cancel_like', {id: note.id}) }}">
+                  data-like-url="{{ path('note_like', {id: note.id}) }}"
+                  data-cancel-like-url="{{ path('note_cancel_like', {id: note.id}) }}">
                   <i class="es-icon es-icon-thumbup"></i>
                   <span class="js-like-num">{{ note.likeNum }}</span>
                 </a>
@@ -61,7 +57,7 @@
         </div>
       </div>
     {% else %}
-      <div class="empty">{{'暂无笔记'|trans}}</div>
+      <div class="empty">{{ '暂无笔记'|trans }}</div>
     {% endfor %}
   </div>
 
