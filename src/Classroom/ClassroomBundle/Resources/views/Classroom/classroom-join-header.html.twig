@@ -79,6 +79,15 @@
                   {% endif %}</span>
               </div>
             {% endif %}
+            <p class="expiry-date hidden-sm">
+              {% if classroom.expiryMode == 'date' %}
+                <span class="mrm">班级有效期</span>
+                <span>{{ classroom.expiryDay|date('Y-n-d') }}</span>
+              {% else %}
+                <span class="mrm">班级有效天数</span>
+                <span>{{ classroom.expiryDay }}天</span>
+              {% endif %}
+            </p>
           </div>
           
           <div class="class-serve hidden-sm hidden-xs">

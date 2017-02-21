@@ -489,7 +489,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields        = $this->fillOrgId($fields);
         $fields        = CourseSerialize::serialize($fields);
-
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
         if (isset($tagIds)) {
@@ -529,7 +528,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function _filterCourseFields($fields)
     {
         if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
-            $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
+            if (!is_int($fields['expiryDay'])) {
+                $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
+            }
         }
 
         $fields = ArrayToolkit::filter($fields, array(

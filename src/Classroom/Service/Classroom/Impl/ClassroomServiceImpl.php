@@ -195,22 +195,48 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
         }
 
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId'));
+        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId', 'expiryMode', 'expiryDay'));
 
         if (empty($fields)) {
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，更新失败！'));
+        }
+
+        $fields = $this->_filterClassroomFields($fields);
+
+        $classroom = $this->getClassroom($id);
+
+        if (!$this->canSetClassroomExpiryDate($fields, $classroom)) {
+            throw $this->createServiceException($this->getKernel()->trans('已发布的班级不允许修改班级原先的有效期模式'));
         }
 
         $fields    = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
 
         if (isset($tagIds)) {
-            $this->dispatchEvent('classroom.update', new ServiceEvent(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds)));
+            $this->dispatchEvent('classroom.update', new ServiceEvent(array('userId' => $user['id'], 'classroomId' => $id, 'tagIds' => $tagIds, 'fields' => $fields)));
         } else {
-            $this->dispatchEvent('classroom.update', new ServiceEvent(array('userId' => $user['id'], 'classroomId' => $id)));
+            $this->dispatchEvent('classroom.update', new ServiceEvent(array('userId' => $user['id'], 'classroomId' => $id, 'fields' => $fields)));
         }
 
         return $classroom;
+    }
+
+    protected function canSetClassroomExpiryDate($fields, $classroom)
+    {
+        if (isset($fields['expiryMode']) && isset($fields['expiryDay']) && $classroom['status'] == 'published' && $fields['expiryMode'] != $classroom['expiryMode']) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function _filterClassroomFields($fields)
+    {
+        if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
+            $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
+        }
+
+        return $fields;
     }
 
     public function batchUpdateOrg($classroomIds, $orgCode)

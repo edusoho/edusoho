@@ -6,6 +6,7 @@ use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Taxonomy\TagOwnerManager;
+use Topxia\Common\ArrayToolkit;
 
 class ClassroomEventSubscriber implements EventSubscriberInterface
 {
@@ -34,10 +35,50 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
 
         $userId      = $fields['userId'];
         $classroomId = $fields['classroomId'];
+        $expiryDate  = array(
+            'expiryMode' => empty($fields['fields']['expiryMode']) ? null : $fields['fields']['expiryMode'],
+            'expiryDay'  => empty($fields['fields']['expiryDay']) ? null : $fields['fields']['expiryDay']
+        );
 
         if (isset($fields['tagIds'])) {
             $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $fields['tagIds'], $userId);
             $tagOwnerManager->update();
+        }
+
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+
+        if (!empty($expiryDate['expiryMode']) && !empty($expiryDate['expiryDay'])) {
+            if ($classroom['expiryMode'] == 'date' || $classroom['status'] != 'published') {
+                $this->updateClassroomMembers($classroomId, $expiryDate);
+            }
+
+            $this->updateClassroomCopyCourses($classroomId, $expiryDate);
+        }
+    }
+
+    protected function updateClassroomCopyCourses($classroomId, $expiryDate)
+    {
+        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+
+        foreach ($activeCourses as $course) {
+            $this->getCourseDao()->updateCourse($course['id'], array('expiryMode' => $expiryDate['expiryMode'], 'expiryDay' => $expiryDate['expiryDay']));
+        }
+    }
+
+    protected function updateClassroomMembers($classroomId, $expiryDate)
+    {
+        $studentsIds = $this->getClassroomService()->findMemberUserIdsByClassroomId($classroomId);
+
+        if ($expiryMode == 'days') {
+            $classroom = $this->getClassroomService()->getClassroom($classroomId);
+
+            $expiryDate['expiryDay'] = $classroom['createdTime'] + $expiryDate['expiryDay'] * 24 * 60 * 60;
+        }
+
+        foreach ($studentsIds as $studentId) {
+            $member = $this->getClassroomService()->getClassroomMember($classroomId, $studentId);
+
+            $this->getClassroomService()->updateMember($member['id'], array('deadline' => $expiryDate['expiryDay']));
         }
     }
 
@@ -116,6 +157,11 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
         return ServiceKernel::instance()->createService('User.StatusService');
     }
 
+    private function getCourseDao()
+    {
+        return ServiceKernel::instance()->createDao('Course.CourseDao');
+    }
+
     protected function getNotifiactionService()
     {
         return ServiceKernel::instance()->createService('User.NotificationService');
@@ -124,6 +170,11 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
     private function getClassroomService()
     {
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    private function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
     private function getClassroomReviewService()

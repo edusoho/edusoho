@@ -140,6 +140,40 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    public function setClassroomMemberExpiryDateAction(Request $request, $classroomId, $userId)
+    {
+        $this->getClassroomService()->tryManageClassroom($classroomId);   
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+
+            if (!$this->getCurrentUser()->isTeacher()) {
+                return $this->redirect('TopxiaWebBundle:Default:404');
+            }
+
+            // if ($fields['expiryDay'] > $classroom['expiryDay']) {
+            //     return $this->createJsonResponse(false);
+            // }
+            
+            $deadline = strtotime($fields['expiryDay'].' 23:59:59');
+            $user = $this->getClassroomService()->updateMember($userId, array('deadline' => $deadline));
+
+            return $this->createJsonResponse(true);
+        }
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+
+        $user = $this->getUserService()->getUser($userId);
+
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+        $deadline = $member['deadline'];
+
+        return $this->render('ClassroomBundle:ClassroomManage:set-expiry-date-modal.html.twig', array(
+            'classroom' => $classroom,
+            'user'      => $user,
+            'deadline'  => $deadline
+        ));
+    }
+
     public function aduitorAction(Request $request, $id, $role = 'auditor')
     {
         $this->getClassroomService()->tryManageClassroom($id);
@@ -678,6 +712,7 @@ class ClassroomManageController extends BaseController
 
         if ($request->getMethod() == "POST") {
             $class = $request->request->all();
+
             $class['tagIds'] = $this->getTagIdsFromRequest($request);
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);

@@ -73,6 +73,10 @@ classroom_manage_student_remark:
     path:  /classroom/{classroomId}/manage/student/{userId}/remark
     defaults: { _controller: ClassroomBundle:ClassroomManage:remark }
 
+classroom_manage_student_expiry_date:
+    path: /classroom/{classroomId}/manage/student/{userId}/expiry_date
+    defaults: { _controller: ClassroomBundle:ClassroomManage:setClassroomMemberExpiryDate }
+
 classroom_manage_student_remove:
     path:  /classroom/{classroomId}/manage/student/{userId}/remove
     defaults: { _controller: ClassroomBundle:ClassroomManage:remove }
