@@ -17,8 +17,8 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
       </ul>
-          {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
-
+          {{ render(controller('AppBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
+          
           <ul class="nav navbar-nav navbar-right">
             {% if app.user %}
               <li><a href="{{ path('my') }}"> {{'我的课程'|trans}} </a></li>
