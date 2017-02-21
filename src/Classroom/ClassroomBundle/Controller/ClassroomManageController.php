@@ -144,6 +144,12 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);   
 
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+
+        $user = $this->getUserService()->getUser($userId);
+
+        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
+
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
@@ -152,15 +158,12 @@ class ClassroomManageController extends BaseController
             }
 
             $deadline = strtotime($fields['expiryDay'].' 23:59:59');
-            $user = $this->getClassroomService()->updateMember($userId, array('deadline' => $deadline));
+
+            $user = $this->getClassroomService()->updateMember($member['id'], array('deadline' => $deadline));
 
             return $this->createJsonResponse(true);
         }
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
-        $user = $this->getUserService()->getUser($userId);
-
-        $member = $this->getClassroomService()->getClassroomMember($classroomId, $userId);
         $deadline = $member['deadline'];
 
         return $this->render('ClassroomBundle:ClassroomManage:set-expiry-date-modal.html.twig', array(
