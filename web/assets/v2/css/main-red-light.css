@@ -8665,6 +8665,9 @@ textarea {
 .open-course-list-section .course-item .course-img .img-responsive {
   padding: 0;
 }
+.open-course-list-section .course-list .course-item .metas .comment {
+  display: inline-block;
+}
 .dynamic-section-main .panel {
   height: 300px;
 }
