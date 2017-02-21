@@ -55,7 +55,7 @@
             {% if task %}
               <span class="live-course-lesson metas">
                 <span class="text-success mrm">{{ task.startTime|date('n月j日 H:i'|trans) }} ~ {{ task.endTime|date('H:i') }}</span>
-                <span class="text-muted mrm">{{'第%number%课时'|trans({'%number%': task.number})}}</span>
+                <span class="text-muted mrm">{{'第%number%任务'|trans({'%number%': task.number})}}</span>
               </span>
             {% endif %}
           {% endif %}

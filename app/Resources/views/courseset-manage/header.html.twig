@@ -1,10 +1,8 @@
 {% import "macro.html.twig" as web_macro %}
 {% do script(['app/js/courseset-manage/header/index.js']) %}
 
-{% if course is defined %}
-    {% set course = data('DefaultCourseByCourseSet', {courseSetId: courseSet.id }) %}
-{% endif %}
-{% set basepath = path('course_show', {id:course.id}) %}
+{% set defaultCourse = data('DefaultCourseByCourseSet', {courseSetId: courseSet.id }) %}
+{% set basepath = path('course_show', {id:defaultCourse.id}) %}
 
 <div class="es-section course-manage-header clearfix">
     <a href="{{basepath}}">

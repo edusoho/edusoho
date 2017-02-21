@@ -271,7 +271,7 @@ class OrderController extends BaseController
                 $target        = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
             } else {
                 $couponContent = '全部课程';
-                $url           = $this->generateUrl('course_explore');
+                $url           = $this->generateUrl('course_set_explore');
                 $target        = "<a href='{$url}' target='_blank'>{$couponContent}</a>";
             }
 

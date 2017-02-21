@@ -64,9 +64,9 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
     public function getActions($action)
     {
         $config = array(
-            'create' => 'AppBundle:Course/CourseAnnouncement:create',
-            'edit'   => 'AppBundle:Course/CourseAnnouncement:edit',
-            'list'   => 'AppBundle:Course/CourseAnnouncement:list'
+            'create' => 'AppBundle:Course/Announcement:create',
+            'edit'   => 'AppBundle:Course/Announcement:edit',
+            'list'   => 'AppBundle:Course/Announcement:list'
         );
 
         return $config[$action];

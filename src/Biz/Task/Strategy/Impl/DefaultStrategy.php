@@ -19,7 +19,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $this->validateTaskMode($field);
 
         if ($field['mode'] == 'lesson') {
-            $chapter = array(
+            $chapter             = array(
                 'courseId' => $field['fromCourseId'],
                 'title'    => $field['title'],
                 'type'     => 'lesson'
@@ -35,12 +35,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
 
         $task = parent::createTask($field);
-
-        $chapter          = $this->getChapterDao()->get($task['categoryId']);
-        $tasks            = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
-        $chapter['tasks'] = $tasks;
-        $chapter['mode']  = $field['mode'];
-        return $chapter;
+        return $task;
     }
 
     public function updateTask($id, $fields)
@@ -64,7 +59,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $this->biz['db']->beginTransaction();
             $allTasks = array();
             if ($task['mode'] == 'lesson') {
-                $allTasks = $this->getTaskDao()->findByCategoryId($task['categoryId']);
+                $allTasks = $this->getTaskDao()->findByCourseIdAndCategoryId($task['courseId'], $task['categoryId']); //courseId
             }
             foreach ($allTasks as $_task) {
                 $this->getTaskDao()->delete($_task['id']);

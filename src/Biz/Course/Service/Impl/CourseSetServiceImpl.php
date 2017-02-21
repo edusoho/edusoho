@@ -168,6 +168,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function hasCourseSetManageRole($courseSetId = 0)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             return false;
         }
@@ -177,14 +178,27 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (empty($courseSetId)) {
-            return false;
+            return $user->isTeacher();
         }
 
         $courseSet = $this->getCourseSetDao()->get($courseSetId);
         if (empty($courseSet)) {
             return false;
         }
-        return $courseSet['creator'] == $user->getId();
+
+        if ($courseSet['creator'] == $user->getId()) {
+            return true;
+        }
+
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        foreach ($courses as $course) {
+            if (in_array($user->getId(), $course['teacherIds'])) {
+                $this->getCourseService()->hasCourseManagerRole($course['id']);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function hasAdminRole()
@@ -784,6 +798,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'expiryDays'    => 0,
             'learnMode'     => 'freeMode',
             'isDefault'     => 1,
+            'isFree'        => 1,
             'serializeMode' => $created['serializeMode'],
             'status'        => 'draft'
         );

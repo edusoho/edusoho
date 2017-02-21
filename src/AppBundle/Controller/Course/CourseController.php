@@ -2,18 +2,18 @@
 
 namespace AppBundle\Controller\Course;
 
-use Biz\Activity\Service\ActivityService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\MaterialService;
+use AppBundle\Common\Paginator;
+use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\User\Service\TokenService;
 use Biz\Course\Service\ReviewService;
+use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\TokenService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\Paginator;
 
 class CourseController extends CourseBaseController
 {
@@ -28,9 +28,14 @@ class CourseController extends CourseBaseController
     public function showAction(Request $request, $id, $tab = 'summary')
     {
         $course    = $this->getCourseService()->getCourse($id);
+        $classroom = array();
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        }
         return $this->render('course/course-show.html.twig', array(
             'tab'       => $tab,
             'course'    => $course,
+            'classroom' => $classroom
         ));
     }
 
@@ -291,7 +296,7 @@ class CourseController extends CourseBaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -302,7 +307,7 @@ class CourseController extends CourseBaseController
     public function exitAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user = $this->getCurrentUser();
+        $user                  = $this->getCurrentUser();
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是课程的学员。');
         }

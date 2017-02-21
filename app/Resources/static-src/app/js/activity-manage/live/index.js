@@ -64,10 +64,12 @@ class Live {
 
   _dateTimePicker() {
     let $starttime = $('#startTime');
+
     $starttime.datetimepicker({
       format: 'yyyy-mm-dd hh:ii',
       language: "zh",
-      autoclose: true
+      autoclose: true,
+      endDate: new Date(Date.now() + 86400*365*100*1000)
     });
     $starttime.datetimepicker('setStartDate', new Date());
   }
