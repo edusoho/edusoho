@@ -86,14 +86,21 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function notesAction($course, $member = array())
+    public function notesAction(Request $request, $course, $member = array())
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        if (empty($member)) {
-            $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+        if ($request->query->has('selectedCourse')) {
+            $notes            = $this->getCourseNoteService()->findPublicNotesByCourseId($request->query->get('selectedCourse'));
+            $selectedCourseId = $request->query->get('selectedCourse');
         } else {
-            $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+            if (empty($member)) {
+                $notes            = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+                $selectedCourseId = 0;
+            } else {
+                $notes            = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+                $selectedCourseId = $member['courseId'];
+            }
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
@@ -106,14 +113,18 @@ class CourseController extends CourseBaseController
         $likes       = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
         $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
 
+        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSet['id']);
+
         return $this->render('course/tabs/notes.html.twig', array(
-            'course'      => $course,
-            'courseSet'   => $courseSet,
-            'notes'       => $notes,
-            'users'       => $users,
-            'tasks'       => $tasks,
-            'likeNoteIds' => $likeNoteIds,
-            'member'      => $member
+            'course'           => $course,
+            'courses'          => $courses,
+            'selectedCourseId' => $selectedCourseId,
+            'courseSet'        => $courseSet,
+            'notes'            => $notes,
+            'users'            => $users,
+            'tasks'            => $tasks,
+            'likeNoteIds'      => $likeNoteIds,
+            'member'           => $member
         ));
     }
 
@@ -127,6 +138,14 @@ class CourseController extends CourseBaseController
 
         if (!empty($member)) {
             $conditions['courseId'] = $course['id'];
+            $selectedCourseId       = $conditions['courseId'];
+        } else {
+            $selectedCourseId = 0;
+        }
+
+        if ($request->query->has('selectedCourse')) {
+            $conditions['courseId'] = $request->query->get('selectedCourse');
+            $selectedCourseId       = $conditions['courseId'];
         }
 
         $paginator = new Paginator(
@@ -147,15 +166,18 @@ class CourseController extends CourseBaseController
             $userReview = $this->getReviewService()->getUserCourseReview($member['userId'], $course['id']);
         }
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+        $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSet['id']);
 
         return $this->render('course/tabs/reviews.html.twig', array(
-            'courseSet'  => $courseSet,
-            'course'     => $course,
-            'reviews'    => $reviews,
-            'userReview' => $userReview,
-            'users'      => $users,
-            'member'     => $member
+            'courseSet'        => $courseSet,
+            'selectedCourseId' => $selectedCourseId,
+            'courses'          => $courses,
+            'course'           => $course,
+            'reviews'          => $reviews,
+            'userReview'       => $userReview,
+            'users'            => $users,
+            'member'           => $member
         ));
     }
 
