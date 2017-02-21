@@ -296,6 +296,9 @@ class DefaultController extends BaseController
             $orderData['name'] = $names[$orderData['targetType']];
             unset($orderData['targetType']);
         });
+        if (!$this->isPluginInstalled('vip')) {
+            unset($orderDatas['vip']);
+        }
         return $this->createJsonResponse(array_values($orderDatas));
     }
 

@@ -460,7 +460,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if ($member) {
-            throw $this->createServiceException("用户(#{$userId})已加入该教学计划！");
+            if ($member['role'] == 'teacher') {
+                throw $this->createServiceException("用户(#{$userId})是该教学计划的教师！");
+            } else {
+                throw $this->createServiceException("用户(#{$userId})已加入该教学计划！");
+            }
         }
 
         //按照教学计划有效期模式计算学员有效期
@@ -772,6 +776,21 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
     {
         return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+    }
+
+    public function addMemberExpiryDays($courseId, $userId, $day)
+    {
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+
+        if ($member['deadline'] > 0) {
+            $deadline = $day * 24 * 60 * 60 + $member['deadline'];
+        } else {
+            $deadline = $day * 24 * 60 * 60 + time();
+        }
+
+        return $this->getMemberDao()->update($member['id'], array(
+            'deadline' => $deadline
+        ));
     }
 
     /**

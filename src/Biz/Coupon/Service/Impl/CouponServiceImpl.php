@@ -148,6 +148,7 @@ class CouponServiceImpl extends BaseService implements CouponService
     {
         $coupon      = $this->getCouponByCode($code);
         $currentUser = $this->getCurrentUser();
+        $course      = $this->getCourseService()->getCourse($targetId);
 
         if (empty($coupon)) {
             return array(
@@ -184,7 +185,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             );
         }
 
-        if ($coupon['targetId'] != 0 && $targetId != $coupon['targetId']) {
+        if ($coupon['targetId'] != 0 && $course['courseSetId'] != $coupon['targetId']) {
             return array(
                 'useable' => 'no',
                 'message' => ''

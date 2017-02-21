@@ -86,7 +86,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
     public function getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskId)
     {
-        $builder = $this->_createQueryBuilder(array('courseTaskId'=>$courseTaskId))
+        $builder = $this->_createQueryBuilder(array('courseTaskId' => $courseTaskId))
             ->select('sum(time) AS learnedTime')
             ->groupBy('courseTaskId');
         return $builder->execute()->fetchColumn();
@@ -94,7 +94,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId)
     {
-        $builder = $this->_createQueryBuilder(array('courseTaskId'=>$courseTaskId))
+        $builder = $this->_createQueryBuilder(array('courseTaskId' => $courseTaskId))
             ->select('sum(watchTime) AS watchTime')
             ->groupBy('courseTaskId');
         return $builder->execute()->fetchColumn();
@@ -117,7 +117,9 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
                 'activityId =:activityId',
                 'courseTaskId = :courseTaskId',
                 'createdTime >= :createdTime_GE',
-                'createdTime <= :createdTime_LE'
+                'createdTime <= :createdTime_LE',
+                'finishedTime >= :finishedTime_GE',
+                'finishedTime <= :finishedTime_LE'
             )
         );
     }

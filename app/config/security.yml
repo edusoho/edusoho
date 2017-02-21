@@ -62,6 +62,7 @@ security:
         - { path: ^/settings, role: ROLE_USER }
         # - { path: ^/note, role: ROLE_USER }
         - { path: ^/message, role: ROLE_USER }
+        - { path: ^/classroom/\d+/manage/, role: ROLE_USER }
         - { path: ^/admin/course, role: ROLE_BACKEND }
         - { path: ^/admin/user, role: ROLE_BACKEND }
         - { path: ^/admin/app, role: ROLE_BACKEND }

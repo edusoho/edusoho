@@ -35,9 +35,9 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->findInField('id', $ids);
     }
 
-    public function findByCategoryId($categoryId)
+    public function findByCourseIdAndCategoryId($courseId, $categoryId)
     {
-        return $this->findByFields(array('categoryId' => $categoryId));
+        return $this->findByFields(array('courseId' => $courseId, 'categoryId' => $categoryId));
     }
 
     public function getMaxSeqByCourseId($courseId)
@@ -117,7 +117,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     {
         $time = time();
         $sql
-        = "SELECT fromCourseSetId, max(startTime) as startTime
+              = "SELECT fromCourseSetId, max(startTime) as startTime
                  FROM {$this->table()}
                  WHERE endTime < {$time} AND status='published' AND type = 'live'
                  GROUP BY fromCourseSetId
@@ -156,7 +156,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         $sql = "select sum(`time`) from `course_task_result` where `courseTaskId` in (SELECT id FROM {$this->table()}  WHERE `fromCourseSetId`= ?)";
         return $this->db()->fetchColumn($sql, array($courseSetId));
     }
-    
+
     public function analysisTaskDataByTime($startTime, $endTime)
     {
         $sql = "SELECT count(id) AS count, from_unixtime(createdTime, '%Y-%m-%d') AS date FROM {$this->table} WHERE createdTime >= ? AND createdTime <= ? GROUP BY date ORDER BY date ASC";
