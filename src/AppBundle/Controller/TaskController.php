@@ -73,7 +73,6 @@ class TaskController extends BaseController
                 throw $this->createAccessDeniedException();
             }
             if ($course["parentId"] > 0) {
-                //TODO 复制课程的预览逻辑
                 return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
             }
 
