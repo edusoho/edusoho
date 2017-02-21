@@ -32,6 +32,18 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
+    public function findQuestionsByCopyIds(array $copyIds)
+    {
+        if (empty($copyIds)) {
+            return array();
+        }
+
+        $marks     = str_repeat('?,', count($copyIds) - 1).'?';
+        $sql       = "SELECT * FROM {$this->table} WHERE copyId IN ({$marks});";
+        $questions = $this->getConnection()->fetchAll($sql, $copyIds);
+        return $this->createSerializer()->unserializes($questions, $this->serializeFields);
+    }
+
     public function findQuestionsByParentId($id)
     {
         $sql       = "SELECT * FROM {$this->table} WHERE parentId = ? ORDER BY createdTime ASC";
@@ -149,10 +161,10 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
         return $this->getConnection()->fetchColumn($sql, array($parentId));
     }
 
-    public function findQuestionsByParentIdAndTarget($parentId, $target)
+    public function findQuestionsByTarget($target)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? and target = ?";
-        $questions = $this->getConnection()->fetchAll($sql, array($parentId, $target));
+        $sql = "SELECT * FROM {$this->table} WHERE target = ?";
+        $questions = $this->getConnection()->fetchAll($sql, array($target));
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 

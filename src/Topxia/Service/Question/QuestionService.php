@@ -89,5 +89,9 @@ interface QuestionService
 
     public function getQuestionCountGroupByTypes($conditions);
 
-    public function findQuestionsByParentIdAndTarget($parentId, $target);
+    public function findQuestionsByTarget($target);
+
+    public function findQuestionsByCopyIds(array $copyIds);
+
+    public function updateQuestionTargetById($id, $target);
 }

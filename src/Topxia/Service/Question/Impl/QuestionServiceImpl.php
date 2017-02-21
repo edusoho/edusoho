@@ -24,6 +24,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return QuestionSerialize::unserializes($questions);
     }
 
+    public function findQuestionsByCopyIds(array $copyIds)
+    {
+        return $this->getQuestionDao()->findQuestionsByCopyIds($copyIds);
+    }
+
     public function findQuestionsByParentId($id)
     {
         return $this->getQuestionDao()->findQuestionsByParentId($id);
@@ -127,6 +132,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $this->dispatchEvent('question.update', array('question'=>$question,'argument' => $argument));
 
         return $question;
+    }
+
+    public function updateQuestionTargetById($id, $target)
+    {
+        return $this->getQuestionDao()->updateQuestion($id, $target);
     }
 
     public function statQuestionTimes ($answers)
@@ -311,9 +321,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $this->getQuestionDao()->getQuestionCountGroupByTypes($conditions);
     }
 
-    public function findQuestionsByParentIdAndTarget($parentId, $target)
+    public function findQuestionsByTarget($target)
     {
-        return $this->getQuestionDao()->findQuestionsByParentIdAndTarget($parentId, $target);
+        return $this->getQuestionDao()->findQuestionsByTarget($target);
     }
 
     protected function getQuestionDao()

@@ -2943,16 +2943,28 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function changeQuestionTarget($courseId, $lessonId)
     {
-        $oldTarget = "course-{$courseId}/lesson-{$lessonId}";
-        $questions = $this->getQuestionService()->findQuestionsByParentIdAndTarget(0, $oldTarget);
+        $sourceTarget = "course-{$courseId}/lesson-{$lessonId}";
+        $sourceQuestions = $this->getQuestionService()->findQuestionsByTarget($sourceTarget);
+        $this->dealQuestionTarget($sourceQuestions);
+
+        $copyQuestions = $this->findCopyQuestions($sourceQuestions);
+        $this->dealQuestionTarget($copyQuestions);
+    }
+
+    protected function findCopyQuestions($sourceQuestions)
+    {
+        $copyIds = ArrayToolkit::column($sourceQuestions, 'copyId');
+        $copyIds = array_unique($copyIds);
+        $copyIds = array_filter($copyIds);
+        $copyIds = array_values($copyIds);
+        return $this->getQuestionService()->findQuestionsByCopyIds($copyIds);
+    }
+
+    protected function dealQuestionTarget($questions)
+    {
         foreach ($questions as $question) {
-            $question['target'] = "course-{$courseId}";
-            $question['choices'] = empty($question['metas']['choices']) ? array() : $question['metas']['choices'];
-            if ($question['type'] == 'uncertain_choice') {
-                $question['uncertain'] = 'uncertain_choice';
-            }
-            unset($question['copyId']);
-            $this->getQuestionService()->updateQuestion($question['id'], $question);
+            $target = explode('/', $question['target']);
+            $this->getQuestionService()->updateQuestionTargetById($question['id'], array('target' => $target[0]));
         }
     }
 
