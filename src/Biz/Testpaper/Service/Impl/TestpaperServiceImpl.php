@@ -350,7 +350,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         $testpaper = $this->getTestpaper($id);
-        $user      = $this->getCurrentuser();
+        $user      = $this->getCurrentUser();
 
         $testpaperResult = $this->getUserUnfinishResult($testpaper['id'], $fields['courseId'], $fields['lessonId'], $testpaper['type'], $user['id']);
 

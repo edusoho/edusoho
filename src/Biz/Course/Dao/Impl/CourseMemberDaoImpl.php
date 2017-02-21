@@ -95,7 +95,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         $sql .= "(m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized') ";
         $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        var_dump($sql, $params, $conditions);
+        
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
 
