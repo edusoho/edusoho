@@ -82,7 +82,7 @@ class CourseController extends CourseBaseController
         $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
         $user = $this->getUser();
-        if ($taskCount) {
+        if ($taskCount && !$member['previewAs']) {
             //学习记录
             $taskResultCount = $this->getTaskResultService()->countTaskResults(array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id']));
 
