@@ -168,6 +168,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function hasCourseSetManageRole($courseSetId = 0)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             return false;
         }
@@ -189,9 +190,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return true;
         }
 
-        $courses = $this->findCoursesByCourseSetId($courseSetId);
-        foreach ($courses as $key => $course) {
-            if ($this->canManageCourse($course['id'])) {
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        foreach ($courses as $course) {
+            if (in_array($user->getId(), $course['teacherIds'])) {
+                $this->getCourseService()->hasCourseManagerRole($course['id']);
                 return true;
             }
         }
