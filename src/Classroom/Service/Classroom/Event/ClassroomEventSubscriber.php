@@ -31,17 +31,17 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
 
     public function onClassroomUpdate(ServiceEvent $event)
     {
-        $classroom = $event->getSubject();
-
-        $userId      = $classroom['userId'];
-        $classroomId = $classroom['classroomId'];
+        $arguments   = $event->getSubject();
+        $userId      = $arguments['userId'];
+        $classroomId = $arguments['classroomId'];
+        $fields      = $arguments['fields'];
         $expiryDate  = array(
-            'expiryMode' => empty($classroom['fields']['expiryMode']) ? null : $classroom['fields']['expiryMode'],
-            'expiryDay'  => empty($classroom['fields']['expiryDay']) ? null : $classroom['fields']['expiryDay']
+            'expiryMode' => empty($fields['expiryMode']) ? null : $fields['expiryMode'],
+            'expiryDay'  => empty($fields['expiryDay']) ? null : $fields['expiryDay']
         );
 
-        if (isset($classroom['tagIds'])) {
-            $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $classroom['tagIds'], $userId);
+        if (isset($fields['tagIds'])) {
+            $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $fields['tagIds'], $userId);
             $tagOwnerManager->update();
         }
 
@@ -73,7 +73,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
 
     protected function updateClassroomMembers($classroomId, $expiryDate)
     {
-        $members = $this->getClassroomService()->findMembersByClassroomId($classroomId);
+        $members = $this->getClassroomService()->findStudentsByClassroomId($classroomId);
 
         if ($expiryDate['expiryMode'] == 'days') {
             $classroom = $this->getClassroomService()->getClassroom($classroomId);

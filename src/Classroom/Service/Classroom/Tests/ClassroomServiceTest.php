@@ -126,7 +126,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals($course1['id'], $result['id']);
     }
 
-    public function testFindMembersByClassroomId()
+    public function testFindStudentsByClassroomId()
     {
         $user          = $this->getCurrentUser();
         $textClassroom = array(

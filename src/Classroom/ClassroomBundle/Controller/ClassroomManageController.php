@@ -153,13 +153,9 @@ class ClassroomManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
-            if (!$this->getClassroomService()->isClassroomHeadTeacher($classroomId, $userId)) {
-                return $this->createJsonResponse(false);
-            }
-
             $deadline = strtotime($fields['expiryDay'].' 23:59:59');
 
-            $user = $this->getClassroomService()->updateMember($member['id'], array('deadline' => $deadline));
+            $this->getClassroomService()->updateMember($member['id'], array('deadline' => $deadline));
 
             return $this->createJsonResponse(true);
         }

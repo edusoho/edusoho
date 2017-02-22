@@ -106,7 +106,7 @@ interface ClassroomService
 
     public function findMemberUserIdsByClassroomId($classroomId);
 
-    public function findMembersByClassroomId($classroomId);
+    public function findStudentsByClassroomId($classroomId);
 
     public function getClassroomMember($classroomId, $userId);
 
