@@ -137,7 +137,8 @@ class CourseController extends CourseBaseController
 
         return $this->render('course/course-show.html.twig', array(
             'tab'    => $tab,
-            'member' => $member
+            'member' => $member,
+            'course' => $course
         ));
     }
 
