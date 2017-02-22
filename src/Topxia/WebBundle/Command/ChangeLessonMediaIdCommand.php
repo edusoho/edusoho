@@ -27,12 +27,10 @@ class ChangeLessonMediaIdCommand extends BaseCommand
         $sourceLessons = $this->findQuestionSourceLessons($condition);
 
         foreach ($sourceLessons as $sourceLesson) {
-            $sourceTestPaper = $this->getSourceTestPaper($sourceLesson['mediaId']);
-
             $copyLessons = $this->findCopyLessons($sourceLesson['id']);
             foreach ($copyLessons as $copyLesson) {
                 $target = "course-{$copyLesson['courseId']}";
-                $trueTestPaper = $this->getTestPaperByCopyIdAndTarget($sourceTestPaper['id'], $target);
+                $trueTestPaper = $this->getTestPaperByCopyIdAndTarget($sourceLesson['mediaId'], $target);
                 $this->updateCopyLessonMediaId($copyLesson['id'], $trueTestPaper['id']);
             }
         }
@@ -63,12 +61,6 @@ class ChangeLessonMediaIdCommand extends BaseCommand
         return $sourceLessons;
     }
 
-    private function getSourceTestPaper($id)
-    {
-        $sql = "select * from testpaper where id = {$id}";
-        return $this->db()->fetchAssoc($sql, array());
-    }
-
     private function findCopyLessons($lessonId)
     {
         $sql = "select * from course_lesson where copyId = {$lessonId}";
@@ -87,7 +79,8 @@ class ChangeLessonMediaIdCommand extends BaseCommand
 
     protected function db()
     {
-        return $this->getBiz()['db'];
+        $biz = $this->getBiz();
+        return $biz['db'];
     }
 
     protected function getCourseService()
