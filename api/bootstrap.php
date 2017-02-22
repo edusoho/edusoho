@@ -40,7 +40,11 @@ $biz = new \Codeages\Biz\Framework\Context\Biz(array(
     'tmp_directory'      => ROOT_DIR . '/tmp',
     'log_directory'      => ROOT_DIR . '/logs',
     'plugin.directory'   => ROOT_DIR . '/../plugins',
-    'plugin.config_file' => ROOT_DIR . '/config/plugin_installed.php'
+    'plugin.config_file' => ROOT_DIR . '/config/plugin_installed.php',
+    'topxia.disk.local_directory' => ROOT_DIR . "/data/udisk",
+    'topxia.upload.public_directory' => ROOT_DIR . "/../web/files",
+    'topxia.upload.private_directory' => ROOT_DIR . "/data/private_files",
+    'topxia.upload.public_url_path' => "/files"
 ));
 
 $biz['migration.directories'][] = dirname(__DIR__) . '/migrations';
