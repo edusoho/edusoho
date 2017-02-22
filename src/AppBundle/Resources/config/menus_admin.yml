@@ -191,9 +191,9 @@ admin:
                                     mode: none
                                 admin_course_guest_member_preview:
                                     name: 预览
-                                    router_name: course_show
+                                    router_name: course_set_show
                                     router_params:
-                                        id: (courseId)
+                                        id: (courseSet.id)
                                         previewAs: 'guest'
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-eye-open'
