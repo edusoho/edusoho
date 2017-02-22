@@ -50,10 +50,11 @@ export default class List extends Component {
               { this.props.sortable && <i className="es-icon es-icon-yidong mrl color-gray inline-block vertical-middle"></i> }
               <img className="avatar-sm avatar-sm-square mrm" src ={item.avatar}/> 
               <span className="label-name text-overflow inline-block vertical-middle">{ item.nickname }</span>
-              <label><input type="checkbox" checked={item.isVisible} onChange= {event=>this.context.onChecked(event)} value={item.itemId}/>显示</label>
+              <label className = { this.props.showCheckbox ? '' :'hidden' }><input type="checkbox" checked={item.isVisible} onChange= {event=>this.context.onChecked(event)} value={item.itemId}/>显示</label>
               <a className="pull-right link-gray mtm" onClick={event=>this.context.removeItem(event)} data-item-id={item.itemId}>
                 <i className = "es-icon es-icon-close01 text-12"></i>
               </a>
+              <input type="hidden" name="ids[]" value={ item.id }/>   
             </li>
           )
         })
