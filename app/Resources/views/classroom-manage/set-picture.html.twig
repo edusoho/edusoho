@@ -1,7 +1,7 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 {% block title %}{{'封面图片'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'picture' %}
-{% do script(['app/js/classroom/set-picture/index.js']) %}
+{% do script(['app/js/classroom-manage/set-picture/index.js']) %}
 
 {% block main %}
 <div class="panel panel-default" role="classroom-set-picture">

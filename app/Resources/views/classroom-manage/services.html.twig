@@ -1,7 +1,7 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 {% block title %}{{'服务设置'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'service' %}
-{% do script(['app/js/classroom/set-services/index.js']) %}
+{% do script(['app/js/classroom-manage/set-services/index.js']) %}
 
 {% block main %}
 <div class="panel panel-default" role="classroom-set-services">

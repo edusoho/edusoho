@@ -1,7 +1,7 @@
 import notify from 'common/notify';
 import 'common/select2';
-import 'app/js/classroom/category-select';
-import 'app/js/classroom/classroom-create';
+import 'app/js/classroom-manage/category-select';
+import 'app/js/classroom-manage/classroom-create';
 
 let editor_classroom_about = CKEDITOR.replace('about', {
     allowedContent: true,
