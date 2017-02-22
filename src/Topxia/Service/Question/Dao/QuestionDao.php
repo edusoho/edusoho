@@ -41,4 +41,8 @@ interface QuestionDao
     public function updateQuestionCountByIds($ids, $status);
 
     public function getQuestionCountGroupByTypes($conditions);
+
+    public function findQuestionsByTarget($target);
+
+    public function findQuestionsByCopyIds(array $copyIds);
 }
