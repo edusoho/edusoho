@@ -35,9 +35,11 @@
         <span class="num"><i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}</span>
       {% endif %}
       <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
-      {% if course %}
-        {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
-      {% endif %}
+      {# {% if course and priceFor|default('course') == 'course' %} #}
+        {# {% include 'course/widgets/price.html.twig' with {shows:'price'} %} #}
+      {# {% else %} #}
+        {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
+      {# {% endif %} #}
     </div>
   </div>
 </div>
