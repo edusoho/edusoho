@@ -21,7 +21,7 @@
               {{ web_macro.star(course.rating) }}
             </div>
             <div class="price hidden-xs">
-                {{ '原价：'|trans }} 0元
+                {{ '原价：'|trans }} {{ course.price }}元
                 {# FIXME 由于目前还没有打折、优惠等插件，这里价格先注释掉#}
                 {# {% include 'TopxiaWebBundle:Course/Widget:course-price.html.twig' with {shows:['originPrice'] } %} #}
             </div>
