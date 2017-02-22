@@ -9,3 +9,4 @@ $('.js-service-item').click(function(){
     $this.removeClass('label-default').addClass('label-primary');  
   }
 })
+
