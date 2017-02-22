@@ -83,7 +83,7 @@
         </div>
         <div class="modal-footer">
           {% if source|default('course') == 'classroom' %}
-            {% set postUrl = path('classroom_manage_testpaper_check', {classroomId:targetId,resultId:paperResult.id}) %}
+            {% set postUrl = path('classroom_manage_testpaper_check', {id:targetId,resultId:paperResult.id}) %}
           {% else %}
             {% set postUrl = path('course_manage_testpaper_check', {id:targetId,resultId:paperResult.id}) %}
           {% endif %}

@@ -232,7 +232,7 @@ class TaskCopy extends AbstractEntityCopy
             'mode',
             'number',
             'type',
-            'mediaSource'
+            'mediaSource',
             'status'
         );
 

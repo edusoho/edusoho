@@ -2,7 +2,12 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
+use Biz\Task\Service\TaskService;
+use Vip\Service\Vip\LevelService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseSetService;
@@ -136,7 +141,7 @@ class CourseSetController extends BaseController
     2: 移除班级课程
     0: 删除未发布课程成功
      */
-    public function deleteAction(Request $request, $id, $type)
+    public function deleteAction(Request $request, $id)
     {
         $currentUser = $this->getUser();
 
@@ -146,41 +151,29 @@ class CourseSetController extends BaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
-        if ($courseSet['status'] == 'published') {
-            $this->getCourseSetService()->closeCourseSet($id);
-            $courseSet['status'] = 'closed';
-        }
-
         $subCourses = $this->getCourseSetService()->findCourseSetsByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
             return $this->createJsonResponse(array('code' => 2, 'message' => '请先删除班级课程'));
         }
+        try {
+            if ($courseSet['status'] == 'draft') {
+                $this->getCourseSetService()->deleteCourseSet($id);
+                return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
+            }
 
-        if ($courseSet['status'] == 'draft') {
+            $isCheckPassword = $request->getSession()->get('checkPassword');
+            if (!$isCheckPassword) {
+                return $this->render('admin/course/delete.html.twig', array('courseSet' => $courseSet));
+            }
+
+            $request->getSession()->remove('checkPassword');
+
             $this->getCourseSetService()->deleteCourseSet($id);
+
             return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('code' => -1, 'message' => $e->getMessage()));
         }
-
-        if ($courseSet['status'] == 'closed') {
-            $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
-
-            if ($classroomCourse) {
-                return $this->createJsonResponse(array('code' => 3, 'message' => '当前课程未移除,请先移除班级课程'));
-            }
-
-            if ($type) {
-                $isCheckPassword = $request->getSession()->get('checkPassword');
-
-                if (!$isCheckPassword) {
-                    throw $this->createAccessDeniedException('未输入正确的校验密码！');
-                }
-
-                $result = $this->getCourseSetService()->deleteCourseSet($id);
-                return $this->createJsonResponse($this->returnDeleteStatus($result, $type));
-            }
-        }
-
-        return $this->render('admin/course/delete.html.twig', array('courseSet' => $courseSet));
     }
 
     public function checkPasswordAction(Request $request)
@@ -331,7 +324,7 @@ class CourseSetController extends BaseController
             $courseCount  = $this->getCourseService()->searchCourseCount(array('courseSetId' => $courseSetId));
             $isLearnedNum = $this->getMemberService()->countMembers(array('isLearned' => 1, 'courseSetId' => $courseSetId));
 
-            $taskCount    = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
+            $taskCount = $this->getTaskService()->countTasks(array('fromCourseSetId' => $courseSetId));
 
             $courseSet['learnedTime'] = $this->getTaskService()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
             if (!empty($courseSetIncomes[$courseSetId])) {
@@ -480,6 +473,7 @@ class CourseSetController extends BaseController
         ));
     }
 
+    //@deprecated
     protected function returnDeleteStatus($result, $type)
     {
         $dataDictionary = array('questions' => '问题', 'testpapers' => '试卷', 'materials' => '课时资料', 'chapters' => '课时章节', 'drafts' => '课时草稿', 'lessons' => '课时', 'lessonLearns' => '课时时长', 'lessonReplays' => '课时录播', 'lessonViews' => '课时播放时长', 'homeworks' => '课时作业', 'exercises' => '课时练习', 'favorites' => '课时收藏', 'notes' => '课时笔记', 'threads' => '课程话题', 'reviews' => '课程评价', 'announcements' => '课程公告', 'statuses' => '课程动态', 'members' => '课程成员', 'conversation' => '会话', 'course' => '课程');
@@ -499,6 +493,48 @@ class CourseSetController extends BaseController
                 return array('success' => false, 'message' => $message);
             }
         }
+    }
+
+    public function chooserAction(Request $request)
+    {
+        $conditions             = $request->query->all();
+        $conditions["parentId"] = 0;
+
+        if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
+            unset($conditions["categoryId"]);
+        }
+
+        if (isset($conditions["status"]) && $conditions["status"] == "") {
+            unset($conditions["status"]);
+        }
+
+        if (isset($conditions["title"]) && $conditions["title"] == "") {
+            unset($conditions["title"]);
+        }
+
+        if (isset($conditions["creator"]) && $conditions["creator"] == "") {
+            unset($conditions["creator"]);
+        }
+
+        $count = $this->getCourseSetService()->countCourseSets($conditions);
+
+        $paginator = new Paginator($this->get('request'), $count, 20);
+
+        $courseSets = $this->getCourseSetService()->searchCourseSets(
+            $conditions,
+            null,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
+
+        return $this->render('admin/course/course-set-chooser.html.twig', array(
+            'conditions' => $conditions,
+            'courseSets' => $courseSets,
+            'categories' => $categories,
+            'paginator'  => $paginator
+        ));
     }
 
     /**
@@ -602,7 +638,7 @@ class CourseSetController extends BaseController
      */
     protected function getThreadService()
     {
-        return $this->createService('Thread:ThreadService');
+        return $this->createService('Course:ThreadService');
     }
 
     /**

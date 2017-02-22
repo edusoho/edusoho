@@ -3,11 +3,11 @@
 
 {% block full_content %}
 
+  {% set previewAs = app.request.query.get('previewAs') %}
   {% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
   {% set route_params = app.request.attributes.get('_route_params') %}
-  {% set course = data('Course', {courseId: course.id|default(route_params.id|default(0))}) %}
   {% set course_set = data('CourseSet', {id: course.courseSetId}) %}
-  {% set previewAs = app.request.query.get('previewAs') %}
+
 
   {{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
 
@@ -21,8 +21,8 @@
           <div class="nav-btn-tab">
             <ul class="nav nav-tabs" role="tablist">
               {% for key, tab in metas.tabs %}
-                <li role="presentation"
-                    class="{% if app.request.attributes.get('_route_params').tab|default('') == key  or nav|default('') == key %}active{% endif %}">
+                <li role="presentation" id="{{ key }}"
+                    class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
                   <a
                       {% if member|default(false) %}
                         href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
@@ -56,7 +56,7 @@
 
           </div>
           {% block detail_content %}
-            {{ render(controller(metas.tabs[tab].content, {course: course, member: member|default(null)})) }}
+            {{ render(controller(metas.tabs[tab].content, {request: app.request, course: course, member: member|default(null)})) }}
           {% endblock %}
         </section>
 

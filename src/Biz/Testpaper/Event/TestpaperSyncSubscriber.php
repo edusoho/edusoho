@@ -34,7 +34,7 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
             return;
         }
         $copiedCourseSetIds = ArrayToolkit::column($copiedCourseSets, 'id');
-        $copiedTestpapers   = $this->getTestpaperDao()->findTestpapersByCopyIdAndLockedCourseSetIds($testpaper['copyId'], $copiedCourseSetIds);
+        $copiedTestpapers   = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($testpaper['copyId'], $copiedCourseSetIds);
         if (empty($copiedTestpapers)) {
             return;
         }
