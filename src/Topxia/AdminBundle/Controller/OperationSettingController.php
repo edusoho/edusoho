@@ -57,9 +57,9 @@ class OperationSettingController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $inviteSetting = $request->request->all();
-            if(isset($inviteSetting['get_coupon_setting'])){
+            if (isset($inviteSetting['get_coupon_setting'])) {
                 $inviteSetting['get_coupon_setting'] = 1;
-            }else{
+            } else {
                 $inviteSetting['get_coupon_setting'] = 0;
             }
             $inviteSetting = ArrayToolkit::parts($inviteSetting, array(
@@ -85,6 +85,31 @@ class OperationSettingController extends BaseController
         return $this->render('TopxiaAdminBundle:Invite:set.html.twig', array(
             'inviteSetting'             => $inviteSetting,
             'inviteInfomation_template' => $inviteSetting['inviteInfomation_template']
+        ));
+    }
+
+    public function wapSetAction(Request $request)
+    {
+        $defaultWapSetting = array(
+            'enabled' => 1
+        );
+
+        if ('POST' == $request->getMethod()) {
+            $wapSetting = $request->request->all();
+            $wapSetting = ArrayToolkit::parts($wapSetting, array(
+                'enabled'
+            ));
+
+            $wapSetting = array_merge($defaultWapSetting, $wapSetting);
+            $this->getSettingService()->set('wap', $wapSetting);
+            $this->getLogService()->info('system', 'update_settings', '更新WAP设置', $wapSetting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('手机微网校设置已保存！'));
+        }
+
+        $wapSetting = $this->setting('wap', array());
+        $wapSetting = array_merge($defaultWapSetting, $wapSetting);
+        return $this->render('TopxiaAdminBundle:Wap:set.html.twig', array(
+            'wapSetting' => $wapSetting
         ));
     }
 
