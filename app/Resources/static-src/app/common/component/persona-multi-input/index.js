@@ -9,6 +9,7 @@ function initItem(dataSourceUi,data,index,props) {
     isVisible: data[props.isVisible] == 1 ? true : false,
     avatar: data[props.avatar],
     seq: index,
+    id:data[props.id],
     outputValue: {
       [props.id]: data[props.id],
       [props.isVisible]: data[props.isVisible] ,
@@ -62,14 +63,18 @@ export default class PersonaMultiInput extends MultiInput {
       return;
     }
     //@TODO重复添加提示
+    if(this.props.replaceItem) {
+      this.state.dataSourceUi = [];
+    }
     initItem(this.state.dataSourceUi,data,this.state.dataSourceUi.length+1,this.props);
+
     this.setState({
       dataSourceUi: this.state.dataSourceUi,
     });
   }
 
   getList() {
-    return (<List listClassName={this.props.listClassName}  dataSourceUi = {this.state.dataSourceUi}  sortable={this.props.sortable}></List>);
+    return (<List listClassName={this.props.listClassName}  dataSourceUi = {this.state.dataSourceUi}  sortable={this.props.sortable} showCheckbox = {this.props.showCheckbox}></List>);
   }
 }
 
@@ -79,6 +84,8 @@ PersonaMultiInput.propTypes = {
   nickname:React.PropTypes.string,
   avatar: React.PropTypes.string,
   isVisible:React.PropTypes.string,
+  replaceItem: React.PropTypes.bool,
+  showCheckbox:React.PropTypes.bool,
 };
 
 PersonaMultiInput.defaultProps = {
@@ -87,6 +94,8 @@ PersonaMultiInput.defaultProps = {
   nickname:'nickname',
   avatar: 'avatar',
   isVisible:'isVisible',
+  replaceItem: false,
+  showCheckbox: true,
 };
 
 PersonaMultiInput.childContextTypes = {

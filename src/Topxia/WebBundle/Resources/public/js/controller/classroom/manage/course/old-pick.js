@@ -6,6 +6,8 @@ define(function(require, exports, module) {
 
         var ids=[];
 
+        $('[data-toggle="tooltip"]').tooltip();
+
         $('#sure').on('click',function(){
             $('#sure').button('submiting').addClass('disabled');
        
@@ -78,8 +80,8 @@ define(function(require, exports, module) {
             }
         });
 
-        $('.row').on('click',".course-item-cbx",function(){
-
+        $('.courses-list').on('click',".course-item-cbx",function(){
+          
             var $course = $(this).parent();
             var sid = $course.data('id');//courseSet.id
 
