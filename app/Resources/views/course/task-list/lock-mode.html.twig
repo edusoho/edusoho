@@ -1,5 +1,5 @@
 <div class="course-detail-content">
-  {#判断是营销页#}
+  {% if not isMarketingPage  %}
   <div class="clearfix mbl">
     <div class="btn-group pull-right js-task-show-type" role="tablist">
       <a class="btn btn-default active" data-list=".js-task-list-ul" data-type="list"> <i class="es-icon es-icon-menu"></i>
@@ -8,6 +8,7 @@
       </a>
     </div>
   </div>
+  {% endif %}
   <ul class="task-list task-list-md task-list-hover js-task-list-ul">
     {% for key, item in courseItems %}
       {% if item.itemType == 'chapter' and item.type == 'chapter' %}
