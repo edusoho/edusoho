@@ -39,7 +39,7 @@ class AppExtension extends \Twig_Extension
         if ($money == 0) {
             return '0';
         }
-        return sprintf('%.2f', $money / 100.0);
+        return sprintf('%.2f', $money);
     }
 
     /**
