@@ -7,7 +7,7 @@ define(function(require, exports, module) {
         var ids=[];
 
         $('#sure').on('click',function(){
-            $('#sure').button('submiting').addClass('disabled');
+            $('#sure').addClass('disabled').button('loading');
        
             $.ajax({
                 type : "post",
@@ -15,11 +15,8 @@ define(function(require, exports, module) {
                 data : "ids="+ids,
                 async : false,
                 success : function(data){
-                    
-                    $('.modal').modal('hide');
                     window.location.reload();
                 }
-
              });
 
         });
