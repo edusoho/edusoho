@@ -1974,6 +1974,10 @@ admin_edu_cloud_search_close:
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClose }
     permissions: [admin_edu_cloud_search]
 
+admin_edu_cloud_search_result_type:
+    path: /setting/edu_cloud/search_result/type
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:setSearchResultType }
+
 admin_app_im:
     path: /setting/app/im
     defaults: { _controller: TopxiaAdminBundle:EduCloud:appIm }
