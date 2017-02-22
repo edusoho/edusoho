@@ -113,7 +113,8 @@ class CourseCopy extends AbstractEntityCopy
             'locked',
             'maxRate',
             'cover',
-            'enableFinish'
+            'enableFinish',
+            'publishedTaskNum'
         );
 
         $new = array();

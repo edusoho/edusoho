@@ -187,8 +187,16 @@ class CourseManageController extends BaseController
 
     public function listAction(Request $request, $courseSetId)
     {
+        $user = $this->getCurrentUser();
+
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
         $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+
+        if (!$user->isAdmin()) {
+            $courses = array_filter($courses, function ($course) use ($user) {
+                return in_array($user->getId(), $course['teacherIds']);
+            });
+        }
 
         if ($courseSet['type'] == 'live') {
             $course = current($courses);

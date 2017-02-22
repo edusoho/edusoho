@@ -41,6 +41,10 @@
     {% else %}
       <td>{{ courseSet.studentNum }}</td>
     {% endif %}
+    {% if filter == 'vip' %}
+        {% set vip = vips[courseSet.vipLevelId]|default(null) %}
+        <td>{% if vip %}{{ vip.name }}{% else %}该会员等级已删除{% endif %}</td>
+    {% endif %}
   {% endif %}
 
   <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>
@@ -51,11 +55,13 @@
   </td>
   <td>
     <div class="btn-group">
+      {% set firstCourse = data('FirstCourse',{'courseSetId':courseSet.id}) %}
+
       {% if has_permission('admin_course_content_manage') %}
         <a class="btn btn-default btn-sm" href="{{ path('course_set_manage', {id:courseSet.id}) }}" target="_blank">{{'管理'|trans}}</a>
       {% endif %}
 
-      {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', course: courseSet} %}
+      {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', courseSet: courseSet, courseId: firstCourse.id } %}
     </div>
   </td>
 </tr>

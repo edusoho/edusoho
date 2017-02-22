@@ -55,10 +55,9 @@ class Testpaper extends Activity
         $sourceExt = $this->getTestpaperActivityService()->getActivity($sourceActivity['mediaId']);
         $ext       = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
-        // $testpaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($sourceExt['mediaId'], $activity['fromCourseSetId']);
+        $testPaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($sourceExt['mediaId'], $activity['fromCourseSetId']);
 
-        // $ext['mediaId']         = $testpaper['id'];
-        $ext['mediaId']         = $activity['testId'];
+        $ext['mediaId']         = $testPaper['id'];
         $ext['redoInterval']    = $sourceExt['redoInterval'];
         $ext['limitedTime']     = $sourceExt['limitedTime'];
         $ext['checkType']       = $sourceExt['checkType'];

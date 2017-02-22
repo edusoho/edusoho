@@ -5,7 +5,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseAnnouncementController extends BaseController
+class AnnouncementController extends BaseController
 {
     public function createAction(Request $request, $targetId)
     {

@@ -27,20 +27,9 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
-        $status    = array(
-            'type'        => 'become_student',
-            'classroomId' => $classroom['id'],
-            'objectType'  => 'classroom',
-            'objectId'    => $classroom['id'],
-            'private'     => $classroom['status'] == 'published' ? 0 : 1,
-            'userId'      => $userId,
-            'properties'  => array(
-                'classroom' => $this->simplifyClassroom($classroom)
-            )
-        );
-        $status['private'] = $classroom['showable'] == 1 ? $status['private'] : 1;
 
-        $this->getStatusService()->publishStatus($status);
+        $this->publishJoinStatus($classroom, $userId, 'become_student');
+        $this->syncCourseStudents($classroom, $userId);
     }
 
     public function onClassroomGuest(Event $event)
@@ -48,7 +37,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
         // publish status
-        $this->publishJoinStatus($classroom, $userId);
+        $this->publishJoinStatus($classroom, $userId, 'become_auditor');
         //add user to classroom courses
         $this->syncCourseStudents($classroom, $userId);
     }
@@ -79,10 +68,10 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         }
     }
 
-    private function publishJoinStatus($classroom, $userId)
+    private function publishJoinStatus($classroom, $userId, $type)
     {
         $status = array(
-            'type'        => 'become_auditor',
+            'type'        => $type,
             'classroomId' => $classroom['id'],
             'objectType'  => 'classroom',
             'objectId'    => $classroom['id'],

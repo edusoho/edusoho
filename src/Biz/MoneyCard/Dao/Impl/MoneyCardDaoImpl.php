@@ -18,7 +18,7 @@ class MoneyCardDaoImpl extends GeneralDaoImpl implements MoneyCardDao
                 'id = :id',
                 'rechargeUserId = :rechargeUserId',
                 'cardId = :cardId',
-                'cardStatus IN ( :cardStatus)',
+                'cardStatus = :cardStatus',
                 'deadline = :deadline',
                 'batchId = :batchId',
                 'deadline <= :deadlineSearchEnd',
