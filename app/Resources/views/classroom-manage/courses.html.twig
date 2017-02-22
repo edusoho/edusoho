@@ -1,30 +1,20 @@
 {% extends 'classroom-manage/layout.html.twig' %}
-
 {% block title %}{{'课程管理'|trans}} - {{ parent() }}{% endblock %}
-
-{% set script_controller = 'topxiawebbundle/controller/classroom/course' %}
 {% set side_nav = 'courses' %}
+{% do script(['app/js/classroom-manage/course-manage/index.js']) %}
 
 {% block main %}
-
 <style>
-
 .sort{
     padding-top: 50px;
     padding-right: 20px;
     padding-left: 20px;
 }
-
-.price{
-  color: #e57259;
-  font-size: 16px;
-}
-
 </style>
 
 {% set url = path('classroom_courses_select',{id:classroom.id}) %}       
 
-<div class="panel panel-default panel-col">
+<div class="panel panel-default" role="classroom-manage-course-manage">
   <div class="panel-heading">{{'课程管理'|trans}}
     <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_courses_pick',{classroomId:classroom.id})}}">{{'添加课程'|trans}}</button>
   </div>
