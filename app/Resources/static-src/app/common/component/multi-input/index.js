@@ -104,7 +104,7 @@ export default class MultiInput extends Component {
     return (
       <div className="multi-group">
         {list}
-        <InputGroup searchable = { searchable } addable = { addable } />
+        { this.props.showAddBtnGroup && <InputGroup searchable = { searchable } addable = { addable } />}
         <input type='hidden' name={outputDataElement} value={JSON.stringify(outputSets)} />
       </div>
     );
@@ -121,19 +121,24 @@ MultiInput.propTypes = {
     enable: React.PropTypes.bool,
     url: React.PropTypes.string,
   }),
+  showAddBtnGroup: React.PropTypes.bool,
+  inputName: React.PropTypes.string,
+  outputDataElement: React.PropTypes.string,
 };
 
 MultiInput.defaultProps = {
   multiInputClassName:'multi-group',
   listClassName:'',
-  dataSource: [],//必须是数组
+  dataSource: [],
   sortable: true,
   addable: true,
   searchable: {
     enable: false,
     url: '',
-  },//必须是bool
-  outputDataElement:'hidden-input',//必须是string,
+  },
+  showAddBtnGroup: true,
+  inputName: '',
+  outputDataElement:'hidden-input',
 };
 
 MultiInput.childContextTypes = {
