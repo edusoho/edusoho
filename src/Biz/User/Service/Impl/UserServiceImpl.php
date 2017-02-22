@@ -5,16 +5,22 @@ use Biz\BaseService;
 use Biz\User\Dao\UserDao;
 use Biz\User\Dao\TokenDao;
 use Biz\User\Dao\FriendDao;
+use Biz\Coupon\Dao\CouponDao;
 use Biz\User\Dao\UserBindDao;
-use AppBundle\Common\FileToolkit;
-use AppBundle\Common\ArrayToolkit;
+use Biz\Org\Service\OrgService;
 use Biz\User\Dao\UserProfileDao;
-use AppBundle\Common\StringToolkit;
+use AppBundle\Common\FileToolkit;
+use Biz\Card\Service\CardService;
 use Biz\Role\Service\RoleService;
 use Biz\User\Dao\UserApprovalDao;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
+use AppBundle\Common\StringToolkit;
+use Biz\User\Dao\UserFortuneLogDao;
+use Biz\Content\Service\FileService;
 use AppBundle\Common\SimpleValidator;
+use Biz\Coupon\Service\CouponService;
 use Biz\User\Dao\UserPayAgreementDao;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\BlacklistService;
@@ -134,7 +140,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function findFriendCount($userId)
     {
-        return $this->getFriendDao()->countByFromId($userId);
+        return $this->getFriendDao()->count(array('fromId' => $userId));
     }
 
     public function getSimpleUser($id)
@@ -423,7 +429,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $record    = $this->getFileService()->uploadFile($groupCode, $file);
         $parsed    = $this->getFileService()->parseFileUri($record['uri']);
-        $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options);
+        $filePaths = FileToolkit::cropImages($parsed["fullpath"], $options);
 
         $fields = array();
 
@@ -1393,7 +1399,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function countUserFollowings($userId)
     {
-        return $this->getFriendDao()->countByFromId($userId);
+        return $this->getFriendDao()->count(array('fromId' => $userId));
     }
 
     public function searchUserFollowers($userId, $start, $limit)
@@ -1424,7 +1430,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function countFriends($userId)
     {
-        return $this->getFriendDao()->countByFromId($userId);
+        return $this->getFriendDao()->count(array('fromId' => $userId));
     }
 
     public function follow($fromId, $toId)
@@ -1796,6 +1802,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createDao("User:FriendDao");
     }
 
+    /**
+     * @return CouponDao
+     */
     protected function getCouponDao()
     {
         return $this->createDao('Coupon:CouponDao');
@@ -1841,16 +1850,25 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createDao('User:TokenDao');
     }
 
+    /**
+     * @return UserFortuneLogDao
+     */
     protected function getUserFortuneLogDao()
     {
         return $this->createDao('User:UserFortuneLogDao');
     }
 
+    /**
+     * @return CardService
+     */
     protected function getCardService()
     {
         return $this->getKernel()->createService('Card:CardService');
     }
 
+    /**
+     * @return CouponService
+     */
     protected function getCouponService()
     {
         return $this->getKernel()->createService('Coupon:CouponService');
@@ -1864,6 +1882,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createDao('User:UserPayAgreementDao');
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
@@ -1930,6 +1951,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getKernel()->createService('Role:RoleService');
     }
 
+    /**
+     * @return OrgService
+     */
     protected function getOrgService()
     {
         return $this->getKernel()->createService('Org:OrgService');
