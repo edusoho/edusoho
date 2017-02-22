@@ -79,7 +79,7 @@
                   {% endif %}</span>
               </div>
             {% endif %}
-            <p class="hidden-sm black">
+            <div class="hidden-sm fsn">
               {% if classroom.expiryMode == 'date' %}
                 <span class="mrm">班级有效期</span>
                 <span>{{ classroom.expiryDay|date('Y-n-d') }}</span>
@@ -87,7 +87,7 @@
                 <span class="mrm">班级有效期</span>
                 <span>{{ member.deadline|date('Y-n-d') }}</span>
               {% endif %}
-            </p>
+            </div>
           </div>
           
           <div class="class-serve hidden-sm hidden-xs">
@@ -98,35 +98,37 @@
           </div>
         </div>
         <div class="class-operation">
-          <ul class='class-data clearfix {% if classroomMemberLevel and 'auditor' in member.role %}hidden-sm{% else %}two-col{% endif %}'>
-            <li>
-              <p><i class="es-icon es-icon-person"></i></p>
-              <p>{{'学员'|trans}}({{classroom.studentNum + classroom.auditorNum }})</p>
-            </li>
-            <li>
-              <span class="es-share top">
-                <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
-                  <p><i class="es-icon es-icon-share"></i></p>
-                  <p>{{'分享'|trans}}</p>
-                </a>
-                {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
-              </span>
-            </li>
-            {% if date(member.deadline) < date() %}
+          {% if date(member.deadline) < date() %}
+            <div class="class-deadline">
               {% if classroom.expiryMode == 'date'%}
-                <li class="alert alert-warning">你的班级已过有效期，无法继续学习</li>
+                 <div  class="alert alert-warning">你的班级已过有效期，无法继续学习</div>
               {% elseif classroom.expiryMode == 'days' %}
-                <li class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_introductions', {id:classroom.id}) }}">重新购买</a></li>
+               <div class="alert alert-warning">你的班级已过有效期，无法继续学习，请<a href="{{ path('classroom_introductions', {id:classroom.id}) }}">重新购买</a></div>
               {% endif %}
-            {% endif %}
-
-            {% if 'auditor' in member.role and classroomMemberLevel and  classroom.showable %}
-              <li class="hidden-xs color-warning icon-vip" title="会员{{setting("classroom.name")|default("班级")}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员{{setting("classroom.name")|default("班级")}}">
-                <i class="es-icon es-icon-crown"></i><br>
-                {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
+            <div>
+          {% else %}
+            <ul class='class-data clearfix {% if classroomMemberLevel and 'auditor' in member.role %}hidden-sm{% else %}two-col{% endif %}'>
+              <li>
+                <p><i class="es-icon es-icon-person"></i></p>
+                <p>{{'学员'|trans}}({{classroom.studentNum + classroom.auditorNum }})</p>
               </li>
-            {% endif %}
-          </ul>
+              <li>
+                <span class="es-share top">
+                  <a class="dropdown-toggle" href="" data-toggle="dropdown"  aria-labelledby="dropdownMenu1">
+                    <p><i class="es-icon es-icon-share"></i></p>
+                    <p>{{'分享'|trans}}</p>
+                  </a>
+                  {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %} 
+                </span>
+              </li>
+              {% if 'auditor' in member.role and classroomMemberLevel and  classroom.showable %}
+                <li class="hidden-xs color-warning icon-vip" title="会员{{setting("classroom.name")|default("班级")}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员{{setting("classroom.name")|default("班级")}}">
+                  <i class="es-icon es-icon-crown"></i><br>
+                  {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
+                </li>
+              {% endif %}
+            </ul>
+          {% endif %}
           {% if 'auditor' in member.role %}
             <div class="class-auditor hidden-sm">
               {{'您现在是'|trans}}<span class="color-warning">{{'旁听生'|trans}}</span>{{'，不能完整学习'|trans}}<i class="es-icon es-icon-help color-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务'|trans}}"></i><br>
