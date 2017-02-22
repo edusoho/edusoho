@@ -81,15 +81,20 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->db()->fetchColumn($sql, array($time));
     }
 
-    //replace: count(array('createdTime' => $endTime))
-    // public function countByLessThanCreatedTime($endTime)
-    // {
-    //     $sql = "SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<=?  ";
-    //     return $this->db()->fetchColumn($sql, array($endTime));
-    // }
-
     protected function _createQueryBuilder($conditions)
     {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == '0') {
+                return true;
+            }
+
+            if (empty($value)) {
+                return false;
+            }
+
+            return true;
+        });
+
         if (isset($conditions['roles'])) {
             $conditions['roles'] = "%{$conditions['roles']}%";
         }
@@ -157,11 +162,11 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     {
         return array(
             'orderbys'   => array(
-                'id', 
-                'createdTime', 
-                'promotedTime', 
-                'promoted', 
-                'promotedSeq', 
+                'id',
+                'createdTime',
+                'promotedTime',
+                'promoted',
+                'promotedSeq',
                 'nickname'
             ),
             'timestamps' => array(

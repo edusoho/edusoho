@@ -5,7 +5,7 @@
     <div class="panel-body es-live-recommend">
         {% set courseSets = data('RecommendCourseSets',{'count':10,'notFill':true}) %}
         {% for courseSet in courseSets if courseSets %}
-		{% set course = data('CourseByCourseSet',{ courseSetId: courseSet.id } ) %}
+		{% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
 	    <div class="media">
 	      <div class="media-left">
 			  <a href="{{ path('course_set_show',{id:courseSet.id}) }}" title="{{ courseSet.title }}" target="_blank">
