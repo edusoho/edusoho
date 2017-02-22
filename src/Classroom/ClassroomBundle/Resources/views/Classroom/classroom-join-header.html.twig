@@ -80,12 +80,12 @@
               </div>
             {% endif %}
             <div class="hidden-sm fsn">
-              {% if classroom.expiryMode == 'date' %}
-                <span class="mrm">班级有效期</span>
-                <span>{{ classroom.expiryDay|date('Y-n-d') }}</span>
-              {% else %}
+              {% if member.role[0] == 'student' %}
                 <span class="mrm">班级有效期</span>
                 <span>{{ member.deadline|date('Y-n-d') }}</span>
+              {% else %}
+                <span class="mrm">班级有效期</span>
+                <span>{{ classroom.deadline|date('Y-n-d') }}</span>
               {% endif %}
             </div>
           </div>
@@ -98,7 +98,7 @@
           </div>
         </div>
         <div class="class-operation">
-          {% if date(member.deadline) < date() %}
+          {% if date(member.deadline) < date() and member.role[0] == 'student'%}
             <div class="class-deadline">
               {% if classroom.expiryMode == 'date'%}
                  <div  class="alert alert-warning">你的班级已过有效期，无法继续学习</div>
