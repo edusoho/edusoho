@@ -1394,8 +1394,13 @@ class WebExtension extends \Twig_Extension
 
     public function isShowMobilePage()
     {
-        $pcVersion = $this->container->get('request')->cookies->get("PCVersion",0);
-        if($pcVersion){
+        $wapSetting = $this->getSetting('wap', array());
+        if (empty($wapSetting['enabled'])) {
+            return false;
+        }
+
+        $pcVersion = $this->container->get('request')->cookies->get("PCVersion", 0);
+        if ($pcVersion) {
             return false;
         }
         return DeviceToolkit::isMobileClient();

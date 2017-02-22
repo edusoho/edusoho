@@ -2074,3 +2074,8 @@ admin_cloud_upload_live_logo:
 admin_setting_cloud_edulive:
     path:  /setting/cloud/edulive
     defaults: { _controller: TopxiaAdminBundle:EduCloud:liveSetting }
+
+admin_wap_set:
+    path: /setting/wap
+    defaults: { _controller: TopxiaAdminBundle:OperationSetting:wapSet }
+
