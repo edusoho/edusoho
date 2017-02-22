@@ -24,6 +24,8 @@ interface CourseService
 
     public function getFirstPublishedCourseByCourseSetId($courseSetId);
 
+    public function getFirstCourseByCourseSetId($courseSetId);
+
     public function createCourse($course);
 
     /**
