@@ -40,9 +40,7 @@ class Marketing {
       }
     });
 
-    $.validator.addMethod("currency", function (value, element, params) {
-      return this.optional(element) || /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
-    }, Translator.trans('请输入价格，最多两位小数'));
+
 
     $('.js-task-price-setting').on('click', 'li', function (event) {
       let $li = $(this).toggleClass('open');

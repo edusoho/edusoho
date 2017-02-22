@@ -1,7 +1,11 @@
 let $form = $('#classroom-set-form');
 let validator = $form.validate({
-  rule: {
-    price:'required',
+  currentDom:'#classroom-save',
+  rules: {
+    price:{
+      required: true,
+      currency: true
+    },
   }
 })
 
