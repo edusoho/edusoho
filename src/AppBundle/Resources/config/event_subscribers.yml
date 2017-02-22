@@ -77,6 +77,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    video_activity_event_subscriber:
+        class: Biz\Activity\Event\VideoViewEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     course_statistics_event_subscriber:
         class: Biz\Course\Event\StatisticsSubscriber
         arguments: ['@biz']

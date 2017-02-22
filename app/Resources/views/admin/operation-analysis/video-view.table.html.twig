@@ -11,10 +11,10 @@
             {% if videoViewedDetail %}
               {% for key,val in videoViewedDetail %}
 
-              {% if  lessons[val.lessonId].title|default(null)  %}
+              {% if  tasks[val.taskId].title|default(null)  %}
                   <tr>
                     <td>{{ users[val.userId].nickname }}</td>
-                    <td>{{ lessons[val.lessonId].title }}</td>
+                    <td>{{ tasks[val.taskId].title }}</td>
                     <td>{{val.createdTime|date_format}}</td>
                   	<td>{{dict_text('videoStorageType',val.fileStorage)}}</td>
                   </tr>
