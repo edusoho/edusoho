@@ -153,8 +153,8 @@ class ClassroomManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
-            if (!$this->getCurrentUser()->isTeacher()) {
-                return $this->redirect('TopxiaWebBundle:Default:404');
+            if (!$this->getClassroomService()->isClassroomHeadTeacher($classroomId, $userId)) {
+                return $this->createJsonResponse(false);
             }
 
             $deadline = strtotime($fields['expiryDay'].' 23:59:59');

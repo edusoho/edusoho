@@ -21,6 +21,10 @@ class ClassroomExpiryDate extends Migration
         $db->exec("
             ALTER TABLE `classroom` ADD `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '到期时间'; 
         ");
+        $db->exec("
+            ALTER TABLE `classroom_member` ADD `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '到期时间'; 
+        ");
+
     }
 
     /**
@@ -33,5 +37,6 @@ class ClassroomExpiryDate extends Migration
         $db->exec("ALTER TABLE `classroom` DROP COLUMN `expiryDay`");
         $db->exec("ALTER TABLE `classroom` DROP COLUMN `expiryMode`");
         $db->exec("ALTER TABLE `classroom` DROP COLUMN `deadline`");
+        $db->exec("ALTER TABLE `classroom_member` DROP COLUMN `deadline`");
     }
 }

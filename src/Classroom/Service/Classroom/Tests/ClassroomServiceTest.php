@@ -126,6 +126,36 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals($course1['id'], $result['id']);
     }
 
+    public function testFindMembersByClassroomId()
+    {
+        $user          = $this->getCurrentUser();
+        $textClassroom = array(
+            'title' => 'test1994'
+        );
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+
+        $currentUser2 = new CurrentUser();
+        $currentUser2->fromArray(array(
+            'id'        => 2,
+            'nickname'  => 'admin5',
+            'email'     => 'admin5@admin.com',
+            'password'  => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array('ROLE_USER')
+        ));
+        $this->getServiceKernel()->setCurrentUser($currentUser2);
+
+        $result = $this->getClassroomService()->getClassroomStudentCount($classroom['id']);
+        $this->assertEquals(0, $result);
+
+        $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+
+        $members = $this->getClassroomService()->findMembersByClassroomId($classroom['id']);
+        $this->assertEquals(1, count($members));
+    }
+
     public function testFindActiveCoursesByClassroomId()
     {
         $textClassroom = array(

@@ -31,23 +31,23 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
 
     public function onClassroomUpdate(ServiceEvent $event)
     {
-        $fields = $event->getSubject();
+        $classroom = $event->getSubject();
 
-        $userId      = $fields['userId'];
-        $classroomId = $fields['classroomId'];
+        $userId      = $classroom['userId'];
+        $classroomId = $classroom['classroomId'];
         $expiryDate  = array(
-            'expiryMode' => empty($fields['fields']['expiryMode']) ? null : $fields['fields']['expiryMode'],
-            'expiryDay'  => empty($fields['fields']['expiryDay']) ? null : $fields['fields']['expiryDay']
+            'expiryMode' => empty($classroom['fields']['expiryMode']) ? null : $classroom['fields']['expiryMode'],
+            'expiryDay'  => empty($classroom['fields']['expiryDay']) ? null : $classroom['fields']['expiryDay']
         );
 
-        if (isset($fields['tagIds'])) {
-            $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $fields['tagIds'], $userId);
+        if (isset($classroom['tagIds'])) {
+            $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $classroom['tagIds'], $userId);
             $tagOwnerManager->update();
         }
 
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
-
         if (!empty($expiryDate['expiryMode']) && !empty($expiryDate['expiryDay'])) {
+            $classroom = $this->getClassroomService()->getClassroom($classroomId);
+
             if ($classroom['expiryMode'] == 'date' || $classroom['status'] != 'published') {
                 $this->updateClassroomMembers($classroomId, $expiryDate);
             }
@@ -61,13 +61,19 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
 
         foreach ($activeCourses as $course) {
-            $this->getCourseDao()->updateCourse($course['id'], array('expiryMode' => $expiryDate['expiryMode'], 'expiryDay' => $expiryDate['expiryDay']));
+            $this->getCourseDao()->updateCourse(
+                $course['id'], 
+                array(
+                    'expiryMode' => $expiryDate['expiryMode'], 
+                    'expiryDay'  => $expiryDate['expiryDay']
+                )
+            );
         }
     }
 
     protected function updateClassroomMembers($classroomId, $expiryDate)
     {
-        $studentsIds = $this->getClassroomService()->findMemberUserIdsByClassroomId($classroomId);
+        $members = $this->getClassroomService()->findMembersByClassroomId($classroomId);
 
         if ($expiryDate['expiryMode'] == 'days') {
             $classroom = $this->getClassroomService()->getClassroom($classroomId);
@@ -75,12 +81,13 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
             $expiryDate['expiryDay'] = $classroom['createdTime'] + $expiryDate['expiryDay'] * 24 * 60 * 60;
         }
 
-        foreach ($studentsIds as $studentId) {
-            $member = $this->getClassroomService()->getClassroomMember($classroomId, $studentId);
-
-            if ($member['role'][0] != 'teacher') {
-                $this->getClassroomService()->updateMember($member['id'], array('deadline' => $expiryDate['expiryDay']));
-            }
+        foreach ($members as $member) {
+            $this->getClassroomService()->updateMember(
+                $member['id'], 
+                array(
+                    'deadline' => $expiryDate['expiryDay']
+                )
+            );
         }
     }
 
