@@ -16,7 +16,7 @@ class ChangeLessonMediaIdCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>修复课时与试卷的从无联系问题...</info>');
+        $output->writeln('<info>修复课时与试卷的无联系问题...</info>');
 
         $condition = array(
             'copyId' => 0,
