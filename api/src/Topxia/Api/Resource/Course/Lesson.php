@@ -324,13 +324,21 @@ class Lesson extends BaseResource
 
     protected function hasRemainTime($lesson)
     {
-        $isLimit = SettingToolkit::getSetting('magic.lesson_watch_limit');
-        $course = $this->getCourseService()->getCourse($lesson['courseId']);
-        if ('video' == $lesson['type'] && $isLimit && $course['watchLimit']) {
-            return true;
-        } else {
+        if ('video' != $lesson['type']) {
             return false;
         }
+
+        $course = $this->getCourseService()->getCourse($lesson['courseId']);
+        if (empty($course['watchLimit'])) {
+            return false;
+        }
+
+        $isLimit = SettingToolkit::getSetting('magic.lesson_watch_limit');
+        if (!$isLimit) {
+            return false;
+        }
+
+        return true;
     }
 
     protected function getRemainTime($user, $lesson)
