@@ -35,7 +35,7 @@ class FreeCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            array('createdTime' => 'DESC'),
+            'latest',
             0,
             $arguments['count']
         );
