@@ -24,7 +24,7 @@ class FreeCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         $conditions = array();
         $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
-        $conditions['minCourse'] = 0;
+        $conditions['minCoursePrice'] = 0;
 
         if (!empty($arguments['categoryId'])) {
             $conditions['categoryId'] = $arguments['categoryId'];
