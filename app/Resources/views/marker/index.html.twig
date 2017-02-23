@@ -2,14 +2,16 @@
 {% block title %}{{'弹题管理'|trans}}{% endblock %}
 
 {% set bodyClass="marker-manage" %}
-
+{% set file = activity.ext.file|default(null) %}
+{% set context = {hideBeginning:true ,hideQuestion:1, hideSubtitle:1} %}
 {% block body %}
-  <div class="marker-manage-content js-marker-manage-content" id="lesson-dashboard"
+  <div class="marker-manage-content js-marker-manage-content" id="task-dashboard"
     data-course-id="{{ course.id }}"
-    data-lesson-id="{{ lesson.id }}"
-    data-lesson-mediaid="{{ lesson.mediaId }}"
-    data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}" 
-    data-marker-metas-url="{{path('course_lesson_marker_metas',{'mediaId':lesson.mediaId})}}">
+    data-task-id="{{ task.id }}"
+    data-task-mediaid="{{ file.id }}"
+    data-hide-media-task-learn-btn="{{ is_feature_enabled('hide_media_task_learn_btn') }}" 
+    data-marker-metas-url="{{path('course_task_marker_metas',{'mediaId':file.id})}}"
+    data-media-player="{{ path('media_play', {mediaId:file.id,context: context}) }}">
     {% include 'marker/player.html.twig' %}
     <div class="manage-edit-body">
       <ul class="nav nav-tabs nav-tabs-edit" role="tablist">
@@ -30,10 +32,10 @@
           </a>
         </li>
       </ul>
-      <a href="{{ path('course_lesson_marker_manage_preview', {courseId:course.id,lessonId:lesson.id}) }}" class="btn btn-info btn-preview" target="_blank"  >{{'预览'|trans}}</a>
+      <a href="{{ path('course_task_marker_manage_preview', {courseId:course.id,taskId:task.id}) }}" class="btn btn-info btn-preview" target="_blank"  >{{'预览'|trans}}</a>
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane active pane-question">
-          {{ render(path('course_lesson_question_marker_list', {courseId:course.id,lessonId:lesson.id})) }}
+          {{ render(path('course_task_question_marker_list', {courseId:course.id,taskId:task.id})) }}
         </div>
       </div>
     </div>

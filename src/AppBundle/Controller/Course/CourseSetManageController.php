@@ -31,7 +31,7 @@ class CourseSetManageController extends BaseController
                 ));
             } else {
                 $courseSet = $this->getCourseSetService()->createCourseSet($data);
-                return $this->redirect($this->generateUrl('course_set_manage', array(
+                return $this->redirect($this->generateUrl('course_set_manage_base', array(
                     'id' => $courseSet['id']
                 )));
             }
@@ -79,13 +79,9 @@ class CourseSetManageController extends BaseController
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
 
-        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
+        if (!$user->isAdmin()) {
             $courses = array_filter($courses, function ($course) use ($user) {
-                if (in_array($user['id'], $course['teacherIds'])) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return in_array($user->getId(), $course['teacherIds']);
             });
         }
 
@@ -109,6 +105,7 @@ class CourseSetManageController extends BaseController
     //基础信息
     public function baseAction(Request $request, $id)
     {
+
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);
@@ -267,9 +264,7 @@ class CourseSetManageController extends BaseController
     {
         $sideNav   = $request->query->get('sideNav', '');
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
-        if (!$courseSet['locked']) {
-            throw new \Exception('CourseSet must be locked');
-        }
+
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
 
         $menuPath  = '';
@@ -295,10 +290,18 @@ class CourseSetManageController extends BaseController
             $menuPath  = $this->generateUrl('course_set_manage_'.$sideNav, array('id' => $courseSet['parentId']));
             $menuTitle = $lockedCourseSetMenus[$sideNav];
         } elseif (!empty($lockedCourseMenus[$sideNav])) {
-            $menuPath  = $this->generateUrl('course_set_manage_course_'.$sideNav, array('courseSetId' => $courseSet['parentId'], 'courseId' => $courses[0]['parentId']));
+            if (!$courseSet['locked']) {
+                $menuPath = $this->generateUrl('course_set_manage_course_'.$sideNav, array('courseSetId' => $courseSet['id'], 'courseId' => $courses[0]['id']));
+            } else {
+                $menuPath = $this->generateUrl('course_set_manage_course_'.$sideNav, array('courseSetId' => $courseSet['parentId'], 'courseId' => $courses[0]['parentId']));
+            }
             $menuTitle = $lockedCourseMenus[$sideNav];
         } else {
             throw new \Exception('Invalid Menu Key');
+        }
+
+        if (!$courseSet['locked']) {
+            return $this->redirect($menuPath);
         }
 
         $copyCourseSet = $this->getCourseSetService()->getCourseSet($courseSet['parentId']);

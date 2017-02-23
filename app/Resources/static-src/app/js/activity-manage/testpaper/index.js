@@ -196,7 +196,8 @@ class Testpaper {
       autoclose: true,
       format: 'yyyy-mm-dd hh:ii',
       language:"zh",
-      minView: 'hour'
+      minView: 'hour',
+      endDate: new Date(Date.now() + 86400*365*100*1000)
     })
     .on('show', event => {
       this.$parentiframe.height($('body').height() + 240);

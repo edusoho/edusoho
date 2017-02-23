@@ -4,7 +4,7 @@ class Essay extends QuestionFormBase {
   constructor($form) {
     super($form);
 
-    this.initTitleEditor();
+    this.initTitleEditor(this.validator);
     this.initAnalysisEditor();
 
     this.answerFieldId = 'question-answer-field';
@@ -27,6 +27,9 @@ class Essay extends QuestionFormBase {
     editor.on( 'change', () => {    
       this.$answerField.val(editor.getData());
     });
+    // editor.on('blur', function() {
+    //   validator.form();
+    // });
   }
 }
 

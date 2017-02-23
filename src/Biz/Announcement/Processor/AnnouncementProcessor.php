@@ -26,4 +26,6 @@ abstract class AnnouncementProcessor
     abstract public function tryManageObject($targetId);
 
     abstract public function getTargetObject($targetId);
+
+    abstract public function getActions($action);
 }

@@ -2,9 +2,8 @@
 
 namespace Tests\Activity;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use Biz\Activity\Service\LiveActivityService;
-use Biz\Course\Service\LiveReplayService;
 
 class LiveActivityServiceTest extends BaseTestCase
 {
@@ -39,14 +38,14 @@ class LiveActivityServiceTest extends BaseTestCase
             'fromUserId'      => '1',
             'startTime'       => time() + 1000,
             'endTime'         => time() + 4000,
-            'length'          => 3000,
-            '_base_url'       => 'url...'
+            'length'          => 3
         );
         $savedActivity              = $this->getLiveActivityService()->createLiveActivity($live);
         $savedActivity              = array_merge($savedActivity, $live);
         $savedActivity['startTime'] = time() + 2000;
         $savedActivity['endTime']   = time() + 5000;
-        $updatedActivity            = $this->getLiveActivityService()->updateLiveActivity($savedActivity['id'], $savedActivity, array('endTime' => 1));
+        $updatedData                = array('length' => 100, 'endTime' => time() + 100000);
+        $updatedActivity            = $this->getLiveActivityService()->updateLiveActivity($savedActivity['id'], $updatedData, $savedActivity);
         $this->assertEquals($savedActivity['liveId'], $updatedActivity['liveId']);
     }
 

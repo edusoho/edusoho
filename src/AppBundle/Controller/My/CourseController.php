@@ -82,7 +82,7 @@ class CourseController extends CourseBaseController
         $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
         $user = $this->getUser();
-        if ($taskCount) {
+        if ($taskCount && empty($member['previewAs'])) {
             //学习记录
             $taskResultCount = $this->getTaskResultService()->countTaskResults(array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id']));
 
@@ -137,7 +137,8 @@ class CourseController extends CourseBaseController
 
         return $this->render('course/course-show.html.twig', array(
             'tab'    => $tab,
-            'member' => $member
+            'member' => $member,
+            'course' => $course
         ));
     }
 

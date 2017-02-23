@@ -4,6 +4,7 @@ namespace Biz\Task\Event;
 
 use Biz\Task\Dao\TaskDao;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\ActivityDao;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Event\Event;
@@ -254,5 +255,13 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     {
         $biz = $this->getBiz();
         return $biz["activity_type.{$type}"];
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    protected function getActivityDao()
+    {
+        return $this->getBiz()->dao('Activity:ActivityDao');
     }
 }

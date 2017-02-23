@@ -27,6 +27,10 @@ class CourseController extends BaseController
             'excludeIds' => $excludeIds
         );
 
+        $user = $this->getCurrentUser();
+        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
+            $conditions['creator'] = $user['id'];
+        }
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseSetService()->countCourseSets($conditions),
@@ -113,10 +117,20 @@ class CourseController extends BaseController
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $key = $request->request->get("key");
 
-        $conditions             = array("title" => "%{$key}%");
-        $conditions['status']   = 'published';
-        $conditions['parentId'] = 0;
-        $paginator              = new Paginator(
+        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        $excludeIds    = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
+
+        $conditions               = array("title" => "%{$key}%");
+        $conditions['status']     = 'published';
+        $conditions['parentId']   = 0;
+        $conditions['excludeIds'] = $excludeIds;
+
+        $user = $this->getCurrentUser();
+        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
+            $conditions['creator'] = $user['id'];
+        }
+
+        $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseSetService()->countCourseSets($conditions),
             5

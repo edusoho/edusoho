@@ -2,9 +2,9 @@
 
 namespace Biz\Course\Event;
 
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Activity\Dao\ActivityDao;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Course\Dao\CourseMemberDao;
@@ -17,7 +17,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     /*
-     * @todo
      * 1. 当业务对象变更（create/update/delete）时，查找引用此对象的业务对象，所以其相关course处于locked状态，则同步
      * 2. 采用dao操作，而非service，这样可以减少副作用
      * 3. 涉及表：
@@ -156,6 +155,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         }
         foreach ($copiedCourses as $cc) {
             $this->setCourseTeachers($cc, $teachers);
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($cc['id']);
+            $this->getClassroomService()->updateClassroomTeachers($classroom['id']);
         }
     }
 
@@ -370,12 +371,11 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     }
 
     /**
-     * @return ActivityDao
+     * @return ClassroomService
      */
-    protected function getActivityDao()
+    protected function getClassroomService()
     {
-        //fixme 不应该调用course模块之外的dao对象
-        return $this->getBiz()->dao('Activity:ActivityDao');
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
     /**

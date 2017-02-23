@@ -4,13 +4,15 @@ import 'jquery';
 import 'bootstrap';
 import 'swiper';
 // import 'placeholder'; 
+import 'es6-promise/auto';
 import 'libs/js/jquery-lavalamp';
 import 'common/bootstrap-modal-hack';
 import 'common/script';
 import 'common/card';
+import 'common/es-polyfill';
 import { isMobileDevice } from 'common/utils';
 // 等待确认可删除Cookie
-// var Cookie = require('cookie');
+// var Cookie = require('cookie');  
 
 $('[data-toggle="popover"]').popover({
   html: true,

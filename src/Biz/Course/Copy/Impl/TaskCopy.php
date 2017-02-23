@@ -167,8 +167,10 @@ class TaskCopy extends AbstractEntityCopy
                     $newActivity['mediaId'] = $testId;
                 }
                 if ($newActivity['mediaType'] == 'live') {
-                    unset($newActivity['startTime']);
-                    unset($newActivity['endTime']);
+                    // unset($newActivity['startTime']);
+                    // unset($newActivity['endTime']);
+                    $newActivity['startTime'] = time();
+                    $newActivity['endTime']   = $newActivity['startTime'] + $newActivity['length'] * 60;
                 }
                 $newActivity = $this->getActivityDao()->create($newActivity);
 
@@ -237,6 +239,9 @@ class TaskCopy extends AbstractEntityCopy
         $new = array(
             'copyId' => $isCopy ? $task['id'] : 0
         );
+        if($task['type'] == 'live' && !$isCopy){
+            $new['status'] = 'create';
+        }
         foreach ($fields as $field) {
             if (!empty($task[$field]) || $task[$field] == 0) {
                 $new[$field] = $task[$field];

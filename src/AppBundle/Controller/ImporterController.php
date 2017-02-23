@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Importer\Importer;
 use Symfony\Component\HttpFoundation\Request;
 
 class ImporterController extends BaseController
@@ -35,6 +36,11 @@ class ImporterController extends BaseController
         return $this->render('importer/userimport.modal.html.twig');
     }
 
+    /**
+     * @param $importType
+     *
+     * @return Importer
+     */
     protected function getImporterFactory($importType)
     {
         $biz = $this->getBiz();
