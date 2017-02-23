@@ -99,14 +99,12 @@ class Editor {
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
-        console.log(response);
         this.$element.modal('hide');
+         // @TODO统一请求结果的返回类型，优化下面系列逻辑
         if (response && response.append !== undefined && response.append === false) {
           let data = $('#sortable-list').sortable("serialize").get();
           $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
             if (response) {
-              // this.showDefaultSetting();
-              // @TODO去除reload;
               document.location.reload();
             }
           });
@@ -134,12 +132,16 @@ class Editor {
             }
           });
           if (add != 1) {
-            $item = $(html);
+            if(typeof html=='string' && html.constructor == String) {
+              $item = $(html);
+            }
             $("#sortable-list").append($item);
             add = 1;
           }
         } else {
-          $item = $(html);
+          if(typeof html=='string' && html.constructor == String) {
+             $item = $(html);
+          }
           $("#sortable-list").append($item);
         }
         // 最后一个
@@ -159,7 +161,7 @@ class Editor {
   }
 
   showDefaultSetting($item=null) {
-    if(item && $item.hasClass('js-task-manage-item')) {
+    if($item && $item.hasClass('js-task-manage-item')) {
       $('.js-task-manage-item').removeClass('active').find('.js-settings-list').slideUp();;
       $item.addClass('active').find('.js-settings-list').slideDown();
     }

@@ -1,5 +1,5 @@
 <div class="course-detail-content">
-  {#@TODO 方块样式展示#}
+  {% if not isMarketingPage  %}
   <div class="clearfix mbl">
     <div class="btn-group pull-right js-task-show-type" role="tablist">
       <a class="btn btn-default active" data-list=".js-task-list-ul" data-type="list"> <i class="es-icon es-icon-menu"></i>
@@ -8,6 +8,7 @@
       </a>
     </div>
   </div>
+  {% endif %}
   <ul class="task-list task-list-md task-list-hover js-task-list-ul">
     {% for key, item in courseItems %}
       {% if item.itemType == 'chapter' and item.type == 'chapter' %}
@@ -70,14 +71,13 @@
             <i class="es-icon es-icon {{ meta.icon }}" data-toggle="tooltip" data-placement="top" title=""
                data-original-title="{{ meta.name }}任务"></i>
             </span>
-          <span class="right-menu mouse-enter">
+          <span class="right-menu">
             {% if task.status != 'published' %}敬请期待{% endif %}
           </span>
         </li>
       {% endif %}
     {% endfor %}
   </ul>
-  {#@TODO 方块样式展示#}
   <ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
     {% for key, item in courseItems %}
       {% if  item.itemType == 'task' %}

@@ -28,25 +28,30 @@
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu"></i>
-            {% if task.status == 'published' %}              
-              <a class="text-overflow title" {% if member %} href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"{% else %} href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" {% endif %}>
+            {% if task.status == 'published' %}    
+              <a class="text-overflow title" {% if member or task.isFree  %} href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}" {% else %} href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" {% endif %}>
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </a>
+              <span class="right-menu color-gray mouse-leave">
+                {{ task.activity.length|default(0)|activity_length_format }}
+                {% set meta = activity_meta(task.activity.mediaType) %}
+                <i class="{{ meta.icon }} color-gray ml10" data-toggle="tooltip" data-placement="top" title=""data-original-title="{{ meta.name }}任务" data-container="body"></i>
+              </span>
+              <span class="right-menu mouse-enter">
+                {% if member or task.isFree %}
+                  <a class="btn btn-primary" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">立即学习</a>
+                {% else %}
+                   <a class="btn btn-primary" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">购买课程</a>
+                {% endif %}
+              </span>
             {% else %}
               <span class="text-overflow title">
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </span>
+              <span class="right-menu color-gray">
+                敬请期待
+              </span>
             {% endif %}
-              <span class="right-menu mouse-leave">
-              {{ task.activity.length|default(0)|activity_length_format }}
-                {% set meta = activity_meta(task.activity.mediaType) %}
-                <i class="{{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title=""data-original-title="{{ meta.name }}任务"></i>
-              </span>
-              <span class="right-menu mouse-enter">
-                {% if task.status != 'published' %}
-                  敬请期待
-                {% endif %}
-              </span>
           </li>
         {% endfor %}
       {% endif %}
