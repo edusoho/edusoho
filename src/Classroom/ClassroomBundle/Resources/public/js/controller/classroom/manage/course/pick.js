@@ -7,6 +7,7 @@ define(function(require, exports, module) {
         var ids=[];
 
         $('#sure').on('click',function(){
+            $('#tip').removeClass('hide');
             $('#sure').addClass('disabled').button('loading');
        
             $.ajax({
