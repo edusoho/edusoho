@@ -145,6 +145,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function getLesson($lessonId)
     {
+        if (empty($lessonId)) {
+            return array();
+        }
         $sql = "select * from course_lesson where id = {$lessonId}";
         return $this->getConnection()->fetchAll($sql, array());
     }
@@ -162,7 +165,6 @@ class EduSohoUpgrade extends AbstractUpdater
             'type'   => 'testpaper',
             'startTime' => 1484064000
         );
-        $connection = $this->getConnection();
 
         $count = $this->getCourseService()->searchLessonCount($condition);
         $pageNum = self::$pageNum;
