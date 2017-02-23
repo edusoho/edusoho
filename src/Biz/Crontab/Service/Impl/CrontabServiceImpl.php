@@ -52,7 +52,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}", $job);
         }
 
-        $this->afterJonExecute($job);
+        // $this->afterJonExecute($job);
         $this->commit();
         $this->refreshNextExecutedTime();
     }
@@ -94,7 +94,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             return false;
         }
 
-        $this->getJobDao()->update($job['id'], array('executing' => 1));
+        // $this->getJobDao()->update($job['id'], array('executing' => 1));
         $lock->release($lockName);
         return true;
     }

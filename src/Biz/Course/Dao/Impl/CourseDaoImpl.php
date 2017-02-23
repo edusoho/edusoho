@@ -9,6 +9,11 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 {
     protected $table = 'c2_course';
 
+    public function update($id, array $fild)
+    {
+        var_dump('asdf');
+    }
+
     public function findCoursesByParentIdAndLocked($parentId, $locked)
     {
         return $this->findByFields(array('parentId' => $parentId, 'locked' => $locked));
