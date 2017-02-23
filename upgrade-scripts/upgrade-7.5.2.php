@@ -179,7 +179,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 foreach ($copyLessons as $copyLesson) {
                     $target = "course-{$copyLesson['courseId']}";
                     $trueTestPaper = $this->getTestPaperByCopyIdAndTarget($sourceLesson['mediaId'], $target);
-                    $this->updateCopyLessonMediaId($copyLesson['id'], $trueTestPaper['id']);
+                    if (!empty($trueTestPaper)) {
+                        $this->updateCopyLessonMediaId($copyLesson['id'], $trueTestPaper['id']);
+                    }
                 }
             }
             if ($page < $pages) {
