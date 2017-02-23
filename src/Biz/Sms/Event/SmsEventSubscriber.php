@@ -12,39 +12,10 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
     public static function getSubscribedEvents()
     {
         return array(
-            'testpaper.reviewed'         => 'onTestpaperReviewed',
             'order.pay.success'          => 'onOrderPaySuccess',
-            'course.lesson.update'       => 'onCourseLessonUpdate',
-            'course.lesson.delete'       => 'onCourseLessonDelete',
-            'course.lesson.unpublish'    => 'onCourseLessonUnpublish',
             'open.course.lesson.publish' => 'onLiveOpenCourseLessonCreate',
             'open.course.lesson.update'  => 'onLiveOpenCourseLessonUpdate'
         );
-    }
-
-    public function onTestpaperReviewed(Event $event)
-    {
-        $parameters = array();
-        $smsType    = 'sms_testpaper_check';
-
-        if ($this->getSmsService()->isOpen($smsType)) {
-            $testpaper       = $event->getSubject();
-            $testpaperResult = $event->getArgument('testpaperResult');
-
-            $target = explode('-', $testpaper['target']);
-
-            if ($target[0] == 'course') {
-                $courseId                     = $target[1];
-                $course                       = $this->getCourseService()->getCourse($courseId);
-                $testpaperResult['paperName'] = StringToolkit::cutter($testpaperResult['paperName'], 20, 15, 4);
-                $course['title']              = StringToolkit::cutter($course['title'], 20, 15, 4);
-                $parameters['lesson_title']   = '《'.$testpaperResult['paperName'].'》'.$this->getKernel()->trans('试卷');
-                $parameters['course_title']   = '《'.$course['title'].'》';
-                $description                  = $parameters['course_title'].' '.$parameters['lesson_title'].$this->getKernel()->trans('试卷批阅提醒');
-                $userId                       = $testpaperResult['userId'];
-                $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
-            }
-        }
     }
 
     public function onOrderPaySuccess(Event $event)
@@ -68,46 +39,6 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
             $description = $parameters['order_title'].$this->getKernel()->trans('成功回执');
 
             $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
-        }
-    }
-
-    public function onCourseLessonUnpublish(Event $event)
-    {
-        $lesson = $event->getSubject();
-        $jobs   = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
-
-        if ($jobs) {
-            $this->deleteJob($jobs);
-        }
-    }
-
-    public function onCourseLessonUpdate(Event $event)
-    {
-        $context  = $event->getSubject();
-        $argument = $context['argument'];
-        $lesson   = $context['lesson'];
-
-        if ($lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['fields']['startTime'] && ($this->getSmsService()->isOpen('sms_live_play_one_day') || $this->getSmsService()->isOpen('sms_live_play_one_hour'))) {
-            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
-
-            if ($jobs) {
-                $this->deleteJob($jobs);
-            }
-
-            if ($lesson['status'] == 'published') {
-                $this->createJob($lesson, 'lesson');
-            }
-        }
-    }
-
-    public function onCourseLessonDelete(Event $event)
-    {
-        $context = $event->getSubject();
-        $lesson  = $context['lesson'];
-        $jobs    = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
-
-        if ($jobs) {
-            $this->deleteJob($jobs);
         }
     }
 

@@ -21,8 +21,45 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     public static function getSubscribedEvents()
     {
         return array(
-            'course.task.publish' => "onTaskPublish"
+            'course.task.unpublish' => 'onTaskUnpublish',
+            'course.task.publish'   => 'onTaskPublish',
+            'course.task.update'    => 'onTaskUpdate',
+            'course.task.delete'    => 'onTaskDelete'
         );
+    }
+
+    public function onTaskUnpublish(Event $event)
+    {
+        $task = $event->getSubject();
+        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('task', $task['id']);
+
+        if ($jobs) {
+            $this->deleteJob($jobs);
+        }
+    }
+
+    public function onTaskDelete(Event $event)
+    {
+        $task = $event->getSubject();
+        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('task', $task['id']);
+        if ($jobs) {
+            $this->deleteJob($jobs);
+        }
+    }
+
+    public function onTaskUpdate(Event $event)
+    {
+        $task = $event->getSubject();
+        if ($task['type'] == 'live') {
+            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('task', $task['id']);
+            if ($jobs) {
+                $this->deleteJob($jobs);
+            }
+
+            if ($task['status'] == 'published') {
+                $this->createJob($task, 'task');
+            }
+        }
     }
 
     public function onTaskPublish(Event $event)
@@ -62,7 +99,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 'name'            => "SmsSendOneDayJob",
                 'cycle'           => 'once',
                 'nextExcutedTime' => $task['startTime'] - 24 * 60 * 60,
-                'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneDayJob',
+                'jobClass'        => substr(__NAMESPACE__, 0, -5) . 'Job\\SmsSendOneDayJob',
                 'targetType'      => $targetType,
                 'targetId'        => $task['id']
             );
@@ -74,11 +111,20 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 'name'            => "SmsSendOneHourJob",
                 'cycle'           => 'once',
                 'nextExcutedTime' => $task['startTime'] - 60 * 60,
-                'jobClass'        => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneHourJob',
+                'jobClass'        => substr(__NAMESPACE__, 0, -5) . 'Job\\SmsSendOneHourJob',
                 'targetType'      => $targetType,
                 'targetId'        => $task['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
+        }
+    }
+
+    private function deleteJob($jobs)
+    {
+        foreach ($jobs as $key => $job) {
+            if ($job['name'] == 'SmsSendOneDayJob' || $job['name'] == 'SmsSendOneHourJob') {
+                $this->getCrontabService()->deleteJob($job['id']);
+            }
         }
     }
 

@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\StringToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -87,17 +88,17 @@ class TaskSmsProcessor extends BaseSmsProcessor
         $shortUrl = SmsToolkit::getShortLink($originUrl);
         $url      = empty($shortUrl) ? $originUrl : $shortUrl;
 
-        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $courseSet = $this->getCourseService()->getCourse($task['courseId']);
 
         $students = array();
-        if ($course['parentId']) {
-            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        if ($courseSet['parentId']) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($task['courseId']);
 
             if ($classroom) {
                 $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId']), array('createdTime' => 'Desc'), $index, 1000);
             }
         } else {
-            $students = $this->getCourseMemberService()->searchMembers(array('courseId' => $course['id']), array('createdTime' => 'Desc'), $index, 1000);
+            $students = $this->getCourseMemberService()->searchMembers(array('courseId' => $task['courseId']), array('createdTime' => 'Desc'), $index, 1000);
         }
 
         $studentIds = ArrayToolkit::column($students, 'userId');
@@ -110,8 +111,8 @@ class TaskSmsProcessor extends BaseSmsProcessor
             $parameters['startTime'] = date("Y-m-d H:i:s", $task['startTime']);
         }
 
-        $course['title']            = StringToolkit::cutter($course['title'], 20, 15, 4);
-        $parameters['course_title'] = $this->getKernel()->trans('课程：') . '《' . $course['title'] . '》';
+        $courseSet['title']            = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
+        $parameters['course_title'] = $this->getKernel()->trans('课程：') . '《' . $courseSet['title'] . '》';
 
         if ($smsType == 'sms_normal_lesson_publish' || $smsType == 'sms_live_lesson_publish') {
             $description = $parameters['course_title'] . ' ' . $parameters['lesson_title'] . $this->getKernel()->trans('已发布');
@@ -161,6 +162,14 @@ class TaskSmsProcessor extends BaseSmsProcessor
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 
     /**
