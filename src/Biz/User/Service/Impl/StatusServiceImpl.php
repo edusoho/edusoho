@@ -58,6 +58,11 @@ class StatusServiceImpl extends BaseService implements StatusService
         );
     }
 
+    public function deleteStatusesByCourseId($courseId)
+    {
+        return $this->getStatusDao()->deleteByCourseId($courseId);
+    }
+
     /**
      * @return StatusDao
      */

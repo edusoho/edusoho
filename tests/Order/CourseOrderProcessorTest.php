@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Order;
 
+use Biz\Course\Service\CourseSetService;
 use Biz\User\CurrentUser;
 use Biz\BaseTestCase;;
 use Biz\Order\OrderProcessor\CourseOrderProcessor;
@@ -32,8 +33,15 @@ class CourseOrderProcessorTest extends BaseTestCase
 
     public function testPreCheck()
     {
-        $course = $this->mockCourse(array('title' => 'course 1'));
+        $courseSet = array(
+            'title' => '新课程开始！',
+            'type'  => 'normal'
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
+        $course = $this->mockCourse(array('title' => 'course 1', 'courseSetId' => $courseSet['id']));
+
         $this->getCourseService()->publishCourse($course['id'], $this->getCurrentUser()->getId());
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
         $result = $this->getCourseOrderProcessor()->preCheck($course['id'], $this->getCurrentUser()->getId());
         $this->assertTrue(empty($result['error']));
     }
@@ -76,6 +84,14 @@ class CourseOrderProcessorTest extends BaseTestCase
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getCourseOrderProcessor()

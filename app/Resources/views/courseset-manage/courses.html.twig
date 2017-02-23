@@ -29,7 +29,7 @@
       			<td>{{course.title}}</td>
       			<td>{{course.taskNum|default(0)}}</td>
       			<td>{{course.studentNum|default(0)}}</td>
-      			<td>{{course.price|currency}}{{'元'|trans}}            
+      			<td>{{course.price}}{{'元'|trans}}            
             <span class="ml5 text-12 color-warning">{{'会员免费'|trans}}</span>
             <span class="ml5 text-12 color-warning">{{'6折'|trans}}</span></td> {# 货币国际化？ #}
       			<td>
@@ -50,7 +50,7 @@
 		                </a>
 		                <ul class="dropdown-menu pull-right">
 		                  <li>
-		                  	<a href="{{path('course_show', { id: course.id, preview: 1 })}}" target="_blank">
+		                  	<a href="{{path('my_course_show', { id: course.id, previewAs: 'member' })}}" target="_blank">
                           <i class="es-icon es-icon-removeredeye mrm"></i>
                           {{'预览'|trans}}
                         </a>

@@ -3,12 +3,10 @@ import React from 'react';
 import MultiInput from 'app/common/component/multi-input';
 import sortList from 'common/sortable';
 
-
-
 CKEDITOR.replace('summary', {
   allowedContent: true,
   toolbar: 'Detail',
-  filebrowserImageUploadUrl: $('#summary').data('imageUploadUrl')
+  filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
 });
 
 $('#courseset-submit').click(function(evt) {

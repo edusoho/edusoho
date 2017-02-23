@@ -5,7 +5,6 @@ class Live {
     this._init();
   }
   _init() {
-    initEditor($('[name="remark"]'));
     this._extendValidator();
     this._dateTimePicker();
     this._initStep2Form();
@@ -60,14 +59,17 @@ class Live {
         },
       },
     });
+    initEditor($('[name="remark"]'),validator);
   }
 
   _dateTimePicker() {
     let $starttime = $('#startTime');
+
     $starttime.datetimepicker({
       format: 'yyyy-mm-dd hh:ii',
       language: "zh",
-      autoclose: true
+      autoclose: true,
+      endDate: new Date(Date.now() + 86400*365*100*1000)
     });
     $starttime.datetimepicker('setStartDate', new Date());
   }

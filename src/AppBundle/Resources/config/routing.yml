@@ -1590,7 +1590,11 @@ course_task_finished_prompt:
 
 course_manage_task_create:
     path:  /course/{courseId}/task
-    defaults: { _controller: AppBundle:TaskManage:create}
+    defaults: { _controller: AppBundle:TaskManage:create }
+
+course_manage_task_batch_create:
+    path:  /course/{courseId}/task/batch/modal
+    defaults: { _controller: AppBundle:TaskManage:batchCreateTasks }
 
 course_manage_task_publish:
     path:  /course/{courseId}/task/{id}/publish

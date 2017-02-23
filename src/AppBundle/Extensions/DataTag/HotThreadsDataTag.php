@@ -14,8 +14,7 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
      *
      *   count 必需 话题数量，取值不能超过100
      *
-     * @param  array $arguments 参数
-     *
+     * @param  array $arguments     参数
      * @return array 最热话题
      */
 
@@ -33,10 +32,11 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
                 'status'      => 'open'
             ),
             array(
-                array('isStick'=> 'DESC'),
-                array('postNum'=> 'DESC'),
-                array('createdTime'=> 'DESC'),
-            ), 0, $arguments['count']
+                'isStick'     => 'DESC',
+                'postNum'     => 'DESC',
+                'createdTime' => 'DESC'
+            ),
+            0, $arguments['count']
         );
 
         $ownerIds = ArrayToolkit::column($hotThreads, 'userId');
@@ -49,9 +49,7 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
 
         $groups = $this->getGroupService()->getGroupsByids($groupIds);
 
-
         foreach ($hotThreads as $key => $thread) {
-
             if ($thread['userId'] == $owners[$thread['userId']]['id']) {
                 $hotThreads[$key]['user'] = $owners[$thread['userId']];
             }
@@ -86,5 +84,4 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
     {
         return ServiceKernel::instance()->createService('System:SettingService');
     }
-
 }

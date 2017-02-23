@@ -5,17 +5,7 @@
 
 {% block main %}
   <div class="panel panel-default">
-    {% if courseSet.type != 'live' %}
-      <div class="panel-heading">
-        {{ course.title }}<span class="mh5">／</span>{{'计划设置'|trans}}
-        {% if course.status != 'published' %}
-          <button class="btn btn-success btn-sm pull-right js-publish-course" 
-            data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
-            {{ '发布计划'|trans }}
-          </button>
-        {% endif %}
-      </div>
-    {% endif %}
+    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
       <form class="form-horizontal" role="form" id="course-info-form" action="{{path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id})}}" method="post">
         <div class="form-group">
@@ -27,12 +17,6 @@
             <input type="hidden" name="courseSetId" value="{{courseSet.id}}">
             <input type="hidden" name="id" value="{{course.id|default(0)}}">
             <input class="form-control" type="text" id="title" name="title" value="{{course.title|default('')}}">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="" class="col-sm-2 control-label">{{'学习完成规则'|trans}}</label>
-          <div class="col-sm-8 radios"> 
-            {{ radios('enableFinish', { '1': '必须满足任务完成的条件才算学完'|trans, '0': '学员可以自己点击“学过了”按钮以示学完'|trans }, course.enableFinish|default('1')) }}
           </div>
         </div>
         <div class="form-group">
@@ -51,6 +35,12 @@
             {% endif %}
             {% if course.learnMode|default('freeMode') == 'lockMode' %} <p class="help-block" id="learnFreeModeHelp" data-role="tab-content">{{'根据计划预定的顺序学习'|trans}}</p>{% endif %}
             {% if course.learnMode|default('freeMode') == 'freeMode' %}<p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{'学习过程自由安排'|trans}}</p>{% endif %}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="" class="col-sm-2 control-label">{{'学习完成规则'|trans}}</label>
+          <div class="col-sm-8 radios"> 
+            {{ radios('enableFinish', { '1': '必须满足任务完成的条件才算学完'|trans, '0': '学员可以自己点击“学过了”按钮以示学完'|trans }, course.enableFinish|default('1')) }}
           </div>
         </div>
         <div class="form-group">

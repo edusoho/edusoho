@@ -1,9 +1,9 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +14,7 @@ class TaskController extends BaseController
     {
         $preview = $request->query->get('preview');
 
-        $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
+        $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
@@ -51,8 +51,6 @@ class TaskController extends BaseController
         $user = $this->getCurrentUser();
 
         if (empty($task) || $task['courseId'] != $courseId) {
-            exit;
-
             return $this->createNotFoundException('task is not exist');
         }
 
@@ -66,15 +64,16 @@ class TaskController extends BaseController
             return $this->render('task/preview-notice-modal.html.twig', array('course' => $course));
         }
 
-        //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
+        //课时不免费并且不满足：
+        // 1. 有时间限制设置
+        // 2. 课时为视频课时
+        // 3. 视频课时非优酷等外链视频时提示购买
         if (empty($task['isFree']) && !(!empty($course['tryLookable']) && $task['type'] == 'video' && $task['mediaSource'] == 'self')) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
-
             if ($course["parentId"] > 0) {
-                //TODO 复制课程的预览逻辑
-                //return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
+                return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
             }
 
             return $this->forward('AppBundle:Course/CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $task['id']));
@@ -130,7 +129,7 @@ class TaskController extends BaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)

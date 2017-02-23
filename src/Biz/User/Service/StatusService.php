@@ -10,4 +10,6 @@ interface StatusService
     public function searchStatuses($conditions, $sort, $start, $limit);
 
     public function countStatuses($conditions);
+
+    public function deleteStatusesByCourseId($courseId);
 }

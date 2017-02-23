@@ -5,35 +5,8 @@
 
 {% block main %}
   <div class="panel panel-default">
-    {% if courseSet.type != 'live' %}
-      <div class="panel-heading">
-        {{ course.title }}<span class="mh5">／</span>{{'学员管理'|trans}}
-        <div class="pull-right">
-          {% if course.status != 'published' %}
-            <button class="btn btn-success btn-sm js-publish-course" 
-              data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
-              {{ '发布计划'|trans }}
-            </button>
-          {% endif %}
-  
-          {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
-            <a class="btn btn-info btn-sm pull-right mhs" id="export-students-btn" href="javascript:;" data-url="{{ path('course_set_manage_course_student_export_csv', {courseSetId:courseSet.id,courseId:course.id}) }}" data-datas-url="{{ path('course_set_manage_course_student_export_datas', {courseSetId:courseSet.id,courseId:course.id}) }}" data-loading-text="正在导出">
-              <i class="glyphicon glyphicon-export"></i> {{ '导出'|trans }}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}
-            </a>
-          {% endif %}
+    {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav,btnGroup:1} %}
 
-          {# 管理学员-导入、添加 #}
-          {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}
-            <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_course_students_add', {courseSetId:courseSet.id, courseId: course.id}) }}"><i class="es-icon es-icon-anonymous-iconfont"></i> {{'添加学员'|trans}}</button>
-            {% if course.status == 'published' %}
-              <a class="btn btn-info pull-right btn-sm mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('importer_index', {type: 'course-member', courseId:course.id}) }}"><i class="glyphicon glyphicon-import"></i> {{ '批量导入'|trans }}</a>
-            {% else %}
-              <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="{{ '课程未发布,不可导入学员'|trans }}"><i class="glyphicon glyphicon-import"></i> {{ '批量导入'|trans }}</a>
-            {% endif %}
-          {% endif %}
-        </div>
-      </div>
-    {% endif %}
     <div class="panel-body">
       <ul class="nav nav-pills mbl">
         <li class="active">
@@ -64,15 +37,11 @@
             <tr class="students-item js-students-item">
               <td class="media media-middle" >
                 <a class="pull-left js-user-card" href="/user/{{student.userId}}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
-                  {# <img class="avatar-sm" src="{{student.smallAvatar}}"> #}
                   {{ web_macro.user_avatar(student, 'pull-left', 'avatar-sm') }}
                 </a>
                 <a target="_blank" href="/user/{{student.userId}}">{{student.nickname}}</a>
                 <div class="text-muted text-sm">{{student.createdTime|date_format()}}</div>
               </td>
-            {#  <td>
-              剩余：360天
-              </td> #}
               <td>
                 <a class="btn link-gray" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}"><span class="color-primary">{{processes[student.userId]|default(0)}}%</span><span class="text-xs">（查看详情）</span></a>
               </td>

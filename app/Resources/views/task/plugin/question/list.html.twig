@@ -3,6 +3,6 @@
     {% set user = users[thread.userId] %}
     {% include 'task/plugin/question/item.html.twig' %}
   {% else %}
-    <li class="empty-item">{{'此课时还没有问题'|trans}}</li>
+    <li class="empty-item">{{'此任务还没有问题'|trans}}</li>
   {% endfor %}
 </ul>

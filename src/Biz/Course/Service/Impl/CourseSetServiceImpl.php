@@ -168,6 +168,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function hasCourseSetManageRole($courseSetId = 0)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             return false;
         }
@@ -177,7 +178,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (empty($courseSetId)) {
-            return false;
+            return $user->isTeacher();
         }
 
         $courseSet = $this->getCourseSetDao()->get($courseSetId);
@@ -189,9 +190,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return true;
         }
 
-        $courses = $this->findCoursesByCourseSetId($courseSetId);
-        foreach ($courses as $key => $course) {
-            if ($this->canManageCourse($course['id'])) {
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        foreach ($courses as $course) {
+            if (in_array($user->getId(), $course['teacherIds'])) {
+                $this->getCourseService()->hasCourseManagerRole($course['id']);
                 return true;
             }
         }
@@ -347,7 +349,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         // 2. 教学计划的内容（主要是学习模式、有效期模式）也应该是可配的
         $defaultCourse = $this->generateDefaultCourse($created);
 
-        $course['creator'] = $this->getCurrentUser()->getId();
         $this->getCourseService()->createCourse($defaultCourse);
 
         return $created;

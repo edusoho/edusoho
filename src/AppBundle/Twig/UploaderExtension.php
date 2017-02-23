@@ -37,7 +37,7 @@ class UploaderExtension extends \Twig_Extension
     public function getProcessMode($targetType)
     {
         $modes = array(
-            'courselesson'    => 'auto',
+            'course-task'    => 'auto',
             'coursematerial'  => 'auto',
             'materiallib'     => 'auto',
             'course-activity' => 'auto',
@@ -54,7 +54,7 @@ class UploaderExtension extends \Twig_Extension
     public function getUploadFileAccept($targetType, $only = '')
     {
         $targetAcceptTypes = array(
-            'courselesson'    => array('video', 'audio', 'flash', 'ppt', 'cloud_document'),
+            'course-task'    => array('video', 'audio', 'flash', 'ppt', 'cloud_document'),
             'course-activity' => array('video', 'audio', 'flash', 'ppt', 'document', 'all'),
             'coursematerial'  => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
             'materiallib'     => array('video', 'audio', 'flash', 'ppt', 'document', 'zip', 'image', 'text'),
