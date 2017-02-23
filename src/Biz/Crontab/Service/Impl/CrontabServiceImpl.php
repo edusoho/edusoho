@@ -10,7 +10,7 @@ use AppBundle\Common\ArrayToolkit;
 
 class CrontabServiceImpl extends BaseService implements CrontabService
 {
-    public function getJob($id, $lock=false)
+    public function getJob($id, $lock = false)
     {
         return $this->getJobDao()->get($id, $lock);
     }
@@ -30,7 +30,13 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             // 加锁
             $job = $this->getJob($id, true);
 
-            $jobInstance = new $job['jobClass']();
+            $jobParents = class_parents($job['jobClass']);
+            if (in_array('Codeages\Biz\Framework\Service\BaseService', $jobParents)) {
+                $jobInstance = new $job['jobClass']($this->biz);
+            } else {
+                $jobInstance = new $job['jobClass']();
+            }
+
             if (!empty($job['targetType'])) {
                 $job['jobParams']['targetType'] = $job['targetType'];
             }
@@ -40,11 +46,9 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             }
 
             $jobInstance->execute($job['jobParams']);
-
-
         } catch (\Exception $e) {
             $message = $e->getMessage();
-            // $this->getJobDao()->updateJob($job['id'], array('executing' => 0));
+            $this->updateJob($job['id'], array('executing' => 0));
             $this->getLogService()->error('crontab', 'execute', "执行任务(#{$job['id']})失败: {$message}", $job);
         }
 
@@ -81,7 +85,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         // 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
         $lockName = "job_{$id}";
         $lock = $this->getLock();
-        $lock->get($lockName,10);
+        $lock->get($lockName, 10);
 
         $job = $this->getJob($id);
         if (empty($job) || $job['executing']) {
