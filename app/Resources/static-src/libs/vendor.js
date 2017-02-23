@@ -14,7 +14,7 @@ import { isMobileDevice } from 'common/utils';
 import './vendor.less';
 
 // 等待确认可删除Cookie
-// var Cookie = require('cookie');  app/Resources/static-src/app/js/file-chooser/base/chooser.js
+// var Cookie = require('cookie');  
 
 $('[data-toggle="popover"]').popover({
   html: true,

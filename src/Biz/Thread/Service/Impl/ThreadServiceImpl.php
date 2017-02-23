@@ -65,9 +65,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['userId'] = $user['id'];
 
         if ($thread['type'] == 'event') {
-            if ($this->tryAccess('thread.event.create', $thread)) {
-                throw $this->createAccessDeniedException('permision access denied.');
-            }
+            $this->tryAccess('thread.event.create', $thread);
 
             if (!empty($thread['location'])) {
                 $thread['location'] = $this->sensitiveFilter($thread['location'], $thread['targetType'].'-thread-create');
@@ -608,7 +606,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $firewall = $this->getTargetFirewall($resource);
 
         $method = $permisions[$permision];
-
         return $firewall->$method($resource);
     }
 

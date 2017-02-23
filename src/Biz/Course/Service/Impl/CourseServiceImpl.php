@@ -86,7 +86,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $courses = $this->searchCourses(
             array(
-                'courseSetId' => $courseSetId,
+                'courseSetId' => $courseSetId
             ),
             array('createdTime' => 'ASC'),
             0,
@@ -120,7 +120,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             'expiryStartDate',
             'serializeMode',
             'expiryEndDate',
-            'isDefault'
+            'isDefault',
+            'isFree',
+            'serializeMode'
         ));
 
         $course = $this->validateExpiryMode($course);
@@ -679,7 +681,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
         return $this->getMemberDao()->countLearnedMembers($conditions);
-
     }
 
     public function findUserLearnedCourses($userId, $start, $limit, $filters = array())
@@ -771,7 +772,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int $userId
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -792,7 +793,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count      = $this->searchCourseCount($conditions);
+        $count = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
@@ -814,6 +815,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             return false;
         }
+
+        if ($course['creator'] == $user->getId()) {
+            return true;
+        }
+
         $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
         //不是课程教师，无权限管理
         if ($teacher) {
@@ -1142,8 +1148,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * used for search userLearn userLearning userLearned
-     * @param $userId
-     * @param $filters
+     * @param  $userId
+     * @param  $filters
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)

@@ -3,6 +3,7 @@ namespace Biz\Marker\Service\Impl;
 
 use Biz\BaseService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Marker\Service\MarkerService;
 use Biz\Marker\Service\QuestionMarkerService;
 
 class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerService
@@ -35,7 +36,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
 
     public function findQuestionMarkersMetaByMediaId($mediaId)
     {
-        $markers = $this->getMarkerService()->findByMediaId($mediaId);
+        $markers = $this->getMarkerService()->findMarkersByMediaId($mediaId);
 
         if (empty($markers)) {
             return array();
@@ -172,6 +173,9 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         return $this->biz->service('Marker:QuestionMarkerResultService');
     }
 
+    /**
+     * @return MarkerService
+     */
     protected function getMarkerService()
     {
         return $this->biz->service('Marker:MarkerService');
