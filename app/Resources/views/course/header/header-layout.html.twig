@@ -85,11 +85,6 @@
           {% endif %}
           </li>
         {% endif %}
-        <li>
-            <a class="btn btn-default btn-xs  vip-btn"  data-toggle="popover" data-placement="top" title="会员课程"
-               data-trigger="hover" data-container=".vip-btn" data-content="银牌会员免费学<a>sdfs</a>"><i class="es-icon es-icon-crown color-warning"></i>
-            </a>
-          </li>
         {% if is_plugin_installed('vip') and course.vipLevelId != 0 %}
           <li id="favorite-btn">
             <a class="btn btn-default btn-xs" href="{{ path('vip') }}" data-toggle="tooltip" data-placement="top" title="会员课程"
