@@ -296,7 +296,8 @@ import "./jquery-mousewheel.js"
 
                       case 32:
                       // space bar
-                        case 34:
+                      /* falls through */
+                      case 34:
                         // page down
                         deltaY = -9;
                         break;

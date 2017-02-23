@@ -17,7 +17,12 @@
     "babel-preset-es2015": "6.9.0",
     "babel-preset-react": "6.11.1",
     "babel-runtime": "6.20.0",
-    "es-webpack-engine": "~2.3.4",
+    "es-webpack-engine": "~2.4.0",
+    "eslint": "3.16.0",
+    "eslint-config-airbnb": "14.1.0",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-jsx-a11y": "4.0.0",
+    "eslint-plugin-react": "6.10.0",
     "nodemon": "1.11.0",
     "webpack": "1.14.0"
   },
@@ -75,7 +80,7 @@
     "compile": "NODE_ENV=production babel-node --max_old_space_size=4096 ./node_modules/.bin/webpack --progress --config ./app/Resources/webpack/webpack.js",
     "compile:debug": "npm run compile -- --debugMode=true",
     "compile:debug-compress": "npm run compile -- --debugMode=true --compress=true",
-    "lint": "eslint src",
+    "lint": "eslint app/Resources/static-src/**/*.js",
     "clean": "npm prune"
   }
 }

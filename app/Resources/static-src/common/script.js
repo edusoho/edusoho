@@ -1,14 +1,14 @@
 /**
  * script loader for modal or html segment loaded by ajax
  */
+/* eslint-disable */
 const script = (scripts, fn, target) => {
   if (!scripts.length) return;
   target = !target ? document.getElementsByTagName('body')[0] : target;
-  (function callback(s) {
-    s = scripts.shift();
-    !scripts.length ? loadJs(s, fn, target) : loadJs(s, callback, target);
+  (function callback(s = scripts.shift()) {
+    loadJs(s, callback, target);
   }());
-}
+};
 
 const loadJs = (path, fn, target) => {
   let elem = document.createElement('script'), loaded;
@@ -20,10 +20,11 @@ const loadJs = (path, fn, target) => {
     elem.onload = elem.onreadystatechange = null;
     loaded = 1;
     fn();
-  }
+  };
   elem.async = 1;
   elem.src = path;
   target.appendChild(elem);
-}
+};
 
-window['script'] = script;
+window.script = script;
+/* eslint-enable */

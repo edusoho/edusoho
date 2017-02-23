@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
 Copyright 2012 Igor Vaynberg
 
@@ -2856,4 +2857,5 @@ the specific language governing permissions and limitations under the Apache Lic
   };
 })(jQuery);
 // require("./i18n/{locale}-debug");
+/* eslint-enable */
 
