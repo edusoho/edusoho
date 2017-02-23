@@ -5,7 +5,6 @@ use AppBundle\Common\StringToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -15,7 +14,6 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
         return array(
             'testpaper.reviewed'         => 'onTestpaperReviewed',
             'order.pay.success'          => 'onOrderPaySuccess',
-            'course.lesson.publish'      => 'onCourseLessonPublish',
             'course.lesson.update'       => 'onCourseLessonUpdate',
             'course.lesson.delete'       => 'onCourseLessonDelete',
             'course.lesson.unpublish'    => 'onCourseLessonUnpublish',
@@ -70,32 +68,6 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
             $description = $parameters['order_title'].$this->getKernel()->trans('成功回执');
 
             $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
-        }
-    }
-
-    public function onCourseLessonPublish(Event $event)
-    {
-        $lesson = $event->getSubject();
-
-        if ($lesson['type'] == 'live') {
-            $this->createJob($lesson, 'lesson');
-            $smsType = 'sms_live_lesson_publish';
-        } else {
-            $smsType = 'sms_normal_lesson_publish';
-        }
-
-        if ($this->getSmsService()->isOpen($smsType)) {
-            $processor    = $this->getSmsService()->getProcessor('lesson');
-            $return       = $processor->getUrls($lesson['id'], $smsType);
-            $callbackUrls = $return['urls'];
-            $count        = ceil($return['count'] / 1000);
-            try {
-                $api    = CloudAPIFactory::create('root');
-                $result = $api->post("/sms/sendBatch", array('total' => $count, 'callbackUrls' => $callbackUrls));
-            } catch (\RuntimeException $e) {
-                $description = $parameters['order_title'].$this->getKernel()->trans('成功回执');
-                throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
-            }
         }
     }
 

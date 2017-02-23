@@ -166,6 +166,12 @@ services:
         tags:
                 - { name: codeages_plugin.event.subscriber }
 
+    sms_task_event_subscriber:
+        class: Biz\Sms\Event\TaskEventSubscriber
+        arguments: ['@biz']
+        tags:
+             - { name: codeages_plugin.event.subscriber }
+
     thread_event_subscriber:
         class: Biz\Thread\Event\ThreadEventSubscriber
         arguments: ['@biz']

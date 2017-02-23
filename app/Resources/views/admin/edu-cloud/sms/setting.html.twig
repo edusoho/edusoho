@@ -203,12 +203,12 @@
         </tr>
         <tr>
           <td>通知类</td>
-          <td>新课时发布通知（普通课程）</td>
+          <td>学习任务发布通知（普通课程）</td>
           <td>
             【<span id="js-sms-school-name">
               {{ sms_sign_school_name }}
             </span>】
-            {{ '您的课程：《课程名称》－课时：《课时名》已发布！链接地址'}}
+            {{ '您的课程：《课程名称》－学习任务：《学习任务名称》已发布！链接地址'}}
           </td>
           <td>课程用户</td>
           <td>自动群发</td>
@@ -225,12 +225,12 @@
         </tr>
         <tr>
           <td>通知类</td>
-          <td>新课时发布通知（直播）</td>
+          <td>学习任务发布通知（直播）</td>
           <td>
             【<span id="js-sms-school-name">
               {{ sms_sign_school_name }}
             </span>】
-            {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！链接地址' }}
+            {{ '课程：《课程名称》－学习任务：《学习任务名称》将在［开播时间］开播！链接地址' }}
           </td>
           <td>课程用户</td>
           <td>自动群发</td>
@@ -252,7 +252,7 @@
             【<span id="js-sms-school-name">
               {{ sms_sign_school_name }}
             </span>】
-            {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播！链接地址' }}
+            {{ '课程：《课程名称》－学习任务：《学习任务名称》将在［开播时间］开播！链接地址' }}
           </td>
           <td>课程用户</td>
           <td>自动群发</td>
@@ -274,7 +274,7 @@
             【<span id="js-sms-school-name">
               {{ sms_sign_school_name }}
             </span>】
-            {{ '课程：《课程名》－课时：《课时名》将在［开播时间］开播!链接地址' }}
+            {{ '课程：《课程名称》－学习任务：《学习任务名称》将在［开播时间］开播!链接地址' }}
           </td>
           <td>课程用户</td>
           <td>自动群发</td>
@@ -296,23 +296,19 @@
             【<span id="js-sms-school-name">
               {{ sms_sign_school_name }}
             </span>】
-            {{ '您的课程：《课程名》-作业：《课时名》的作业已被老师批阅，快来看看吧!' }}
+            {{ '您的课程：《课程名称》：《学习任务名称》(作业)已被老师批阅，快来看看吧!' }}
           </td>
           <td>单个用户</td>
           <td>自动单发</td>
           <td>
-            {% if (is_plugin_installed('Homework')) %}
-              <label>
-                <input type="radio" name="sms_homework_check" value="on"
-                  {% if (setting('cloud_sms.sms_homework_check')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
-              </label>
-              <label>
-                <input type="radio" name="sms_homework_check" value="off"
-                  {% if (setting('cloud_sms.sms_homework_check')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
-              </label>
-            {% else %}
-              {{ '请先安装作业插件！'|trans }}
-            {% endif %}
+            <label>
+              <input type="radio" name="sms_homework_check" value="on"
+                {% if (setting('cloud_sms.sms_homework_check')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ '开启'|trans }}
+            </label>
+            <label>
+              <input type="radio" name="sms_homework_check" value="off"
+                {% if (setting('cloud_sms.sms_homework_check')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ '关闭'|trans }}
+            </label>
           </td>
         </tr>
         <tr>
@@ -322,7 +318,7 @@
             【<span id="js-sms-school-name">
               {{ sms_sign_school_name }}
             </span>】
-            {{ '您的课程：《课程名》-试卷：《课时名》的试卷已被老师批阅，快来看看吧!'  }}
+            {{ '您的课程：《课程名称》：《学习任务名称》(试卷)已被老师批阅，快来看看吧!'  }}
           </td>
           <td>单个用户</td>
           <td>自动单发</td>
@@ -344,7 +340,7 @@
             【<span id="js-sms-school-name">
               {{ sms_sign_school_name }}
             </span>】
-            {{ '你已成功购买课程《课程名称》，支付［订单金额］。' }}
+            {{ '你已成功购买课程《课程名称》-《教学计划名称》，支付［订单金额］。' }}
           </td>
           <td>单个用户</td>
           <td>自动单发</td>

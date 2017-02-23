@@ -1,27 +1,29 @@
 <?php
 namespace Biz\Sms\SmsProcessor;
 
-use Biz\Sms\SmsProcessor\SmsProcessor;
+
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Topxia\Service\Common\ServiceKernel;
 
 class SmsProcessorFactory
 {
 
+    /**
+     * @param $targetType
+     *
+     * @return BaseSmsProcessor
+     * @throws InvalidArgumentException
+     */
 	public static function create($targetType)
     {
     	if(empty($targetType)) {
-    		throw new Exception(self::getKernel()->trans('短信类型不存在'));
+    		throw new InvalidArgumentException('短信类型不存在');
     	}
 
     	$class = __NAMESPACE__ . '\\' . ucfirst($targetType). 'SmsProcessor';
 
-    	return new $class();
+    	return new $class(ServiceKernel::instance()->getBiz());
     }
-    
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
-    }
-
 }
 
 
