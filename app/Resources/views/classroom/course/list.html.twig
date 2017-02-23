@@ -24,7 +24,8 @@
                 {{ '原价：'|trans }} {{ course.price }}元
                 {# FIXME 由于目前还没有打折、优惠等插件，这里价格先注释掉#}
                 {# {% include 'TopxiaWebBundle:Course/Widget:course-price.html.twig' with {shows:['originPrice'] } %} #}
-                {% include 'course/widgets/price.html.twig' with {courseSet: course.courseSet, shows:'price'} %}
+                原价：
+                {% include 'course/widgets/price.html.twig' with {courseSet: course.courseSet, shows:'originPrice'} %}
             </div>
             <span class="course-show">
               <i class="es-icon es-icon-keyboardarrowdown" data-lesson-url="{{ path('classrom_course_tasks_list', {courseId:course.id, classroomId:classroom.id}) }}"></i>

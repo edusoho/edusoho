@@ -9,7 +9,6 @@ class CategoryController extends BaseController
     public function embedAction($group, $layout, $menu = null)
     {
         $group = $this->getCategoryService()->getGroupByCode($group);
-
         if (empty($group)) {
             throw $this->createNotFoundException();
         }
