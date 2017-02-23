@@ -44,7 +44,7 @@
         {% if task.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
           {% set file = task.activity.ext.file|default(null) %}
           {% if  file.storage|default(null) == 'cloud' %}
-          <li class="mark-manage" style="display:none;">
+          <li class="mark-manage" >
           <a href="{{ path('course_task_marker_manage', {courseId:course.id, taskId:task.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
           <span class="glyphicon glyphicon-list prs"></span>{{'弹题管理'|trans}}
           </a>
