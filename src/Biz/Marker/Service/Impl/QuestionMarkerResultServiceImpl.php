@@ -3,6 +3,7 @@ namespace Biz\Marker\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Marker\Service\QuestionMarkerResultService;
+use Biz\Marker\Service\QuestionMarkerService;
 
 class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMarkerResultService
 {
@@ -21,9 +22,9 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->getQuestionMarkerResultDao()->update($id, $result);
     }
 
-    public function finishCurrentQuestion($markerId, $userId, $questionMarkerId, $answer, $type, $lessonId)
+    public function finishCurrentQuestion($markerId, $userId, $questionMarkerId, $answer, $type)
     {
-        $questionMarker = $this->getQuestionMarkerService()->get($questionMarkerId);
+        $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
         if (in_array($type, array('single_choice', 'determine'))) {
             $status = array_diff($answer, $questionMarker['answer']) ? 'right' : 'wrong';
         }
@@ -58,7 +59,6 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->addQuestionMarkerResult(array(
             'markerId'         => $markerId,
             'questionMarkerId' => $questionMarkerId,
-            'lessonId'         => $lessonId,
             'userId'           => $userId,
             'status'           => $status,
             'answer'           => serialize($answer)
@@ -85,6 +85,9 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->createDao('Marker:QuestionMarkerResultDao');
     }
 
+    /**
+     * @return QuestionMarkerService
+     */
     protected function getQuestionMarkerService()
     {
         return $this->biz->service('Marker:QuestionMarkerService');
