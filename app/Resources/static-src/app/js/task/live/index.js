@@ -102,14 +102,9 @@ class LiveShow {
             $countDown += "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
           });
         }
-<<<<<<< HEAD
-      };
-      let $content = $liveNotice + '<div class="pb20" style=" border-bottom:1px dashed #ccc; height: auto;">' + summary + '</div>' + '<br>' + $countDown;
-=======
       }
 
       let $content = $liveNotice + '<div style="padding:15px 15px 15px 30px; border-bottom:1px dashed #ccc; height: auto;">' + summary + '</div>' + '<br>' + $countDown;
->>>>>>> origin/feature/x8
       $("#lesson-live-content").find('.lesson-content-text-body').html($content);
 
       intervalSecond++;
