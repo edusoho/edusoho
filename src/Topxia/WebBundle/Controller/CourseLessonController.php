@@ -60,7 +60,7 @@ class CourseLessonController extends BaseController
         ));
     }
 
-    private function isEnablePreview($course, $lesson, $user)
+    private function isEnablePreview($course, $lesson)
     {
         if ($lesson['free']) {
             return true;
@@ -74,6 +74,7 @@ class CourseLessonController extends BaseController
             $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
 
             if ($courseVip) {
+                $user = $this->getCurrentUser();
                 $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
                 if ('ok' == $vipStatus) {
                     return true;
