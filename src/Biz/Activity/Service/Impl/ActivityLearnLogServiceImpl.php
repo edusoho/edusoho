@@ -30,7 +30,7 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
         } else {
             $fields['courseTaskId'] = 0;
         }
-        
+
         return $this->getActivityLearnLogDao()->create($fields);
     }
 
@@ -62,7 +62,8 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
 
     public function sumLearnTime($conditions)
     {
-        return $this->getActivityLearnLogDao()->sumLearnTime($conditions);
+        $result = $this->getActivityLearnLogDao()->sumLearnTime($conditions);
+        return intval($result/60);
     }
 
     public function sumWatchTime($conditions)
