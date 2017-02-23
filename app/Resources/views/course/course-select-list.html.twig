@@ -14,7 +14,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th width="10%" ></th>
+      <th class="text-center" width="8%"></th>
       <th width="15%">课程名称</th>
       <th width="20%">课程名称</th>
       <th width="30%">教学计划名称</th>
@@ -27,7 +27,7 @@
     {% for courseSet in courseSets %}
     <tr>
       <td class="vertical-middle" data-id="{{courseSet.id}}">
-        <input class="course-item-cbx" style="float:left;" type="checkbox" name="course-{{courseSet.id}}">
+        <input class="course-item-cbx"  type="checkbox" name="course-{{courseSet.id}}">
       </td>
       <td class="">
         <a href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">
