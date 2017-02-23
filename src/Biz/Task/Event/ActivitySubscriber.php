@@ -11,22 +11,19 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
     public static function getSubscribedEvents()
     {
         return array(
-            'activity.start' => array('onActivityStart', 'onActivityDoing'),
+            'activity.start' => 'onActivityStart',
             'activity.doing' => 'onActivityDoing',
         );
     }
 
     public function onActivityStart(Event $event)
     {
-        var_dump(22);
         $task = $event->getArgument('task');
         $this->getTaskService()->startTask($task['id']);
     }
 
     public function onActivityDoing(Event $event)
     {
-        var_dump(22333);
-        exit;
         $taskId = $event->getArgument('taskId');
 
         if (!$event->hasArgument('timeStep')) {

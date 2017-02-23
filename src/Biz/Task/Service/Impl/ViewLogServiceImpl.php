@@ -19,7 +19,7 @@ class ViewLogServiceImpl extends BaseService implements ViewLogService
         return $this->getViewLogDao()->search($conditions, $sortBys, $start, $limit);
     }
 
-    public function searchTaskViewsGroupByTime($conditions, $startTime, $endTime)
+    public function searchViewLogsGroupByTime($conditions, $startTime, $endTime)
     {
         return $this->getViewLogDao()->searchTaskViewGroupByTime($conditions, $startTime, $endTime);
     }

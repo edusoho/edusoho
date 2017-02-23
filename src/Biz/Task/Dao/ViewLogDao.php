@@ -8,5 +8,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface ViewLogDao extends GeneralDaoInterface
 {
-    public function searchTaskViewsGroupByTime($conditions, $startTime, $endTime);
+    public function searchViewLogsGroupByTime($conditions, $startTime, $endTime);
 }

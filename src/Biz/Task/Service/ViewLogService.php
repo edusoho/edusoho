@@ -12,5 +12,5 @@ interface ViewLogService
 
     public function countViewLogs($conditions);
 
-    public function searchTaskViewsGroupByTime($conditions, $startTime, $endTime);
+    public function searchViewLogsGroupByTime($conditions, $startTime, $endTime);
 }
