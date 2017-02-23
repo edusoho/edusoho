@@ -183,7 +183,7 @@ interface CourseSetService
 
     public function updateMaxRate($id, $maxRate);
 
-    public function applyDiscountToCourses($id, $discountId);
+    public function applyDiscount($discountId);
 
-    public function removeDiscountFromCourses($id);
+    public function cancelDiscount($discountId);
 }

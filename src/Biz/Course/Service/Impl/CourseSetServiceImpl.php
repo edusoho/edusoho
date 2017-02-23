@@ -643,7 +643,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $courseSet;
     }
 
-    public function applyDiscountToCourses($discountId)
+    public function applyDiscount($discountId)
     {
         $discount = $this->getDiscountService()->getDiscount($discountId);
 
@@ -671,7 +671,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
             foreach ($courseSets as $courseSet) {
                 $fields = array(
-                    'discountId' => $discount['id'],
+                    'discountId' => $discountId,
                     'discount' => $discount['globalDiscount'],
                 );
 
@@ -698,17 +698,50 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             
             foreach ($courses as $course) {
                 $fields = isset($course['originCoinPrice']) ? array(
-                    'price' => ''
-                ) : array('price' => $course['originPrice'] * $courseSet['']);
+                    'price' => $course['originPrice'] * $courseSet['discount'],
+                    'coinPrice' => $course['originCoinPrice'] * $courseSet['discount']
+                ) : array('price' => $course['originPrice'] * $courseSet['discount']);
+
+                if ($courseSet['discount'] == 0) {
+                    $fields['isFree'] = 1;
+                }
 
                 $this->getCourseDao()->update($id, $fields);
             }
         }
     }
 
-    public function removeDiscountFromCourses($discountId)
+    public function cancelDiscount($discountId)
     {
-        ;
+        $discount = $this->getDiscountService()->getDiscount($discountId);
+
+        if (empty($discount)) {
+            throw $this->createServiceException($this->getKernel()->trans('折扣活动#%discountId%不存在！', array('%discountId%' => $discountId)));
+        }
+
+        $conditions = array(
+            'discountId' => $discountId
+        );
+
+        $count = $this->countCourseSets($conditions);
+
+        $courseSets = $this->searchCourseSets($conditions, array(), 0, $count);
+
+        foreach ($courseSets as $courseSet) {
+            $courses = $this->getCourseService()->findCoursesByCourseSetIds(array($courseSet['id']));
+
+            foreach ($courses as $course) {
+                $this->getCourseDao()->update(
+                    $course['id'],
+                    array('price' => 'originPrice', 'coinPrice' => 'originCoinPrice')
+                );
+            }
+
+            $this->getCourseSetDao()->update(
+                $courseSet['id'],
+                array('discountId' => 0, 'discount' => 10)
+            );
+        }
     }
 
     protected function validateCourseSet($courseSet)
