@@ -20,12 +20,6 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="" class="col-sm-2 control-label">{{'学习完成规则'|trans}}</label>
-          <div class="col-sm-8 radios"> 
-            {{ radios('enableFinish', { '1': '必须满足任务完成的条件才算学完'|trans, '0': '学员可以自己点击“学过了”按钮以示学完'|trans }, course.enableFinish|default('1')) }}
-          </div>
-        </div>
-        <div class="form-group">
           <label for="" class="col-sm-2 control-label">{{'学习模式'|trans}}</label>
           <div class="col-sm-8 radios"> 
             {% if course.learnMode|default('freeMode') == 'freeMode' %}
@@ -41,6 +35,12 @@
             {% endif %}
             {% if course.learnMode|default('freeMode') == 'lockMode' %} <p class="help-block" id="learnFreeModeHelp" data-role="tab-content">{{'根据计划预定的顺序学习'|trans}}</p>{% endif %}
             {% if course.learnMode|default('freeMode') == 'freeMode' %}<p class="help-block" id="learnLockModeHelp" data-role="tab-content" >{{'学习过程自由安排'|trans}}</p>{% endif %}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="" class="col-sm-2 control-label">{{'学习完成规则'|trans}}</label>
+          <div class="col-sm-8 radios"> 
+            {{ radios('enableFinish', { '1': '必须满足任务完成的条件才算学完'|trans, '0': '学员可以自己点击“学过了”按钮以示学完'|trans }, course.enableFinish|default('1')) }}
           </div>
         </div>
         <div class="form-group">

@@ -33,6 +33,16 @@
     }|json_encode|raw
   }};
 
+  app.arguments = {};
+  {% if script_controller is defined %}
+    app.controller = '{{ script_controller }}';
+  {% endif %}
+  {% if script_arguments is defined %}
+    app.arguments = {{ script_arguments|json_encode|raw }};
+  {% endif %}
+  
+  app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
+
   app.uploadUrl = '{{ path("file_upload") }}';
   app.imgCropUrl = '{{ path("file_img_crop") }}';
   app.lessonCopyEnabled = '{{ setting("course.copy_enabled","0") }}';
