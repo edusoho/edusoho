@@ -4,7 +4,7 @@
 
 {% block title %}{% if thread %}{{'编辑'|trans}}{{ dict_text('threadType', type) }}{% else %}{{'发表'|trans}}{{ dict_text('threadType', type) }}{% endif %} - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'thread/thread-form' %}
+{% do load_script('thread/thread-form') %}
 {% set nav = 'thread' %}
 {% block main %}
 

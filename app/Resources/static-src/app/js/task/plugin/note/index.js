@@ -22,7 +22,7 @@ $('#note-save-btn').click(function (event) {
   let data = $form.serializeArray();
   $.post($form.attr('action'), data)
     .then((response) => {
-      notify('info', '保存成功');
+      notify('success', '保存成功');
       $btn.removeAttr('disabled');
     });
 });

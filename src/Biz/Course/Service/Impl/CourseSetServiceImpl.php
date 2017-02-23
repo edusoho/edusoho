@@ -349,7 +349,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         // 2. 教学计划的内容（主要是学习模式、有效期模式）也应该是可配的
         $defaultCourse = $this->generateDefaultCourse($created);
 
-        $course['creator'] = $this->getCurrentUser()->getId();
         $this->getCourseService()->createCourse($defaultCourse);
 
         return $created;

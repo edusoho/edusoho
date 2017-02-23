@@ -5,7 +5,6 @@ class Live {
     this._init();
   }
   _init() {
-    initEditor($('[name="remark"]'));
     this._extendValidator();
     this._dateTimePicker();
     this._initStep2Form();
@@ -60,6 +59,7 @@ class Live {
         },
       },
     });
+    initEditor($('[name="remark"]'),validator);
   }
 
   _dateTimePicker() {

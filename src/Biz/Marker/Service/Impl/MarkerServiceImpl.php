@@ -25,7 +25,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     public function findMarkersMetaByMediaId($mediaId)
     {
-        $markers = $this->findByMediaId($mediaId);
+        $markers = $this->findMarkersByMediaId($mediaId);
 
         if (empty($markers)) {
             return array();
