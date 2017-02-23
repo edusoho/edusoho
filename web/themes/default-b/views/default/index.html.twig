@@ -1,7 +1,7 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% set bodyClass = 'homepage' %}
-{% set script_controller = 'index' %}
+{% do script(['libs/echo-js.js','defaultbtheme/js/default/index.js']) %}
 
 {% set consultDisplay = true %}
 
@@ -17,9 +17,9 @@
     <ul class="homepage-category-nav">
       {% set categories = data('Categories', {parentId:0, group:'course'}) %}
       {% for category in categories %}
-        <li><a href="{{ path('course_explore', {category:category.code,fliter:{type: 'all',price: 'all',currentLevelId: 'all'},orderBy:'latest'}) }}">{{ category.name }}</a></li>
+        <li><a href="{{ path('course_set_explore', {category:category.code,fliter:{type: 'all',price: 'all',currentLevelId: 'all'},orderBy:'latest'}) }}">{{ category.name }}</a></li>
       {% endfor %}
-      <li><a href="{{ path('course_explore') }}">{{'更多'|trans}}</a></li>
+      <li><a href="{{ path('course_set_explore') }}">{{'更多'|trans}}</a></li>
     </ul>
 
     <div class="row row-9-3">
@@ -98,44 +98,44 @@
 
 
         {# 推荐课程 #}
-        {% set recommendCourses = data('RecommendCourses', {count:3}) %}
-        {% if recommendCourses %}
+        {% set recommendCourseSets = data('RecommendCourseSets', {count:3}) %}
+        {% if recommendCourseSets %}
           <div class="es-box">
             <div class="es-box-heading">
-              <a class="pull-right" href="{{ path('course_explore', {sort:'recommendedSeq'}) }}">更多&gt;</a>
+              <a class="pull-right" href="{{ path('course_set_explore', {sort:'recommendedSeq'}) }}">更多&gt;</a>
               <h2>{{'推荐课程'|trans}}</h2>
             </div>
             <div class="es-box-body">
-              {{ _self.course_grids(data('RecommendCourses',{ count:3 })) }}         
+              {{ _self.course_grids(data('RecommendCourseSets',{ count:3 })) }}         
             </div>
           </div>
         {% endif %}
 
         {# 最新课程 #}
-        {% set latestCourses = data('LatestCourses', {count:6}) %}
-        {% if latestCourses %}
+        {% set latestCourseSets = data('LatestCourseSets', {count:6}) %}
+        {% if latestCourseSets %}
           <div class="es-box">
             <div class="es-box-heading">
-              <a class="pull-right" href="{{ path('course_explore') }}">更多&gt;</a>
+              <a class="pull-right" href="{{ path('course_set_explore') }}">更多&gt;</a>
               <h2>{{'最新课程'|trans}}</h2>
             </div>
             <div class="es-box-body">
-              {{ _self.course_grids(data('LatestCourses',{ count:6 })) }}            
+              {{ _self.course_grids(data('LatestCourseSets',{ count:6 })) }}            
             </div>
           </div>
         {% endif %}
 
         {# 最新直播 #}
         {% if setting('course.live_course_enabled') %}
-          {% set recentLiveCourses = data('RecentLiveCourses', {count:3}) %}
-          {% if recentLiveCourses %}
+          {% set recentLiveCourseSets = data('RecentLiveCourseSets', {count:3}) %}
+          {% if recentLiveCourseSets %}
             <div class="es-box">
               <div class="es-box-heading">
-                <a class="pull-right" href="{{ path('live_course_explore') }}">{{'更多'|trans}}&gt;</a>
+                <a class="pull-right" href="{{ path('live_course_set_explore') }}">{{'更多'|trans}}&gt;</a>
                 <h2>{{'最新直播'|trans}}</h2>
               </div>
               <div class="es-box-body">
-                {{ _self.course_grids(data('RecentLiveCourses',{ count:3 })) }}
+                {{ _self.course_grids(data('RecentLiveCourseSets',{ count:3 })) }}
               </div>
             </div>
           {% endif %}
@@ -315,7 +315,7 @@
       <div class="col-md-3">
         {# 在学课程 #}
         {% if app.user %}
-          {% include 'TopxiaWebBundle:Default:member-recently-learned.html.twig' %}
+          {% include 'default/member-recently-learned.html.twig' %}
         {% endif %}
 
         {# 热门标签 #}    
@@ -338,21 +338,21 @@
         {% endif %}
 
         {# 课程排行 #}
-        {% set coursesRank = data('PopularCourses',{'count':'5', 'type':'studentNum'}) %}
-        {% if coursesRank %}
-          <div class="es-box courses-rank">
+        {% set courseSetsRank = data('PopularCourseSets',{'count':'5', 'type':'studentNum'}) %}
+        {% if courseSetsRank %}
+          <div class="es-box courseSets-rank">
             <div class="es-box-heading">
               <h2>{{'课程排行'|trans}}</h2>
             </div>
             <div class="es-box-body">
               <ul class="media-list">
-                {% for course in coursesRank %}
-                  {% if course %}
+                {% for courseSet in courseSetsRank %}
+                  {% if courseSet %}
                     <li class="media">
-                      <a href="{{ path('course_show', {id:course.id}) }}">
+                      <a href="{{ path('course_set_show', {id:courseSet.id}) }}">
                         <div class="course-item">
-                          <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb pull-left">
-                          <div class="course-title">{{ course.title }}</div>
+                          <img src="{{ filepath(course.cover.moddle|default(), 'course.png') }}"  class="img-responsive thumb pull-left">
+                          <div class="course-title">{{ courseSet.title }}</div>
                         </div>
                       </a>
                     </li>
@@ -386,7 +386,7 @@
           </div>
         {% endif %}
 
-        {{ render(controller('TopxiaWebBundle:Default:latestReviewsBlock', {number:5})) }}
+        {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
 
         {# 最热话题 #}
         {% if setting('group').group_show|default(1) %}
@@ -413,35 +413,35 @@
   </div>
 {% endblock %}
 
-{% block contact %}
+{# {% block contact %}
   {% if contact %}
   {% if contact.enabled == 1 %}
     {% include 'TopxiaWebBundle:ContactFloat:contact.html.twig'   with {contact:contact} %}
   {% endif %}
   {% endif %}
-{% endblock %}
+{% endblock %} #}
 
-{% macro course_grids(courses) %}
+{% macro course_grids(courseSets) %}
   {% set mode = mode|default('default') %}
-  {% if courses %}
+  {% if courseSets %}
   <ul class="course-grids clearfix">
-    {% for course in courses %}
+    {% for courseSet in courseSets %}
       <li class="course-grid">
-        <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
-          {{ lazy_img(filepath(course.largePicture, 'course.png'), 'img-responsive thumb', '') }}
-          {% if course.status == 'draft' %}
+        <a href="{{ path('course_set_show', {id:courseSet.id}) }}" class="grid-body">
+          {{ lazy_img(filepath(courseSet.cover.middle|default(), 'courseSet.png'), 'img-responsive thumb', '') }}
+          {% if courseSet.status == 'draft' %}
             <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
-          {% elseif course.status == 'closed' %}
+          {% elseif courseSet.status == 'closed' %}
             <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
           {% endif %} 
-          {% if course.serializeMode=='serialize' %}
+          {% if courseSet.serializeMode=='serialize' %}
             <span class="label label-success series-mode-label">{{'更新中'|trans}}</span>
-          {% elseif course.serializeMode=='finished' %}
+          {% elseif courseSet.serializeMode=='finished' %}
             <span class="label label-warning series-mode-label">{{'已完结'|trans}}</span>
           {% endif %}
 
-          {% if course.type == 'live' %}
-            {% set lesson = course['lesson']|default(null) %}
+          {% if courseSet.type == 'live' %}
+            {% set lesson = courseSet['lesson']|default(null) %}
             {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
               <span class="label label-warning series-mode-label">{{'正在直播中'|trans}}</span>
             {% else %}
@@ -449,11 +449,11 @@
             {% endif %}
           {% endif %}
 
-          <span class="title">{{ course.title }}</span>
+          <span class="title">{{ courseSet.title }}</span>
           {% if mode in ['default', 'teach'] %}
 
-            {% if course.type == 'live' %}
-              {% set lesson = course['lesson']|default(null) %}
+            {% if courseSet.type == 'live' %}
+              {% set lesson = courseSet['lesson']|default(null) %}
               {% if lesson %}
                 <span class="live-course-lesson metas">
                   <span class="text-success mrm">{{ lesson.startTime|date('m-d H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
@@ -463,17 +463,18 @@
             {% endif %}
 
             <span class="metas clearfix">
-            {% if setting('course.coursesPrice') == 0 %}
+            {% if setting('courseSet.coursesPrice') == 0 %}
+            {% set course = data('PublishedCourseByCourseSet', {'courseSetId':courseSet.id}) %} 
               <div class="price-block">
-                 {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
+                 {% include "course/widgets/price.html.twig" with {shows: ['price', 'discount']} %}
               </div>
             {% endif %}
 
               <span class="review-col pull-left" style="text-align: left;">
                 {% if course.ratingNum > 0 %}
-                  <span class="meta-label"><strong>{{ course.ratingNum }}</strong> {{'评价'|trans}}</span>
+                  <span class="meta-label"><strong>{{ courseSet.ratingNum }}</strong> {{'评价'|trans}}</span>
                   <span class="review-rating">
-                    <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
+                    <span class="stars-{{ (courseSet.rating)|number_format }}">&nbsp;</span>
                   </span>
                 {% else %}
                   <span class="meta-label">{{'无评价'|trans}}</span>
@@ -486,7 +487,7 @@
               {% if setting('course.show_student_num_enabled', '1') == 1  %}
               <span class="student-col">
                 <span class="meta-label">{{'学生'|trans}}</span>
-                <span class="student-num">{{ '%courseTtudentNum%人'|trans({'%courseTtudentNum%': course.studentNum})}}</span>
+                <span class="student-num">{{ '%courseTtudentNum%人'|trans({'%courseTtudentNum%': courseSet.studentNum})}}</span>
               </span>
               {% endif %}
 
@@ -506,7 +507,7 @@
 
           {% if mode in ['learn'] %}
             <div class="learn-status">
-              {% if course.memberIsLearned %}
+              {% if courseSet.memberIsLearned %}
                 <div class="progress">
                   <div class="progress-bar progress-bar-success" style="width: 100%;"></div>
                 </div>
@@ -518,19 +519,19 @@
                 <div class="action"><span class="btn btn-primary btn-sm">{{'继续学习'|trans}}</span></div>
               {% endif %}
             </div>
-            {% if course.status == 'draft' %}
+            {% if courseSet.status == 'draft' %}
               <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
-            {% elseif course.status == 'closed' %}
+            {% elseif courseSet.status == 'closed' %}
               <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
             {% endif %}       
           {% endif %}
 
           {% if mode == 'teach' %}
-            {% if course.status == 'published' %}
+            {% if courseSet.status == 'published' %}
               <span class="label label-success course-status">{{'已发布'|trans}}</span>
-            {% elseif course.status == 'draft' %}
+            {% elseif courseSet.status == 'draft' %}
               <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
-            {% elseif course.status == 'closed' %}
+            {% elseif courseSet.status == 'closed' %}
               <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
             {% endif %}
           {% endif %}

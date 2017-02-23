@@ -14,7 +14,7 @@
         {% endif %}
       </div>
       <div class="navbar-collapse collapse">
-        {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
+        {{ render(controller('AppBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
 
         <ul class="nav navbar-nav navbar-right">
           {% if app.user %}
