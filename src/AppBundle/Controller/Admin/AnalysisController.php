@@ -4,6 +4,8 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\DateToolkit;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
+use Biz\Task\Service\ViewLogService;
 use Symfony\Component\HttpFoundation\Request;
 
 class AnalysisController extends BaseController
@@ -25,7 +27,6 @@ class AnalysisController extends BaseController
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
-
         $paginator = new Paginator(
             $request,
             $this->getUserService()->searchUserCount($timeRange),
@@ -39,7 +40,6 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $registerData = "";
 
         if ($tab == "trend") {
             $registerData = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
@@ -55,8 +55,7 @@ class AnalysisController extends BaseController
             $registerStartDate = date("Y-m-d", $registerStartData[0]['createdTime']);
         }
 
-        $dataInfo = $this->getDataInfo($condition, $timeRange);
-
+        $dataInfo         = $this->getDataInfo($condition, $timeRange);
         $registerIds      = ArrayToolkit::column($registerDetail, 'id');
         $registerProfiles = $this->getUserService()->findUserProfilesByIds($registerIds);
 
@@ -86,8 +85,8 @@ class AnalysisController extends BaseController
         );
 
         if ($tab == "trend") {
-            $registerData  = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
-            $userInitCount = $this->getUserService()->countUsers(
+            $registerData   = $this->getUserService()->analysisRegisterDataByTime($timeRange['startTime'], $timeRange['endTime']);
+            $userInitCount  = $this->getUserService()->countUsers(
                 array('endTime' => $timeRange['startTime'])
             );
             $data           = $this->fillAnalysisSum($condition, $registerData, $userInitCount);
@@ -99,7 +98,7 @@ class AnalysisController extends BaseController
                 20
             );
 
-            $userSumDetail = $this->getUserService()->searchUsers(
+            $userSumDetail           = $this->getUserService()->searchUsers(
                 $timeRange,
                 array('createdTime' => 'DESC'),
                 $paginator->getOffsetCount(),
@@ -353,7 +352,7 @@ class AnalysisController extends BaseController
 
     public function taskAction(Request $request, $tab)
     {
-        $data            = array();
+        $data          = array();
         $taskStartDate = "";
 
         $condition = $request->query->all();
@@ -401,14 +400,14 @@ class AnalysisController extends BaseController
         $dataInfo = $this->getDataInfo($condition, $timeRange);
         return $this->render("admin/operation-analysis/task.html.twig", array(
             'taskDetail'    => $taskDetail,
-            'paginator'       => $paginator,
-            'tab'             => $tab,
-            'data'            => $data,
-            'courses'         => $courses,
-            'courseSets'      => $courseSets,
-            'users'           => $users,
+            'paginator'     => $paginator,
+            'tab'           => $tab,
+            'data'          => $data,
+            'courses'       => $courses,
+            'courseSets'    => $courseSets,
+            'users'         => $users,
             'taskStartDate' => $taskStartDate,
-            'dataInfo'        => $dataInfo
+            'dataInfo'      => $dataInfo
         ));
     }
 
@@ -602,7 +601,7 @@ class AnalysisController extends BaseController
         $timeRange              = $this->getTimeRange($condition);
         $paidClassroomStartDate = '';
 
-        $paginator = new Paginator(
+        $paginator           = new Paginator(
             $request,
             $this->getOrderService()->countOrders(array("paidStartTime" => $timeRange['startTime'], "paidEndTime" => $timeRange['endTime'], "statusPaid" => "paid", "statusCreated" => "created", "targetType" => 'classroom')),
             20
@@ -723,47 +722,48 @@ class AnalysisController extends BaseController
     public function videoViewedAction(Request $request, $tab)
     {
         $data      = array();
+        $count     = 0;
         $condition = $request->query->all();
 
         $timeRange = $this->getTimeRange($condition);
 
         $searchCondition = array(
             "fileType"  => 'video',
-            "startTime" => $timeRange['startTime']
-            , "endTime" => $timeRange['endTime']
+            "startTime" => $timeRange['startTime'],
+            "endTime"   => $timeRange['endTime']
         );
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchAnalysisLessonViewCount(
-                $searchCondition,
-                20
-            )
+            $this->getTaskViewLog()->countViewLogs($searchCondition),
+            20
         );
 
-        $videoViewedDetail = $this->getCourseService()->searchAnalysisLessonView(
+        $videoViewedDetail = $this->getTaskViewLog()->searchViewLogs(
             $searchCondition,
             array("createdTime" => "DESC"),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $videoViewedTrendData = "";
 
         if ($tab == "trend") {
-            $videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'], $timeRange['endTime'], array("fileType" => 'video'));
+            $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime(array("fileType" => 'video'), $timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
+            foreach ($videoViewedTrendData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
-        $lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
-        $lessons   = $this->getCourseService()->findLessonsByIds($lessonIds);
-        $lessons   = ArrayToolkit::index($lessons, 'id');
+        $taskIds = ArrayToolkit::column($videoViewedDetail, 'taskId');
+        $tasks   = $this->getTaskService()->findTasksByIds($taskIds);
+        $tasks   = ArrayToolkit::index($tasks, 'id');
 
         $userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
         $users   = $this->getUserService()->findUsersByIds($userIds);
         $users   = ArrayToolkit::index($users, 'id');
 
-        $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('all');
+        //  $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('all');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
         return $this->render("admin/operation-analysis/video-view.html.twig", array(
@@ -771,11 +771,12 @@ class AnalysisController extends BaseController
             'paginator'         => $paginator,
             'tab'               => $tab,
             'data'              => $data,
-            'lessons'           => $lessons,
+            'tasks'             => $tasks,
             'users'             => $users,
             'dataInfo'          => $dataInfo,
-            'minCreatedTime'    => date("Y-m-d", $minCreatedTime['createdTime']),
-            'showHelpMessage'   => 1
+            'minCreatedTime'    => date("Y-m-d", time()),
+            'showHelpMessage'   => 1,
+            'count'             => $count
         ));
     }
 
@@ -783,47 +784,47 @@ class AnalysisController extends BaseController
     {
         $data      = array();
         $condition = $request->query->all();
-
+        $count     = 0;
         $timeRange = $this->getTimeRange($condition);
 
         $searchCondition = array(
             "fileType"    => 'video',
             "fileStorage" => 'cloud',
-            "startTime"   => $timeRange['startTime']
-            , "endTime" => $timeRange['endTime']
+            "startTime"   => $timeRange['startTime'],
+            "endTime"     => $timeRange['endTime']
         );
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchAnalysisLessonViewCount(
-                $searchCondition,
-                20
-            )
+            $this->getTaskViewLog()->countViewLogs($searchCondition),
+            20
         );
 
-        $videoViewedDetail = $this->getCourseService()->searchAnalysisLessonView(
+        $videoViewedDetail = $this->getTaskViewLog()->searchViewLogs(
             $searchCondition,
-            array("createdTime", "DESC"),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $videoViewedTrendData = "";
-
         if ($tab == "trend") {
-            $videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'], $timeRange['endTime'], array("fileType" => 'video', "fileStorage" => 'cloud'));
+            $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime(array("fileType" => 'video', "fileStorage" => 'cloud'), $timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
+
+            foreach ($videoViewedTrendData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
-        $lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
-        $lessons   = $this->getCourseService()->findLessonsByIds($lessonIds);
-        $lessons   = ArrayToolkit::index($lessons, 'id');
+        $taskIds = ArrayToolkit::column($videoViewedDetail, 'taskId');
+        $tasks   = $this->getTaskService()->findTasksByIds($taskIds);
+        $tasks   = ArrayToolkit::index($tasks, 'id');
 
-        $userIds        = ArrayToolkit::column($videoViewedDetail, 'userId');
-        $users          = $this->getUserService()->findUsersByIds($userIds);
-        $users          = ArrayToolkit::index($users, 'id');
-        $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('cloud');
+        $userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
+        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users   = ArrayToolkit::index($users, 'id');
+        //  $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('cloud');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
         return $this->render("admin/operation-analysis/cloud-video-view.html.twig", array(
@@ -831,11 +832,12 @@ class AnalysisController extends BaseController
             'paginator'         => $paginator,
             'tab'               => $tab,
             'data'              => $data,
-            'lessons'           => $lessons,
+            'tasks'             => $tasks,
             'users'             => $users,
             'dataInfo'          => $dataInfo,
-            'minCreatedTime'    => date("Y-m-d", $minCreatedTime['createdTime']),
-            'showHelpMessage'   => 1
+            'minCreatedTime'    => date("Y-m-d", time()),
+            'showHelpMessage'   => 1,
+            'count'             => $count
         ));
     }
 
@@ -843,7 +845,7 @@ class AnalysisController extends BaseController
     {
         $data      = array();
         $condition = $request->query->all();
-
+        $count     = 0;
         $timeRange = $this->getTimeRange($condition);
 
         $searchCondition = array(
@@ -855,13 +857,13 @@ class AnalysisController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchAnalysisLessonViewCount(
+            $this->getTaskViewLog()->countViewLogs(
                 $searchCondition,
                 20
             )
         );
 
-        $videoViewedDetail = $this->getCourseService()->searchAnalysisLessonView(
+        $videoViewedDetail = $this->getTaskViewLog()->searchViewLogs(
             $searchCondition,
             array("createdTime" => "DESC"),
             $paginator->getOffsetCount(),
@@ -871,19 +873,24 @@ class AnalysisController extends BaseController
         $videoViewedTrendData = "";
 
         if ($tab == "trend") {
-            $videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'], $timeRange['endTime'], array("fileType" => 'video', "fileStorage" => 'local'));
+            $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime(array("fileType" => 'video', "fileStorage" => 'local'), $timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
+
+            foreach ($videoViewedTrendData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
-        $lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
-        $lessons   = $this->getCourseService()->findLessonsByIds($lessonIds);
-        $lessons   = ArrayToolkit::index($lessons, 'id');
 
-        $userIds        = ArrayToolkit::column($videoViewedDetail, 'userId');
-        $users          = $this->getUserService()->findUsersByIds($userIds);
-        $users          = ArrayToolkit::index($users, 'id');
-        $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('local');
+        $taskIds = ArrayToolkit::column($videoViewedDetail, 'taskId');
+        $tasks   = $this->getTaskService()->findTasksByIds($taskIds);
+        $tasks   = ArrayToolkit::index($tasks, 'id');
+
+        $userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
+        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users   = ArrayToolkit::index($users, 'id');
+        //  $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('local');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
         return $this->render("admin/operation-analysis/local-video-view.html.twig", array(
@@ -891,11 +898,12 @@ class AnalysisController extends BaseController
             'paginator'         => $paginator,
             'tab'               => $tab,
             'data'              => $data,
-            'lessons'           => $lessons,
+            'tasks'             => $tasks,
             'users'             => $users,
             'dataInfo'          => $dataInfo,
-            'minCreatedTime'    => date("Y-m-d", $minCreatedTime['createdTime']),
-            'showHelpMessage'   => 1
+            'minCreatedTime'    => date("Y-m-d", time()),
+            'showHelpMessage'   => 1,
+            'count'             => $count
         ));
     }
 
@@ -903,27 +911,27 @@ class AnalysisController extends BaseController
     {
         $data      = array();
         $condition = $request->query->all();
-
+        $count     = 0;
         $timeRange = $this->getTimeRange($condition);
 
         $searchCondition = array(
             "fileType"    => 'video',
             "fileStorage" => 'net',
             "startTime"   => $timeRange['startTime']
-            , "endTime" => $timeRange['endTime']
+        , "endTime"       => $timeRange['endTime']
         );
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchAnalysisLessonViewCount(
+            $this->getTaskViewLog()->countViewLogs(
                 $searchCondition,
                 20
             )
         );
 
-        $videoViewedDetail = $this->getCourseService()->searchAnalysisLessonView(
+        $videoViewedDetail = $this->getTaskViewLog()->searchViewLogs(
             $searchCondition,
-            array("createdTime", "DESC"),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -931,19 +939,24 @@ class AnalysisController extends BaseController
         $videoViewedTrendData = "";
 
         if ($tab == "trend") {
-            $videoViewedTrendData = $this->getCourseService()->analysisLessonViewDataByTime($timeRange['startTime'], $timeRange['endTime'], array("fileType" => 'video', "fileStorage" => 'net'));
+            $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime( array("fileType" => 'video', "fileStorage" => 'net'), $timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
+
+
+            foreach ($videoViewedTrendData as $key => $value) {
+                $count += $value['count'];
+            }
         }
 
-        $lessonIds = ArrayToolkit::column($videoViewedDetail, 'lessonId');
-        $lessons   = $this->getCourseService()->findLessonsByIds($lessonIds);
-        $lessons   = ArrayToolkit::index($lessons, 'id');
+        $taskIds = ArrayToolkit::column($videoViewedDetail, 'taskId');
+        $tasks   = $this->getTaskService()->findTasksByIds($taskIds);
+        $tasks   = ArrayToolkit::index($tasks, 'id');
 
-        $userIds        = ArrayToolkit::column($videoViewedDetail, 'userId');
-        $users          = $this->getUserService()->findUsersByIds($userIds);
-        $users          = ArrayToolkit::index($users, 'id');
-        $minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('net');
+        $userIds = ArrayToolkit::column($videoViewedDetail, 'userId');
+        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users   = ArrayToolkit::index($users, 'id');
+        //$minCreatedTime = $this->getCourseService()->getAnalysisLessonMinTime('net');
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
         return $this->render("admin/operation-analysis/net-video-view.html.twig", array(
@@ -951,11 +964,12 @@ class AnalysisController extends BaseController
             'paginator'         => $paginator,
             'tab'               => $tab,
             'data'              => $data,
-            'lessons'           => $lessons,
+            'tasks'             => $tasks,
             'users'             => $users,
-            'minCreatedTime'    => date("Y-m-d", $minCreatedTime['createdTime']),
+            'minCreatedTime'    => date("Y-m-d", time()),
             'dataInfo'          => $dataInfo,
-            'showHelpMessage'   => 1
+            'showHelpMessage'   => 1,
+            'count'             => $count
         ));
     }
 
@@ -1276,7 +1290,7 @@ class AnalysisController extends BaseController
     protected function getTimeRange($fields)
     {
         $startTime = !empty($fields['startTime']) ? $fields['startTime'] : date("Y-m", time());
-        $endTime   = !empty($fields['endTime']) ? $fields['endTime'] : date("Y-m", time());
+        $endTime   = !empty($fields['endTime']) ? $fields['endTime'] : date("Y-m-d", time());
 
         return array(
             'startTime' => strtotime($startTime),
@@ -1299,6 +1313,17 @@ class AnalysisController extends BaseController
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return ViewLogService
+     */
+    protected function getTaskViewLog()
+    {
+        return $this->createService('Task:ViewLogService');
+    }
+
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');

@@ -12,7 +12,7 @@ import 'common/card';
 import 'common/es-polyfill';
 import { isMobileDevice } from 'common/utils';
 // 等待确认可删除Cookie
-// var Cookie = require('cookie');  app/Resources/static-src/app/js/file-chooser/base/chooser.js
+// var Cookie = require('cookie');  
 
 $('[data-toggle="popover"]').popover({
   html: true,
