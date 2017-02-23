@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Biz\Activity\Event;
+namespace Biz\Task\Event;
 
 
 use Biz\Activity\Service\ActivityService;
