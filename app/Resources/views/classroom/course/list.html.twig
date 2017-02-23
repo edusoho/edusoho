@@ -22,7 +22,8 @@
             </div>
             <div class="price hidden-xs">
                 {# {% include 'TopxiaWebBundle:Course/Widget:course-price.html.twig' with {shows:['originPrice'] } %} #}
-                {% include 'course/widgets/price.html.twig' with {courseSet: course.courseSet, shows:'price'} %}
+                原价：
+                {% include 'course/widgets/price.html.twig' with {courseSet: course.courseSet, shows:'originPrice'} %}
             </div>
             <span class="course-show">
               <i class="es-icon es-icon-keyboardarrowdown" data-lesson-url="{{ path('classrom_course_tasks_list', {courseId:course.id, classroomId:classroom.id}) }}"></i>

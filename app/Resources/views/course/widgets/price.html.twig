@@ -15,9 +15,9 @@
 
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}
-        <span class="price">{{ course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
+        <span >{{ course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
       {% else %}
-        <span class="price">{{'%price%元'|trans({'%price%': course.price})}}</span>
+        <span >{{'%price%元'|trans({'%price%': course.price})}}</span>
       {% endif %}
     {% endif %}
 
@@ -44,7 +44,7 @@
   {% else %}
 
     {% if 'full' in shows or 'price' in shows %}
-      <span class="price">
+      <span >
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
           {% if course.price > 0 %} 
             {{ course.price * setting('coin.cash_rate')}}
