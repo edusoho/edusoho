@@ -4,10 +4,10 @@ namespace AppBundle\Extensions\DataTag;
 
 
 
-class CourseCourseSetDataTag extends CourseBaseDataTag implements DataTag
+class PublishedCourseByCourseSetDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     * 获取一个教学计划
+     * 获取第一个发布的教学计划
      *
      * 可传入的参数：
      *   courseSetId 必需 课程ID

@@ -28,10 +28,14 @@ class CourseController extends CourseBaseController
     public function showAction(Request $request, $id, $tab = 'summary')
     {
         $course    = $this->getCourseService()->getCourse($id);
+        if (empty($course)) {
+            throw $this->createNotFoundException('该教学计划不存在！');
+        }
         $classroom = array();
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
+        
         return $this->render('course/course-show.html.twig', array(
             'tab'       => $tab,
             'course'    => $course,

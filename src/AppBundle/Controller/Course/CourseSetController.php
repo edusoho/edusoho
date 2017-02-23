@@ -17,11 +17,15 @@ class CourseSetController extends BaseController
     public function showAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($id);
+        $previewAs = $request->query->get('previewAs');
+        if (!empty($previewAs)) {
+            $course = $this->getCourseService()->getFirstCourseByCourseSetId($id);
+        }
         if (empty($course)) {
             throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
         }
 
-        return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
+        return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'], 'previewAs' => $previewAs)));
     }
 
     public function courseSetsBlockAction(array $courseSets, $view = 'list', $mode = 'default')

@@ -19,8 +19,6 @@ const config = {
     'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
     "iframe-resizer":['libs/js/iframe-resizer.js'],
     "iframe-resizer-contentWindow":['libs/js/iframe-resizer-contentWindow.js'],
-    "es-webuploader":['libs/js/es-webuploader.js'],
-    "es-image-crop":['libs/js/es-image-crop.js'],
     'jquery-timer':['libs/js/jquery-timer.js'],
     'jquery-cycle2': ['jquery-cycle2'],
     'excanvas-compiled':['libs/js/excanvas-compiled.js'],

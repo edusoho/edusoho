@@ -105,7 +105,7 @@ class Editor {
           let data = $('#sortable-list').sortable("serialize").get();
           $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
             if (response) {
-              this.showDefaultSetting();
+              // this.showDefaultSetting();
               // @TODO去除reload;
               document.location.reload();
             }
@@ -158,8 +158,8 @@ class Editor {
       });
   }
 
-  showDefaultSetting($item) {
-    if($item.hasClass('js-task-manage-item')) {
+  showDefaultSetting($item=null) {
+    if(item && $item.hasClass('js-task-manage-item')) {
       $('.js-task-manage-item').removeClass('active').find('.js-settings-list').slideUp();;
       $item.addClass('active').find('.js-settings-list').slideDown();
     }

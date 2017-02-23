@@ -1,3 +1,5 @@
+{% do script(['app/js/classroom/manage/publish/index.js']) %}
+
 {% set unsetted = "" %}
 {% if not classroom.about %}
 {% set unsetted = unsetted ~ ',简介'|trans %}
@@ -82,6 +84,3 @@
 
   </div>
 </div>
-
-{% do load_script('topxiawebbundle/controller/classroom/manage/publish') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}

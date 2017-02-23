@@ -1,8 +1,11 @@
 {% import "macro.html.twig" as web_macro %}
 {% do script(['app/js/courseset-manage/header/index.js']) %}
+{% if courseSet.status == 'published' %}
+    {% set basepath = path('course_set_show', {id: courseSet.id}) %}
+{% else %}
+    {% set basepath = 'javascript:;' %}
+{% endif %}
 
-{% set defaultCourse = data('DefaultCourseByCourseSet', {courseSetId: courseSet.id }) %}
-{% set basepath = path('course_show', {id:defaultCourse.id}) %}
 
 <div class="es-section course-manage-header clearfix">
     <a href="{{basepath}}">
@@ -47,7 +50,7 @@
 
     {% if courseSet.status != 'published' %}
       <div class="btn-group">
-        <a class="btn btn-default btn-sm" href="{{ basepath ~ '?previewAs=guest' }}">{{'预览'|trans}}</a>
+        <a class="btn btn-default btn-sm" target="_blank" href="{{ path('course_set_show', {id: courseSet.id, 'previewAs':'guest'}) }}">{{'预览'|trans}}</a>
       </div>
       <div class="btn-group">
         <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('course_set_manage_publish', {id:courseSet.id}) }}">{{'发布课程'|trans}}</button>

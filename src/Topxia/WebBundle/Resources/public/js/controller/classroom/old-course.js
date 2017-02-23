@@ -27,7 +27,5 @@ define(function(require, exports, module) {
                 $('#courses-form').submit();
             }
         });
-
     };
-
 });
