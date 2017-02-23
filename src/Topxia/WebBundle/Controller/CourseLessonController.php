@@ -60,19 +60,33 @@ class CourseLessonController extends BaseController
         ));
     }
 
-    private function isEnablePreview($course,$lesson)
+    private function isEnablePreview($course, $lesson, $user)
     {
-        if($lesson['free']){
+        if ($lesson['free']) {
             return true;
         }
-        if($lesson['type'] == 'video' && $course['tryLookable']){
+
+        if ($lesson['type'] == 'video' && $course['tryLookable']) {
             return true;
         }
-        if(empty($course['buyable'])){
+
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $courseVip = $course['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($course['vipLevelId']) : null;
+
+            if ($courseVip) {
+                $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
+                if ('ok' == $vipStatus) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        if (empty($course['buyable'])) {
             return false;
         }
         return true;
-
     }
 
     public function previewAction(Request $request, $courseId, $lessonId = 0)
@@ -89,9 +103,11 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        $user = $this->getCurrentUser();
+
 //开启限制加入
 
-        if (!$this->isEnablePreview($course,$lesson)) {
+        if (!$this->isEnablePreview($course, $lesson)) {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
 
@@ -99,8 +115,6 @@ class CourseLessonController extends BaseController
         if (!empty($course['status']) && $course['status'] == 'closed') {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
-
-        $user = $this->getCurrentUser();
 
 //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
 
