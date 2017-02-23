@@ -33,7 +33,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $classroom = $event->getSubject();
         $classroomId = $classroom['classroomId'];
-        $courseNum = $this->getClassroomService()->countClassroomCourseByClassroomId($classroomId);
+        $courseNum = $this->getClassroomService()->countClassroomCoursesByClassroomId($classroomId);
         $taskNum = $this->getClassroomService()->countClassroomCourseTasksByClassroomId($classroomId);
 
         $fields = array('courseNum' => $courseNum, 'lessonNum' => $taskNum);
@@ -102,14 +102,6 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     private function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return ClassroomService
-     */
-    private function getCourseService()
-    {
-        return $this->getBiz()->service('Course:CourseService');
     }
 
     /**

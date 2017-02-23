@@ -174,6 +174,6 @@ interface ClassroomService
 
     public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId);
 
-    public function countClassroomCourseByClassroomId($classroomId);
+    public function countClassroomCoursesByClassroomId($classroomId);
 
 }

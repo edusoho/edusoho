@@ -1456,7 +1456,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->updateMember($classroomMember['id'], $fields);
     }
 
-    public function countClassroomCourseByClassroomId($classroomId)
+    public function countClassroomCoursesByClassroomId($classroomId)
     {
         return $this->getClassroomCourseDao()->count(
             array(
