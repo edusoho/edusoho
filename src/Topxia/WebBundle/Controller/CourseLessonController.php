@@ -76,11 +76,9 @@ class CourseLessonController extends BaseController
             if ($courseVip) {
                 $user = $this->getCurrentUser();
                 $vipStatus = $this->getVipService()->checkUserInMemberLevel($user['id'], $courseVip['id']);
-                if ('ok' == $vipStatus) {
-                    return true;
-                } else {
+                if ('ok' != $vipStatus && empty($course['buyable'])) {
                     return false;
-                }
+                } 
             }
         }
 
