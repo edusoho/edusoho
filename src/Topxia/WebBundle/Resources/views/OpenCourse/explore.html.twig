@@ -27,8 +27,17 @@
   {% endif %}
 {% endblock %}
 {% block content %}
-  <div class="open-course-list">
-    <div class="row course-list es-open-course-list">
+  <div class="open-course-list open-course-list-section">
+     <div class="course-list">
+      <div class="row">
+        {% for course in courses %}
+          <div class="col-lg-4 col-md-4 col-xs-6">
+            {% include 'TopxiaWebBundle:OpenCourse/Widget:open-course-grid.html.twig' %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+   {#<div class="row course-list">
       {% for course in courses if course %}
         {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
         <div class="col-md-4 col-xs-6">
@@ -72,6 +81,7 @@
         <div class="empty">{{ '暂无公开课'|trans }}</div>
       {% endfor %}
     </div>
+    #}
     {% if not mobile %}
       {{ web_macro.paginator(paginator) }}
     {% endif %}

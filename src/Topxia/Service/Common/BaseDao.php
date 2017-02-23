@@ -172,6 +172,8 @@ abstract class BaseDao
                 $redis->incr($key);
                 unset($this->dataCached[$key]);
             }
+        } else {
+            unset($this->dataCached);
         }
     }
 

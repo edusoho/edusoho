@@ -73,7 +73,8 @@ $resources = array(
     'SmsCodes',
     'User/VerifiedMobile',
     'MyLearning',
-    'CoursesLearnProgress'
+    'CoursesLearnProgress',
+    'LessonWatchTime'
 );
 
 foreach ($resources as $res) {
