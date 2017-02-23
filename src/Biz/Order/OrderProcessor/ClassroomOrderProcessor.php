@@ -2,8 +2,8 @@
 namespace Biz\Order\OrderProcessor;
 
 use Exception;
-use Topxia\Common\ArrayToolKit;
-use Topxia\Common\NumberToolkit;
+use AppBundle\Common\ArrayToolKit;
+use AppBundle\Common\NumberToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
@@ -347,7 +347,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderInfoTemplate()
     {
-        return "ClassroomBundle:Classroom:orderInfo";
+        return "AppBundle:Classroom/Classroom:orderInfo";
     }
 
     public function isTargetExist($targetId)

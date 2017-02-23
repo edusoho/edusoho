@@ -1,7 +1,7 @@
 {% import 'macro.html.twig' as web_macro %}
 
 {% for testpaper in testpapers if testpaper %}
-  {% set resultListRout = 'course_manage_testpaper_result_list' %}
+  {% set resultListRout = targetType|default('course') ~ '_manage_testpaper_result_list' %}
 
   {% include 'testpaper/manage/check-list-item.html.twig' with {testpaper:testpaper,targetResultInfo:testpaper.resultStatusNum,targetId:targetId} %}
 {% else %}

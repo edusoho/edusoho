@@ -3,7 +3,7 @@ namespace Biz\Util\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Util\Service\MediaParseService;
-use Topxia\Component\MediaParser\ParserProxy;
+use AppBundle\Component\MediaParser\ParserProxy;
 
 class MediaParseServiceImpl extends BaseService implements MediaParseService
 {

@@ -1,7 +1,7 @@
 <?php
 namespace Biz\Course\Event;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\TagOwnerManager;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;

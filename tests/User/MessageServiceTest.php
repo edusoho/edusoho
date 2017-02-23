@@ -2,7 +2,7 @@
 
 namespace Tests\User;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;;
 
 class MessageServiceTest extends BaseTestCase
@@ -217,11 +217,11 @@ class MessageServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getMessageService()
     {
-        return $this->getBiz()->service('User:MessageService');
+        return $this->createService('User:MessageService');
     }
 }

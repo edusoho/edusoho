@@ -9,6 +9,14 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 {
     protected $table = 'course_task_result';
 
+    public function analysisCompletedTaskDataByTime($startTime, $endTime)
+    {
+        $sql = "SELECT count(id) AS count, from_unixtime(finishedTime, '%Y-%m-%d') AS date FROM
+            {$this->table} WHERE finishedTime >= ? AND finishedTime <= ? GROUP BY date ORDER BY date ASC";
+
+        return $this->db()->fetchAll($sql, array($startTime, $endTime));
+    }
+
     public function findByCourseIdAndUserId($courseId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? and userId = ? ";
@@ -78,7 +86,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
     public function getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskId)
     {
-        $builder = $this->_createQueryBuilder(array('courseTaskId'=>$courseTaskId))
+        $builder = $this->_createQueryBuilder(array('courseTaskId' => $courseTaskId))
             ->select('sum(time) AS learnedTime')
             ->groupBy('courseTaskId');
         return $builder->execute()->fetchColumn();
@@ -86,7 +94,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId)
     {
-        $builder = $this->_createQueryBuilder(array('courseTaskId'=>$courseTaskId))
+        $builder = $this->_createQueryBuilder(array('courseTaskId' => $courseTaskId))
             ->select('sum(watchTime) AS watchTime')
             ->groupBy('courseTaskId');
         return $builder->execute()->fetchColumn();
@@ -95,7 +103,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime', 'updatedTime'),
+            'orderbys'   => array('createdTime', 'updatedTime', 'finishedTime'),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'id = :id',
@@ -109,7 +117,9 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
                 'activityId =:activityId',
                 'courseTaskId = :courseTaskId',
                 'createdTime >= :createdTime_GE',
-                'createdTime <= :createdTime_LE'
+                'createdTime <= :createdTime_LE',
+                'finishedTime >= :finishedTime_GE',
+                'finishedTime <= :finishedTime_LE'
             )
         );
     }

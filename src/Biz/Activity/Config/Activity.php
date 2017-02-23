@@ -4,7 +4,7 @@ namespace Biz\Activity\Config;
 
 use Biz\Activity\Listener\Listener;
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Common\Exception\UnexpectedValueException;
+use AppBundle\Common\Exception\UnexpectedValueException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
@@ -21,9 +21,9 @@ abstract class Activity
     }
 
     /**
-     * @param $targetId
-     * @param $fields     fields  to update
-     * @param $activity   existed activity
+     * @param int   $targetId
+     * @param array $fields     fields to update
+     * @param array $activity   existed activity
      */
     public function update($targetId, &$fields, $activity)
     {
@@ -47,6 +47,17 @@ abstract class Activity
         return null;
     }
 
+    /**
+     * 实现Activity附属信息的同步
+     * @param  array   $sourceActivity 源activity
+     * @param  array   $activity       目标activity
+     * @return mixed
+     */
+    public function sync($sourceActivity, $activity)
+    {
+        return null;
+    }
+
     public function isFinished($id)
     {
         return false;
@@ -57,6 +68,7 @@ abstract class Activity
      */
     public function get($targetId)
     {
+        return array();
     }
 
     final public function __construct(Biz $biz)

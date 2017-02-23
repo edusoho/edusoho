@@ -4,23 +4,23 @@ services:
         arguments:    ['@service_container']
 
     topxia.authentication.failure_handler:
-        class: Topxia\WebBundle\Handler\AuthenticationFailureHandler
+        class: AppBundle\Handler\AuthenticationFailureHandler
         parent: security.authentication.failure_handler
 
     topxia.authentication.success_handler:
-        class: Topxia\WebBundle\Handler\AuthenticationSuccessHandler
+        class: AppBundle\Handler\AuthenticationSuccessHandler
         parent: security.authentication.success_handler
     topxia.logout.success_handler:
-        class: Topxia\WebBundle\Handler\LogoutSuccessHandler
+        class: AppBundle\Handler\LogoutSuccessHandler
         parent: security.logout.success_handler
 
     user.login_listener:
-        class: Topxia\WebBundle\Handler\LoginSuccessHandler
+        class: AppBundle\Handler\LoginSuccessHandler
         arguments: ['@security.authorization_checker']
         tags: [{ name: kernel.event_listener, event: security.interactive_login }]
 
     user.login_generate_notification_handler:
-        class: Topxia\WebBundle\Handler\GenerateNotificationHandler
+        class: AppBundle\Handler\GenerateNotificationHandler
         arguments: ['@service_container']
         tags: [{ name: kernel.event_listener, event: security.interactive_login }]
 
@@ -62,6 +62,7 @@ security:
         - { path: ^/settings, role: ROLE_USER }
         # - { path: ^/note, role: ROLE_USER }
         - { path: ^/message, role: ROLE_USER }
+        - { path: ^/classroom/\d+/manage/, role: ROLE_USER }
         - { path: ^/admin/course, role: ROLE_BACKEND }
         - { path: ^/admin/user, role: ROLE_BACKEND }
         - { path: ^/admin/app, role: ROLE_BACKEND }

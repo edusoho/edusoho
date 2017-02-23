@@ -1,6 +1,6 @@
 import 'bootstrap-notify';
 
-const notify = (level, message,icon=null) => {
+const notify = (level, message, delay=3000, icon=null) => {
   $('[data-notify="container"]').remove();
   let iconFont = icon;
   if(!iconFont) {
@@ -24,7 +24,7 @@ const notify = (level, message,icon=null) => {
     icon: iconFont,
   }, {
     type: level, //info,danger,warning,success
-    delay: 2000,
+    delay: delay,
     placement: {
       from: 'top',
       align: 'center'

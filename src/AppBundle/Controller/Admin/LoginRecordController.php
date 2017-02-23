@@ -1,9 +1,9 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\ConvertIpToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ConvertIpToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 

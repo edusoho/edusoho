@@ -1,9 +1,10 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
+use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class TagGroupController extends BaseController
 {
@@ -97,6 +98,9 @@ class TagGroupController extends BaseController
         return ArrayToolkit::column($tags, 'id');
     }
 
+    /**
+     * @return TagService
+     */
     protected function getTagService()
     {
         return $this->createService('Taxonomy:TagService');

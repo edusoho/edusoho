@@ -4,6 +4,8 @@ namespace Biz\Task\Service;
 
 interface TaskResultService
 {
+    public function analysisCompletedTaskDataByTime($startTime, $endTime);
+    
     public function createTaskResult($taskResult);
 
     public function updateTaskResult($id, $taskResult);
@@ -17,8 +19,6 @@ interface TaskResultService
     public function waveWatchTime($id, $watchTime);
 
     public function findUserTaskResultsByCourseId($courseId);
-
-    public function countTaskResults($conditions);
 
     public function getUserTaskResultByTaskId($taskId);
 
@@ -35,9 +35,12 @@ interface TaskResultService
     /**
      * 统计某个任务的学习次数，学习的定义为task_result的status为start、finish，不对用户去重；
      */
-    public function countLearnNumByTaskId($taskId);
+
+    public function countTaskResults($conditions);
 
     public function searchTaskResults($conditions, $orderbys, $start, $limit);
+
+    public function countLearnNumByTaskId($taskId);
 
     public function findFinishedTasksByCourseIdGroupByUserId($courseId);
 

@@ -5,12 +5,16 @@ namespace Biz\Task\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Dao\TaskResultDao;
-use Biz\Task\Service\TaskService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskResultService;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService
 {
+    public function analysisCompletedTaskDataByTime($startTime, $endTime)
+    {
+        return $this->getTaskResultDao()->analysisCompletedTaskDataByTime($startTime, $endTime);
+    }
+
     public function findUserTaskResultsByCourseId($courseId)
     {
         $user = $this->getCurrentUser();
@@ -160,7 +164,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException('unlogin');
         }
-        $conditions  = array(
+        $conditions = array(
             'userId'   => $user->getId(),
             'status'   => 'finish',
             'courseId' => $courseId
@@ -176,6 +180,9 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException('unlogin');
+        }
+        if (empty($taskIds)) {
+            return array();
         }
         return $this->getTaskResultDao()->findByTaskIdsAndUserId($taskIds, $user->getId());
     }
@@ -225,7 +232,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId)
     {
         return $this->getTaskResultDao()->getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId);
-    }
+    } 
 
     /**
      * @return TaskResultDao

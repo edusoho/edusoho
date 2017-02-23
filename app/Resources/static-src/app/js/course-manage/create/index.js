@@ -1,4 +1,8 @@
 import { TabChange } from '../help';
+jQuery.validator.addMethod("max_year", function (value, element) {
+  return this.optional(element) || value < 100000;
+}, "有效期最大值不能超过99,999天");
+
 
 class Creator {
   constructor() {
@@ -44,7 +48,8 @@ class Creator {
         },
         expiryDays: {
           required: '#expiryByDays:checked',
-          digits: true
+          digits: true,
+          max_year: true
         },
         expiryStartDate: {
           required: '#expiryByDate:checked',
@@ -59,7 +64,6 @@ class Creator {
       },
       messages: {
         title: Translator.trans('请输入教学计划课程标题'),
-        expiryDays: Translator.trans('请输入学习有效期'),
         expiryStartDate: {
           required: Translator.trans('请输入开始日期'),
           before: Translator.trans('开始日期应早于结束日期')
@@ -77,7 +81,7 @@ class Creator {
         if ($('input[name="expiryMode"]:checked').val() !== 'date') {
           return true;
         }
-        return value && $(params).val() > value;
+        return value && $(params).val() >= value;
       },
       Translator.trans('开始日期应早于结束日期')
     );
@@ -88,7 +92,7 @@ class Creator {
         if ($('input[name="expiryMode"]:checked').val() !== 'date') {
           return true;
         }
-        return value && $(params).val() < value;
+        return value && $(params).val() <= value;
       },
       Translator.trans('结束日期应晚于开始日期')
     );
@@ -107,7 +111,8 @@ class Creator {
       format: 'yyyy-mm-dd',
       language: "zh",
       minView: 2, //month
-      autoclose: true
+      autoclose: true,
+      endDate: new Date(Date.now() + 86400*365*100*1000)
     });
     $picker.datetimepicker('setStartDate', new Date());
   }

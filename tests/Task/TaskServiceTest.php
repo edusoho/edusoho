@@ -2,7 +2,7 @@
 
 namespace Tests\Task;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
@@ -106,6 +106,7 @@ class TaskServiceTest extends BaseTestCase
         $task = $this->getTaskService()->createTask($task);
 
         $this->getTaskService()->startTask($task['id']);
+        $this->getActivityLearnLogService()->createLog($task['activity'],'text',array('task'=>$task,'learnedTime'=>1));
         $this->getTaskService()->finishTask($task['id']);
 
         $result = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
@@ -126,6 +127,7 @@ class TaskServiceTest extends BaseTestCase
 
         //finish firstTask;
         $this->getTaskService()->startTask($firstTask['id']);
+        $this->getActivityLearnLogService()->createLog($firstTask['activity'],'text',array('task'=>$firstTask,'learnedTime'=>1));
         $this->getTaskService()->finishTask($firstTask['id']);
 
         $nextTask = $this->getTaskService()->getNextTask($firstTask['id']);
@@ -171,7 +173,9 @@ class TaskServiceTest extends BaseTestCase
             'title'           => 'test task',
             'mediaType'       => 'text',
             'fromCourseId'    => $courseId,
-            'fromCourseSetId' => 1
+            'fromCourseSetId' => 1,
+            'finishType' => 'time',
+            'status' => 'published'
         );
     }
 
@@ -188,7 +192,9 @@ class TaskServiceTest extends BaseTestCase
             'title'           => 'test task',
             'mediaType'       => 'text',
             'fromCourseId'    => $course['id'],
-            'fromCourseSetId' => 1
+            'fromCourseSetId' => 1,
+            'finishType' => 'time',
+            'status' => 'published'
         );
     }
 
@@ -197,7 +203,7 @@ class TaskServiceTest extends BaseTestCase
      */
     protected function getTaskService()
     {
-        return $this->getBiz()->service('Task:TaskService');
+        return $this->createService('Task:TaskService');
     }
 
     /**
@@ -205,7 +211,7 @@ class TaskServiceTest extends BaseTestCase
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -213,6 +219,11 @@ class TaskServiceTest extends BaseTestCase
      */
     protected function getTaskResultService()
     {
-        return $this->getBiz()->service('Task:TaskResultService');
+        return $this->createService('Task:TaskResultService');
+    }
+
+    protected function getActivityLearnLogService()
+    {
+        return $this->createService('Activity:ActivityLearnLogService');
     }
 }

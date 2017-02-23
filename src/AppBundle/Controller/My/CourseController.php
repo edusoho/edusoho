@@ -5,7 +5,7 @@ namespace AppBundle\Controller\My;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use Topxia\Common\Paginator;
+use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\Course\CourseBaseController;
 
@@ -78,11 +78,11 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
-        $taskCount = $this->getTaskService()->count(array('courseId' => $course['id'], 'status' => 'published'));
+        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published'));
         $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
         $user = $this->getUser();
-        if ($taskCount) {
+        if ($taskCount && empty($member['previewAs'])) {
             //学习记录
             $taskResultCount = $this->getTaskResultService()->countTaskResults(array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id']));
 
@@ -137,7 +137,8 @@ class CourseController extends CourseBaseController
 
         return $this->render('course/course-show.html.twig', array(
             'tab'    => $tab,
-            'member' => $member
+            'member' => $member,
+            'course' => $course
         ));
     }
 

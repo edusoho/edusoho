@@ -3,8 +3,10 @@
 namespace Biz\Course\Copy\Impl;
 
 use Biz\Course\Dao\CourseDao;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\CourseMaterialDao;
+use Biz\Classroom\Dao\ClassroomMemberDao;
 
 class ClassroomCourseCopy extends CourseCopy
 {
@@ -25,11 +27,12 @@ class ClassroomCourseCopy extends CourseCopy
 
     /*
      * $source = $originalCourseSet
-     * $config : courseId (course to copy), classroomId(?)
+     * $config : courseId (course to copy), classroomId
      */
     protected function _copy($source, $config = array())
     {
         $newCourseSet = $this->doCopyCourseSet($source);
+
         $this->doCopyMaterial($source, $newCourseSet);
 
         $course = $this->getCourseDao()->get($config['courseId']);
@@ -41,18 +44,24 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourse['isDefault']   = $course['isDefault'];
         $modeChange               = false;
         $newCourse['parentId']    = $course['id'];
+        $newCourse['locked']      = 1; //默认锁定
         $newCourse['courseSetId'] = $courseSetId;
         $newCourse['creator']     = $user['id'];
         $newCourse['status']      = 'published';
         $newCourse['teacherIds']  = array($user['id']);
 
         $newCourse = $this->getCourseDao()->create($newCourse);
-        $this->doCopyCourseMember($newCourse);
+        $this->doCopyCourseMember($course, $newCourse);
+        $this->doCopyTeachersToClassroom($course, $config['classroomId']);
 
-        $testpaperCopy = new CourseSetTestpaperCopy($this->biz);
-        $testpaperCopy->copy($course, array('newCourseSet' => $newCourseSet));
+        $this->doCopyQuestion($course, $newCourse);
+        $this->doCopyTestpaper($course, $newCourseSet);
 
-        $this->childrenCopy($course, array('newCourse' => $newCourse, 'modeChange' => $modeChange));
+        $this->childrenCopy($course, array(
+            'newCourse'  => $newCourse,
+            'modeChange' => $modeChange,
+            'isCopy'     => true // 用于标记是复制还是clone，clone不需要记录parentId
+        ));
 
         return $newCourse;
     }
@@ -82,7 +91,8 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourseSet = array(
             'parentId' => $courseSet['id'],
             'status'   => 'published',
-            'creator'  => $this->biz['user']['id']
+            'creator'  => $this->biz['user']['id'],
+            'locked'   => 1 // 默认锁定
         );
 
         foreach ($fields as $field) {
@@ -136,6 +146,42 @@ class ClassroomCourseCopy extends CourseCopy
         }
     }
 
+    protected function doCopyTeachersToClassroom($oldCourse, $classroomId)
+    {
+        $existTeachers = $this->getClassroomMemberDao()->findByClassroomIdAndRole($classroomId, 'teacher', 0, PHP_INT_MAX);
+        if (empty($existTeachers)) {
+            $existTeachers = array();
+        } else {
+            $existTeachers = ArrayToolkit::index($existTeachers, 'userId');
+        }
+
+        $teachers = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
+        if (!empty($teachers)) {
+            foreach ($teachers as $teacher) {
+                if (!empty($existTeachers[$teacher['userId']])) {
+                    continue;
+                }
+                $this->getClassroomMemberDao()->create(array(
+                    'classroomId' => $classroomId,
+                    'userId'      => $teacher['userId'],
+                    'role'        => array('teacher')
+                ));
+            }
+        }
+    }
+
+    protected function doCopyQuestion($course, $newCourse)
+    {
+        $questionCopy = new QuestionCopy($this->biz, 'question');
+        $questionCopy->copy($course, array('newCourse' => $newCourse, 'isCopy' => true));
+    }
+
+    protected function doCopyTestpaper($course, $newCourseSet)
+    {
+        $testpaperCopy = new CourseSetTestpaperCopy($this->biz);
+        $testpaperCopy->copy($course, array('newCourseSet' => $newCourseSet, 'isCopy' => true));
+    }
+
     /**
      * @return CourseSetDao
      */
@@ -158,5 +204,13 @@ class ClassroomCourseCopy extends CourseCopy
     protected function getMaterialDao()
     {
         return $this->biz->dao('Course:CourseMaterialDao');
+    }
+
+    /**
+     * @return ClassroomMemberDao
+     */
+    protected function getClassroomMemberDao()
+    {
+        return $this->biz->dao('Classroom:ClassroomMemberDao');
     }
 }

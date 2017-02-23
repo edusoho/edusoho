@@ -1,7 +1,7 @@
 <?php
 namespace AppBundle\Controller;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Announcement\Service\AnnouncementService;

@@ -39,8 +39,6 @@ class TaskShow extends Emitter {
     let learnedTime = 0;
     let minute = 60 * 1000;
     let timeStep = 1; // 分钟
-
-
     //注册doing延时监听
     this.delay('doing', (timeStep) => {
       learnedTime = parseInt(timeStep) + parseInt(learnedTime);
@@ -50,18 +48,17 @@ class TaskShow extends Emitter {
         taskId: this.taskId
       };
       this.eventEmitter.emit('doing', eventData)
-        .then(response => {
+        .then(undefined, response => {
           this.receiveFinish(response);
         })
-        .catch(() => {
-          //
-        })
-        .then(() => { //always
-          this.trigger('doing', timeStep);
+        ['catch'](() => {
+      })
+        .then(undefined, () => { //always
+          this.emit('doing', timeStep);
         });
     }, timeStep * minute);
 
-    this.trigger('doing', timeStep);
+    this.emit('doing', timeStep);
 
     this.element.on('click', '#learn-btn', event => {
       $.post($('#learn-btn').data('url'), response => {
@@ -93,8 +90,10 @@ class TaskShow extends Emitter {
   }
 
   receiveFinish(response) {
-    if (response.result.status == 'finish'
-      && $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
+    // response.result.status == 'finish'
+    //     &&
+    if ($('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
+      // 盘点是任务式学习还是自由式学习
       $.get($(".js-learned-prompt").data('url'), html => {
         $(".js-learned-prompt").attr('data-content', html);
         this.ui.learnedWeakPrompt();

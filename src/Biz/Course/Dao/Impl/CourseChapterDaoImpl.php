@@ -9,6 +9,11 @@ class CourseChapterDaoImpl extends GeneralDaoImpl implements CourseChapterDao
 {
     protected $table = 'course_chapter';
 
+    public function getByCopyIdAndLockedCourseId($copyId, $courseId)
+    {
+        return $this->getByFields(array('copyId' => $copyId, 'courseId' => $courseId));
+    }
+
     public function findChaptersByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER BY createdTime ASC";

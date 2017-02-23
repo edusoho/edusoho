@@ -2,7 +2,7 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\InviteRecordService;
 
 class InviteRecordServiceImpl extends BaseService implements InviteRecordService
@@ -58,7 +58,7 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 
         if (array_key_exists('nickname', $conditions)) {
             if ($conditions['nickname']) {
-                $users = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+                $users = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
                 $conditions['invitedUserIds'] = empty($users) ? -1 : ArrayToolkit::column($users, 'id');
             }

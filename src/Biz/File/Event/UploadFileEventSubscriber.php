@@ -1,7 +1,7 @@
 <?php
 namespace Biz\File\Event;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Event\Event;

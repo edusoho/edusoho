@@ -11,11 +11,3 @@
     <textarea class="form-control" id="description-field" name="description" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{% if testpaper.description | default(null)%}{{testpaper.description }}{% endif %}</textarea>
   </div>
 </div>
-
-<div class="form-group">
-  <div class="col-md-2 control-label"><label for="limitedTime-field">{{'时间限制'|trans}}</label></div>
-  <div class="col-md-8 controls">
-      <input class="form-control width-input width-input-large" name="limitedTime" id="limitedTime-field" value="{% if testpaper.limitedTime | default(null)%}{{testpaper.limitedTime }}{%else%}0{% endif %}" /> {{'分钟'|trans}}
-      <div class="help-block">{{'0分钟，表示无限制'|trans}}</div>
-  </div>
-</div>

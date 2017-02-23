@@ -26,6 +26,10 @@ class OrgBatchUpdateFactory
                 'protocol' => 'biz',
                 'service'  => 'User:UserService'
             ),
+            'courseSet'    => array(
+                'protocol' => 'biz',
+                'service'  => 'Course:CourseSetService'      
+            ),
             'course'       => array(
                 'protocol' => 'biz',
                 'service'  => 'Course:CourseService',

@@ -18,6 +18,11 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
         return $this->findInField('parentId', array($id));
     }
 
+    public function findQuestionsByCourseSetId($courseSetId)
+    {
+        return $this->findInField('courseId', array($courseSetId));
+    }
+
     public function deleteSubQuestions($parentId)
     {
         return $this->db()->delete($this->table(), array('parentId' => $parentId));
@@ -50,10 +55,13 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
             'subCount <> :subCount',
             'id NOT IN ( :excludeIds )',
             'courseId = :courseId',
+            'courseId IN (:courseIds)',
             'lessonId = :lessonId',
             'lessonId >= :lessonIdGT',
             'lessonId <= :lessonIdLT',
-            'lessonId IN ( :lessonIds)'
+            'lessonId IN ( :lessonIds)',
+            'copyId = :copyId',
+            'copyId IN (:copyIds)'
         );
 
         $declares['serializes'] = array(

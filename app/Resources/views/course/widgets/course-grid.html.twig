@@ -1,6 +1,6 @@
 <div class="course-item">
   <div class="course-img">
-    {% set course = data('CourseByCourseSet',{ courseSetId: courseSet.id } ) %}
+    {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
     <a href="{{ path('course_set_show', {id: courseSet.id }) }}" target="_blank">
       {% if courseSet.discountId > 0 %}
         {% if courseSet.discount == 0 %}
@@ -35,9 +35,11 @@
         <span class="num"><i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}</span>
       {% endif %}
       <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
-      {% if course %}
-        {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
-      {% endif %}
+      {# {% if course and priceFor|default('course') == 'course' %} #}
+        {# {% include 'course/widgets/price.html.twig' with {shows:'price'} %} #}
+      {# {% else %} #}
+        {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
+      {# {% endif %} #}
     </div>
   </div>
 </div>

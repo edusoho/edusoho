@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -27,6 +27,10 @@ class CourseController extends BaseController
             'excludeIds' => $excludeIds
         );
 
+        $user = $this->getCurrentUser();
+        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
+            $conditions['creator'] = $user['id'];
+        }
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseSetService()->countCourseSets($conditions),
@@ -113,27 +117,37 @@ class CourseController extends BaseController
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $key = $request->request->get("key");
 
-        $conditions             = array("title" => $key);
-        $conditions['status']   = 'published';
-        $conditions['parentId'] = 0;
-        $paginator              = new Paginator(
+        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        $excludeIds    = ArrayToolkit::column($activeCourses, 'parentCourseSetId');
+
+        $conditions               = array("title" => "%{$key}%");
+        $conditions['status']     = 'published';
+        $conditions['parentId']   = 0;
+        $conditions['excludeIds'] = $excludeIds;
+
+        $user = $this->getCurrentUser();
+        if (!$user->isAdmin() && !$user->isSuperAdmin()) {
+            $conditions['creator'] = $user['id'];
+        }
+
+        $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions),
+            $this->getCourseSetService()->countCourseSets($conditions),
             5
         );
 
-        $courses = $this->getCourseService()->searchCourses(
+        $courseSets = $this->searchCourseSetWithCourses(
             $conditions,
-            'latest',
+            array('updatedTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUsers($courses);
+        $users = $this->getUsers($courseSets);
 
         return $this->render('course/course-select-list.html.twig', array(
             'users'       => $users,
-            'courses'     => $courses,
+            'courseSets'  => $courseSets,
             'paginator'   => $paginator,
             'classroomId' => $classroomId,
             'type'        => 'ajax_pagination'
@@ -199,6 +213,10 @@ class CourseController extends BaseController
         $courses    = $this->getCourseService()->findCoursesByCourseSetIds(array_keys($courseSets));
         if (!empty($courses)) {
             foreach ($courses as $course) {
+                if ($course['status'] != 'published') {
+                    continue;
+                }
+
                 if (empty($courseSets[$course['courseSetId']]['courses'])) {
                     $courseSets[$course['courseSetId']]['courses'] = array($course);
                 } else {

@@ -2,6 +2,7 @@
 namespace AppBundle\Controller;
 
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -55,6 +56,9 @@ class LiveAuthController extends BaseController
     }
 
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');

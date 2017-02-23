@@ -1,7 +1,5 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% do load_script('classroombundle/controller/classroom/buy-modal') %}
-
 {% set billable = false %}
 {% if classroom.price > 0 %}
   {% set billable = true %}
@@ -93,7 +91,6 @@
     {% endif %}
 
   {% endif %}
-
-  {# {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %} #}
-  {# <script>app.lazyLoad = function() { app.load('classroombundle/controller/classroom/buy-modal') };</script> #}
+  {% do load_script('topxiawebbundle/controller/classroom/buy-modal') %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% endblock %}

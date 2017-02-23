@@ -2,7 +2,7 @@
 
 {% block page_body %}
 
-  {% do load_script('materiallibbundle/controller/material-lib/index') %}
+  {% do load_script('topxiawebbundle/controller/material-lib/index') %}
   {% include 'seajs_loader_compatible.html.twig' with { topxiawebbundle: true } %}
 
 <form id="material-search-form" action="{{ path('material_lib_browsing') }}" method="get" novalidate>

@@ -215,7 +215,7 @@ abstract class BaseDao
     }
 
     /**
-     * @deprecated this is deprecated and will be removed. Please use use `throw new Topxia\Common\Exception\XXXException(...)` instead.
+     * @deprecated this is deprecated and will be removed. Please use use `throw new AppBundle\Common\Exception\XXXException(...)` instead.
      */
     protected function createDaoException($message = null, $code = 0)
     {

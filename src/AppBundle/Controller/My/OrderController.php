@@ -4,8 +4,8 @@ namespace AppBundle\Controller\My;
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 use Biz\Order\Service\OrderService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 
 class OrderController extends BaseController

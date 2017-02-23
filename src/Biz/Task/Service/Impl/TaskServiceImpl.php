@@ -2,16 +2,14 @@
 
 namespace Biz\Task\Service\Impl;
 
-use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\StrategyContext;
+use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -31,16 +29,15 @@ class TaskServiceImpl extends BaseService implements TaskService
         });
 
         if ($this->invalidTask($fields)) {
-            throw new InvalidArgumentException('task is invalid');
+            throw $this->createInvalidArgumentException('task is invalid');
         }
 
         if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
-            throw new AccessDeniedException('无权创建任务');
+            throw $this->createAccessDeniedException('无权创建任务');
         }
 
         $this->beginTransaction();
         try {
-
             $fields   = $this->createActivity($fields);
             $strategy = $this->createCourseStrategy($fields['courseId']);
             $task     = $strategy->createTask($fields);
@@ -63,6 +60,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['courseId']      = $activity['fromCourseId'];
         $fields['seq']           = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
         $fields['type']          = $fields['mediaType'];
+        $fields['endTime']       = $activity['endTime'];
+
         if ($activity['mediaType'] == 'video') {
             $fields['mediaSource'] = $fields['ext']['mediaSource'];
         }
@@ -72,11 +71,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     protected function invalidTask($task)
     {
-        if (!ArrayToolkit::requireds($task, array(
-            'title',
-            'fromCourseId'
-        ))
-        ) {
+        if (!ArrayToolkit::requireds($task, array('title', 'fromCourseId'))) {
             return true;
         }
 
@@ -99,8 +94,10 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $fields['mediaSource'] = $fields['ext']['mediaSource'];
             }
 
-            $strategy = $this->createCourseStrategy($task['courseId']);
-            $task     = $strategy->updateTask($id, $fields);
+            $fields['endTime'] = $activity['endTime'];
+            $strategy          = $this->createCourseStrategy($task['courseId']);
+            $task              = $strategy->updateTask($id, $fields);
+            $this->dispatchEvent("course.task.update", new Event($task));
             $this->commit();
             return $task;
         } catch (\Exception $exception) {
@@ -142,7 +139,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $strategy = $this->createCourseStrategy($task['courseId']);
         $task     = $strategy->unpublishTask($task);
-        $this->dispatchEvent("course.task.unpublish", new Event($task));
+        $this->dispatchEvent('course.task.unpublish', new Event($task));
         return $task;
     }
 
@@ -153,7 +150,9 @@ class TaskServiceImpl extends BaseService implements TaskService
             'categoryId',
             'number'
         ));
-        return $this->getTaskDao()->update($id, $fields);
+        $task   = $this->getTaskDao()->update($id, $fields);
+        $this->dispatchEvent('course.task.update', new Event($task));
+        return $task;
     }
 
     public function updateTasks($ids, $fields)
@@ -161,7 +160,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields = ArrayToolkit::parts($fields, array('isFree'));
 
         foreach ($ids as $id) {
-            $this->getTaskDao()->update($id, $fields);
+            $_task = $this->getTaskDao()->update($id, $fields);
+            //xxx 这里可能影响执行效率：1. 批量处理，2. 仅仅是更新isFree，却会触发task的所有信息
+            $this->dispatchEvent('course.task.update', new Event($_task));
         }
         return true;
     }
@@ -169,7 +170,6 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function deleteTask($id)
     {
         $task = $this->getTask($id);
-
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException('无权删除任务');
         }
@@ -209,7 +209,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $tasks       = $this->findTasksByCourseId($courseId);
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities  = $this->getActivityService()->findActivities($activityIds);
+        $activities  = $this->getActivityService()->findActivities($activityIds, true);
         $activities  = ArrayToolkit::index($activities, 'id');
 
         array_walk($tasks, function (&$task) use ($activities) {
@@ -231,11 +231,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
         foreach ($tasks as &$task) {
-            foreach ($taskResults as $key => $result) {
-                if ($key != $task['id']) {
-                    continue;
-                }
-                $task['result'] = $result;
+            if (in_array($task['id'], array_keys($taskResults))) {
+                $task['result'] = $taskResults[$task['id']];
             }
             $task = $this->setTaskLockStatus($tasks, $task);
         }
@@ -253,7 +250,6 @@ class TaskServiceImpl extends BaseService implements TaskService
      * 给定一个任务 ，判断前置解锁条件是完成
      *
      * @param  $preTasks
-     *
      * @return bool
      */
     public function isPreTasksIsFinished($preTasks)
@@ -328,12 +324,12 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
     }
 
-    public function search($conditions, $orderBy, $start, $limit)
+    public function searchTasks($conditions, $orderBy, $start, $limit)
     {
         return $this->getTaskDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function count($conditions)
+    public function countTasks($conditions)
     {
         return $this->getTaskDao()->count($conditions);
     }
@@ -426,16 +422,27 @@ class TaskServiceImpl extends BaseService implements TaskService
     }
 
     /**
+     * 设置当前任务最大可同时进行的人数  如直播任务等
+     *
+     * @param  $taskId
+     * @param  $maxNum
+     * @return mixed
+     */
+    public function setTaskMaxOnlineNum($taskId, $maxNum)
+    {
+        return $this->getTaskDao()->update($taskId, array('maxOnlineNum' => $maxNum));
+    }
+
+    /**
      * 统计当前时间以后每天的直播次数
      *
-     * @param $courseIds
-     * @param $limit
-     *
-     * @return array<string, int|string>
+     * @param  $courseSetIds
+     * @param  $limit
+     * @return array           <string, int|string>
      */
-    public function findFutureLiveDatesByCourseIdsGroupByDate($courseIds, $limit)
+    public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit)
     {
-        return $this->getTaskDao()->findFutureLiveDates($courseIds, $limit);
+        return $this->getTaskDao()->findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
     }
 
     /**
@@ -459,16 +466,16 @@ class TaskServiceImpl extends BaseService implements TaskService
             $this->getCourseSetService()->countCourseSets($setConditions)
         );
 
-        $courseSetIds   = ArrayToolkit::column($courseSets, 'id');
-        $courses        = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+
         $taskConditions = array(
-            'startTime_LT' => time(),
-            'endTime_GT'   => time(),
-            'type'         => 'live',
-            'courseIds'    => ArrayToolkit::column($courses, 'id'),
-            'status'       => 'published'
+            'startTime_LT'     => time(),
+            'endTime_GT'       => time(),
+            'type'             => 'live',
+            'fromCourseSetIds' => ArrayToolkit::column($courseSetIds, 'id'),
+            'status'           => 'published'
         );
-        return $this->search($taskConditions, array('startTime' => 'ASC'), 0, $this->count($taskConditions));
+        return $this->searchTasks($taskConditions, array('startTime' => 'ASC'), 0, $this->countTasks($taskConditions));
     }
 
     /**
@@ -492,18 +499,28 @@ class TaskServiceImpl extends BaseService implements TaskService
             $this->getCourseSetService()->countCourseSets($setConditions)
         );
 
-        $courseSetIds   = ArrayToolkit::column($courseSets, 'id');
-        $courses        = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+
         $taskConditions = array(
-            'startTime_GT' => time(),
-            'endTime_LT'   => strtotime(date('Y-m-d').' 23:59:59'),
-            'type'         => 'live',
-            'courseIds'    => ArrayToolkit::column($courses, 'id'),
-            'status'       => 'published'
+            'startTime_GT'     => time(),
+            'endTime_LT'       => strtotime(date('Y-m-d').' 23:59:59'),
+            'type'             => 'live',
+            'fromCourseSetIds' => $courseSetIds,
+            'status'           => 'published'
         );
-        return $this->search($taskConditions, array('startTime' => 'ASC'), 0, $this->count($taskConditions));
+        return $this->searchTasks($taskConditions, array('startTime' => 'ASC'), 0, $this->countTasks($taskConditions));
     }
 
+    /**
+     * 返回过去直播过的教学计划ID
+     *
+     * @return array
+     */
+    public function findPastLivedCourseSetIds()
+    {
+        $arrays = $this->getTaskDao()->findPastLivedCourseSetIds();
+        return ArrayToolkit::column($arrays, 'fromCourseSetId');
+    }
 
     public function isFinished($taskId)
     {
@@ -568,6 +585,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->getMaxSeqByCourseId($courseId);
     }
 
+    public function getMaxNumberByCourseId($courseId)
+    {
+        return $this->getTaskDao()->getNumberSeqByCourseId($courseId);
+    }
+
     public function getTaskByCourseIdAndActivityId($courseId, $activityId)
     {
         return $this->getTaskDao()->getTaskByCourseIdAndActivityId($courseId, $activityId);
@@ -594,53 +616,45 @@ class TaskServiceImpl extends BaseService implements TaskService
     }
 
     /**
-     *
-     * 自由式
-     * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第一个任务作为下一个学习任务，
-     * 2.如果不为空，则按照任务序列返回第一个作为下一个学习任务
-     * 任务式
-     * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第前三个作为任务，
-     * 2.如果不为空，则取关联的三个。
-     *
-     * 自由式和任务式的逻辑由任务策略完成
-     *
      * @param  $courseId
-     *
-     * @return array       tasks
+     * @return array        tasks
      */
     public function findToLearnTasksByCourseId($courseId)
     {
         list($course) = $this->getCourseService()->tryTakeCourse($courseId);
         $toLearnTasks = $tasks = array();
-        if ($course['learnMode'] == 'freeMode') {
-            $toLearnTasks[] = $this->getToLearnTaskWithFreeMode($courseId);
-        } elseif ($course['learnMode'] == 'lockMode') {
-            list($tasks, $toLearnTasks) = $this->getToLearnTasksWithLockMode($courseId);
-        } else {
+
+        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
             return $toLearnTasks;
         }
 
-        $activityIds = ArrayToolkit::column($toLearnTasks, 'activityId');
-
-        $activities = $this->getActivityService()->findActivities($activityIds);
-        $activities = ArrayToolkit::index($activities, 'id');
-
-        $taskIds     = ArrayToolkit::column($toLearnTasks, 'id');
-        $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
-
-        //设置任务是否解锁
-        foreach ($toLearnTasks as &$task) {
-            $task['activity'] = $activities[$task['activityId']];
-            foreach ($taskResults as $key => $result) {
-                if ($result['courseTaskId'] != $task['id']) {
-                    continue;
-                }
-                $task['result'] = $result;
-            }
-            if ($course['learnMode'] == 'lockMode') {
-                $task = $this->setTaskLockStatus($tasks, $task);
-            }
+        if ($course['learnMode'] == 'freeMode') {
+            $toLearnTasks[] = $this->getToLearnTaskWithFreeMode($courseId);
         }
+        if ($course['learnMode'] == 'lockMode') {
+            list($tasks, $toLearnTasks) = $this->getToLearnTasksWithLockMode($courseId);
+        }
+
+        $toLearnTasks = $this->fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks);
+
+        return $toLearnTasks;
+    }
+
+    /**
+     * @param $courseId
+     * @return array|mixed
+     */
+    public function findToLearnTasksByCourseIdForMission($courseId)
+    {
+        list($course) = $this->getCourseService()->tryTakeCourse($courseId);
+        $toLearnTasks = $tasks = array();
+
+        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
+            return $toLearnTasks;
+        }
+        list($tasks, $toLearnTasks) = $this->getToLearnTasksWithLockMode($courseId);
+
+        $toLearnTasks = $this->fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks);
 
         return $toLearnTasks;
     }
@@ -654,7 +668,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         } else {
             $latestTaskResult = array_shift($taskResults);
             $latestLearnTask  = $this->getTask($latestTaskResult['courseTaskId']); //获取最新学习未学完的课程
-            $tasks            = $this->getTaskDao()->search(array('seq_GE' => $latestLearnTask['seq'], 'courseId' => $courseId), array('seq' => 'ASC'), 0, 2);
+            $conditions       = array(
+                'seq_GE'   => $latestLearnTask['seq'],
+                'courseId' => $courseId,
+            );
+            $tasks            = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 2);
             $toLearnTask      = array_pop($tasks); //如果当正在学习的是最后一个，则取当前在学的任务
         }
         return $toLearnTask;
@@ -730,6 +748,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $data;
     }
 
+    public function analysisTaskDataByTime($startTime, $endTime)
+    {
+        return $this->getTaskDao()->analysisTaskDataByTime($startTime, $endTime);
+    }
+
     /**
      * @return TaskDao
      */
@@ -780,18 +803,20 @@ class TaskServiceImpl extends BaseService implements TaskService
     /**
      * @param  $tasks
      * @param  $task
-     *
      * @return mixed
      */
     protected function setTaskLockStatus($tasks, $task)
     {
         $preTasks = $this->getPreTask($tasks, $task);
+
         if (empty($preTasks)) {
             $task['lock'] = false;
         }
 
-        $finish       = $this->isPreTasksIsFinished($preTasks);
+        $finish = $this->isPreTasksIsFinished($preTasks);
+        //当前任务未完成且前一个问题未完成则锁定
         $task['lock'] = !$finish;
+
 
         //选修任务不需要判断解锁条件
         if ($task['isOptional']) {
@@ -805,6 +830,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         if ($task['type'] == 'testpaper' && $task['startTime']) {
             $task['lock'] = false;
         }
+
+        //如果该任务已经完成则忽略其他的条件
+        if (isset($task['result']['status']) && ($task['result']['status'] == 'finish')) {
+            $task['lock'] = false;
+        }
         return $task;
     }
 
@@ -814,5 +844,38 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @param $toLearnTasks
+     * @param $task
+     * @param $course
+     * @param $tasks
+     * @return mixed
+     */
+    protected function fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks)
+    {
+        $activityIds = ArrayToolkit::column($toLearnTasks, 'activityId');
+
+        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = ArrayToolkit::index($activities, 'id');
+
+        $taskIds     = ArrayToolkit::column($toLearnTasks, 'id');
+        $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
+
+        //设置任务是否解锁
+        foreach ($toLearnTasks as &$task) {
+            $task['activity'] = $activities[$task['activityId']];
+            foreach ($taskResults as $key => $result) {
+                if ($result['courseTaskId'] != $task['id']) {
+                    continue;
+                }
+                $task['result'] = $result;
+            }
+            if ($course['learnMode'] == 'lockMode') {
+                $task = $this->setTaskLockStatus($tasks, $task);
+            }
+        }
+        return $toLearnTasks;
     }
 }

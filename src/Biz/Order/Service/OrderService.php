@@ -4,6 +4,11 @@ namespace Biz\Order\Service;
 
 interface OrderService
 {
+
+    const TARGETTYPE_COURSE = 'course';
+
+    const SNPREFIX_C = 'C';
+
     public function getOrder($id);
 
     public function getOrderBySn($sn, $lock = false);
@@ -15,8 +20,6 @@ interface OrderService
     public function findOrdersBySns(array $sns);
 
     public function searchOrders($conditions, $sort, $start, $limit);
-
-    public function searchBill($conditions, $sort, $start, $limit);
 
     public function countUserBillNum($conditions);
 
@@ -34,6 +37,13 @@ interface OrderService
     public function createOrder($order);
 
     public function payOrder($payData);
+
+    /**
+     * [createSystemOrder 创建系统内部订单，如VIP，免费加入，导入加入等]
+     * @param  [type] $order [description]
+     * @return [type]        [description]
+     */
+    public function createSystemOrder($order);
 
     public function canOrderPay($order);
 

@@ -69,6 +69,6 @@ class ArticleThreadFirewallTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 }

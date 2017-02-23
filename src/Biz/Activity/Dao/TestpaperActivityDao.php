@@ -7,4 +7,6 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 interface TestpaperActivityDao extends GeneralDaoInterface
 {
     public function findActivitiesByIds($ids);
+
+    public function findActivitiesByMediaIds($mediaIds);
 }

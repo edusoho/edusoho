@@ -1,11 +1,11 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\CurlToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\CurlToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Topxia\Component\Echats\EchartsBuilder;
+use AppBundle\Component\Echats\EchartsBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends BaseController
@@ -241,18 +241,14 @@ class DefaultController extends BaseController
         return $this->createJsonResponse($userAnalysis);
     }
 
-    public function lessonLearnStatisticAction(Request $request, $period)
+    public function completedTaskStatisticAction(Request $request, $period)
     {
         $days   = $this->getDaysDiff($period);
         $series = array();
-
         $timeRange                     = $this->getTimeRange($period);
-        $finishedLessonData            = $this->getCourseService()->analysisLessonFinishedDataByTime($timeRange['startTime'], $timeRange['endTime']);
-        $series['finishedLessonCount'] = $finishedLessonData;
-
-        $LessonLearnAnalysis = EchartsBuilder::createBarDefaultData($days, 'Y/m/d', $series);
-
-        return $this->createJsonResponse($LessonLearnAnalysis);
+        $finishedTaskData = $this->getTaskResultService()->analysisCompletedTaskDataByTime($timeRange['startTime'],$timeRange['endTime']);
+        $series['finishedTaskCount'] = $finishedTaskData;
+        return $this->createJsonResponse(EchartsBuilder::createBarDefaultData($days, 'Y/m/d', $series));
     }
 
     /**
@@ -300,6 +296,9 @@ class DefaultController extends BaseController
             $orderData['name'] = $names[$orderData['targetType']];
             unset($orderData['targetType']);
         });
+        if (!$this->isPluginInstalled('vip')) {
+            unset($orderDatas['vip']);
+        }
         return $this->createJsonResponse(array_values($orderDatas));
     }
 
@@ -308,14 +307,14 @@ class DefaultController extends BaseController
         $days      = $this->getDaysDiff($period);
         $startTime = strtotime(date('Y-m-d', time() - $days * 24 * 60 * 60));
 
-        $memberCounts = $this->getCourseMemberService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0, 'role' => 'student'), 'courseId', 0, 10);
-        $courseIds    = ArrayToolkit::column($memberCounts, 'courseId');
-        $courses      = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courses      = ArrayToolkit::index($courses, 'id');
+        $memberCounts = $this->getCourseMemberService()->searchMemberCountGroupByFields(array('startTimeGreaterThan' => $startTime, 'classroomId' => 0, 'role' => 'student'), 'courseSetId', 0, 10);
+        $courseSetIds    = ArrayToolkit::column($memberCounts, 'courseSetId');
+        $courseSets      = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets      = ArrayToolkit::index($courseSets, 'id');
 
         return $this->render('admin/default/parts/course-explore-table.html.twig', array(
             'memberCounts' => $memberCounts,
-            'courses'      => $courses
+            'courseSets'      => $courseSets
         ));
     }
 
@@ -533,6 +532,11 @@ class DefaultController extends BaseController
         return $this->createService('Course:CourseService');
     }
 
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
     /**
      * @return OrderService
      */
@@ -566,7 +570,7 @@ class DefaultController extends BaseController
 
     private function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     protected function getUpgradeNoticeService()
@@ -594,11 +598,16 @@ class DefaultController extends BaseController
      */
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip.VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     protected function isPluginInstalled($name)
     {
-        return $this->get('topxia.twig.web_extension')->isPluginInstalled($name);
+        return $this->get('web.twig.extension')->isPluginInstalled($name);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Biz\Activity\Type;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\FlashActivityDao;
 use Biz\Activity\Service\ActivityService;
@@ -52,6 +52,17 @@ class Flash extends Activity
             'createdUserId' => $biz['user']['id']
         );
         return $this->getFlashActivityDao()->create($newFlash);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceFlash           = $this->getFlashActivityDao()->get($sourceActivity['mediaId']);
+        $flash                 = $this->getFlashActivityDao()->get($activity['mediaId']);
+        $flash['mediaId']      = $sourceFlash['mediaId'];
+        $flash['finishType']   = $sourceFlash['finishType'];
+        $flash['finishDetail'] = $sourceFlash['finishDetail'];
+
+        return $this->getFlashActivityDao()->update($flash['id'], $flash);
     }
 
     public function update($targetId, &$fields, $activity)

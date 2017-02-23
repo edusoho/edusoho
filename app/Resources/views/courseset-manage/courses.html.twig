@@ -20,19 +20,28 @@
           <th>{{'任务数'|trans}}</th>
           <th>{{'学员'|trans}}</th>
           <th>{{'价格（元）'|trans}}</th>
+          <th>{{'状态'|trans}}</th>
           <th>{{'操作'|trans}}</th>
       	</thead>
       	<tbody>
       		{% for course in courses %}
       		<tr>
-      			<td>{{course.title}}
-              <span class="label label-warning mll">{{'会员免费'|trans}}</span>
-              <span class="label label-warning mll">{{'6折'|trans}}</span>
-            </td>
+      			<td>{{course.title}}</td>
       			<td>{{course.taskNum|default(0)}}</td>
       			<td>{{course.studentNum|default(0)}}</td>
-      			<td>{{course.price|currency}}{{'元'|trans}}</td> {# 货币国际化？ #}
+      			<td>{{course.price}}{{'元'|trans}}            
+            <span class="ml5 text-12 color-warning">{{'会员免费'|trans}}</span>
+            <span class="ml5 text-12 color-warning">{{'6折'|trans}}</span></td> {# 货币国际化？ #}
       			<td>
+             {% if course.status == 'published' %}
+              <span class="color-success">{{'已发布'|trans}}</span>
+              {% elseif course.status=='closed'%}             
+              <span class="color-danger">{{'已关闭'|trans}}</span>
+              {% else %}
+              <span class="text-muted">{{'未发布'|trans}}</span>
+              {% endif %}   
+            </td>
+            <td>
       				<div class="btn-group">
 		                <a class="mr10" href="{{path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id})}}">{{'管理'|trans}}</a>
 		                <a href="javascript:;" class="dropdown-toggle a-hover" data-toggle="dropdown">
@@ -41,7 +50,7 @@
 		                </a>
 		                <ul class="dropdown-menu pull-right">
 		                  <li>
-		                  	<a href="{{path('course_show', { id: course.id, preview: 1 })}}" target="_blank">
+		                  	<a href="{{path('my_course_show', { id: course.id, previewAs: 'member' })}}" target="_blank">
                           <i class="es-icon es-icon-removeredeye mrm"></i>
                           {{'预览'|trans}}
                         </a>

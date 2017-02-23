@@ -13,6 +13,6 @@
   	 {% else %}
   	 	<a  class="attachment-preview btn btn-sm btn-info"  href="#attachment-modal"  data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}">预览</a>
   	{% endif %}
-    <a class="attachment-download btn btn-sm btn-primary" {% if app.user.id|default(null) %} href="{{ path('attachment_download', {'id': attachment.id}) }}" {% else %}  href="#attachment-modal"  data-toggle="modal" data-url="{{ path('login_ajax') }}" {% endif %}">下载</a>
+    <a class="attachment-download btn btn-sm btn-primary" {% if app.user.id|default(null) %} href="{{ path('attachment_download', {'id': attachment.id}) }}" {% else %}  href="#attachment-modal"  data-toggle="modal" data-url="{{ path('login_ajax') }}" {% endif %}>下载</a>
   </span>
 </div>

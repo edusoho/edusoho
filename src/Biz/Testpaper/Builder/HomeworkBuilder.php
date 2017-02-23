@@ -1,11 +1,11 @@
 <?php
 namespace Biz\Testpaper\Builder;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Testpaper\Builder\TestpaperBuilderInterface;
-use Topxia\Common\Exception\InvalidArgumentException;
+use AppBundle\Common\Exception\InvalidArgumentException;
 
 class HomeworkBuilder implements TestpaperBuilderInterface
 {
@@ -256,7 +256,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
         $total = $this->getQuestionService()->searchCount($conditions);
 
-        return $this->getQuestionService()->search($conditions, array('createdTime', 'DESC'), 0, $total);
+        return $this->getQuestionService()->search($conditions, array('createdTime' => 'DESC'), 0, $total);
     }
 
     protected function makeItem($homeworkId, $question)

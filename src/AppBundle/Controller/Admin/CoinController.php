@@ -4,9 +4,9 @@ namespace AppBundle\Controller\Admin;
 
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
-use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -104,10 +104,10 @@ class CoinController extends BaseController
                 goto response;
             }
 
-            $courses = $this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00', 'parentId' => 0), 'latest', 0, PHP_INT_MAX);
+            $courseSets = $this->getCourseSetService()->searchCourseSets(array('parentId' => 0, 'maxCoursePrice_GT' => 0), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
             return $this->render('admin/coin/coin-course-set.html.twig', array(
                 'set'   => $set,
-                'items' => $courses
+                'items' => $courseSets
             ));
         }
 
@@ -128,10 +128,11 @@ class CoinController extends BaseController
         $set        = $conditions['set'];
 
         if ($type == 'course') {
-            $items = $this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00', 'parentId' => 0), 'latest', 0, PHP_INT_MAX);
+            $items = $this->getCourseSetService()->searchCourseSets(array('maxCoursePrice_GT' => '0.00', 'parentId' => 0), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
         } elseif ($type == 'classroom') {
-            $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+            $items = $this->getClassroomService()->searchClassrooms(array('private' => 0, 'price_GT' => '0.00'), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         } elseif ($type == 'vip') {
+            // todo
             $items = $this->getLevelService()->searchLevels(array('enable' => 1), 0, PHP_INT_MAX);
         }
 
@@ -148,6 +149,7 @@ class CoinController extends BaseController
 
         if ($request->getMethod() == "POST") {
             $data                         = $request->request->all();
+
             $coinSettings['coin_enabled'] = 1;
             $coinSettings['cash_rate']    = $data['cash_rate'];
 
@@ -182,7 +184,7 @@ class CoinController extends BaseController
 
         if ($type == 'course') {
             foreach ($data as $key => $value) {
-                $this->getCourseService()->updateMaxRate($key, $value);
+                $this->getCourseSetService()->updateMaxRate($key, $value);
             }
         } elseif ($type == 'classroom') {
             foreach ($data as $key => $value) {
@@ -641,7 +643,7 @@ class CoinController extends BaseController
         $conditions['cashType'] = $cashType;
 
         $num            = $this->getCashService()->searchFlowsCount($conditions);
-        $orders         = $this->getCashService()->searchFlows($conditions, array('ID' => 'DESC'), 0, $num);
+        $orders         = $this->getCashService()->searchFlows($conditions, array('id' => 'DESC'), 0, $num);
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
@@ -877,7 +879,7 @@ class CoinController extends BaseController
 
     protected function getLevelService()
     {
-        return $this->createService('Vip:Vip.LevelService');
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getCashService()
@@ -905,8 +907,8 @@ class CoinController extends BaseController
         return $this->createService('Classroom:ClassroomService');
     }
 
-    protected function getVipService()
+    protected function getCourseSetService()
     {
-        return $this->createService('Vip:VipService');
+        return $this->createService('Course:CourseSetService');
     }
 }

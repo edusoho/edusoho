@@ -10,7 +10,7 @@ class SystemUtilDaoImpl extends GeneralDaoImpl implements SystemUtilDao
     {
         $sql = "SELECT DISTINCT  targetId FROM upload_files WHERE ";
         $sql .= " targetType='courselesson' AND usedCount<= 0 AND targetId NOT IN (SELECT id FROM course)";
-        return $this->getConnection()->fetchAll($sql);
+        return $this->db()->fetchAll($sql);
     }
 
     public function declares()

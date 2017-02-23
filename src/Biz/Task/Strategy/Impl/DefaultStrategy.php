@@ -1,7 +1,7 @@
 <?php
 namespace Biz\Task\Strategy\Impl;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
@@ -34,13 +34,8 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $field['status'] = $lessonTask['status'];
         }
 
-        $task            = parent::createTask($field);
-
-        $chapter          = $this->getChapterDao()->get($task['categoryId']);
-        $tasks            = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
-        $chapter['tasks'] = $tasks;
-        $chapter['mode']  = $field['mode'];
-        return $chapter;
+        $task = parent::createTask($field);
+        return $task;
     }
 
     public function updateTask($id, $fields)
@@ -57,17 +52,25 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     public function deleteTask($task)
     {
-        $that   = $this;
-        $result = $this->biz['db']->transactional(function () use ($task, $that) {
+        if (empty($task)) {
+            return;
+        }
+        try {
+            $this->biz['db']->beginTransaction();
+            $allTasks = array();
             if ($task['mode'] == 'lesson') {
-                $that->getTaskDao()->deleteByCategoryId($task['categoryId']); //删除该课时下的所有任务，
-                $that->getTaskResultService()->deleteUserTaskResultByTaskId($task['id']);
-                $that->getActivityService()->deleteActivity($task['activityId']); //删除该课时
-            } else {
-                $that->getTaskDao()->delete($task['id']);
+                $allTasks = $this->getTaskDao()->findByCourseIdAndCategoryId($task['courseId'], $task['categoryId']); //courseId
             }
-        });
-        return $result;
+            foreach ($allTasks as $_task) {
+                $this->getTaskDao()->delete($_task['id']);
+                $this->getTaskResultService()->deleteUserTaskResultByTaskId($_task['id']);
+                $this->getActivityService()->deleteActivity($_task['activityId']);
+            }
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
     }
 
     protected function validateTaskMode($field)
@@ -162,7 +165,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 }
             }
 
-            $chapter = $this->getChapterDao()->update($id, $fields);
+            $chapter = $this->getCourseService()->updateChapter($courseId, $id, $fields);
             if ($chapter['type'] == 'lesson') {
                 array_push($lessonChapterTypes, $chapter);
             }
@@ -196,6 +199,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         foreach ($tasks as $task) {
             $this->getTaskDao()->update($task['id'], array('status' => 'published'));
         }
+        return $task;
     }
 
     //取消发布课时中一组任务
@@ -205,6 +209,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         foreach ($tasks as $key => $task) {
             $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
         }
+        return $task;
     }
 
     protected function getTaskSeq($taskMode, $chapterSeq)
@@ -215,5 +220,4 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
         return $chapterSeq + $taskModes[$taskMode];
     }
-
 }

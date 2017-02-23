@@ -14,15 +14,11 @@
         <div class="col-xs-8">
           转码画质
           <select class="form-control border-gray mrl js-upload-params" name="videoQuality">
-            <option value="low" selected>流畅</option>
-            <option value="normal">标准</option>
-            <option value="high">精细</option>
+            {{ select_options({'low':'流畅', 'normal':'标准', 'high':'精细'}, setting('storage.video_quality')) }}
           </select>
           转码音质
           <select class="form-control border-gray js-upload-params" name="audioQuality">
-            <option value="low" selected>流畅</option>
-            <option value="normal">标准</option>
-            <option value="high">精细</option>
+            {{ select_options({'low':'流畅', 'normal':'标准', 'high':'精细'}, setting('storage.video_audio_quality')) }}
           </select>
         </div>
         <div class="col-xs-4 text-xs text-center">

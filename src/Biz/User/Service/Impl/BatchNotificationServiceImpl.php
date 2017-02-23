@@ -2,30 +2,35 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\BatchNotificationService;
 
 class BatchNotificationServiceImpl extends BaseService implements BatchNotificationService
 {
     public function createBatchNotification($fields)
     {
-        if (empty($fields['fromId'])) {
-            throw $this->createInvalidArgumentException('Sender Required');
+        if (!ArrayToolkit::requireds($fields, array('title', 'content'))) {
+            throw $this->createInvalidArgumentException('Invalid Arguments');
         }
-        if (!isset($fields['targetId'])) {
-            $fields['targetId'] = 0;
-        }
-        if (!isset($fields['type'])) {
-            $fields['type'] = 'text';
-        }
-        if (!isset($fields['published'])) {
-            $fields['published'] = 0;
-        }
-        if (!isset($fields['targetType'])) {
-            $fields['targetType'] = 'global';
-        }
-        $fields['createdTime'] = isset($fields['createdTime']) ? time() : $fields['createdTime'];
+
+        $mode = empty($fields['mode']) ? '' : $fields['mode'];
+        unset($fields['mode']);
+
+        $user             = $this->getCurrentUser();
+        $fields['fromId'] = $user['id'];
+
+        $fields['targetId']    = empty($fields['targetId']) ? 0 : $fields['targetId'];
+        $fields['type']        = empty($fields['type']) ? 'text' : $fields['type'];
+        $fields['published']   = empty($fields['published']) ? 0 : $fields['published'];
+        $fields['targetType']  = empty($fields['targetType']) ? 'global' : $fields['targetType'];
+        $fields['createdTime'] = empty($fields['createdTime']) ? time() : $fields['createdTime'];
         $fields['sendedTime']  = 0;
         $notification          = $this->getBatchNotificationDao()->create($fields);
+
+        if (!empty($mode) && $mode == 'publish') {
+            $this->publishBatchNotification($notification['id']);
+        }
+
         return $notification;
     }
 
@@ -96,21 +101,31 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
     public function deleteBatchNotification($id)
     {
         $batchNotification = $this->getBatchNotificationDao()->get($id);
-        if (empty($batchNotification)) {
+        if (!$batchNotification) {
             throw $this->createNotFoundException('Notification Not Found');
         }
-        if (!empty($batchNotification)) {
-            $this->getBatchNotificationDao()->delete($id);
-        }
+
+        $this->getBatchNotificationDao()->delete($id);
+
         return true;
     }
 
     public function updateBatchNotification($id, $fields)
     {
-        if (!empty($fields)) {
-            $this->getBatchNotificationDao()->update($id, $fields);
+        if (empty($fields)) {
+            return array();
         }
-        return true;
+
+        $mode = empty($fields['mode']) ? '' : $fields['mode'];
+        unset($fields['mode']);
+
+        $notification = $this->getBatchNotificationDao()->update($id, $fields);
+
+        if (!empty($mode) && $mode == 'publish') {
+            $this->publishBatchNotification($notification['id']);
+        }
+
+        return $notification;
     }
 
     protected function addBatchNotification($type, $title, $fromId, $content, $targetType, $targetId, $createdTime, $sendedTime, $published)

@@ -12,7 +12,7 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
     public function getByUserIdAndTaskId($userId, $taskId)
     {
         return $this->getByFields(array(
-            'userId'   => $userId,
+            'userId' => $userId,
             'taskId' => $taskId,
         ));
     }
@@ -35,10 +35,16 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
         return $this->db()->fetchColumn($sql, array($userId, $courseId));
     }
 
+    public function deleteByCourseId($courseId)
+    {
+        return $this->db()->delete($this->table(), array('courseId' => $courseId));
+    }
+
     public function declares()
     {
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
+            'orderbys'   => array('createdTime', 'updatedTime', 'likeNum'),
             'conditions' => array(
                 'courseId = :courseId',
                 'userId = :userId',
@@ -51,9 +57,6 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
                 'courseSetId IN (:courseSetIds)',
                 'courseSetId = :courseSetId'
             ),
-            'orderbys' => array(
-                'createdTime'
-            )
         );
     }
 }

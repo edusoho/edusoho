@@ -4,7 +4,7 @@ namespace Topxia\MobileBundleV2\Processor\Impl;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\SchoolProcessor;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
@@ -547,7 +547,7 @@ class SchoolProcessorImpl extends BaseProcessor implements SchoolProcessor {
 
     public function getLevelService()
     {
-        return $this->controller->getService('Vip:Vip.LevelService');
+        return $this->controller->getService('VipPlugin:Vip:LevelService');
     }
 }
 

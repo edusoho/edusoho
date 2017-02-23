@@ -228,11 +228,11 @@ class RefererLogServiceTest extends BaseTestCase
      */
     protected function getRefererLogService()
     {
-        return $this->getBiz()->service('RefererLog:RefererLogService');
+        return $this->createService('RefererLog:RefererLogService');
     }
 
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 }

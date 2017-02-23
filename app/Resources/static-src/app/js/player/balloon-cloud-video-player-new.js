@@ -1,4 +1,4 @@
-import Emitter from 'es6-event-emitter';
+import Emitter from 'component-emitter';
 import swfobject from 'es-swfobject';
 
 class BalloonCloudVideoPlayer extends Emitter {
@@ -24,13 +24,13 @@ class BalloonCloudVideoPlayer extends Emitter {
     let extConfig = {};
 
     //字幕
-    if (self.options.textTrack != '') {
+    if (self.options.textTrack) {
       extConfig = Object.assign(extConfig, {
         textTrack: self.options.textTrack
       });
     }
 
-    if (self.options.watermark != '') {
+    if (self.options.watermark) {
       extConfig = Object.assign(extConfig, {
         watermark: {
           file: self.options.watermark,
@@ -41,7 +41,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
-    if (self.options.fingerprint != '') {
+    if (self.options.fingerprint) {
       extConfig = Object.assign(extConfig, {
         fingerprint: {
           html: self.options.fingerprint,
@@ -50,7 +50,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       })
     }
 
-    if (self.options.timelimit != '') {
+    if (self.options.timelimit) {
       extConfig = Object.assign(extConfig, {
         pluck: {
           timelimit: self.options.timelimit,
@@ -60,7 +60,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       })
     }
 
-    if (self.options.enablePlaybackRates != false && self.isBrowserSupportPlaybackRates()) {
+    if (self.options.enablePlaybackRates && self.isBrowserSupportPlaybackRates()) {
       extConfig = Object.assign(extConfig, {
         playbackRates: {
           enable: true,
@@ -70,13 +70,13 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
-    if (self.options.controlBar != '') {
+    if (self.options.controlBar) {
       extConfig = Object.assign(extConfig, {
         controlBar: self.options.controlBar
       });
     }
 
-    if (self.options.statsInfo != '') {
+    if (self.options.statsInfo) {
       var statsInfo = self.options.statsInfo;
       extConfig = Object.assign(extConfig, {
         statsInfo: {
@@ -99,31 +99,31 @@ class BalloonCloudVideoPlayer extends Emitter {
     var player = new VideoPlayerSDK(extConfig);
 
     player.on('ready', function(e) {
-      self.trigger("ready", e);
+      self.emit("ready", e);
     });
 
     player.on("timeupdate", function(e) {
       //    player.__events get all the event;
-      self.trigger("timechange", e);
+      self.emit("timechange", e);
     });
 
     player.on("ended", function(e) {
-      self.trigger("ended", e);
+      self.emit("ended", e);
     });
 
     player.on("playing", function(e) {
-      self.trigger("playing", e);
+      self.emit("playing", e);
     });
 
     player.on("paused", function(e) {
-      self.trigger("paused", e);
+      self.emit("paused", e);
     });
 
     player.on("answered", function(e) {
       var data = e.data;
       data['answer'] = data.result.choosed;
       data['type'] = self.convertQuestionType(data.type, 'cloud');
-      self.trigger("answered", data);
+      self.emit("answered", data);
     });
 
     this.player = player;

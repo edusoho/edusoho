@@ -15,7 +15,6 @@ class Testpaper {
     this.setValidateRule();
     this.initEvent();
     this.initStepForm2();
-    this.dateTimePicker();
   }
 
   initEvent() {
@@ -108,14 +107,14 @@ class Testpaper {
   }
 
   showRedoInterval(event) {
-    var $this = $(event.currentTarget);
+    let $this = $(event.currentTarget);
     if ($this.val() == 1) {
       $('#lesson-redo-interval-field').closest('.form-group').hide();
       $('.starttime-check-div').show();
+      this.dateTimePicker();
     } else {
       $('#lesson-redo-interval-field').closest('.form-group').show();
       $('.starttime-check-div').hide();
-      $('input[name="startTime"]').val(0);
     }
   }
 
@@ -127,7 +126,7 @@ class Testpaper {
       this.dateTimePicker();
     } else {
       $('.starttime-input').addClass('hidden');
-      $('input[name="startTime"]').val('0');
+      //$('input[name="startTime"]').val('0');
     }
   }
 
@@ -189,7 +188,7 @@ class Testpaper {
     let data = new Date();
     let $starttime = $('input[name="startTime"]');
 
-    if ($starttime.val() == '' || $starttime.val() == '0') {
+    if ($starttime.is(':visible') && ($starttime.val() == '' || $starttime.val() == '0')) {
       $starttime.val(data.Format('yyyy-MM-dd hh:mm'));
     }
    
@@ -197,7 +196,8 @@ class Testpaper {
       autoclose: true,
       format: 'yyyy-mm-dd hh:ii',
       language:"zh",
-      minView: 'hour'
+      minView: 'hour',
+      endDate: new Date(Date.now() + 86400*365*100*1000)
     })
     .on('show', event => {
       this.$parentiframe.height($('body').height() + 240);

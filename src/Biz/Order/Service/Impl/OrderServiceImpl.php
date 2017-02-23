@@ -5,11 +5,12 @@ use Biz\BaseService;
 use Biz\Order\Dao\OrderLogDao;
 use Biz\Order\Dao\OrderRefundDao;
 use Biz\Order\Service\OrderService;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\ExtensionManager;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ExtensionManager;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Order\Dao\OrderDao;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class OrderServiceImpl extends BaseService implements OrderService
 {
@@ -150,6 +151,26 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         return array($success, $order);
+    }
+
+    public function createSystemOrder($order)
+    {
+        if (!ArrayToolkit::requireds($order, array('userId', 'title', 'targetType', 'targetId', 'amount', 'totalPrice', 'snPrefix'))) {
+            throw new InvalidArgumentException('Invalid arguments when create order');
+        }
+
+        $order['payment'] = 'none';
+
+        $newOrder = $this->createOrder($order);
+
+        $this->payOrder(array(
+            'sn'       => $newOrder['sn'],
+            'status'   => 'success',
+            'amount'   => $newOrder['amount'],
+            'paidTime' => time()
+        ));
+
+        return $newOrder;
     }
 
     public function findOrderLogs($orderId)
@@ -553,22 +574,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         $conditions = $this->_prepareSearchConditions($conditions);
 
         $orders = $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
-
-        return ArrayToolkit::index($orders, 'id');
-    }
-
-    public function searchBill($conditions, $sort, $start, $limit)
-    {
-        $orderBy = array();
-
-        if ($sort == 'early') {
-            $orderBy = array('createdTime' , 'ASC');
-        } else {
-            $orderBy = array('createdTime' , 'DESC');
-        }
-
-        $conditions = $this->_prepareSearchConditions($conditions);
-        $orders     = $this->getOrderDao()->searchBill($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($orders, 'id');
     }

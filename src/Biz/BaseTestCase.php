@@ -4,12 +4,22 @@ namespace Biz;
 
 use Mockery;
 use Biz\User\CurrentUser;
+use Biz\Role\Util\PermissionBuilder;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\Role\Util\PermissionBuilder;
 
 class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 {
+    protected function createService($alias)
+    {
+        return $this->getBiz()->service($alias);
+    }
+
+    protected function createDao($alias)
+    {
+        return $this->getBiz()->Dao($alias);
+    }
+
     protected function getCurrentUser()
     {
         return $this->getServiceKernel()->getCurrentUser();
@@ -35,6 +45,18 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
             ->initCurrentUser();
     }
 
+    public function tearDown()
+    {
+        $biz = $this->getBiz();
+        $keys = $biz->keys();
+
+        foreach ($keys as $key) {
+            if (substr($key, 0, 1) === '@') {
+                unset($biz[$key]);
+            }
+        }
+    }
+
     protected function initDevelopSetting()
     {
         $this->getServiceKernel()->createService('System:SettingService')->set('developer', array(
@@ -49,6 +71,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $userService = ServiceKernel::instance()->createService('User:UserService');
 
         $currentUser = new CurrentUser();
+        //由于创建管理员用户时，当前用户（CurrentUser）必须有管理员权限，所以在register之前先mock一个临时管理员用户作为CurrentUser
         $currentUser->fromArray(array(
             'id'        => 0,
             'nickname'  => '游客',
@@ -96,7 +119,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $newService = explode('.', $objectName);
         $mockObject = Mockery::mock($newService[1]);
 
-        foreach ($params as $key => $param) {
+        foreach ($params as $param) {
             $mockObject->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
         }
 
@@ -105,16 +128,18 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $this->setPool($pool);
     }
 
-    protected function mockBiz($alias, $className, $params = array())
+    protected function mockBiz($alias, $params = array())
     {
+        $aliasList = explode(':', $alias);
+        $className = end($aliasList);
         $mockObj = Mockery::mock($className);
-    
+
         foreach ($params as $param) {
             $mockObj->shouldReceive($param['functionName'])->withAnyArgs()->andReturn($param['returnValue']);
         }
 
-        $biz = $this->getBiz();
-        $biz['@' . $alias] = $mockObj;
+        $biz               = $this->getBiz();
+        $biz['@'.$alias] = $mockObj;
     }
 
     protected function setPool($object)
@@ -158,7 +183,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
                 $this->assertEquals($ary1[$key], $ary2[$key]);
             }
         } else {
-            foreach ($ary1 as $key => $value) {
+            foreach (array_keys($ary1) as $key) {
                 $this->assertEquals($ary1[$key], $ary2[$key]);
             }
         }
@@ -166,7 +191,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
     protected function grantPermissionToUser($currentUser)
     {
-        $permissions = new \ArrayObject();
+        $permissions                                = new \ArrayObject();
         $permissions['admin_course_content_manage'] = true;
         $currentUser->setPermissions($permissions);
     }

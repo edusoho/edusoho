@@ -3,7 +3,7 @@
 namespace Topxia\Api\Resource\Classroom;
 
 use Silex\Application;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Api\Resource\BaseResource;
 use Topxia\Service\Common\ServiceKernel;

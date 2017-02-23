@@ -3,17 +3,20 @@ import 'jquery-sortable';
 
 export const closeCourse = () => {
   $('body').on('click', '.js-close-course', function(evt) {
+    let $target = $(evt.currentTarget);
     if (!confirm(Translator.trans('是否确定关闭该教学计划？'))) {
       return;
     }
 
-    $.post($(evt.currentTarget).data('check-url'), function(data) {
+    $.post($target.data('check-url'), function(data) {
+
       if (data.warn) {
         if (!confirm(Translator.trans(data.message))) {
           return;
         }
       }
-      $.post($(evt.currentTarget).data('url'), function(data) {
+
+      $.post($target.data('url'), function(data) {
         if (data.success) {
           notify('success', '关闭成功');
           location.reload();
@@ -23,7 +26,7 @@ export const closeCourse = () => {
       });
     });
   });
-}
+};
 
 export const sortList = (element = '#sortable-list') => {
   let data = $(element).sortable("serialize").get();
@@ -32,7 +35,8 @@ export const sortList = (element = '#sortable-list') => {
       document.location.reload();
     }
   });
-}
+};
+
 export const deleteCourse = () => {
   $('body').on('click', '.js-delete-course', function(evt) {
     if (!confirm(Translator.trans('是否确定删除该教学计划？'))) {
@@ -47,7 +51,7 @@ export const deleteCourse = () => {
       }
     });
   });
-}
+};
 
 export const publishCourse = () => {
   $('body').on('click', '.js-publish-course', function(evt) {
@@ -59,11 +63,11 @@ export const publishCourse = () => {
         notify('success', '发布成功');
         location.reload();
       } else {
-        notify('danger', '发布失败：' + data.message);
+        notify('danger','发布失败：' + data.message,5000);
       }
     });
   });
-}
+};
 
 export const deleteTask = () => {
   $('body').on('click', '.delete-item', function(evt) {
@@ -86,7 +90,7 @@ export const deleteTask = () => {
       }
     });
   });
-}
+};
 
 export const publishTask = () => {
   $('body').on('click', '.publish-item', (event) => {
@@ -99,7 +103,7 @@ export const publishTask = () => {
       }
     });
   })
-}
+};
 
 export const unpublishTask = () => {
   $('body').on('click', '.unpublish-item', (event) => {
@@ -112,7 +116,7 @@ export const unpublishTask = () => {
       }
     });
   })
-}
+};
 
 export const showSettings = () => {
   $("#sortable-list").on('click', '.js-item-content', event => {
@@ -125,11 +129,11 @@ export const showSettings = () => {
       $this.addClass('active').find('.js-settings-list').slideDown();
     }
   });
-}
+};
 
 export const TabChange = () => {
   $('[data-role="tab"]').click(function (event) {
     let $this = $(this);
     $($this.data('tab-content')).removeClass("hidden").siblings('[data-role="tab-content"]').addClass('hidden');
   });
-}
+};

@@ -5,7 +5,7 @@ namespace Biz\File\Service\Impl;
 use Biz\BaseService;
 use Biz\File\Dao\FileUsedDao;
 use Biz\File\Dao\UploadFileDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
 use Biz\File\Dao\UploadFileTagDao;
 use Biz\System\Service\LogService;

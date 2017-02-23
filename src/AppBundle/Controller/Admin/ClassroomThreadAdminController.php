@@ -3,17 +3,14 @@ namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 
 class ClassroomThreadAdminController extends BaseController
 {
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
-
-        // if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
-        // }
 
         $paginator = new Paginator(
             $request,

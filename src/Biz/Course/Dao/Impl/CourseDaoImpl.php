@@ -11,12 +11,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 
     public function findCoursesByParentIdAndLocked($parentId, $locked)
     {
-        if (empty($parentId)) {
-            return array();
-        }
-
-        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? AND locked = ?";
-        return $this->db()->fetchAll($sql, array($parentId, $locked));
+        return $this->findByFields(array('parentId' => $parentId, 'locked' => $locked));
     }
 
     public function findCoursesByCourseSetIdAndStatus($courseSetId, $status = null)
@@ -38,8 +33,8 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE isDefault=1 AND courseSetId IN ({$marks});";
+        $marks = str_repeat('?,', count($courseSetIds) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE isDefault=1 AND courseSetId IN ({$marks});";
 
         return $this->db()->fetchAll($sql, $courseSetIds);
     }
@@ -59,7 +54,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         if (empty($courseSetIds)) {
             return array();
         }
-        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
+        $marks = str_repeat('?,', count($courseSetIds) - 1) . '?';
 
         $sql = "SELECT MIN(price) AS minPrice, MAX(price) AS maxPrice,courseSetId FROM {$this->table} WHERE courseSetId IN ({$marks}) GROUP BY courseSetId";
         return $this->db()->fetchAll($sql, $courseSetIds) ?: null;
@@ -83,10 +78,29 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
-        $sql   = "SELECT courseSetId,sum(`income`) as income FROM {$this->table} WHERE courseSetId IN ({$marks}) group by courseSetId;";
+        $marks = str_repeat('?,', count($courseSetIds) - 1) . '?';
+        $sql = "SELECT courseSetId,sum(`income`) as income FROM {$this->table} WHERE courseSetId IN ({$marks}) group by courseSetId;";
 
-        return $this->db()->fetchAll($sql, $courseSetIds);  
+        return $this->db()->fetchAll($sql, $courseSetIds);
+    }
+
+    public function analysisCourseDataByTime($startTime, $endTime)
+    {
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM {$this->table} WHERE createdTime >= ? AND createdTime <= ?
+            group by from_unixtime(createdTime,'%Y-%m-%d') order by date ASC";
+
+        return $this->db()->fetchAll($sql, array($startTime, $endTime));
+    }
+
+    public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
+    {
+        $sql = "SELECT ifnull(min(price),0) as minPrice, ifnull(max(price),0) as maxPrice FROM {$this->table} WHERE courseSetId = {$courseSetId} and status = 'published'";
+        return $this->db()->fetchAssoc($sql);
+    }
+
+    public function updateMaxRateByCourseSetId($courseSetId, $updateFields)
+    {
+        return $this->db()->update($this->table, $updateFields, array('courseSetId' => $courseSetId));
     }
 
     public function declares()
@@ -116,8 +130,8 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'title LIKE :titleLike',
                 'userId = :userId',
                 'recommended = :recommended',
-                'startTime >= :startTimeGreaterThan',
-                'startTime < :startTimeLessThan',
+                'createdTime >= :startTime',
+                'createdTime < :endTime',
                 'rating > :ratingGreaterThan',
                 'vipLevelId >= :vipLevelIdGreaterThan',
                 'vipLevelId = :vipLevelId',
@@ -140,7 +154,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         );
     }
 
-    protected function _createSearchQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";

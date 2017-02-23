@@ -14,8 +14,6 @@ interface OrderDao extends GeneralDaoInterface
 
     public function findBySns(array $sns);
 
-    public function searchBill($conditions, $orderBy, $start, $limit);
-
     public function countBill($conditions);
 
     public function sumOrderAmounts($startTime, $endTime, array $courseId);

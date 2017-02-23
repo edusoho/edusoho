@@ -2,7 +2,7 @@
 
 namespace Tests\Activity;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use Biz\Activity\Service\LiveActivityService;
 
 class LiveActivityServiceTest extends BaseTestCase
@@ -38,15 +38,14 @@ class LiveActivityServiceTest extends BaseTestCase
             'fromUserId'      => '1',
             'startTime'       => time() + 1000,
             'endTime'         => time() + 4000,
-            'length'          => 3000,
-            '_base_url'       => 'url...'
+            'length'          => 3
         );
         $savedActivity              = $this->getLiveActivityService()->createLiveActivity($live);
         $savedActivity              = array_merge($savedActivity, $live);
         $savedActivity['startTime'] = time() + 2000;
         $savedActivity['endTime']   = time() + 5000;
-        $savedActivity['endTime']   = 3000;
-        $updatedActivity            = $this->getLiveActivityService()->updateLiveActivity($savedActivity['id'], $savedActivity, array());
+        $updatedData                = array('length' => 100, 'endTime' => time() + 100000);
+        $updatedActivity            = $this->getLiveActivityService()->updateLiveActivity($savedActivity['id'], $updatedData, $savedActivity);
         $this->assertEquals($savedActivity['liveId'], $updatedActivity['liveId']);
     }
 
@@ -75,7 +74,7 @@ class LiveActivityServiceTest extends BaseTestCase
      */
     protected function getLiveActivityService()
     {
-        $service = $this->getBiz()->service('Activity:LiveActivityService');
+        $service = $this->createService('Activity:LiveActivityService');
         //mock client
         $class      = new \ReflectionClass(get_class($service));
         $clientProp = $class->getProperty('client');

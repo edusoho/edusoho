@@ -78,7 +78,8 @@ define(function(require, exports, module) {
             if (error) {
                 return;
             }
-            
+            $('.js-save-btn').button('loading');
+
             $.post($form.attr('action'), $form.serialize(), function(json) {
                 window.location.reload();
             }, 'json');

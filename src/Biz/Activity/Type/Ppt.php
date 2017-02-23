@@ -2,7 +2,7 @@
 
 namespace Biz\Activity\Type;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\PptActivityDao;
 use Biz\Activity\Service\ActivityService;
@@ -76,6 +76,17 @@ class Ppt extends Activity
             'createdUserId' => $biz['user']['id']
         );
         return $this->getPptActivityDao()->create($newPpt);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourcePpt           = $this->getPptActivityDao()->get($sourceActivity['mediaId']);
+        $ppt                 = $this->getPptActivityDao()->get($activity['mediaId']);
+        $ppt['mediaId']      = $sourcePpt['mediaId'];
+        $ppt['finishType']   = $sourcePpt['finishType'];
+        $ppt['finishDetail'] = $sourcePpt['finishDetail'];
+
+        return $this->getPptActivityDao()->update($ppt['id'], $ppt);
     }
 
     public function update($targetId, &$fields, $activity)

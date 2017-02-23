@@ -1,7 +1,7 @@
 <?php
 namespace Biz\Testpaper\Pattern;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\Testpaper\Pattern\TestpaperPatternInterface;
 

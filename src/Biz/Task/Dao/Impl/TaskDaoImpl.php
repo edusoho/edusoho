@@ -35,9 +35,20 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->findInField('id', $ids);
     }
 
+    public function findByCourseIdAndCategoryId($courseId, $categoryId)
+    {
+        return $this->findByFields(array('courseId' => $courseId, 'categoryId' => $categoryId));
+    }
+
     public function getMaxSeqByCourseId($courseId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table()} WHERE courseId = ? ";
+        return $this->db()->fetchColumn($sql, array($courseId)) ?: 0;
+    }
+
+    public function getNumberSeqByCourseId($courseId)
+    {
+        $sql = "SELECT MAX(number) FROM {$this->table()} WHERE courseId = ? ";
         return $this->db()->fetchColumn($sql, array($courseId)) ?: 0;
     }
 
@@ -79,25 +90,41 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     /**
      * 统计当前时间以后每天的直播次数
      *
-     * @param $courseIds
-     * @param $limit
-     *
-     * @return array<string, int|string>
+     * @param  $courseSetIds
+     * @param  $limit
+     * @return array           <string, int|string>
      */
-    public function findFutureLiveDatesGroupByDate($courseIds, $limit)
+    public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit)
     {
-        if (empty($courseIds)) {
+        if (empty($courseSetIds)) {
             return array();
         }
 
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
 
         $time = time();
 
-        $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `type`= 'live' AND status='published' AND courseId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
-        return $this->db()->fetchAll($sql, $courseIds);
+        $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->table()}` WHERE  `type`= 'live' AND status='published' AND fromCourseSetId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
+        return $this->db()->fetchAll($sql, $courseSetIds);
     }
 
+    /**
+     * 返回过去直播过的教学计划ID
+     *
+     * @return array<int>
+     */
+    public function findPastLivedCourseSetIds()
+    {
+        $time = time();
+        $sql
+              = "SELECT fromCourseSetId, max(startTime) as startTime
+                 FROM {$this->table()}
+                 WHERE endTime < {$time} AND status='published' AND type = 'live'
+                 GROUP BY fromCourseSetId
+                 ORDER BY startTime DESC
+                 ";
+        return $this->db()->fetchAll($sql);
+    }
 
     public function getTaskByCourseIdAndActivityId($courseId, $activityId)
     {
@@ -109,22 +136,55 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->findByFields(array('courseId' => $courseId, 'isFree' => $isFree));
     }
 
+    public function findByCopyIdAndLockedCourseIds($copyId, $courseIds)
+    {
+        if (empty($courseIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $parmaters = array_merge(array($copyId), $courseIds);
+
+        $sql = "SELECT * FROM {$this->table()} WHERE copyId= ? AND courseId IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, $parmaters) ?: array();
+    }
+
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
     {
         $sql = "select sum(`time`) from `course_task_result` where `courseTaskId` in (SELECT id FROM {$this->table()}  WHERE `fromCourseSetId`= ?)";
-        return $this->db()->fetchColumn($sql, array($courseSetId)); 
+        return $this->db()->fetchColumn($sql, array($courseSetId));
+    }
+
+    public function analysisTaskDataByTime($startTime, $endTime)
+    {
+        $sql = "SELECT count(id) AS count, from_unixtime(createdTime, '%Y-%m-%d') AS date FROM {$this->table} WHERE createdTime >= ? AND createdTime <= ? GROUP BY date ORDER BY date ASC";
+
+        return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function declares()
     {
         return array(
-            'orderbys'   => array('seq', 'startTime'),
+            'timestamps' => array(
+                'createdTime',
+                'updatedTime'
+            ),
+            'orderbys'   => array(
+                'seq',
+                'startTime',
+                'createdTime'
+            ),
             'conditions' => array(
                 'id = :id',
                 'id IN ( :ids )',
+                'id NOT IN (:excludeIds)',
                 'courseId = :courseId',
                 'courseId IN ( :courseIds )',
+                'title LIKE :titleLike',
                 'fromCourseSetId = :fromCourseSetId',
+                'fromCourseSetId IN (:fromCourseSetIds)',
                 'status =:status',
                 'type = :type',
                 'isFree =:isFree',
@@ -133,7 +193,11 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'seq > :seq_GT',
                 'seq < :seq_LT',
                 'startTime >= :startTime_GE',
-                'endTime < :endTime_GT'
+                'startTime > :startTime_GT',
+                'startTime <= :startTime_LE',
+                'endTime > :endTime_GT',
+                'endTime < :endTime_LT',
+                'endTime <= :endTime_GE'
             )
         );
     }

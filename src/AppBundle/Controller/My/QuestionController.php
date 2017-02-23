@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\My;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
@@ -38,11 +38,21 @@ class QuestionController extends BaseController
         $questionIds = ArrayToolkit::column($favoriteQuestions, 'questionId');
         $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
+        $testpaperIds = array();
+        $testpaperIds = array_map(function ($favorite) {
+            if ($favorite['targetType'] == 'testpaper') {
+                return $favorite['targetId'];
+            }
+        }, $favoriteQuestions);
+
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+
         return $this->render('my/question/favorite-list.html.twig', array(
             'favoriteQuestions' => $favoriteQuestions,
             'paginator'         => $paginator,
             'questions'         => $questions,
-            'nav'               => 'questionFavorite'
+            'nav'               => 'questionFavorite',
+            'testpapers'        => $testpapers
         ));
     }
 
@@ -118,5 +128,10 @@ class QuestionController extends BaseController
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    protected function getTestpaperService()
+    {
+        return $this->createService('Testpaper:TestpaperService');
     }
 }

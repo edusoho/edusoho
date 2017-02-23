@@ -8,12 +8,14 @@ export default class TaskUi {
   }
 
   learnedWeakPrompt() {
+    console.log(this.learnprompt);
+    console.log(this.learningPrompt);
     this.learnprompt.removeClass('open');
     this.learningPrompt.addClass('moveup');
     window.setTimeout(() => {
       this.learningPrompt.removeClass('moveup');
       this.learnedPrompt.addClass('moveup');
-    }, 2000);
+    }, 3000);
   }
 
 

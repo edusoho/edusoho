@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\My;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -51,6 +51,9 @@ class HomeworkController extends BaseController
         $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
         $testpapers   = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
 
+        $activityIds = ArrayToolkit::column($paperResults, 'lessonId');
+        $tasks       = $this->getTaskService()->findTasksByActivityIds($activityIds);
+
         return $this->render('my/homework/check-list.html.twig', array(
             'paperResults' => $paperResults,
             'paginator'    => $paginator,
@@ -58,7 +61,8 @@ class HomeworkController extends BaseController
             'courseSets'   => $courseSets,
             'users'        => $users,
             'status'       => $status,
-            'testpapers'   => $testpapers
+            'testpapers'   => $testpapers,
+            'tasks'        => $tasks
         ));
     }
 

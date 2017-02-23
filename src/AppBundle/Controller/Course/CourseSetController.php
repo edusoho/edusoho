@@ -7,7 +7,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 
 class CourseSetController extends BaseController
@@ -15,11 +15,15 @@ class CourseSetController extends BaseController
     public function showAction(Request $request, $id)
     {
         $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($id);
+        $previewAs = $request->query->get('previewAs');
+        if (!empty($previewAs)) {
+            $course = $this->getCourseService()->getFirstCourseByCourseSetId($id);
+        }
         if (empty($course)) {
             throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
         }
 
-        return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
+        return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'], 'previewAs' => $previewAs)));
     }
 
     public function courseSetsBlockAction(array $courseSets, $view = 'list', $mode = 'default')
@@ -30,7 +34,7 @@ class CourseSetController extends BaseController
 
         $courseSets = array_map(function ($set) use (&$userIds, $service) {
             $set['course'] = $service->getFirstPublishedCourseByCourseSetId($set['id']);
-            if (!empty($set['course']['teacherIds'])) {
+            if (!empty($set['course']['teacherIds']) && is_array($set['course']['teacherIds'])) {
                 $userIds = array_merge($userIds, $set['course']['teacherIds']); 
             }
             return $set;

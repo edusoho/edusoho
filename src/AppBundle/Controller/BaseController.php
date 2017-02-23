@@ -3,15 +3,16 @@
 namespace AppBundle\Controller;
 
 use Biz\User\CurrentUser;
-use Topxia\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\System\Service\LogService;
 use Biz\CloudPlatform\Service\AppService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Codeages\Biz\Framework\Service\BaseService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use AppBundle\Common\Exception\ResourceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -224,6 +225,14 @@ class BaseController extends Controller
         return $response->setCallback($callback);
     }
 
+    //@todo 此方法是为了和旧的调用兼容，考虑清理掉
+    protected function createErrorResponse($request, $name, $message)
+    {
+        $error = array('error' => array('name' => $name, 'message' => $message));
+
+        return new JsonResponse($error, '200');
+    }
+
     /**
      * JSONM
      * https://github.com/lifesinger/lifesinger.github.com/issues/118
@@ -277,7 +286,7 @@ class BaseController extends Controller
 
     protected function setting($name, $default = null)
     {
-        return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
+        return $this->get('web.twig.extension')->getSetting($name, $default);
     }
 
     /**
@@ -288,6 +297,9 @@ class BaseController extends Controller
         return $this->getBiz()->service('User:UserService');
     }
 
+    /**
+     * @return LogService
+     */
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');

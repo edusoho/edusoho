@@ -1,15 +1,10 @@
 {% extends 'classroom-manage/layout.html.twig' %}
-
 {% block title %}{{ setting('classroom.name')|default("班级"|trans) }}{{'管理'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'main' %}
-{% set script_controller = 'classroombundle/controller/classroom/index' %}
 
 {% block main %}
-
 {% set unsetted = "" %}
-
-<div class="panel panel-default panel-col">
+<div class="panel panel-default" role="classroom-manage-index">
   <div class="panel-body">
     {{ web_macro.flash_messages() }}
     <div class="row">
@@ -85,7 +80,7 @@
               {% endif %}
             </tr>
             <tr>
-              <td>{{'课时数'|trans}}</td>
+              <td>{{'任务数'|trans}}</td>
               <td><span class="label label-default pull-right">{{classroom.lessonNum}}</span></td>
             </tr>
           </table>
@@ -137,9 +132,9 @@
               <td>{{studentCount}}</td>
             </tr>
             <tr>
-              <td>{{'课时完成学习数'|trans}}</td>
-              <td>{{yesterdayFinishedLessonNum}}</td>
-              <td>{{todayFinishedLessonNum}}</td>
+              <td>{{'任务完成学习数'|trans}}</td>
+              <td>{{yesterdayFinishedTaskNum}}</td>
+              <td>{{todayFinishedTaskNum}}</td>
             </tr>
             <tr>
                 <td>{{'新增话题数'|trans}}</td>
@@ -177,5 +172,4 @@
     {% endif %}
   </div>
 </div>
-
 {% endblock %}

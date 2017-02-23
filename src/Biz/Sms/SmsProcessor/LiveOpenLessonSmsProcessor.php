@@ -1,9 +1,9 @@
 <?php
 namespace Biz\Sms\SmsProcessor;
 
-use Topxia\Common\SmsToolkit;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\SmsToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\StringToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
@@ -60,7 +60,7 @@ class LiveOpenLessonSmsProcessor implements SmsProcessor
         $course   = $this->getOpenCourseService()->getCourse($lesson['courseId']);
         $to       = '';
 
-        $students = $this->getOpenCourseService()->searchMembers(array('courseId' => $course['id']), array('createdTime', 'Desc'), $index, 1000);
+        $students = $this->getOpenCourseService()->searchMembers(array('courseId' => $course['id']), array('createdTime' => 'Desc'), $index, 1000);
 
         $to = array_filter(ArrayToolkit::column($students, 'mobile'));
         $to = implode(',', $to);

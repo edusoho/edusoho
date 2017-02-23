@@ -4,7 +4,7 @@ namespace Topxia\Api\Resource;
 
 use Biz\User\Service\StatusService;
 use Silex\Application;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 

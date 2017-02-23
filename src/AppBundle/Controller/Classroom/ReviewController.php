@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
@@ -116,9 +116,10 @@ class ReviewController extends BaseController
         $post = $this->getClassroomReviewService()->saveReview($fields);
 
         return $this->render("review/widget/subpost-item.html.twig", array(
-            'post'      => $post,
-            'author'    => $this->getCurrentUser(),
-            'canAccess' => true
+            'post'       => $post,
+            'author'     => $this->getCurrentUser(),
+            'canAccess'  => true,
+            'targetType' => 'classroom'
         ));
     }
 

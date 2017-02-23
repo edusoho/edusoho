@@ -8,78 +8,11 @@ use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 
 class ExploreController extends BaseController
 {
-    public function liveCourseSetsAction(Request $request)
-    {
-        if (!$this->setting('course.live_course_enabled')) {
-            return $this->createMessageResponse('info', $this->get('translator')->trans('直播频道已关闭'));
-        }
-
-        $recentTasksCondition = array(
-            'status'     => 'published',
-            'endTime_GT' => time(),
-            'type'       => 'live'
-        );
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getTaskService()->count($recentTasksCondition)
-            , 30
-        );
-
-        $recentTasks = $this->getTaskService()->search(
-            $recentTasksCondition,
-            array('startTime' => 'ASC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $courses          = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentTasks, 'courseId'));
-        $courses          = ArrayToolkit::index($courses, 'id');
-        $courseSets       = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($courses, 'courseSetId'));
-        $courseSets       = ArrayToolkit::index($courseSets, 'id');
-        $recentCourseSets = array();
-
-        foreach ($recentTasks as $task) {
-            $course    = $courses[$task['courseId']];
-            $courseSet = $courseSets[$course['courseSetId']];
-
-            if ($courseSet['status'] != 'published' || $courseSet['parentId'] != '0') {
-                continue;
-            }
-
-            $courseSet['task']  = $task;
-            $recentCourseSets[] = $courseSet;
-        }
-
-        $liveCourseSets = $this->getCourseSetService()->searchCourseSets(array(
-            'status'   => 'published',
-            'type'     => 'live',
-            'parentId' => '0'
-        ), 'lastest', 0, 10);
-
-        $liveCourses    = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($liveCourseSets, 'id'));
-
-        $userIds = array();
-        foreach ($liveCourses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-        }
-
-        $users   = $this->getUserService()->findUsersByIds($userIds);
-        $default = $this->getSettingService()->get('default', array());
-        return $this->render('course-set/live/explore.html.twig', array(
-            'recentCourseSets' => $recentCourseSets,
-            'liveCourseSets'   => $liveCourseSets,
-            'users'            => $users,
-            'paginator'        => $paginator,
-            'default'          => $default
-        ));
-    }
-
     public function courseSetsAction(Request $request, $category)
     {
         $conditions = $request->query->all();
@@ -131,22 +64,22 @@ class ExploreController extends BaseController
 
             $tagIdsNum = count($conditions['tagIds']);
 
-            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course');
-            $courseIds         = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
-            $flag              = array_count_values($courseIds);
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course-set');
+            $courseSetIds         = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+            $flag              = array_count_values($courseSetIds);
 
-            $courseIds = array_unique($courseIds);
+            $courseSetIds = array_unique($courseSetIds);
 
-            foreach ($courseIds as $key => $courseId) {
-                if ($flag[$courseId] != $tagIdsNum) {
-                    unset($courseIds[$key]);
+            foreach ($courseSetIds as $key => $setId) {
+                if ($flag[$setId] != $tagIdsNum) {
+                    unset($courseSetIds[$key]);
                 }
             }
 
-            if (empty($courseIds)) {
-                $conditions['courseIds'] = array(0);
+            if (empty($courseSetIds)) {
+                $conditions['ids'] = array(0);
             } else {
-                $conditions['courseIds'] = $courseIds;
+                $conditions['ids'] = $courseSetIds;
             }
 
             unset($conditions['tagIds']);
@@ -569,7 +502,7 @@ class ExploreController extends BaseController
 
     protected function getLevelService()
     {
-        return $this->createService('Vip:Vip:LevelService');
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     /**

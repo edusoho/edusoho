@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class DiscoveryColumnController extends BaseController
@@ -60,13 +60,13 @@ class DiscoveryColumnController extends BaseController
 
                 $conditions['parentId'] = 0;
                 $conditions['status']   = 'published';
-                $courses                = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, $discoveryColumn['showCount']);
+                $courses                = $this->getCourseSetService()->searchCourseSets($conditions, 'createdTime', 0, $discoveryColumn['showCount']);
 
                 $discoveryColumns[$key]['count'] = count($courses);
             }
         }
 
-        return $this->render('admin/discovery-Column/index.html.twig', array(
+        return $this->render('admin/discovery-column/index.html.twig', array(
             'discoveryColumns' => $discoveryColumns
         ));
     }
@@ -104,7 +104,7 @@ class DiscoveryColumnController extends BaseController
             $discoveryColumn = array();
         }
 
-        return $this->render('admin/discovery-Column/discovery-column-modal.html.twig', array(
+        return $this->render('admin/discovery-column/discovery-column-modal.html.twig', array(
             'discoveryColumn' => $discoveryColumn,
             'categoryId'      => $categoryId
         ));
@@ -133,7 +133,7 @@ class DiscoveryColumnController extends BaseController
             return $this->redirect($this->generateUrl('admin_discovery_column_index'));
         }
 
-        return $this->render('admin/discovery-Column/discovery-column-modal.html.twig', array(
+        return $this->render('admin/discovery-column/discovery-column-modal.html.twig', array(
             'discoveryColumn' => $discoveryColumn,
             'categoryId'      => $discoveryColumn['categoryId']
         ));
@@ -169,12 +169,17 @@ class DiscoveryColumnController extends BaseController
 
     protected function getDiscoveryColumnService()
     {
-        return $this->createService('admin/discovery-Column/DiscoveryColumnService');
+        return $this->createService('DiscoveryColumn:DiscoveryColumnService');
     }
 
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getCategoryService()

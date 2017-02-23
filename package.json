@@ -13,10 +13,12 @@
   },
   "devDependencies": {
     "babel-cli": "6.18.0",
-    "babel-preset-react": "6.11.1",
+    "babel-core": "6.8.0",
     "babel-preset-es2015": "6.9.0",
+    "babel-preset-react": "6.11.1",
     "babel-runtime": "6.20.0",
-    "es-webpack-engine": "latest",
+    "es-webpack-engine": "~2.3.4",
+    "nodemon": "1.11.0",
     "webpack": "1.14.0"
   },
   "dependencies": {
@@ -25,6 +27,8 @@
     "bootstrap-daterangepicker": "2.1.24",
     "bootstrap-datetime-picker": "2.3.10",
     "bootstrap-notify": "3.1.3",
+    "chokidar": "1.6.1",
+    "component-emitter": "component/emitter",
     "console-polyfill": "0.2.3",
     "easy-pie-chart": "2.1.7",
     "echarts": "3.3.1",
@@ -32,7 +36,7 @@
     "es-messenger": "latest",
     "es-swfobject": "latest",
     "es5-shim": "4.5.9",
-    "es6-event-emitter": "1.5.2",
+    "es6-promise": "^4.0.5",
     "fetch-ie8": "1.4.3",
     "font-awesome": "4.6.3",
     "html5shiv": "3.7.3",
@@ -47,6 +51,7 @@
     "moment": "2.16.0",
     "nouislider": "9.1.0",
     "perfect-scrollbar": "0.6.13",
+    "placeholder": "1.0.2",
     "postal": "2.0.5",
     "postal.federation": "0.5.3",
     "postal.xframe": "0.5.0",
@@ -66,9 +71,10 @@
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "NODE_ENV=development babel-node --max_old_space_size=4096  ./app/Resources/webpack/webpack.dev.js",
+    "dev": "babel-node  ./node_modules/es-webpack-engine/dist/chokidar-watch.js && NODE_ENV=development nodemon ./app/Resources/webpack/webpack.dev.js --exec babel-node --max_old_space_size=4096",
     "compile": "NODE_ENV=production babel-node --max_old_space_size=4096 ./node_modules/.bin/webpack --progress --config ./app/Resources/webpack/webpack.js",
     "compile:debug": "npm run compile -- --debugMode=true",
+    "compile:debug-compress": "npm run compile -- --debugMode=true --compress=true",
     "lint": "eslint src",
     "clean": "npm prune"
   }

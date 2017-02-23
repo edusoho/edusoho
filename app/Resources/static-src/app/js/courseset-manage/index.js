@@ -1,3 +1,3 @@
-$("#course-select").change(function(){
-	location.href = $(this).val();
-});
+import { publishCourse } from '../course-manage/help';
+publishCourse();
+

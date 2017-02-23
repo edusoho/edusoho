@@ -4,17 +4,17 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
-use Biz\Task\Service\TaskResultService;
-use Topxia\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Order\Service\OrderService;
-use Biz\User\Service\MessageService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskResultService;
+use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
@@ -63,23 +63,17 @@ class MemberServiceImpl extends BaseService implements MemberService
             $data['price'] = 0;
         }
 
-        $order = $this->getOrderService()->createOrder(array(
-            'userId'     => $user['id'],
+        $systemOrder = array(
+            'userId'     => $userId,
             'title'      => $orderTitle,
-            'targetType' => 'course',
-            'targetId'   => $course['id'],
+            'targetType' => OrderService::TARGETTYPE_COURSE,
+            'targetId'   => $courseId,
             'amount'     => $data['price'],
             'totalPrice' => $course['price'],
-            'payment'    => $payment,
-            'snPrefix'   => 'C'
-        ));
+            'snPrefix'   => OrderService::SNPREFIX_C
+        );
 
-        $this->getOrderService()->payOrder(array(
-            'sn'       => $order['sn'],
-            'status'   => 'success',
-            'amount'   => $order['amount'],
-            'paidTime' => time()
-        ));
+        $order = $this->getOrderService()->createSystemOrder($systemOrder);
 
         $info = array(
             'orderId'         => $order['id'],
@@ -144,7 +138,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('用户未登录');
         }
 
-        $condition     = array(
+        $condition = array(
             'userId'              => $currentUser["id"],
             'role'                => 'student',
             'deadlineNotified'    => 0,
@@ -190,7 +184,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (is_array($sort)) {
             $orderBy = $sort;
         } else {
-            $orderBy = array('createdTime', 'DESC');
+            $orderBy = array('createdTime' => 'DESC');
         }
 
         return $this->getMemberDao()->searchMemberIds($conditions, $orderBy, $start, $limit);
@@ -341,11 +335,14 @@ class MemberServiceImpl extends BaseService implements MemberService
         $fields = array('teacherIds' => $visibleTeacherIds);
         $course = $this->getCourseDao()->update($courseId, $fields);
 
-        $this->dispatchEvent("course.teacher.update", array(
-            "courseId" => $courseId,
-            "course"   => $course,
-            'teachers' => $teachers
-        ));
+        $this->dispatchEvent('course.teachers.update', new Event($course, array('teachers' => $teachers)));
+
+        //@deprecated to be deleted
+        // $this->dispatchEvent("course.teacher.update", array(
+        //     "courseId" => $courseId,
+        //     "course"   => $course,
+        //     'teachers' => $teachers
+        // ));
     }
 
     /**
@@ -377,7 +374,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             throw $this->createServiceException('教学计划学员不存在，备注失败!');
         }
 
-        $fields = array('remark' => empty($remark) ? '' : (string)$remark);
+        $fields = array('remark' => empty($remark) ? '' : (string) $remark);
         return $this->getMemberDao()->update($member['id'], $fields);
     }
 
@@ -463,24 +460,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if ($member) {
-            throw $this->createServiceException("用户(#{$userId})已加入该教学计划！");
-        }
-
-        $levelChecked = '';
-
-        if (!empty($info['becomeUseMember'])) {
-            $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
-
-            if ($levelChecked != 'ok') {
-                throw $this->createServiceException("用户(#{$userId})不能以会员身份加入教学计划！");
+            if ($member['role'] == 'teacher') {
+                return $member;
+            } else {
+                throw $this->createServiceException("用户(#{$userId})已加入该教学计划！");
             }
-
-            $userMember = $this->getVipService()->getMemberByUserId($user['id']);
         }
 
         //按照教学计划有效期模式计算学员有效期
         $deadline = 0;
-        if ($course['expiryMode'] == 'days' and $course['expiryDays'] > 0) {
+        if ($course['expiryMode'] == 'days' && $course['expiryDays'] > 0) {
             $endTime  = strtotime(date('Y-m-d', time())); //从第二天零点开始计算
             $deadline = $course['expiryDays'] * 24 * 60 * 60 + $endTime;
         } elseif ($course['expiryMode'] == 'date') {
@@ -502,7 +491,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'status'   => 'finish',
             'courseId' => $courseId
         );
-        $count      = $this->getTaskResult()->countTaskResults($conditions);
+        $count = $this->getTaskResult()->countTaskResults($conditions);
 
         $fields = array(
             'courseId'    => $courseId,
@@ -510,7 +499,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'courseSetId' => $course['courseSetId'],
             'orderId'     => empty($order) ? 0 : $order['id'],
             'deadline'    => $deadline,
-            'levelId'     => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
+            'levelId'     => empty($info['levelId']) ? 0 : $info['levelId'],
             'role'        => 'student',
             'remark'      => empty($order['note']) ? '' : $order['note'],
             'learnedNum'  => $count,
@@ -523,40 +512,14 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $member = $this->getMemberDao()->create($fields);
 
-        $this->refreshMemberNoteNumber(
-            $courseId, $userId
-        );
+        $this->refreshMemberNoteNumber($courseId, $userId);
 
-        $setting = $this->getSettingService()->get('course', array());
-
-        if (!empty($setting['welcome_message_enabled']) && !empty($course['teacherIds'])) {
-            $message = $this->getWelcomeMessageBody($user, $course);
-            $this->getMessageService()->sendMessage($course['teacherIds'][0], $user['id'], $message);
-        }
-
-        $fields = array(
-            'studentNum' => $this->getCourseStudentCount($courseId)
-        );
-
-        if ($order) {
-            $fields['income'] = $this->getOrderService()->sumOrderPriceByTarget('course', $courseId);
-        }
-
-        $this->getCourseDao()->update($courseId, $fields);
         $this->dispatchEvent(
             'course.join',
-            $course, array('userId' => $member['userId'], 'member' => $member)
+            $course,
+            array('userId' => $member['userId'], 'member' => $member)
         );
         return $member;
-    }
-
-    protected function getWelcomeMessageBody($user, $course)
-    {
-        $setting            = $this->getSettingService()->get('course', array());
-        $valuesToBeReplace  = array('{{nickname}}', '{{course}}');
-        $valuesToReplace    = array($user['nickname'], $course['title']);
-        $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
-        return $welcomeMessageBody;
     }
 
     public function removeStudent($courseId, $userId)
@@ -632,8 +595,8 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
     {
-        $course   = $this->getCourseService()->getCourse($courseId);
-        $fields   = array(
+        $course = $this->getCourseService()->getCourse($courseId);
+        $fields = array(
             'courseId'    => $courseId,
             'courseSetId' => $course['courseSetId'],
             'userId'      => $userId,
@@ -759,7 +722,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $number = $this->getCourseNoteService()->countNotesByUserIdAndCourseId($userId, $courseId);
 
         $this->getMemberDao()->update($member['id'], array(
-            'noteNum'            => (int)$number,
+            'noteNum'            => (int) $number,
             'noteLastUpdateTime' => time()
         ));
 
@@ -782,7 +745,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
-     * @param  int $userId
+     * @param  int     $userId
      * @return mixed
      */
     public function findStudentMemberByUserId($userId)
@@ -810,6 +773,26 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->countPostsByCourseIdAndUserId($courseId, $userId);
     }
 
+    public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
+    {
+        return $this->getMemberDao()->searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+    }
+
+    public function addMemberExpiryDays($courseId, $userId, $day)
+    {
+        $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+
+        if ($member['deadline'] > 0) {
+            $deadline = $day * 24 * 60 * 60 + $member['deadline'];
+        } else {
+            $deadline = $day * 24 * 60 * 60 + time();
+        }
+
+        return $this->getMemberDao()->update($member['id'], array(
+            'deadline' => $deadline
+        ));
+    }
+
     /**
      * @return CourseMemberDao
      */
@@ -832,14 +815,6 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getCourseDao()
     {
         return $this->createDao('Course:CourseDao');
-    }
-
-    /**
-     * @return MessageService
-     */
-    protected function getMessageService()
-    {
-        return $this->createService('User:MessageService');
     }
 
     /**
@@ -879,7 +854,7 @@ class MemberServiceImpl extends BaseService implements MemberService
      */
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip.VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     /**

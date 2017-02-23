@@ -10,7 +10,7 @@ export const publishCourseSet = () => {
         notify('success', '课程发布成功');
         location.reload();
       } else {
-        notify('danger', '课程发布失败：' + data.message);
+        notify('danger','课程发布失败：' + data.message,5000);
       }
     });
   });

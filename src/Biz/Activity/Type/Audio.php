@@ -7,6 +7,7 @@ use Biz\Activity\Dao\AudioActivityDao;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ActivityLearnLogService;
+use AppBundle\Common\ArrayToolkit;
 
 class Audio extends Activity
 {
@@ -18,7 +19,8 @@ class Audio extends Activity
         if (empty($fields['ext'])) {
             throw $this->createInvalidArgumentException('参数不正确');
         }
-        $audioActivity = $this->getAudioActivityDao()->create($fields['ext']);
+        $audio = ArrayToolkit::parts($fields['ext'],array('mediaId'));
+        $audioActivity = $this->getAudioActivityDao()->create($audio);
         return $audioActivity;
     }
 
@@ -30,6 +32,15 @@ class Audio extends Activity
         );
 
         return $this->getAudioActivityDao()->create($newAudio);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceAudio      = $this->getAudioActivityDao()->get($sourceActivity['mediaId']);
+        $audio            = $this->getAudioActivityDao()->get($activity['mediaId']);
+        $audio['mediaId'] = $sourceAudio['mediaId'];
+
+        return $this->getAudioActivityDao()->update($audio['id'], $audio);
     }
 
     /**

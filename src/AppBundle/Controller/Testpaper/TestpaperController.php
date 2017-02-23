@@ -1,11 +1,11 @@
 <?php
 namespace AppBundle\Controller\Testpaper;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Exception\AccessDeniedException;
+use AppBundle\Common\Exception\AccessDeniedException;
 
 class TestpaperController extends BaseController
 {
@@ -121,7 +121,7 @@ class TestpaperController extends BaseController
 
         $activity          = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        //$task              = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        $task              = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->render('testpaper/result.html.twig', array(
             'questions'     => $questions,
@@ -135,7 +135,7 @@ class TestpaperController extends BaseController
             'attachments'   => $attachments,
             'questionTypes' => $this->getCheckedQuestionType($testpaper),
             'limitedTime'   => 0,
-            //'task'          => $task,
+            'task'          => $task,
             'action'        => $request->query->get('action', ''),
             'target'        => $testpaperActivity
         ));

@@ -1,6 +1,7 @@
 {% import "macro.html.twig" as web_macro %}
 
-{% do load_script('classroombundle/controller/classroom/teachers') %}
+{% do load_script('topxiawebbundle/controller/classroom/teachers') %}
+{% include 'seajs_loader_compatible.html.twig' with {'topxiawebbundle':true} %}
 
 <div class="panel panel-default" id="class-teacher-column">
   <div class="panel-heading">
@@ -17,7 +18,7 @@
       
       <div class="media-body">
         <div class="title">
-          {{ web_macro.user_link(headTeacher , 'link-light') }}
+          {{ web_macro.user_link(headTeacher , 'link-dark') }}
         </div>
         {% if headTeacher.title|default('') %}
           <div class="content">{{ headTeacher.title }}</div>

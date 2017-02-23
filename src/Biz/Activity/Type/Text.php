@@ -4,7 +4,7 @@ namespace Biz\Activity\Type;
 
 use Biz\Activity\Dao\TextActivityDao;
 use Biz\Activity\Service\ActivityService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityLearnLogService;
 
@@ -30,6 +30,16 @@ class Text extends Activity
             'createdUserId' => $biz['user']['id']
         );
         return $this->getTextActivityDao()->create($newText);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceText           = $this->getTextActivityDao()->get($sourceActivity['mediaId']);
+        $text                 = $this->getTextActivityDao()->get($activity['mediaId']);
+        $text['finishType']   = $sourceText['finishType'];
+        $text['finishDetail'] = $sourceText['finishDetail'];
+
+        return $this->getTextActivityDao()->update($text['id'], $text);
     }
 
     public function update($targetId, &$fields, $activity)

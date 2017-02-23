@@ -2,7 +2,7 @@
 namespace Biz\Testpaper\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Type\Testpaper;
 use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Service\CourseService;
@@ -14,7 +14,7 @@ use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Dao\TestpaperResultDao;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\Dao\TestpaperItemResultDao;
-use Topxia\Common\Exception\ResourceNotFoundException;
+use AppBundle\Common\Exception\ResourceNotFoundException;
 
 class TestpaperServiceImpl extends BaseService implements TestpaperService
 {
@@ -50,7 +50,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, $fields);
 
-        $this->dispatchEvent('testpaper.update', array('argument' => $argument, 'testpaper' => $testpaper));
+        $this->dispatchEvent('testpaper.update', $testpaper, array('argument' => $argument));
 
         return $testpaper;
     }
@@ -81,6 +81,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         return true;
+    }
+
+    public function getTestpaperByCopyIdAndCourseSetId($copyId, $courseSetId)
+    {
+        return $this->getTestpaperDao()->getTestpaperByCopyIdAndCourseSetId($copyId, $courseSetId);
     }
 
     public function findTestpapersByIds($ids)
@@ -152,6 +157,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     {
         $items = $this->getItemDao()->findItemsByTestId($testpaperId);
         return ArrayToolkit::index($items, 'questionId');
+    }
+
+    public function findItemsByTestIds($testpaperIds)
+    {
+        return $this->getItemDao()->findItemsByTestIds($testpaperIds);
     }
 
     public function searchItems($conditions, $orderBy, $start, $limit)
@@ -340,7 +350,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         $testpaper = $this->getTestpaper($id);
-        $user      = $this->getCurrentuser();
+        $user      = $this->getCurrentUser();
 
         $testpaperResult = $this->getUserUnfinishResult($testpaper['id'], $fields['courseId'], $fields['lessonId'], $testpaper['type'], $user['id']);
 

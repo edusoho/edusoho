@@ -1,4 +1,5 @@
 import Chooser from './chooser';
+import notify from 'common/notify';
 
 export default class UploaderChooser extends Chooser {
   constructor(element) {
@@ -23,6 +24,7 @@ export default class UploaderChooser extends Chooser {
       process: $uploader.data('process'),
       ui: 'single'
     });
+
     return this;
   }
 
@@ -37,6 +39,10 @@ export default class UploaderChooser extends Chooser {
 
     this._sdk.on('file.finish', file => this._onFileUploadFinish(file));
 
+    this._sdk.on('error', (error) => {
+      notify('danger', error.message);
+    });
+
     return this;
   }
 
@@ -47,7 +53,7 @@ export default class UploaderChooser extends Chooser {
       $('[data-role="placeholder"]').html(name);
     };
 
-    this.trigger('select', file);
+    this.emit('select', file);
 
     let placeMediaAttr = (file) => {
       if (file.length !== 0 && file.length !== undefined) {

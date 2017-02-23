@@ -28,6 +28,11 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
         ));
     }
 
+    public function deleteByCourseId($courseId)
+    {
+        return $this->db()->delete($this->table(), array('courseId' => $courseId));
+    }
+
     public function findByCourseId($courseId)
     {
         return $this->findInField('courseId', array($courseId));

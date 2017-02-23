@@ -5,9 +5,9 @@ namespace Topxia\Api\Resource;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
-use Topxia\Common\EncryptionToolkit;
+use AppBundle\Common\EncryptionToolkit;
 use Biz\Common\Mail\MailFactory;
-use Topxia\Common\SimpleValidator;
+use AppBundle\Common\SimpleValidator;
 use Topxia\Service\Common\ServiceKernel;
 
 class Emails extends BaseResource

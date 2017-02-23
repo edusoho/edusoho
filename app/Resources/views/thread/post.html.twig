@@ -11,7 +11,7 @@
         </div>
       </div>
       {% if thread.type != 'event' %}
-        {{ render(controller('AppBundle:Attachment:formFields', {targetType: 'classroom.thread.post', targetId: thread.id|default(0)}, {'showLabel':false})) }}
+        {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'classroom.thread.post', targetId: thread.id|default(0)}, {'showLabel':false})) }}
      {% endif %}
       <div class="form-group clearfix">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

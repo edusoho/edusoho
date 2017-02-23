@@ -10,6 +10,8 @@ interface TestpaperItemDao extends GeneralDaoInterface
 
     public function findItemsByTestId($testpaperId);
 
+    public function findItemsByTestIds($testpaperIds);
+
     public function getItemsCountByParams(array $conditions, $groupBy = '');
 
     public function getItemsCountByTestId($testId);
@@ -18,7 +20,7 @@ interface TestpaperItemDao extends GeneralDaoInterface
 
     public function getItemsCountByTestIdAndQuestionType($testId, $questionType);
 
-    public function findTestpaperItemsByPIdAndLockedTestIds($pId, $testIds);
+    public function findTestpaperItemsByCopyIdAndLockedTestIds($copyId, $testIds);
 
     public function deleteItemsByParentId($id);
 

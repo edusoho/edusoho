@@ -100,7 +100,7 @@ class ClassroomThreadController extends BaseController
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($request->getMethod() == 'POST') {
-            return $this->forward('Appbundle:Thread:update', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id']), 'thread' => $thread));
+            return $this->forward('AppBundle:Thread:update', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id']), 'thread' => $thread));
         }
 
         return $this->render('classroom-thread/create.html.twig', array(
@@ -138,7 +138,6 @@ class ClassroomThreadController extends BaseController
         if ($member && !$member['locked']) {
             $layout = 'classroom/join-layout.html.twig';
         }
-
         return $this->render('classroom-thread/show.html.twig', array(
             'classroom' => $classroom,
             'thread'    => $thread,

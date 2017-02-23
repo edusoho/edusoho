@@ -24,6 +24,8 @@ interface CourseService
 
     public function getFirstPublishedCourseByCourseSetId($courseSetId);
 
+    public function getFirstCourseByCourseSetId($courseSetId);
+
     public function createCourse($course);
 
     /**
@@ -54,6 +56,8 @@ interface CourseService
     public function tryManageCourse($courseId, $courseSetId = 0);
 
     public function getNextNumberAndParentId($courseId);
+
+    public function getNextCourseItemSeq($courseId);
 
     public function tryTakeCourse($courseId);
 
@@ -102,9 +106,16 @@ interface CourseService
      */
     public function findPublicCoursesByIds(array $ids);
 
-    //---start 前两个已经重构了，后面的四个也需要重构，目前还没有用到，用到的时候在重构
     public function countUserLearningCourses($userId, $filters = array());
 
+    /**
+     * filter 支持 type classroomId locked ...
+     * @param $userId
+     * @param $start
+     * @param $limit
+     * @param array $filters
+     * @return mixed
+     */
     public function findUserLearningCourses($userId, $start, $limit, $filters = array());
 
     public function countUserLearnedCourses($userId, $filters = array());
@@ -113,11 +124,10 @@ interface CourseService
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
-    // public function findUserLearnCourses($userId, $start, $limit);
+    public function findUserLearnCourses($userId, $start, $limit);
 
-    //public function findUserLearnCourseCount($userId);
+    public function countUserLearnCourse($userId);
 
-    //---end
     public function searchCourses($conditions, $sort, $start, $limit);
 
     public function searchCourseCount($conditions);
@@ -125,4 +135,12 @@ interface CourseService
     public function sortCourseItems($courseId, $ids);
 
     public function deleteChapter($courseId, $chapterId);
+
+    public function analysisCourseDataByTime($startTime, $endTime);
+
+    public function countCourses(array $conditions);
+
+    public function getMinAndMaxPublishedCoursePriceByCourseSetId($CourseSetId);
+
+    public function updateMaxRateByCourseSetId($courseSetId, $maxRate);
 }

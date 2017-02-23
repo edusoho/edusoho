@@ -2,23 +2,21 @@ import MaterialLibChoose from './base/materiallib-choose';
 import VideoImport from './base/import-video';
 import CourseFileChoose from './base/coursefile-choose';
 import UploadChooser from './base/upload-chooser';
-import Emitter from 'es6-event-emitter';
+import Emitter from "component-emitter";
 
-class FileChooser extends Emitter {
-
+class FileChooser extends Emitter{
   constructor(options) {
     super();
     this.init();
-
   }
 
   init() {
-    this.initFileChooser();
     this.initTab();
+    this.initFileChooser();
   }
 
   initTab() {
-    $("#material a").click(function(e) {
+    $("#material a").click(function (e) {
       e.preventDefault();
       let $this = $(this);
       $this.find('[type="radio"]').prop('checked', 'checked');
@@ -39,9 +37,27 @@ class FileChooser extends Emitter {
   }
 
   fileSelect(file) {
-    this.trigger('select', file);
+    this._fillTitle(file);
+    this.emit('select', file);
   }
 
+  _fillTitle(file){
+    let $title = $("#title");
+    if ($title.length > 0 && $title.val()=='') {
+      let title = file.name.substring(0,file.name.indexOf('.'));
+      $title.val(title);
+    }
+  }
+
+  static openUI() {
+    $('.file-chooser-bar').addClass('hidden');
+    $('.file-chooser-main').removeClass('hidden');
+  }
+
+  static closeUI() {
+    $('.file-chooser-main').addClass('hidden');
+    $('.file-chooser-bar').removeClass('hidden');
+  }
 }
 
 export default FileChooser;

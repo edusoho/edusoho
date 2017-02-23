@@ -1,26 +1,17 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 
-{% block title %}{{'作业批改'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'作业批阅'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'homework-check' %}
 
 {% block main %}
   <div class="panel panel-default panel-col">
-    <div class="panel-heading">{{'作业批改'|trans}}</div>
+    <div class="panel-heading">{{'作业批阅'|trans}}</div>
     <div class="panel-body">
-      <ul class="nav nav-tabs">
-        <li {% if status == 'reviewing' %} class="active"{% endif %}>
-          <a href="{{ path('classroom_manage_homework', {id:classroom.id,status:'reviewing'}) }}">{{'未批改'|trans}}
-            <span class="badge">{{ reviewingCount|default(0) }}</span>
-          </a>
-        </li>
+      {% if isTeacher is defined and not isTeacher %}
+        <span class="color-danger">{{'当前用户不是本班级教师或助教，没有批阅作业的权限。'|trans}}</span>
+      {% endif %}
 
-        <li {% if status == 'finished' %} class="active"{% endif %}>
-          <a href="{{ path('classroom_manage_homework', {id:classroom.id,status:'finished'}) }}">{{'已批改'|trans}}
-            <span class="badge">{{ finishedCount|default(0) }}</span>
-          </a>
-        </li>
-      </ul>
-      {% include 'HomeworkBundle:CourseHomeworkManage:teaching-homework-list.html.twig' %}
+      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:classroom.id,targetType:'classroom',type:'homework',testpaperIds:homeworkIds})) }}
 
     </div>
   </div>

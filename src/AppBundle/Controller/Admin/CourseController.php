@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -628,7 +628,7 @@ class CourseController extends BaseController
 
     protected function getVipLevelService()
     {
-        return $this->createService('Vip:Vip.LevelService');
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getCourseMemberService()

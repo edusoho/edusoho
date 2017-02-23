@@ -26,12 +26,17 @@ class Live extends Activity
         $refLiveroom = $config['refLiveroom'];
         if (!$refLiveroom) {
             $activity['fromUserId'] = $biz['user']['id'];
-            $activity['_base_url']  = ''; //todo 临时赋值
             unset($activity['id']);
             return $this->getLiveActivityService()->createLiveActivity($activity, true);
         }
 
         return $live;
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        //引用的是同一个直播教室，无需同步
+        return null;
     }
 
     public function update($id, &$fields, $activity)

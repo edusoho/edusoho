@@ -3,7 +3,7 @@ namespace Tests\Article;
 
 
 use Biz\Article\Service\CategoryService;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class CategoryServiceTest extends BaseTestCase
 {
@@ -95,6 +95,6 @@ class CategoryServiceTest extends BaseTestCase
      */
     protected function getCategoryService()
     {
-        return $this->getBiz()->service('Article:CategoryService');
+        return $this->createService('Article:CategoryService');
     }
 }

@@ -53,7 +53,7 @@ class OrderRefererLogEventSubscriber extends EventSubscriber
 
         $refererLogs = $this->getRefererLogService()->searchRefererLogs(
             array('ids' => $refererOrderIds),
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             0, PHP_INT_MAX
         );
 

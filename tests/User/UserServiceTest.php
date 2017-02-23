@@ -2,7 +2,7 @@
 
 namespace Tests\User;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class UserServiceTest extends BaseTestCase
 {
@@ -1197,10 +1197,19 @@ class UserServiceTest extends BaseTestCase
      */
     public function testApplyUserApprovalTwice()
     {
+
+        $file = new \Symfony\Component\HttpFoundation\File\UploadedFile(
+            __DIR__.'/Fixtures/test.gif',
+            'original.gif',
+            'image/gif',
+            filesize(__DIR__.'/Fixtures/test.gif'),
+            null
+        );
+
         $userId    = null;
         $approval  = null;
-        $faceImg   = null;
-        $backImg   = null;
+        $faceImg   = $file;
+        $backImg   = $file;
         $directory = null;
         $this->getUserService()->applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
     }
@@ -1284,17 +1293,6 @@ class UserServiceTest extends BaseTestCase
         $arrays = $this->getUserService()->analysisRegisterDataByTime($time1, $time2);
         $result = $arrays['0'];
         $this->assertGreaterThanOrEqual('3', $result['count']);
-    }
-
-    public function testAnalysisUserSumByTime()
-    {
-        $user1  = $this->createUser('user1');
-        $user2  = $this->createUser('user2');
-        $user3  = $this->createUser('user3');
-        $time2  = time();
-        $arrays = $this->getUserService()->analysisUserSumByTime($time2);
-        $result = $arrays['0'];
-        $this->assertEquals('4', $result['count']);
     }
 
     public function testParseAts()
@@ -2414,16 +2412,16 @@ class UserServiceTest extends BaseTestCase
 
     protected function getUserService()
     {
-        return $this->getBiz()->service('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getFileService()
     {
-        return $this->getServiceKernel()->createService('Content.FileService');
+        return $this->createService('Content:FileService');
     }
 }

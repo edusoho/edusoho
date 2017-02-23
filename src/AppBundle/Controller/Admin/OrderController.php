@@ -1,9 +1,9 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -40,6 +40,12 @@ class OrderController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $courseIds = ArrayToolkit::column($orders, 'targetId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        $courseSetId = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetId);
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
 
         foreach ($orders as $index => $expiredOrderToBeUpdated) {
@@ -53,6 +59,8 @@ class OrderController extends BaseController
             'request'    => $request,
             'targetType' => $targetType,
             'orders'     => $orders,
+            'courses'     => $courses,
+            'courseSets' => $courseSets,
             'users'      => $users,
             'paginator'  => $paginator
         ));
@@ -309,6 +317,11 @@ class OrderController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getClassroomService()

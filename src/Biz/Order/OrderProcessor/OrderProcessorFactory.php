@@ -1,12 +1,17 @@
 <?php
 namespace Biz\Order\OrderProcessor;
 
-use Topxia\Common\JoinPointToolkit;
-use Topxia\Common\Exception\InvalidArgumentException;
+use AppBundle\Common\JoinPointToolkit;
+use AppBundle\Common\Exception\InvalidArgumentException;
 use Topxia\Service\Common\ServiceKernel;
 
 class OrderProcessorFactory
 {
+    /**
+     * @param $type
+     *
+     * @return OrderProcessor
+     */
     public static function create($type)
     {
         $map = JoinPointToolkit::load('order');

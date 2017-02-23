@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller\Admin;
 
-use Topxia\Common\TreeToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\TreeToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrgManageController extends BaseController
@@ -17,7 +17,7 @@ class OrgManageController extends BaseController
         $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
         $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('org-manage/index.html.twig', array(
+        return $this->render('admin/org-manage/index.html.twig', array(
             'orgs'         => $treeOrgs,
             'createdUsers' => $createdUsers
         ));

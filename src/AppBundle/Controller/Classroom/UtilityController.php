@@ -1,10 +1,10 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
+use AppBundle\Twig\WebExtension;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Twig\Extension\WebExtension;
 
 class UtilityController extends BaseController
 {
@@ -73,6 +73,6 @@ class UtilityController extends BaseController
      */
     private function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 }

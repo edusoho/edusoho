@@ -83,7 +83,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         }
         $activity = array_merge($activity, $testpaperActivity);
 
-        $testpapers = $this->findCourseTestpapers($course['courseSetId']);
+        $testpapers = $this->findCourseTestpapers($course);
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
@@ -99,7 +99,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
     public function createAction(Request $request, $courseId)
     {
         $course     = $this->getCourseService()->getCourse($courseId);
-        $testpapers = $this->findCourseTestpapers($course['courseSetId']);
+        $testpapers = $this->findCourseTestpapers($course);
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
@@ -119,13 +119,19 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         ));
     }
 
-    protected function findCourseTestpapers($courseId)
+    protected function findCourseTestpapers($course)
     {
         $conditions = array(
-            'courseSetId' => $courseId,
+            'courseSetId' => $course['courseSetId'],
             'status'      => 'open',
             'type'        => 'testpaper'
         );
+
+        if ($course['parentId'] > 0) {
+            $conditions['copyIdGT'] = 0;
+        } else {
+            $conditions['copyId'] = 0;
+        }
 
         $testpapers = $this->getTestpaperService()->searchTestpapers(
             $conditions,

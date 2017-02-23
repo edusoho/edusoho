@@ -3,8 +3,8 @@
 namespace Tests\Role;
 
 use Biz\Role\Service\RoleService;
-use Topxia\Common\Tree;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Tree;
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Role\Util\PermissionBuilder;
 
@@ -88,11 +88,11 @@ class  RoleServiceTest extends BaseTestCase
      */
     protected function getRoleService()
     {
-        return $this->getServiceKernel()->createService('Role:RoleService');
+        return $this->createService('Role:RoleService');
     }
 
     protected function getRoleDao()
     {
-        return $this->getBiz()->dao('Role:RoleDao');
+        return $this->createDao('Role:RoleDao');
     }
 }

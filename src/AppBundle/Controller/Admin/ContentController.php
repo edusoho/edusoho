@@ -3,8 +3,8 @@ namespace AppBundle\Controller\Admin;
 
 use Biz\Content\Type\ContentTypeFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 
 class ContentController extends BaseController
 {

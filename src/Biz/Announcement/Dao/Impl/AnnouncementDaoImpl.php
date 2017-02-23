@@ -10,6 +10,11 @@ class AnnouncementDaoImpl extends GeneralDaoImpl implements AnnouncementDao
 {
     protected $table = 'announcement';
 
+    public function deleteByTargetIdAndTargetType($targetId, $targetType)
+    {
+        return $this->db()->delete($this->table(), array('targetId' => $targetId, 'targetType' => $targetType));
+    }
+
     public function declares()
     {
         return array(

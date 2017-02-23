@@ -2,7 +2,7 @@
 namespace Biz\Marker\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Marker\Service\MarkerService;
 
 class MarkerServiceImpl extends BaseService implements MarkerService

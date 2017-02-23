@@ -2,8 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseNoteService;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,14 +17,15 @@ class NoteController extends BaseController
         $notes           = array();
         $result['notes'] = $notes;
         if ((isset($conditions['courseIds']) && !empty($conditions['courseIds'])) ||
-            (isset($conditions['courseId']) && !empty($conditions['courseId']))) {
-            $paginator = new Paginator(
+            (isset($conditions['courseId']) && !empty($conditions['courseId']))
+        ) {
+            $paginator           = new Paginator(
                 $request,
                 $this->getNoteService()->countCourseNotes($conditions),
                 20
             );
-            $orderBy = $this->convertFiltersToOrderBy($filters);
-            $notes   = $this->getNoteService()->searchNotes(
+            $orderBy             = $this->convertFiltersToOrderBy($filters);
+            $notes               = $this->getNoteService()->searchNotes(
                 $conditions,
                 $orderBy,
                 $paginator->getOffsetCount(),
@@ -38,7 +40,7 @@ class NoteController extends BaseController
     /**
      * create note or update note
      *
-     * @param  Request                                          $request
+     * @param  Request $request
      * @param  $courseId
      * @param  $taskId
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -88,9 +90,9 @@ class NoteController extends BaseController
         $users               = $this->getUserService()->findUsersByIds($userIds);
         $result['noteLikes'] = $noteLikes;
         $result['users']     = $users;
-        $lessonIds           = ArrayToolkit::column($notes, 'lessonId');
-        $lessons             = $this->getCourseService()->findLessonsByIds($lessonIds);
-        $result['lessons']   = $lessons;
+        $tasksIds            = ArrayToolkit::column($notes, 'taskId');
+        $tasks              = $this->getTaskService()->findTasksByIds($tasksIds);
+        $result['tasks']     = $tasks;
         if (is_array($courseIds)) {
             $courseIds         = ArrayToolkit::column($notes, 'courseId');
             $courses           = $this->getCourseService()->findCoursesByIds($courseIds);
@@ -114,8 +116,8 @@ class NoteController extends BaseController
         if (is_array($courseIds) && empty($filters['courseId'])) {
             $conditions['courseIds'] = $courseIds;
         }
-        if (!empty($filters['lessonId'])) {
-            $conditions['lessonId'] = $filters['lessonId'];
+        if (!empty($filters['taskId'])) {
+            $conditions['taskId'] = $filters['taskId'];
         }
         return $conditions;
     }
@@ -151,5 +153,13 @@ class NoteController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }

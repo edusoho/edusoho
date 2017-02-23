@@ -35,9 +35,9 @@ interface TaskService
 
     public function findTasksByActivityIds($activityIds);
 
-    public function search($conditions, $orderBy, $start, $limit);
+    public function searchTasks($conditions, $orderBy, $start, $limit);
 
-    public function count($conditions);
+    public function countTasks($conditions);
 
     /**
      * @param  array $ids
@@ -56,6 +56,8 @@ interface TaskService
      * @return array
      */
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId);
+
+    public function isPreTasksIsFinished($preTasks);
 
     public function startTask($taskId);
 
@@ -94,6 +96,8 @@ interface TaskService
 
     public function getMaxSeqByCourseId($courseId);
 
+    public function getMaxNumberByCourseId($courseId);
+
     public function findTasksByChapterId($chapterId);
 
     public function findTasksFetchActivityByChapterId($chapterId);
@@ -103,14 +107,22 @@ interface TaskService
     public function findFreeTasksByCourseId($courseId);
 
     /**
+     * 设置当前任务最大可同时进行的人数  如直播任务等
+     *
+     * @param  $taskId
+     * @param  $maxNum
+     * @return mixed
+     */
+    public function setTaskMaxOnlineNum($taskId, $maxNum);
+
+    /**
      * 统计当前时间以后每天的直播次数
      *
-     * @param $courseIds
-     * @param $limit
-     *
-     * @return array<string, int|string>
+     * @param  $courseSetIds
+     * @param  $limit
+     * @return array           <string, int|string>
      */
-    public function findFutureLiveDatesByCourseIdsGroupByDate($courseIds, $limit);
+    public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
 
     /**
      * 返回当前正在直播的直播任务
@@ -127,6 +139,13 @@ interface TaskService
     public function findFutureLiveTasks();
 
     /**
+     * 返回过去直播过的课程ID
+     *
+     * @return array<int>
+     */
+    public function findPastLivedCourseSetIds();
+
+    /**
      *
      * 自由式
      * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第一个任务作为下一个学习任务，
@@ -141,10 +160,19 @@ interface TaskService
      */
     public function findToLearnTasksByCourseId($courseId);
 
+    /**
+     * 侧边栏的任务中心不区分课程类型
+     * @param $courseId
+     * @return mixed
+     */
+    public function findToLearnTasksByCourseIdForMission($courseId);
+
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 
     /**
      * 获得课程的总学习时间
      */
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
+
+    public function analysisTaskDataByTime($startTime, $endTime);
 }

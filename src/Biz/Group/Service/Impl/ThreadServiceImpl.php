@@ -4,7 +4,7 @@ namespace Biz\Group\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Thread\Dao\ThreadDao;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Group\Dao\ThreadCollectDao;
 use Biz\Group\Service\ThreadService;
 use Codeages\Biz\Framework\Event\Event;

@@ -1,7 +1,7 @@
 <?php
 namespace Biz\Search\Adapter;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class TeacherSearchAdapter extends AbstractSearchAdapter

@@ -1,6 +1,8 @@
 <div class="es-bar-menu">
   <ul class="bar-menu-top">
+    {#任务中心#}
     {% include 'es-bar/left-list/study-center.html.twig' %}
+    {#我的考试/作业#}
     {% include 'es-bar/left-list/my-learn-result.html.twig' %}
     {% include 'es-bar/left-list/my-learn-place.html.twig' %}
     {% include 'es-bar/left-list/my-notification.html.twig' %}
@@ -17,7 +19,7 @@
         <a href="{{ path('mobile') }}" target="_blank"><i class="es-icon es-icon-phone1"></i></a>
       </li>
     {% endif %}
-    <li class="go-top" style="margin:-10px auto 0 auto;" data-toggle="tooltip" data-placement="left" title="{{'回到顶端'|trans}}">
+    <li class="go-top" style="margin:-10px auto 0 auto;" data-toggle="tooltip" data-placement="left" title="{{'回到顶端'|trans}}" data-trigger="hover" data-container=".es-bar">
       <a href="javascript:;">
         <i class="es-icon es-icon-keyboardarrowup" style="margin-bottom:-8px"></i>
         <span class="text-sm">TOP</span>

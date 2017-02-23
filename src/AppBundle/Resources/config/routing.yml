@@ -286,15 +286,6 @@ live_auth:
    path:  /live/auth
    defaults: { _controller: AppBundle:LiveAuth:index }
 
-live_verify:
-   path:  /live/verify
-   defaults: { _controller: AppBundle:LiveCourse:verify }
-
-live_course_explore:
-   path:  /live
-   defaults: { _controller: AppBundle:LiveCourse:explore }
-
-
 course_order_detail:
    path:  /order/{id}/detail_course
    defaults: { _controller: AppBundle:Order:detail }
@@ -751,6 +742,14 @@ content_page_show:
 content_page_list:
     path: /page
     defaults: {_controller: AppBundle:Content:pageList }
+
+content_course_rule:
+    path: /courserule
+    defaults: {_controller: AppBundle:Course/CourseManage:courseRule }
+
+course_set_live_capacity:
+    path: /course_set/{courseSetId}/manage/course/{courseId}/live_capacity
+    defaults: { _controller: AppBundle:Course/CourseManage:liveCapacity }
 
 teacher:
     path: /teacher
@@ -1577,6 +1576,10 @@ course_task_trigger:
     path:  /course/{courseId}/task/{id}/trigger
     defaults: { _controller: AppBundle:Task:trigger }
 
+course_task_report:
+    path:  /course/{courseId}/task/{id}/report
+    defaults: { _controller: AppBundle:Task:report }
+
 course_task_finish:
     path:  /course/{courseId}/task/{id}/finish
     defaults: { _controller: AppBundle:Task:finish }
@@ -1591,7 +1594,11 @@ course_task_finished_prompt:
 
 course_manage_task_create:
     path:  /course/{courseId}/task
-    defaults: { _controller: AppBundle:TaskManage:create}
+    defaults: { _controller: AppBundle:TaskManage:create }
+
+course_manage_task_batch_create:
+    path:  /course/{courseId}/task/batch/modal
+    defaults: { _controller: AppBundle:TaskManage:batchCreateTasks }
 
 course_manage_task_publish:
     path:  /course/{courseId}/task/{id}/publish
@@ -1613,9 +1620,33 @@ course_manage_task_delete:
     path:  /course/{courseId}/task/{taskId}/delete
     defaults: { _controller: AppBundle:TaskManage:delete }
 
+course_manage_task_replay_edit:
+  path: /course/{courseId}/task/{taskId}/replay/edit
+  defaults: { _controller: AppBundle:Course/CourseManage:editTaskReplay }
+
+course_manage_task_replay_title_update:
+  path:  /course/{courseId}/task/{taskId}/replay/{replayId}/update_title
+  defaults: { _controller: AppBundle:Course/CourseManage:updateTaskReplayTitle }
+  methods: [POST]
+
+course_manage_task_replay_upload:
+  path:  /course/{courseId}/task/{taskId}/replay/upload
+  defaults: { _controller: AppBundle:Course/CourseManage:uploadReplay }
+
+course_manage_task_replay_create:
+  path:  /course/{courseId}/task/{taskId}/replay/create
+  defaults: { _controller: AppBundle:Course/CourseManage:createReplay }
+  methods: [POST]
+
 task_live_entry:
-    path: /course/{courseId}/activity/{activityId}/live_entry
-    defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
+  path: /course/{courseId}/activity/{activityId}/live_entry
+  defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
+
+task_live_replay_player:
+  path: /course/{courseId}/activity/{activityId}/replay
+  defaults: {_controller: AppBundle:Activity/Live:liveReplay }
+
+
 
 # task_liveroom_ticket:
 #     path: /course/{courseId}/activity/{activityId}/liveroom/{roomId}/ticket
@@ -1682,7 +1713,19 @@ course_set_explore:
 
 live_course_set_explore:
     path:  /live
-    defaults: { _controller: AppBundle:Explore:liveCourseSets }
+    defaults: { _controller: AppBundle:Course/LiveCourseSet:explore }
+
+course_set_manage_sync:
+  path: /course_set/{id}/manage/sync
+  defaults: {_controller: AppBundle:Course/CourseSetManage:syncInfo}
+
+course_set_manage_unlock:
+  path: /course_set/{id}/manage/unlock
+  defaults: {_controller: AppBundle:Course/CourseSetManage:unlock}
+
+course_set_manage_unlock_confirm:
+  path: /course_set/{id}/manage/unlock_confirm
+  defaults: {_controller: AppBundle:Course/CourseSetManage:unlockConfirm}
 
 course_set_manage_courses:
   path: /course_set/{courseSetId}/manage/courses
@@ -1703,6 +1746,10 @@ course_set_manage_course_info:
 course_set_manage_course_tasks:
   path: /course_set/{courseSetId}/manage/course/{courseId}/tasks
   defaults: {_controller: AppBundle:Course/CourseManage:tasks}
+
+course_set_manage_course_replay:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/replay
+  defaults: { _controller: AppBundle:Course/CourseManage:replay }
 
 course_set_manage_course_marketing:
   path: /course_set/{courseSetId}/manage/course/{courseId}/marketing
@@ -1732,6 +1779,22 @@ course_set_manage_course_students_remove:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/remove
   defaults: {_controller: AppBundle:Course/StudentManage:removeCourseStudent}
   methods: [POST]
+
+course_set_manage_course_students_remark:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/remark
+  defaults: { _controller: AppBundle:Course/StudentManage:remark }
+
+course_set_manage_course_students_expiryday:
+  path:  /course_set/{courseSetId}/manage/course/{courseId}/student/{userId}/expiryday
+  defaults: { _controller: AppBundle:Course/StudentManage:addMemberExpiryDays }
+
+course_set_manage_course_student_export_csv:
+   path:  /course_set/{courseSetId}/manage/course/{courseId}/student/export
+   defaults: { _controller: AppBundle:Course/StudentManage:exportCsv }
+
+course_set_manage_course_student_export_datas:
+   path:  /course_set/{courseSetId}/manage/course/{courseId}/manage/student/export/datas
+   defaults: { _controller: AppBundle:Course/StudentManage:exportDatas }
 
 course_set_manage_course_students_process:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/process
@@ -1840,6 +1903,7 @@ my_group_member_center:
 my_group_member_join:
     path:  /my/group/join
     defaults: { _controller: AppBundle:My/Group:memberJoin}
+
 my_group_member_threads:
     path:  /my/group/threads
     defaults: { _controller: AppBundle:My/Group:memberThreads}
@@ -2080,7 +2144,7 @@ course_set_manage_question_check:
   defaults: { _controller: AppBundle:Question/Manage:check }
 
 #testpaper
-course_set_manage_testpaper:  
+course_set_manage_testpaper:
   path: /course_set/{id}/manage/testpaper
   defaults: { _controller: AppBundle:Testpaper/Manage:index }
 
@@ -2190,15 +2254,15 @@ course_manage_homework_check:
 
 
 homework_start_do:
-  pattern: /lesson/{lessonId}/homework/{homeworkId}/startDo
+  path: /lesson/{lessonId}/homework/{homeworkId}/startDo
   defaults: { _controller: AppBundle:Homework:startDo }
 
 homework_show:
-  pattern: /homework/{resultId}/show
+  path: /homework/{resultId}/show
   defaults: { _controller: AppBundle:Homework:doTest }
 
 homework_result_show:
-  pattern: /homework/result/{resultId}/show
+  path: /homework/result/{resultId}/show
   defaults: { _controller: AppBundle:Homework:showResult }
 
 homework_finish:
@@ -2228,10 +2292,6 @@ exercise_finish:
   path: /exercise/result/{resultId}/finish
   defaults: { _controller: AppBundle:Exercise:submit }
   methods: [POST]
-
-course_set_manage_question_check:
-  path: /course_set/{id}/manage/question/check
-  defaults: { _controller: AppBundle:Question/Manage:check }
 
 #attachment
 attachment_upload:
@@ -2268,6 +2328,10 @@ classroom_manage:
 classroom_manage_courses:
     path: /classroom/{id}/manage/courses
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:courses }
+
+classroom_manage_course_remove:
+    path: /classroom/{id}/manage/course/{courseId}/remove
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:removeCourse }
 
 classroom_courses_select:
     path: /classroom/{id}/courses/select
@@ -2366,12 +2430,24 @@ classroom_manage_student_to_base:
     methods: [POST]
 
 classroom_manage_testpaper:
-    path:  /classroom/{id}/manage/testpaper/{status}
+    path:  /classroom/{id}/manage/testpaper/list
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaper }
 
+classroom_manage_testpaper_result_list:
+  path: /classroom/{id}/manage/testpaper/{testpaperId}/result
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperResultList }
+
+classroom_manage_testpaper_check:
+  path: /classroom/{id}/manage/testpaper/{resultId}/check
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:testpaperCheck }
+
 classroom_manage_homework:
-    path:  /classroom/{id}/manage/homework/{status}
+    path:  /classroom/{id}/manage/homework/list
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:homework }
+
+classroom_manage_homework_check:
+  path: /classroom/{id}/manage/homework/{resultId}/check
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:homeworkCheck }
 
 classroom_explore:
     path:  /classroom/explore/{category}
@@ -2507,17 +2583,13 @@ classroom_teacherIds_catch:
     path: /classroom/{classroomId}/teacherIds/catch
     defaults: { _controller: AppBundle:Classroom/Teacher:catchIds }
 
-classroom_course_lessons_preview:
-    path: /classroom/{classroomId}/course/{courseId}/lessons/preview
-    defaults: { _controller: AppBundle:Classroom/CourseLesson:preview }
-
 classroom_buy_hint:
     path: /classroom/courses/{courseId}/buy/hint
-    defaults: { _controller: AppBundle:Classroom/CourseLesson:buyHint }
+    defaults: { _controller: AppBundle:Classroom/CourseTask:buyHint }
 
-classrom_course_lessons_list:
-    path: /classroom/{classroomId}/course/{courseId}/lessons/list
-    defaults: { _controller: AppBundle:Classroom/CourseLesson:list }
+classrom_course_tasks_list:
+    path: /classroom/{classroomId}/course/{courseId}/tasks/list
+    defaults: { _controller: AppBundle:Classroom/CourseTask:list }
 
 #material_lib
 material_lib_browsing:
@@ -2675,7 +2747,7 @@ course_member_expired:
 
 course_member_deadline_reach:
     path:  /course/{id}/member/deadline/reach
-    defaults: { _controller: TopxiaWebBundle:Course:deadlineReach }
+    defaults: { _controller: AppBundle:Course/Course:deadlineReach }
 
 course_buy:
     path: /course/{id}/buy

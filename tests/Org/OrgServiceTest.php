@@ -3,7 +3,7 @@
 namespace Org\Service\Org\Tests;
 
 use Biz\System\Service\SettingService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
 use Biz\BaseTestCase;
@@ -119,14 +119,17 @@ class OrgServiceTest extends BaseTestCase
         $org  = $this->getOrgService()->createOrg($org);
         $org  = $this->getOrgService()->createOrg($org1);
 
-        $orgs   = $this->getOrgService()->findOrgsByPrefixOrgCode();
+        $orgs   = $this->getOrgService()->searchOrgs(array(),array(),0,2);
+
         $seqs   = ArrayToolkit::column($orgs, 'seq');
         $orgIds = ArrayToolkit::column($orgs, 'id');
         $this->getOrgService()->sortOrg($orgIds);
 
-        $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode();
+        $orgs = $this->getOrgService()->searchOrgs(array(),array(),0,2);
 
         $sortSeqs = ArrayToolkit::column($orgs, 'seq');
+
+
         $this->assertGreaterThan(array_sum($seqs), array_sum($sortSeqs));
     }
 
@@ -140,21 +143,22 @@ class OrgServiceTest extends BaseTestCase
         $org  = $this->getOrgService()->createOrg($org);
         $org1 = $this->getOrgService()->createOrg($org1);
 
-        $course = array(
+        $createCourseSet = array(
             'title'   => 'online test course 1',
             'orgCode' => $org['orgCode'],
-            'courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days'
+            'courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days',
+            'type' => 'normal'
         );
-        $createCourse = $this->getCourseService()->createCourse($course);
+        $createCourseSet = $this->getCourseSetService()->createCourseSet($createCourseSet);
 
-        $this->assertEquals($org['id'], $createCourse['orgId']);
-        $this->assertEquals($org['orgCode'], $createCourse['orgCode']);
+        $this->assertEquals($org['id'], $createCourseSet['orgId']);
+        $this->assertEquals($org['orgCode'], $createCourseSet['orgCode']);
 
-        $this->getOrgService()->batchUpdateOrg('course', $createCourse['id'], $org1['orgCode']);
-        $course = $this->getCourseService()->getCourse($createCourse['id']);
+        $this->getOrgService()->batchUpdateOrg('courseSet', $createCourseSet['id'], $org1['orgCode']);
+        $createCourseSet = $this->getCourseSetService()->getCourseSet($createCourseSet['id']);
 
-        $this->assertEquals($org['id'], $course['orgId']);
-        $this->assertEquals($org['orgCode'], $course['orgCode']);
+        $this->assertEquals($org['id'], $createCourseSet['orgId']);
+        $this->assertEquals($org['orgCode'], $createCourseSet['orgCode']);
     }
 
     public function testBatchUpdateOrgwithEnableOrg()
@@ -169,19 +173,20 @@ class OrgServiceTest extends BaseTestCase
 
         $course = array(
             'title'   => 'online test course 1',
+            'type' => 'normal',
             'orgCode' => $org['orgCode'],
             'courseSetId'=>1, 'learnMode'=>'freeMode', 'expiryMode'=>'days'
         );
-        $createCourse = $this->getCourseService()->createCourse($course);
+        $createCourseSet = $this->getCourseSetService()->createCourseSet($course);
 
-        $this->assertEquals($org['id'], $createCourse['orgId']);
-        $this->assertEquals($org['orgCode'], $createCourse['orgCode']);
+        $this->assertEquals($org['id'], $createCourseSet['orgId']);
+        $this->assertEquals($org['orgCode'], $createCourseSet['orgCode']);
 
-        $this->getOrgService()->batchUpdateOrg('course', $createCourse['id'], $org1['orgCode']);
-        $course = $this->getCourseService()->getCourse($createCourse['id']);
+        $this->getOrgService()->batchUpdateOrg('courseSet', $createCourseSet['id'], $org1['orgCode']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($createCourseSet['id']);
 
-        $this->assertEquals($org1['id'], $course['orgId']);
-        $this->assertEquals($org1['orgCode'], $course['orgCode']);
+        $this->assertEquals($org1['id'], $courseSet['orgId']);
+        $this->assertEquals($org1['orgCode'], $courseSet['orgCode']);
 
     }
 
@@ -215,17 +220,17 @@ class OrgServiceTest extends BaseTestCase
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     public function getOrgService()
     {
-        return $this->getServiceKernel()->createService('Org:OrgService');
+        return $this->createService('Org:OrgService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
@@ -233,7 +238,12 @@ class OrgServiceTest extends BaseTestCase
      */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
 }

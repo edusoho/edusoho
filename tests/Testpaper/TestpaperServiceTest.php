@@ -3,7 +3,7 @@
 namespace Biz\Testpaper\Tests;
 
 use Biz\BaseTestCase;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
 class TestpaperServiceTest extends BaseTestCase
 {
@@ -14,6 +14,26 @@ class TestpaperServiceTest extends BaseTestCase
         $findTestpaper = $this->getTestpaperService()->getTestpaper($testpaper['id']);
 
         $this->assertEquals($testpaper['type'], $findTestpaper['type']);
+    }
+
+    public function testGetTestpaperByCopyIdAndCourseSetId()
+    {
+        $testpaper      = $this->createTestpaper1();
+        $copyTestpaper1 = $testpaper;
+        unset($copyTestpaper1['id']);
+        $copyTestpaper1['copyId']      = $testpaper['id'];
+        $copyTestpaper1['courseSetId'] = 2;
+        $copyTestpaper1                = $this->getTestpaperService()->createTestpaper($copyTestpaper1);
+
+        $copyTestpaper2 = $testpaper;
+        unset($copyTestpaper2['id']);
+        $copyTestpaper2['copyId']      = $testpaper['id'];
+        $copyTestpaper2['courseSetId'] = 3;
+        $copyTestpaper2                = $this->getTestpaperService()->createTestpaper($copyTestpaper2);
+
+        $copyTestpaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($testpaper['id'], 2);
+
+        $this->assertArrayEquals($copyTestpaper1, $copyTestpaper);
     }
 
     public function testCreateTestpaper()
@@ -1141,11 +1161,11 @@ class TestpaperServiceTest extends BaseTestCase
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question:QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 
     protected function getTestpaperService()
     {
-        return $this->getServiceKernel()->createService('Testpaper:TestpaperService');
+        return $this->createService('Testpaper:TestpaperService');
     }
 }

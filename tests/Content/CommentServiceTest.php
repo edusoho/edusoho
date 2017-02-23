@@ -26,7 +26,7 @@ class CommentServiceTest extends BaseTestCase
      */
 	protected function getCommentService()
     {
-        return $this->getBiz()->service('Content:CommentService');
+        return $this->createService('Content:CommentService');
     }
 
 }

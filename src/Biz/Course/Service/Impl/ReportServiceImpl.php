@@ -2,7 +2,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -99,7 +99,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     private function countMembersFinishedAllTasksByCourseId($courseId)
     {
-        $totalTaskCount = $this->getTaskService()->count(array('courseId' => $courseId, 'status' => 'published'));
+        $totalTaskCount = $this->getTaskService()->countTasks(array('courseId' => $courseId, 'status' => 'published'));
         if ($totalTaskCount == 0) {
             return 0;
         }

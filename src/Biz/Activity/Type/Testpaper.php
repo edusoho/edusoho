@@ -2,10 +2,9 @@
 
 namespace Biz\Activity\Type;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Dao\TestpaperActivityDao;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\TestpaperActivityService;
@@ -31,10 +30,15 @@ class Testpaper extends Activity
 
     public function copy($activity, $config = array())
     {
-        $ext    = $this->getTestpaperActivityDao()->get($activity['mediaId']);
+        if ($activity['mediaType'] != 'testpaper') {
+            return null;
+        }
+
+        $ext = $this->get($activity['mediaId']);
+
         $newExt = array(
-            'mediaId'         => $ext['mediaId'],
-            'doTimes'         => 0,
+            'mediaId'         => $config['testId'],
+            'doTimes'         => $ext['doTimes'],
             'redoInterval'    => $ext['redoInterval'],
             'limitedTime'     => $ext['limitedTime'],
             'checkType'       => $ext['checkType'],
@@ -43,7 +47,25 @@ class Testpaper extends Activity
             'testMode'        => $ext['testMode']
         );
 
-        return $this->getTestpaperActivityDao()->create($newExt);
+        return $this->create($newExt);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceExt = $this->getTestpaperActivityService()->getActivity($sourceActivity['mediaId']);
+        $ext       = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+
+        $testPaper = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($sourceExt['mediaId'], $activity['fromCourseSetId']);
+
+        $ext['mediaId']         = $testPaper['id'];
+        $ext['redoInterval']    = $sourceExt['redoInterval'];
+        $ext['limitedTime']     = $sourceExt['limitedTime'];
+        $ext['checkType']       = $sourceExt['checkType'];
+        $ext['finishCondition'] = $sourceExt['finishCondition'];
+        $ext['requireCredit']   = $sourceExt['requireCredit'];
+        $ext['testMode']        = $sourceExt['testMode'];
+
+        return $this->getTestpaperActivityService()->updateActivity($ext['id'], $ext);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -52,6 +74,11 @@ class Testpaper extends Activity
 
         if (!$activity) {
             throw $this->createNotFoundException('教学活动不存在');
+        }
+
+        //引用传递，当考试时间设置改变时，时间值也改变
+        if ($fields['testMode'] == 'normal') {
+            $fields['startTime'] = 0;
         }
 
         $filterFields = $this->filterFields($fields);
@@ -164,13 +191,5 @@ class Testpaper extends Activity
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return TestpaperActivityDao
-     */
-    protected function getTestpaperActivityDao()
-    {
-        return $this->getBiz()->dao('Activity:TestpaperActivityDao');
     }
 }

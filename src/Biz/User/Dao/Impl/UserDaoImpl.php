@@ -71,14 +71,8 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
     public function analysisRegisterDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `createdTime`>=? AND `createdTime`<=? group by date order by date ASC ";
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
-    }
-
-    public function analysisUserSumByTime($endTime)
-    {
-        $sql = "select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
-        return $this->db()->fetchAll($sql, array($endTime));
     }
 
     public function countByLessThanCreatedTime($time)
@@ -87,15 +81,20 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         return $this->db()->fetchColumn($sql, array($time));
     }
 
-    //replace: count(array('createdTime' => $endTime))
-    // public function countByLessThanCreatedTime($endTime)
-    // {
-    //     $sql = "SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<=?  ";
-    //     return $this->db()->fetchColumn($sql, array($endTime));
-    // }
-
     protected function _createQueryBuilder($conditions)
     {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == '0') {
+                return true;
+            }
+
+            if (empty($value)) {
+                return false;
+            }
+
+            return true;
+        });
+
         if (isset($conditions['roles'])) {
             $conditions['roles'] = "%{$conditions['roles']}%";
         }
@@ -162,7 +161,14 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime', 'promotedTime', 'promoted', 'promotedSeq','id', 'nickname'),
+            'orderbys'   => array(
+                'id',
+                'createdTime',
+                'promotedTime',
+                'promoted',
+                'promotedSeq',
+                'nickname'
+            ),
             'timestamps' => array(
                 'createdTime',
                 'updatedTime'

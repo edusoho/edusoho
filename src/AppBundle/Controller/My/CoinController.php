@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller\My;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\StringToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\StringToolkit;
 use Biz\Card\Service\CardService;
 use Biz\Cash\Service\CashService;
 use Biz\User\Service\UserService;

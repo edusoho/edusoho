@@ -1,5 +1,7 @@
 import FileChooser from '../../file-chooser/file-choose';
-import {chooserUiOpen, chooserUiClose, showChooserType} from '../widget/chooser-ui.js';
+import SubtitleDialog from './subtitle/dialog';
+
+
 jQuery.validator.addMethod("unsigned_integer", function (value, element) {
   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
 }, "时长必须为非负整数");
@@ -12,9 +14,10 @@ jQuery.validator.addMethod("time_length", function (value, element) {
   return parseInt($("#minute").val()) + parseInt($("#second").val()) > 0
 }, "时长不能等于0");
 
-
-showChooserType($('[name="ext[mediaSource]"]'));
-
+$('#iframe-content').on('click', '.js-choose-trigger', (event) => {
+  FileChooser.openUI();
+  $('[name="ext[mediaSource]"]').val(null);
+});
 
 function _inItStep3from() {
 
@@ -87,9 +90,12 @@ $(".js-length").blur(function () {
 });
 
 const fileChooser = new FileChooser();
+//字幕组件
+const subtitleDialog = new SubtitleDialog('.js-subtitle-list');
+
 
 const onSelectFile = file => {
-  chooserUiClose();
+  FileChooser.closeUI();
   if (file.length && file.length > 0) {
     let minute = parseInt(file.length / 60);
     let second = Math.round(file.length % 60);
@@ -104,7 +110,15 @@ const onSelectFile = file => {
     $("#ext_mediaUri").val(file.uri)
   }
 
+  //渲染字幕
+  subtitleDialog.render(file);
 };
+
+// 完成条件是观看时长的情况
+if($("#finish-condition").children('option:selected').val() === 'time') {
+  $('.viewLength').removeClass('hidden');
+  _inItStep3from();
+}
 
 $("#finish-condition").on('change', function (event) {
   if (event.target.value == 'time') {

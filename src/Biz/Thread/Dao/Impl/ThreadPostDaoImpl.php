@@ -23,7 +23,8 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
     {
         $declares['orderbys'] = array(
             'createdTime',
-            'updatedTime'
+            'updatedTime',
+            'ups'
         );
 
         $declares['conditions'] = array(

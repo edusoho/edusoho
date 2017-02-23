@@ -6,6 +6,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface TaskResultDao extends GeneralDaoInterface
 {
+    public function analysisCompletedTaskDataByTime($startTime, $endTime);
+
     public function findByCourseIdAndUserId($courseId, $userId);
 
     public function findByActivityIdAndUserId($activityId, $userId);

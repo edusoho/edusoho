@@ -10,8 +10,8 @@ use Biz\File\Service\FileImplementor;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\FileToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\CloudClientFactory;
@@ -649,7 +649,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function synData($conditions)
     {
-        $files = $this->getUploadFileDao()->search($conditions, array('createdTime', 'DESC'), 0, 100);
+        $files = $this->getUploadFileDao()->search($conditions, array('createdTime' => 'DESC'), 0, 100);
 
         if (!empty($files)) {
             $api      = CloudAPIFactory::create('root');

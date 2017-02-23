@@ -2,12 +2,11 @@
 
 namespace Biz\Activity\Type;
 
-use Biz\Activity\Dao\TestpaperActivityDao;
-use Biz\Activity\Service\ActivityLearnLogService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Config\Activity;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
-use Topxia\Common\ArrayToolkit;
-use Biz\Activity\Config\Activity;
+use Biz\Activity\Service\ActivityLearnLogService;
 
 class Exercise extends Activity
 {
@@ -30,19 +29,7 @@ class Exercise extends Activity
 
     public function copy($activity, $config = array())
     {
-        $ext    = $this->getTestpaperActivityDao()->get($activity['mediaId']);
-        $newExt = array(
-            'mediaId'         => $ext['testId'],
-            'doTimes'         => 0,
-            'redoInterval'    => $ext['redoInterval'],
-            'limitedTime'     => $ext['limitedTime'],
-            'checkType'       => $ext['checkType'],
-            'finishCondition' => $ext['finishCondition'],
-            'requireCredit'   => $ext['requireCredit'],
-            'testMode'        => $ext['testMode']
-        );
-
-        return $this->getTestpaperActivityDao()->create($newExt);
+        return null;
     }
 
     public function update($targetId, &$fields, $activity)
@@ -132,13 +119,5 @@ class Exercise extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service("Activity:ActivityService");
-    }
-
-    /**
-     * @return TestpaperActivityDao
-     */
-    protected function getTestpaperActivityDao()
-    {
-        return $this->getBiz()->service('Activity:TestpaperActivityDao');
     }
 }

@@ -29,7 +29,11 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
 
     public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl)
     {
-        $count   = $this->getCourseService()->getCourseStudentCount($targetId);
+        $conditions = array(
+            'courseId' => $targetId,
+            'role'     => 'student'
+        );
+        $count   = $this->getCourseMemberService()->countMembers($conditions);
         $members = $this->getCourseMemberService()->findCourseStudents($targetId, 0, $count);
 
         $result = false;
@@ -60,9 +64,9 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
     public function getActions($action)
     {
         $config = array(
-            'create' => 'AppBundle:Course/CourseAnnouncement:create',
-            'edit'   => 'AppBundle:Course/CourseAnnouncement:edit',
-            'list'   => 'AppBundle:Course/CourseAnnouncement:list'
+            'create' => 'AppBundle:Course/Announcement:create',
+            'edit'   => 'AppBundle:Course/Announcement:edit',
+            'list'   => 'AppBundle:Course/Announcement:list'
         );
 
         return $config[$action];

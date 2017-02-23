@@ -3,8 +3,8 @@
 namespace Topxia\MobileBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
+use AppBundle\Common\ArrayToolkit;
 
 class CourseReviewController extends MobileController
 {

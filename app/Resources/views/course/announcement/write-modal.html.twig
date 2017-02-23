@@ -79,5 +79,5 @@
 {% endblock %}
 {% block footer %}
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
-  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#announcement-write-form">{{'保存'|trans}}</button>
+  <button type="submit" class="btn btn-primary pull-right js-save-btn" data-toggle="form-submit" data-target="#announcement-write-form" data-loading-text="{{'正在保存...'|trans}}">{{'保存'|trans}}</button>
 {% endblock %}

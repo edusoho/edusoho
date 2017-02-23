@@ -1,12 +1,11 @@
 {% extends 'classroom-manage/layout.html.twig' %}
-
-{% set side_nav = "price" %}
-{% set script_controller = 'classroombundle/controller/classroom/set-price' %}
-
 {% block title %}{{'价格设置'|trans}} - {{ parent() }}{% endblock %}
 
+{% set side_nav = "price" %}
+{% do script(['libs/jquery-validation.js','app/js/classroom-manage/set-price/index.js']) %}
+
 {% block main %}
-<div class="panel panel-default panel-col">
+<div class="panel panel-default" role="classroom-set-price">
   <div class="panel-heading">{{'价格设置'|trans}}</div>
   <div class="panel-body">
   {{ web_macro.flash_messages() }}
@@ -27,24 +26,12 @@
       {% endif %}
       </div>
 
-      {% if setting('vip.enabled') %}
-
-      <div class="form-group">
-        <div class="col-md-2 control-label">
-          <label for="price">{{'会员免费学'|trans}}</label>
-        </div>
-        <div class="col-md-8 controls">
-          <select name="vipLevelId" class="form-control width-input width-input-large">
-            {{ select_options(levels, classroom.vipLevelId|default(0), '不支持'|trans) }}
-          </select>
-        </div>
-      </div>
-      {% endif %}
+      {{ slot('classroom.marketing.setting', {'classroom':classroom}) }}
 
       <div class="row form-group">
         <div class="col-md-2 control-label"></div>
         <div class="controls col-md-8">
-          <button type="submit" class="btn btn-primary" id="classroom-save">{{'提交'|trans}}</button>  
+          <button class="btn btn-primary" id="classroom-save">{{'提交'|trans}}</button>  
         </div>
       </div>
 

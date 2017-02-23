@@ -117,4 +117,6 @@ interface MemberService
     public function countDiscussionsByCourseIdAndUserId($courseId, $userId);
 
     public function countPostsByCourseIdAndUserId($courseId, $userId);
+
+    public function addMemberExpiryDays($courseId, $userId, $day);
 }

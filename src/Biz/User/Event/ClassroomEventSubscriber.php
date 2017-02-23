@@ -1,14 +1,14 @@
 <?php
 
-
 namespace Biz\User\Event;
 
-
+use AppBundle\Common\StringToolkit;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\MemberService;
 use Biz\User\Service\StatusService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Topxia\Common\StringToolkit;
 
 class ClassroomEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -19,48 +19,27 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         return array(
             'classroom.join'         => 'onClassroomJoin',
-            'classroom.auditor_join' => 'onClassroomGuest',
+            'classroom.auditor_join' => 'onClassroomGuest'
         );
     }
 
     public function onClassroomJoin(Event $event)
     {
-        $classroom         = $event->getSubject();
-        $userId            = $event->getArgument('userId');
-        $status            = array(
-            'type'        => 'become_student',
-            'classroomId' => $classroom['id'],
-            'objectType'  => 'classroom',
-            'objectId'    => $classroom['id'],
-            'private'     => $classroom['status'] == 'published' ? 0 : 1,
-            'userId'      => $userId,
-            'properties'  => array(
-                'classroom' => $this->simplifyClassroom($classroom)
-            )
-        );
-        $status['private'] = $classroom['showable'] == 1 ? $status['private'] : 1;
+        $classroom = $event->getSubject();
+        $userId    = $event->getArgument('userId');
 
-        $this->getStatusService()->publishStatus($status);
+        $this->publishJoinStatus($classroom, $userId, 'become_student');
+        $this->syncCourseStudents($classroom, $userId);
     }
 
     public function onClassroomGuest(Event $event)
     {
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
-        $status    = array(
-            'type'        => 'become_auditor',
-            'classroomId' => $classroom['id'],
-            'objectType'  => 'classroom',
-            'objectId'    => $classroom['id'],
-            'private'     => $classroom['status'] == 'published' ? 0 : 1,
-            'userId'      => $userId,
-            'properties'  => array(
-                'classroom' => $this->simplifyClassroom($classroom)
-            )
-        );
-
-        $status['private'] = $classroom['showable'] == 1 ? $status['private'] : 1;
-        $this->getStatusService()->publishStatus($status);
+        // publish status
+        $this->publishJoinStatus($classroom, $userId, 'become_auditor');
+        //add user to classroom courses
+        $this->syncCourseStudents($classroom, $userId);
     }
 
     private function simplifyClassroom($classroom)
@@ -74,11 +53,60 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         );
     }
 
+    private function syncCourseStudents($classroom, $userId)
+    {
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+        if(empty($courses)){
+            return;
+        }
+
+        foreach ($courses as $course){
+            $member = $this->getMemberService()->getCourseMember($course['id'], $userId);
+            if(empty($member)){
+                $this->getMemberService()->becomeStudentByClassroomJoined($course['id'], $userId);
+            }
+        }
+    }
+
+    private function publishJoinStatus($classroom, $userId, $type)
+    {
+        $status = array(
+            'type'        => $type,
+            'classroomId' => $classroom['id'],
+            'objectType'  => 'classroom',
+            'objectId'    => $classroom['id'],
+            'private'     => $classroom['status'] == 'published' ? 0 : 1,
+            'userId'      => $userId,
+            'properties'  => array(
+                'classroom' => $this->simplifyClassroom($classroom)
+            )
+        );
+
+        $status['private'] = $classroom['showable'] == 1 ? $status['private'] : 1;
+        $this->getStatusService()->publishStatus($status);
+    }
+
     /**
      * @return StatusService
      */
     protected function getStatusService()
     {
         return $this->getBiz()->service('User:StatusService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 }

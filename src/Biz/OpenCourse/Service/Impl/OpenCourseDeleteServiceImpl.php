@@ -40,7 +40,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
         $count = 0;
 
         if ($lessonCount > 0) {
-            $lessons = $this->getOpenCourseLessonDao()->search(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
+            $lessons = $this->getOpenCourseLessonDao()->search(array('courseId' => $course['id']), array('createdTime' => 'desc'), 0, 500);
 
             foreach ($lessons as $lesson) {
                 if (!empty($lesson['mediaId'])) {
@@ -66,7 +66,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
         $count       = 0;
 
         if ($memberCount > 0) {
-            $members = $this->getOpenCourseMemberDao()->search(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
+            $members = $this->getOpenCourseMemberDao()->search(array('courseId' => $course['id']), array('createdTime' => 'desc'), 0, 500);
 
             foreach ($members as $member) {
                 $result = $this->getOpenCourseMemberDao()->delete($member['id']);
@@ -86,7 +86,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
         $count     = 0;
 
         if ($openCount > 0) {
-            $openCourses = $this->getRecommendCourseDao()->search(array('openCourseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
+            $openCourses = $this->getRecommendCourseDao()->search(array('openCourseId' => $course['id']), array('createdTime' => 'desc'), 0, 500);
 
             foreach ($openCourses as $openCourse) {
                 $result = $this->getRecommendCourseDao()->delete($openCourse['id']);
@@ -115,7 +115,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
         $count         = 0;
 
         if ($materialCount > 0) {
-            $materials = $this->getMaterialService()->searchMaterials($conditions, array('createdTime', 'DESC'), 0, $materialCount);
+            $materials = $this->getMaterialService()->searchMaterials($conditions, array('createdTime' => 'DESC'), 0, $materialCount);
 
             foreach ($materials as $material) {
                 $result = $this->getMaterialService()->deleteMaterial($course['id'], $material['id']);

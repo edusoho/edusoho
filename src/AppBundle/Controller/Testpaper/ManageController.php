@@ -1,8 +1,8 @@
 <?php
 namespace AppBundle\Controller\Testpaper;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,10 +13,23 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
+        if ($courseSet['locked']) {
+            return $this->redirectToRoute('course_set_manage_sync', array(
+                'id'      => $id,
+                'sideNav' => 'testpaper'
+            ));
+        }
+
         $conditions = array(
             'courseSetId' => $courseSet['id'],
             'type'        => 'testpaper'
         );
+
+        if ($courseSet['parentId'] > 0) {
+            $conditions['copyIdGT'] = 0;
+        } else {
+            $conditions['copyId'] = 0;
+        }
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -34,12 +47,14 @@ class ManageController extends BaseController
         $userIds = ArrayToolkit::column($testpapers, 'updatedUserId');
         $users   = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('testpaper/manage/index.html.twig', array(
-            'courseSet'  => $courseSet,
-            'testpapers' => $testpapers,
-            'users'      => $users,
-            'paginator'  => $paginator
+        $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByMediaIds(ArrayToolkit::column($testpapers, 'id'));
 
+        return $this->render('testpaper/manage/index.html.twig', array(
+            'courseSet'           => $courseSet,
+            'testpapers'          => $testpapers,
+            'users'               => $users,
+            'paginator'           => $paginator,
+            'testpaperActivities' => $testpaperActivities
         ));
     }
 
@@ -81,7 +96,7 @@ class ManageController extends BaseController
         ));
     }
 
-    public function checkListAction(Request $request, $targetId, $type, $testpaperIds = array())
+    public function checkListAction(Request $request, $targetId, $targetType, $type, $testpaperIds = array())
     {
         if (empty($testpaperIds)) {
             $testpaperIds = array(0);
@@ -113,7 +128,8 @@ class ManageController extends BaseController
         return $this->render('testpaper/manage/check-list.html.twig', array(
             'testpapers' => ArrayToolkit::index($testpapers, 'id'),
             'paginator'  => $paginator,
-            'targetId'   => $targetId
+            'targetId'   => $targetId,
+            'targetType' => $targetType
         ));
     }
 
@@ -497,6 +513,11 @@ class ManageController extends BaseController
     public function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function getTestpaperActivityService()
+    {
+        return $this->createService('Activity:TestpaperActivityService');
     }
 
     protected function getServiceKernel()

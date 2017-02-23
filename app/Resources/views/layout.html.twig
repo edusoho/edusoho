@@ -35,6 +35,12 @@
     <link rel="shortcut icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" media="screen"/>
   {% endif %}
 
+  <!--[if lt IE 9]>
+  <script src="{{ asset('static-dist/libs/html5shiv.js') }}"></script>
+  <script src="{{ asset('static-dist/es5-shim/es5-shim.js') }}"></script>
+  <script src="{{ asset('static-dist/es5-shim/es5-sham.js') }}"></script>
+  <![endif]-->
+
   {% block stylesheets %}
     {% set currentTheme = current_theme() %}
     {% include 'css_loader.html.twig' %}
@@ -45,6 +51,10 @@
 
 </head>
 <body class="es-main-green {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}">
+
+<!--[if lt IE 9]>
+<script src="{{ asset('static-dist/libs/fix-ie.js') }}"></script>
+<![endif]-->
 
 {% block body %}
   <div class="es-wrap">
@@ -90,7 +100,6 @@
   <div id="attachment-modal" class="modal"></div>
 {% endblock %}
 {% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
-
 {% include 'script_boot.html.twig' %}
 </body>
 </html>

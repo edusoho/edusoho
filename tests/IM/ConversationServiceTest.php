@@ -2,7 +2,7 @@
 namespace Tests\IM;
 
 use Mockery;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;;
 use Biz\CloudPlatform\CloudAPIFactory;
 
@@ -521,6 +521,6 @@ class ConversationServiceTest extends BaseTestCase
 
     protected function getConversationService()
     {
-        return $this->getBiz()->service('IM:ConversationService');
+        return $this->createService('IM:ConversationService');
     }
 }

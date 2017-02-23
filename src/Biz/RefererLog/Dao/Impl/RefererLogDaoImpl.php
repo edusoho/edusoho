@@ -30,9 +30,9 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
     public function findRefererLogsGroupByTargetId($targetType, $orderBy, $startTime, $endTime, $start, $limit)
     {
         $parameters = array($targetType, $targetType);
-        $sql
-                    = "SELECT a.targetId AS targetId, b.hitNum AS hitNum,b.orderCount AS orderCount FROM (SELECT id,targetId from {$this->table} WHERE targetType = ?
-                GROUP BY targetId) AS a LEFT JOIN (SELECT id,targetId, COUNT(id) AS hitNum, SUM(orderCount) AS orderCount FROM {$this->table}
+        $sql        = "SELECT a.targetId AS targetId, b.hitNum AS hitNum,b.orderCount AS orderCount
+                    FROM (SELECT targetId FROM {$this->table} WHERE targetType = ?
+                GROUP BY targetId) AS a LEFT JOIN (SELECT targetId, COUNT(id) AS hitNum, SUM(orderCount) AS orderCount FROM {$this->table}
                 WHERE targetType = ?";
 
         if (!empty($startTime)) {
@@ -61,7 +61,7 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit)
     {
         $builder = $this->createQueryBuilder($conditions, $groupBy)
-            ->select("{$groupBy}, refererHost, count(id) as count , sum(orderCount) as orderCount")
+            ->select("{$groupBy}, count(id) as count , sum(orderCount) as orderCount") //refererHost,
             ->setFirstResult($start)
             ->setMaxResults($limit)
             ->addOrderBy('count', 'DESC');

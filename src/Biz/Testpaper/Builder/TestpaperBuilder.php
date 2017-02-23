@@ -1,10 +1,10 @@
 <?php
 namespace Biz\Testpaper\Builder;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\Exception\RuntimeException;
+use AppBundle\Common\Exception\RuntimeException;
 use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 
 class TestpaperBuilder implements TestpaperBuilderInterface

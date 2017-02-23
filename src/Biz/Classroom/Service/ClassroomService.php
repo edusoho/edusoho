@@ -82,12 +82,18 @@ interface ClassroomService
 
     public function findClassroomsByCoursesIds($courseIds);
 
+    public function findClassroomsByCourseSetIds(array $courseSetIds);
+
+    public function findClassroomCourseByCourseSetIds($courseSetIds);
+
     /**
      * @before findClassroomByCourseId
      * @param  $courseId
      * @return mixed
      */
     public function getClassroomByCourseId($courseId);
+
+    public function getClassroomCourseByCourseSetId($courseSetId);
 
     // 内部方法
     public function updateClassroomTeachers($id);

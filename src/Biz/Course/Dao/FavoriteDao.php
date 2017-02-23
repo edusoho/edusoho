@@ -13,4 +13,6 @@ interface FavoriteDao extends GeneralDaoInterface
     public function getByUserIdAndCourseSetId($userId, $courseSetId, $type='course');
 
     public function countByUserId($userId);
+
+    public function deleteByCourseId($courseId);
 }

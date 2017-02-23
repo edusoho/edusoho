@@ -10,5 +10,7 @@ interface StatusDao extends GeneralDaoInterface
 
     public function deleteByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId);
 
+    public function deleteByCourseId($courseId);
+
     public function findByCourseId($courseId);
 }

@@ -86,6 +86,17 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals(2, count($subs));
     }
 
+    public function testFindQuestionsByCourseSetId()
+    {
+        $question1 = $this->createQuestion();
+        $question2 = $this->createQuestion1();
+        $question3 = $this->createQuestion3();
+
+        $questions = $this->getQuestionService()->findQuestionsByCourseSetId(1);
+
+        $this->assertEquals(2, count($questions));
+    }
+
     public function testSearch()
     {
         $question1 = $this->createQuestion();
@@ -308,6 +319,20 @@ class QuestionServiceTest extends BaseTestCase
         return $this->getQuestionService()->create($question);
     }
 
+    protected function createQuestion3()
+    {
+        $question = array(
+            'type'     => 'fill',
+            'stem'     => 'fill[[a|b]]',
+            'courseId' => 2,
+            'lessonId' => 0,
+            'answer'   => array(array('a', 'b')),
+            'target'   => 'course-2'
+        );
+
+        return $this->getQuestionService()->create($question);
+    }
+
     protected function createMaterialQuestion()
     {
         $material = array(
@@ -401,6 +426,6 @@ class QuestionServiceTest extends BaseTestCase
 
     protected function getQuestionService()
     {
-        return $this->getServiceKernel()->createService('Question:QuestionService');
+        return $this->createService('Question:QuestionService');
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Course\Event;
 
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -10,10 +10,10 @@ class CourseMemberEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.update'        => 'onCourseUpdate',
-            'course.lesson.create' => 'onCourseLessonCreate',
-            'course.lesson.delete' => 'onCourseLessonDelete',
-            'course.lesson_finish' => 'onLessonFinish'
+            // 'course.update'        => 'onCourseUpdate',
+            // 'course.lesson.create' => 'onCourseLessonCreate',
+            // 'course.lesson.delete' => 'onCourseLessonDelete',
+            // 'course.lesson_finish' => 'onLessonFinish'
         );
     }
 

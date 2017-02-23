@@ -1,10 +1,7 @@
-  {% extends 'classroom-manage/students.html.twig' %}
-
+{% extends 'classroom-manage/students.html.twig' %}
 {% block title %}{{'学员管理'|trans}} - {{ parent() }}{% endblock %}
-
 {% set submenu = 'student' %}
-
-{% set script_controller = 'classroombundle/controller/classroom/students' %}
+{% do script(['app/js/classroom-manage/students-manage/index.js']) %}
 
 {% block maincontent %}
 

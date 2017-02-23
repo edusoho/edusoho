@@ -2,30 +2,29 @@
 
 namespace AppBundle\Controller\Classroom;
 
-use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use Vip\Service\Vip\VipService;
 use Biz\Sign\Service\SignService;
 use Biz\User\Service\AuthService;
 use Vip\Service\Vip\LevelService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
 use Biz\Order\Service\OrderService;
 use Biz\User\Service\StatusService;
-use Topxia\Common\ExtensionManager;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use AppBundle\Common\ExtensionManager;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\Cash\Service\CashOrdersService;
-use Codeages\Biz\Framework\Event\Event;
+use AppBundle\Controller\BaseController;
 use Biz\Cash\Service\CashAccountService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\WebBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomOrderService;
 use Biz\Classroom\Service\ClassroomReviewService;
 
@@ -92,7 +91,7 @@ class ClassroomController extends BaseController
         $cashRate = $this->getCashRate();
 
         foreach ($courses as $key => $course) {
-            $lessonNum += $course['taskCount'];
+            $lessonNum += $course['taskNum'];
 
             $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
@@ -234,9 +233,6 @@ class ClassroomController extends BaseController
             $layout = 'classroom/join-layout.html.twig';
         }
 
-        $this->dispatchEvent('classroom.view',
-            new Event($classroom, array('userId' => $user['id']))
-        );
         return $this->render("classroom/introduction.html.twig", array(
             'introduction'         => $introduction,
             'layout'               => $layout,
@@ -671,7 +667,7 @@ class ClassroomController extends BaseController
             && $this->setting('vip.enabled')
             && !empty($classroom['vipLevelId'])
             && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) == 'ok') {
-            return $this->forward("classroom/becomeStudent", array(
+            return $this->forward("AppBundle:Classroom/Classroom:becomeStudent", array(
                 'request' => $request,
                 'id'      => $classroom['id']
             ));
@@ -977,7 +973,7 @@ class ClassroomController extends BaseController
      */
     protected function getLevelService()
     {
-        return $this->createService('Vip:Vip.LevelService');
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     /**
@@ -985,7 +981,7 @@ class ClassroomController extends BaseController
      */
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip.VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     /**

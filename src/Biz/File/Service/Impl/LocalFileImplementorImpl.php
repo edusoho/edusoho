@@ -4,7 +4,7 @@ namespace Biz\File\Service\Impl;
 use Biz\BaseService;
 use Biz\File\Dao\UploadFileDao;
 use Biz\File\Service\FileImplementor;
-use Topxia\Common\FileToolkit;
+use AppBundle\Common\FileToolkit;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Biz\User\Service\UserService;
@@ -187,7 +187,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         unset($conditions['start']);
         unset($conditions['limit']);
 
-        return $this->getUploadFileDao()->search($conditions, array('createdTime', 'DESC'), $start, $limit);
+        return $this->getUploadFileDao()->search($conditions, array('createdTime' => 'DESC'), $start, $limit);
     }
 
     public function synData($conditions)

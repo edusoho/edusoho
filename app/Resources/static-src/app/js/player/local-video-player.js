@@ -1,7 +1,7 @@
 import videojs from 'video.js'
-import Emitter from 'es6-event-emitter';
+import Emitter from "component-emitter";
 let videoSwf = require('video.js/dist/video-js/video-js.swf');
-let webpack_base_url = 'http://127.0.0.1:3030';
+
 class LocalVideoPlayer extends Emitter {
   constructor(options) {
     super();
@@ -20,7 +20,7 @@ class LocalVideoPlayer extends Emitter {
       techOrder: techOrder,
       loop: false,
       flash: {
-        swf: webpack_base_url + videoSwf
+        swf: videoSwf
       },
       controlBar: {
         liveDisplay: false
@@ -31,7 +31,6 @@ class LocalVideoPlayer extends Emitter {
     player.src(this.options.url);
 
     player.on('error', error => {
-      console.log(error)
       this.set("hasPlayerError", true);
       var message = Translator.trans('您的浏览器不能播放当前视频。');
       Notify.danger(message, 60);
@@ -44,24 +43,24 @@ class LocalVideoPlayer extends Emitter {
     });
 
     player.on('ended', (e) => {
-      this.trigger('ended', e);
+      this.emit('ended', e);
       this._onEnded(e);
     });
 
     player.on('timeupdate', (e) => {
-      this.trigger('timechange', e);
+      this.emit('timechange', e);
     });
 
     player.on('loadedmetadata', (e) => {
-      that.trigger('ready', e);
+      that.emit('ready', e);
     });
 
     player.on("play", (e) => {
-      that.trigger("playing", e);
+      that.emit("playing", e);
     });
 
     player.on("pause", (e) => {
-      that.trigger("paused", e);
+      that.emit("paused", e);
     });
 
     this.player = player;

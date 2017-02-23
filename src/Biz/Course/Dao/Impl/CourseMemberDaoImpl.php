@@ -72,53 +72,66 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
 
-    public function countLearningMembersByUserId($userId)
+    public function countLearningMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
         $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
-        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND (m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serilized')";
+        $sql .= "WHERE ";
 
-        return $this->db()->fetchColumn($sql, array($userId));
+        list($sql, $params) = $this->applySqlParams($conditions, $sql);
+
+        $sql .= "(m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized')";
+
+        return $this->db()->fetchColumn($sql, $params);
     }
 
-    public function findLearningMembers($userId, $start, $limit)
+    public function findLearningMembers($conditions, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
         $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
-        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND (m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serilized') ";
-        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= "WHERE ";
 
-        return $this->db()->fetchAll($sql, array($userId))?: array();
+        list($sql, $params) = $this->applySqlParams($conditions, $sql);
+
+        $sql .= "(m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized') ";
+        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        
+        return $this->db()->fetchAll($sql, $params) ?: array();
     }
 
-    public function countLearnedMembersByUserId($userId)
+    public function countLearnedMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
         $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
-        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
+        $sql .= "WHERE ";
 
-        return $this->db()->fetchColumn($sql, array($userId));
+        list($sql, $params) = $this->applySqlParams($conditions, $sql);
+        $sql .= "m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
+
+        return $this->db()->fetchColumn($sql, $params);
     }
 
-    public function findLearnedMembers($userId,  $start, $limit)
+    public function findLearnedMembers($conditions, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
         $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
-        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
+        $sql .= "WHERE ";
+        list($sql, $params) = $this->applySqlParams($conditions, $sql);
+        $sql .= "m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
         $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
-        return $this->db()->fetchAll($sql, array($userId))?: array();
+        return $this->db()->fetchAll($sql, $params) ?: array();
     }
-
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
     {
         $builder = $this->_createQueryBuilder($conditions)
-            ->select('courseId, COUNT(id) AS count')
+            ->select("{$groupBy}, COUNT(id) AS count")
             ->groupBy($groupBy)
             ->orderBy('count', 'DESC')
             ->setFirstResult($start)
             ->setMaxResults($limit);
+
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -163,9 +176,12 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $builder = $this->_createQueryBuilder($conditions);
 
         if (isset($conditions['unique'])) {
-            $builder->select('DISTINCT userId');
+            $builder->select('userId');
             $builder->orderBy($orderBy[0], $orderBy[1]);
             $builder->from('('.$builder->getSQL().')', $this->table());
+            //when we use distinct in strict mode, it's not allowed to order by field that is not in select part,
+            //so we use a sub query, and reset result field here.
+            $builder->select('distinct userId');
             $builder->resetQueryPart('where');
             $builder->resetQueryPart('orderBy');
         } else {
@@ -250,5 +266,23 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'deadline >= :deadlineGreaterThan'
             )
         );
+    }
+
+    /**
+     * @param $conditions
+     * @param $sql
+     * @return array
+     */
+    protected function applySqlParams($conditions, $sql)
+    {
+        $params     = array();
+        $conditions = array_filter($conditions, function ($value) {
+            return !empty($value);
+        });
+        foreach ($conditions as $key => $value) {
+            $sql .= $key." = ? AND ";
+            array_push($params, $value);
+        }
+        return array($sql, $params);
     }
 }

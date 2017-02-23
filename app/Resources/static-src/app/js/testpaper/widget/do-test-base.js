@@ -12,7 +12,7 @@ class DoTestBase
     this.$form = $container.find('form');
     this._initEvent();
     this._initUsedTimer();
-    new CopyDeny();
+    this._isCopy();
     this._alwaysSave();
   }
 
@@ -26,6 +26,13 @@ class DoTestBase
     this.$container.on('click','.js-favorite',event=>this._favoriteToggle(event));
     this.$container.on('click','.js-analysis',event=>this._analysisToggle(event));
     this.$container.on('blur','[data-type="fill"]',event=>this.fillChange(event));
+  }
+
+  _isCopy() {
+    let isCopy = this.$container.find('.js-testpaper-body').data('copy');
+    if (isCopy) {
+      new CopyDeny();
+    }
   }
 
   fillChange(event) {
@@ -58,7 +65,6 @@ class DoTestBase
   _analysisToggle(event) {
     let $current = $(event.currentTarget);
     $current.addClass('hidden');
-    console.log($current.siblings('.js-analysis.hidden'));
     $current.siblings('.js-analysis.hidden').removeClass('hidden');
     $current.closest('.js-testpaper-question').find('.js-testpaper-question-analysis').slideToggle();
   }
@@ -221,7 +227,8 @@ class DoTestBase
       let url = $('input[name="testSuspend"]').data('url');
       setInterval(function(){
         self._submitTest(url);
-        notify('success','已保存');
+        let currentTime = new Date().getHours()+ ':' + new Date().getMinutes()+ ':' +new Date().getSeconds();
+        notify('success',currentTime + ' 已保存');
       }, 5 * 60 * 1000);
     }
   }

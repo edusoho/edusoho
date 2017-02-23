@@ -6,6 +6,8 @@ use Pimple\Container;
 use Biz\Common\HTMLHelper;
 use Pimple\ServiceProviderInterface;
 use Biz\File\FireWall\FireWallFactory;
+use Biz\Importer\CourseMemberImporter;
+use Biz\Importer\ClassroomMemberImporter;
 use Biz\Testpaper\Builder\ExerciseBuilder;
 use Biz\Testpaper\Builder\HomeworkBuilder;
 use Biz\Testpaper\Builder\TestpaperBuilder;
@@ -84,6 +86,12 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return new ArticleEventSubscriber($biz);
         };
 
-    }
+        $biz['importer.course-member'] = function ($biz) {
+            return new CourseMemberImporter($biz);
+        };
 
+        $biz['importer.classroom-member'] = function ($biz) {
+            return new ClassroomMemberImporter($biz);
+        };
+    }
 }

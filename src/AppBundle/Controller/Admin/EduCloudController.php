@@ -5,9 +5,9 @@ namespace AppBundle\Controller\Admin;
 use Biz\CloudPlatform\Service\AppService;
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
-use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Util\EdusohoLiveClient;
 use Biz\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\Request;
@@ -301,7 +301,7 @@ class EduCloudController extends BaseController
 
         $response = array(
             'path' => $path,
-            'url'  => $this->get('topxia.twig.web_extension')->getFileUrl($path)
+            'url'  => $this->get('web.twig.extension')->getFileUrl($path)
         );
 
         return new Response(json_encode($response));
@@ -342,7 +342,7 @@ class EduCloudController extends BaseController
 
         $response = array(
             'path' => $path,
-            'url'  => $this->get('topxia.twig.web_extension')->getFileUrl($path)
+            'url'  => $this->get('web.twig.extension')->getFileUrl($path)
         );
 
         return new Response(json_encode($response));
@@ -1462,7 +1462,7 @@ class EduCloudController extends BaseController
 
     private function getWebExtension()
     {
-        return $this->container->get('topxia.twig.web_extension');
+        return $this->container->get('web.twig.extension');
     }
 
     protected function getSignEncoder()
