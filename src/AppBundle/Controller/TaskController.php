@@ -26,7 +26,7 @@ class TaskController extends BaseController
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
         }
 
-        $taskResult   = array();
+        $taskResult   = array('status' => 'none');
         $nextTask     = array();
         $finishedRate = 0;
         //非课程成员学习task不需要记录学习信息
