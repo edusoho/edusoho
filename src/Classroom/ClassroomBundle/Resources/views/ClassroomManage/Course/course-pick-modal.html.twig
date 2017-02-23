@@ -38,6 +38,6 @@
 {% block footer %}
   <button id="sure" class="btn btn-primary pull-right" data-loading-text="正在添加..." data-url="{{ path('classroom_courses_select', {id:classroomId})}}">{{'添加'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
-  <p id="tip" class="hide" style="color: #F40;">班级数据处理中，请耐心等待。</p>
+  <p id="tip" class="color-danger pull-right mts mbs" >班级数据处理中，请耐心等待。</p>
   <script>app.load('classroombundle/controller/classroom/manage/course/pick')</script>
 {% endblock %}
