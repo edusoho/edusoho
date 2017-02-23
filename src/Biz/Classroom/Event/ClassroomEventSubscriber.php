@@ -16,6 +16,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         return array(
             'classroom.delete' => 'onClassroomDelete',
+            'classroom.course.change' => 'onClassroomCourseChange',
             'classroom.update' => 'onClassroomUpdate',
             'classReview.add'  => 'onReviewCreate'
         );
@@ -24,9 +25,20 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onClassroomDelete(Event $event)
     {
         $classroom = $event->getSubject();
-
         $tagOwnerManager = new TagOwnerManager('classroom', $classroom['id']);
         $tagOwnerManager->delete();
+    }
+
+    public function onClassroomCourseChange(Event $event)
+    {
+        $classroom = $event->getSubject();
+        $classroomId = $classroom['classroomId'];
+        $courseNum = $this->getClassroomService()->countClassroomCourseByClassroomId($classroomId);
+        $taskNum = $this->getClassroomService()->countClassroomCourseTasksByClassroomId($classroomId);
+
+        $fields = array('courseNum' => $courseNum, 'lessonNum' => $taskNum);
+        $this->getClassroomService()->updateClassroom($classroomId, $fields);
+        $this->getClassroomService()->updateClassroomTeachers($classroomId);
     }
 
     public function onClassroomUpdate(Event $event)
@@ -90,6 +102,14 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     private function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    private function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     /**
