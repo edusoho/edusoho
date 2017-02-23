@@ -26,6 +26,7 @@
     "one-var-declaration-per-line": 0,
     "no-unused-expressions": 0,
     "arrow-body-style": 0,
+    "no-console": 0,
 
     // 待改进
     "no-unused-vars": 1,
