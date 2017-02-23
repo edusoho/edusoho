@@ -60,6 +60,21 @@ class CourseLessonController extends BaseController
         ));
     }
 
+    private function isEnablePreview($course,$lesson)
+    {
+        if($lesson['free']){
+            return true;
+        }
+        if($lesson['type'] == 'video' && $course['tryLookable']){
+            return true;
+        }
+        if(empty($course['buyable'])){
+            return false;
+        }
+        return true;
+
+    }
+
     public function previewAction(Request $request, $courseId, $lessonId = 0)
     {
         $course = $this->getCourseService()->getCourse($courseId);
@@ -76,9 +91,10 @@ class CourseLessonController extends BaseController
 
 //开启限制加入
 
-        if (empty($course['buyable'])) {
+        if (!$this->isEnablePreview($course,$lesson)) {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
+
 
         if (!empty($course['status']) && $course['status'] == 'closed') {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
