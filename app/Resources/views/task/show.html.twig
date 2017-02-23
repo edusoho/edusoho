@@ -15,6 +15,7 @@
     <input type="hidden" name="task-id" value="{{ task.id }}">
     <input type="hidden" name="task-result-status" value="{{ taskResult.status }}">
     <input type="hidden" name="mode" value="{% if preview %}preview{% else %}learn{% endif %}">
+    <input type="hidden" name="isMember" value="{{ isMember ? true : false }}">
     <input type="hidden" name="plugins_url" value="{{ path('course_task_show_plugins', {courseId: task.courseId, taskId: task.id}) }}">
   </div>
 
@@ -51,7 +52,7 @@
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
           </span>
         </div>
-        {% if course.enableFinish|default(1) == 0 %}
+        {% if course.enableFinish|default(1) == 0 and isMember %}
           <a type="button" href="javascript:;"
             {% if taskResult.status != 'finish' %}
               class="btn btn-transparent btn-learn js-btn-learn"

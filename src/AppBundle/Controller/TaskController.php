@@ -46,7 +46,8 @@ class TaskController extends BaseController
             'task'         => $task,
             'taskResult'   => $taskResult,
             'nextTask'     => $nextTask,
-            'finishedRate' => $finishedRate
+            'finishedRate' => $finishedRate,
+            'isMember'     => !empty($member)
         ));
     }
 
