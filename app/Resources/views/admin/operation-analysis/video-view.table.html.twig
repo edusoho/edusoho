@@ -10,7 +10,6 @@
           <tbody>
             {% if videoViewedDetail %}
               {% for key,val in videoViewedDetail %}
-
               {% if  tasks[val.taskId].title|default(null)  %}
                   <tr>
                     <td>{{ users[val.userId].nickname }}</td>
