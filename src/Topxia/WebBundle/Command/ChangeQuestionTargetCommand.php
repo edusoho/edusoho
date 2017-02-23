@@ -86,7 +86,8 @@ class ChangeQuestionTargetCommand extends BaseCommand
 
     protected function db()
     {
-        return $this->getBiz()['db'];
+        $biz = $this->getBiz();
+        return $biz['db'];
     }
 
     protected function getQuestionService()
