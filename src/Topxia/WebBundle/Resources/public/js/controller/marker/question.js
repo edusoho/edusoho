@@ -10,7 +10,7 @@ define(function (require, exports, module) {
         $form = $('.js-mark-from');
         var count = parseInt((document.body.clientHeight - 350) / 50) ? parseInt((document.body.clientHeight - 350) / 50) : 1;
         $.post($form.attr('action'), $form.serialize() + '&pageSize=' + count, function (response) {
-            $('#subject-task-list').html(response);
+            $('#subject-lesson-list').html(response);
             $('[data-toggle="popover"]').popover();
             if (!Cookie.get("MARK-MANGE-GUIDE")) {
                 initIntro();
@@ -33,7 +33,7 @@ define(function (require, exports, module) {
                 var count = parseInt((document.body.clientHeight - 350) / 50) ? parseInt((document.body.clientHeight - 350) / 50) : 1;
 
                 $.post($form.attr('action'), $form.serialize() + '&pageSize=' + count, function (response) {
-                    $('#subject-task-list').html(response);
+                    $('#subject-lesson-list').html(response);
                 });
             }
         });
@@ -41,7 +41,7 @@ define(function (require, exports, module) {
         $(".js-marker-manage-content").on('change', 'select[name=target]', function () {
             var count = parseInt((document.body.clientHeight - 350) / 50) ? parseInt((document.body.clientHeight - 350) / 50) : 1;
             $.post($form.attr('action'), $form.serialize() + '&pageSize=' + count, function (response) {
-                $('#subject-task-list').html(response);
+                $('#subject-lesson-list').html(response);
             });
         })
 
@@ -56,7 +56,7 @@ define(function (require, exports, module) {
         var target = $('select[name=target]');
         $(".js-marker-manage-content").on('click', '.js-more-questions', function (e) {
             var $this = $(this).hide().parent().addClass('loading'),
-                $list = $('#subject-task-list').css('max-height', $('#subject-task-list').height()),
+                $list = $('#subject-lesson-list').css('max-height', $('#subject-lesson-list').height()),
                 getpage = parseInt($this.data('current-page')) + 1,
                 lastpage = $this.data('last-page');
             $.post($this.data('url') + getpage, {
@@ -175,7 +175,7 @@ define(function (require, exports, module) {
                     questionId: markerJson.questionMarkers[0].id
                 }, function (data) {
                     $marker_question.remove();
-                    $('#subject-task-list').find('.item-task[question-id=' + markerJson.questionMarkers[0].questionId + ']').removeClass('disdragg').addClass('drag');
+                    $('#subject-lesson-list').find('.item-task[question-id=' + markerJson.questionMarkers[0].questionId + ']').removeClass('disdragg').addClass('drag');
                     if ($marker.find('[data-role="scale-blue-list"]').children().length <= 0) {
                         $marker.remove();
                         for (i in markers_array) {
