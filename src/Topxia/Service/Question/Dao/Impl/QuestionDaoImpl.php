@@ -143,7 +143,7 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             ->setMaxResults($limit)
             ->orderBy($orderBy[0], $orderBy[1]);
         $questions = $builder->execute()->fetchAll() ?: array();
-
+        
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
 
@@ -284,7 +284,8 @@ class QuestionDaoImpl extends BaseDao implements QuestionDao
             ->andWhere('stem LIKE :stem')
             ->andWhere("type IN ( :types )")
             ->andwhere("subCount <> :subCount")
-            ->andWhere("id NOT IN ( :excludeIds ) ");
+            ->andWhere("id NOT IN ( :excludeIds ) ")
+            ->andWhere('copyId = :copyId');
 
         if (isset($conditions['excludeUnvalidatedMaterial']) && ($conditions['excludeUnvalidatedMaterial'] == 1)) {
             $builder->andStaticWhere(" not( type = 'material' AND subCount = 0 )");
