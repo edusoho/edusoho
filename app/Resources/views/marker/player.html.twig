@@ -1,15 +1,15 @@
 <div class="manage-player-body">
   <div class="manage-player-header">
-    <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class=" title-link"><i class="es-icon es-icon-chevronleft"></i>返回</a>
+    <a href="{{ path('course_set_manage_course_tasks', {courseSetId:course.courseSetId, courseId:course.id}) }}" class=" title-link"><i class="es-icon es-icon-chevronleft"></i>返回</a>
     <ol class="breadcrumb breadcrumb-o">
       <li>
         {{course.title}}
       </li>
-      <li class="active">{{lesson.title|plain_text(50) }}</li>
+      <li class="active">{{task.title|plain_text(50) }}</li>
       </ol>
   </div>
-  <div class="manage-player-content" id="lesson-video-content" data-role="lesson-content" {% if setting('storage.video_watermark') >
-    0 and setting('storage.video_watermark_image') %}
+
+  <div class="manage-player-content" id="task-video-content" data-url="" data-role="task-content" {% if setting('storage.video_watermark') >0 and setting('storage.video_watermark_image') %}
       data-watermark="{{ filepath(setting('storage.video_watermark_image'), null) }}"
     {% endif %}
     {% if setting('storage.video_fingerprint') and app.user %}

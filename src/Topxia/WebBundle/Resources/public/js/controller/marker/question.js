@@ -63,7 +63,7 @@ define(function (require, exports, module) {
                 "target": target.val()
             }, function (response) {
                 $this.remove();
-                $list.append(response).animate({scrollTop: 40 * ($list.find('.item-lesson').length + 1)});
+                $list.append(response).animate({scrollTop: 40 * ($list.find('.item-task').length + 1)});
                 if (getpage == lastpage) {
                     $('.js-more-questions').parent().remove();
                 }
@@ -111,7 +111,7 @@ define(function (require, exports, module) {
 
 
         var myDraggableWidget = new DraggableWidget({
-            element: "#lesson-dashboard",
+            element: "#task-dashboard",
             initMarkerArry: initMarkerArry,
             _video_time: mediaLength,
             messenger:messenger,
@@ -135,7 +135,7 @@ define(function (require, exports, module) {
 
                     }
                     $marker.removeClass('hidden');
-                    $marker.find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').attr('id', data.id);
+                    $marker.find('.item-task[question-id=' + markerJson.questionMarkers[0].questionId + ']').attr('id', data.id);
                 });
                 return markerJson;
             },
@@ -175,7 +175,7 @@ define(function (require, exports, module) {
                     questionId: markerJson.questionMarkers[0].id
                 }, function (data) {
                     $marker_question.remove();
-                    $('#subject-lesson-list').find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').removeClass('disdragg').addClass('drag');
+                    $('#subject-lesson-list').find('.item-task[question-id=' + markerJson.questionMarkers[0].questionId + ']').removeClass('disdragg').addClass('drag');
                     if ($marker.find('[data-role="scale-blue-list"]').children().length <= 0) {
                         $marker.remove();
                         for (i in markers_array) {
