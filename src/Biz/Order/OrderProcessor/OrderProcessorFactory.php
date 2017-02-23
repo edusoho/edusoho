@@ -7,6 +7,11 @@ use Topxia\Service\Common\ServiceKernel;
 
 class OrderProcessorFactory
 {
+    /**
+     * @param $type
+     *
+     * @return OrderProcessor
+     */
     public static function create($type)
     {
         $map = JoinPointToolkit::load('order');
