@@ -61,7 +61,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
                 $userSignStatistics = $this->getSignService()->getSignUserStatistics($user['id'], 'classroom_sign', $classRoomId);
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
         return array(
@@ -184,7 +184,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $member = $this->getClassroomService()->getClassroomMember($classRoomId, $user["id"]);
 
         if (empty($member)) {
-            $this->createErrorResponse('error', '您不是班级的学员。');
+            return $this->createErrorResponse('error', '您不是班级的学员。');
         }
 
         if (!array_intersect($member["role"], array("auditor", "student"))) {
@@ -209,8 +209,8 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $classRoomId = $this->getParam("classRoomId");
         $targetType = $this->getParam("targetType");
 
-        if(!in_array($targetType, array("course", "classroom"))) {
-            $this->createErrorResponse('error', '退出学习失败');
+        if (!in_array($targetType, array("course", "classroom"))) {
+            return $this->createErrorResponse('error', '退出学习失败');
         }
         $processor = OrderRefundProcessorFactory::create($targetType);
 
@@ -235,12 +235,12 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $amount = empty($data['applyRefund']) ? 0 : null;
 
         try {
-            if(isset($data["applyRefund"]) && $data["applyRefund"] ){
+            if (isset($data["applyRefund"]) && $data["applyRefund"]) {
                 $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
             } else {
                 $processor->removeStudent($order['targetId'], $user['id']);
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
 
