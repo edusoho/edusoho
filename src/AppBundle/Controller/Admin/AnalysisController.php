@@ -747,7 +747,7 @@ class AnalysisController extends BaseController
         );
 
         if ($tab == "trend") {
-            $videoViewedTrendData = $this->getTaskViewLog()->searchTaskViewGroupByTime(array("fileType" => 'video'), $timeRange['startTime'], $timeRange['endTime']);
+            $videoViewedTrendData = $this->getTaskViewLog()->searchTaskViewsGroupByTime(array("fileType" => 'video'), $timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
             foreach ($videoViewedTrendData as $key => $value) {
@@ -808,7 +808,7 @@ class AnalysisController extends BaseController
         );
 
         if ($tab == "trend") {
-            $videoViewedTrendData = $this->getTaskViewLog()->searchTaskViewGroupByTime(array("fileType" => 'video', "fileStorage" => 'cloud'), $timeRange['startTime'], $timeRange['endTime']);
+            $videoViewedTrendData = $this->getTaskViewLog()->searchTaskViewsGroupByTime(array("fileType" => 'video', "fileStorage" => 'cloud'), $timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
 
@@ -873,7 +873,7 @@ class AnalysisController extends BaseController
         $videoViewedTrendData = "";
 
         if ($tab == "trend") {
-            $videoViewedTrendData = $this->getTaskViewLog()->searchTaskViewGroupByTime(array("fileType" => 'video', "fileStorage" => 'local'), $timeRange['startTime'], $timeRange['endTime']);
+            $videoViewedTrendData = $this->getTaskViewLog()->searchTaskViewsGroupByTime(array("fileType" => 'video', "fileStorage" => 'local'), $timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
 
@@ -939,7 +939,7 @@ class AnalysisController extends BaseController
         $videoViewedTrendData = "";
 
         if ($tab == "trend") {
-            $videoViewedTrendData = $this->getTaskViewLog()->searchTaskViewGroupByTime( array("fileType" => 'video', "fileStorage" => 'net'), $timeRange['startTime'], $timeRange['endTime']);
+            $videoViewedTrendData = $this->getTaskViewLog()->searchTaskViewsGroupByTime( array("fileType" => 'video', "fileStorage" => 'net'), $timeRange['startTime'], $timeRange['endTime']);
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
 

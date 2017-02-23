@@ -103,7 +103,7 @@ const onSelectFile = file => {
     $("#second").val(second);
     $("#length").val(minute * 60 + second);
   }
-  console.log(file)
+
   $('[name="ext[mediaSource]"]').val(file.source);
   if (file.source == 'self') {
     $("#ext_mediaId").val(file.id);

@@ -26,7 +26,7 @@ class ViewLogDaoImpl extends GeneralDaoImpl implements ViewLogDao
         );
     }
 
-    public function searchTaskViewGroupByTime($conditions, $startTime, $endTime)
+    public function searchTaskViewsGroupByTime($conditions, $startTime, $endTime)
     {
         $params = array($startTime, $endTime);
 
