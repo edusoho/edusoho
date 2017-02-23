@@ -224,6 +224,7 @@ class TaskController extends BaseController
         }
 
         $task = $this->getTaskService()->getTask($id);
+
         if ($task['status'] != 'published') {
             return $this->createMessageResponse('未发布的任务无法完成');
         }
