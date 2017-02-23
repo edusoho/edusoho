@@ -87,7 +87,8 @@ class CourseController extends CourseBaseController
             'course'         => $course,
             'classroom'      => $classroom,
             'previewTask'    => empty($previewTasks) ? null : array_shift($previewTasks),
-            'previewAs'      => $previewAs
+            'previewAs'      => $previewAs,
+            'marketingPage' => 1
         ));
     }
 
@@ -217,7 +218,10 @@ class CourseController extends CourseBaseController
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
         $files = $this->findFiles($courseItems);
+
+        $isMarketingPage = false;
         if (empty($member)) {
+            $isMarketingPage = true;
             $user   = $this->getCurrentUser();
             $member = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
         }
@@ -225,7 +229,8 @@ class CourseController extends CourseBaseController
             'course'      => $course,
             'courseItems' => $courseItems,
             'member'      => $member,
-            'files'       => $files
+            'files'       => $files,
+            'isMarketingPage' => $isMarketingPage
         ));
     }
 
