@@ -178,6 +178,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    sms_pay_center_event_subscriber:
+        class: Biz\Sms\Event\PayCenterEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     thread_event_subscriber:
         class: Biz\Thread\Event\ThreadEventSubscriber
         arguments: ['@biz']

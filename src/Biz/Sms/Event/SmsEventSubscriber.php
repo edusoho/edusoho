@@ -12,34 +12,9 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
     public static function getSubscribedEvents()
     {
         return array(
-            'order.pay.success'          => 'onOrderPaySuccess',
             'open.course.lesson.publish' => 'onLiveOpenCourseLessonCreate',
             'open.course.lesson.update'  => 'onLiveOpenCourseLessonUpdate'
         );
-    }
-
-    public function onOrderPaySuccess(Event $event)
-    {
-        $order      = $event->getSubject();
-        $targetType = $event->getArgument('targetType');
-        $smsType    = 'sms_'.$targetType.'_buy_notify';
-
-        if ($this->getSmsService()->isOpen($smsType)) {
-            $userId                    = $order['userId'];
-            $parameters                = array();
-            $parameters['order_title'] = $order['title'];
-            $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
-
-            if ($targetType == 'coin') {
-                $parameters['totalPrice'] = $order['amount'].$this->getKernel()->trans('元');
-            } else {
-                $parameters['totalPrice'] = $order['totalPrice'].$this->getKernel()->trans('元');
-            }
-
-            $description = $parameters['order_title'].$this->getKernel()->trans('成功回执');
-
-            $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
-        }
     }
 
     public function onLiveOpenCourseLessonCreate(Event $event)
