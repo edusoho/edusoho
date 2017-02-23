@@ -56,7 +56,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             $order = array();
 
             $order['userId']     = $user['id'];
-            $order['title']      = $this->getKernel()->trans('购买课程《%courseSetTitle%》-%courseTitle%', array('%courseSetTitle%' => $courseSet['title'], '%courseTitle%' => $course['title']));
+            $order['title']      = $this->getKernel()->trans('购买课程《%courseSetTitle%》- %courseTitle%', array('%courseSetTitle%' => $courseSet['title'], '%courseTitle%' => $course['title']));
             $order['targetType'] = 'course';
             $order['targetId']   = $course['id'];
             if (!empty($course['discountId'])) {
