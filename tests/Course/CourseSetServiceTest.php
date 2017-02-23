@@ -107,6 +107,35 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertEquals(0, $result['ratingNum']);
     }
 
+    public function testApplyDiscount()
+    {
+        $courseSetFields = array(
+            'title' => '新课程开始！',
+            'type'  => 'normal'
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
+        $this->assertNotEmpty($courseSet);
+
+        $discountFields = array(
+            'type' => 'discount',
+            'startTime' => time(),
+            'endTime' => time() + 100,
+        );
+        $discount = $this->getDiscountService()->addDiscount($discountFields);
+        $this->assertNotEmpty($discount);
+
+        $discountItem = $this->getDiscountService()->putItems($discount['id'], array($courseSet['id']));
+        $this->assertNotEmpty($discountItem);
+        $this->getDiscountService()->setAllItemsDiscount($discount['id'], 5);
+
+        //Todo set course origin price ...
+    }
+
+    public function testCancelDiscount()
+    {
+        ;
+    }
+
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
@@ -115,5 +144,10 @@ class CourseSetServiceTest extends BaseTestCase
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getDiscountService()
+    {
+        return $this->createService('DiscountPlugin:Discount:DiscountService');
     }
 }

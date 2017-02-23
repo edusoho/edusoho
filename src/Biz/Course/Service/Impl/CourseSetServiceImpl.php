@@ -644,16 +644,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function applyDiscount($discountId)
     {
-        // var_dump('enter');
+// var_dump('enter');
         $discount = $this->getDiscountService()->getDiscount($discountId);
 
         if (empty($discount)) {
-            var_dump("折扣活动#{$discountId}不存在！");
+var_dump("折扣活动#{$discountId}不存在！");
             throw $this->createServiceException($this->getKernel()->trans('折扣活动#%discountId%不存在！', array('%discountId%' => $discountId)));
         }
 
         if ($discount['type'] == 'global') {
-            var_dump('enter global');
+var_dump('enter global');
             $conditions = array('originPrice_GT' => '0.00');
             $count   = $this->getCourseService()->countCourses($conditions);
             $courses = $this->getCourseService()->searchCourses($conditions, array(), 0, $count);
@@ -680,12 +680,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $this->getCourseSetDao()->update($courseSet['id'], $fields);
             }
         } else {
-            // var_dump('enter normal');
+// var_dump('enter normal');
             $courseSets = array();
             
             $discountItems = $this->getDiscountService()->findItemsByDiscountIds(array($discountId));
 
-            // var_dump($discountItems);
+// var_dump($discountItems);
             foreach ($discountItems as $discountItem) {
                 $courseSets[] = $this->getCourseSetDao()->update(
                     $discountItem['targetId'],
@@ -708,10 +708,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                         $fields['isFree'] = 1;
                     }
 
-                    // var_dump(is_object($this->getCourseDao()), $this->getCourseDao() instanceof \Biz\Course\Dao\CourseDao, method_exists($this->getCourseDao(), 'update'));
-                    var_dump($fields);
+var_dump(get_class($this->getCourseDao()));
                     $res = $this->getCourseDao()->update($id, $fields);
-                    // var_dump($res);
                 }
             }
         }
