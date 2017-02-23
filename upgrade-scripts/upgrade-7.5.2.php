@@ -225,8 +225,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $default = array(
             'enabled' => 1
         );
+        $wap = $this->getSettingService()->get('wap', array());
 
-        $this->getSettingService()->set('wap', $default);
+        if (empty($wap)) {
+            $this->getSettingService()->set('wap', $default);
+        }
 
         return 1;
     }
