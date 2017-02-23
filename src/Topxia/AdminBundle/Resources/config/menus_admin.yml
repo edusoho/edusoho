@@ -742,6 +742,9 @@ admin:
                         admin_invite_set:
                             name: '邀请注册设置'
                             disable: true
+                        admin_wap_set:
+                            name: 手机微网校
+                            disable: true
                 admin_setting_finance:
                     name: 账务设置
                     children:

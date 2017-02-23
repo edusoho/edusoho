@@ -4,7 +4,6 @@ namespace Topxia\Api\Resource\User;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Api\Util\SmsUtil;
 use Topxia\Api\Resource\BaseResource;
 
@@ -28,14 +27,14 @@ class VerifiedMobile extends BaseResource
 
         $smsUtil = new SmsUtil();
         $result = $smsUtil->verifySmsCode('sms_verify_mobile', $smsCode, $smsToken);
-        if( $result !== true ){
-            if( $result == 'sms_code_expired' ){
+
+        if (true != $result) {
+            if ('sms_code_expired' == $result) {
                 return $this->error('sms_code_expired', '验证码已过期');
-            }else{
+            } else {
                 return $this->error('500', '验证码错误');
             }
         }
-
         $userInfo = $this->getUserService()->getUserByVerifiedMobile($mobile);
         if ($userInfo) {
             return $this->error('500', '手机号已绑定');
@@ -43,7 +42,7 @@ class VerifiedMobile extends BaseResource
 
         $user = $this->getCurrentUser();
         $this->getUserService()->changeMobile($user['id'], $mobile);
-        $this->getTokenService()->destoryToken($token);
+        $this->getTokenService()->destoryToken($smsToken);
 
         return array('userId' => $user['id'], 'mobile' => $mobile);
     }

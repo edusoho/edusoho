@@ -112,6 +112,10 @@ class OrderController extends BaseController
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', $this->trans('用户未登录，创建订单失败。'));
         }
+        
+        if (isset($fields['coinPayAmount']) && !$this->canUseCoinPay($fields['coinPayAmount'], $user['id'])) {
+            return $this->createMessageResponse('error', $this->trans('当前使用的账户金额大于账户余额。'));
+        }
 
         if (!array_key_exists("targetId", $fields) || !array_key_exists("targetType", $fields)) {
             return $this->createMessageResponse('error', $this->trans('订单中没有购买的内容，不能创建!'));
@@ -199,6 +203,17 @@ class OrderController extends BaseController
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
         }
+    }
+
+    protected function canUseCoinPay($coinPayAmount, $userId)
+    {
+        $cashAccount = $this->getCashAccountService()->getAccountByUserId($userId, true);
+
+        if ($coinPayAmount > $cashAccount['cash']) {
+            return false;
+        }
+
+        return true;
     }
 
     public function detailAction(Request $request, $id)
@@ -321,6 +336,11 @@ class OrderController extends BaseController
     protected function getCashService()
     {
         return $this->getServiceKernel()->createService('Cash.CashService');
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashAccountService');
     }
 
     protected function getOrderService()

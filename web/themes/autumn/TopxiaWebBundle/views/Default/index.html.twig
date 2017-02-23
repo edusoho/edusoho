@@ -172,7 +172,7 @@
       {% if articles %}
         <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading panel-heading-important">
-            <h2 class="panel-title">{{'最新资讯'|trans}} / <small>The latest infomation</small></h2>
+            <h2 class="panel-title">{{'最新%article_name%'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)})}} / <small>The latest infomation</small></h2>
             <a class="pull-right more-autumn-default" href="{{ path('article_show') }}">More&gt;</a>
           </div>
           <div class="panel-body news">

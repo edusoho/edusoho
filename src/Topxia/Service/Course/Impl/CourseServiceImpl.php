@@ -1373,6 +1373,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getLessonDao()->deleteLesson($lessonId);
         $this->getLessonExtendDao()->deleteLesson($lessonId);
+        $this->changeQuestionTarget($courseId, $lessonId);
 
         // 更新课时序号
         $this->updateCourseCounter($course['id'], array(
@@ -2940,6 +2941,33 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $learnProgress;
     }
 
+    protected function changeQuestionTarget($courseId, $lessonId)
+    {
+        $sourceTarget = "course-{$courseId}/lesson-{$lessonId}";
+        $sourceQuestions = $this->getQuestionService()->findQuestionsByTarget($sourceTarget);
+        $this->dealQuestionTarget($sourceQuestions);
+
+        $copyQuestions = $this->findCopyQuestions($sourceQuestions);
+        $this->dealQuestionTarget($copyQuestions);
+    }
+
+    protected function findCopyQuestions($sourceQuestions)
+    {
+        $copyIds = ArrayToolkit::column($sourceQuestions, 'id');
+        $copyIds = array_unique($copyIds);
+        $copyIds = array_filter($copyIds);
+        $copyIds = array_values($copyIds);
+        return $this->getQuestionService()->findQuestionsByCopyIds($copyIds);
+    }
+
+    protected function dealQuestionTarget($questions)
+    {
+        foreach ($questions as $question) {
+            $target = explode('/', $question['target']);
+            $this->getQuestionService()->updateQuestionTargetById($question['id'], array('target' => $target[0]));
+        }
+    }
+
     protected function isClassroomMember($course, $userId)
     {
         $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
@@ -3058,6 +3086,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getChapterDao()
     {
         return $this->createDao('Course.CourseChapterDao');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->createService('Question.QuestionService');
     }
 
     protected function getCategoryService()
