@@ -958,9 +958,8 @@ class EduCloudController extends BaseController
         $cloud_search_setting = $this->getSettingService()->get('cloud_search');
 
         $differentSetting = array_diff_assoc($cloud_search_setting['type'], $newSetting);
-
         foreach ($cloud_search_setting['type'] as $key => &$type) {
-            if (array_key_exists($key, $differentSetting)) {
+            if (array_key_exists($key, $differentSetting) && $key != 'course') {
                 $type = 0;
             } else {
                 $type = 1;
