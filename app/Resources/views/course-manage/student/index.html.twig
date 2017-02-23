@@ -37,15 +37,11 @@
             <tr class="students-item js-students-item">
               <td class="media media-middle" >
                 <a class="pull-left js-user-card" href="/user/{{student.userId}}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
-                  {# <img class="avatar-sm" src="{{student.smallAvatar}}"> #}
                   {{ web_macro.user_avatar(student, 'pull-left', 'avatar-sm') }}
                 </a>
                 <a target="_blank" href="/user/{{student.userId}}">{{student.nickname}}</a>
                 <div class="text-muted text-sm">{{student.createdTime|date_format()}}</div>
               </td>
-            {#  <td>
-              剩余：360天
-              </td> #}
               <td>
                 <a class="btn link-gray" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}"><span class="color-primary">{{processes[student.userId]|default(0)}}%</span><span class="text-xs">（查看详情）</span></a>
               </td>

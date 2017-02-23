@@ -5,7 +5,7 @@
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/courseset-manage/detail/index.js']) %}
 
 {% block main %}
-<div class="panel panel-default panel-col">
+<div class="panel panel-default" role="courseSet-manage-detail">
   <div class="panel-heading">{{'详细信息'|trans}}</div>
   <div class="panel-body">
     <form id="courseset-detail-form" class="form-horizontal" action="{{path('course_set_manage_detail', {id: courseSet.id})}}" method="post">

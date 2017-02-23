@@ -8,26 +8,29 @@
     {% endif %}
     <div class="text-muted text-sm">{{'加入时间'|trans}}：{{ student.createdTime|date('Y-n-d H:i') }}</div>
   </td>
-  <td style="vertical-align: middle;">
+  {#<td style="vertical-align: middle;">
     {% if role == 'student' %}
       <div class="progress mvm" title="{{'已学%number%课程'|trans({'%number%':progress.number})}}">
         <div class="progress-bar" style="width: {{ progress.percent }}" data-toggle="tooltip" data-placement="right" data-original-title="{{ progress.percent }}">
         </div>
       </div>
     {% endif %}
+  </td>#}
+  <td class="color-gray vertical-middle">
+    {{ progress.percent }}
   </td>
   <td style="vertical-align: middle;">
     <div class="btn-group">
       {% if app.user.id != user.id %}
-        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'发私信'|trans}}</button>
+        <a class="mr10" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'发私信'|trans}}</a>
       {% endif %}
       {% if app.user.isAdmin() %}
-        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {courseSetId: 0, courseId:classroom.id, userId:user.id})}}">{{'查看资料'|trans}}</button>
+        <a class="mr10" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {courseSetId: 0, courseId:classroom.id, userId:user.id})}}">{{'查看资料'|trans}}</a>
       {% elseif setting("course.buy_fill_userinfo") %}
-        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_defined_show', {courseSetId: 0, courseId:classroom.id, userId:user.id}) }}">{{'查看资料'|trans}}</button>
+        <a class="mr10" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_defined_show', {courseSetId: 0, courseId:classroom.id, userId:user.id}) }}">{{'查看资料'|trans}}</a>
       {% endif %}
-      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">{{'管理'|trans}}
-        <span class="caret"></span>
+      <a href="#" type="button" class=" dropdown-toggle" data-toggle="dropdown">{{'管理'|trans}}
+        <span class="caret ml5"></span>
       </a>
       <ul class="dropdown-menu pull-right">
         <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_manage_student_remark', {classroomId:classroom.id, userId:user.id})}}">{{'备注'|trans}}</a></li>

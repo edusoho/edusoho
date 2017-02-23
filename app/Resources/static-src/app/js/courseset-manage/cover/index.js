@@ -1,4 +1,4 @@
-import EsWebUploader from 'libs/js/es-webuploader.js';
+import EsWebUploader from 'common/es-webuploader.js';
 import notify from 'common/notify';
 
 class Cover {
