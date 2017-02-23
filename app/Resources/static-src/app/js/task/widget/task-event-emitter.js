@@ -112,11 +112,11 @@ export default class TaskEventEmitter {
 
   flush(eventName) {
     Object.assign(this.eventDatas, {
-      'stayTime': {
+      'stay': {
         'startTime': this.startTime
       }
     });
-    this.emit(eventName, this.eventDatas)
+    this.emit(eventName, {'events': this.eventDatas, 'startTime': this.startTime})
       .then(response => {
         this.startTime = response.startTime;
         

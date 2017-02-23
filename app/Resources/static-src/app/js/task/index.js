@@ -12,7 +12,7 @@ class TaskShow {
       element: this.element.find('#task-content-iframe'),
       startTime: startTime,
       timeStep: timeStep,
-      dataName: 'dataReporter'
+      dataName: 'doing'
     });
     this.ui = new TaskUi({
       element: '.js-task-dashboard-page'

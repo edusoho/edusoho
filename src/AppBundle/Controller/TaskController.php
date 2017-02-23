@@ -211,7 +211,8 @@ class TaskController extends BaseController
         return $this->createJsonResponse(array(
             'event'  => $eventName,
             'data'   => $data,
-            'result' => $result
+            'result' => $result,
+            'startTime' => time()
         ));
     }
 

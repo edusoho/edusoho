@@ -93,9 +93,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $this->triggerActivityLearnLogListener($activity, $eventName, $data);
-        $this->triggerExtendListener($activity, $eventName, $data);
+        
+        $events = empty($data['events'])? array(): $data['events'];
+        foreach ($events as $key => $value) {
+            if($key != 'stay') {
+                $this->triggerExtendListener($activity, $key, $value);
+            }
+        }
 
-        if (in_array($eventName, array('doing', 'watching'))) {
+        if (in_array($eventName, array('doing'))) {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
     }
