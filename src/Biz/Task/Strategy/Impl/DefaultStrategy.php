@@ -19,23 +19,12 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $this->validateTaskMode($field);
 
         if ($field['mode'] == 'lesson') {
-            $chapter             = array(
-                'courseId' => $field['fromCourseId'],
-                'title'    => $field['title'],
-                'type'     => 'lesson'
-            );
-            $chapter             = $this->getCourseService()->createChapter($chapter);
-            $field['categoryId'] = $chapter['id'];
+            // 创建课时中的任务学习
+            return $this->_createLesson($field);
         } else {
-            $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($field['categoryId'], 'lesson');
-            if (empty($lessonTask)) {
-                throw new NotFoundException('lesson task is not found');
-            }
-            $field['status'] = $lessonTask['status'];
+            // 创建课时中的环节
+            return $this->_createLessonLink($field);
         }
-
-        $task = parent::createTask($field);
-        return $task;
     }
 
     public function updateTask($id, $fields)
@@ -210,6 +199,32 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
         }
         return $task;
+    }
+
+    private function _createLesson($task)
+    {
+        $chapter             = array(
+            'courseId' => $task['fromCourseId'],
+            'title'    => $task['title'],
+            'type'     => 'lesson'
+        );
+        $chapter             = $this->getCourseService()->createChapter($chapter);
+        $task['categoryId'] = $chapter['id'];
+
+        return parent::createTask($task);
+    }
+
+    private function _createLessonLink($task)
+    {
+        $lessonTask = $this->getTaskDao()->getByChapterIdAndMode($task['categoryId'], 'lesson');
+
+        if (empty($lessonTask)) {
+            throw new NotFoundException('lesson task is not found');
+        }
+
+        $task = parent::createTask($task);
+        $this->getTaskService()->publishTask($task['id']);
+        return $this->getTaskService()->getTask($task['id']);
     }
 
     protected function getTaskSeq($taskMode, $chapterSeq)

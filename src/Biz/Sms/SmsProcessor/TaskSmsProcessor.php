@@ -104,7 +104,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
         $to         = $this->getUsersMobile($studentIds);
 
         $task['title']            = StringToolkit::cutter($task['title'], 20, 15, 4);
-        $parameters['lesson_title'] = $this->getKernel()->trans('－学习任务：') . '《' . $task['title'] . '》';
+        $parameters['lesson_title'] = $this->getKernel()->trans('学习任务：') . '《' . $task['title'] . '》';
 
         if ($task['type'] == 'live') {
             $parameters['startTime'] = date("Y-m-d H:i:s", $task['startTime']);
