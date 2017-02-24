@@ -13,8 +13,8 @@
     <div class="empty">{{'暂无题目'|trans}}</div>
   {% endfor %}
   {% if paginator.lastPage > 1 %}
-  <li class="more-questions" data-last-page="{{ paginator.lastPage }}" data-current-page="{{ paginator.currentPage }}" data-url='/course/{{ course.id }}/lesson/{{ lesson.id }}/question_marker/search?page='>
-    <span class="loading">
+  <li class="more-questions" data-last-page="{{ paginator.lastPage }}" data-current-page="{{ paginator.currentPage }}" data-url="{{ path('course_task_question_marker_search',{courseId: course.id, taskId: task.id, page: ''}) }}">
+    <span class="loading hidden">
       <img src="{{ asset('assets/img/default/loading.gif') }} ">正在加载...
     </span>
     <a class="js-more-questions" href="javascript:;" >

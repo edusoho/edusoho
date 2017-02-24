@@ -815,6 +815,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($course)) {
             return false;
         }
+
+        if ($course['creator'] == $user->getId()) {
+            return true;
+        }
+
         $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
         //不是课程教师，无权限管理
         if ($teacher) {

@@ -45,6 +45,7 @@ define(function(require, exports, module) {
         $('#enterSearch').keydown(function(event){
 
             if(event.keyCode == 13){
+                event.preventDefault();
                 $.post($searchForm.attr('action'),$searchForm.serialize(),function(data){
 
                     $('.courses-list').html(data);

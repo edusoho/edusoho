@@ -3,9 +3,17 @@ import 'postal.federation';
 import 'postal.xframe';
 
 export default class TaskEventEmitter {
-  constructor(element) {
+  constructor({element, startTime, timeStep, dataName}) {
     this.element = $(element);
+    this.startTime = startTime;
+    this.timeStep = timeStep;
+    this.dataName = dataName;
     this.eventUrl = this.element.data('eventUrl');
+
+    this.eventDatas = {};
+
+    this.serverInterval = null;
+
     if (this.eventUrl === undefined) {
       throw Error('task event url is undefined');
     }
@@ -15,6 +23,7 @@ export default class TaskEventEmitter {
     };
 
     this._registerIframeEvents();
+    this.init();
   }
 
   _registerIframeEvents(){
@@ -43,7 +52,9 @@ export default class TaskEventEmitter {
       topic: '#',
       callback: ({event, data}) => {
         let listeners = this.eventMap.receives[event];
-        $.post(this.eventUrl, {eventName: event, data: data})
+        Object.assign(this.eventDatas, data);
+        
+        $.post(this.eventUrl, {eventName: event, data: this.eventDatas})
             .done(response => {
               if (typeof listeners !== 'undefined') {
                 listeners.forEach(callback => callback(response));
@@ -83,6 +94,37 @@ export default class TaskEventEmitter {
         reject(error);
       });
     });
+  }
+
+  init() {
+    window.onbeforeunload = () => {  
+      this.clear(); 
+      this.flush(this.dataName);
+    } 
+    this.clear();
+    let minute = 60 * 1000;
+    this.serverInterval = setInterval(() => this.flush(this.dataName),this.timeStep * minute);
+  }
+
+  clear() {
+    clearInterval(this.serverInterval);
+  }
+
+  flush(eventName) {
+    Object.assign(this.eventDatas, {
+      'stay': {
+        'startTime': this.startTime
+      }
+    });
+    this.emit(eventName, {'events': this.eventDatas, 'startTime': this.startTime})
+      .then(response => {
+        this.startTime = response.startTime;
+        
+        this.receiveFinish(response);
+      })
+      .catch(() => {
+        //
+      })
   }
 
   // 监听activity的事件
