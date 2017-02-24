@@ -6,6 +6,7 @@ use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
+use Biz\Order\Service\OrderService;
 use Biz\Course\Service\ReviewService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
@@ -25,9 +26,9 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function showAction(Request $request, $id, $tab = 'summary')
+    public function showAction($id, $tab = 'summary')
     {
-        $course    = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
             throw $this->createNotFoundException('该教学计划不存在！');
         }
@@ -35,7 +36,7 @@ class CourseController extends CourseBaseController
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
-        
+
         return $this->render('course/course-show.html.twig', array(
             'tab'       => $tab,
             'course'    => $course,
@@ -43,7 +44,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function memberExpiredAction(Request $request, $id)
+    public function memberExpiredAction($id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         if ($member && !$this->getMemberService()->isMemberNonExpired($course, $member)) {
@@ -53,7 +54,7 @@ class CourseController extends CourseBaseController
         }
     }
 
-    public function deadlineReachAction(Request $request, $id)
+    public function deadlineReachAction($id)
     {
         $user = $this->getCurrentUser();
 
@@ -88,7 +89,7 @@ class CourseController extends CourseBaseController
             'classroom'      => $classroom,
             'previewTask'    => empty($previewTasks) ? null : array_shift($previewTasks),
             'previewAs'      => $previewAs,
-            'marketingPage' => 1
+            'marketingPage'  => 1
         ));
     }
 
@@ -217,24 +218,24 @@ class CourseController extends CourseBaseController
     {
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
-        $files = $this->findFiles($courseItems);
+        $files = $this->findFiles($course['id']);
 
         $isMarketingPage = false;
         if (empty($member)) {
             $isMarketingPage = true;
-            $user   = $this->getCurrentUser();
-            $member = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
+            $user            = $this->getCurrentUser();
+            $member          = $user->isLogin() ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : array();
         }
         return $this->render('course/tabs/tasks.html.twig', array(
-            'course'      => $course,
-            'courseItems' => $courseItems,
-            'member'      => $member,
-            'files'       => $files,
+            'course'          => $course,
+            'courseItems'     => $courseItems,
+            'member'          => $member,
+            'files'           => $files,
             'isMarketingPage' => $isMarketingPage
         ));
     }
 
-    public function characteristicAction(Request $request, $course)
+    public function characteristicAction($course)
     {
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
@@ -260,7 +261,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function otherCourseAction(Request $request, $course)
+    public function otherCourseAction($course)
     {
         // $this->getCourseService()->getOtherCourses($course['id']);
 
@@ -269,7 +270,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function teachersAction(Request $request, $course)
+    public function teachersAction($course)
     {
         $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
@@ -278,7 +279,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function newestStudentsAction(Request $request, $course, $member = array())
+    public function newestStudentsAction($course, $member = array())
     {
         $conditions = array(
             'role'   => 'student',
@@ -301,7 +302,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function orderInfoAction(Request $request, $sn)
+    public function orderInfoAction($sn)
     {
         $order = $this->getOrderService()->getOrderBySn($sn);
 
@@ -339,7 +340,7 @@ class CourseController extends CourseBaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exitAction(Request $request, $id)
+    public function exitAction($id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
         $user                  = $this->getCurrentUser();
@@ -351,7 +352,7 @@ class CourseController extends CourseBaseController
             throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
         }
 
-        $this->getCourseMemberService()->removeStudent($course['id'], $user['id']);
+        $this->getMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
     }
@@ -404,6 +405,9 @@ class CourseController extends CourseBaseController
         return $this->createService('Course:ReviewService');
     }
 
+    /**
+     * @return OrderService
+     */
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
@@ -433,10 +437,10 @@ class CourseController extends CourseBaseController
         return $this->createService('File:UploadFileService');
     }
 
-    protected function findFiles($courseItems)
+    protected function findFiles($courseId)
     {
-        $activities = ArrayToolkit::column($courseItems, 'activity');
-
+        $tasks      = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+        $activities = ArrayToolkit::column($tasks, 'activity');
         //获取视频的源数据
         $activityIds = array();
         array_walk($activities, function ($activity) use (&$activityIds) {
@@ -444,10 +448,8 @@ class CourseController extends CourseBaseController
                 array_push($activityIds, $activity['id']);
             }
         });
-
         $fullActivities = $this->getActivityService()->findActivities($activityIds, $fetchMedia = true);
-
-        $files = array();
+        $files          = array();
         array_walk($fullActivities, function ($activity) use (&$files) {
             $files[$activity['mediaId']] = empty($activity['ext']['file']) ? null : $activity['ext']['file'];
         });

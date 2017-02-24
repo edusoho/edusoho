@@ -51,7 +51,7 @@ class TaskController extends BaseController
         ));
     }
 
-    public function previewAction(Request $request, $courseId, $id)
+    public function previewAction($courseId, $id)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -107,14 +107,30 @@ class TaskController extends BaseController
 
     public function contentPreviewAction($courseId, $id)
     {
-        $task = $this->getTaskService()->getTask($id);
+        $course = $this->getCourseService()->getCourse($courseId);
+        $task   = $this->getTaskService()->getTask($id);
+
         if (empty($task) || $task['courseId'] != $courseId) {
-            return $this->createNotFoundException('task is not exist');
+            throw $this->createNotFoundException('task is not exist');
         }
-        if (empty($task['isFree'])) {
-            return $this->createNotFoundException('task is not free');
+
+        if (!$this->canPreviewTask($task, $course)) {
+            throw $this->createAccessDeniedException('task is not free');
         }
+
         return $this->forward('AppBundle:Activity/Activity:preview', array('task' => $task));
+    }
+
+    private function canPreviewTask($task, $course)
+    {
+        if ($task['isFree']) {
+            return true;
+        }
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        if (empty($course['tryLookable']) || $activity['mediaType'] != 'video') {
+            return false;
+        }
+        return $activity['ext']['mediaSource'] == 'cloud';
     }
 
     public function qrcodeAction(Request $request, $courseId, $id)
@@ -165,7 +181,8 @@ class TaskController extends BaseController
     {
         $preview = $request->query->get('preview', false);
 
-        $task = $this->tryLearnTask($courseId, $taskId);
+        $this->tryLearnTask($courseId, $taskId);
+
         return $this->createJsonResponse(array(
             array(
                 'code' => 'task-list',
@@ -198,10 +215,12 @@ class TaskController extends BaseController
         ));
     }
 
-    public function reportAction(Request $request, $courseId, $id)
+    public function reportAction($courseId, $id)
     {
         return $this->createJsonResponse(array(
-            'time' => time()
+            'time'     => time(),
+            'courseId' => $courseId,
+            'id'       => $id
         ));
     }
 
@@ -224,7 +243,7 @@ class TaskController extends BaseController
         ));
     }
 
-    public function finishAction(Request $request, $courseId, $id)
+    public function finishAction($courseId, $id)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -250,7 +269,7 @@ class TaskController extends BaseController
         ));
     }
 
-    public function taskFinishedPromptAction(Request $request, $courseId, $id)
+    public function taskFinishedPromptAction($courseId, $id)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
         $result = $this->getTaskService()->finishTaskResult($id);
@@ -294,7 +313,7 @@ class TaskController extends BaseController
     protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
         if ($preview) {
-            if ($this->canPreview($courseId)) {
+            if ($this->canPreviewCourse($courseId)) {
                 $task = $this->getTaskService()->getTask($taskId);
             } else {
                 throw $this->createNotFoundException('you can not preview this task ');
@@ -313,7 +332,7 @@ class TaskController extends BaseController
         return $task;
     }
 
-    private function canPreview($courseId)
+    private function canPreviewCourse($courseId)
     {
         $user   = $this->getCurrentUser();
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);

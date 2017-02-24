@@ -38,11 +38,15 @@
                 <i class="{{ meta.icon }} color-gray ml10" data-toggle="tooltip" data-placement="top" title=""data-original-title="{{ meta.name }}任务" data-container="body"></i>
               </span>
               <span class="right-menu mouse-enter">
-                {% if member or task.isFree %}
+                
+                {% if member %}
                   <a class="btn btn-primary" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">立即学习</a>
-                {% else %}
-                   <a class="btn btn-primary" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">购买课程</a>
+                {% elseif task.isFree %}
+                  <a class="btn btn-primary" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">预览</a>
+                {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
+                   <a class="btn btn-primary" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">试看</a>
                 {% endif %}
+
               </span>
             {% else %}
               <span class="text-overflow title">
