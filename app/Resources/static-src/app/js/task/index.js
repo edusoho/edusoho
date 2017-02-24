@@ -37,7 +37,7 @@ class TaskShow extends Emitter {
 
   bindEvent() {
     let learnedTime = 0;
-    let minute = 60 * 1000;
+    let minute = 10 * 1000;
     let timeStep = 1; // 分钟
     //注册doing延时监听
     this.delay('doing', (timeStep) => {
