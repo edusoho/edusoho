@@ -10,14 +10,19 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
 {
     public function createLog($activity, $eventName, $data)
     {
+        if(!empty($data['startTime'])) {
+            $data['learnedTime'] = time() - $data['startTime'];
+        }
+
         $fields = array(
             'activityId'  => $activity['id'],
             'userId'      => $this->getCurrentUser()->getId(),
             'event'       => $eventName,
-            'learnedTime' => !empty($data['learnedTime']) ?: 0,
+            'learnedTime' => !empty($data['learnedTime']) ? $data['learnedTime']: 0,
             'data'        => $data,
             'createdTime' => time()
         );
+
         if (!empty($data['task'])) {
             $fields['courseTaskId'] = $data['task']['id'];
         } elseif (!empty($data['taskId'])) {
@@ -25,6 +30,7 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
         } else {
             $fields['courseTaskId'] = 0;
         }
+
         return $this->getActivityLearnLogDao()->create($fields);
     }
 
@@ -56,7 +62,8 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
 
     public function sumLearnTime($conditions)
     {
-        return $this->getActivityLearnLogDao()->sumLearnTime($conditions);
+        $result = $this->getActivityLearnLogDao()->sumLearnTime($conditions);
+        return intval($result/60);
     }
 
     public function sumWatchTime($conditions)

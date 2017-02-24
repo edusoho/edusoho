@@ -232,7 +232,8 @@ class TaskController extends BaseController
         return $this->createJsonResponse(array(
             'event'  => $eventName,
             'data'   => $data,
-            'result' => $result
+            'result' => $result,
+            'startTime' => time()
         ));
     }
 
@@ -246,6 +247,7 @@ class TaskController extends BaseController
         }
 
         $task = $this->getTaskService()->getTask($id);
+
         if ($task['status'] != 'published') {
             return $this->createMessageResponse('error', '未发布的任务无法完成');
         }
