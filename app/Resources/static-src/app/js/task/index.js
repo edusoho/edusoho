@@ -4,13 +4,12 @@ import TaskEventEmitter from "./widget/task-event-emitter";
 import Emitter from "common/es-event-emitter";
 
 class TaskShow extends Emitter {
-  constructor({element, courseId, taskId, mode, isMember}) {
+  constructor({element, courseId, taskId, mode}) {
     super();
     this.element = $(element);
     this.courseId = courseId;
     this.taskId = taskId;
     this.mode = mode;
-    this.isMember = isMember;
     this.eventEmitter = new TaskEventEmitter(this.element.find('#task-content-iframe'));
     this.ui = new TaskUi({
       element: '.js-task-dashboard-page'
@@ -22,7 +21,7 @@ class TaskShow extends Emitter {
   init() {
     this.initPlugin();
     this.initSidebar();
-    if (this.mode != 'preview' && this.isMember) {
+    if (this.mode != 'preview') {
       this.bindEvent();
     }
   }
@@ -114,6 +113,5 @@ new TaskShow({
   element: $('body'),
   courseId: $('body').find('#js-hidden-data [name="course-id"]').val(),
   taskId: $('body').find('#js-hidden-data [name="task-id"]').val(),
-  mode: $('body').find('#js-hidden-data [name="mode"]').val(),
-  isMember: $('body').find('#js-hidden-data [name="isMember"]').val()
+  mode: $('body').find('#js-hidden-data [name="mode"]').val()
 });

@@ -26,28 +26,21 @@ class TaskController extends BaseController
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
         }
 
-        $taskResult   = array('status' => 'none');
-        $nextTask     = array();
-        $finishedRate = 0;
-        //非课程成员学习task不需要记录学习信息
-        if (!empty($member)) {
-            $this->getActivityService()->trigger($task['activityId'], 'start', array(
-                'task' => $task
-            ));
+        $this->getActivityService()->trigger($task['activityId'], 'start', array(
+            'task' => $task
+        ));
 
-            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
-            if ($taskResult['status'] == 'finish') {
-                list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
-            }
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
+        if ($taskResult['status'] == 'finish') {
+            list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
         }
 
         return $this->render('task/show.html.twig', array(
             'course'       => $course,
             'task'         => $task,
             'taskResult'   => $taskResult,
-            'nextTask'     => $nextTask,
-            'finishedRate' => $finishedRate,
-            'isMember'     => !empty($member)
+            'nextTask'     => empty($nextTask) ? array() : $nextTask,
+            'finishedRate' => empty($finishedRate) ? 0 : $finishedRate
         ));
     }
 
