@@ -11,7 +11,7 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
     public function createLog($activity, $eventName, $data)
     {
         if(!empty($data['startTime'])) {
-            $data['learnedTime'] = time() - $data['startTime'];
+            $data['learnedTime'] = time() - $data['lastTime'];
         }
 
         $fields = array(

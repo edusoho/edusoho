@@ -12,7 +12,7 @@ export default class TaskPipe {
 
     this.eventDatas = {};
     this.intervalId = null;
-    this.lastReportTime = this.element.data('lastReportTime');
+    this.lastTime = this.element.data('lastTime');
     this.eventMap = {
       receives: {}
     };
@@ -66,11 +66,11 @@ export default class TaskPipe {
   _flush() {
     Object.assign(this.eventDatas, {
       'stay': {
-        'lastReportTime': this.lastReportTime
+        'lastTime': this.lastTime
       }
     });
 
-    let ajax = $.post(this.eventUrl, {eventName: 'doing', data: this.eventDatas})
+    let ajax = $.post(this.eventUrl, {eventName: 'doing', data: {lastTime: this.lastTime, events: this.eventDatas}})
       .done((response) => {
         this._publishResponse(response);
         this.eventDatas = {};
