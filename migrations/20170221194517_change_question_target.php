@@ -14,11 +14,11 @@ class ChangeQuestionTarget extends Migration
     public function up()
     {
         $sourceQuestionCount = $this->searchSourceQuestionCount();
-        for ($i=0; $i < $sourceQuestionCount/$this->num; $i++) { 
+        for ($i=0; $i < $sourceQuestionCount/$this->num; $i++) {
             $sourceQuestions = $this->getQuestionService()->searchQuestions(
-                array('copyId' => 0), 
-                array('createdTime', 'DESC'), 
-                0, 
+                array('copyId' => 0),
+                array('createdTime', 'DESC'),
+                0,
                 $this->num*($i + 1)
             );
 
@@ -45,7 +45,6 @@ class ChangeQuestionTarget extends Migration
      */
     public function down()
     {
-
     }
     
     private function searchSourceQuestionCount()
@@ -87,7 +86,8 @@ class ChangeQuestionTarget extends Migration
 
     protected function db()
     {
-        return $this->getBiz()['db'];
+        $biz = $this->getBiz();
+        return $biz['db'];
     }
 
     protected function getQuestionService()
