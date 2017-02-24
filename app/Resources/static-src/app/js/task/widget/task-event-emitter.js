@@ -70,10 +70,20 @@ export default class TaskPipe {
       }
     });
 
-    let ajax = $.post(this.eventUrl, {eventName: 'doing', data: {lastTime: this.lastTime, events: this.eventDatas}})
+    let ajax = $.post(this.eventUrl, {data: {lastTime: this.lastTime, events: this.eventDatas}})
       .done((response) => {
         this._publishResponse(response);
         this.eventDatas = {};
+        this.lastTime = response.lastTime;
+        if(response.result.status) {
+          let listners = this.eventMap.receives[response.result.status];
+          if(listners) {
+            for (var i = listners.length - 1; i >= 0; i--) {
+              let listner = listners[i];
+              listner(response);
+            }
+          }
+        }
       })
       .fail((error) => {
       });

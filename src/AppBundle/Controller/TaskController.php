@@ -202,19 +202,13 @@ class TaskController extends BaseController
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        $eventName = $request->request->get('eventName');
-        if (empty($eventName)) {
-            throw $this->createNotFoundException('task event is empty');
-        }
-
+        $eventName = 'doing';
         $data           = $request->request->get('data', array());
         $data['taskId'] = $id;
         $result         = $this->getTaskService()->trigger($id, $eventName, $data);
         return $this->createJsonResponse(array(
-            'event'  => $eventName,
-            'data'   => $data,
             'result' => $result,
-            'startTime' => time()
+            'lastTime' => time()
         ));
     }
 
