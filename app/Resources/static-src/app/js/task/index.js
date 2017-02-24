@@ -1,6 +1,7 @@
 import TaskSidebar from "./widget/sidebar";
 import TaskUi from "./widget/task-ui";
 import TaskEventEmitter from "./widget/task-event-emitter";
+import Emitter from "common/es-event-emitter";
 
 class TaskShow extends Emitter {
   constructor({element, courseId, taskId, mode, isMember}) {
@@ -26,7 +27,38 @@ class TaskShow extends Emitter {
     }
   }
 
+  initPlugin() {
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover({
+      html: true,
+      trigger: 'hover'
+    });
+  }
+
   bindEvent() {
+    let learnedTime = 0;
+    let minute = 60 * 1000;
+    let timeStep = 1; // 分钟
+    //注册doing延时监听
+    this.delay('doing', (timeStep) => {
+      learnedTime = parseInt(timeStep) + parseInt(learnedTime);
+      let eventData = {
+        timeStep: timeStep,
+        learnedTime: learnedTime,
+        taskId: this.taskId
+      };
+      this.eventEmitter.emit('doing', eventData)
+          .then(undefined, response => {
+            this.receiveFinish(response);
+          })
+          ['catch'](() => {
+          })
+          .then(undefined, () => { //always
+            this.emit('doing', timeStep);
+          });
+    }, timeStep * minute);
+
+    this.emit('doing', timeStep);
 
     this.element.on('click', '#learn-btn', event => {
       $.post($('#learn-btn').data('url'), response => {
@@ -48,8 +80,8 @@ class TaskShow extends Emitter {
     // response.result.status == 'finish'
     //     &&
     if ( $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
-      // 盘点是任务式学习还是自由式学习
-      $.get($(".js-learned-prompt").data('url'), html => {
+        // 盘点是任务式学习还是自由式学习
+        $.get($(".js-learned-prompt").data('url'), html => {
         $(".js-learned-prompt").attr('data-content', html);
         this.ui.learnedWeakPrompt();
         this.ui.learned();
@@ -57,14 +89,6 @@ class TaskShow extends Emitter {
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
       });
     }
-  }
-
-  initPlugin() {
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]').popover({
-      html: true,
-      trigger: 'hover'
-    });
   }
 
   initSidebar() {
