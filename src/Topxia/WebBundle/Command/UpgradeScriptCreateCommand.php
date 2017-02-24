@@ -17,44 +17,51 @@ class UpgradeScriptCreateCommand extends BaseCommand
     {
         $this->setName('util:upgrade-script-create')
             ->addArgument('version', InputArgument::REQUIRED, '要创建的版本号')
-            ->addArgument('withPage', InputArgument::OPTIONAL, '是否需要分页')
+            ->addArgument('mode', InputArgument::OPTIONAL, '模式')
             ->setDescription('用于命令行中创建升级脚本');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $version = $input->getArgument('version');
+        $mode = $input->getArgument('mode');
         $this->output = $output;
+        $this->generateUpgradeScripts($version, $mode);
     }
 
-    protected function generateScripts()
+    /**
+     * TODO: 添加带分页的脚本文件
+     */
+    protected function generateUpgradeScripts($version, $mode)
     {
         $rootDir = $this->getContainer()->getParameter('kernel.root_dir').'/../';
 
         $fileSystem = new Filesystem();
-        if (!$fileSystem->exists($rootDir.'scripts')) {
-            exec('git clone git@coding.codeages.net:edusoho/upgradescripts.git scripts');
-        }
-    }
-
-    protected function generateUpgradeScripts($version)
-    {
-        $rootDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
-
-        $fileSystem = new Filesystem();
-        if (!$fileSystem->exists($rootDir.'scripts')) {
-            $this->output->writeln("<comment>clone scripts....</comment>");
-            exec('git clone git@coding.codeages.net:edusoho/upgradescripts.git scripts');
-            $this->output->writeln("<comment>scripts directory created</comment>");
+        if (!$fileSystem->exists($rootDir . 'scripts')) {
+            $this->generateScriptPath();
         }
 
         $scriptPath = $rootDir.'/scripts/';
         $scriptFileName = 'upgrade-'.$version;
         $scriptFilePath = $scriptPath.$scriptFileName.'.php';
         if (file_exists($scriptFilePath)) {
-            return true;
+            $this->output->writeln("<comment>The version script file already exists</comment>");
         } else {
-            return false;
+            $script = $this->getScript();
+            file_put_contents($scriptFilePath, $script);
+            $this->output->writeln("<comment>the script file has created, please take care of it</comment>");
         }
+    }
+
+    protected function generateScriptPath()
+    {
+        $this->output->writeln("<comment>clone scripts....</comment>");
+        exec('git clone git@coding.codeages.net:edusoho/upgradescripts.git scripts');
+        $this->output->writeln("<comment>scripts directory created</comment>");
+    }
+
+    protected function getScript()
+    {
+        return file_get_contents(__DIR__."/scripts-tpl/Scripts.twig");
     }
 }
