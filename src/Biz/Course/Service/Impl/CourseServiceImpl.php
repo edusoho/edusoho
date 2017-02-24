@@ -273,7 +273,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function calculatePrice($id, $originPrice)
     {
-        return $originPrice;
+        $course = $this->getCourse($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        return $originPrice * $courseSet['discount'] / 10;
     }
 
     public function updateCourseStatistics($id, $fields)

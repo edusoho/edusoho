@@ -644,32 +644,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function applyDiscount($discountId)
     {
-// var_dump('enter');
         $discount = $this->getDiscountService()->getDiscount($discountId);
 
         if (empty($discount)) {
-var_dump("折扣活动#{$discountId}不存在！");
             throw $this->createServiceException($this->getKernel()->trans('折扣活动#%discountId%不存在！', array('%discountId%' => $discountId)));
         }
 
         if ($discount['type'] == 'global') {
-var_dump('enter global');
-            $conditions = array('originPrice_GT' => '0.00');
-            $count   = $this->getCourseService()->countCourses($conditions);
-            $courses = $this->getCourseService()->searchCourses($conditions, array(), 0, $count);
-
             $conditions = array('maxCoursePrice_GT' => '0.00');
             $count   = $this->countCourseSets($conditions);
             $courseSets = $this->searchCourseSets($conditions, array(), 0, $count);
-
-            foreach ($courses as $course) {
-                $fields = array(
-                    'price' => $course['originPrice'] * $discount['globalDiscount'] / 10,
-                    'coinPrice' => $course['originCoinPrice'] * $discount['globalDiscount'] / 10,
-                );
-
-                $this->getCourseDao()->update($course['id'], $fields);
-            }
 
             foreach ($courseSets as $courseSet) {
                 $fields = array(
@@ -679,13 +663,27 @@ var_dump('enter global');
 
                 $this->getCourseSetDao()->update($courseSet['id'], $fields);
             }
+
+            $conditions = array('originPrice_GT' => '0.00');
+            $count   = $this->getCourseService()->countCourses($conditions);
+            $courses = $this->getCourseService()->searchCourses($conditions, array(), 0, $count);
+
+            foreach ($courses as $course) {
+                $fields = $course;
+
+                $this->getCourseService()->updateCourseMarketing($course['id'], $fields);
+
+                $coinFields = array(
+                    'coinPrice' => $course['originCoinPrice'] * $discount['globalDiscount'] / 10,
+                );
+
+                $this->getCourseDao()->update($course['id'], $coinFields);
+            }
         } else {
-// var_dump('enter normal');
             $courseSets = array();
             
             $discountItems = $this->getDiscountService()->findItemsByDiscountIds(array($discountId));
 
-// var_dump($discountItems);
             foreach ($discountItems as $discountItem) {
                 $courseSets[] = $this->getCourseSetDao()->update(
                     $discountItem['targetId'],
@@ -699,17 +697,19 @@ var_dump('enter global');
             foreach ($courseSets as $courseSet) {
                 $courses = $this->getCourseService()->findCoursesByCourseSetIds(array($courseSet['id']));
                 foreach ($courses as $course) {
-                    $fields = isset($course['originCoinPrice']) ? array(
-                        'price' => $course['originPrice'] * $courseSet['discount'] / 10,
-                        'coinPrice' => $course['originCoinPrice'] * $courseSet['discount'] / 10
-                    ) : array('price' => $course['originPrice'] * $courseSet['discount'] / 10);
+                    $fields = $course;
 
                     if ($courseSet['discount'] == 0) {
                         $fields['isFree'] = 1;
                     }
 
-var_dump(get_class($this->getCourseDao()));
-                    $res = $this->getCourseDao()->update($id, $fields);
+                    $this->getCourseService()->updateCourseMarketing($course['id'], $fields);
+
+                    $coinFields = array(
+                        'coinPrice' => $course['originCoinPrice'] * $discount['globalDiscount'] / 10,
+                    );
+
+                    $this->getCourseDao()->update($course['id'], $coinFields);
                 }
             }
         }
@@ -732,19 +732,23 @@ var_dump(get_class($this->getCourseDao()));
         $courseSets = $this->searchCourseSets($conditions, array(), 0, $count);
 
         foreach ($courseSets as $courseSet) {
-            $courses = $this->getCourseService()->findCoursesByCourseSetIds(array($courseSet['id']));
-
-            foreach ($courses as $course) {
-                $this->getCourseDao()->update(
-                    $course['id'],
-                    array('price' => 'originPrice', 'coinPrice' => 'originCoinPrice')
-                );
-            }
-
             $this->getCourseSetDao()->update(
                 $courseSet['id'],
                 array('discountId' => 0, 'discount' => 10)
             );
+
+            $courses = $this->getCourseService()->findCoursesByCourseSetIds(array($courseSet['id']));
+
+            foreach ($courses as $course) {
+                $fields = $course;
+
+                $fields['isFree'] = 0;
+
+                $this->getCourseService()->updateCourseMarketing(
+                    $course['id'],
+                    $fields
+                );
+            }
         }
     }
 

@@ -107,33 +107,92 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertEquals(0, $result['ratingNum']);
     }
 
+    // Todo: not fully covered
     public function testApplyDiscount()
+    {
+        $courseSet = $this->getNewCourseSet();
+        $course = $this->getNewCourse($courseSet['id']);
+        $discount = $this->getNewDiscount();
+        $discountItem = $this->getNewDiscountItem($discount['id'], $courseSet['id']);
+
+        $this->getCourseSetService()->applyDiscount($discount['id']);
+
+        $discountedCourse = $this->getCourseService()->getCourse($course['id']);
+        $this->assertEquals($discountedCourse['price'], $discountedCourse['originPrice'] * 5 / 10);
+    }
+
+    // Todo: not fully covered
+    public function testCancelDiscount()
+    {
+        $courseSet = $this->getNewCourseSet();
+        $course = $this->getNewCourse($courseSet['id']);
+        $discount = $this->getNewDiscount();
+        $discountItem = $this->getNewDiscountItem($discount['id'], $courseSet['id']);
+
+        $this->getCourseSetService()->applyDiscount($discount['id']);
+
+        $discountedCourse = $this->getCourseService()->getCourse($course['id']);
+        $this->assertEquals($discountedCourse['price'], $discountedCourse['originPrice'] * 5 / 10);
+
+        $this->getCourseSetService()->cancelDiscount($discount['id']);
+
+        $canceledDiscountedCourse = $this->getCourseService()->getCourse($course['id']);
+
+        $this->assertEquals($canceledDiscountedCourse['price'], $discountedCourse['originPrice']);
+    }
+
+    protected function getNewCourseSet()
     {
         $courseSetFields = array(
             'title' => '新课程开始！',
             'type'  => 'normal'
         );
-        $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
+
         $this->assertNotEmpty($courseSet);
 
+        return $courseSet;
+    }
+
+    protected function getNewCourse($courseSetId)
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(array($courseSetId));
+        $course = $courses[0];
+        $courseFields = array(
+            'originPrice' => 100,
+            'isFree' => 0,
+            'buyable' => 1,
+            'tryLookable' => 0,
+        );
+        $course = $this->getCourseService()->updateCourseMarketing($course['id'], $courseFields);
+
+        $this->assertNotEmpty($course);
+
+        return $course;
+    }
+
+    protected function getNewDiscount()
+    {
         $discountFields = array(
             'type' => 'discount',
             'startTime' => time(),
             'endTime' => time() + 100,
         );
         $discount = $this->getDiscountService()->addDiscount($discountFields);
+
         $this->assertNotEmpty($discount);
 
-        $discountItem = $this->getDiscountService()->putItems($discount['id'], array($courseSet['id']));
-        $this->assertNotEmpty($discountItem);
-        $this->getDiscountService()->setAllItemsDiscount($discount['id'], 5);
-
-        //Todo set course origin price ...
+        return $discount;
     }
 
-    public function testCancelDiscount()
+    protected function getNewDiscountItem($discountId, $courseSetId)
     {
-        ;
+        $discountItem = $this->getDiscountService()->putItems($discountId, array($courseSetId));
+        $this->getDiscountService()->setAllItemsDiscount($discountId, 5);
+
+        $this->assertNotEmpty($discountItem);
+
+        return $discountItem;
     }
 
     protected function getCourseSetService()
