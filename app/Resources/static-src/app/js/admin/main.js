@@ -1,0 +1,1 @@
+console.log('admin app js:bundles/topxiaadmin/js/admin-app.js ');
