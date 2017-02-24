@@ -103,6 +103,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         foreach ($events as $key => $value) {
             $value = array_merge($value, $data);
+            $this->triggerActivityLearnLogListener($activity, $key, $value);
             $this->triggerExtendListener($activity, $key, $value);
         }
 
