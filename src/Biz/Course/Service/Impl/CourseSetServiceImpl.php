@@ -656,28 +656,32 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $courseSets = $this->searchCourseSets($conditions, array(), 0, $count);
 
             foreach ($courseSets as $courseSet) {
+                if ($courseSet['discount'] < $discount['globalDiscount']) {
+                    continue;
+                }
+
                 $fields = array(
                     'discountId' => $discountId,
                     'discount' => $discount['globalDiscount'],
                 );
 
                 $this->getCourseSetDao()->update($courseSet['id'], $fields);
-            }
 
-            $conditions = array('originPrice_GT' => '0.00');
-            $count   = $this->getCourseService()->countCourses($conditions);
-            $courses = $this->getCourseService()->searchCourses($conditions, array(), 0, $count);
+                $conditions = array('courseSetId' => $courseSet['id']);
+                $count   = $this->getCourseService()->countCourses($conditions);
+                $courses = $this->getCourseService()->searchCourses($conditions, array(), 0, $count);
 
-            foreach ($courses as $course) {
-                $fields = $course;
+                foreach ($courses as $course) {
+                    $fields = $course;
 
-                $this->getCourseService()->updateCourseMarketing($course['id'], $fields);
+                    $this->getCourseService()->updateCourseMarketing($course['id'], $fields);
 
-                $coinFields = array(
-                    'coinPrice' => $course['originCoinPrice'] * $discount['globalDiscount'] / 10,
-                );
+                    $coinFields = array(
+                        'coinPrice' => $course['originCoinPrice'] * $discount['globalDiscount'] / 10,
+                    );
 
-                $this->getCourseDao()->update($course['id'], $coinFields);
+                    $this->getCourseDao()->update($course['id'], $coinFields);
+                }
             }
         } else {
             $courseSets = array();
@@ -685,6 +689,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $discountItems = $this->getDiscountService()->findItemsByDiscountIds(array($discountId));
 
             foreach ($discountItems as $discountItem) {
+                $courseSet = $this->getCourseSet($discountItem['targetId']);
+
+                if ($courseSet['discount'] < $discountItem['discount']) {
+                    continue;
+                }
+
                 $courseSets[] = $this->getCourseSetDao()->update(
                     $discountItem['targetId'],
                     array(
@@ -706,7 +716,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                     $this->getCourseService()->updateCourseMarketing($course['id'], $fields);
 
                     $coinFields = array(
-                        'coinPrice' => $course['originCoinPrice'] * $discount['globalDiscount'] / 10,
+                        'coinPrice' => $course['originCoinPrice'] * $courseSet['discount'] / 10,
                     );
 
                     $this->getCourseDao()->update($course['id'], $coinFields);
@@ -732,6 +742,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSets = $this->searchCourseSets($conditions, array(), 0, $count);
 
         foreach ($courseSets as $courseSet) {
+            if ($courseSet['discountId'] != $discountId) {
+                continue;
+            }
+
             $this->getCourseSetDao()->update(
                 $courseSet['id'],
                 array('discountId' => 0, 'discount' => 10)
