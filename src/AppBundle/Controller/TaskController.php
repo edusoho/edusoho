@@ -2,9 +2,11 @@
 namespace AppBundle\Controller;
 
 use Biz\Task\Service\TaskService;
+use Biz\User\Service\TokenService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,29 +18,36 @@ class TaskController extends BaseController
 
         $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
+        $user   = $this->getCurrentUser();
+        $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
 
         if ($member && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
         }
 
-        $this->getActivityService()->trigger($task['activityId'], 'start', array(
-            'task' => $task
-        ));
+        $taskResult   = array('status' => 'none');
+        $nextTask     = array();
+        $finishedRate = 0;
+        //非课程成员学习task不需要记录学习信息
+        if (!empty($member)) {
+            $this->getActivityService()->trigger($task['activityId'], 'start', array(
+                'task' => $task
+            ));
 
-        $course = $this->getCourseService()->getCourse($courseId);
-
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
-        if ($taskResult['status'] == 'finish') {
-            list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
+            if ($taskResult['status'] == 'finish') {
+                list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
+            }
         }
 
         return $this->render('task/show.html.twig', array(
             'course'       => $course,
             'task'         => $task,
             'taskResult'   => $taskResult,
-            'nextTask'     => empty($nextTask) ? array() : $nextTask,
-            'finishedRate' => empty($finishedRate) ? 0 : $finishedRate
+            'nextTask'     => $nextTask,
+            'finishedRate' => $finishedRate,
+            'isMember'     => !empty($member)
         ));
     }
 
@@ -220,14 +229,15 @@ class TaskController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        if (!$course['enableFinish']) {
+        //0表示允许手动点击完成
+        if ($course['enableFinish']) {
             throw $this->createAccessDeniedException('task can not finished.');
         }
 
         $task = $this->getTaskService()->getTask($id);
 
         if ($task['status'] != 'published') {
-            return $this->createMessageResponse('未发布的任务无法完成');
+            return $this->createMessageResponse('error', '未发布的任务无法完成');
         }
         $result = $this->getTaskService()->finishTaskResult($id);
 
@@ -285,9 +295,8 @@ class TaskController extends BaseController
 
     protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         if ($preview) {
-            if ($this->canPreview($course, $member)) {
+            if ($this->canPreview($courseId)) {
                 $task = $this->getTaskService()->getTask($taskId);
             } else {
                 throw $this->createNotFoundException('you can not preview this task ');
@@ -299,16 +308,23 @@ class TaskController extends BaseController
             throw $this->createResourceNotFoundException('task', $taskId);
         }
 
-        if ($task['courseId'] != $course['id']) {
+        if ($task['courseId'] != $courseId) {
             throw $this->createAccessDeniedException();
         }
 
         return $task;
     }
 
-    private function canPreview($course, $member)
+    private function canPreview($courseId)
     {
-        $user      = $this->getCurrentUser();
+        $user   = $this->getCurrentUser();
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
+
+        if (empty($member)) {
+            return false;
+        }
+
+        $course    = $this->getCourseService()->getCourse($courseId);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         if ($user->isSuperAdmin()) {

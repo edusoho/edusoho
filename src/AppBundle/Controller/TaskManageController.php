@@ -102,7 +102,6 @@ class TaskManageController extends BaseController
             'type'          => $file['type'],
             'length'        => $file['length'],
             'title'         => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
-            'courseSetType' => 'normal',
             'ext'           => array('mediaSource' => 'self', 'mediaId' => $file['id'])
         );
         if ($file['type'] == 'document') {
@@ -112,6 +111,13 @@ class TaskManageController extends BaseController
         return $task;
     }
 
+    /**
+     * @param Request $request
+     * @param         $task
+     * @param         $course
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     */
     private function createTask(Request $request, $task, $course)
     {
         $task['_base_url']       = $request->getSchemeAndHttpHost();
@@ -121,14 +127,22 @@ class TaskManageController extends BaseController
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
         if ($course['isDefault'] && isset($task['mode']) && $task['mode'] != 'lesson') {
-            return $this->createJsonResponse(array('append' => false));
+            return $this->createJsonResponse(array(
+                'append' => false,
+                'html'   => ''
+            ));
         }
 
         $task = $this->prepareRenderTask($course, $task);
 
-        return $this->render($this->getTaskItemTemplate($course), array(
+        $html = $this->renderView($this->getTaskItemTemplate($course), array(
             'course' => $course,
             'task'   => $task
+        ));
+
+        return $this->createJsonResponse(array(
+            'append' => true,
+            'html'   => $html
         ));
     }
 
@@ -145,7 +159,7 @@ class TaskManageController extends BaseController
             if ($request->getMethod() == 'POST') {
                 $task = $request->request->all();
                 $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
-                return $this->createJsonResponse(array('append' => false));
+                return $this->createJsonResponse(array('append' => false, 'html' => ''));
             }
 
             $activity  = $this->getActivityService()->getActivity($task['activityId']);
@@ -248,6 +262,7 @@ class TaskManageController extends BaseController
 
     /**
      * @param  $type
+     *
      * @return mixed
      */
     protected function getActivityActionConfig($type)
@@ -258,6 +273,7 @@ class TaskManageController extends BaseController
 
     /**
      * @param  $course
+     *
      * @return BaseStrategy|CourseStrategy
      */
     protected function createCourseStrategy($course)

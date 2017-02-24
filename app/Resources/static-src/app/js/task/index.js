@@ -2,18 +2,15 @@ import TaskSidebar from "./widget/sidebar";
 import TaskUi from "./widget/task-ui";
 import TaskEventEmitter from "./widget/task-event-emitter";
 
-class TaskShow {
-  constructor({element, courseId, taskId, mode, startTime, timeStep}) {
+class TaskShow extends Emitter {
+  constructor({element, courseId, taskId, mode, isMember}) {
+    super();
     this.element = $(element);
     this.courseId = courseId;
     this.taskId = taskId;
     this.mode = mode;
-    this.eventEmitter = new TaskEventEmitter({
-      element: this.element.find('#task-content-iframe'),
-      startTime: startTime,
-      timeStep: timeStep,
-      dataName: 'doing'
-    });
+    this.isMember = isMember;
+    this.eventEmitter = new TaskEventEmitter(this.element.find('#task-content-iframe'));
     this.ui = new TaskUi({
       element: '.js-task-dashboard-page'
     });
@@ -24,8 +21,7 @@ class TaskShow {
   init() {
     this.initPlugin();
     this.initSidebar();
-
-    if (this.mode != 'preview') {
+    if (this.mode != 'preview' && this.isMember) {
       this.bindEvent();
     }
   }
@@ -92,9 +88,8 @@ class TaskShow {
 
 new TaskShow({
   element: $('body'),
-  courseId: $('#js-hidden-data [name="course-id"]').val(),
-  taskId: $('#js-hidden-data [name="task-id"]').val(),
-  mode: $('#js-hidden-data [name="mode"]').val(),
-  startTime: $("#js-hidden-data input[name ='current-timestamp']").val(),
-  timeStep: 1
+  courseId: $('body').find('#js-hidden-data [name="course-id"]').val(),
+  taskId: $('body').find('#js-hidden-data [name="task-id"]').val(),
+  mode: $('body').find('#js-hidden-data [name="mode"]').val(),
+  isMember: $('body').find('#js-hidden-data [name="isMember"]').val()
 });
