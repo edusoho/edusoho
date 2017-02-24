@@ -65,33 +65,26 @@ class CourseServiceTest extends BaseTestCase
 
     public function testUpdateCourseMarketing()
     {
-        $course = array(
-            'title'       => '第一个教学计划',
-            'courseSetId' => 1,
-            'learnMode'   => 'lockMode',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0
-        );
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->createNewCourse($courseSet['id']);
 
-        $result = $this->getCourseService()->createCourse($course);
+        $course['isFree']        = 0;
+        $course['originPrice']   = 111;
+        $course['vipLevelId']    = 1;
+        $course['buyable']       = 1;
+        $course['tryLookable']   = 1;
+        $course['tryLookLength'] = 2;
+        $course['watchLimit']    = 3;
+        $course['services']      = array('xxx', 'yy', 'zzz');
+        $updated                 = $this->getCourseService()->updateCourseMarketing($course['id'], $course);
 
-        $result['isFree']        = 0;
-        $result['originPrice']   = 111;
-        $result['vipLevelId']    = 1;
-        $result['buyable']       = 1;
-        $result['tryLookable']   = 1;
-        $result['tryLookLength'] = 2;
-        $result['watchLimit']    = 3;
-        $result['services']      = array('xxx', 'yy', 'zzz');
-        $updated                 = $this->getCourseService()->updateCourseMarketing($result['id'], $result);
-
-        $this->assertEquals($result['originPrice'], $updated['price']);
-        $this->assertEquals($result['vipLevelId'], $updated['vipLevelId']);
-        $this->assertEquals($result['buyable'], $updated['buyable']);
-        $this->assertEquals($result['tryLookable'], $updated['tryLookable']);
-        $this->assertEquals($result['tryLookLength'], $updated['tryLookLength']);
-        $this->assertEquals($result['watchLimit'], $updated['watchLimit']);
-        $this->assertEquals($result['services'], $updated['services']);
+        $this->assertEquals($course['originPrice'], $updated['price']);
+        $this->assertEquals($course['vipLevelId'], $updated['vipLevelId']);
+        $this->assertEquals($course['buyable'], $updated['buyable']);
+        $this->assertEquals($course['tryLookable'], $updated['tryLookable']);
+        $this->assertEquals($course['tryLookLength'], $updated['tryLookLength']);
+        $this->assertEquals($course['watchLimit'], $updated['watchLimit']);
+        $this->assertEquals($course['services'], $updated['services']);
     }
 
     public function testDelete()
@@ -216,6 +209,42 @@ class CourseServiceTest extends BaseTestCase
         // $this->assertCount(1, $result);
     }
 
+    protected function createNewCourseSet()
+    {
+        $courseSetFields = array(
+            'title' => '新课程开始！',
+            'type'  => 'normal'
+        );
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
+
+        $this->assertNotEmpty($courseSet);
+
+        return $courseSet;
+    }
+
+    protected function createNewCourse($courseSetId)
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(array($courseSetId));
+
+        if (empty($courses)) {
+            $courseFields = array(
+                'title'       => '第一个教学计划',
+                'courseSetId' => 1,
+                'learnMode'   => 'lockMode',
+                'expiryMode'  => 'days',
+                'expiryDays'  => 0
+            );
+
+            $course = $this->getCourseService()->createCourse($courseFields);
+        } else {
+            $course = $courses[0];
+        }
+
+        $this->assertNotEmpty($course);
+
+        return $course;
+    }
+
     private function createNormalUser()
     {
         $user              = array();
@@ -234,6 +263,11 @@ class CourseServiceTest extends BaseTestCase
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
