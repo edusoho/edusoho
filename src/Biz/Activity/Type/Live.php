@@ -23,8 +23,7 @@ class Live extends Activity
     {
         $biz         = $this->getBiz();
         $live        = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
-        $refLiveroom = $config['refLiveroom'];
-        if (!$refLiveroom) {
+        if (!empty($config['refLiveroom'])) {
             $activity['fromUserId'] = $biz['user']['id'];
             unset($activity['id']);
             return $this->getLiveActivityService()->createLiveActivity($activity, true);

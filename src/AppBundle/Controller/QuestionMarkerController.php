@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
 use Biz\Marker\Service\MarkerService;
@@ -9,6 +10,7 @@ use Biz\Marker\Service\QuestionMarkerService;
 use Biz\Question\Service\QuestionService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
 class QuestionMarkerController extends BaseController
@@ -17,8 +19,7 @@ class QuestionMarkerController extends BaseController
     public function showQuestionMakersAction(Request $request, $mediaId)
     {
         $questionMakers = $this->getQuestionMarkerService()->findQuestionMarkersMetaByMediaId($mediaId);
-
-        $baseUrl = $request->getSchemeAndHttpHost();
+        $baseUrl        = $request->getSchemeAndHttpHost();
 
         $result = array();
 
@@ -32,7 +33,7 @@ class QuestionMarkerController extends BaseController
             $result[$index]['type']     = $questionMaker['type'];
             $result[$index]['question'] = self::convertAbsoluteUrl($baseUrl, $questionMaker['stem']);
             if ($isChoice) {
-                $questionMetas = json_decode($questionMaker['metas'], true);
+                $questionMetas = $questionMaker['metas'];
                 if (!empty($questionMetas['choices'])) {
                     foreach ($questionMetas['choices'] as $choiceIndex => $choice) {
                         $result[$index]['options'][$choiceIndex]['option_key'] = chr(65 + $choiceIndex);
@@ -40,7 +41,7 @@ class QuestionMarkerController extends BaseController
                     }
                 }
             }
-            $answers = json_decode($questionMaker['answer'], true);
+            $answers = $questionMaker['answer'];
             foreach ($answers as $answerIndex => $answer) {
                 if ($isChoice) {
                     $result[$index]['answer'][$answerIndex] = chr(65 + $answer);
@@ -51,6 +52,7 @@ class QuestionMarkerController extends BaseController
                 }
             }
             $result[$index]['analysis'] = self::convertAbsoluteUrl($baseUrl, $questionMaker['analysis']);
+
         }
 
         return $this->createJsonResponse($result);
@@ -58,7 +60,7 @@ class QuestionMarkerController extends BaseController
 
     /**
      * 视频弹题预览
-     * @param  Request                                      $request
+     * @param  Request $request
      * @param  $courseId
      * @param  $id
      * @return \Symfony\Component\HttpFoundation\Response
@@ -67,7 +69,7 @@ class QuestionMarkerController extends BaseController
     {
         $this->getCourseService()->tryManageCourse($courseId);
 
-        $question = $this->getQuestionService()->getQuestion($id);
+        $question = $this->getQuestionService()->get($id);
 
         if (empty($question)) {
             throw $this->createNotFoundException('题目不存在！');
@@ -103,7 +105,7 @@ class QuestionMarkerController extends BaseController
         ));
     }
 
-    public function sortQuestionAction(Request $Request, $markerId)
+    public function sortQuestionAction(Request $request, $markerId)
     {
         if (!$this->tryManageQuestionMarker()) {
             return $this->createJsonResponse(false);
@@ -142,7 +144,7 @@ class QuestionMarkerController extends BaseController
     }
 
     //新增弹题
-    public function addQuestionMarkerAction(Request $request, $courseId, $lessonId)
+    public function addQuestionMarkerAction(Request $request, $courseId, $taskId)
     {
         if (!$this->tryManageQuestionMarker()) {
             return $this->createJsonResponse(false);
@@ -150,21 +152,22 @@ class QuestionMarkerController extends BaseController
 
         $data = $request->request->all();
 
-        $lesson = $this->getCourseService()->getLesson($lessonId);
+        $task = $this->getTaskService()->getCourseTask($courseId, $taskId);
 
-        if (empty($lesson)) {
+        if (empty($task)) {
             return $this->createMessageResponse('error', '该课时不存在!');
         }
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
 
         $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
-        $question           = $this->getQuestionService()->getQuestion($data['questionId']);
+        $question           = $this->getQuestionService()->get($data['questionId']);
 
         if (empty($question)) {
             return $this->createMessageResponse('error', '该题目不存在!');
         }
 
         if (empty($data['markerId'])) {
-            $result = $this->getMarkerService()->addMarker($lesson['mediaId'], $data);
+            $result = $this->getMarkerService()->addMarker($activity['ext']['file']['id'], $data);
             return $this->createJsonResponse($result);
         } else {
             $marker = $this->getMarkerService()->getMarker($data['markerId']);
@@ -185,7 +188,7 @@ class QuestionMarkerController extends BaseController
         $answer = $data['answer'];
         if (in_array($data['type'], array('choice', 'single_choice'))) {
             foreach ($answer as &$answerItem) {
-                $answerItem = (string) (ord($answerItem) - 65);
+                $answerItem = (string)(ord($answerItem) - 65);
             }
         } elseif ($data['type'] == 'determine') {
             foreach ($answer as &$answerItem) {
@@ -193,8 +196,8 @@ class QuestionMarkerController extends BaseController
             }
         }
 
-        $user                 = $this->getUserService()->getCurrentUser();
-        $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion($markerId, $user['id'], $questionMarkerId, $answer, $data['type'], $data['lessonId']);
+        $user                 = $this->getCurrentUser();
+        $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion($markerId, $user['id'], $questionMarkerId, $answer, $data['type']);
 
         $data = array(
             'markerId'               => $markerId,
@@ -203,30 +206,36 @@ class QuestionMarkerController extends BaseController
         return $this->createJsonResponse($data);
     }
 
-    public function questionAction(Request $request, $courseId, $lessonId)
+    public function questionAction(Request $request, $courseId, $taskId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $task   = $this->getTaskService()->getTask($taskId);
+        $video  = $this->getActivityService()->getActivity($task['activityId'], true);
 
+        if ($course['id'] != $task['courseId']) {
+            $task = $video = array();
+        }
         return $this->render('marker/question.html.twig', array(
             'course'        => $course,
-            'lesson'        => $lesson,
-            'targetChoices' => $this->getQuestionTargetChoices($course, $lesson)
+            'task'          => $task,
+            'video'         => $video,
+            'targetChoices' => $this->getQuestionTargetChoices($course)
         ));
     }
 
-    public function searchAction(Request $request, $courseId, $lessonId)
+    public function searchAction(Request $request, $courseId, $taskId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        $task = $this->getTaskService()->getTask($taskId);
 
         $conditions = $request->request->all();
 
-        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course, $lesson);
+        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course, $task);
 
         return $this->render('marker/question-tr.html.twig', array(
             'course'        => $course,
-            'lesson'        => $lesson,
+            'task'          => $task,
             'paginator'     => $paginator,
             'questions'     => $questions,
             'targetChoices' => $this->getQuestionTargetChoices($course)
@@ -235,18 +244,18 @@ class QuestionMarkerController extends BaseController
 
     protected function getQuestionTargetChoices($course)
     {
-        $lessons                           = $this->getCourseService()->getCourseLessons($course['id']);
-        $choices                           = array();
-        $choices["course-{$course['id']}"] = $this->getServiceKernel()->trans('本课程');
+        $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
 
-        foreach ($lessons as $lesson) {
-            $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}：{$lesson['title']}";
+        $choices = array("course-{$course['id']}" => '本课程');
+
+        foreach ($tasks as $task) {
+            $choices["course-{$course['id']}/task-{$task['id']}"] = "课时{$task['number']}：{$task['title']}";
         }
 
         return $choices;
     }
 
-    protected function getPaginatorAndQuestion($request, $conditions, $course, $lesson)
+    protected function getPaginatorAndQuestion($request, $conditions, $course, $task)
     {
         if (!isset($conditions['target']) || empty($conditions['target'])) {
             unset($conditions['target']);
@@ -259,23 +268,28 @@ class QuestionMarkerController extends BaseController
 
         $conditions['parentId'] = 0;
         $conditions['types']    = array('determine', 'single_choice', 'uncertain_choice', 'fill', 'choice');
-        $orderBy                = array('createdTime'=>'DESC');
-        $paginator              = new Paginator(
+        $orderBy                = array('createdTime' => 'DESC');
+
+        $paginator = new Paginator(
             $request,
-            $this->getQuestionService()->searchQuestionsCount($conditions),
+            $this->getQuestionService()->searchCount($conditions),
             empty($conditions['pageSize']) ? 7 : $conditions['pageSize']
         );
 
         $paginator->setPageRange(4);
 
-        $questions = $this->getQuestionService()->searchQuestions(
+        $questions = $this->getQuestionService()->search(
             $conditions,
             $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $markerIds         = ArrayToolkit::column($this->getMarkerService()->findMarkersByMediaId($lesson['mediaId']), 'id');
+        $video = $this->getActivityService()->getActivity($task['activityId'], true);
+
+        $file = $video['ext']['file'];
+
+        $markerIds         = ArrayToolkit::column($this->getMarkerService()->findMarkersByMediaId($file['id']), 'id');
         $questionMarkerIds = ArrayToolkit::column($this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds($markerIds), 'questionId');
 
         foreach ($questions as $key => $question) {
@@ -355,5 +369,21 @@ class QuestionMarkerController extends BaseController
     protected function getQuestionMarkerResultService()
     {
         return $this->getBiz()->service('Marker:QuestionMarkerResultService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 }

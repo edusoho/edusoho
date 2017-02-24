@@ -21,8 +21,7 @@
               {{ web_macro.star(course.rating) }}
             </div>
             <div class="price hidden-xs">
-                {# {% include 'TopxiaWebBundle:Course/Widget:course-price.html.twig' with {shows:['originPrice'] } %} #}
-                原价：
+                {{ '原价：'|trans }}
                 {% include 'course/widgets/price.html.twig' with {courseSet: course.courseSet, shows:'originPrice'} %}
             </div>
             <span class="course-show">
