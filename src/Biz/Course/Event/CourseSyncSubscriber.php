@@ -150,13 +150,21 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         }
 
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($course['id'], 1);
+
         if (empty($copiedCourses)) {
             return;
         }
+
         foreach ($copiedCourses as $cc) {
-            $this->setCourseTeachers($cc, $teachers);
             $classroom = $this->getClassroomService()->getClassroomByCourseId($cc['id']);
+
+            if(empty($classroom)){
+                continue;
+            }
+
+            $this->setCourseTeachers($cc, $teachers);
             $this->getClassroomService()->updateClassroomTeachers($classroom['id']);
+
         }
     }
 
