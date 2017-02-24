@@ -1,6 +1,6 @@
 import TaskSidebar from "./widget/sidebar";
 import TaskUi from "./widget/task-ui";
-import TaskPipe from "./widget/task-event-emitter";
+import TaskPipe from "./widget/task-pipe";
 import Emitter from "common/es-event-emitter";
 
 class TaskShow extends Emitter {
