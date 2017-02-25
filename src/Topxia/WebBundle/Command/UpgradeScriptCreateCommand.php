@@ -13,6 +13,8 @@ class UpgradeScriptCreateCommand extends BaseCommand
      */
     private $output;
 
+    private $rootDir;
+
     protected function configure()
     {
         $this->setName('util:upgrade-script-create')
@@ -26,28 +28,27 @@ class UpgradeScriptCreateCommand extends BaseCommand
         $version = $input->getArgument('version');
         $mode = $input->getArgument('mode');
         $this->output = $output;
+        $this->rootDir = $rootDir = $this->getContainer()->getParameter('kernel.root_dir').'/../';
         $this->generateUpgradeScripts($version, $mode);
     }
 
-    /**
-     * TODO: 添加带分页的脚本文件
-     */
     protected function generateUpgradeScripts($version, $mode)
     {
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir').'/../';
 
         $fileSystem = new Filesystem();
-        if (!$fileSystem->exists($rootDir . 'scripts')) {
+        if (!$fileSystem->exists($this->rootDir . 'scripts')) {
             $this->generateScriptPath();
+        } else {
+            $this->updateScriptPath();
         }
 
-        $scriptPath = $rootDir.'/scripts/';
+        $scriptPath = $this->rootDir.'/scripts/';
         $scriptFileName = 'upgrade-'.$version;
         $scriptFilePath = $scriptPath.$scriptFileName.'.php';
         if (file_exists($scriptFilePath)) {
             $this->output->writeln("<comment>The version script file already exists</comment>");
         } else {
-            $script = $this->getScript();
+            $script = $this->getTplScript();
             file_put_contents($scriptFilePath, $script);
             $this->output->writeln("<comment>the script file has created, please take care of it</comment>");
         }
@@ -60,8 +61,15 @@ class UpgradeScriptCreateCommand extends BaseCommand
         $this->output->writeln("<comment>scripts directory created</comment>");
     }
 
-    protected function getScript()
+    protected function updateScriptPath()
     {
-        return file_get_contents(__DIR__."/scripts-tpl/Scripts.twig");
+        $this->output->writeln("<comment>git pull scripts....</comment>");
+        exec('git pull');
+        $this->output->writeln("<comment>the scripts have updated</comment>");
+    }
+
+    protected function getTplScript()
+    {
+        return file_get_contents($this->rootDir."/scripts/upgrade.php.tpl");
     }
 }
