@@ -16,7 +16,9 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         return array(
             'classroom.delete' => 'onClassroomDelete',
-            'classroom.course.change' => 'onClassroomCourseChange',
+            'classroom.course.create' => 'onClassroomCourseChange',
+            'classroom.course.delete' => 'onClassroomCourseChange',
+            'classroom.course.update' => 'onClassroomCourseChange',
             'classroom.update' => 'onClassroomUpdate',
             'classReview.add'  => 'onReviewCreate'
         );
@@ -33,8 +35,8 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $classroom = $event->getSubject();
         $classroomId = $classroom['classroomId'];
-        $courseNum = $this->getClassroomService()->countClassroomCoursesByClassroomId($classroomId);
-        $taskNum = $this->getClassroomService()->countClassroomCourseTasksByClassroomId($classroomId);
+        $courseNum = $this->getClassroomService()->countCoursesByClassroomId($classroomId);
+        $taskNum = $this->getClassroomService()->countCourseTasksByClassroomId($classroomId);
 
         $fields = array('courseNum' => $courseNum, 'lessonNum' => $taskNum);
         $this->getClassroomService()->updateClassroom($classroomId, $fields);

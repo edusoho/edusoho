@@ -223,7 +223,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->commit();
 
             $this->dispatchEvent(
-                'classroom.course.change',
+                'classroom.course.create',
                 new Event(array('classroomId' => $classroomId))
             );
             return $this->findActiveCoursesByClassroomId($classroomId);
@@ -459,7 +459,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $this->dispatchEvent(
-            'classroom.course.change',
+            'classroom.course.delete',
             new Event(array('classroomId' => $classroomId))
         );
     }
@@ -704,7 +704,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->commit();
 
             $this->dispatchEvent(
-                'classroom.course.change',
+                'classroom.course.update',
                 new Event(array('classroomId' => $classroomId))
             );
         } catch (\Exception $e) {
@@ -1457,7 +1457,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->updateMember($classroomMember['id'], $fields);
     }
 
-    public function countClassroomCoursesByClassroomId($classroomId)
+    public function countCoursesByClassroomId($classroomId)
     {
         return $this->getClassroomCourseDao()->count(
             array(
@@ -1467,9 +1467,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         );
     }
 
-    public function countClassroomCourseTasksByClassroomId($classroomId)
+    public function countCourseTasksByClassroomId($classroomId)
     {
-        return $this->getClassroomCourseDao()->countClassroomCourseTasksByClassroomId($classroomId);
+        return $this->getClassroomCourseDao()->countCourseTasksByClassroomId($classroomId);
     }
 
     private function updateStudentNumAndAuditorNum($classroomId)
