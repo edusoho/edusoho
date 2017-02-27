@@ -6,7 +6,7 @@ use Topxia\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    private static $pageNum = 1500;
+    private static $pageNum = 2000;
 
     public function update($index = 0)
     {
