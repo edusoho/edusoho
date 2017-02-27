@@ -3,7 +3,8 @@
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
-{% set bodyClass = 'homepage has-app' %}
+{% set appDownload = ( not custom | default(0) and not setting('copyright').name|default(null) and setting("mobile").enabled|default(null))  %}
+{% set bodyClass = 'homepage {% if appDownload %} has-app {% endif %}' %}
 {% set siteNav = '/' %}
 {% set script_controller = 'index' %}
 {% set _target_path = path('homepage') %}
@@ -16,7 +17,7 @@
 {% set consultDisplay = true %}
 
 {% block full_content %}
-  {% if not custom | default(0) and not setting('copyright.name') %}
+  {% if appDownload  %}
     {{ render(controller('TopxiaWebBundle:Default:appDownload')) }}
   {% endif %}
     {% cache 'jianmo/home/top/banner' 600 %}
