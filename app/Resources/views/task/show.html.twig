@@ -15,6 +15,7 @@
     <input type="hidden" name="task-id" value="{{ task.id }}">
     <input type="hidden" name="task-result-status" value="{{ taskResult.status }}">
     <input type="hidden" name="mode" value="{% if preview %}preview{% else %}learn{% endif %}">
+    <input type="hidden" name="isMember" value="{{ isMember ? true : false }}">
     <input type="hidden" name="plugins_url" value="{{ path('course_task_show_plugins', {courseId: task.courseId, taskId: task.id}) }}">
   </div>
 
@@ -37,7 +38,6 @@
 
       <div class="dashboard-footer ">
         <div class="state-opration js-state-opration" data-learnmode="{{course.learnMode|default('freeMode')}}">
-          {% if course.learnMode|default('freeMode') == 'lockMode' %}
           <a class="btn btn-gray text-sm js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
             href="javascript:;" data-container=".js-learn-prompt" data-toggle="popover"
             data-trigger="hover" data-placement="top"
@@ -52,9 +52,8 @@
               data-url="{{ path('course_task_finished_prompt', {courseId: course.id, id: task.id}) }}">
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
           </span>
-          {% endif %}
         </div>
-        {% if course.learnMode|default('freeMode') == 'freeMode' or course.enableFinish|default(1) == 0 %}
+        {% if course.enableFinish|default(1) == 0 and isMember %}
           <a type="button" href="javascript:;"
             {% if taskResult.status != 'finish' %}
               class="btn btn-transparent btn-learn js-btn-learn"

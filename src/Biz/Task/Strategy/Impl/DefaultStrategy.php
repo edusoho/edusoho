@@ -187,7 +187,9 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                     'number'     => $taskNumber
                 );
                 $this->getTaskService()->updateSeq($task['id'], $fields);
-                $taskNumber++;
+                if($task['mode'] == 'lesson'){
+                    $taskNumber++;
+                }
             }
         }
     }

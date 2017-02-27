@@ -2770,3 +2770,67 @@ course_show:
 changelog_list:
     path: /changelog/list
     defaults: { _controller: AppBundle:Changelog:list }
+
+
+#弹题
+course_task_marker_manage:
+    path:  /course/{courseId}/task/{taskId}/marker/manage
+    defaults: { _controller: AppBundle:Marker:manage }
+
+course_task_marker_manage_preview:
+    path:  /course/{courseId}/task/{taskId}/marker/preview
+    defaults: { _controller: AppBundle:Marker:preview }
+
+course_task_marker_show:
+    path:  /course/task/{taskId}/marker/show
+    defaults: { _controller: AppBundle:Marker:showMarkers }
+
+course_task_marker_metas:
+    path:  /course/task/{mediaId}/marker/metas
+    defaults: { _controller: AppBundle:Marker:markerMetas }
+
+course_task_marker_merge:
+    path:  /course/{courseId}/task/{taskId}/marker/merge
+    defaults: { _controller: AppBundle:Marker:merge }
+    methods: [POST]
+
+course_task_marker_update:
+    path:  /course/{courseId}/task/{taskId}/marker/update
+    defaults: { _controller: AppBundle:Marker:updateMarker }
+    methods: [POST]
+
+course_question_marker_preview:
+    path: /course/{courseId}/question/{id}/marker/preview
+    defaults: { _controller: AppBundle:QuestionMarker:questionMakerPreview }
+
+course_task_question_markers_show:
+    path:  /course/task/media/{mediaId}/question_markers/show
+    defaults: { _controller: AppBundle:QuestionMarker:showQuestionMakers }
+
+course_task_question_marker_finish:
+    path:  /course/task/marker/{markerId}/question_marker/{questionMarkerId}/finish
+    defaults: { _controller: AppBundle:QuestionMarker:finishQuestionMarker }
+    methods: [POST]
+
+course_task_question_marker_add:
+    path:  /course/{courseId}/task/{taskId}/question_marker/add
+    defaults: { _controller: AppBundle:QuestionMarker:addQuestionMarker }
+    methods: [POST]
+
+course_task_question_marker_delete:
+    path:  /course/{courseId}/task/{taskId}/question_marker/delete
+    defaults: { _controller: AppBundle:QuestionMarker:deleteQuestionMarker }
+    methods: [POST]
+
+course_task_question_marker_sort:
+    path:  /course/{courseId}/task/{taskId}/question_marker/sort
+    defaults: { _controller: AppBundle:QuestionMarker:sortQuestionMarker }
+    methods: [POST]
+
+course_task_question_marker_list:
+    path:  /course/{courseId}/task/{taskId}/question_marker/list
+    defaults: { _controller: AppBundle:QuestionMarker:question }
+
+course_task_question_marker_search:
+    path:  /course/{courseId}/task/{taskId}/question_marker/search
+    defaults: { _controller: AppBundle:QuestionMarker:search }

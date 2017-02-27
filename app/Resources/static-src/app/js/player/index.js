@@ -142,13 +142,11 @@ class Show {
       }
     });
 
-    player.on('answered', function (data) {
-      // @todo delete lessonId
-      var finishUrl = '/course/lesson/marker/' + data.markerId + '/question_marker/' + data.id + '/finish';
+    player.on('answered', (data) => {
+      var finishUrl = '/course/task/marker/' + data.markerId + '/question_marker/' + data.id + '/finish';
       $.post(finishUrl, {
         "answer": data.answer,
         "type": data.type,
-        "lessonId": lessonId
       }, function (result) {
 
       }, 'json');

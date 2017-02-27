@@ -23,6 +23,9 @@ class Video extends Activity
         $videoActivity = $fields['ext'];
         if (empty($videoActivity['mediaId'])) {
             $videoActivity['mediaId'] = 0;
+        } else {
+            $file                         = $this->getUploadFileService()->getFile($videoActivity['mediaId']);
+            $videoActivity['mediaSource'] = $file['storage'];
         }
         $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
         return $videoActivity;
@@ -57,7 +60,6 @@ class Video extends Activity
     public function update($activityId, &$fields, $activity)
     {
         $video = $fields['ext'];
-
         if ($video['finishType'] == 'time') {
             if (empty($video['finishDetail'])) {
                 throw $this->createAccessDeniedException('finish time can not be emtpy');
@@ -66,6 +68,10 @@ class Video extends Activity
         $videoActivity = $this->getVideoActivityDao()->get($fields['mediaId']);
         if (empty($videoActivity)) {
             throw new \Exception('教学活动不存在');
+        }
+        if(!empty($video['mediaId'])) {
+            $file                         = $this->getUploadFileService()->getFile($videoActivity['mediaId']);
+            $video['mediaSource'] = $file['storage'];
         }
         $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $video);
         return $videoActivity;
