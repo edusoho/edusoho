@@ -3,6 +3,7 @@
 namespace Topxia\Service\Course\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
+use Topxia\Service\Course\Dao\CourseDao;
 use Topxia\Service\Course\Dao\FavoriteDao;
 
 class FavoriteDaoImpl extends BaseDao implements FavoriteDao
@@ -29,6 +30,16 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND type = 'course' ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array($userId)) ?: array();
+    }
+
+    public function findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT f.* FROM {$this->table} f";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON f.userId = ? ';
+        $sql .= "AND m.courseId = c.id AND c.parentId = 0";
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($userId, $start, $limit));
     }
 
     public function getFavoriteCourseCountByUserId($userId)

@@ -45,19 +45,35 @@ interface CourseService
 
     public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
 
+    public function findUserLearningCoursesNotInClassroom($userId, $start, $limit, $filters = array());
+
     public function findUserLeaningCourseCount($userId, $filters = array());
+
+    public function findUserLearningCourseCountNotInClassroom($userId, $filters = array());
 
     public function findUserLeanedCourseCount($userId, $filters = array());
 
+    public function findUserLearnedCourseCountNotInClassroom($userId, $filters = array());
+
     public function findUserLeanedCourses($userId, $start, $limit, $filters = array());
+
+    public function findUserLearnedCoursesNotInClassroom($userId, $start, $limit, $filters = array());
 
     public function findUserTeachCourseCount($conditions, $onlyPublished = true);
 
+    public function findUserTeachCourseCountNotInClassroom($conditions, $onlyPublished = true);
+
     public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
+
+    public function findUserTeachCoursesNotInClassroom($conditions, $start, $limit, $onlyPublished = true);
 
     public function findUserFavoritedCourseCount($userId);
 
+    public function findUserFavoritedCourseCountNotInClassroom($userId);
+
     public function findUserFavoritedCourses($userId, $start, $limit);
+
+    public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit);
 
     public function findRandomCourses($conditions, $num);
 

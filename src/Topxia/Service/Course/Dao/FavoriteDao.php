@@ -10,6 +10,8 @@ interface FavoriteDao
 
     public function findCourseFavoritesByUserId($userId, $start, $limit);
 
+    public function findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
+
     public function getFavoriteCourseCountByUserId($userId);
 
     public function addFavorite($collect);
@@ -19,4 +21,5 @@ interface FavoriteDao
     public function searchCourseFavoriteCount($conditions);
 
     public function searchCourseFavorites($conditions, $orderBy, $start, $limit);
+
 }
