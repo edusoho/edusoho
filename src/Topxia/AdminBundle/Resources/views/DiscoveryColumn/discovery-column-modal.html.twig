@@ -27,31 +27,42 @@
       	<label for="keyword-name-field">{{'类型'|trans}}</label>
     	</div>
 			<div class="col-md-7 controls radios">
-        <input type="radio" id="course" name="type" checked="checked" value="course">
+        <input type="radio" id="course" name="type" checked="checked" value="course" data-url="{{ path('admin_get_discovery_column_category', {id:discoveryColumn.id|default(), type:'course'}) }}">
         <label for="course">{{ '普通课程'|trans }}</label>
-        <input type="radio" id="live" name="type"{% if discoveryColumn and discoveryColumn.type == 'live' %} checked="checked" {% endif %}value="live">
+        <input type="radio" id="live" name="type"{% if discoveryColumn and discoveryColumn.type == 'live' %} checked="checked" {% endif %}value="live" data-url="{{ path('admin_get_discovery_column_category', {id:discoveryColumn.id|default(), type:'live'}) }}">
         <label for="live">{{ '直播课程'|trans }}</label>
-        <input type="radio" id="classroom" name="type" {% if discoveryColumn and discoveryColumn.type == 'classroom' %} checked="checked" {% endif %}value="classroom">
+        <input type="radio" id="classroom" name="type" {% if discoveryColumn and discoveryColumn.type == 'classroom' %} checked="checked" {% endif %}value="classroom" data-url="{{ path('admin_get_discovery_column_category', {id:discoveryColumn.id|default(), type:'classroom'}) }}">
         <label for="classroom">{{'班级'|trans}}</label>
     	</div>
     </div>
   
 
-		<div class="form-group">
-      <label class="col-md-3 control-label">{{'分类'|trans}}</label>
-        <div class="col-md-8 controls course-category {% if discoveryColumn %}{% if discoveryColumn.type == 'course' or discoveryColumn.type == 'live' %}{% else %}hide{% endif %}{% else %}{% endif %}">
-          <select id="" name="categoryId" required="required" class="form-control width-input width-input-large">
-  					{{ select_options(category_choices('course'), categoryId, '分类'|trans) }}
-          </select>
-          <div class="help-block" style="display:none;"></div>
-        </div>
-
-        <div class="col-md-8 controls classroom-category {% if discoveryColumn %}{% if discoveryColumn.type == 'classroom' %}{% else %}hide{% endif %}{% else %}hide{% endif %}">
-          <select id="" name="categoryId" required="required" class="form-control width-input width-input-large">
-            {{ select_options(category_choices('classroom'), categoryId, '分类'|trans) }}
-          </select>
-          <div class="help-block" style="display:none;"></div>
-        </div>
+    <div class="form-group category-ajax">
+    <label class="col-md-3 control-label">{{'分类'|trans}}</label>
+    {% if discoveryColumn %}
+      {% if discoveryColumn.type == 'course' or discoveryColumn.type == 'live' %}
+      <div class="col-md-8 controls course-category">
+        <select name="categoryId" required="required" class="form-control width-input width-input-large">
+          {{ select_options(category_choices('course'), categoryId, '分类'|trans) }}
+        </select>
+        <div class="help-block" style="display:none;"></div>
+      </div>
+      {% else %}
+       <div class="col-md-8 controls classroom-category">
+        <select name="categoryId" required="required" class="form-control width-input width-input-large">
+          {{ select_options(category_choices('classroom'), categoryId, '分类'|trans) }}
+        </select>
+        <div class="help-block" style="display:none;"></div>
+      </div>       
+      {% endif %}
+    {% else %}
+      <div class="col-md-8 controls course-category">
+        <select name="categoryId" required="required" class="form-control width-input width-input-large">
+          {{ select_options(category_choices('course'), categoryId, '分类'|trans) }}
+        </select>
+        <div class="help-block" style="display:none;"></div>
+      </div>        
+    {% endif %}
     </div>
 
 		<div {% if discoveryColumn and discoveryColumn.type == 'live' %}class="form-group order-form hide" {% else %}class="form-group order-form" {% endif %}>

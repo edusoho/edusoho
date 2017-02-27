@@ -40,24 +40,21 @@ define(function(require, exports, module) {
             required: true,
             rule: 'minlength{min:1} maxlength{max:10} remote'
         });
-
         $('.radios').on('click', "input[name=type]", function() {
             var selectedValue = $(this).attr('value');
+            var url = $(this).data(url);
 
+            $.get(url['url'], function(html){
+                $('.category-ajax').html(html);
+            });
             if (selectedValue == 'classroom') {
                 $('.order-form').removeClass('hide');
-                $('.course-category').addClass('hide');
-                $('.classroom-category').removeClass('hide');
             }
             if (selectedValue == 'live') {
                 $('.order-form').addClass('hide');
-                $('.classroom-category').addClass('hide');
-                $('.course-category').removeClass('hide');
             }
             if (selectedValue == 'course') {
                 $('.order-form').removeClass('hide');
-                $('.classroom-category').addClass('hide');
-                $('.course-category').removeClass('hide');
             }
         });
     };

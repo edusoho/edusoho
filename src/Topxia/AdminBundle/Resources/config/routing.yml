@@ -614,6 +614,10 @@ admin_discovery_column_edit:
     path:  /discovery_column/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:edit }
 
+admin_get_discovery_column_category:
+    path: /discovery_column/get/category
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:getCategory }
+
 admin_discovery_column_title_check:
     path:  /discovery_column/{id}/title_check
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:checkTitle }
