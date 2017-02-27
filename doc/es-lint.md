@@ -32,7 +32,7 @@ npm run lint
 /* eslint-enable */
 ```
 
-也可以指定具体不验证的规范
+也可以指定具体不验证的规范:
 
 ```
 /*eslint-disable no-alert, no-console */
@@ -47,22 +47,26 @@ console.log('bar');
 ### 常见错误(需要大家不断补充)
 以下罗列的是在启动编码风格检测工具时，出现的错误。
 
-报错信息统一说明：
+* 报错信息统一说明：
+
 ``` bash
 xxx/app/Resources/static-src/common/load-animation.js
 6:16  error  Irregular whitespace not allowed  no-irregular-whitespace
-```
+
 xxx/app/Resources/static-src/common/load-animation.js 代表错误所在的js文件
 
 6:16 代表在第6行第16个字符
 errer 代表报错信息的级别，也可能是warning
 Irregular whitespace 对于报错信息的简要说明
 no-irregular-whitespace 对应es-lint中的配置项
+```
 
 * 其他说明
+
 文件结尾需要空且只空1行 <br>
 
 * 最好用"."
+
 ```
 ["script"] is better written in dot notation     dot-notation
 
@@ -176,6 +180,7 @@ Missing semicolon   semi
 
 如：
 import { isMobileDevice } from 'common/utils'
+
 后面需加上分号
 ```
 
