@@ -145,6 +145,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function getLesson($lessonId)
     {
+        if (empty($lessonId)) {
+            return array();
+        }
         $sql = "select * from course_lesson where id = {$lessonId}";
         return $this->getConnection()->fetchAll($sql, array());
     }
@@ -162,7 +165,6 @@ class EduSohoUpgrade extends AbstractUpdater
             'type'   => 'testpaper',
             'startTime' => 1484064000
         );
-        $connection = $this->getConnection();
 
         $count = $this->getCourseService()->searchLessonCount($condition);
         $pageNum = self::$pageNum;
@@ -179,7 +181,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 foreach ($copyLessons as $copyLesson) {
                     $target = "course-{$copyLesson['courseId']}";
                     $trueTestPaper = $this->getTestPaperByCopyIdAndTarget($sourceLesson['mediaId'], $target);
-                    $this->updateCopyLessonMediaId($copyLesson['id'], $trueTestPaper['id']);
+                    if (!empty($trueTestPaper)) {
+                        $this->updateCopyLessonMediaId($copyLesson['id'], $trueTestPaper['id']);
+                    }
                 }
             }
             if ($page < $pages) {
@@ -223,8 +227,11 @@ class EduSohoUpgrade extends AbstractUpdater
         $default = array(
             'enabled' => 1
         );
+        $wap = $this->getSettingService()->get('wap', array());
 
-        $this->getSettingService()->set('wap', $default);
+        if (empty($wap)) {
+            $this->getSettingService()->set('wap', $default);
+        }
 
         return 1;
     }
