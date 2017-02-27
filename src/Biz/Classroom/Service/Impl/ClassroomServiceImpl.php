@@ -218,25 +218,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
                 $this->setClassroomCourses($classroomId, $newCourseIds);
             }
-
-            $courses    = $this->findActiveCoursesByClassroomId($classroomId);
-            $coursesNum = count($courses);
-
-            $lessonNum = 0;
-
-            foreach ($courses as $key => $course) {
-                $lessonNum += $course['taskNum'];
-            }
-
-            $this->updateClassroom($classroomId, array("courseNum" => $coursesNum, "lessonNum" => $lessonNum));
-
-            $this->updateClassroomTeachers($classroomId);
-
             $this->refreshCoursesSeq($classroomId, $courseIds);
 
             $this->commit();
 
-            return $courses;
+            $this->dispatchEvent(
+                'classroom.course.create',
+                new Event($classroom, array('courseIds' => $courseIds))
+            );
+            return $this->findActiveCoursesByClassroomId($classroomId);
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;
@@ -466,6 +456,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         foreach ($courseIds as $key => $value) {
             $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $value);
         }
+        $classroom = $this->getClassroom($classroomId);
+        $this->dispatchEvent(
+            'classroom.course.delete',
+            new Event($classroom, array('deleteCourseIds' => $courseIds))
+        );
     }
 
     public function countMobileVerifiedMembersByClassroomId($classroomId, $locked = 0)
@@ -701,19 +696,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     $this->getClassroomDao()->wave(array($classroomId), array('noteNum' => "-{$course['noteNum']}"));
                     $this->getLogService()->info('classroom', 'delete_course', "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})");
                 }
-
-                $courses    = $this->findActiveCoursesByClassroomId($classroomId);
-                $coursesNum = count($courses);
-
-                $lessonNum = 0;
-
-                foreach ($courses as $key => $course) {
-                    $lessonNum += $course['taskNum'];
-                }
-
-                $this->updateClassroom($classroomId, array("courseNum" => $coursesNum, "lessonNum" => $lessonNum));
-
-                $this->updateClassroomTeachers($classroomId);
             }
 
             $this->refreshCoursesSeq($classroomId, $activeCourseIds);
@@ -721,8 +703,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->commit();
 
             $this->dispatchEvent(
-                'classroom.course.delete',
-                new Event($activeCourseIds, array('classroomId' => $classroomId))
+                'classroom.course.update',
+                new Event($classroom, array('courseIds' => $activeCourseIds))
             );
         } catch (\Exception $e) {
             $this->rollback();
@@ -1472,6 +1454,21 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroomMember = $this->getClassroomMember($classroomId, $userId);
         return $this->updateMember($classroomMember['id'], $fields);
+    }
+
+    public function countCoursesByClassroomId($classroomId)
+    {
+        return $this->getClassroomCourseDao()->count(
+            array(
+                'classroomId' => $classroomId,
+                'disabled' => 0
+            )
+        );
+    }
+
+    public function countCourseTasksByClassroomId($classroomId)
+    {
+        return $this->getClassroomCourseDao()->countCourseTasksByClassroomId($classroomId);
     }
 
     private function updateStudentNumAndAuditorNum($classroomId)
