@@ -76,7 +76,7 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
         $members = $this->getClassroomService()->findStudentsByClassroomId($classroomId);
 
         foreach ($members as $member) {
-            $this->getClassroomService()->updateMemberExpiryDate(
+            $this->getClassroomService()->updateMemberDeadline(
                 $member['id'], 
                 array(
                     'createdTime' => $member['createdTime'],

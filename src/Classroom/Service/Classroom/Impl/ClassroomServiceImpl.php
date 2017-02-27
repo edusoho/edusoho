@@ -1485,7 +1485,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->updateMember($id, $fields);
     }
 
-    public function updateMemberExpiryDate($id, $fields) {
+    public function updateMemberDeadline($id, $fields) {
         $deadline = $this->buildMemberDeadline($fields);
 
         return $this->getClassroomMemberDao()->updateMember($id, array('deadline' => $deadline));
