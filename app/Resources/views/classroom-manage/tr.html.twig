@@ -17,7 +17,9 @@
     {% endif %}
   </td>#}
   <td class="color-gray vertical-middle">
+  {% if role == 'student' %}
     {{ progress.percent }}
+  {% endif %}
   </td>
   <td style="vertical-align: middle;">
     <div class="btn-group">

@@ -75,7 +75,7 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderInfoTemplate()
     {
-        return "ChargeCoinBundle:Coin:orderInfo";
+        return "ChargeCoinPlugin:Coin:orderInfo";
     }
 
     public function isTargetExist($targetId)

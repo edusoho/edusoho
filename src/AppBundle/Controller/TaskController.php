@@ -208,32 +208,19 @@ class TaskController extends BaseController
         ));
     }
 
-    public function reportAction($courseId, $id)
-    {
-        return $this->createJsonResponse(array(
-            'time'     => time(),
-            'courseId' => $courseId,
-            'id'       => $id
-        ));
-    }
-
     public function triggerAction(Request $request, $courseId, $id)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        $eventName = $request->request->get('eventName');
-        if (empty($eventName)) {
-            throw $this->createNotFoundException('task event is empty');
-        }
-
+        $eventName      = 'doing';
         $data           = $request->request->get('data', array());
         $data['taskId'] = $id;
         $result         = $this->getTaskService()->trigger($id, $eventName, $data);
         return $this->createJsonResponse(array(
-            'event'  => $eventName,
-            'data'   => $data,
-            'result' => $result,
-            'startTime' => time()
+            'result'   => $result,
+            'lastTime' => time(),
+            'event'    => $eventName,
+            'data'     => $data
         ));
     }
 
