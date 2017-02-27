@@ -4,7 +4,7 @@ import InputGroup from './input-group';
 import { getRandomString } from './part';
 import '!style!css!less!./style.less';
 
-function initItem(dataSourceUi,value) {
+function initItem(dataSourceUi, value) {
   let item = {
     itemId: getRandomString(),
     label: value,
@@ -14,23 +14,23 @@ function initItem(dataSourceUi,value) {
   dataSourceUi.push(item);
 }
 
-function removeItem(dataSourceUi,itemId) {
-  for(let i = 0; i< dataSourceUi.length ;i++) {
-    if(dataSourceUi[i].itemId==itemId) {
+function removeItem(dataSourceUi, itemId) {
+  for (let i = 0; i < dataSourceUi.length; i++) {
+    if (dataSourceUi[i].itemId == itemId) {
       dataSourceUi.splice(i, 1);
       i--;
-    }else {
-      dataSourceUi[i].seq = i+1;
+    } else {
+      dataSourceUi[i].seq = i + 1;
     }
   }
 }
 
-function updateItemSeq(data,datas) {
+function updateItemSeq(data, datas) {
   let temps = [];
-  for(let i = 0;i<data.length ; i++) {
-    for(let j = 0; j<datas.length;j++) {
-      if(data[i] == datas[j].itemId) {
-        datas[j].seq= i+1;
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < datas.length; j++) {
+      if (data[i] == datas[j].itemId) {
+        datas[j].seq = i + 1;
         temps.push(datas[j]);
       }
     }
@@ -47,8 +47,8 @@ export default class MultiInput extends Component {
     this.state = {
       dataSourceUi: [],
     }
-    this.props.dataSource.map((item,index)=>{
-      initItem(this.state.dataSourceUi,item);
+    this.props.dataSource.map((item, index) => {
+      initItem(this.state.dataSourceUi, item);
     })
   }
 
@@ -62,49 +62,49 @@ export default class MultiInput extends Component {
 
   removeItem = (event) => {
     let id = event.currentTarget.attributes["data-item-id"].value;
-    removeItem(this.state.dataSourceUi,id);
+    removeItem(this.state.dataSourceUi, id);
     this.setState({
       dataSourceUi: this.state.dataSourceUi,
     });
   }
 
   sortItem = (datas) => {
-    this.state.dataSourceUi = updateItemSeq(datas,this.state.dataSourceUi);
+    this.state.dataSourceUi = updateItemSeq(datas, this.state.dataSourceUi);
     this.setState({
       dataSourceUi: this.state.dataSourceUi,
     });
   }
 
-  addItem = (value,data) => {
-    initItem(this.state.dataSourceUi,value);
+  addItem = (value, data) => {
+    initItem(this.state.dataSourceUi, value);
     this.setState({
       dataSourceUi: this.state.dataSourceUi,
     });
   }
-  
+
   getOutputSets() {
     //应该优化成表单数据进行填充
     let outputSets = [];
-    this.state.dataSourceUi.map((item,index)=>{
+    this.state.dataSourceUi.map((item, index) => {
       outputSets.push(item.outputValue);
-    }) 
+    })
     return outputSets;
 
   }
 
   getList() {
-    const { sortable,listClassName,inputName } = this.props;
-    return (<List sortable={ sortable }   inputName ={ inputName} listClassName={ listClassName } dataSourceUi = {this.state.dataSourceUi}></List>);
+    const { sortable, listClassName, inputName } = this.props;
+    return (<List sortable={sortable} inputName={inputName} listClassName={listClassName} dataSourceUi={this.state.dataSourceUi}></List>);
   }
 
-  render (){
-    const { searchable, addable, outputDataElement} = this.props;
-    let list =  this.getList();
+  render() {
+    const { searchable, addable, blurIsAdd, outputDataElement} = this.props;
+    let list = this.getList();
     let outputSets = this.getOutputSets();
     return (
       <div className="multi-group">
         {list}
-        { this.props.showAddBtnGroup && <InputGroup searchable = { searchable } addable = { addable } />}
+        {this.props.showAddBtnGroup && <InputGroup searchable={searchable} addable={addable} blurIsAdd={blurIsAdd} />}
         <input type='hidden' name={outputDataElement} value={JSON.stringify(outputSets)} />
       </div>
     );
@@ -115,7 +115,7 @@ MultiInput.propTypes = {
   multiInputClassName: React.PropTypes.string,
   listClassName: React.PropTypes.string,
   dataSource: React.PropTypes.array.isRequired,
-  sortable: React.PropTypes.bool, 
+  sortable: React.PropTypes.bool,
   addable: React.PropTypes.bool,
   blurIsAdd: React.PropTypes.bool,
   searchable: React.PropTypes.shape({
@@ -124,13 +124,13 @@ MultiInput.propTypes = {
   }),
   showAddBtnGroup: React.PropTypes.bool,
   inputName: React.PropTypes.string,
-  checkBoxName:React.PropTypes.string,
+  checkBoxName: React.PropTypes.string,
   outputDataElement: React.PropTypes.string,//带删除字段
 };
 
 MultiInput.defaultProps = {
-  multiInputClassName:'multi-group',
-  listClassName:'',
+  multiInputClassName: 'multi-group',
+  listClassName: '',
   dataSource: [],
   sortable: true,
   addable: true,
@@ -142,7 +142,7 @@ MultiInput.defaultProps = {
   showAddBtnGroup: true,
   inputName: '',
   checkBoxName: 'visible_',
-  outputDataElement:'hidden-input',//带删除字段
+  outputDataElement: 'hidden-input',//带删除字段
 };
 
 MultiInput.childContextTypes = {
