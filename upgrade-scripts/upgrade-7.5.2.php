@@ -76,7 +76,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($page == 1) {
             $step ++;
         }
-        if ($step < 6) {
+        if ($step < 7) {
             return array(
                 'index' => $this->generateIndex($step, $page),
                 'message' => '正在升级数据...',
@@ -126,8 +126,7 @@ class EduSohoUpgrade extends AbstractUpdater
             foreach ($questions as $question) {
                 if (empty($lessons[$question['lessonId']])) {
                     $target = explode('/', $question['target']);
-                    $fields = array('target' => $target[0]);
-                    $this->getQuestionService()->updateQuestionTargetById($question['id'], $fields);
+                    $this->updateQuestionTarget($question['id'], $target[0]);
                 }
             }
 
@@ -251,7 +250,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function createTmpTableDao()
     {
         $sql = "CREATE TABLE IF NOT EXISTS `question_lesson_tmp` ( 
-                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '题目ID',
+                  `id` int(10) unsigned NOT NULL COMMENT '题目ID',
                   `target` varchar(255) NOT NULL DEFAULT '' COMMENT '从属于',
                   `lessonId` int(10) unsigned NOT NULL COMMENT '课时ID',
                   PRIMARY KEY (`id`)
@@ -271,6 +270,11 @@ class EduSohoUpgrade extends AbstractUpdater
     private function addTmpQuestion($tmp)
     {
         $this->getConnection()->insert('question_lesson_tmp', $tmp);
+    }
+
+    private function updateQuestionTarget($id, $target)
+    {
+        $this->getConnection()->update('question', array('target' => $target), array('id' => $id));
     }
 
     protected function isTableExist($table)
@@ -297,6 +301,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return ServiceKernel::instance()->createService('Question.QuestionService');
     }
+
 }
 
 //抽象类
