@@ -76,7 +76,7 @@
           </a>
         {% endif %}
       </li>
-        
+      {{ slot('course_set.menu.extension', {'courseSet':courseSet,'sideNav':side_nav}) }}
     {% endif %}
 
     {% if courses|length <= 1 or ( curCourse and menuType != 'courseSet') %}

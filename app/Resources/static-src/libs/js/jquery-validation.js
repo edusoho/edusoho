@@ -130,7 +130,7 @@ $.validator.addMethod("idcardNumber", function (value, element, params) {
     if (!'undefined' == typeof birth.getDate) {
       return false;
     }
-    let iW = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1);
+    let IW = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1];
     let iSum = 0;
     for (let i = 0; i < 17; i++) {
       iSum += parseInt(idcardNumber.charAt(i)) * iW[i];

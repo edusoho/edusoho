@@ -43,15 +43,15 @@ $('.courses-list').on('click', '.pagination li', function () {
 
 $('#enterSearch').keydown(function (event) {
 
-  if (event.keyCode == 13) {
+  // if (event.keyCode == 13) {
 
-    $.post($(this).data('url'), $('.form-search').serialize(), function (data) {
+  //   $.post($(this).data('url'), $('.form-search').serialize(), function (data) {
 
-      $('.courses-list').html(data);
+  //     $('.courses-list').html(data);
 
-    });
-    return false;
-  }
+  //   });
+  //   return false;
+  // }
 });
 
 $('#all-courses').on('click', function () {

@@ -1,3 +1,4 @@
+/* eslint-disable */
 var jQuery = window.$;
     /*
 Copyright 2012 Igor Vaynberg
@@ -2856,3 +2857,5 @@ the specific language governing permissions and limitations under the Apache Lic
             }
         };
     })(jQuery);
+/* eslint-disable */
+
