@@ -26,11 +26,16 @@ class TaskController extends BaseController
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
         }
 
-        $this->getActivityService()->trigger($task['activityId'], 'start', array(
-            'task' => $task
-        ));
+        if ($this->canStartTask($task)) {
+            $this->getActivityService()->trigger($task['activityId'], 'start', array(
+                'task' => $task
+            ));
+        }
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
+        if (empty($taskResult)) {
+            $taskResult = array('status' => 'none');
+        }
         if ($taskResult['status'] == 'finish') {
             list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
         }
@@ -42,6 +47,13 @@ class TaskController extends BaseController
             'nextTask'     => empty($nextTask) ? array() : $nextTask,
             'finishedRate' => empty($finishedRate) ? 0 : $finishedRate
         ));
+    }
+
+    private function canStartTask($task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $config   = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        return $config->allowTaskAutoStart($activity);
     }
 
     public function previewAction($courseId, $id)
