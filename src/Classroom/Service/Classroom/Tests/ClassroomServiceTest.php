@@ -152,7 +152,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
 
-        $members = $this->getClassroomService()->findMembersByClassroomId($classroom['id']);
+        $members = $this->getClassroomService()->findStudentsByClassroomId($classroom['id']);
         $this->assertEquals(1, count($members));
     }
 
