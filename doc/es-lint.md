@@ -3,7 +3,7 @@
 
 ### 启动命令
 
-```bash
+```
 npm run lint
 ```
 
@@ -49,7 +49,7 @@ console.log('bar');
 
 * 报错信息统一说明：
 
-``` bash
+```
 xxx/app/Resources/static-src/common/load-animation.js
 6:16  error  Irregular whitespace not allowed  no-irregular-whitespace
 
@@ -96,6 +96,7 @@ fileSizeLimit: 2 * 1024 * 1024
 ```
 
 * 缺少默认的case
+
 ```
 Expected a default case    default-case
 
@@ -119,6 +120,7 @@ switch(type) {
 ```
 
 * 空格不符合规范
+
 ```
 Irregular whitespace not allowed  no-irregular-whitespace
 
@@ -128,26 +130,31 @@ Irregular whitespace not allowed  no-irregular-whitespace
 ```
 
 * 用const 替代 let
+
 ```
 Exporting mutable 'let' binding, use 'const' instead   import/no-mutable-exports
 ```
 
 * function函数名后面留一个空格
+
 ```
 Missing space before function parentheses   space-before-function-paren
 ```
 
 * 在注释"//"后面留一个空格
+
 ```
 Expected exception block, space or tab after '//' in comment     spaced-comment
 ```
 
 * 字符串必须用单引号
+
 ```
 Strings must use singlequote  quotes
 ```
 
 * 用箭头方式代替函数表达式
+
 ```
 Unexpected function expression   prefer-arrow-callback
 
@@ -163,6 +170,7 @@ $('node').on('click', () => {
 ```
 
 * 代码缩进不对
+
 ```
 Expected indentation of 6 spaces but found 8   indent
 
@@ -170,11 +178,13 @@ Expected indentation of 2 spaces but found 1 tab  indent
 ```
 
 * 太多空行
+
 ```
 Too many blank lines at the end of file. Max of 1 allowed   no-multiple-empty-lines
 ```
 
 * 缺少分号
+
 ```
 Missing semicolon   semi
 
@@ -185,6 +195,7 @@ import { isMobileDevice } from 'common/utils'
 ```
 
 * 不要用多重赋值
+
 ```
 Unexpected chained assignment    no-multi-assign
 
@@ -197,6 +208,7 @@ let $picture = this.element;
 ```
 
 * 绝对路径的import依赖应当先于相对路径的import依赖引入
+
 ```
 Absolute imports should come before relative imports   import/first
 
@@ -212,6 +224,7 @@ import SWF_PATH from './fex-webuploader/Uploader.swf';
 ```
 
 * 左括号的位置
+
 ```
 Opening curly brace does not appear on the same line as controlling statement  brace-style
 
@@ -228,6 +241,7 @@ class EsWebUploader {
 ```
 
 * 方法简写
+
 ```
 Expected method shorthand   object-shorthand
 
@@ -251,6 +265,7 @@ let a = {
 ```
 
 * 无用的构造函数
+
 ```
 Useless constructor  no-useless-constructor
 
@@ -263,6 +278,7 @@ export default class EsEmitter extends Emitter {
 ```
 
 * 不需要的引号
+
 ```
 Unnecessarily quoted property '_csrf_token' found  quote-props
 
@@ -278,6 +294,7 @@ let a = {
 ```
 
 * 不需要的空格
+
 ```
 There should be no spaces inside this paren  space-in-parens
 
@@ -294,6 +311,7 @@ uploader.on( 'fileQueued', (file) => {
 ```
 
 * 不能对函数参数重新赋值
+
 ```
 Assignment to function parameter 'time'   no-param-reassign
 
@@ -327,26 +345,31 @@ delay(event, cb, time = 0) {
 ```
 
 * 在','后应该添加一个空格
+
 ```
 A space is required after ','     comma-spacing
 ```
 
 * 混淆了spaces 和 tabs
+
 ```
 Mixed spaces and tabs  no-mixed-spaces-and-tabs
 ```
 
 * 请用 '===' 取代 '=='
+
 ```
 Expected '===' and instead saw '=='  eqeqeq
 ```
 
 * 重复定义
+
 ```
 'a' is already defined  no-redeclare
 ```
 
 * 期望看到一个表达式，而不是赋值
+
 ```
 Expected a conditional expression and instead saw an assignment  no-cond-assign
 
