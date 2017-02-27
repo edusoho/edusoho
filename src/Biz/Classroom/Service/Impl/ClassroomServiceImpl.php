@@ -224,7 +224,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->dispatchEvent(
                 'classroom.course.create',
-                new Event($classroom,array('courseIds' => $courseIds))
+                new Event($classroom, array('courseIds' => $courseIds))
             );
             return $this->findActiveCoursesByClassroomId($classroomId);
         } catch (\Exception $e) {
