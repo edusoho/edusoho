@@ -228,8 +228,7 @@ class TaskController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        //0表示允许手动点击完成
-        if ($course['enableFinish']) {
+        if (!$course['enableFinish']) {
             throw $this->createAccessDeniedException('task can not finished.');
         }
 
