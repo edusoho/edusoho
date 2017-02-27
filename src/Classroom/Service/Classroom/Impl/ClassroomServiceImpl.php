@@ -1476,45 +1476,45 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->findUserJoinedClassroomIds($userId);
     }
 
-    public function updateMember($id, $member)
+    public function updateMember($id, $fields)
     {
-        $member = $this->filterMemberfields($member);
+        if (isset($fields['expiryMode']) && isset($fields['expiryDay'])) {
+            $fields['deadline'] = $this->buildMemberDeadline($fields);
+        }
 
-        return $this->getClassroomMemberDao()->updateMember($id, $member);
+        return $this->getClassroomMemberDao()->updateMember($id, $fields);
     }
 
-    protected function filterMemberfields($member)
-    {
-        if (isset($member['expiryMode'])) {
-            if ($member['expiryMode'] == 'days') {
-                $member['deadline'] = $member['createdTime'] + $member['expiryDay'] * 24 * 60 * 60;
+    public function updateMemberExpiryDate($id, $fields) {
+        $deadline = $this->buildMemberDeadline($fields);
 
-                unset($member['createdTime']);
+        return $this->getClassroomMemberDao()->updateMember($id, array('deadline' => $deadline));
+    }
+
+    protected function buildMemberDeadline($fields)
+    {
+        if (isset($fields['expiryMode'])) {
+            if ($fields['expiryMode'] == 'days') {
+                $deadline = $fields['createdTime'] + $fields['expiryDay'] * 24 * 60 * 60;
             }
 
-            if ($member['expiryMode'] == 'date') {
-                $deadline = $member['expiryDay'];
+            if ($fields['expiryMode'] == 'date') {
+                $deadline = $fields['expiryDay'];
 
                 if (!is_int($deadline)) {
                     $deadline = strtotime($deadline.' 23:59:59');
                 }
-
                 if ($deadline < time()) {
                     throw $this->createServiceException($this->getKernel()->trans('有效期的设置时间小于当前时间！'));
                 }
-
-                $member['deadline'] = $deadline;
             }
 
-            if ($member['expiryMode'] == 'none') {
-                $member['deadline'] = 0;
+            if ($fields['expiryMode'] == 'none') {
+                $deadline = 0;
             }
-
-            unset($member['expiryMode']);
-            unset($member['expiryDay']);
         }
 
-        return $member;
+        return $deadline;
     }
 
     public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId)
