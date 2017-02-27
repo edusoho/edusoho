@@ -34,7 +34,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onClassroomCourseChange(Event $event)
     {
         $classroom = $event->getSubject();
-        $classroomId = $classroom['classroomId'];
+        $classroomId = $classroom['id'];
         $courseNum = $this->getClassroomService()->countCoursesByClassroomId($classroomId);
         $taskNum = $this->getClassroomService()->countCourseTasksByClassroomId($classroomId);
 
@@ -46,7 +46,6 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onClassroomUpdate(Event $event)
     {
         $fields = $event->getSubject();
-
         $userId      = $fields['userId'];
         $classroomId = $fields['classroomId'];
 

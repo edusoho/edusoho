@@ -224,7 +224,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->dispatchEvent(
                 'classroom.course.create',
-                new Event(array('classroomId' => $classroomId))
+                new Event($classroom,array('courseIds' => $courseIds))
             );
             return $this->findActiveCoursesByClassroomId($classroomId);
         } catch (\Exception $e) {
@@ -453,14 +453,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function deleteClassroomCourses($classroomId, array $courseIds)
     {
-
         foreach ($courseIds as $key => $value) {
             $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $value);
         }
-
+        $classroom = $this->getClassroom($classroomId);
         $this->dispatchEvent(
             'classroom.course.delete',
-            new Event(array('classroomId' => $classroomId))
+            new Event($classroom, array('deleteCourseIds' => $courseIds))
         );
     }
 
@@ -705,7 +704,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->dispatchEvent(
                 'classroom.course.update',
-                new Event(array('classroomId' => $classroomId))
+                new Event($classroom, array('courseIds' => $activeCourseIds))
             );
         } catch (\Exception $e) {
             $this->rollback();
