@@ -570,7 +570,10 @@ define(function(require, exports, module) {
                                 } else if (result.status == 'finished') {
                                     var redoUrl = '../../lesson/' + id + '/test/' + lesson.mediaId + '/redo';
                                     var resultUrl = '../../test/' + result.id + '/result?targetType=lesson&targetId=' + id;
-                                    
+                                    if (lesson.doTimes == 1 && result) {
+                                        html = '<a href="' + resultUrl + '" class="btn btn-link btn-sm mbs" target="_blank">' + Translator.trans('查看结果') + '</a>';
+                                        $("#lesson-testpaper-content").find('.lesson-content-text-body').html(html);
+                                    }
                                     html = Translator.trans('试卷已批阅，成绩') + '：' + result.score + '／' + result.totalScore; 
                                     if (result.passedStatus == 'unpassed') {
                                         html += '<span class="text-danger mls mrs">' + Translator.trans('未通过') + '</span>';
