@@ -74,7 +74,7 @@ export default class PersonaMultiInput extends MultiInput {
   }
 
   getList() {
-    return (<List listClassName={this.props.listClassName}  dataSourceUi = {this.state.dataSourceUi}  sortable={this.props.sortable} showCheckbox = {this.props.showCheckbox} showDeleteBtn = {this.props.showDeleteBtn}  inputName = { this.props.inputName }></List>);
+    return (<List listClassName={this.props.listClassName}  dataSourceUi = {this.state.dataSourceUi}  sortable={this.props.sortable} showCheckbox = {this.props.showCheckbox} showDeleteBtn = {this.props.showDeleteBtn}  inputName = { this.props.inputName } checkBoxName ={this.props.checkBoxName}></List>);
   }
 }
 

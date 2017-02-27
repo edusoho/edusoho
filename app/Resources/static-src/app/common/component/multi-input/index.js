@@ -93,8 +93,8 @@ export default class MultiInput extends Component {
   }
 
   getList() {
-    const { sortable,listClassName } = this.props;
-    return (<List sortable={ sortable } listClassName={ listClassName } dataSourceUi = {this.state.dataSourceUi}></List>);
+    const { sortable,listClassName,inputName } = this.props;
+    return (<List sortable={ sortable }   inputName ={ inputName} listClassName={ listClassName } dataSourceUi = {this.state.dataSourceUi}></List>);
   }
 
   render (){
@@ -116,14 +116,16 @@ MultiInput.propTypes = {
   listClassName: React.PropTypes.string,
   dataSource: React.PropTypes.array.isRequired,
   sortable: React.PropTypes.bool, 
-  addable:React.PropTypes.bool,
+  addable: React.PropTypes.bool,
+  blurIsAdd: React.PropTypes.bool,
   searchable: React.PropTypes.shape({
     enable: React.PropTypes.bool,
     url: React.PropTypes.string,
   }),
   showAddBtnGroup: React.PropTypes.bool,
   inputName: React.PropTypes.string,
-  outputDataElement: React.PropTypes.string,
+  checkBoxName:React.PropTypes.string,
+  outputDataElement: React.PropTypes.string,//带删除字段
 };
 
 MultiInput.defaultProps = {
@@ -132,13 +134,15 @@ MultiInput.defaultProps = {
   dataSource: [],
   sortable: true,
   addable: true,
+  blurIsAdd: false,
   searchable: {
     enable: false,
     url: '',
   },
   showAddBtnGroup: true,
   inputName: '',
-  outputDataElement:'hidden-input',
+  checkBoxName: 'visible_',
+  outputDataElement:'hidden-input',//带删除字段
 };
 
 MultiInput.childContextTypes = {
