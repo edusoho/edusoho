@@ -3,10 +3,10 @@
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
-use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\Course\Dao\CourseNoteDao;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Classroom\Dao\ClassroomDao;
 use Biz\Order\Service\OrderService;
@@ -101,6 +101,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $count;
     }
 
+    //@deprecated 一个courseId（注意：不是parentCourseId）只会对应一个classroomId
     public function findClassroomIdsByCourseId($courseId)
     {
         return $this->getClassroomCourseDao()->findClassroomIdsByCourseId($courseId);
