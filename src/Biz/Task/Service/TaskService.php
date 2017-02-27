@@ -194,4 +194,8 @@ interface TaskService
      * @return array
      */
     public function getUserRecentlyStartTask($userId);
+
+    public function findPublishedLivingTasksByCourseSetId($courseSetId);
+
+    public function findTasksByCourseSetId($courseSetId);
 }
