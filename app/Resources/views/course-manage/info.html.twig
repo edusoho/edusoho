@@ -40,7 +40,7 @@
         <div class="form-group">
           <label for="" class="col-sm-2 control-label">{{'学习完成规则'|trans}}</label>
           <div class="col-sm-8 radios"> 
-            {{ radios('enableFinish', { '1': '必须满足任务完成的条件才算学完'|trans, '0': '学员可以自己点击“学过了”按钮以示学完'|trans }, course.enableFinish|default('1')) }}
+            {{ radios('enableFinish', { '0': '必须满足任务完成的条件才算学完'|trans, '1': '学员可以自己点击“学过了”按钮以示学完'|trans }, course.enableFinish|default('0')) }}
           </div>
         </div>
         <div class="form-group">

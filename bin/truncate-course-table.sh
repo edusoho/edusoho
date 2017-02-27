@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 usage="Usage: $(basename "$0") [-h] [-d database] [-u user] [-p password]
 
@@ -13,7 +13,7 @@ Options:
 
 database_name=
 user="root"
-password="root"
+password=""
 
 while getopts ':hupd:' option; do
   case "$option" in

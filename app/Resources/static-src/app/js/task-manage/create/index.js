@@ -99,9 +99,13 @@ class Editor {
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
+
+        const needAppend = response.append;
+        const html = response.html;
+
         this.$element.modal('hide');
-         // @TODO统一请求结果的返回类型，优化下面系列逻辑
-        if (response && response.append !== undefined && response.append === false) {
+
+        if (needAppend === false) {
           let data = $('#sortable-list').sortable("serialize").get();
           $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
             if (response) {
@@ -109,12 +113,12 @@ class Editor {
             }
           });
         }
-        let html = response;
+
         let chapterId = postData.find(function (input) {
           return input.name == 'chapterId';
-        })
+        });
 
-        var add = 0;
+        let add = 0;
         let $parent = $('#' + chapterId.value);
         let $item = null;
 
@@ -132,16 +136,12 @@ class Editor {
             }
           });
           if (add != 1) {
-            if(typeof html=='string' && html.constructor == String) {
-              $item = $(html);
-            }
+            $item = $(html);
             $("#sortable-list").append($item);
             add = 1;
           }
         } else {
-          if(typeof html=='string' && html.constructor == String) {
-             $item = $(html);
-          }
+          $item = $(html);
           $("#sortable-list").append($item);
         }
         // 最后一个
