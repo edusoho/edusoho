@@ -3,8 +3,8 @@
 namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\ActivityDao;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
@@ -91,11 +91,23 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if ($eventName == 'start') {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
-
+        
         $this->triggerActivityLearnLogListener($activity, $eventName, $data);
-        $this->triggerExtendListener($activity, $eventName, $data);
+        
+        if(empty($data['events'])) {
+            $events = array(); 
+        } else {
+            $events = $data['events'];
+            unset($data['events']);
+        }
 
-        if (in_array($eventName, array('doing', 'watching'))) {
+        foreach ($events as $key => $value) {
+            $value = array_merge($value, $data);
+            $this->triggerActivityLearnLogListener($activity, $key, $value);
+            $this->triggerExtendListener($activity, $key, $value);
+        }
+
+        if (in_array($eventName, array('doing'))) {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
     }

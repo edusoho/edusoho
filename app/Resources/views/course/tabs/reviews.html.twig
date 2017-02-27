@@ -3,11 +3,13 @@
 
 {% do script(['app/js/course/widgets/choice-course/index.js']) %}
 
-{% include 'course/tabs/widget/course-choice.html.twig' with {
-courses: courses,
-selectedCourseId: selectedCourseId,
-courseSet: courseSet,
-tab: 'reviews'
-} %}
+{% if courses|length > 1 %}
+    {% include 'course/tabs/widget/course-choice.html.twig' with {
+        courses: courses,
+        selectedCourseId: selectedCourseId,
+        courseSet: courseSet,
+        tab: 'reviews'
+    } %}
+{% endif %}
 
 {% include 'review/widget/list.html.twig' %}
