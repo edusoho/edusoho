@@ -58,6 +58,11 @@ abstract class Activity
         return null;
     }
 
+    public function allowTaskAutoStart($activity)
+    {
+        return true;
+    }
+
     public function isFinished($id)
     {
         return false;
