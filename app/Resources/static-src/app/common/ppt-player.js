@@ -61,7 +61,7 @@ export default class PPT extends Emitter {
 
     this._page = currentPage;
 
-    this.trigger('change', {
+    this.emit('change', {
       current: currentPage,
       before: beforePage
     });
@@ -149,14 +149,14 @@ export default class PPT extends Emitter {
     let self = this;
     this.on('change', ({current, before}) => {
       if (current == self.total) {
-        self.trigger('end');
+        self.emit('end',{page: this.total});
       }
     });
   }
 
   _onNext() {
     if (this.page === this.total) {
-      this.trigger('end');
+      this.emit('end',{page: this.total});
       return;
     }
 
