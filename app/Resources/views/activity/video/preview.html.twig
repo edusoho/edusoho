@@ -2,7 +2,7 @@
 {% do script(['app/js/activity/video/preview/index.js']) %}
 
 {% block body %}
-  {% if activity.ext.mediaSource|default('self') == 'self' %}
+  {% if activity.ext.mediaSource|default('self') in ['self', 'cloud'] %}
     <div class="task-preview-modal-content" id="task-preview-player">
       <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="task-content">
         {#如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx#}
