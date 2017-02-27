@@ -1,9 +1,9 @@
-export const send = (url,callback,data=null,type="POST") =>{
+export const send = (url, callback, data=null, type="POST") => {
   $.ajax({
-    url:url,
-    type:type,
+    url: url,
+    type: type,
     data: data,
-    success: function(res){
+    success: function(res) {
       (callback && typeof(callback) === "function") && callback(res);
     },  
     error: function(){

@@ -1,17 +1,15 @@
 import TaskSidebar from "./widget/sidebar";
 import TaskUi from "./widget/task-ui";
-import TaskEventEmitter from "./widget/task-event-emitter";
+import TaskPipe from "./widget/task-pipe";
 import Emitter from "common/es-event-emitter";
 
 class TaskShow extends Emitter {
-  constructor({element, courseId, taskId, mode, isMember}) {
+  constructor({element, mode}) {
     super();
     this.element = $(element);
-    this.courseId = courseId;
-    this.taskId = taskId;
     this.mode = mode;
-    this.isMember = isMember;
     this.eventEmitter = new TaskEventEmitter(this.element.find('#task-content-iframe'));
+
     this.ui = new TaskUi({
       element: '.js-task-dashboard-page'
     });
@@ -22,8 +20,9 @@ class TaskShow extends Emitter {
   init() {
     this.initPlugin();
     this.initSidebar();
-    if (this.mode != 'preview' && this.isMember) {
-      this.bindEvent();
+    if (this.mode != 'preview') {
+      this.initTaskPipe();
+      this.initLearnBtn();
     }
   }
 
@@ -35,31 +34,7 @@ class TaskShow extends Emitter {
     });
   }
 
-  bindEvent() {
-    let learnedTime = 0;
-    let minute = 60 * 1000;
-    let timeStep = 1; // 分钟
-    //注册doing延时监听
-    this.delay('doing', (timeStep) => {
-      learnedTime = parseInt(timeStep) + parseInt(learnedTime);
-      let eventData = {
-        timeStep: timeStep,
-        learnedTime: learnedTime,
-        taskId: this.taskId
-      };
-      this.eventEmitter.emit('doing', eventData)
-        .then(undefined, response => {
-          this.receiveFinish(response);
-        })
-        ['catch'](() => {
-      })
-        .then(undefined, () => { //always
-          this.emit('doing', timeStep);
-        });
-    }, timeStep * minute);
-
-    this.emit('doing', timeStep);
-
+  initLearnBtn() {
     this.element.on('click', '#learn-btn', event => {
       $.post($('#learn-btn').data('url'), response => {
         $('#modal').modal('show');
@@ -68,10 +43,12 @@ class TaskShow extends Emitter {
         this.ui.learned();
       });
     });
+  }
 
-    // 接收活动的finish事件
-    this.eventEmitter.receive('finish', response => {
-      this.receiveFinish(response);
+  initTaskPipe() {
+    this.eventEmitter = new TaskPipe(this.element.find('#task-content-iframe'));
+    this.eventEmitter.addListener('finish', response => {
+      this._receiveFinish(response);
     });
 
     this.eventEmitter.receive('watching', response => {
@@ -89,7 +66,7 @@ class TaskShow extends Emitter {
     })
   }
 
-  receiveFinish(response) {
+  _receiveFinish(response) {
     // response.result.status == 'finish'
     //     &&
     if ($('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
@@ -125,8 +102,5 @@ class TaskShow extends Emitter {
 
 new TaskShow({
   element: $('body'),
-  courseId: $('body').find('#js-hidden-data [name="course-id"]').val(),
-  taskId: $('body').find('#js-hidden-data [name="task-id"]').val(),
-  mode: $('body').find('#js-hidden-data [name="mode"]').val(),
-  isMember: $('body').find('#js-hidden-data [name="isMember"]').val()
+  mode: $('body').find('#js-hidden-data [name="mode"]').val()
 });

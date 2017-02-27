@@ -1,15 +1,15 @@
 <?php
 namespace AppBundle\Controller\Activity;
 
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ActivityController extends BaseController
 {
 
-    public function showAction(Request $request, $task, $preview)
+    public function showAction($id, $courseId, $preview)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
@@ -23,7 +23,7 @@ class ActivityController extends BaseController
         ));
     }
 
-    public function previewAction(Request $request, $task)
+    public function previewAction($task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         if (empty($activity)) {
@@ -31,7 +31,7 @@ class ActivityController extends BaseController
         }
         $actionConfig = $this->getActivityActionConfig($activity['mediaType']);
         return $this->forward($actionConfig['preview'], array(
-            'task' => $task,
+            'task' => $task
         ));
     }
 
@@ -49,7 +49,7 @@ class ActivityController extends BaseController
     {
         $actionConfig = $this->getActivityActionConfig($type);
         return $this->forward($actionConfig['create'], array(
-            'courseId' => $courseId,
+            'courseId' => $courseId
         ));
     }
 
@@ -97,7 +97,6 @@ class ActivityController extends BaseController
     {
         return $this->createService('Activity:ActivityService');
     }
-
 
     /**
      * @return CourseService

@@ -2,13 +2,10 @@
 
 namespace AppBundle\Controller\Activity;
 
-
+use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
-use Biz\File\Service\UploadFileService;
-use Biz\User\Service\TokenService;
-use Biz\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class VideoController extends BaseController implements ActivityActionInterface
@@ -73,10 +70,9 @@ class VideoController extends BaseController implements ActivityActionInterface
         ));
     }
 
-
     /**
      * 获取当前视频活动的文件来源
-     * @param $activity
+     * @param  $activity
      * @return mediaSource
      */
     protected function getMediaSource($activity)
@@ -123,6 +119,9 @@ class VideoController extends BaseController implements ActivityActionInterface
         return $this->createService('Activity:ActivityService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
@@ -170,3 +169,4 @@ class VideoController extends BaseController implements ActivityActionInterface
         return $watchStatus;
     }
 }
+

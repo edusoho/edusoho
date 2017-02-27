@@ -2,12 +2,14 @@ import swfobject from 'es-swfobject';
 import EsMessenger from '../../../common/messenger';
 import ActivityEmitter from '../../activity/activity-emitter';
 import 'store';
+
 class VideoPlay {
   constructor(recorder) {
     this.player = {};
     this.intervalId = null;
     this.recorder = recorder;
     this.emitter = new ActivityEmitter();
+    
   }
 
   play() {
@@ -66,7 +68,6 @@ class VideoPlay {
 
   _onFinishLearnTask(msg) {
     this.emitter.emit('finish', {data: msg}).then(() => {
-      console.log('vidoe.finish');
       clearInterval(this.intervalId)
     }).catch((error) => {
       console.error(error);
@@ -92,7 +93,6 @@ class VideoRecorder {
     if (!(player && player.playing)) {
       return false;
     }
-    console.log(playerCounter, this.interval)
     if (playerCounter >= this.interval) {
       emitter.emit('watching', {watchTime: this.interval}).then(() => {
       }).catch((error) => {
