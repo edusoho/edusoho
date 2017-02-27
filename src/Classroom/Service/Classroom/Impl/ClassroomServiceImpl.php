@@ -244,7 +244,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (isset($fields['expiryMode'])) {
             if ($fields['expiryMode'] == 'date') {
                 $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
+
+                if ($fields['expiryDay'] < time()) {
+                    throw $this->createServiceException($this->getKernel()->trans('设置的有效期小于当前时间！'));
+                }
+
                 $fields['deadline']  = $fields['expiryDay'];
+
             } 
 
             if ($fields['expiryMode'] == 'days') {
@@ -614,7 +620,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         if ($classroom['expiryMode'] == 'days') {
-            $expiryDay = $classroom['createdTime'] + $classroom['expiryDay'] * 24 * 60 * 60;
+            $expiryDay = time() + $classroom['expiryDay'] * 24 * 60 * 60;
         } else {
             $expiryDay = $classroom['expiryDay'];
         }
@@ -1472,7 +1478,23 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function updateMember($id, $member)
     {
+        $this->filterMemberfields($member);
+
         return $this->getClassroomMemberDao()->updateMember($id, $member);
+    }
+
+    protected function filterMemberfields($member)
+    {
+        if (isset($member['deadline'])) {
+            $deadline = strtotime($member['deadline'].' 23:59:59');
+            if ($deadline < time()) {
+                throw $this->createServiceException($this->getKernel()->trans('有效期的设置时间小于当前时间！'));
+            }
+
+            $member['deadline'] = $deadline;
+        }
+
+        return $member;
     }
 
     public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId)
