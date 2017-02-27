@@ -226,7 +226,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'classroom.course.change',
                 new Event(array('classroomId' => $classroomId))
             );
-            return $courses;
+            return $this->findActiveCoursesByClassroomId($classroomId);
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;
