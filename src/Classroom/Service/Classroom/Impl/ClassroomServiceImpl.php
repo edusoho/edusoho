@@ -195,15 +195,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
         }
 
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId', 'expiryMode', 'expiryDay'));
+        $classroom = $this->getClassroom($id);
+
+        $fields = $this->filterClassroomFields($fields, $classroom);
 
         if (empty($fields)) {
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，更新失败！'));
         }
-
-        $classroom = $this->getClassroom($id);
-
-        $fields = $this->filterClassroomFields($fields, $classroom);
 
         if (!$this->canSetClassroomExpiryDate($fields, $classroom)) {
             throw $this->createServiceException($this->getKernel()->trans('已发布的班级不允许修改班级原先的有效期模式'));
@@ -213,7 +211,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
 
         $arguments           = $fields;
-        if (!empty($tagids)) {
+        if (!empty($tagIds)) {
             $arguments['tagIds'] = $tagIds;
         }
         $this->dispatchEvent('classroom.update', new ServiceEvent(array(
@@ -241,6 +239,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function filterClassroomFields($fields, $classroom)
     {
+        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId', 'expiryMode', 'expiryDay'));
+
         if (isset($fields['expiryMode'])) {
             if ($fields['expiryMode'] == 'date') {
                 $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
@@ -1478,20 +1478,40 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function updateMember($id, $member)
     {
-        $this->filterMemberfields($member);
+        $member = $this->filterMemberfields($member);
 
         return $this->getClassroomMemberDao()->updateMember($id, $member);
     }
 
     protected function filterMemberfields($member)
     {
-        if (isset($member['deadline'])) {
-            $deadline = strtotime($member['deadline'].' 23:59:59');
-            if ($deadline < time()) {
-                throw $this->createServiceException($this->getKernel()->trans('有效期的设置时间小于当前时间！'));
+        if (isset($member['expiryMode'])) {
+            if ($member['expiryMode'] == 'days') {
+                $member['deadline'] = $member['createdTime'] + $member['expiryDay'] * 24 * 60 * 60;
+
+                unset($member['createdTime']);
             }
 
-            $member['deadline'] = $deadline;
+            if ($member['expiryMode'] == 'date') {
+                $deadline = $member['expiryDay'];
+
+                if (!is_int($deadline)) {
+                    $deadline = strtotime($deadline.' 23:59:59');
+                }
+
+                if ($deadline < time()) {
+                    throw $this->createServiceException($this->getKernel()->trans('有效期的设置时间小于当前时间！'));
+                }
+
+                $member['deadline'] = $deadline;
+            }
+
+            if ($member['expiryMode'] == 'none') {
+                $member['deadline'] = 0;
+            }
+
+            unset($member['expiryMode']);
+            unset($member['expiryDay']);
         }
 
         return $member;

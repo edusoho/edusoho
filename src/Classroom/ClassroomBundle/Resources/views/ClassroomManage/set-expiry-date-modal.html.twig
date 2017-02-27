@@ -34,11 +34,12 @@
         <label for="set-more-expiryday">{{'有效期'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="classroom_expiryDay" name="expiryDay" required="required" value="{{ deadline|date('Y-m-d') }}"class="form-control width-input width-input-large">
+        <input type="text" id="classroom_expiryDay" name="expiryDay" required="required" {% if deadline %}value="{{ deadline|date('Y-m-d') }}"{% endif %}class="form-control width-input width-input-large">
         <div class="help-block">
         {{ '设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) }}
         </div>
       </div>
+      <input type="hidden" name="expiryMode" value="date">
     </div>
     <input type="hidden" name="memberId" value="{{ user.id }}">
   {% else %}

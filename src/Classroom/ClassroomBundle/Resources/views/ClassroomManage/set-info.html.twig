@@ -80,16 +80,16 @@ isClassroomPublished: classroom.status
       </div>
 
       <div class="form-group">
-          <label class="col-md-2 control-label">班级有效期</label>
-          <div class="col-md-8 controls radios">
-            {% if classroom.status == 'published' %}
-              <input type="hidden" name="expiryMode" value="{{ classroom.expiryMode }}">
-              {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, classroom.expiryMode|default('none'), 'disabled') }}
-            {% else %}
-              {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, classroom.expiryMode|default('none')) }}
-            {% endif %}
-          </div>
+        <label class="col-md-2 control-label">班级有效期</label>
+        <div class="col-md-8 controls radios">
+          {% if classroom.status == 'published' %}
+            <input type="hidden" name="expiryMode" value="{{ classroom.expiryMode }}">
+            {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, classroom.expiryMode|default('none'), 'disabled') }}
+          {% else %}
+            {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, classroom.expiryMode|default('none')) }}
+          {% endif %}
         </div>
+      </div>
 
       <div class="form-group expiry-day-js {% if classroom.expiryMode|default('none') == 'none' %} hidden {% endif %}">
         <label class="col-md-2 control-label"></label>
