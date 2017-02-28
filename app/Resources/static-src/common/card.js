@@ -1,4 +1,4 @@
-import { isMobileDevice } from 'common/utils'
+import { isMobileDevice } from 'common/utils';
 
 const Card = () => {
   if (!isMobileDevice()) {
@@ -14,17 +14,17 @@ const Card = () => {
         '<span></span>' +
         '</div>' + Translator.trans('名片加载中') +
         '</div>' +
-        '</div>'
+        '</div>';
       let timer = setTimeout(function () {
-        if ($('#user-card-' + userId).length == 0 || !_this.data('popover')) {
+        if ($('#user-card-' + userId).length === 0 || !_this.data('popover')) {
           $.ajax({
             type: "GET",
             url: _this.data('cardUrl'),
             dataType: "html",
-            beforeSend: beforeSend(_this),
-            success: function (html) {
+            beforeSend: beforeSend(_this, loadingHtml),
+            success(html) {
               bindCardEvent('.js-card-content');
-              callback(html, _this)
+              callback(html, _this);
             }
           });
         } else {
@@ -43,10 +43,10 @@ const Card = () => {
       clearTimeout(_this.data('timerId'));
     });
   }
-}
+};
 
 function callback(html, _this) {
-  if ($('#user-card-' + _this.data('userId')).length == 0) {
+  if ($('#user-card-' + _this.data('userId')).length === 0) {
     if ($('body').find('#user-card-store').length > 0) {
       $('#user-card-store').append(html);
     } else {
@@ -60,7 +60,7 @@ function callback(html, _this) {
       trigger: 'manual',
       placement: 'auto top',
       html: 'true',
-      content: function () {
+      content() {
         return html;
       },
       template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
@@ -82,7 +82,7 @@ function bindCardEvent(selector) {
       $btn.button('reset').hide();
       $btn.siblings('.unfollow-btn').show();
     });
-  })
+  });
 
   $('body').on('click', '.js-card-content .unfollow-btn', function () {
     let $btn = $(this).button('loading');
@@ -90,24 +90,21 @@ function bindCardEvent(selector) {
       $btn.button('reset').hide();
       $btn.siblings('.follow-btn').show();
     });
-  })
+  });
 }
 
-function beforeSend(_this) {
+function beforeSend(_this, loadingHtml) {
   _this.popover({
     trigger: 'manual',
     placement: 'auto top',
     html: 'true',
-    content: function () {
+    content() {
       return loadingHtml;
     },
     template: '<div class="popover es-card"><div class="arrow"></div><div class="popover-content"></div></div>',
     container: 'body',
     animation: true
   });
-};
-
-
+}
 
 export default Card();
-

@@ -3,8 +3,8 @@
 namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\ActivityDao;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;

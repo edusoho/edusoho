@@ -4,12 +4,11 @@ import TaskPipe from "./widget/task-pipe";
 import Emitter from "common/es-event-emitter";
 
 class TaskShow extends Emitter {
-  constructor({element, mode, isMember}) {
+  constructor({element, mode}) {
     super();
     this.element = $(element);
     this.mode = mode;
-    this.isMember = isMember;
-    
+
     this.ui = new TaskUi({
       element: '.js-task-dashboard-page'
     });
@@ -20,7 +19,7 @@ class TaskShow extends Emitter {
   init() {
     this.initPlugin();
     this.initSidebar();
-    if (this.mode != 'preview' && this.isMember) {
+    if (this.mode != 'preview') {
       this.initTaskPipe();
       this.initLearnBtn();
     }
@@ -89,6 +88,5 @@ class TaskShow extends Emitter {
 
 new TaskShow({
   element: $('body'),
-  mode: $('body').find('#js-hidden-data [name="mode"]').val(),
-  isMember: $('body').find('#js-hidden-data [name="isMember"]').val()
+  mode: $('body').find('#js-hidden-data [name="mode"]').val()
 });
