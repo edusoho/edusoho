@@ -16,7 +16,7 @@
                 <td>{{ admin_macro.user_link(data) }}</td>
                 <td>
                     {% if data.verifiedMobile %}
-                    {{ data.verifiedMobile }}<span class="text-success">({{'已绑定'|trans}})</span>
+                    {{ data.verifiedMobile }}<span class="color-success">({{'已绑定'|trans}})</span>
                     {% elseif userSumProfiles[data.id].mobile %}
                     {{ userSumProfiles[data.id].mobile }}<span class="text-danger">({{'未绑定'|trans}})</span>
                     {% else %}

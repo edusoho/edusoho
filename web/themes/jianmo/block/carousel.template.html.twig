@@ -1,8 +1,6 @@
 <section class="es-poster swiper-container">
   <div class="swiper-wrapper">
-    {{ dump(posters) }}
     {% for poster in posters %}
-      
       {% if poster.status == 1 %}
         {% if poster.mode == "img" %}
           <div class="swiper-slide swiper-hidden" style="background: {{poster.background}};">
