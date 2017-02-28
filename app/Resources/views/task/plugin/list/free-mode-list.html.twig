@@ -38,10 +38,10 @@
           {% endif %}
 
           {% if task.status != 'published' %}
-            <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
+            {#<span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
               <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mlm"></i>
-          </span>
-            <span class="right-menu mouse-enter color-primary">敬请期待</span>
+            </span>#}
+            <span class="right-menu ">敬请期待</span>
           {% elseif task_lock %}
             <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
               <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mlm"></i>

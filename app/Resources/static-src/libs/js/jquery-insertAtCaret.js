@@ -13,7 +13,7 @@ jQuery.fn.extend({
         var startPos = this.selectionStart;
         var endPos = this.selectionEnd;
         var scrollTop = this.scrollTop;
-        this.value = this.value.substring(0, startPos)+myValue+this.value.substring(endPos,this.value.length);
+        this.value = this.value.substring(0, startPos) + myValue + this.value.substring(endPos, this.value.length);
         this.focus();
         this.selectionStart = startPos + myValue.length;
         this.selectionEnd = startPos + myValue.length;

@@ -1,9 +1,8 @@
-import './vendor.less';
 import 'babel-polyfill';
 import 'jquery';
 import 'bootstrap';
 import 'swiper';
-// import 'placeholder'; 
+// import 'placeholder';
 import 'es6-promise/auto';
 import 'libs/js/jquery-lavalamp';
 import 'common/bootstrap-modal-hack';
@@ -11,8 +10,12 @@ import 'common/script';
 import 'common/card';
 import 'common/es-polyfill';
 import { isMobileDevice } from 'common/utils';
+
+import './vendor.less';
+
 // 等待确认可删除Cookie
 // var Cookie = require('cookie');  
+
 
 $('[data-toggle="popover"]').popover({
   html: true,
@@ -30,9 +33,9 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
     return;
   }
 
-  if (error.name == 'Unlogin') {
+  if (error.name === 'Unlogin') {
     let ua = navigator.userAgent.toLowerCase();
-    if (ua.match(/MicroMessenger/i) == "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
+    if (ua.match(/MicroMessenger/i) === "micromessenger" && $('meta[name=is-open]').attr('content') !== 0) {
       window.location.href = '/login/bind/weixinmob?_target_path=' + location.href;
     } else {
       let $loginModal = $("#login-modal");
@@ -46,18 +49,20 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 });
 
 if ($('html').hasClass('lt-ie8')) {
-  let message = '<div class="alert alert-warning" style="margin-bottom:0;text-align:center;">';
-  message += Translator.trans('由于您的浏览器版本太低，将无法正常使用本站点，请使用最新的');
-  message += '<a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie" target="_blank">' + Translator.trans('IE浏览器') + '</a>、';
-  message += '<a href="http://www.baidu.com/s?wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank">' + Translator.trans('谷歌浏览器') + '</a>' + '<strong>' + '(' + Translator.trans('推荐') + ')' + '</strong>、';
-  message += '<a href="http://firefox.com.cn/download/" target="_blank">' + Translator.trans('Firefox浏览器') + '</a>' + '，' + Translator.trans('访问本站。');
-  message += '</div>';
+  const message = `
+    <div class="alert alert-warning" style="margin-bottom:0;text-align:center;">
+      ${Translator.trans('由于您的浏览器版本太低，将无法正常使用本站点，请使用最新的')}
+      <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie" target="_blank">${Translator.trans('IE浏览器')}</a>
+      <a href="http://www.baidu.com/s?wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank">${Translator.trans('谷歌浏览器')}</a>
+      <a href="http://firefox.com.cn/download/" target="_blank">${Translator.trans('Firefox浏览器')}</a>
+      ${Translator.trans('访问本站。')}
+    </div>`;
 
   $('body').prepend(message);
 }
 
 $(document).ajaxSend(function (a, b, c) {
-  if (c.type == 'POST') {
+  if (c.type === 'POST') {
     b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
   }
 });
@@ -79,7 +84,6 @@ if ($(".set-email-alert").length > 0) {
 }
 
 if ($(".announcements-alert").length > 0) {
-
   if ($('.announcements-alert .swiper-container .swiper-wrapper').children().length > 1) {
     let noticeSwiper = new Swiper('.alert-notice .swiper-container', {
       speed: 300,
@@ -98,13 +102,11 @@ if ($(".announcements-alert").length > 0) {
 }
 
 if (!isMobileDevice()) {
-
   $("body").on("mouseenter", "li.nav-hover", function (event) {
     $(this).addClass("open");
   }).on("mouseleave", "li.nav-hover", function (event) {
     $(this).removeClass("open");
   });
-
 } else {
   $("li.nav-hover >a").attr("data-toggle", "dropdown");
 }

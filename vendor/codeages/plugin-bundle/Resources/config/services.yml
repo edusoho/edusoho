@@ -47,7 +47,7 @@ services:
 
     codeages_plugin.theme.twig_loader:
         class: Codeages\PluginBundle\Loader\ThemeTwigLoader
-        arguments: ['@kernel', '@codeages_plugin.theme.file_locator', '@templating.name_parser']
+        arguments: ['@kernel']
         tags:
             - { name: twig.loader, priority: 255 }
 

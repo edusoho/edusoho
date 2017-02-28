@@ -29,4 +29,6 @@ interface ClassroomCourseDao extends GeneralDaoInterface
     public function getClassroomIdByCourseId($courseId);
 
     public function findActiveCoursesByClassroomId($classroomId);
+
+    public function countCourseTasksByClassroomId($classroomId);
 }
