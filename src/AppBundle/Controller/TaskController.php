@@ -328,6 +328,10 @@ class TaskController extends BaseController
     private function canPreviewCourse($courseId)
     {
         $user   = $this->getCurrentUser();
+        if ($user->isSuperAdmin() || $user->isAdmin()) {
+            return true;
+        }
+
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
 
         if (empty($member)) {
@@ -337,9 +341,7 @@ class TaskController extends BaseController
         $course    = $this->getCourseService()->getCourse($courseId);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        if ($user->isSuperAdmin()) {
-            return true;
-        } elseif ($user['id'] == $courseSet['creator']) {
+        if ($user['id'] == $courseSet['creator']) {
             return true;
         } elseif (in_array($user->getId(), $course['teacherIds'])) {
             return true;
