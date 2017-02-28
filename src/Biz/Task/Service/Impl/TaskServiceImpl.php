@@ -475,6 +475,28 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
     }
 
+    public function findPublishedLivingTasksByCourseSetId($courseSetId)
+    {
+        $conditions = array(
+            'fromCourseSetId' => $courseSetId,
+            'type'     => 'live',
+            'status'   => 'published',
+            'startTime_LT'     => time(),
+            'endTime_GT'       => time(),
+        );
+        return $this->searchTasks($conditions, array('startTime' => 'ASC'), 0, $this->countTasks($conditions));
+
+    }
+
+    public function findPublishedTasksByCourseSetId($courseSetId)
+    {
+        $conditions = array(
+            'fromCourseSetId' => $courseSetId,
+            'type'     => 'live',
+            'status'   => 'published',
+        );
+        return $this->searchTasks($conditions, array('startTime' => 'ASC'), 0, $this->countTasks($conditions));
+    }
     /**
      * 返回当前正在直播的直播任务
      *
