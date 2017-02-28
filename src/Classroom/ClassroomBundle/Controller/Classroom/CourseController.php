@@ -166,7 +166,8 @@ class CourseController extends BaseController
                 'remark'      => '',
                 'role'        => array('auditor'),
                 'locked'      => 0,
-                'createdTime' => 0
+                'createdTime' => 0,
+                'deadline'    => $classroom['deadline']
             );
 
             if ($previewAs == 'member') {

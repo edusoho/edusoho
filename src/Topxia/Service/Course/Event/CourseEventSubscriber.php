@@ -13,6 +13,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
+            'classroom.update'       => 'onClassroomUpdate',
             'course.join'            => 'onCourseJoin',
             'course.favorite'        => 'onCourseFavorite',
             'course.note.create'     => 'onCourseNoteCreate',
@@ -30,6 +31,78 @@ class CourseEventSubscriber implements EventSubscriberInterface
             'announcement.delete'    => 'onAnnouncementDelete',
             'courseReview.add'       => 'onCourseReviewCreate'
         );
+    }
+
+    public function onClassroomUpdate(ServiceEvent $event)
+    {
+        $arguments = $event->getSubject();
+        $classroom = $arguments['classroom'];
+        $fields    = $arguments['fields'];
+        try {
+            $this->getConnection()->beginTransaction();
+
+            if (!empty($fields['expiryMode']) && !empty($fields['expiryDay'])) {
+
+                $this->updateClassroomCourses($classroom['id'], array('expiryMode' => $fields['expiryMode'], 'expiryDay' => $fields['expiryDay']));
+
+                if ($this->canUpdateClassroomMember($classroom)) {
+                    $this->updateClassroomCoursesStudents($classroom['id'], array('expiryDay' => $fields['expiryDay'], 'expiryMode' => $fields['expiryMode'], 'classroomStatus' => $classroom['status']));
+                }
+            }
+
+            $this->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->getConnection()->rollBack();
+            throw $e;
+        }
+    }
+
+    protected function buildMemberDeadline($fields, $member)
+    {
+        if ($fields['classroomStatus'] == 'published' && $fields['expiryMode'] == 'days') {
+            $fields['expiryDay'] = $member['deadline'];
+        }
+
+        if ($fields['classroomStatus'] == 'draft' && $fields['expiryMode'] == 'days') {
+            $fields['expiryDay'] = $member['createdTime'] + $fields['expiryDay'] * 24 * 60 * 60;
+        }
+
+        return $fields['expiryDay'];
+    }
+
+    protected function canUpdateClassroomMember($classroom)
+    {
+        if ($classroom['status'] == 'draft') {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function updateClassroomCoursesStudents($classroomId, $fields)
+    {
+        $members = $this->getCourseService()->findMembersByClassroomId($classroomId);
+
+        foreach ($members as $member) {
+            $deadline = $this->buildMemberDeadline($fields, $member);
+
+            $this->getCourseService()->updateCourseMember($member['id'], array('deadline' => $deadline));
+        }
+    }
+
+    protected function updateClassroomCourses($classroomId, $expiryDate)
+    {
+        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+
+        foreach ($activeCourses as $course) {
+            $this->getCourseDao()->updateCourse(
+                $course['id'], 
+                array(
+                    'expiryMode' => $expiryDate['expiryMode'], 
+                    'expiryDay'  => $expiryDate['expiryDay']
+                )
+            );
+        }
     }
 
     public function onRoleChange(ServiceEvent $event)
@@ -392,6 +465,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    protected function getCourseDao()
+    {
+        return ServiceKernel::instance()->createDao('Course.CourseDao');
+    }
+
     protected function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
@@ -430,5 +508,10 @@ class CourseEventSubscriber implements EventSubscriberInterface
     protected function getNotifiactionService()
     {
         return ServiceKernel::instance()->createService('User.NotificationService');
+    }
+
+    protected function getConnection()
+    {
+        return ServiceKernel::instance()->getConnection();
     }
 }

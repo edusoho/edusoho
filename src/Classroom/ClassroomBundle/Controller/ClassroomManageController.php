@@ -140,7 +140,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function setClassroomMemberExpiryDateAction(Request $request, $classroomId, $userId)
+    public function setClassroomStudentExpiryDateAction(Request $request, $classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);   
 
@@ -158,12 +158,11 @@ class ClassroomManageController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $user      = $this->getUserService()->getUser($userId);
-        $deadline  = $member['deadline'];
 
-        return $this->render('ClassroomBundle:ClassroomManage:set-expiry-date-modal.html.twig', array(
+        return $this->render('ClassroomBundle:ClassroomManage/Member:set-expiry-date-modal.html.twig', array(
             'classroom' => $classroom,
             'user'      => $user,
-            'deadline'  => $deadline
+            'member'    => $member
         ));
     }
 

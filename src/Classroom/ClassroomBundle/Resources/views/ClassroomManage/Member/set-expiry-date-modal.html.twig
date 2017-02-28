@@ -2,7 +2,7 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}{{'学员备注'|trans}}{% endblock %}
+{% block title %}{{'修改学员有效期'|trans}}{% endblock %}
 {% block body %}
 
 <form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('classroom_manage_student_expiry_date', { classroomId:classroom.id, userId:user.id }) }}">
@@ -20,7 +20,7 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="student-nickname">{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{'学员'|trans}}{% endif %}{{'用户名'|trans}}</label>
+        <label for="student-nickname">{{ setting('default.user_name')|default('学员'|trans) }}{{'用户名'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <div style="margin-top: 7px;">
@@ -34,7 +34,7 @@
         <label for="set-more-expiryday">{{'有效期'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="classroom_expiryDay" name="expiryDay" required="required" {% if deadline %}value="{{ deadline|date('Y-m-d') }}"{% endif %}class="form-control width-input width-input-large">
+        <input type="text" id="student_expiryDay" name="expiryDay" required="required" {% if member.deadline %}value="{{ member.deadline|date('Y-m-d') }}"{% endif %}class="form-control width-input width-input-large">
         <div class="help-block">
         {{ '设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) }}
         </div>
@@ -43,7 +43,7 @@
     </div>
     <input type="hidden" name="memberId" value="{{ user.id }}">
   {% else %}
-    <div class="empty">{{dict_text('classroomStatus', classroom.status)}}{{'班级不能增加'|trans}}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{'学员'|trans}}{% endif %}{{'有效期，请班级发布后再增加。'|trans}}</div>
+    <div class="empty">{{dict_text('classroomStatus', classroom.status)}}{{'班级不能修改'|trans}}{{ setting('default.user_name')|default('学员'|trans) }}{{'有效期，请班级发布后再增加。'|trans}}</div>
   {% endif %}
 </form>
 
@@ -52,5 +52,5 @@
 {% block footer %}
   <button type="submit" id="student-save" data-loading-text="正在保存..."class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form">{{'保存'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
-<script>app.load('classroombundle/controller/classroom/expiry-date')</script>
+<script>app.load('classroombundle/controller/classroom/student/expiry-date')</script>
 {% endblock %}

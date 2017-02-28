@@ -1,9 +1,9 @@
 {% if date(classroom.deadline) < date() %}
   <button type="button" style="pointer-events:auto" class="btn btn-default disabled btn-lg" data-toggle="tooltip" data-placement="top">
   {% if classroom.buyable == 1 %}
-    {{'已超过有效期，无法加入'|trans}}
-  {% else %}
     {{'已超过有效期，无法购买'|trans}}
+  {% else %}
+    {{'已超过有效期，无法加入'|trans}}
   {% endif %}
   </button>
 {% else %}

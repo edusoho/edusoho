@@ -210,17 +210,49 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields    = $this->fillOrgId($fields);
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
 
-        $arguments           = $fields;
+        $arguments = $fields;
+
+        if (!empty($arguments['expiryMode']) && !empty($arguments['expiryDay'])) {
+            if ($this->canUpdateMember($classroom)) {
+                $this->updateClassroomMembers($id, array('expiryMode' => $arguments['expiryMode'], 'expiryDay' => $arguments['expiryDay']));
+            }
+        }
         if (!empty($tagIds)) {
             $arguments['tagIds'] = $tagIds;
         }
+
         $this->dispatchEvent('classroom.update', new ServiceEvent(array(
             'userId'      => $user['id'], 
-            'classroomId' => $id, 
+            'classroom'   => $classroom, 
             'fields'      => $arguments
         )));
 
         return $classroom;
+    }
+
+    protected function canUpdateMember($classroom)
+    {
+        if ($classroom['status'] == 'draft') {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function updateClassroomMembers($classroomId, $expiryDate)
+    {
+        $members = $this->findStudentsByClassroomId($classroomId);
+
+        foreach ($members as $member) {
+            $this->updateMemberDeadline(
+                $member['id'], 
+                array(
+                    'createdTime' => $member['createdTime'],
+                    'expiryMode'  => $expiryDate['expiryMode'],
+                    'expiryDay'   => $expiryDate['expiryDay']
+                )
+            );
+        }
     }
 
     public function findStudentsByClassroomId($classroomId)
@@ -1478,10 +1510,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function updateMember($id, $fields)
     {
-        if (isset($fields['expiryMode']) && isset($fields['expiryDay'])) {
-            $fields['deadline'] = $this->buildMemberDeadline($fields);
-        }
-
         return $this->getClassroomMemberDao()->updateMember($id, $fields);
     }
 
@@ -1493,25 +1521,23 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function buildMemberDeadline($fields)
     {
-        if (isset($fields['expiryMode'])) {
-            if ($fields['expiryMode'] == 'days') {
-                $deadline = $fields['createdTime'] + $fields['expiryDay'] * 24 * 60 * 60;
-            }
+        if ($fields['expiryMode'] == 'days') {
+            $deadline = $fields['createdTime'] + $fields['expiryDay'] * 24 * 60 * 60;
+        }
 
-            if ($fields['expiryMode'] == 'date') {
-                $deadline = $fields['expiryDay'];
+        if ($fields['expiryMode'] == 'date') {
+            $deadline = $fields['expiryDay'];
 
-                if (!is_int($deadline)) {
-                    $deadline = strtotime($deadline.' 23:59:59');
-                }
-                if ($deadline < time()) {
-                    throw $this->createServiceException($this->getKernel()->trans('有效期的设置时间小于当前时间！'));
-                }
+            if (!is_int($deadline)) {
+                $deadline = strtotime($deadline.' 23:59:59');
             }
+            if ($deadline < time()) {
+                throw $this->createServiceException($this->getKernel()->trans('有效期的设置时间小于当前时间！'));
+            }
+        }
 
-            if ($fields['expiryMode'] == 'none') {
-                $deadline = 0;
-            }
+        if ($fields['expiryMode'] == 'none') {
+            $deadline = 0;
         }
 
         return $deadline;

@@ -34,6 +34,8 @@ interface CourseMemberDao
 
     public function findMembersByUserIdAndJoinType($userId, $joinedType);
 
+    public function findMembersByClassroomId($classroomId);
+
     public function searchMemberCount($conditions);
 
     public function searchMembers($conditions, $orderBys, $start, $limit);

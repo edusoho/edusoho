@@ -75,7 +75,7 @@ classroom_manage_student_remark:
 
 classroom_manage_student_expiry_date:
     path: /classroom/{classroomId}/manage/student/{userId}/expiry_date
-    defaults: { _controller: ClassroomBundle:ClassroomManage:setClassroomMemberExpiryDate }
+    defaults: { _controller: ClassroomBundle:ClassroomManage:setClassroomStudentExpiryDate }
 
 classroom_manage_student_remove:
     path:  /classroom/{classroomId}/manage/student/{userId}/remove

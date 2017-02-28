@@ -33,57 +33,12 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
     {
         $arguments   = $event->getSubject();
         $userId      = $arguments['userId'];
-        $classroomId = $arguments['classroomId'];
+        $classroom   = $arguments['classroom'];
         $fields      = $arguments['fields'];
-        $expiryDate  = array(
-            'expiryMode' => empty($fields['expiryMode']) ? null : $fields['expiryMode'],
-            'expiryDay'  => empty($fields['expiryDay']) ? null : $fields['expiryDay']
-        );
 
         if (isset($fields['tagIds'])) {
-            $tagOwnerManager = new TagOwnerManager('classroom', $classroomId, $fields['tagIds'], $userId);
+            $tagOwnerManager = new TagOwnerManager('classroom', $classroom['id'], $fields['tagIds'], $userId);
             $tagOwnerManager->update();
-        }
-
-        if (!empty($expiryDate['expiryMode'])) {
-            $classroom = $this->getClassroomService()->getClassroom($classroomId);
-
-            if ($classroom['expiryMode'] == 'none' || $classroom['expiryMode'] == 'date' || $classroom['status'] != 'published') {
-                $this->updateClassroomMembers($classroomId, $expiryDate);
-            }
-
-            $this->updateClassroomCopyCourses($classroomId, $expiryDate);
-        }
-    }
-
-    protected function updateClassroomCopyCourses($classroomId, $expiryDate)
-    {
-        $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-
-        foreach ($activeCourses as $course) {
-            $this->getCourseDao()->updateCourse(
-                $course['id'], 
-                array(
-                    'expiryMode' => $expiryDate['expiryMode'], 
-                    'expiryDay'  => $expiryDate['expiryDay']
-                )
-            );
-        }
-    }
-
-    protected function updateClassroomMembers($classroomId, $expiryDate)
-    {
-        $members = $this->getClassroomService()->findStudentsByClassroomId($classroomId);
-
-        foreach ($members as $member) {
-            $this->getClassroomService()->updateMemberDeadline(
-                $member['id'], 
-                array(
-                    'createdTime' => $member['createdTime'],
-                    'expiryMode'  => $expiryDate['expiryMode'],
-                    'expiryDay'   => $expiryDate['expiryDay']
-                )
-            );
         }
     }
 
@@ -160,11 +115,6 @@ class ClassroomEventSubscriber implements EventSubscriberInterface
     private function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
-    }
-
-    private function getCourseDao()
-    {
-        return ServiceKernel::instance()->createDao('Course.CourseDao');
     }
 
     protected function getNotifiactionService()

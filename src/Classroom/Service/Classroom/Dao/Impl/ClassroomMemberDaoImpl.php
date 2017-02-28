@@ -208,7 +208,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
     public function findStudentsByClassroomId($classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role = '|student|'";
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE '%|student|%'";
         return $this->getConnection()->fetchAll($sql, array($classroomId));
     }
 

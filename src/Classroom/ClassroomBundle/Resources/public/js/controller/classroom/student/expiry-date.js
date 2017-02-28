@@ -35,12 +35,12 @@ define(function(require, exports, module) {
             display: '有效期'
         });
 
-        $("#classroom_expiryDay").datetimepicker({
+        $("#student_expiryDay").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
         });
-        $("#classroom_expiryDay").datetimepicker('setStartDate', new Date);
+        $("#student_expiryDay").datetimepicker('setStartDate', new Date);
     };
 });
