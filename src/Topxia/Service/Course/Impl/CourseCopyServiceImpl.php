@@ -192,6 +192,10 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             $fields['copyId'] = $lesson['id'];
             $copiedLesson     = $this->getLessonDao()->addLesson($fields);
 
+            if (array_key_exists('type', $copiedLesson) && $copiedLesson['type'] == 'live' && $copiedLesson['status'] == 'published') {
+                $this->createJob($copiedLesson);
+            }
+
             $map[$lesson['id']] = $copiedLesson;
 
             if (array_key_exists("mediaId", $copiedLesson) && $copiedLesson["mediaId"] > 0 && in_array($copiedLesson["type"], array('video', 'audio', 'ppt'))) {
