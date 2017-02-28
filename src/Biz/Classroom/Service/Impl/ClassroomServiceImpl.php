@@ -454,14 +454,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function deleteClassroomCourses($classroomId, array $courseIds)
     {
-        foreach ($courseIds as $key => $value) {
-            $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $value);
-        }
         $classroom = $this->getClassroom($classroomId);
-        $this->dispatchEvent(
-            'classroom.course.delete',
-            new Event($classroom, array('deleteCourseIds' => $courseIds))
-        );
+        foreach ($courseIds as $courseId) {
+            $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
+
+            $this->dispatchEvent(
+                'classroom.course.delete',
+                new Event($classroom, array('deleteCourseId' => $courseId))
+            );
+        }
     }
 
     public function countMobileVerifiedMembersByClassroomId($classroomId, $locked = 0)
@@ -1462,7 +1463,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomCourseDao()->count(
             array(
                 'classroomId' => $classroomId,
-                'disabled' => 0
+                'disabled'    => 0
             )
         );
     }

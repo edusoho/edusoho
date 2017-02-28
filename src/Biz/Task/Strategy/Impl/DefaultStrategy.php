@@ -19,7 +19,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $this->validateTaskMode($field);
 
         if ($field['mode'] == 'lesson') {
-            $chapter             = array(
+            $chapter = array(
                 'courseId' => $field['fromCourseId'],
                 'title'    => $field['title'],
                 'type'     => 'lesson'
@@ -187,7 +187,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                     'number'     => $taskNumber
                 );
                 $this->getTaskService()->updateSeq($task['id'], $fields);
-                if($task['mode'] == 'lesson'){
+                if ($task['mode'] == 'lesson') {
                     $taskNumber++;
                 }
             }
@@ -201,6 +201,8 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         foreach ($tasks as $task) {
             $this->getTaskDao()->update($task['id'], array('status' => 'published'));
         }
+        $task['status'] = 'published';
+
         return $task;
     }
 
@@ -208,9 +210,11 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     public function unpublishTask($task)
     {
         $tasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
-        foreach ($tasks as $key => $task) {
+        foreach ($tasks as $task) {
             $this->getTaskDao()->update($task['id'], array('status' => 'unpublished'));
         }
+        $task['status'] = 'unpublished';
+
         return $task;
     }
 

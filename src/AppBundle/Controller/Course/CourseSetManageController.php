@@ -105,7 +105,6 @@ class CourseSetManageController extends BaseController
     //基础信息
     public function baseAction(Request $request, $id)
     {
-
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);
@@ -287,7 +286,11 @@ class CourseSetManageController extends BaseController
             'teachers'  => '教师设置'
         );
         if (!empty($lockedCourseSetMenus[$sideNav])) {
-            $menuPath  = $this->generateUrl('course_set_manage_'.$sideNav, array('id' => $courseSet['parentId']));
+            if (!$courseSet['locked']) {
+                $menuPath = $this->generateUrl('course_set_manage_'.$sideNav, array('id' => $courseSet['id']));
+            } else {
+                $menuPath = $this->generateUrl('course_set_manage_'.$sideNav, array('id' => $courseSet['parentId']));
+            }
             $menuTitle = $lockedCourseSetMenus[$sideNav];
         } elseif (!empty($lockedCourseMenus[$sideNav])) {
             if (!$courseSet['locked']) {
