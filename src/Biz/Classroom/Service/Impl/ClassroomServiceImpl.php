@@ -186,9 +186,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException('班级名称不能为空！');
         }
 
-        $classroom = $this->fillOrgId($classroom);
+        $classroom               = $this->fillOrgId($classroom);
+        $userId                  = $this->getCurrentUser()->getId();
+        $classroom['creator']    = $userId;
+        $classroom['teacherIds'] = array($userId);
 
         $classroom = $this->getClassroomDao()->create($classroom);
+        $this->becomeTeacher($classroom['id'], $userId);
+
         $this->dispatchEvent("classroom.create", $classroom);
         $this->getLogService()->info('classroom', 'create', "创建班级《{$classroom['title']}》(#{$classroom['id']})");
 
@@ -324,10 +329,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     public function updateClassroomTeachers($id)
     {
-        $courses = $this->findActiveCoursesByClassroomId($id);
+        $classroom = $this->getClassroom($id);
+        $courses   = $this->findActiveCoursesByClassroomId($id);
 
         $oldTeacherIds = $this->findTeachers($id);
-        $newTeacherIds = array();
+        $newTeacherIds = array($classroom['creator']);
 
         foreach ($courses as $key => $value) {
             $teachers      = $this->getCourseMemberService()->findCourseTeachers($value['id']);
@@ -1462,7 +1468,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomCourseDao()->count(
             array(
                 'classroomId' => $classroomId,
-                'disabled' => 0
+                'disabled'    => 0
             )
         );
     }
