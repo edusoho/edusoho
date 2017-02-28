@@ -2,7 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-class PublishedLivingTasksByCourseSetIdDataTag extends BaseDataTag implements DataTag
+class PublishedLivingTasksDataTag extends BaseDataTag implements DataTag
 {
     /**
      * 获取正在直播的已发布任务

@@ -2,7 +2,9 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-class TasksByCourseSetIdDataTag extends BaseDataTag implements DataTag
+use Biz\Task\Service\TaskService;
+
+class PublishedTasksDataTag extends BaseDataTag implements DataTag
 {
     /**
      * 获取课程的所有任务
@@ -19,10 +21,13 @@ class TasksByCourseSetIdDataTag extends BaseDataTag implements DataTag
         if (empty($arguments['courseSetId'])) {
             throw new \InvalidArgumentException($this->getServiceKernel()->trans('courseSetId参数缺失'));
         }
-        $tasks = $this->getTaskService()->findTasksByCourseSetId($arguments['courseSetId']);
+        $tasks = $this->getTaskService()->findPublishedTasksByCourseSetId($arguments['courseSetId']);
         return $tasks;
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->getServiceKernel()->createService('Task:TaskService');

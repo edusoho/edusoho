@@ -488,11 +488,12 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     }
 
-    public function findTasksByCourseSetId($courseSetId)
+    public function findPublishedTasksByCourseSetId($courseSetId)
     {
         $conditions = array(
             'fromCourseSetId' => $courseSetId,
             'type'     => 'live',
+            'status'   => 'published',
         );
         return $this->searchTasks($conditions, array('startTime' => 'ASC'), 0, $this->countTasks($conditions));
     }

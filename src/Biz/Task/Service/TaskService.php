@@ -197,5 +197,5 @@ interface TaskService
 
     public function findPublishedLivingTasksByCourseSetId($courseSetId);
 
-    public function findTasksByCourseSetId($courseSetId);
+    public function findPublishedTasksByCourseSetId($courseSetId);
 }
