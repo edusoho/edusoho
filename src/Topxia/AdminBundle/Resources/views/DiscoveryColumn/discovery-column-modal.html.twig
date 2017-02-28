@@ -27,11 +27,11 @@
       	<label for="keyword-name-field">{{'类型'|trans}}</label>
     	</div>
 			<div class="col-md-7 controls radios">
-        <input type="radio" id="course" name="type" checked="checked" value="course" data-url="{{ path('admin_get_discovery_column_category', {id:discoveryColumn.id|default(), type:'course'}) }}">
+        <input type="radio" id="course" name="type" checked="checked" value="course" data-url="{{ path('admin_discovery_column_category_tree', {id:discoveryColumn.id|default(), type:'course'}) }}">
         <label for="course">{{ '普通课程'|trans }}</label>
-        <input type="radio" id="live" name="type"{% if discoveryColumn and discoveryColumn.type == 'live' %} checked="checked" {% endif %}value="live" data-url="{{ path('admin_get_discovery_column_category', {id:discoveryColumn.id|default(), type:'live'}) }}">
+        <input type="radio" id="live" name="type"{% if discoveryColumn and discoveryColumn.type == 'live' %} checked="checked" {% endif %}value="live" data-url="{{ path('admin_discovery_column_category_tree', {id:discoveryColumn.id|default(), type:'live'}) }}">
         <label for="live">{{ '直播课程'|trans }}</label>
-        <input type="radio" id="classroom" name="type" {% if discoveryColumn and discoveryColumn.type == 'classroom' %} checked="checked" {% endif %}value="classroom" data-url="{{ path('admin_get_discovery_column_category', {id:discoveryColumn.id|default(), type:'classroom'}) }}">
+        <input type="radio" id="classroom" name="type" {% if discoveryColumn and discoveryColumn.type == 'classroom' %} checked="checked" {% endif %}value="classroom" data-url="{{ path('admin_discovery_column_category_tree', {id:discoveryColumn.id|default(), type:'classroom'}) }}">
         <label for="classroom">{{'班级'|trans}}</label>
     	</div>
     </div>

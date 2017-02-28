@@ -140,7 +140,7 @@ class DiscoveryColumnController extends BaseController
         ));
     }
 
-    public function getCategoryAction(Request $request)
+    public function categoryTreeAction(Request $request)
     {
         $id     = $request->query->get('id');
         $type = $request->query->get('type');

@@ -47,14 +47,11 @@ define(function(require, exports, module) {
             $.get(url['url'], function(html){
                 $('.category-ajax').html(html);
             });
-            if (selectedValue == 'classroom') {
+            if (selectedValue == 'classroom' || selectedValue == 'course') {
                 $('.order-form').removeClass('hide');
             }
             if (selectedValue == 'live') {
                 $('.order-form').addClass('hide');
-            }
-            if (selectedValue == 'course') {
-                $('.order-form').removeClass('hide');
             }
         });
     };
