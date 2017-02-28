@@ -13,10 +13,13 @@ class ThemeController extends BaseController
 
         $themes = $this->getThemes();
 
-        return $this->render('admin/theme/index.html.twig', array(
-            'themes'       => $themes,
-            'currentTheme' => $currentTheme
-        ));
+        return $this->render(
+            'admin/theme/index.html.twig',
+            array(
+                'themes'       => $themes,
+                'currentTheme' => $currentTheme,
+            )
+        );
     }
 
     public function changeAction(Request $request)
@@ -43,10 +46,13 @@ class ThemeController extends BaseController
         $config      = $this->getThemeService()->saveCurrentThemeConfig($config);
 
         if ($currentData) {
-            return $this->render('admin/theme/theme-edit-config-li.html.twig', array(
-                'pendant' => $currentData,
-                'uri'     => $uri
-            ));
+            return $this->render(
+                'admin/theme/theme-edit-config-li.html.twig',
+                array(
+                    'pendant' => $currentData,
+                    'uri'     => $uri,
+                )
+            );
         }
 
         return $this->createJsonResponse(true);
@@ -55,6 +61,7 @@ class ThemeController extends BaseController
     public function confirmConfigAction(Request $request, $uri)
     {
         $this->getThemeService()->saveConfirmConfig();
+
         return $this->redirect($this->generateUrl('admin_setting_theme', array(), true));
     }
 
@@ -66,11 +73,15 @@ class ThemeController extends BaseController
 
         $this->getThemeService()->resetCurrentConfig();
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-        return $this->render('admin/theme/edit.html.twig', array(
-            'themeConfig' => $themeConfig['config'],
-            'allConfig'   => $themeConfig['allConfig'],
-            'themeUri'    => $uri
-        ));
+
+        return $this->render(
+            'admin/theme/edit.html.twig',
+            array(
+                'themeConfig' => $themeConfig['config'],
+                'allConfig'   => $themeConfig['allConfig'],
+                'themeUri'    => $uri,
+            )
+        );
     }
 
     public function resetConfigAction(Request $request, $uri)
@@ -81,21 +92,28 @@ class ThemeController extends BaseController
 
         $this->getThemeService()->resetConfig();
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
-        return $this->render('admin/theme/edit.html.twig', array(
-            'themeConfig' => $themeConfig['config'],
-            'allConfig'   => $themeConfig['allConfig'],
-            'themeUri'    => $uri
-        ));
+
+        return $this->render(
+            'admin/theme/edit.html.twig',
+            array(
+                'themeConfig' => $themeConfig['config'],
+                'allConfig'   => $themeConfig['allConfig'],
+                'themeUri'    => $uri,
+            )
+        );
     }
 
     public function showAction(Request $request, $uri)
     {
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
-        return $this->render('default/index.html.twig', array(
-            'isEditColor'   => true,
-            'friendlyLinks' => $friendlyLinks
-        ));
+        return $this->render(
+            'default/index.html.twig',
+            array(
+                'isEditColor'   => true,
+                'friendlyLinks' => $friendlyLinks,
+            )
+        );
     }
 
     public function themeConfigEditAction(Request $request, $uri)
@@ -164,50 +182,65 @@ class ThemeController extends BaseController
 
     private function edit($code, $config)
     {
-        return $this->render('theme/edit-'.$code.'-modal.html.twig', array(
-            'config' => $config
-        ));
+        return $this->render(
+            'theme/edit-'.$code.'-modal.html.twig',
+            array(
+                'config' => $config,
+            )
+        );
     }
 
     private function editGroups($config)
     {
-        return $this->render('theme/edit-groups-modal.html.twig', array(
-            'config' => $config
-        ));
+        return $this->render(
+            'theme/edit-groups-modal.html.twig',
+            array(
+                'config' => $config,
+            )
+        );
     }
 
     private function editLiveCourse($config)
     {
-        return $this->render('theme/edit-live-course-modal.html.twig', array(
-            'config' => $config
-        ));
+        return $this->render(
+            'theme/edit-live-course-modal.html.twig',
+            array(
+                'config' => $config,
+            )
+        );
     }
 
     private function editRecommendTeacher($config)
     {
-        return $this->render('theme/edit-recommend-teacher-modal.html.twig', array(
-            'config' => $config
-        ));
+        return $this->render(
+            'theme/edit-recommend-teacher-modal.html.twig',
+            array(
+                'config' => $config,
+            )
+        );
     }
 
     private function editRecommendClassroom($config)
     {
-        return $this->render('theme/edit-recommend-classroom-modal.html.twig', array(
-            'config' => $config
-        ));
+        return $this->render(
+            'theme/edit-recommend-classroom-modal.html.twig',
+            array(
+                'config' => $config,
+            )
+        );
     }
 
     protected function getThemetemplate()
     {
         $currentTheme = $this->setting('theme', array('uri' => 'default'));
 
-        /*if ($currentTheme['uri'] == 'graceful') {
-        $template = 'GracefulThemePlugin:theme:theme-edit-config-li.html.twig';
+        if ($currentTheme['uri'] == 'graceful') {
+            $template = 'GracefulThemePlugin:theme:theme-edit-config-li.html.twig';
         } else {
-        $template = 'admin/theme/theme-edit-config-li.html.twig';
-        }*/
+            $template = 'admin/theme/theme-edit-config-li.html.twig';
+        }
 
-        return 'admin/theme/theme-edit-config-li.html.twig';
+        return $template;
     }
 
     protected function getSettingService()
