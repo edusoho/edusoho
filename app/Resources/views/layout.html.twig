@@ -50,7 +50,14 @@
   {% block head_scripts %}{% endblock %}
 
 </head>
-<body class="es-main-green {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}">
+{#{% if isEditColor|default(0) %}
+	{% set maincolor = config.config.maincolor|default('default') %}
+	{% set navigationcolor = config.config.navigationcolor|default('default') %}
+{% else %}
+	{% set maincolor = config.confirmConfig.maincolor|default('default') %}
+	{% set navigationcolor = config.confirmConfig.navigationcolor|default('default') %}
+{% endif %}#}
+<body class="es-main-red {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}">
 
 <!--[if lt IE 9]>
 <script src="{{ asset('static-dist/libs/fix-ie.js') }}"></script>
