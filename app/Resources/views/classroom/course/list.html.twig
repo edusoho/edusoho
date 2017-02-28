@@ -6,16 +6,22 @@
 {% do load_script('topxiawebbundle/controller/classroom/course/list') %}
 {% include 'seajs_loader_compatible.html.twig' with {'topxiawebbundle':true} %}
 
+{% if isCourseMember|default(false) %}
+  {% set courseShowPath = 'my_course_show' %}
+{% else %}
+  {% set courseShowPath = 'course_show' %}
+{% endif %}
+
   <div class="class-course-list">
     {% for course in courses %}
       <div class="course-item">
         <div class="media">
-          <a class="media-left" href="{{ path('course_show', {id:course.id}) }}">
+          <a class="media-left" href="{{ path(courseShowPath, {id:course.id}) }}">
             {{ lazy_img(filepath(course.courseSet.cover.middle|default(null), 'course.png'), '', '') }}
           </a>
           <div class="media-body">
             <div class="title">
-              <a href="{{ path('course_show',{id:course.id}) }}">{{ course.title }}</a>
+              <a href="{{ path(courseShowPath, {id:course.id}) }}">{{ course.title }}</a>
             </div>
             <div class="score">
               {{ web_macro.star(course.rating) }}

@@ -90,9 +90,11 @@ class CourseController extends BaseController
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
-        $layout = 'classroom/layout.html.twig';
+        $layout         = 'classroom/layout.html.twig';
+        $isCourseMember = false;
         if ($member && !$member["locked"]) {
-            $layout = 'classroom/join-layout.html.twig';
+            $isCourseMember = true;
+            $layout         = 'classroom/join-layout.html.twig';
         }
         if (!$classroom) {
             $classroomDescription = array();
@@ -101,6 +103,7 @@ class CourseController extends BaseController
             $classroomDescription = strip_tags($classroomDescription, '');
             $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
+
         return $this->render("classroom/course/list.html.twig", array(
             'classroom'            => $classroom,
             'member'               => $member,
@@ -108,7 +111,8 @@ class CourseController extends BaseController
             'courses'              => $courses,
             'courseMembers'        => $courseMembers,
             'layout'               => $layout,
-            'classroomDescription' => $classroomDescription
+            'classroomDescription' => $classroomDescription,
+            'isCourseMember'       => $isCourseMember
         ));
     }
 
