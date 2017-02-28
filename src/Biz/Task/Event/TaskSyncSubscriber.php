@@ -82,8 +82,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
 
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-//        $this->getLogService()->info('1','2', 'copiedCourseIds : ', $copiedCourseIds);
-        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
+        $copiedTasks     = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
             $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId']);
             $ct = $this->copyFields($task, $ct, array(
@@ -98,7 +97,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
                 'maxOnlineNum',
                 'status'
             ));
-//            $this->getLogService()->info('1','2', 'updateTask : ', $ct);
             $this->getTaskDao()->update($ct['id'], $ct);
         }
     }
@@ -126,10 +124,8 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
 
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-//        $this->getLogService()->info('1','2', 'copiedCourseIds : ', $copiedCourseIds);
-        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
+        $copiedTasks     = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
-//            $this->getLogService()->info('1','2', 'updateTask : ', $ct);
             if ($published) {
                 $this->getTaskService()->publishTask($ct['id']);
             } else {
