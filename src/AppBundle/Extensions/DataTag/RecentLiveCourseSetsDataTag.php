@@ -55,9 +55,6 @@ class RecentLiveCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         $courseSets       = ArrayToolkit::index($courseSets, 'id');
         $recentCourseSets = array();
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
-        $courses = ArrayToolkit::index($courses, 'id');
-
         foreach ($recentTasks as $task) {
             $courseSet = $courseSets[$task['fromCourseSetId']];
             if ($courseSet['status'] != 'published') {
@@ -68,7 +65,6 @@ class RecentLiveCourseSetsDataTag extends CourseBaseDataTag implements DataTag
                 continue;
             }
             $courseSet['task']     = $task;
-            $courseSet['teachers'] = $this->getUserService()->findUsersByIds($courses[$task['courseId']]['teacherIds']);
 
             if (count($recentCourseSets) >= $count) {
                 break;

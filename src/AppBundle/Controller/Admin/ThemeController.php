@@ -41,10 +41,9 @@ class ThemeController extends BaseController
         $config      = $request->request->get('config');
         $currentData = $request->request->get('currentData');
         $config      = $this->getThemeService()->saveCurrentThemeConfig($config);
-        $template    = $this->getThemetemplate();
 
         if ($currentData) {
-            return $this->render($template, array(
+            return $this->render('admin/theme/theme-edit-config-li.html.twig', array(
                 'pendant' => $currentData,
                 'uri'     => $uri
             ));
@@ -202,13 +201,13 @@ class ThemeController extends BaseController
     {
         $currentTheme = $this->setting('theme', array('uri' => 'default'));
 
-        if ($currentTheme['uri'] == 'graceful') {
-            $template = 'GracefulThemeBundle:Theme:theme-edit-config-li.html.twig';
+        /*if ($currentTheme['uri'] == 'graceful') {
+        $template = 'GracefulThemePlugin:theme:theme-edit-config-li.html.twig';
         } else {
-            $template = 'theme/theme-edit-config-li.html.twig';
-        }
+        $template = 'admin/theme/theme-edit-config-li.html.twig';
+        }*/
 
-        return $template;
+        return 'admin/theme/theme-edit-config-li.html.twig';
     }
 
     protected function getSettingService()

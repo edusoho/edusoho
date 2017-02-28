@@ -20,7 +20,9 @@ const config = {
     "iframe-resizer":['libs/js/iframe-resizer.js'],
     "iframe-resizer-contentWindow":['libs/js/iframe-resizer-contentWindow.js'],
     'jquery-timer':['libs/js/jquery-timer.js'],
-    'excanvas-compiled':['libs/js/excanvas-compiled.js']
+    'jquery-cycle2': ['jquery-cycle2'],
+    'excanvas-compiled':['libs/js/excanvas-compiled.js'],
+    'echo-js': ['echo-js'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
@@ -40,7 +42,9 @@ const config = {
     'moment/moment.js',
     'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
     'jquery-sortable/source/js/jquery-sortable.js',
-    'nouislider/distribute/nouislider.js'
+    'jquery.cycle2/src/jquery.cycle2.min.js',
+    'nouislider/distribute/nouislider.js',
+    'echo-js/dist/echo.js',
   ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {

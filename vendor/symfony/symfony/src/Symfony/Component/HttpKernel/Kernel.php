@@ -253,6 +253,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
         }
 
         $bundleName = substr($name, 1);
+
         $path = '';
         if (false !== strpos($bundleName, '/')) {
             list($bundleName, $path) = explode('/', $bundleName, 2);

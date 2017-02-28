@@ -13,19 +13,19 @@
                 "type": "imglink",
                 "default": [
                     {
-                        "src": "\/themes\/autumn\/img\/slide-1.jpg",
+                        "src": "\/static-dist\/autumntheme\/img\/slide-1.jpg",
                         "alt": "图片１的描述",
                         "href": "#",
                         "target": "_blank"
                     },
                     {
-                        "src": "\/themes\/autumn\/img\/slide-2.jpg",
+                        "src": "\/static-dist\/autumntheme\/img\/slide-2.jpg",
                         "alt": "图片２的描述",
                         "href": "#",
                         "target": "_self"
                     },
                     {
-                        "src": "\/themes\/autumn\/img\/slide-3.jpg",
+                        "src": "\/static-dist\/autumntheme\/img\/slide-3.jpg",
                         "alt": "图片３的描述",
                         "href": "#",
                         "target": "_blank"

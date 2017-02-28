@@ -3,7 +3,7 @@
     "name": "默认主题(B)",
     "author": "EduSoho官方",
     "version": "1.0",
-    "supprot_version": "1.0+",
+    "support_version": "1.0+",
     "date": "2013-11-07",
-    "thumb": "img/theme.jpg"
+    "thumb": "static-src/img/theme.jpg"
 }
