@@ -1,10 +1,10 @@
 .nav-pills {
-  >li {
+  > li {
     margin-right: 5px;
-    &+li {
+    & + li {
       margin-left: 0;
     }
-    >a {
+    > a {
       padding: 10px 15px;
       color: @gray-dark;
       .es-transition;
@@ -14,34 +14,34 @@
       }
     }
     &.active {
-      >a {
+      > a {
         color: #fff;
         background: @brand-primary;
         .es-transition;
       }
     }
   }
-  &.nav-pills-sm >li >a {
+  &.nav-pills-sm > li > a {
     font-size: 12px;
     line-height: 1.5;
     padding: 4px 13px;
   }
   &.nav-pills-gray  {
-    >li {
-      >a {
+    > li {
+      > a {
         background-color: #f8fbfd;
       }
       &.active {
-        >a {
+        > a {
           background: @brand-primary;
         }
       }
     }
   }
   &.nav-pills-transparent {
-    >li {
+    > li {
       margin-bottom: 10px;
-      >a {
+      > a {
         background-color: transparent;
         border: 1px solid @gray-light;
         color: @gray-dark;
@@ -52,7 +52,7 @@
         >a {
           border-color: @brand-primary;
           background-color: transparent;
-          color: @brand-primary
+          color: @brand-primary;
         }
       }
     }
