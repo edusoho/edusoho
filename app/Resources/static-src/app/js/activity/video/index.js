@@ -1,6 +1,6 @@
 import swfobject from 'es-swfobject';
 import EsMessenger from '../../../common/messenger';
-import ActivityEmitter from '../../activity/activity-emitter';
+import ActivityEmitter from '../activity-emitter';
 import 'store';
 
 class VideoPlay {
@@ -9,7 +9,7 @@ class VideoPlay {
     this.intervalId = null;
     this.recorder = recorder;
     this.emitter = new ActivityEmitter();
-    
+
   }
 
   play() {
@@ -95,6 +95,12 @@ class VideoRecorder {
     }
     if (playerCounter >= this.interval) {
       emitter.emit('watching', {watchTime: this.interval}).then(() => {
+        let url = $("#video-content").data('watchUrl');
+        $.post(url, function (response) {
+          if (response && response.status == 'error') {
+            window.location.reload();
+          }
+        })
       }).catch((error) => {
         console.error(error);
       });

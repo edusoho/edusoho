@@ -12,6 +12,7 @@ class Video extends Activity
 {
     protected function registerListeners()
     {
+        return array('watching' => 'Biz\Activity\Listener\VideoActivityWatchListener');
     }
 
     public function create($fields)
@@ -69,8 +70,8 @@ class Video extends Activity
         if (empty($videoActivity)) {
             throw new \Exception('教学活动不存在');
         }
-        if(!empty($video['mediaId'])) {
-            $file                         = $this->getUploadFileService()->getFile($videoActivity['mediaId']);
+        if (!empty($video['mediaId'])) {
+            $file                 = $this->getUploadFileService()->getFile($videoActivity['mediaId']);
             $video['mediaSource'] = $file['storage'];
         }
         $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $video);

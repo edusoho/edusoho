@@ -49,20 +49,6 @@ class TaskShow extends Emitter {
     this.eventEmitter.addListener('finish', response => {
       this._receiveFinish(response);
     });
-
-    this.eventEmitter.receive('watching', response => {
-      this.receiveWatch();
-    })
-  }
-
-  receiveWatch() {
-    let url = $("#task-content-iframe").data('watchUrl');
-    $.post(url, function (response) {
-      console.log(response, url)
-      if (response && response.watchLimited) {
-        window.location.reload();
-      }
-    })
   }
 
   _receiveFinish(response) {

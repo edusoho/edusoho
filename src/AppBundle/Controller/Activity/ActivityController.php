@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ActivityController extends BaseController
 {
 
-    public function showAction($id, $courseId, $preview)
+    public function showAction($task, $preview)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 

@@ -1547,6 +1547,10 @@ course_activity_trigger:
     defaults: { _controller: AppBundle:Activity/Activity:trigger }
     methods: [POST]
 
+course_acitvity_watch:
+    path:  /course/{courseId}/activity/{id}/watch
+    defaults: { _controller: AppBundle:Activity/Video:watch}
+
 course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
     defaults: { _controller: AppBundle:Activity/Download:downloadFile }
@@ -1555,10 +1559,6 @@ course_activity_download:
 course_task_show:
     path:  /course/{courseId}/task/{id}/show
     defaults: { _controller: AppBundle:Task:show }
-
-course_task_watch:
-    path:  /course/{courseId}/task/{id}/watch
-    defaults: { _controller: AppBundle:Task:watch }
 
 course_task_preview:
     path:  /course/{courseId}/task/{id}/preview

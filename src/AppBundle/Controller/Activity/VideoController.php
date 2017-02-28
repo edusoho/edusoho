@@ -155,7 +155,6 @@ class VideoController extends BaseController implements ActivityActionInterface
             }
 
             $watchLimitTime = $activity['length'] * $course['watchLimit'];
-
             if (empty($watchTime)) {
                 return array('status' => 'ok', 'watchedTime' => 0, 'watchLimitTime' => $watchLimitTime);
             }
@@ -167,6 +166,24 @@ class VideoController extends BaseController implements ActivityActionInterface
 
         }
         return $watchStatus;
+    }
+
+    public function watchAction(Request $request, $courseId, $id)
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $activity = $this->getActivityService()->getActivity($id);
+
+        $isLimit = $this->setting('magic.lesson_watch_limit');
+        if ($isLimit) {
+            $watchStatus = $this->getWatchStatus($activity);
+
+            return $this->createJsonResponse($watchStatus);
+        }
+        return $this->createJsonResponse(array('status' => 'ok'));
     }
 }
 

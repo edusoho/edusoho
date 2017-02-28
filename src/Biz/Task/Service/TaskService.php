@@ -6,11 +6,6 @@ interface TaskService
 {
     const LEARN_TIME_STEP = 2;
 
-    /*
-     * watch video, audio time, unit is second
-     */
-    const WATCH_TIME_STEP = 120;
-
     public function getTask($id);
 
     public function getCourseTask($courseId,$id);

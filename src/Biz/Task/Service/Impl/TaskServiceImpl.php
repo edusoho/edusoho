@@ -693,8 +693,8 @@ class TaskServiceImpl extends BaseService implements TaskService
                 'seq_GE'   => $latestLearnTask['seq'],
                 'courseId' => $courseId
             );
-            $tasks       = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 2);
-            $toLearnTask = array_pop($tasks); //如果当正在学习的是最后一个，则取当前在学的任务
+            $tasks            = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 2);
+            $toLearnTask      = array_pop($tasks); //如果当正在学习的是最后一个，则取当前在学的任务
         }
         return $toLearnTask;
     }
@@ -750,8 +750,8 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function trigger($id, $eventName, $data = array())
     {
-        $task = $this->getTask($id);
-        $data = $this->prepareData($task, $data);
+        $task         = $this->getTask($id);
+        $data['task'] = $task;
         $this->getActivityService()->trigger($task['activityId'], $eventName, $data);
         return $this->getTaskResultService()->getUserTaskResultByTaskId($id);
     }
@@ -761,13 +761,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
     }
 
-    protected function prepareData($task, $data)
-    {
-        if (empty($data['taskId'])) {
-            $data['taskId'] = $task['id'];
-        }
-        return $data;
-    }
 
     public function analysisTaskDataByTime($startTime, $endTime)
     {

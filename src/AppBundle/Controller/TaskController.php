@@ -125,25 +125,6 @@ class TaskController extends BaseController
         return $this->forward('AppBundle:Activity/Activity:preview', array('task' => $task));
     }
 
-    public function watchAction(Request $request, $courseId, $id)
-    {
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException();
-        }
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($id);
-
-        $isLimit = $this->setting('magic.lesson_watch_limit');
-        if ($isLimit) {
-            $watchStatus = $this->getTaskResultService()->checkUserWatchNum($id);
-
-            if ($watchStatus['status'] == 'error') {
-                $taskResult['watchLimited'] = true;
-            }
-        }
-        return $this->createJsonResponse($taskResult);
-    }
-
     private function canPreviewTask($task, $course)
     {
         if ($task['isFree']) {

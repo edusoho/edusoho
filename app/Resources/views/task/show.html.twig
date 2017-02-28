@@ -26,7 +26,6 @@
       </div>
       <div class="dashboard-body">
         <iframe id="task-content-iframe" class="task-content-iframe"
-                data-watch-url="{{ path('course_task_watch',{courseId: task.courseId, id: task.id}) }}"
                 data-event-url="{{ path('course_task_trigger', {courseId: task.courseId, id: task.id}) }}"
                 data-last-time="{{ date().timestamp }}"
                 src="{{ path('course_task_activity_show',{courseId:task.courseId, id:task.id, preview:app.request.get('preview') }) }}"
