@@ -23,7 +23,7 @@ class TestpaperController extends BaseController implements ActivityActionInterf
 
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
 
-        if (!$testpaperResult || ($testpaperResult['status'] == 'doing' && !$testpaperResult['updateTime'])) {
+        if (!$testpaperResult || ($testpaperResult['status'] == 'doing' && !$testpaperResult['updateTime']) || $testpaper['status'] != 'open') {
             return $this->render('activity/testpaper/show.html.twig', array(
                 'activity'          => $activity,
                 'testpaperActivity' => $testpaperActivity,

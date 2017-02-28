@@ -8,32 +8,38 @@
 	        <div class="title font-blod">
 	          <i class="es-icon es-icon-xinxi color-info"></i>{{'考试说明'|trans}}
 	        </div>
-	        <div class="content">
-	        	{% if testpaperActivity.testMode == 'realTime' and activity.startTime and activity.startTime > "now"|date("U") %}
-		          <div class="text-16 ">
-		          	考试未开始，请在{{ activity.startTime|date('Y-m-d H:i:s') }}之后再来
-		          </div>
-	          {% else %}
-							<div class="text-16 ">
-		          	本次考试共<span class="color-primary">{{ testpaper.itemCount }}题</span>，总分<span class="color-primary">{{ testpaper.score }}分</span>
-	          		{% if testpaperActivity.finishCondition.type == 'score' %}
-	          			，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore}}分</span>
-	          		{% endif %}；
-									
-		          	{% if testpaperActivity.limitedTime %}
-		          		<div class="mt5">请在<span class="color-primary">{{ testpaperActivity.limitedTime }}分钟</span>内作答。</div>
-		          	{% endif %}
-		          	{% if testpaperActivity.doTimes %}
-									仅有<span class="color-danger">一次</span>考试机会。
-		          	{% endif %}
-		          </div>
-	          {% endif %}
-	        </div>
-	        <div class="text-right mtl">
-	        	{% if not activity.startTime or (activity.startTime and activity.startTime <= "now"|date("U")) %}
-	          	<a class="btn btn-primary" href="{{ path('testpaper_do',{lessonId:activity.id,testId:testpaperActivity.mediaId})}}">{{'开始考试'|trans}}</a>
-	          {% endif %}
-	        </div>
+	        {% if testpaper.status == 'open' %}
+		        <div class="content">
+		        	{% if testpaperActivity.testMode == 'realTime' and activity.startTime and activity.startTime > "now"|date("U") %}
+			          <div class="text-16 ">
+			          	考试未开始，请在{{ activity.startTime|date('Y-m-d H:i:s') }}之后再来
+			          </div>
+		          {% else %}
+								<div class="text-16 ">
+			          	本次考试共<span class="color-primary">{{ testpaper.itemCount }}题</span>，总分<span class="color-primary">{{ testpaper.score }}分</span>
+		          		{% if testpaperActivity.finishCondition.type == 'score' %}
+		          			，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore}}分</span>
+		          		{% endif %}；
+										
+			          	{% if testpaperActivity.limitedTime %}
+			          		<div class="mt5">请在<span class="color-primary">{{ testpaperActivity.limitedTime }}分钟</span>内作答。</div>
+			          	{% endif %}
+			          	{% if testpaperActivity.doTimes %}
+										仅有<span class="color-danger">一次</span>考试机会。
+			          	{% endif %}
+			          </div>
+		          {% endif %}
+		        </div>
+		        <div class="text-right mtl">
+		        	{% if not activity.startTime or (activity.startTime and activity.startTime <= "now"|date("U")) %}
+		          	<a class="btn btn-primary" href="{{ path('testpaper_do',{lessonId:activity.id,testId:testpaperActivity.mediaId})}}">{{'开始考试'|trans}}</a>
+		          {% endif %}
+		        </div>
+	        {% else %}
+						<div class="content">
+							<div class="text-16 ">该考试已关闭，请联系教师！</div>
+						</div>
+	        {% endif %}
 	      </div>
 	    </div>
 	  </div>
@@ -41,44 +47,3 @@
 </div>
 <div class="modal-backdrop in"></div>
 {% endblock %}
-
-
-
-{#
-{% if activity.startTime|default(0) and activity.startTime > "now"|date("U") %}
-	<div>
-		<span>考试将在{{ activity.startTime|date('Y-m-d H:i:s') }}开始，请到时再来。</span>
-	</div>
-{% elseif "now"|date("U") > activity.startTime|default(0) and "now"|date("U") <= activity.endTime|default(0)%}
-	<div>
-		<span>考试已开始，请在{{ activity.endTime|date('H:i:s') }}之前完成考试</span>
-		{% if not testpaperResult|default(null) or testpaperResult.status|default('doing') == 'doing' %}
-			<a href="javascript:;" class="btn btn-primary btn-sm" data-url="">{{'开始考试'|trans}}</a>
-		{% elseif testpaperResult.status|default('doing') == 'reviewing' %}
-			<span>{{'正在批阅'|trans}}</span>
-		{% else %}
-			<a href="javascript:;" class="btn btn-primary btn-sm" data-url="">{{'查看结果'|trans}}</a>
-		{% endif %}
-	</div>
-{% else %}
-	
-{% endif %}
-
-{% if not testpaperResult|default(null) or testpaperResult.status|default('doing') == 'doing'%}
-	<div>
-		<span>{{'欢迎参加考试，请点击「开始考试」按钮。'|trans}}</span>
-		<a href= class="btn btn-primary btn-sm" target="_blank">{{'开始考试'|trans}}</a>
-	</div>
-{% else %}
-	{% if testpaperResult.status == 'finished' %}
-		<a href="javascript:;" class="btn btn-primary btn-sm" data-url="">{{'查看结果'|trans}}</a>
-		{% if testpaperActivity.redoInterval > 0 and testpaperResult.checkedTime > ("now"|date("U") + testpaperActivity.redoInterval * 3600 * 1000) or not testpaperActivity.redoInterval %}
-			<a href="javascript:;" class="btn btn-primary btn-sm" data-url="">{{'重新考试'|trans}}</a>
-		{% else %}
-			<span>{{'重考倒计时：'|trans}}{{ testpaperActivity.redoInterval|date('H:i:s') }}</span>
-		{% endif %}
-	{% elseif testpaperResult.status == 'reviewing' %}
-		<a href="javascript:;" class="btn btn-primary btn-sm" data-url="">{{'正在批阅'|trans}}</a>
-	{% endif %}
-	
-{% endif %}#}

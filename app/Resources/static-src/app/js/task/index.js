@@ -8,7 +8,6 @@ class TaskShow extends Emitter {
     super();
     this.element = $(element);
     this.mode = mode;
-    this.eventEmitter = new TaskEventEmitter(this.element.find('#task-content-iframe'));
 
     this.ui = new TaskUi({
       element: '.js-task-dashboard-page'
