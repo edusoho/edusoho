@@ -44,4 +44,4 @@ before_install:
 
 install: composer update --prefer-dist
 
-script: if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then phpunit --coverage-clover=coverage.clover; else phpunit; fi
+script: if [ "$TRAVIS_PHP_VERSION" == "5.6" ]; then vendor/bin/phpunit --coverage-clover=coverage.clover; else phpunit; fi

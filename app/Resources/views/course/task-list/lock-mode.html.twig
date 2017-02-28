@@ -18,7 +18,7 @@
           <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
         </li>
       {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
-        <li class="task-item color-gray bg-gray-lighter">
+        <li class=" color-gray bg-gray-lighter">
           <span class="text-overflow title">第{{ item.number }}
             节: {{ item.title }}</span>
         </li>
@@ -60,20 +60,20 @@
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </a>
             {% endif %}
+            <span class="right-menu">
+              {% set meta =  activity_meta(task.activity.mediaType) %}
+              {{ task.activity.length|default(0)|activity_length_format }}
+              <i class="es-icon es-icon {{ meta.icon }} ml20" data-toggle="tooltip" data-placement="top" title=""
+                data-original-title="{{ meta.name }}任务" data-container="body"></i>
+            </span>
           {% else %}
             <span class="text-overflow title">
               {% include 'course/task-list/parts/list-li-title.html.twig' %}
             </span>
-          {% endif %}
-          <span class="right-menu mouse-leave">
-            {% set meta =  activity_meta(task.activity.mediaType) %}
-            {{ task.activity.length|default(0)|activity_length_format }}
-            <i class="es-icon es-icon {{ meta.icon }}" data-toggle="tooltip" data-placement="top" title=""
-               data-original-title="{{ meta.name }}任务"></i>
-            </span>
-          <span class="right-menu">
-            {% if task.status != 'published' %}敬请期待{% endif %}
+            <span class="right-menu">
+            敬请期待
           </span>
+          {% endif %}
         </li>
       {% endif %}
     {% endfor %}
