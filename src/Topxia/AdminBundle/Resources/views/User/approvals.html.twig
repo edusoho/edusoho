@@ -10,6 +10,8 @@
        href="{{ path('admin_approval_approvals',{approvalStatus: 'approving'}) }}">{{ '审核中'|trans }}</a>
     <a type="button" class="btn btn-default btn-sm {% if approvalStatus == 'approved' %}btn-primary{% endif %}"
        href="{{ path('admin_approval_approvals',{approvalStatus: 'approved'}) }}">{{ '审核成功'|trans }}</a>
+    <a type="button" class="btn btn-default btn-sm {% if approvalStatus == 'approve_fail' %}btn-primary{% endif %}"
+       href="{{ path('admin_approval_approvals',{approvalStatus: 'approve_fail'}) }}">{{ '审核失败'|trans }}</a>
   </div>
   <form id="user-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
    {% include 'OrgBundle:Org:org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
@@ -61,13 +63,16 @@
           <td>
             {% if approvalStatus == 'approved' %}
               <div class="btn-group">
-                <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_info_view', {id:user.id}) }}"
+                <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_info_view', {id:user.id, approvalStatus:'approved'}) }}"
                    class="btn btn-default btn-sm">{{ '查看'|trans }}</a>
                 {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_approval_approvals', group:'groupButton', user: user} %}
               </div>
             {% elseif approvalStatus == 'approving' %}
               <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_approve', {id:user.id}) }}"
                  class="btn btn-default btn-sm">{{ '审核'|trans }}</a>
+            {% elseif approvalStatus == 'approve_fail' %}
+               <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_info_view', {id:user.id, approvalStatus:'approve_fail'}) }}"
+                 class="btn btn-default btn-sm">{{ '查看'|trans }}</a>               
             {% endif %}
           </td>
         </tr>
@@ -81,6 +86,8 @@
       <div class="empty">{{ '暂无已经审核成功的实名认证用户'|trans }}</div>
     {% elseif approvalStatus == 'approving' %}
       <div class="empty">{{ '暂无需要审核中的实名认证用户'|trans }}</div>
+    {% elseif approvalStatus == 'approve_fail' %}
+      <div class="empty">{{ '暂无需要审核失败的实名认证用户'|trans }}</div>
     {% endif %}
   {% endif %}
 
