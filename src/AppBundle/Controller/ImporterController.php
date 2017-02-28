@@ -31,11 +31,6 @@ class ImporterController extends BaseController
         return $template;
     }
 
-    public function importModalAction(Request $request)
-    {
-        return $this->render('importer/userimport.modal.html.twig');
-    }
-
     /**
      * @param $importType
      *

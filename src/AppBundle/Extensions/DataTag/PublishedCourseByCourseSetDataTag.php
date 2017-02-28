@@ -2,8 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-
-
 class PublishedCourseByCourseSetDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
@@ -27,4 +25,3 @@ class PublishedCourseByCourseSetDataTag extends CourseBaseDataTag implements Dat
         return $set;
     }
 }
-
