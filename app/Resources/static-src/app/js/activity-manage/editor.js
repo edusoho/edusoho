@@ -3,7 +3,7 @@
  * @param  {[string]} $item [te]
  * @return {[type]}       [description]
  */
-export const initEditor = ($item,validator) => {
+export const initEditor = ($item, validator) => {
   var editor = CKEDITOR.replace('text-content-field', {
     toolbar: 'Full',
     filebrowserImageUploadUrl: $('#text-content-field').data('imageUploadUrl'),
@@ -15,8 +15,9 @@ export const initEditor = ($item,validator) => {
     $item.val(editor.getData());
   });
 
-  editor.on('blur', function() {
-    if(validator) {
+  editor.on('blur', () => {
+    $item.val(editor.getData());//ie11
+    if (validator) {
       validator.form();
     }
   });
