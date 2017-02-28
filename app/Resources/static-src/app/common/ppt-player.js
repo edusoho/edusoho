@@ -176,7 +176,7 @@ export default class PPT extends Emitter {
   }
 
   _onLast() {
-    this.page = this.total
+    this.page = this.total;
   }
 
   _onFullScreen() {
