@@ -5,6 +5,7 @@ namespace Biz\Task\Event;
 use Biz\Task\Dao\TaskDao;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
+use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Event\Event;
@@ -20,8 +21,8 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'course.task.update'    => 'onCourseTaskUpdate',
             'course.task.delete'    => 'onCourseTaskDelete',
 
-            'course.task.publish'   => 'onCourseTaskUpdate',
-            'course.task.unpublish' => 'onCourseTaskUpdate'
+            'course.task.publish'   => 'onCourseTaskPublish',
+            'course.task.unpublish' => 'onCourseTaskUnpublish'
         );
     }
 
@@ -81,7 +82,8 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
 
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedTasks     = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
+//        $this->getLogService()->info('1','2', 'copiedCourseIds : ', $copiedCourseIds);
+        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
             $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId']);
             $ct = $this->copyFields($task, $ct, array(
@@ -96,8 +98,43 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
                 'maxOnlineNum',
                 'status'
             ));
-
+//            $this->getLogService()->info('1','2', 'updateTask : ', $ct);
             $this->getTaskDao()->update($ct['id'], $ct);
+        }
+    }
+
+    public function onCourseTaskPublish(Event $event)
+    {
+        $task = $event->getSubject();
+        $this->syncTaskStatus($task, true);
+    }
+
+    public function onCourseTaskUnpublish(Event $event)
+    {
+        $task = $event->getSubject();
+        $this->syncTaskStatus($task, false);
+    }
+
+    protected function syncTaskStatus($task, $published)
+    {
+        if ($task['copyId'] > 0) {
+            return;
+        }
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        if (empty($copiedCourses)) {
+            return;
+        }
+
+        $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
+//        $this->getLogService()->info('1','2', 'copiedCourseIds : ', $copiedCourseIds);
+        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
+        foreach ($copiedTasks as $ct) {
+//            $this->getLogService()->info('1','2', 'updateTask : ', $ct);
+            if ($published) {
+                $this->getTaskService()->publishTask($ct['id']);
+            } else {
+                $this->getTaskService()->unpublishTask($ct['id']);
+            }
         }
     }
 
@@ -237,6 +274,14 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         $strategy = StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->getBiz());
         //delete task and belongings
         $strategy->deleteTask($this->getTaskDao()->get($taskId));
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 
     /**
