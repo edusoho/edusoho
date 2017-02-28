@@ -46,7 +46,7 @@ define(function(require, exports, module) {
         toggleExpiryValue($("[name=expiryMode]:checked").val());
 
         $("[name='expiryMode']").change(function () {
-            if (app.arguments.isClassroomPublished == 'published') {
+            if (app.arguments.classroomStatus == 'published') {
                 return false;
             }
 

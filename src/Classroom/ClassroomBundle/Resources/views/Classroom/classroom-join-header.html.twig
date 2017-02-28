@@ -82,7 +82,7 @@
             {% endif %}
             <div class="hidden-sm fsn">
               {% if classroom.expiryMode != 'none' %}
-                {% if member.role[0] == 'student' or member.role[0] == 'member' or member.role[0] == 'auditor' %}
+                {% if member.role[0] == 'student' or member.role[0] == 'member' %}
                   <span class="mrm">班级有效期</span>
                   <span>{{ deadline|date('Y-n-d') }}</span>
                 {% endif %}
