@@ -144,6 +144,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $newCourseIds = array();
 
                 foreach ($courses as $key => $course) {
+                    $course['expiryMode'] = $classroom['expiryMode'];
+                    $course['expiryDay']  = $classroom['expiryDay'];
                     $newCourse      = $this->getCourseCopyService()->copy($course, true);
                     $newCourseIds[] = $newCourse['id'];
                     $this->getLogService()->info('classroom', 'add_course', "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})");
@@ -1514,6 +1516,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     }
 
     public function updateMemberDeadline($id, $fields) {
+        if (empty($fields['expiryMode']) && empty($fields['expiryDay'])) {
+            $this->createServiceException($this->getKernel()->trans('缺少相关参数'));
+        }
+
         $deadline = $this->buildMemberDeadline($fields);
 
         return $this->getClassroomMemberDao()->updateMember($id, array('deadline' => $deadline));
@@ -1534,10 +1540,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             if ($deadline < time()) {
                 throw $this->createServiceException($this->getKernel()->trans('有效期的设置时间小于当前时间！'));
             }
-        }
-
-        if ($fields['expiryMode'] == 'none') {
-            $deadline = 0;
         }
 
         return $deadline;
