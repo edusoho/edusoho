@@ -454,14 +454,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function deleteClassroomCourses($classroomId, array $courseIds)
     {
+        $classroom = $this->getClassroom($classroomId);
         foreach ($courseIds as $courseId) {
             $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
+
+            $this->dispatchEvent(
+                'classroom.course.delete',
+                new Event($classroom, array('deleteCourseId' => $courseId))
+            );
         }
-        $classroom = $this->getClassroom($classroomId);
-        $this->dispatchEvent(
-            'classroom.course.delete',
-            new Event($classroom, array('deleteCourseId' => $courseId))
-        );
     }
 
     public function countMobileVerifiedMembersByClassroomId($classroomId, $locked = 0)
