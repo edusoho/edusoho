@@ -15,8 +15,8 @@ let createPPT = (watermark) => {
 
 
   if ($content.data('finishType') === 'end') {
-    ppt.once('end', () => {
-      emitter.emit('finish');
+    ppt.once('end', (data) => {
+      emitter.emit('finish',data);
     });
   }
 
