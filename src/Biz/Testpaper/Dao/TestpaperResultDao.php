@@ -10,7 +10,7 @@ interface TestpaperResultDao extends GeneralDaoInterface
 
     public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
 
-    public function findPaperResultsStatusNumGroupByStatus($testId);
+    public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds);
 
     public function sumScoreByParames($conditions);
 

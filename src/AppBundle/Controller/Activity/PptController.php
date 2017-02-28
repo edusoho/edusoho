@@ -1,14 +1,12 @@
 <?php
 
-
 namespace AppBundle\Controller\Activity;
 
-
+use Biz\File\Service\UploadFileService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
-use Biz\File\Service\UploadFileService;
-use Biz\MaterialLib\Service\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\MaterialLib\Service\MaterialLibService;
 
 class PptController extends BaseController implements ActivityActionInterface
 {
@@ -18,16 +16,16 @@ class PptController extends BaseController implements ActivityActionInterface
 
         $ppt = $config->get($activity['mediaId']);
 
-        $file  = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
 
-        if(empty($file) || $file['type'] !== 'ppt'){
+        if (empty($file) || $file['type'] !== 'ppt') {
             throw $this->createAccessDeniedException('file type error');
         }
 
         $error = array();
         if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
-                $url              = $this->generateUrl('course_manage_files', array('id' => $activity['fromCourseId']));
+                $url              = $this->generateUrl('course_set_manage_files', array('id' => $activity['fromCourseId']));
                 $message          = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
                 $error['code']    = 'error';
                 $error['message'] = $message;
@@ -39,8 +37,8 @@ class PptController extends BaseController implements ActivityActionInterface
 
         $result = $this->getMaterialLibService()->player($file['globalId']);
 
-        if(isset($result['error'])){
-            $error['code'] = 'error';
+        if (isset($result['error'])) {
+            $error['code']    = 'error';
             $error['message'] = $result['error'];
         }
 
@@ -54,7 +52,6 @@ class PptController extends BaseController implements ActivityActionInterface
         ));
     }
 
-
     public function previewAction(Request $request, $task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
@@ -67,16 +64,16 @@ class PptController extends BaseController implements ActivityActionInterface
 
         $ppt = $config->get($activity['mediaId']);
 
-        $file  = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
 
-        if(empty($file) || $file['type'] !== 'ppt'){
+        if (empty($file) || $file['type'] !== 'ppt') {
             throw $this->createAccessDeniedException('file type error');
         }
 
         $error = array();
         if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
-                $url              = $this->generateUrl('course_manage_files', array('id' => $courseId));
+                $url              = $this->generateUrl('course_set_manage_files', array('id' => $courseId));
                 $message          = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
                 $error['code']    = 'error';
                 $error['message'] = $message;
@@ -88,8 +85,8 @@ class PptController extends BaseController implements ActivityActionInterface
 
         $result = $this->getMaterialLibService()->player($file['globalId']);
 
-        if(isset($result['error'])){
-            $error['code'] = 'error';
+        if (isset($result['error'])) {
+            $error['code']    = 'error';
             $error['message'] = $result['error'];
         }
 
@@ -98,7 +95,7 @@ class PptController extends BaseController implements ActivityActionInterface
             'ppt'      => $ppt,
             'slides'   => $slides,
             'error'    => $error,
-            'courseId' => $task['courseId'],
+            'courseId' => $task['courseId']
         ));
     }
 
@@ -108,7 +105,7 @@ class PptController extends BaseController implements ActivityActionInterface
         $config   = $this->getActivityService()->getActivityConfig('ppt');
         $ppt      = $config->get($activity['mediaId']);
 
-        $file                             = $this->getUploadFileService()->getFile($ppt['mediaId']);
+        $file = $this->getUploadFileService()->getFile($ppt['mediaId']);
 
         $ppt['media'] = $file;
 
@@ -158,5 +155,4 @@ class PptController extends BaseController implements ActivityActionInterface
     {
         return $this->createService('MaterialLib:MaterialLibService');
     }
-
 }

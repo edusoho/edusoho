@@ -121,8 +121,14 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $courseIds = array($targetId);
+        if ($targetType == 'classroom') {
+            $courses   = $this->getClassroomService()->findCoursesByClassroomId($id);
+            $courseIds = ArrayToolkit::column($courses, 'id');
+        }
+
         foreach ($testpapers as $key => $testpaper) {
-            $testpapers[$key]['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id']);
+            $testpapers[$key]['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id'], $courseIds);
         }
 
         return $this->render('testpaper/manage/check-list.html.twig', array(
@@ -208,7 +214,14 @@ class ManageController extends BaseController
             $conditions['userId'] = $searchUser ? $searchUser['id'] : '-1';
         }
 
-        $testpaper['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id']);
+        $courseIds = array($targetId);
+        if ($source == 'classroom') {
+            $courses   = $this->getClassroomService()->findCoursesByClassroomId($id);
+            $courseIds = ArrayToolkit::column($courses, 'id');
+        }
+        $conditions['courseIds'] = $courseIds;
+
+        $testpaper['resultStatusNum'] = $this->getTestpaperService()->findPaperResultsStatusNumGroupByStatus($testpaper['id'], $courseIds);
 
         $paginator = new Paginator(
             $request,
@@ -234,7 +247,8 @@ class ManageController extends BaseController
             'users'        => $users,
             'source'       => $source,
             'targetId'     => $targetId,
-            'isTeacher'    => true
+            'isTeacher'    => true,
+            'keyword'      => $keyword
         ));
     }
 
@@ -518,6 +532,11 @@ class ManageController extends BaseController
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getServiceKernel()

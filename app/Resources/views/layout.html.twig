@@ -99,7 +99,11 @@
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
 {% endblock %}
-{% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
+
+{% block footer_script %}
+  {% include 'default/script-webpack.html.twig' %}
+{% endblock %}
+
 {% include 'script_boot.html.twig' %}
 </body>
 </html>

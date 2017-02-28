@@ -35,7 +35,6 @@ interface TaskResultService
     /**
      * 统计某个任务的学习次数，学习的定义为task_result的status为start、finish，不对用户去重；
      */
-
     public function countTaskResults($conditions);
 
     public function searchTaskResults($conditions, $orderbys, $start, $limit);

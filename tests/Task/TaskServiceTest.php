@@ -167,6 +167,19 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals(true, $isLearned);
     }
 
+    public function testGetUserRecentlyStartTask()
+    {
+        $task = $this->mockTask();
+        $firstTask = $this->getTaskService()->createTask($task);
+        $secondTask = $this->getTaskService()->createTask($task);
+        $this->getTaskService()->startTask($firstTask['id']);
+        sleep(1);
+        $this->getTaskService()->startTask($secondTask['id']);
+        $result = $this->getTaskService()->getUserRecentlyStartTask($this->getCurrentUser()->getId());
+
+        $this->assertArraySubset($result, $secondTask);
+    }
+
     protected function mockSimpleTask($courseId = 1)
     {
         return array(
