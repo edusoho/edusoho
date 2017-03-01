@@ -119,7 +119,8 @@ class CourseController extends CourseBaseController
             'taskPerDay'           => $taskPerDay,
             'planStudyTaskCount'   => $planStudyTaskCount,
             'planProgressProgress' => $planProgressProgress,
-            'isUserFavorite'       => $isUserFavorite
+            'isUserFavorite'       => $isUserFavorite,
+            'marketingPage'        => 0
         ));
     }
 
