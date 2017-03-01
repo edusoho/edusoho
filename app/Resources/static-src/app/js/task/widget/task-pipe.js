@@ -55,7 +55,7 @@ export default class TaskPipe {
       this._flush();
     } 
     this._clearInterval();
-    let minute = 60 * 1000;
+    let minute = 60 * 1000*4;
     this.intervalId = setInterval(() => this._flush(), minute);
   }
 

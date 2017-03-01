@@ -53,6 +53,8 @@ class TaskShow extends Emitter {
   }
 
   _receiveFinish(response) {
+    console.log('_receiveFinish');
+    console.log(response);
     // response.result.status == 'finish'
     //     &&
     if ( $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
