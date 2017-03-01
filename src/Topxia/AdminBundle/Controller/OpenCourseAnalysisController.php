@@ -126,7 +126,9 @@ class OpenCourseAnalysisController extends BaseController
         }
         $totalWatchNum      = $this->getRefererLogService()->searchRefererLogCount($conditions);
         $logs = $this->getRefererLogService()->searchRefererLogs($conditions, array('createdTime', 'DESC'), 0, $totalWatchNum);
-        $totalOpenCourseNum = count(array_unique(ArrayToolkit::column($logs, 'targetId')));
+        $targetIds = array_unique(ArrayToolkit::column($logs, 'targetId'));
+        $courseIds = $this->getOpenCourseService()->findCoursesByIds(array_values($targetIds));
+        $totalOpenCourseNum = count($courseIds);
         $logsGroupByDate    = $this->getRefererLogService()->findRefererLogsGroupByDate($conditions);
         $logsGroupByDate    = $this->fillDateRangeWithLogsGroupDate($logsGroupByDate, $startTime, $endTime);
 
@@ -269,10 +271,12 @@ class OpenCourseAnalysisController extends BaseController
         $endTime                  = ArrayToolkit::get($conditions, 'endTime', '');
         unset($conditions['startTime']);
         unset($conditions['endTime']);
+        $targetIds = $this->getRefererLogService()->findTargetIds($conditions);
+        $courseIds = $this->getOpenCourseService()->findCoursesByIds($targetIds);
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getRefererLogService()->countDistinctLogsByField($conditions, 'targetId'),
+            count($courseIds),
             10
         );
 
