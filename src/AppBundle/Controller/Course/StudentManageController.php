@@ -24,19 +24,60 @@ use Biz\Activity\Service\ActivityLearnLogService;
 
 class StudentManageController extends BaseController
 {
-    public function studentsAction($courseSetId, $courseId)
+    public function studentsAction(Request $request, $courseSetId, $courseId)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $students  = $this->getCourseService()->findStudentsByCourseId($courseId);
-        $processes = $this->calculateUserLearnProgresses($course['id']);
+        $courseSet  = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course     = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $followings = $this->findCurrentUserFollowings();
+        $processes  = $this->calculateUserLearnProgresses($course['id']);
+
+        $keyword = $request->query->get('keyword', '');
+
+        $conditions = array(
+            'courseId' => $course['id'],
+            'role'     => 'student'
+        );
+
+        if (!empty($keyword)) {
+            $conditions['userIds'] = $this->getUserIds($keyword);
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseMemberService()->countMembers($conditions),
+            20
+        );
+
+        $members = $this->getCourseMemberService()->searchMembers(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $userIds = ArrayToolkit::column($members, 'userId');
+        $users   = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('course-manage/student/index.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course,
-            'students'  => $students,
-            'processes' => $processes
+            'courseSet'  => $courseSet,
+            'course'     => $course,
+            'students'   => $members,
+            'followings' => $followings,
+            'processes'  => $processes,
+            'users'      => $users,
+            'paginator'  => $paginator
         ));
+    }
+
+    public function findCurrentUserFollowings()
+    {
+        $user       = $this->getCurrentUser();
+        $followings = $this->getUserService()->findAllUserFollowing($user->getId());
+        if (!empty($followings)) {
+            return ArrayToolkit::index($followings, 'id');
+        }
+
+        return array();
     }
 
     public function studentQuitRecordsAction(Request $request, $courseSetId, $courseId)
@@ -612,8 +653,7 @@ class StudentManageController extends BaseController
         if (SimpleValidator::email($keyword)) {
             $user = $this->getUserService()->getUserByEmail($keyword);
 
-            $userIds[] = $user ? $user['id'] : null;
-            return $userIds;
+            return $user ? array($user['id']) : array(-1);
         } elseif (SimpleValidator::mobile($keyword)) {
             $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
             $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id' => 'DESC'), 0, PHP_INT_MAX);
@@ -625,12 +665,10 @@ class StudentManageController extends BaseController
 
             $userIds = array_unique($userIds);
 
-            $userIds = $userIds ? $userIds : null;
-            return $userIds;
+            return $userIds ? $userIds : array(-1);
         } else {
-            $user      = $this->getUserService()->getUserByNickname($keyword);
-            $userIds[] = $user ? $user['id'] : null;
-            return $userIds;
+            $user = $this->getUserService()->getUserByNickname($keyword);
+            return $user ? array($user['id']) : array(-1);
         }
     }
 

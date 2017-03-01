@@ -56,11 +56,17 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                 'uri'        => 'AppBundle:Course/Course:otherCourse',
                 'renderType' => 'render'
             ),
+            //所属班级
+            'belongClassroom'    => array(
+                'uri'        => 'course/widgets/belong-classroom.html.twig',
+                'renderType' => 'include',
+                'showMode'   => 'classroom' //班级课程才会显示
+            ),
             //推荐班级
             'recommendClassroom' => array(
-                'uri'             => 'course/widgets/recommend-classroom.html.twig',
-                'renderType'      => 'include',
-                'classroomCourse' => true //班级课程才会显示
+                'uri'        => 'course/widgets/recommend-classroom.html.twig',
+                'renderType' => 'include',
+                'showMode'   => 'course' //普通课程才会显示
             ),
             //教学团队
             'teachers'           => array(
@@ -80,13 +86,15 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         );
 
         $forGuestWidgets = array(
-            'characteristic'  => $widgets['characteristic'],
-            'teachers'        => $widgets['teachers'],
-            'newestStudents'  => $widgets['newestStudents'],
-            'studentActivity' => $widgets['studentActivity']
+            'recommendClassroom' => $widgets['recommendClassroom'],
+            'characteristic'     => $widgets['characteristic'],
+            'teachers'           => $widgets['teachers'],
+            'newestStudents'     => $widgets['newestStudents'],
+            'studentActivity'    => $widgets['studentActivity']
         );
 
         $forMemberWidgets = array(
+            'belongClassroom'    => $widgets['belongClassroom'],
             'recommendClassroom' => $widgets['recommendClassroom'],
             'teachers'           => $widgets['teachers'],
             'newestStudents'     => $widgets['newestStudents'],

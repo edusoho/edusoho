@@ -39,6 +39,7 @@ class BaseStrategy
             'isOptional',
             'startTime',
             'endTime',
+            'length',
             'status',
             'createdUserId'
         ));
@@ -56,6 +57,7 @@ class BaseStrategy
             'isOptional',
             'startTime',
             'endTime',
+            'length',
             'status',
             'mediaSource'
         ));

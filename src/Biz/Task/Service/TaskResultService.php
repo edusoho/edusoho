@@ -12,11 +12,15 @@ interface TaskResultService
 
     public function deleteUserTaskResultByTaskId($taskId);
 
+    public function checkUserWatchNum($taskId);
+
     public function waveLearnTime($id, $time);
+
+    public function waveWatchTime($id, $watchTime);
 
     public function findUserTaskResultsByCourseId($courseId);
 
-    public function getUserTaskResultByTaskId($courseTaskId);
+    public function getUserTaskResultByTaskId($taskId);
 
     public function findUserProgressingTaskResultByActivityId($activityId);
 

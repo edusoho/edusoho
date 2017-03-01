@@ -24,12 +24,15 @@
 	}
 	</style>
 
-	{# <pre>{{activity.remark|raw}}</pre> #}
-
-	<div class="lesson-content lesson-content-text" id="lesson-live-content" data-role="lesson-content"
-         style="display:none;">
-         <pre id="activity-data" style="display:none !important;">{{activity|json_encode()|raw}}</pre>
-         <pre id="activity-summary" style="display:none !important;">{{summary|raw}}</pre>
-      <div class="lesson-content-text-body" style="padding-left: 15px;"></div>
+  {# <pre>{{activity.remark|raw}}</pre> #}
+  {% block body %}
+    <div class="iframe-parent-content ph20 pv20">
+      <div class="lesson-content lesson-content-text" id="lesson-live-content" data-role="lesson-content"
+           style="display:none;">
+    <pre id="activity-data" style="display:none !important;">{{ activity|json_encode()|raw }}
+    </pre>
+        <pre id="activity-summary" style="display:none !important;">{{ summary|raw }}</pre>
+        <div class="lesson-content-text-body"></div>
+      </div>
     </div>
-{% endblock %}
+  {% endblock %}

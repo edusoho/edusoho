@@ -16,7 +16,7 @@ class TaskController extends BaseController
     {
         $preview = $request->query->get('preview');
 
-        $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
+        $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
 
         $user   = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
@@ -39,7 +39,6 @@ class TaskController extends BaseController
         if ($taskResult['status'] == 'finish') {
             list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
         }
-
         return $this->render('task/show.html.twig', array(
             'course'       => $course,
             'task'         => $task,
@@ -82,7 +81,9 @@ class TaskController extends BaseController
         // 1. 有时间限制设置
         // 2. 课时为视频课时
         // 3. 视频课时非优酷等外链视频时提示购买
-        if (empty($task['isFree']) && !(!empty($course['tryLookable']) && $task['type'] == 'video' && $task['mediaSource'] == 'self')) {
+        $taskCanTryLook = $course['tryLookable'] && $task['type'] == 'video' && $task['mediaSource'] == 'self';
+
+        if (empty($task['isFree']) && !$taskCanTryLook) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
@@ -101,7 +102,6 @@ class TaskController extends BaseController
         }
 
         //TODO vip 插件改造 判断用户是否为VIP
-
         return $this->render('task/preview.html.twig', array(
             'course'    => $course,
             'task'      => $task,
@@ -122,7 +122,6 @@ class TaskController extends BaseController
         if (!$this->canPreviewTask($task, $course)) {
             throw $this->createAccessDeniedException('task is not free');
         }
-
         return $this->forward('AppBundle:Activity/Activity:preview', array('task' => $task));
     }
 
@@ -132,10 +131,13 @@ class TaskController extends BaseController
             return true;
         }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+
         if (empty($course['tryLookable']) || $activity['mediaType'] != 'video') {
             return false;
         }
-        return $activity['ext']['mediaSource'] == 'cloud';
+
+        $file = $activity['ext']['file'];
+        return !empty($file) && $file['storage'] == 'cloud';
     }
 
     public function qrcodeAction(Request $request, $courseId, $id)
@@ -159,7 +161,7 @@ class TaskController extends BaseController
             'times'    => 1,
             'duration' => 3600
         ));
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -176,9 +178,8 @@ class TaskController extends BaseController
             return $this->render('task/inform.html.twig');
         }
         return $this->forward('AppBundle:Activity/Activity:show', array(
-            'id'       => $task['activityId'],
-            'courseId' => $courseId,
-            'preview'  => $preview
+            'task'    => $task,
+            'preview' => $preview
         ));
     }
 
@@ -289,10 +290,10 @@ class TaskController extends BaseController
 
     protected function getNextTaskAndFinishedRate($task)
     {
-        $nextTask   = $this->getTaskService()->getNextTask($task['id']);
-        $course     = $this->getCourseService()->getCourse($task['courseId']);
-        $user       = $this->getUser();
-        $conditions = array(
+        $nextTask      = $this->getTaskService()->getNextTask($task['id']);
+        $course        = $this->getCourseService()->getCourse($task['courseId']);
+        $user          = $this->getUser();
+        $conditions    = array(
             'courseId' => $task['courseId'],
             'userId'   => $user['id'],
             'status'   => 'finish'
