@@ -82,6 +82,7 @@ class TaskController extends BaseController
         // 2. 课时为视频课时
         // 3. 视频课时非优酷等外链视频时提示购买
         $taskCanTryLook = $course['tryLookable'] && $task['type'] == 'video' && $task['mediaSource'] == 'self';
+
         if (empty($task['isFree']) && !$taskCanTryLook) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
@@ -101,7 +102,6 @@ class TaskController extends BaseController
         }
 
         //TODO vip 插件改造 判断用户是否为VIP
-
         return $this->render('task/preview.html.twig', array(
             'course'    => $course,
             'task'      => $task,
@@ -122,7 +122,6 @@ class TaskController extends BaseController
         if (!$this->canPreviewTask($task, $course)) {
             throw $this->createAccessDeniedException('task is not free');
         }
-
         return $this->forward('AppBundle:Activity/Activity:preview', array('task' => $task));
     }
 
@@ -132,10 +131,13 @@ class TaskController extends BaseController
             return true;
         }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+
         if (empty($course['tryLookable']) || $activity['mediaType'] != 'video') {
             return false;
         }
-        return $activity['ext']['mediaSource'] == 'cloud';
+
+        $file = $activity['ext']['file'];
+        return !empty($file) && $file['storage'] == 'cloud';
     }
 
     public function qrcodeAction(Request $request, $courseId, $id)
