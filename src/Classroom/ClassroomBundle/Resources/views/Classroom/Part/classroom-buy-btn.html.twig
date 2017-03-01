@@ -1,4 +1,4 @@
-{% if date(classroom.deadline) < date() %}
+{% if date(classroom.expiryValue) < date() and classroom.expiryMode == 'date' %}
   <button type="button" style="pointer-events:auto" class="btn btn-default disabled btn-lg" data-toggle="tooltip" data-placement="top">
   {% if classroom.buyable == 1 %}
     {{'已超过有效期，无法购买'|trans}}

@@ -34,13 +34,13 @@
         <label for="set-more-expiryday">{{'有效期'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="student_expiryDay" name="expiryDay" required="required" {% if member.deadline %}value="{{ member.deadline|date('Y-m-d') }}"{% endif %}class="form-control width-input width-input-large">
+        <input type="text" id="student_expiryValue" name="expiryValue" required="required" {% if member.deadline %}value="{{ member.deadline|date('Y-m-d') }}"{% endif %}class="form-control width-input width-input-large">
         <div class="help-block">
         {{ '设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) }}
         </div>
       </div>
-      <input type="hidden" name="expiryMode" value="date">
     </div>
+    <input type="hidden" name="expiryMode" value="date">
     <input type="hidden" name="memberId" value="{{ user.id }}">
   {% else %}
     <div class="empty">{{dict_text('classroomStatus', classroom.status)}}{{'班级不能修改'|trans}}{{ setting('default.user_name')|default('学员'|trans) }}{{'有效期，请班级发布后再增加。'|trans}}</div>

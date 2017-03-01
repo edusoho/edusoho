@@ -50,56 +50,56 @@ define(function(require, exports, module) {
                 return false;
             }
 
-            validator.removeItem('[name=expiryDay]');
+            validator.removeItem('[name=expiryValue]');
 
-            var expiryDay = $("[name='expiryDay']").val();
-            if (expiryDay) {
-                if (expiryDay.match("-")) {
-                    $("[name='expiryDay']").data('date', $("[name='expiryDay']").val());
+            var expiryValue = $("[name='expiryValue']").val();
+            if (expiryValue) {
+                if (expiryValue.match("-")) {
+                    $("[name='expiryValue']").data('date', $("[name='expiryValue']").val());
                 } else {
-                    $("[name='expiryDay']").data('days', $("[name='expiryDay']").val());
+                    $("[name='expiryValue']").data('days', $("[name='expiryValue']").val());
                 }
-                $("[name='expiryDay']").val('')
+                $("[name='expiryValue']").val('')
             }
 
             if ($(this).val() == 'none') {
-                $('.expiry-day-js').addClass('hidden');
+                $('.expiry-value-js').addClass('hidden');
             } else {
-                $('.expiry-day-js').removeClass('hidden');
-                var $esBlock = $('.expiry-day-js > .controls > .help-block');
+                $('.expiry-value-js').removeClass('hidden');
+                var $esBlock = $('.expiry-value-js > .controls > .help-block');
                 $esBlock.text($esBlock.data($(this).val()));
                 toggleExpiryValue($(this).val());
             }
         });
         function toggleExpiryValue(expiryMode) {
-            if (!$("[name='expiryDay']").val()) {
-                $("[name='expiryDay']").val($("[name='expiryDay']").data(expiryMode));
+            if (!$("[name='expiryValue']").val()) {
+                $("[name='expiryValue']").val($("[name='expiryValue']").data(expiryMode));
             }
             switch (expiryMode) {
                 case 'days':
-                    $('[name="expiryDay"]').datetimepicker('remove');
-                    $(".expiry-day-js .controls > span").removeClass('hidden');
+                    $('[name="expiryValue"]').datetimepicker('remove');
+                    $(".expiry-value-js .controls > span").removeClass('hidden');
                     validator.addItem({
-                        element: '[name=expiryDay]',
+                        element: '[name=expiryValue]',
                         rule: 'positive_integer maxlength{max:10}',
                         required: true,
                         display: '有效期'
                     });
                     break;
                 case 'date':
-                    $(".expiry-day-js .controls > span").addClass('hidden');
+                    $(".expiry-value-js .controls > span").addClass('hidden');
                     validator.addItem({
-                        element: '[name=expiryDay]',
+                        element: '[name=expiryValue]',
                         required: true,
                         display: '有效期'
                     });
-                    $("#classroom_expiryDay").datetimepicker({
+                    $("#classroom_expiryValue").datetimepicker({
                         language: 'zh-CN',
                         autoclose: true,
                         format: 'yyyy-mm-dd',
                         minView: 'month'
                     });
-                    $("#classroom_expiryDay").datetimepicker('setStartDate', new Date);
+                    $("#classroom_expiryValue").datetimepicker('setStartDate', new Date);
                     break;
                 default:
                     break;

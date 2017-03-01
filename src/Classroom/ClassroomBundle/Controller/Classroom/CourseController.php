@@ -155,6 +155,8 @@ class CourseController extends BaseController
                 return;
             }
 
+            $deadline = $this->buidDeadline($classroom);
+
             $member = array(
                 'id'          => 0,
                 'classroomId' => $classroom['id'],
@@ -167,7 +169,7 @@ class CourseController extends BaseController
                 'role'        => array('auditor'),
                 'locked'      => 0,
                 'createdTime' => 0,
-                'deadline'    => $classroom['deadline']
+                'deadline'    => $deadline
             );
 
             if ($previewAs == 'member') {
@@ -176,6 +178,17 @@ class CourseController extends BaseController
         }
 
         return $member;
+    }
+
+    protected function buidDeadline($classroom)
+    {
+        $deadline = $classroom['expiryValue'];
+
+        if ($classroom['expiryMode'] == 'days') {
+            $deadline = time() + $classroom['expiryValue'] * 24 * 60 * 60;
+        }
+
+        return $deadline;
     }
 
     private function getCourseService()

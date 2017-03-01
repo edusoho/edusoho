@@ -30,17 +30,17 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name=expiryDay]',
+            element: '[name=expiryValue]',
             required: true,
             display: '有效期'
         });
 
-        $("#student_expiryDay").datetimepicker({
+        $("#student_expiryValue").datetimepicker({
             language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
         });
-        $("#student_expiryDay").datetimepicker('setStartDate', new Date);
+        $("#student_expiryValue").datetimepicker('setStartDate', new Date);
     };
 });

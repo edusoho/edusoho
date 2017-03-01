@@ -98,7 +98,6 @@ class SearchController extends BaseController
 
         $type = $request->query->get('type', 'course');
         $page = $request->query->get('page', '1');
-
         if (empty($keywords)) {
             return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
                 'keywords'     => $keywords,

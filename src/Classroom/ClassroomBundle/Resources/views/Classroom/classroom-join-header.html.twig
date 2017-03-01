@@ -1,5 +1,5 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
-{% set deadline = member.deadline|default(0) %}
+{% set memberDeadline = member.deadline|default(0) %}
 <section class="class-header after {% if 'auditor' in member.role %} auditor{% endif %}">
   <div class="container">
 
@@ -82,9 +82,9 @@
             {% endif %}
             <div class="hidden-sm fsn">
               {% if classroom.expiryMode != 'none' %}
-                {% if member.role[0] == 'student' or member.role[0] == 'member' %}
+                {% if 'student' in member.role or 'member' in member.role %}
                   <span class="mrm">班级有效期</span>
-                  <span>{{ deadline|date('Y-n-d') }}</span>
+                  <span>{{ memberDeadline|date('Y-n-d') }}</span>
                 {% endif %}
               {% endif %}
             </div>
@@ -98,7 +98,7 @@
           </div>
         </div>
         <div class="class-operation">
-          {% if date(deadline) < date() and member.role[0] == 'student' and deadline != 0 %}
+          {% if (date(memberDeadline) < date() and memberDeadline != 0) and ('student' in member.role) %}
             <div class="class-deadline">
               {% if classroom.expiryMode == 'date'%}
                  <div  class="alert alert-warning">你的班级已过有效期，无法继续学习</div>

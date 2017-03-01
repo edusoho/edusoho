@@ -82,19 +82,19 @@ classroomStatus: classroom.status
       <div class="form-group">
         <label class="col-md-2 control-label">班级有效期</label>
         <div class="col-md-8 controls radios">
-          {% if classroom.status == 'published' %}
+          {% if classroom.status == 'draft' %}
             <input type="hidden" name="expiryMode" value="{{ classroom.expiryMode }}">
-            {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, classroom.expiryMode|default('none'), 'disabled') }}
-          {% else %}
             {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, classroom.expiryMode|default('none')) }}
+          {% else %}
+            {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, classroom.expiryMode|default('none'), 'disabled') }}
           {% endif %}
         </div>
       </div>
 
-      <div class="form-group expiry-day-js {% if classroom.expiryMode|default('none') == 'none' %} hidden {% endif %}">
+      <div class="form-group expiry-value-js {% if classroom.expiryMode|default('none') == 'none' %} hidden {% endif %}">
         <label class="col-md-2 control-label"></label>
         <div class="col-md-8 controls">
-          <input type="text" id="classroom_expiryDay" name="expiryDay" required="required" value="{% if classroom.expiryMode|default('none') == 'date' %}{{ classroom.expiryDay|date('Y-m-d') }}{% else %}{{ classroom.expiryDay }}{% endif %}"
+          <input type="text" id="classroom_expiryValue" name="expiryValue" required="required" value="{% if classroom.expiryMode|default('none') == 'date' %}{{ classroom.expiryValue|date('Y-m-d') }}{% else %}{{ classroom.expiryValue }}{% endif %}"
                  class="form-control width-input width-input-large" > <span
               {% if classroom.expiryMode|default('none') != 'days' %}class="hidden" {% endif %}>{{ '天'|trans }} </span>
           {% set date_help = '设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) %}

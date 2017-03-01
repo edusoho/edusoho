@@ -41,12 +41,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
         try {
             $this->getConnection()->beginTransaction();
 
-            if (!empty($fields['expiryMode']) && !empty($fields['expiryDay'])) {
+            if (!empty($fields['expiryMode']) && !empty($fields['expiryValue'])) {
+                if ($this->canUpdateCoursesMembersAndCourses($classroom)) {
+                    $this->updateClassroomCoursesExpiryDate($classroom['id'], array('expiryMode' => $fields['expiryMode'], 'expiryValue' => $fields['expiryValue']));
 
-                $this->updateClassroomCourses($classroom['id'], array('expiryMode' => $fields['expiryMode'], 'expiryDay' => $fields['expiryDay']));
-
-                if ($this->canUpdateClassroomMember($classroom)) {
-                    $this->updateClassroomCoursesStudents($classroom['id'], array('expiryDay' => $fields['expiryDay'], 'expiryMode' => $fields['expiryMode'], 'classroomStatus' => $classroom['status']));
+                    $this->updateClassroomCoursesStudentsExpiryDate($classroom['id'], array('expiryValue' => $fields['expiryValue'], 'expiryMode' => $fields['expiryMode'], 'classroomStatus' => $classroom['status']));
                 }
             }
 
@@ -60,17 +59,17 @@ class CourseEventSubscriber implements EventSubscriberInterface
     protected function buildMemberDeadline($fields, $member)
     {
         if ($fields['classroomStatus'] == 'published' && $fields['expiryMode'] == 'days') {
-            $fields['expiryDay'] = $member['deadline'];
+            $fields['expiryValue'] = $member['deadline'];
         }
 
         if ($fields['classroomStatus'] == 'draft' && $fields['expiryMode'] == 'days') {
-            $fields['expiryDay'] = $member['createdTime'] + $fields['expiryDay'] * 24 * 60 * 60;
+            $fields['expiryValue'] = $member['createdTime'] + $fields['expiryValue'] * 24 * 60 * 60;
         }
 
-        return $fields['expiryDay'];
+        return $fields['expiryValue'];
     }
 
-    protected function canUpdateClassroomMember($classroom)
+    protected function canUpdateCoursesMembersAndCourses($classroom)
     {
         if ($classroom['status'] == 'draft') {
             return true;
@@ -79,7 +78,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         return false;
     }
 
-    protected function updateClassroomCoursesStudents($classroomId, $fields)
+    protected function updateClassroomCoursesStudentsExpiryDate($classroomId, $fields)
     {
         $members = $this->getCourseService()->findMembersByClassroomId($classroomId);
 
@@ -90,7 +89,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    protected function updateClassroomCourses($classroomId, $expiryDate)
+    protected function updateClassroomCoursesExpiryDate($classroomId, $expiryDate)
     {
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
 
@@ -99,7 +98,7 @@ class CourseEventSubscriber implements EventSubscriberInterface
                 $course['id'], 
                 array(
                     'expiryMode' => $expiryDate['expiryMode'], 
-                    'expiryDay'  => $expiryDate['expiryDay']
+                    'expiryDay'  => $expiryDate['expiryValue']
                 )
             );
         }

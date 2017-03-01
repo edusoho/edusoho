@@ -145,7 +145,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
                 foreach ($courses as $key => $course) {
                     $course['expiryMode'] = $classroom['expiryMode'];
-                    $course['expiryDay']  = $classroom['expiryDay'];
+                    $course['expiryDay']  = $classroom['expiryValue'];
                     $newCourse      = $this->getCourseCopyService()->copy($course, true);
                     $newCourseIds[] = $newCourse['id'];
                     $this->getLogService()->info('classroom', 'add_course', "班级《{$classroom['title']}》(#{$classroom['id']})添加了课程《{$newCourse['title']}》(#{$newCourse['id']})");
@@ -214,9 +214,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $arguments = $fields;
 
-        if (!empty($arguments['expiryMode']) && !empty($arguments['expiryDay'])) {
+        if (!empty($arguments['expiryMode']) && !empty($arguments['expiryValue'])) {
             if ($this->canUpdateMember($classroom)) {
-                $this->updateClassroomMembers($id, array('expiryMode' => $arguments['expiryMode'], 'expiryDay' => $arguments['expiryDay']));
+                $this->updateClassroomMembers($id, array('expiryMode' => $arguments['expiryMode'], 'expiryValue' => $arguments['expiryValue']));
             }
         }
         if (!empty($tagIds)) {
@@ -273,22 +273,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function filterClassroomFields($fields, $classroom)
     {
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId', 'expiryMode', 'expiryDay'));
+        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId', 'expiryMode', 'expiryValue'));
 
         if (isset($fields['expiryMode'])) {
             if ($fields['expiryMode'] == 'date') {
-                $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
+                $fields['expiryValue'] = strtotime($fields['expiryValue'].' 23:59:59');
 
-                if ($fields['expiryDay'] < time()) {
+                if ($fields['expiryValue'] < time()) {
                     throw $this->createServiceException($this->getKernel()->trans('设置的有效期小于当前时间！'));
                 }
-
-                $fields['deadline']  = $fields['expiryDay'];
-
-            } 
-
-            if ($fields['expiryMode'] == 'days') {
-                $fields['deadline'] = $classroom['createdTime'] + $fields['expiryDay'] * 24 * 60 * 60;
             }
         }
 
@@ -654,9 +647,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         if ($classroom['expiryMode'] == 'days') {
-            $expiryDay = time() + $classroom['expiryDay'] * 24 * 60 * 60;
+            $deadline = time() + $classroom['expiryValue'] * 24 * 60 * 60;
         } else {
-            $expiryDay = $classroom['expiryDay'];
+            $deadline = $classroom['expiryValue'];
         }
 
         $fields = array(
@@ -666,7 +659,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'levelId'     => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
             'role'        => '|student|',
             'remark'      => empty($order['note']) ? '' : $order['note'],
-            'deadline'    => $expiryDay
+            'deadline'    => $deadline
         );
 
         if (empty($fields['remark'])) {
@@ -702,7 +695,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'orderId'   => empty($order) ? 0 : $order['id'],
                     'orderNote' => empty($order['note']) ? '' : $order['note'],
                     'levelId' => empty($member['levelId']) ? 0 : $member['levelId'],
-                    'deadline' => $classroom['deadline']
+                    'deadline' => $member['deadline']
                 );
                 $this->getCourseService()->createMemberByClassroomJoined($courseId, $userId, $classroomId, $info);
             }
@@ -1517,7 +1510,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     }
 
     public function updateMemberDeadline($id, $fields) {
-        if (empty($fields['expiryMode']) && empty($fields['expiryDay'])) {
+        if (empty($fields['expiryMode']) && empty($fields['expiryValue'])) {
             $this->createServiceException($this->getKernel()->trans('缺少相关参数'));
         }
 
@@ -1528,12 +1521,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function buildMemberDeadline($fields)
     {
+        $deadline = $fields['expiryValue'];
+
         if ($fields['expiryMode'] == 'days') {
-            $deadline = $fields['createdTime'] + $fields['expiryDay'] * 24 * 60 * 60;
+            $deadline = $fields['createdTime'] + $fields['expiryValue'] * 24 * 60 * 60;
         }
 
         if ($fields['expiryMode'] == 'date') {
-            $deadline = $fields['expiryDay'];
+            $deadline = $fields['expiryValue'];
 
             if (!is_int($deadline)) {
                 $deadline = strtotime($deadline.' 23:59:59');
