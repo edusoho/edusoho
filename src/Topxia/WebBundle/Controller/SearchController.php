@@ -20,7 +20,8 @@ class SearchController extends BaseController
 
         if (isset($cloud_search_setting['search_enabled']) && $cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
             return $this->redirect($this->generateUrl('cloud_search', array(
-                'q' => $keywords
+                'q' => $keywords,
+                'type' => $request->query->get('type')
             )));
         }
 
