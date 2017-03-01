@@ -34,7 +34,7 @@ class DefaultController extends BaseController
             return $this->createMessageResponse('warning', '非法请求');
         }
 
-        $mobileCode = (!empty($result["mobileCode"]) ? $result["mobileCode"] : "edusohov3");
+        $mobileCode = (empty($result["mobileCode"]) ? 'edusohov3' : $result["mobileCode"]);
 
         if ($this->getWebExtension()->isMicroMessenger()) {
             $url ="http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi";
