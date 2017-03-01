@@ -596,15 +596,22 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
     {
         $course = $this->getCourseService()->getCourse($courseId);
+
+        if (!empty($info['deadline'])) {
+            $deadline = $info['deadline'];
+        } else {
+            $deadline = $course['expiryMode'] == 'days' ? strtotime('+'.$course['expiryDays'].' days') : $course['expiryEndDate'];
+        }
+
         $fields = array(
             'courseId'    => $courseId,
             'courseSetId' => $course['courseSetId'],
             'userId'      => $userId,
-            'orderId'     => empty($info["orderId"]) ? 0 : $info["orderId"],
-            'deadline'    => empty($info['deadline']) ? 0 : $info['deadline'],
+            'orderId'     => empty($info['orderId']) ? 0 : $info['orderId'],
+            'deadline'    => $deadline,
             'levelId'     => empty($info['levelId']) ? 0 : $info['levelId'],
             'role'        => 'student',
-            'remark'      => empty($info["orderNote"]) ? '' : $info["orderNote"],
+            'remark'      => empty($info['orderNote']) ? '' : $info['orderNote'],
             'createdTime' => time(),
             'classroomId' => $classRoomId,
             'joinedType'  => 'classroom'
