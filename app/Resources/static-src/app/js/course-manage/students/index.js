@@ -40,8 +40,10 @@ class Students {
             $this.hide();
             if ($this.hasClass('follow-student-btn')) {
                 $this.parent().find('.unfollow-student-btn').show();
+                notify('success', '关注成功');
             } else {
                 $this.parent().find('.follow-student-btn').show();
+                notify('success', '取消关注成功');
             }
         });
         
