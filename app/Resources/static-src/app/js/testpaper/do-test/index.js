@@ -1,5 +1,5 @@
 import DoTestBase from '../widget/do-test-base';
-import { initScrollbar,testpaperCardFixed,testpaperCardLocation,initWatermark } from '../widget/part';
+import { initScrollbar,testpaperCardFixed,testpaperCardLocation,initWatermark, onlyShowError } from '../widget/part';
 
 
 
@@ -16,6 +16,7 @@ class DoTestpaper extends DoTestBase {
     initWatermark();
     testpaperCardFixed();
     testpaperCardLocation();
+    onlyShowError();
     this._initTimer();
     this.$container.on('click','.js-btn-pause',event=>this._clickBtnPause(event));
     this.$container.on('click','.js-btn-resume',event => this._clickBtnReume(event));
