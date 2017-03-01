@@ -36,7 +36,7 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
         $sql     = "SELECT * FROM {$this->getTable()} WHERE id IN ({$marks});";
         $courses = $this->getConnection()->fetchAll($sql, $ids);
 
-        return $courses ? $this->createSerializer()->unserializes($courses, $this->serializeFields) : null;
+        return $courses ? $this->createSerializer()->unserializes($courses, $this->serializeFields) : array();
     }
 
     public function searchCourses($conditions, $orderBy, $start, $limit)
