@@ -332,20 +332,13 @@ class TaskController extends BaseController
             return true;
         }
 
-        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
-
-        if (empty($member)) {
-            return false;
+        $course    = $this->getCourseService()->getCourse($courseId);
+        if (in_array($user->getId(), $course['teacherIds'])) {
+            return true;
         }
 
-        $course    = $this->getCourseService()->getCourse($courseId);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
         if ($user['id'] == $courseSet['creator']) {
-            return true;
-        } elseif (in_array($user->getId(), $course['teacherIds'])) {
-            return true;
-        } elseif ($member['role'] == 'teacher') {
             return true;
         }
         return false;
