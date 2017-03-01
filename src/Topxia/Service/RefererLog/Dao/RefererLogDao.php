@@ -20,4 +20,6 @@ interface RefererLogDao
     public function searchRefererLogs($conditions, $orderBy, $start, $limit);
 
     public function searchRefererLogCount($conditions);
+
+    public function findTargetIds($conditions);
 }

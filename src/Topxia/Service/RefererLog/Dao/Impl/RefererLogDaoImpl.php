@@ -63,7 +63,7 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
             $parameters[] = $endTime;
         }
 
-        $sql .= "GROUP BY targetId) AS b ON a.targetId = b.targetId ORDER BY {$orderBy[0]} {$orderBy[1]},targetId DESC LIMIT {$start}, {$limit}";
+        $sql .= "GROUP BY targetId) AS b ON a.targetId = b.targetId where a.targetId in (select id from open_course) ORDER BY {$orderBy[0]} {$orderBy[1]},targetId DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, $parameters);
     }
 
@@ -93,6 +93,13 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
         $builder = $this->createQueryBuilder($conditions)
             ->select("COUNT(DISTINCT {$field})");
         return $builder->execute()->fetchColumn(0);
+    }
+
+    public function findTargetIds($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("DISTINCT targetId");
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     public function searchRefererLogCount($conditions)
