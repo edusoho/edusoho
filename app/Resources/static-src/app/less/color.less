@@ -1,8 +1,24 @@
-@import url('./match-color.less');
+@import url('color/match-color.less');
+@import url('color/nav-color.less');
+@import url('color/nav-color-white.less');
+
+.es-nav-default {
+  @brand-primary: #212121;
+  .nav-color(@brand-primary);
+}
+
+.es-nav-white {
+  .nav-color-white();
+}
 
 .es-main-bule {
   @brand-primary: #0081e6;
   .match-color(@brand-primary);
+}
+
+.es-nav-bule {
+  @brand-primary: #0081e6;
+  .nav-color(@brand-primary);
 }
 
 .es-main-bule-light {
@@ -10,9 +26,19 @@
   .match-color(@brand-primary);
 }
 
-.es-main-green {
+.es-nav-bule-light {
+  @brand-primary: #4bbbfa;
+  .nav-color(@brand-primary);
+}
+
+.es-main-default {
   @brand-primary: #46c37b;
   .match-color(@brand-primary);
+}
+
+.es-nav-green {
+  @brand-primary: #46c37b;
+  .nav-color(@brand-primary);
 }
 
 .es-main-green-light {
@@ -20,9 +46,19 @@
   .match-color(@brand-primary);
 }
 
+.es-nav-green-light {
+  @brand-primary: #81d867;
+  .nav-color(@brand-primary);
+}
+
 .es-main-orange {
   @brand-primary: #ff7200;
   .match-color(@brand-primary);
+}
+
+.es-nav-orange {
+  @brand-primary: #ff7200;
+  .nav-color(@brand-primary);
 }
 
 .es-main-orange-light {
@@ -30,9 +66,19 @@
   .match-color(@brand-primary);
 }
 
+.es-nav-orange-light {
+  @brand-primary: #f9b469;
+  .nav-color(@brand-primary);
+}
+
 .es-main-purple {
   @brand-primary: #773cec;
   .match-color(@brand-primary);
+}
+
+.es-nav-purple {
+  @brand-primary: #773cec;
+  .nav-color(@brand-primary);
 }
 
 .es-main-purple-light {
@@ -40,14 +86,29 @@
   .match-color(@brand-primary);
 }
 
+.es-nav-purple-light {
+  @brand-primary: #9e9abd;
+  .nav-color(@brand-primary);
+}
+
 .es-main-red {
   @brand-primary: #cf010e;
   .match-color(@brand-primary);
 }
 
+.es-nav-red {
+  @brand-primary: #cf010e;
+  .nav-color(@brand-primary);
+}
+
 .es-main-red-light {
   @brand-primary: #fd5f56;
   .match-color(@brand-primary);
+}
+
+.es-nav-red-light {
+  @brand-primary: #fd5f56;
+  .nav-color(@brand-primary);
 }
 
 
