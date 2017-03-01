@@ -27,7 +27,7 @@
         {% if  isMarketingPage or  member is empty %}
           {% set task_lock = (course.learnMode  == 'lockMode') %}
         {% else %}
-          {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+          {% set task_lock =  (course.learnMode  == 'lockMode')  and task.lock  %}
         {% endif %}
         {% set file = files[task.activity.mediaId]|default(null) %}
         <li class="task-item task-content mouse-control">
@@ -102,7 +102,7 @@
         {% if isMarketingPage or  member is empty %}
           {% set task_lock = true %}
         {% else %}
-          {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+          {% set task_lock =  (course.learnMode  == 'lockMode')  and task.lock %}
         {% endif %}
         {% set file = files[task.activity.mediaId]|default(null) %}
         <li class="task-item task-content mouse-control">
