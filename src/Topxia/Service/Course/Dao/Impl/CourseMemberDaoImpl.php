@@ -203,7 +203,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
         $sql .= "AND m.role = ? AND c.type = ?  AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0";
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($userId, $role, $type, $isLearned, $start, $limit));
+        return $this->getConnection()->fetchAll($sql, array($userId, $role, $type, $isLearned));
     }
 
     public function findAllMemberByUserIdAndRole($userId, $role, $onlyPublished = true)
@@ -250,7 +250,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->getTable()} m ";
         $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
         $sql .= " AND m.role = ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0";
-        return $this->getConnection()->fetchColumn($sql. array($userId, $role, $isLearned));
+        return $this->getConnection()->fetchColumn($sql, array($userId, $role, $isLearned));
     }
 
     public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
@@ -271,7 +271,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
-        return $this->getConnection()->fetchAll($sql, array($userId, $role, $isLearned, $start, $limit));
+        return $this->getConnection()->fetchAll($sql, array($userId, $role, $isLearned));
     }
 
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)

@@ -316,7 +316,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (isset($filters['type'])) {
             $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, 'student', $filters["type"], '0', $start, $limit);
         } else {
-            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', '0', $start, $limit);
+            $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, 'student', 0, $start, $limit);
         }
 
 
