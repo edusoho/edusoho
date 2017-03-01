@@ -81,6 +81,7 @@
             <input class="form-control width-150 mrs" type="text" name="tryLookLength" value="{{course.tryLookLength|default(1)}}">分钟
           </div>
         </div>
+        {% if setting('magic.lesson_watch_limit') %}
         <div class="form-group">
           <label class="col-sm-2 control-label">{{'视频观看时长限制'|trans}}</label>
           <div class="col-sm-8">
@@ -88,7 +89,7 @@
             <div class="help-block">{{'0表示无限制'|trans}}</div>
           </div>
         </div>
-
+        {% endif %}
         <div class="form-group">
           <label class="col-sm-2 control-label">实名认证</label>
           <div class="col-sm-8 radios">

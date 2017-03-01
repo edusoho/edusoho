@@ -49,15 +49,14 @@ class TaskShow extends Emitter {
     this.eventEmitter.addListener('finish', response => {
       this._receiveFinish(response);
     });
-
   }
 
   _receiveFinish(response) {
     // response.result.status == 'finish'
     //     &&
-    if ( $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
-        // 盘点是任务式学习还是自由式学习
-        $.get($(".js-learned-prompt").data('url'), html => {
+    if ($('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
+      // 盘点是任务式学习还是自由式学习
+      $.get($(".js-learned-prompt").data('url'), html => {
         $(".js-learned-prompt").attr('data-content', html);
         this.ui.learnedWeakPrompt();
         this.ui.learned();
@@ -73,16 +72,16 @@ class TaskShow extends Emitter {
       url: this.element.find('#js-hidden-data [name="plugins_url"]').val()
     });
     this.sidebar
-        .on('popup', (px, time) => {
-          this.element.find('#dashboard-content').animate({
-            right: px
-          }, time);
-        })
-        .on('fold', (px, time) => {
-          this.element.find('#dashboard-content').animate({
-            right: px
-          }, time);
-        });
+      .on('popup', (px, time) => {
+        this.element.find('#dashboard-content').animate({
+          right: px
+        }, time);
+      })
+      .on('fold', (px, time) => {
+        this.element.find('#dashboard-content').animate({
+          right: px
+        }, time);
+      });
   }
 }
 

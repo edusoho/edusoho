@@ -29,17 +29,18 @@
             <th width="40%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</th>
             {# <th width="20%">{{'服务期限'|trans}}</th> #}
             <th width="30%">{{'学习进度'|trans}}</th>
-            <th width="30%%">{{'操作'|trans}}</th>
+            <th width="30%">{{'操作'|trans}}</th>
           </tr>
         </thead>
         <tbody>
-          {% for student in students %}
+          {% for student in students if student %}
+            {% set user = users[student.userId]|default(null) %}
             <tr class="students-item js-students-item">
               <td class="media media-middle" >
                 <a class="pull-left js-user-card" href="/user/{{student.userId}}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
-                  {{ web_macro.user_avatar(student, 'pull-left', 'avatar-sm') }}
+                  {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
                 </a>
-                <a target="_blank" href="/user/{{student.userId}}">{{student.nickname}}</a>
+                <a target="_blank" href="/user/{{student.userId}}">{{ user.nickname }}</a>
                 
                 {% if student.remark %}
                   <span class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
@@ -87,10 +88,15 @@
                 </div>
               </td>
             </tr>
-            {# {% include 'course-manage/student/tr.html.twig' with { student: student, courseSet: courseSet, course: course } %} #}
+          {% else %}
+            <tr class="empty"><td colspan="20">暂无学员记录</td></tr>
           {% endfor %}
+
         </tbody>
       </table>
+      <nav class="text-center">
+        {{ web_macro.paginator(paginator) }}
+      </nav>
     </div>
   </div>
 {% endblock %}

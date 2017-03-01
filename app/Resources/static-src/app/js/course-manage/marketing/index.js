@@ -40,8 +40,6 @@ class Marketing {
       }
     });
 
-
-
     $('.js-task-price-setting').on('click', 'li', function (event) {
       let $li = $(this).toggleClass('open');
       let $input = $li.find('input');

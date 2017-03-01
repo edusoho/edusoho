@@ -10,13 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 class AudioController extends BaseController implements ActivityActionInterface
 {
 
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $activity)
     {
-        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
-
+        $audio = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
         return $this->render('activity/audio/show.html.twig', array(
             'activity' => $activity,
-            'courseId' => $courseId
+            'audio'    => $audio
         ));
     }
 

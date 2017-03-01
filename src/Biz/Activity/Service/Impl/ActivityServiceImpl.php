@@ -91,16 +91,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if ($eventName == 'start') {
             $this->biz['dispatcher']->dispatch("activity.{$eventName}", new Event($activity, $data));
         }
-        
+
         $this->triggerActivityLearnLogListener($activity, $eventName, $data);
-        
+
         if(empty($data['events'])) {
-            $events = array(); 
+            $events = array();
         } else {
             $events = $data['events'];
             unset($data['events']);
         }
-
         foreach ($events as $key => $value) {
             $value = array_merge($value, $data);
             $this->triggerActivityLearnLogListener($activity, $key, $value);

@@ -24,24 +24,49 @@ use Topxia\Service\Common\ServiceKernel;
 
 class StudentManageController extends BaseController
 {
-    public function studentsAction($courseSetId, $courseId)
+    public function studentsAction(Request $request, $courseSetId, $courseId)
     {
         $courseSet  = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course     = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $students   = $this->getCourseService()->findStudentsByCourseId($courseId);
         $followings = $this->findCurrentUserFollowings();
         $processes  = $this->calculateUserLearnProgresses($course['id']);
 
-        return $this->render(
-            'course-manage/student/index.html.twig',
-            array(
-                'courseSet'  => $courseSet,
-                'course'     => $course,
-                'students'   => $students,
-                'followings' => $followings,
-                'processes'  => $processes,
-            )
+        $keyword = $request->query->get('keyword', '');
+
+        $conditions = array(
+            'courseId' => $course['id'],
+            'role'     => 'student'
         );
+
+        if (!empty($keyword)) {
+            $conditions['userIds'] = $this->getUserIds($keyword);
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseMemberService()->countMembers($conditions),
+            20
+        );
+
+        $members = $this->getCourseMemberService()->searchMembers(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $userIds = ArrayToolkit::column($members, 'userId');
+        $users   = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('course-manage/student/index.html.twig', array(
+            'courseSet'  => $courseSet,
+            'course'     => $course,
+            'students'   => $members,
+            'followings' => $followings,
+            'processes'  => $processes,
+            'users'      => $users,
+            'paginator'  => $paginator
+        ));
     }
 
     public function findCurrentUserFollowings()
@@ -701,14 +726,9 @@ class StudentManageController extends BaseController
 
     private function getUserIds($keyword)
     {
-        $userIds = array();
-
         if (SimpleValidator::email($keyword)) {
             $user = $this->getUserService()->getUserByEmail($keyword);
-
-            $userIds[] = $user ? $user['id'] : null;
-
-            return $userIds;
+            return $user ? array($user['id']) : array(-1);
         } elseif (SimpleValidator::mobile($keyword)) {
             $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
             $profileUsers       = $this->getUserService()->searchUserProfiles(
@@ -725,14 +745,10 @@ class StudentManageController extends BaseController
 
             $userIds = array_unique($userIds);
 
-            $userIds = $userIds ? $userIds : null;
-
-            return $userIds;
+            return $userIds ? $userIds : array(-1);
         } else {
-            $user      = $this->getUserService()->getUserByNickname($keyword);
-            $userIds[] = $user ? $user['id'] : null;
-
-            return $userIds;
+            $user = $this->getUserService()->getUserByNickname($keyword);
+            return $user ? array($user['id']) : array(-1);
         }
     }
 

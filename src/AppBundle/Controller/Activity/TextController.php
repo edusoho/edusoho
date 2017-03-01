@@ -8,10 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TextController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $activity)
     {
-        $activity = $this->getActivityService()->getActivity($id);
-
         if (empty($activity)) {
             throw $this->createNotFoundException('activity not found');
         }

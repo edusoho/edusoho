@@ -65,6 +65,8 @@ interface TaskService
 
     public function doTask($taskId, $time = self::LEARN_TIME_STEP);
 
+    public function watchTask($taskId, $watchTime = self::WATCH_TIME_STEP);
+
     public function finishTask($taskId);
 
     public function isFinished($taskId);

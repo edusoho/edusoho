@@ -2,16 +2,17 @@
 
 namespace AppBundle\Controller\My;
 
+use AppBundle\Common\Paginator;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
-use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\Course\CourseBaseController;
 
 class CourseController extends CourseBaseController
 {
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         if ($this->getCurrentUser()->isTeacher()) {
             return $this->redirect($this->generateUrl('my_teaching_course_sets'));
@@ -41,7 +42,7 @@ class CourseController extends CourseBaseController
         ));
     }
 
-    public function learnedAction(Request $request)
+    public function learnedAction()
     {
         $currentUser = $this->getCurrentUser();
         $paginator   = new Paginator(
@@ -72,14 +73,13 @@ class CourseController extends CourseBaseController
         ));
     }
 
-
-    public function headerForMemberAction(Request $request, $course, $member)
+    public function headerForMemberAction($course, $member)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
         $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published'));
-        $progress  = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
+        $progress  = $taskResultCount  = $toLearnTasks  = $taskPerDay  = $planStudyTaskCount  = $planProgressProgress  = 0;
 
         $user = $this->getUser();
         if ($taskCount && empty($member['previewAs'])) {
@@ -119,7 +119,8 @@ class CourseController extends CourseBaseController
             'taskPerDay'           => $taskPerDay,
             'planStudyTaskCount'   => $planStudyTaskCount,
             'planProgressProgress' => $planProgressProgress,
-            'isUserFavorite'       => $isUserFavorite
+            'isUserFavorite'       => $isUserFavorite,
+            'marketingPage'        => 0
         ));
     }
 
@@ -135,10 +136,16 @@ class CourseController extends CourseBaseController
             )));
         }
 
+        $classroom = array();
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        }
+
         return $this->render('course/course-show.html.twig', array(
-            'tab'    => $tab,
-            'member' => $member,
-            'course' => $course
+            'tab'       => $tab,
+            'member'    => $member,
+            'course'    => $course,
+            'classroom' => $classroom
         ));
     }
 
@@ -197,5 +204,13 @@ class CourseController extends CourseBaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }
