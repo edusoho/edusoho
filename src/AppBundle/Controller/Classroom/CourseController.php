@@ -167,11 +167,16 @@ class CourseController extends BaseController
                 $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
 
                 $courseSet['tags'] = ArrayToolkit::column($tags, 'id');
-                $userIds           = array_merge($userIds, array($courseSet['creator']));
             }
+            $userIds = array_merge($userIds, array($courseSet['creator']));
         }
 
-        return $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        if (!empty($users)) {
+            $users = ArrayToolkit::index($users, 'id');
+        }
+
+        return $users;
     }
 
     private function previewAsMember($previewAs, $member, $classroom)
