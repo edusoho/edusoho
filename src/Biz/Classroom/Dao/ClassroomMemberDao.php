@@ -29,4 +29,6 @@ interface ClassroomMemberDao extends GeneralDaoInterface
     public function findMemberIdsByClassroomId($classroomId);
 
     public function findByUserId($userId);
+
+    public function countMembersByMobileNotEmptyAndClassroomId($classroomId, $userLocked = 0);
 }

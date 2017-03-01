@@ -176,4 +176,5 @@ interface ClassroomService
 
     public function countCoursesByClassroomId($classroomId);
 
+    public function countMembersByMobileNotEmptyAndClassroomId($classroomId, $locked = 0);
 }
