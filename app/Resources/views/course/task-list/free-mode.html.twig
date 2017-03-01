@@ -20,7 +20,7 @@
             <i class="es-icon
               {% if task_lock %}
               es-icon-lock
-              {% elseif  not task.result|default(null) or(member is empty)  %}
+              {% elseif  not task.result|default(null) or(member is empty) %}
               es-icon-undone-check color-gray
               {% elseif task.result.status == 'start' %}
               es-icon-doing color-primary
@@ -28,25 +28,38 @@
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu"></i>
-            {% if task.status == 'published' %}    
-              <a class="text-overflow title" {% if member or task.isFree  %} href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}" {% else %} href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" {% endif %}>
+
+            {% if task.status == 'published' %}
+              <a class="text-overflow title"
+                {% if member %}
+                  href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}"
+                {% else %}
+                  href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                {% endif %}>
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </a>
               <span class="right-menu color-gray mouse-leave">
                 {{ task.activity.length|default(0)|activity_length_format }}
                 {% set meta = activity_meta(task.activity.mediaType) %}
-                <i class="{{ meta.icon }} color-gray ml10" data-toggle="tooltip" data-placement="top" title=""data-original-title="{{ meta.name }}任务" data-container="body"></i>
+                <i class="{{ meta.icon }} color-gray ml10" data-toggle="tooltip" data-placement="top" title=""
+                   data-original-title="{{ meta.name }}任务" data-container="body"></i>
               </span>
               <span class="right-menu mouse-enter">
-                
-                {% if member %}
-                  <a class="btn btn-primary" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">立即学习</a>
-                {% elseif task.isFree %}
-                  <a class="btn btn-primary" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">免费学习</a>
+              {% if not member %}
+                {% if  task.isFree %}
+                  <a class="btn btn-primary" href="#modal" data-toggle="modal"
+                     data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                     style="margin-top:-8px">免费学习</a>
                 {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
-                   <a class="btn btn-primary" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}" style="margin-top:-8px">试看</a>
+                  <a class="btn btn-warning" href="#modal" data-toggle="modal"
+                     data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                     style="margin-top:-8px">免费试看</a>
+                {% elseif  not task.isFree %}
+                  <a class="btn btn-primary" href="#modal" data-toggle="modal"
+                     data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                     style="margin-top:-8px">立即购买</a>
                 {% endif %}
-
+              {% endif %}
               </span>
             {% else %}
               <span class="text-overflow title">

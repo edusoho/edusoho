@@ -60,7 +60,6 @@ class VideoController extends BaseController implements ActivityActionInterface
                 $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
             }
         }
-
         return $this->render('activity/video/preview.html.twig', array(
             'activity' => $activity,
             'course'   => $course,
@@ -146,7 +145,7 @@ class VideoController extends BaseController implements ActivityActionInterface
         $watchTime = $this->getActivityLearnLogService()->sumWatchTimeByActivityIdAndUserId($activity['id'], $user['id']);
 
         $course      = $this->getCourseService()->getCourse($activity['fromCourseId']);
-        $watchStatus = array();
+        $watchStatus = array('status' => 'ok');
         if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
 
             //只有视频课程才限制观看时长
