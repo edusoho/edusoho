@@ -58,15 +58,15 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             ),
             //所属班级
             'belongClassroom'    => array(
-                'uri'             => 'course/widgets/belong-classroom.html.twig',
-                'renderType'      => 'include',
-                'classroomCourse' => true //班级课程才会显示
+                'uri'        => 'course/widgets/belong-classroom.html.twig',
+                'renderType' => 'include',
+                'showMode'   => 'classroom' //班级课程才会显示
             ),
             //推荐班级
             'recommendClassroom' => array(
-                'uri'             => 'course/widgets/recommend-classroom.html.twig',
-                'renderType'      => 'include',
-                'classroomCourse' => true //班级课程才会显示
+                'uri'        => 'course/widgets/recommend-classroom.html.twig',
+                'renderType' => 'include',
+                'showMode'   => 'course' //普通课程才会显示
             ),
             //教学团队
             'teachers'           => array(
