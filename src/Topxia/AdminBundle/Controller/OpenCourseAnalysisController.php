@@ -272,11 +272,11 @@ class OpenCourseAnalysisController extends BaseController
         unset($conditions['startTime']);
         unset($conditions['endTime']);
         $targetIds = $this->getRefererLogService()->findTargetIds($conditions);
-        $courseIds = $this->getOpenCourseService()->findCoursesByIds($targetIds);
+        $courses = $this->getOpenCourseService()->findCoursesByIds($targetIds);
 
         $paginator = new Paginator(
             $this->get('request'),
-            count($courseIds),
+            count($courses),
             10
         );
 

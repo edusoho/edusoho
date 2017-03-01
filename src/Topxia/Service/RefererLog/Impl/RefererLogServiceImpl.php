@@ -84,16 +84,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
     public function findTargetIds($conditions)
     {
         $result = $this->getRefererLogDao()->findTargetIds($conditions);
-        return $this->dealTargetIdResult($result);
-    }
-
-    protected function dealTargetIdResult($result)
-    {
-        $targetIds = array();
-        foreach ($result as $value) {
-            $targetIds[] = $value['targetId'];
-        }
-        return $targetIds;
+        return ArrayToolkit::column($result, 'targetId');
     }
 
     protected function prepareConditions($conditions)
