@@ -306,7 +306,7 @@ class TaskController extends BaseController
     protected function tryLearnTask($courseId, $taskId, $preview = false)
     {
         if ($preview) {
-            if ($this->canPreviewCourse($courseId)) {
+            if ($this->getCourseService()->hasCourseManagerRole($courseId)) {
                 $task = $this->getTaskService()->getTask($taskId);
             } else {
                 throw $this->createNotFoundException('you can not preview this task ');
@@ -324,31 +324,7 @@ class TaskController extends BaseController
 
         return $task;
     }
-
-    private function canPreviewCourse($courseId)
-    {
-        $user   = $this->getCurrentUser();
-        $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
-
-        if (empty($member)) {
-            return false;
-        }
-
-        $course    = $this->getCourseService()->getCourse($courseId);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
-        if ($user->isSuperAdmin()) {
-            return true;
-        } elseif ($user['id'] == $courseSet['creator']) {
-            return true;
-        } elseif (in_array($user->getId(), $course['teacherIds'])) {
-            return true;
-        } elseif ($member['role'] == 'teacher') {
-            return true;
-        }
-        return false;
-    }
-
+    
     /**
      * @return CourseService
      */
