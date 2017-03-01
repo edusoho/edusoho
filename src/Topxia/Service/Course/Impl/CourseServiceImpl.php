@@ -2941,7 +2941,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $learnProgress;
     }
 
-    public function tryLookable($courseId)
+    public function canTryLook($courseId)
     {
         $course = $this->getCourseDao()->getCourse($courseId);
         $user = $this->getCurrentUser();

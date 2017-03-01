@@ -34,7 +34,7 @@
       <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
       {% endif %}
       <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
-      {% if try_lookable(course.id) %}
+      {% if can_try_look(course.id) %}
         <span class="comment"><i class="es-icon es-icon-playcircleoutline"></i>试看</span>
       {% endif %}
       {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}

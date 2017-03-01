@@ -127,7 +127,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
             new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
-            new \Twig_SimpleFunction('try_lookable', array($this, 'tryLookable'))
+            new \Twig_SimpleFunction('can_try_look', array($this, 'canTryLook'))
         );
     }
 
@@ -1321,9 +1321,9 @@ class WebExtension extends \Twig_Extension
         return NumberToolkit::roundUp($price);
     }
 
-    public function tryLookable($courseId)
+    public function canTryLook($courseId)
     {
-        return $this->getCourseService()->tryLookable($courseId);
+        return $this->getCourseService()->canTryLook($courseId);
     }
 
     public function getCategoryChoices($groupName, $indent = '　')

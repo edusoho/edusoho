@@ -412,5 +412,5 @@ interface CourseService
 
     public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
 
-    public function tryLookable($courseId);
+    public function canTryLook($courseId);
 }
