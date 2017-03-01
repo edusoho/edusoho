@@ -2941,6 +2941,31 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $learnProgress;
     }
 
+    public function canTryLook($courseId)
+    {
+        $course = $this->getCourseDao()->getCourse($courseId);
+        $user = $this->getCurrentUser();
+        
+        if ($user->isLogin()) {
+            $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
+            if (empty($member)) {
+                return true;
+            }
+        }
+        
+        if ($course['tryLookable']) {
+            return true;
+        }
+
+        $lessons = $this->getLessonDao()->findLessonsByCourseId($course['id']);
+        foreach ($lessons as $lesson) {
+            if ($lesson['free']) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected function changeQuestionTarget($courseId, $lessonId)
     {
         $sourceTarget = "course-{$courseId}/lesson-{$lessonId}";

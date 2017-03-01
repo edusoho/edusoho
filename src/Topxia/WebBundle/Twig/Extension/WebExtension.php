@@ -126,7 +126,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
             new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
-            new \Twig_SimpleFunction('cdn', array($this, 'getCdn'))
+            new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
+            new \Twig_SimpleFunction('can_try_look', array($this, 'canTryLook'))
         );
     }
 
@@ -373,6 +374,11 @@ class WebExtension extends \Twig_Extension
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    private function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
     public function getAccount($userId)
@@ -1313,6 +1319,11 @@ class WebExtension extends \Twig_Extension
     public function getSetPrice($price)
     {
         return NumberToolkit::roundUp($price);
+    }
+
+    public function canTryLook($courseId)
+    {
+        return $this->getCourseService()->canTryLook($courseId);
     }
 
     public function getCategoryChoices($groupName, $indent = '　')
