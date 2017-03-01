@@ -164,6 +164,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function updateSeq($id, $fields)
     {
+
         $fields = ArrayToolkit::parts(
             $fields,
             array(
@@ -345,7 +346,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId)
     {
-        $conditions     = array(
+        $conditions = array(
             'userId' => $userId,
         );
         $myTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions, 0, PHP_INT_MAX, true);
@@ -409,12 +410,26 @@ class TaskServiceImpl extends BaseService implements TaskService
         $this->getTaskResultService()->waveLearnTime($taskResult['id'], $time);
     }
 
+    public function watchTask($taskId, $watchTime = TaskService::WATCH_TIME_STEP)
+    {
+        $task = $this->tryTakeTask($taskId);
+
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+
+        if (empty($taskResult)) {
+            throw $this->createAccessDeniedException("task #{taskId} can not do. ");
+        }
+
+        $this->getTaskResultService()->waveWatchTime($taskResult['id'], $watchTime);
+    }
+
     public function finishTask($taskId)
     {
         $this->tryTakeTask($taskId);
 
         if (!$this->isFinished($taskId)) {
-            throw $this->createAccessDeniedException("can not finish task #{$taskId}.");
+            throw $this->createAccessDeniedException("can not finish task #{
+        $taskId}.");
         }
 
         return $this->finishTaskResult($taskId);
@@ -625,6 +640,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function canLearnTask($taskId)
     {
         $task = $this->getTask($taskId);
+        list($course) = $this->getCourseService()->tryTakeCourse($task['courseId']);
         //check if has permission to course and task
         $isAllowed = false;
         if ($task['isFree']) {
@@ -811,7 +827,8 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function trigger($id, $eventName, $data = array())
     {
-        $task = $this->getTask($id);
+        $task         = $this->getTask($id);
+        $data['task'] = $task;
         $this->getActivityService()->trigger($task['activityId'], $eventName, $data);
 
         return $this->getTaskResultService()->getUserTaskResultByTaskId($id);
@@ -821,6 +838,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         return $this->getTaskDao()->sumCourseSetLearnedTimeByCourseSetId($courseSetId);
     }
+
 
     public function analysisTaskDataByTime($startTime, $endTime)
     {

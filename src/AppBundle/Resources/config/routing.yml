@@ -1547,6 +1547,10 @@ course_activity_trigger:
     defaults: { _controller: AppBundle:Activity/Activity:trigger }
     methods: [POST]
 
+course_acitvity_watch:
+    path:  /course/{courseId}/activity/{id}/watch
+    defaults: { _controller: AppBundle:Activity/Video:watch}
+
 course_activity_download:
     path: /course/{courseId}/activiy/{activityId}/download
     defaults: { _controller: AppBundle:Activity/Download:downloadFile }
