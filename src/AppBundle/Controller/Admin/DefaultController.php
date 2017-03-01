@@ -346,10 +346,11 @@ class DefaultController extends BaseController
     public function questionRemindTeachersAction(Request $request, $courseId, $questionId)
     {
         $course   = $this->getCourseService()->getCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $question = $this->getThreadService()->getThread($courseId, $questionId);
 
         $message = array(
-            'courseTitle'   => $course['title'],
+            'courseTitle'   => $courseSet['title'],
             'courseId'      => $course['id'],
             'threadId'      => $question['id'],
             'questionTitle' => strip_tags($question['title'])

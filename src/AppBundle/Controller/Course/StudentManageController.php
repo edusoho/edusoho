@@ -2,25 +2,25 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Common\Paginator;
-use AppBundle\Common\ExportHelp;
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Order\Service\OrderService;
+use AppBundle\Common\ExportHelp;
+use AppBundle\Common\Paginator;
 use AppBundle\Common\SimpleValidator;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MemberService;
-use Biz\System\Service\SettingService;
-use Biz\User\Service\UserFieldService;
-use Biz\Task\Service\TaskResultService;
 use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseSetService;
-use Topxia\Service\Common\ServiceKernel;
-use Biz\Activity\Service\ActivityService;
-use Biz\Testpaper\Service\TestpaperService;
-use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
+use Biz\Order\Service\OrderService;
+use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\UserFieldService;
+use Biz\User\Service\UserService;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\Common\ServiceKernel;
 
 class StudentManageController extends BaseController
 {
@@ -32,13 +32,16 @@ class StudentManageController extends BaseController
         $followings = $this->findCurrentUserFollowings();
         $processes  = $this->calculateUserLearnProgresses($course['id']);
 
-        return $this->render('course-manage/student/index.html.twig', array(
-            'courseSet'  => $courseSet,
-            'course'     => $course,
-            'students'   => $students,
-            'followings' => $followings,
-            'processes'  => $processes
-        ));
+        return $this->render(
+            'course-manage/student/index.html.twig',
+            array(
+                'courseSet'  => $courseSet,
+                'course'     => $course,
+                'students'   => $students,
+                'followings' => $followings,
+                'processes'  => $processes,
+            )
+        );
     }
 
     public function findCurrentUserFollowings()
@@ -87,34 +90,53 @@ class StudentManageController extends BaseController
             $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
         }
 
-        return $this->render('course-manage/student/quit-records.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course,
-            'refunds'   => $refunds,
-            'paginator' => $paginator,
-            'role'      => 'student'
-        ));
+        return $this->render(
+            'course-manage/student/quit-records.html.twig',
+            array(
+                'courseSet' => $courseSet,
+                'course'    => $course,
+                'refunds'   => $refunds,
+                'paginator' => $paginator,
+                'role'      => 'student',
+            )
+        );
     }
 
     public function createCourseStudentAction(Request $request, $courseSetId, $courseId)
     {
         if ($request->isMethod('POST')) {
-            $data           = $request->request->all();
-            $user           = $this->getUserService()->getUserByLoginField($data['queryfield']);
+            $data = $request->request->all();
+            $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
+
+            if ($this->getCurrentUser()->isAdmin()) {
+                $data['isAdminAdded'] = true;
+            }
+
             $data['userId'] = $user['id'];
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
-            return $this->redirect($this->generateUrl('course_set_manage_course_students', array('courseSetId' => $courseSetId, 'courseId' => $courseId)));
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'course_set_manage_course_students',
+                    array('courseSetId' => $courseSetId, 'courseId' => $courseId)
+                )
+            );
         }
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        return $this->render('course-manage/student/add-modal.html.twig', array(
-            'course'      => $course,
-            'courseSetId' => $courseSetId
-        ));
+
+        return $this->render(
+            'course-manage/student/add-modal.html.twig',
+            array(
+                'course'      => $course,
+                'courseSetId' => $courseSetId,
+            )
+        );
     }
 
     public function removeCourseStudentAction($courseSetId, $courseId, $userId)
     {
         $this->getCourseMemberService()->removeCourseStudent($courseId, $userId);
+
         return $this->createJsonResponse(array('success' => true));
     }
 
@@ -126,15 +148,20 @@ class StudentManageController extends BaseController
         if ('POST' == $request->getMethod()) {
             $data   = $request->request->all();
             $member = $this->getCourseMemberService()->remarkStudent($course['id'], $user['id'], $data['remark']);
+
             return $this->createStudentTrResponse($course, $member);
         }
         $default = $this->getSettingService()->get('default', array());
-        return $this->render('course-manage/student/remark-modal.html.twig', array(
-            'member'  => $member,
-            'user'    => $user,
-            'course'  => $course,
-            'default' => $default
-        ));
+
+        return $this->render(
+            'course-manage/student/remark-modal.html.twig',
+            array(
+                'member'  => $member,
+                'user'    => $user,
+                'course'  => $course,
+                'default' => $default,
+            )
+        );
     }
 
     public function addMemberExpiryDaysAction(Request $request, $courseId, $userId)
@@ -144,14 +171,19 @@ class StudentManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $this->getCourseMemberService()->addMemberExpiryDays($courseId, $userId, $fields['expiryDay']);
+
             return $this->createJsonResponse(true);
         }
         $default = $this->getSettingService()->get('default', array());
-        return $this->render('course-manage/student/set-expiryday-modal.html.twig', array(
-            'course'  => $course,
-            'user'    => $user,
-            'default' => $default
-        ));
+
+        return $this->render(
+            'course-manage/student/set-expiryday-modal.html.twig',
+            array(
+                'course'  => $course,
+                'user'    => $user,
+                'default' => $default,
+            )
+        );
     }
 
     public function checkStudentAction(Request $request, $courseSetId, $courseId)
@@ -175,6 +207,7 @@ class StudentManageController extends BaseController
                 }
             }
         }
+
         return $this->createJsonResponse($response);
     }
 
@@ -204,11 +237,14 @@ class StudentManageController extends BaseController
             }
         }
 
-        return $this->render('course-manage/student/show-modal.html.twig', array(
-            'user'       => $user,
-            'profile'    => $profile,
-            'userFields' => $userFields
-        ));
+        return $this->render(
+            'course-manage/student/show-modal.html.twig',
+            array(
+                'user'       => $user,
+                'profile'    => $profile,
+                'userFields' => $userFields,
+            )
+        );
     }
 
     public function definedShowAction($courseId, $userId)
@@ -247,11 +283,14 @@ class StudentManageController extends BaseController
             $userinfoFields = $course['userinfoFields'];
         }
 
-        return $this->render('course-manage/student/defined-show-modal.html.twig', array(
-            'profile'        => $profile,
-            'userFields'     => $userFields,
-            'userinfoFields' => $userinfoFields
-        ));
+        return $this->render(
+            'course-manage/student/defined-show-modal.html.twig',
+            array(
+                'profile'        => $profile,
+                'userFields'     => $userFields,
+                'userinfoFields' => $userinfoFields,
+            )
+        );
     }
 
     public function studyProcessAction($courseSetId, $courseId, $userId)
@@ -269,20 +308,24 @@ class StudentManageController extends BaseController
         $discussionCount = $this->getCourseMemberService()->countDiscussionsByCourseIdAndUserId($courseId, $userId);
         $postCount       = $this->getCourseMemberService()->countPostsByCourseIdAndUserId($courseId, $userId);
 
-        list($daysCount, $learnedTime, $learnedTimePerDay) = $this->getActivityLearnLogService()->calcLearnProcessByCourseIdAndUserId($courseId, $userId);
+        list($daysCount, $learnedTime, $learnedTimePerDay) = $this->getActivityLearnLogService(
+        )->calcLearnProcessByCourseIdAndUserId($courseId, $userId);
 
-        return $this->render('course-manage/student/process-modal.html.twig', array(
-            'course'            => $course,
-            'student'           => $student,
-            'user'              => $user,
-            'questionCount'     => $questionCount,
-            'activityCount'     => $activityCount,
-            'discussionCount'   => $discussionCount,
-            'postCount'         => $postCount,
-            'daysCount'         => $daysCount,
-            'learnedTime'       => round($learnedTime / 60, 2),
-            'learnedTimePerDay' => round($learnedTimePerDay / 60, 2)
-        ));
+        return $this->render(
+            'course-manage/student/process-modal.html.twig',
+            array(
+                'course'            => $course,
+                'student'           => $student,
+                'user'              => $user,
+                'questionCount'     => $questionCount,
+                'activityCount'     => $activityCount,
+                'discussionCount'   => $discussionCount,
+                'postCount'         => $postCount,
+                'daysCount'         => $daysCount,
+                'learnedTime'       => round($learnedTime / 60, 2),
+                'learnedTimePerDay' => round($learnedTimePerDay / 60, 2),
+            )
+        );
     }
 
     public function reportCardAction($course, $user)
@@ -295,6 +338,7 @@ class StudentManageController extends BaseController
     public function exportCsvAction(Request $request, $courseSetId, $courseId)
     {
         $fileName = sprintf("course-%s-students-(%s).csv", $courseId, date('Y-n-d'));
+
         return ExportHelp::exportCsv($request, $fileName);
     }
 
@@ -307,7 +351,12 @@ class StudentManageController extends BaseController
 
         list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
 
-        list($title, $students, $courseMemberCount) = $this->getExportContent($courseId, $start, $limit, $exportAllowCount);
+        list($title, $students, $courseMemberCount) = $this->getExportContent(
+            $courseId,
+            $start,
+            $limit,
+            $exportAllowCount
+        );
 
         $file = '';
         if ($start == 0) {
@@ -323,26 +372,33 @@ class StudentManageController extends BaseController
             array(
                 'status'   => $status,
                 'fileName' => $file,
-                'start'    => $start + $limit
+                'start'    => $start + $limit,
             )
         );
     }
 
     protected function getExportContent($id, $start, $limit, $exportAllowCount)
     {
-        $gender = array('female' => $this->getServiceKernel()->trans('女'), 'male' => $this->getServiceKernel()->trans('男'), 'secret' => $this->getServiceKernel()->trans('秘密'));
+        $gender = array(
+            'female' => $this->getServiceKernel()->trans('女'),
+            'male'   => $this->getServiceKernel()->trans('男'),
+            'secret' => $this->getServiceKernel()->trans('秘密'),
+        );
 
         $userinfoFields = array();
 
         $course = $this->getCourseService()->getCourse($id);
 
         if (isset($courseSetting['userinfoFields'])) {
-            $userinfoFields = array_diff($courseSetting['userinfoFields'], array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin'));
+            $userinfoFields = array_diff(
+                $courseSetting['userinfoFields'],
+                array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin')
+            );
         }
 
         $condition = array(
             'courseId' => $course['id'],
-            'role'     => 'student'
+            'role'     => 'student',
         );
 
         $courseMemberCount = $this->getCourseMemberService()->countMembers($condition);
@@ -351,7 +407,12 @@ class StudentManageController extends BaseController
         if ($courseMemberCount < ($start + $limit + 1)) {
             $limit = $courseMemberCount - $start;
         }
-        $courseMembers = $this->getCourseMemberService()->searchMembers($condition, array('createdTime' => 'DESC'), $start, $limit);
+        $courseMembers = $this->getCourseMemberService()->searchMembers(
+            $condition,
+            array('createdTime' => 'DESC'),
+            $start,
+            $limit
+        );
         $userFields    = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         $fields['weibo'] = $this->getServiceKernel()->trans('微博');
@@ -439,10 +500,11 @@ class StudentManageController extends BaseController
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
         $percent = intval($member['learnedNum'] / $course['taskNum'] * 100).'%';
+
         return array(
             'percent' => $percent,
             'number'  => $member['learnedNum'],
-            'total'   => $course['taskNum']
+            'total'   => $course['taskNum'],
         );
     }
 
@@ -465,15 +527,19 @@ class StudentManageController extends BaseController
         $isFollowing                = $this->getUserService()->isFollowed($curUser['id'], $student['userId']);
         $progress                   = $this->calculateUserLearnProgress($course, $student);
         $default                    = $this->getSettingService()->get('default', array());
-        return $this->render('course-manage/student/tr.html.twig', array(
-            'course'                     => $course,
-            'student'                    => $student,
-            'user'                       => $user,
-            'progress'                   => $progress,
-            'isFollowing'                => $isFollowing,
-            'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
-            'default'                    => $default
-        ));
+
+        return $this->render(
+            'course-manage/student/tr.html.twig',
+            array(
+                'course'                     => $course,
+                'student'                    => $student,
+                'user'                       => $user,
+                'progress'                   => $progress,
+                'isFollowing'                => $isFollowing,
+                'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
+                'default'                    => $default,
+            )
+        );
     }
 
     private function createReportCard($course, $user)
@@ -505,14 +571,14 @@ class StudentManageController extends BaseController
                 $activities[] = array(
                     'id'      => $activity['id'],
                     'mediaId' => $activity['mediaId'],
-                    'name'    => $activity['title']
+                    'name'    => $activity['title'],
                 );
             } elseif ($activity['mediaType'] == 'testpaper') {
                 $testpapersCount += 1;
                 $activities[] = array(
                     'id'      => $activity['id'],
                     'mediaId' => $activity['ext']['mediaId'],
-                    'name'    => $activity['title']
+                    'name'    => $activity['title'],
                 );
             }
         }
@@ -522,24 +588,39 @@ class StudentManageController extends BaseController
         if (!empty($activities)) {
             $testIds = ArrayToolkit::column($activities, 'mediaId');
 
-            $allTests = $this->getTestpaperService()->searchTestpapers(array(
-                'ids'   => $testIds,
-                'types' => array('homework', 'testpaper')
-            ), array('createdTime' => 'ASC'), 0, PHP_INT_MAX);
+            $allTests = $this->getTestpaperService()->searchTestpapers(
+                array(
+                    'ids'   => $testIds,
+                    'types' => array('homework', 'testpaper'),
+                ),
+                array('createdTime' => 'ASC'),
+                0,
+                PHP_INT_MAX
+            );
 
-            $finishedTargets = $this->getTestpaperService()->searchTestpaperResults(array(
-                'courseId' => $course['id'],
-                'userId'   => $user['id'],
-                'status'   => 'finished',
-                'types'    => array('homework', 'testpaper')
-            ), array('lessonId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
+            $finishedTargets = $this->getTestpaperService()->searchTestpaperResults(
+                array(
+                    'courseId' => $course['id'],
+                    'userId'   => $user['id'],
+                    'status'   => 'finished',
+                    'types'    => array('homework', 'testpaper'),
+                ),
+                array('lessonId' => 'ASC', 'beginTime' => 'ASC'),
+                0,
+                PHP_INT_MAX
+            );
 
-            $reviewingTargets = $this->getTestpaperService()->searchTestpaperResults(array(
-                'courseId' => $course['id'],
-                'userId'   => $user['id'],
-                'status'   => 'reviewing',
-                'types'    => array('homework', 'testpaper')
-            ), array('lessonId' => 'ASC', 'beginTime' => 'ASC'), 0, PHP_INT_MAX);
+            $reviewingTargets = $this->getTestpaperService()->searchTestpaperResults(
+                array(
+                    'courseId' => $course['id'],
+                    'userId'   => $user['id'],
+                    'status'   => 'reviewing',
+                    'types'    => array('homework', 'testpaper'),
+                ),
+                array('lessonId' => 'ASC', 'beginTime' => 'ASC'),
+                0,
+                PHP_INT_MAX
+            );
         }
 
         if (!empty($finishedTargets)) {
@@ -626,10 +707,16 @@ class StudentManageController extends BaseController
             $user = $this->getUserService()->getUserByEmail($keyword);
 
             $userIds[] = $user ? $user['id'] : null;
+
             return $userIds;
         } elseif (SimpleValidator::mobile($keyword)) {
             $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
-            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id' => 'DESC'), 0, PHP_INT_MAX);
+            $profileUsers       = $this->getUserService()->searchUserProfiles(
+                array('tel' => $keyword),
+                array('id' => 'DESC'),
+                0,
+                PHP_INT_MAX
+            );
             $mobileNameUser     = $this->getUserService()->getUserByNickname($keyword);
             $userIds            = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
 
@@ -639,10 +726,12 @@ class StudentManageController extends BaseController
             $userIds = array_unique($userIds);
 
             $userIds = $userIds ? $userIds : null;
+
             return $userIds;
         } else {
             $user      = $this->getUserService()->getUserByNickname($keyword);
             $userIds[] = $user ? $user['id'] : null;
+
             return $userIds;
         }
     }
