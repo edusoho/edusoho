@@ -93,11 +93,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         );
 
         $forMemberWidgets = array(
-            'belongClassroom'    => $widgets['belongClassroom'],
-            'recommendClassroom' => $widgets['recommendClassroom'],
-            'teachers'           => $widgets['teachers'],
-            'newestStudents'     => $widgets['newestStudents'],
-            'studentActivity'    => $widgets['studentActivity']
+            'belongClassroom' => $widgets['belongClassroom'],
+            'teachers'        => $widgets['teachers'],
+            'newestStudents'  => $widgets['newestStudents'],
+            'studentActivity' => $widgets['studentActivity']
         );
 
         return array(
