@@ -34,6 +34,8 @@ Unit Test With PHP 5.5:
     - mysql:5.5
   script:
     - phpunit -c app/
+  only:
+    - test
 
 Unit Test With PHP 7.0:
   stage: test
@@ -58,7 +60,6 @@ Functional Test With 5.5:
     - selenium/standalone-chrome:latest
   script:
     - sh tests/functional/bin/start.sh;
-    - ps aux|grep nginx;
     - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/functional
   only:
       - feature/x8-function-test
