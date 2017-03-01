@@ -131,6 +131,10 @@ abstract class BaseController extends Controller
 
     private function isSelfHost($request, $url)
     {
+        if (empty($url)) {
+            return true;
+        }
+
         $host = $request->getHost();
         preg_match("/^(http[s]:\/\/)?([^\/]+)/i", $url, $matches);
         $ulrHost = empty($matches[2]) ? '' : $matches[2];
@@ -145,10 +149,8 @@ abstract class BaseController extends Controller
             $targetPath = $request->getSession()->get('_target_path');
         } else {
             $targetPath = $request->headers->get('Referer');
-            if (!empty($targetPath)) {
-                if ($this->isSelfHost($request, $targetPath) === false) {
-                    $targetPath = '';
-                }
+            if ($this->isSelfHost($request, $targetPath) === false) {
+                $targetPath = '';
             }
         }
 
