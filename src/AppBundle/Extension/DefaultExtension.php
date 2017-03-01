@@ -47,39 +47,33 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     {
         $widgets = array(
             //课程特色
-            'characteristic'     => array(
+            'characteristic'  => array(
                 'uri'        => 'AppBundle:Course/Course:characteristic',
                 'renderType' => 'render'
             ),
             //其他教学计划
-            'otherCourse'        => array(
+            'otherCourse'     => array(
                 'uri'        => 'AppBundle:Course/Course:otherCourse',
                 'renderType' => 'render'
             ),
             //所属班级
-            'belongClassroom'    => array(
+            'belongClassroom' => array(
                 'uri'             => 'course/widgets/belong-classroom.html.twig',
                 'renderType'      => 'include',
                 'classroomCourse' => true //班级课程才会显示
             ),
-            //推荐班级
-            'recommendClassroom' => array(
-                'uri'             => 'course/widgets/recommend-classroom.html.twig',
-                'renderType'      => 'include',
-                'classroomCourse' => true //班级课程才会显示
-            ),
             //教学团队
-            'teachers'           => array(
+            'teachers'        => array(
                 'uri'        => 'AppBundle:Course/Course:teachers',
                 'renderType' => 'render'
             ),
             //最新学员
-            'newestStudents'     => array(
+            'newestStudents'  => array(
                 'uri'        => 'AppBundle:Course/Course:newestStudents',
                 'renderType' => 'render'
             ),
             //学员动态
-            'studentActivity'    => array(
+            'studentActivity' => array(
                 'uri'        => 'course/widgets/student-activity.html.twig',
                 'renderType' => 'include'
             )
@@ -93,11 +87,10 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
         );
 
         $forMemberWidgets = array(
-            'belongClassroom'    => $widgets['belongClassroom'],
-            'recommendClassroom' => $widgets['recommendClassroom'],
-            'teachers'           => $widgets['teachers'],
-            'newestStudents'     => $widgets['newestStudents'],
-            'studentActivity'    => $widgets['studentActivity']
+            'belongClassroom' => $widgets['belongClassroom'],
+            'teachers'        => $widgets['teachers'],
+            'newestStudents'  => $widgets['newestStudents'],
+            'studentActivity' => $widgets['studentActivity']
         );
 
         return array(
