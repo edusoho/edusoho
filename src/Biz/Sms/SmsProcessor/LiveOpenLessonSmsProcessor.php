@@ -5,24 +5,18 @@ use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\StringToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
-class LiveOpenLessonSmsProcessor implements SmsProcessor
+class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
 {
-    protected $biz;
-
-    public function __construct(Biz $biz)
-    {
-        $this->$biz = $biz;
-    }
-
     public function getUrls($targetId, $smsType)
     {
         $lesson = $this->getOpenCourseService()->getLesson($targetId);
         $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
         $count  = 0;
 
-        $count = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id']));
+        $count = $this->getOpenCourseService()->countMembers(array('courseId' => $course['id']));
 
         global $kernel;
         $api                = CloudAPIFactory::create('root');
@@ -83,17 +77,20 @@ class LiveOpenLessonSmsProcessor implements SmsProcessor
 
     protected function getUserService()
     {
-        return $this->biz->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->biz->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 
+    /**
+     * @return OpenCourseService
+     */
     protected function getOpenCourseService()
     {
-        return $this->biz->service('OpenCourse:OpenCourseService');
+        return $this->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
     protected function getSignEncoder()

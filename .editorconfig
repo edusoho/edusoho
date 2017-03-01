@@ -1,19 +1,39 @@
-root = true
-
 [*]
-indent_style = space
-end_of_line = lf
+charset=utf-8
+end_of_line=lf
+insert_final_newline=false
+indent_style=space
+indent_size=4
 
-[*.{html,twig,less,css,js,jsx}]
-charset = utf-8
-indent_size = 2
+[{*.ng,*.sht,*.html,*.shtm,*.shtml,*.htm}]
+indent_style=space
+indent_size=2
 
-[*.php]
-charset = utf-8
-indent_size = 4
+[{.babelrc,.stylelintrc,.eslintrc,*.json,*.jsb3,*.jsb2,*.bowerrc}]
+indent_style=space
+indent_size=2
 
-[Makefile]
-indent_style = tab
+[*.twig]
+indent_style=space
+indent_size=2
 
-[{package.json,.gitlab-ci.yml}]
-indent_size = 2
+[*.js]
+indent_style=space
+indent_size=2
+
+[{jshint.json,*.jshintrc}]
+indent_style=space
+indent_size=2
+
+[{*.ddl,*.sql}]
+indent_style=space
+indent_size=2
+
+[*.less]
+indent_style=space
+indent_size=2
+
+[{*.yml,*.yaml}]
+indent_style=space
+indent_size=2
+
