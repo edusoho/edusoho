@@ -9,7 +9,7 @@
 {% block course_header_qrcode %}{% endblock %}
 
 {% block course_header_subtitle %}
-  <p class="mt10  text-overflow  mb20">{{ courseSet.subtitle }}</p>
+  <p class="text-overflow  mb10 mt10 pb10">{{ courseSet.subtitle }}</p>
 {% endblock %}
 
 {% block course_header_people_num %}{% endblock %}
@@ -56,7 +56,7 @@
       {#</div>#}
       <div class="pv20 bg-color course-detail-gray">
         {% if courseSet.type != 'live' %}
-          <div class="course-detail-nav mb10">
+          <div class="course-detail-content mb10">
             <span class="course-detail-title inline-block">教学计划</span>
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent inline-block ml5">
               {% set current_course = course %}
