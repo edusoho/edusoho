@@ -20,7 +20,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if ($classroom) {
-                $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId'], 'roles' => array('student', 'teacher')));
+                $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroom['classroomId'], 'role' => 'student'));
             }
         } else {
             $count = $this->getCourseService()->searchMemberCount(array('courseId' => $course['id']));
@@ -67,7 +67,7 @@ class LessonSmsProcessor extends BaseProcessor implements SmsProcessor
             $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
 
             if ($classroom) {
-                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId'], 'roles' => array('student', 'teacher')), array('createdTime', 'Desc'), $index, 1000);
+                $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroom['classroomId'], 'role' => 'student'), array('createdTime', 'Desc'), $index, 1000);
             }
         } else {
             $students = $this->getCourseService()->searchMembers(array('courseId' => $course['id']), array('createdTime', 'Desc'), $index, 1000);
