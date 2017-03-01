@@ -36,8 +36,8 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT m.* FROM {$this->table} m ";
-        $sql .= "JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? AND m.type = 'course'" ;
-        $sql .= "AND m.courseId = c.id AND c.parentId = 0";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ?';
+        $sql .= "AND m.courseId = c.id AND c.parentId = 0 AND m.type = 'course'";
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
         return $this->getConnection()->fetchAll($sql, array($userId));
