@@ -26,9 +26,10 @@ class StudentManageController extends BaseController
 {
     public function studentsAction(Request $request, $courseSetId, $courseId)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-        $processes = $this->calculateUserLearnProgresses($course['id']);
+        $courseSet  = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course     = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $followings = $this->findCurrentUserFollowings();
+        $processes  = $this->calculateUserLearnProgresses($course['id']);
 
         $keyword = $request->query->get('keyword', '');
 
@@ -58,13 +59,25 @@ class StudentManageController extends BaseController
         $users   = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('course-manage/student/index.html.twig', array(
-            'courseSet' => $courseSet,
-            'course'    => $course,
-            'students'  => $members,
-            'processes' => $processes,
-            'users'     => $users,
-            'paginator' => $paginator
+            'courseSet'  => $courseSet,
+            'course'     => $course,
+            'students'   => $members,
+            'followings' => $followings,
+            'processes'  => $processes,
+            'users'      => $users,
+            'paginator'  => $paginator
         ));
+    }
+
+    public function findCurrentUserFollowings()
+    {
+        $user       = $this->getCurrentUser();
+        $followings = $this->getUserService()->findAllUserFollowing($user->getId());
+        if (!empty($followings)) {
+            return ArrayToolkit::index($followings, 'id');
+        }
+
+        return array();
     }
 
     public function studentQuitRecordsAction(Request $request, $courseSetId, $courseId)

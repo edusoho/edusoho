@@ -28,15 +28,15 @@
             {% for type in questionTypes|default([]) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
-                  <td><span class="text-success">{{ accuracy[type].right }} <small>{{'道'|trans}}</small></span></td>
+                  <td><span class="color-success">{{ accuracy[type].right }} <small>{{'道'|trans}}</small></span></td>
                 {% else %}
-                  <td rowspan="4" style="vertical-align:middle"><span class="text-success" style="font-size:40px">?</span></td>
+                  <td rowspan="4" style="vertical-align:middle"><span class="color-success" style="font-size:40px">?</span></td>
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
-                  <td><span class="text-success">{{ accuracy[type].right }} <small>{{'道'|trans}}</small></span></td>
+                  <td><span class="color-success">{{ accuracy[type].right }} <small>{{'道'|trans}}</small></span></td>
                 {% else %}
-                  <td rowspan="4" style="vertical-align:middle"><span class="text-success" style="font-size:40px">?</span></td>
+                  <td rowspan="4" style="vertical-align:middle"><span class="color-success" style="font-size:40px">?</span></td>
                 {% endif %}
               {% endif %}
             {% endfor %}

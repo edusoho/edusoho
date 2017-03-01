@@ -12,6 +12,9 @@ var editor = CKEDITOR.replace('groupIntroduce', {
 editor.on('change', () => {
    $groupIntroduce.val(editor.getData());
 });
+editor.on('blur', () => {
+   $groupIntroduce.val(editor.getData());
+});
 
 let $groupCreateValidator = $userGroupForm.validate({
     currentDom: btn,

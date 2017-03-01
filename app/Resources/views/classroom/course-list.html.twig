@@ -32,7 +32,7 @@
                     {% if courseMembers[course.id] and courseMembers[course.id].learnedNum == 0 %}
                     {{'未学'|trans}}
                     {% elseif courseMembers[course.id] and courseMembers[course.id].learnedNum == course.lessonNum %}
-                    <span class="text-success">{{'已学完'|trans}}</span>
+                    <span class="color-success">{{'已学完'|trans}}</span>
                     {% elseif courseMembers[course.id] and courseMembers[course.id].learnedNum < course.lessonNum %}
                     <span class="text-info">{{'学习中'|trans}}</span>
                     {% else %}
