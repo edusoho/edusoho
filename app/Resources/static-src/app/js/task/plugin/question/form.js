@@ -66,7 +66,10 @@ export default class {
       }
     });
 
-    editor.on('change', () => {
+    editor.on( 'change', () => {
+      this.$element.find('[name="question[content]"]').val(editor.getData());
+    });
+    editor.on('blur', () => {
       this.$element.find('[name="question[content]"]').val(editor.getData());
     });
 
