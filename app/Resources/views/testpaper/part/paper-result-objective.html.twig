@@ -18,14 +18,14 @@
       <table class="table table-bordered table-condensed testpaper-result-table">
         <thead>
           <th></th>
-          {% for type in questionTypes|default([]) %}
+          {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
             <th>{{ questionTypesDict[type] }} <small class="text-muted">({{ accuracy[type].all }}{{'道'|trans}})</small></th>
           {% endfor %}
         </thead>
         <tbody>
           <tr>
             <th>{{'答对'|trans}}</th>
-            {% for type in questionTypes|default([]) %}
+            {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
                   <td><span class="color-success">{{ accuracy[type].right }} <small>{{'道'|trans}}</small></span></td>
@@ -43,7 +43,7 @@
           </tr>
           <tr>
             <th>{{'答错'|trans}}</th>
-            {% for type in questionTypes|default([]) %}
+            {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
                   <td><span class="text-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>{{'道'|trans}}</small></span></td>
@@ -67,7 +67,7 @@
           </tr>
           <tr>
             <th>{{'未答'|trans}}</th>
-            {% for type in questionTypes|default([]) %}
+            {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
                   <td><span class="text-muted">{{ accuracy[type].noAnswer }} <small>{{'道'|trans}}</small></span></td>
@@ -81,7 +81,7 @@
           </tr>
           <tr>
             <th>{{'得分'|trans}}</th>
-            {% for type in questionTypes|default([]) %}
+            {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
                   <td><span class="text-score">{{ accuracy[type].score }} <small>{{'分'|trans}}</small></span></td>
