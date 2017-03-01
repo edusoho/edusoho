@@ -256,6 +256,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    public function findUserLearnCoursesNotInClassroomWithType($userId, $type, $start, $limit, $onlyPublished = true)
+    {
+        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndType($userId, 'student', $type, $start, $limit, $onlyPublished);
+
+        $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
+
+        return $courses;
+    }
+
     // TODO 和findUserLearnCourseCountNotInClassroom合并
     public function findUserLearnCourseCount($userId, $onlyPublished = true)
     {

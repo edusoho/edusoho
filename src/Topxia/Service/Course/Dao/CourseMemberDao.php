@@ -76,4 +76,6 @@ interface CourseMemberDao
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
 
+    public function findMembersNotInClassroomByUserIdAndRoleAndType($userId, $role, $type, $start, $limit, $onlyPublished = true);
+
 }

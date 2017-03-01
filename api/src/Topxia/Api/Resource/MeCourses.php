@@ -35,12 +35,21 @@ class MeCourses extends BaseResource
             );
         } elseif ($relation == 'learn') {
             $total              = $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id'], true);
-            $coursesAfterColumn = $this->getCourseService()->findUserLearnCoursesNotInClassroom(
-                $user['id'],
-                $start,
-                $limit,
-                empty($type) ? array() : array('type' => $type)
-            );
+            if (empty($type)) {
+                $coursesAfterColumn = $this->getCourseService()->findUserLearnCoursesNotInClassroom(
+                    $user['id'],
+                    $start,
+                    $limit
+                );
+            } else {
+                $coursesAfterColumn = $this->getCourseService()->findUserLearnCoursesNotInClassroomWithType(
+                    $user['id'],
+                    $type,
+                    $start,
+                    $limit
+                );
+            }
+
             $courses = array_values($coursesAfterColumn);
         } elseif ($relation == 'teaching') {
             $total   = $this->getCourseService()->findUserTeachCourseCountNotInClassroom(array('userId' => $user['id']), false);
