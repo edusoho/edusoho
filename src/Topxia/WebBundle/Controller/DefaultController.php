@@ -25,7 +25,8 @@ class DefaultController extends BaseController
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom));
     }
 
-    public function appDownloadAction() {
+    public function appDownloadAction()
+    {
         $result = CloudAPIFactory::create('leaf')->get('/me');
         $custom = $this->isCustom($result);
 
@@ -33,7 +34,7 @@ class DefaultController extends BaseController
             return $this->createMessageResponse('warning', '非法请求');
         }
 
-        $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+        $mobileCode = (empty($result["mobileCode"]) ? 'edusohov3' : $result["mobileCode"]);
 
         if ($this->getWebExtension()->isMicroMessenger()) {
             $url ="http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi";
