@@ -2286,11 +2286,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::column($courseIds, 'courseId');
     }
 
-    public function findMembersByClassroomId($classroomId)
-    {
-        return $this->getMemberDao()->findMembersByClassroomId($classroomId);
-    }
-
     public function becomeStudent($courseId, $userId, $info = array())
     {
         $course = $this->getCourse($courseId);

@@ -64,7 +64,12 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
 
     protected function updateClassroomCoursesStudentsExpiryDate($classroomId, $fields)
     {
-        $members = $this->getCourseService()->findMembersByClassroomId($classroomId);
+        $members = $this->getCourseService()->searchMembers(
+            array('classroomId' => $classroomId), 
+            array('createdTime', 'desc'), 
+            0, 
+            PHP_INT_MAX
+        );
 
         foreach ($members as $member) {
             $deadline = $this->buildMemberDeadline($fields, $member);

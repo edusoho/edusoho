@@ -293,8 +293,6 @@ interface CourseService
 
     public function findMembersByUserIdAndJoinType($userId, $joinedType = 'course');
 
-    public function findMembersByClassroomId($classroomId);
-
     public function quitCourseByDeadlineReach($userId, $courseId);
 
     public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds);

@@ -251,7 +251,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 array(
                     'createdTime' => $member['createdTime'],
                     'expiryMode'  => $expiryDate['expiryMode'],
-                    'expiryDay'   => $expiryDate['expiryDay']
+                    'expiryValue' => $expiryDate['expiryValue']
                 )
             );
         }
