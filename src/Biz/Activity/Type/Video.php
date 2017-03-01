@@ -12,6 +12,7 @@ class Video extends Activity
 {
     protected function registerListeners()
     {
+        return array('watching' => 'Biz\Activity\Listener\VideoActivityWatchListener');
     }
 
     public function create($fields)
@@ -57,7 +58,6 @@ class Video extends Activity
     public function update($activityId, &$fields, $activity)
     {
         $video = $fields['ext'];
-
         if ($video['finishType'] == 'time') {
             if (empty($video['finishDetail'])) {
                 throw $this->createAccessDeniedException('finish time can not be emtpy');

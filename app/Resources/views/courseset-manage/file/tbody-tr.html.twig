@@ -33,7 +33,7 @@
   <td>
     {% set fileQuotes = filesQuote[uploadFile.id]|default(null) %}
     {# {% if 'courselesson' in fileQuotes or 'opencourselesson' in fileQuotes %}
-      <span class="label label-success tip">{{'课时'|trans}}</span>
+      <span class="label label-success tip">{{'任务'|trans}}</span>
     {% endif %}
 
     {% if 'coursetask' in fileQuotes %}
@@ -73,7 +73,7 @@
       {% else %}
         {% set goto = path('course_set_manage_files', {id:courseSet.id}) %}
       {% endif %}
-    <a class="btn btn-default" href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:goto}) }}">字幕管理</a>
+    <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:goto}) }}">字幕管理</a>
     {% endif %}
   </td>
 

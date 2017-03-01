@@ -21,9 +21,7 @@ class Choice extends QuestionFormBase {
     }
     this.imageUploadUrl = this.$questionOptions.data('imageUploadUrl');
     this.imageDownloadUrl = this.$questionOptions.data('imageDownloadUrl');
-    console.log(this.imageUploadUrl);
-    console.log(this.imageDownloadUrl);
-    this.initTitleEditor();
+    this.initTitleEditor(this.validator);
     this.initAnalysisEditor();
     this.initOptions();
     this.subscriptionMessage();
@@ -35,8 +33,9 @@ class Choice extends QuestionFormBase {
 
   submitForm(event) {
     this.$submit = $(event.currentTarget);
-    console.log(this.validator.form());
-    console.log( this.isSubmit);
+    let submitType = this.$submit.data('submission');
+    this.$form.find('[name=submission]').val(submitType);
+    
     if(this.validator.form() && this.isSubmit ) {
       this.submit();
     }
@@ -46,7 +45,6 @@ class Choice extends QuestionFormBase {
   }
 
   submit() {
-    console.log('submit');
     this.$submit.button('loading');
     this.$form.submit();
   }

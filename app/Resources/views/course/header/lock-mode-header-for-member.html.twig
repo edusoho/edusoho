@@ -43,10 +43,10 @@
                 <ul class="task-list task-chart task-list-md task-list-hover clearfix">
                   {% for task in task %}
                     {% if task != " " %}
-                      {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+                      {% set task_lock =  (course.learnMode  == 'lockMode')  and ( loop.index !=1  and  task.lock  ) %}
                       <li class="task-item task-content half mouse-control">
                         <i class="es-icon
-                        {% if task_lock %}
+                        {% if task_lock and loop.index !=1 %}
                         es-icon-lock
                         {% elseif  not task.result|default(null) %}
                         es-icon-undone-check
@@ -86,10 +86,10 @@
         <div class="swiper-pager"></div>
       </div>
     {% endif %}
-    <ul class="task-list task-list-md task-list-hover task-list-gray js-task-list-ul">
+    <ul class="task-list task-list-md task-list-hover task-list-gray js-task-list-ul ">
       {% for task in toLearnTasks %}
         {% set meta = activity_meta(task.activity.mediaType|default(null)) %}
-        {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+        {% set task_lock =  (course.learnMode  == 'lockMode')  and ( loop.index !=1 and  task.lock  ) %}
         <li class="task-item task-content mouse-control">
           <i class="es-icon
           {% if task_lock %}
@@ -110,8 +110,7 @@
           {% endif %}
           <span class="right-menu mouse-leave">
           {{ task.activity.length|activity_length_format }} <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
-                                                               data-toggle="tooltip" data-placement="top"
-                                                               title="{{ meta.name|default(null) }}任务"></i>
+          data-toggle="tooltip" data-placement="top" title="{{ meta.name|default(null) }}任务"></i>
         </span>
           {% if  task_lock is empty %}
             <span class="right-menu mouse-enter">

@@ -45,7 +45,7 @@
           {% elseif paperResult.status == 'reviewing' %}
             {% if isTeacher is defined and isTeacher %}
               {% if source == 'classroom' %}
-
+                {% set checkUrl = path('classroom_manage_' ~ paperResult.type ~ '_check', {id:targetId,resultId:paperResult.id,action:'check'}) %}
               {% else %}
                 {% set checkUrl = path('course_manage_' ~ paperResult.type ~ '_check', {id:targetId,resultId:paperResult.id,action:'check'}) %}
               {% endif %}

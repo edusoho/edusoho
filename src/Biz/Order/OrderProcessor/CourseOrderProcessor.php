@@ -3,6 +3,7 @@ namespace Biz\Order\OrderProcessor;
 
 use Biz\Course\Service\CourseOrderService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Exception;
 use AppBundle\Common\NumberToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -23,6 +24,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $course = $this->getCourseService()->getCourse($targetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         if (!$course['buyable']) {
             return array('error' => $this->getKernel()->trans('该教学计划不可购买，如有需要，请联系客服'));
@@ -34,6 +36,10 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
         if ($course['status'] != 'published') {
             return array('error' => $this->getKernel()->trans('不能加入未发布的教学计划!'));
+        }
+
+        if($courseSet['status'] != 'published') {
+            return array('error' => $this->getKernel()->trans('不能加入未发布课程中的教学计划!'));
         }
 
         if ($course["type"] == "live" && $course["studentNum"] >= $course["maxStudentNum"]) {
@@ -253,6 +259,11 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             return false;
         }
 
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        if($courseSet['status'] != 'published') {
+            return false;
+        }
+
         return true;
     }
 
@@ -277,11 +288,19 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     }
 
     /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return ServiceKernel::instance()->createService('Course:CourseSetService');
+    }
+
+    /**
      * @return CourseOrderService
      */
     protected function getCourseOrderService()
     {
-        return ServiceKernel::instance()->createService("Course:CourseOrderService");
+        return ServiceKernel::instance()->createService('Course:CourseOrderService');
     }
 
     protected function getOrderService()

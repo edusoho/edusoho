@@ -3,10 +3,10 @@
 namespace Biz\User\Event;
 
 use AppBundle\Common\StringToolkit;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\MemberService;
 use Biz\User\Service\StatusService;
+use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\Classroom\Service\ClassroomService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -27,20 +27,9 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
-        $status    = array(
-            'type'        => 'become_student',
-            'classroomId' => $classroom['id'],
-            'objectType'  => 'classroom',
-            'objectId'    => $classroom['id'],
-            'private'     => $classroom['status'] == 'published' ? 0 : 1,
-            'userId'      => $userId,
-            'properties'  => array(
-                'classroom' => $this->simplifyClassroom($classroom)
-            )
-        );
-        $status['private'] = $classroom['showable'] == 1 ? $status['private'] : 1;
 
-        $this->getStatusService()->publishStatus($status);
+        $this->publishJoinStatus($classroom, $userId, 'become_student');
+        $this->syncCourseStudents($classroom, $userId);
     }
 
     public function onClassroomGuest(Event $event)
@@ -48,9 +37,9 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
         // publish status
-        $this->publishJoinStatus($classroom, $userId);
+        $this->publishJoinStatus($classroom, $userId, 'become_auditor');
         //add user to classroom courses
-        $this->syncCourseStudents($classroom, $userId);
+        // $this->syncCourseStudents($classroom, $userId);
     }
 
     private function simplifyClassroom($classroom)
@@ -67,22 +56,22 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     private function syncCourseStudents($classroom, $userId)
     {
         $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
-        if(empty($courses)){
+        if (empty($courses)) {
             return;
         }
 
-        foreach ($courses as $course){
+        foreach ($courses as $course) {
             $member = $this->getMemberService()->getCourseMember($course['id'], $userId);
-            if(empty($member)){
+            if (empty($member)) {
                 $this->getMemberService()->becomeStudentByClassroomJoined($course['id'], $userId);
             }
         }
     }
 
-    private function publishJoinStatus($classroom, $userId)
+    private function publishJoinStatus($classroom, $userId, $type)
     {
         $status = array(
-            'type'        => 'become_auditor',
+            'type'        => $type,
             'classroomId' => $classroom['id'],
             'objectType'  => 'classroom',
             'objectId'    => $classroom['id'],

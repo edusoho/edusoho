@@ -1,5 +1,5 @@
 import EsMessenger from '../../../common/messenger';
-import ActivityEmitter from '../../activity/activity-emitter';
+import ActivityEmitter from '../activity-emitter';
 class VideoPlay {
   constructor(elment) {
     this.dom = $(elment);
@@ -10,7 +10,7 @@ class VideoPlay {
 
   play() {
     var messenger = new EsMessenger({
-      name: 'parent',
+      name: 'partner',
       project: 'PlayerProject',
       children: [],
       type: 'parent'

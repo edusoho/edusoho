@@ -22,7 +22,7 @@
               {% if emailArr[1] != 'edusoho.net' %}
                 {{ app.user.email }}
                 {% if app.user.emailVerified %}
-                  <span class="text-success">({{'已验证'|trans}})</span>
+                  <span class="color-success">({{'已验证'|trans}})</span>
                 {% else %}
                   <p class="help-block mtm">
                     {{'邮箱地址尚未验证，'|trans}}
@@ -30,7 +30,7 @@
                   </p>
                 {% endif %}
               {% else %}
-                <span class="text-success">{{'您还未设置邮箱，请在下方设置你的新邮箱。'|trans}}</span>
+                <span class="color-success">{{'您还未设置邮箱，请在下方设置你的新邮箱。'|trans}}</span>
               {% endif %}
 
             </span>

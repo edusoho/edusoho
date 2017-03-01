@@ -150,7 +150,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             ));
         }
 
-        $event = $this->dispatchEvent('course.thread.create', $thread);
+        $this->dispatchEvent('course.thread.create', new Event($thread));
 
         return $thread;
     }

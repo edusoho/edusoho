@@ -1,24 +1,24 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Classroom\Service\ClassroomService;
+use Biz\User\CurrentUser;
+use AppBundle\Common\Paginator;
+use Vip\Service\Vip\VipService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\UserService;
+use Vip\Service\Vip\LevelService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Group\Service\GroupService;
 use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
-use Biz\Group\Service\GroupService;
-use Biz\Course\Service\CourseNoteService;
 use Biz\System\Service\SettingService;
-use Biz\User\CurrentUser;
-use Biz\User\Service\AuthService;
-use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
-use Biz\User\Service\UserService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\User\Service\NotificationService;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\Paginator;
-use Vip\Service\Vip\LevelService;
-use Vip\Service\Vip\VipService;
 
 class UserController extends BaseController
 {
@@ -129,7 +129,7 @@ class UserController extends BaseController
 
             $classrooms = $this->getClassroomService()->searchClassrooms(
                 $conditions,
-                array('createdTime'=>'DESC'),
+                array('createdTime' => 'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
@@ -170,11 +170,11 @@ class UserController extends BaseController
             'roles'  => array('teacher', 'headTeacher'),
             'userId' => $user['id']
         );
-        $classroomMembers     = $this->getClassroomService()->searchMembers($conditions, array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $classroomMembers = $this->getClassroomService()->searchMembers($conditions, array('createdTime' => 'desc'), 0, PHP_INT_MAX);
 
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
         if (empty($classroomIds)) {
-            $paginator  = new Paginator(
+            $paginator = new Paginator(
                 $this->get('request'),
                 0,
                 20
@@ -226,7 +226,7 @@ class UserController extends BaseController
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
 
-        $paginator  = new Paginator(
+        $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseSetService()->countUserFavorites($user['id']),
             20
@@ -254,12 +254,12 @@ class UserController extends BaseController
         $admins               = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'admin'),
             array('createdTime' => "DESC"), 0, 1000
         );
-        $owners               = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'owner'),
+        $owners = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'owner'),
             array('createdTime' => "DESC"), 0, 1000
         );
-        $members              = array_merge($admins, $owners);
-        $groupIds             = ArrayToolkit::column($members, 'groupId');
-        $adminGroups          = $this->getGroupService()->getGroupsByIds($groupIds);
+        $members     = array_merge($admins, $owners);
+        $groupIds    = ArrayToolkit::column($members, 'groupId');
+        $adminGroups = $this->getGroupService()->getGroupsByIds($groupIds);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -423,7 +423,7 @@ class UserController extends BaseController
         $levels               = array();
 
         if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
+            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), null, 0, 100), 'id');
         }
 
         return $this->render('user/card-show.html.twig', array(

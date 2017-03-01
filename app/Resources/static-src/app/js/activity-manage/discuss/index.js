@@ -6,7 +6,6 @@ class Discuss {
   }
 
   _init() {
-    initEditor($('[name="content"]'));
     this._inItStep2form();
   }
 
@@ -22,6 +21,7 @@ class Discuss {
         content: 'required',
       },
     });
+    initEditor($('[name="content"]'),validator);
   }
 }
 

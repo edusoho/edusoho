@@ -89,7 +89,8 @@ abstract class CourseBaseController extends BaseController
                     'fake'        => true,
                     'locked'      => 0,
                     'createdTime' => time(),
-                    'deadline'    => 0
+                    'deadline'    => 0,
+                    'previewAs'    => 1
                 );
             }
 
@@ -103,7 +104,6 @@ abstract class CourseBaseController extends BaseController
                 $member = null;
             }
         }
-
         return $member;
     }
 

@@ -64,15 +64,12 @@ export default class ActivityEmitter {
 
       let channel = postal.channel('task-events');
       let subscriber = channel.subscribe('#', (data) => {
-        const listenEvent = data.event;
-        if (listenEvent === event) {
-          if (data.error) {
-            reject(data.error);
-          } else {
-            resolve(data);
-          }
-          subscriber.unsubscribe();
+        if (data.error) {
+          reject(data.error);
+        } else {
+          resolve(data);
         }
+        subscriber.unsubscribe();
       });
     });
   }

@@ -25,19 +25,19 @@
     {% endif %}
     </div>
     <ul class="nav nav-pills hidden-xs" role="tablist">
-      <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search') }}">{{'全部课程'|trans}}</a></li>
+      <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search', {q:keywords}) }}">{{'全部课程'|trans}}</a></li>
       {% if isShowVipSearch  %}
         {% if currentUserVipLevel  %}
           <li role="presentation" class="{% if filter == 'vip' %}active{% endif %}">
-            <a href="{{ path('search',{filter:'vip'}) }}">{{'会员课程'|trans}}</a>
+            <a href="{{ path('search',{filter:'vip', q:keywords}) }}">{{'会员课程'|trans}}</a>
           </li>
         {% endif %}
       {% endif %}
       <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
-          <a href="{{ path('search',{filter:'free'}) }}">{{'免费课程'|trans}}</a>
+          <a href="{{ path('search',{filter:'free', q:keywords}) }}">{{'免费课程'|trans}}</a>
       </li>
       <li role="presentation" class="{% if filter == 'live' %}active{% endif %}">
-          <a href="{{ path('search',{filter:'live'}) }}">{{'直播课程'|trans}}</a>
+          <a href="{{ path('search',{filter:'live', q:keywords}) }}">{{'直播课程'|trans}}</a>
       </li>
     </ul>
     <div class="btn-group visible-xs">
@@ -70,7 +70,7 @@
       <div class="row">
         {% for courseSet in courseSets %}
           <div class="col-lg-3 col-md-4 col-xs-6">
-            {% include 'course/widgets/course-grid.html.twig' with {courseSet: courseSet} %}
+            {% include 'course/widgets/course-grid.html.twig' with { courseSet: courseSet} %}
           </div>
         {% endfor %}
       </div>

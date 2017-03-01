@@ -1,5 +1,5 @@
 <div class="course-detail-content">
-  {#@TODO 方块样式展示#}
+  {% if not isMarketingPage  %}
   <div class="clearfix mbl">
     <div class="btn-group pull-right js-task-show-type" role="tablist">
       <a class="btn btn-default active" data-list=".js-task-list-ul" data-type="list"> <i class="es-icon es-icon-menu"></i>
@@ -8,6 +8,7 @@
       </a>
     </div>
   </div>
+  {% endif %}
   <ul class="task-list task-list-md task-list-hover js-task-list-ul">
     {% for key, item in courseItems %}
       {% if item.itemType == 'chapter' and item.type == 'chapter' %}
@@ -17,16 +18,16 @@
           <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
         </li>
       {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
-        <li class="task-item color-gray bg-gray-lighter">
+        <li class=" color-gray bg-gray-lighter">
           <span class="text-overflow title">第{{ item.number }}
             节: {{ item.title }}</span>
         </li>
       {% elseif  item.itemType == 'task' %}
         {% set task = item %}
-        {% if  member is empty %}
-          {% set task_lock = true %}
+        {% if  isMarketingPage or  member is empty %}
+          {% set task_lock = (course.learnMode  == 'lockMode') %}
         {% else %}
-          {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+          {% set task_lock =  (course.learnMode  == 'lockMode')  and task.lock  %}
         {% endif %}
         {% set file = files[task.activity.mediaId]|default(null) %}
         <li class="task-item task-content mouse-control">
@@ -59,33 +60,49 @@
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </a>
             {% endif %}
+            <span class="right-menu color-gray mouse-leave">
+              {% set meta =  activity_meta(task.activity.mediaType) %}
+              {{ task.activity.length|default(0)|activity_length_format }}
+              <i class="es-icon es-icon {{ meta.icon }} ml20" data-toggle="tooltip" data-placement="top" title=""
+                data-original-title="{{ meta.name }}任务" data-container="body"></i>
+            </span>
+            <span class="right-menu mouse-enter">
+              {% if not member %}
+                {% if  task.isFree %}
+                  <a class="btn btn-primary" href="#modal" data-toggle="modal"
+                     data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                     style="margin-top:-8px">免费学习</a>
+                {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
+                  <a class="btn btn-warning" href="#modal" data-toggle="modal"
+                     data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                     style="margin-top:-8px">免费试看</a>
+                {% elseif  not task.isFree %}
+                  <a class="btn btn-primary" href="#modal" data-toggle="modal"
+                     data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                     style="margin-top:-8px">立即购买</a>
+                {% endif %}
+              {% endif %}
+              </span>
           {% else %}
             <span class="text-overflow title">
               {% include 'course/task-list/parts/list-li-title.html.twig' %}
             </span>
-          {% endif %}
-          <span class="right-menu mouse-leave">
-            {% set meta =  activity_meta(task.activity.mediaType) %}
-            {{ task.activity.length|default(0)|activity_length_format }}
-            <i class="es-icon es-icon {{ meta.icon }}" data-toggle="tooltip" data-placement="top" title=""
-               data-original-title="{{ meta.name }}任务"></i>
-            </span>
-          <span class="right-menu mouse-enter">
-            {% if task.status != 'published' %}敬请期待{% endif %}
+            <span class="right-menu">
+            敬请期待
           </span>
+          {% endif %}
         </li>
       {% endif %}
     {% endfor %}
   </ul>
-  {#@TODO 方块样式展示#}
   <ul class="task-list task-chart task-list-md task-list-hover clearfix hidden js-task-chart-ul">
     {% for key, item in courseItems %}
       {% if  item.itemType == 'task' %}
         {% set task = item %}
-        {% if  member is empty %}
+        {% if isMarketingPage or  member is empty %}
           {% set task_lock = true %}
         {% else %}
-          {% set task_lock =  (course.learnMode  == 'lockMode')  and (  task.number != 1 and  task.lock  ) %}
+          {% set task_lock =  (course.learnMode  == 'lockMode')  and task.lock %}
         {% endif %}
         {% set file = files[task.activity.mediaId]|default(null) %}
         <li class="task-item task-content mouse-control">
@@ -103,15 +120,16 @@
           </i>
           {% if task.status == 'published'  %}
             {% if member  %}
-                {% if task_lock is empty %}
-                  <a class="text-overflow title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
-                    {% include 'course/task-list/parts/list-li-title.html.twig' %}
-                  </a>
-                {% else %}
-                  <span class="text-overflow title">
-                    {% include 'course/task-list/parts/list-li-title.html.twig' %}
-                  </span>
-                {% endif  %}
+              {% if task_lock is empty %}
+                <a class="text-overflow title"
+                   href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+                  {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                </a>
+              {% else %}
+                <span class="text-overflow title">
+                  {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                </span>
+              {% endif %}
             {% else %}
               <a class="text-overflow title" href="#modal" data-toggle="modal" data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}">
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}

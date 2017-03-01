@@ -1,15 +1,19 @@
 <?php
+
 namespace Biz\Importer;
 
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\HttpFoundation\Request;
+use Codeages\Biz\Framework\Context\Biz;
 
 abstract class Importer
 {
     const DANGER_STATUS  = 'danger';
     const ERROR_STATUS   = 'error';
     const SUCCESS_STATUS = 'success';
+
+    protected $biz;
 
     abstract public function import(Request $request);
 
@@ -22,6 +26,11 @@ abstract class Importer
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
+    }
+
+    public function __construct(Biz $biz)
+    {
+        $this->biz = $biz;
     }
 
     protected function render($view, $params = array())

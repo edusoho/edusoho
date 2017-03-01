@@ -27,7 +27,7 @@ $.validator.setDefaults({
       element.parent().append(error);
     }
   },
-  submitError: function(){
+  submitError: function () {
     console.log('submitError');
   },
   submitSuccess: function (data) {
@@ -55,7 +55,7 @@ $.validator.setDefaults({
 $.extend($.validator.prototype, {
   defaultMessage: function (element, rule) {
     if (typeof rule === "string") {
-      rule = {method: rule};
+      rule = { method: rule };
     }
 
     var message = this.findDefined(
@@ -63,10 +63,10 @@ $.extend($.validator.prototype, {
       this.customDataMessage(element, rule.method),
 
       // 'title' is never undefined, so handle empty string as undefined
-        !this.settings.ignoreTitle && element.title || undefined,
+      !this.settings.ignoreTitle && element.title || undefined,
       $.validator.messages[rule.method],
-        "<strong>Warning: No message defined for " + element.name + "</strong>"
-      ),
+      "<strong>Warning: No message defined for " + element.name + "</strong>"
+    ),
       theregex = /\$?\{(\d+)\}/g,
       displayregex = /%display%/g;
     if (typeof message === "function") {
@@ -130,7 +130,7 @@ $.validator.addMethod("idcardNumber", function (value, element, params) {
     if (!'undefined' == typeof birth.getDate) {
       return false;
     }
-    let iW = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1);
+    let IW = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1];
     let iSum = 0;
     for (let i = 0; i < 17; i++) {
       iSum += parseInt(idcardNumber.charAt(i)) * iW[i];
@@ -161,6 +161,10 @@ jQuery.validator.addMethod("visible_character", function (value, element, params
   return this.optional(element) || $.trim(value).length > 0;
 }, jQuery.validator.format("{0}请输入可见性字符"));
 
-$.validator.addMethod('positive_integer', function(value, element) {
+$.validator.addMethod('positive_integer', function (value, element) {
   return this.optional(element) || parseInt(value) > 0;
 }, jQuery.validator.format("请输入正整数"));
+
+$.validator.addMethod("currency", function (value, element, params) {
+  return this.optional(element) || /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
+}, Translator.trans('请输入有效价格，最多两位小数，整数位不超个8位！'));

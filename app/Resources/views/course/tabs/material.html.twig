@@ -8,7 +8,7 @@
       <div class="media-body">
         <div class="mbs">
           {% if task and task.status != 'published' %}
-            {{ material.title }} <span class="text-muted text-sm">({{'课时未发布，不能下载该资料'|trans}})</span>
+            {{ material.title }} <span class="text-muted text-sm">({{'任务未发布，不能下载该资料'|trans}})</span>
           {% else %}
             {% if material.link %}
               <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>

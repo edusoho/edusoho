@@ -1,3 +1,5 @@
+{% do script(['app/js/classroom-manage/publish/index.js']) %}
+
 {% set unsetted = "" %}
 {% if not classroom.about %}
 {% set unsetted = unsetted ~ ',简介'|trans %}
@@ -37,9 +39,9 @@
         {{'预览'|trans}} <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu">
-        <li><a href="{{path('classroom_courses',{classroomId:classroom.id,previewAs:'guest'})}}" target="blank">{{'作为未购买用户'|trans}}</a></li>
+        <li><a href="{{path('classroom_courses',{classroomId:classroom.id,previewAs:'guest'})}}" target="_blank">{{'作为未购买用户'|trans}}</a></li>
         {% if  classroom.showable %}
-          <li><a href="{{path('classroom_courses',{classroomId:classroom.id,previewAs:'auditor'})}}" target="blank">{{'作为旁听生'|trans}}</a></li>
+          <li><a href="{{path('classroom_courses',{classroomId:classroom.id,previewAs:'auditor'})}}" target="_blank">{{'作为旁听生'|trans}}</a></li>
         {% endif %}
         <li><a href="{{path('classroom_courses',{classroomId:classroom.id,previewAs:'member'})}}" target="_blank">{{'作为正式学员'|trans}}</a></li>
       </ul>
@@ -82,6 +84,3 @@
 
   </div>
 </div>
-
-{% do load_script('topxiawebbundle/controller/classroom/manage/publish') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}

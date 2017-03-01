@@ -2,8 +2,8 @@
 namespace Biz\Testpaper\Service\Impl;
 
 use Biz\BaseService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Type\Testpaper;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
@@ -50,7 +50,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, $fields);
 
-        $this->dispatchEvent('testpaper.update', array('argument' => $argument, 'testpaper' => $testpaper));
+        $this->dispatchEvent('testpaper.update', $testpaper, array('argument' => $argument));
 
         return $testpaper;
     }
@@ -250,9 +250,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
     }
 
-    public function findPaperResultsStatusNumGroupByStatus($testId)
+    public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds)
     {
-        $numInfo = $this->getTestpaperResultDao()->findPaperResultsStatusNumGroupByStatus($testId);
+        $numInfo = $this->getTestpaperResultDao()->findPaperResultsStatusNumGroupByStatus($testId, $courseIds);
         if (!$numInfo) {
             return array();
         }
@@ -350,7 +350,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         $testpaper = $this->getTestpaper($id);
-        $user      = $this->getCurrentuser();
+        $user      = $this->getCurrentUser();
 
         $testpaperResult = $this->getUserUnfinishResult($testpaper['id'], $fields['courseId'], $fields['lessonId'], $testpaper['type'], $user['id']);
 

@@ -1,18 +1,12 @@
 {% extends 'classroom-manage/layout.html.twig' %}
-
-{% set side_nav = 'base' %}
-{# {% set script_controller = 'topxiawebbundle/controller/classroom/set-info' %} #}
-{% do load_script('topxiawebbundle/controller/classroom/set-info') %}
-{% do load_script('topxiaadminbundle/controller/classroom/classroom-create') %}
-
-{% set script_arguments = {
-tagMatchUrl: path('tag_match'),
-} %}
-
 {% block title %}{{'基本信息'|trans}} - {{ parent() }}{% endblock %}
+{% set script_arguments = { tagMatchUrl: path('tag_match'),} %}
+{% set side_nav = 'base' %}
+
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/classroom-manage/set-info/index.js']) %}
 
 {% block main %}
-<div class="panel panel-default panel-col">
+<div class="panel panel-default" role="classroom-manage-base">
   <div class="panel-heading">{{'基本信息'|trans}}</div>
   <div class="panel-body">
     {{ web_macro.flash_messages() }}
@@ -84,7 +78,9 @@ tagMatchUrl: path('tag_match'),
         <label class="col-md-2 control-label">{{'分类'|trans}}</label>
         <div class="col-md-8 controls">
           <select id="course_categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
+             {{dump(select_options(category_choices('classroom'), classroom.categoryId, {0:'分类'|trans}))}}
             {{ select_options(category_choices('classroom'), classroom.categoryId, {0:'分类'|trans}) }}
+           
           </select>
           <div class="help-block" style="display:none;"></div>
         </div>
@@ -95,7 +91,7 @@ tagMatchUrl: path('tag_match'),
       <div class="row form-group">
         <div class="col-md-2 control-label"></div>
         <div class="controls col-md-8">
-          <button type="submit" class="btn btn-primary" id="classroom-save">{{'提交'|trans}}</button>  
+          <button class="btn btn-primary" id="classroom-save">{{'提交'|trans}}</button>  
         </div>
       </div>
 
@@ -103,5 +99,4 @@ tagMatchUrl: path('tag_match'),
     </form>
   </div>
 </div>
-
 {% endblock %}

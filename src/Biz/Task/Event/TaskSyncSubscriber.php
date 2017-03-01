@@ -4,6 +4,8 @@ namespace Biz\Task\Event;
 
 use Biz\Task\Dao\TaskDao;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\ActivityDao;
+use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Event\Event;
@@ -19,8 +21,8 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'course.task.update'    => 'onCourseTaskUpdate',
             'course.task.delete'    => 'onCourseTaskDelete',
 
-            'course.task.publish'   => 'onCourseTaskUpdate',
-            'course.task.unpublish' => 'onCourseTaskUpdate'
+            'course.task.publish'   => 'onCourseTaskPublish',
+            'course.task.unpublish' => 'onCourseTaskUnpublish'
         );
     }
 
@@ -95,8 +97,40 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
                 'maxOnlineNum',
                 'status'
             ));
-
             $this->getTaskDao()->update($ct['id'], $ct);
+        }
+    }
+
+    public function onCourseTaskPublish(Event $event)
+    {
+        $task = $event->getSubject();
+        $this->syncTaskStatus($task, true);
+    }
+
+    public function onCourseTaskUnpublish(Event $event)
+    {
+        $task = $event->getSubject();
+        $this->syncTaskStatus($task, false);
+    }
+
+    protected function syncTaskStatus($task, $published)
+    {
+        if ($task['copyId'] > 0) {
+            return;
+        }
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        if (empty($copiedCourses)) {
+            return;
+        }
+
+        $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
+        $copiedTasks     = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
+        foreach ($copiedTasks as $ct) {
+            if ($published) {
+                $this->getTaskService()->publishTask($ct['id']);
+            } else {
+                $this->getTaskService()->unpublishTask($ct['id']);
+            }
         }
     }
 
@@ -239,6 +273,14 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     }
 
     /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
      * @return TaskDao
      */
     protected function getTaskDao()
@@ -254,5 +296,13 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     {
         $biz = $this->getBiz();
         return $biz["activity_type.{$type}"];
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    protected function getActivityDao()
+    {
+        return $this->getBiz()->dao('Activity:ActivityDao');
     }
 }

@@ -2,11 +2,15 @@
 
 namespace Biz\Task\Service;
 
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+
 interface TaskService
 {
     const LEARN_TIME_STEP = 2;
 
     public function getTask($id);
+
+    public function getCourseTask($courseId,$id);
 
     public function createTask($task);
 
@@ -36,6 +40,7 @@ interface TaskService
 
     /**
      * @param  array $ids
+     *
      * @return array
      */
     public function findTasksByIds(array $ids);
@@ -46,8 +51,10 @@ interface TaskService
 
     /**
      * for question and testpaper ranges
+     *
      * @param  [type]  $userId
      * @param  [type]  $courseSetId
+     *
      * @return array
      */
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId);
@@ -57,6 +64,8 @@ interface TaskService
     public function startTask($taskId);
 
     public function doTask($taskId, $time = self::LEARN_TIME_STEP);
+
+    public function watchTask($taskId, $watchTime = self::WATCH_TIME_STEP);
 
     public function finishTask($taskId);
 
@@ -68,21 +77,27 @@ interface TaskService
 
     /**
      * return next Task that can be learned of the  course plan, or return empty array()
+     *
      * @param  $taskId
+     *
      * @return mixed
      */
     public function getNextTask($taskId);
 
     /**
      *  return if the task can learn or not
+     *
      * @param  $taskId
+     *
      * @return True|False
      */
     public function canLearnTask($taskId); // 任务是否可学
 
     /**
      * return if the task has been learned
+     *
      * @param  $taskId
+     *
      * @return True|False
      */
     public function isTaskLearned($taskId);
@@ -104,6 +119,7 @@ interface TaskService
      *
      * @param  $taskId
      * @param  $maxNum
+     *
      * @return mixed
      */
     public function setTaskMaxOnlineNum($taskId, $maxNum);
@@ -113,6 +129,7 @@ interface TaskService
      *
      * @param  $courseSetIds
      * @param  $limit
+     *
      * @return array           <string, int|string>
      */
     public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
@@ -148,14 +165,18 @@ interface TaskService
      * 2.如果不为空，则取关联的三个。
      *
      * 自由式和任务式的逻辑由任务策略完成
+     *
      * @param  $courseId
+     *
      * @return array       tasks
      */
     public function findToLearnTasksByCourseId($courseId);
 
     /**
      * 侧边栏的任务中心不区分课程类型
+     *
      * @param $courseId
+     *
      * @return mixed
      */
     public function findToLearnTasksByCourseIdForMission($courseId);
@@ -168,4 +189,15 @@ interface TaskService
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
 
     public function analysisTaskDataByTime($startTime, $endTime);
+
+    /**
+     * 获取用户最近进行的一个任务
+     * @param int $userId
+     * @return array
+     */
+    public function getUserRecentlyStartTask($userId);
+
+    public function findPublishedLivingTasksByCourseSetId($courseSetId);
+
+    public function findPublishedTasksByCourseSetId($courseSetId);
 }

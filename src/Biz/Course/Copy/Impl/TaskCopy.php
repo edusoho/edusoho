@@ -47,10 +47,23 @@ class TaskCopy extends AbstractEntityCopy
         $newTasks       = array();
         $chapterMap     = $this->doCopyChapters($source['id'], $newCourse['id'], $config['isCopy']);
         $activityMap    = $this->doCopyActivities($source['id'], $newCourse['id'], $newCourseSetId, $config['isCopy']);
-
+        //task orderd by seq
+        usort($tasks, function ($t1, $t2) {
+            return $t1['seq'] - $t2['seq'];
+        });
+        //sort tasks
+        $num = 1;
         foreach ($tasks as $task) {
             $newTask             = $this->doCopyTask($task, $config['isCopy']);
             $newTask['courseId'] = $newCourse['id'];
+            //number 代表任务的次序，默认教学计划 和 自由式与解锁式的设置方法不同
+            //对于默认教学计划，跟lesson同级的五个任务拥有相同的number，
+            //对于自由式和解锁式，则每个任务按照seq次序依次排列
+            //因此，当从默认教学计划复制为自由式/解锁式的时候需要重新计算number
+            if ($modeChange) {
+                $newTask['number'] = $num++;
+            }
+            $newTask['fromCourseSetId'] = $newCourseSetId;
             if (!empty($task['categoryId'])) {
                 $newChapter = $chapterMap[$task['categoryId']];
                 //如果是从默认教学计划复制，则删除type=lesson的chapter，并将对应task的categoryId指向该chapter的父级
@@ -162,12 +175,14 @@ class TaskCopy extends AbstractEntityCopy
                     $newActivity['mediaId'] = $ext['id'];
                 }
                 //对于exercise、homework，mediaId指向testpaper.id
-                if ($testId > 0) {
+                if ($testId > 0 && in_array($activity['mediaType'], array('homework', 'exercise'))) {
                     $newActivity['mediaId'] = $testId;
                 }
                 if ($newActivity['mediaType'] == 'live') {
-                    unset($newActivity['startTime']);
-                    unset($newActivity['endTime']);
+                    // unset($newActivity['startTime']);
+                    // unset($newActivity['endTime']);
+                    $newActivity['startTime'] = time();
+                    $newActivity['endTime']   = $newActivity['startTime'] + $newActivity['length'] * 60;
                 }
                 $newActivity = $this->getActivityDao()->create($newActivity);
 
@@ -236,6 +251,9 @@ class TaskCopy extends AbstractEntityCopy
         $new = array(
             'copyId' => $isCopy ? $task['id'] : 0
         );
+        if ($task['type'] == 'live' && !$isCopy) {
+            $new['status'] = 'create';
+        }
         foreach ($fields as $field) {
             if (!empty($task[$field]) || $task[$field] == 0) {
                 $new[$field] = $task[$field];

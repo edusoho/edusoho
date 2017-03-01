@@ -1,10 +1,10 @@
 <?php
 namespace AppBundle\Controller\Classroom;
 
+use AppBundle\Twig\WebExtension;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Twig\WebExtension;
 
 class UtilityController extends BaseController
 {

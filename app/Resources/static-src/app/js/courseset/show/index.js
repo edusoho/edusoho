@@ -1,6 +1,7 @@
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
-import Swiper from 'swiper';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
+import { Browser } from 'common/utils';
+import Swiper from 'swiper';
 
 let orderLearnSwiper = null;
 
@@ -30,6 +31,8 @@ function initTaskLearnChart() {
         lineWidth: 14,
         size: 145,
         onStep: function(from, to, percent) {
+            $('canvas').css('height','146px');
+            $('canvas').css('width','146px');
             if (Math.round(percent) == 100) {
                 $(this.el).addClass('done');
             }
@@ -79,13 +82,11 @@ function initSwiper() {
   })
   $('.arrow-left').on('click', function(e){
     e.preventDefault()
-    orderLearnSwiper.swipePrev()
+    orderLearnSwiper.swipePrev();
   })
   $('.arrow-right').on('click', function(e){
     e.preventDefault()
-    orderLearnSwiper.swipeNext()
+    orderLearnSwiper.swipeNext();
   })
-
-  // $('data-toggle="tooltip"').tooTip()
 }
 

@@ -22,7 +22,7 @@
 	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
-		  	{{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>，
+		  	{{'正确答案是'|trans}} <strong class="color-success">{{ keys|join(',') }}</strong>，
 				{% if question.testResult.status|default('noAnswer') == 'right' %}
 					{{'回答正确'|trans}}
 				{% elseif question.testResult.status|default('noAnswer') == 'partRight' %}
@@ -66,7 +66,7 @@
 		{% if showAnswer|default(0) %}
 			<div class="testpaper-preview-answer clearfix mtl mbl">
 				<div class="testpaper-question-result">
-				{{'正确答案是'|trans}} <strong class="text-success">{{ keys|join(',') }}</strong>
+				{{'正确答案是'|trans}} <strong class="color-success">{{ keys|join(',') }}</strong>
 				</div>
 			</div>
 		{% endif %}

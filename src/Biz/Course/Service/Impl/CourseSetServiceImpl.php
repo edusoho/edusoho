@@ -168,6 +168,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function hasCourseSetManageRole($courseSetId = 0)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             return false;
         }
@@ -177,14 +178,27 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
 
         if (empty($courseSetId)) {
-            return false;
+            return $user->isTeacher();
         }
 
         $courseSet = $this->getCourseSetDao()->get($courseSetId);
         if (empty($courseSet)) {
             return false;
         }
-        return $courseSet['creator'] == $user->getId();
+
+        if ($courseSet['creator'] == $user->getId()) {
+            return true;
+        }
+
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        foreach ($courses as $course) {
+            if (in_array($user->getId(), $course['teacherIds'])) {
+                $this->getCourseService()->hasCourseManagerRole($course['id']);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function hasAdminRole()
@@ -335,7 +349,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         // 2. 教学计划的内容（主要是学习模式、有效期模式）也应该是可配的
         $defaultCourse = $this->generateDefaultCourse($created);
 
-        $course['creator'] = $this->getCurrentUser()->getId();
         $this->getCourseService()->createCourse($defaultCourse);
 
         return $created;
@@ -601,7 +614,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
         try {
             $this->beginTransaction();
-            $this->getCourseSetDao()->update($id, array('locked' => 0));
+            $courseSet = $this->getCourseSetDao()->update($id, array('locked' => 0));
             $this->getCourseDao()->update($courses[0]['id'], array('locked' => 0));
             $this->commit();
             return $courseSet;
@@ -616,10 +629,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->analysisCourseSetDataByTime($startTime, $endTime);
     }
 
-    public function updateCourseSetMinPublishedCoursePrice($courseSetId)
+    public function updateCourseSetMinAndMaxPublishedCoursePrice($courseSetId)
     {
-        $price = $this->getCourseService()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
-        return $this->getCourseSetDao()->update($courseSetId, array('minCoursePrice' => $price['price']));
+        $price = $this->getCourseService()->getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
+        return $this->getCourseSetDao()->update($courseSetId, array('minCoursePrice' => $price['minPrice'], 'maxCoursePrice' => $price['maxPrice']));
+    }
+
+    public function updateMaxRate($id, $maxRate)
+    {
+        $courseSet = $this->getCourseSetDao()->update($id, array('maxRate' => $maxRate));
+        $this->dispatchEvent('courseSet.maxRate.update', new Event(array('courseSet' => $courseSet, 'maxRate' => $maxRate)));
+        return $courseSet;
     }
 
     protected function validateCourseSet($courseSet)
@@ -777,6 +797,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'expiryDays'    => 0,
             'learnMode'     => 'freeMode',
             'isDefault'     => 1,
+            'isFree'        => 1,
             'serializeMode' => $created['serializeMode'],
             'status'        => 'draft'
         );

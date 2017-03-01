@@ -77,6 +77,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    video_task_event_subscriber:
+        class: Biz\Task\Event\VideoViewEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     course_statistics_event_subscriber:
         class: Biz\Course\Event\StatisticsSubscriber
         arguments: ['@biz']
@@ -89,6 +95,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    course_set_event_subscriber:
+        class: Biz\Course\Event\CourseSetSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     course_sync_event_subscriber:
         class: Biz\Course\Event\CourseSyncSubscriber
         arguments: ['@biz']
@@ -97,6 +109,18 @@ services:
 
     task_sync_event_subscriber:
         class: Biz\Task\Event\TaskSyncSubscriber
+        arguments: ['@biz']
+        tags: 
+            - { name: codeages_plugin.event.subscriber }
+
+    testpaper_sync_event_subscriber:
+        class: Biz\Testpaper\Event\TestpaperSyncSubscriber
+        arguments: ['@biz']
+        tags: 
+            - { name: codeages_plugin.event.subscriber }
+
+    question_sync_event_subscriber:
+        class: Biz\Question\Event\QuestionSyncSubscriber
         arguments: ['@biz']
         tags: 
             - { name: codeages_plugin.event.subscriber }

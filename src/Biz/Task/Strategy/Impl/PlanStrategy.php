@@ -154,7 +154,8 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
                     }
                 }
 
-                $chapter                          = $this->getChapterDao()->update($id, $fields);
+                $chapter = $this->getCourseService()->updateChapter($courseId, $id, $fields);
+
                 $parentChapters[$chapter['type']] = $chapter;
             }
             if (strpos($id, 'task') === 0) {
