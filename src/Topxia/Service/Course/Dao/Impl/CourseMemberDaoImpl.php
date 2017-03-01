@@ -176,6 +176,14 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         );
     }
 
+    public function findMemberCountNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
+    {
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->getTable()} m ";
+        $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
+        $sql .= " AND m.role = ? AND c.type =  ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0";
+        return $this->getConnection()->fetchColumn($sql. array($userId, $role, $type, $isLearned));
+    }
+
     public function findMembersByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -186,6 +194,16 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
         return $this->getConnection()->fetchAll($sql, array($userId, $type, $isLearned, $role));
+    }
+
+    public function findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT m.* FROM {$this->table} m";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= "AND m.role = ? AND c.type = ?  AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0";
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($userId, $role, $type, $isLearned));
     }
 
     public function findAllMemberByUserIdAndRole($userId, $role, $onlyPublished = true)
@@ -227,12 +245,32 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         );
     }
 
+    public function findMemberCountNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
+    {
+        $sql = "SELECT COUNT( m.courseId ) FROM {$this->getTable()} m ";
+        $sql .= " JOIN  ".CourseDao::TABLENAME." AS c ON m.userId = ? ";
+        $sql .= " AND m.role = ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0";
+        return $this->getConnection()->fetchColumn($sql, array($userId, $role, $isLearned));
+    }
+
     public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $sql
-        = "SELECT * FROM {$this->table} WHERE userId = ? AND role = ? AND isLearned = ?
+            = "SELECT * FROM {$this->table} WHERE userId = ? AND role = ? AND isLearned = ?
             ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array($userId, $role, $isLearned));
+    }
+
+    public function findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT m.* FROM {$this->table} m ";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= "AND m.role =  ? AND M.isLearned = ? AND m.courseId = c.id AND c.parentId = 0";
+
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
         return $this->getConnection()->fetchAll($sql, array($userId, $role, $isLearned));
     }
 
@@ -330,7 +368,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         for ($i = 0; $i < count($orderBys); $i = $i + 2) {
             $builder->addOrderBy($orderBys[$i], $orderBys[$i + 1]);
         };
-        
+
         return $builder->execute()->fetchAll() ?: array();
     }
 

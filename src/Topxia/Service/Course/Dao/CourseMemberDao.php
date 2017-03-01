@@ -20,13 +20,21 @@ interface CourseMemberDao
 
     public function findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned);
 
+    public function findMemberCountNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned);
+
     public function findMembersByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit);
 
+    public function findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit);
+
     public function findMemberCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
+
+    public function findMemberCountNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
 
     public function findMobileVerifiedMemberCountByCourseId($courseId, $locked);
 
     public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
+
+    public function findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
 
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit);
 
