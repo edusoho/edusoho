@@ -464,7 +464,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findUserTeachCourseCountNotInClassroom($conditions, $onlyPublished = true)
     {
-        $members = $this->getMemberDao()->findMemberCountNotInClassroomByUserIdAndRole($conditions['userId'], 'teacher', $onlyPublished);
+        $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($conditions['userId'], 'teacher', 0, PHP_INT_MAX, $onlyPublished);
         unset($conditions['userId']);
 
         $courseIds               = ArrayToolkit::column($members, 'courseId');

@@ -29,17 +29,18 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND type = 'course' ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($userId)) ?: array();
+        return $this->getConnection()->fetchAll($sql, array($userId, $start, $limit)) ?: array();
     }
 
     public function findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT f.* FROM {$this->table} f";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON f.userId = ? ';
+        $sql = "SELECT m.* FROM {$this->table} m ";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
         $sql .= "AND m.courseId = c.id AND c.parentId = 0";
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($userId, $start, $limit));
+
+        return $this->getConnection()->fetchAll($sql, array($userId));
     }
 
     public function getFavoriteCourseCountByUserId($userId)
