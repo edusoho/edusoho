@@ -3,7 +3,7 @@
 {% do script(['app/js/activity/video/index.js']) %}
 
 {% block body %}
-  {% if video.mediaSource|default('self') in ['cloud', 'local'] %}
+  {% if video.mediaSource|default('self') in ['cloud', 'self'] %}
     <div class="iframe-parent-content iframe-parent-full" id="video-content"
          data-role="lesson-content"
          data-watch-url="{{ path('course_acitvity_watch',{courseId: activity.fromCourseId, id: activity.id}) }}"
