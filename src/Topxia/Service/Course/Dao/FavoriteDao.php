@@ -22,4 +22,6 @@ interface FavoriteDao
 
     public function searchCourseFavorites($conditions, $orderBy, $start, $limit);
 
+    public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit);
+
 }

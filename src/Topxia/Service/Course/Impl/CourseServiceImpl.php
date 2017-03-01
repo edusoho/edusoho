@@ -565,6 +565,37 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserializes($favoriteCourses);
     }
 
+    public function findUserFavoriteCourseCountNotInClassroomWithCourseType($userId, $courseType)
+    {
+        $favorites = $this->getFavoriteDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(
+            $userId,
+            $courseType,
+            0,
+            PHP_INT_MAX
+        );
+
+        $courseIds = ArrayToolkit::column($favorites, 'courseId');
+        $conditions = array('courseIds' => $courseIds);
+
+        if (count($courseIds) == 0) {
+            return 0;
+        }
+
+        return $this->searchCourseCount($conditions);
+    }
+
+    public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
+    {
+        $favorites = $this->getFavoriteDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(
+            $userId,
+            $courseType,
+            $start,
+            $limit
+        );
+        $favoriteCourses = $this->getCourseDao()->findCoursesByIds(ArrayToolkit::column($favorites, 'courseId'));
+        return CourseSerialize::unserializes($favoriteCourses);
+    }
+
     public function findFavoritesCountByCourseId($courseId)
     {
         return $this->getFavoriteDao()->findFavoritesCountByCourseId($courseId);

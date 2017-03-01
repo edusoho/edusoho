@@ -35,12 +35,23 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
     public function findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT m.* FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ?';
-        $sql .= "AND m.courseId = c.id AND c.parentId = 0 AND m.type = 'course'";
+        $sql = "SELECT f.* FROM {$this->table} f ";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON f.userId = ?';
+        $sql .= "AND f.courseId = c.id AND c.parentId = 0 AND f.type = 'course'";
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
         return $this->getConnection()->fetchAll($sql, array($userId));
+    }
+
+    public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT f.* FROM {$this->table} f ";
+        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON f.userId = ? AND c.type = ?';
+        $sql .= "AND f.courseId = c.id AND c.parentId = 0 AND f.type = 'course'";
+        $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, array($userId, $courseType));
     }
 
     public function getFavoriteCourseCountByUserId($userId)

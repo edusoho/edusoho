@@ -77,6 +77,10 @@ interface CourseService
 
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit);
 
+    public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit);
+
+    public function findUserFavoriteCourseCountNotInClassroomWithCourseType($userId, $courseType);
+
     public function findRandomCourses($conditions, $num);
 
     public function createCourse($course);

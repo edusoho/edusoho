@@ -699,7 +699,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     public function getFavoriteLiveCourse()
     {
-        $result  = $this->getFavoriteCourse();
+        $result  = $this->getFavoriteCourseByCourseType('live');
         if (isset($result['error'])) {
             return $result;
         }
@@ -722,7 +722,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     public function getFavoriteNormalCourse()
     {
-        $result = $this->getFavoriteCourse();
+        $result = $this->getFavoriteCourseByCourseType('normal');
         if (isset($result['error'])) {
             return $result;
         }
@@ -741,6 +741,36 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $result["data"]  = array_values($normalCourses);
         $result["total"] = count($normalCourses);
         return $result;
+    }
+
+    protected function getFavoriteCourseByCourseType($courseType)
+    {
+        $user = $this->controller->getUserByToken($this->request);
+
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+        }
+
+        $start = (int) $this->getParam("start", 0);
+        $limit = (int) $this->getParam("limit", 10);
+
+        $total   = $this->controller->getCourseService()->findUserFavoriteCourseCountNotInClassroomWithCourseType(
+            $user['id'],
+            $courseType
+        );
+        $courses = $this->controller->getCourseService()->findUserFavoriteCoursesNotInClassroomWithCourseType(
+            $user['id'],
+            $courseType,
+            $start,
+            $limit
+        );
+
+        return array(
+            "start" => $start,
+            "limit" => $limit,
+            "total" => $total,
+            "data"  => $this->controller->filterCourses($courses)
+        );
     }
 
     public function getFavoriteCourse()
