@@ -14,6 +14,9 @@ let editor = CKEDITOR.replace(threadContent, {
 editor.on('change', () => {
   $("#" + threadContent).val(editor.getData());
 });
+editor.on('blur', () => {
+  $("#" + threadContent).val(editor.getData());
+});
 
 let formValidator = $userThreadForm.validate({
   currentDom: groupThreadAddBtn,

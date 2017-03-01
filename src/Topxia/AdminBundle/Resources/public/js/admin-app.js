@@ -5,6 +5,7 @@ define(function(require, exports, module) {
 
 	require('bootstrap');
 	require('common/bootstrap-modal-hack2');
+  
 
 	var Notify = require('common/bootstrap-notify');
 

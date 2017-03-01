@@ -23,7 +23,7 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
 
         $courses = $this->getOpenCourseService()->searchCourses($conditions, $orderBy, 0, $arguments['count']);
 
-        if ($orderBy[0] == 'recommendedSeq') {
+        if (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'recommendedSeq') {
             if (count($courses) < $arguments['count']) {
                 $unrecommendedCourses = $this->getOpenCourseService()->searchCourses(array(
                     'status'      => 'published',

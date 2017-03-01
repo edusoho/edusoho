@@ -9,4 +9,7 @@ export let initEditor = (options) => {
   editor.on('change', () => {
     $("#" + options.replace).val(editor.getData());
   });
+  editor.on('blur', () => {
+    $("#" + options.replace).val(editor.getData());
+  });
 }

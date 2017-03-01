@@ -1,15 +1,15 @@
 <?php
 namespace AppBundle\Controller;
 
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
-use Biz\System\Service\SettingService;
-use Biz\Task\Service\TaskService;
-use Biz\Taxonomy\Service\CategoryService;
-use Biz\Taxonomy\Service\TagService;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Taxonomy\Service\TagService;
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Taxonomy\Service\CategoryService;
+use Symfony\Component\HttpFoundation\Request;
 
 class ExploreController extends BaseController
 {
@@ -65,7 +65,7 @@ class ExploreController extends BaseController
             $tagIdsNum = count($conditions['tagIds']);
 
             $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course-set');
-            $courseSetIds         = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+            $courseSetIds      = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
             $flag              = array_count_values($courseSetIds);
 
             $courseSetIds = array_unique($courseSetIds);
@@ -131,7 +131,7 @@ class ExploreController extends BaseController
         }
 
         if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
+            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100), 'id');
 
             if ($filter['currentLevelId'] != 'all') {
                 $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
@@ -185,7 +185,7 @@ class ExploreController extends BaseController
                     20
                 );
             } elseif (($recommendPage + 1) == $currentPage) {
-                $courseSets                = $this->getCourseSetService()->searchCourseSets(
+                $courseSets = $this->getCourseSetService()->searchCourseSets(
                     $conditions,
                     $orderBy,
                     ($currentPage - 1) * 20,
@@ -198,7 +198,7 @@ class ExploreController extends BaseController
                     0,
                     20 - $recommendLeft
                 );
-                $courseSets                = array_merge($courseSets, $coursesTemp);
+                $courseSets = array_merge($courseSets, $coursesTemp);
             } else {
                 $conditions['recommended'] = 0;
                 $courseSets                = $this->getCourseSetService()->searchCourseSets(
@@ -362,7 +362,7 @@ class ExploreController extends BaseController
         $levels = array();
 
         if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
+            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100), 'id');
 
             if (!$filter['currentLevelId'] != 'all') {
                 $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');

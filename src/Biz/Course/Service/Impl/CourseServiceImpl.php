@@ -319,7 +319,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         $subCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
-            throw $this->createAccessDeniedException('该教学计划在班级下存在引用，请先删除相关引用');
+            throw $this->createAccessDeniedException('至少需要保留一个教学计划，作为教学内容');
         }
         $courseCount = $this->getCourseDao()->count(array('courseSetId' => $course['courseSetId']));
         if ($courseCount <= 1) {
@@ -817,6 +817,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($course['creator'] == $user->getId()) {
+            return true;
+        }
+
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        if ($user->getId() == $courseSet['creator']) {
             return true;
         }
 

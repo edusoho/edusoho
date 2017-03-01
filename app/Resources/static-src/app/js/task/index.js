@@ -1,16 +1,14 @@
 import TaskSidebar from "./widget/sidebar";
 import TaskUi from "./widget/task-ui";
-import TaskEventEmitter from "./widget/task-event-emitter";
+import TaskPipe from "./widget/task-pipe";
+import Emitter from "common/es-event-emitter";
 
 class TaskShow extends Emitter {
-  constructor({element, courseId, taskId, mode, isMember}) {
+  constructor({element, mode}) {
     super();
     this.element = $(element);
-    this.courseId = courseId;
-    this.taskId = taskId;
     this.mode = mode;
-    this.isMember = isMember;
-    this.eventEmitter = new TaskEventEmitter(this.element.find('#task-content-iframe'));
+
     this.ui = new TaskUi({
       element: '.js-task-dashboard-page'
     });
@@ -21,41 +19,9 @@ class TaskShow extends Emitter {
   init() {
     this.initPlugin();
     this.initSidebar();
-    if (this.mode != 'preview' && this.isMember) {
-      this.bindEvent();
-    }
-  }
-
-  bindEvent() {
-
-    this.element.on('click', '#learn-btn', event => {
-      $.post($('#learn-btn').data('url'), response => {
-        $('#modal').modal('show');
-        $('#modal').html(response);
-        $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
-        this.ui.learned();
-      });
-    });
-
-    // 接收活动的finish事件
-    this.eventEmitter.receive('finish', response => {
-      this.receiveFinish(response);
-    });
-
-  }
-
-  receiveFinish(response) {
-    // response.result.status == 'finish'
-    //     &&
-    if ( $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
-      // 盘点是任务式学习还是自由式学习
-      $.get($(".js-learned-prompt").data('url'), html => {
-        $(".js-learned-prompt").attr('data-content', html);
-        this.ui.learnedWeakPrompt();
-        this.ui.learned();
-        this.sidebar.reload();
-        $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
-      });
+    if (this.mode != 'preview') {
+      this.initTaskPipe();
+      this.initLearnBtn();
     }
   }
 
@@ -65,6 +31,40 @@ class TaskShow extends Emitter {
       html: true,
       trigger: 'hover'
     });
+  }
+
+  initLearnBtn() {
+    this.element.on('click', '#learn-btn', event => {
+      $.post($('#learn-btn').data('url'), response => {
+        $('#modal').modal('show');
+        $('#modal').html(response);
+        $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
+        this.ui.learned();
+      });
+    });
+  }
+
+  initTaskPipe() {
+    this.eventEmitter = new TaskPipe(this.element.find('#task-content-iframe'));
+    this.eventEmitter.addListener('finish', response => {
+      this._receiveFinish(response);
+    });
+
+  }
+
+  _receiveFinish(response) {
+    // response.result.status == 'finish'
+    //     &&
+    if ( $('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
+        // 盘点是任务式学习还是自由式学习
+        $.get($(".js-learned-prompt").data('url'), html => {
+        $(".js-learned-prompt").attr('data-content', html);
+        this.ui.learnedWeakPrompt();
+        this.ui.learned();
+        this.sidebar.reload();
+        $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
+      });
+    }
   }
 
   initSidebar() {
@@ -88,8 +88,5 @@ class TaskShow extends Emitter {
 
 new TaskShow({
   element: $('body'),
-  courseId: $('body').find('#js-hidden-data [name="course-id"]').val(),
-  taskId: $('body').find('#js-hidden-data [name="task-id"]').val(),
-  mode: $('body').find('#js-hidden-data [name="mode"]').val(),
-  isMember: $('body').find('#js-hidden-data [name="isMember"]').val()
+  mode: $('body').find('#js-hidden-data [name="mode"]').val()
 });

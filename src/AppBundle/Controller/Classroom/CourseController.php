@@ -90,9 +90,11 @@ class CourseController extends BaseController
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
 
-        $layout = 'classroom/layout.html.twig';
+        $layout         = 'classroom/layout.html.twig';
+        $isCourseMember = false;
         if ($member && !$member["locked"]) {
-            $layout = 'classroom/join-layout.html.twig';
+            $isCourseMember = true;
+            $layout         = 'classroom/join-layout.html.twig';
         }
         if (!$classroom) {
             $classroomDescription = array();
@@ -101,6 +103,7 @@ class CourseController extends BaseController
             $classroomDescription = strip_tags($classroomDescription, '');
             $classroomDescription = preg_replace("/ /", "", $classroomDescription);
         }
+
         return $this->render("classroom/course/list.html.twig", array(
             'classroom'            => $classroom,
             'member'               => $member,
@@ -108,7 +111,8 @@ class CourseController extends BaseController
             'courses'              => $courses,
             'courseMembers'        => $courseMembers,
             'layout'               => $layout,
-            'classroomDescription' => $classroomDescription
+            'classroomDescription' => $classroomDescription,
+            'isCourseMember'       => $isCourseMember
         ));
     }
 
@@ -163,11 +167,16 @@ class CourseController extends BaseController
                 $tags = $this->getTagService()->findTagsByIds($courseSet['tags']);
 
                 $courseSet['tags'] = ArrayToolkit::column($tags, 'id');
-                $userIds           = array_merge($userIds, array($courseSet['creator']));
             }
+            $userIds = array_merge($userIds, array($courseSet['creator']));
         }
 
-        return $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        if (!empty($users)) {
+            $users = ArrayToolkit::index($users, 'id');
+        }
+
+        return $users;
     }
 
     private function previewAsMember($previewAs, $member, $classroom)
