@@ -270,6 +270,40 @@ class ClassroomServiceTest extends BaseTestCase
     {
     }
 
+    public function testUpdateMemberDeadline()
+    {
+        $user          = $this->getCurrentUser();
+        $textClassroom = array(
+            'title' => 'test066'
+        );
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+
+        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user2['id']);
+
+        $student = $this->getClassroomService()->updateMemberDeadline($student['id'], array('expiryMode' => 'date', 'expiryValue' => '1488433547'));
+
+        $this->assertEquals('1488433547', $student['deadline']);
+    }
+
+    public function testUpdateMembersDeadlinesByClassroomId()
+    {
+        $user          = $this->getCurrentUser();
+        $textClassroom = array(
+            'title' => 'test066'
+        );
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+
+        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user2['id']);
+
+        $student = $this->getClassroomService()->updateMembersDeadlinesByClassroomId($classroom['id'], '1488433547');
+
+        $this->assertEquals('1488433547', $student['deadline']);
+    }
+
     public function testDeleteClassroom()
     {
         $textClassroom = array(

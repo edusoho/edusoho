@@ -687,6 +687,31 @@ class CourseServiceTest extends BaseTestCase
         $updateCourseCounter = $this->getCourseService()->updateCourseCounter($createCourse['id'], $counter);
     }
 
+    public function testUpdateMembersDeadlinesByClassroomId()
+    {
+        $course       = array(
+            'title' => 'test course 1'
+        );
+        $textClassroom = array(
+            'title' => 'test'
+        );
+
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $this->getCourseService()->publishCourse($createCourse['id']);
+
+        $normalUser  = $this->createNormalUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($normalUser);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->becomeStudent($classroom['id'], $currentUser['id']);
+
+        $result = $this->getCourseService()->updateMembersDeadlinesByClassroomId($classroom['id'], '1488433547');
+
+        $this->assertEquals('1488433547', $result['deadline']);
+    }
+
     public function testChangeCoursePicture()
     {
         //暂时等待
