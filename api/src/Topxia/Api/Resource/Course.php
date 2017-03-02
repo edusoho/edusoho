@@ -4,36 +4,57 @@ namespace Topxia\Api\Resource;
 
 use Topxia\Api\Util\TagUtil;
 use AppBundle\Common\ArrayToolkit;
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 class Course extends BaseResource
 {
-    public function filter($res)
+    public function get(Application $app, Request $request, $id)
     {
-        $res['createdTime'] = date('c', $res['createdTime']);
-        $res['updatedTime'] = date('c', $res['updatedTime']);
-        $default            = $this->getSettingService()->get('default', array());
+        $course = $this->getCourseService()->getCourse($id);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        if (empty($res['smallPicture']) && empty($res['middlePicture']) && empty($res['largePicture'])) {
-            $res['smallPicture']  = !isset($default['course.png']) ? '' : $default['course.png'];
-            $res['middlePicture'] = !isset($default['course.png']) ? '' : $default['course.png'];
-            $res['largePicture']  = !isset($default['course.png']) ? '' : $default['course.png'];
+        $course = $this->convertOldFields($course);
+        $course = $this->filledCourseByCourseSet($course, $courseSet);
+        return $course;
+    }
+
+    public function filter($course)
+    {
+    }
+
+    private function convertOldFields($course)
+    {
+        $course['expiryDay'] = $course['expiryDays'];
+        $course['lessonNum'] = $course['taskNum'];
+        $course['userId'] = $course['creator'];
+        $course['tryLookTime']  = $course['tryLookLength'];
+        return $course;
+    }
+
+    private function filledCourseByCourseSet($course, $courseSet)
+    {
+        $copyKeys = array('tags', 'hitNum', 'orgCode', 'orgId',
+            'discount', 'categoryId', 'recommended', 'recommendedSeq', 'recommendedTime',
+            'subtitle', 'discountId', 'smallPicture', 'middlePicture', 'largePicture'
+        );
+        if (empty($courseSet['cover'])) {
+            $courseSet = array(
+                'smallPicture' => '',
+                'middlePicture' => '',
+                'largePicture' => ''
+            );
+        } else {
+            $courseSet = array(
+                'smallPicture' => $courseSet['cover']['small'],
+                'middlePicture' => $courseSet['cover']['middle'],
+                'largePicture' => $courseSet['cover']['large']
+            );
+        };
+        foreach ($copyKeys as $value) {
+            $course[$value] = $courseSet[$value];
         }
-
-        foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key) {
-            $res[$key] = $this->getFileUrl($res[$key]);
-        }
-
-        $res['convNo'] = $this->getConversation($res['id']);
-
-        //temp fix for app, will be remove when new app version published
-        $res['expiryDay'] = '0';
-
-        $res['tags'] = TagUtil::buildTags('course', $res['id']);
-        $res['tags'] = ArrayToolkit::column($res['tags'], 'name');
-
-
-
-        return $res;
+        return $course;
     }
 
     public function simplify($res)
@@ -67,4 +88,15 @@ class Course extends BaseResource
     {
         return $this->getServiceKernel()->createService('IM:ConversationService');
     }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseSetService');
+    }
+
 }
