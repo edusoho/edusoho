@@ -42,6 +42,7 @@ class CourseController extends CourseBaseController
 
     public function showAction($id, $tab = 'summary')
     {
+        $tab    = $this->prepareTab($tab);
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
             throw $this->createNotFoundException('该教学计划不存在！');
@@ -550,5 +551,20 @@ class CourseController extends CourseBaseController
             return array($isMarketingPage, $member);
         }
         return array($isMarketingPage, $member);
+    }
+
+    /**
+     * @param $tab
+     * @return string
+     */
+    protected function prepareTab($tab)
+    {
+        $metas = $this->container->get('extension.default')->getCourseShowMetas();
+        $tabs  = array_keys($metas['for_guest']['tabs']);
+        if (!in_array($tab, $tabs)) {
+            $tab = 'summary';
+            return $tab;
+        }
+        return $tab;
     }
 }
