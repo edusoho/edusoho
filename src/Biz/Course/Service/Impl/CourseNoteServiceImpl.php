@@ -67,7 +67,7 @@ class CourseNoteServiceImpl extends BaseService implements CourseNoteService
     {
         $conditions = array(
             'courseId' => $courseId,
-            'status'   => 1
+            'status'   => CourseNoteService::PUBLIC_STATUS
         );
         return $this->searchNotes(
             $conditions,
