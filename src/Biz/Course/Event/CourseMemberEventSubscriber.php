@@ -6,6 +6,7 @@ use Biz\Course\Dao\CourseDao;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
+use Biz\User\Service\StatusService;
 use Biz\User\Service\MessageService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -37,6 +38,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $this->countStudentMember($event);
         $this->countIncome($event);
         $this->sendWelcomeMsg($event);
+        $this->publishStatus($event, 'become_student');
     }
 
     public function onClassroomCourseCopy(Event $event)
@@ -99,6 +101,26 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         }
     }
 
+    private function publishStatus($event, $type)
+    {
+        $course = $event->getSubject();
+        $member = $event->getArgument('member');
+
+        $status = array(
+            'type'       => $type,
+            'courseId'   => $course['id'],
+            'objectType' => 'course',
+            'objectId'   => $course['id'],
+            'private'    => $course['status'] == 'published' ? 0 : 1,
+            'userId'     => $member['userId'],
+            'properties' => array(
+                'course' => $this->simplifyCourse($course)
+            )
+        );
+
+        $this->getStatusService()->publishStatus($status);
+    }
+
     public function onMemberDelete(Event $event)
     {
         $course = $event->getSubject();
@@ -131,6 +153,17 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $valuesToReplace    = array($user['nickname'], $course['title']);
         $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
         return $welcomeMessageBody;
+    }
+
+    protected function simplifyCourse($course)
+    {
+        return array(
+            'id'     => $course['id'],
+            'title'  => $course['title'],
+            'type'   => $course['type'],
+            'rating' => $course['rating'],
+            'price'  => $course['price']
+        );
     }
 
     /**
@@ -195,6 +228,14 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     protected function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
+    }
+
+    /**
+     * @return StatusService
+     */
+    protected function getStatusService()
+    {
+        return $this->getBiz()->service('User:StatusService');
     }
 
     /**
