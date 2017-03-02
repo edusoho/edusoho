@@ -100,6 +100,7 @@ class TestpaperForm{
       this.$description.val(editor.getData());
     });
     editor.on('blur', function() {
+      this.$description.val(editor.getData());
       validator.form();
     });
   }

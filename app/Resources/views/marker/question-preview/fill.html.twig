@@ -12,7 +12,7 @@
 			{% for index, answer in item.question.answer %}
 			<li class="list">
       	<span class="num">{{'%index%'|trans({'%index%': index+1})}}</span>
-      	<div class="info">正确答案：<span class="text-success">{{ answer|join(' 或 '|trans) }}</span></div>
+      	<div class="info">正确答案：<span class="color-success">{{ answer|join(' 或 '|trans) }}</span></div>
     	</li>
     	{% endfor %}
 		</ul>
@@ -25,7 +25,7 @@
 					{% for index, answer in item.question.answer %}
 					<p>
 						{{'填空(%index%)的正确答案：'| trans({'%index%': index+1})}}
-						<span class="text-success">{{ answer|join(' 或 '|trans) }}</span>
+						<span class="color-success">{{ answer|join(' 或 '|trans) }}</span>
 					</p>
 					{% endfor %}
 				</div>

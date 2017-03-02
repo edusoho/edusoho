@@ -12,29 +12,30 @@
   {% elseif task.mediaSource == 'iframe' %}
     <div class="task-preview-modal-content">
       <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="task-content"
-          data-media-source="{{ activity.ext.mediaSource }}">
+           data-media-source="{{ activity.ext.mediaSource }}">
         <div id="swf-player" data-url="{{ activity.ext.mediaUri }}"></div>
       </div>
     </div>
   {% else %}
     <div id="task-preview-iframe">
-      <iframe src="{{ task.mediaUri }}" style="height:360px; width:100%; border:0px; overflow: hidden" scrolling="no"></iframe>
+      <iframe src="{{ task.mediaUri }}" style="height:360px; width:100%; border:0px; overflow: hidden"
+              scrolling="no"></iframe>
     </div>
-{% endif %}
+  {% endif %}
 
-<div class="js-time-limit-dev hidden">
-  <div style="height:360px;background-color:black;" class="text-center">
-    <br><br><br><br>
-    <br><br><br><br>
-    <div style="font-size:20px;color:#fff;">
-      {{ '立刻购买本课程，即可获得全部完整学习内容。'|trans }}
+  <div class="js-time-limit-dev hidden">
+    <div style="height:360px;background-color:black;" class="text-center">
+      <br><br><br><br>
+      <br><br><br><br>
+      <div style="font-size:20px;color:#fff;">
+        {{ '立刻购买本课程，即可获得全部完整学习内容。'|trans }}
+      </div>
     </div>
-  </div>
-  <div class="js-buy-text">
+    <div class="js-buy-text">
     <span class="text-success">
       {{ '您可以免费试看前%tryLookLength%分钟,购买后可完整观看。'|trans({'%tryLookLength%': course.tryLookLength }) }}
     </span>
+    </div>
   </div>
-</div>
 
 {% endblock %}

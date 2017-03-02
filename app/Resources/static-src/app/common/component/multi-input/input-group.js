@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { trim } from '../../unit';
 import { send } from '../../server';
 import Options from './options';
+import postal from 'postal';
 
 export default class InputGroup extends Component {
   constructor(props) {
@@ -10,16 +11,28 @@ export default class InputGroup extends Component {
       itemName: "",
       searched: true,
       resultful: false,
-      searchResult:[],
+      searchResult: [],
     }
     this.searchable = this.props.searchable.enable;
     this.addable = this.props.addable;
     this.searchableUrl = this.props.searchable.url;
+    this.subscribeMessage();
   }
 
-  selectChange(name,data) {
-    if(data) {
-      this.context.addItem(name,data);
+  subscribeMessage() {
+    postal.subscribe({
+      channel: "courseInfoMultiInput",
+      topic: "addMultiInput",
+      callback: () => {
+        console.log('add');
+        this.handleAdd();
+      }
+    });
+  }
+
+  selectChange(name, data) {
+    if (data) {
+      this.context.addItem(name, data);
     }
     this.setState({
       itemName: '',
@@ -33,51 +46,57 @@ export default class InputGroup extends Component {
     })
   }
 
-  handleNameChange (event){
+  handleNameChange(event) {
     let value = trim(event.currentTarget.value);
     this.setState({
       itemName: value,
       searchResult: [],
-      resultful:false,
+      resultful: false,
     });
 
-    if(this.searchable && value.length > 0 && this.state.searched) {
-      setTimeout(()=>{
-        send(this.searchableUrl+value,searchResult=>{
-          if(this.state.itemName.length>0) {
-            console.log({'searchResult': searchResult});
+    if (this.searchable && value.length > 0 && this.state.searched) {
+      setTimeout(() => {
+        send(this.searchableUrl + value, searchResult => {
+          if (this.state.itemName.length > 0) {
+            console.log({ 'searchResult': searchResult });
             this.setState({
               searchResult: searchResult,
-              resultful : true,
+              resultful: true,
             });
           }
         });
-      },100)
+      }, 100)
     }
   }
 
-  handleAdd()  {
-    if(this.state.itemName.length>0) {
-      this.context.addItem(this.state.itemName,this.state.itemData);
+  handleAdd() {
+    if (this.state.itemName.length > 0) {
+      this.context.addItem(this.state.itemName, this.state.itemData);
     }
     this.setState({
-      itemName:'',
-      searchResult:[],
+      itemName: '',
+      searchResult: [],
       resultful: false,
     })
   }
 
-  render (){
+  blurAdd() {
+    if (this.props.blurIsAdd) {
+      console.log('ok');
+    }
+  }
+
+  render() {
     return (
       <div className="input-group">
-        <input className="form-control" value={this.state.itemName} onChange={event => this.handleNameChange(event)} onFocus = {event=>this.onFocus(event)}  />
-        { this.searchable && this.state.resultful && <Options searchResult ={this.state.searchResult} selectChange ={(event,name)=>this.selectChange(event,name)} resultful={this.state.resultful}/> }
-        { this.addable && <span className="input-group-btn"><a className="btn btn-default" onClick={()=>this.handleAdd()}>添加</a></span> }
+        <input className="form-control" value={this.state.itemName} onChange={event => this.handleNameChange(event)} onFocus={event => this.onFocus(event)} onBlur={event => this.blurAdd(event)} />
+        {this.searchable && this.state.resultful && <Options searchResult={this.state.searchResult} selectChange={(event, name) => this.selectChange(event, name)} resultful={this.state.resultful} />}
+        {this.addable && <span className="input-group-btn"><a className="btn btn-default" onClick={() => this.handleAdd()}>添加</a></span>}
       </div>
     );
   }
 }
 
 InputGroup.contextTypes = {
-  addItem:React.PropTypes.func,
+  addItem: React.PropTypes.func,
 };

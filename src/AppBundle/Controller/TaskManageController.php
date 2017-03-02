@@ -148,33 +148,29 @@ class TaskManageController extends BaseController
 
     public function updateAction(Request $request, $courseId, $id)
     {
-        try {
-            $course   = $this->tryManageCourse($courseId);
-            $task     = $this->getTaskService()->getTask($id);
-            $taskMode = $request->query->get('type');
-            if ($task['courseId'] != $courseId) {
-                throw new InvalidArgumentException('任务不在计划中');
-            }
-
-            if ($request->getMethod() == 'POST') {
-                $task = $request->request->all();
-                $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
-                return $this->createJsonResponse(array('append' => false, 'html' => ''));
-            }
-
-            $activity  = $this->getActivityService()->getActivity($task['activityId']);
-            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-            return $this->render('task-manage/modal.html.twig', array(
-                'mode'        => 'edit',
-                'currentType' => $activity['mediaType'],
-                'course'      => $course,
-                'courseSet'   => $courseSet,
-                'task'        => $task,
-                'taskMode'    => $taskMode
-            ));
-        } catch (\Exception $e) {
-            var_dump($e->getTraceAsString());
+        $course   = $this->tryManageCourse($courseId);
+        $task     = $this->getTaskService()->getTask($id);
+        $taskMode = $request->query->get('type');
+        if ($task['courseId'] != $courseId) {
+            throw new InvalidArgumentException('任务不在计划中');
         }
+
+        if ($request->getMethod() == 'POST') {
+            $task = $request->request->all();
+            $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
+            return $this->createJsonResponse(array('append' => false, 'html' => ''));
+        }
+
+        $activity  = $this->getActivityService()->getActivity($task['activityId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        return $this->render('task-manage/modal.html.twig', array(
+            'mode'        => 'edit',
+            'currentType' => $activity['mediaType'],
+            'course'      => $course,
+            'courseSet'   => $courseSet,
+            'task'        => $task,
+            'taskMode'    => $taskMode
+        ));
 
     }
 

@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/swiper.js','app/js/courseset/show/index.js']) %}
+{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','app/js/courseset/show/index.js']) %}
 
 {% block full_content %}
 
@@ -63,11 +63,15 @@
       </div>
       <div class="col-lg-3 col-md-4 course-sidebar">
         {# 有些widget只有班级计划才显示 #}
-        {% for key, widget in metas.widgets if not (widget.classroomCourse|default(false) and course.parentId == 0) %}
-          {% if widget.renderType == 'render' %}
-            {{ render(controller(widget.uri, {course: course, member: member|default({})})) }}
-          {% elseif widget.renderType == 'include' %}
-            {% include widget.uri with {course: course} %}
+        {% for key, widget in metas.widgets %}
+          {% if (widget.showMode|default('all') == 'classroom' and course.parentId > 0) 
+              or (widget.showMode|default('all') == 'course' and course.parentId == 0)
+              or widget.showMode|default('all') == 'all' %}
+            {% if widget.renderType == 'render' %}
+              {{ render(controller(widget.uri, {course: course, member: member|default({})})) }}
+            {% elseif widget.renderType == 'include' %}
+              {% include widget.uri with {course: course} %}
+            {% endif %}
           {% endif %}
         {% endfor %}
       </div>

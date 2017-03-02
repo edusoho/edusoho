@@ -6,7 +6,7 @@
 	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
-		  	{{'正确答案是'|trans}} <strong class="text-success">
+		  	{{'正确答案是'|trans}} <strong class="color-success">
 		  		{% if question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong>，
 				{% if question.testResult.status|default('noAnswer') == 'right' %}
 					{{'你答对了'|trans}}
@@ -38,7 +38,7 @@
 		{% if showAnswer|default(0) %}
 			<div class="testpaper-preview-answer clearfix mtl mbl">
 			  <div class="testpaper-question-result">
-				  {{'正确答案是'|trans}} <strong class="text-success">{% if question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong class="text-success">
+				  {{'正确答案是'|trans}} <strong class="color-success">{% if question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong class="color-success">
 				</div>
 		  </div>
 	  {% endif %}

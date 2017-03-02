@@ -698,7 +698,6 @@ class CourseManageController extends BaseController
         $task     = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
-        // $count     = $this->getCourseService()->searchLearnCount(array('courseId' => $courseId, 'lessonId' => $lessonId));
         $count     = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($taskId, 'all');
         $paginator = new Paginator($request, $count, 20);
 
@@ -713,9 +712,8 @@ class CourseManageController extends BaseController
             $students[$key]['watchTime']    = $result['time'];
 
             if ($activity['mediaType'] == 'testpaper') {
-                $paperId     = $activity['mediaId'];
-                $paperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $paperId, $courseId, $activity['id'], 'testpaper');
-
+                $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+                $paperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $courseId, $activity['id'], 'testpaper');
                 $students[$key]['result'] = empty($paperResult) ? 0 : $paperResult['score'];
             }
         }
@@ -799,7 +797,8 @@ class CourseManageController extends BaseController
             $tasks[$key]['watchTime']   = $taskWatchTime;
 
             if ($value['type'] == 'testpaper') {
-                $paperId  = $value['activity']['mediaId'];
+                $testpaperActivity = $this->getTestpaperActivityService()->getActivity($value['activity']['mediaId']);
+                $paperId = $testpaperActivity['mediaId'];
                 $score    = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $paperId));
                 $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(array('testId' => $paperId));
 
@@ -971,4 +970,10 @@ class CourseManageController extends BaseController
     {
         return $this->createService('Course:LiveReplayService');
     }
+
+    protected function getTestpaperActivityService()
+    {
+        return $this->createService('Activity:TestpaperActivityService');
+    }
+
 }

@@ -2,9 +2,9 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
 use Vip\Service\Vip\VipService;
 use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
 use Topxia\Api\Resource\Classroom;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
@@ -72,7 +72,7 @@ class ThreadController extends CourseBaseController
         if ($course['parentId']) {
             $classroom        = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');
-            if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
+            if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
                 return $this->createMessageResponse('info', '非常抱歉，您无权限访问该'.$classroomSetting['name'].'，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
             }
         }
@@ -395,7 +395,7 @@ class ThreadController extends CourseBaseController
         if ($course['parentId']) {
             $classroom        = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');
-            if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
+            if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
                 return $this->createMessageResponse('info', '非常抱歉，您无权限访问该'.$classroomSetting['name'].'，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
             }
         }

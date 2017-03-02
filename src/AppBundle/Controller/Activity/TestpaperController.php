@@ -8,23 +8,22 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId, $preview = 0)
+    public function showAction(Request $request, $activity, $preview = 0)
     {
         if ($preview) {
             return $this->forward('AppBundle:Activity/Testpaper:preview', array(
-                'id'       => $id,
-                'courseId' => $courseId
+                'id'       => $activity['id'],
+                'courseId' => $activity['fromCourseId']
             ));
         }
 
         $user              = $this->getUser();
-        $activity          = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $testpaper         = $this->getTestpaperService()->getTestpaper($testpaperActivity['mediaId']);
 
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaperActivity['mediaId'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
 
-        if (!$testpaperResult || ($testpaperResult['status'] == 'doing' && !$testpaperResult['updateTime'])) {
+        if (!$testpaperResult || ($testpaperResult['status'] == 'doing' && !$testpaperResult['updateTime']) || $testpaper['status'] != 'open') {
             return $this->render('activity/testpaper/show.html.twig', array(
                 'activity'          => $activity,
                 'testpaperActivity' => $testpaperActivity,

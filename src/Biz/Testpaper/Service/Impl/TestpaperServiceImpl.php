@@ -2,8 +2,8 @@
 namespace Biz\Testpaper\Service\Impl;
 
 use Biz\BaseService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Type\Testpaper;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
@@ -250,9 +250,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
     }
 
-    public function findPaperResultsStatusNumGroupByStatus($testId)
+    public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds)
     {
-        $numInfo = $this->getTestpaperResultDao()->findPaperResultsStatusNumGroupByStatus($testId);
+        $numInfo = $this->getTestpaperResultDao()->findPaperResultsStatusNumGroupByStatus($testId, $courseIds);
         if (!$numInfo) {
             return array();
         }
@@ -470,7 +470,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $paperResult = $this->updateTestpaperResult($paperResult['id'], $fields);
 
-        $this->dispatchEvent('testpaper.reviewed', new Event($paperResult));
+        $this->dispatchEvent('exam.reviewed', new Event($paperResult));
 
         return $paperResult;
     }

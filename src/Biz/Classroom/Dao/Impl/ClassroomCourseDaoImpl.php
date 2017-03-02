@@ -15,7 +15,8 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
             'orderbys'   => array('seq'),
             'conditions' => array(
                 'classroomId =:classroomId',
-                'courseId = :courseId'
+                'courseId = :courseId',
+                'disabled = :disabled'
             )
         );
     }
@@ -114,5 +115,15 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
     {
         $sql = "SELECT * FROM {$this->table()} WHERE classroomId = ? AND disabled = 0 ORDER BY seq ASC;";
         return $this->db()->fetchAll($sql, array($classroomId)) ?: array();
+    }
+
+    public function countCourseTasksByClassroomId($classroomId)
+    {
+        $sql ="select sum(`taskNum`) from `c2_course` where id in (select `courseId` from `{$this->table}` where `classroomId` = {$classroomId} )";
+        $result = $this->db()->fetchColumn($sql);
+        if (is_null($result)){
+            return 0;
+        }
+        return $result;
     }
 }
