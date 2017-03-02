@@ -29,8 +29,8 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         'T' => 
         array (
             'Topxia\\Api\\' => 11,
+            'Tests\\Unit\\' => 11,
             'Tests\\Functional\\' => 17,
-            'Tests\\' => 6,
         ),
         'S' => 
         array (
@@ -105,13 +105,13 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         array (
             0 => __DIR__ . '/../..' . '/api/src/Topxia/Api',
         ),
+        'Tests\\Unit\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
+        ),
         'Tests\\Functional\\' => 
         array (
             0 => __DIR__ . '/../..' . '/tests/functional',
-        ),
-        'Tests\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/tests',
         ),
         'Symfony\\Polyfill\\Util\\' => 
         array (

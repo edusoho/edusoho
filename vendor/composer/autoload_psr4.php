@@ -7,8 +7,8 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Topxia\\Api\\' => array($baseDir . '/api/src/Topxia/Api'),
+    'Tests\\Unit\\' => array($baseDir . '/tests'),
     'Tests\\Functional\\' => array($baseDir . '/tests/functional'),
-    'Tests\\' => array($baseDir . '/tests'),
     'Symfony\\Polyfill\\Util\\' => array($vendorDir . '/symfony/polyfill-util'),
     'Symfony\\Polyfill\\Php70\\' => array($vendorDir . '/symfony/polyfill-php70'),
     'Symfony\\Polyfill\\Php56\\' => array($vendorDir . '/symfony/polyfill-php56'),
