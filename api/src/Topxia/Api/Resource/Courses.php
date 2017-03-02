@@ -20,14 +20,14 @@ class Courses extends BaseResource
             $conditions['status']         = 'published';
             $conditions['parentId']       = 0;
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $courses                      = $this->getCourseService()->searchCourses($conditions, array('updatedTime', 'ASC'), $start, $limit);
+            $courses                      = $this->getCourseService()->searchCourses($conditions, array('updatedTime' => 'ASC'), $start, $limit);
             $courses                      = $this->assemblyCourses($courses);
             $next                         = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses);
 
             return $this->wrap($this->filter($courses), $next);
         } else {
             $total   = $this->getCourseService()->searchCourseCount($conditions);
-            $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), $start, $limit);
+            $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), $start, $limit);
             $courses = $this->assemblyCourses($courses);
 
             return $this->wrap($this->filter($courses), $total);
@@ -87,7 +87,7 @@ class Courses extends BaseResource
     {
     }
 
-    protected function assemblyCourses(&$courses)
+    protected function assemblyCourses($courses)
     {
         $categoryIds = ArrayToolkit::column($courses, 'categoryId');
         $categories  = $this->getCategoryService()->findCategoriesByIds($categoryIds);

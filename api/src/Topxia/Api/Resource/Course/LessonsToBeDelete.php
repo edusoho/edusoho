@@ -22,13 +22,13 @@ class LessonsToBeDelete extends BaseResource
         if (isset($conditions['cursor'])) {
             $conditions['status']         = 'published';
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $lessons                      = $this->getCourseService()->searchLessons($conditions, array('updatedTime', 'ASC'), $start, $limit);
+            $lessons                      = $this->getCourseService()->searchLessons($conditions, array('updatedTime'=> 'ASC'), $start, $limit);
             $next                         = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $lessons);
             return $this->wrap($this->filter($lessons), $next);
         } else {
             $total   = $this->getCourseService()->searchLessonCount($conditions);
             $start   = $start == -1 ? rand(0, $total - 1) : $start;
-            $lessons = $this->getCourseService()->searchLessons($conditions, array('createdTime', 'ASC'), $start, $limit);
+            $lessons = $this->getCourseService()->searchLessons($conditions, array('createdTime'=> 'ASC'), $start, $limit);
             return $this->wrap($this->filter($lessons), $total);
         }
     }

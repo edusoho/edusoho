@@ -29,7 +29,7 @@ class ThreadPosts extends BaseResource
             $total = $this->getThreadService()->searchPostsCount($conditions);
             $posts = $this->getThreadService()->searchPosts(
                 $conditions,
-                array('createdTime', 'asc'),
+                array('createdTime'=> 'ASC'),
                 0,
                 $total
             );

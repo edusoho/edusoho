@@ -119,7 +119,7 @@ class MemberSync extends BaseResource
             'targetTypes' => array($targetType.'-push')
         );
         $count       = $this->getConversationService()->searchConversationCount($params);
-        $targetConvs = $this->getConversationService()->searchConversations($params, array('createdTime', 'desc'), 0, $count);
+        $targetConvs = $this->getConversationService()->searchConversations($params, array('createdTime'=> 'DESC'), 0, $count);
 
         $targetConvsMap = ArrayToolkit::index($targetConvs, 'targetId');
         $targetConvIds  = ArrayToolkit::column($targetConvs, 'targetId');

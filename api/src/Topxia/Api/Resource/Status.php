@@ -20,7 +20,7 @@ class Status extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $statuses = $this->getStatusService()->searchStatuses(array('userId' => $member['userId'], 'courseId' => $courseId), array('createdTime', 'DESC'), $start, $limit);
+        $statuses = $this->getStatusService()->searchStatuses(array('userId' => $member['userId'], 'courseId' => $courseId), array('createdTime'=> 'DESC'), $start, $limit);
 
         return $this->_filterStatus($statuses);
     }

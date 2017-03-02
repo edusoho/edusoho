@@ -27,7 +27,7 @@ class Users extends BaseResource
 
         if (isset($conditions['cursor'])) {
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $users = $this->getUserService()->searchUsers($conditions, array('updatedTime', 'ASC'), $start, $limit);
+            $users = $this->getUserService()->searchUsers($conditions, array('updatedTime'=> 'ASC'), $start, $limit);
             $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $users);
             return $this->wrap($this->filter($users), $next);
         } else {
@@ -133,12 +133,12 @@ class Users extends BaseResource
      */
     private function matchUsers($q)
     {
-        $mobileProfiles = $this->getUserService()->searchUserProfiles(array('mobile' => $q), array('id', 'DESC'), 0, 5);
-        $qqProfiles = $this->getUserService()->searchUserProfiles(array('qq' => $q), array('id', 'DESC'), 0, 5);
+        $mobileProfiles = $this->getUserService()->searchUserProfiles(array('mobile' => $q), array('id'=> 'DESC'), 0, 5);
+        $qqProfiles = $this->getUserService()->searchUserProfiles(array('qq' => $q), array('id'=> 'DESC'), 0, 5);
 
         $mobileList = $this->getUserService()->findUsersByIds(ArrayToolkit::column($mobileProfiles, 'id'));
         $qqList = $this->getUserService()->findUsersByIds(ArrayToolkit::column($qqProfiles, 'id'));
-        $nicknameList = $this->getUserService()->searchUsers(array('nickname' => $q), array('LENGTH(nickname)', 'ASC'), 0, 5);
+        $nicknameList = $this->getUserService()->searchUsers(array('nickname' => $q), array('LENGTH(nickname)'=> 'ASC'), 0, 5);
 
         return array(
             'mobile' => filters($mobileList, 'user'),

@@ -29,7 +29,7 @@ class HomeworkResult extends BaseResource
             return '';
         }
         $homeworkResults = $this->getHomeworkService()->searchResults(
-            array('homeworkId' => $homework['id'], 'userId' => $user['id']), array('createdTime', 'DESC'), 0, 1);
+            array('homeworkId' => $homework['id'], 'userId' => $user['id']), array('createdTime'=> 'DESC'), 0, 1);
         if (empty($homeworkResults)) {
             return '';
         }

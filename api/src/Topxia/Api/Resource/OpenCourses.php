@@ -24,14 +24,14 @@ class OpenCourses extends BaseResource
             $conditions['status']         = 'published';
             $conditions['parentId']       = 0;
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $openCourses                  = $this->getOpenCourseService()->searchCourses($conditions, array('createdTime', 'ASC'), $start, $limit);
+            $openCourses                  = $this->getOpenCourseService()->searchCourses($conditions, array('createdTime'=> 'ASC'), $start, $limit);
             $openCourses                  = $this->assembly($openCourses);
             $next                         = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $openCourses);
 
             return $this->wrap($this->filter($openCourses), $next);
         } else {
             $total       = $this->getOpenCourseService()->countCourses($conditions);
-            $openCourses = $this->getOpenCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), $start, $limit);
+            $openCourses = $this->getOpenCourseService()->searchCourses($conditions, array('createdTime'=> 'DESC'), $start, $limit);
             $openCourses = $this->assembly($openCourses);
             return $this->wrap($this->filter($openCourses), $total);
         }

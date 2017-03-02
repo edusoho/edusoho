@@ -825,22 +825,22 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
-        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
-        if (!$cloud_search_settting['search_enabled']) {
+        $cloudSearchSettting = $this->getSettingService()->get('cloud_search', array());
+        if (!$cloudSearchSettting['search_enabled']) {
             return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
         }
 
-        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
-        $searchInitStatus = $this->checkCloudSearchStatus($cloud_search_setting);
+        $cloudSearchSetting = $this->getSettingService()->get('cloud_search', array());
+        $searchInitStatus = $this->checkCloudSearchStatus($cloudSearchSetting);
 
         return $this->render('admin/edu-cloud/search/setting.html.twig', array(
             'searchInitStatus' => $searchInitStatus
         ));
     }
 
-    protected function checkCloudSearchStatus($cloud_search_setting )
+    protected function checkCloudSearchStatus($cloudSearchSetting )
     {
-        if ($cloud_search_setting['status'] == 'waiting') {
+        if ($cloudSearchSetting['status'] == 'waiting') {
             $api         = CloudAPIFactory::create('root');
             $search_account = $api->get("/me/search_account");
             if ($search_account['isInit'] == 'yes') {
@@ -850,7 +850,7 @@ class EduCloudController extends BaseController
             }
         }
 
-        if ($cloud_search_setting['status'] == 'ok') {
+        if ($cloudSearchSetting['status'] == 'ok') {
             $searchInitStatus = 'init';
         }
 
@@ -867,13 +867,13 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
-        $cloud_search_setting = $this->getSettingService()->get('cloud_search', array());
+        $cloudSearchSetting = $this->getSettingService()->get('cloud_search', array());
         try {
             $api = CloudAPIFactory::create('root');
 
             $userOverview = $api->get("/users/{$api->getAccessKey()}/overview");
             $searchOverview = $api->get("/me/search/overview");
-            $data = $this->isSearchInited($api, $cloud_search_setting);
+            $data = $this->isSearchInited($api, $cloudSearchSetting);
         } catch (\RuntimeException $e) {
             return $this->render('admin/edu-cloud/search/without-enable.html.twig', array(
                 'data' => array('status' => 'unlink')
@@ -927,11 +927,11 @@ class EduCloudController extends BaseController
 
     public function searchOpenAction()
     {
-        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
-        if ($cloud_search_settting['status'] == 'ok' || $cloud_search_settting['status'] == 'waiting') {
+        $cloudSearchSettting = $this->getSettingService()->get('cloud_search', array());
+        if ($cloudSearchSettting['status'] == 'ok' || $cloudSearchSettting['status'] == 'waiting') {
             $this->getSettingService()->set('cloud_search', array(
                 'search_enabled' => 1,
-                'status'         => $cloud_search_settting['status']
+                'status'         => $cloudSearchSettting['status']
             ));
         }
 
@@ -940,11 +940,11 @@ class EduCloudController extends BaseController
 
     public function searchCloseAction()
     {
-        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+        $cloudSearchSettting = $this->getSettingService()->get('cloud_search', array());
 
         $this->getSettingService()->set('cloud_search', array(
             'search_enabled' => 0,
-            'status'         => $cloud_search_settting['status']
+            'status'         => $cloudSearchSettting['status']
         ));
 
         return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
