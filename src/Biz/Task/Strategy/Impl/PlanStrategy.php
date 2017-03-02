@@ -69,7 +69,8 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         //取得下一个发布的课时
         $conditions = array(
             'courseId' => $task['courseId'],
-            'seq_LT'   => $task['seq']
+            'seq_LT'   => $task['seq'],
+            'status'   => 'published'
         );
 
         $count    = $this->getTaskDao()->count($conditions);
@@ -113,8 +114,8 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             'unit'    => array(),
             'chapter' => array()
         );
-        $taskNumber   = 0;
-        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+        $taskNumber     = 0;
+        $chapterTypes   = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
         foreach ($itemIds as $key => $id) {
             if (strpos($id, 'chapter') === 0) {
                 $id      = str_replace('chapter-', '', $id);
