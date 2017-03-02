@@ -7,6 +7,7 @@ class StudentAdd {
     let $form = $('#student-add-form');
     let validator = $form.validate({
       onkeyup: false,
+      currentDom:'#student-add-submit',
       rules: {
         queryfield: {
           required: true,
@@ -29,8 +30,7 @@ class StudentAdd {
     });
 
     $('#student-add-submit').click(function(event) {
-      if (validator.form()) {
-        $(event.target).button('loading');
+      if(validator.form()) {
         $form.submit();
       }
     });
