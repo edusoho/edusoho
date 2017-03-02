@@ -57,7 +57,6 @@ Functional Test With 5.5:
     - mysql:5.5
     - selenium/standalone-chrome:latest
   script:
-    - sh tests/functional/bin/start.sh;
     - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/functional
   only:
       - tags
