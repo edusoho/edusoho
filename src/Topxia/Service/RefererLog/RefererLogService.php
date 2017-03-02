@@ -59,6 +59,4 @@ interface RefererLogService
     public function createOrderReferer($userRefererOrder);
 
     public function updateOrderReferer($id, $fields);
-
-    public function findTargetIds($conditions);
 }
