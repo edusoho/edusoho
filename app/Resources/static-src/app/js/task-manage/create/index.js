@@ -105,7 +105,7 @@ class Editor {
         const html = response.html;
         this.$element.modal('hide');
         if (needAppend === false) {
-          // @TODO这里页需要返回html,进行替换          
+          // @TODO这里也需要返回html,进行替换          
           document.location.reload();
         }
 
@@ -123,14 +123,12 @@ class Editor {
               $(this).before(html);
               add = 1;
               sortablelist('#sortable-list');
-               console.log('1');
               return false;
             }
             if ($parent.hasClass('task-manage-unit') && $(this).hasClass('task-manage-unit')) {
               $(this).before(html);
               add = 1;
               sortablelist('#sortable-list');
-               console.log('2');
               return false;
             }
           });
@@ -140,7 +138,6 @@ class Editor {
             add = 1;
           }
         } else {
-          console.log('4');
           $item = $(html);
           $("#sortable-list").append($item);
         }
