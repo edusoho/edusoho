@@ -44,12 +44,12 @@
             <i class="es-icon es-icon-help mrs text-md"></i>任务完成条件
           </a>
 
-          <span
-              class="btn text-sm js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
+          <span class="btn text-sm js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
               href="javascript:;"
               data-toggle="popover"
               data-trigger="hover"
               data-placement="top"
+              data-container=".js-learned-prompt"
               data-content='{% include "task/task-finished-prompt.html.twig" %}'
               data-url="{{ path('course_task_finished_prompt', {courseId: course.id, id: task.id}) }}">
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
