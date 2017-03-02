@@ -81,12 +81,6 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         return $this->getRefererLogDao()->countDistinctLogsByField($conditions, $field);
     }
 
-    public function findTargetIds($conditions)
-    {
-        $result = $this->getRefererLogDao()->findTargetIds($conditions);
-        return ArrayToolkit::column($result, 'targetId');
-    }
-
     protected function prepareConditions($conditions)
     {
         return $conditions;
