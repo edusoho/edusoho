@@ -107,7 +107,7 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         ),
         'Tests\\Unit\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/tests',
+            0 => __DIR__ . '/../..' . '/tests/unit',
         ),
         'Tests\\Functional\\' => 
         array (
