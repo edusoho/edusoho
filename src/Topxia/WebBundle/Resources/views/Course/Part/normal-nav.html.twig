@@ -8,7 +8,7 @@
     {% if not member %}
       <li role="presentation" {% if tab == 'overview' %}class="active"{% endif %}><a {% if previewAs %}href="{{ path('course_show', {id:course.id,previewAs:'guest'}) }}"{% else %}href="{{ path('course_show', {id:course.id}) }}" {% endif %}>{{'课程概览'|trans}}</a></li>
       <li role="presentation" {% if tab == 'lesson-list' %}class="active"{% endif %}><a {% if previewAs %}href="{{ path('course_lesson_list', {id:course.id, previewAs:'guest'}) }}"{% else %}href="{{ path('course_lesson_list', {id:course.id})}}"{% endif %}>{{'课时列表'|trans}}
-      {% if can_try_look(course.id) %}
+      {% if can_try_look(course.id) or member is null %}
         <span class="badge badge-primary">试看</span>
       {% endif %}
       </a></li>
