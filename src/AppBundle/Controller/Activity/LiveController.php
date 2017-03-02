@@ -34,7 +34,7 @@ class LiveController extends BaseController implements ActivityActionInterface
             $activity['replays'] = $this->_getLiveReplays($activity);
         }
 
-        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->id)) {
+        if ($this->getCourseMemberService()->isCourseTeacher($activity['fromCourseId'], $this->getUser()->id)) {
             $activity['isTeacher'] = $this->getUser()->isTeacher();
         }
 
