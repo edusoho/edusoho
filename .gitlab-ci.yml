@@ -54,7 +54,7 @@ Unit Test With PHP 7.0:
 
 Functional Test With 5.5:
   stage: test
-  image: registry.cn-hangzhou.aliyuncs.com/ruanwenqin/php:latest
+  image: codeages/ci-php:5.5-3
   services:
     - mysql:5.5
     - selenium/standalone-chrome:latest
