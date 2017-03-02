@@ -6,7 +6,7 @@ use Topxia\Service\Common\BaseTestCase;
 
 class CourseServiceTest extends BaseTestCase
 {
-    //=============== Course API Test [start]===============
+    =============== Course API Test [start]===============
     public function testGetCourse()
     {
         $course       = array(
@@ -685,6 +685,7 @@ class CourseServiceTest extends BaseTestCase
         $counter             = array();
         $createCourse        = $this->getCourseService()->createCourse($course);
         $updateCourseCounter = $this->getCourseService()->updateCourseCounter($createCourse['id'], $counter);
+
     }
 
     public function testUpdateMembersDeadlinesByClassroomId()
@@ -699,17 +700,16 @@ class CourseServiceTest extends BaseTestCase
         $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->publishCourse($createCourse['id']);
 
-        $normalUser  = $this->createNormalUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($normalUser);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $user  = $this->getCurrentUser();
 
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
-        $this->getClassroomService()->becomeStudent($classroom['id'], $currentUser['id']);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+        $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
 
         $result = $this->getCourseService()->updateMembersDeadlinesByClassroomId($classroom['id'], '1488433547');
 
-        $this->assertEquals('1488433547', $result['deadline']);
+        $this->assertEquals(1, count($result));
     }
 
     public function testChangeCoursePicture()
@@ -3522,7 +3522,6 @@ class CourseServiceTest extends BaseTestCase
         $itemIds[] = 'lesson-99999';
         $this->getCourseService()->sortCourseItems($course['id'], $itemIds);
     }
-
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */
