@@ -997,19 +997,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->count($conditions);
     }
 
-    public function hasFavoritedCourse($courseId)
-    {
-        $user = $this->getCurrentUser();
-
-        if (empty($user['id'])) {
-            return false;
-        }
-
-        $favorite = $this->getFavoriteDao()->getByUserIdAndCourseId($user['id'], $courseId, 'course');
-
-        return $favorite ? true : false;
-    }
-
     protected function createCourseStrategy($course)
     {
         return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
@@ -1139,14 +1126,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return FavoriteDao
-     */
-    protected function getFavoriteDao()
-    {
-        return $this->biz->dao('Course:FavoriteDao');
     }
 
     /**
