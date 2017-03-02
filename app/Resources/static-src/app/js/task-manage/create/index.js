@@ -105,8 +105,8 @@ class Editor {
         const html = response.html;
         this.$element.modal('hide');
         if (needAppend === false) {
-          console.log(needAppend);
-          sortablelist('#sortable-list');
+          // @TODO这里页需要返回html,进行替换          
+          document.location.reload();
         }
 
         let chapterId = postData.find(function (input) {
@@ -138,7 +138,6 @@ class Editor {
             $item = $(html);
             $("#sortable-list").append($item);
             add = 1;
-            console.log('3');
           }
         } else {
           console.log('4');
