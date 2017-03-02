@@ -3,19 +3,28 @@
     <h3 class="panel-title">推荐班级</h3>
   </div>
   <div class="panel-body recommend-class-list">
-    <div class="class-item">
-      <div class="class-img-wrap">
-        <a class="class-img" href="/classroom/2">
-          <img src="/assets/img/default/course.png" alt="课程套餐" class="img-responsive"></a>
-        <div class="mask">
-
-          <a href="/classroom/2" class="btn btn-warning">继续学习</a>
+    {# {% set count = config.count %}
+    {% set items = data('RecommendClassrooms',{'count':count}) %} #}
+    {% set items = data('RecommendClassrooms',{'count': 1}) %}
+    {% if items %}
+    {% set classroom = items[0] %}
+      <div class="class-item">
+        <div class="class-img-wrap">
+          <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
+            <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}" class="img-responsive">
+          </a>
+          <div class="mask">
+            <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">查看班级</a>
+          </div>
         </div>
+        <h3>
+          <a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">课程套餐</a>
+        </h3>
+        <div class="metas">共有{{classroom.courseNum}}门课程</div>
       </div>
-      <h3>
-        <a class="link-dark" href="/classroom/2">课程套餐</a>
-      </h3>
-      <div class="metas">共有5门课程</div>
-    </div>
+      <a class="more" href="{{ path('classroom_explore') }}">更多&gt;</a>
+    {% else %}
+      <div class="empty">还没有发布的{{ setting('classroom.name')|default("班级") }}</div>
+    {% endif %}
   </div>
 </div>

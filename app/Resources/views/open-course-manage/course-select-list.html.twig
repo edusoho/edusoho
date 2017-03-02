@@ -18,7 +18,7 @@
 
     <li class="course-item clearfix"   data-id="{{course.id}}" >
       <a class="course-picture-link" href="{{ path('course_set_show',{id:course.id}) }}" target="_blank">
-        <img class="course-picture" src="{{ filepath(course.cover.middle|default(null), 'course.png') }}" alt="{{ course.title }}">
+        <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
       </a>
       <div class="course-body">
         <div style="float:right;" class="text-muted mrm mls">
