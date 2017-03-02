@@ -18,7 +18,7 @@
     <div class="notebook" id="notebook">
       <div class="notebook-heading">
         <a class="btn btn-default btn-sm pull-right notebook-back-btn" href="{{ path('my_notebooks') }}" >{{'返回'|trans}}</a>
-        <img class="notebook-icon" src="{{ filepath(course.cover.large|default(null), 'course.png') }}" />
+        <img class="notebook-icon" src="{{ filepath(course_cover(course, 'large')|default(null), 'courseSet.png') }}" />
         {{'《%title%》的笔记'|trans({'%title%':course.title})}}
       </div>
       <div class="notebook-body">

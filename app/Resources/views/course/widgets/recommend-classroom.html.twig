@@ -3,7 +3,28 @@
     <h3 class="panel-title">推荐班级</h3>
   </div>
   <div class="panel-body recommend-class-list">
-    <div class="class-item">
+    {% set items = data('RecommendClassrooms',{'count': 1}) %}
+    {% if items %}
+    {% set classroom = items[0] %}
+      <div class="class-item">
+        <div class="class-img-wrap">
+          <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
+            <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}" class="img-responsive">
+          </a>
+          <div class="mask">
+            <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">继续学习</a>
+          </div>
+        </div>
+        <h3>
+          <a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">课程套餐</a>
+        </h3>
+        <div class="metas">共有{{classroom.courseNum}}门课程</div>
+      </div>
+      <a class="more" href="{{ path('classroom_explore') }}">更多&gt;</a>
+    {% else %}
+      <div class="empty">还没有发布的{{ setting('classroom.name')|default("班级") }}</div>
+    {% endif %}
+    {# <div class="class-item">
       <div class="class-img-wrap">
         <a class="class-img" href="/classroom/2">
           <img src="/assets/img/default/course.png" alt="课程套餐" class="img-responsive"></a>
@@ -16,6 +37,77 @@
         <a class="link-dark" href="/classroom/2">课程套餐</a>
       </h3>
       <div class="metas">共有5门课程</div>
-    </div>
+    </div> #}
+    
+    {# <h2>{{ config.title|default(config.defaultTitle) }}</h2>
+    {% set count = config.count %}
+    {% set items = data('RecommendClassrooms',{'count':count}) %} #}
+    
+    {# {% set items = data('RecommendClassrooms',{'count':1}) %}
+    {% if items %}
+    {% set mode = mode|default('default') %}
+      <ul class="home-class-list clearfix">
+      {% for classroom in items %}
+        <li class="class-item">
+          <div class="mask-wrap">
+            <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
+              {{ lazy_img(filepath(classroom.largePicture, 'classroom.png'), '', classroom.title, 'lazyload_class.png') }}
+            </a>
+            <div class="class-body">
+              <h3 class="class-title">
+                {{ classroom.title }}
+              </h3>
+
+              <div class="class-metas">
+                <span class="class-teacher">
+                  <i class="fa fa-user"></i>
+                {% set teachers = classroom.users|default(null) %}
+                {% if teachers %}
+                {% for teacher in teachers %}
+                  {% if loop.index <= 3%}
+                  <span>{{ teacher.nickname|default('') }}</span>
+                   {% endif %}
+                {% endfor %}
+                
+                {% endif %}
+                </span>
+                <span class="class-student"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }}</span>
+                <span class="class-price">
+                  {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                      {% if classroom.price > 0 %}
+                       {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                      {% else %}
+                        免费
+                      {% endif %}
+                  {% else %}
+                      {% if classroom.price > 0 %}
+                        {{ classroom.price }}元
+                      {% else %}
+                        免费
+                      {% endif %}
+                  {% endif %}
+                  </span>
+              </div>
+
+              <div class="course-num">共{{classroom.lessonNum}}课</div>
+              
+            </div>
+            <div class="mask">
+              <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+                <div class="class-about">
+                  简介：<br>
+                  {{ classroom.about|plain_text(100) }}
+                </div>
+                <span class="iconfont icon-jiantou"></span>
+              </a>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+      </ul>
+      <a class="more" href="{{ path('classroom_explore') }}">更多&gt;</a>
+    {% else %}
+      <div class="empty">还没有发布的{{ setting('classroom.name')|default("班级") }}</div>
+    {% endif %} #}
   </div>
 </div>

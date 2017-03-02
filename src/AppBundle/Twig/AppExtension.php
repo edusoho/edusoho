@@ -2,8 +2,14 @@
 
 namespace AppBundle\Twig;
 
+use Codeages\Biz\Framework\Context\Biz;
+use Biz\Course\Service\CourseSetService;
+
 class AppExtension extends \Twig_Extension
 {
+    /**
+     * @var Biz
+     */
     protected $biz;
 
     public function __construct($biz)
@@ -24,7 +30,8 @@ class AppExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('services', array($this, 'buildServiceTags')),
             new \Twig_SimpleFunction('classroom_services', array($this, 'buildClassroomServiceTags')),
-            new \Twig_SimpleFunction('count', array($this, 'count'))
+            new \Twig_SimpleFunction('count', array($this, 'count')),
+            new \Twig_SimpleFunction('course_cover', array($this, 'courseCover'))
         );
     }
 
@@ -163,6 +170,23 @@ class AppExtension extends \Twig_Extension
         return $this->sortTags($tags);
     }
 
+    public function courseCover($course, $type = 'middle')
+    {
+        if (empty($course)) {
+            return null;
+        }
+        if (!empty($course['courseSet'])) {
+            $courseSet = $course['courseSet'];
+        } else {
+            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        }
+        $cover = $courseSet['cover'];
+        if (empty($cover) || empty($cover[$type])) {
+            return null;
+        }
+        return $cover[$type];
+    }
+
     protected function sortTags($tags)
     {
         if (empty($tags)) {
@@ -186,5 +210,13 @@ class AppExtension extends \Twig_Extension
     public function getName()
     {
         return 'app_twig';
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->biz->service('Course:CourseSetService');
     }
 }

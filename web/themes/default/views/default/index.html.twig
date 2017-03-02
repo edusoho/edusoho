@@ -290,7 +290,7 @@
     {% for course in courses %}
     <li class="course-item clearfix">
       <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-        {{ lazy_img(filepath(course.cover.large|default(''), 'course.png'), 'course-picture', '') }}
+        {{ lazy_img(filepath(course_cover(course, 'large')|default(''), 'courseSet.png'), 'course-picture', '') }}
         {% if course.serializeMode=='serialize' %}
           <span class="label label-success ">{{'更新中'|trans}}</span>
         {% elseif course.serializeMode=='finished' %}

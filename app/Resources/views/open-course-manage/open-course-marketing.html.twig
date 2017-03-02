@@ -64,7 +64,7 @@
                 
                 <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>
                 <a class="course-picture-link" href="{{ showUrl }}" target="_blank">
-                  <img class="course-picture" src="{{ filepath(course.cover.middle|default(null), 'course.png') }}" alt="{{ course.title }}">
+                  <img class="course-picture" src="{{ filepath(course_cover(course, 'middle')|default(null), 'courseSet.png') }}" alt="{{ course.title }}">
                 </a>
 
                 <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="删除" style="font-size:35px;" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{course.id}}">× </button>
