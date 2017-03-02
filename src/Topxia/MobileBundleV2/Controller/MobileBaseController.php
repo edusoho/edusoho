@@ -266,6 +266,8 @@ class MobileBaseController extends BaseController
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
 
         return array_map(function ($course, $courseSet) use ($self, $container, $teachers, $coinSetting) {
+            $course = $this->convertOldFields($course);
+            $course = $this->filledCourseByCourseSet($course, $courseSet);
             $course['smallPicture']  = $container->get('web.twig.extension')->getFurl($courseSet['cover']['small'], 'course.png');
             $course['middlePicture'] = $container->get('web.twig.extension')->getFurl($courseSet['cover']['middle'], 'course.png');
             $course['largePicture']  = $container->get('web.twig.extension')->getFurl($courseSet['cover']['large'], 'course.png');
@@ -281,15 +283,12 @@ class MobileBaseController extends BaseController
             }
 
             unset($course['teacherIds']);
-            
-            $course['tags'] = TagUtil::buildTags('course', $course['id']);
+
+            $course['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
             $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
 
             $course["priceType"] = $coinSetting["priceType"];
             $course['coinName']  = $coinSetting["name"];
-
-            $course = $this->convertOldFields($course);
-            $course = $this->filledCourseByCourseSet($course, $courseSet);
 
             return $course;
         }, $courses, $courseSets);
@@ -306,6 +305,7 @@ class MobileBaseController extends BaseController
 
     private function filledCourseByCourseSet($course, $courseSet)
     {
+        $course['tags'] = $courseSet['tags'];
         $course['hitNum'] = $courseSet['hitNum'];
         $course['orgCode'] = $courseSet['orgCode'];
         $course['orgId'] = $courseSet['orgId'];
