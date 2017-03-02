@@ -48,10 +48,21 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
 
     public function findRefererLogsGroupByTargetId($targetType, $orderBy, $startTime, $endTime, $start, $limit)
     {
-        $parameters = array($targetType, $targetType);
-        $sql        = "SELECT a.targetId AS targetId, b.hitNum AS hitNum,b.orderCount AS orderCount FROM (SELECT id,targetId from {$this->table} WHERE targetType = ?
-                GROUP BY targetId) AS a LEFT JOIN (SELECT id,targetId, COUNT(id) AS hitNum, SUM(orderCount) AS orderCount FROM {$this->table}
+        $parameters = array($targetType);
+        $sql  = "SELECT a.targetId AS targetId, b.hitNum AS hitNum,b.orderCount AS orderCount FROM (SELECT id,targetId from {$this->table} WHERE targetType = ?";
+        if (!empty($startTime)) {
+            $sql .= 'AND createdTime >= ?';
+            $parameters[] = $startTime;
+        }
+
+        if (!empty($endTime)) {
+            $sql .= "and createdTime <= ?";
+            $parameters[] = $endTime;
+        }
+        $sql .= "GROUP BY targetId) AS a LEFT JOIN (SELECT id,targetId, COUNT(id) AS hitNum, SUM(orderCount) AS orderCount FROM {$this->table}
                 WHERE targetType = ?";
+
+        $parameters[] = $targetType;
 
         if (!empty($startTime)) {
             $sql .= 'AND createdTime >= ?';
@@ -62,7 +73,6 @@ class RefererLogDaoImpl extends BaseDao implements RefererLogDao
             $sql .= "and createdTime <= ?";
             $parameters[] = $endTime;
         }
-
         $sql .= "GROUP BY targetId) AS b ON a.targetId = b.targetId where a.targetId in (select id from open_course) ORDER BY {$orderBy[0]} {$orderBy[1]},targetId DESC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, $parameters);
     }
