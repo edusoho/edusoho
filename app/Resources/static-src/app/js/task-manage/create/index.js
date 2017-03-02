@@ -1,6 +1,8 @@
 import loadAnimation from 'common/load-animation'
 import 'jquery-sortable';
 import notify from "common/notify";
+import { sortablelist } from "app/js/course-manage/help";
+
 
 class Editor {
   constructor($modal) {
@@ -70,14 +72,14 @@ class Editor {
     this._onNext(event);
   }
 
-  _askSave(){
+  _askSave() {
     const isCreateOperation = $('#task-create-type').data('editor-mode') == 'create';
     const isDaysMode = $('#courseExpiryMode').val() == 'days';
     const isNormalCourseSet = $('#courseSetType').val() == 'normal';
     const isLiveType = this.type == 'live';
     let confirmResult = true;
     console.log($('#courseExpiryMode').val());
-    if(isCreateOperation && isDaysMode && isNormalCourseSet && isLiveType){
+    if (isCreateOperation && isDaysMode && isNormalCourseSet && isLiveType) {
       confirmResult = confirm('本计划的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。确定要添加吗？');
     }
 
@@ -89,7 +91,7 @@ class Editor {
       return;
     }
 
-    if(!this._askSave()){
+    if (!this._askSave()) {
       return;
     }
 
@@ -99,19 +101,12 @@ class Editor {
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
-
         const needAppend = response.append;
         const html = response.html;
-
         this.$element.modal('hide');
-
         if (needAppend === false) {
-          let data = $('#sortable-list').sortable("serialize").get();
-          $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
-            if (response) {
-              document.location.reload();
-            }
-          });
+          // @TODO这里也需要返回html,进行替换          
+          document.location.reload();
         }
 
         let chapterId = postData.find(function (input) {
@@ -127,11 +122,13 @@ class Editor {
             if ($(this).hasClass('task-manage-chapter')) {
               $(this).before(html);
               add = 1;
+              sortablelist('#sortable-list');
               return false;
             }
             if ($parent.hasClass('task-manage-unit') && $(this).hasClass('task-manage-unit')) {
               $(this).before(html);
               add = 1;
+              sortablelist('#sortable-list');
               return false;
             }
           });
@@ -144,10 +141,8 @@ class Editor {
           $item = $(html);
           $("#sortable-list").append($item);
         }
-        // 最后一个
         this.showDefaultSetting($item);
-        let data = $('#sortable-list').sortable("serialize").get();
-        $.post($('#sortable-list').data('sortUrl'), {ids: data});
+        sortablelist('#sortable-list');
       })
       .fail((response) => {
         let msg = '';
@@ -160,8 +155,8 @@ class Editor {
       });
   }
 
-  showDefaultSetting($item=null) {
-    if($item && $item.hasClass('js-task-manage-item')) {
+  showDefaultSetting($item = null) {
+    if ($item && $item.hasClass('js-task-manage-item')) {
       $('.js-task-manage-item').removeClass('active').find('.js-settings-list').slideUp();;
       $item.addClass('active').find('.js-settings-list').slideDown();
     }
