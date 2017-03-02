@@ -3146,8 +3146,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $learnProgress;
     }
 
-    public function canTryLook($courseId)
+    public function canTryLook($courseId, $type)
     {
+        if (in_array($type, array('liveOpen', 'open'))) {
+            return false;
+        }
+        
         $course = $this->getCourseDao()->getCourse($courseId);
         $user = $this->getCurrentUser();
         
