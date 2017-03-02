@@ -269,8 +269,6 @@ class OpenCourseAnalysisController extends BaseController
         $conditions['targetType'] = 'openCourse';
         $startTime                = ArrayToolkit::get($conditions, 'startTime', '');
         $endTime                  = ArrayToolkit::get($conditions, 'endTime', '');
-        unset($conditions['startTime']);
-        unset($conditions['endTime']);
         $targetIds = $this->getRefererLogService()->findTargetIds($conditions);
         $courses = $this->getOpenCourseService()->findCoursesByIds($targetIds);
 
