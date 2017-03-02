@@ -98,7 +98,7 @@
           </div>
         </div>
         <div class="class-operation">
-          {% if (date(memberDeadline) < date() and memberDeadline != 0) and ('student' in member.role) %}
+          {% if (memberDeadline != 0 and date(memberDeadline) < date()) and ('student' in member.role or 'member' in member.role) %}
             <div class="class-deadline">
               {% if classroom.expiryMode == 'date'%}
                  <div  class="alert alert-warning">你的班级已过有效期，无法继续学习</div>

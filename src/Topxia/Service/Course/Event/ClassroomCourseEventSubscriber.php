@@ -26,10 +26,12 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
             $this->getConnection()->beginTransaction();
 
             if (!empty($fields['expiryMode']) && !empty($fields['expiryValue'])) {
-                if ($this->canUpdateCoursesMembersAndCourses($classroom)) {
-                    $this->updateClassroomCoursesExpiryDate($classroom['id'], array('expiryMode' => $fields['expiryMode'], 'expiryValue' => $fields['expiryValue']));
+                if ($this->canUpdateCourses($classroom, $fields['expiryMode'])) {
+                    $this->updateCoursesExpiryDate($classroom['id'], array('expiryMode' => $fields['expiryMode'], 'expiryValue' => $fields['expiryValue']));
+                }
 
-                    $this->updateClassroomCoursesStudentsExpiryDate($classroom['id'], array('expiryValue' => $fields['expiryValue'], 'expiryMode' => $fields['expiryMode'], 'classroomStatus' => $classroom['status']));
+                if ($this->canUpdateCoursesMembers($classroom, $fields['expiryMode'])) {
+                    $this->updateCoursesStudentsDeadline($classroom['id'], array('expiryValue' => $fields['expiryValue'], 'expiryMode' => $fields['expiryMode'], 'classroomStatus' => $classroom['status']));
                 }
             }
 
@@ -53,32 +55,36 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
         return $fields['expiryValue'];
     }
 
-    protected function canUpdateCoursesMembersAndCourses($classroom)
+    protected function canUpdateCourses($classroom, $expiryMode)
     {
         if ($classroom['status'] == 'draft') {
+            return true;
+        }
+
+        if ($classroom['status'] == 'published' && $expiryMode == 'date') {
             return true;
         }
 
         return false;
     }
 
-    protected function updateClassroomCoursesStudentsExpiryDate($classroomId, $fields)
+    protected function canUpdateCoursesMembers($classroom, $expiryMode)
     {
-        $members = $this->getCourseService()->searchMembers(
-            array('classroomId' => $classroomId), 
-            array('createdTime', 'desc'), 
-            0, 
-            PHP_INT_MAX
-        );
+        if ($classroom['status'] == 'published' && $expiryMode == 'date') {
+            return true;
+        }
 
-        foreach ($members as $member) {
-            $deadline = $this->buildMemberDeadline($fields, $member);
+        return false;
+    }
 
-            $this->getCourseService()->updateCourseMember($member['id'], array('deadline' => $deadline));
+    protected function updateCoursesStudentsDeadline($classroomId, $fields)
+    {
+        if ($fields['expiryMode'] == 'date') {
+            $this->getCourseService()->updateMembersDeadlinesByClassroomId($classroomId, $fields['expiryValue']);
         }
     }
 
-    protected function updateClassroomCoursesExpiryDate($classroomId, $expiryDate)
+    protected function updateCoursesExpiryDate($classroomId, $expiryDate)
     {
         $activeCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
 

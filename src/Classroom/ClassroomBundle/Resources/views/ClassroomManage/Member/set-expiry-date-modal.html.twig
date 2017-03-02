@@ -40,7 +40,6 @@
         </div>
       </div>
     </div>
-    <input type="hidden" name="expiryMode" value="date">
     <input type="hidden" name="memberId" value="{{ user.id }}">
   {% else %}
     <div class="empty">{{dict_text('classroomStatus', classroom.status)}}{{'班级不能修改'|trans}}{{ setting('default.user_name')|default('学员'|trans) }}{{'有效期，请班级发布后再增加。'|trans}}</div>

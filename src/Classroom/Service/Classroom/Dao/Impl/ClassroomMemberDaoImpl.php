@@ -71,6 +71,12 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         return $this->getMember($id);
     }
 
+    public function updateMembersDeadlinesByClassroomId($id, $deadline)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? SET deadline = ?";
+        return $this->getConnection()->fetchAll($sql, array($id, $deadline));
+    }
+
     public function findAssistants($classroomId)
     {
         $that = $this;

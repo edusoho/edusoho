@@ -65,6 +65,8 @@ interface CourseService
 
     public function updateCourse($id, $fields);
 
+    public function updateMembersDeadlinesByClassroomId($classroomId, $deadline);
+
     public function batchUpdateOrg($courseIds, $orgCode);
 
     public function updateCourseCounter($id, $counter);

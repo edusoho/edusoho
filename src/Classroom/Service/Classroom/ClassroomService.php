@@ -102,13 +102,13 @@ interface ClassroomService
 
     public function updateMemberDeadline($id, $fields);
 
+    public function updateMembersDeadlinesByClassroomId($classroomId, $expiryDate);
+
     public function searchMemberCount($conditions);
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
     public function findMemberUserIdsByClassroomId($classroomId);
-
-    public function findStudentsByClassroomId($classroomId);
 
     public function getClassroomMember($classroomId, $userId);
 

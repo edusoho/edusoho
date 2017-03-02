@@ -224,6 +224,10 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function createJob($lesson)
     {
+        if ($this->isJobExsit($lesson)) {
+            return;
+        }
+
         $daySmsType  = 'sms_live_play_one_day';
         $hourSmsType = 'sms_live_play_one_hour';
         $dayIsOpen   = $this->getSmsService()->isOpen($daySmsType);
@@ -252,6 +256,15 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }
+    }
+
+    protected function isJobExsit($lesson)
+    {
+        if ($this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id'])) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function copyChapters($courseId, $newCourse)
