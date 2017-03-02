@@ -35,7 +35,7 @@
         <tbody>
           {% for student in students if student %}
             {% set user = users[student.userId]|default(null) %}
-            <tr class="students-item js-students-item">
+            <tr id="student-{{user.id}}-tr" class="students-item js-students-item">
               <td class="media media-middle" >
                 <a class="pull-left js-user-card" href="/user/{{student.userId}}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
                   {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}

@@ -24,7 +24,7 @@
 	</div>
 	<div class="panel-body">
 		<div class="js-panel-card panel-card">
-		{% for type in questionTypes|default([]) %}
+		{% for type in questionTypes|default([]) if questions[type]|default(null) %}
 			<p>{{ questionTypeDict[type] }}</p>
 			{% for question in questions[type]|default(null) %}
 				{% if question.type == 'material' %}

@@ -10,6 +10,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -239,12 +240,10 @@ class TaskServiceImpl extends BaseService implements TaskService
         $activities  = $this->getActivityService()->findActivities($activityIds, true);
         $activities  = ArrayToolkit::index($activities, 'id');
 
-        array_walk(
-            $tasks,
-            function (&$task) use ($activities) {
-                $activity         = $activities[$task['activityId']];
-                $task['activity'] = $activity;
-            }
+        array_walk($tasks, function (&$task) use ($activities) {
+            $activity         = $activities[$task['activityId']];
+            $task['activity'] = $activity;
+        }
         );
 
         return $tasks;
@@ -260,11 +259,18 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
+
+        $isLock = false;
         foreach ($tasks as &$task) {
             if (in_array($task['id'], array_keys($taskResults))) {
                 $task['result'] = $taskResults[$task['id']];
             }
             $task = $this->setTaskLockStatus($tasks, $task);
+            //设置第一个发布的任务为解锁的
+            if ($task['status'] == 'published' and empty($isLock)) {
+                $task['lock'] = false;
+                $isLock       = true;
+            }
         }
 
         return $tasks;
@@ -346,7 +352,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId)
     {
-        $conditions = array(
+        $conditions     = array(
             'userId' => $userId,
         );
         $myTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions, 0, PHP_INT_MAX, true);
@@ -494,10 +500,10 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $conditions = array(
             'fromCourseSetId' => $courseSetId,
-            'type'     => 'live',
-            'status'   => 'published',
-            'startTime_LT'     => time(),
-            'endTime_GT'       => time(),
+            'type'            => 'live',
+            'status'          => 'published',
+            'startTime_LT'    => time(),
+            'endTime_GT'      => time(),
         );
         return $this->searchTasks($conditions, array('startTime' => 'ASC'), 0, $this->countTasks($conditions));
 
@@ -507,11 +513,12 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $conditions = array(
             'fromCourseSetId' => $courseSetId,
-            'type'     => 'live',
-            'status'   => 'published',
+            'type'            => 'live',
+            'status'          => 'published',
         );
         return $this->searchTasks($conditions, array('startTime' => 'ASC'), 0, $this->countTasks($conditions));
     }
+
     /**
      * 返回当前正在直播的直播任务
      *
@@ -760,6 +767,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             $conditions       = array(
                 'seq_GE'   => $latestLearnTask['seq'],
                 'courseId' => $courseId,
+                'status'   => 'published'
             );
             $tasks            = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 2);
             $toLearnTask      = array_pop($tasks); //如果当正在学习的是最后一个，则取当前在学的任务
@@ -780,7 +788,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         if (empty($taskResult)) {
             $toLearnTasks = $this->getTaskDao()->search(
-                array('courseId' => $courseId),
+                array('courseId' => $courseId, 'status' => 'published'),
                 array('seq' => 'ASC'),
                 0,
                 $toLearnTaskCount
@@ -881,6 +889,12 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->createDao('Task:TaskDao');
     }
 
+    /**
+     * @param $courseId
+     *
+     * @return CourseStrategy
+     * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
     protected function createCourseStrategy($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);

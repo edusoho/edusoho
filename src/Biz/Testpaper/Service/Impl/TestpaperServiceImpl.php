@@ -470,7 +470,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $paperResult = $this->updateTestpaperResult($paperResult['id'], $fields);
 
-        $this->dispatchEvent('testpaper.reviewed', new Event($paperResult));
+        $this->dispatchEvent('exam.reviewed', new Event($paperResult));
 
         return $paperResult;
     }
