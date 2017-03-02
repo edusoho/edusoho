@@ -12,8 +12,7 @@
 
 		"psr-4": {
 			"Topxia\\Api\\" : "api/src/Topxia/Api",
-			"Tests\\Unit\\": "tests/unit",
-			"Tests\\Functional\\": "tests/functional"
+			"Tests\\": "tests"
 		},
 		"files": [ "app/AppKernel.php" ]
 	},
