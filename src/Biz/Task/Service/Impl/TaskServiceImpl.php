@@ -10,6 +10,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Event\Event;
 
@@ -888,6 +889,12 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->createDao('Task:TaskDao');
     }
 
+    /**
+     * @param $courseId
+     *
+     * @return CourseStrategy
+     * @throws \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
     protected function createCourseStrategy($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);

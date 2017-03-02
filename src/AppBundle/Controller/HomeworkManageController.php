@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Testpaper\Service\TestpaperService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -149,6 +150,9 @@ class HomeworkManageController extends BaseController
         return $newTypes;
     }
 
+    /**
+     * @return TestpaperService
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
