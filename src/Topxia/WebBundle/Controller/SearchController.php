@@ -148,13 +148,15 @@ class SearchController extends BaseController
 
     protected function isTypeUseable($type)
     {
-        $cloud_search_setting = $this->getSettingService()->get('cloud_search');
+        $cloudSearchSetting = $this->getSettingService()->get('cloud_search');
 
-        if (!array_key_exists($type, $cloud_search_setting['type'])) {
+        $cloudSearchType = $cloudSearchSetting['type'];
+
+        if (!array_key_exists($type, $cloudSearchType)) {
             return false;
         }
 
-        if ($cloud_search_setting['type'][$type] == 1) {
+        if ($cloudSearchType[$type] == 1) {
             return true;
         }
 
