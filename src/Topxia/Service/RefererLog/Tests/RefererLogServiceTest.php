@@ -154,9 +154,8 @@ class RefererLogServiceTest extends BaseTestCase
 
     public function testFindRefererLogsGroupByTargetId()
     {
-        $liveOpenCourse = $this->_createLiveOpenCourse();
         $refererlog1       = array(
-            'targetId'   => $liveOpenCourse['id'],
+            'targetId'   => 1,
             'targetType' => 'course',
             'refererUrl' => 'http://demo.edusoho.com/course/explore',
             'userAgent'  => 'iOS10'
@@ -185,39 +184,6 @@ class RefererLogServiceTest extends BaseTestCase
 
         $this->assertEquals(1, count($refererLogs));
         $this->assertEquals(2, $refererLogs[0]['hitNum']);
-    }
-
-    public function testFindTargetIds()
-    {
-        $refererlog2       = array(
-            'targetId'   => 1,
-            'targetType' => 'openCourse',
-            'refererUrl' => 'http://demo.edusoho.com/open/course/explore',
-            'userAgent'  => 'iOS10'
-        );
-        $createRefererLog2 = $this->getRefererLogService()->addRefererLog($refererlog2);
-
-        $refererlog3       = array(
-            'targetId'   => 1,
-            'targetType' => 'openCourse',
-            'refererUrl' => 'http://demo.edusoho.com',
-            'userAgent'  => 'iOS10'
-        );
-        $createRefererLog3 = $this->getRefererLogService()->addRefererLog($refererlog3);
-        $targetIds = $this->getRefererLogService()->findTargetIds(array());
-        $this->assertEquals(1, count($targetIds));
-    }
-
-    private function _createLiveOpenCourse()
-    {
-        $course = array(
-            'title'       => 'liveOpenCourse',
-            'type'        => 'liveOpen',
-            'userId'      => 1,
-            'createdTime' => time()
-        );
-
-        return $this->getOpenCourseService()->createCourse($course);
     }
 
     private function createCourse()
@@ -251,11 +217,6 @@ class RefererLogServiceTest extends BaseTestCase
         return $this->getServiceKernel()->createService('RefererLog.RefererLogService');
     }
 
-    protected function getOpenCourseService()
-    {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
-    }
-    
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
