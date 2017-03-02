@@ -151,7 +151,7 @@ class SearchController extends BaseController
     {
         $cloudSearchSetting = $this->getSettingService()->get('cloud_search');
 
-        $cloudSearchType = $cloudSearchSetting['type'];
+        $cloudSearchType = empty($cloudSearchSetting['type']) ? array() : $cloudSearchSetting['type'];
 
         if (!array_key_exists($type, $cloudSearchType)) {
             return false;
