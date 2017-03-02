@@ -114,14 +114,12 @@ class UserApprovalController extends BaseController
 
     public function viewApprovalInfoAction(Request $request, $id)
     {
-        $approvalStatus = $request->query->get('approvalStatus', '');
         list($user, $userApprovalInfo) = $this->getApprovalInfo($request, $id);
 
         return $this->render("TopxiaAdminBundle:User:user-approve-info-modal.html.twig",
             array(
                 'user'             => $user,
-                'userApprovalInfo' => $userApprovalInfo,
-                'approvalStatus'     => $approvalStatus
+                'userApprovalInfo' => $userApprovalInfo
             )
         );
     }
