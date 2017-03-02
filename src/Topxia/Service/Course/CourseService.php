@@ -39,6 +39,9 @@ interface CourseService
 
     public function findUserLearnCoursesNotInClassroom($userId, $start, $limit); //
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserLearnCoursesNotInClassroomWithType($userId, $type, $start, $limit);
 
     public function findUserLearnCourseCount($userId);
@@ -47,38 +50,68 @@ interface CourseService
 
     public function findUserLeaningCourses($userId, $start, $limit, $filters = array());
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserLearningCoursesNotInClassroom($userId, $start, $limit, $filters = array());
 
     public function findUserLeaningCourseCount($userId, $filters = array());
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserLearningCourseCountNotInClassroom($userId, $filters = array());
 
     public function findUserLeanedCourseCount($userId, $filters = array());
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserLearnedCourseCountNotInClassroom($userId, $filters = array());
 
     public function findUserLeanedCourses($userId, $start, $limit, $filters = array());
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserLearnedCoursesNotInClassroom($userId, $start, $limit, $filters = array());
 
     public function findUserTeachCourseCount($conditions, $onlyPublished = true);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserTeachCourseCountNotInClassroom($conditions, $onlyPublished = true);
 
     public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserTeachCoursesNotInClassroom($conditions, $start, $limit, $onlyPublished = true);
 
     public function findUserFavoritedCourseCount($userId);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoritedCourseCountNotInClassroom($userId);
 
     public function findUserFavoritedCourses($userId, $start, $limit);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoriteCourseCountNotInClassroomWithCourseType($userId, $courseType);
 
     public function findRandomCourses($conditions, $num);

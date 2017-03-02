@@ -256,6 +256,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserLearnCoursesNotInClassroomWithType($userId, $type, $start, $limit, $onlyPublished = true)
     {
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRoleAndType($userId, 'student', $type, $start, $limit, $onlyPublished);
@@ -285,6 +288,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 0);
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserLearningCourseCountNotInClassroom($userId, $filters = array())
     {
         if (isset($filters['type'])) {
@@ -320,6 +326,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserLearningCoursesNotInClassroom($userId, $start, $limit, $filters = array())
     {
         if (isset($filters['type'])) {
@@ -391,6 +400,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->findMemberCountByUserIdAndRoleAndIsLearned($userId, 'student', 1);
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserLearnedCourseCountNotInClassroom($userId, $filters = array())
     {
         if (isset($filters['type'])) {
@@ -426,6 +438,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $sortedCourses;
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserLearnedCoursesNotInClassroom($userId, $start, $limit, $filters = array())
     {
         if (isset($filters['type'])) {
@@ -471,6 +486,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->searchCourseCount($conditions);
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserTeachCourseCountNotInClassroom($conditions, $onlyPublished = true)
     {
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($conditions['userId'], 'teacher', 0, PHP_INT_MAX, $onlyPublished);
@@ -511,6 +529,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserTeachCoursesNotInClassroom($conditions, $start, $limit, $onlyPublished = true)
     {
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($conditions['userId'], 'teacher', $start, $limit, $onlyPublished);
@@ -538,6 +559,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getFavoriteDao()->getFavoriteCourseCountByUserId($userId);
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoritedCourseCountNotInClassroom($userId)
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, 0, PHP_INT_MAX);
@@ -558,6 +582,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserializes($favoriteCourses);
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoritedCoursesNotInClassroom($userId, $start, $limit)
     {
         $courseFavorites = $this->getFavoriteDao()->findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
@@ -565,6 +592,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserializes($favoriteCourses);
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoriteCourseCountNotInClassroomWithCourseType($userId, $courseType)
     {
         $favorites = $this->getFavoriteDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(
@@ -584,6 +614,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->searchCourseCount($conditions);
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
     {
         $favorites = $this->getFavoriteDao()->findUserFavoriteCoursesNotInClassroomWithCourseType(

@@ -106,6 +106,9 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array($userId, $role));
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findMembersNotInClassroomByUserIdAndRoleAndType($userId, $role, $type, $start, $limit, $onlyPublished = true)
     {
         $this->filterStartLimit($start, $limit);
@@ -193,6 +196,9 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         );
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findMemberCountNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->getTable()} m ";
@@ -213,6 +219,9 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array($userId, $type, $isLearned, $role));
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findMembersNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -262,6 +271,9 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         );
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findMemberCountNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->getTable()} m ";
@@ -279,6 +291,9 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $this->getConnection()->fetchAll($sql, array($userId, $role, $isLearned));
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

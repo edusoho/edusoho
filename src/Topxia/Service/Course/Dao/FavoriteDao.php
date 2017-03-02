@@ -10,6 +10,9 @@ interface FavoriteDao
 
     public function findCourseFavoritesByUserId($userId, $start, $limit);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit);
 
     public function getFavoriteCourseCountByUserId($userId);
@@ -22,6 +25,8 @@ interface FavoriteDao
 
     public function searchCourseFavorites($conditions, $orderBy, $start, $limit);
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit);
-
 }

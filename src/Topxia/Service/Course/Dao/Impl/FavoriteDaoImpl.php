@@ -32,6 +32,9 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
         return $this->getConnection()->fetchAll($sql, array($userId)) ?: array();
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -43,6 +46,9 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
         return $this->getConnection()->fetchAll($sql, array($userId));
     }
 
+    /*
+     * 2017/3/1 为移动端提供服务，其他慎用
+     */
     public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
