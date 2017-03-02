@@ -288,25 +288,36 @@ class MobileBaseController extends BaseController
             $course["priceType"] = $coinSetting["priceType"];
             $course['coinName']  = $coinSetting["name"];
 
-            $course['subtitle'] = $courseSet['subtitle'];
-            $course['discountId'] = $courseSet['discountId'];
-            $course['expiryDay'] = $course['expiryDays'];
-            $course['lessonNum'] = $course['taskNum'];
-            $course['categoryId'] = $courseSet['categoryId'];
-            $course['recommended'] = $courseSet['recommended'];
-            $course['recommendedSeq'] = $courseSet['recommendedSeq'];
-            $course['recommendedTime'] = $courseSet['recommendedTime'];
-            $course['hitNum'] = $courseSet['hitNum'];
-            $course['userId'] = $course['creator'];
-            $course['discountId'] = $courseSet['discountId'];
-            $course['discount'] = $courseSet['discount'];
-            $course['tryLookTime']  = $course['tryLookLength'];
-            $course['orgCode'] = $courseSet['orgCode'];
-            $course['orgId'] = $courseSet['orgId'];
-
+            $course = $this->convertOldFields($course);
+            $course = $this->filledCourseByCourseSet($course, $courseSet);
 
             return $course;
         }, $courses, $courseSets);
+    }
+
+    private function convertOldFields($course, $courseSet)
+    {
+        $course['expiryDay'] = $course['expiryDays'];
+        $course['lessonNum'] = $course['taskNum'];
+        $course['userId'] = $course['creator'];
+        $course['tryLookTime']  = $course['tryLookLength'];
+        return $course;
+    }
+
+    private function filledCourseByCourseSet($course, $courseSet)
+    {
+        $course['hitNum'] = $courseSet['hitNum'];
+        $course['orgCode'] = $courseSet['orgCode'];
+        $course['orgId'] = $courseSet['orgId'];
+        $course['discountId'] = $courseSet['discountId'];
+        $course['discount'] = $courseSet['discount'];
+        $course['categoryId'] = $courseSet['categoryId'];
+        $course['recommended'] = $courseSet['recommended'];
+        $course['recommendedSeq'] = $courseSet['recommendedSeq'];
+        $course['recommendedTime'] = $courseSet['recommendedTime'];
+        $course['subtitle'] = $courseSet['subtitle'];
+        $course['discountId'] = $courseSet['discountId'];
+        return $course;
     }
 
     public function convertAbsoluteUrl($request, $html)
