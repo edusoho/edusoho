@@ -2,18 +2,18 @@
 
 namespace AppBundle\Controller\Course;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
-use Biz\Activity\Service\ActivityService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Course\Service\MaterialService;
-use Biz\Course\Service\ReviewService;
-use Biz\File\Service\UploadFileService;
-use Biz\Order\Service\OrderService;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\TokenService;
+use Biz\Order\Service\OrderService;
+use Biz\Course\Service\ReviewService;
+use Biz\Course\Service\MaterialService;
+use Biz\File\Service\UploadFileService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Activity\Service\ActivityService;
+use Biz\Course\Service\CourseNoteService;
+use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends CourseBaseController
@@ -24,7 +24,7 @@ class CourseController extends CourseBaseController
             'course/tabs/summary.html.twig',
             array(
                 'course' => $course,
-                'member' => $member,
+                'member' => $member
             )
         );
     }
@@ -45,7 +45,7 @@ class CourseController extends CourseBaseController
             array(
                 'tab'       => $tab,
                 'course'    => $course,
-                'classroom' => $classroom,
+                'classroom' => $classroom
             )
         );
     }
@@ -57,7 +57,7 @@ class CourseController extends CourseBaseController
             return $this->render(
                 'course/member/expired.html.twig',
                 array(
-                    'course' => $course,
+                    'course' => $course
                 )
             );
         }
@@ -81,8 +81,8 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
-        $user           = $this->getCurrentUser();
-        $member         = $user->isLogin() ? $this->getMemberService()->getCourseMember(
+        $user   = $this->getCurrentUser();
+        $member = $user->isLogin() ? $this->getMemberService()->getCourseMember(
             $course['id'],
             $user['id']
         ) : array();
@@ -90,8 +90,8 @@ class CourseController extends CourseBaseController
             $user['id'],
             $course['courseSetId']
         ) : false;
-        $previewAs      = $request->query->get('previewAs', false);
-        $classroom      = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        $previewAs = $request->query->get('previewAs', false);
+        $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
         $previewTasks = $this->getTaskService()->searchTasks(
             array('courseId' => $course['id'], 'type' => 'video', 'isFree' => '1'),
@@ -111,7 +111,7 @@ class CourseController extends CourseBaseController
                 'classroom'      => $classroom,
                 'previewTask'    => empty($previewTasks) ? null : array_shift($previewTasks),
                 'previewAs'      => $previewAs,
-                'marketingPage'  => 1,
+                'marketingPage'  => 1
             )
         );
     }
@@ -160,7 +160,7 @@ class CourseController extends CourseBaseController
                 'users'            => $users,
                 'tasks'            => $tasks,
                 'likeNoteIds'      => $likeNoteIds,
-                'member'           => $member,
+                'member'           => $member
             )
         );
     }
@@ -170,7 +170,7 @@ class CourseController extends CourseBaseController
         $courseSet  = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $conditions = array(
             'parentId'    => 0,
-            'courseSetId' => $courseSet['id'],
+            'courseSetId' => $courseSet['id']
         );
 
         if (!empty($member)) {
@@ -215,7 +215,7 @@ class CourseController extends CourseBaseController
                 'reviews'          => $reviews,
                 'userReview'       => $userReview,
                 'users'            => $users,
-                'member'           => $member,
+                'member'           => $member
             )
         );
     }
@@ -244,7 +244,7 @@ class CourseController extends CourseBaseController
             array(
                 'courses' => $courses,
                 'users'   => $users,
-                'mode'    => $mode,
+                'mode'    => $mode
             )
         );
     }
@@ -272,7 +272,7 @@ class CourseController extends CourseBaseController
                 'courseItems'     => $courseItems,
                 'member'          => $member,
                 'files'           => $files,
-                'isMarketingPage' => $isMarketingPage,
+                'isMarketingPage' => $isMarketingPage
             )
         );
     }
@@ -292,7 +292,7 @@ class CourseController extends CourseBaseController
                 $characteristicData[$type] = array(
                     'icon' => $activities[$type]['meta']['icon'],
                     'name' => $activities[$type]['meta']['name'],
-                    'num'  => 1,
+                    'num'  => 1
                 );
             }
         }
@@ -301,7 +301,7 @@ class CourseController extends CourseBaseController
             'course/widgets/characteristic.html.twig',
             array(
                 'course'             => $course,
-                'characteristicData' => $characteristicData,
+                'characteristicData' => $characteristicData
             )
         );
     }
@@ -309,11 +309,13 @@ class CourseController extends CourseBaseController
     public function otherCourseAction($course)
     {
         // $this->getCourseService()->getOtherCourses($course['id']);
+        $courseSet           = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $course['courseSet'] = $courseSet;
 
         return $this->render(
             'course/widgets/other-course.html.twig',
             array(
-                'otherCourse' => $course,
+                'otherCourse' => $course
             )
         );
     }
@@ -325,7 +327,7 @@ class CourseController extends CourseBaseController
         return $this->render(
             'course/widgets/teachers.html.twig',
             array(
-                'teachers' => $teachers,
+                'teachers' => $teachers
             )
         );
     }
@@ -334,7 +336,7 @@ class CourseController extends CourseBaseController
     {
         $conditions = array(
             'role'   => 'student',
-            'locked' => 0,
+            'locked' => 0
         );
 
         if (empty($member)) {
@@ -351,7 +353,7 @@ class CourseController extends CourseBaseController
         return $this->render(
             'course/widgets/newest-students.html.twig',
             array(
-                'students' => $students,
+                'students' => $students
             )
         );
     }
@@ -370,7 +372,13 @@ class CourseController extends CourseBaseController
             throw $this->createNotFoundException('课程不存在，或已删除。');
         }
 
-        return $this->render('course/widgets/course-order.html.twig', array('order' => $order, 'course' => $course));
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        return $this->render('course/widgets/course-order.html.twig', array(
+            'order'     => $order,
+            'course'    => $course,
+            'courseSet' => $courseSet
+        ));
     }
 
     public function qrcodeAction(Request $request, $id)
@@ -383,16 +391,16 @@ class CourseController extends CourseBaseController
                 'userId'   => $user['id'],
                 'data'     => array(
                     'url'    => $this->generateUrl('course_show', array('id' => $id), true),
-                    'appUrl' => "{$host}/mapi_v2/mobile/main#/course/{$id}",
+                    'appUrl' => "{$host}/mapi_v2/mobile/main#/course/{$id}"
                 ),
                 'times'    => 1,
-                'duration' => 3600,
+                'duration' => 3600
             )
         );
-        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
-            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true),
+            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
         );
 
         return $this->createJsonResponse($response);
@@ -401,7 +409,7 @@ class CourseController extends CourseBaseController
     public function exitAction($id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user = $this->getCurrentUser();
+        $user                  = $this->getCurrentUser();
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是课程的学员。');
         }
