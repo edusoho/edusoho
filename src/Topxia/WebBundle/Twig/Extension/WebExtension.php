@@ -127,10 +127,21 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
             new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
-            new \Twig_SimpleFunction('can_try_look', array($this, 'canTryLook'))
+            new \Twig_SimpleFunction('can_try_look', array($this, 'canTryLook')),
+            new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright'))
         );
     }
-
+    public function isESCopyright()
+    {
+        $copyright = $this->getSetting('copyright');
+        $request    = $this->container->get('request');
+        $host          = $request->getHttpHost();
+        if ($copyright) {
+            $result = !( isset($copyright['owned']) && isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] != 2 && isset($copyright['licenseDomains'])  && in_array($host,  explode(';', $copyright['licenseDomains'])) || (isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] == 2) );
+            return $result;
+        }
+        return true;
+    }
     public function tag_equal($tags, $target_tagId, $target_tagGroupId)
     {
         foreach ($tags as $groupId => $tagId) {

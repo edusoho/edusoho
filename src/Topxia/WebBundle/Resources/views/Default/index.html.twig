@@ -3,7 +3,7 @@
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
-{% set appDownload = ( not custom | default(0) ) and ( not setting('copyright').name|default(null) ) and ( setting("mobile").enabled|default(null) ) %}
+{% set appDownload = ( not custom | default(0) ) and ( is_ES_copyright() ) and ( setting("mobile").enabled|default(null) ) %}
 {% if appDownload %}
   {% set bodyClass = 'homepage  has-app' %}
 {% else %}
