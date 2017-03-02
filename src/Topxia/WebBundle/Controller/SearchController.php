@@ -133,13 +133,13 @@ class SearchController extends BaseController
         }
 
         $paginator = new Paginator($this->get('request'), $counts, $pageSize);
-
+        
         return $this->render('TopxiaWebBundle:Search:cloud-search.html.twig', array(
-            'keywords'  => $keywords,
-            'type'      => $type,
-            'resultSet' => $resultSet,
-            'counts'    => $counts,
-            'paginator' => $paginator
+            'keywords'    => $keywords,
+            'type'        => $type,
+            'resultSet'   => $resultSet,
+            'counts'      => $counts,
+            'paginator'   => $paginator
         ));
     }
 
