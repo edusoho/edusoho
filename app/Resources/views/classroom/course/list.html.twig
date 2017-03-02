@@ -17,7 +17,7 @@
       <div class="course-item">
         <div class="media">
           <a class="media-left" href="{{ path(courseShowPath, {id:course.id}) }}">
-            {{ lazy_img(filepath(course.courseSet.cover.middle|default(null), 'course.png'), '', '') }}
+            {{ lazy_img(filepath(course_cover(course, 'middle'), 'course.png'), '', '') }}
           </a>
           <div class="media-body">
             <div class="title">
