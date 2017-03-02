@@ -17,7 +17,8 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
     {
         return array(
             'course.task.start'  => 'onCourseTaskStart',
-            'course.task.finish' => 'onCourseTaskFinish'
+            'course.task.finish' => 'onCourseTaskFinish',
+            'exam.reviewed'      => 'onTestpaperReviewed'
         );
     }
 
@@ -27,13 +28,16 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $course     = $this->getCourseService()->getCourse($taskResult['courseId']);
         $task       = $this->getTaskService()->getTask($taskResult['courseTaskId']);
 
+        list($classroom, $isPrivate) = $this->isPrivate($course);
+
         $this->getStatusService()->publishStatus(array(
-            'type'       => 'task_start',
-            'courseId'   => $course['id'],
-            'objectType' => 'task',
-            'objectId'   => $task['id'],
-            'private'    => $this->isPrivate($course),
-            'properties' => array(
+            'type'        => 'task_start',
+            'courseId'    => $course['id'],
+            'classroomId' => $classroom ? $classroom['id'] : 0,
+            'objectType'  => 'task',
+            'objectId'    => $task['id'],
+            'private'     => $isPrivate,
+            'properties'  => array(
                 'course' => $this->simplifyCousrse($course),
                 'task'   => $this->simplifyTask($task)
             )
@@ -46,15 +50,47 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $course     = $this->getCourseService()->getCourse($taskResult['courseId']);
         $task       = $this->getTaskService()->getTask($taskResult['courseTaskId']);
 
+        list($classroom, $isPrivate) = $this->isPrivate($course);
+
         $this->getStatusService()->publishStatus(array(
-            'type'       => 'task_finish',
-            'courseId'   => $course['id'],
-            'objectType' => 'task',
-            'objectId'   => $task['id'],
-            'private'    => $this->isPrivate($course),
-            'properties' => array(
+            'type'        => 'task_finish',
+            'courseId'    => $course['id'],
+            'classroomId' => $classroom ? $classroom['id'] : 0,
+            'objectType'  => 'task',
+            'objectId'    => $task['id'],
+            'private'     => $isPrivate,
+            'properties'  => array(
                 'course' => $this->simplifyCousrse($course),
                 'task'   => $this->simplifyTask($task)
+            )
+        ));
+    }
+
+    public function onTestpaperReviewed(Event $event)
+    {
+        $paperResult = $event->getSubject();
+
+        $course    = $this->getCourseService()->getCourse($paperResult['courseId']);
+        $activity  = $this->getActivityService()->getActivity($paperResult['lessonId']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($paperResult['testId']);
+
+        list($classroom, $isPrivate) = $this->isPrivate($course);
+
+        $type = "reviewed_{$paperResult['type']}";
+
+        $this->getStatusService()->publishStatus(array(
+            'userId'      => $paperResult['userId'],
+            'courseId'    => $course['id'],
+            'classroomId' => $classroom ? $classroom['id'] : 0,
+            'type'        => $type,
+            'objectType'  => $testpaper['type'],
+            'objectId'    => $testpaper['id'],
+            'private'     => $isPrivate,
+            'properties'  => array(
+                'testpaper' => $this->simplifyTestpaper($testpaper),
+                'result'    => $this->simplifyTestpaperResult($paperResult),
+                'activity'  => $this->simplifyActivity($activity),
+                'version'   => '2.0'
             )
         ));
     }
@@ -85,9 +121,45 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         );
     }
 
+    protected function simplifyTestpaper($testpaper)
+    {
+        return array(
+            'id'          => $testpaper['id'],
+            'name'        => $testpaper['name'],
+            'description' => StringToolkit::plain($testpaper['description'], 100),
+            'score'       => $testpaper['score'],
+            'passedScore' => $testpaper['passedCondition'],
+            'itemCount'   => $testpaper['itemCount']
+        );
+    }
+
+    protected function simplifyTestpaperResult($testpaperResult)
+    {
+        return array(
+            'id'              => $testpaperResult['id'],
+            'userId'          => $testpaperResult['userId'],
+            'score'           => $testpaperResult['score'],
+            'objectiveScore'  => $testpaperResult['objectiveScore'],
+            'subjectiveScore' => $testpaperResult['subjectiveScore'],
+            'teacherSay'      => StringToolkit::plain($testpaperResult['teacherSay'], 100),
+            'passedStatus'    => $testpaperResult['passedStatus']
+        );
+    }
+
+    protected function simplifyActivity($activity)
+    {
+        return array(
+            'id'      => $activity['id'],
+            'type'    => $activity['mediaType'],
+            'title'   => $activity['title'],
+            'summary' => StringToolkit::plain($activity['content'], 100)
+        );
+    }
+
     protected function isPrivate($course)
     {
-        $private = $course['status'] == 'published' ? 0 : 1;
+        $private   = $course['status'] == 'published' ? 0 : 1;
+        $classroom = array();
 
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
@@ -100,7 +172,7 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
             }
         }
 
-        return $private;
+        return array($classroom, $private);
     }
 
     /**
@@ -129,5 +201,15 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
     protected function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    public function getTestpaperService()
+    {
+        return $this->getBiz()->service('Testpaper:TestpaperService');
+    }
+
+    public function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 }
