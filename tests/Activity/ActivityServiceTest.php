@@ -104,7 +104,13 @@ class ActivityServiceTest extends BaseTestCase
             'expiryMode'  => 'days',
             'learnMode'   => 'lockMode',
             'expiryDays'  => 0,
-            'isDefault'   => 0
+            'isDefault'   => 0,
+            'status'      => 'published',
+            'parentId'    => 0,
+            'type'        => 'normal',
+            'rating'      => 0,
+            'summary'     => '',
+            'price'       => 0
         );
 
         $this->mockBiz(
