@@ -2189,6 +2189,10 @@ course_manage_testpaper_check:
   path: /course/{id}/manage/testpaper/{resultId}/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:check }
 
+testpaper_check:
+  path: /testpaper/{resultId}/check
+  defaults: { _controller: AppBundle:Course/TestpaperManage:checkForword }
+
 course_manage_testpaper_check_list:
   path: /course/{id}/manage/testpaper/check
   defaults: { _controller: AppBundle:Course/TestpaperManage:checkList }
