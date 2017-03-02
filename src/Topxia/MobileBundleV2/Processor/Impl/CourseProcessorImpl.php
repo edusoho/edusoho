@@ -1004,7 +1004,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {
             $vipLevels = $this->controller->getLevelService()->searchLevels(array(
                 'enabled' => 1
-            ), 0, 100);
+            ),array(), 0, 100);
         }
 
         $course["source"] = $this->setCourseTarget($course['id']);
