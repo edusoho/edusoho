@@ -1,5 +1,6 @@
 <div class="course-detail-content">
   <ul class="task-list task-list-md task-list-hover">
+    {% set taskCount = 0 %}
     {% for key, item in courseItems %}
       {% if item.type == 'chapter' %}
         <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
@@ -13,7 +14,9 @@
             节: {{ item.title }}</span>
         </li>
       {% elseif  item.type == 'lesson' %}
-        {% for task in item.tasks %}
+        {% for task in item.tasks  %}
+          {% if ( not limitCount  or taskCount < limitCount )%}
+          {% set taskCount = taskCount + 1 %}
           {% set task_lock =  false %}
           {% set file = files[task.activity.mediaId]|default(null) %}
           <li class="task-item task-content mouse-control">
@@ -70,6 +73,7 @@
               </span>
             {% endif %}
           </li>
+          {% endif %}
         {% endfor %}
       {% endif %}
     {% endfor %}
