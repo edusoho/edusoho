@@ -106,7 +106,7 @@ class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDa
         return $this->db()->fetchColumn($sql, array($classroomId));
     }
 
-    public function countMembersByMobileNotEmptyAndClassroomId($classroomId, $userLocked = 0) {
+    public function countMobileFilledMembersByClassroomId($classroomId, $userLocked = 0) {
         $sql = "SELECT COUNT(DISTINCT `mobile`) FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND `mobile` != '' and u.id in (SELECT userId FROM {$this->table} where $classroomId = '{$classroomId}')";
         if ($userLocked) {
             $sql .= " AND u.locked != 1";
