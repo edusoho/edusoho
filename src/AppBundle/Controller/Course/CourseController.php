@@ -121,10 +121,12 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         if ($request->query->has('selectedCourse')) {
-            $notes            = $this->getCourseNoteService()->findPublicNotesByCourseId(
-                $request->query->get('selectedCourse')
-            );
             $selectedCourseId = $request->query->get('selectedCourse');
+            if (empty($selectedCourseId)) {
+                $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+            } else {
+                $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($selectedCourseId);
+            }
         } else {
             if (empty($member)) {
                 $notes            = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
