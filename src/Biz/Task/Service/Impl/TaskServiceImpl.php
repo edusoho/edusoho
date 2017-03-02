@@ -771,6 +771,9 @@ class TaskServiceImpl extends BaseService implements TaskService
             );
             $tasks            = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 2);
             $toLearnTask      = array_pop($tasks); //如果当正在学习的是最后一个，则取当前在学的任务
+            if(empty($toLearnTask)){
+                $toLearnTask = $latestLearnTask;
+            }
         }
 
         return $toLearnTask;
