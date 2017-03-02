@@ -47,7 +47,7 @@
     </div>
   </div>
 
-  {% if approvalStatus == 'approve_fail' %}
+  {% if approvalStatus|default() == 'approve_fail' %}
     <div class="row form-group">
       <div class="col-md-3 control-label">
         <label for="idcard">{{'审核驳回原因'|trans}}</label>
