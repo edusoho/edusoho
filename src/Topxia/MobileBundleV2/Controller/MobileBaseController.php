@@ -295,7 +295,7 @@ class MobileBaseController extends BaseController
         }, $courses, $courseSets);
     }
 
-    private function convertOldFields($course, $courseSet)
+    private function convertOldFields($course)
     {
         $course['expiryDay'] = $course['expiryDays'];
         $course['lessonNum'] = $course['taskNum'];
