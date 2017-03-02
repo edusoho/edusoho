@@ -38,9 +38,9 @@ export const taskSortable = (list) => {
 }
 
 export const courseFunctionRemask = () => {
-  const COURSE_FUNCTION_REMASK = 'COURSE-FUNCTION-REMASK'; //课程改版功能提醒
-  if (!store.get(COURSE_FUNCTION_REMASK)) {
-    store.set(COURSE_FUNCTION_REMASK, true);
+  const COURSE_FEATURE_REMIND = 'COURSE-FEATURE-REMIND'; //课程改版功能提醒
+  if (!store.get(COURSE_FEATURE_REMIND)) {
+    store.set(COURSE_FEATURE_REMIND, true);
     $('#course-function-modal').modal('show');
   }
 }
