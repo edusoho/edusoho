@@ -3,6 +3,7 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\Service\CourseOrderService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\StringToolkit;
@@ -50,10 +51,12 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 throw $this->createServiceException($this->getKernel()->trans('该教学计划需要实名认证，你还没有实名认证，不可购买。'));
             }
 
+            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
             $order = array();
 
             $order['userId']     = $user['id'];
-            $order['title']      = $this->getKernel()->trans('购买教学计划《%courseTitle%》', array('%courseTitle%' => $course['title']));
+            $order['title']      = $this->getKernel()->trans('购买课程《%courseSetTitle%》- %courseTitle%', array('%courseSetTitle%' => $courseSet['title'], '%courseTitle%' => $course['title']));
             $order['targetType'] = 'course';
             $order['targetId']   = $course['id'];
             if (!empty($course['discountId'])) {
@@ -234,6 +237,9 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');

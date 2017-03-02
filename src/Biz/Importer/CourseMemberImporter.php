@@ -1,13 +1,15 @@
 <?php
 namespace Biz\Importer;
 
-use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\FileToolkit;
+use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseMemberImporter extends Importer
 {
-    protected $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
+    protected $necessaryFields  = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
     protected $objWorksheet;
     protected $rowTotal         = 0;
     protected $colTotal         = 0;
@@ -25,16 +27,17 @@ class CourseMemberImporter extends Importer
         $course     = $this->getCourseService()->getCourse($courseId);
         $orderData  = array(
             'amount' => $price,
-            'remark' => $remark
+            'remark' => $remark,
         );
+
         return $this->excelDataImporting($course, $importData, $orderData);
     }
 
-    protected function excelDataImporting($targetObject, $userData, $orderData)
+    protected function excelDataImporting($course, $userData, $orderData)
     {
         $existsUserCount = 0;
         $successCount    = 0;
-
+        $courseSet       = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         foreach ($userData as $key => $user) {
             if (!empty($user['nickname'])) {
                 $user = $this->getUserService()->getUserByNickname($user['nickname']);
@@ -46,53 +49,67 @@ class CourseMemberImporter extends Importer
                 }
             }
 
-            $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($targetObject['id'], $user['id']);
-            $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($targetObject['id'], $user['id']);
+            $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($course['id'], $user['id']);
+            $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']);
 
             if ($isCourseStudent || $isCourseTeacher) {
                 $existsUserCount++;
             } else {
-                $currentUser = $this->getUserService()->getCurrentUser();
+                $currentUser = $this->biz['user'];
 
-                $order = $this->getOrderService()->createOrder(array(
-                    'userId'     => $user['id'],
-                    'title'      => $this->getServiceKernel()->trans('购买课程《%title%》(管理员添加)', array('%title%' => $targetObject['title'])),
-                    'targetType' => 'course',
-                    'targetId'   => $targetObject['id'],
-                    'totalPrice' => $targetObject['price'],
-                    'amount'     => empty($orderData['amount']) ? 0 : $orderData['amount'],
-                    'payment'    => 'outside',
-                    'snPrefix'   => 'C',
-                    'note'       => empty($orderData['remark']) ? $this->getServiceKernel()->trans('通过批量导入添加') : $orderData['remark']
-                ));
+                $order = $this->getOrderService()->createOrder(
+                    array(
+                        'userId'     => $user['id'],
+                        'title'      => $this->getServiceKernel()->trans(
+                            '购买课程《%courseSetTitle%》-%courseTitle%(管理员添加)',
+                            array('%courseSetTitle%' => $courseSet['title'], '%courseTitle%' => $course['title'])
+                        ),
+                        'targetType' => 'course',
+                        'targetId'   => $course['id'],
+                        'totalPrice' => $course['price'],
+                        'amount'     => empty($orderData['amount']) ? 0 : $orderData['amount'],
+                        'payment'    => 'outside',
+                        'snPrefix'   => 'C',
+                        'note'       => empty($orderData['remark']) ? $this->getServiceKernel()->trans(
+                            '通过批量导入添加'
+                        ) : $orderData['remark'],
+                    )
+                );
 
-                $this->getOrderService()->payOrder(array(
-                    'sn'       => $order['sn'],
-                    'status'   => 'success',
-                    'amount'   => $order['amount'],
-                    'paidTime' => time()
-                ));
+                $this->getOrderService()->payOrder(
+                    array(
+                        'sn'       => $order['sn'],
+                        'status'   => 'success',
+                        'amount'   => $order['amount'],
+                        'paidTime' => time(),
+                    )
+                );
 
                 $info = array(
-                    'orderId' => $order['id']
+                    'orderId' => $order['id'],
                 );
 
                 if ($this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
                     $successCount++;
                 };
 
-                $member = $this->getCourseMemberService()->getCourseMember($targetObject['id'], $user['id']);
+                $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
                 $message = array(
-                    'courseId'    => $targetObject['id'],
-                    'courseTitle' => $targetObject['title'],
+                    'courseId'    => $course['id'],
+                    'courseTitle' => $courseSet['title'],
                     'userId'      => $currentUser['id'],
                     'userName'    => $currentUser['nickname'],
-                    'type'        => 'create');
+                    'type'        => 'create',
+                );
 
                 $this->getNotificationService()->notify($member['userId'], 'course-student', $message);
 
-                $this->getLogService()->info('course', 'add_student', "课程《{$targetObject['title']}》(#{$targetObject['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：通过批量导入添加");
+                $this->getLogService()->info(
+                    'course',
+                    'add_student',
+                    "《{$courseSet['title']}》-{$course['title']}(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：通过批量导入添加"
+                );
             }
         }
 
@@ -132,8 +149,9 @@ class CourseMemberImporter extends Importer
             array(
                 'courseId' => $courseId,
                 'price'    => $price,
-                'remark'   => $remark
-            ));
+                'remark'   => $remark,
+            )
+        );
     }
 
     protected function checkPassedRepeatData()
@@ -205,7 +223,7 @@ class CourseMemberImporter extends Importer
                 continue;
             }
 
-            $info                            = $this->validExcelFieldValue($userData, $row, $fieldCol);
+            $info = $this->validExcelFieldValue($userData, $row, $fieldCol);
             empty($info) ? '' : $errorInfo[] = $info;
 
             $userCount     = $userCount + 1;
@@ -283,6 +301,7 @@ class CourseMemberImporter extends Importer
         if (!$user) {
             $errorInfo = $this->getServiceKernel()->trans('第 %row%行的信息有误，用户数据不存在，请检查。', array('%row%' => $row));
         }
+
         return $errorInfo;
     }
 
@@ -322,12 +341,18 @@ class CourseMemberImporter extends Importer
 
         foreach ($repeatArrayCount as $key => $value) {
             if ($value > 1 && !empty($key)) {
-                $repeatRow .= $this->getServiceKernel()->trans('第%col%列重复:', array('%col%' => ($nickNameCol + 1))).'<br>';
+                $repeatRow .= $this->getServiceKernel()->trans(
+                        '第%col%列重复:',
+                        array('%col%' => ($nickNameCol + 1))
+                    ).'<br>';
 
                 for ($i = 1; $i <= $value; $i++) {
                     $row = array_search($key, $array) + 3;
 
-                    $repeatRow .= $this->getServiceKernel()->trans('第%row%行    %key%', array('%row%' => $row, '%key%' => $key)).'<br>';
+                    $repeatRow .= $this->getServiceKernel()->trans(
+                            '第%row%行    %key%',
+                            array('%row%' => $row, '%key%' => $key)
+                        ).'<br>';
 
                     unset($array[$row - 3]);
                 }
@@ -367,7 +392,7 @@ class CourseMemberImporter extends Importer
         $excelFields        = array();
 
         for ($col = 0; $col < $highestColumnIndex; $col++) {
-            $fieldTitle                                  = $objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
+            $fieldTitle = $objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
             empty($fieldTitle) ? '' : $excelFields[$col] = $this->trim($fieldTitle);
         }
 
@@ -383,19 +408,26 @@ class CourseMemberImporter extends Importer
 
     protected function checkNecessaryFields($excelFields)
     {
-        return ArrayToolkit::some($this->necessaryFields, function ($fields) use ($excelFields) {
-            return in_array($fields, array_values($excelFields));
-        });
+        return ArrayToolkit::some(
+            $this->necessaryFields,
+            function ($fields) use ($excelFields) {
+                return in_array($fields, array_values($excelFields));
+            }
+        );
     }
 
     public function getTemplate(Request $request)
     {
         $courseId = $request->query->get('courseId');
         $course   = $this->getCourseService()->getCourse($courseId);
-        return $this->render('course-manage/student/import.html.twig', array(
-            'course'       => $course,
-            'importerType' => $this->type
-        ));
+
+        return $this->render(
+            'course-manage/student/import.html.twig',
+            array(
+                'course'       => $course,
+                'importerType' => $this->type,
+            )
+        );
     }
 
     public function tryImport(Request $request)
@@ -409,6 +441,14 @@ class CourseMemberImporter extends Importer
         $this->getCourseService()->tryManageCourse($courseId);
     }
 
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->biz->service('Course:CourseSetService');
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
@@ -417,6 +457,7 @@ class CourseMemberImporter extends Importer
     public function getNecessaryFields()
     {
         $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
+
         return $this->getServiceKernel()->transArray($necessaryFields);
     }
 
@@ -440,6 +481,9 @@ class CourseMemberImporter extends Importer
         return $this->getServiceKernel()->getBiz()->service('System:LogService');
     }
 
+    /**
+     * @return MemberService
+     */
     protected function getCourseMemberService()
     {
         return $this->getServiceKernel()->getBiz()->service('Course:MemberService');
