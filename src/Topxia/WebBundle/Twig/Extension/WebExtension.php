@@ -1332,9 +1332,9 @@ class WebExtension extends \Twig_Extension
         return NumberToolkit::roundUp($price);
     }
 
-    public function canTryLook($courseId)
+    public function canTryLook($courseId, $type)
     {
-        return $this->getCourseService()->canTryLook($courseId);
+        return $this->getCourseService()->canTryLook($courseId, $type);
     }
 
     public function getCategoryChoices($groupName, $indent = '　')
