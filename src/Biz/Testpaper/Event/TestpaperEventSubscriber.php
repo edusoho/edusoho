@@ -40,8 +40,10 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
                 'type'     => 'perusal'
             );
 
-            foreach ($course['teacherIds'] as $receiverId) {
-                $result = $this->getNotificationService()->notify($receiverId, 'test-paper', $message);
+            if (!empty($course['teacherIds'])) {
+                foreach ($course['teacherIds'] as $receiverId) {
+                    $result = $this->getNotificationService()->notify($receiverId, 'test-paper', $message);
+                }
             }
         }
     }

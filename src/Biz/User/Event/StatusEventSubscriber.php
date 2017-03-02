@@ -28,6 +28,10 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $course     = $this->getCourseService()->getCourse($taskResult['courseId']);
         $task       = $this->getTaskService()->getTask($taskResult['courseTaskId']);
 
+        if (!$course || !$task) {
+            return;
+        }
+
         list($classroom, $isPrivate) = $this->isPrivate($course);
 
         $this->getStatusService()->publishStatus(array(
@@ -49,6 +53,10 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $taskResult = $event->getSubject();
         $course     = $this->getCourseService()->getCourse($taskResult['courseId']);
         $task       = $this->getTaskService()->getTask($taskResult['courseTaskId']);
+
+        if (!$course || !$task) {
+            return;
+        }
 
         list($classroom, $isPrivate) = $this->isPrivate($course);
 
@@ -73,6 +81,10 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $course    = $this->getCourseService()->getCourse($paperResult['courseId']);
         $activity  = $this->getActivityService()->getActivity($paperResult['lessonId']);
         $testpaper = $this->getTestpaperService()->getTestpaper($paperResult['testId']);
+
+        if (!$course || !$activity || !$testpaper) {
+            return;
+        }
 
         list($classroom, $isPrivate) = $this->isPrivate($course);
 
