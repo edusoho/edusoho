@@ -99,7 +99,7 @@ class SearchController extends BaseController
         $type = $request->query->get('type', 'course');
         $page = $request->query->get('page', '1');
 
-        if (!$this->isTypeOpen($type)) {
+        if (!$this->isTypeUseable($type)) {
             return $this->render('TwigBundle:Exception:error403.html.twig');
         }
 
@@ -146,9 +146,13 @@ class SearchController extends BaseController
         ));
     }
 
-    protected function isTypeOpen($type)
+    protected function isTypeUseable($type)
     {
         $cloud_search_setting = $this->getSettingService()->get('cloud_search');
+
+        if (!array_key_exists($type, $cloud_search_setting['type'])) {
+            return false;
+        }
 
         if ($cloud_search_setting['type'][$type] == 1) {
             return true;
