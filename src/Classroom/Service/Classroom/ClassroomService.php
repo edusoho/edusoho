@@ -102,7 +102,7 @@ interface ClassroomService
 
     public function updateMemberDeadline($id, $fields);
 
-    public function updateMembersDeadlinesByClassroomId($classroomId, $expiryDate);
+    public function updateMembersDeadlineByClassroomId($classroomId, $expiryDate);
 
     public function searchMemberCount($conditions);
 

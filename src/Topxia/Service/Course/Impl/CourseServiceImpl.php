@@ -533,9 +533,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function _filterCourseFields($fields)
     {
         if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
-            if (!is_int($fields['expiryDay'])) {
-                $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
-            }
+            $fields['expiryDay'] = strtotime($fields['expiryDay'].' 23:59:59');
         }
 
         $fields = ArrayToolkit::filter($fields, array(

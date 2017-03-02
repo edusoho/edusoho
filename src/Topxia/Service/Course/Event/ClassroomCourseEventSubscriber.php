@@ -80,7 +80,7 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
     protected function updateCoursesStudentsDeadline($classroomId, $fields)
     {
         if ($fields['expiryMode'] == 'date') {
-            $this->getCourseService()->updateMembersDeadlinesByClassroomId($classroomId, $fields['expiryValue']);
+            $this->getCourseService()->updateMembersDeadlineByClassroomId($classroomId, $fields['expiryValue']);
         }
     }
 

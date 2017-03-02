@@ -1504,14 +1504,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->updateMember($id, array('deadline' => $deadline));
     }
 
-    public function updateMembersDeadlinesByClassroomId($classroomId, $expiryDate)
+    public function updateMembersDeadlineByClassroomId($classroomId, $expiryDate)
     {
         if (empty($expiryDate['expiryMode']) && empty($expiryDate['expiryValue'])) {
             $this->createServiceException($this->getKernel()->trans('缺少相关参数'));
         }
 
         if ($expiryDate['expiryMode'] == 'date') {
-            return $this->getClassroomMemberDao()->updateMembersDeadlinesByClassroomId($classroomId, $expiryDate['expiryValue']);
+            return $this->getClassroomMemberDao()->updateMembersDeadlineByClassroomId($classroomId, $expiryDate['expiryValue']);
         }
 
         return;

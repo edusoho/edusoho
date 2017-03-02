@@ -392,11 +392,6 @@ class CourseEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    protected function getCourseDao()
-    {
-        return ServiceKernel::instance()->createDao('Course.CourseDao');
-    }
-
     protected function getStatusService()
     {
         return ServiceKernel::instance()->createService('User.StatusService');
