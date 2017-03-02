@@ -70,7 +70,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return null;
         }
 
-        $member = $user->isLogin() ? $this->controller->getCourseMemberService()->getCourseMember($courseId, $user['id']) : null;
+        $member = $user->isLogin() ? $this->getCourseMemberService()->getCourseMember($courseId, $user['id']) : null;
         $member = $this->previewAsMember($member, $courseId, $user);
 
         if ($member && $member['locked']) {
@@ -992,8 +992,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         if (empty($member)) {
-            $member = $this->getCourseMemberService()->becomeStudentByClassroomJoined($courseId, $user["id"]);
-
+            $member = $this->controller->getCourseMemberService()->becomeStudentByClassroomJoined($courseId, $user["id"]);
             if (empty($member)) {
                 $member = null;
             }
@@ -1009,8 +1008,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         $course["source"] = $this->setCourseTarget($course['id']);
+        $course = $this->controller->filterCourse($course);
+
         return array(
-            "course"        => $this->controller->filterCourse($course),
+            "course"        => $course,
             "userFavorited" => $userFavorited,
             "member"        => $this->checkMemberStatus($member),
             "vipLevels"     => $vipLevels,
@@ -1020,7 +1021,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
     private function setCourseTarget($courseId)
     {
-        $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
+        $classroom = $this->controller->getClassroomService()->getClassroomByCourseId($courseId);
 
         return empty($classroom) ? null : 'classroom';
     }
@@ -1638,18 +1639,4 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return true;
     }
 
-    protected function getDiscountService()
-    {
-        return $this->controller->getService('Discount:Discount.DiscountService');
-    }
-
-    private function getClassroomService()
-    {
-        return $this->controller->getService('Classroom:ClassroomService');
-    }
-
-    protected function getCourseMemberService()
-    {
-        return $this->getServiceKernel()->createService('Course:MemberService');
-    }
 }

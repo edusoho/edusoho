@@ -3,7 +3,6 @@
 namespace Topxia\MobileBundleV2\Controller;
 
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
@@ -56,11 +55,6 @@ class MobileBaseController extends BaseController
         return $result ? $result : $default;
     }
 
-    public function getUser()
-    {
-        return $this->getCurrentUser();
-    }
-
     public function setting($name, $default = null)
     {
         return $this->get('web.twig.extension')->getSetting($name, $default);
@@ -73,7 +67,7 @@ class MobileBaseController extends BaseController
 
     public function getService($name)
     {
-        return $this->getServiceKernel()->createService($name);
+        return $this->createService($name);
     }
 
     public function isinstalledPlugin($name)
@@ -92,14 +86,14 @@ class MobileBaseController extends BaseController
         $user['currentIp'] = $request->getClientIp();
 
         $currentUser = $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $biz         = $this->getBiz();
+        $biz['user'] = $currentUser;
     }
 
     public function getUserToken($request)
     {
         $token = $this->getToken($request);
         $token = $this->getUserService()->getToken(self::TOKEN_TYPE, $token);
-
         if ($token) {
             $this->setCurrentUser($token['userId'], $request);
         }
@@ -267,10 +261,14 @@ class MobileBaseController extends BaseController
         $coinSetting = $this->getCoinSetting();
         $self        = $this;
         $container   = $this->container;
-        return array_map(function ($course) use ($self, $container, $teachers, $coinSetting) {
-            $course['smallPicture']  = $container->get('web.twig.extension')->getFurl($course['smallPicture'], 'course.png');
-            $course['middlePicture'] = $container->get('web.twig.extension')->getFurl($course['middlePicture'], 'course.png');
-            $course['largePicture']  = $container->get('web.twig.extension')->getFurl($course['largePicture'], 'course.png');
+
+        $courseIds = ArrayToolkit::column($courses,'id');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
+
+        return array_map(function ($course, $courseSet) use ($self, $container, $teachers, $coinSetting) {
+            $course['smallPicture']  = $container->get('web.twig.extension')->getFurl($courseSet['cover']['small'], 'course.png');
+            $course['middlePicture'] = $container->get('web.twig.extension')->getFurl($courseSet['cover']['middle'], 'course.png');
+            $course['largePicture']  = $container->get('web.twig.extension')->getFurl($courseSet['cover']['large'], 'course.png');
             $course['about']         = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
             $course['createdTime']   = date("c", $course['createdTime']);
 
@@ -289,8 +287,26 @@ class MobileBaseController extends BaseController
 
             $course["priceType"] = $coinSetting["priceType"];
             $course['coinName']  = $coinSetting["name"];
+
+            $course['subtitle'] = $courseSet['subtitle'];
+            $course['discountId'] = $courseSet['discountId'];
+            $course['expiryDay'] = $course['expiryDays'];
+            $course['lessonNum'] = $course['taskNum'];
+            $course['categoryId'] = $courseSet['categoryId'];
+            $course['recommended'] = $courseSet['recommended'];
+            $course['recommendedSeq'] = $courseSet['recommendedSeq'];
+            $course['recommendedTime'] = $courseSet['recommendedTime'];
+            $course['hitNum'] = $courseSet['hitNum'];
+            $course['userId'] = $course['creator'];
+            $course['discountId'] = $courseSet['discountId'];
+            $course['discount'] = $courseSet['discount'];
+            $course['tryLookTime']  = $course['tryLookLength'];
+            $course['orgCode'] = $courseSet['orgCode'];
+            $course['orgId'] = $courseSet['orgId'];
+
+
             return $course;
-        }, $courses);
+        }, $courses, $courseSets);
     }
 
     public function convertAbsoluteUrl($request, $html)
@@ -530,96 +546,116 @@ class MobileBaseController extends BaseController
 
     public function getMaterialService()
     {
-        return $this->getServiceKernel()->createService('Course:MaterialService');
+        return $this->createService('Course:MaterialService');
     }
 
     public function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
+    }
+
+    public function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    public function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
     public function getReviewService()
     {
-        return $this->getServiceKernel()->createService('Course:ReviewService');
+        return $this->createService('Course:ReviewService');
     }
 
     public function getUploadFileService()
     {
-        return ServiceKernel::instance()->createService('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     public function getMemberDao()
     {
-        return $this->getServiceKernel()->createDao('Course:CourseMemberDao');
+        return $this->createDao('Course:CourseMemberDao');
     }
 
     public function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User:AuthService');
+        return $this->createService('User:AuthService');
     }
 
     public function getNotificationService()
     {
-        return ServiceKernel::instance()->createService('User:NotificationService');
+        return $this->createService('User:NotificationService');
     }
 
     public function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     public function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     public function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 
     public function getLogService()
     {
-        return ServiceKernel::instance()->createService('System:LogService');
+        return $this->createService('System:LogService');
     }
 
     public function getVipService()
     {
-        return $this->getServiceKernel()->createService('VipPlugin:Vip:VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     public function getLevelService()
     {
-        return $this->getServiceKernel()->createService('VipPlugin:Vip:LevelService');
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     public function getTokenService()
     {
-        return ServiceKernel::instance()->createService('User:TokenService');
+        return $this->createService('User:TokenService');
     }
 
     public function getCourseOrderService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseOrderService');
+        return $this->createService('Course:CourseOrderService');
     }
 
     public function getThreadService()
     {
-        return $this->getServiceKernel()->createService('Course:ThreadService');
+        return $this->createService('Course:ThreadService');
     }
 
     public function getNoteService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseNoteService');
+        return $this->createService('Course:CourseNoteService');
     }
 
     public function getEduCloudService()
     {
-        return $this->getServiceKernel()->createService('EduCloud:EduCloudService');
+        return $this->createService('EduCloud:EduCloudService');
     }
 
     public function getMaterialLibService()
     {
-        return $this->getServiceKernel()->createService('MaterialLib:MaterialLibService');
+        return $this->createService('MaterialLib:MaterialLibService');
+    }
+
+    public function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
+
+    protected function getDiscountService()
+    {
+        return $this->createService('Discount:Discount.DiscountService');
     }
 }
