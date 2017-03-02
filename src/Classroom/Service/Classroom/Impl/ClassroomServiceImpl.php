@@ -234,7 +234,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function canUpdateMembersDeadlines($classroom, $expiryMode)
     {
-        if ($expiryMode == $classroom['expiryMode'] && $expiryMode == 'date') {
+        if ($expiryMode == $classroom['expiryMode'] && $expiryMode != 'days') {
             return true;
         }
 
