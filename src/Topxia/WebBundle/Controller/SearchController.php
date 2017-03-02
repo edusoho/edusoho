@@ -100,6 +100,10 @@ class SearchController extends BaseController
         $type = $request->query->get('type', 'course');
         $page = $request->query->get('page', '1');
 
+        if (!$this->isTypeUseable($type)) {
+            return $this->render('TwigBundle:Exception:error403.html.twig');
+        }
+
         if (empty($keywords)) {
             return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
                 'keywords'     => $keywords,
@@ -141,6 +145,23 @@ class SearchController extends BaseController
             'counts'      => $counts,
             'paginator'   => $paginator
         ));
+    }
+
+    protected function isTypeUseable($type)
+    {
+        $cloudSearchSetting = $this->getSettingService()->get('cloud_search');
+
+        $cloudSearchType = $cloudSearchSetting['type'];
+
+        if (!array_key_exists($type, $cloudSearchType)) {
+            return false;
+        }
+
+        if ($cloudSearchType[$type] == 1) {
+            return true;
+        }
+
+        return false;
     }
 
     private function filterKeyWord($keyword)
