@@ -22,7 +22,7 @@
   <div class="course-detail-bottom">
     <div class="course-detail-img">
       <img class="img-responsive"
-           src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(courseSet.cover.large) }} {% endif %}"
+           src="{{ filepath(courseSet.cover.large|default(null), 'courseSet.png') }}"
            alt="{{ course.title }} ">
       <div class="image-overlay"></div>
       {% if previewTask|default(null) %}
