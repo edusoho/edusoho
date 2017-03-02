@@ -25,7 +25,7 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
         try {
             $this->getConnection()->beginTransaction();
 
-            if (!empty($fields['expiryMode']) && !empty($fields['expiryValue'])) {
+            if (!empty($fields['expiryMode'])) {
                 if ($this->canUpdateCourses($classroom, $fields['expiryMode'])) {
                     $this->updateCoursesExpiryDate($classroom['id'], array('expiryMode' => $fields['expiryMode'], 'expiryValue' => $fields['expiryValue']));
                 }
@@ -61,7 +61,7 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
             return true;
         }
 
-        if ($classroom['status'] == 'published' && $expiryMode == 'date') {
+        if ($expiryMode == $classroom['expiryMode']) {
             return true;
         }
 
@@ -70,7 +70,7 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
 
     protected function canUpdateCoursesMembers($classroom, $expiryMode)
     {
-        if ($classroom['status'] == 'published' && $expiryMode == 'date') {
+        if ($expiryMode == $classroom['expiryMode'] && $expiryMode != 'days') {
             return true;
         }
 

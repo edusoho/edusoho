@@ -87,6 +87,7 @@ classroomStatus: classroom.status
             {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, classroom.expiryMode|default('none')) }}
           {% else %}
             {{ radios('expiryMode', {'date':'截止日期'|trans, 'days':'有效期天数'|trans,'none':'无'|trans}, classroom.expiryMode|default('none'), 'disabled') }}
+            <input type="hidden" name="expiryMode" value="{{ classroom.expiryMode|default('none') }}">
           {% endif %}
         </div>
       </div>
