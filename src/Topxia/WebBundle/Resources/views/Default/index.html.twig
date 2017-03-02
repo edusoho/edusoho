@@ -3,8 +3,13 @@
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
 
-{% set appDownload = ( not custom | default(0) ) and ( not setting('copyright').name|default(null) ) and ( setting("mobile").enabled|default(null) ) %}
-{% set bodyClass = 'homepage {% if appDownload %} has-app {% endif %}' %}
+{% set appDownload = ( not custom | default(0) ) and ( is_ES_copyright() ) and ( setting("mobile").enabled|default(null) ) %}
+{% if appDownload %}
+  {% set bodyClass = 'homepage  has-app' %}
+{% else %}
+  {% set bodyClass = 'homepage' %}
+{% endif %}
+
 {% set siteNav = '/' %}
 {% set script_controller = 'index' %}
 {% set _target_path = path('homepage') %}
