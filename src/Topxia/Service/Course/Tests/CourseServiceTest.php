@@ -6,7 +6,7 @@ use Topxia\Service\Common\BaseTestCase;
 
 class CourseServiceTest extends BaseTestCase
 {
-    =============== Course API Test [start]===============
+    //=============== Course API Test [start]===============
     public function testGetCourse()
     {
         $course       = array(
