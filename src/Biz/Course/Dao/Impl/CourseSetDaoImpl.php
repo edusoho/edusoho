@@ -38,6 +38,12 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
+    public function clearSubtitle($id)
+    {
+        $sql = "UPDATE {$this->table} SET subtitle = '' WHERE id = ?";
+        return $this->db()->executeUpdate($sql, array($id));
+    }
+
     protected function _createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
