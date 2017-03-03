@@ -29,10 +29,12 @@
       			<td>{{course.title}}</td>
       			<td>{{course.taskNum|default(0)}}</td>
       			<td>{{course.studentNum|default(0)}}</td>
-      			<td>{{course.price}}{{'元'|trans}}            
-            <span class="ml5 text-12 color-warning">{{'会员免费'|trans}}</span>
-            <span class="ml5 text-12 color-warning">{{'6折'|trans}}</span></td> {# 货币国际化？ #}
-      			<td>
+      			<td>{{course.price}}{{'元'|trans}}
+
+			{{ slot('course.marketing.extension', {'course':course}) }}
+
+
+			<td>
              {% if course.status == 'published' %}
               <span class="color-success">{{'已发布'|trans}}</span>
               {% elseif course.status=='closed'%}             

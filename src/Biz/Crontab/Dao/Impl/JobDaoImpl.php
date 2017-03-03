@@ -28,7 +28,7 @@ class JobDaoImpl extends GeneralDaoImpl implements JobDao
     {
         return array(
             'serializes' => array(
-                'jobParams' > 'json',
+                'jobParams' => 'json',
             ),
             'orderbys' => array(
                 'createdTime',
