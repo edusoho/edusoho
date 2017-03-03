@@ -392,14 +392,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
-    public function findCourseItems($courseId)
+    public function findCourseItems($courseId, $limitNum= 0)
     {
         $course = $this->getCourse($courseId);
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
         $tasks = $this->findTasksByCourseId($course);
-        return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks);
+        return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks, $limitNum);
     }
 
     protected function findTasksByCourseId($course)
@@ -772,7 +772,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param  int     $userId
+     * @param  int $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
@@ -793,7 +793,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'status'    => 'published',
             'courseIds' => $ids
         );
-        $count = $this->searchCourseCount($conditions);
+        $count      = $this->searchCourseCount($conditions);
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
