@@ -36,7 +36,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields = array_filter(
             $fields,
             function ($value) {
-                if (is_array($value) || ctype_digit((string) $value)) {
+                if (is_array($value) || ctype_digit((string)$value)) {
                     return true;
                 }
 
@@ -173,7 +173,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 'number'
             )
         );
-        $task = $this->getTaskDao()->update($id, $fields);
+        $task   = $this->getTaskDao()->update($id, $fields);
         $this->dispatchEvent('course.task.update', new Event($task));
 
         return $task;
@@ -349,7 +349,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId)
     {
-        $conditions = array(
+        $conditions     = array(
             'userId' => $userId
         );
         $myTeachCourses = $this->getCourseService()->findUserTeachCourses($conditions, 0, PHP_INT_MAX, true);
@@ -358,7 +358,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'courseIds'   => ArrayToolkit::column($myTeachCourses, 'courseId'),
             'courseSetId' => $courseSetId
         );
-        $courses = $this->getCourseService()->searchCourses(
+        $courses    = $this->getCourseService()->searchCourses(
             $conditions,
             array('createdTime' => 'DESC'),
             0,
@@ -626,7 +626,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             'status'   => 'published',
             'seq_GT'   => $task['seq']
         );
-        $nextTasks = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 1);
+        $nextTasks  = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 1);
         if (empty($nextTasks)) {
             return array();
         }
@@ -643,6 +643,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function canLearnTask($taskId)
     {
         $task = $this->getTask($taskId);
+
         $this->getCourseService()->tryTakeCourse($task['courseId']);
 
         //check if has permission to course and task
@@ -764,8 +765,13 @@ class TaskServiceImpl extends BaseService implements TaskService
                 'courseId' => $courseId,
                 'status'   => 'published'
             );
+
             $tasks       = $this->getTaskDao()->search($conditions, array('seq' => 'ASC'), 0, 2);
             $toLearnTask = array_pop($tasks); //如果当正在学习的是最后一个，则取当前在学的任务
+            if (empty($toLearnTask)) {
+                $toLearnTask = $latestLearnTask;
+            }
+
         }
 
         return $toLearnTask;
@@ -850,7 +856,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     /**
      * 获取用户最近进行的一个任务
      *
-     * @param  int     $userId
+     * @param  int $userId
      * @return array
      */
     public function getUserRecentlyStartTask($userId)
@@ -865,7 +871,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             0,
             1
         );
-        $result = array_shift($results);
+        $result  = array_shift($results);
         if (empty($result)) {
             return array();
         }

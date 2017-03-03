@@ -258,7 +258,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
     {
         $biz = $this->getBiz();
         return array(
-            'text'      => array(
+            'text'    => array(
                 'meta'    => array(
                     'name' => '图文',
                     'icon' => 'es-icon es-icon-graphicclass'
@@ -274,7 +274,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     return $courseSet['type'] != 'live';
                 }
             ),
-            'video'     => array(
+            'video'   => array(
                 'meta'    => array(
                     'name' => '视频',
                     'icon' => 'es-icon es-icon-videoclass'
@@ -290,7 +290,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     return $courseSet['type'] != 'live';
                 }
             ),
-            'audio'     => array(
+            'audio'   => array(
                 'meta'    => array(
                     'name' => '音频',
                     'icon' => 'es-icon es-icon-audioclass'
@@ -306,7 +306,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     return $courseSet['type'] != 'live';
                 }
             ),
-            'live'      => array(
+            'live'    => array(
                 'meta'    => array(
                     'name' => '直播',
                     'icon' => 'es-icon es-icon-videocam'
@@ -322,7 +322,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                     return ArrayToolkit::get($storage, 'live_course_enabled', false);
                 }
             ),
-            'discuss'   => array(
+            'discuss' => array(
                 'meta'    => array(
                     'name' => '讨论',
                     'icon' => 'es-icon es-icon-comment'
@@ -475,7 +475,7 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
                 )
             )
         );
-        $that = $this;
+        $that   = $this;
         //used for course/courseSet copy
         $container['course_copy.chains'] = function ($node) use ($that, $chains) {
             return function ($node) use ($that, $chains) {
@@ -510,23 +510,23 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
 
     protected function registerActivityTypes($container)
     {
-        $that                            = $this;
-        $container['activity_type.text'] = function () use ($that) {
+        $that                                = $this;
+        $container['activity_type.text']     = function () use ($that) {
             return new Text($that->getBiz());
         };
-        $container['activity_type.video'] = function () use ($that) {
+        $container['activity_type.video']    = function () use ($that) {
             return new Video($that->getBiz());
         };
-        $container['activity_type.audio'] = function () use ($that) {
+        $container['activity_type.audio']    = function () use ($that) {
             return new Audio($that->getBiz());
         };
         $container['activity_type.download'] = function () use ($that) {
             return new Download($that->getBiz());
         };
-        $container['activity_type.live'] = function () use ($that) {
+        $container['activity_type.live']     = function () use ($that) {
             return new Live($that->getBiz());
         };
-        $container['activity_type.discuss'] = function () use ($that) {
+        $container['activity_type.discuss']  = function () use ($that) {
             return new Discuss($that->getBiz());
         };
 
@@ -538,41 +538,41 @@ class DefaultExtension extends Extension implements ServiceProviderInterface
             return new Doc($that->getBiz());
         };
 
-        $container['activity_type.ppt'] = function () use ($that) {
+        $container['activity_type.ppt']       = function () use ($that) {
             return new Ppt($that->getBiz());
         };
         $container['activity_type.testpaper'] = function () use ($that) {
             return new Testpaper($that->getBiz());
         };
-        $container['activity_type.homework'] = function () use ($that) {
+        $container['activity_type.homework']  = function () use ($that) {
             return new Homework($that->getBiz());
         };
-        $container['activity_type.exercise'] = function () use ($that) {
+        $container['activity_type.exercise']  = function () use ($that) {
             return new Exercise($that->getBiz());
         };
     }
 
     protected function registerQuestionTypes($container)
     {
-        $container['question_type.choice'] = function () {
+        $container['question_type.choice']           = function () {
             return new Choice();
         };
-        $container['question_type.single_choice'] = function () {
+        $container['question_type.single_choice']    = function () {
             return new SingleChoice();
         };
         $container['question_type.uncertain_choice'] = function () {
             return new UncertainChoice();
         };
-        $container['question_type.determine'] = function () {
+        $container['question_type.determine']        = function () {
             return new Determine();
         };
-        $container['question_type.essay'] = function () {
+        $container['question_type.essay']            = function () {
             return new Essay();
         };
-        $container['question_type.fill'] = function () {
+        $container['question_type.fill']             = function () {
             return new Fill();
         };
-        $container['question_type.material'] = function () {
+        $container['question_type.material']         = function () {
             return new Material();
         };
 
