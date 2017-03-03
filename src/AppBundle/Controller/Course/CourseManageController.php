@@ -77,7 +77,7 @@ class CourseManageController extends BaseController
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
 
         $liveTasks = array_filter($tasks, function ($task) {
-            return $task['type'] === 'live';
+            return $task['type'] === 'live' && $task['status'] === 'published';
         });
 
         foreach ($liveTasks as $key => $task) {

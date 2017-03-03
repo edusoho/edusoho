@@ -14,8 +14,8 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
     {
         return array(
             // 'testpaper.create'      => 'onTestpaperCreate',
-            'testpaper.update'      => 'onTestpaperUpdate',
-            'testpaper.delete'      => 'onTestpaperDelete',
+            'exam.update'           => 'onTestpaperUpdate',
+            'exam.delete'           => 'onTestpaperDelete',
 
             'testpaper.item.create' => 'onTestpaperItemCreate',
             'testpaper.item.update' => 'onTestpaperItemUpdate',
