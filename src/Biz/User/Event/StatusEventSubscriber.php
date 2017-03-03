@@ -176,7 +176,6 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
 
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-            $classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
 
             if (array_key_exists('showable', $classroom) && $classroom['showable'] == 1) {
                 $private = 0;
