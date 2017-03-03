@@ -6,18 +6,18 @@ use Topxia\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    private static $pageNum = 1000;
+    private static $pageNum = 2000;
 
     public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
-        try{
+        try {
             $result = $this->batchUpdate($index);
             $this->getConnection()->commit();
             if (!empty($result)) {
                 return $result;
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
         }
@@ -41,22 +41,25 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function generateIndex($step, $page)
     {
-        return $step*1000000 + $page;
+        return $step * 1000000 + $page;
     }
 
-    protected function getStepAndPage($index) 
+    protected function getStepAndPage($index)
     {
-        $step = intval($index/1000000);
-        $page = $index%1000000;
+        $step = intval($index / 1000000);
+        $page = $index % 1000000;
         return array($step, $page);
     }
 
     protected function batchUpdate($index)
     {
         $batchUpdates = array(
-            1 => 'changeQuestionTarget',
-            2 => 'changeLessonMediaId',
-            3 => 'initWapSetting'
+            1 => 'createTmpTable',
+            2 => 'copyQuestionDataToTemplate',
+            3 => 'dealQuestionTarget',
+            4 => 'deleteTmpTable',
+            5 => 'changeLessonMediaId',
+            6 => 'initWapSetting'
         );
         if ($index == 0) {
             return array(
@@ -67,14 +70,13 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         list($step, $page) = $this->getStepAndPage($index);
-
         $method = $batchUpdates[$step];
         $page = $this->$method($page);
 
         if ($page == 1) {
             $step ++;
         }
-        if ($step < 4) {
+        if ($step < 7) {
             return array(
                 'index' => $this->generateIndex($step, $page),
                 'message' => '正在升级数据...',
@@ -83,81 +85,65 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-//处理题目从属
-    protected function changeQuestionTarget($page = 1)
+    protected function createTmpTable()
+    {
+        $this->createTmpTableDao();
+        return 1;
+    }
+
+    protected function copyQuestionDataToTemplate($page = 1)
     {
         $count = $this->searchSourceQuestionCount();
         $pageNum = self::$pageNum;
         $pages = intval(floor($count/$pageNum)) + ($count%$pageNum>0 ? 1 : 0);
 
         if ($page <= $pages) {
-            $start = ($page-1) * $pageNum;
-
-            $sourceQuestions = $this->getQuestionService()->searchQuestions(
-                array('copyId' => 0), 
-                array('createdTime', 'DESC'), 
-                $start,
-                $pageNum
-            );
-
-            foreach ($sourceQuestions as $sourceQuestion) {
-                $questionTarget = explode('/', $sourceQuestion['target']);
-                $num = count($questionTarget);
-                //只有课时题目做处理
-                if ($num > 1) {
-                    $questionLessonTarget = explode('-', $questionTarget[1]);
-                    $lessonId = $questionLessonTarget[1];
-                    $lesson = $this->getLesson($lessonId);
-
-                    if (empty($lesson)) {
-                        $this->dealQuestionTarget($sourceQuestion);
-                        $this->dealCopyQuestion($sourceQuestion);
-                    }
-                }
+            $start = ($page - 1) * $pageNum;
+            $questions = $this->searchSourceQuestion($start, $pageNum);
+            foreach ($questions as $question) {
+                $this->addTmpQuestion($question);
             }
             if ($page < $pages) {
                 return ++$page;
             }
         }
+
         return 1;
     }
 
-    private function searchSourceQuestionCount()
+    protected function dealQuestionTarget($page = 1)
     {
-        $sql = "select count(*) from question where copyId = 0";
-        $count = $this->getConnection()->fetchAssoc($sql, array());
-        return $count['count(*)'];
-    }
+        $count = $this->searchTmpQuestionCount();
+        $pageNum = self::$pageNum;
+        $pages = intval(floor($count/$pageNum)) + ($count%$pageNum>0 ? 1 : 0);
 
-    private function dealQuestionTarget($question)
-    {
-        $target = explode('/', $question['target']);
-        return $this->getQuestionService()->updateQuestionTargetById($question['id'], array('target' => $target[0]));
-    }
+        if ($page <= $pages) {
+            $start = ($page - 1) * $pageNum;
+            $questions = $this->searchTmpQuestion($start, $pageNum);
+            $lessonIds = ArrayToolkit::column($questions, 'lessonId');
+            $lessons = $this->getCourseService()->findLessonsByIds($lessonIds);
 
-    private function dealCopyQuestion($sourceQuestion)
-    {
-        $copyQuestions = $this->findCopyQuestion($sourceQuestion);
-        foreach ($copyQuestions as $copyQuestion) {
-            $this->dealQuestionTarget($copyQuestion);
+            foreach ($questions as $question) {
+                if (empty($lessons[$question['lessonId']])) {
+                    $target = explode('/', $question['target']);
+                    $this->updateQuestionTarget($question['id'], $target[0]);
+                }
+            }
+
+            if ($page < $pages) {
+                return ++$page;
+            }
         }
+
+        return 1;
     }
 
-    private function getLesson($lessonId)
+    protected function deleteTmpTable()
     {
-        if (empty($lessonId)) {
-            return array();
-        }
-        $sql = "select * from course_lesson where id = {$lessonId}";
-        return $this->getConnection()->fetchAll($sql, array());
+        $this->deleteTmpTableDao();
+        return 1;
     }
 
-    protected function findCopyQuestion($sourceQuestion)
-    {
-        return $this->getQuestionService()->findQuestionsByCopyIds(array($sourceQuestion['id']));
-    }
-
-//处理课时试卷
     protected function changeLessonMediaId($page = 1)
     {
         $condition = array(
@@ -193,35 +179,6 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    private function findQuestionSourceLessons($condition, $start, $pageNum)
-    {
-        $sourceLessons = $this->getCourseService()->searchLessons(
-            $condition, 
-            array('createdTime', 'DESC'), 
-            $start, 
-            $pageNum
-        );
-
-        return $sourceLessons;
-    }
-    private function updateCopyLessonMediaId($lessonId, $mediaId)
-    {
-        $sql = "update course_lesson set mediaId = {$mediaId} where id = {$lessonId}";
-        return $this->getConnection()->executeQuery($sql, array());
-    }
-
-    private function getTestPaperByCopyIdAndTarget($copyId, $target)
-    {
-        $sql = "select * from testpaper where copyId = ? and target = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($copyId, $target));
-    }
-
-    private function findCopyLessons($lessonId)
-    {
-        $sql = "select * from course_lesson where copyId = {$lessonId}";
-        return $this->getConnection()->fetchAll($sql, array());
-    }
-
     protected function initWapSetting()
     {
         $default = array(
@@ -236,6 +193,96 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    private function findQuestionSourceLessons($condition, $start, $pageNum)
+    {
+        $sourceLessons = $this->getCourseService()->searchLessons(
+            $condition,
+            array('createdTime', 'DESC'),
+            $start,
+            $pageNum
+        );
+
+        return $sourceLessons;
+    }
+
+    private function findCopyLessons($lessonId)
+    {
+        $sql = "select * from course_lesson where copyId = {$lessonId}";
+        return $this->getConnection()->fetchAll($sql, array());
+    }
+
+    private function getTestPaperByCopyIdAndTarget($copyId, $target)
+    {
+        $sql = "select * from testpaper where copyId = ? and target = ?";
+        return $this->getConnection()->fetchAssoc($sql, array($copyId, $target));
+    }
+
+    private function updateCopyLessonMediaId($lessonId, $mediaId)
+    {
+        $sql = "update course_lesson set mediaId = {$mediaId} where id = {$lessonId}";
+        return $this->getConnection()->executeQuery($sql, array());
+    }
+
+    private function searchSourceQuestionCount()
+    {
+        $sql = "select count(*) from question where target  REGEXP 'lesson-[0-9]+$'";
+        return $this->getConnection()->fetchColumn($sql);
+    }
+
+    private function searchSourceQuestion($start, $limit)
+    {
+        $sql = "select id ,target, substring_index(substring_index(target,'/',-1),'-',-1) as lessonId FROM question WHERE target  REGEXP 'lesson-[0-9]+$' limit {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array());
+    }
+
+    private function searchTmpQuestionCount()
+    {
+        $sql = "SELECT COUNT(*) FROM `question_lesson_tmp`";
+        return $this->getConnection()->fetchColumn($sql);
+    }
+
+    private function searchTmpQuestion($start, $limit)
+    {
+        $sql = "SELECT * FROM `question_lesson_tmp` limit {$start}, {$limit}";
+        return $this->getConnection()->fetchAll($sql, array());
+    }
+
+    private function createTmpTableDao()
+    {
+        $sql = "CREATE TABLE IF NOT EXISTS `question_lesson_tmp` ( 
+                  `id` int(10) unsigned NOT NULL COMMENT '题目ID',
+                  `target` varchar(255) NOT NULL DEFAULT '' COMMENT '从属于',
+                  `lessonId` int(10) unsigned NOT NULL COMMENT '课时ID',
+                  PRIMARY KEY (`id`)
+              ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;";
+
+        $this->getConnection()->exec($sql);
+    }
+
+    private function deleteTmpTableDao()
+    {
+        if ($this->isTableExist('question_lesson_tmp')) {
+            $sql = "DROP TABLE `question_lesson_tmp`";
+            $this->getConnection()->exec($sql);
+        }
+    }
+
+    private function addTmpQuestion($tmp)
+    {
+        $this->getConnection()->insert('question_lesson_tmp', $tmp);
+    }
+
+    private function updateQuestionTarget($id, $target)
+    {
+        $this->getConnection()->update('question', array('target' => $target), array('id' => $id));
+    }
+
+    protected function isTableExist($table)
+    {
+        $sql = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
 
     protected function getSettingService()
     {
@@ -247,10 +294,14 @@ class EduSohoUpgrade extends AbstractUpdater
         return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
+    /**
+     * @return \Topxia\Service\Question\Impl\QuestionServiceImpl
+     */
     protected function getQuestionService()
     {
         return ServiceKernel::instance()->createService('Question.QuestionService');
     }
+
 }
 
 //抽象类
@@ -278,5 +329,5 @@ abstract class AbstractUpdater
     }
 
     abstract public function update();
-   
+
 }

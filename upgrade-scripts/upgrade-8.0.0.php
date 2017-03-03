@@ -17,7 +17,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         try {
-            $dir        = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."../web/install");
+            $dir = realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."../web/install");
             $filesystem = new Filesystem();
 
             if (!empty($dir)) {
@@ -26,7 +26,7 @@ class EduSohoUpgrade extends AbstractUpdater
         } catch (\Exception $e) {
         }
 
-        $developerSetting          = $this->getSettingService()->get('developer', array());
+        $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
         ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
@@ -37,6 +37,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->c2courseSetMigrate();
         $this->c2courseMigrate();
+        $this->c2CourseLessonMigrate();
         $this->c2testpaperMigrate();
     }
 
@@ -84,7 +85,8 @@ class EduSohoUpgrade extends AbstractUpdater
             $result = $this->getConnection()->exec($sql);
         }
 
-        $sql = "INSERT INTO `c2_course_set` (
+        $sql
+        = "INSERT INTO `c2_course_set` (
             `oldCourseId`
             ,`title`
             ,`subtitle`
@@ -147,10 +149,10 @@ class EduSohoUpgrade extends AbstractUpdater
         FROM `course` where `id` not in (select `oldCourseId` from `c2_course_set`);";
         $result = $this->getConnection()->exec($sql);
 
-        $sql    = "UPDATE `c2_course_set` AS `c` SET `c`.`parentId` =  (select `id` from `c2_course_set` where `oldCourseId` = `c`.`oldCourseId`)";
+        $sql = "UPDATE `c2_course_set` AS `c` SET `c`.`parentId` =  (select `id` from `c2_course_set` where `oldCourseId` = `c`.`oldCourseId`)";
         $result = $this->getConnection()->exec($sql);
 
-        $sql    = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseSetId FROM `course_material` GROUP BY courseSetId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseSetId`;";
+        $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseSetId FROM `course_material` GROUP BY courseSetId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseSetId`;";
         $result = $this->getConnection()->exec($sql);
     }
 
@@ -215,7 +217,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `enableFinish` INT(1) NOT NULL DEFAULT '1' COMMENT '是否允许学院强制完成任务',
                   `materialNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传的资料数量',
                   `maxRate` tinyint(3) DEFAULT 0 COMMENT '最大抵扣百分比',
-                  `publishedTaskNum` INT(10) DEFAULT '0' COMMENT '已发布的任务数' AFTER `taskNum`,
+                  `publishedTaskNum` INT(10) DEFAULT '0' COMMENT '已发布的任务数',
                   `oldCourseId` int(11) unsigned NOT NULL DEFAULT '0',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
@@ -223,7 +225,8 @@ class EduSohoUpgrade extends AbstractUpdater
             $result = $this->getConnection()->exec($sql);
         }
 
-        $sql = "INSERT INTO `c2_course` (
+        $sql
+        = "INSERT INTO `c2_course` (
             `oldCourseId`
             ,`title`
             ,`status`
@@ -332,24 +335,576 @@ class EduSohoUpgrade extends AbstractUpdater
         FROM `course` where `id` not in (select `oldCourseId` from `c2_course`);";
         $result = $this->getConnection()->exec($sql);
 
-        $sql    = "UPDATE `c2_course` AS `c` SET `c`.`courseSetId` =  (select `id` from `c2_course_set` where `oldCourseId` = `c`.`oldCourseId`)";
+        $sql = "UPDATE `c2_course` AS `c` SET `c`.`courseSetId` =  (select `id` from `c2_course_set` where `oldCourseId` = `c`.`oldCourseId`)";
         $result = $this->getConnection()->exec($sql);
 
-        $sql    = "UPDATE `c2_course` AS `c` SET `c`.`parentId` =  (select `id` from `c2_course` where `oldCourseId` = `c`.`oldCourseId`)";
+        $sql = "UPDATE `c2_course` AS `c` SET `c`.`parentId` =  (select `id` from `c2_course` where `oldCourseId` = `c`.`oldCourseId`)";
         $result = $this->getConnection()->exec($sql);
 
-        $sql    = "UPDATE `c2_course` AS `c` SET `c`.`copyCourseId` = `c`.`parentId`";
+        $sql = "UPDATE `c2_course` AS `c` SET `c`.`copyCourseId` = `c`.`parentId`";
         $result = $this->getConnection()->exec($sql);
 
-        $sql    = "UPDATE `c2_course` AS `c` SET `c`.`cloneId` = `c`.`parentId`";
+        $sql = "UPDATE `c2_course` AS `c` SET `c`.`cloneId` = `c`.`parentId`";
         $result = $this->getConnection()->exec($sql);
 
-        $sql    = "UPDATE `c2_course` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.courseId;";
+        $sql = "UPDATE `c2_course` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.courseId;";
         $result = $this->getConnection()->exec($sql);
 
         $sql = "UPDATE `c2_course_set` cs, `c2_course` c,
         SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where c.courseSetId = cs.id";
         $result = $this->getConnection()->exec($sql);
+    }
+
+    /**
+     * 课时数据升级 包含了 task, activity, activityExt
+     *
+     * 为了保证数据准确性，扩展表中添加了lessonId
+     */
+    protected function c2CourseLessonMigrate()
+    {
+        $this->c2CourseTaskMigrate();
+        $this->c2Activity();
+
+        $this->c2VideoActivity();
+        $this->c2TextActivity();
+        $this->c2AudioActivity();
+        $this->c2FlashActivity();
+        $this->c2PPtActivity();
+        $this->c2DocActivity();
+        $this->c2TestPaperActivity();
+
+        $this->c2CourseTaskView();
+
+        $this->c2CourseTaskResult();
+    }
+
+    /**
+     * taskId 与lessonId一直
+     */
+    protected function c2CourseTaskMigrate()
+    {
+        if (!$this->isTableExist('course_task')) {
+            $this->getConnection()->exec("
+                  CREATE TABLE `course_task` (
+                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                  `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属课程的id',
+                  `fromCourseSetId` int(10) unsigned NOT NULL DEFAULT '0',
+                  `seq` int(10) unsigned NOT NULL,
+                  `categoryId` int(10) DEFAULT NULL,
+                  `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '引用的教学活动',
+                  `title` varchar(255) NOT NULL COMMENT '标题',
+                  `isFree` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '是否免费',
+                  `isOptional` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '是否必修',
+                  `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
+                  `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
+                  `status` varchar(255) NOT NULL DEFAULT 'create' COMMENT '发布状态 create|publish|unpublish',
+                  `createdUserId` int(10) unsigned NOT NULL COMMENT '创建者',
+                  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+                  `mode` varchar(60) DEFAULT NULL COMMENT '任务模式',
+                  `number` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务编号',
+                  `type` varchar(50) NOT NULL COMMENT '任务类型',
+                  `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
+                  `length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '若是视频类型，则表示时长；若是ppt，则表示页数；由具体的活动业务来定义',
+                  `maxOnlineNum` int(11) unsigned DEFAULT '0' COMMENT '任务最大可同时进行的人数，0为不限制',
+                  `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制来源task的id',
+                  `lessonId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '老课时Id',
+                  PRIMARY KEY (`id`),
+                  KEY `seq` (`seq`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        $this->getConnection()->exec("
+            insert into course_task(
+                 `id`,
+                 `courseId`,
+                 `seq`,
+                 `categoryId`,
+                 `title`,
+                 `isFree`,
+                 `startTime`,
+                 `endTime`,
+                 `status`,
+                 `createdUserId`,
+                 `createdTime`,
+                 `updatedTime`,
+                 `mode` ,
+                 `number`,
+                 `type`,
+                 `mediaSource` ,
+                 `length` ,
+                 `maxOnlineNum`,
+                 `copyId`,
+                 `lessonId`
+            ) select
+                `id`,
+                `courseId`,
+                `seq`,
+                `chapterId`,
+                `title`,
+                `free`,
+                `startTime`,
+                `endTime`,
+                `status`,
+                `userId`,
+                `createdTime`,
+                `updatedTime`,
+                'lesson',
+                `number`,
+                `type`,
+                `mediaSource`,
+                `length`,
+                `maxOnlineNum`,
+                `copyId`,
+                `id` as `lessonId`
+            from `course_lesson` WHERE `id` NOT IN (SELECT id FROM `course_task`)
+        ");
+
+        $this->getConnection()->exec("update `course_task` AS  `ct` set `ct`.fromCourseSetId   = (select `courseSetId` from `c2_course` AS `ce` where `ct`.courseId = `ce`.id)");
+    }
+
+    protected function c2Activity()
+    {
+        if (!$this->isTableExist('activity')) {
+            $this->getConnection()->exec("
+             CREATE TABLE `activity` (
+                `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                  `title` varchar(255) NOT NULL COMMENT '标题',
+                  `remark` text,
+                  `mediaId` int(10) unsigned DEFAULT '0' COMMENT '教学活动详细信息Id，如：视频id, 教室id',
+                  `mediaType` varchar(50) NOT NULL COMMENT '活动类型',
+                  `content` text COMMENT '活动描述',
+                  `length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '若是视频类型，则表示时长；若是ppt，则表示页数；由具体的活动业务来定义',
+                  `fromCourseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属教学计划',
+                  `fromCourseSetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属的课程',
+                  `fromUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者的ID',
+                  `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
+                  `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
+                  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+                  `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制来源activity的id',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8;
+            ");
+
+            $this->getConnection()->exec("
+            insert into `activity`(
+                `id`,
+                `title` ,
+                `remark` ,
+                `mediaId` ,
+                `mediaType`,
+                `content`,
+                `length`,
+                `fromCourseId`,
+                `fromUserId`,
+                `startTime`,
+                `endTime`,
+                `createdTime`,
+                `updatedTime`,
+                `copyId`
+            )select
+                `id`,
+                `title`,
+                `summary`,
+                `mediaId`,
+                CASE WHEN `type` = 'document' THEN 'doc'  ELSE TYPE END AS 'type',
+                `content`,
+                `length`,
+                `courseId`,
+                `userId`,
+                `startTime`,
+                `endTime`,
+                `createdTime`,
+                `updatedTime`,
+                `copyId`
+            from `course_lesson` where `id` not in (select id from `activity`);
+
+        ");
+
+            //update activityId in table course_task
+            $this->getConnection()->exec("update `course_task`  ck set  `activityId` = (select `id` from  `activity` ay  where  ck.id = ay.id)
+            ");
+            //courseSetId
+            $this->getConnection()->exec("update `activity` AS  `ct` set `ct`.fromCourseSetId   = (select `courseSetId` from `c2_course` AS `ce` where `ct`.courseId = `ce`.id)");
+        }
+    }
+
+    protected function c2VideoActivity()
+    {
+        if (!$this->isTableExist('video_activity')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `video_activity` (
+                  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                  `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
+                  `mediaId` int(10) NOT NULL DEFAULT '0' COMMENT '媒体文件ID',
+                  `mediaUri` text COMMENT '媒体文件资UR',
+                  `finishType` varchar(60) DEFAULT NULL COMMENT '完成类型',
+                  `finishDetail` text COMMENT '完成条件',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='视频活动扩展表';
+            ");
+        }
+        if (!$this->isFieldExist('video_activity', 'lessonId')) {
+            $this->exec("alter table `video_activity` add `lessonId` int(10) ;");
+        }
+        $this->getConnection()->exec("
+            insert into `video_activity` (
+                `mediaSource`,
+                `mediaId`,
+                `mediaUri`,
+                `finishType`,
+                `finishDetail`,
+                `lessonId`
+            )
+            select
+                `mediaSource`,
+                `mediaId`,
+                `mediaUri`,
+                'end',
+                '1',
+                `id`
+            from `course_lesson` where  type ='video' and   `id` not in (select `lessonId` from `video_activity`);
+        ");
+
+        $this->getConnection()->exec("
+            UPDATE  `activity` AS ay ,`video_activity` AS vy   SET ay.`mediaId`  =  vy.id
+            WHERE ay.id  = vy.lessonId   AND ay.`mediaType` = 'video';
+        ");
+    }
+
+    protected function c2TextActivity()
+    {
+        if (!$this->isTableExist("text_activity")) {
+            $this->getConnection()->exec("
+            CREATE TABLE `text_activity` (
+              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'click, time',
+              `finishDetail` varchar(32) DEFAULT '0' COMMENT '至少观看X分钟',
+              `createdTime` int(10) NOT NULL,
+              `createdUserId` int(11) NOT NULL,
+              `updatedTime` int(11) DEFAULT NULL,
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        if (!$this->isFieldExist('text_activity', 'lessonId')) {
+            $this->exec("alter table `text_activity` add `lessonId` int(10) ;");
+        }
+
+        $this->getConnection()->exec("
+            INSERT INTO `text_activity` (
+                `finishType`,
+                `finishDetail`,
+                `createdTime`,
+                `createdUserId`,
+                `updatedTime`,
+                `lessonId`
+            )
+            SELECT
+                'time',
+                '1',
+                `createdTime`,
+                `userId`,
+                `updatedTime`,
+                `id`
+            FROM `course_lesson` WHERE  `type`='text' AND  `id` NOT IN (SELECT `lessonId` FROM `text_activity`);
+        ");
+
+        $this->getConnection()->exec("
+             UPDATE  `activity` AS ay ,`text_activity` AS ty   SET ay.`mediaId`  =  ty.id
+             WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'text';
+        ");
+    }
+
+    protected function c2AudioActivity()
+    {
+        if (!$this->isTableExist('audio_activity')) {
+            $this->exec("
+                CREATE TABLE `audio_activity` (
+                  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+                  `mediaId` int(10) DEFAULT NULL COMMENT '媒体文件ID',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='音频活动扩展表';
+            ");
+        }
+
+        if (!$this->isFieldExist('audio_activity', 'lessonId')) {
+            $this->exec("alter table `audio_activity` add `lessonId` int(10) ;");
+        }
+
+        $this->exec("
+            insert into `audio_activity`
+            (
+                `mediaId`,
+                `lessonId`
+            )
+            select
+              `mediaId`,
+              `id`
+            from `course_lesson` where  type ='audio' and   `id` not in (select `lessonId` from `audio_activity`);
+        ");
+
+        $this->exec("
+          UPDATE  `activity` AS ay ,`audio_activity` AS ty   SET ay.`mediaId`  =  ty.id
+          WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'audio';
+         ");
+
+        // $this->getConnection()->exec("alter table `audio_activity` add `lessonId` int(10) ;");
+    }
+
+    protected function c2FlashActivity()
+    {
+        if (!$this->isTableExist("flash_activity")) {
+            $this->exec("
+                CREATE TABLE `flash_activity` (
+                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                  `mediaId` int(11) NOT NULL,
+                  `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'click, time',
+                  `finishDetail` varchar(32) DEFAULT '0' COMMENT '至少观看X分钟',
+                  `createdTime` int(10) NOT NULL,
+                  `createdUserId` int(11) NOT NULL,
+                  `updatedTime` int(11) DEFAULT NULL,
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        if (!$this->isFieldExist('flash_activity', 'lessonId')) {
+            $this->exec("alter table `flash_activity` add `lessonId` int(10) ;");
+        }
+
+        $this->exec("
+            INSERT INTO `flash_activity`
+            (
+            `mediaId`,
+            `finishType`,
+            `finishDetail`,
+            `createdTime`,
+            `createdUserId`,
+            `updatedTime`,
+            `lessonId`
+            )
+            SELECT
+                `mediaId`,
+                'time',
+                '1',
+                `createdTime`,
+                `userId` ,
+                `updatedTime`,
+                `id`
+            FROM `course_lesson` WHERE TYPE ='flash' AND id NOT IN (SELECT `lessonId` FROM `flash_activity`)
+        ");
+
+        $this->exec("
+          UPDATE  `activity` AS ay ,`flash_activity` AS ty   SET ay.`mediaId`  =  ty.id
+          WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'flash';
+         ");
+    }
+
+    protected function c2PPtActivity()
+    {
+        if (!$this->isTableExist('ppt_activity')) {
+            $this->exec("
+                CREATE TABLE `ppt_activity` (
+                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                  `mediaId` int(11) NOT NULL,
+                  `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'end, time',
+                  `finishDetail` varchar(32) DEFAULT '0' COMMENT '至少观看X分钟',
+                  `createdTime` int(11) unsigned NOT NULL DEFAULT '0',
+                  `createdUserId` int(11) NOT NULL,
+                  `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        if (!$this->isFieldExist('ppt_activity', 'lessonId')) {
+            $this->exec("alter table `ppt_activity` add `lessonId` int(10) ;");
+        }
+
+        $this->exec("
+            insert into `ppt_activity`
+            (
+            `mediaId`,
+            `finishType`,
+            `finishDetail`,
+            `createdTime`,
+            `createdUserId`,
+            `updatedTime`,
+            `lessonId`
+            )
+            select
+                `mediaId`,
+                'end',
+                '1',
+                `createdTime`,
+                `userId` ,
+                `updatedTime`,
+                `id`
+            from `course_lesson` where type ='ppt' and id not in (select `lessonId` from `ppt_activity`);
+        ");
+
+        $this->exec("
+          UPDATE  `activity` AS ay ,`ppt_activity` AS ty   SET ay.`mediaId`  =  ty.id
+          WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'ppt';
+         ");
+    }
+
+    protected function c2DocActivity()
+    {
+        if (!$this->isTableExist('doc_activity')) {
+            $this->exec("
+                CREATE TABLE `doc_activity` (
+                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                  `mediaId` int(11) NOT NULL,
+                  `finishType` varchar(32) NOT NULL DEFAULT '' COMMENT 'click, detail',
+                  `finishDetail` varchar(32) DEFAULT '0' COMMENT '至少观看X分钟',
+                  `createdTime` int(10) NOT NULL,
+                  `createdUserId` int(11) NOT NULL,
+                  `updatedTime` int(11) DEFAULT NULL,
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        if (!$this->isFieldExist('doc_activity', 'lessonId')) {
+            $this->exec("alter table `doc_activity` add `lessonId` int(10) ;");
+        }
+
+        $this->exec("
+            INSERT INTO `doc_activity`
+            (
+            `mediaId`,
+            `finishType`,
+            `finishDetail`,
+            `createdTime`,
+            `createdUserId`,
+            `updatedTime`,
+            `lessonId`
+            )
+            SELECT
+                `mediaId`,
+                'time',
+                '1',
+                `createdTime`,
+                `userId` ,
+                `updatedTime`,
+                `id`
+            FROM `course_lesson` WHERE TYPE ='document' AND id NOT IN (SELECT `lessonId` FROM `doc_activity`)
+        ");
+
+        $this->exec("
+          UPDATE  `activity` AS ay ,`doc_activity` AS ty   SET ay.`mediaId`  =  ty.id
+          WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'doc';
+         ");
+    }
+
+    protected function c2CourseTaskView()
+    {
+        if (!$this->isTableExist('course_task_view')) {
+            $this->exec("
+                CREATE TABLE `course_task_view` (
+                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                  `courseSetId` int(10) NOT NULL,
+                  `courseId` int(10) NOT NULL,
+                  `taskId` int(10) NOT NULL,
+                  `fileId` int(10) NOT NULL,
+                  `userId` int(10) NOT NULL,
+                  `fileType` varchar(80) NOT NULL,
+                  `fileStorage` varchar(80) NOT NULL,
+                  `fileSource` varchar(32) NOT NULL,
+                  `createdTime` int(10) unsigned NOT NULL,
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        $this->exec("
+            INSERT INTO `course_task_view`
+            (
+                `id`,
+                `courseSetId`,
+                `courseId`,
+                `taskId`,
+                `fileId`,
+                `userId`,
+                `fileType`,
+                `fileStorage`,
+                `fileSource`,
+                `createdTime`
+            )
+            SELECT
+                `id`,
+                0,
+                `courseId`,
+                `lessonId`,
+                `fileId`,
+                `userId`,
+                `fileType`,
+                `fileStorage`,
+                `fileSource`,
+                `createdTime`
+            FROM `course_lesson_view` WHERE id NOT IN (SELECT id FROM `course_task_view`);
+        ");
+
+        $this->exec("UPDATE `course_task_view` AS cw , `c2_course` c SET cw.`courseSetId` = c.`courseSetId` WHERE cw.`courseId` = c.id ;");
+    }
+
+    protected function c2CourseTaskResult()
+    {
+        if (!$this->isTableExist('course_task_result')) {
+            $this->exec("
+                CREATE TABLE `course_task_result` (
+                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                  `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '活动的id',
+                  `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属课程的id',
+                  `courseTaskId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程的任务id',
+                  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+                  `status` varchar(255) NOT NULL DEFAULT 'start' COMMENT '任务状态，start，finish',
+                  `finishedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '完成时间',
+                  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+                  `time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务进行时长（分钟）',
+                  `watchTime` int(10) unsigned NOT NULL DEFAULT '0',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        $this->exec("
+            insert into `course_task_result`
+            (
+                `id`,
+                `courseId`,
+                `courseTaskId`,
+                `userId`,
+                `status`,
+                `finishedTime`,
+                `createdTime`,
+                `updatedTime`,
+                `time`,
+                `watchTime`
+            )
+            select
+                `id`,
+                `courseId`,
+                `lessonId`,
+                `userId`,
+                case when `status` = 'finished' then 'finish' else 'start' end AS 'status',
+                `finishedTime`,
+                `updateTime`,
+                `updateTime`,
+                `learnTime`,
+                `watchTime`
+            from `course_lesson_learn` where id not in (select id from `course_task_result`);
+        ");
+
+        $this->exec("
+            UPDATE `course_task_result` cl,  `course_task` ck SET cl.`activityId`= ck.`activityId` WHERE cl.`courseTaskId` = ck.`id`;
+        ");
     }
 
     protected function c2testpaperMigrate()
@@ -457,25 +1012,24 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->testpaperUpgrade();
         $this->homeworkUpgrade();
         $this->exerciseUpdate();
-        $this->testpaperActivity();
     }
 
     protected function testpaperUpgrade()
     {
-        $sql        = "select * from testpaper";
+        $sql = "select * from testpaper";
         $testpapers = $this->getConnection()->fetchAll($sql);
         foreach ($testpapers as $testpaper) {
             $targetArr = explode('/', $testpaper['target']);
             $courseArr = explode('-', $targetArr[0]);
-            $lessonId  = 0;
+            $lessonId = 0;
             if (!empty($targetArr[1])) {
                 $lessonArr = explode('-', $targetArr[1]);
-                $lessonId  = $lessonArr[1];
+                $lessonId = $lessonArr[1];
             }
             $passedCondition = empty($testpaper['passedStatus']) ? '' : json_encode(array($testpaper['passedStatus']));
 
-            $courseSql   = "select * from c2_course where oldCourseId = ".$courseArr[1];
-            $newCourse   = $this->getConnection()->fetchAssoc($courseSql);
+            $courseSql = "select * from c2_course where oldCourseId = ".$courseArr[1];
+            $newCourse = $this->getConnection()->fetchAssoc($courseSql);
             $courseSetId = $newCourse['courseSetId'];
 
             $insertSql = "insert into c2_testpaper (id,name,description,courseId,lessonId,limitedTime,pattern,target,status,score,passedCondition,itemCount,createdUserId,createdTime,updatedUserId,updatedTime,metas,copyId,type,courseSetId,oldTestId) values({$testpaper['id']},'".$testpaper['name']."','".$testpaper['description']."',{$courseArr[1]},{$lessonId},{$testpaper['limitedTime']},'questionType','".$testpaper['target']."','".$testpaper['status']."',{$testpaper['score']},'".$passedCondition."',{$testpaper['itemCount']},{$testpaper['createdUserId']},{$testpaper['createdTime']},{$testpaper['updatedUserId']},{$testpaper['updatedTime']},'".$testpaper['metas']."',{$testpaper['copyId']},'testpaper',{$courseSetId},{$testpaper['id']})";
@@ -487,10 +1041,10 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->exec($sql);
 
         //testpaper_result
-        $sql = "insert into c2_testpaper_result(id,paperName,testId,userId,courseId,lessonId,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,oldResultId) select (id,paperName,testId,userId,courseId,lessonId,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,id) from c2_testpaper_result";
+        $sql = "insert into c2_testpaper_result(id,paperName,testId,userId,courseId,lessonId,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,oldResultId,type) select (id,paperName,testId,userId,courseId,lessonId,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,id,'testpaper') from c2_testpaper_result";
         $this->getConnection()->exec($sql);
 
-        $sql                 = "select * from c2_testpaper_result";
+        $sql = "select * from c2_testpaper_result";
         $newTestpaperResults = $this->getConnection()->fetchAll($sql);
         foreach ($newTestpaperResults as $testpaperResult) {
             $targetArr = explode('/', $testpaperResult['target']);
@@ -500,41 +1054,44 @@ class EduSohoUpgrade extends AbstractUpdater
             $courseSql = "select * from c2_course where oldCourseId = ".$courseArr[1];
             $newCourse = $this->getConnection()->fetchAssoc($courseSql);
 
-            $sql = "update c2_testpaper_result set courseId={$newCourse['id']},courseSetId={$newCourse['courseSetId']},type='testpaper' where id={$testpaperResult['id']}";
+            $sql = "update c2_testpaper_result set courseId={$newCourse['id']},courseSetId={$newCourse['courseSetId']} where id={$testpaperResult['id']}";
 
-            $this->getConnection()->exec();
+            $this->getConnection()->exec($sql);
         }
 
         //testpaper_item_result
         $sql = "insert into c2_testpaper_item_result (id,itemId,testId,resultId,userId,questionId,status,score,answer,teacherSay,pId,oldItemResultId) select(id,itemId,testId,testPaperResultId,userId,questionId,status,score,answer,teacherSay,pId,id) from testpaper_item_result";
-        $this->getConnection()->exec();
+        $this->getConnection()->exec($sql);
 
         $sql = "update c2_testpaper_item_result as ir set ir.testId = (select id from c2_testpaper where oldTestId = ir.testId)";
-        $this->getConnection()->exec();
+        $this->getConnection()->exec($sql);
 
         $sql = "update c2_testpaper_item_result as ir set ir.resultId = (select id from c2_testpaper_result where oldResultId = ir.resultId)";
-        $this->getConnection()->exec();
+        $this->getConnection()->exec($sql);
 
-        //还需一个lessonId对应activityId
+        $this->testpaperActivity();
+
+        $sql = "update c2_testpaper_result as tr set lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='testpaper') where type='testpaper'";
+        $this->exec($sql);
     }
 
     protected function homeworkUpgrade()
     {
-        $sql    = "show tables like 'homework'";
+        $sql = "show tables like 'homework'";
         $result = $this->getConnection()->fetchAssoc($sql);
         if (!$result) {
             return;
         }
 
-        $sql       = "select * from homework";
+        $sql = "select * from homework";
         $homeworks = $this->getConnection()->fetchAll($sql);
         if (!$homeworks) {
             return;
         }
 
         foreach ($homeworks as $homework) {
-            $courseSql   = "select * from c2_course where oldCourseId = ".$courseArr[1];
-            $newCourse   = $this->getConnection()->fetchAssoc($courseSql);
+            $courseSql = "select * from c2_course where oldCourseId = ".$courseArr[1];
+            $newCourse = $this->getConnection()->fetchAssoc($courseSql);
             $courseSetId = $newCourse['courseSetId'];
 
             $passedCondition = !empty($homework['correctPercent']) ? $homework['correctPercent'] : null;
@@ -542,7 +1099,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $insertSql = "insert into c2_testpaper (name,description,courseId,lessonId,limitedTime,pattern,target,status,score,passedCondition,itemCount,createdUserId,createdTime,updatedUserId,updatedTime,metas,copyId,type,courseSetId,oldTestId) values('','".$homework['description']."',{$homework['courseId']},{$homework['lessonId']},0,'questionType','','open',0,'".$passedCondition."',{$homework['itemCount']},{$homework['createdUserId']},{$homework['createdTime']},{$homework['updatedUserId']},{$homework['updatedTime']},null,{$homework['copyId']},'homework',{$courseSetId},{$homework['id']})";
 
             $this->getConnection()->exec($insertSql);
-            $homeworkId  = $this->getConnection()->lastInsertId();
+            $homeworkId = $this->getConnection()->lastInsertId();
             $homeworkNew = $this->getConnection()->fetchAssoc("select * from c2_testpaper where id={$homeworkId}");
 
             if ($homework['copyId'] == 0) {
@@ -551,7 +1108,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
             //homework_item
             $itemSql = "select * from homework_item where homeworkId={$homework['id']}";
-            $items   = $this->getConnection()->fetchAll($itemSql);
+            $items = $this->getConnection()->fetchAll($itemSql);
 
             if (!$items) {
                 continue;
@@ -564,56 +1121,103 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         //homework_result
-        $sql     = "select * from homework_result";
+        /*$sql = "select * from homework_result";
         $results = $this->getConnection()->fetchAll($sql);
 
         foreach ($result as $result) {
-            $courseSql = "select * from c2_course where oldCourseId={$result['courseId']}";
-            $newCourse = $this->getConnection()->fetchAssoc($courseSql);
-            //指向activityId
-            $lessonId = $result['lessonId'];
+        $courseSql = "select * from c2_course where oldCourseId={$result['courseId']}";
+        $newCourse = $this->getConnection()->fetchAssoc($courseSql);
+        //指向activityId
+        $lessonId = $result['lessonId'];
 
-            $homeworksql = "select * from c2_testpaper where oldTestId = {$result['homeworkId']}";
-            $newHomework = $this->getConnection()->fetchAssoc($homeworksql);
+        $homeworksql = "select * from c2_testpaper where oldTestId = {$result['homeworkId']} and type='homework'";
+        $newHomework = $this->getConnection()->fetchAssoc($homeworksql);
 
-            $sql = "insert into c2_testpaper_result(paperName,testId,userId,courseId,lessonId,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,type,courseSetId,oldResultId) values('',{$newHomework['id']},{$result['userId']},{$newCourse['courseId']},{$lessonId},0,0,0,'".$result['teacherSay']."',{$result['rightItemCount']},{$result['passedStatus']},0,0,0,{$result['updatedTime']},0,{$result['status']},'',{$result['checkTeacherId']},{$result['checkedTime']},{$result['usedTime']},'homework',{$newCourse['courseSetId']},{$result['id']})";
-            $this->getConnection()->exec($sql);
+        $sql = "insert into c2_testpaper_result(paperName,testId,userId,courseId,lessonId,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,type,courseSetId,oldResultId) values('',{$newHomework['id']},{$result['userId']},{$newCourse['courseId']},{$lessonId},0,0,0,'".$result['teacherSay']."',{$result['rightItemCount']},{$result['passedStatus']},0,0,0,{$result['updatedTime']},0,{$result['status']},'',{$result['checkTeacherId']},{$result['checkedTime']},{$result['usedTime']},'homework',{$newCourse['courseSetId']},{$result['id']})";
+        $this->getConnection()->exec($sql);
         }
+         */
+        $sql = "insert into c2_testpaper_result (
+                paperName,
+                testId,
+                userId,
+                courseId,
+                lessonId,
+                teacherSay,
+                rightItemCount,
+                passedStatus,
+                updatedTime,
+                status,
+                checkTeacherId,
+                checkedTime,
+                usedTime,
+                type,
+                courseSetId,
+                oldResultId )
+            SELECT
+                '',
+                homeworkId,
+                userId,
+                courseId,
+                lessonId,
+                teacherSay,
+                rightItemCount,
+                passedStatus,
+                updatedTime,
+                status,
+                checkTeacherId,
+                checkedTime,
+                usedTime,
+                'homework',
+                0,
+                id as oldResultId from homework_result ";
+        $this->exec($sql);
+
+        $sql = "update c2_testpaper_result as tr set
+            testId = (select id from c2_testpaper where oldTestId = tr.testId and type='homework'),
+            courseId = (select id from c2_course where oldCourseId = tr.courseId),
+            courseSetId = (select id from c2_course_set where oldCourseId = tr.courseId),
+            lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='homework')
+            where type = 'homework'";
+        $this->exec($sql);
 
         //homework_item_result
-        $sql         = "select * from homework_item_result";
+        $sql = "select * from homework_item_result";
         $resultItems = $this->getConnection()->fetchAll($sql);
 
         foreach ($resultItems as $item) {
             $resultSql = "select * from c2_testpaper_result where oldResultId = {$item['homeworkResultId']}";
-            $result    = $this->getConnection()->fetchAssoc($resultSql);
+            $result = $this->getConnection()->fetchAssoc($resultSql);
 
             $sql = "insert into c2_testpaper_item_result (itemId,testId,resultId,userId,questionId,status,score,answer,teacherSay,pId,oldItemResultId) values(0,{$result['testId']},{$result['id']},{$result['userId']},{$result['questionId']},{$result['status']},0,'".$result['answer']."','".$result['teacherSay']."',0,{$result['id']})";
             $this->getConnection()->exec($sql);
         }
+
+        $sql = "update c2_testpaper_result as tr set lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='homework') where type='homework'";
+        $this->exec($sql);
     }
 
     protected function exerciseUpdate()
     {
-        $sql    = "show tables like 'exercise'";
+        $sql = "show tables like 'exercise'";
         $result = $this->getConnection()->fetchAssoc($sql);
         if (!$result) {
             return;
         }
 
-        $sql       = "select * from exercise";
+        $sql = "select * from exercise";
         $exercises = $this->getConnection()->fetchAll($sql);
         if (!$exercises) {
             return;
         }
 
         foreach ($exercises as $exercise) {
-            $courseSql   = "select * from c2_course where oldCourseId = ".$courseArr[1];
-            $newCourse   = $this->getConnection()->fetchAssoc($courseSql);
+            $courseSql = "select * from c2_course where oldCourseId = ".$courseArr[1];
+            $newCourse = $this->getConnection()->fetchAssoc($courseSql);
             $courseSetId = $newCourse['courseSetId'];
 
             $passedCondition = json_encode(array('type' => 'submit'));
-            $metas           = null;
+            $metas = null;
             if (!empty($exercise['difficulty'])) {
                 $metas['difficulty'] = $exercise['difficulty'];
             }
@@ -623,7 +1227,7 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             $metas['questionTypes'] = json_decode($exercise['questionTypeRange']);
-            $metas                  = json_encode($metas);
+            $metas = json_encode($metas);
 
             $insertSql = "insert into c2_testpaper (name,description,courseId,lessonId,limitedTime,pattern,target,status,score,passedCondition,itemCount,createdUserId,createdTime,updatedUserId,updatedTime,metas,copyId,type,courseSetId) values('','',{$exercise['courseId']},{$exercise['lessonId']},0,'questionType','','open',0,'".$passedCondition."',{$exercise['itemCount']},{$exercise['createdUserId']},{$exercise['createdTime']},0,0,'".$metas."',{$exercise['copyId']},'exercise',{$courseSetId})";
 
@@ -638,7 +1242,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
             //exercise_item
             $itemSql = "select * from exercise_item where exerciseId={$exercise['id']}";
-            $items   = $this->getConnection()->fetchAll($itemSql);
+            $items = $this->getConnection()->fetchAll($itemSql);
 
             if (!$items) {
                 continue;
@@ -651,71 +1255,126 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         //homework_result
-        $sql     = "select * from exercise_result";
+        /*$sql = "select * from exercise_result";
         $results = $this->getConnection()->fetchAll($sql);
 
         foreach ($result as $result) {
-            $courseSql = "select * from c2_course where oldCourseId={$result['courseId']}";
-            $newCourse = $this->getConnection()->fetchAssoc($courseSql);
-            //指向activityId
-            $lessonId = $result['lessonId'];
+        $courseSql = "select * from c2_course where oldCourseId={$result['courseId']}";
+        $newCourse = $this->getConnection()->fetchAssoc($courseSql);
+        //指向activityId
+        $lessonId = $result['lessonId'];
 
-            $exerciseSql = "select * from c2_testpaper where oldTestId = {$result['exerciseId']}";
-            $newExercise = $this->getConnection()->fetchAssoc($exerciseSql);
+        $exerciseSql = "select * from c2_testpaper where oldTestId = {$result['exerciseId']}";
+        $newExercise = $this->getConnection()->fetchAssoc($exerciseSql);
 
-            $sql = "insert into c2_testpaper_result(testId,userId,courseId,lessonId,rightItemCountupdateTime,status,usedTime,beginTime,type,courseSetId,oldResultId) values({$newExercise['id']},{$result['userId']},{$newCourse['courseId']},{$lessonId},{$result['rightItemCount']},{$result['updatedTime']},{$result['status']},{$result['usedTime']},{$result['createdTime']},'homework',{$newCourse['courseSetId']},{$result['id']})";
-            $this->getConnection()->exec($sql);
-        }
+        $sql = "insert into c2_testpaper_result(testId,userId,courseId,lessonId,rightItemCountupdateTime,status,usedTime,beginTime,type,courseSetId,oldResultId) values({$newExercise['id']},{$result['userId']},{$newCourse['courseId']},{$lessonId},{$result['rightItemCount']},{$result['updatedTime']},{$result['status']},{$result['usedTime']},{$result['createdTime']},'homework',{$newCourse['courseSetId']},{$result['id']})";
+        $this->getConnection()->exec($sql);
+        }*/
+
+        $sql = "insert into c2_testpaper_result (
+                testId,
+                userId,
+                courseId,
+                lessonId,
+                rightItemCount,
+                updatedTime,
+                status,
+                usedTime,
+                type,
+                courseSetId,
+                oldResultId )
+            SELECT
+                exerciseId,
+                userId,
+                courseId,
+                lessonId,
+                rightItemCount,
+                updatedTime,
+                status,
+                usedTime,
+                'exercise',
+                0,
+                id as oldResultId from exercise_result ";
+        $this->exec($sql);
+
+        $sql = "update c2_testpaper_result as tr set
+            testId = (select id from c2_testpaper where oldTestId = tr.testId and type='exercise'),
+            courseId = (select id from c2_course where oldCourseId = tr.courseId),
+            courseSetId = (select id from c2_course_set where oldCourseId = tr.courseId),
+            lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='exercise')
+            where type = 'exercise'";
+        $this->exec($sql);
 
         //homework_item_result
-        $sql         = "select * from exercise_item_result";
+        $sql = "select * from exercise_item_result";
         $resultItems = $this->getConnection()->fetchAll($sql);
 
         foreach ($resultItems as $item) {
             $resultSql = "select * from c2_testpaper_result where oldResultId = {$item['exerciseResultId']}";
-            $result    = $this->getConnection()->fetchAssoc($resultSql);
+            $result = $this->getConnection()->fetchAssoc($resultSql);
 
             $sql = "insert into c2_testpaper_item_result (itemId,testId,resultId,userId,questionId,status,score,answer,teacherSay,pId,oldItemResultId) values(0,{$result['testId']},{$result['id']},{$result['userId']},{$result['questionId']},{$result['status']},0,{$result['answer']},{$result['teacherSay']},0,{$result['id']})";
             $this->getConnection()->exec($sql);
         }
+
+        $sql = "update c2_testpaper_result as tr set lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='exercise') where type='exercise'";
+        $this->exec($sql);
     }
 
     protected function testpaperActivity()
     {
-        $sql = "insert into testpaper_activity (mediaId,limitedTime) select id,limitedTime from c2_testpaper where type='testpaper'";
+        if (!$this->isFieldExist('testpaper_activity', 'lessonId')) {
+            $this->exec("alter table `testpaper_activity` add `lessonId` int(10) ;");
+        }
+
+        $sql = "insert into testpaper_activity (lessonId,mediaId,checkType,finishCondition,requireCredit,doTimes,redoInterval) select cl.id,cl.mediaId,'score','{\"type\":\"submit\",\"finishScore\":\"0\"}',cl.requireCredit,cle.doTimes,cle.redoInterval from course_lesson as cl left join course_lesson_extend as cle on cl.id=cle.id where cl.type='testpaper'and cl.mediaId > 0";
         $this->getConnection()->exec($sql);
 
-        $sql = "update testpaper_activity set checkType = 'score',finishCondition='{\"type\":\"submit\",\"finishScore\":\"0\"}'";
+        $sql = "update testpaper_activity as ta,(select id,limitedTime,oldTestId from c2_testpaper) as tmp set ta.mediaId = tmp.id,ta.limitedTime=tmp.limitedTime where tmp.oldTestId = ta.mediaId";
         $this->getConnection()->exec($sql);
 
-        $sql = "update testpaper_activity as ta,(select ls.mediaId,ls.type,lse.doTimes,lse.redoInterval from course_lesson as ls right join course_lesson_extend as lse on ls.id=lse.id where ls.type='testpaper' and ls.mediaId >0) as tmp set ta.doTimes = tmp.doTimes,ta.redoInterval=tmp.redoInterval where tmp.mediaId = ta.mediaId";
-        $this->getConnection()->exec($sql);
+        $this->exec("
+          UPDATE  `activity` AS ay ,`testpaper_activity` AS ty   SET ay.`mediaId`  =  ty.id
+          WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'testpaper';
+         ");
+    }
+
+    /**
+     * Executes an SQL statement and return the number of affected rows.
+     *
+     * @param  string                         $statement
+     * @throws \Doctrine\DBAL\DBALException
+     * @return integer                        The number of affected rows.
+     */
+    protected function exec($statement)
+    {
+        return $this->getConnection()->exec($statement);
     }
 
     protected function isFieldExist($table, $filedName)
     {
-        $sql    = "DESCRIBE `{$table}` `{$filedName}`;";
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
         $result = $this->getConnection()->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
 
     protected function isTableExist($table)
     {
-        $sql    = "SHOW TABLES LIKE '{$table}'";
+        $sql = "SHOW TABLES LIKE '{$table}'";
         $result = $this->getConnection()->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
 
     protected function isIndexExist($table, $filedName, $indexName)
     {
-        $sql    = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
+        $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
 
     protected function isCrontabJobExist($code)
     {
-        $sql    = "select * from crontab_job where name='{$code}'";
+        $sql = "select * from crontab_job where name='{$code}'";
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;

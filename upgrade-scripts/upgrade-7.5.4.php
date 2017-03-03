@@ -1,7 +1,8 @@
 <?php
 
-use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -9,8 +10,11 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
-            $this->updateScheme();
+            $result = $this->batchUpdate();
             $this->getConnection()->commit();
+            if (!empty($result)) {
+                return $result;
+            }
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
@@ -26,59 +30,38 @@ class EduSohoUpgrade extends AbstractUpdater
         } catch (\Exception $e) {
         }
 
-        $developerSetting = $this->getSettingService()->get('developer', array());
+        $developerSetting          = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
         ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
         ServiceKernel::instance()->createService('System.SettingService')->set("crontab_next_executed_time", time());
     }
 
-    private function updateScheme()
+    protected function batchUpdate()
     {
+        $cloudSearchSettings = $this->getSettingService()->get('cloud_search');
+
+        $cloudSearchSettings['type'] = array(
+            'course'     => 1,
+            'teacher'    => 1,
+            'thread'     => 1, 
+            'article'    => 1
+        );
+
+        $this->getSettingService()->set('cloud_search', $cloudSearchSettings);
     }
 
-    protected function isFieldExist($table, $filedName)
-    {
-        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
-    protected function isTableExist($table)
-    {
-        $sql = "SHOW TABLES LIKE '{$table}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
-    protected function isIndexExist($table, $filedName, $indexName)
-    {
-        $sql    = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
-    }
-
-
-    protected function isCrontabJobExist($code)
-    {
-        $sql = "select * from crontab_job where name='{$code}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
-
-        return empty($result) ? false : true;
-    }
-
-
-
-    private function getSettingService()
+    protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
     }
 }
 
+//抽象类
 abstract class AbstractUpdater
 {
     protected $kernel;
-    public function __construct($kernel)
+    public function __construct ($kernel)
     {
         $this->kernel = $kernel;
     }
@@ -99,4 +82,5 @@ abstract class AbstractUpdater
     }
 
     abstract public function update();
+
 }
