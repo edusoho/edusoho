@@ -43,9 +43,11 @@ class Lesson extends BaseResource
             $lesson['hlsLine'] = $line;
         }
         $hls_encryption = $request->query->get('hls_encryption');
-        if (!empty($hls_encryption)) {
-            $lesson['hlsEncryption'] = true;
-        }
+        $enable_hls_encryption_plus = SettingToolkit::getSetting('storage.enable_hls_encryption_plus');
+    
+        if (!empty($hls_encryption) && $enable_hls_encryption_plus) {
+             $lesson['hlsEncryption'] = true;
+         }
 
         $ssl = $request->isSecure() ? true : false;
 
