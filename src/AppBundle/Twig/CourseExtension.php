@@ -35,6 +35,7 @@ class CourseExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('course_show_metas', array($this, 'getCourseShowMetas')),
             new \Twig_SimpleFunction('is_buy_course_from_modal', array($this, 'isBuyCourseFromModal')),
+            new \Twig_SimpleFunction('buy_course_need_approve', array($this, 'isUserApproval'))
         );
     }
 
@@ -52,15 +53,20 @@ class CourseExtension extends \Twig_Extension
 
         return !$user->isLogin()
             || $this->shouldUserinfoFill()
-            || $this->isUserApproval($course)
+            || $this->isUserApproval($courseId)
             || $this->isUserAvatarEmpty();
     }
 
-    protected function isUserApproval($course)
+    public function isUserApproval($courseId)
     {
         $user = $this->biz['user'];
+        $course = $this->getCourseService()->getCourse($courseId);
 
-        return $course['approval'] && $user['approvalStatus'] != 'approved';
+        if(empty($course)){
+            return false;
+        }
+
+        return $course['approval'] && $user['approvalStatus'] !== 'approved';
     }
 
     protected function isUserAvatarEmpty()
