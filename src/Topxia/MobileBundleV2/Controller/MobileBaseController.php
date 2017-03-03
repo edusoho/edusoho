@@ -305,18 +305,13 @@ class MobileBaseController extends BaseController
 
     private function filledCourseByCourseSet($course, $courseSet)
     {
-        $course['tags'] = $courseSet['tags'];
-        $course['hitNum'] = $courseSet['hitNum'];
-        $course['orgCode'] = $courseSet['orgCode'];
-        $course['orgId'] = $courseSet['orgId'];
-        $course['discountId'] = $courseSet['discountId'];
-        $course['discount'] = $courseSet['discount'];
-        $course['categoryId'] = $courseSet['categoryId'];
-        $course['recommended'] = $courseSet['recommended'];
-        $course['recommendedSeq'] = $courseSet['recommendedSeq'];
-        $course['recommendedTime'] = $courseSet['recommendedTime'];
-        $course['subtitle'] = $courseSet['subtitle'];
-        $course['discountId'] = $courseSet['discountId'];
+        $copyKeys = array('tags', 'hitNum', 'orgCode', 'orgId',
+            'discount', 'categoryId', 'recommended', 'recommendedSeq', 'recommendedTime',
+            'subtitle', 'discountId'
+        );
+        foreach ($copyKeys as $value) {
+            $course[$value] = $courseSet[$value];
+        }
         return $course;
     }
 
