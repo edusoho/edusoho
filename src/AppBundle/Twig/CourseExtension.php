@@ -2,9 +2,9 @@
 
 namespace AppBundle\Twig;
 
+use AppBundle\Util\AvatarAlert;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use AppBundle\Util\AvatarAlert;
 
 class CourseExtension extends \Twig_Extension
 {
@@ -26,8 +26,7 @@ class CourseExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array(
-        );
+        return array();
     }
 
     public function getFunctions()
@@ -35,7 +34,7 @@ class CourseExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('course_show_metas', array($this, 'getCourseShowMetas')),
             new \Twig_SimpleFunction('is_buy_course_from_modal', array($this, 'isBuyCourseFromModal')),
-            new \Twig_SimpleFunction('buy_course_need_approve', array($this, 'isUserApproval'))
+            new \Twig_SimpleFunction('buy_course_need_approve', array($this, 'isUserApproval')),
         );
     }
 
@@ -62,7 +61,7 @@ class CourseExtension extends \Twig_Extension
         $user = $this->biz['user'];
         $course = $this->getCourseService()->getCourse($courseId);
 
-        if(empty($course)){
+        if (empty($course)) {
             return false;
         }
 
