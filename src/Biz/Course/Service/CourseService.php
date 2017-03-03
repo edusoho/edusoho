@@ -30,7 +30,7 @@ interface CourseService
 
     /**
      * 复制教学计划
-     * @param  array   $fields
+     * @param  array $fields
      * @return mixed
      */
     public function copyCourse($fields);
@@ -51,7 +51,12 @@ interface CourseService
 
     public function publishCourse($id);
 
-    public function findCourseItems($courseId);
+    /**
+     * @param $courseId
+     * @param int $limitNum 限制取几条任务，默认不限制
+     * @return mixed
+     */
+    public function findCourseItems($courseId, $limitNum = 0);
 
     public function tryManageCourse($courseId, $courseSetId = 0);
 
@@ -76,22 +81,22 @@ interface CourseService
     /**
      * 获取用户在教的教学计划
      *
-     * @param  integer                 $courseSetId
-     * @param  bool                    $onlyPublished
+     * @param  integer $courseSetId
+     * @param  bool $onlyPublished
      * @throws AccessDeniedException
      * @return mixed
      */
     public function findUserTeachingCoursesByCourseSetId($courseSetId, $onlyPublished = true);
 
     /**
-     * @param  integer   $userId
-     * @param  bool      $onlyPublished 是否只需要发布后的教学计划
+     * @param  integer $userId
+     * @param  bool $onlyPublished 是否只需要发布后的教学计划
      * @return array[]
      */
     public function findTeachingCoursesByUserId($userId, $onlyPublished = true);
 
     /**
-     * @param  integer   $userId
+     * @param  integer $userId
      * @return array[]
      */
     public function findLearnCoursesByUserId($userId);
@@ -101,7 +106,7 @@ interface CourseService
     public function findUserTeachCourses($conditions, $start, $limit, $onlyPublished = true);
 
     /**
-     * @param  array     $ids
+     * @param  array $ids
      * @return array[]
      */
     public function findPublicCoursesByIds(array $ids);

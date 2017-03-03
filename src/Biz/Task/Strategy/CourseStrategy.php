@@ -18,7 +18,7 @@ interface CourseStrategy
 
     public function unpublishTask($task);
 
-    public function prepareCourseItems($course, $tasks);
+    public function prepareCourseItems($course, $tasks, $limitNum);
 
     public function sortCourseItems($courseId, array $itemIds);
 

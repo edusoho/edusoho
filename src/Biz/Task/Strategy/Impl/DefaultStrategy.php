@@ -69,7 +69,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
     }
 
-    public function prepareCourseItems($courseId, $tasks)
+    public function prepareCourseItems($courseId, $tasks, $limitNum)
     {
         $tasks = ArrayToolkit::group($tasks, 'categoryId');
 
@@ -84,12 +84,18 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             return $item1['seq'] > $item2['seq'];
         });
 
+        $taskCount = 0;
         foreach ($items as $key => $item) {
+            if ($limitNum and $taskCount >= $limitNum) {
+                unset($items[$key]);
+            }
             if ($item['type'] != 'lesson') {
                 continue;
             }
+
             if (!empty($tasks[$item['id']])) {
                 $items[$key]['tasks'] = $tasks[$item['id']];
+                $taskCount += count($tasks[$item['id']]);
             } else {
                 unset($items[$key]);
                 //throw new NotFoundException(json_encode($item));
@@ -209,12 +215,12 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     private function _createLesson($task)
     {
-        $chapter             = array(
+        $chapter            = array(
             'courseId' => $task['fromCourseId'],
             'title'    => $task['title'],
             'type'     => 'lesson'
         );
-        $chapter             = $this->getCourseService()->createChapter($chapter);
+        $chapter            = $this->getCourseService()->createChapter($chapter);
         $task['categoryId'] = $chapter['id'];
 
         return parent::createTask($task);
