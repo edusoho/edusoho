@@ -3,9 +3,9 @@
 namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Course\Service\CourseService;
 use Biz\Task\Dao\TaskResultDao;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService
@@ -65,7 +65,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
         $taskResult['status'] = 'start';
 
-        $this->getTaskResultDao()->create($taskResult);
+        return $this->getTaskResultDao()->create($taskResult);
     }
 
     public function updateTaskResult($id, $taskResult)
@@ -114,7 +114,6 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
         return array('status' => 'error', 'watchedTime' => $taskResult['watchTime'], 'watchLimitTime' => $watchLimitTime);
     }
-
 
     public function findUserProgressingTaskResultByActivityId($activityId)
     {
@@ -232,7 +231,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId)
     {
         return $this->getTaskResultDao()->getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId);
-    } 
+    }
 
     /**
      * @return TaskResultDao

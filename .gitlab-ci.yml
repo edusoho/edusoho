@@ -49,3 +49,17 @@ Unit Test With PHP 7.0:
     - develop
     - master
     - trigger
+
+Functional Test With 5.5:
+  stage: test
+  image: codeages/ci-php:5.5-3
+  services:
+    - mysql:5.5
+    - selenium/standalone-chrome:latest
+  script:
+    - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/functional
+  only:
+      - tags
+      - develop
+      - master
+      - trigger

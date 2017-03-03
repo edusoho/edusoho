@@ -82,7 +82,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
-    public function prepareCourseItems($courseId, $tasks)
+    public function prepareCourseItems($courseId, $tasks, $limitNum)
     {
         $items = array();
         foreach ($tasks as $task) {
@@ -91,7 +91,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         }
 
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-        foreach ($chapters as $chapter) {
+        foreach ($chapters as $index => $chapter) {
             $chapter['itemType']               = 'chapter';
             $items["chapter-{$chapter['id']}"] = $chapter;
         }
@@ -100,6 +100,19 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             return $item1['seq'] > $item2['seq'];
         });
 
+        if (empty($limitNum)) {
+            return $items;
+        }
+
+        $taskCount = 0;
+        foreach ($items as $key => $item) {
+            if (strpos($key, 'task') !== false) {
+                $taskCount++;
+            }
+            if ($taskCount > $limitNum) {
+                unset($items[$key]);
+            }
+        }
         return $items;
     }
 

@@ -3,8 +3,8 @@
 namespace AppBundle\Controller\Question;
 
 use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
 use Biz\User\Service\UserService;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,7 +86,7 @@ class ManageController extends BaseController
                 return $this->redirect($request->query->get('goto', $this->generateUrl('course_set_manage_question', array('id' => $courseSet['id'], 'parentId' => $question['id']))));
             } else {
                 $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功。'));
-                return $this->redirect($request->query->get('goto', $this->generateUrl('course_set_manage_question', array('id' => $courseSet['id']))));
+                return $this->redirect($request->query->get('goto', $this->generateUrl('course_set_manage_question', array('id' => $courseSet['id'], 'parentId' => $question['parentId']))));
             }
         }
 

@@ -24,7 +24,7 @@ class CourseController extends CourseBaseController
 
         $courseItems = $files = array();
         if ($isMarketingPage) {
-            $courseItems = $this->getCourseService()->findCourseItems($course['id']);
+            $courseItems = $this->getCourseService()->findCourseItems($course['id'],$limitNum = 6);
             $files       = $this->findFiles($course['id']);
         }
 
