@@ -946,6 +946,7 @@ class EduSohoUpgrade extends AbstractUpdater
               `missScore` float(10,1) unsigned NOT NULL DEFAULT '0.0',
               `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制来源testpaper_item的id',
               `oldItemId` int(11) unsigned NOT NULL DEFAULT '0',
+              `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -991,6 +992,7 @@ class EduSohoUpgrade extends AbstractUpdater
               `teacherSay` text,
               `pId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '复制试卷题目Id',
               `oldItemResultId` int(11) unsigned NOT NULL DEFAULT '0',
+              `type` varchar(32) NOT NULL DEFAULT 'testpaper' COMMENT '测验类型',
               PRIMARY KEY (`id`),
               KEY `testPaperResultId` (`resultId`)
             ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -1037,7 +1039,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         //testpaper_item
-        $sql = "insert into c2_testpaper_item (id,testId,seq,questionId,questionType,parentId,score,missScore,oldItemId) select id,testId,seq,questionId,questionType,parentId,score,missScore,id from testpaper_item";
+        $sql = "insert into c2_testpaper_item (id,testId,seq,questionId,questionType,parentId,score,missScore,oldItemId,type) select id,testId,seq,questionId,questionType,parentId,score,missScore,id,'testpaper' from testpaper_item";
         $this->getConnection()->exec($sql);
 
         //testpaper_result
@@ -1060,7 +1062,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         //testpaper_item_result
-        $sql = "insert into c2_testpaper_item_result (id,itemId,testId,resultId,userId,questionId,status,score,answer,teacherSay,pId,oldItemResultId) select(id,itemId,testId,testPaperResultId,userId,questionId,status,score,answer,teacherSay,pId,id) from testpaper_item_result";
+        $sql = "insert into c2_testpaper_item_result (id,itemId,testId,resultId,userId,questionId,status,score,answer,teacherSay,pId,oldItemResultId,type) select(id,itemId,testId,testPaperResultId,userId,questionId,status,score,answer,teacherSay,pId,id,'testpaper') from testpaper_item_result";
         $this->getConnection()->exec($sql);
 
         $sql = "update c2_testpaper_item_result as ir set ir.testId = (select id from c2_testpaper where oldTestId = ir.testId)";
@@ -1120,23 +1122,6 @@ class EduSohoUpgrade extends AbstractUpdater
             }
         }
 
-        //homework_result
-        /*$sql = "select * from homework_result";
-        $results = $this->getConnection()->fetchAll($sql);
-
-        foreach ($result as $result) {
-        $courseSql = "select * from c2_course where oldCourseId={$result['courseId']}";
-        $newCourse = $this->getConnection()->fetchAssoc($courseSql);
-        //指向activityId
-        $lessonId = $result['lessonId'];
-
-        $homeworksql = "select * from c2_testpaper where oldTestId = {$result['homeworkId']} and type='homework'";
-        $newHomework = $this->getConnection()->fetchAssoc($homeworksql);
-
-        $sql = "insert into c2_testpaper_result(paperName,testId,userId,courseId,lessonId,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,type,courseSetId,oldResultId) values('',{$newHomework['id']},{$result['userId']},{$newCourse['courseId']},{$lessonId},0,0,0,'".$result['teacherSay']."',{$result['rightItemCount']},{$result['passedStatus']},0,0,0,{$result['updatedTime']},0,{$result['status']},'',{$result['checkTeacherId']},{$result['checkedTime']},{$result['usedTime']},'homework',{$newCourse['courseSetId']},{$result['id']})";
-        $this->getConnection()->exec($sql);
-        }
-         */
         $sql = "insert into c2_testpaper_result (
                 paperName,
                 testId,
@@ -1181,17 +1166,32 @@ class EduSohoUpgrade extends AbstractUpdater
             where type = 'homework'";
         $this->exec($sql);
 
-        //homework_item_result
-        $sql = "select * from homework_item_result";
-        $resultItems = $this->getConnection()->fetchAll($sql);
+        $sql = "insert into c2_testpaper_item_result (
+            testId,
+            resultId,
+            userId,
+            questionId,
+            status,
+            answer,
+            teacherSay,
+            oldItemResultId,
+            type)
+        select
+            homeworkId,
+            homeworkResultId,
+            userId,
+            questionId,
+            status,
+            answer,
+            teacherSay,
+            id as oldItemResultId,
+            'homework' from homework_item_result";
+        $this->getConnection()->exec($sql);
 
-        foreach ($resultItems as $item) {
-            $resultSql = "select * from c2_testpaper_result where oldResultId = {$item['homeworkResultId']}";
-            $result = $this->getConnection()->fetchAssoc($resultSql);
-
-            $sql = "insert into c2_testpaper_item_result (itemId,testId,resultId,userId,questionId,status,score,answer,teacherSay,pId,oldItemResultId) values(0,{$result['testId']},{$result['id']},{$result['userId']},{$result['questionId']},{$result['status']},0,'".$result['answer']."','".$result['teacherSay']."',0,{$result['id']})";
-            $this->getConnection()->exec($sql);
-        }
+        $sql = "update c2_testpaper_item_result as rt set
+            testId = (select id from c2_testpaper where oldTestId = rt.testId and type='homework'),
+            resultId = (select id from c2_testpaper_result where rt.resultId = oldResultId and type = 'homework') where type='homework'";
+        $this->exec($sql);
 
         $sql = "update c2_testpaper_result as tr set lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='homework') where type='homework'";
         $this->exec($sql);
@@ -1254,22 +1254,14 @@ class EduSohoUpgrade extends AbstractUpdater
             }
         }
 
-        //homework_result
-        /*$sql = "select * from exercise_result";
-        $results = $this->getConnection()->fetchAll($sql);
+        /*$sql = "insert into c2_testpaper_item (testId,seq,questionId,parentId,score,missScore,oldItemId,type) select exerciseId,seq,questionId,parentId,score,missScore,id as oldItemId,'exercise' from exercise_item";
+        $this->exec($sql);
 
-        foreach ($result as $result) {
-        $courseSql = "select * from c2_course where oldCourseId={$result['courseId']}";
-        $newCourse = $this->getConnection()->fetchAssoc($courseSql);
-        //指向activityId
-        $lessonId = $result['lessonId'];
+        $sql = "update c2_testpaper_item as it set testId = (select id from c2_testpaper where oldTestId = it.testId and type = 'exercise') where type ='exercise'";
+        $this->exec($sql);
 
-        $exerciseSql = "select * from c2_testpaper where oldTestId = {$result['exerciseId']}";
-        $newExercise = $this->getConnection()->fetchAssoc($exerciseSql);
-
-        $sql = "insert into c2_testpaper_result(testId,userId,courseId,lessonId,rightItemCountupdateTime,status,usedTime,beginTime,type,courseSetId,oldResultId) values({$newExercise['id']},{$result['userId']},{$newCourse['courseId']},{$lessonId},{$result['rightItemCount']},{$result['updatedTime']},{$result['status']},{$result['usedTime']},{$result['createdTime']},'homework',{$newCourse['courseSetId']},{$result['id']})";
-        $this->getConnection()->exec($sql);
-        }*/
+        $sql = "update c2_testpaper_item as it set it.parentId = (select id from (select * from c2_testpaper_item) as tmp where tmp.oldItemId = it.parentId and tmp.type = 'exercise') where it.type ='exercise' and it.parentId > 0";
+        $this->exec($sql);*/
 
         $sql = "insert into c2_testpaper_result (
                 testId,
@@ -1305,17 +1297,32 @@ class EduSohoUpgrade extends AbstractUpdater
             where type = 'exercise'";
         $this->exec($sql);
 
-        //homework_item_result
-        $sql = "select * from exercise_item_result";
-        $resultItems = $this->getConnection()->fetchAll($sql);
+        $sql = "insert into c2_testpaper_item_result (
+            testId,
+            resultId,
+            userId,
+            questionId,
+            status,
+            answer,
+            teacherSay,
+            oldItemResultId,
+            type)
+        select
+            exerciseId,
+            exerciseResultId,
+            userId,
+            questionId,
+            status,
+            answer,
+            teacherSay,
+            id as oldItemResultId,
+            'exercise' from exercise_item_result";
+        $this->getConnection()->exec($sql);
 
-        foreach ($resultItems as $item) {
-            $resultSql = "select * from c2_testpaper_result where oldResultId = {$item['exerciseResultId']}";
-            $result = $this->getConnection()->fetchAssoc($resultSql);
-
-            $sql = "insert into c2_testpaper_item_result (itemId,testId,resultId,userId,questionId,status,score,answer,teacherSay,pId,oldItemResultId) values(0,{$result['testId']},{$result['id']},{$result['userId']},{$result['questionId']},{$result['status']},0,{$result['answer']},{$result['teacherSay']},0,{$result['id']})";
-            $this->getConnection()->exec($sql);
-        }
+        $sql = "update c2_testpaper_item_result as rt set
+            testId = (select id from c2_testpaper where oldTestId = rt.testId and type='exercise'),
+            resultId = (select id from c2_testpaper_result where rt.resultId = oldResultId and type = 'exercise') where type='exercise'";
+        $this->exec($sql);
 
         $sql = "update c2_testpaper_result as tr set lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='exercise') where type='exercise'";
         $this->exec($sql);
