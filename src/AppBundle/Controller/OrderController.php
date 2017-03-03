@@ -14,6 +14,7 @@ use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class OrderController extends BaseController
 {
@@ -362,7 +363,7 @@ class OrderController extends BaseController
      */
     protected function getVipService()
     {
-        return $this->getBiz()->service('Vip:Vip:VipService');
+        return $this->getBiz()->service('VipPlugin:Vip:VipService');
     }
 
     /**

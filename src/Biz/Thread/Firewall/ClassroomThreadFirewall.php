@@ -127,7 +127,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     protected function getVipService()
     {
-        return ServiceKernel::instance()->createService('Vip:Vip:VipService');
+        return ServiceKernel::instance()->createService('VipPlugin:Vip:VipService');
     }
 
     protected function getKernel()
