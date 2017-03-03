@@ -20,11 +20,22 @@ class CourseController extends CourseBaseController
 {
     public function summaryAction($course, $member = array())
     {
-        return $this->render(
-            'course/tabs/summary.html.twig',
+        list ($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
+
+        $courseItems = $files = array();
+        if ($isMarketingPage) {
+            $courseItems = $this->getCourseService()->findCourseItems($course['id'],$limitNum = 6);
+            $files       = $this->findFiles($course['id']);
+        }
+
+        return $this->render('course/tabs/summary.html.twig',
             array(
-                'course' => $course,
-                'member' => $member
+                'course'          => $course,
+                'member'          => $member,
+                'isMarketingPage' => $isMarketingPage,
+                'courseItems'     => $courseItems,
+                'files'           => $files
+
             )
         );
     }
@@ -81,8 +92,8 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $courses   = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
-        $user   = $this->getCurrentUser();
-        $member = $user->isLogin() ? $this->getMemberService()->getCourseMember(
+        $user           = $this->getCurrentUser();
+        $member         = $user->isLogin() ? $this->getMemberService()->getCourseMember(
             $course['id'],
             $user['id']
         ) : array();
@@ -90,8 +101,8 @@ class CourseController extends CourseBaseController
             $user['id'],
             $course['courseSetId']
         ) : false;
-        $previewAs = $request->query->get('previewAs', false);
-        $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        $previewAs      = $request->query->get('previewAs', false);
+        $classroom      = $this->getClassroomService()->getClassroomByCourseId($course['id']);
 
         $previewTasks = $this->getTaskService()->searchTasks(
             array('courseId' => $course['id'], 'type' => 'video', 'isFree' => '1'),
@@ -255,15 +266,7 @@ class CourseController extends CourseBaseController
 
         $files = $this->findFiles($course['id']);
 
-        $isMarketingPage = false;
-        if (empty($member)) {
-            $isMarketingPage = true;
-            $user            = $this->getCurrentUser();
-            $member          = $user->isLogin() ? $this->getMemberService()->getCourseMember(
-                $course['id'],
-                $user['id']
-            ) : array();
-        }
+        list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
         return $this->render(
             'course/tabs/tasks.html.twig',
@@ -397,7 +400,7 @@ class CourseController extends CourseBaseController
                 'duration' => 3600
             )
         );
-        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
@@ -409,7 +412,7 @@ class CourseController extends CourseBaseController
     public function exitAction($id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
-        $user                  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         if (empty($member)) {
             throw $this->createAccessDeniedException('您不是课程的学员。');
         }
@@ -527,5 +530,25 @@ class CourseController extends CourseBaseController
         );
 
         return $files;
+    }
+
+    /**
+     * @param $courseId
+     * @param $member
+     * @return array
+     */
+    protected function isMarketingPage($courseId, $member)
+    {
+        $isMarketingPage = false;
+        if (empty($member)) {
+            $isMarketingPage = true;
+            $user            = $this->getCurrentUser();
+            $member          = $user->isLogin() ? $this->getMemberService()->getCourseMember(
+                $courseId,
+                $user['id']
+            ) : array();
+            return array($isMarketingPage, $member);
+        }
+        return array($isMarketingPage, $member);
     }
 }
