@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
-use Vip\Service\Vip\VipService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Topxia\Api\Resource\Classroom;
@@ -13,6 +12,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\User\Service\NotificationService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class ThreadController extends CourseBaseController
 {
@@ -656,7 +656,7 @@ class ThreadController extends CourseBaseController
      */
     protected function getVipService()
     {
-        return $this->getBiz()->service('Vip:Vip:VipService');
+        return $this->getBiz()->service('VipPlugin:Vip:VipService');
     }
 
     /**

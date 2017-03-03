@@ -29,11 +29,12 @@ Unit Test With PHP 5.3:
 
 Unit Test With PHP 5.5:
   stage: test
-  image: codeages/ci-php:5.5-3
+  image: codeages/ci-php:5.5-4
   services:
     - mysql:5.5
   script:
     - phpunit -c app/
+    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
 
 Unit Test With PHP 7.0:
   stage: test
@@ -52,11 +53,12 @@ Unit Test With PHP 7.0:
 
 Functional Test With 5.5:
   stage: test
-  image: codeages/ci-php:5.5-3
+  image: codeages/ci-php:5.5-4
   services:
     - mysql:5.5
     - selenium/standalone-chrome:latest
   script:
+    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/functional
   only:
       - tags
