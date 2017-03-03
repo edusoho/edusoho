@@ -66,7 +66,12 @@ let validator = $form.validate({
   },
   rules: {
     title: {
-      required: true
+      required: {
+        depends:function(){
+            $(this).val($.trim($(this).val()));
+            return true;
+        }
+      }
     },
     maxStudentNum: {
       required: true,
