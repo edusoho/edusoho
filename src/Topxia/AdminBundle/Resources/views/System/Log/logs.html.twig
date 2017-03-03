@@ -87,7 +87,10 @@
         <td>
           <span class="">{{ log.createdTime|date("Y-m-d H:i:s") }}</span>
           <br />
+          <span class="text-muted text-sm">
           <a  class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ log.ip }}" target="_blank">{{ log.ip }}</a>
+          {{convertIP(log.ip)}}
+          </span>
         </td>
       </tr>
     {% else %}
