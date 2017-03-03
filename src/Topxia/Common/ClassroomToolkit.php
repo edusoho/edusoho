@@ -3,15 +3,15 @@ namespace Topxia\Common;
 
 class ClassroomToolkit
 {
-    public static function buildMemberDeadlineByMode($fields, $type)
+    public static function buildMemberDeadlineByMode($fields, $mode)
     {
         $deadline = $fields['expiryValue'];
 
-        if ($type == 'days') {
+        if ($mode == 'days') {
             $deadline = time() + $fields['expiryValue'] * 24 * 60 * 60;
         }
 
-        if ($type == 'date') {
+        if ($mode == 'date') {
             if (!is_int($deadline)) {
                 $deadline = strtotime($deadline.' 23:59:59');
             }

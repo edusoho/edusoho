@@ -633,7 +633,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         if ($classroom['expiryMode'] == 'days') {
-            $deadline = ClassroomToolkit::buildMemberDeadlineByMode($classroom, 'days')
+            $deadline = ClassroomToolkit::buildMemberDeadlineByMode($classroom, 'days');
         } else {
             $deadline = $classroom['expiryValue'];
         }
