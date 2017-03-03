@@ -1566,15 +1566,14 @@ class UserServiceImpl extends BaseService implements UserService
             'approvalTime'   => time()
         ));
 
-        $lastestApproval = $this->getUserApprovalDao()->getLastestApprovalByUserIdAndStatus($user['id'], 'approved');
+        $latestApproval = $this->getUserApprovalDao()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
         $currentUser     = $this->getCurrentUser();
-        $this->getUserApprovalDao()->updateApproval($lastestApproval['id'],
-            array(
-                'userId'     => $user['id'],
-                'note'       => $note,
-                'status'     => 'approve_fail',
-                'operatorId' => $currentUser['id'])
-        );
+        $this->getUserApprovalDao()->updateApproval($latestApproval['id'], array(
+            'userId'     => $user['id'],
+            'note'       => $note,
+            // 'status'     => 'approve_fail',
+            'operatorId' => $currentUser['id']
+            ));
 
         $this->getLogService()->info('user', 'approval_fail', sprintf('用户%s实名认证失败，操作人:%s !', $user['nickname'], $currentUser['nickname']));
         $message = array(

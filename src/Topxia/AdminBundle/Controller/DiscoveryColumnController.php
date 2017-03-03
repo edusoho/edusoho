@@ -140,6 +140,19 @@ class DiscoveryColumnController extends BaseController
         ));
     }
 
+    public function categoryTreeAction(Request $request)
+    {
+        $id     = $request->query->get('id');
+        $type = $request->query->get('type');
+        if ($id) {
+            $discoveryColumn = $this->getDiscoveryColumnService()->getDiscoveryColumn($id);
+        }
+        return $this->render('TopxiaAdminBundle:DiscoveryColumn:discovery-column-category.html.twig', array(
+            'categoryId'             => empty($discoveryColumn['categoryId']) ? 0 : $discoveryColumn['categoryId'],
+            'type'                        => $type
+        ));
+    }
+
     public function checkTitleAction(Request $request, $id)
     {
         $title           = $request->query->get('value');

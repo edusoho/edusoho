@@ -614,6 +614,10 @@ admin_discovery_column_edit:
     path:  /discovery_column/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:edit }
 
+admin_discovery_column_category_tree:
+    path: /discovery_column/category/tree
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:categoryTree }
+
 admin_discovery_column_title_check:
     path:  /discovery_column/{id}/title_check
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:checkTitle }
@@ -1973,6 +1977,10 @@ admin_edu_cloud_search_close:
     path: /setting/edu_cloud/search/close
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClose }
     permissions: [admin_edu_cloud_search]
+
+admin_edu_cloud_search_result_type:
+    path: /setting/edu_cloud/search_result/type
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:setSearchResultType }
 
 admin_app_im:
     path: /setting/app/im
