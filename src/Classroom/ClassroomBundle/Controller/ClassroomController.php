@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Common\ClassroomToolkit;
 
 class ClassroomController extends BaseController
 {
@@ -229,7 +230,7 @@ class ClassroomController extends BaseController
                 return;
             }
 
-            $deadline = $this->buidDeadline($classroom);
+            $deadline = ClassroomToolkit::buildMemberDeadline($classroom);
 
             $member = array(
                 'id'          => 0,
@@ -252,17 +253,6 @@ class ClassroomController extends BaseController
         }
 
         return $member;
-    }
-
-    protected function buidDeadline($classroom)
-    {
-        $deadline = $classroom['expiryValue'];
-
-        if ($classroom['expiryMode'] == 'days') {
-            $deadline = time() + $classroom['expiryValue'] * 24 * 60 * 60;
-        }
-
-        return $deadline;
     }
 
     public function introductionAction(Request $request, $id)

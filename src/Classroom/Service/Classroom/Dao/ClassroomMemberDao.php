@@ -39,6 +39,4 @@ interface ClassroomMemberDao
     public function findMemberUserIdsByClassroomId($classroomId);
 
     public function findUserJoinedClassroomIds($userId);
-
-    public function findStudentsByClassroomId($classroomId);
 }

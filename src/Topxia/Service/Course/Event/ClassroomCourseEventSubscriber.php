@@ -42,19 +42,6 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    protected function buildMemberDeadline($fields, $member)
-    {
-        if ($fields['classroomStatus'] == 'published' && $fields['expiryMode'] == 'days') {
-            $fields['expiryValue'] = $member['deadline'];
-        }
-
-        if ($fields['classroomStatus'] == 'draft' && $fields['expiryMode'] == 'days') {
-            $fields['expiryValue'] = $member['createdTime'] + $fields['expiryValue'] * 24 * 60 * 60;
-        }
-
-        return $fields['expiryValue'];
-    }
-
     protected function canUpdateCourses($classroom, $expiryMode)
     {
         if ($classroom['status'] == 'draft') {
