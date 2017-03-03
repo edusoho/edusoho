@@ -11,35 +11,20 @@ class Marketing {
     let $form = $('#course-marketing-form');
     $('.js-task-price-setting').perfectScrollbar();
     TabChange();
-
     let validator = $form.validate({
       onkeyup: false,
       rules: {
         originPrice: {
-          required: function () {
-            return $("[name=isFree]:checked").val() == 0;
-          },
           currency: true
         },
         tryLookLength: {
-          required: '#enableTryLook:checked',
           digits: true
         },
         tryLookLimit: {
-          required: '#enableTryLook:checked',
           digits: true
         }
       },
-      messages: {
-        originPrice: {
-          required: Translator.trans('请输入价格'),
-          currency: Translator.trans('请输入价格，最多两位小数')
-        },
-        tryLookLength: Translator.trans('请输入试看时长'),
-        tryLookLimit: Translator.trans('请输入视频观看时长限制')
-      }
     });
-
     $('.js-task-price-setting').on('click', 'li', function (event) {
       let $li = $(this).toggleClass('open');
       let $input = $li.find('input');
@@ -68,13 +53,13 @@ class Marketing {
       }
     });
 
-		$('input[name="buyExpiryTime"]').datetimepicker({
-			format: 'yyyy-mm-dd',
-			language: "zh",
-			minView: 2, //month
-			autoclose: true,
-			endDate: new Date(Date.now() + 86400*365*100*1000)
-		});
+    $('input[name="buyExpiryTime"]').datetimepicker({
+      format: 'yyyy-mm-dd',
+      language: "zh",
+      minView: 2, //month
+      autoclose: true,
+      endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
+    });
 
     $('input[name="tryLookable"]').on('change', function (event) {
       if ($('input[name="tryLookable"]:checked').val() == 1) {
