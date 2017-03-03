@@ -6,6 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Classroom\Service\Classroom\ClassroomService;
+use Topxia\Common\ClassroomToolkit;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
 {
@@ -632,7 +633,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         if ($classroom['expiryMode'] == 'days') {
-            $deadline = time() + $classroom['expiryValue'] * 24 * 60 * 60;
+            $deadline = ClassroomToolkit::buildMemberDeadlineByMode($classroom, 'days')
         } else {
             $deadline = $classroom['expiryValue'];
         }
@@ -1499,7 +1500,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createServiceException($this->getKernel()->trans('缺少相关参数'));
         }
 
-        $deadline = $this->buildMemberDeadline($fields);
+        $deadline = ClassroomToolkit::buildMemberDeadlineByMode($fields, 'date');
 
         return $this->getClassroomMemberDao()->updateMember($id, array('deadline' => $deadline));
     }
@@ -1515,22 +1516,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         return;
-    }
-
-    protected function buildMemberDeadline($fields)
-    {
-        $deadline = $fields['expiryValue'];
-
-        if ($fields['expiryMode'] == 'date') {
-            if (!is_int($deadline)) {
-                $deadline = strtotime($deadline.' 23:59:59');
-            }
-            if ($deadline < time()) {
-                throw $this->createServiceException($this->getKernel()->trans('有效期的设置时间小于当前时间！'));
-            }
-        }
-
-        return $deadline;
     }
 
     public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId)

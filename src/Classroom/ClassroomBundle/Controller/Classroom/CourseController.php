@@ -156,7 +156,7 @@ class CourseController extends BaseController
                 return;
             }
 
-            $deadline = ClassroomToolkit::buildMemberDeadline($classroom);
+            $deadline = ClassroomToolkit::buildMemberDeadlineByMode($classroom, 'days');
 
             $member = array(
                 'id'          => 0,
