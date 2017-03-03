@@ -1,7 +1,8 @@
 <?php
+
 namespace Tests\Unit\System;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class SessionServiceTest extends BaseTestCase
 {

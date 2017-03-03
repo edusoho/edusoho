@@ -31,7 +31,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     public function searchReviewCount($conditions)
     {
         $conditions = $this->_prepareReviewSearchConditions($conditions);
-        $count      = $this->getClassroomReviewDao()->count($conditions);
+        $count = $this->getClassroomReviewDao()->count($conditions);
 
         return $count;
     }
@@ -41,7 +41,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $classroom = $this->getClassroomDao()->get($classroomId);
 
         if (empty($classroom)) {
-            throw $this->createServiceException("Classroom is not Exist!");
+            throw $this->createServiceException('Classroom is not Exist!');
         }
 
         return $this->getClassroomReviewDao()->getByUserIdAndClassroomId($userId, $classroomId);
@@ -56,11 +56,10 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
 
             return !empty($value);
         }
-
         );
 
         if (isset($conditions['author'])) {
-            $author               = $this->getUserService()->getUserByNickname($conditions['author']);
+            $author = $this->getUserService()->getUserByNickname($conditions['author']);
             $conditions['userId'] = $author ? $author['id'] : -1;
         }
 
@@ -90,22 +89,22 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $fields['parentId'] = empty($fields['parentId']) ? 0 : $fields['parentId'];
         if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getClassroomReviewDao()->create(array(
-                'userId'      => $fields['userId'],
+                'userId' => $fields['userId'],
                 'classroomId' => $fields['classroomId'],
-                'rating'      => $fields['rating'],
-                'content'     => empty($fields['content']) ? '' : $fields['content'],
-                'title'       => empty($fields['title']) ? '' : $fields['title'],
-                'parentId'    => $fields['parentId'],
-                'meta'        => array()
+                'rating' => $fields['rating'],
+                'content' => empty($fields['content']) ? '' : $fields['content'],
+                'title' => empty($fields['title']) ? '' : $fields['title'],
+                'parentId' => $fields['parentId'],
+                'meta' => array(),
             ));
             $this->dispatchEvent('classReview.add', new Event($review));
         } else {
             $review = $this->getClassroomReviewDao()->update($review['id'], array(
-                'rating'      => $fields['rating'],
-                'title'       => empty($fields['title']) ? '' : $fields['title'],
-                'content'     => empty($fields['content']) ? '' : $fields['content'],
+                'rating' => $fields['rating'],
+                'title' => empty($fields['title']) ? '' : $fields['title'],
+                'content' => empty($fields['content']) ? '' : $fields['content'],
                 'updatedTime' => time(),
-                'meta'        => array()
+                'meta' => array(),
             ));
         }
 
@@ -120,8 +119,8 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $ratingNum = $this->getClassroomReviewDao()->countReviewByClassroomId($classroomId);
 
         $this->getClassroomService()->updateClassroom($classroomId, array(
-            'rating'    => $ratingNum ? $ratingSum / $ratingNum : 0,
-            'ratingNum' => $ratingNum
+            'rating' => $ratingNum ? $ratingSum / $ratingNum : 0,
+            'ratingNum' => $ratingNum,
         ));
     }
 

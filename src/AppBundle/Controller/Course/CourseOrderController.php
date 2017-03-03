@@ -1,8 +1,8 @@
 <?php
+
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
 use AppBundle\Util\AvatarAlert;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
@@ -21,43 +21,43 @@ class CourseOrderController extends BaseController
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
         if (!empty($member)) {
             return $this->render('course/order/is-member.html.twig', array(
-                'course' => $course
+                'course' => $course,
             ));
         }
 
-        if($course['price'] > 0 && !$this->getEnabledPayments()) {
+        if ($course['price'] > 0 && !$this->getEnabledPayments()) {
             return $this->render('course/order/payments-disabled.html.twig', array(
-                'course' => $course
+                'course' => $course,
             ));
         }
 
-        $userInfo                   = $this->getUserService()->getUserProfile($user['id']);
+        $userInfo = $this->getUserService()->getUserProfile($user['id']);
         $userInfo['approvalStatus'] = $user['approvalStatus'];
         if ($course['approval'] == 1 && ($userInfo['approvalStatus'] != 'approved')) {
             return $this->render('course/order/approve-modal.html.twig', array(
-                'course' => $course
+                'course' => $course,
             ));
         }
 
         $remainingStudentNum = $this->getRemainStudentNum($course);
         if ($remainingStudentNum <= 0 && $course['type'] == 'live') {
             return $this->render('course/order/remainless-modal.html.twig', array(
-                'course' => $course
+                'course' => $course,
             ));
         }
 
-        if(AvatarAlert::alertJoinCourse($user)) {
+        if (AvatarAlert::alertJoinCourse($user)) {
             return $this->render('course/order/avatar-alert-modal.html.twig', array(
-                'course' => $course
+                'course' => $course,
             ));
         }
 
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         return $this->render('course/order/buy-modal.html.twig', array(
-            'course'           => $course,
-            'user'             => $userInfo,
-            'userFields'       => $userFields,
+            'course' => $course,
+            'user' => $userInfo,
+            'userFields' => $userFields,
         ));
     }
 
@@ -91,7 +91,7 @@ class CourseOrderController extends BaseController
             'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5',
             'dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5',
             'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
-            'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10'
+            'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
         ));
 
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
@@ -103,10 +103,10 @@ class CourseOrderController extends BaseController
                 $this->getUserService()->setupAccount($user['id']);
             }
         }
-        
+
         return $this->redirect($this->generateUrl('order_show', array(
-            'targetId'   => $formData['targetId'],
-            'targetType' => 'course'
+            'targetId' => $formData['targetId'],
+            'targetType' => 'course',
         )));
     }
 
@@ -118,10 +118,10 @@ class CourseOrderController extends BaseController
             return $this->createMessageResponse('error', $this->getServiceKernel()->trans('订单不存在!'));
         }
 
-        $this->getCourseService()->tryManageCourse($order["targetId"]);
+        $this->getCourseService()->tryManageCourse($order['targetId']);
 
         return $this->forward('AppBundle:Order:detail', array(
-            'id' => $id
+            'id' => $id,
         ));
     }
 
@@ -135,12 +135,12 @@ class CourseOrderController extends BaseController
             return $enableds;
         }
 
-        $payment  = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('payment');
+        $payment = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $payNames = array_keys($payment);
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
                 $enableds[$payName] = array(
-                    'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
+                    'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type'],
                 );
             }
         }
@@ -157,10 +157,10 @@ class CourseOrderController extends BaseController
                 $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'];
             } else {
                 $createdOrdersCount = $this->getOrderService()->countOrders(array(
-                    'targetType'             => 'course',
-                    'targetId'               => $course['id'],
-                    'status'                 => 'created',
-                    'createdTimeGreaterThan' => strtotime("-30 minutes")
+                    'targetType' => 'course',
+                    'targetId' => $course['id'],
+                    'status' => 'created',
+                    'createdTimeGreaterThan' => strtotime('-30 minutes'),
                 ));
                 $remainingStudentNum = $course['maxStudentNum'] - $course['studentNum'] - $createdOrdersCount;
             }

@@ -1,7 +1,6 @@
 <?php
+
 namespace Biz\Announcement\Dao\Impl;
-
-
 
 use Biz\Announcement\Dao\AnnouncementDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -19,10 +18,10 @@ class AnnouncementDaoImpl extends GeneralDaoImpl implements AnnouncementDao
     {
         return array(
             'timestamps' => array(
-                'createdTime', 'updatedTime'
+                'createdTime', 'updatedTime',
             ),
             'orderbys' => array(
-                'createdTime'
+                'createdTime',
             ),
             'conditions' => array(
                 'targetType = :targetType',
@@ -34,14 +33,14 @@ class AnnouncementDaoImpl extends GeneralDaoImpl implements AnnouncementDao
                 'orgCode LIKE :likeOrgCode',
                 'copyId = :copyId',
                 'userId =:userId',
-            )
+            ),
         );
     }
 
     protected function _createQueryBuilder($conditions)
     {
         if (isset($conditions['likeOrgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['likeOrgCode'] . '%';
+            $conditions['likeOrgCode'] = $conditions['likeOrgCode'].'%';
             unset($conditions['orgCode']);
         }
 

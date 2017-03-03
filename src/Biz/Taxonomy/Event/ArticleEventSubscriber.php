@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Taxonomy\Event;
-
 
 use Biz\Taxonomy\TagOwnerManager;
 use Codeages\Biz\Framework\Event\Event;
@@ -14,7 +12,7 @@ class ArticleEventSubscriber extends EventSubscriber implements EventSubscriberI
     public static function getSubscribedEvents()
     {
         return array(
-            'article.create' => 'onArticleCreate'
+            'article.create' => 'onArticleCreate',
         );
     }
 
@@ -32,8 +30,8 @@ class ArticleEventSubscriber extends EventSubscriber implements EventSubscriberI
     public function onArticleUpdate(Event $event)
     {
         $article = $event->getSubject();
-        $tagIds  = $event->getArgument('tagIds');
-        $userId  = $event->getArgument('userId');
+        $tagIds = $event->getArgument('tagIds');
+        $userId = $event->getArgument('userId');
 
         $tagOwnerManager = new TagOwnerManager('article', $article['id'], $tagIds, $userId);
         $tagOwnerManager->update();

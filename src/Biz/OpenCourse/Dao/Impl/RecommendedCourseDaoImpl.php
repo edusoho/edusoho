@@ -13,7 +13,7 @@ class RecommendedCourseDaoImpl extends GeneralDaoImpl implements RecommendedCour
     {
         return array(
             'timestamps' => array('createdTime'),
-            'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq'),
+            'orderbys' => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum', 'seq'),
             'conditions' => array(
                 'id = :id',
                 'id IN (:ids)',
@@ -22,42 +22,45 @@ class RecommendedCourseDaoImpl extends GeneralDaoImpl implements RecommendedCour
                 'recommendCourseId = :recommendCourseId',
                 'type = :type',
                 'createdTime >= :startTimeGreaterThan',
-                'createdTime < :startTimeLessThan'
-            )
+                'createdTime < :startTimeLessThan',
+            ),
         );
     }
 
     public function getByCourseIdAndType($openCourseId, $recommendCourseId, $type)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE openCourseId = ? AND recommendCourseId = ? AND type = ? ORDER BY seq ASC;";
+
         return $this->db()->fetchAssoc($sql, array($openCourseId, $recommendCourseId, $type)) ?: null;
     }
 
     public function findByOpenCourseId($openCourseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE openCourseId = ? ORDER BY seq ASC;";
+
         return $this->db()->fetchAll($sql, array($openCourseId)) ?: array();
     }
 
     public function deleteByOpenCourseIdAndRecommendCourseId($openCourseId, $recommendCourseId)
     {
         $sql = "DELETE FROM {$this->table()} WHERE openCourseId = ? AND recommendCourseId= ?";
+
         return $this->db()->executeUpdate($sql, array($openCourseId, $recommendCourseId));
     }
 
     public function findRandomRecommendCourses($courseId, $num)
     {
         $conditions = array(
-            'openCourseId' => $courseId
+            'openCourseId' => $courseId,
         );
 
         $count = $this->count($conditions);
-        $max   = $count - $num - 1;
+        $max = $count - $num - 1;
         if ($max < 0) {
             $max = 0;
         }
         $randomSeed = (int) rand(0, $max);
-        $sql        = "SELECT * FROM {$this->table()} WHERE openCourseId = ? LIMIT {$randomSeed}, $num";
+        $sql = "SELECT * FROM {$this->table()} WHERE openCourseId = ? LIMIT {$randomSeed}, $num";
 
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }

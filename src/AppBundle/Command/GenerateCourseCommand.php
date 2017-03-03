@@ -1,23 +1,18 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Biz\User\CurrentUser;
-use Symfony\Component\ClassLoader\ApcClassLoader;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Input\InputArgument;
 use Topxia\Service\Common\ServiceKernel;
 
 class GenerateCourseCommand extends BaseCommand
 {
-
     protected function configure()
     {
-        $this->setName ( 'util:generate-course' )
-        ->addArgument('count',InputArgument::OPTIONAL)
+        $this->setName('util:generate-course')
+        ->addArgument('count', InputArgument::OPTIONAL)
         ->addArgument('price', InputArgument::OPTIONAL)
         ->setDescription('第一个参数为创建课程数量(默认为50),第二个参数为价格(默认为随即)');
     }
@@ -29,7 +24,7 @@ class GenerateCourseCommand extends BaseCommand
         $count = $input->getArgument('count', 50);
         $this->getCourseDao()->getConnection()->beginTransaction();
         try {
-            for ($i=0; $i < $count; $i++) {
+            for ($i = 0; $i < $count; ++$i) {
                 $price = $input->getArgument('price', rand(0, 100));
                 $course['title'] = '课程-'.$price.'元-'.time().'-'.$i;
                 $course['status'] = 'published';
@@ -50,10 +45,10 @@ class GenerateCourseCommand extends BaseCommand
 
                 $this->getMemberDao()->addMember($member);
                 unset($course);
-                $output->writeln('<info>第'.($i+1).'个课程添加</info>');
+                $output->writeln('<info>第'.($i + 1).'个课程添加</info>');
             }
             $this->getCourseDao()->getConnection()->commit();
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->getCourseDao()->getConnection()->rollback();
             throw $e;
         }
@@ -65,12 +60,12 @@ class GenerateCourseCommand extends BaseCommand
         return ServiceKernel::instance()->createService('User:UserService');
     }
 
-    private function getCourseDao ()
+    private function getCourseDao()
     {
         return $this->getServiceKernel()->createDao('Course:CourseDao');
     }
 
-    private function getMemberDao ()
+    private function getMemberDao()
     {
         return $this->getServiceKernel()->createDao('Course:CourseMemberDao');
     }

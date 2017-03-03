@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Controller\BaseController;
@@ -22,17 +23,17 @@ class ThreadMemberController extends BaseController
         }
 
         return $this->forward('AppBundle:Thread/Member:become', array(
-            'request'  => $request,
-            'threadId' => $threadId
+            'request' => $request,
+            'threadId' => $threadId,
         ));
     }
 
     public function quitAction(Request $request, $threadId, $memberId)
     {
         return $this->forward('AppBundle:Thread/Member:quit', array(
-            'request'  => $request,
+            'request' => $request,
             'threadId' => $threadId,
-            'memberId' => $memberId
+            'memberId' => $memberId,
         ));
     }
 

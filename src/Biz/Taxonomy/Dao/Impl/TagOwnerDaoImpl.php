@@ -17,12 +17,14 @@ class TagOwnerDaoImpl extends GeneralDaoImpl implements TagOwnerDao
     public function getTagOwnerRelationByTagIdAndOwnerTypeAndOwnerId($tagId, $ownerType, $ownerId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE tagId = ? and ownerType = ? and ownerId = ?";
+
         return $this->db()->fetchAll($sql, array($tagId, $ownerType, $ownerId)) ?: array();
     }
 
     public function findByOwnerTypeAndOwnerId($ownerType, $ownerId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE ownerType = ? and ownerId = ?";
+
         return $this->db()->fetchAll($sql, array($ownerType, $ownerId)) ?: array();
     }
 
@@ -42,12 +44,14 @@ class TagOwnerDaoImpl extends GeneralDaoImpl implements TagOwnerDao
     public function updateByOwnerTypeAndOwnerId($ownerType, $ownerId, $fields)
     {
         $this->db()->update($this->table, array('ownerType' => $ownerType, 'ownerId' => $ownerId), $fields);
+
         return $this->findByOwnerTypeAndOwnerId($ownerType, $ownerId);
     }
 
     public function deleteByOwnerTypeAndOwnerId($ownerType, $ownerId)
     {
         $result = $this->db()->delete($this->table, array('ownerId' => $ownerId, 'ownerType' => $ownerType));
+
         return $result;
     }
 }

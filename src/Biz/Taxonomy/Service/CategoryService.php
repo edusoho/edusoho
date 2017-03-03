@@ -2,7 +2,6 @@
 
 namespace Biz\Taxonomy\Service;
 
-
 interface CategoryService
 {
     public function findCategoriesByGroupIdAndParentId($groupId, $parentId);

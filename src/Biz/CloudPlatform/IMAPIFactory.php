@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\CloudPlatform;
 
 use Biz\System\Service\SettingService;
@@ -20,19 +21,18 @@ class IMAPIFactory
             return self::$client;
         }
 
-
         /**
-         * @var $setting SettingService
+         * @var SettingService
          */
         $setting = ServiceKernel::instance()->getBiz()->service('System:SettingService');
 
-        $storage   = $setting->get('storage', array());
+        $storage = $setting->get('storage', array());
         $developer = $setting->get('developer', array());
 
         $config = array(
             'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
             'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
-            'endpoint'    => empty($storage['cloud_api_im_server']) ? 'http://imapi.edusoho.net/v1/' : $storage['cloud_api_im_server'],
+            'endpoint' => empty($storage['cloud_api_im_server']) ? 'http://imapi.edusoho.net/v1/' : $storage['cloud_api_im_server'],
         );
 
         $logger = self::getLogger();

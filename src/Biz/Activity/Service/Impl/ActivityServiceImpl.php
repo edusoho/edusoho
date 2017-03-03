@@ -23,6 +23,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if ($fetchMedia) {
             $activity = $this->fetchMedia($activity);
         }
+
         return $activity;
     }
 
@@ -35,6 +36,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $activity = $this->fetchMedia($activity);
             }
         }
+
         return $activities;
     }
 
@@ -42,7 +44,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $conditions = array(
             'fromCourseId' => $courseId,
-            'mediaType'    => $type
+            'mediaType' => $type,
         );
         $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
 
@@ -51,6 +53,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $activity = $this->fetchMedia($activity);
             }
         }
+
         return $activities;
     }
 
@@ -58,7 +61,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $conditions = array(
             'fromCourseSetId' => $courseSetId,
-            'mediaType'       => $type
+            'mediaType' => $type,
         );
         $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
 
@@ -67,6 +70,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $activity = $this->fetchMedia($activity);
             }
         }
+
         return $activities;
     }
 
@@ -94,7 +98,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $this->triggerActivityLearnLogListener($activity, $eventName, $data);
 
-        if(empty($data['events'])) {
+        if (empty($data['events'])) {
             $events = array();
         } else {
             $events = $data['events'];
@@ -115,7 +119,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $logListener = new ActivityLearnLogListener($this->biz);
 
-        $logData          = $data;
+        $logData = $data;
         $logData['event'] = $activity['mediaType'].'.'.$eventName;
         $logListener->handle($activity, $logData);
     }
@@ -139,14 +143,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $materials = $this->getFileDataFromActivity($fields);
 
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
-        $media          = $activityConfig->create($fields);
+        $media = $activityConfig->create($fields);
 
         if (!empty($media)) {
             $fields['mediaId'] = $media['id'];
         }
 
-        $fields['fromUserId']  = $this->getCurrentUser()->getId();
-        $fields                = $this->filterFields($fields);
+        $fields['fromUserId'] = $this->getCurrentUser()->getId();
+        $fields = $this->filterFields($fields);
         $fields['createdTime'] = time();
 
         $activity = $this->getActivityDao()->create($fields);
@@ -185,6 +189,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $fields = $this->filterFields($fields);
+
         return $this->getActivityDao()->update($id, $fields);
     }
 
@@ -204,6 +209,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             $this->getActivityLearnLogService()->deleteLearnLogsByActivityId($id);
             $result = $this->getActivityDao()->delete($id);
             $this->commit();
+
             return $result;
         } catch (\Exception $e) {
             $this->rollback();
@@ -213,7 +219,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     public function isFinished($id)
     {
-        $activity       = $this->getActivity($id);
+        $activity = $this->getActivity($id);
         $activityConfig = $this->getActivityConfig($activity['mediaType']);
 
         return $activityConfig->isFinished($id);
@@ -223,6 +229,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         if ($mode === 'delete') {
             $this->getMaterialService()->deleteMaterialsByLessonId($activity['id']);
+
             return;
         }
 
@@ -237,14 +244,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 }
                 break;
             case 'update':
-                $exists   = $this->getMaterialService()->searchMaterials(array('lessonId' => $activity['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+                $exists = $this->getMaterialService()->searchMaterials(array('lessonId' => $activity['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
                 $currents = array();
                 foreach ($materials as $id => $material) {
                     $currents[] = $this->buildMaterial($material, $activity);
                 }
 
-                $dropMaterials   = $this->diffMaterials($exists, $currents);
-                $addMaterials    = $this->diffMaterials($currents, $exists);
+                $dropMaterials = $this->diffMaterials($exists, $currents);
+                $addMaterials = $this->diffMaterials($currents, $exists);
                 $updateMaterials = $this->dirtyMaterials($exists, $currents);
                 foreach ($dropMaterials as $material) {
                     $this->getMaterialService()->deleteMaterial($activity['fromCourseSetId'], $material['id']);
@@ -264,17 +271,17 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     protected function buildMaterial($material, $activity)
     {
         return array(
-            'fileId'      => intval($material['id']),
-            'courseId'    => $activity['fromCourseId'],
+            'fileId' => intval($material['id']),
+            'courseId' => $activity['fromCourseId'],
             'courseSetId' => $activity['fromCourseSetId'],
-            'lessonId'    => $activity['id'],
-            'title'       => $material['name'],
+            'lessonId' => $activity['id'],
+            'title' => $material['name'],
             'description' => empty($material['summary']) ? '' : $material['summary'],
-            'userId'      => $this->getCurrentUser()->offsetGet('id'),
-            'type'        => 'course',
-            'source'      => $activity['mediaType'] == 'download' ? 'coursematerial' : 'courseactivity',
-            'link'        => empty($material['link']) ? '' : $material['link'],
-            'copyId'      => 0 //$fields
+            'userId' => $this->getCurrentUser()->offsetGet('id'),
+            'type' => 'course',
+            'source' => $activity['mediaType'] == 'download' ? 'coursematerial' : 'courseactivity',
+            'link' => empty($material['link']) ? '' : $material['link'],
+            'copyId' => 0, //$fields
         );
     }
 
@@ -300,6 +307,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $diffs[] = $value1;
             }
         }
+
         return $diffs;
     }
 
@@ -324,6 +332,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 }
             }
         }
+
         return $diffs;
     }
 
@@ -340,7 +349,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'fromCourseSetId',
             'fromUserId',
             'startTime',
-            'endTime'
+            'endTime',
         ));
 
         if (!empty($fields['startTime']) && !empty($fields['length']) && $fields['mediaType'] != 'testpaper') {
@@ -360,7 +369,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'title',
             'mediaType',
             'fromCourseId',
-            'fromCourseSetId'
+            'fromCourseSetId',
         ))
         ) {
             return true;
@@ -369,11 +378,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if (!is_object($activity)) {
             return true;
         }
+
         return false;
     }
 
     /**
      * @param  $fields
+     *
      * @return array
      */
     public function getFileDataFromActivity($fields)
@@ -388,10 +399,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if (empty($materials) && !empty($fields['ext'])) {
             $ext = $fields['ext'];
             if (!empty($ext['mediaId'])) {
-                $file        = $this->getUploadFileService()->getFile($ext['mediaId']);
+                $file = $this->getUploadFileService()->getFile($ext['mediaId']);
                 $materials[] = array(
-                    'id'   => $file['id'],
-                    'name' => $file['filename']
+                    'id' => $file['id'],
+                    'name' => $file['filename'],
                 );
             }
         }
@@ -401,16 +412,19 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     /**
      * @param  $activity
+     *
      * @return mixed
      */
     public function fetchMedia($activity)
     {
         if (!empty($activity['mediaId'])) {
-            $activityConfig  = $this->getActivityConfig($activity['mediaType']);
-            $media           = $activityConfig->get($activity['mediaId']);
+            $activityConfig = $this->getActivityConfig($activity['mediaType']);
+            $media = $activityConfig->get($activity['mediaId']);
             $activity['ext'] = $media;
+
             return $activity;
         }
+
         return $activity;
     }
 

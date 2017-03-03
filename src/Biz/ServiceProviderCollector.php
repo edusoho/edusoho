@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz;
 
 use Pimple\ServiceProviderInterface;
@@ -21,5 +22,4 @@ class ServiceProviderCollector
     {
         return $this->providers;
     }
-
 }

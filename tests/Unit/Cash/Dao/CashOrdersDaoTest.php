@@ -18,32 +18,32 @@ class CashOrdersDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 5
+                'expectedCount' => 5,
                 ),
             array(
                 'condition' => array('status' => 'paid'),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('userId' => 2),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('payment' => 'q'),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('title' => 'w'),
                 'expectedResults' => array($expected[3]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('sn' => 127),
                 'expectedResults' => array($expected[4]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             );
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
@@ -90,7 +90,7 @@ class CashOrdersDaoTest extends BaseDaoTestCase
             'title' => 'b',
             'createdTime' => 0,
             'note' => 'c',
-            'sn' => 123
+            'sn' => 123,
             );
     }
 }

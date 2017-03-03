@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Marker\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;

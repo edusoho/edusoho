@@ -156,7 +156,7 @@ class CourseLessonReplayDaoTest extends BaseDaoTestCase
             'userId' => 1,
             'hidden' => 1,
             'type' => 'live',
-            'copyId' => 1
+            'copyId' => 1,
         );
     }
 }

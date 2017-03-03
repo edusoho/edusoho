@@ -1,19 +1,19 @@
 <?php
+
 namespace Biz\Org\Service;
 
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Topxia\Service\Common\ServiceKernel;
 
-
 class OrgBatchUpdateFactory
 {
-
     public static function getModuleService($module)
     {
         $modules = self::getModules();
         if (!array_key_exists($module, $modules)) {
             throw new InvalidArgumentException(array('模块%module%不存在,更新组织机构失败', array('%module%' => $module)));
         }
+
         return $modules[$module];
     }
 
@@ -22,42 +22,41 @@ class OrgBatchUpdateFactory
     public static function getModules()
     {
         return array(
-            'user'         => array(
+            'user' => array(
                 'protocol' => 'biz',
-                'service'  => 'User:UserService'
+                'service' => 'User:UserService',
             ),
-            'courseSet'    => array(
+            'courseSet' => array(
                 'protocol' => 'biz',
-                'service'  => 'Course:CourseSetService'      
+                'service' => 'Course:CourseSetService',
             ),
-            'course'       => array(
+            'course' => array(
                 'protocol' => 'biz',
-                'service'  => 'Course:CourseService',
+                'service' => 'Course:CourseService',
             ),
-            'classroom'    => array(
+            'classroom' => array(
                 'protocol' => 'biz',
-                'service'  => 'Classroom:ClassroomService'
+                'service' => 'Classroom:ClassroomService',
             ),
-            'article'      => array(
+            'article' => array(
                 'protocol' => 'biz',
-                'service'  => 'Article:ArticleService'
+                'service' => 'Article:ArticleService',
             ),
             'announcement' => array(
                 'protocol' => 'biz',
-                'service'  => 'Announcement:AnnouncementService',
-            )
+                'service' => 'Announcement:AnnouncementService',
+            ),
         );
     }
-
 
     public static function getDispayModuleName($key)
     {
         $modules = array(
-            'user'         => '用户',
-            'course'       => '课程',
-            'classroom'    => '班级',
-            'article'      => '咨询',
-            'announcement' => '网站公告'
+            'user' => '用户',
+            'course' => '课程',
+            'classroom' => '班级',
+            'article' => '咨询',
+            'announcement' => '网站公告',
         );
         if (array_key_exists($key, $modules)) {
             return $modules[$key];

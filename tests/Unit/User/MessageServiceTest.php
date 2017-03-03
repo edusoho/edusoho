@@ -3,21 +3,21 @@
 namespace Tests\Unit\User;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class MessageServiceTest extends BaseTestCase
 {
     public function testDeleteMessagesByAdmin()
     {
         /*create*/
-        $sender   = $this->createSender();
+        $sender = $this->createSender();
         $receiver = $this->createReceiver();
-        $content  = "testSendMessage";
-        for ($i = 0; $i < 4; $i++) {
+        $content = 'testSendMessage';
+        for ($i = 0; $i < 4; ++$i) {
             $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $i.$content.$i);
         }
 
-        $conversation          = $this->getMessageService()->getConversationByFromIdAndToId($receiver['id'], $sender['id']);
+        $conversation = $this->getMessageService()->getConversationByFromIdAndToId($receiver['id'], $sender['id']);
         $messageByConversation = $this->getMessageService()->findConversationMessages($conversation['id'], 0, 10);
         $this->getMessageService()->deleteMessagesByIds(ArrayToolkit::column($messageByConversation, 'id'));
     }
@@ -25,14 +25,14 @@ class MessageServiceTest extends BaseTestCase
     public function testSendMessage()
     {
         /*create*/
-        $sender   = $this->createSender();
+        $sender = $this->createSender();
         $receiver = $this->createReceiver();
-        $content  = "testSendMessage";
-        for ($i = 0; $i < 4; $i++) {
+        $content = 'testSendMessage';
+        for ($i = 0; $i < 4; ++$i) {
             $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $i.$content.$i);
         }
 
-        $conversationToSender           = $this->getMessageService()->getConversationByFromIdAndToId($receiver['id'], $sender['id']);
+        $conversationToSender = $this->getMessageService()->getConversationByFromIdAndToId($receiver['id'], $sender['id']);
         $messagesByConversationToSender = $this->getMessageService()->findConversationMessages($conversationToSender['id'], 0, 10);
 
         /* test conversation */
@@ -42,7 +42,7 @@ class MessageServiceTest extends BaseTestCase
         $this->assertEquals($conversationToSender['fromId'], $receiver['id']);
         $this->assertEquals($conversationToSender['messageNum'], 4);
         $this->assertEquals($conversationToSender['unreadNum'], 0);
-        $this->assertEquals($conversationToSender['latestMessageContent'], "3testSendMessage3");
+        $this->assertEquals($conversationToSender['latestMessageContent'], '3testSendMessage3');
 
         /* test message */
         foreach ($messagesByConversationToSender as $messageByConversationToSender) {
@@ -50,7 +50,7 @@ class MessageServiceTest extends BaseTestCase
             $this->assertEquals($messageByConversationToSender['toId'], $receiver['id']);
         }
 
-        $conversationToReceiver           = $this->getMessageService()->getConversationByFromIdAndToId($sender['id'], $receiver['id']);
+        $conversationToReceiver = $this->getMessageService()->getConversationByFromIdAndToId($sender['id'], $receiver['id']);
         $messagesByConversationToReceiver = $this->getMessageService()->findConversationMessages($conversationToReceiver['id'], 0, 10);
 
         /* test conversation */
@@ -60,7 +60,7 @@ class MessageServiceTest extends BaseTestCase
         $this->assertEquals($conversationToReceiver['fromId'], $sender['id']);
         $this->assertEquals($conversationToReceiver['messageNum'], 4);
         $this->assertEquals($conversationToReceiver['unreadNum'], 4);
-        $this->assertEquals($conversationToReceiver['latestMessageContent'], "3testSendMessage3");
+        $this->assertEquals($conversationToReceiver['latestMessageContent'], '3testSendMessage3');
 
         /* test message */
         foreach ($messagesByConversationToReceiver as $messageByConversationToReceiver) {
@@ -71,10 +71,10 @@ class MessageServiceTest extends BaseTestCase
 
     public function testShowConversation()
     {
-        $sender   = $this->createSender();
+        $sender = $this->createSender();
         $receiver = $this->createReceiver();
-        $content  = "testSendMessage";
-        for ($i = 0; $i < 4; $i++) {
+        $content = 'testSendMessage';
+        for ($i = 0; $i < 4; ++$i) {
             $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $i.$content.$i);
         }
 
@@ -89,7 +89,7 @@ class MessageServiceTest extends BaseTestCase
         $this->assertEquals($updatedConversation['fromId'], $receiver['id']);
         $this->assertEquals($updatedConversation['toId'], $sender['id']);
         $this->assertEquals($updatedConversation['latestMessageUserId'], $sender['id']);
-        $this->assertEquals($updatedConversation['latestMessageContent'], "3testSendMessage3");
+        $this->assertEquals($updatedConversation['latestMessageContent'], '3testSendMessage3');
 
         /*get conversationToReceiver*/
         $conversationToReceiver = $this->getMessageService()->
@@ -102,7 +102,7 @@ class MessageServiceTest extends BaseTestCase
         $this->assertEquals($updatedConversation['toId'], $receiver['id']);
         $this->assertEquals($updatedConversation['fromId'], $sender['id']);
         $this->assertEquals($updatedConversation['latestMessageUserId'], $sender['id']);
-        $this->assertEquals($updatedConversation['latestMessageContent'], "3testSendMessage3");
+        $this->assertEquals($updatedConversation['latestMessageContent'], '3testSendMessage3');
     }
 
     /**
@@ -110,17 +110,17 @@ class MessageServiceTest extends BaseTestCase
      */
     public function testDeleteMessageBySenderUser()
     {
-        $sender   = $this->createSender();
+        $sender = $this->createSender();
         $receiver = $this->createReceiver();
-        $content  = "testSendMessage";
-        for ($i = 0; $i < 4; $i++) {
+        $content = 'testSendMessage';
+        for ($i = 0; $i < 4; ++$i) {
             $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $i.$content.$i);
         }
         $conversationToSender = $this->getMessageService()->
             getConversationByFromIdAndToId($receiver['id'], $sender['id']);
-        $messagesCount          = $this->getMessageService()->countConversationMessages($conversationToSender['id']);
+        $messagesCount = $this->getMessageService()->countConversationMessages($conversationToSender['id']);
         $messagesOfConversation = $this->getMessageService()->findConversationMessages($conversationToSender['id'], 0, $messagesCount);
-        $updatedConversation    = $this->getMessageService()->getConversation($conversationToSender['id']);
+        $updatedConversation = $this->getMessageService()->getConversation($conversationToSender['id']);
         /* test conversation */
         foreach ($messagesOfConversation as $messageOfConversation) {
             $this->getMessageService()->deleteConversationMessage($conversationToSender['id'], $messageOfConversation['id']);
@@ -128,7 +128,7 @@ class MessageServiceTest extends BaseTestCase
             $this->assertEquals($updatedConversation['fromId'], $receiver['id']);
             $this->assertEquals($updatedConversation['toId'], $sender['id']);
             $this->assertEquals($updatedConversation['latestMessageUserId'], $sender['id']);
-            $this->assertEquals($updatedConversation['latestMessageContent'], "3testSendMessage3");
+            $this->assertEquals($updatedConversation['latestMessageContent'], '3testSendMessage3');
         }
         $updatedConversation = $this->getMessageService()->getConversation($conversationToSender['id']);
         $this->assertEquals($updatedConversation['messageNum'], 0);
@@ -141,17 +141,17 @@ class MessageServiceTest extends BaseTestCase
 
     public function testDeleteMessageByReceiverUser()
     {
-        $sender   = $this->createSender();
+        $sender = $this->createSender();
         $receiver = $this->createReceiver();
-        $content  = "testSendMessage";
-        for ($i = 0; $i < 4; $i++) {
+        $content = 'testSendMessage';
+        for ($i = 0; $i < 4; ++$i) {
             $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $i.$content.$i);
         }
         $conversationToReceiver = $this->getMessageService()->
             getConversationByFromIdAndToId($sender['id'], $receiver['id']);
-        $messagesCount          = $this->getMessageService()->countConversationMessages($conversationToReceiver['id']);
+        $messagesCount = $this->getMessageService()->countConversationMessages($conversationToReceiver['id']);
         $messagesOfConversation = $this->getMessageService()->findConversationMessages($conversationToReceiver['id'], 0, $messagesCount);
-        $updatedConversation    = $this->getMessageService()->getConversation($conversationToReceiver['id']);
+        $updatedConversation = $this->getMessageService()->getConversation($conversationToReceiver['id']);
 
         /* test conversation */
         foreach ($messagesOfConversation as $messageOfConversation) {
@@ -159,7 +159,7 @@ class MessageServiceTest extends BaseTestCase
             $this->assertEquals($updatedConversation['fromId'], $sender['id']);
             $this->assertEquals($updatedConversation['toId'], $receiver['id']);
             $this->assertEquals($updatedConversation['latestMessageUserId'], $sender['id']);
-            $this->assertEquals($updatedConversation['latestMessageContent'], "3testSendMessage3");
+            $this->assertEquals($updatedConversation['latestMessageContent'], '3testSendMessage3');
         }
         $updatedConversation = $this->getMessageService()->getConversation($conversationToReceiver['id']);
         $this->assertEquals($updatedConversation['messageNum'], 0);
@@ -172,10 +172,10 @@ class MessageServiceTest extends BaseTestCase
 
     public function testDeleteConversationByUser()
     {
-        $sender   = $this->createSender();
+        $sender = $this->createSender();
         $receiver = $this->createReceiver();
-        $content  = "testSendMessage";
-        for ($i = 0; $i < 4; $i++) {
+        $content = 'testSendMessage';
+        for ($i = 0; $i < 4; ++$i) {
             $this->getMessageService()->sendMessage($sender['id'], $receiver['id'], $i.$content.$i);
         }
         /*  for sender */
@@ -199,19 +199,21 @@ class MessageServiceTest extends BaseTestCase
 
     protected function createSender()
     {
-        $sender             = array();
-        $sender['email']    = "sender@sender.com";
-        $sender['nickname'] = "sender";
-        $sender['password'] = "sender";
+        $sender = array();
+        $sender['email'] = 'sender@sender.com';
+        $sender['nickname'] = 'sender';
+        $sender['password'] = 'sender';
+
         return $this->getUserService()->register($sender);
     }
 
     protected function createReceiver()
     {
-        $receiver             = array();
-        $receiver['email']    = "receiver@receiver.com";
-        $receiver['nickname'] = "receiver";
-        $receiver['password'] = "receiver";
+        $receiver = array();
+        $receiver['email'] = 'receiver@receiver.com';
+        $receiver['nickname'] = 'receiver';
+        $receiver['password'] = 'receiver';
+
         return $this->getUserService()->register($receiver);
     }
 

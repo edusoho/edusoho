@@ -52,8 +52,6 @@ class ArticleLikeDaoTest extends BaseDaoTestCase
         $res[] = $this->getDao()->findByUserId(1);
         $res[] = $this->getDao()->findByUserId(2);
 
-        
-        
         $this->assertEquals(array($expected[0], $expected[1]), $res[0]);
         $this->assertEquals(array($expected[2]), $res[1]);
     }
@@ -72,7 +70,7 @@ class ArticleLikeDaoTest extends BaseDaoTestCase
         $res[] = $this->getDao()->findByArticleId(2);
 
         $this->sort($expected, array('createdTime' => 'DESC', 'id' => 'ASC'));
-        
+
         $this->assertEquals(array($expected[0], $expected[2]), $res[0]);
         $this->assertEquals(array($expected[1]), $res[1]);
     }

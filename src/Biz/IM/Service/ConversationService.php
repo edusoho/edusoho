@@ -53,5 +53,4 @@ interface ConversationService
     public function searchMembers($conditions, $orderBy, $start, $limit);
 
     public function searchMemberCount($conditions);
-
 }

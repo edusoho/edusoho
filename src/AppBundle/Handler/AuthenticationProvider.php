@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Topxia\Service\Common\ServiceKernel;
 
 /**
- * 此Class大部分代码来自DaoAuthenticationProvider
+ * 此Class大部分代码来自DaoAuthenticationProvider.
  */
 class AuthenticationProvider extends UserAuthenticationProvider
 {
@@ -31,14 +31,14 @@ class AuthenticationProvider extends UserAuthenticationProvider
      * @param UserCheckerInterface    $userChecker                An UserCheckerInterface instance
      * @param string                  $providerKey                The provider key
      * @param EncoderFactoryInterface $encoderFactory             An EncoderFactoryInterface instance
-     * @param Boolean                 $hideUserNotFoundExceptions Whether to hide user not found exception or not
+     * @param bool                    $hideUserNotFoundExceptions Whether to hide user not found exception or not
      */
     public function __construct(UserProviderInterface $userProvider, UserCheckerInterface $userChecker, $providerKey, EncoderFactoryInterface $encoderFactory, $hideUserNotFoundExceptions = true)
     {
         parent::__construct($userChecker, $providerKey, $hideUserNotFoundExceptions);
 
         $this->encoderFactory = $encoderFactory;
-        $this->userProvider   = $userProvider;
+        $this->userProvider = $userProvider;
     }
 
     /**
@@ -52,7 +52,7 @@ class AuthenticationProvider extends UserAuthenticationProvider
                 throw new BadCredentialsException('The credentials were changed from another session.');
             }
         } else {
-            if ("" === ($presentedPassword = $token->getCredentials())) {
+            if ('' === ($presentedPassword = $token->getCredentials())) {
                 throw new BadCredentialsException('The presented password cannot be empty.');
             }
 
@@ -82,13 +82,10 @@ class AuthenticationProvider extends UserAuthenticationProvider
                     if ($bind) {
                         $partnerUser = $this->getAuthService()->checkPartnerLoginById($bind['fromId'], $token->getCredentials());
                         if ($partnerUser) {
-
                             $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
                         }
                     }
-
                 } catch (UsernameNotFoundException $notFound) {
-
                     if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
                         $partnerUser = $this->getAuthService()->checkPartnerLoginByEmail($username, $token->getCredentials());
                     } else {
@@ -100,21 +97,20 @@ class AuthenticationProvider extends UserAuthenticationProvider
                     }
                     $bind = $this->getUserService()->getUserBindByTypeAndFromId($this->getAuthService()->getPartnerName(), $partnerUser['id']);
                     if ($bind) {
-
                         $user = $this->getUserService()->getUser($bind['toId']);
                         $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
                     } else {
-                        $setting     = $this->getSettingService()->get('user_partner', array());
+                        $setting = $this->getSettingService()->get('user_partner', array());
                         $emailFilter = explode("\n", $setting['email_filter']);
                         if (in_array($partnerUser['email'], $emailFilter)) {
-                            $partnerUser['email'] = $partnerUser['id'] . '_dz_' . $this->getRandomString(5) . '@edusoho.net';
+                            $partnerUser['email'] = $partnerUser['id'].'_dz_'.$this->getRandomString(5).'@edusoho.net';
                         }
-                        $registration              = array();
-                        $registration['nickname']  = $partnerUser['nickname'];
-                        $registration['email']     = $partnerUser['email'];
-                        $registration['password']  = $token->getCredentials();
+                        $registration = array();
+                        $registration['nickname'] = $partnerUser['nickname'];
+                        $registration['email'] = $partnerUser['email'];
+                        $registration['password'] = $token->getCredentials();
                         $registration['createdIp'] = $partnerUser['createdIp'];
-                        $registration['token']     = array(
+                        $registration['token'] = array(
                             'userId' => $partnerUser['id'],
                         );
 
@@ -128,7 +124,6 @@ class AuthenticationProvider extends UserAuthenticationProvider
             }
 
             if (!$user instanceof UserInterface) {
-
                 throw new AuthenticationServiceException('The user provider must return a UserInterface object.');
             }
 
@@ -145,7 +140,6 @@ class AuthenticationProvider extends UserAuthenticationProvider
 
     private function syncEmailAndPassword($user, $partnerUser, $token)
     {
-
         try {
             $isEmaildChanged = ($user['email'] != $partnerUser['email']);
             if ($isEmaildChanged) {
@@ -164,16 +158,14 @@ class AuthenticationProvider extends UserAuthenticationProvider
             $this->getLogService()->error('user', 'sync_password', $this->getServiceKernel()->trans('同步用户(#%userId%)密码失败', array('%userId%' => $user['id'])));
         }
 
-
         $user = $this->userProvider->loadUserByUsername($user['email']);
-
 
         return $user;
     }
 
     private function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
     {
-        $s       = '';
+        $s = '';
         $cLength = strlen($chars);
 
         while (strlen($s) < $length) {
@@ -216,5 +208,4 @@ class AuthenticationProvider extends UserAuthenticationProvider
     {
         return ServiceKernel::instance();
     }
-
 }

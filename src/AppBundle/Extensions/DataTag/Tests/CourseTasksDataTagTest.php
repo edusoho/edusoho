@@ -3,18 +3,13 @@
 namespace AppBundle\Extensions\DataTag\Test;
 
 use Biz\BaseTestCase;
-
-;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Extensions\DataTag\CourseLessonsDataTag;
 
 class CourseTasksDataTagTest extends BaseTestCase
 {
-
     public function testGetData()
     {
-
         $course = array(
             'title' => 'online test course 1',
         );
@@ -22,9 +17,9 @@ class CourseTasksDataTagTest extends BaseTestCase
 
         $task = array(
             'courseId' => $course['id'],
-            'title'    => 'test lesson 1',
-            'content'  => 'test lesson content 1',
-            'type'     => 'text'
+            'title' => 'test lesson 1',
+            'content' => 'test lesson content 1',
+            'type' => 'text',
         );
         $lesson = $this->getTaskService()->createTask($task);
 
@@ -35,7 +30,6 @@ class CourseTasksDataTagTest extends BaseTestCase
 
         $foundLesson = array_pop($lessons);
         $this->assertEquals($lesson['id'], $foundLesson['id']);
-
     }
 
     private function getCourseService()
@@ -50,6 +44,4 @@ class CourseTasksDataTagTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Task:TaskService');
     }
-
-
 }

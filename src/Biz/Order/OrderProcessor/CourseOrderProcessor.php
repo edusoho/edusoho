@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Order\OrderProcessor;
 
 use Biz\Course\Service\CourseOrderService;
@@ -10,7 +11,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-    protected $router = "course_show";
+    protected $router = 'course_show';
 
     public function getTarget($targetId)
     {
@@ -38,11 +39,11 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             return array('error' => $this->getKernel()->trans('不能加入未发布的教学计划!'));
         }
 
-        if($courseSet['status'] != 'published') {
+        if ($courseSet['status'] != 'published') {
             return array('error' => $this->getKernel()->trans('不能加入未发布课程中的教学计划!'));
         }
 
-        if ($course["type"] == "live" && $course["studentNum"] >= $course["maxStudentNum"]) {
+        if ($course['type'] == 'live' && $course['studentNum'] >= $course['maxStudentNum']) {
             return array('error' => $this->getKernel()->trans('名额已满，不能加入!'));
         }
 
@@ -64,29 +65,30 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         $totalPrice = 0;
 
         if (!$coinEnable) {
-            $totalPrice = $course["price"];
+            $totalPrice = $course['price'];
+
             return array(
                 'totalPrice' => $totalPrice,
-                'targetId'   => $targetId,
-                'targetType' => "course",
-                'course'     => empty($course) ? null : $course,
-                'users'      => $users
+                'targetId' => $targetId,
+                'targetType' => 'course',
+                'course' => empty($course) ? null : $course,
+                'users' => $users,
             );
         }
 
-        if ($priceType == "Coin") {
+        if ($priceType == 'Coin') {
             $coinSetting = $this->getSettingService()->get('coin');
-            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-            $crshRate    = 1;
+            $coinEnable = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'] == 1;
+            $crshRate = 1;
 
-            if ($coinEnable && array_key_exists("cash_rate", $coinSetting)) {
+            if ($coinEnable && array_key_exists('cash_rate', $coinSetting)) {
                 $cashRate = $coinSetting['cash_rate'];
             }
 
-            $totalPrice = $course["price"] * $cashRate;
-        } elseif ($priceType == "RMB") {
-            $totalPrice = $course["price"];
-            $maxCoin    = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);
+            $totalPrice = $course['price'] * $cashRate;
+        } elseif ($priceType == 'RMB') {
+            $totalPrice = $course['price'];
+            $maxCoin = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);
         }
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
@@ -96,17 +98,17 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         return array(
-            'course'         => empty($course) ? null : $course,
-            'users'          => empty($users) ? null : $users,
-            'totalPrice'     => $totalPrice,
-            'targetId'       => $targetId,
-            'targetType'     => "course",
-            'cashRate'       => $cashRate,
-            'priceType'      => $priceType,
-            'account'        => $account,
+            'course' => empty($course) ? null : $course,
+            'users' => empty($users) ? null : $users,
+            'totalPrice' => $totalPrice,
+            'targetId' => $targetId,
+            'targetType' => 'course',
+            'cashRate' => $cashRate,
+            'priceType' => $priceType,
+            'account' => $account,
             'hasPayPassword' => $hasPayPassword,
-            'coinPayAmount'  => $coinPayAmount,
-            'maxCoin'        => $maxCoin
+            'coinPayAmount' => $coinPayAmount,
+            'maxCoin' => $maxCoin,
         );
     }
 
@@ -118,9 +120,9 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
 //优惠码优惠价格
 
-        if (isset($fields["couponCode"]) && trim($fields["couponCode"]) != "") {
+        if (isset($fields['couponCode']) && trim($fields['couponCode']) != '') {
             $couponResult = $this->afterCouponPay(
-                $fields["couponCode"],
+                $fields['couponCode'],
                 'course',
                 $targetId,
                 $totalPrice,
@@ -128,8 +130,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
                 $cashRate
             );
 
-            if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes" && isset($couponResult["afterAmount"])) {
-                $amount = $couponResult["afterAmount"];
+            if (isset($couponResult['useable']) && $couponResult['useable'] == 'yes' && isset($couponResult['afterAmount'])) {
+                $amount = $couponResult['afterAmount'];
             } else {
                 unset($couponResult);
             }
@@ -137,18 +139,18 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
 //虚拟币优惠价格
 
-        if (array_key_exists("coinPayAmount", $fields)) {
+        if (array_key_exists('coinPayAmount', $fields)) {
             $amount = $this->afterCoinPay(
                 $coinEnabled,
                 $priceType,
                 $cashRate,
                 $amount,
                 $fields['coinPayAmount'],
-                $fields["payPassword"]
+                $fields['payPassword']
             );
         }
 
-        if ($priceType == "Coin") {
+        if ($priceType == 'Coin') {
             $amount = $amount / $cashRate;
         }
 
@@ -157,12 +159,12 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $totalPrice = NumberToolkit::roundUp($totalPrice);
-        $amount     = NumberToolkit::roundUp($amount);
+        $amount = NumberToolkit::roundUp($amount);
 
         return array(
             $amount,
             $totalPrice,
-            empty($couponResult) ? null : $couponResult
+            empty($couponResult) ? null : $couponResult,
         );
     }
 
@@ -174,22 +176,23 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getTotalPrice($targetId, $priceType)
     {
         $totalPrice = 0;
-        $course     = $this->getCourseService()->getCourse($targetId);
+        $course = $this->getCourseService()->getCourse($targetId);
 
-        if ($priceType == "RMB") {
-            $totalPrice = $course["price"];
-        } elseif ($priceType == "Coin") {
+        if ($priceType == 'RMB') {
+            $totalPrice = $course['price'];
+        } elseif ($priceType == 'Coin') {
             $coinSetting = $this->getSettingService()->get('coin');
-            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-            $crshRate    = 1;
-            if ($coinEnable && array_key_exists("cash_rate", $coinSetting)) {
+            $coinEnable = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'] == 1;
+            $crshRate = 1;
+            if ($coinEnable && array_key_exists('cash_rate', $coinSetting)) {
                 $cashRate = $coinSetting['cash_rate'];
             }
 
-            $totalPrice = $course["price"] * $cashRate;
+            $totalPrice = $course['price'] * $cashRate;
         }
 
         $totalPrice = (float) $totalPrice;
+
         return $totalPrice;
     }
 
@@ -217,12 +220,14 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     public function getNote($targetId)
     {
         $course = $this->getCourseService()->getCourse($targetId);
+
         return str_replace(' ', '', strip_tags($course['about']));
     }
 
     public function getTitle($targetId)
     {
         $course = $this->getCourseService()->getCourse($targetId);
+
         return str_replace(' ', '', strip_tags($course['title']));
     }
 
@@ -248,7 +253,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderInfoTemplate()
     {
-        return "AppBundle:Course/Course:orderInfo";
+        return 'AppBundle:Course/Course:orderInfo';
     }
 
     public function isTargetExist($targetId)
@@ -260,7 +265,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        if($courseSet['status'] != 'published') {
+        if ($courseSet['status'] != 'published') {
             return false;
         }
 

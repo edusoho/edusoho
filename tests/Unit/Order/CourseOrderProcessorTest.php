@@ -1,9 +1,9 @@
 <?php
+
 namespace Tests\Unit\Order;
 
 use Biz\Course\Service\CourseSetService;
-use Biz\User\CurrentUser;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use Biz\Order\OrderProcessor\CourseOrderProcessor;
 
 class CourseOrderProcessorTest extends BaseTestCase
@@ -15,12 +15,12 @@ class CourseOrderProcessorTest extends BaseTestCase
 
         $student = $this->getUserService()->register(
             array(
-                'nickname'  => 'student',
-                'email'     => 'student@student.com',
-                'password'  => 'student',
+                'nickname' => 'student',
+                'email' => 'student@student.com',
+                'password' => 'student',
                 'createdIp' => '127.0.0.1',
-                'orgCode'   => '1.',
-                'orgId'     => '1'
+                'orgCode' => '1.',
+                'orgId' => '1',
             )
         );
 
@@ -35,7 +35,7 @@ class CourseOrderProcessorTest extends BaseTestCase
     {
         $courseSet = array(
             'title' => '新课程开始！',
-            'type'  => 'normal'
+            'type' => 'normal',
         );
         $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
         $course = $this->mockCourse(array('title' => 'course 1', 'courseSetId' => $courseSet['id']));
@@ -49,6 +49,7 @@ class CourseOrderProcessorTest extends BaseTestCase
     protected function getCurrentUser()
     {
         $biz = $this->getBiz();
+
         return $biz['user'];
     }
 
@@ -68,6 +69,7 @@ class CourseOrderProcessorTest extends BaseTestCase
     protected function mockCourse($fields)
     {
         $fields = array_merge($this->getDefaultMockFields(), $fields);
+
         return $this->getCourseService()->createCourse($fields);
     }
 

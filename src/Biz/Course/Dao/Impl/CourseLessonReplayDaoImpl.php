@@ -13,14 +13,14 @@ class CourseLessonReplayDaoImpl extends GeneralDaoImpl implements CourseLessonRe
     {
         return array(
             'timestamps' => array('createdTime'),
-            'orderbys'   => array('replayId', 'createdTime'),
+            'orderbys' => array('replayId', 'createdTime'),
             'conditions' => array(
                 'courseId = :courseId',
                 'lessonId = :lessonId',
                 'hidden = :hidden',
                 'copyId = :copyId',
-                'type = :type'
-            )
+                'type = :type',
+            ),
         );
     }
 
@@ -32,6 +32,7 @@ class CourseLessonReplayDaoImpl extends GeneralDaoImpl implements CourseLessonRe
     public function findByLessonId($lessonId, $lessonType = 'live')
     {
         $sql = "SELECT * FROM {$this->table()} WHERE lessonId = ? AND type = ? ORDER BY replayId ASC";
+
         return $this->db()->fetchAll($sql, array($lessonId, $lessonType));
     }
 
@@ -43,12 +44,14 @@ class CourseLessonReplayDaoImpl extends GeneralDaoImpl implements CourseLessonRe
     public function getByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live')
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId=? AND lessonId = ? AND type = ? ";
+
         return $this->db()->fetchAssoc($sql, array($courseId, $lessonId, $lessonType));
     }
 
     public function findByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live')
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId=? AND lessonId = ? AND type = ? ";
+
         return $this->db()->fetchAll($sql, array($courseId, $lessonId, $lessonType));
     }
 

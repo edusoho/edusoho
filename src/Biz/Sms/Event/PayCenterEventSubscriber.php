@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Sms\Event;
-
 
 use AppBundle\Common\StringToolkit;
 use Biz\Sms\Service\SmsService;
@@ -13,34 +11,34 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class PayCenterEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return array(
-            'order.pay.success' => 'onPaySuccess'
+            'order.pay.success' => 'onPaySuccess',
         );
     }
 
     public function onPaySuccess(Event $event)
     {
-        $order      = $event->getSubject();
+        $order = $event->getSubject();
         $targetType = $event->getArgument('targetType');
-        $smsType    = 'sms_'.$targetType.'_buy_notify';
+        $smsType = 'sms_'.$targetType.'_buy_notify';
 
         if ($this->getSmsService()->isOpen($smsType)) {
-            $userId                    = $order['userId'];
-            $parameters                = array();
+            $userId = $order['userId'];
+            $parameters = array();
             $parameters['order_title'] = $order['title'];
             $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
 
             if ($targetType == 'coin') {
-                $parameters['totalPrice'] = $order['amount'] . '元';
+                $parameters['totalPrice'] = $order['amount'].'元';
             } else {
-                $parameters['totalPrice'] = $order['totalPrice'] . '元';
+                $parameters['totalPrice'] = $order['totalPrice'].'元';
             }
 
-            $description = $parameters['order_title'] . '成功回执';
+            $description = $parameters['order_title'].'成功回执';
 
             $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
         }

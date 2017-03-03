@@ -29,10 +29,10 @@ class QuestionServiceTest extends BaseTestCase
     public function testUpdate()
     {
         $question = $this->createQuestion();
-        $update   = array(
-            'stem'   => 'update test single choice question 1.',
+        $update = array(
+            'stem' => 'update test single choice question 1.',
             'answer' => array('2'),
-            'score'  => '2'
+            'score' => '2',
         );
 
         $questionUpdate = $this->getQuestionService()->update($question['id'], $update);
@@ -105,8 +105,8 @@ class QuestionServiceTest extends BaseTestCase
         $question4 = $this->createMaterialQuestion();
 
         $conditions = array(
-            'type'     => 'single_choice',
-            'courseId' => 1
+            'type' => 'single_choice',
+            'courseId' => 1,
         );
 
         $questions = $this->getQuestionService()->search($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
@@ -124,8 +124,8 @@ class QuestionServiceTest extends BaseTestCase
         $question4 = $this->createMaterialQuestion();
 
         $conditions = array(
-            'types'    => array('single_choice', 'determine', 'fill'),
-            'courseId' => 1
+            'types' => array('single_choice', 'determine', 'fill'),
+            'courseId' => 1,
         );
 
         $count = $this->getQuestionService()->searchCount($conditions);
@@ -158,7 +158,7 @@ class QuestionServiceTest extends BaseTestCase
         $question3 = $this->createQuestion2();
 
         $questionIds = array($question1['id'], $question2['id'], $question3['id']);
-        $result      = $this->getQuestionService()->hasEssay($questionIds);
+        $result = $this->getQuestionService()->hasEssay($questionIds);
 
         $this->assertFalse($result);
     }
@@ -171,7 +171,7 @@ class QuestionServiceTest extends BaseTestCase
         $question4 = $this->createMaterialQuestion();
 
         $conditions = array(
-            'courseId' => 1
+            'courseId' => 1,
         );
 
         $result = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
@@ -219,7 +219,7 @@ class QuestionServiceTest extends BaseTestCase
         $favorite3 = $this->createFavorite3();
 
         $conditions = array(
-            'userId' => 1
+            'userId' => 1,
         );
 
         $favorites = $this->getQuestionService()->searchFavoriteQuestions(
@@ -238,7 +238,7 @@ class QuestionServiceTest extends BaseTestCase
         $favorite3 = $this->createFavorite3();
 
         $conditions = array(
-            'userId' => 1
+            'userId' => 1,
         );
 
         $count = $this->getQuestionService()->searchFavoriteCount($conditions);
@@ -274,18 +274,18 @@ class QuestionServiceTest extends BaseTestCase
     protected function createQuestion()
     {
         $question = array(
-            'type'     => 'single_choice',
-            'stem'     => 'test single choice question 1.',
+            'type' => 'single_choice',
+            'stem' => 'test single choice question 1.',
             'courseId' => 1,
             'lessonId' => 0,
-            'choices'  => array(
+            'choices' => array(
                 'question 1 -> choice 1',
                 'question 1 -> choice 2',
                 'question 1 -> choice 3',
-                'question 1 -> choice 4'
+                'question 1 -> choice 4',
             ),
-            'answer'   => array(1),
-            'target'   => 'course-1'
+            'answer' => array(1),
+            'target' => 'course-1',
         );
 
         return $this->getQuestionService()->create($question);
@@ -294,12 +294,12 @@ class QuestionServiceTest extends BaseTestCase
     protected function createQuestion1()
     {
         $question = array(
-            'type'     => 'determine',
-            'stem'     => 'test material-determine question.',
+            'type' => 'determine',
+            'stem' => 'test material-determine question.',
             'courseId' => 1,
             'lessonId' => 0,
-            'answer'   => array(1),
-            'target'   => 'course-1'
+            'answer' => array(1),
+            'target' => 'course-1',
         );
 
         return $this->getQuestionService()->create($question);
@@ -308,12 +308,12 @@ class QuestionServiceTest extends BaseTestCase
     protected function createQuestion2()
     {
         $question = array(
-            'type'     => 'fill',
-            'stem'     => 'fill[[a|b]]',
+            'type' => 'fill',
+            'stem' => 'fill[[a|b]]',
             'courseId' => 1,
             'lessonId' => 0,
-            'answer'   => array(array('a', 'b')),
-            'target'   => 'course-1'
+            'answer' => array(array('a', 'b')),
+            'target' => 'course-1',
         );
 
         return $this->getQuestionService()->create($question);
@@ -322,12 +322,12 @@ class QuestionServiceTest extends BaseTestCase
     protected function createQuestion3()
     {
         $question = array(
-            'type'     => 'fill',
-            'stem'     => 'fill[[a|b]]',
+            'type' => 'fill',
+            'stem' => 'fill[[a|b]]',
             'courseId' => 2,
             'lessonId' => 0,
-            'answer'   => array(array('a', 'b')),
-            'target'   => 'course-2'
+            'answer' => array(array('a', 'b')),
+            'target' => 'course-2',
         );
 
         return $this->getQuestionService()->create($question);
@@ -336,46 +336,47 @@ class QuestionServiceTest extends BaseTestCase
     protected function createMaterialQuestion()
     {
         $material = array(
-            'type'     => 'material',
-            'stem'     => 'test material question.',
+            'type' => 'material',
+            'stem' => 'test material question.',
             'courseId' => 1,
             'lessonId' => 0,
-            'answer'   => array(),
-            'target'   => 'course-1'
+            'answer' => array(),
+            'target' => 'course-1',
         );
         $questionParent = $this->getQuestionService()->create($material);
 
         $single = array(
-            'type'     => 'single_choice',
-            'stem'     => 'test material-single choice question.',
+            'type' => 'single_choice',
+            'stem' => 'test material-single choice question.',
             'courseId' => 1,
             'lessonId' => 0,
-            'choices'  => array(
+            'choices' => array(
                 'question 1 -> choice 1',
                 'question 1 -> choice 2',
                 'question 1 -> choice 3',
-                'question 1 -> choice 4'
+                'question 1 -> choice 4',
             ),
-            'answer'   => array(1),
-            'target'   => 'course-1',
-            'parentId' => $questionParent['id']
+            'answer' => array(1),
+            'target' => 'course-1',
+            'parentId' => $questionParent['id'],
         );
 
         $subQuestion1 = $this->getQuestionService()->create($single);
 
         $determine = array(
-            'type'     => 'determine',
-            'stem'     => 'test material-determine question.',
+            'type' => 'determine',
+            'stem' => 'test material-determine question.',
             'courseId' => 1,
             'lessonId' => 0,
-            'answer'   => array(1),
-            'target'   => 'course-1',
-            'parentId' => $questionParent['id']
+            'answer' => array(1),
+            'target' => 'course-1',
+            'parentId' => $questionParent['id'],
         );
 
         $subQuestion2 = $this->getQuestionService()->create($determine);
 
         $questionParent = $this->getQuestionService()->get($questionParent['id']);
+
         return $questionParent;
     }
 
@@ -386,9 +387,9 @@ class QuestionServiceTest extends BaseTestCase
         $fields = array(
             'questionId' => $question['id'],
             'targetType' => 'testpaper',
-            'targetId'   => 1,
-            'target'     => 'testpaper-1',
-            'userId'     => 1
+            'targetId' => 1,
+            'target' => 'testpaper-1',
+            'userId' => 1,
         );
 
         return $this->getQuestionService()->createFavoriteQuestion($fields);
@@ -401,9 +402,9 @@ class QuestionServiceTest extends BaseTestCase
         $fields = array(
             'questionId' => $question['id'],
             'targetType' => 'testpaper',
-            'targetId'   => 1,
-            'target'     => 'testpaper-1',
-            'userId'     => 1
+            'targetId' => 1,
+            'target' => 'testpaper-1',
+            'userId' => 1,
         );
 
         return $this->getQuestionService()->createFavoriteQuestion($fields);
@@ -416,9 +417,9 @@ class QuestionServiceTest extends BaseTestCase
         $fields = array(
             'questionId' => $question['id'],
             'targetType' => 'testpaper',
-            'targetId'   => 2,
-            'target'     => 'testpaper-2',
-            'userId'     => 1
+            'targetId' => 2,
+            'target' => 'testpaper-2',
+            'userId' => 1,
         );
 
         return $this->getQuestionService()->createFavoriteQuestion($fields);

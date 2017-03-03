@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
@@ -11,7 +12,7 @@ class AppPackageUpdateController extends BaseController
         $package = $this->getAppService()->getCenterPackageInfo($id);
 
         return $this->render('admin/app-package-update/modal.html.twig', array(
-            'package' => $package
+            'package' => $package,
         ));
     }
 
@@ -31,42 +32,48 @@ class AppPackageUpdateController extends BaseController
     public function checkDependsAction(Request $request, $id)
     {
         $errors = $this->getAppService()->checkDependsForPackageUpdate($id);
+
         return $this->createResponseWithErrors($errors);
     }
 
     public function backupFileAction(Request $request, $id)
     {
         $errors = $this->getAppService()->backupFileForPackageUpdate($id);
+
         return $this->createResponseWithErrors($errors);
     }
 
     public function backupDbAction(Request $request, $id)
     {
         $errors = $this->getAppService()->backupDbForPackageUpdate($id);
+
         return $this->createResponseWithErrors($errors);
     }
 
     public function downloadAndExtractAction(Request $request, $id)
     {
         $errors = $this->getAppService()->downloadPackageForUpdate($id);
+
         return $this->createResponseWithErrors($errors);
     }
 
     public function checkDownloadAndExtractAction(Request $request, $id)
     {
         $errors = $this->getAppService()->checkDownloadPackageForUpdate($id);
+
         return $this->createResponseWithErrors($errors);
     }
 
     public function checklastErrorAction(Request $request, $id)
     {
         $result = $this->getAppService()->hasLastErrorForPackageUpdate($id);
+
         return $this->createJsonResponse($result);
     }
 
     public function beginUpgradeAction(Request $request, $id)
     {
-        $index  = $request->query->get('index', 0);
+        $index = $request->query->get('index', 0);
         $errors = $this->getAppService()->beginPackageUpdate($id, $request->query->get('type'), $index);
         if (empty($errors)) {
             echo json_encode(array('status' => 'ok'));
@@ -77,6 +84,7 @@ class AppPackageUpdateController extends BaseController
             echo json_encode($errors);
             exit;
         }
+
         return $this->createResponseWithErrors($errors);
     }
 
@@ -88,7 +96,7 @@ class AppPackageUpdateController extends BaseController
 
                 return $this->createJsonResponse(array(
                     'status' => 'error',
-                    'errors' => $errors
+                    'errors' => $errors,
                 ));
             }
 
@@ -96,7 +104,7 @@ class AppPackageUpdateController extends BaseController
 
             if (empty($apps)) {
                 return $this->createJsonResponse(array(
-                    'isUpgrade' => false
+                    'isUpgrade' => false,
                 ));
             }
 
@@ -104,7 +112,7 @@ class AppPackageUpdateController extends BaseController
 
             if (empty($apps[$code])) {
                 return $this->createJsonResponse(array(
-                    'isUpgrade' => false
+                    'isUpgrade' => false,
                 ));
             }
 
@@ -113,14 +121,14 @@ class AppPackageUpdateController extends BaseController
 
                 return $this->createJsonResponse(array(
                     'status' => 'error',
-                    'errors' => $errors
+                    'errors' => $errors,
                 ));
             }
 
             $result = array(
                 'isUpgrade' => true,
                 'packageId' => $apps[$code]['package']['id'],
-                'toVersion' => $apps[$code]['package']['toVersion']
+                'toVersion' => $apps[$code]['package']['toVersion'],
             );
         } catch (\Exception $e) {
             $result = array('isUpgrade' => false);

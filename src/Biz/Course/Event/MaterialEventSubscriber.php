@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Course\Event;
-
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -58,5 +56,4 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
     {
         return $this->getBiz()->service('Course:CourseSetService');
     }
-
 }

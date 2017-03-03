@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Sms\SmsProcessor;
 
 use AppBundle\Common\SmsToolkit;
@@ -23,9 +24,9 @@ class TaskSmsProcessor extends BaseSmsProcessor
 
     public function getUrls($targetId, $smsType)
     {
-        $task   = $this->getTaskService()->getTask($targetId);
+        $task = $this->getTaskService()->getTask($targetId);
         $course = $this->getCourseService()->getCourse($task['courseId']);
-        $count  = 0;
+        $count = 0;
 
         if ($course['parentId'] != 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
@@ -41,28 +42,28 @@ class TaskSmsProcessor extends BaseSmsProcessor
 
         global $kernel;
         $router = $kernel->getContainer()->get('router');
-        $site   = $this->getSettingService()->get('site');
-        $url    = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
+        $site = $this->getSettingService()->get('site');
+        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
 
         $urls = array();
-        for ($i = 0; $i <= intval($count / 1000); $i++) {
+        for ($i = 0; $i <= intval($count / 1000); ++$i) {
             if (empty($url)) {
                 $urls[$i] = $router->generate(
                     'edu_cloud_sms_send_callback',
                     array(
                         'targetType' => self::PROCESSOR_TYPE,
-                        'targetId'   => $task['id']
+                        'targetId' => $task['id'],
                     ),
                     true
                 );
             } else {
-                $urls[$i] = $url . $router->generate('edu_cloud_sms_send_callback', array('targetType' => self::PROCESSOR_TYPE, 'targetId' => $targetId));
+                $urls[$i] = $url.$router->generate('edu_cloud_sms_send_callback', array('targetType' => self::PROCESSOR_TYPE, 'targetId' => $targetId));
             }
-            $urls[$i] .= '?index=' . ($i * 1000);
-            $urls[$i] .= '&smsType=' . $smsType;
+            $urls[$i] .= '?index='.($i * 1000);
+            $urls[$i] .= '&smsType='.$smsType;
             $sign = $this->getSignEncoder()->encodePassword($urls[$i], $api->getAccessKey());
             $sign = rawurlencode($sign);
-            $urls[$i] .= '&sign=' . $sign;
+            $urls[$i] .= '&sign='.$sign;
         }
 
         return array('count' => $count, 'urls' => $urls);
@@ -76,17 +77,17 @@ class TaskSmsProcessor extends BaseSmsProcessor
         }
 
         global $kernel;
-        $site      = $this->getSettingService()->get('site');
-        $url       = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
+        $site = $this->getSettingService()->get('site');
+        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
 
-        if(empty($url)){
+        if (empty($url)) {
             $originUrl = $kernel->getContainer()->get('router')->generate('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']), true);
-        }else{
-            $originUrl = $url . $kernel->getContainer()->get('router')->generate('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']));
+        } else {
+            $originUrl = $url.$kernel->getContainer()->get('router')->generate('course_task_show', array('courseId' => $task['courseId'], 'id' => $task['id']));
         }
 
         $shortUrl = SmsToolkit::getShortLink($originUrl);
-        $url      = empty($shortUrl) ? $originUrl : $shortUrl;
+        $url = empty($shortUrl) ? $originUrl : $shortUrl;
 
         $courseSet = $this->getCourseService()->getCourse($task['courseId']);
 
@@ -102,25 +103,25 @@ class TaskSmsProcessor extends BaseSmsProcessor
         }
 
         $studentIds = ArrayToolkit::column($students, 'userId');
-        $to         = $this->getUsersMobile($studentIds);
+        $to = $this->getUsersMobile($studentIds);
 
-        $task['title']            = StringToolkit::cutter($task['title'], 20, 15, 4);
-        $parameters['lesson_title'] = $this->getKernel()->trans('学习任务：') . '《' . $task['title'] . '》';
+        $task['title'] = StringToolkit::cutter($task['title'], 20, 15, 4);
+        $parameters['lesson_title'] = $this->getKernel()->trans('学习任务：').'《'.$task['title'].'》';
 
         if ($task['type'] == 'live') {
-            $parameters['startTime'] = date("Y-m-d H:i:s", $task['startTime']);
+            $parameters['startTime'] = date('Y-m-d H:i:s', $task['startTime']);
         }
 
-        $courseSet['title']            = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
-        $parameters['course_title'] = $this->getKernel()->trans('课程：') . '《' . $courseSet['title'] . '》';
+        $courseSet['title'] = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
+        $parameters['course_title'] = $this->getKernel()->trans('课程：').'《'.$courseSet['title'].'》';
 
         if ($smsType == 'sms_normal_lesson_publish' || $smsType == 'sms_live_lesson_publish') {
-            $description = $parameters['course_title'] . ' ' . $parameters['lesson_title'] . $this->getKernel()->trans('已发布');
+            $description = $parameters['course_title'].' '.$parameters['lesson_title'].$this->getKernel()->trans('已发布');
         } else {
-            $description = $parameters['course_title'] . ' ' . $parameters['lesson_title'] . $this->getKernel()->trans('预告');
+            $description = $parameters['course_title'].' '.$parameters['lesson_title'].$this->getKernel()->trans('预告');
         }
 
-        $parameters['url'] = $url . ' ';
+        $parameters['url'] = $url.' ';
 
         $this->getLogService()->info('sms', $smsType, $description, array($to));
 
@@ -135,7 +136,7 @@ class TaskSmsProcessor extends BaseSmsProcessor
     protected function getUsersMobile($userIds)
     {
         $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
-        $to      = implode(',', $mobiles);
+        $to = implode(',', $mobiles);
 
         return $to;
     }

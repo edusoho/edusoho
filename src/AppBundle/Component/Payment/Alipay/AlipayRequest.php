@@ -1,22 +1,25 @@
 <?php
+
 namespace AppBundle\Component\Payment\Alipay;
 
 use AppBundle\Component\Payment\Request;
 
-class AlipayRequest extends Request {
-
+class AlipayRequest extends Request
+{
     protected $url = 'https://mapi.alipay.com/gateway.do';
 
     public function form()
     {
         $form = array();
-        $form['action'] = $this->url . '?_input_charset=utf-8';
+        $form['action'] = $this->url.'?_input_charset=utf-8';
         $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
+
         return $form;
     }
 
-    public function signParams($params) {
+    public function signParams($params)
+    {
         unset($params['sign_type']);
         unset($params['sign']);
 
@@ -27,10 +30,10 @@ class AlipayRequest extends Request {
             if (empty($value)) {
                 continue;
             }
-            $sign .= $key . '=' . $value . '&';
+            $sign .= $key.'='.$value.'&';
         }
-        $sign = substr($sign, 0, - 1);
-        $sign .=$this->options['secret'];
+        $sign = substr($sign, 0, -1);
+        $sign .= $this->options['secret'];
 
         return md5($sign);
     }
@@ -93,7 +96,7 @@ class AlipayRequest extends Request {
         }
 
         $converted['sign'] = $this->signParams($converted);
-        
+
         return $converted;
     }
 
@@ -115,5 +118,4 @@ class AlipayRequest extends Request {
     {
         return empty($this->options['type']) ? 'direct' : $this->options['type'];
     }
-
 }

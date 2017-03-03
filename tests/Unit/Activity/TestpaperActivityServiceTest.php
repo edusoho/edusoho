@@ -34,7 +34,7 @@ class TestpaperActivityServiceTest extends BaseTestCase
         $activity2 = $this->createActivity2();
         $activity3 = $this->createActivity4();
 
-        $mediaIds   = array($activity1['mediaId'], $activity2['mediaId'], $activity3['mediaId']);
+        $mediaIds = array($activity1['mediaId'], $activity2['mediaId'], $activity3['mediaId']);
         $activities = $this->getTestpaperActivityService()->findActivitiesByIds($mediaIds);
 
         $this->assertEquals(2, count($activities));
@@ -43,16 +43,16 @@ class TestpaperActivityServiceTest extends BaseTestCase
     public function testCreateActivity()
     {
         $fields = array(
-            'mediaId'         => 1,
-            'doTimes'         => 0,
-            'redoInterval'    => 0,
-            'limitedTime'     => 0,
-            'checkType'       => 'score',
+            'mediaId' => 1,
+            'doTimes' => 0,
+            'redoInterval' => 0,
+            'limitedTime' => 0,
+            'checkType' => 'score',
             'finishCondition' => array(
-                'type'        => 'score',
-                'finishScore' => 5
+                'type' => 'score',
+                'finishScore' => 5,
             ),
-            'testMode'        => 'normal'
+            'testMode' => 'normal',
         );
         $activity = $this->getTestpaperActivityService()->createActivity($fields);
         $this->assertArrayEquals($fields['finishCondition'], $activity['finishCondition']);
@@ -60,10 +60,10 @@ class TestpaperActivityServiceTest extends BaseTestCase
 
     public function testUpdateActivity()
     {
-        $activity     = $this->createActivity();
+        $activity = $this->createActivity();
         $updateFields = array(
-            'doTimes'     => 1,
-            'limitedTime' => 5
+            'doTimes' => 1,
+            'limitedTime' => 5,
         );
 
         $update = $this->getTestpaperActivityService()->updateActivity($activity['id'], $updateFields);
@@ -84,66 +84,70 @@ class TestpaperActivityServiceTest extends BaseTestCase
     protected function createActivity()
     {
         $fields = array(
-            'mediaId'         => 1,
-            'doTimes'         => 0,
-            'redoInterval'    => 0,
-            'limitedTime'     => 0,
-            'checkType'       => 'score',
+            'mediaId' => 1,
+            'doTimes' => 0,
+            'redoInterval' => 0,
+            'limitedTime' => 0,
+            'checkType' => 'score',
             'finishCondition' => array(
-                'type'        => 'score',
-                'finishScore' => 5
+                'type' => 'score',
+                'finishScore' => 5,
             ),
-            'testMode'        => 'normal'
+            'testMode' => 'normal',
         );
+
         return $this->getTestpaperActivityService()->createActivity($fields);
     }
 
     protected function createActivity2()
     {
         $fields = array(
-            'mediaId'         => 1,
-            'doTimes'         => 0,
-            'redoInterval'    => '0.1',
-            'limitedTime'     => 0,
-            'checkType'       => 'score',
+            'mediaId' => 1,
+            'doTimes' => 0,
+            'redoInterval' => '0.1',
+            'limitedTime' => 0,
+            'checkType' => 'score',
             'finishCondition' => array(
-                'type'        => 'score',
-                'finishScore' => 5
+                'type' => 'score',
+                'finishScore' => 5,
             ),
-            'testMode'        => 'realTime'
+            'testMode' => 'realTime',
         );
+
         return $this->getTestpaperActivityService()->createActivity($fields);
     }
 
     protected function createActivity3()
     {
         $fields = array(
-            'mediaId'         => 1,
-            'doTimes'         => 1,
-            'redoInterval'    => 0,
-            'limitedTime'     => 5,
-            'checkType'       => 'score',
+            'mediaId' => 1,
+            'doTimes' => 1,
+            'redoInterval' => 0,
+            'limitedTime' => 5,
+            'checkType' => 'score',
             'finishCondition' => array(
-                'type' => 'score'
+                'type' => 'score',
             ),
-            'testMode'        => 'normal'
+            'testMode' => 'normal',
         );
+
         return $this->getTestpaperActivityService()->createActivity($fields);
     }
 
     protected function createActivity4()
     {
         $fields = array(
-            'mediaId'         => 2,
-            'doTimes'         => 1,
-            'redoInterval'    => 0,
-            'limitedTime'     => 5,
-            'checkType'       => 'score',
+            'mediaId' => 2,
+            'doTimes' => 1,
+            'redoInterval' => 0,
+            'limitedTime' => 5,
+            'checkType' => 'score',
             'finishCondition' => array(
-                'type' => 'score'
+                'type' => 'score',
             ),
-            'testMode'        => 'normal'
+            'testMode' => 'normal',
         );
+
         return $this->getTestpaperActivityService()->createActivity($fields);
     }
 

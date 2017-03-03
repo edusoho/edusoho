@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Service;
 
 interface ReviewService
@@ -22,5 +23,4 @@ interface ReviewService
     public function countRatingByCourseId($courseId);
 
     public function countRatingByCourseSetId($courseSetId);
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\Payment;
 
 abstract class Request
@@ -15,6 +16,7 @@ abstract class Request
     public function setParams(array $params)
     {
         $this->params = $params;
+
         return $this;
     }
 
@@ -26,12 +28,12 @@ abstract class Request
     {
         if ($_SERVER['REMOTE_ADDR']) {
             $cip = $_SERVER['REMOTE_ADDR'];
-        } elseif (getenv("REMOTE_ADDR")) {
-            $cip = getenv("REMOTE_ADDR");
-        } elseif (getenv("HTTP_CLIENT_IP")) {
-            $cip = getenv("HTTP_CLIENT_IP");
+        } elseif (getenv('REMOTE_ADDR')) {
+            $cip = getenv('REMOTE_ADDR');
+        } elseif (getenv('HTTP_CLIENT_IP')) {
+            $cip = getenv('HTTP_CLIENT_IP');
         } else {
-            $cip = "unknown";
+            $cip = 'unknown';
         }
 
         return $cip;

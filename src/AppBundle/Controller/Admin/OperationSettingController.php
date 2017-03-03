@@ -12,8 +12,8 @@ class OperationSettingController extends BaseController
         $articleSetting = $this->getSettingService()->get('article', array());
 
         $default = array(
-            'name'     => '资讯频道',
-            'pageNums' => 20
+            'name' => '资讯频道',
+            'pageNums' => 20,
         );
 
         $articleSetting = array_merge($default, $articleSetting);
@@ -23,10 +23,10 @@ class OperationSettingController extends BaseController
             $this->getSettingService()->set('article', $articleSetting);
             $this->getLogService()->info('article', 'update_settings', '更新资讯频道设置', $articleSetting);
             $this->setFlashMessage('success', '资讯频道设置已保存！');
-        };
+        }
 
         return $this->render('admin/article/setting.html.twig', array(
-            'articleSetting' => $articleSetting
+            'articleSetting' => $articleSetting,
         ));
     }
 
@@ -46,19 +46,19 @@ class OperationSettingController extends BaseController
     public function inviteSetAction(Request $request)
     {
         $default = array(
-            'invite_code_setting'       => 0,
-            'promoted_user_value'       => '',
-            'promote_user_value'        => '',
-            'get_coupon_setting'        => 1,
-            'deadline'                  => 90,
-            'inviteInfomation_template' => '{{registerUrl}}'
+            'invite_code_setting' => 0,
+            'promoted_user_value' => '',
+            'promote_user_value' => '',
+            'get_coupon_setting' => 1,
+            'deadline' => 90,
+            'inviteInfomation_template' => '{{registerUrl}}',
         );
 
         if ($request->getMethod() == 'POST') {
             $inviteSetting = $request->request->all();
-            if(isset($inviteSetting['get_coupon_setting'])){
+            if (isset($inviteSetting['get_coupon_setting'])) {
                 $inviteSetting['get_coupon_setting'] = 1;
-            }else{
+            } else {
                 $inviteSetting['get_coupon_setting'] = 0;
             }
             $inviteSetting = ArrayToolkit::parts($inviteSetting, array(
@@ -67,7 +67,7 @@ class OperationSettingController extends BaseController
                 'promote_user_value',
                 'get_coupon_setting',
                 'deadline',
-                'inviteInfomation_template'
+                'inviteInfomation_template',
             ));
 
             $inviteSetting = array_merge($default, $inviteSetting);
@@ -82,8 +82,8 @@ class OperationSettingController extends BaseController
 
         response:
         return $this->render('admin/invite/set.html.twig', array(
-            'inviteSetting'             => $inviteSetting,
-            'inviteInfomation_template' => $inviteSetting['inviteInfomation_template']
+            'inviteSetting' => $inviteSetting,
+            'inviteInfomation_template' => $inviteSetting['inviteInfomation_template'],
         ));
     }
 

@@ -11,7 +11,9 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
      * 获取个人动态
      *
      *   count    必需
-     * @param  array $arguments     参数
+     *
+     * @param array $arguments 参数
+     *
      * @return array 个人动态
      */
     public function getData(array $arguments)
@@ -26,9 +28,9 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
         $articlePosts = $this->getThreadService()->searchPosts(
             array(
                 'targetType' => 'article',
-                'parentId'   => 0,
-                'targetIds'  => $targetIds,
-                'latest'     => 'week'
+                'parentId' => 0,
+                'targetIds' => $targetIds,
+                'latest' => 'week',
             ),
             array('ups' => 'DESC', 'createdTime' => 'DESC'),
             0,
@@ -38,7 +40,7 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
         if ($arguments['count'] > count($articlePosts)) {
             $conditions = array(
                 'targetType' => 'article',
-                'targetIds'  => $targetIds
+                'targetIds' => $targetIds,
             );
 
             $excludeIds = ArrayToolkit::column($articlePosts, 'id');
@@ -65,7 +67,7 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
         $articles = $this->getArticleService()->findArticlesByIds($articleIds);
 
         foreach ($articlePosts as $key => $articlePost) {
-            $articlePosts[$key]['user']    = $owners[$articlePost['userId']];
+            $articlePosts[$key]['user'] = $owners[$articlePost['userId']];
             $articlePosts[$key]['article'] = $articles[$articlePost['targetId']];
         }
 

@@ -2,32 +2,30 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-use AppBundle\Common\ArrayToolkit;
-
-class LatestClassroomsDataTag extends CourseBaseDataTag implements DataTag  
+class LatestClassroomsDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     * 获取推荐班级列表
+     * 获取推荐班级列表.
      *
      * 可传入的参数：
      *   count    必需 班级数量，取值不能超过100
-     * 
-     * @param  array $arguments 参数
+     *
+     * @param array $arguments 参数
+     *
      * @return array 班级推荐列表
      */
     public function getData(array $arguments)
-    {	
+    {
         $this->checkCount($arguments);
-        
+
         $conditions = array(
             'status' => 'published',
-            'showable' => 1
+            'showable' => 1,
         );
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
                 $conditions,
-                array('createdTime','DESC'),
+                array('createdTime', 'DESC'),
                 0,
                 $arguments['count']
         );
@@ -36,15 +34,15 @@ class LatestClassroomsDataTag extends CourseBaseDataTag implements DataTag
 
         foreach ($classrooms as &$classroom) {
             if (empty($classroom['teacherIds'])) {
-                $classroomTeacherIds=array();
-            }else{
-                $classroomTeacherIds=$classroom['teacherIds'];
+                $classroomTeacherIds = array();
+            } else {
+                $classroomTeacherIds = $classroom['teacherIds'];
             }
 
             $users = $this->getUserService()->findUsersByIds($classroomTeacherIds);
             $classroom['users'] = $users;
         }
-        
+
         return $classrooms;
     }
 
@@ -57,5 +55,4 @@ class LatestClassroomsDataTag extends CourseBaseDataTag implements DataTag
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
     }
-
 }

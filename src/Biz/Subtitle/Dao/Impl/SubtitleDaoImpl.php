@@ -17,7 +17,6 @@ class SubtitleDaoImpl extends GeneralDaoImpl implements SubtitleDao
     public function declares()
     {
         return array(
-
         );
     }
 }

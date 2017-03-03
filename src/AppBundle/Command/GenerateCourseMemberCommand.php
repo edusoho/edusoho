@@ -1,22 +1,17 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Biz\User\CurrentUser;
-use Symfony\Component\ClassLoader\ApcClassLoader;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Input\InputArgument;
 use Topxia\Service\Common\ServiceKernel;
 
 class GenerateCourseMemberCommand extends BaseCommand
 {
-
     protected function configure()
     {
-        $this->setName ( 'util:generate-course-member' )
+        $this->setName('util:generate-course-member')
             ->addArgument('courseId', InputArgument::REQUIRED, '课程id')
             ->addArgument('index', InputArgument::REQUIRED, '数量');
     }
@@ -30,11 +25,10 @@ class GenerateCourseMemberCommand extends BaseCommand
 
         $course = $this->getCourseService()->getCourse($courseId);
 
-        for ($i = 0; $i < $index; $i++) {
+        for ($i = 0; $i < $index; ++$i) {
             $user = $this->getUserService()->getUserByLoginField('test_'.$i);
 
             if (!empty($user)) {
-
                 $member = array(
                     'courseId' => $course['id'],
                     'userId' => $user['id'],
@@ -44,7 +38,7 @@ class GenerateCourseMemberCommand extends BaseCommand
 
                 $this->becomeStudent($member);
 
-                $output->writeln('<info>第'.($i+1).'个课程添加</info>');
+                $output->writeln('<info>第'.($i + 1).'个课程添加</info>');
             }
         }
 
@@ -56,16 +50,17 @@ class GenerateCourseMemberCommand extends BaseCommand
         $orderFileds = array(
             'price' => 0,
             'remark' => '',
-            'isAdminAdded' => 1
+            'isAdminAdded' => 1,
         );
 
-        list($course, $member, $order) = $this->getCourseMemberService()->becomeStudentAndCreateOrder($member["userId"], $member['courseId'], $orderFileds);
+        list($course, $member, $order) = $this->getCourseMemberService()->becomeStudentAndCreateOrder($member['userId'], $member['courseId'], $orderFileds);
     }
 
     protected function getCourseMemberService()
     {
         return $this->getServiceKernel()->createService('Course:MemberService');
     }
+
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User:UserService');
@@ -75,5 +70,4 @@ class GenerateCourseMemberCommand extends BaseCommand
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
     }
-
 }

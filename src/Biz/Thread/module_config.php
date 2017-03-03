@@ -2,7 +2,6 @@
 
 return array(
     'event_subscriber' => array(
-        'Biz\\Thread\\Event\\ThreadEventSubscriber'
-    )
-
+        'Biz\\Thread\\Event\\ThreadEventSubscriber',
+    ),
 );

@@ -12,6 +12,7 @@ class SettingDaoImpl extends GeneralDaoImpl implements SettingDao
     public function findAll()
     {
         $sql = "SELECT * FROM {$this->table}";
+
         return $this->db()->fetchAll($sql, array());
     }
 
@@ -30,8 +31,8 @@ class SettingDaoImpl extends GeneralDaoImpl implements SettingDao
         return array(
             'conditions' => array(
                 'name = :name',
-                'namespace = :namespace'
-            )
+                'namespace = :namespace',
+            ),
         );
     }
 }

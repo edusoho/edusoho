@@ -27,7 +27,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
 
     public function countByGroup($conditions, $groupBy = '')
     {
-        $index = empty($groupBy) ? '' : $groupBy . ',';
+        $index = empty($groupBy) ? '' : $groupBy.',';
         $builder = $this->_createQueryBuilder($conditions)
             ->select("{$index} COUNT(id) AS count");
 
@@ -41,6 +41,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
     public function deleteByThreadId($threadId)
     {
         $sql = "DELETE FROM {$this->table} WHERE threadId = ?";
+
         return $this->db()->executeUpdate($sql, array($threadId));
     }
 
@@ -62,8 +63,8 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
     {
         return array(
             'timestamps' => array('createdTime'),
-            'orderbys'    => array('createdTime'),
-            'conditions'  => array(
+            'orderbys' => array('createdTime'),
+            'conditions' => array(
                 'updatedTime >= :updatedTime_GE',
                 'courseSetId = :courseSetId',
                 'courseId = :courseId',
@@ -72,8 +73,8 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
                 'threadId = :threadId',
                 'userId = :userId',
                 'isElite = :isElite',
-                'content LIKE :content'
-            )
+                'content LIKE :content',
+            ),
         );
     }
 }

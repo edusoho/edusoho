@@ -17,77 +17,77 @@ class ArticleDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('status' => 'published'),
                 'expectedResults' => array($expected[1], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('articleIds' => array(1, 2)),
                 'expectedResults' => array($expected[0], $expected[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('categoryId' => 1),
                 'expectedResults' => array($expected[0], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('featured' => 1),
                 'expectedResults' => array($expected[0], $expected[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('promoted' => 1),
                 'expectedResults' => array($expected[1], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('sticky' => 1),
                 'expectedResults' => array($expected[0], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('keywords' => 'char'),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('pictureNull' => 'int'),
                 'expectedResults' => array($expected[1], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('categoryIds' => array(1, 2)),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('likeOrgCode' => 'var'),
                 'expectedResults' => array($expected[0], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('idNotEqual' => 3),
                 'expectedResults' => array($expected[0], $expected[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('articleId' => 1),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
             ),
             array(
                 'condition' => array('thumbNotEqual' => 'int'),
                 'expectedResults' => array($expected[0], $expected[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('orgCode' => 'varchar'),
                 'expectedResults' => array($expected[0], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
         );
 

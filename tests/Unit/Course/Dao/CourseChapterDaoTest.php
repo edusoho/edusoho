@@ -85,7 +85,7 @@ class CourseChapterDaoTest extends BaseDaoTestCase
         $activity2 = $this->mockDataObject(array('courseId' => 2));
         $this->mockDataObject(array('courseId' => 3));
         $expectedResults = array($activity1, $activity2);
-        $ids = array(1,2);
+        $ids = array(1, 2);
         $results = $this->getDao()->findChaptersByCopyIdAndLockedCourseIds(1, $ids);
 
         foreach ($results as $key => $result) {
@@ -102,7 +102,7 @@ class CourseChapterDaoTest extends BaseDaoTestCase
             'number' => 1,
             'seq' => 1,
             'title' => 's',
-            'copyId' => 1
+            'copyId' => 1,
         );
     }
 }

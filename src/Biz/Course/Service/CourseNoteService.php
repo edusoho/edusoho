@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Service;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -11,9 +12,9 @@ interface CourseNoteService
     const PRIVATE_STATUS = 0;
 
     /**
-     * return note
+     * return note.
      *
-     * @param integer $id
+     * @param int $id
      *
      * @return array
      */
@@ -22,36 +23,36 @@ interface CourseNoteService
     /**
      * @param $courseId
      *
-     * @return integer
+     * @return int
      */
     public function countCourseNoteByCourseId($courseId);
 
     /**
-     * return note by user id and task id
+     * return note by user id and task id.
      *
-     * @param integer $userId
-     * @param integer $taskId
+     * @param int $userId
+     * @param int $taskId
      *
      * @return array
      */
     public function getCourseNoteByUserIdAndTaskId($userId, $taskId);
 
     /**
-     * @param integer $courseSetId
+     * @param int $courseSetId
      *
      * @return array[]
      */
     public function findPublicNotesByCourseSetId($courseSetId);
 
     /**
-     * @param integer $courseId
+     * @param int $courseId
      *
      * @return array[]
      */
     public function findPublicNotesByCourseId($courseId);
 
     /**
-     * return notes
+     * return notes.
      *
      * @param $userId
      * @param $courseId
@@ -61,7 +62,7 @@ interface CourseNoteService
     public function findCourseNotesByUserIdAndCourseId($userId, $courseId);
 
     /**
-     * search notes
+     * search notes.
      *
      * @param $conditions
      * @param $sort
@@ -75,56 +76,53 @@ interface CourseNoteService
     /**
      * @param $conditions
      *
-     * @return integer
+     * @return int
      */
     public function countCourseNotes($conditions);
 
     /**
-     * create note or update exist note
+     * create note or update exist note.
      *
      * @param array $note
      *
      * @throws InvalidArgumentException
      * @throws NotFoundException
      * @throws AccessDeniedException
+     *
      * @return array
      */
     public function saveNote(array $note);
 
     /**
-     * delete note
+     * delete note.
      *
      * @param $id
      *
      * @throws AccessDeniedException
      * @throws NotFoundException
-     * @return void
      */
     public function deleteNote($id);
 
     /**
-     * delete notes
+     * delete notes.
      *
      * @param array $ids
      *
      * @throws AccessDeniedException
      * @throws NotFoundException
-     * @return void
      */
     public function deleteNotes(array $ids);
 
     /**
-     * add or reduce note's like number
+     * add or reduce note's like number.
      *
-     * @param integer $id
-     * @param integer $num
-     *
-     * @return void
+     * @param int $id
+     * @param int $num
      */
     public function waveLikeNum($id, $num);
 
     /**
-     * @param integer $noteId
+     * @param int $noteId
      *
      * @throws NotFoundException
      * @throws AccessDeniedException
@@ -134,7 +132,7 @@ interface CourseNoteService
     public function like($noteId);
 
     /**
-     * @param integer $noteId
+     * @param int $noteId
      *
      * @throws NotFoundException
      * @throws AccessDeniedException
@@ -144,22 +142,22 @@ interface CourseNoteService
     public function cancelLike($noteId);
 
     /**
-     * @param integer $noteId
-     * @param integer $userId
+     * @param int $noteId
+     * @param int $userId
      *
      * @return array
      */
     public function getNoteLikeByNoteIdAndUserId($noteId, $userId);
 
     /**
-     * @param integer $userId
+     * @param int $userId
      *
      * @return array[]
      */
     public function findNoteLikesByUserId($userId);
 
     /**
-     * @param integer $noteId
+     * @param int $noteId
      *
      * @return array[]
      */
@@ -181,17 +179,17 @@ interface CourseNoteService
     public function findNoteLikesByNoteIdsAndUserId(array $noteIds, $userId);
 
     /**
-     * @param integer $userId
-     * @param integer $courseId
+     * @param int $userId
+     * @param int $courseId
      *
-     * @return integer
+     * @return int
      */
     public function countNotesByUserIdAndCourseId($userId, $courseId);
 
     /**
      * @param $courseSetId
      *
-     * @return integer
+     * @return int
      */
     public function countCourseNoteByCourseSetId($courseSetId);
 }

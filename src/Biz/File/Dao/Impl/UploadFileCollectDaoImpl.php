@@ -2,7 +2,6 @@
 
 namespace Biz\File\Dao\Impl;
 
-
 use Biz\File\Dao\UploadFileCollectDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -14,7 +13,7 @@ class UploadFileCollectDaoImpl extends GeneralDaoImpl implements UploadFileColle
     {
         return $this->getByFields(array(
             'userId' => $userId,
-            'fileId' => $fileId
+            'fileId' => $fileId,
         ));
     }
 
@@ -27,13 +26,15 @@ class UploadFileCollectDaoImpl extends GeneralDaoImpl implements UploadFileColle
         $marks = str_repeat('?,', count($ids) - 1).'?';
 
         $parameters = array_merge($ids, array($userId));
-        $sql       = "SELECT * FROM {$this->table()} WHERE fileId IN ({$marks}) and userId = ? ";
+        $sql = "SELECT * FROM {$this->table()} WHERE fileId IN ({$marks}) and userId = ? ";
+
         return $this->db()->fetchAll($sql, $parameters);
     }
 
     public function findByUserId($userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ? ";
+
         return $this->db()->fetchAll($sql, array($userId));
     }
 

@@ -5,19 +5,19 @@ use Phpmig\Migration\Migration;
 class C2CourseRemoveAudit extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("
+        $biz['db']->exec('
             ALTER TABLE `c2_course` DROP COLUMN auditStatus;
             ALTER TABLE `c2_course` DROP COLUMN auditRemark;
-        ");
+        ');
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {

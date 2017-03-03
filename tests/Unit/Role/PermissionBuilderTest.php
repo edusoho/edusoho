@@ -1,16 +1,16 @@
 <?php
+
 namespace Tests\Unit\Tests;
 
 use Symfony\Component\Yaml\Yaml;
 use Biz\BaseTestCase;
 use Biz\Role\Util\PermissionBuilder;
-use Topxia\Service\Common\ServiceKernel;
 
 class PermissionBuilderTest extends BaseTestCase
 {
     public function testgetPermissionByCode()
     {
-        $user        = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $permissions = $this->loadPermissions($user->toArray());
         $user->setPermissions($permissions);
 
@@ -25,7 +25,7 @@ class PermissionBuilderTest extends BaseTestCase
         }
 
         $permissionBuilder = PermissionBuilder::instance();
-        $configs           = $permissionBuilder->getPermissionConfig();
+        $configs = $permissionBuilder->getPermissionConfig();
 
         $res = array();
         foreach ($configs as $key => $config) {
@@ -38,7 +38,7 @@ class PermissionBuilderTest extends BaseTestCase
             }
 
             $menus = $this->getMenusFromConfig($menus);
-            $res   = array_merge($res, $menus);
+            $res = array_merge($res, $menus);
         }
 
         if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
@@ -76,8 +76,8 @@ class PermissionBuilderTest extends BaseTestCase
                 unset($parents[$key]['children']);
 
                 foreach ($childrenMenu as $childKey => $childValue) {
-                    $childValue["parent"] = $key;
-                    $menus                = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
+                    $childValue['parent'] = $key;
+                    $menus = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
                 }
             }
 

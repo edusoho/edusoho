@@ -14,7 +14,7 @@ class OrderRefundDaoImpl extends GeneralDaoImpl implements OrderRefundDao
         return array(
             'timestamps' => array(),
             'serializes' => array(),
-            'orderbys'   => array('createdTime'),
+            'orderbys' => array('createdTime'),
             'conditions' => array(
                 'status = :status',
                 'userId = :userId',
@@ -24,20 +24,22 @@ class OrderRefundDaoImpl extends GeneralDaoImpl implements OrderRefundDao
                 'userId IN ( :userIds )',
                 'targetId = :targetId',
                 'status <> :statusNotEqual',
-                'targetId IN ( :targetIds )'
-            )
+                'targetId IN ( :targetIds )',
+            ),
         );
     }
 
     public function countByUserId($userId)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE userId = ?";
+
         return $this->db()->fetchColumn($sql, array($userId));
     }
 
     public function findByUserId($userId, $start, $limit)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
         return $this->db()->fetchAll($sql, array($userId)) ?: array();
     }
 
@@ -46,8 +48,9 @@ class OrderRefundDaoImpl extends GeneralDaoImpl implements OrderRefundDao
         $builder = parent::_createQueryBuilder($conditions);
 
         if (isset($conditions['targetIds'])) {
-            $builder->andWhere("targetId IN ( :targetIds )");
+            $builder->andWhere('targetId IN ( :targetIds )');
         }
+
         return $builder;
     }
 
@@ -60,5 +63,4 @@ class OrderRefundDaoImpl extends GeneralDaoImpl implements OrderRefundDao
     {
         return $this->getByFields(array('orderId' => $orderId));
     }
-
 }

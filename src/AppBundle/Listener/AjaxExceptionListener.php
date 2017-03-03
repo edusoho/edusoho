@@ -17,9 +17,9 @@ class AjaxExceptionListener
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        $problem   = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+        $problem = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
-        $request   = $event->getRequest();
+        $request = $event->getRequest();
 
         if (!$request->isXmlHttpRequest()) {
             return;
@@ -31,6 +31,7 @@ class AjaxExceptionListener
             $result = ob_get_contents();
             ob_end_clean();
             $event->setResponse(new JsonResponse(array('result' => $result)));
+
             return;
         }
 

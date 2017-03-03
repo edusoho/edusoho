@@ -1,16 +1,17 @@
 <?php
+
 namespace Tests\Unit\Group;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class GroupServiceTest extends BaseTestCase
 {
     public function testAddGroup()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
         $group = $this->getGroupService()->addGroup($user, $textGroup);
 
@@ -21,26 +22,25 @@ class GroupServiceTest extends BaseTestCase
         $this->assertEquals($textGroup['about'], $group['about']);
 
         $this->assertEquals('open', $group['status']);
-
     }
 
     /**
      * @group current
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testAddGroupWithEmptyTitle()
     {
         $textGroup = array(
         );
-        $user  = $this->createUser();
+        $user = $this->createUser();
         $group = $this->getGroupService()->addGroup($user, $textGroup);
     }
 
     public function testGetGroup()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $group = $this->getGroupService()->addGroup($user, $textGroup);
 
@@ -53,35 +53,34 @@ class GroupServiceTest extends BaseTestCase
         $group = $this->getGroupService()->getGroup('999');
 
         $this->assertEquals(null, $group);
-
     }
 
     public function testUpdateGroup()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
 
-        $group  = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $fields = array(
-            'title' => 'textgroup22222'
+            'title' => 'textgroup22222',
         );
 
         $group = $this->getGroupService()->updateGroup($group['id'], $fields);
 
         $this->assertEquals($fields['title'], $group['title']);
 
-        $group = $this->getGroupService()->updateGroup("999", $fields);
+        $group = $this->getGroupService()->updateGroup('999', $fields);
 
         $this->assertEquals(null, $group);
     }
 
     public function testCloseGroup()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $group = $this->getGroupService()->addGroup($user, $textGroup);
 
@@ -92,9 +91,9 @@ class GroupServiceTest extends BaseTestCase
 
     public function testOpenGroup()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $group = $this->getGroupService()->addGroup($user, $textGroup);
 
@@ -107,17 +106,17 @@ class GroupServiceTest extends BaseTestCase
 
     public function testGetGroupsByIds()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup1'
+            'title' => 'textgroup1',
         );
         $textGroup2 = array(
-            'title' => 'textgroup2'
+            'title' => 'textgroup2',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
         $group2 = $this->getGroupService()->addGroup($user, $textGroup2);
 
-        $ids    = array($group1['id'], $group2['id']);
+        $ids = array($group1['id'], $group2['id']);
         $groups = $this->getGroupService()->GetGroupsByIds($ids);
 
         $this->assertTrue(is_array($groups));
@@ -126,21 +125,20 @@ class GroupServiceTest extends BaseTestCase
 
         $this->assertEquals($textGroup2['title'], $groups[$group2['id']]['title']);
 
-        $ids    = array(999, 9999);
+        $ids = array(999, 9999);
         $groups = $this->getGroupService()->GetGroupsByIds($ids);
 
         $this->assertEquals(array(), $groups);
-
     }
 
     public function testSearchGroupsCount()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup1'
+            'title' => 'textgroup1',
         );
         $textGroup2 = array(
-            'title' => 'textgroup2'
+            'title' => 'textgroup2',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
         $group2 = $this->getGroupService()->addGroup($user, $textGroup2);
@@ -160,13 +158,13 @@ class GroupServiceTest extends BaseTestCase
 
     public function testJoinGroup()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $group = $this->getGroupService()->addGroup($user, $textGroup);
 
-        $user1       = $this->createUser1();
+        $user1 = $this->createUser1();
         $groupMember = $this->getGroupService()->joinGroup($user1, $group['id']);
 
         $this->assertTrue(is_array($groupMember));
@@ -176,17 +174,16 @@ class GroupServiceTest extends BaseTestCase
         $this->assertEquals('member', $groupMember['role']);
 
         $this->assertEquals($group['id'], $groupMember['groupId']);
-
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testJoinGroupWithErrorId()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $user1 = $this->createUser1();
         $group = $this->getGroupService()->addGroup($user, $textGroup);
@@ -194,17 +191,16 @@ class GroupServiceTest extends BaseTestCase
         $groupMember = $this->getGroupService()->joinGroup($user1, $group['id']);
 
         $groupMember = $this->getGroupService()->joinGroup($user1, 999);
-
     }
 
     public function testFindGroupsByUserId()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup1'
+            'title' => 'textgroup1',
         );
         $textGroup2 = array(
-            'title' => 'textgroup2'
+            'title' => 'textgroup2',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
         $group2 = $this->getGroupService()->addGroup($user, $textGroup2);
@@ -220,17 +216,16 @@ class GroupServiceTest extends BaseTestCase
         $groups = $this->getGroupService()->findGroupsByUserId(999);
 
         $this->assertEquals(array(), $groups);
-
     }
 
     public function testFindGroupByTitle()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup1'
+            'title' => 'textgroup1',
         );
         $textGroup2 = array(
-            'title' => 'textgroup2'
+            'title' => 'textgroup2',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
         $group2 = $this->getGroupService()->addGroup($user, $textGroup2);
@@ -244,17 +239,16 @@ class GroupServiceTest extends BaseTestCase
         $groups = $this->getGroupService()->findGroupBytitle('textgroup11111111  ');
 
         $this->assertEquals(array(), $groups);
-
     }
 
     public function testSearchMembers()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup1'
+            'title' => 'textgroup1',
         );
         $textGroup2 = array(
-            'title' => 'textgroup2'
+            'title' => 'textgroup2',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
         $group2 = $this->getGroupService()->addGroup($user, $textGroup2);
@@ -262,17 +256,16 @@ class GroupServiceTest extends BaseTestCase
         $member = $this->getGroupService()->searchMembers(array('groupId' => $group1['id']), array('createdTime' => 'desc'), 0, 1);
         $this->assertEquals($user['id'], $member[0]['userId']);
         $this->assertEquals('owner', $member[0]['role']);
-
     }
 
     public function testSearchMembersCount()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
-        $user1  = $this->createUser1();
+        $user1 = $this->createUser1();
         $this->getGroupService()->joinGroup($user1, $group1['id']);
         $count = $this->getGroupService()->getMembersCountByGroupId($group1['id']);
 
@@ -281,14 +274,13 @@ class GroupServiceTest extends BaseTestCase
         $count = $this->getGroupService()->getMembersCountByGroupId(999);
 
         $this->assertEquals(0, $count);
-
     }
 
     public function testIsOwner()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
         $status = $this->getGroupService()->isOwner($group1['id'], $user['id']);
@@ -298,17 +290,16 @@ class GroupServiceTest extends BaseTestCase
         $status = $this->getGroupService()->isOwner($group1['id'], 999);
 
         $this->assertFalse($status);
-
     }
 
     public function testIsMember()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
-        $user1  = $this->createUser1();
+        $user1 = $this->createUser1();
         $status = $this->getGroupService()->isMember($group1['id'], $user1['id']);
 
         $this->assertFalse($status);
@@ -318,17 +309,16 @@ class GroupServiceTest extends BaseTestCase
         $status = $this->getGroupService()->isMember($group1['id'], $user1['id']);
 
         $this->assertTrue($status);
-
     }
 
     public function testGetMembersCountByGroupId()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
-        $user1  = $this->createUser1();
+        $user1 = $this->createUser1();
         $this->getGroupService()->joinGroup($user1, $group1['id']);
         $count = $this->getGroupService()->getMembersCountByGroupId($group1['id']);
 
@@ -337,17 +327,16 @@ class GroupServiceTest extends BaseTestCase
         $count = $this->getGroupService()->getMembersCountByGroupId(999);
 
         $this->assertEquals(0, $count);
-
     }
 
     public function testDeleteMemberByGroupIdAndUserId()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
-        $user1  = $this->createUser1();
+        $user1 = $this->createUser1();
         $this->getGroupService()->joinGroup($user1, $group1['id']);
 
         $this->getGroupService()->deleteMemberByGroupIdAndUserId($group1['id'], $user1['id']);
@@ -359,9 +348,9 @@ class GroupServiceTest extends BaseTestCase
 
     public function testWaveGroup()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
 
@@ -374,7 +363,6 @@ class GroupServiceTest extends BaseTestCase
         $this->assertEquals(1, $group['postNum']);
         $this->assertEquals(1, $group['threadNum']);
         $this->assertEquals(2, $group['memberNum']);
-
     }
 
     /**
@@ -382,9 +370,9 @@ class GroupServiceTest extends BaseTestCase
      */
     public function testWaveMember()
     {
-        $user       = $this->createUser();
+        $user = $this->createUser();
         $textGroup1 = array(
-            'title' => 'textgroup'
+            'title' => 'textgroup',
         );
         $group1 = $this->getGroupService()->addGroup($user, $textGroup1);
 
@@ -395,7 +383,6 @@ class GroupServiceTest extends BaseTestCase
 
         $this->assertEquals(10, $member['postNum']);
         $this->assertEquals(10, $member['threadNum']);
-
     }
 
     protected function getGroupService()
@@ -410,20 +397,21 @@ class GroupServiceTest extends BaseTestCase
 
     protected function createUser()
     {
-        $user             = array();
-        $user['email']    = "user@user.com";
-        $user['nickname'] = "user";
-        $user['password'] = "user";
+        $user = array();
+        $user['email'] = 'user@user.com';
+        $user['nickname'] = 'user';
+        $user['password'] = 'user';
+
         return $this->getUserService()->register($user);
     }
 
     protected function createUser1()
     {
-        $user             = array();
-        $user['email']    = "user1@user1.com";
-        $user['nickname'] = "user1";
-        $user['password'] = "user1";
+        $user = array();
+        $user['email'] = 'user1@user1.com';
+        $user['nickname'] = 'user1';
+        $user['password'] = 'user1';
+
         return $this->getUserService()->register($user);
     }
-
 }

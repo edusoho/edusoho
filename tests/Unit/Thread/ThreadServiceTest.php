@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Thread;
 
 use Biz\BaseTestCase;
@@ -26,7 +27,7 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testUpdateThread()
     {
-        $user        = $this->createUser();
+        $user = $this->createUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
@@ -34,8 +35,8 @@ class ThreadServiceTest extends BaseTestCase
         $thread = $this->createProtectThread();
 
         $fields = array(
-            'title'   => 'title2',
-            'content' => 'hello123'
+            'title' => 'title2',
+            'content' => 'hello123',
         );
         $threadUpdate = $this->getThreadService()->updateThread($thread['id'], $fields);
 
@@ -44,13 +45,13 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testDeleteThread()
     {
-        $thread      = $this->createProtectThread();
+        $thread = $this->createProtectThread();
         $createdPost = $this->createTestPost($thread);
 
         $this->getThreadService()->deleteThread($thread['id']);
 
         $foundThread = $this->getThreadService()->getThread($thread['id']);
-        $foundPost   = $this->getThreadService()->getPost($createdPost['id']);
+        $foundPost = $this->getThreadService()->getPost($createdPost['id']);
 
         $this->assertNull($foundThread);
         $this->assertNull($foundPost);
@@ -142,11 +143,11 @@ class ThreadServiceTest extends BaseTestCase
         $this->createTestThread1();
         $this->createTestThread2();
 
-        $conditions   = array('targetType' => 'classroom');
+        $conditions = array('targetType' => 'classroom');
         $foundThreads = $this->getThreadService()->searchThreads($conditions, array('createdTime' => 'DESC'), 0, 20);
         $this->assertEquals(2, count($foundThreads));
 
-        $conditions   = array('targetId' => 1, 'type' => 'discussion');
+        $conditions = array('targetId' => 1, 'type' => 'discussion');
         $foundThreads = $this->getThreadService()->searchThreads($conditions, array('createdTime' => 'DESC'), 0, 20);
         $this->assertEquals(1, count($foundThreads));
     }
@@ -158,7 +159,7 @@ class ThreadServiceTest extends BaseTestCase
         $this->createTestThread2();
 
         $conditions = array('type' => 'question');
-        $count      = $this->getThreadService()->searchThreadCount($conditions, array('createdTime' => 'DESC'), 0, 20);
+        $count = $this->getThreadService()->searchThreadCount($conditions, array('createdTime' => 'DESC'), 0, 20);
         $this->assertEquals(1, $count);
     }
 
@@ -173,14 +174,13 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * thread_post
+     * thread_post.
      */
-
     public function testGetPost()
     {
         $thread = $this->createProtectThread();
 
-        $post      = $this->createTestPost($thread);
+        $post = $this->createTestPost($thread);
         $foundPost = $this->getThreadService()->getPost($post['id']);
 
         $this->assertEquals($post['content'], $foundPost['content']);
@@ -189,7 +189,7 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testCreatePost()
     {
-        $thread      = $this->createProtectThread();
+        $thread = $this->createProtectThread();
         $createdPost = $this->createTestPost($thread);
 
         $this->assertTrue(is_array($createdPost));
@@ -202,7 +202,7 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testDeletePost()
     {
-        $thread      = $this->createProtectThread();
+        $thread = $this->createProtectThread();
         $createdPost = $this->createTestPost($thread);
 
         $this->getThreadService()->deletePost($createdPost['id']);
@@ -223,11 +223,11 @@ class ThreadServiceTest extends BaseTestCase
         $post3 = $this->createTestPost2($thread);
 
         $conditions = array('threadId' => $thread['id']);
-        $count      = $this->getThreadService()->searchPostsCount($conditions);
+        $count = $this->getThreadService()->searchPostsCount($conditions);
         $this->assertEquals(3, $count);
 
         $conditions = array('threadId' => $thread['id'], 'greaterThanId' => $post2['id']);
-        $count      = $this->getThreadService()->searchPostsCount($conditions);
+        $count = $this->getThreadService()->searchPostsCount($conditions);
         $this->assertEquals(2, $count);
     }
 
@@ -248,7 +248,7 @@ class ThreadServiceTest extends BaseTestCase
     public function testSetPostAdopted()
     {
         $thread = $this->createProtectThread();
-        $post   = $this->createTestPost($thread);
+        $post = $this->createTestPost($thread);
 
         $this->getThreadService()->setPostAdopted($post['id']);
         $foundPost = $this->getThreadService()->getPost($post['id']);
@@ -259,7 +259,7 @@ class ThreadServiceTest extends BaseTestCase
     public function testCancelPostAdopted()
     {
         $thread = $this->createProtectThread();
-        $post   = $this->createTestPost($thread);
+        $post = $this->createTestPost($thread);
 
         $this->getThreadService()->setPostAdopted($post['id']);
         $foundPost = $this->getThreadService()->getPost($post['id']);
@@ -273,7 +273,7 @@ class ThreadServiceTest extends BaseTestCase
     public function testWavePost()
     {
         $thread = $this->createProtectThread();
-        $post   = $this->createTestPost($thread);
+        $post = $this->createTestPost($thread);
 
         $this->assertEquals(0, $post['subposts']);
 
@@ -284,9 +284,8 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * thread_member
+     * thread_member.
      */
-
     public function getMember($memberId)
     {
         $thread = $this->createProtectThread();
@@ -349,13 +348,13 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testSearchMembers()
     {
-        $thread  = $this->createProtectThread();
+        $thread = $this->createProtectThread();
         $member1 = $this->createThreadMember1($thread['id']);
         $member2 = $this->createThreadMember2($thread['id']);
         $member3 = $this->createThreadMember3($thread['id']);
 
         $conditions = array(
-            'threadId' => $thread['id']
+            'threadId' => $thread['id'],
         );
 
         $members = $this->getThreadService()->searchMembers(
@@ -368,7 +367,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $conditions = array(
             'threadId' => $thread['id'],
-            'userId'   => $member2['userId']
+            'userId' => $member2['userId'],
         );
 
         $members = $this->getThreadService()->searchMembers(
@@ -382,13 +381,13 @@ class ThreadServiceTest extends BaseTestCase
 
     public function searchMemberCount($conditions)
     {
-        $thread  = $this->createProtectThread();
+        $thread = $this->createProtectThread();
         $member1 = $this->createThreadMember1($thread['id']);
         $member2 = $this->createThreadMember2($thread['id']);
         $member3 = $this->createThreadMember3($thread['id']);
 
         $conditions = array(
-            'threadId' => $thread['id']
+            'threadId' => $thread['id'],
         );
 
         $count = $this->getThreadService()->searchMemberCount($conditions);
@@ -396,7 +395,7 @@ class ThreadServiceTest extends BaseTestCase
 
         $conditions = array(
             'threadId' => $thread['id'],
-            'userId'   => $member2['id']
+            'userId' => $member2['id'],
         );
 
         $count = $this->getThreadService()->searchMemberCount($conditions);
@@ -404,20 +403,19 @@ class ThreadServiceTest extends BaseTestCase
     }
 
     /**
-     * thread_vote
+     * thread_vote.
      */
-
     public function testVoteUpPost()
     {
         $thread = $this->createProtectThread();
-        $post   = $this->createTestPost($thread);
+        $post = $this->createTestPost($thread);
 
         $result = $this->getThreadService()->voteUpPost($post['id']);
         $this->assertEquals('ok', $result['status']);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testCanAccess()
     {
@@ -436,30 +434,31 @@ class ThreadServiceTest extends BaseTestCase
 
     protected function createUser()
     {
-        $user              = array();
-        $user['email']     = "user@user.com";
-        $user['nickname']  = "user";
-        $user['password']  = "user";
-        $user              = $this->getUserService()->register($user);
+        $user = array();
+        $user['email'] = 'user@user.com';
+        $user['nickname'] = 'user';
+        $user['password'] = 'user';
+        $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
-        $user['roles']     = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $user['roles'] = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+
         return $user;
     }
 
     protected function createProtectThread()
     {
         $textClassroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
 
         $thread = array(
-            'title'      => 'title',
-            'content'    => 'classroom thread content',
-            'userId'     => 2,
-            'targetId'   => $classroom['id'],
+            'title' => 'title',
+            'content' => 'classroom thread content',
+            'userId' => 2,
+            'targetId' => $classroom['id'],
             'targetType' => 'classroom',
-            'type'       => 'question'
+            'type' => 'question',
         );
 
         return $this->getThreadService()->createThread($thread);
@@ -468,17 +467,17 @@ class ThreadServiceTest extends BaseTestCase
     protected function createTestThread1()
     {
         $textClassroom = array(
-            'title' => 'test1'
+            'title' => 'test1',
         );
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
 
         $thread = array(
-            'title'      => 'title1',
-            'content'    => 'thread content1',
-            'userId'     => 1,
-            'targetId'   => $classroom['id'],
+            'title' => 'title1',
+            'content' => 'thread content1',
+            'userId' => 1,
+            'targetId' => $classroom['id'],
             'targetType' => 'classroom',
-            'type'       => 'discussion'
+            'type' => 'discussion',
         );
 
         return $this->getThreadService()->createThread($thread);
@@ -487,17 +486,17 @@ class ThreadServiceTest extends BaseTestCase
     protected function createTestThread2()
     {
         $textClassroom = array(
-            'title' => 'test2'
+            'title' => 'test2',
         );
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
 
         $thread = array(
-            'title'      => 'title2',
-            'content'    => 'thread content2',
-            'userId'     => 1,
-            'targetId'   => $classroom['id'],
+            'title' => 'title2',
+            'content' => 'thread content2',
+            'userId' => 1,
+            'targetId' => $classroom['id'],
             'targetType' => 'classroom',
-            'type'       => 'discussion'
+            'type' => 'discussion',
         );
 
         return $this->getThreadService()->createThread($thread);
@@ -506,33 +505,36 @@ class ThreadServiceTest extends BaseTestCase
     protected function createTestPost($thread)
     {
         $post = array(
-            'targetId'   => $thread['targetId'],
+            'targetId' => $thread['targetId'],
             'targetType' => $thread['targetType'],
-            'threadId'   => $thread['id'],
-            'content'    => 'post thread'
+            'threadId' => $thread['id'],
+            'content' => 'post thread',
         );
+
         return $this->getThreadService()->createPost($post);
     }
 
     protected function createTestPost1($thread)
     {
         $post = array(
-            'targetId'   => $thread['targetId'],
+            'targetId' => $thread['targetId'],
             'targetType' => $thread['targetType'],
-            'threadId'   => $thread['id'],
-            'content'    => 'post thread1'
+            'threadId' => $thread['id'],
+            'content' => 'post thread1',
         );
+
         return $this->getThreadService()->createPost($post);
     }
 
     protected function createTestPost2($thread)
     {
         $post = array(
-            'targetId'   => $thread['targetId'],
+            'targetId' => $thread['targetId'],
             'targetType' => $thread['targetType'],
-            'threadId'   => $thread['id'],
-            'content'    => 'post thread2'
+            'threadId' => $thread['id'],
+            'content' => 'post thread2',
         );
+
         return $this->getThreadService()->createPost($post);
     }
 
@@ -540,9 +542,10 @@ class ThreadServiceTest extends BaseTestCase
     {
         $fields = array(
             'threadId' => $threadId,
-            'userId'   => 1,
-            'nickname' => 'xiaofang'
+            'userId' => 1,
+            'nickname' => 'xiaofang',
         );
+
         return $this->getThreadService()->createMember($fields);
     }
 
@@ -550,9 +553,10 @@ class ThreadServiceTest extends BaseTestCase
     {
         $fields = array(
             'threadId' => $threadId,
-            'userId'   => 2,
-            'nickname' => 'lisan'
+            'userId' => 2,
+            'nickname' => 'lisan',
         );
+
         return $this->getThreadService()->createMember($fields);
     }
 
@@ -560,9 +564,10 @@ class ThreadServiceTest extends BaseTestCase
     {
         $fields = array(
             'threadId' => $threadId,
-            'userId'   => 3,
-            'nickname' => 'zhaosi'
+            'userId' => 3,
+            'nickname' => 'zhaosi',
         );
+
         return $this->getThreadService()->createMember($fields);
     }
 
@@ -585,5 +590,4 @@ class ThreadServiceTest extends BaseTestCase
     {
         return $this->createService('User:UserService');
     }
-
 }

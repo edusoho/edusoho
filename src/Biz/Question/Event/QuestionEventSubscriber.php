@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Question\Event;
 
 use Codeages\Biz\Framework\Event\Event;
@@ -12,7 +13,7 @@ class QuestionEventSubscriber extends EventSubscriber implements EventSubscriber
         return array(
             'question.create' => 'onQuestionCreate',
             'question.update' => 'onQuestionUpdate',
-            'question.delete' => 'onQuestionDelete'
+            'question.delete' => 'onQuestionDelete',
         );
     }
 

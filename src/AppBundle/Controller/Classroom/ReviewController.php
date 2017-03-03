@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\Paginator;
@@ -19,7 +20,7 @@ class ReviewController extends BaseController
         $user = $this->getCurrentUser();
 
         $classroomSetting = $this->setting('classroom', array());
-        $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
+        $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
@@ -29,11 +30,11 @@ class ReviewController extends BaseController
 
         $conditions = array(
             'classroomId' => $id,
-            'parentId'    => 0
+            'parentId' => 0,
         );
 
         $reviewsNum = $this->getClassroomReviewService()->searchReviewCount($conditions);
-        $paginator  = new Paginator(
+        $paginator = new Paginator(
             $this->get('request'),
             $reviewsNum,
             20
@@ -47,11 +48,11 @@ class ReviewController extends BaseController
         );
 
         $reviewUserIds = ArrayToolkit::column($reviews, 'userId');
-        $reviewUsers   = $this->getUserService()->findUsersByIds($reviewUserIds);
+        $reviewUsers = $this->getUserService()->findUsersByIds($reviewUserIds);
 
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $review    = $this->getClassroomReviewService()->getUserClassroomReview($user['id'], $classroom['id']);
-        $layout    = 'classroom/layout.html.twig';
+        $review = $this->getClassroomReviewService()->getUserClassroomReview($user['id'], $classroom['id']);
+        $layout = 'classroom/layout.html.twig';
 
         if ($member && !$member['locked']) {
             $layout = 'classroom/join-layout.html.twig';
@@ -62,32 +63,32 @@ class ReviewController extends BaseController
         } else {
             $classroomDescription = $classroom['about'];
             $classroomDescription = strip_tags($classroomDescription, '');
-            $classroomDescription = preg_replace("/ /", "", $classroomDescription);
+            $classroomDescription = preg_replace('/ /', '', $classroomDescription);
         }
 
-        return $this->render("classroom/review/list.html.twig", array(
-            'classroom'            => $classroom,
-            'courses'              => $courses,
-            'paginator'            => $paginator,
-            'reviewsNum'           => $reviewsNum,
-            'reviews'              => $reviews,
-            'userReview'           => $review,
-            'reviewSaveUrl'        => $this->generateUrl('classroom_review_create', array('id' => $id)),
-            'users'                => $reviewUsers,
-            'member'               => $member,
-            'layout'               => $layout,
+        return $this->render('classroom/review/list.html.twig', array(
+            'classroom' => $classroom,
+            'courses' => $courses,
+            'paginator' => $paginator,
+            'reviewsNum' => $reviewsNum,
+            'reviews' => $reviews,
+            'userReview' => $review,
+            'reviewSaveUrl' => $this->generateUrl('classroom_review_create', array('id' => $id)),
+            'users' => $reviewUsers,
+            'member' => $member,
+            'layout' => $layout,
             'classroomDescription' => $classroomDescription,
-            'canReview'            => $this->isClassroomMember($classroom, $user['id']),
-            'targetType'           => 'classroom'
+            'canReview' => $this->isClassroomMember($classroom, $user['id']),
+            'targetType' => 'classroom',
         ));
     }
 
     public function createAction(Request $request, $id)
     {
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $fields = $request->request->all();
 
-        $fields['userId']      = $user['id'];
+        $fields['userId'] = $user['id'];
         $fields['classroomId'] = $id;
         $this->getClassroomReviewService()->saveReview($fields);
 
@@ -107,25 +108,26 @@ class ReviewController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        $fields                = $request->request->all();
-        $fields['userId']      = $user['id'];
+        $fields = $request->request->all();
+        $fields['userId'] = $user['id'];
         $fields['classroomId'] = $classroom['id'];
-        $fields['rating']      = 1;
-        $fields['parentId']    = $reviewId;
+        $fields['rating'] = 1;
+        $fields['parentId'] = $reviewId;
 
         $post = $this->getClassroomReviewService()->saveReview($fields);
 
-        return $this->render("review/widget/subpost-item.html.twig", array(
-            'post'       => $post,
-            'author'     => $this->getCurrentUser(),
-            'canAccess'  => true,
-            'targetType' => 'classroom'
+        return $this->render('review/widget/subpost-item.html.twig', array(
+            'post' => $post,
+            'author' => $this->getCurrentUser(),
+            'canAccess' => true,
+            'targetType' => 'classroom',
         ));
     }
 
     public function deleteAction($reviewId)
     {
         $this->getClassroomReviewService()->deleteReview($reviewId);
+
         return $this->createJsonResponse(true);
     }
 

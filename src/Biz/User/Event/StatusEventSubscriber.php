@@ -16,17 +16,17 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
     public static function getSubscribedEvents()
     {
         return array(
-            'course.task.start'  => 'onCourseTaskStart',
+            'course.task.start' => 'onCourseTaskStart',
             'course.task.finish' => 'onCourseTaskFinish',
-            'exam.reviewed'      => 'onTestpaperReviewed'
+            'exam.reviewed' => 'onTestpaperReviewed',
         );
     }
 
     public function onCourseTaskStart(Event $event)
     {
         $taskResult = $event->getSubject();
-        $course     = $this->getCourseService()->getCourse($taskResult['courseId']);
-        $task       = $this->getTaskService()->getTask($taskResult['courseTaskId']);
+        $course = $this->getCourseService()->getCourse($taskResult['courseId']);
+        $task = $this->getTaskService()->getTask($taskResult['courseTaskId']);
 
         if (!$course || !$task) {
             return;
@@ -35,24 +35,24 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         list($classroom, $isPrivate) = $this->isPrivate($course);
 
         $this->getStatusService()->publishStatus(array(
-            'type'        => 'task_start',
-            'courseId'    => $course['id'],
+            'type' => 'task_start',
+            'courseId' => $course['id'],
             'classroomId' => $classroom ? $classroom['id'] : 0,
-            'objectType'  => 'task',
-            'objectId'    => $task['id'],
-            'private'     => $isPrivate,
-            'properties'  => array(
+            'objectType' => 'task',
+            'objectId' => $task['id'],
+            'private' => $isPrivate,
+            'properties' => array(
                 'course' => $this->simplifyCousrse($course),
-                'task'   => $this->simplifyTask($task)
-            )
+                'task' => $this->simplifyTask($task),
+            ),
         ));
     }
 
     public function onCourseTaskFinish(Event $event)
     {
         $taskResult = $event->getSubject();
-        $course     = $this->getCourseService()->getCourse($taskResult['courseId']);
-        $task       = $this->getTaskService()->getTask($taskResult['courseTaskId']);
+        $course = $this->getCourseService()->getCourse($taskResult['courseId']);
+        $task = $this->getTaskService()->getTask($taskResult['courseTaskId']);
 
         if (!$course || !$task) {
             return;
@@ -61,16 +61,16 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         list($classroom, $isPrivate) = $this->isPrivate($course);
 
         $this->getStatusService()->publishStatus(array(
-            'type'        => 'task_finish',
-            'courseId'    => $course['id'],
+            'type' => 'task_finish',
+            'courseId' => $course['id'],
             'classroomId' => $classroom ? $classroom['id'] : 0,
-            'objectType'  => 'task',
-            'objectId'    => $task['id'],
-            'private'     => $isPrivate,
-            'properties'  => array(
+            'objectType' => 'task',
+            'objectId' => $task['id'],
+            'private' => $isPrivate,
+            'properties' => array(
                 'course' => $this->simplifyCousrse($course),
-                'task'   => $this->simplifyTask($task)
-            )
+                'task' => $this->simplifyTask($task),
+            ),
         ));
     }
 
@@ -78,8 +78,8 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
     {
         $paperResult = $event->getSubject();
 
-        $course    = $this->getCourseService()->getCourse($paperResult['courseId']);
-        $activity  = $this->getActivityService()->getActivity($paperResult['lessonId']);
+        $course = $this->getCourseService()->getCourse($paperResult['courseId']);
+        $activity = $this->getActivityService()->getActivity($paperResult['lessonId']);
         $testpaper = $this->getTestpaperService()->getTestpaper($paperResult['testId']);
 
         if (!$course || !$activity || !$testpaper) {
@@ -91,86 +91,87 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $type = "reviewed_{$paperResult['type']}";
 
         $this->getStatusService()->publishStatus(array(
-            'userId'      => $paperResult['userId'],
-            'courseId'    => $course['id'],
+            'userId' => $paperResult['userId'],
+            'courseId' => $course['id'],
             'classroomId' => $classroom ? $classroom['id'] : 0,
-            'type'        => $type,
-            'objectType'  => $testpaper['type'],
-            'objectId'    => $testpaper['id'],
-            'private'     => $isPrivate,
-            'properties'  => array(
+            'type' => $type,
+            'objectType' => $testpaper['type'],
+            'objectId' => $testpaper['id'],
+            'private' => $isPrivate,
+            'properties' => array(
                 'testpaper' => $this->simplifyTestpaper($testpaper),
-                'result'    => $this->simplifyTestpaperResult($paperResult),
-                'activity'  => $this->simplifyActivity($activity),
-                'version'   => '2.0'
-            )
+                'result' => $this->simplifyTestpaperResult($paperResult),
+                'activity' => $this->simplifyActivity($activity),
+                'version' => '2.0',
+            ),
         ));
     }
 
     protected function simplifyCousrse($course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
         return array(
-            'id'          => $course['id'],
+            'id' => $course['id'],
             'courseSetId' => $course['courseSetId'],
-            'title'       => $course['title'],
-            'picture'     => $courseSet['cover'],
-            'type'        => $course['type'],
-            'rating'      => $course['rating'],
-            'about'       => StringToolkit::plain($course['summary'], 100),
-            'price'       => $course['price']
+            'title' => $course['title'],
+            'picture' => $courseSet['cover'],
+            'type' => $course['type'],
+            'rating' => $course['rating'],
+            'about' => StringToolkit::plain($course['summary'], 100),
+            'price' => $course['price'],
         );
     }
 
     protected function simplifyTask($task)
     {
         return array(
-            'id'      => $task['id'],
-            'number'  => $task['number'],
-            'type'    => $task['type'],
-            'title'   => $task['title'],
-            'summary' => ''
+            'id' => $task['id'],
+            'number' => $task['number'],
+            'type' => $task['type'],
+            'title' => $task['title'],
+            'summary' => '',
         );
     }
 
     protected function simplifyTestpaper($testpaper)
     {
         return array(
-            'id'          => $testpaper['id'],
-            'name'        => $testpaper['name'],
+            'id' => $testpaper['id'],
+            'name' => $testpaper['name'],
             'description' => StringToolkit::plain($testpaper['description'], 100),
-            'score'       => $testpaper['score'],
+            'score' => $testpaper['score'],
             'passedScore' => $testpaper['passedCondition'],
-            'itemCount'   => $testpaper['itemCount']
+            'itemCount' => $testpaper['itemCount'],
         );
     }
 
     protected function simplifyTestpaperResult($testpaperResult)
     {
         return array(
-            'id'              => $testpaperResult['id'],
-            'userId'          => $testpaperResult['userId'],
-            'score'           => $testpaperResult['score'],
-            'objectiveScore'  => $testpaperResult['objectiveScore'],
+            'id' => $testpaperResult['id'],
+            'userId' => $testpaperResult['userId'],
+            'score' => $testpaperResult['score'],
+            'objectiveScore' => $testpaperResult['objectiveScore'],
             'subjectiveScore' => $testpaperResult['subjectiveScore'],
-            'teacherSay'      => StringToolkit::plain($testpaperResult['teacherSay'], 100),
-            'passedStatus'    => $testpaperResult['passedStatus']
+            'teacherSay' => StringToolkit::plain($testpaperResult['teacherSay'], 100),
+            'passedStatus' => $testpaperResult['passedStatus'],
         );
     }
 
     protected function simplifyActivity($activity)
     {
         return array(
-            'id'      => $activity['id'],
-            'type'    => $activity['mediaType'],
-            'title'   => $activity['title'],
-            'summary' => StringToolkit::plain($activity['content'], 100)
+            'id' => $activity['id'],
+            'type' => $activity['mediaType'],
+            'title' => $activity['title'],
+            'summary' => StringToolkit::plain($activity['content'], 100),
         );
     }
 
     protected function isPrivate($course)
     {
-        $private   = $course['status'] == 'published' ? 0 : 1;
+        $private = $course['status'] == 'published' ? 0 : 1;
         $classroom = array();
 
         if ($course['parentId']) {

@@ -16,6 +16,7 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
     public function updateDiscoveryColumn($id, $fields)
     {
         $fields = ArrayToolkit::parts($fields, array('categoryId', 'orderType', 'type', 'showCount', 'title', 'seq'));
+
         return $this->getDiscoveryColumnDao()->update($id, $fields);
     }
 
@@ -44,7 +45,7 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
         $index = 1;
         foreach ($ids as $key => $id) {
             $this->updateDiscoveryColumn($id, array('seq' => $index));
-            $index++;
+            ++$index;
         }
     }
 

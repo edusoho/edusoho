@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Activity\Listener;
-
 
 use Biz\Task\Service\TaskService;
 
@@ -15,7 +13,6 @@ class VideoActivityWatchListener extends Listener
 
     public function handle($activity, $data)
     {
-
         if (!$data['watchTime'] || $data['watchTime'] >= static::WATCH_TIME_STEP) {
             $watchTime = TaskService::WATCH_TIME_STEP;
         } else {

@@ -1,7 +1,8 @@
 <?php
+
 namespace Tests\Unit\Crontab;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class CrontabServiceTest extends BaseTestCase
 {
@@ -23,11 +24,11 @@ class CrontabServiceTest extends BaseTestCase
 
     public function testSearchJobs()
     {
-        $job1       = $this->createJob();
-        $job2       = $this->createJob();
-        $user       = $this->getServiceKernel()->getCurrentUser();
+        $job1 = $this->createJob();
+        $job2 = $this->createJob();
+        $user = $this->getServiceKernel()->getCurrentUser();
         $conditions = array(
-            'creatorId' => $user['id']
+            'creatorId' => $user['id'],
         );
         $results = $this->getCrontabService()->searchJobs($conditions, 'created', 0, 20);
         $this->assertEquals(2, count($results));
@@ -35,11 +36,11 @@ class CrontabServiceTest extends BaseTestCase
 
     public function testSearchJobsCount()
     {
-        $job1       = $this->createJob();
-        $job2       = $this->createJob();
-        $user       = $this->getServiceKernel()->getCurrentUser();
+        $job1 = $this->createJob();
+        $job2 = $this->createJob();
+        $user = $this->getServiceKernel()->getCurrentUser();
         $conditions = array(
-            'creatorId' => $user['id']
+            'creatorId' => $user['id'],
         );
         $result = $this->getCrontabService()->searchJobsCount($conditions);
         $this->assertEquals(2, $result);
@@ -63,19 +64,18 @@ class CrontabServiceTest extends BaseTestCase
         $this->getCrontabService()->executeJob($job['id']);
         $JobCount = $this->getCrontabService()->searchJobsCount(array('nextExcutedTime' => time())); //执行时间大于当前时间
         $this->assertEquals(0, $JobCount);
-
     }
 
     public function testDeleteJob()
     {
-        $job    = $this->createJob();
+        $job = $this->createJob();
         $result = $this->getCrontabService()->deleteJob($job['id']);
         $this->assertEquals($result, $job['id']);
     }
 
     public function testDeleteJobs()
     {
-        $job    = $this->createJob();
+        $job = $this->createJob();
         $result = $this->getCrontabService()->deleteJobs(1, 'test');
         $this->assertEquals($result, $job['id']);
     }
@@ -93,7 +93,7 @@ class CrontabServiceTest extends BaseTestCase
     {
         $job = $this->createJob('everyhour');
         $this->getCrontabService()->executeJob($job['id']);
-        $job             = $this->getCrontabService()->getJob($job['id']); //执行时间大于当前时间
+        $job = $this->getCrontabService()->getJob($job['id']); //执行时间大于当前时间
         $nextExcutedTime = $this->getCrontabService()->getNextExcutedTime();
 
         $this->assertEquals($job['nextExcutedTime'], $nextExcutedTime);
@@ -110,18 +110,18 @@ class CrontabServiceTest extends BaseTestCase
 
     public function testFindJobByTargetTypeAndTargetId()
     {
-        $newJob  = $this->createJob();
+        $newJob = $this->createJob();
         $results = $this->getCrontabService()->findJobByTargetTypeAndTargetId($newJob['targetType'], $newJob['targetId']);
-        $result  = $results[0];
+        $result = $results[0];
         $this->assertEquals($newJob['targetId'], $result['targetId']);
         $this->assertEquals($newJob['targetType'], $result['targetType']);
     }
 
     public function testFindJobByNameAndTargetTypeAndTargetId()
     {
-        $newJob  = $this->createJob();
+        $newJob = $this->createJob();
         $results = $this->getCrontabService()->findJobByNameAndTargetTypeAndTargetId($newJob['name'], $newJob['targetType'], $newJob['targetId']);
-        $result  = $results[0];
+        $result = $results[0];
         $this->assertEquals($newJob['targetId'], $result['targetId']);
         $this->assertEquals($newJob['targetType'], $result['targetType']);
         $this->assertEquals($newJob['name'], $result['name']);
@@ -131,7 +131,7 @@ class CrontabServiceTest extends BaseTestCase
     {
         $newJob = $this->createJob();
         $fields = array(
-            'name' => 'newTest'
+            'name' => 'newTest',
         );
         $updateJob = $this->getCrontabService()->updateJob($newJob['id'], $fields);
         $this->assertEquals('newTest', $updateJob['name']);
@@ -141,16 +141,17 @@ class CrontabServiceTest extends BaseTestCase
     private function createJob($cycle = 'once')
     {
         $job = array(
-            'name'            => "EmptyJob",
-            'cycle'           => $cycle,
+            'name' => 'EmptyJob',
+            'cycle' => $cycle,
             'nextExcutedTime' => time(), //方便执行的时候,可以处理当前的job
-            'jobClass'        => 'Biz\\Crontab\\Service\\Impl\\EmptyJob',
-            'targetType'      => 'test',
-            'targetId'        => 1,
-            'creatorId'       => 1,
-            'createdTime'     => time(),
-            'jobParams'       => ''
+            'jobClass' => 'Biz\\Crontab\\Service\\Impl\\EmptyJob',
+            'targetType' => 'test',
+            'targetId' => 1,
+            'creatorId' => 1,
+            'createdTime' => time(),
+            'jobParams' => '',
         );
+
         return $this->getCrontabService()->createJob($job);
     }
 
@@ -163,5 +164,4 @@ class CrontabServiceTest extends BaseTestCase
     {
         return $this->createService('User:UserService');
     }
-
 }

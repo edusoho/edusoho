@@ -24,7 +24,7 @@ class CashOrdersLogDaoTest extends BaseDaoTestCase
         return array(
             'orderId' => 1,
             'ip' => 123,
-            'type' => 'a'
+            'type' => 'a',
             );
     }
 }

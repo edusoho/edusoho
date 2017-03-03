@@ -20,6 +20,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function searchThreads($conditions, $orderBy, $start, $limit)
     {
         $orderBys = is_array($orderBy) ? $orderBy : $this->filterSort($orderBy);
+
         return $this->getThreadDao()->search($conditions, $orderBys, $start, $limit);
     }
 
@@ -62,6 +63,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function getThreadsByIds($ids)
     {
         $threads = $this->getThreadDao()->findByIds($ids);
+
         return ArrayToolkit::index($threads, 'id');
     }
 
@@ -86,8 +88,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->dispatchEvent('group.thread.collect', new Event($thread));
 
         return $this->getThreadCollectDao()->create(array(
-            "userId"   => $userId,
-            "threadId" => $threadId
+            'userId' => $userId,
+            'threadId' => $threadId,
         ));
     }
 
@@ -149,10 +151,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException('Creating threads too frequently');
         }
 
-        $thread['title']   = $this->sensitiveFilter($thread['title'], 'group-thread-create');
+        $thread['title'] = $this->sensitiveFilter($thread['title'], 'group-thread-create');
         $thread['content'] = $this->sensitiveFilter($thread['content'], 'group-thread-create');
 
-        $thread['title']   = $this->biz['html_helper']->purify(empty($thread['title']) ? '' : $thread['title']);
+        $thread['title'] = $this->biz['html_helper']->purify(empty($thread['title']) ? '' : $thread['title']);
         $thread['content'] = $this->biz['html_helper']->purify(empty($thread['content']) ? '' : $thread['content']);
 
         if (empty($thread['groupId'])) {
@@ -164,7 +166,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $thread['createdTime'] = time();
-        $thread                = $this->getThreadDao()->create($thread);
+        $thread = $this->getThreadDao()->create($thread);
 
         $this->getGroupService()->waveGroup($thread['groupId'], 'threadNum', +1);
 
@@ -173,6 +175,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->hideThings($thread['content'], $thread['id']);
         $this->dispatchEvent('group.thread.create', $thread);
         $this->getLogService()->info('group', 'create_thread', "新增话题 {$thread['title']}({$thread['id']})");
+
         return $thread;
     }
 
@@ -187,7 +190,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         $user = $this->getCurrentUser();
 
-        for ($i = 0; $i < count($files['id']); $i++) {
+        for ($i = 0; $i < count($files['id']); ++$i) {
             $file = $this->getFileService()->getFile($files['id'][$i]);
 
             if ($file['userId'] != $user->id) {
@@ -199,14 +202,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $files['title'][$i] = $this->subTxt($files['title'][$i]);
 
             $attach = array(
-                'title'       => $files['title'][$i],
+                'title' => $files['title'][$i],
                 'description' => $files['description'][$i],
-                'type'        => 'attachment',
-                'userId'      => $user->id,
-                'threadId'    => $threadId,
-                'coin'        => $files['coin'][$i],
-                'fileId'      => $files['id'][$i],
-                'createdTime' => time()
+                'type' => 'attachment',
+                'userId' => $user->id,
+                'threadId' => $threadId,
+                'coin' => $files['coin'][$i],
+                'fileId' => $files['id'][$i],
+                'createdTime' => time(),
             );
 
             if ($hide) {
@@ -222,7 +225,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         $user = $this->getCurrentUser();
 
-        for ($i = 0; $i < count($files['id']); $i++) {
+        for ($i = 0; $i < count($files['id']); ++$i) {
             $file = $this->getFileService()->getFile($files['id'][$i]);
 
             if ($file['userId'] != $user->id) {
@@ -232,15 +235,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $files['title'][$i] = $this->subTxt($files['title'][$i]);
 
             $attach = array(
-                'title'       => $files['title'][$i],
+                'title' => $files['title'][$i],
                 'description' => $files['description'][$i],
-                'type'        => 'postAttachment',
-                'userId'      => $user->id,
-                'threadId'    => $threadId,
-                'coin'        => $files['coin'][$i],
-                'fileId'      => $files['id'][$i],
-                'postId'      => $postId,
-                'createdTime' => time()
+                'type' => 'postAttachment',
+                'userId' => $user->id,
+                'threadId' => $threadId,
+                'coin' => $files['coin'][$i],
+                'fileId' => $files['id'][$i],
+                'postId' => $postId,
+                'createdTime' => time(),
             );
 
             $this->getThreadGoodsDao()->create($attach);
@@ -254,27 +257,27 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function hideThings($content, $id)
     {
-        $content = str_replace("#", "<!--></>", $content);
-        $content = str_replace("[hide=coin", "#[hide=coin", $content);
+        $content = str_replace('#', '<!--></>', $content);
+        $content = str_replace('[hide=coin', '#[hide=coin', $content);
 
         $user = $this->getCurrentUser();
         $data = explode('[/hide]', $content);
 
         foreach ($data as $key => $value) {
-            $value = " ".$value;
-            sscanf($value, "%[^#]#[hide=coin%[^]]]%[^$$]", $content, $coin, $title);
+            $value = ' '.$value;
+            sscanf($value, '%[^#]#[hide=coin%[^]]]%[^$$]', $content, $coin, $title);
 
             if (!is_numeric($coin)) {
                 $coin = 0;
             }
 
-            if ($coin >= 0 && $title != "") {
+            if ($coin >= 0 && $title != '') {
                 $hide = array(
-                    'title'    => $title,
-                    'type'     => 'content',
+                    'title' => $title,
+                    'type' => 'content',
                     'threadId' => $id,
-                    'coin'     => $coin,
-                    'userId'   => $user->id
+                    'coin' => $coin,
+                    'userId' => $user->id,
                 );
                 $this->getThreadGoodsDao()->create($hide);
             }
@@ -286,17 +289,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function subTxt($string, $length = 10)
     {
-        $string = explode(".", $string);
+        $string = explode('.', $string);
 
         $text = $this->pureString($string);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text, 'utf-8') > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
         }
 
-        return $text.".".$string[count($string) - 1];
+        return $text.'.'.$string[count($string) - 1];
     }
 
     protected function pureString($string)
@@ -306,6 +309,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $text = str_replace(array("\n", "\r", "\t"), '', $text);
         $text = str_replace('&nbsp;', ' ', $text);
+
         return trim($text);
     }
 
@@ -316,7 +320,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function sumGoodsCoinsByThreadId($id)
     {
-        $condition = array('threadId' => $id, 'type' => "content");
+        $condition = array('threadId' => $id, 'type' => 'content');
+
         return $this->getThreadGoodsDao()->sumGoodsCoins($condition);
     }
 
@@ -344,17 +349,18 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createInvalidArgumentException('Content Required');
         }
 
-        $fields['title']   = $this->sensitiveFilter($fields['title'], 'group-thread-update');
+        $fields['title'] = $this->sensitiveFilter($fields['title'], 'group-thread-update');
         $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-update');
 
         $this->getThreadGoodsDao()->deleteByThreadIdAndType($id, 'content');
         $this->hideThings($fields['content'], $id);
 
-        $fields['title']   = $this->biz['html_helper']->purify($fields['title']);
+        $fields['title'] = $this->biz['html_helper']->purify($fields['title']);
         $fields['content'] = $this->biz['html_helper']->purify($fields['content']);
 
         $thread = $this->getThreadDao()->update($id, $fields);
         $this->dispatchEvent('group.thread.update', $thread);
+
         return $thread;
     }
 
@@ -384,13 +390,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException('Creating threads too frequently');
         }
 
-        $threadContent['content']     = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
-        $threadContent['content']     = $this->biz['html_helper']->purify($threadContent['content']);
-        $threadContent['userId']      = $memberId;
+        $threadContent['content'] = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
+        $threadContent['content'] = $this->biz['html_helper']->purify($threadContent['content']);
+        $threadContent['userId'] = $memberId;
         $threadContent['createdTime'] = time();
-        $threadContent['threadId']    = $threadId;
-        $threadContent['postId']      = $postId;
-        $post                         = $this->getThreadPostDao()->create($threadContent);
+        $threadContent['threadId'] = $threadId;
+        $threadContent['postId'] = $postId;
+        $post = $this->getThreadPostDao()->create($threadContent);
         $this->getThreadDao()->update($threadId, array('lastPostMemberId' => $memberId, 'lastPostTime' => time()));
         $this->getGroupService()->waveGroup($groupId, 'postNum', +1);
         $this->getGroupService()->waveMember($groupId, $memberId, 'postNum', +1);
@@ -458,14 +464,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $post = $this->getThreadPostDao()->update($id, $fields);
         $this->dispatchEvent('group.thread.post.update', $post);
+
         return $post;
     }
 
     public function deletePost($postId)
     {
-        $post     = $this->getThreadPostDao()->get($postId);
+        $post = $this->getThreadPostDao()->get($postId);
         $threadId = $post['threadId'];
-        $thread   = $this->getThreadDao()->get($threadId);
+        $thread = $this->getThreadDao()->get($threadId);
 
         $this->getThreadPostDao()->delete($postId);
 
@@ -480,7 +487,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function deletePostsByThreadId($threadId)
     {
-        $thread    = $this->getThreadDao()->get($threadId);
+        $thread = $this->getThreadDao()->get($threadId);
         $postCount = $this->getThreadPostDao()->count(array('threadId' => $threadId));
 
         $this->getGroupService()->waveGroup($thread['groupId'], 'postNum', -$postCount);

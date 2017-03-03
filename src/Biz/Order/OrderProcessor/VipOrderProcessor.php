@@ -1,14 +1,14 @@
 <?php
+
 namespace Biz\Order\OrderProcessor;
 
 use Exception;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\NumberToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-    protected $router = "vip";
+    protected $router = 'vip';
 
     public function getTarget($targetId)
     {
@@ -17,7 +17,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function preCheck($targetId, $userId)
     {
-        $member      = $this->getVipService()->getMemberByUserId($userId);
+        $member = $this->getVipService()->getMemberByUserId($userId);
         $targetLevel = $this->getLevelService()->getLevel($targetId);
         $memberLevel = $this->getLevelService()->getLevel($member['levelId']);
 
@@ -41,34 +41,34 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         $member = $this->getVipService()->getMemberByUserId($user->id);
 
         if ($member) {
-            if (array_key_exists("buyType", $fields) && $fields['buyType'] == "upgrade") {
-                $buyType = "upgrade";
+            if (array_key_exists('buyType', $fields) && $fields['buyType'] == 'upgrade') {
+                $buyType = 'upgrade';
             } else {
-                $buyType = "renew";
+                $buyType = 'renew';
             }
         } else {
-            $buyType = "new";
+            $buyType = 'new';
         }
 
         $levelPrice = array(
             'month' => $level['monthPrice'],
-            'year'  => $level['yearPrice']
+            'year' => $level['yearPrice'],
         );
 
         list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
 
-        if ($buyType == "upgrade") {
+        if ($buyType == 'upgrade') {
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($user->id, $level['id']);
         } else {
-            if (!ArrayToolkit::requireds($fields, array("unit", "duration"))) {
+            if (!ArrayToolkit::requireds($fields, array('unit', 'duration'))) {
                 throw new Exception('参数不正确');
             }
 
-            $unitType  = $fields['unit'];
-            $duration  = $fields['duration'];
+            $unitType = $fields['unit'];
+            $duration = $fields['duration'];
             $unitPrice = $levelPrice[$unitType];
 
-            if ($priceType == "Coin") {
+            if ($priceType == 'Coin') {
                 $unitPrice = NumberToolkit::roundUp($unitPrice * $cashRate);
             }
 
@@ -78,39 +78,39 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         if (!$coinEnable) {
             return array(
                 'totalPrice' => $totalPrice,
-                'targetId'   => $targetId,
-                'targetType' => "vip",
+                'targetId' => $targetId,
+                'targetType' => 'vip',
 
-                'level'      => empty($level) ? null : $level,
-                'unitType'   => empty($unitType) ? null : $unitType,
-                'duration'   => empty($duration) ? null : $duration,
-                'buyType'    => empty($buyType) ? null : $buyType
+                'level' => empty($level) ? null : $level,
+                'unitType' => empty($unitType) ? null : $unitType,
+                'duration' => empty($duration) ? null : $duration,
+                'buyType' => empty($buyType) ? null : $buyType,
             );
         }
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
-        if ($priceType == "Coin") {
+        if ($priceType == 'Coin') {
             $maxCoin = $coinPayAmount;
         } else {
             $maxCoin = NumberToolkit::roundUp($level['maxRate'] * $totalPrice / 100 * $cashRate);
         }
 
         return array(
-            'level'          => empty($level) ? null : $level,
-            'unitType'       => empty($unitType) ? null : $unitType,
-            'duration'       => empty($duration) ? null : $duration,
-            'buyType'        => empty($buyType) ? null : $buyType,
+            'level' => empty($level) ? null : $level,
+            'unitType' => empty($unitType) ? null : $unitType,
+            'duration' => empty($duration) ? null : $duration,
+            'buyType' => empty($buyType) ? null : $buyType,
 
-            'totalPrice'     => $totalPrice,
-            'targetId'       => $targetId,
-            'targetType'     => "vip",
-            'cashRate'       => $cashRate,
-            'priceType'      => $priceType,
-            'account'        => $account,
+            'totalPrice' => $totalPrice,
+            'targetId' => $targetId,
+            'targetType' => 'vip',
+            'cashRate' => $cashRate,
+            'priceType' => $priceType,
+            'account' => $account,
             'hasPayPassword' => $hasPayPassword,
-            'coinPayAmount'  => $coinPayAmount,
-            'maxCoin'        => $maxCoin
+            'coinPayAmount' => $coinPayAmount,
+            'maxCoin' => $maxCoin,
         );
     }
 
@@ -124,7 +124,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
             throw new Exception('购买类型不正确，创建会员订单失败。');
         }
 
-        if (!(array_key_exists("buyType", $orderData) && $orderData["buyType"] == "upgrade")) {
+        if (!(array_key_exists('buyType', $orderData) && $orderData['buyType'] == 'upgrade')) {
             $orderData['duration'] = intval($orderData['duration']);
 
             if (empty($orderData['duration'])) {
@@ -148,12 +148,12 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $currentUser = $this->getLevelService()->getCurrentUser();
 
-        if (array_key_exists("buyType", $orderData) && $orderData["buyType"] == "upgrade") {
+        if (array_key_exists('buyType', $orderData) && $orderData['buyType'] == 'upgrade') {
             $totalPrice = $this->getVipService()->calUpgradeMemberAmount($currentUser->id, $level['id']);
         } else {
             $unitPrice = $level[$orderData['unitType'].'Price'];
 
-            if ($priceType == "Coin") {
+            if ($priceType == 'Coin') {
                 $unitPrice = NumberToolkit::roundUp($unitPrice * $cashRate);
             }
 
@@ -163,9 +163,9 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         $amount = $totalPrice;
         //优惠码优惠价格
 
-        if ($orderData["couponCode"] && trim($orderData["couponCode"]) != "") {
+        if ($orderData['couponCode'] && trim($orderData['couponCode']) != '') {
             $couponResult = $this->afterCouponPay(
-                $orderData["couponCode"],
+                $orderData['couponCode'],
                 'vip',
                 $targetId,
                 $totalPrice,
@@ -173,25 +173,25 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
                 $cashRate
             );
 
-            if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes" && isset($couponResult["afterAmount"])) {
-                $amount = $couponResult["afterAmount"];
+            if (isset($couponResult['useable']) && $couponResult['useable'] == 'yes' && isset($couponResult['afterAmount'])) {
+                $amount = $couponResult['afterAmount'];
             }
         }
 
         //虚拟币优惠价格
 
-        if (array_key_exists("coinPayAmount", $orderData)) {
+        if (array_key_exists('coinPayAmount', $orderData)) {
             $amount = $this->afterCoinPay(
                 $coinEnabled,
                 $priceType,
                 $cashRate,
                 $amount,
                 $orderData['coinPayAmount'],
-                $orderData["payPassword"]
+                $orderData['payPassword']
             );
         }
 
-        if ($priceType == "Coin") {
+        if ($priceType == 'Coin') {
             $amount = $amount / $cashRate;
         }
 
@@ -200,12 +200,12 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $totalPrice = NumberToolkit::roundUp($totalPrice);
-        $amount     = NumberToolkit::roundUp($amount);
+        $amount = NumberToolkit::roundUp($amount);
 
         return array(
             $amount,
             $totalPrice,
-            empty($couponResult) ? null : $couponResult
+            empty($couponResult) ? null : $couponResult,
         );
     }
 
@@ -215,8 +215,8 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $unitNames = array('month' => '个月', 'year' => '年');
 
-        if (array_key_exists("buyType", $fields) && $fields["buyType"] == "upgrade") {
-            $orderInfo['title']    = '升级会员到'.$level['name'];
+        if (array_key_exists('buyType', $fields) && $fields['buyType'] == 'upgrade') {
+            $orderInfo['title'] = '升级会员到'.$level['name'];
             $orderInfo['snPrefix'] = 'M';
         } else {
             $orderInfo['title'] = ($fields['buyType'] == 'renew' ? '续费' : '购买');
@@ -228,7 +228,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $orderInfo['targetType'] = 'vip';
-        $orderInfo['data']       = $fields;
+        $orderInfo['data'] = $fields;
 
         return $this->getOrderService()->createOrder($orderInfo);
     }
@@ -248,7 +248,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
                 $order['id']
             );
 
-            $level   = $this->getLevelService()->getLevel($vip['levelId']);
+            $level = $this->getLevelService()->getLevel($vip['levelId']);
             $message = '您已经成功加入'.$level['name'].'，点击查看'."<a href='/vip/course_set/level/{$level['id']}' target='_blank'>{$level['name']}</a>".'课程';
         } elseif ($order['data']['buyType'] == 'renew') {
             $vip = $this->getVipService()->renewMember(
@@ -258,7 +258,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
                 $order['id']
             );
 
-            $level   = $this->getLevelService()->getLevel($vip['levelId']);
+            $level = $this->getLevelService()->getLevel($vip['levelId']);
             $message = '您的'.$level['name'].'已成功续费，当前的有效期至：'.date('Y-m-d', $vip['deadline']);
         } elseif ($order['data']['buyType'] == 'upgrade') {
             $vip = $this->getVipService()->upgradeMember(
@@ -267,7 +267,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
                 $order['id']
             );
 
-            $level   = $this->getLevelService()->getLevel($vip['levelId']);
+            $level = $this->getLevelService()->getLevel($vip['levelId']);
             $message = '您已经升级到'.$level['name'].'，点击查看'."<a href='/vip/course_set/level/{$level['id']}' target='_blank'>{$level['name']}</a>".'课程';
         }
 
@@ -287,12 +287,14 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     public function getNote($targetId)
     {
         $vipLevel = $this->getLevelService()->getLevel($targetId);
+
         return str_replace(' ', '', strip_tags($vipLevel['description']));
     }
 
     public function getTitle($targetId)
     {
         $vipLevel = $this->getLevelService()->getLevel($targetId);
+
         return str_replace(' ', '', strip_tags($vipLevel['name']));
     }
 
@@ -318,7 +320,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderInfoTemplate()
     {
-        return "VipPlugin:Vip:orderInfo";
+        return 'VipPlugin:Vip:orderInfo';
     }
 
     public function isTargetExist($targetId)
@@ -344,7 +346,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getLevelService()
     {
-        return $this->getBiz()->service("VipPlugin:Vip:LevelService");
+        return $this->getBiz()->service('VipPlugin:Vip:LevelService');
     }
 
     protected function getVipService()

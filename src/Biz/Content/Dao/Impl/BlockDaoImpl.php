@@ -2,7 +2,6 @@
 
 namespace Biz\Content\Dao\Impl;
 
-
 use Biz\Content\Dao\BlockDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -10,33 +9,33 @@ class BlockDaoImpl extends GeneralDaoImpl implements BlockDao
 {
     protected $table = 'block';
 
-    public function getByTemplateIdAndOrgId($blockTemplateId,$orgId=0)
+    public function getByTemplateIdAndOrgId($blockTemplateId, $orgId = 0)
     {
         return $this->getByFields(array(
             'blockTemplateId' => $blockTemplateId,
-            'orgId' => $orgId
+            'orgId' => $orgId,
         ));
     }
 
     public function getByTemplateId($blockTemplateId)
     {
         return $this->getByFields(array(
-            'blockTemplateId' => $blockTemplateId
+            'blockTemplateId' => $blockTemplateId,
         ));
     }
 
     public function getByCode($code)
     {
         return $this->getByFields(array(
-            'code' => $code
+            'code' => $code,
         ));
     }
 
-    public function getByCodeAndOrgId($code,$orgId=0)
+    public function getByCodeAndOrgId($code, $orgId = 0)
     {
         return $this->getByFields(array(
             'code' => $code,
-            'orgId'=> $orgId
+            'orgId' => $orgId,
         ));
     }
 
@@ -45,8 +44,8 @@ class BlockDaoImpl extends GeneralDaoImpl implements BlockDao
         return array(
             'serializes' => array(
                 'meta' => 'json',
-                'data' => 'json'
-            )
+                'data' => 'json',
+            ),
         );
     }
 }

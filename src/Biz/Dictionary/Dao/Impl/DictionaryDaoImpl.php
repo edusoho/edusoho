@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Dictionary\Dao\Impl;
 
 use Biz\Dictionary\Dao\DictionaryDao;
@@ -11,6 +12,7 @@ class DictionaryDaoImpl extends GeneralDaoImpl implements DictionaryDao
     public function findAll()
     {
         $sql = "SELECT * FROM {$this->table} ";
+
         return $this->db()->fetchAll($sql, array());
     }
 

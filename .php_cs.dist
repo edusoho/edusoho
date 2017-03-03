@@ -1,0 +1,17 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__.'/src/AppBundle')
+    ->in(__DIR__.'/src/Biz')
+    ->in(__DIR__.'/bootstrap')
+    ->in(__DIR__.'/migrations')
+    ->in(__DIR__.'/tests')
+;
+
+return PhpCsFixer\Config::create()
+    ->setUsingCache(false)
+    ->setRules(array(
+        '@Symfony' => true,
+    ))
+    ->setFinder($finder)
+;
