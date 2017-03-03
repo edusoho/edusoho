@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Task\Service\Impl;
-
 
 use Biz\BaseService;
 use Biz\Task\Service\ViewLogService;
@@ -33,5 +31,4 @@ class ViewLogServiceImpl extends BaseService implements ViewLogService
     {
         return $this->createDao('Task:ViewLogDao');
     }
-
 }

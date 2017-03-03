@@ -2,20 +2,19 @@
 
 namespace AppBundle\Controller\Activity;
 
-
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
 class AudioController extends BaseController implements ActivityActionInterface
 {
-
     public function showAction(Request $request, $activity)
     {
         $audio = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
+
         return $this->render('activity/audio/show.html.twig', array(
             'activity' => $activity,
-            'audio'    => $audio
+            'audio' => $audio,
         ));
     }
 
@@ -24,9 +23,9 @@ class AudioController extends BaseController implements ActivityActionInterface
         $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
 
         return $this->render('activity/audio/preview.html.twig', array(
-            'task'     => $task,
+            'task' => $task,
             'activity' => $activity,
-            'courseId' => $task['courseId']
+            'courseId' => $task['courseId'],
         ));
     }
 
@@ -34,16 +33,17 @@ class AudioController extends BaseController implements ActivityActionInterface
     {
         $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
         $activity = $this->fillMinuteAndSecond($activity);
+
         return $this->render('activity/audio/modal.html.twig', array(
             'activity' => $activity,
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
         return $this->render('activity/audio/modal.html.twig', array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
     }
 
@@ -58,6 +58,7 @@ class AudioController extends BaseController implements ActivityActionInterface
             $activity['minute'] = intval($activity['length'] / 60);
             $activity['second'] = intval($activity['length'] % 60);
         }
+
         return $activity;
     }
 

@@ -29,5 +29,4 @@ interface CloudClient
     public function getMediaInfo($key, $mediaType);
 
     public function generateFileUrl($key, $duration);
-
 }

@@ -2,7 +2,6 @@
 
 namespace Biz\PostFilter\Dao\Impl;
 
-
 use Biz\PostFilter\Dao\RecentPostNumDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 

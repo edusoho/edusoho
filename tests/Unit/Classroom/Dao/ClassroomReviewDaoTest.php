@@ -18,35 +18,35 @@ class ClassroomReviewDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 5
+                'expectedCount' => 5,
                 ),
             array(
                 'condition' => array('userId' => 2),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('classroomId' => 2),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('rating' => 2),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('content' => 'qqq'),
                 'expectedResults' => array($expected[3]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('parentId' => 2),
                 'expectedResults' => array($expected[4]),
-                'expectedCount' => 1
-                )
+                'expectedCount' => 1,
+                ),
             );
-            $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
+        $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
 
     public function testSumReviewRatingByClassroomId()
@@ -82,7 +82,7 @@ class ClassroomReviewDaoTest extends BaseDaoTestCase
             'rating' => 1,
             'content' => 'aaa',
             'parentId' => 0,
-            'title' => 'bbb'
+            'title' => 'bbb',
             );
     }
 }

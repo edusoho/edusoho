@@ -30,38 +30,37 @@ class CourseDaoTest extends BaseDaoTestCase
     {
         $resultResult = array(
           array(
-            "courseSetId"=>"1",
-            "income"=> "12.00"
+            'courseSetId' => '1',
+            'income' => '12.00',
           ),
           array(
-            "courseSetId"=>"2",
-            "income"=> "1.00"
-          )      
+            'courseSetId' => '2',
+            'income' => '1.00',
+          ),
         );
-        $this->mockDataObject(array('income' => 1, 'courseSetId'=> 2));
+        $this->mockDataObject(array('income' => 1, 'courseSetId' => 2));
         $this->mockDataObject(array('income' => 1));
         $this->mockDataObject(array('income' => 2));
         $this->mockDataObject(array('income' => 4));
         $this->mockDataObject(array('income' => 5));
-        $result = $this->getDao()->findCourseSetIncomesByCourseSetIds(array(1,2));
+        $result = $this->getDao()->findCourseSetIncomesByCourseSetIds(array(1, 2));
         $this->assertArrayEquals($resultResult, $result);
     }
 
     public function testGetMinAndMaxPublishedCoursePriceByCourseSetId()
     {
-        $this->mockDataObject(array('courseSetId'=> 2, 'price'=>0, 'status'=>'published'));
-        $this->mockDataObject(array('price'=> 1));
-        $this->mockDataObject(array('price'=> 2, 'status'=>'published'));
-        $this->mockDataObject(array('price'=> 3, 'status'=>'published'));
+        $this->mockDataObject(array('courseSetId' => 2, 'price' => 0, 'status' => 'published'));
+        $this->mockDataObject(array('price' => 1));
+        $this->mockDataObject(array('price' => 2, 'status' => 'published'));
+        $this->mockDataObject(array('price' => 3, 'status' => 'published'));
 
         $price = $this->getDao()->getMinAndMaxPublishedCoursePriceByCourseSetId(1);
         $this->assertEquals(2, $price['minPrice']);
 
-        $this->mockDataObject(array('price'=> 0, 'status'=>'published'));
+        $this->mockDataObject(array('price' => 0, 'status' => 'published'));
         $price = $this->getDao()->getMinAndMaxPublishedCoursePriceByCourseSetId(1);
         $this->assertEquals(0, $price['minPrice']);
         $this->assertEquals(3, $price['maxPrice']);
-
     }
 
     protected function getDefaultMockFields()
@@ -69,7 +68,7 @@ class CourseDaoTest extends BaseDaoTestCase
         return array(
             'courseSetId' => 1,
             'title' => 'a',
-            'address' => 'a'
+            'address' => 'a',
         );
     }
 }

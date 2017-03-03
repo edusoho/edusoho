@@ -11,7 +11,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\CloudFile\Service\CloudFileService;
 use Topxia\Service\Common\ServiceKernel;
 
-
 class CloudFileServiceImpl extends BaseService implements CloudFileService
 {
     public function search($conditions, $start, $limit)
@@ -19,8 +18,8 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         if (empty($conditions['resType'])) {
             $conditions['start'] = $start;
             $conditions['limit'] = $limit;
-            $conditions          = $this->filterConditions($conditions);
-            $result              = $this->getCloudFileImplementor()->search($conditions);
+            $conditions = $this->filterConditions($conditions);
+            $result = $this->getCloudFileImplementor()->search($conditions);
 
             if (!empty($result['data'])) {
                 $createdUserIds = array();
@@ -29,7 +28,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
                     $file = $this->getUploadFileService()->getFileByGlobalId($cloudFile['no']);
 
                     if (!empty($file)) {
-                        $createdUserIds[]           = $file['createdUserId'];
+                        $createdUserIds[] = $file['createdUserId'];
                         $cloudFile['createdUserId'] = $file['createdUserId'];
                     }
                 }
@@ -38,18 +37,20 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             }
         } else {
             $conditions['targetType'] = $conditions['resType'];
-            $result['count']          = $this->getUploadFileService()->searchFileCount($conditions);
-            $result['data']           = $this->getUploadFileService()->searchFiles($conditions, array('id' => 'DESC'), $start, $limit);
+            $result['count'] = $this->getUploadFileService()->searchFileCount($conditions);
+            $result['data'] = $this->getUploadFileService()->searchFiles($conditions, array('id' => 'DESC'), $start, $limit);
 
-            $createdUserIds         = ArrayToolkit::column($result['data'], 'createdUserId');
+            $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
             $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
 
             $result['data'] = array_map(function ($file) {
-                $file['no']            = $file['globalId'];
+                $file['no'] = $file['globalId'];
                 $file['processStatus'] = empty($file['processStatus']) ? 'none' : $file['processStatus'];
+
                 return $file;
             }, $result['data']);
         }
+
         return $result;
     }
 
@@ -77,7 +78,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
         $globalIds = array();
 
-        for ($i = 0; $i < count($noArray); $i++) {
+        for ($i = 0; $i < count($noArray); ++$i) {
             if (empty($noArray[$i])) {
                 $globalIds = array(0);
                 break;
@@ -112,7 +113,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function findGlobalIdByUsedCount($usedStatus)
     {
-        if ($usedStatus == "used") {
+        if ($usedStatus == 'used') {
             $conditions = array('startCount' => 1);
         } else {
             $conditions = array('endCount' => 1);
@@ -130,8 +131,8 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function findGlobalIdsByTags($tags)
     {
         $filesInTags = $this->getUploadFileTagService()->findByTagId($tags);
-        $fileIds     = ArrayToolkit::column($filesInTags, 'fileId');
-        $files       = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $fileIds = ArrayToolkit::column($filesInTags, 'fileId');
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
 
         if (!empty($files)) {
             return ArrayToolkit::column($files, 'globalId');
@@ -143,7 +144,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function findGlobalIdsByKeyWords($searchType, $keywords)
     {
         if ($searchType == 'course') {
-            $courseSets   = $this->getCourseSetService()->findCourseSetsLikeTitle($keywords);
+            $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keywords);
             $courseSetIds = ArrayToolkit::column($courseSets, 'id');
 
             $courseMaterials = $this->getMaterialService()->searchMaterials(
@@ -153,7 +154,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
                 PHP_INT_MAX
             );
 
-            $conditions        = array();
+            $conditions = array();
             $conditions['ids'] = ArrayToolkit::column($courseMaterials, 'fileId');
 
             $materials = $this->getUploadFileService()->searchFiles($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
@@ -165,7 +166,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
             $userIds = ArrayToolkit::column($users, 'id');
 
-            $userIds    = empty($userIds) ? array(-1) : $userIds;
+            $userIds = empty($userIds) ? array(-1) : $userIds;
             $localFiles = $this->getUploadFileService()->searchFiles(
                 array('createdUserIds' => $userIds, 'storage' => 'cloud'),
                 array('createdTime' => 'DESC'),
@@ -190,10 +191,12 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
         if (!empty($file)) {
             $this->getUploadFileService()->update($file['id'], $fields);
+
             return array('success' => true);
         }
 
         $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags', 'description'));
+
         return $this->getCloudFileImplementor()->updateFile($globalId, $cloudFields);
     }
 
@@ -207,6 +210,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
         if (!empty($file)) {
             $this->getUploadFileService()->deleteFile($file['id']);
+
             return array('success' => true);
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
@@ -31,7 +32,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             if ($type == 'default') {
                 if (!empty($authUser['id'])) {
                     $registration['token'] = array(
-                        'userId' => $authUser['id']
+                        'userId' => $authUser['id'],
                     );
                 }
 
@@ -45,6 +46,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             }
 
             $this->getKernel()->getConnection()->commit();
+
             return $newUser;
         } catch (\Exception $e) {
             $this->getKernel()->getConnection()->rollBack();
@@ -55,7 +57,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     protected function registerLimitValidator($registration)
     {
         $authSettings = $this->getSettingService()->get('auth', array());
-        $user         = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         if (!$user->isAdmin() && isset($authSettings['register_protective'])) {
             $status = $this->protectiveRule($authSettings['register_protective'], $registration['createdIp']);
@@ -74,7 +76,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             case 'middle':
                 $condition = array(
                     'startTime' => time() - 24 * 3600,
-                    'createdIp' => $ip);
+                    'createdIp' => $ip, );
                 $registerCount = $this->getUserService()->searchUserCount($condition);
 
                 if ($registerCount > 30) {
@@ -85,7 +87,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             case 'high':
                 $condition = array(
                     'startTime' => time() - 24 * 3600,
-                    'createdIp' => $ip);
+                    'createdIp' => $ip, );
                 $registerCount = $this->getUserService()->searchUserCount($condition);
 
                 if ($registerCount > 10) {
@@ -94,7 +96,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
                 $registerCount = $this->getUserService()->searchUserCount(array(
                     'startTime' => time() - 3600,
-                    'createdIp' => $ip));
+                    'createdIp' => $ip, ));
 
                 if ($registerCount >= 1) {
                     return false;
@@ -120,13 +122,14 @@ class AuthServiceImpl extends BaseService implements AuthService
             $registration['email'] = $this->getUserService()->generateEmail($registration);
         }
         $registration = $this->fillOrgId($registration);
+
         return $registration;
     }
 
     public function syncLogin($userId)
     {
         $providerName = $this->getAuthProvider()->getProviderName();
-        $bind         = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
+        $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
 
         if (empty($bind)) {
             return '';
@@ -138,7 +141,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function syncLogout($userId)
     {
         $providerName = $this->getAuthProvider()->getProviderName();
-        $bind         = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
+        $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
 
         if (empty($bind)) {
             return '';
@@ -151,7 +154,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if ($this->hasPartnerAuth()) {
             $providerName = $this->getAuthProvider()->getProviderName();
-            $bind         = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
+            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
 
             if ($bind) {
                 $this->getAuthProvider()->changeNickname($bind['fromId'], $newName);
@@ -165,7 +168,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if ($this->hasPartnerAuth()) {
             $providerName = $this->getAuthProvider()->getProviderName();
-            $bind         = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
+            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
 
             if ($bind) {
                 $this->getAuthProvider()->changeEmail($bind['fromId'], $password, $newEmail);
@@ -179,7 +182,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if ($this->hasPartnerAuth()) {
             $providerName = $this->getAuthProvider()->getProviderName();
-            $bind         = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
+            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
 
             if ($bind) {
                 $this->getAuthProvider()->changePassword($bind['fromId'], $oldPassword, $newPassword);
@@ -205,7 +208,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function checkUsername($username, $randomName = '')
     {
-//如果一步注册则$randomName为空，正常校验discus和系统校验，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
+        //如果一步注册则$randomName为空，正常校验discus和系统校验，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
         if (empty($randomName) || $username != $randomName) {
             try {
                 $result = $this->getAuthProvider()->checkUsername($username);
@@ -288,7 +291,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if ($this->hasPartnerAuth()) {
             $providerName = $this->getAuthProvider()->getProviderName();
-            $bind         = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
+            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
 
             if (!$bind) {
                 return $this->getUserService()->verifyPassword($userId, $password);
@@ -327,7 +330,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function getPartnerAvatar($userId, $size = 'middle')
     {
         $providerName = $this->getAuthProvider()->getProviderName();
-        $bind         = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
+        $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
 
         if (!$bind) {
             return null;
@@ -351,7 +354,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         $auth = $this->getSettingService()->get('auth');
 
         if ($auth && array_key_exists('register_mode', $auth)) {
-            return (in_array($auth['register_mode'], array('email', 'mobile', 'email_or_mobile')));
+            return in_array($auth['register_mode'], array('email', 'mobile', 'email_or_mobile'));
         }
 
         return true;
@@ -372,7 +375,7 @@ class AuthServiceImpl extends BaseService implements AuthService
                 throw $this->createInvalidArgumentException('Invalid partner');
             }
 
-            $class = substr(__NAMESPACE__, 0, -13)."\\AuthProvider\\".ucfirst($partner)."AuthProvider";
+            $class = substr(__NAMESPACE__, 0, -13).'\\AuthProvider\\'.ucfirst($partner).'AuthProvider';
 
             $this->partner = new $class();
         }

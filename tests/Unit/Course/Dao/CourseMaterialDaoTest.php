@@ -17,77 +17,77 @@ class CourseMaterialDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('id' => 1),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
             ),
             array(
                 'condition' => array('courseId' => 1),
                 'expectedResults' => array($expected[0], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('courseSetId' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('lessonId' => 1),
                 'expectedResults' => array($expected[0], $expected[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('excludeLessonId' => 1),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
             ),
             array(
                 'condition' => array('type' => 'eeee'),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('userId' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('titleLike' => 's'),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('copyId' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('fileId' => 1),
                 'expectedResults' => array($expected[0], $expected[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('fileIds' => array(1, 2)),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('source' => 'aaaa'),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('sources' => array('aaaa', 1)),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('courseIds' => array(1, 2)),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
         );
 
@@ -237,7 +237,7 @@ class CourseMaterialDaoTest extends BaseDaoTestCase
             'userId' => 1,
             'copyId' => 1,
             'type' => 'eeee',
-            'courseSetId' => 1
+            'courseSetId' => 1,
         );
     }
 }

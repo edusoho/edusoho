@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
@@ -20,7 +21,7 @@ class CourseExtension extends \Twig_Extension
     public function __construct(ContainerInterface $container, Biz $biz)
     {
         $this->container = $container;
-        $this->biz       = $biz;
+        $this->biz = $biz;
     }
 
     public function getFilters()
@@ -33,13 +34,14 @@ class CourseExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFunction('course_show_metas', array($this, 'getCourseShowMetas')),
-            new \Twig_SimpleFunction('is_buy_course_from_modal', array($this, 'isBuyCourseFromModal'))
+            new \Twig_SimpleFunction('is_buy_course_from_modal', array($this, 'isBuyCourseFromModal')),
         );
     }
 
     public function getCourseShowMetas($mode = 'guest')
-    {   
+    {
         $metas = $this->container->get('extension.default')->getCourseShowMetas();
+
         return $metas["for_{$mode}"];
     }
 
@@ -48,27 +50,30 @@ class CourseExtension extends \Twig_Extension
         $course = $this->getCourseService()->getCourse($courseId);
         $user = $this->biz['user'];
 
-        return !$user->isLogin() 
-            || $this->shouldUserinfoFill() 
-            || $this->isUserApproval($course) 
+        return !$user->isLogin()
+            || $this->shouldUserinfoFill()
+            || $this->isUserApproval($course)
             || $this->isUserAvatarEmpty();
     }
 
     protected function isUserApproval($course)
     {
         $user = $this->biz['user'];
+
         return $course['approval'] && $user['approvalStatus'] != 'approved';
     }
 
     protected function isUserAvatarEmpty()
     {
         $user = $this->biz['user'];
+
         return AvatarAlert::alertJoinCourse($user);
     }
 
     public function shouldUserinfoFill()
     {
         $setting = $this->getSettingService()->get('course');
+
         return !empty($setting['buy_fill_userinfo']);
     }
 

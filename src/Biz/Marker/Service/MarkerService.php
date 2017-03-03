@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Marker\Service;
 
 interface MarkerService
@@ -22,5 +23,4 @@ interface MarkerService
     public function canManageMarker($lessonUserId);
 
     public function merge($sourceMarkerId, $targetMarkerId);
-
 }

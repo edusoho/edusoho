@@ -75,14 +75,15 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "DELETE FROM {$this->table} WHERE id IN ({$marks});";
+        $sql = "DELETE FROM {$this->table} WHERE id IN ({$marks});";
+
         return $this->db()->executeUpdate($sql, $ids);
     }
 
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime'),
+            'orderbys' => array('createdTime'),
             'conditions' => array(
                 'fromId = :fromId',
                 'toId = :toId',
@@ -91,8 +92,8 @@ class MessageDaoImpl extends GeneralDaoImpl implements MessageDao
                 'createdTime < :endDate',
                 'fromId IN (:fromIds)',
                 'toId IN (:toIds)',
-                'content LIKE :content'
-            )
+                'content LIKE :content',
+            ),
         );
     }
 }

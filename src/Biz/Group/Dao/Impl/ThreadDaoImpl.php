@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Group\Dao\Impl;
 
 use Biz\Group\Dao\ThreadDao;
@@ -18,6 +19,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         if (isset($conditions['title'])) {
             $conditions['title'] = '%'.$conditions['title'].'%';
         }
+
         return parent::_createQueryBuilder($conditions);
     }
 
@@ -26,7 +28,7 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
         return array(
             'timestamps' => array('createdTime'),
             'serializes' => array('tagIds' => 'json'),
-            'orderbys'   => array('isStick', 'postNum', 'createdTime', 'lastPostTime'),
+            'orderbys' => array('isStick', 'postNum', 'createdTime', 'lastPostTime'),
             'conditions' => array(
                 'groupId = :groupId',
                 'createdTime > :createdTime',
@@ -36,8 +38,8 @@ class ThreadDaoImpl extends GeneralDaoImpl implements ThreadDao
                 'type = :type',
                 'userId = :userId',
                 'status = :status',
-                'title like :title'
-            )
+                'title like :title',
+            ),
         );
     }
 }

@@ -27,7 +27,7 @@ class ThemeServiceTest extends BaseTestCase
     public function testGetCurrentThemeConfig()
     {
         $themeSetting = $this->setThemeSetting();
-        $config       = $this->getThemeService()->getCurrentThemeConfig();
+        $config = $this->getThemeService()->getCurrentThemeConfig();
 
         $this->assertEquals($themeSetting['name'], $config['name']);
     }
@@ -38,19 +38,19 @@ class ThemeServiceTest extends BaseTestCase
         $createConfig = $this->createConfig();
 
         $config = array(
-            'color'  => 'default',
+            'color' => 'default',
             'blocks' => array(
                 'left' => array(
-                    "title"        => "",
-                    "count"        => "6",
-                    "categoryId"   => "",
-                    "orderBy"      => "latest",
-                    "code"         => "course-grid-with-condition-index",
-                    "defaultTitle" => "课程组件",
-                    "id"           => "latestCourse"
-                )
+                    'title' => '',
+                    'count' => '6',
+                    'categoryId' => '',
+                    'orderBy' => 'latest',
+                    'code' => 'course-grid-with-condition-index',
+                    'defaultTitle' => '课程组件',
+                    'id' => 'latestCourse',
+                ),
             ),
-            'bottom' => ''
+            'bottom' => '',
         );
 
         $configUpdate = $this->getThemeService()->saveCurrentThemeConfig($config);
@@ -82,7 +82,7 @@ class ThemeServiceTest extends BaseTestCase
     public function testResetCurrentConfig()
     {
         $themeSetting = $this->setThemeSetting();
-        $themeCreate  = $this->createConfig();
+        $themeCreate = $this->createConfig();
 
         $config = $this->getThemeService()->resetCurrentConfig();
 
@@ -92,13 +92,13 @@ class ThemeServiceTest extends BaseTestCase
     protected function setThemeSetting()
     {
         $value = array(
-            'code'            => 'jianmo',
-            'name'            => '简墨',
-            'author'          => 'EduSoho官方',
-            'version'         => '1.0.0',
+            'code' => 'jianmo',
+            'name' => '简墨',
+            'author' => 'EduSoho官方',
+            'version' => '1.0.0',
             'supprot_version' => '6.0.0+',
-            'date'            => '2015-6-1',
-            'thumb'           => 'img/theme.jpg'
+            'date' => '2015-6-1',
+            'thumb' => 'img/theme.jpg',
         );
         $this->getSettingService()->set('theme', $value);
 
@@ -108,19 +108,19 @@ class ThemeServiceTest extends BaseTestCase
     protected function createConfig()
     {
         $config = array(
-            'color'  => 'green',
+            'color' => 'green',
             'blocks' => array(
                 'left' => array(
-                    "title"        => "",
-                    "count"        => "12",
-                    "categoryId"   => "",
-                    "orderBy"      => "latest",
-                    "code"         => "course-grid-with-condition-index",
-                    "defaultTitle" => "课程组件",
-                    "id"           => "latestCourse"
-                )
+                    'title' => '',
+                    'count' => '12',
+                    'categoryId' => '',
+                    'orderBy' => 'latest',
+                    'code' => 'course-grid-with-condition-index',
+                    'defaultTitle' => '课程组件',
+                    'id' => 'latestCourse',
+                ),
             ),
-            'bottom' => ''
+            'bottom' => '',
         );
 
         return $this->getThemeService()->createThemeConfig('简墨', $config);

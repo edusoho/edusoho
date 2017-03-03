@@ -12,12 +12,12 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
     public function declares()
     {
         return array(
-            'orderbys'   => array('seq'),
+            'orderbys' => array('seq'),
             'conditions' => array(
                 'classroomId =:classroomId',
                 'courseId = :courseId',
-                'disabled = :disabled'
-            )
+                'disabled = :disabled',
+            ),
         );
     }
 
@@ -29,37 +29,43 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
     public function deleteByClassroomIdAndCourseId($classroomId, $courseId)
     {
         $result = $this->db()->delete($this->table, array('classroomId' => $classroomId, 'courseId' => $courseId));
+
         return $result;
     }
 
     public function findClassroomIdsByCourseId($courseId)
     {
         $sql = "SELECT classroomId FROM {$this->table()} where courseId=?";
+
         return $this->db()->fetchAll($sql, array($courseId));
     }
 
     public function getClassroomIdByCourseId($courseId)
     {
         $sql = "SELECT classroomId FROM {$this->table()} where courseId = ? LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($courseId)) ?: null;
     }
 
     public function getByCourseSetId($courseSetId)
     {
         $sql = "SELECT * FROM {$this->table()} where courseSetId = ? LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($courseSetId)) ?: null;
     }
 
     public function getByClassroomIdAndCourseId($classroomId, $courseId)
     {
         $sql = "SELECT * FROM {$this->table} where classroomId = ? AND courseId = ? LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($classroomId, $courseId)) ?: null;
     }
 
     public function deleteByClassroomId($classroomId)
     {
-        $sql    = "DELETE FROM {$this->table} WHERE classroomId = ?";
+        $sql = "DELETE FROM {$this->table} WHERE classroomId = ?";
         $result = $this->db()->executeUpdate($sql, array($classroomId));
+
         return $result;
     }
 
@@ -69,8 +75,8 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
             return array();
         }
 
-        $marks     = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql       = "SELECT * FROM {$this->table} WHERE classroomId = ? AND courseId IN ({$marks}) ORDER BY seq ASC;";
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND courseId IN ({$marks}) ORDER BY seq ASC;";
         $courseIds = array_merge(array($classroomId), $courseIds);
 
         return $this->db()->fetchAll($sql, $courseIds) ?: array();
@@ -79,6 +85,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
     public function findByClassroomId($classroomId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? ORDER BY seq ASC;";
+
         return $this->db()->fetchAll($sql, array($classroomId)) ?: array();
     }
 
@@ -89,7 +96,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         }
 
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE courseId IN ({$marks}) ORDER BY seq ASC;";
+        $sql = "SELECT * FROM {$this->table} WHERE courseId IN ({$marks}) ORDER BY seq ASC;";
 
         return $this->db()->fetchAll($sql, $courseIds) ?: array();
     }
@@ -106,7 +113,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         }
 
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE courseId IN ({$marks}) AND disabled=0 ORDER BY seq ASC;";
+        $sql = "SELECT * FROM {$this->table} WHERE courseId IN ({$marks}) AND disabled=0 ORDER BY seq ASC;";
 
         return $this->db()->fetchAll($sql, $courseIds) ?: array();
     }
@@ -114,16 +121,18 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
     public function findActiveCoursesByClassroomId($classroomId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE classroomId = ? AND disabled = 0 ORDER BY seq ASC;";
+
         return $this->db()->fetchAll($sql, array($classroomId)) ?: array();
     }
 
     public function countCourseTasksByClassroomId($classroomId)
     {
-        $sql ="select sum(`taskNum`) from `c2_course` where id in (select `courseId` from `{$this->table}` where `classroomId` = {$classroomId} )";
+        $sql = "select sum(`taskNum`) from `c2_course` where id in (select `courseId` from `{$this->table}` where `classroomId` = {$classroomId} )";
         $result = $this->db()->fetchColumn($sql);
-        if (is_null($result)){
+        if (is_null($result)) {
             return 0;
         }
+
         return $result;
     }
 }

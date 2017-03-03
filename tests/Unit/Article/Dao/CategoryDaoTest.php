@@ -18,12 +18,12 @@ class CategoryDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array('parentId' => 0),
                 'expectedResults' => array($expected[0], $expected[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('parentId' => 1),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
             ),
         );
 
@@ -109,7 +109,6 @@ class CategoryDaoTest extends BaseDaoTestCase
     //已被testSearch覆盖
     public function testSearchByParentId()
     {
-        ;
     }
 
     public function testCountByParentId()
@@ -147,7 +146,7 @@ class CategoryDaoTest extends BaseDaoTestCase
         $this->assertEquals(array($expected[0]), $res[1]);
         $this->assertEquals($expected, $res[2]);
     }
-    
+
     public function testFindAll()
     {
         $expected = array();

@@ -1,6 +1,6 @@
 <?php
-namespace Biz\Common;
 
+namespace Biz\Common;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

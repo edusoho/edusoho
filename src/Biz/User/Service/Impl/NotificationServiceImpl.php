@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
@@ -8,14 +9,15 @@ class NotificationServiceImpl extends BaseService implements NotificationService
 {
     public function notify($userId, $type, $content)
     {
-        $notification                = array();
-        $notification['userId']      = $userId;
-        $notification['type']        = empty($type) ? 'default' : (string) $type;
-        $notification['content']     = is_array($content) ? $content : array('message' => $content);
+        $notification = array();
+        $notification['userId'] = $userId;
+        $notification['type'] = empty($type) ? 'default' : (string) $type;
+        $notification['content'] = is_array($content) ? $content : array('message' => $content);
         $notification['createdTime'] = time();
-        $notification['isRead']      = 0;
+        $notification['isRead'] = 0;
         $this->getNotificationDao()->create($notification);
         $this->getUserService()->waveUserCounter($userId, 'newNotificationNum', 1);
+
         return true;
     }
 

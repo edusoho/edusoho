@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class OldCloudAppAddProtocol extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -15,12 +15,12 @@ class OldCloudAppAddProtocol extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        $db->exec("ALTER TABLE `cloud_app` DROP `protocol`;");
+        $db->exec('ALTER TABLE `cloud_app` DROP `protocol`;');
     }
 }

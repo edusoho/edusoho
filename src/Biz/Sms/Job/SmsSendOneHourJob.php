@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Sms\Job;
 
 use Biz\Crontab\Service\Job;
@@ -10,20 +11,20 @@ class SmsSendOneHourJob implements Job
 {
     public function execute($params)
     {
-        $smsType    = 'sms_live_play_one_hour';
-        $dayIsOpen  = $this->getSmsService()->isOpen($smsType);
+        $smsType = 'sms_live_play_one_hour';
+        $dayIsOpen = $this->getSmsService()->isOpen($smsType);
         $parameters = array();
 
         if ($dayIsOpen) {
-            $targetType   = $params['targetType'];
-            $targetId     = $params['targetId'];
-            $processor    = SmsProcessorFactory::create($targetType);
-            $return       = $processor->getUrls($targetId, $smsType);
+            $targetType = $params['targetType'];
+            $targetId = $params['targetId'];
+            $processor = SmsProcessorFactory::create($targetType);
+            $return = $processor->getUrls($targetId, $smsType);
             $callbackUrls = $return['urls'];
-            $count        = ceil($return['count'] / 1000);
+            $count = ceil($return['count'] / 1000);
             try {
-                $api    = CloudAPIFactory::create('leaf');
-                $result = $api->post("/sms/sendBatch", array('total' => $count, 'callbackUrls' => $callbackUrls));
+                $api = CloudAPIFactory::create('leaf');
+                $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
             } catch (\RuntimeException $e) {
                 throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
             }

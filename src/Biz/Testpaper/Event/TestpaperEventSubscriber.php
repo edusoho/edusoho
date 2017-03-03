@@ -11,8 +11,8 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     public static function getSubscribedEvents()
     {
         return array(
-            'exam.finish'   => 'onTestpaperFinish',
-            'exam.reviewed' => 'onTestpaperReviewd'
+            'exam.finish' => 'onTestpaperFinish',
+            'exam.reviewed' => 'onTestpaperReviewd',
         );
     }
 
@@ -20,24 +20,24 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $paperResult = $event->getSubject();
 
-        $biz  = $this->getBiz();
+        $biz = $this->getBiz();
         $user = $biz['user'];
 
         $itemCount = $this->getTestpaperService()->searchItemCount(array(
-            'testId'        => $paperResult['testId'],
-            'questionTypes' => array('essay')
+            'testId' => $paperResult['testId'],
+            'questionTypes' => array('essay'),
         ));
 
         if ($itemCount) {
             $course = $this->getCourseService()->getCourse($paperResult['courseId']);
 
             $message = array(
-                'id'       => $paperResult['id'],
+                'id' => $paperResult['id'],
                 'courseId' => $paperResult['courseId'],
-                'name'     => $paperResult['paperName'],
-                'userId'   => $user['id'],
+                'name' => $paperResult['paperName'],
+                'userId' => $user['id'],
                 'userName' => $user['nickname'],
-                'type'     => 'perusal'
+                'type' => 'perusal',
             );
 
             if (!empty($course['teacherIds'])) {
@@ -52,7 +52,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         $paperResult = $event->getSubject();
 
-        $biz  = $this->getBiz();
+        $biz = $this->getBiz();
         $user = $biz['user'];
 
         if (!in_array($paperResult['type'], array('testpaper', 'homework'))) {
@@ -60,13 +60,13 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         }
 
         $message = array(
-            'id'            => $paperResult['id'],
-            'courseId'      => $paperResult['courseId'],
-            'name'          => $paperResult['paperName'],
-            'userId'        => $user['id'],
-            'userName'      => $user['nickname'],
-            'type'          => 'read',
-            'testpaperType' => $paperResult['type']
+            'id' => $paperResult['id'],
+            'courseId' => $paperResult['courseId'],
+            'name' => $paperResult['paperName'],
+            'userId' => $user['id'],
+            'userName' => $user['nickname'],
+            'type' => 'read',
+            'testpaperType' => $paperResult['type'],
         );
 
         $result = $this->getNotificationService()->notify($paperResult['userId'], 'test-paper', $message);

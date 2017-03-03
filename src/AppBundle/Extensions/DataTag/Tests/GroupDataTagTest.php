@@ -2,7 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag\Test;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\GroupDataTag;
 
 class GroupDataTagTest extends BaseTestCase
@@ -11,15 +11,15 @@ class GroupDataTagTest extends BaseTestCase
     {
         $group = array(
             'title' => 'online',
-            'about' => 'online test course 1'
+            'about' => 'online test course 1',
         );
         $user = array(
-            'id' => 1
+            'id' => 1,
         );
 
         $group = $this->getGroupService()->addGroup($user, $group);
 
-        $datatag   = new GroupDataTag();
+        $datatag = new GroupDataTag();
         $distGroup = $datatag->getData(array('groupId' => $group['id']));
         $this->assertEquals($group['id'], $distGroup['id']);
     }
@@ -28,5 +28,4 @@ class GroupDataTagTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Group:GroupService');
     }
-
 }

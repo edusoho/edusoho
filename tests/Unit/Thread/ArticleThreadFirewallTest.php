@@ -9,7 +9,7 @@ class ArticleThreadFirewallTest extends BaseTestCase
 {
     public function testaccessPostCreate()
     {
-        $user        = $this->createUser();
+        $user = $this->createUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
@@ -22,11 +22,11 @@ class ArticleThreadFirewallTest extends BaseTestCase
 
     public function testaccessPostDelete()
     {
-        $user        = $this->createUser();
+        $user = $this->createUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        $user1   = $this->getCurrentUser();
+        $user1 = $this->getCurrentUser();
         $user1Id = '1';
 
         if ($result = $user1->isLogin()) {
@@ -39,7 +39,7 @@ class ArticleThreadFirewallTest extends BaseTestCase
 
     public function testaccessPostVote()
     {
-        $user        = $this->createUser();
+        $user = $this->createUser();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
@@ -52,13 +52,14 @@ class ArticleThreadFirewallTest extends BaseTestCase
 
     protected function createUser()
     {
-        $user              = array();
-        $user['email']     = "user@user.com";
-        $user['nickname']  = "user";
-        $user['password']  = "user";
-        $user              = $this->getUserService()->register($user);
+        $user = array();
+        $user['email'] = 'user@user.com';
+        $user['nickname'] = 'user';
+        $user['password'] = 'user';
+        $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
-        $user['roles']     = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $user['roles'] = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+
         return $user;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Task\Strategy\Impl;
 
 use AppBundle\Common\ArrayToolkit;
@@ -73,10 +74,10 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
     {
         $tasks = ArrayToolkit::group($tasks, 'categoryId');
 
-        $items    = array();
+        $items = array();
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
         foreach ($chapters as $chapter) {
-            $chapter['itemType']               = 'chapter';
+            $chapter['itemType'] = 'chapter';
             $items["chapter-{$chapter['id']}"] = $chapter;
         }
 
@@ -101,30 +102,31 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 //throw new NotFoundException(json_encode($item));
             }
         }
+
         return $items;
     }
 
     public function sortCourseItems($courseId, array $ids)
     {
         $parentChapters = array(
-            'lesson'  => array(),
-            'unit'    => array(),
-            'chapter' => array()
+            'lesson' => array(),
+            'unit' => array(),
+            'chapter' => array(),
         );
 
-        $chapterTypes       = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
         $lessonChapterTypes = array();
-        $seq                = 0;
+        $seq = 0;
 
         foreach ($ids as $key => $id) {
             if (strpos($id, 'chapter') !== 0) {
                 continue;
             }
-            $id      = str_replace('chapter-', '', $id);
+            $id = str_replace('chapter-', '', $id);
             $chapter = $this->getChapterDao()->get($id);
-            $seq++;
+            ++$seq;
 
-            $index  = $chapterTypes[$chapter['type']];
+            $index = $chapterTypes[$chapter['type']];
             $fields = array('seq' => $seq);
 
             switch ($index) {
@@ -175,15 +177,15 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
             $tasks = ArrayToolkit::index($tasks, 'mode');
             foreach ($tasks as $task) {
-                $seq    = $this->getTaskSeq($task['mode'], $chapter['seq']);
+                $seq = $this->getTaskSeq($task['mode'], $chapter['seq']);
                 $fields = array(
-                    'seq'        => $seq,
+                    'seq' => $seq,
                     'categoryId' => $chapter['id'],
-                    'number'     => $taskNumber
+                    'number' => $taskNumber,
                 );
                 $this->getTaskService()->updateSeq($task['id'], $fields);
                 if ($task['mode'] == 'lesson') {
-                    $taskNumber++;
+                    ++$taskNumber;
                 }
             }
         }
@@ -215,12 +217,12 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
     private function _createLesson($task)
     {
-        $chapter            = array(
+        $chapter = array(
             'courseId' => $task['fromCourseId'],
-            'title'    => $task['title'],
-            'type'     => 'lesson'
+            'title' => $task['title'],
+            'type' => 'lesson',
         );
-        $chapter            = $this->getCourseService()->createChapter($chapter);
+        $chapter = $this->getCourseService()->createChapter($chapter);
         $task['categoryId'] = $chapter['id'];
 
         return parent::createTask($task);
@@ -236,6 +238,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
         $task = parent::createTask($task);
         $this->getTaskService()->publishTask($task['id']);
+
         return $this->getTaskService()->getTask($task['id']);
     }
 
@@ -245,6 +248,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         if (!in_array($taskMode, array_keys($taskModes))) {
             throw new InvalidArgumentException('task mode is invalida');
         }
+
         return $chapterSeq + $taskModes[$taskMode];
     }
 }

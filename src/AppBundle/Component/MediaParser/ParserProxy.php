@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\MediaParser;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -20,7 +21,7 @@ class ParserProxy
             $extrasParsers = $extras['item'];
 
             foreach ($extrasParsers as $extrasParser) {
-                $class  = $extrasParser['class'];
+                $class = $extrasParser['class'];
                 $parser = new $class();
 
                 if (!$parser->detect($url)) {
@@ -32,7 +33,7 @@ class ParserProxy
         }
 
         foreach ($parsers as $parserName) {
-            $class  = __NAMESPACE__."\\ItemParser\\{$parserName}ItemParser";
+            $class = __NAMESPACE__."\\ItemParser\\{$parserName}ItemParser";
             $parser = new $class();
 
             if (!$parser->detect($url)) {
@@ -50,7 +51,7 @@ class ParserProxy
         $parsers = array('YoukuVideo', 'QQVideo', 'NeteaseOpenCourse', 'SinaOpenCourse');
 
         foreach ($parsers as $parserName) {
-            $class  = __NAMESPACE__."\\AlbumParser\\{$parserName}AlbumParser";
+            $class = __NAMESPACE__."\\AlbumParser\\{$parserName}AlbumParser";
             $parser = new $class();
 
             if (!$parser->detect($url)) {

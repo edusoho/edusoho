@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Biz\User\CurrentUser;
@@ -19,27 +20,27 @@ class CreateTestDataCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $num   = $input->getArgument('num');
+        $num = $input->getArgument('num');
         $start = $input->getArgument('start');
 
         $this->initServiceKernel();
         $user = $this->getUserService()->getUserByEmail('test@edusoho.com');
         $this->authenticateUser($user);
 
-        for ($i = $start; $i < $num; $i++) {
+        for ($i = $start; $i < $num; ++$i) {
             $user = array(
-                "email"     => "canuo{$i}@qq.com",
-                "nickname"  => "canuo{$i}",
-                "password"  => "111111",
-                "createdIp" => "127.0.0.1",
-                "type"      => "import"
+                'email' => "canuo{$i}@qq.com",
+                'nickname' => "canuo{$i}",
+                'password' => '111111',
+                'createdIp' => '127.0.0.1',
+                'type' => 'import',
             );
             $user = $this->getAuthService()->register($user);
 
             $course = array(
-                'title'   => "课程测试{$i}",
-                "buyable" => "1",
-                "type"    => "normal"
+                'title' => "课程测试{$i}",
+                'buyable' => '1',
+                'type' => 'normal',
             );
             $course = $this->getCourseService()->createCourse($course);
 
@@ -47,13 +48,13 @@ class CreateTestDataCommand extends BaseCommand
 
             $this->getCourseMemberService()->becomeStudent($course['id'], $user['id']);
 
-            for ($j = 0; $j < 5; $j++) {
+            for ($j = 0; $j < 5; ++$j) {
                 $lesson = array(
                     'courseId' => $course['id'],
-                    'title'    => "测试课时{$j}",
-                    'type'     => 'text',
-                    'content'  => '课时内容',
-                    'summary'  => '课时内容'
+                    'title' => "测试课时{$j}",
+                    'type' => 'text',
+                    'content' => '课时内容',
+                    'summary' => '课时内容',
                 );
                 $lesson = $this->getCourseService()->createLesson($lesson);
 
@@ -85,7 +86,7 @@ class CreateTestDataCommand extends BaseCommand
     protected function authenticateUser($user)
     {
         $user['currentIp'] = '127.0.0.1';
-        $currentUser       = new CurrentUser();
+        $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
 
         ServiceKernel::instance()->setCurrentUser($currentUser);

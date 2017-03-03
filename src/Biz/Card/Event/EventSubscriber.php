@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Card\Event;
 
 use Biz\Card\Service\CardService;
@@ -6,35 +7,34 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 
 class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'coupon.use'         => 'onCouponUsed',
+            'coupon.use' => 'onCouponUsed',
             'order.service.paid' => 'onOrderPaid',
-            'user.register'      => 'onUserRegister'
+            'user.register' => 'onUserRegister',
         );
     }
 
     public function onCouponUsed(Event $event)
     {
         $coupon = $event->getSubject();
-        $card   = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
+        $card = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
 
         if (!empty($card)) {
             $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', array(
-                'status'  => 'used',
-                'useTime' => $coupon['orderTime']
+                'status' => 'used',
+                'useTime' => $coupon['orderTime'],
             ));
         }
     }
 
     public function onOrderPaid(Event $event)
     {
-        $order         = $event->getSubject();
+        $order = $event->getSubject();
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
         if (isset($inviteSetting['get_coupon_setting']) && $inviteSetting['get_coupon_setting'] == 1) {
@@ -54,8 +54,8 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber
 
     public function onUserRegister(Event $event)
     {
-        $userIds      = $event->getSubject();
-        $userId       = $userIds['userId'];
+        $userIds = $event->getSubject();
+        $userId = $userIds['userId'];
         $inviteUserId = $userIds['inviteUserId'];
 
         $inviteSetting = $this->getSettingService()->get('invite', array());

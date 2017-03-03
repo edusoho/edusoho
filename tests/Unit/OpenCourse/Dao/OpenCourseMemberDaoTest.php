@@ -18,48 +18,48 @@ class OpenCourseMemberDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 5
+                'expectedCount' => 5,
                 ),
             array(
                 'condition' => array('userId' => 2),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('courseId' => 2),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('role' => 'teacher'),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('isNotified' => 2),
                 'expectedResults' => array($expected[3]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('startTimeGreaterThan' => 2, 'startTimeLessThan' => 1234567891232),
                 'expectedResults' => $expected,
-                'expectedCount' => 5
+                'expectedCount' => 5,
                 ),
             array(
                 'condition' => array('mobile' => '2'),
                 'expectedResults' => array($expected[4]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('courseIds' => array(2)),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('userIds' => array(2)),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
-                )
+                'expectedCount' => 1,
+                ),
             );
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
@@ -128,7 +128,7 @@ class OpenCourseMemberDaoTest extends BaseDaoTestCase
             'isNotified' => 1,
             'createdTime' => 1,
             'mobile' => '1',
-            'ip' => 'a'
+            'ip' => 'a',
             );
     }
 }

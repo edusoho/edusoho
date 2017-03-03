@@ -16,33 +16,33 @@ class ThreadPostDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array('courseId' => 1),
                 'expectedResults' => array($threads[0], $threads[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('taskId' => 1),
                 'expectedResults' => array($threads[0], $threads[1], $threads[2]),
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('userId' => 2),
                 'expectedResults' => array($threads[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
             ),
             array(
                 'condition' => array('isElite' => 127),
                 'expectedResults' => array($threads[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
             ),
             array(
                 'condition' => array('courseIds' => array(1, 2)),
                 'expectedResults' => array($threads[0], $threads[1], $threads[2]),
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('content' => '啥'),
                 'expectedResults' => array(),
-                'expectedCount' => 0
-            )
+                'expectedCount' => 0,
+            ),
         );
 
         $this->searchByGroupTestUtil($testConditions, $this->getCompareKeys());
@@ -57,17 +57,17 @@ class ThreadPostDaoTest extends BaseDaoTestCase
         $res[0] = $this->getDao()->countByGroup(array('courseId' => 1), 'userId');
         $res[1] = $this->getDao()->countByGroup(array('taskId' => 1), 'courseId');
         $res[2] = $this->getDao()->countByGroup(array('content' => '？'));
-        
+
         $this->assertEquals(array(
             array('userId' => 1, 'count' => 1),
-            array('userId' => 2, 'count' => 1)
+            array('userId' => 2, 'count' => 1),
         ), $res[0]);
         $this->assertEquals(array(
             array('courseId' => 1, 'count' => 2),
-            array('courseId' => 2, 'count' => 1)
+            array('courseId' => 2, 'count' => 1),
         ), $res[1]);
         $this->assertEquals(array(
-            array('count' => 3)
+            array('count' => 3),
         ), $res[2]);
     }
 
@@ -95,7 +95,7 @@ class ThreadPostDaoTest extends BaseDaoTestCase
             }
         }
     }
-    
+
     protected function getDefaultMockFields()
     {
         return array(
@@ -104,7 +104,7 @@ class ThreadPostDaoTest extends BaseDaoTestCase
             'threadId' => rand(0, 1000),
             'userId' => rand(0, 1000),
             'isElite' => rand(0, 127),
-            'content' => '哈？'
+            'content' => '哈？',
         );
     }
 }

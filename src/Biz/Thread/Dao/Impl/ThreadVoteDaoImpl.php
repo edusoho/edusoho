@@ -12,6 +12,7 @@ class ThreadVoteDaoImpl extends GeneralDaoImpl implements ThreadVoteDao
     public function getVoteByThreadIdAndPostIdAndUserId($threadId, $postId, $userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE threadId = ? AND postId =? AND userId = ? LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($threadId, $postId, $userId)) ?: null;
     }
 

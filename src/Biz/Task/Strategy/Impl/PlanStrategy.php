@@ -13,6 +13,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         $task = parent::createTask($field);
 
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
+
         return $task;
     }
 
@@ -39,9 +40,12 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
     }
 
     /**
-     * 任务学习
+     * 任务学习.
+     *
      * @param  $task
+     *
      * @throws NotFoundException
+     *
      * @return bool
      */
     public function canLearnTask($task)
@@ -69,16 +73,17 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         //取得下一个发布的课时
         $conditions = array(
             'courseId' => $task['courseId'],
-            'seq_LT'   => $task['seq'],
-            'status'   => 'published'
+            'seq_LT' => $task['seq'],
+            'status' => 'published',
         );
 
-        $count    = $this->getTaskDao()->count($conditions);
+        $count = $this->getTaskDao()->count($conditions);
         $preTasks = $this->getTaskDao()->search($conditions, array('seq' => 'DESC'), 0, $count);
 
         if (empty($preTasks)) {
             return true;
         }
+
         return $this->getTaskService()->isPreTasksIsFinished($preTasks);
     }
 
@@ -86,13 +91,13 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
     {
         $items = array();
         foreach ($tasks as $task) {
-            $task['itemType']            = 'task';
+            $task['itemType'] = 'task';
             $items["task-{$task['id']}"] = $task;
         }
 
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
         foreach ($chapters as $index => $chapter) {
-            $chapter['itemType']               = 'chapter';
+            $chapter['itemType'] = 'chapter';
             $items["chapter-{$chapter['id']}"] = $chapter;
         }
 
@@ -107,12 +112,13 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         $taskCount = 0;
         foreach ($items as $key => $item) {
             if (strpos($key, 'task') !== false) {
-                $taskCount++;
+                ++$taskCount;
             }
             if ($taskCount > $limitNum) {
                 unset($items[$key]);
             }
         }
+
         return $items;
     }
 
@@ -123,17 +129,17 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         }
 
         $parentChapters = array(
-            'lesson'  => array(),
-            'unit'    => array(),
-            'chapter' => array()
+            'lesson' => array(),
+            'unit' => array(),
+            'chapter' => array(),
         );
-        $taskNumber     = 0;
-        $chapterTypes   = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
+        $taskNumber = 0;
+        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
         foreach ($itemIds as $key => $id) {
             if (strpos($id, 'chapter') === 0) {
-                $id      = str_replace('chapter-', '', $id);
+                $id = str_replace('chapter-', '', $id);
                 $chapter = $this->getChapterDao()->get($id);
-                $fields  = array('seq' => $key);
+                $fields = array('seq' => $key);
 
                 $index = $chapterTypes[$chapter['type']];
                 switch ($index) {
@@ -174,12 +180,12 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             }
             if (strpos($id, 'task') === 0) {
                 $categoryId = empty($chapter) ? 0 : $chapter['id'];
-                $id         = str_replace('task-', '', $id);
-                $taskNumber++;
+                $id = str_replace('task-', '', $id);
+                ++$taskNumber;
                 $this->getTaskService()->updateSeq($id, array(
-                    'seq'        => $key,
+                    'seq' => $key,
                     'categoryId' => $categoryId,
-                    'number'     => $taskNumber
+                    'number' => $taskNumber,
                 ));
             }
         }

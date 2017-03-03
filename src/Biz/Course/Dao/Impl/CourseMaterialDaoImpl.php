@@ -13,7 +13,7 @@ class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
     {
         return array(
             'timestamps' => array('createdTime'),
-            'orderbys'   => array('createdTime'),
+            'orderbys' => array('createdTime'),
             'conditions' => array(
                 'id = :id',
                 'courseId = :courseId',
@@ -29,8 +29,8 @@ class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
                 'source = :source',
                 'source IN (:sources)',
                 'courseSetId IN (:courseSetIds)',
-                'courseId IN (:courseIds)'
-            )
+                'courseId IN (:courseIds)',
+            ),
         );
     }
 
@@ -93,6 +93,7 @@ class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
     {
         $builder = $this->_createQueryBuilder($conditions)
             ->select('COUNT(DISTINCT(fileId))');
+
         return $builder->execute()->fetchColumn(0);
     }
 

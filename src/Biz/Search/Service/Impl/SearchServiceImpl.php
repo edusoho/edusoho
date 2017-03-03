@@ -1,9 +1,9 @@
 <?php
+
 namespace Biz\Search\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Search\Service\SearchService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Search\Adapter\SearchAdapterFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -12,15 +12,15 @@ class SearchServiceImpl extends BaseService implements SearchService
 {
     public function cloudSearch($type, $conditions = array())
     {
-        $api        = CloudAPIFactory::create('leaf');
+        $api = CloudAPIFactory::create('leaf');
 
-        if($type === 'course'){
+        if ($type === 'course') {
             $conditions['type'] = 'course,openCourse';
         }
 
         $conditions = $this->searchBase64Encode($conditions);
 
-        $result     = $api->get('/search', $conditions);
+        $result = $api->get('/search', $conditions);
 
         if (empty($result['success'])) {
             throw new \RuntimeException($this->getKernel()->trans('搜索失败，请稍候再试.'), 1);
@@ -31,7 +31,7 @@ class SearchServiceImpl extends BaseService implements SearchService
         }
 
         $resultSet = $result['body']['datas'];
-        $counts    = $result['body']['count'];
+        $counts = $result['body']['count'];
 
         $resultSet = SearchAdapterFactory::create($type)->adapt($resultSet);
 
@@ -40,8 +40,9 @@ class SearchServiceImpl extends BaseService implements SearchService
 
     public function refactorAllDocuments()
     {
-        $api        = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
         $conditions = array('categorys' => 'course,user,thread,article');
+
         return $api->post('/search/refactor_documents', $conditions);
     }
 
@@ -49,24 +50,24 @@ class SearchServiceImpl extends BaseService implements SearchService
     {
         $siteUrl = $this->getSiteUrl();
 
-        $api  = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
         $urls = array(
-            array('category' => 'course', 'url' => $siteUrl . '/api/courses?cursor=0&start=0&limit=100'),
-            array('category' => 'lesson', 'url' => $siteUrl . '/api/lessons?cursor=0&start=0&limit=100'),
-            array('category' => 'user', 'url' => $siteUrl . '/api/users?cursor=0&start=0&limit=100'),
-            array('category' => 'thread', 'url' => $siteUrl . '/api/chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
-            array('category' => 'article', 'url' => $siteUrl . '/api/articles?cursor=0&start=0&limit=100'),
-            array('category' => 'openCourse', 'url' => $siteUrl . '/api/open_courses?cursor=0&start=0&limit=100'),
-            array('category' => 'openLesson', 'url' => $siteUrl . '/api/open_course_lessons?cursor=0&start=0&limit=100'),
+            array('category' => 'course', 'url' => $siteUrl.'/api/courses?cursor=0&start=0&limit=100'),
+            array('category' => 'lesson', 'url' => $siteUrl.'/api/lessons?cursor=0&start=0&limit=100'),
+            array('category' => 'user', 'url' => $siteUrl.'/api/users?cursor=0&start=0&limit=100'),
+            array('category' => 'thread', 'url' => $siteUrl.'/api/chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
+            array('category' => 'article', 'url' => $siteUrl.'/api/articles?cursor=0&start=0&limit=100'),
+            array('category' => 'openCourse', 'url' => $siteUrl.'/api/open_courses?cursor=0&start=0&limit=100'),
+            array('category' => 'openLesson', 'url' => $siteUrl.'/api/open_course_lessons?cursor=0&start=0&limit=100'),
         );
         $urls = urlencode(json_encode($urls));
 
-        $callbackUrl = $siteUrl . $callbackRouteUrl;
-        $sign        = $this->getSignEncoder()->encodePassword($callbackUrl, $api->getAccessKey());
-        $callbackUrl .= '?sign=' . rawurlencode($sign);
+        $callbackUrl = $siteUrl.$callbackRouteUrl;
+        $sign = $this->getSignEncoder()->encodePassword($callbackUrl, $api->getAccessKey());
+        $callbackUrl .= '?sign='.rawurlencode($sign);
 
-        $result = $api->post("/search/accounts", array('urls' => $urls, 'callback' => $callbackUrl));
-        
+        $result = $api->post('/search/accounts', array('urls' => $urls, 'callback' => $callbackUrl));
+
         if ($result['success']) {
             $this->setCloudSearchWaiting();
         }
@@ -77,10 +78,11 @@ class SearchServiceImpl extends BaseService implements SearchService
     protected function getSiteUrl()
     {
         $siteSetting = $this->getSettingService()->get('site');
-        $siteUrl     = $siteSetting['url'];
+        $siteUrl = $siteSetting['url'];
         if (strpos($siteUrl, 'http://') !== 0) {
-            $siteUrl = 'http://' . $siteUrl;
+            $siteUrl = 'http://'.$siteUrl;
         }
+
         return rtrim(rtrim($siteUrl), '/');
     }
 
@@ -88,7 +90,7 @@ class SearchServiceImpl extends BaseService implements SearchService
     {
         $searchSetting = array(
             'search_enabled' => 1,
-            'status'         => 'waiting'
+            'status' => 'waiting',
         );
         $this->getSettingService()->set('cloud_search', $searchSetting);
     }
@@ -106,6 +108,7 @@ class SearchServiceImpl extends BaseService implements SearchService
         }
 
         $conditions['method'] = 'base64';
+
         return $conditions;
     }
 

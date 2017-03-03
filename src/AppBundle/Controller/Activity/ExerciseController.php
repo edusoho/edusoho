@@ -16,29 +16,29 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     {
         if ($preview) {
             return $this->forward('AppBundle:Activity/Exercise:preview', array(
-                'id'       => $activity,
-                'courseId' => $activity['fromCourseId']
+                'id' => $activity,
+                'courseId' => $activity['fromCourseId'],
             ));
         }
 
         $user = $this->getUser();
 
-        $activity       = $this->getActivityService()->getActivity($activity['id']);
-        $exercise       = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $activity = $this->getActivityService()->getActivity($activity['id']);
+        $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
         $exerciseResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $exercise['id'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
 
         if (!$exerciseResult || ($exerciseResult['status'] == 'doing' && !$exerciseResult['updateTime'])) {
             return $this->render('activity/exercise/show.html.twig', array(
-                'activity'       => $activity,
+                'activity' => $activity,
                 'exerciseResult' => $exerciseResult,
-                'exercise'       => $exercise,
-                'courseId'       => $activity['fromCourseId']
+                'exercise' => $exercise,
+                'courseId' => $activity['fromCourseId'],
             ));
         }
 
         return $this->forward('AppBundle:Exercise:startDo', array(
-            'lessonId'   => $activity['id'],
-            'exerciseId' => $activity['mediaId']
+            'lessonId' => $activity['id'],
+            'exerciseId' => $activity['mediaId'],
         ));
     }
 
@@ -51,21 +51,21 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
             return $this->createMessageResponse('error', 'exercise not found');
         }
 
-        $questions   = $this->getTestpaperService()->showTestpaperItems($exercise['id']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($exercise['id']);
         $attachments = $this->getTestpaperService()->findAttachments($exercise['id']);
 
         return $this->render('activity/exercise/preview.html.twig', array(
-            'paper'       => $exercise,
-            'questions'   => $questions,
+            'paper' => $exercise,
+            'questions' => $questions,
             'paperResult' => array(),
-            'activity'    => $activity
+            'activity' => $activity,
         ));
     }
 
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-        $course   = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
         $activity = array_merge($activity, $exercise);
@@ -77,8 +77,8 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
 
         return $this->render('activity/exercise/modal.html.twig', array(
             'questionNums' => $questionNums,
-            'activity'     => $activity,
-            'courseSetId'  => $activity['courseSetId']
+            'activity' => $activity,
+            'courseSetId' => $activity['courseSetId'],
         ));
     }
 
@@ -92,17 +92,18 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseId' => $course['courseSetId']));
 
         return $this->render('activity/exercise/modal.html.twig', array(
-            'courseId'     => $courseId,
+            'courseId' => $courseId,
             'questionNums' => $questionNums,
-            'courseSetId'  => $course['courseSetId']
+            'courseSetId' => $course['courseSetId'],
         ));
     }
 
     public function finishConditionAction($activity)
     {
         $exercise = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+
         return $this->render('activity/exercise/finish-condition.html.twig', array(
-            'exercise' => $exercise
+            'exercise' => $exercise,
         ));
     }
 
@@ -110,7 +111,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     {
         $conditions = array(
             'courseId' => $courseId,
-            'status'   => 'open'
+            'status' => 'open',
         );
 
         $testpapers = $this->getTestpaperService()->searchTestpapers(

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Org\Dao\Impl;
 
 use Biz\Org\Dao\OrgDao;
@@ -17,17 +18,17 @@ class OrgDaoImpl extends GeneralDaoImpl implements OrgDao
         );
 
         $declares['timestamps'] = array(
-            'createdTime'
+            'createdTime',
         );
 
         $declares['orderbys'] = array(
             'createdTime',
-            'updatedTime'
+            'updatedTime',
         );
 
         $declares['timestamps'] = array(
             'createdTime',
-            'updateTime'
+            'updateTime',
         );
 
         return $declares;
@@ -35,21 +36,22 @@ class OrgDaoImpl extends GeneralDaoImpl implements OrgDao
 
     public function deleteByPrefixOrgCode($orgCode)
     {
-        $likeOrgCode = $orgCode."%";
-        $sql         = "DELETE  FROM {$this->table()} where orgCode like ? ";
+        $likeOrgCode = $orgCode.'%';
+        $sql = "DELETE  FROM {$this->table()} where orgCode like ? ";
+
         return $this->db()->executeUpdate($sql, array($likeOrgCode));
     }
 
     public function findByPrefixOrgCode($orgCode)
     {
-        $sql   = "SELECT * FROM {$this->table()}";
+        $sql = "SELECT * FROM {$this->table()}";
         $query = array();
 
         if (!empty($orgCode)) {
-            $sql .= " WHERE orgCode like ?  order by orgCode ";
+            $sql .= ' WHERE orgCode like ?  order by orgCode ';
             $query = array($orgCode.'%');
         } else {
-            $sql .= " order by orgCode";
+            $sql .= ' order by orgCode';
         }
 
         return $this->db()->fetchAll($sql, $query) ?: array();

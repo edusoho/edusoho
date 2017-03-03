@@ -10,7 +10,7 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $courseSet = array(
             'title' => '新课程开始！',
-            'type'  => 'normal'
+            'type' => 'normal',
         );
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertTrue($created['id'] > 0);
@@ -23,10 +23,10 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $courseSet = array(
             'title' => '新课程开始！',
-            'type'  => 'normal'
+            'type' => 'normal',
         );
         $expected = $this->getCourseSetService()->createCourseSet($courseSet);
-        $res      = $this->getCourseSetService()->findCourseSetsLikeTitle('开始');
+        $res = $this->getCourseSetService()->findCourseSetsLikeTitle('开始');
 
         $this->assertEquals(array($expected), $res);
     }
@@ -35,16 +35,16 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $courseSet = array(
             'title' => '新课程开始！',
-            'type'  => 'normal'
+            'type' => 'normal',
         );
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
 
-        $created['title']         = '新课程开始(更新)！';
-        $created['subtitle']      = '新课程的副标题参见！';
-        $created['tags']          = 'new';
-        $created['categoryId']    = 6;
+        $created['title'] = '新课程开始(更新)！';
+        $created['subtitle'] = '新课程的副标题参见！';
+        $created['tags'] = 'new';
+        $created['categoryId'] = 6;
         $created['serializeMode'] = 'none';
-        $updated                  = $this->getCourseSetService()->updateCourseSet($created['id'], $created);
+        $updated = $this->getCourseSetService()->updateCourseSet($created['id'], $created);
         $this->assertEquals($created['title'], $updated['title']);
     }
 
@@ -52,12 +52,12 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $courseSet = array(
             'title' => '新课程开始！',
-            'type'  => 'normal'
+            'type' => 'normal',
         );
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
 
-        $created['summary']   = 'this is summary <script ...';
-        $created['goals']     = array(1);
+        $created['summary'] = 'this is summary <script ...';
+        $created['goals'] = array(1);
         $created['audiences'] = array(1);
 
         $updated = $this->getCourseSetService()->updateCourseSetDetail($created['id'], $created);
@@ -68,7 +68,7 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $courseSet = array(
             'title' => '新课程开始！',
-            'type'  => 'normal'
+            'type' => 'normal',
         );
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         //mock file service ?
@@ -84,7 +84,7 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $courseSet = array(
             'title' => '新课程开始！',
-            'type'  => 'normal'
+            'type' => 'normal',
         );
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertNotEmpty($created);
@@ -97,7 +97,7 @@ class CourseSetServiceTest extends BaseTestCase
     {
         $courseSet = array(
             'title' => '新课程开始！',
-            'type'  => 'normal'
+            'type' => 'normal',
         );
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertNotEmpty($created);

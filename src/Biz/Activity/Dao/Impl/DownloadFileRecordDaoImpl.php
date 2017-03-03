@@ -2,7 +2,6 @@
 
 namespace Biz\Activity\Dao\Impl;
 
-
 use Biz\Activity\Dao\DownloadFileRecordDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -13,9 +12,7 @@ class DownloadFileRecordDaoImpl extends GeneralDaoImpl implements DownloadFileRe
     public function declares()
     {
         return array(
-            'timestamps' => array('createdTime')
+            'timestamps' => array('createdTime'),
         );
     }
-
-
 }

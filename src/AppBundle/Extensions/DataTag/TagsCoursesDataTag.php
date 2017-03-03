@@ -2,18 +2,17 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-
 class TagsCoursesDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     * 获取标签课程列表
+     * 获取标签课程列表.
      *
      * 可传入的参数：
      *   tags 必需 标签名称like array('aa')
      *   count    必需 课程数量，取值不超过10
      *
-     * @param  array $arguments     参数
+     * @param array $arguments 参数
+     *
      * @return array 课程列表
      */
     public function getData(array $arguments)
@@ -34,7 +33,7 @@ class TagsCoursesDataTag extends CourseBaseDataTag implements DataTag
 
         $condition = array(
             'tagIds' => $tagIds,
-            'status' => $status
+            'status' => $status,
         );
 
         $courses = $this->getCourseService()->searchCourses($condition, 'createdTime', 0, $arguments['count']);

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Common;
 
 class ArrayToolkit
@@ -14,7 +15,7 @@ class ArrayToolkit
 
     public static function column(array $array, $columnName)
     {
-        if(function_exists('array_column')){
+        if (function_exists('array_column')) {
             return array_column($array, $columnName);
         }
 
@@ -50,7 +51,7 @@ class ArrayToolkit
             if (!array_key_exists($key, $array)) {
                 return false;
             }
-            if ($strictMode && (is_null($array[$key]) || $array[$key] === "" || $array[$key] === 0)) {
+            if ($strictMode && (is_null($array[$key]) || $array[$key] === '' || $array[$key] === 0)) {
                 return false;
             }
         }
@@ -69,7 +70,7 @@ class ArrayToolkit
 
             if ($value != $before[$key]) {
                 $changes['before'][$key] = $before[$key];
-                $changes['after'][$key]  = $value;
+                $changes['after'][$key] = $value;
             }
         }
 
@@ -176,6 +177,7 @@ class ArrayToolkit
                 return false;
             }
         }
+
         return true;
     }
 
@@ -186,6 +188,7 @@ class ArrayToolkit
                 return true;
             }
         }
+
         return false;
     }
 }

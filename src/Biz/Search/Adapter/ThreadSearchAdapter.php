@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Search\Adapter;
 
 class ThreadSearchAdapter extends AbstractSearchAdapter

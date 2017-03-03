@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Media;
 
 use AppBundle\Controller\BaseController;

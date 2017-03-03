@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Announcement\Service\Impl;
 
 use Biz\BaseService;
@@ -54,11 +55,12 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 
         $announcement['content'] = $this->biz['html_helper']->purify(empty($announcement['content']) ? '' : $announcement['content']);
 
-        $announcement['userId']      = $this->getCurrentUser()->id;
+        $announcement['userId'] = $this->getCurrentUser()->id;
         $announcement['createdTime'] = time();
-        $announcement                = $this->fillOrgId($announcement);
-        $announcement                = $this->getAnnouncementDao()->create($announcement);
+        $announcement = $this->fillOrgId($announcement);
+        $announcement = $this->getAnnouncementDao()->create($announcement);
         $this->dispatchEvent('announcement.create', $announcement);
+
         return $announcement;
     }
 
@@ -75,7 +77,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
             throw $this->createServiceException('结束时间不能为空！');
         }
-        $announcement                = $this->fillOrgId($announcement);
+        $announcement = $this->fillOrgId($announcement);
         $announcement['updatedTime'] = time();
 
         $announcement = $this->getAnnouncementDao()->update($id, $announcement);

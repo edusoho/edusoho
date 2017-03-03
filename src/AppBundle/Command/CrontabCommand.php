@@ -1,22 +1,15 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Biz\User\CurrentUser;
-use Symfony\Component\ClassLoader\ApcClassLoader;
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Common\BlockToolkit;
-
 class CrontabCommand extends BaseCommand
 {
-
     protected function configure()
     {
-        $this->setName ( 'crontab:schedule' );
+        $this->setName('crontab:schedule');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -35,7 +28,7 @@ class CrontabCommand extends BaseCommand
         $setting = $this->getSettingService()->get('magic', array());
         if (empty($setting['disable_web_crontab'])) {
             $setting['disable_web_crontab'] = 1;
-            $this->getSettingService()->set('magic',$setting);
+            $this->getSettingService()->set('magic', $setting);
         }
     }
 

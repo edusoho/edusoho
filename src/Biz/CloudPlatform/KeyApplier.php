@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\CloudPlatform;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -19,21 +20,21 @@ class KeyApplier
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
         $params = array();
-        $site   = $this->getSettingService()->get('site');
+        $site = $this->getSettingService()->get('site');
 
         $params['siteName'] = empty($site['name']) ? $this->getKernel()->trans('EduSoho网络课程') : $site['name'];
-        $params['siteUrl']  = 'http://' . $_SERVER['HTTP_HOST'];
-        $params['email']    = empty($user['email']) ? '' : $user['email'];
-        $params['contact']  = empty($profile['truename']) ? '' : $profile['truename'];
-        $params['qq']       = empty($profile['qq']) ? '' : $profile['qq'];
-        $params['mobile']   = empty($profile['mobile']) ? '' : $profile['mobile'];
-        $params['edition']  = empty($edition) ? 'opensource' : $edition;
-        $params['source']   = empty($source) ? 'apply' : $source;
+        $params['siteUrl'] = 'http://'.$_SERVER['HTTP_HOST'];
+        $params['email'] = empty($user['email']) ? '' : $user['email'];
+        $params['contact'] = empty($profile['truename']) ? '' : $profile['truename'];
+        $params['qq'] = empty($profile['qq']) ? '' : $profile['qq'];
+        $params['mobile'] = empty($profile['mobile']) ? '' : $profile['mobile'];
+        $params['edition'] = empty($edition) ? 'opensource' : $edition;
+        $params['source'] = empty($source) ? 'apply' : $source;
 
         $sign = md5(json_encode($params));
 
         $url = empty($setting['cloud_api_server']) ? 'http://api.edusoho.net' : rtrim($setting['cloud_api_server'], '/');
-        $url = $url . '/v1/keys';
+        $url = $url.'/v1/keys';
 
         $response = $this->postRequest($url, $params);
 
@@ -47,10 +48,9 @@ class KeyApplier
 
     protected function postRequest($url, $params)
     {
-
         $curl = curl_init();
 
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_USERAGENT, 'EduSoho Install Client 1.0');
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 20);
         curl_setopt($curl, CURLOPT_TIMEOUT, 20);
@@ -62,7 +62,7 @@ class KeyApplier
 
         ksort($params);
         $headers[] = 'Content-type: application/json';
-        $headers[] = 'Sign: ' . md5(json_encode($params));
+        $headers[] = 'Sign: '.md5(json_encode($params));
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         $response = curl_exec($curl);
@@ -86,6 +86,4 @@ class KeyApplier
     {
         return ServiceKernel::instance()->createService('System:SettingService');
     }
-
 }
-

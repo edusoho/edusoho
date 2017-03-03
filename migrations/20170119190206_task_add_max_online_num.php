@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class TaskAddMaxOnlineNum extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -14,11 +14,11 @@ class TaskAddMaxOnlineNum extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-        $sql = "ALTER TABLE `course_task` DROP COLUMN  `maxOnlineNum`;";
+        $sql = 'ALTER TABLE `course_task` DROP COLUMN  `maxOnlineNum`;';
         $this->getContainer()->offsetGet('db')->exec($sql);
     }
 }

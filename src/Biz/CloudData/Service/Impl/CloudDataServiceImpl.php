@@ -2,8 +2,6 @@
 
 namespace Biz\CloudData\Service\Impl;
 
-
-
 use Biz\BaseService;
 use Biz\CloudData\Dao\CloudDataDao;
 use Biz\CloudData\Service\CloudDataService;
@@ -22,13 +20,14 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
             if ($level == 'important') {
                 $user = $this->getCurrentUser();
                 $fields = array(
-                    'name'          => $name,
-                    'body'          => $body,
-                    'timestamp'     => $timestamp,
-                    'createdUserId' => $user['id']
+                    'name' => $name,
+                    'body' => $body,
+                    'timestamp' => $timestamp,
+                    'createdUserId' => $user['id'],
                 );
                 $this->getCloudDataDao()->create($fields);
             }
+
             return false;
         }
     }

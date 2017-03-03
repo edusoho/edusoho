@@ -18,15 +18,15 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     public static function getSubscribedEvents()
     {
         return array(
-            'classroom.join'         => 'onClassroomJoin',
-            'classroom.auditor_join' => 'onClassroomGuest'
+            'classroom.join' => 'onClassroomJoin',
+            'classroom.auditor_join' => 'onClassroomGuest',
         );
     }
 
     public function onClassroomJoin(Event $event)
     {
         $classroom = $event->getSubject();
-        $userId    = $event->getArgument('userId');
+        $userId = $event->getArgument('userId');
 
         $this->publishJoinStatus($classroom, $userId, 'become_student');
         $this->syncCourseStudents($classroom, $userId);
@@ -35,7 +35,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onClassroomGuest(Event $event)
     {
         $classroom = $event->getSubject();
-        $userId    = $event->getArgument('userId');
+        $userId = $event->getArgument('userId');
         // publish status
         $this->publishJoinStatus($classroom, $userId, 'become_auditor');
         //add user to classroom courses
@@ -45,11 +45,11 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     private function simplifyClassroom($classroom)
     {
         return array(
-            'id'      => $classroom['id'],
-            'title'   => $classroom['title'],
+            'id' => $classroom['id'],
+            'title' => $classroom['title'],
             'picture' => $classroom['middlePicture'],
-            'about'   => StringToolkit::plain($classroom['about'], 100),
-            'price'   => $classroom['price']
+            'about' => StringToolkit::plain($classroom['about'], 100),
+            'price' => $classroom['price'],
         );
     }
 
@@ -71,15 +71,15 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     private function publishJoinStatus($classroom, $userId, $type)
     {
         $status = array(
-            'type'        => $type,
+            'type' => $type,
             'classroomId' => $classroom['id'],
-            'objectType'  => 'classroom',
-            'objectId'    => $classroom['id'],
-            'private'     => $classroom['status'] == 'published' ? 0 : 1,
-            'userId'      => $userId,
-            'properties'  => array(
-                'classroom' => $this->simplifyClassroom($classroom)
-            )
+            'objectType' => 'classroom',
+            'objectId' => $classroom['id'],
+            'private' => $classroom['status'] == 'published' ? 0 : 1,
+            'userId' => $userId,
+            'properties' => array(
+                'classroom' => $this->simplifyClassroom($classroom),
+            ),
         );
 
         $status['private'] = $classroom['showable'] == 1 ? $status['private'] : 1;

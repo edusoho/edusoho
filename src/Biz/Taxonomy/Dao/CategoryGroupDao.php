@@ -4,7 +4,7 @@ namespace Biz\Taxonomy\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
-interface CategoryGroupDao extends  GeneralDaoInterface
+interface CategoryGroupDao extends GeneralDaoInterface
 {
     public function getByCode($code);
 

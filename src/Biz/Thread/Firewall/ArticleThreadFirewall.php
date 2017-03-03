@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Thread\Firewall;
 
 use Topxia\Service\Common\ServiceKernel;

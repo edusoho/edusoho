@@ -6,7 +6,6 @@ use Topxia\Service\Common\ServiceKernel;
 
 class UploadToken
 {
-
     public function make($group, $type = 'image', $duration = 18000)
     {
         $user = $this->getCurrentUser();
@@ -14,6 +13,7 @@ class UploadToken
         $secret = $this->getServiceKernel()->getParameter('secret');
         $key = "{$user['id']}|{$group}|{$type}|{$deadline}";
         $sign = md5("{$key}|{$secret}");
+
         return $this->base64Encode("{$key}|{$sign}");
     }
 
@@ -23,8 +23,8 @@ class UploadToken
         if (empty($token)) {
             return null;
         }
-        
-        list($userId, $group, $type, $deadline, $sign) =  explode('|', $token);
+
+        list($userId, $group, $type, $deadline, $sign) = explode('|', $token);
 
         if ($deadline < time()) {
             return null;
@@ -41,15 +41,16 @@ class UploadToken
             'group' => $group,
             'type' => $type,
         );
-
     }
 
-    private function base64Encode($data) { 
-      return rtrim(strtr(base64_encode($data), '+/', '-_'), '='); 
-    } 
+    private function base64Encode($data)
+    {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    }
 
-    private function base64Decode($data) { 
-      return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT)); 
+    private function base64Decode($data)
+    {
+        return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
     }
 
     private function getCurrentUser()
@@ -61,6 +62,4 @@ class UploadToken
     {
         return ServiceKernel::instance();
     }
-
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\System\Service\SettingService;
@@ -13,7 +14,7 @@ class CommonController extends BaseController
 {
     public function qrcodeAction(Request $request)
     {
-        $text   = $request->get('text');
+        $text = $request->get('text');
         $qrCode = new QrCode();
         $qrCode->setText($text);
         $qrCode->setSize(250);
@@ -21,9 +22,10 @@ class CommonController extends BaseController
         $img = $qrCode->get('png');
 
         $headers = array(
-            'Content-Type'        => 'image/png',
-            'Content-Disposition' => 'inline; filename="qrcode.png"'
+            'Content-Type' => 'image/png',
+            'Content-Disposition' => 'inline; filename="qrcode.png"',
         );
+
         return new Response($img, 200, $headers);
     }
 
@@ -33,11 +35,12 @@ class CommonController extends BaseController
 
         if (empty($token) || !isset($token['data']['url'])) {
             $content = $this->renderView('default/message.html.twig', array(
-                'type'     => 'error',
-                'goto'     => $this->generateUrl('homepage', array(), true),
+                'type' => 'error',
+                'goto' => $this->generateUrl('homepage', array(), true),
                 'duration' => 1,
-                'message'  => '二维码已失效，正跳转到首页'
+                'message' => '二维码已失效，正跳转到首页',
             ));
+
             return new Response($content, '302');
         }
 

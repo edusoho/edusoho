@@ -2,7 +2,6 @@
 
 namespace Biz\Task\Strategy;
 
-
 interface CourseStrategy
 {
     //任务的api
@@ -21,5 +20,4 @@ interface CourseStrategy
     public function prepareCourseItems($course, $tasks, $limitNum);
 
     public function sortCourseItems($courseId, array $itemIds);
-
 }
