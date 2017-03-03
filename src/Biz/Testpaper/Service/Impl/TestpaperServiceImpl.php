@@ -50,7 +50,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, $fields);
 
-        $this->dispatchEvent('testpaper.update', $testpaper, array('argument' => $argument));
+        $this->dispatchEvent('exam.update', $testpaper, array('argument' => $argument));
 
         return $testpaper;
     }
@@ -65,7 +65,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $result = $this->getTestpaperDao()->delete($testpaper['id']);
         $this->deleteItemsByTestId($testpaper['id']);
 
-        $this->dispatchEvent('testpaper.delete', $testpaper);
+        $this->dispatchEvent('exam.delete', $testpaper);
 
         return $result;
     }
@@ -188,7 +188,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'open'));
 
-        $this->dispatchEvent('testpaper.publish', new Event($testpaper));
+        $this->dispatchEvent('exam.publish', new Event($testpaper));
 
         return $testpaper;
     }
@@ -207,7 +207,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
 
-        $this->dispatchEvent('testpaper.close', new Event($testpaper));
+        $this->dispatchEvent('exam.close', new Event($testpaper));
 
         return $testpaper;
     }
@@ -319,7 +319,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult($result['id'], $formData['usedTime']);
 
-        $this->dispatchEvent('testpaper.finish', new Event($paperResult));
+        $this->dispatchEvent('exam.finish', new Event($paperResult));
 
         return $paperResult;
     }

@@ -25,6 +25,21 @@ class TestpaperManageController extends BaseController
         ));
     }
 
+    /**
+     * 仅作为8.0之前版本通知使用
+     */
+    public function checkForwordAction(Request $request, $resultId)
+    {
+        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+        return $this->forward('AppBundle:Course/TestpaperManage:check', array(
+            'request'  => $request,
+            'resultId' => $result['id'],
+            'source'   => 'course',
+            'targetId' => $result['courseId']
+        ));
+    }
+
     public function checkListAction(Request $request, $id)
     {
         $course    = $this->getCourseService()->getCourse($id);

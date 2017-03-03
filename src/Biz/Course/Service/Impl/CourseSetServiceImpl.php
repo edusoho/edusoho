@@ -399,6 +399,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $fields = array_filter($fields);
 
         $this->updateCourseSerializeMode($courseSet, $fields);
+        if (empty($fields['subtitle'])) {
+            $this->getCourseSetDao()->clearSubtitle($courseSet['id']);
+        }
+
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
 
         $this->dispatchEvent('course-set.update', new Event($courseSet));
