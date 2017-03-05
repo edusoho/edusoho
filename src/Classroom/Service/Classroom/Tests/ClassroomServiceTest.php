@@ -4,6 +4,7 @@ namespace Classroom\Service\Classroom\Tests;
 
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\BaseTestCase;
+use Topxia\Common\ClassroomToolkit;
 
 class ClassroomServiceTest extends BaseTestCase
 {
@@ -285,7 +286,12 @@ class ClassroomServiceTest extends BaseTestCase
 
         $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
 
-        $student = $this->getClassroomService()->updateMembersDeadlineByClassroomId($classroom['id'], array('expiryMode' => 'date', 'expiryValue' => '1488433547'));
+        $deadline = ClassroomToolkit::buildMemberDeadline(array(
+            'expiryMode' => 'date',
+            'expiryValue' => '1488433547'
+        ));
+
+        $student = $this->getClassroomService()->updateMembersDeadlineByClassroomId($classroom['id'], $deadline);
 
         $this->assertEquals(1, count($student));
     }
