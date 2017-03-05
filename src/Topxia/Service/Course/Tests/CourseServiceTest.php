@@ -688,7 +688,7 @@ class CourseServiceTest extends BaseTestCase
 
     }
 
-    public function testUpdateMembersDeadlinesByClassroomId()
+    public function testUpdateMembersDeadlineByClassroomId()
     {
         $course       = array(
             'title' => 'test course 1'
@@ -707,7 +707,7 @@ class CourseServiceTest extends BaseTestCase
         $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
         $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
 
-        $result = $this->getCourseService()->updateMembersDeadlinesByClassroomId($classroom['id'], '1488433547');
+        $result = $this->getCourseService()->updateMembersDeadlineByClassroomId($classroom['id'], '1488433547');
 
         $this->assertEquals(1, count($result));
     }
