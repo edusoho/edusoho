@@ -217,7 +217,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (!empty($arguments['expiryMode']) && !empty($arguments['expiryValue'])) {
             if ($this->canUpdateMembersDeadlines($classroom, $arguments['expiryMode'])) {
-                $this->updateMembersDeadlinesByClassroomId($id, array('expiryMode' => $arguments['expiryMode'], 'expiryValue' => $arguments['expiryValue']));
+                $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                    'expiryMode'  => $arguments['expiryMode'],
+                    'expiryValue' => $arguments['expiryValue']
+                ));
+
+                $this->updateMembersDeadlineByClassroomId($id, $deadline);
             }
         }
         if (!empty($tagIds)) {
@@ -259,7 +264,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return false;
     }
 
-    protected function filterClassroomFields($fields, $classroom)
+    protected function filterClassroomFields($fields)
     {
         $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId', 'expiryMode', 'expiryValue'));
 
@@ -632,11 +637,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $order = null;
         }
 
-        if ($classroom['expiryMode'] == 'days') {
-            $deadline = ClassroomToolkit::buildMemberDeadlineByMode($classroom, 'days');
-        } else {
-            $deadline = $classroom['expiryValue'];
-        }
+        $deadline = ClassroomToolkit::buildMemberDeadline(array(
+            'expiryMode'  => $classroom['expiryMode'],
+            'expiryValue' => $classroom['expiryValue']
+        ));
 
         $fields = array(
             'classroomId' => $classroomId,
@@ -1495,27 +1499,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->updateMember($id, $fields);
     }
 
-    public function updateMemberDeadline($id, $fields) {
-        if (empty($fields['expiryMode']) && empty($fields['expiryValue'])) {
-            $this->createServiceException($this->getKernel()->trans('缺少相关参数'));
-        }
-
-        $deadline = ClassroomToolkit::buildMemberDeadlineByMode($fields, 'date');
-
-        return $this->getClassroomMemberDao()->updateMember($id, array('deadline' => $deadline));
+    public function updateMemberDeadline($id, $deadline)
+    {
+        return $this->getClassroomMemberDao()->updateMember($id, $deadline);
     }
 
-    public function updateMembersDeadlineByClassroomId($classroomId, $expiryDate)
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
     {
-        if (empty($expiryDate['expiryMode']) && empty($expiryDate['expiryValue'])) {
-            $this->createServiceException($this->getKernel()->trans('缺少相关参数'));
-        }
-
-        if ($expiryDate['expiryMode'] == 'date') {
-            return $this->getClassroomMemberDao()->updateMembersDeadlineByClassroomId($classroomId, $expiryDate['expiryValue']);
-        }
-
-        return;
+        return $this->getClassroomMemberDao()->updateMembersDeadlineByClassroomId($classroomId, $deadline);
     }
 
     public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId)

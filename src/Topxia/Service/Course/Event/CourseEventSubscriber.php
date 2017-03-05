@@ -431,9 +431,4 @@ class CourseEventSubscriber implements EventSubscriberInterface
     {
         return ServiceKernel::instance()->createService('User.NotificationService');
     }
-
-    protected function getConnection()
-    {
-        return ServiceKernel::instance()->getConnection();
-    }
 }

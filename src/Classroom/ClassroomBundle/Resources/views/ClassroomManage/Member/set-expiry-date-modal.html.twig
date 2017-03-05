@@ -5,7 +5,7 @@
 {% block title %}{{'修改学员有效期'|trans}}{% endblock %}
 {% block body %}
 
-<form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('classroom_manage_student_expiry_date', { classroomId:classroom.id, userId:user.id }) }}">
+<form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('classroom_manage_student_deadline', { classroomId:classroom.id, userId:user.id }) }}">
   {% if classroom.status == 'published' %}
     <div class="row form-group">
       <div class="col-md-2 control-label">
@@ -34,7 +34,7 @@
         <label for="set-more-expiryday">{{'有效期'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="student_expiryValue" name="expiryValue" required="required" {% if member.deadline %}value="{{ member.deadline|date('Y-m-d') }}"{% endif %}class="form-control width-input width-input-large">
+        <input type="text" id="student_deadline" name="deadline" required="required" {% if member.deadline %}value="{{ member.deadline|date('Y-m-d') }}"{% endif %}class="form-control width-input width-input-large">
         <div class="help-block">
         {{ '设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)}) }}
         </div>

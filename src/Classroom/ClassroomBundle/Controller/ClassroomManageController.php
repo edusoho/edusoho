@@ -8,6 +8,8 @@ use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Controller\BaseController;
+use Topxia\Common\ClassroomToolkit;
+use Topxia\Service\Common\ServiceException;
 
 class ClassroomManageController extends BaseController
 {
@@ -140,7 +142,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function setClassroomStudentExpiryDateAction(Request $request, $classroomId, $userId)
+    public function setClassroomStudentDeadlineAction(Request $request, $classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);   
 
@@ -149,9 +151,17 @@ class ClassroomManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
+            if (empty($fields['deadline'])) {
+                throw new ServiceException($this->getServiceKernel()->trans('缺少相关参数'));
+            }
+
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode'  => 'date',
+                'expiryValue' => $fields['deadline']
+            ));
+
             $this->getClassroomService()->updateMemberDeadline($member['id'], array(
-                'expiryValue' => $fields['expiryValue'],
-                'expiryMode'  => 'date'
+                'deadline' => $deadline
             ));
 
             return $this->createJsonResponse(true);

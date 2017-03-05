@@ -500,9 +500,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserialize($updatedCourse);
     }
 
-    public function updateMembersDeadlinesByClassroomId($classroomId, $deadline)
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
     {
-        return $this->getMemberDao()->updateMembersDeadlinesByClassroomId($classroomId, $deadline);
+        return $this->getMemberDao()->updateMembersDeadlineByClassroomId($classroomId, $deadline);
     }
 
     public function batchUpdateOrg($courseIds, $orgCode)

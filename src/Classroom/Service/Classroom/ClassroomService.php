@@ -100,9 +100,9 @@ interface ClassroomService
 
     public function updateMember($id, $member);
 
-    public function updateMemberDeadline($id, $fields);
+    public function updateMemberDeadline($id, $deadline);
 
-    public function updateMembersDeadlineByClassroomId($classroomId, $expiryDate);
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
 
     public function searchMemberCount($conditions);
 

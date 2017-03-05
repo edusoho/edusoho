@@ -387,12 +387,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $courseMember;
     }
 
-    public function updateMembersDeadlinesByClassroomId($classroomId, $deadline)
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
     {
         $sql = "UPDATE {$this->table} SET deadline = ? WHERE classroomId = ?";
-        $result = $this->getConnection()->executeQuery($sql, array($deadline, $classroomId));
-        $this->clearCached();
-        return $result;
+        return $this->getConnection()->executeUpdate($sql, array($deadline, $classroomId));
     }
 
     public function updateMembers($conditions, $updateFields)

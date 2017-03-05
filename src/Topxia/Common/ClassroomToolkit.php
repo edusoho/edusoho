@@ -1,25 +1,32 @@
 <?php   
 namespace Topxia\Common;
 
+use Topxia\Service\Common\ServiceKernel;
+
 class ClassroomToolkit
 {
-    public static function buildMemberDeadlineByMode($fields, $mode)
+    public static function buildMemberDeadline(array $expiryDate)
     {
-        $deadline = $fields['expiryValue'];
+        $deadline = $expiryDate['expiryValue'];
 
-        if ($mode == 'days') {
-            $deadline = time() + $fields['expiryValue'] * 24 * 60 * 60;
+        if ($expiryDate['expiryMode'] == 'days') {
+            $deadline = time() + $expiryDate['expiryValue'] * 24 * 60 * 60;
         }
 
-        if ($mode == 'date') {
+        if ($expiryDate['expiryMode'] == 'date') {
             if (!is_int($deadline)) {
                 $deadline = strtotime($deadline.' 23:59:59');
             }
             if ($deadline < time()) {
-                throw $this->createServiceException($this->getKernel()->trans('有效期的设置时间小于当前时间！'));
+                throw new \Exception(self::getKernel()->trans('有效期的设置时间小于当前时间！'));
             }
         }
 
         return $deadline;
+    }
+
+    protected static function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }
