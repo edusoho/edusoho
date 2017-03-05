@@ -2,7 +2,6 @@
 
 namespace Biz\File\FireWall;
 
-
 use Topxia\Service\Common\ServiceKernel;
 
 class ArticleFileFireWall extends BaseFireWall implements FireWallInterface
@@ -17,6 +16,7 @@ class ArticleFileFireWall extends BaseFireWall implements FireWallInterface
         if ($article['userId'] == $user['id']) {
             return true;
         }
+
         return false;
     }
 

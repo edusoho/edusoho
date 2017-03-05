@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Marker\Dao\Impl;
 
 use Biz\Marker\Dao\QuestionMarkerResultDao;
@@ -27,12 +28,12 @@ class QuestionMarkerResultDaoImpl extends GeneralDaoImpl implements QuestionMark
     {
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys'   => array('createdTime'),
+            'orderbys' => array('createdTime'),
             'conditions' => array(
                 'userId = :userId',
                 'markerId = :markerId',
-                'questionMarkerId = :questionMarkerId'
-            )
+                'questionMarkerId = :questionMarkerId',
+            ),
         );
     }
 }

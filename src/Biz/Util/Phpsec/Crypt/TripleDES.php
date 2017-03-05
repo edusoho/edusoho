@@ -27,49 +27,43 @@
  * </code>
  *
  * @category  Crypt
- * @package   TripleDES
  *
  * @author    Jim Wigginton <terrafrost@php.net>
  * @copyright 2007 Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  *
- * @link      http://phpseclib.sourceforge.net
+ * @see      http://phpseclib.sourceforge.net
  */
 
 namespace Biz\Util\Phpsec\Crypt;
 
-use Biz\Util\Phpsec\Crypt\DES;
-use Biz\Util\Phpsec\Crypt\Base;
-
 /**
  * Pure-PHP implementation of Triple DES.
  *
- * @access  public
- * @package TripleDES
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
 class TripleDES extends DES
 {
     /**
-     * Encrypt / decrypt using inner chaining
+     * Encrypt / decrypt using inner chaining.
      *
      * Inner chaining is used by SSH-1 and is generally considered to be less secure then outer chaining (self::MODE_CBC3).
      */
     const MODE_3CBC = -2;
 
     /**
-     * Encrypt / decrypt using outer chaining
+     * Encrypt / decrypt using outer chaining.
      *
      * Outer chaining is used by SSH-2 and when the mode is set to \Biz\Util\Phpsec\Crypt\Base::MODE_CBC.
      */
     const MODE_CBC3 = Base::MODE_CBC;
 
     /**
-     * The default password key_size used by setPassword()
+     * The default password key_size used by setPassword().
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\DES::password_key_size
      * @see \Biz\Util\Phpsec\Crypt\Base::password_key_size
      * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
@@ -77,59 +71,57 @@ class TripleDES extends DES
     public $password_key_size = 24;
 
     /**
-     * The default salt used by setPassword()
+     * The default salt used by setPassword().
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::password_default_salt
      * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_default_salt = 'phpseclib';
 
     /**
-     * The mcrypt specific name of the cipher
+     * The mcrypt specific name of the cipher.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\DES::cipher_name_mcrypt
      * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
      */
     public $cipher_name_mcrypt = 'tripledes';
 
     /**
-     * Optimizing value while CFB-encrypting
+     * Optimizing value while CFB-encrypting.
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::cfb_init_len
      */
     public $cfb_init_len = 750;
 
     /**
-     * max possible size of $key
+     * max possible size of $key.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\TripleDES::setKey()
      * @see \Biz\Util\Phpsec\Crypt\DES::setKey()
      */
     public $key_size_max = 24;
 
     /**
-     * Internal flag whether using self::MODE_3CBC or not
+     * Internal flag whether using self::MODE_3CBC or not.
      *
-     * @var Boolean
-     * @access private
+     * @var bool
      */
     public $mode_3cbc;
 
     /**
-     * The \Biz\Util\Phpsec\Crypt\DES objects
+     * The \Biz\Util\Phpsec\Crypt\DES objects.
      *
      * Used only if $mode_3cbc === true
      *
-     * @var Array
-     * @access private
+     * @var array
      */
     public $des;
 
@@ -154,7 +146,6 @@ class TripleDES extends DES
      *
      * If not explicitly set, \Biz\Util\Phpsec\Crypt\Base::MODE_CBC will be used.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\DES::__construct()
      * @see \Biz\Util\Phpsec\Crypt\Base::__construct()
      *
@@ -173,7 +164,7 @@ class TripleDES extends DES
                 $this->des = array(
                     new DES(Base::MODE_CBC),
                     new DES(Base::MODE_CBC),
-                    new DES(Base::MODE_CBC)
+                    new DES(Base::MODE_CBC),
                 );
 
                 // we're going to be doing the padding, ourselves, so disable it in the \Biz\Util\Phpsec\Crypt\DES objects
@@ -188,37 +179,36 @@ class TripleDES extends DES
     }
 
     /**
-     * Test for engine validity
+     * Test for engine validity.
      *
      * This is mainly just a wrapper to set things up for \Biz\Util\Phpsec\Crypt\Base::isValidEngine()
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
      *
-     * @param  Integer   $engine
-     * @return Boolean
+     * @param int $engine
+     *
+     * @return bool
      */
     public function isValidEngine($engine)
     {
         if ($engine == self::ENGINE_OPENSSL) {
             $this->cipher_name_openssl_ecb = 'des-ede3';
-            $mode                          = $this->_openssl_translate_mode();
-            $this->cipher_name_openssl     = $mode == 'ecb' ? 'des-ede3' : 'des-ede3-'.$mode;
+            $mode = $this->_openssl_translate_mode();
+            $this->cipher_name_openssl = $mode == 'ecb' ? 'des-ede3' : 'des-ede3-'.$mode;
         }
 
         return parent::isValidEngine($engine);
     }
 
     /**
-     * Sets the initialization vector. (optional)
+     * Sets the initialization vector. (optional).
      *
      * SetIV is not required when \Biz\Util\Phpsec\Crypt\Base::MODE_ECB is being used.  If not explicitly set, it'll be assumed
      * to be all zero's.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::setIV()
      *
-     * @param String $iv
+     * @param string $iv
      */
     public function setIV($iv)
     {
@@ -241,11 +231,10 @@ class TripleDES extends DES
      *
      * If the key is not explicitly set, it'll be assumed to be all null bytes.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\DES::setKey()
      * @see \Biz\Util\Phpsec\Crypt\Base::setKey()
      *
-     * @param String $key
+     * @param string $key
      */
     public function setKey($key)
     {
@@ -277,11 +266,11 @@ class TripleDES extends DES
     /**
      * Encrypts a message.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
      *
-     * @param  String $plaintext
-     * @return String $cipertext
+     * @param string $plaintext
+     *
+     * @return string $cipertext
      */
     public function encrypt($plaintext)
     {
@@ -306,11 +295,11 @@ class TripleDES extends DES
     /**
      * Decrypts a message.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      *
-     * @param  String $ciphertext
-     * @return String $plaintext
+     * @param string $ciphertext
+     *
+     * @return string $plaintext
      */
     public function decrypt($ciphertext)
     {
@@ -363,7 +352,6 @@ class TripleDES extends DES
      * continuous buffers not be used.  They do offer better security and are, in fact, sometimes required (SSH uses them),
      * however, they are also less intuitive and more likely to cause you problems.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::enableContinuousBuffer()
      * @see \Biz\Util\Phpsec\Crypt\TripleDES::disableContinuousBuffer()
      */
@@ -383,7 +371,6 @@ class TripleDES extends DES
      *
      * The default behavior.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::disableContinuousBuffer()
      * @see \Biz\Util\Phpsec\Crypt\TripleDES::enableContinuousBuffer()
      */
@@ -399,9 +386,8 @@ class TripleDES extends DES
     }
 
     /**
-     * Creates the key schedule
+     * Creates the key schedule.
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\DES::_setupKey()
      * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
@@ -436,14 +422,14 @@ class TripleDES extends DES
     }
 
     /**
-     * Sets the internal crypt engine
+     * Sets the internal crypt engine.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
      * @see \Biz\Util\Phpsec\Crypt\Base::setPreferredEngine()
      *
-     * @param  Integer   $engine
-     * @return Integer
+     * @param int $engine
+     *
+     * @return int
      */
     public function setPreferredEngine($engine)
     {

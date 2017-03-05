@@ -11,7 +11,7 @@
       {% elseif mediaStatus == 'error' %}
       <i class="fa fa-file-video-o text-danger"></i>
       {% else %}
-      <i class="fa fa-file-video-o text-success"></i>
+      <i class="fa fa-file-video-o color-success"></i>
       {% endif %}
     {% elseif lesson.type == 'liveOpen' %}
       {% if mediaStatus == 'waiting' %}
@@ -21,10 +21,10 @@
       {% elseif mediaStatus == 'error' %}
       <i class="fa fa-video-camera text-danger"></i>
       {% else %}
-      <i class="fa fa-video-camera text-success"></i>
+      <i class="fa fa-video-camera color-success"></i>
       {% endif %}
     {% else %}
-      <i class="fa fa-file-powerpoint-o text-success"></i>
+      <i class="fa fa-file-powerpoint-o color-success"></i>
     {% endif %}
     课时 <span class="number">{{ lesson.number }}</span>：
 

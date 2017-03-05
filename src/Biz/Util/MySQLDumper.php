@@ -6,15 +6,15 @@ use Biz\BaseService;
 
 class MySQLDumper extends BaseService
 {
-    public $target           = '';
-    private $dbSettings      = array();
+    public $target = '';
+    private $dbSettings = array();
     private $internelSetting = array(
-        'exclude'        => array(),
-        'isDropTable'    => true,
+        'exclude' => array(),
+        'isDropTable' => true,
         'hasTransaction' => true,
-        'lockread'       => true,
-        'lockwrite'      => true,
-        'isextend'       => true
+        'lockread' => true,
+        'lockwrite' => true,
+        'isextend' => true,
     );
 
     private $connection;
@@ -23,7 +23,7 @@ class MySQLDumper extends BaseService
     {
         $this->connection = $connection;
         $this->dbSettings = $settings;
-        $this->connection->exec("SET NAMES utf8");
+        $this->connection->exec('SET NAMES utf8');
     }
 
     protected function getSet($key)
@@ -37,18 +37,18 @@ class MySQLDumper extends BaseService
 
     public function export($target)
     {
-        $target .= ".gz";
+        $target .= '.gz';
 
         if (!is_writable(dirname($target))) {
             throw new \Exception($this->getKernel()->trans('无导出目录写权限，无法导出数据库'), 1);
         }
 
         $tables = array();
-        foreach ($this->connection->query("SHOW TABLES") as $table) {
+        foreach ($this->connection->query('SHOW TABLES') as $table) {
             $tables[] = current($table);
         }
 
-        $file = gzopen($target, "wb");
+        $file = gzopen($target, 'wb');
 
         $this->lineWrite($file, "-- --------------------------------------------------\n");
         $this->lineWrite($file, $this->getKernel()->trans('-- ---------------- 导出数据库')."\n");
@@ -67,13 +67,14 @@ class MySQLDumper extends BaseService
                 } catch (\Exception $e) {
                     $this->connection->rollback();
                     if ($this->getSet('lockread')) {
-                        $this->connection->exec("UNLOCK TABLES");
+                        $this->connection->exec('UNLOCK TABLES');
                     }
                     throw new \Exception($e->getMessage());
                 }
             }
         }
         gzclose($file);
+
         return $target;
     }
 
@@ -97,6 +98,7 @@ class MySQLDumper extends BaseService
                 $line .= $row['Create Table'];
                 $line .= ";\n\n";
                 $this->lineWrite($file, $line);
+
                 return true;
             }
             if (isset($row['Create View'])) {
@@ -115,7 +117,7 @@ class MySQLDumper extends BaseService
 
     protected function exportValues($file, $table)
     {
-        $this->lineWrite($file, $this->getKernel()->trans("-- ----------- %table% 的数据 ---------", array('%table%' => $table))."\n\n");
+        $this->lineWrite($file, $this->getKernel()->trans('-- ----------- %table% 的数据 ---------', array('%table%' => $table))."\n\n");
 
         if ($this->getSet('hasTransaction')) {
             $this->connection->setTransactionIsolation(3);
@@ -130,19 +132,19 @@ class MySQLDumper extends BaseService
         }
 
         $insertExclude = true;
-        $sql           = "SELECT * FROM `$table`";
+        $sql = "SELECT * FROM `$table`";
         foreach ($this->connection->query($sql, \PDO::FETCH_NUM) as $row) {
             $vals = array();
             foreach ($row as $val) {
-                $vals[] = is_null($val) ? "NULL" :
+                $vals[] = is_null($val) ? 'NULL' :
                 $this->connection->quote($val);
             }
             if ($insertExclude || !$this->getSet('isextend')) {
                 $this->lineWrite($file,
-                    "INSERT INTO {$table} VALUES (".implode(",", $vals).")");
+                    "INSERT INTO {$table} VALUES (".implode(',', $vals).')');
                 $insertExclude = false;
             } else {
-                $this->lineWrite($file, ",(".implode(",", $vals).")");
+                $this->lineWrite($file, ',('.implode(',', $vals).')');
             }
         }
         if (!$insertExclude) {
@@ -155,7 +157,7 @@ class MySQLDumper extends BaseService
             $this->connection->commit();
         }
         if ($this->getSet('lockread')) {
-            $this->connection->exec("UNLOCK TABLES");
+            $this->connection->exec('UNLOCK TABLES');
         }
         $this->lineWrite($file, "\n\n");
         $this->lineWrite($file, $this->getKernel()->trans('-- ----------- %table% 的数据结束 ---------', array('%table%' => $table))."\n\n");

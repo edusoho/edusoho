@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Group\Dao\Impl;
 
 use Biz\Group\Dao\ThreadPostDao;
@@ -48,14 +49,14 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
         return array(
             'timestamps' => array('createdTime'),
             'serializes' => array('tagIds' => 'json'),
-            'orderbys'   => array('id', 'createdTime'),
+            'orderbys' => array('id', 'createdTime'),
             'conditions' => array(
                 'id < :id',
                 'userId = :userId',
                 'postId = :postId',
                 'adopt = :adopt',
-                'threadId = :threadId'
-            )
+                'threadId = :threadId',
+            ),
         );
     }
 }

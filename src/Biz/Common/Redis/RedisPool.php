@@ -15,17 +15,18 @@ class RedisPool
     public static function init($config)
     {
         if (self::$instance) {
-            throw new \RuntimeException("Redis pool is already inited.");
+            throw new \RuntimeException('Redis pool is already inited.');
         }
 
         self::$instance = new self($config);
+
         return self::$instance;
     }
 
     public function instance()
     {
         if (empty(self::$instance)) {
-            throw new \RuntimeException("Redis pool is not init.");
+            throw new \RuntimeException('Redis pool is not init.');
         }
 
         return self::$instance;
@@ -59,10 +60,9 @@ class RedisPool
     }
 
     /**
-     * 获得Redis的Slave连接
+     * 获得Redis的Slave连接.
      *
      * 如果有多个Slave，则随机返回1个，如果没有Slave则返回Master。
-     *
      */
     public function getRedisSlave($group = 'default')
     {
@@ -74,7 +74,7 @@ class RedisPool
             return $this->getRedis($group);
         }
 
-        $index   = array_rand($this->config[$group]['slaves']);
+        $index = array_rand($this->config[$group]['slaves']);
         $poolKey = "{$group}:slave:{$index}";
 
         if (isset($this->pool[$poolKey])) {

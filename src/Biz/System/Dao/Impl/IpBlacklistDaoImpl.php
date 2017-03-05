@@ -19,8 +19,8 @@ class IpBlacklistDaoImpl extends GeneralDaoImpl implements IpBlacklistDao
         return array(
             'conditions' => array(
                 'ip = :ip',
-                'type = :type'
-            )
+                'type = :type',
+            ),
         );
     }
 }

@@ -18,6 +18,7 @@ class BatchNotificationDaoImpl extends GeneralDaoImpl implements BatchNotificati
                 $conditions['content'] = "%{$conditions['content']}%";
             }
         }
+
         return parent::count($conditions);
     }
 
@@ -29,7 +30,7 @@ class BatchNotificationDaoImpl extends GeneralDaoImpl implements BatchNotificati
 
         if (empty($orderBy)) {
             $orderBy = array(
-                'createdTime' => 'DESC'
+                'createdTime' => 'DESC',
             );
         }
 
@@ -40,9 +41,9 @@ class BatchNotificationDaoImpl extends GeneralDaoImpl implements BatchNotificati
     {
         return array(
             'serializes' => array(
-                'content' => 'json'
+                'content' => 'json',
             ),
-            'orderbys'   => array('createdTime')
+            'orderbys' => array('createdTime'),
         );
     }
 }

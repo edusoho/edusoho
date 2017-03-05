@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Announcement\Processor;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -34,8 +35,8 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         $result = false;
         if ($members) {
             $message = array('title' => $targetObject['title'],
-                'url'                    => $targetObjectShowUrl,
-                'type'                   => 'classroom');
+                'url' => $targetObjectShowUrl,
+                'type' => 'classroom', );
             foreach ($members as $member) {
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
@@ -61,8 +62,8 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
     {
         $config = array(
             'create' => 'AppBundle:Classroom/Announcement:create',
-            'edit'   => 'AppBundle:Classroom/Announcement:edit',
-            'list'   => 'AppBundle:Classroom/Announcement:list'
+            'edit' => 'AppBundle:Classroom/Announcement:edit',
+            'list' => 'AppBundle:Classroom/Announcement:list',
         );
 
         return $config[$action];

@@ -21,10 +21,10 @@ class CourseDraftDaoImpl extends GeneralDaoImpl implements CourseDraftDao
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime'),
+            'orderbys' => array('createdTime'),
             'conditions' => array(
-                'courseId = :courseId'
-            )
+                'courseId = :courseId',
+            ),
         );
     }
 }

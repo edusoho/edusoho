@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\RefererLog\Service\Impl;
 
 use Biz\BaseService;
@@ -16,10 +17,11 @@ class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogS
     public function addOrderRefererLog($fields)
     {
         if (!ArrayToolkit::requireds($fields, array('refererLogId', 'orderId', 'targetId', 'targetType', 'sourceTargetId', 'sourceTargetId'))) {
-            throw $this->createServiceException("缺少字段,添加OrderRefererLog失败");
+            throw $this->createServiceException('缺少字段,添加OrderRefererLog失败');
         }
 
         $fields['createdTime'] = time();
+
         return $this->getOrderRefererLogDao()->create($fields);
     }
 
@@ -36,12 +38,14 @@ class OrderRefererLogServiceImpl extends BaseService implements OrderRefererLogS
     public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy = '')
     {
         $conditions = $this->prepareConditions($conditions);
+
         return $this->getOrderRefererLogDao()->searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy);
     }
 
     public function searchOrderRefererLogCount($conditions, $groupBy = '')
     {
         $conditions = $this->prepareConditions($conditions);
+
         return $this->getOrderRefererLogDao()->countOrderRefererLogs($conditions, $groupBy);
     }
 

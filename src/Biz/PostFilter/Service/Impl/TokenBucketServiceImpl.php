@@ -1,6 +1,6 @@
 <?php
-namespace Biz\PostFilter\Service\Impl;
 
+namespace Biz\PostFilter\Service\Impl;
 
 use Biz\BaseService;
 use Biz\PostFilter\Dao\RecentPostNumDao;
@@ -12,17 +12,18 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
     protected function createRecentPostNum($ip, $type)
     {
         $fields = array(
-            'ip'          => $ip,
-            'type'        => $type,
-            'num'         => 0,
-            'createdTime' => time()
+            'ip' => $ip,
+            'type' => $type,
+            'num' => 0,
+            'createdTime' => time(),
         );
+
         return $this->getRecentPostNumDao()->create($fields);
     }
 
     public function incrToken($ip, $type)
     {
-        $postNumRules = $this->getSettingService()->get("post_num_rules");
+        $postNumRules = $this->getSettingService()->get('post_num_rules');
 
         if (!isset($postNumRules['rules'])) {
             return;
@@ -37,13 +38,13 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
                         continue;
                     }
 
-                    $ruleName      = "{$key}.{$ruleName}";
+                    $ruleName = "{$key}.{$ruleName}";
                     $recentPostNum = $this->getRecentPostNumDao()->getByIpAndType($ip, $ruleName);
 
                     if (empty($recentPostNum)) {
                         $recentPostNum = $this->createRecentPostNum($ip, $ruleName);
                     }
-                    $this->getRecentPostNumDao()->wave(array($recentPostNum["id"]), array('num' => 1));
+                    $this->getRecentPostNumDao()->wave(array($recentPostNum['id']), array('num' => 1));
                 }
             }
         }
@@ -55,7 +56,7 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
             return false;
         }
 
-        $postNumRules = $this->getSettingService()->get("post_num_rules");
+        $postNumRules = $this->getSettingService()->get('post_num_rules');
 
         if (!isset($postNumRules['rules'])) {
             return true;
@@ -88,8 +89,9 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
             return true;
         }
 
-        if ((time() - $recentPostNum['createdTime']) > $postNumRule["interval"]) {
-            $this->getRecentPostNumDao()->delete($recentPostNum["id"]);
+        if ((time() - $recentPostNum['createdTime']) > $postNumRule['interval']) {
+            $this->getRecentPostNumDao()->delete($recentPostNum['id']);
+
             return true;
         }
 
@@ -102,10 +104,10 @@ class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 
     protected function getIpBlacklist()
     {
-        $postNumRules = $this->getSettingService()->get("post_num_rules");
+        $postNumRules = $this->getSettingService()->get('post_num_rules');
 
-        if (isset($postNumRules["ipBlackList"])) {
-            return $postNumRules["ipBlackList"];
+        if (isset($postNumRules['ipBlackList'])) {
+            return $postNumRules['ipBlackList'];
         }
 
         return array();

@@ -1,27 +1,25 @@
 <?php
 
-
 namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
-use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\File\Service\UploadFileService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Symfony\Component\HttpFoundation\Request;
 
 class FlashController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $id, $courseId)
+    public function showAction(Request $request, $activity)
     {
-        $activity = $this->getActivityService()->getActivity($id);
-        $flash    = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
+        $flash = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
         $file = $this->getUploadFileService()->getFullFile($flash['mediaId']);
         $result = $this->getMaterialLibService()->player($file['globalId']);
         $flashMedia['uri'] = $result['url'];
+
         return $this->render('activity/flash/index.html.twig', array(
-            'flash'      => $flash,
-            'flashMedia' => $flashMedia
+            'flash' => $flash,
+            'flashMedia' => $flashMedia,
         ));
     }
 
@@ -34,16 +32,16 @@ class FlashController extends BaseController implements ActivityActionInterface
         $flashMedia['uri'] = $result['url'];
 
         return $this->render('activity/flash/preview.html.twig', array(
-            'flash'      => $flash,
-            'flashMedia' => $flashMedia
+            'flash' => $flash,
+            'flashMedia' => $flashMedia,
         ));
     }
 
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id);
-        $config   = $this->getActivityService()->getActivityConfig('flash');
-        $flash    = $config->get($activity['mediaId']);
+        $config = $this->getActivityService()->getActivityConfig('flash');
+        $flash = $config->get($activity['mediaId']);
 
         $file = $this->getUploadFileService()->getFile($flash['mediaId']);
 
@@ -52,15 +50,14 @@ class FlashController extends BaseController implements ActivityActionInterface
         return $this->render('activity/flash/edit-modal.html.twig', array(
             'activity' => $activity,
             'courseId' => $courseId,
-            'flash'    => $flash
+            'flash' => $flash,
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
-
         return $this->render('activity/flash/edit-modal.html.twig', array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
     }
 
@@ -69,7 +66,7 @@ class FlashController extends BaseController implements ActivityActionInterface
         $media = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
 
         return $this->render('activity/flash/finish-condition.html.twig', array(
-            'media' => $media
+            'media' => $media,
         ));
     }
 

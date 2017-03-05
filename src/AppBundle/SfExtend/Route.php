@@ -60,29 +60,29 @@ class Route extends BaseRoute
     public function serialize()
     {
         return serialize(array(
-            'path'         => $this->path,
-            'host'         => $this->host,
-            'defaults'     => $this->defaults,
+            'path' => $this->path,
+            'host' => $this->host,
+            'defaults' => $this->defaults,
             'requirements' => $this->requirements,
-            'options'      => $this->options,
-            'schemes'      => $this->schemes,
-            'methods'      => $this->methods,
-            'compiled'     => $this->compiled,
-            'permissions'  => $this->permissions
+            'options' => $this->options,
+            'schemes' => $this->schemes,
+            'methods' => $this->methods,
+            'compiled' => $this->compiled,
+            'permissions' => $this->permissions,
         ));
     }
 
     public function unserialize($serialized)
     {
-        $data               = unserialize($serialized);
-        $this->path         = $data['path'];
-        $this->host         = $data['host'];
-        $this->defaults     = $data['defaults'];
+        $data = unserialize($serialized);
+        $this->path = $data['path'];
+        $this->host = $data['host'];
+        $this->defaults = $data['defaults'];
         $this->requirements = $data['requirements'];
-        $this->options      = $data['options'];
-        $this->schemes      = $data['schemes'];
-        $this->methods      = $data['methods'];
-        $this->permissions  = $data['permissions'];
+        $this->options = $data['options'];
+        $this->schemes = $data['schemes'];
+        $this->methods = $data['methods'];
+        $this->permissions = $data['permissions'];
 
         if (isset($data['compiled'])) {
             $this->compiled = $data['compiled'];
@@ -97,6 +97,7 @@ class Route extends BaseRoute
     public function setPermissions($permissions)
     {
         $this->permissions = $permissions;
+
         return $permissions;
     }
 }

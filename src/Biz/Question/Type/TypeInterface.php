@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Question\Type;
 
 interface TypeInterface

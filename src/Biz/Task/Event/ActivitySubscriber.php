@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Task\Event;
 
 use Biz\Task\Service\TaskService;
@@ -24,7 +25,7 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
 
     public function onActivityDoing(Event $event)
     {
-        $taskId = $event->getArgument('taskId');
+        $task = $event->getArgument('task');
 
         if (!$event->hasArgument('timeStep')) {
             $time = TaskService::LEARN_TIME_STEP;
@@ -36,7 +37,7 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
             return;
         }
 
-        $this->getTaskService()->doTask($taskId, $time);
+        $this->getTaskService()->doTask($task['id'], $time);
 
         if ($this->getTaskService()->isFinished($taskId)) {
             $this->getTaskService()->finishTaskResult($taskId);

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Activity\Dao\Impl;
 
 use Biz\Activity\Dao\TestpaperActivityDao;
@@ -22,11 +23,11 @@ class TestpaperActivityDaoImpl extends GeneralDaoImpl implements TestpaperActivi
     {
         $declares['conditions'] = array(
             'id = :id',
-            'id IN (:ids)'
+            'id IN (:ids)',
         );
 
         $declares['serializes'] = array(
-            'finishCondition' => 'json'
+            'finishCondition' => 'json',
         );
 
         return $declares;

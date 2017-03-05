@@ -32,6 +32,9 @@ class Live {
     editor.on('change', () => {
       $('[name="remark"]').val(editor.getData());
     });
+    editor.on('blur', () => {
+      $('[name="remark"]').val(editor.getData());
+    });
   }
   _initStep2Form() {
     var $step2_form = $("#step2-form");

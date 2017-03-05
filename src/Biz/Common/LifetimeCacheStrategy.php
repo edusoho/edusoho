@@ -31,6 +31,7 @@ class LifetimeCacheStrategy implements CacheStrategyInterface
         if ($this->isPageCacheEnabled()) {
             return $this->cache->fetch($key['key']);
         }
+
         return false;
     }
 
@@ -42,7 +43,7 @@ class LifetimeCacheStrategy implements CacheStrategyInterface
 
         return array(
             'lifetime' => $value,
-            'key'      => '__LCS__'.$annotation
+            'key' => '__LCS__'.$annotation,
         );
     }
 
@@ -55,8 +56,8 @@ class LifetimeCacheStrategy implements CacheStrategyInterface
 
     protected function isPageCacheEnabled()
     {
-
         $setting = $this->getSettingService()->get('performance', array());
+
         return empty($setting['pageCache']) ? 0 : $setting['pageCache'];
     }
 

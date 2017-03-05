@@ -12,11 +12,11 @@
 		      {% for index, answer in question.answer %}
 		        {% set userAnswer = question.testResult.answer[index]|default(null) %}
 			    	<li>
-			    		{{'填空(%index%)： 正确答案'|trans({'%index%': index+1})}} <strong class="text-success">{{ answer|join(' 或 '|trans) }}</strong>
+			    		{{'填空(%index%)： 正确答案'|trans({'%index%': index+1})}} <strong class="color-success">{{ answer|join(' 或 '|trans) }}</strong>
 			    	  {% if userAnswer == '' %}
 			    	  	{{'。你未回答'|trans}}
 			    	  {% elseif question.testResult.status|default('noAnswer') == "right" %}
-			    	  	{{'，你的答案'|trans}}　<strong class="text-success">{{ userAnswer }}</strong>。
+			    	  	{{'，你的答案'|trans}}　<strong class="color-success">{{ userAnswer }}</strong>。
 			    	  {% elseif question.testResult.status|default('noAnswer') == "partRight" %}
 			    	  	{{'，你的答案'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>。
 			    	  {% else %}
@@ -27,7 +27,7 @@
 		    </ul>
 
 		    {% if question.testResult.status == "right" %}
-			    <p class="text-success">{{'回答正确。'|trans}}</p>
+			    <p class="color-success">{{'回答正确。'|trans}}</p>
 			  {% elseif question.testResult.status == "partRight" %}
 			    <p class="text-warning">{{'回答部分正确。'|trans}}
 				    {% if showScore|default(1) %}
@@ -66,7 +66,7 @@
 			    <ul>
 			      {% for index, answer in question.answer %}
 			    	<li>
-			    		{{'填空(%index%)： 正确答案'|trans({'%index%': index+1})}} <strong class="text-success">{{ answer|join(' 或 '|trans) }}</strong>
+			    		{{'填空(%index%)： 正确答案'|trans({'%index%': index+1})}} <strong class="color-success">{{ answer|join(' 或 '|trans) }}</strong>
 			    	</li>
 			      {% endfor %}
 			    </ul>

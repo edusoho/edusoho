@@ -47,6 +47,7 @@ interface BlockService
     public function deleteBlockTemplate($id);
 
     public function updateBlockTemplate($id, $fields);
+
     /**
      * 批量获取指定code的，编辑区块内容。
      *

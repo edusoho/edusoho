@@ -19,7 +19,7 @@ class QuestionController extends BaseController
         }
 
         $conditions = array(
-            'userId' => $user['id']
+            'userId' => $user['id'],
         );
 
         $paginator = new Paginator(
@@ -36,7 +36,7 @@ class QuestionController extends BaseController
         );
 
         $questionIds = ArrayToolkit::column($favoriteQuestions, 'questionId');
-        $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         $testpaperIds = array();
         $testpaperIds = array_map(function ($favorite) {
@@ -49,10 +49,10 @@ class QuestionController extends BaseController
 
         return $this->render('my/question/favorite-list.html.twig', array(
             'favoriteQuestions' => $favoriteQuestions,
-            'paginator'         => $paginator,
-            'questions'         => $questions,
-            'nav'               => 'questionFavorite',
-            'testpapers'        => $testpapers
+            'paginator' => $paginator,
+            'questions' => $questions,
+            'nav' => 'questionFavorite',
+            'testpapers' => $testpapers,
         ));
     }
 
@@ -72,6 +72,7 @@ class QuestionController extends BaseController
             $favorite = $this->getQuestionService()->createFavoriteQuestion($fields);
 
             $cancelUrl = $this->generateUrl('my_question_unfavorite', array('id' => $favorite['id']));
+
             return $this->createJsonResponse(array('result' => true, 'message' => '', 'url' => $cancelUrl));
         }
     }
@@ -119,9 +120,9 @@ class QuestionController extends BaseController
         }
 
         return $this->render('question-manage/preview-modal.html.twig', array(
-            'question'     => $question,
-            'showAnswer'   => 1,
-            'showAnalysis' => 1
+            'question' => $question,
+            'showAnswer' => 1,
+            'showAnalysis' => 1,
         ));
     }
 

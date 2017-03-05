@@ -2,12 +2,11 @@
 
 namespace AppBundle\Extensions\DataTag\Test;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\CourseRankByStudentDataTag;
 
 class CourseRankByStudentDataTagTest extends BaseTestCase
-{   
-
+{
     public function testGetData()
     {
         $datatag = new CourseRankByStudentDataTag();
@@ -15,5 +14,4 @@ class CourseRankByStudentDataTagTest extends BaseTestCase
 
         $this->assertEquals(0, count($courses));
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Filesystem\Filesystem;
@@ -36,8 +37,8 @@ class DumpInitDataCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<info>dump-init-sql开始</info>');
-        $domain   = $input->getArgument('domain');
-        $user     = $input->getArgument('user');
+        $domain = $input->getArgument('domain');
+        $user = $input->getArgument('user');
         $password = $input->getArgument('password');
         $database = $input->getArgument('database');
         $projectPath = $input->getArgument('projectPath');
@@ -58,7 +59,7 @@ class DumpInitDataCommand extends BaseCommand
         $output->writeln("<info>{$command}</info>");
         exec($command);
 
-        $rootPath   = __DIR__.'/../../../..';
+        $rootPath = __DIR__.'/../../../..';
         $filesystem = new Filesystem();
 
         if (!$filesystem->exists("{$rootPath}/installFiles")) {

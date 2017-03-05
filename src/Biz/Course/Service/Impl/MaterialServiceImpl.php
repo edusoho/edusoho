@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
@@ -25,18 +26,18 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             $courseMaterials = $this->searchMaterials(
                 array(
                     'courseSetId' => $fields['courseSetId'],
-                    'courseId'    => $fields['courseId'],
-                    'fileId'      => $fields['fileId'],
-                    'lessonId'    => 0,
-                    'type'        => $fields['type']
+                    'courseId' => $fields['courseId'],
+                    'fileId' => $fields['fileId'],
+                    'lessonId' => 0,
+                    'type' => $fields['type'],
                 ),
                 array('createdTime' => 'DESC'), 0, PHP_INT_MAX
             );
             if ($courseMaterials) {
                 $updateFields = array(
-                    'lessonId'    => $fields['lessonId'],
-                    'source'      => $fields['source'],
-                    'description' => $fields['description']
+                    'lessonId' => $fields['lessonId'],
+                    'source' => $fields['source'],
+                    'description' => $fields['description'],
                 );
                 $material = $this->updateMaterial($courseMaterials[0]['id'], $updateFields, $argument);
             } else {
@@ -53,7 +54,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     {
         $material = $this->getMaterialDao()->create($fields);
 
-        $this->dispatchEvent("course.material.create", new Event($material, array('argument' => $argument)));
+        $this->dispatchEvent('course.material.create', new Event($material, array('argument' => $argument)));
 
         return $material;
     }
@@ -61,9 +62,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     public function updateMaterial($id, $fields, $argument)
     {
         $sourceMaterial = $this->getMaterialDao()->get($id);
-        $material       = $this->getMaterialDao()->update($id, $fields);
+        $material = $this->getMaterialDao()->update($id, $fields);
 
-        $this->dispatchEvent("course.material.update", new Event($material, array('argument' => $argument, 'sourceMaterial' => $sourceMaterial)));
+        $this->dispatchEvent('course.material.update', new Event($material, array('argument' => $argument, 'sourceMaterial' => $sourceMaterial)));
 
         return $material;
     }
@@ -77,7 +78,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
         $this->getMaterialDao()->delete($materialId);
 
-        $this->dispatchEvent("course.material.delete", new Event($material));
+        $this->dispatchEvent('course.material.delete', new Event($material));
     }
 
     public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
@@ -114,10 +115,10 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     {
         $conditions = array(
             'fileIds' => $fileIds,
-            'type'    => $courseType
+            'type' => $courseType,
         );
         if ($courseType == 'openCourse') {
-            $conditions['courseId']    = $courseSetId;
+            $conditions['courseId'] = $courseSetId;
             $conditions['courseSetId'] = 0;
         } else {
             $conditions['courseSetId'] = $courseSetId;
@@ -152,6 +153,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         if (empty($material) || $material['courseId'] != $courseId) {
             return null;
         }
+
         return $material;
     }
 
@@ -193,8 +195,8 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     public function findUsedCourseMaterials($fileIds, $courseId = 0)
     {
         $conditions = array(
-            'fileIds'         => $fileIds,
-            'excludeLessonId' => 0
+            'fileIds' => $fileIds,
+            'excludeLessonId' => 0,
         );
         if ($courseId) {
             $conditions['courseId'] = $courseId;
@@ -207,7 +209,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             PHP_INT_MAX
         );
         $materials = ArrayToolkit::group($materials, 'fileId');
-        $files     = array();
+        $files = array();
 
         if ($materials) {
             foreach ($materials as $fileId => $material) {
@@ -221,8 +223,8 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     public function findUsedCourseSetMaterials($fileIds, $courseSetId)
     {
         $conditions = array(
-            'fileIds'         => $fileIds,
-            'excludeLessonId' => 0
+            'fileIds' => $fileIds,
+            'excludeLessonId' => 0,
         );
         if ($courseSetId) {
             $conditions['courseSetId'] = $courseSetId;
@@ -235,7 +237,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             PHP_INT_MAX
         );
         $materials = ArrayToolkit::group($materials, 'fileId');
-        $files     = array();
+        $files = array();
 
         if ($materials) {
             foreach ($materials as $fileId => $material) {
@@ -253,13 +255,13 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         }
 
         $fileIds = ArrayToolkit::column($materials, 'fileId');
-        $files   = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds, $showCloud = 1);
 
-        $files     = ArrayToolkit::index($files, 'id');
+        $files = ArrayToolkit::index($files, 'id');
         $sortFiles = array();
         foreach ($materials as $key => $material) {
             if (isset($files[$material['fileId']])) {
-                $file            = array_merge($material, $files[$material['fileId']]);
+                $file = array_merge($material, $files[$material['fileId']]);
                 $sortFiles[$key] = $file;
             }
         }
@@ -271,13 +273,13 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     {
         $fields = array(
             'courseSetId' => $material['courseSetId'],
-            'courseId'    => $material['courseId'],
-            'lessonId'    => empty($material['lessonId']) ? 0 : $material['lessonId'],
+            'courseId' => $material['courseId'],
+            'lessonId' => empty($material['lessonId']) ? 0 : $material['lessonId'],
             'description' => empty($material['description']) ? '' : $material['description'],
-            'userId'      => $this->getCurrentUser()->offsetGet('id'),
-            'source'      => isset($material['source']) ? $material['source'] : 'coursematerial',
-            'type'        => isset($material['type']) ? $material['type'] : 'course',
-            'createdTime' => time()
+            'userId' => $this->getCurrentUser()->offsetGet('id'),
+            'source' => isset($material['source']) ? $material['source'] : 'coursematerial',
+            'type' => isset($material['type']) ? $material['type'] : 'course',
+            'createdTime' => time(),
         );
 
         if (empty($material['fileId'])) {
@@ -285,16 +287,16 @@ class MaterialServiceImpl extends BaseService implements MaterialService
                 throw $this->createServiceException('资料链接地址不能为空，添加资料失败！');
             }
             $fields['fileId'] = 0;
-            $fields['link']   = $material['link'];
-            $fields['title']  = empty($material['description']) ? $material['link'] : $material['description'];
+            $fields['link'] = $material['link'];
+            $fields['title'] = empty($material['description']) ? $material['link'] : $material['description'];
         } else {
             $fields['fileId'] = (int) $material['fileId'];
-            $file             = $this->getUploadFileService()->getFile($material['fileId']);
+            $file = $this->getUploadFileService()->getFile($material['fileId']);
             if (empty($file)) {
                 throw $this->createServiceException('文件不存在，上传资料失败！');
             }
-            $fields['link']     = '';
-            $fields['title']    = $file['filename'];
+            $fields['link'] = '';
+            $fields['title'] = $file['filename'];
             $fields['fileSize'] = $file['fileSize'];
         }
 

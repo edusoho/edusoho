@@ -1,19 +1,20 @@
 <?php
+
 namespace Biz\Order\OrderRefundProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
 
 class OrderRefundProcessorFactory
 {
-	public static function create($target)
+    public static function create($target)
     {
-    	if(empty($target)) {
-    		throw new \Exception(self::getKernel()->trans('订单类型不存在'));
-    	}
+        if (empty($target)) {
+            throw new \Exception(self::getKernel()->trans('订单类型不存在'));
+        }
 
-    	$class = __NAMESPACE__ . '\\' . ucfirst($target). 'OrderRefundProcessor';
+        $class = __NAMESPACE__.'\\'.ucfirst($target).'OrderRefundProcessor';
 
-    	return new $class();
+        return new $class();
     }
 
     protected function getKernel()
@@ -21,5 +22,3 @@ class OrderRefundProcessorFactory
         return ServiceKernel::instance();
     }
 }
-
-

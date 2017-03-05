@@ -28,7 +28,7 @@ export default class {
 
     $.post(this.$element.attr('action'), this.$element.serialize())
         .done((html) => {
-          notify('info', '提问成功');
+          notify('success', '提问成功');
           channel.publish("form.save", {
             html: html
           });
@@ -66,7 +66,10 @@ export default class {
       }
     });
 
-    editor.on('change', () => {
+    editor.on( 'change', () => {
+      this.$element.find('[name="question[content]"]').val(editor.getData());
+    });
+    editor.on('blur', () => {
       this.$element.find('[name="question[content]"]').val(editor.getData());
     });
 

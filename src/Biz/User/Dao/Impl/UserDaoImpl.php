@@ -22,6 +22,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     public function countByMobileNotEmpty()
     {
         $sql = "SELECT COUNT(DISTINCT `mobile`) FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` != ''";
+
         return $this->db()->fetchColumn($sql, array(), 0);
     }
 
@@ -65,19 +66,22 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         }
 
         $currentTime = time();
-        $sql         = "UPDATE {$this->table} SET {$name} = 0, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+        $sql = "UPDATE {$this->table} SET {$name} = 0, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+
         return $this->db()->executeQuery($sql, array($id));
     }
 
     public function analysisRegisterDataByTime($startTime, $endTime)
     {
         $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `createdTime`>=? AND `createdTime`<=? group by date order by date ASC ";
+
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function countByLessThanCreatedTime($time)
     {
         $sql = "SELECT count(id) as count FROM `{$this->table()}` WHERE  `createdTime` <= ?  ";
+
         return $this->db()->fetchColumn($sql, array($time));
     }
 
@@ -147,7 +151,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
             unset($conditions['orgCode']);
         }
 
-        $conditions['verifiedMobileNull'] = "";
+        $conditions['verifiedMobileNull'] = '';
 
         $builder = parent::_createQueryBuilder($conditions);
 
@@ -161,17 +165,17 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
     public function declares()
     {
         return array(
-            'orderbys'   => array(
+            'orderbys' => array(
                 'id',
                 'createdTime',
                 'promotedTime',
                 'promoted',
                 'promotedSeq',
-                'nickname'
+                'nickname',
             ),
             'timestamps' => array(
                 'createdTime',
-                'updatedTime'
+                'updatedTime',
             ),
             'conditions' => array(
                 'mobile = :mobile',
@@ -201,8 +205,8 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
                 'inviteCode != :NoInviteCode',
                 'id NOT IN ( :excludeIds )',
                 'orgCode LIKE :likeOrgCode',
-                'orgCode = :orgCode'
-            )
+                'orgCode = :orgCode',
+            ),
         );
     }
 }

@@ -13,7 +13,7 @@
   </div>
   {% if tag %}
     {% if courses %}
-      {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
+      {{ render(controller('AppBundle:Course/Course:coursesBlock', {courses:courses, view: 'list'})) }}
       {{ web_macro.paginator(paginator) }}
     {% else %}
       <div class="empty">{{'没有搜到相关课程，请换个标签试试！'|trans}}</div>

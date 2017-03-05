@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
@@ -13,11 +14,11 @@ class Download extends Activity
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function create($fields)
     {
-        $files   = json_decode($fields['materials'], true);
+        $files = json_decode($fields['materials'], true);
         $fileIds = array_keys($files);
 
         $downloadActivity = array('mediaCount' => count($files), 'fileIds' => $fileIds);
@@ -28,26 +29,27 @@ class Download extends Activity
 
     public function copy($activity, $config = array())
     {
-        $download    = $this->getDownloadActivityDao()->get($activity['mediaId']);
+        $download = $this->getDownloadActivityDao()->get($activity['mediaId']);
         $newDownload = array(
             'mediaCount' => $download['mediaCount'],
-            'fileIds'    => $download['fileIds']
+            'fileIds' => $download['fileIds'],
         );
+
         return $this->getDownloadActivityDao()->create($newDownload);
     }
 
     public function sync($sourceActivity, $activity)
     {
-        $sourceDownload         = $this->getDownloadActivityDao()->get($sourceActivity['mediaId']);
-        $download               = $this->getDownloadActivityDao()->get($activity['mediaId']);
+        $sourceDownload = $this->getDownloadActivityDao()->get($sourceActivity['mediaId']);
+        $download = $this->getDownloadActivityDao()->get($activity['mediaId']);
         $download['mediaCount'] = $sourceDownload['mediaCount'];
-        $download['fileIds']    = $sourceDownload['fileIds'];
+        $download['fileIds'] = $sourceDownload['fileIds'];
 
         return $this->getDownloadActivityDao()->update($download['id'], $download);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function update($id, &$fields, $activity)
     {
@@ -59,11 +61,10 @@ class Download extends Activity
         $downloadActivity = $this->getDownloadActivityDao()->update($id, $downloadActivity);
 
         return $downloadActivity;
-
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function delete($id)
     {
@@ -73,11 +74,12 @@ class Download extends Activity
     public function isFinished($activityId)
     {
         $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'download.finish');
+
         return !empty($result);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($id)
     {
@@ -97,7 +99,7 @@ class Download extends Activity
      */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     protected function getConnection()

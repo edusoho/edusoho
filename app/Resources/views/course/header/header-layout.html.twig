@@ -11,7 +11,6 @@
   </ol>
 
   {% block course_header_info %}{% endblock %}
-
   <div class="es-section course-detail-section clearfix">
     <div class="course-detail-top clearfix">
       <span class="tags mrm">
@@ -21,7 +20,8 @@
           <span class="tag-finished"></span>
         {% endif %}
       </span>
-      <span class="text-overflow vertical-top inline-block gray-darker text-24 course-detail-heading">{{ courseSet.title }}</span>
+      <span class="text-overflow vertical-top inline-block gray-darker text-24 course-detail-heading">
+        {% if marketingPage %} {{ courseSet.title }} {% else %} {{ course.title }}{% endif %}</span>
       {% block course_header_qrcode %}
         <!--加入后显示-->
         <span class="es-qrcode top" data-url="{{ path('course_qrcode', { id: course.id }) }}">
@@ -38,12 +38,12 @@
         {% block course_header_people_num %}
           <!--加入后显示-->
           {% if setting('course.show_student_num_enabled', '1') == 1 %}
-          <li>
+            <li>
               <span class="btn btn-xs">
                 <i class="es-icon es-icon-people text-16"></i>
                 <span class="mls">{% block course_member_count %}{{ course.studentNum }}人 {% endblock %}</span>
               </span>
-          </li>
+            </li>
           {% endif %}
         {% endblock %}
         {% block course_member_exit %}{% endblock %}
@@ -70,25 +70,27 @@
         {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
         {% if canManage %}
           <li class="pull-left">
-          {% if page_type|default('guest') == 'member' %}
-            <a class="btn btn-default btn-xs "
-               href="{{ path('course_set_manage_course_tasks', {courseSetId: course.courseSetId, courseId: course.id }) }}"
-               title="课程管理">
-              <i class="es-icon es-icon-setting"></i>
-            </a>
-          {% else %}
-            <a class="btn btn-default btn-xs "
-               href="{{ path('course_set_manage_base', {id: course.courseSetId}) }}"
-               title="课程管理">
-              <i class="es-icon es-icon-setting"></i>
-            </a>
-          {% endif %}
+            {% if page_type|default('guest') == 'member' %}
+              <a class="btn btn-default btn-xs "
+                 href="{{ path('course_set_manage_course_tasks', {courseSetId: course.courseSetId, courseId: course.id }) }}"
+                 title="课程管理">
+                <i class="es-icon es-icon-setting"></i>
+              </a>
+            {% else %}
+              <a class="btn btn-default btn-xs "
+                 href="{{ path('course_set_manage_base', {id: course.courseSetId}) }}"
+                 title="课程管理">
+                <i class="es-icon es-icon-setting"></i>
+              </a>
+            {% endif %}
           </li>
         {% endif %}
         {% if is_plugin_installed('vip') and course.vipLevelId != 0 %}
-          <li id="favorite-btn">
-            <a class="btn btn-default btn-xs" href="{{ path('vip') }}" data-toggle="tooltip" data-placement="top" title="会员课程"
-               data-trigger="hover"> <i class="es-icon es-icon-crown"></i>
+          {% set level = data('VipLevel',{'id' : course.vipLevelId} ) %}
+          <li>
+            <a class="btn btn-default btn-xs  vip-btn" data-toggle="popover" data-placement="top" title="会员课程"
+               data-trigger="hover" data-container=".vip-btn" data-content="{{ level.name }}免费学"><i
+                  class="es-icon es-icon-crown color-warning"></i>
             </a>
           </li>
         {% endif %}

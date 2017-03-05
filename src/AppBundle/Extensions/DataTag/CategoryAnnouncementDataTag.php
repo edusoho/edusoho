@@ -2,26 +2,24 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-
 /**
  * @todo  需改名成CourseAnnouncementDataTag
  */
-class CategoryAnnouncementDataTag extends CourseBaseDataTag implements DataTag  
+class CategoryAnnouncementDataTag extends CourseBaseDataTag implements DataTag
 {
-
     /**
-     * 获取公告列表
+     * 获取公告列表.
      *
      * 可传入的参数：
      *   categoryId 可选 分类ID
      *   count    必需 课程数量，取值不超过10
-     * 
-     * @param  array $arguments 参数
+     *
+     * @param array $arguments 参数
+     *
      * @return array 公告列表
      */
     public function getData(array $arguments)
-    {	
+    {
         $this->checkCount($arguments);
 
         $conditions = array();
@@ -29,11 +27,11 @@ class CategoryAnnouncementDataTag extends CourseBaseDataTag implements DataTag
 
         if (!empty($arguments['categoryId'])) {
             $conditions['categoryId'] = $arguments['categoryId'];
-        } 
+        }
 
-        $courseCount =  $this->getCourseService()->searchCourseCount($conditions);
-        
-        $courses = $this->getCourseService()->searchCourses($conditions,'latest', 0, $courseCount);
+        $courseCount = $this->getCourseService()->searchCourseCount($conditions);
+
+        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, $courseCount);
 
         $ids = array();
 

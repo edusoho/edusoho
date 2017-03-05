@@ -5,7 +5,7 @@ namespace AppBundle\Extensions\DataTag;
 class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     * 获取公开课列表
+     * 获取公开课列表.
      *
      * 可传入的参数：
      *   count      必需 课程数量
@@ -13,7 +13,8 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
      *   categoryId 可选 分类ID
      *
      *
-     * @param  array $arguments     参数
+     * @param array $arguments 参数
+     *
      * @return array 课程列表
      */
     public function getData(array $arguments)
@@ -23,11 +24,11 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
 
         $courses = $this->getOpenCourseService()->searchCourses($conditions, $orderBy, 0, $arguments['count']);
 
-        if ($orderBy[0] == 'recommendedSeq') {
+        if (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'recommendedSeq') {
             if (count($courses) < $arguments['count']) {
                 $unrecommendedCourses = $this->getOpenCourseService()->searchCourses(array(
-                    'status'      => 'published',
-                    'recommended' => 0
+                    'status' => 'published',
+                    'recommended' => 0,
                 ), array('createdTime' => 'DESC'),
                     0, ($arguments['count'] - count($courses))
                 );
@@ -42,11 +43,11 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
     protected function filterConditions($arguments)
     {
         $conditions = array('status' => 'published');
-        $orderBy    = array('createdTime' => 'DESC');
+        $orderBy = array('createdTime' => 'DESC');
 
         if (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'recommendedSeq') {
             $conditions['recommended'] = 1;
-            $orderBy                   = array('recommendedSeq' => 'ASC');
+            $orderBy = array('recommendedSeq' => 'ASC');
         } elseif (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'hitNum') {
             $orderBy = array('hitNum' => 'DESC');
         }

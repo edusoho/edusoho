@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\User\Service\AuthService;
@@ -21,12 +22,12 @@ class PartnerController extends BaseController
         $goto = $request->query->get('goto') ?: $this->generateUrl('homepage');
 
         $response = $this->render('partner/message.html.twig', array(
-            'type'     => 'info',
-            'title'    => '登录成功',
-            'message'  => '正在跳转页面，请稍等....',
+            'type' => 'info',
+            'title' => '登录成功',
+            'message' => '正在跳转页面，请稍等....',
             'duration' => 3000,
-            'goto'     => $goto,
-            'script'   => $loginScript
+            'goto' => $goto,
+            'script' => $loginScript,
         ));
 
         return $response;
@@ -46,12 +47,12 @@ class PartnerController extends BaseController
         $goto = $request->query->get('goto') ?: $this->generateUrl('homepage');
 
         return $this->render('partner/message.html.twig', array(
-            'type'     => 'info',
-            'title'    => '退出成功',
-            'message'  => '正在跳转页面，请稍等....',
+            'type' => 'info',
+            'title' => '退出成功',
+            'message' => '正在跳转页面，请稍等....',
             'duration' => 3000,
-            'goto'     => $goto,
-            'script'   => $logoutScript
+            'goto' => $goto,
+            'script' => $logoutScript,
         ));
     }
 

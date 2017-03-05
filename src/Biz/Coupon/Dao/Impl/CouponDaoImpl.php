@@ -2,7 +2,6 @@
 
 namespace Biz\Coupon\Dao\Impl;
 
-
 use Biz\Coupon\Dao\CouponDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -26,13 +25,13 @@ class CouponDaoImpl extends GeneralDaoImpl implements CouponDao
                 'code LIKE :codeLike',
                 'orderTime >= :useStartDateTime',
                 'orderTime < :useEndDateTime',
-                'id IN ( :ids)'
+                'id IN ( :ids)',
             ),
             'orderbys' => array(
                 'createdTime',
                 'orderTime',
-                'id'
-            )
+                'id',
+            ),
         );
     }
 
@@ -43,7 +42,8 @@ class CouponDaoImpl extends GeneralDaoImpl implements CouponDao
 
     public function getByCode($code, $lock = false)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1" . ($lock ? ' FOR UPDATE' : '');
+        $sql = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1".($lock ? ' FOR UPDATE' : '');
+
         return $this->db()->fetchAssoc($sql, array($code)) ?: null;
     }
 
@@ -51,10 +51,10 @@ class CouponDaoImpl extends GeneralDaoImpl implements CouponDao
     {
         return $this->search(
             array(
-                'batchId' => $batchId
+                'batchId' => $batchId,
             ),
             array(
-                'createdTime' => 'DESC'
+                'createdTime' => 'DESC',
             ),
             $start,
             $limit
@@ -86,19 +86,19 @@ class CouponDaoImpl extends GeneralDaoImpl implements CouponDao
         }
 
         if (isset($conditions['startDateTime'])) {
-            $conditions['startDateTime'] = strtotime($conditions['startDateTime'] . "\n00:00:00");
+            $conditions['startDateTime'] = strtotime($conditions['startDateTime']."\n00:00:00");
         }
 
         if (isset($conditions['endDateTime'])) {
-            $conditions['endDateTime'] = strtotime($conditions['endDateTime'] . "+1 day");
+            $conditions['endDateTime'] = strtotime($conditions['endDateTime'].'+1 day');
         }
 
         if (isset($conditions['useStartDateTime'])) {
-            $conditions['useStartDateTime'] = strtotime($conditions['useStartDateTime'] . "\n00:00:00");
+            $conditions['useStartDateTime'] = strtotime($conditions['useStartDateTime']."\n00:00:00");
         }
 
         if (isset($conditions['useEndDateTime'])) {
-            $conditions['useEndDateTime'] = strtotime($conditions['useEndDateTime'] . "+1 day");
+            $conditions['useEndDateTime'] = strtotime($conditions['useEndDateTime'].'+1 day');
         }
 
         return parent::_createQueryBuilder($conditions);

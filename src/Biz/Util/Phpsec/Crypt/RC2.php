@@ -27,50 +27,44 @@
  * </code>
  *
  * @category Crypt
- * @package  RC2
  *
  * @author   Patrick Monnerat <pm@datasphere.ch>
  * @license  http://www.opensource.org/licenses/mit-license.html  MIT License
  *
- * @link     http://phpseclib.sourceforge.net
+ * @see     http://phpseclib.sourceforge.net
  */
 
 namespace Biz\Util\Phpsec\Crypt;
 
-use Biz\Util\Phpsec\Crypt\Base;
-
 /**
  * Pure-PHP implementation of RC2.
- *
- * @access  public
- * @package RC2
  */
 class RC2 extends Base
 {
     /**
-     * Block Length of the cipher
+     * Block Length of the cipher.
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::block_size
      */
     public $block_size = 8;
 
     /**
-     * The Key
+     * The Key.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::key
      * @see setKey()
      */
     public $key;
 
     /**
-     * The Original (unpadded) Key
+     * The Original (unpadded) Key.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::key
      * @see setKey()
      * @see encrypt()
@@ -79,29 +73,29 @@ class RC2 extends Base
     public $orig_key;
 
     /**
-     * The default password key_size used by setPassword()
+     * The default password key_size used by setPassword().
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::password_key_size
      * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_key_size = 16; // = 128 bits
 
     /**
-     * The mcrypt specific name of the cipher
+     * The mcrypt specific name of the cipher.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
      */
     public $cipher_name_mcrypt = 'rc2';
 
     /**
-     * Optimizing value while CFB-encrypting
+     * Optimizing value while CFB-encrypting.
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::cfb_init_len
      */
     public $cfb_init_len = 500;
@@ -109,10 +103,11 @@ class RC2 extends Base
     /**
      * The key length in bits.
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @internal Should be in range [1..1024].
-     * @internal Changing this value after setting the key has no effect.
+     * @internal changing this value after setting the key has no effect
+     *
      * @see \Biz\Util\Phpsec\Crypt\RC2::setKeyLength()
      * @see \Biz\Util\Phpsec\Crypt\RC2::setKey()
      */
@@ -121,19 +116,20 @@ class RC2 extends Base
     /**
      * The key length in bits.
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @internal Should be in range [1..1024].
+     *
      * @see \Biz\Util\Phpsec\Crypt\RC2::isValidEnine()
      * @see \Biz\Util\Phpsec\Crypt\RC2::setKey()
      */
     public $current_key_length;
 
     /**
-     * The Key Schedule
+     * The Key Schedule.
      *
-     * @var Array
-     * @access private
+     * @var array
+     *
      * @see \Biz\Util\Phpsec\Crypt\RC2::_setupKey()
      */
     public $keys;
@@ -142,8 +138,8 @@ class RC2 extends Base
      * Key expansion randomization table.
      * Twice the same 256-value sequence to save a modulus in key expansion.
      *
-     * @var Array
-     * @access private
+     * @var array
+     *
      * @see \Biz\Util\Phpsec\Crypt\RC2::setKey()
      */
     public $pitable = array(
@@ -210,14 +206,14 @@ class RC2 extends Base
         0x0D, 0x38, 0x34, 0x1B, 0xAB, 0x33, 0xFF, 0xB0,
         0xBB, 0x48, 0x0C, 0x5F, 0xB9, 0xB1, 0xCD, 0x2E,
         0xC5, 0xF3, 0xDB, 0x47, 0xE5, 0xA5, 0x9C, 0x77,
-        0x0A, 0xA6, 0x20, 0x68, 0xFE, 0x7F, 0xC1, 0xAD
+        0x0A, 0xA6, 0x20, 0x68, 0xFE, 0x7F, 0xC1, 0xAD,
     );
 
     /**
      * Inverse key expansion randomization table.
      *
-     * @var Array
-     * @access private
+     * @var array
+     *
      * @see \Biz\Util\Phpsec\Crypt\RC2::setKey()
      */
     public $invpitable = array(
@@ -252,19 +248,19 @@ class RC2 extends Base
         0xA1, 0xD4, 0xDD, 0xC4, 0x56, 0xF4, 0xD2, 0x77,
         0x81, 0x09, 0x82, 0x33, 0x9F, 0x07, 0x86, 0x75,
         0x38, 0x4E, 0x69, 0xF1, 0xAD, 0x23, 0x73, 0x87,
-        0x70, 0x02, 0xC2, 0x1E, 0xB8, 0x0A, 0xFC, 0xE6
+        0x70, 0x02, 0xC2, 0x1E, 0xB8, 0x0A, 0xFC, 0xE6,
     );
 
     /**
-     * Test for engine validity
+     * Test for engine validity.
      *
      * This is mainly just a wrapper to set things up for Crypt_Base::isValidEngine()
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::Crypt_Base()
      *
-     * @param  Integer   $engine
-     * @return Boolean
+     * @param int $engine
+     *
+     * @return bool
      */
     public function isValidEngine($engine)
     {
@@ -276,21 +272,20 @@ class RC2 extends Base
                 }
 
                 $this->cipher_name_openssl_ecb = 'rc2-ecb';
-                $this->cipher_name_openssl     = 'rc2-'.$this->_openssl_translate_mode();
+                $this->cipher_name_openssl = 'rc2-'.$this->_openssl_translate_mode();
         }
 
         return parent::isValidEngine($engine);
     }
 
     /**
-     * Sets the key length
+     * Sets the key length.
      *
      * Valid key lengths are 1 to 1024.
      * Calling this function after setting the key has no effect until the next
      *  \Biz\Util\Phpsec\Crypt\RC2::setKey() call.
      *
-     * @access public
-     * @param Integer $length in bits
+     * @param int $length in bits
      */
     public function setKeyLength($length)
     {
@@ -310,11 +305,10 @@ class RC2 extends Base
      * If the key is not explicitly set, it'll be assumed to be a single
      * null byte.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::setKey()
      *
-     * @param String  $key
-     * @param Integer $t1     optional Effective key length in bits.
+     * @param string $key
+     * @param int    $t1  optional Effective key length in bits
      */
     public function setKey($key, $t1 = 0)
     {
@@ -329,7 +323,7 @@ class RC2 extends Base
         $this->current_key_length = $t1;
         // Key byte count should be 1..128.
         $key = strlen($key) ? substr($key, 0, 128) : "\x00";
-        $t   = strlen($key);
+        $t = strlen($key);
 
         // The mcrypt RC2 implementation only supports effective key length
         // of 1024 bits. It is however possible to handle effective key
@@ -338,18 +332,18 @@ class RC2 extends Base
         // to mcrypt.
 
         // Key expansion.
-        $l  = array_values(unpack('C*', $key));
+        $l = array_values(unpack('C*', $key));
         $t8 = ($t1 + 7) >> 3;
         $tm = 0xFF >> (8 * $t8 - $t1);
 
         // Expand key.
         $pitable = $this->pitable;
 
-        for ($i = $t; $i < 128; $i++) {
+        for ($i = $t; $i < 128; ++$i) {
             $l[$i] = $pitable[$l[$i - 1] + $l[$i - $t]];
         }
 
-        $i     = 128 - $t8;
+        $i = 128 - $t8;
         $l[$i] = $pitable[$l[$i] & $tm];
 
         while ($i--) {
@@ -367,19 +361,20 @@ class RC2 extends Base
      *
      * Mostly a wrapper for Crypt_Base::encrypt, with some additional OpenSSL handling code
      *
-     * @access public
      * @see decrypt()
      *
-     * @param  String $plaintext
-     * @return String $ciphertext
+     * @param string $plaintext
+     *
+     * @return string $ciphertext
      */
     public function encrypt($plaintext)
     {
         if ($this->engine == self::ENGINE_OPENSSL) {
-            $temp      = $this->key;
+            $temp = $this->key;
             $this->key = $this->orig_key;
-            $result    = parent::encrypt($plaintext);
+            $result = parent::encrypt($plaintext);
             $this->key = $temp;
+
             return $result;
         }
 
@@ -391,19 +386,20 @@ class RC2 extends Base
      *
      * Mostly a wrapper for Crypt_Base::decrypt, with some additional OpenSSL handling code
      *
-     * @access public
      * @see encrypt()
      *
-     * @param  String $ciphertext
-     * @return String $plaintext
+     * @param string $ciphertext
+     *
+     * @return string $plaintext
      */
     public function decrypt($ciphertext)
     {
         if ($this->engine == self::ENGINE_OPENSSL) {
-            $temp      = $this->key;
+            $temp = $this->key;
             $this->key = $this->orig_key;
-            $result    = parent::decrypt($ciphertext);
+            $result = parent::decrypt($ciphertext);
             $this->key = $temp;
+
             return $result;
         }
 
@@ -411,24 +407,24 @@ class RC2 extends Base
     }
 
     /**
-     * Encrypts a block
+     * Encrypts a block.
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_encryptBlock()
      * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
      *
-     * @param  String   $in
-     * @return String
+     * @param string $in
+     *
+     * @return string
      */
     public function _encryptBlock($in)
     {
         list($r0, $r1, $r2, $r3) = array_values(unpack('v*', $in));
-        $keys                    = $this->keys;
-        $limit                   = 20;
-        $actions                 = array($limit => 44, 44 => 64);
-        $j                       = 0;
+        $keys = $this->keys;
+        $limit = 20;
+        $actions = array($limit => 44, 44 => 64);
+        $j = 0;
 
-        for (;;) {
+        for (; ;) {
             // Mixing round.
             $r0 = (($r0 + $keys[$j++] + ((($r1 ^ $r2) & $r3) ^ $r1)) & 0xFFFF) << 1;
             $r0 |= $r0 >> 16;
@@ -457,24 +453,24 @@ class RC2 extends Base
     }
 
     /**
-     * Decrypts a block
+     * Decrypts a block.
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_decryptBlock()
      * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      *
-     * @param  String   $in
-     * @return String
+     * @param string $in
+     *
+     * @return string
      */
     public function _decryptBlock($in)
     {
         list($r0, $r1, $r2, $r3) = array_values(unpack('v*', $in));
-        $keys                    = $this->keys;
-        $limit                   = 44;
-        $actions                 = array($limit => 20, 20 => 0);
-        $j                       = 64;
+        $keys = $this->keys;
+        $limit = 44;
+        $actions = array($limit => 20, 20 => 0);
+        $j = 64;
 
-        for (;;) {
+        for (; ;) {
             // R-mixing round.
             $r3 = ($r3 | ($r3 << 16)) >> 5;
             $r3 = ($r3 - $keys[--$j] - ((($r0 ^ $r1) & $r2) ^ $r0)) & 0xFFFF;
@@ -491,10 +487,10 @@ class RC2 extends Base
                 }
 
                 // R-mashing round.
-                $r3    = ($r3 - $keys[$r2 & 0x3F]) & 0xFFFF;
-                $r2    = ($r2 - $keys[$r1 & 0x3F]) & 0xFFFF;
-                $r1    = ($r1 - $keys[$r0 & 0x3F]) & 0xFFFF;
-                $r0    = ($r0 - $keys[$r3 & 0x3F]) & 0xFFFF;
+                $r3 = ($r3 - $keys[$r2 & 0x3F]) & 0xFFFF;
+                $r2 = ($r2 - $keys[$r1 & 0x3F]) & 0xFFFF;
+                $r1 = ($r1 - $keys[$r0 & 0x3F]) & 0xFFFF;
+                $r0 = ($r0 - $keys[$r3 & 0x3F]) & 0xFFFF;
                 $limit = $actions[$limit];
             }
         }
@@ -503,9 +499,8 @@ class RC2 extends Base
     }
 
     /**
-     * Setup the \Biz\Util\Phpsec\Crypt\Base::ENGINE_MCRYPT $engine
+     * Setup the \Biz\Util\Phpsec\Crypt\Base::ENGINE_MCRYPT $engine.
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_setupMcrypt()
      */
     public function _setupMcrypt()
@@ -518,9 +513,8 @@ class RC2 extends Base
     }
 
     /**
-     * Creates the key schedule
+     * Creates the key schedule.
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
     public function _setupKey()
@@ -539,9 +533,8 @@ class RC2 extends Base
     }
 
     /**
-     * Setup the performance-optimized function for de/encrypt()
+     * Setup the performance-optimized function for de/encrypt().
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_setupInlineCrypt()
      */
     public function _setupInlineCrypt()
@@ -589,11 +582,11 @@ class RC2 extends Base
             ';
 
             // Create code for encryption.
-            $limit   = 20;
+            $limit = 20;
             $actions = array($limit => 44, 44 => 64);
-            $j       = 0;
+            $j = 0;
 
-            for (;;) {
+            for (; ;) {
                 // Mixing round.
                 $encrypt_block .= '
                     $r0 = (($r0 + '.$keys[$j++].' +
@@ -627,11 +620,11 @@ class RC2 extends Base
             $encrypt_block .= '$in = pack("v4", $r0, $r1, $r2, $r3);';
 
             // Create code for decryption.
-            $limit   = 44;
+            $limit = 44;
             $actions = array($limit => 20, 20 => 0);
-            $j       = 64;
+            $j = 64;
 
-            for (;;) {
+            for (; ;) {
                 // R-mixing round.
                 $decrypt_block .= '
                     $r3 = ($r3 | ($r3 << 16)) >> 5;
@@ -667,9 +660,9 @@ class RC2 extends Base
             // Creates the inline-crypt function
             $lambda_functions[$code_hash] = $this->_createInlineCryptFunction(
                 array(
-                    'init_crypt'    => $init_crypt,
+                    'init_crypt' => $init_crypt,
                     'encrypt_block' => $encrypt_block,
-                    'decrypt_block' => $decrypt_block
+                    'decrypt_block' => $decrypt_block,
                 )
             );
         }

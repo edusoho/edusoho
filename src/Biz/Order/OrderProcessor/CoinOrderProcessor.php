@@ -1,11 +1,10 @@
 <?php
-namespace Biz\Order\OrderProcessor;
 
-use Topxia\Service\Common\ServiceKernel;
+namespace Biz\Order\OrderProcessor;
 
 class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-    protected $router = "my_coin";
+    protected $router = 'my_coin';
 
     public function preCheck($targetId, $userId)
     {
@@ -44,12 +43,14 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
     public function getNote($targetId)
     {
         $coin = $this->getSettingService()->get('coin');
+
         return '充值'.$coin['coin_name'];
     }
 
     public function getTitle($targetId)
     {
         $coin = $this->getSettingService()->get('coin');
+
         return $coin['coin_name'];
     }
 
@@ -75,7 +76,7 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderInfoTemplate()
     {
-        return "ChargeCoinBundle:Coin:orderInfo";
+        return 'ChargeCoinPlugin:Coin:orderInfo';
     }
 
     public function isTargetExist($targetId)
@@ -86,6 +87,7 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
     public function callbackUrl($order, $container)
     {
         $goto = $container->get('router')->generate('my_coin', array(), true);
+
         return $goto;
     }
 
@@ -93,5 +95,4 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         return $this->getBiz()->service('Cash:CashOrdersService');
     }
-
 }

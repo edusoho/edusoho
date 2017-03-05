@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Testpaper\Dao\Impl;
 
 use Biz\Testpaper\Dao\TestpaperDao;
@@ -31,6 +32,7 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
     public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget)
     {
         $sql = "SELECT * FROM {$this->table} WHERE copyId = ?  AND target IN {$lockedTarget}";
+
         return $this->db()->fetchAll($sql, array($copyId));
     }
 
@@ -47,7 +49,7 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
     public function declares()
     {
         $declares['orderbys'] = array(
-            'createdTime'
+            'createdTime',
         );
 
         $declares['conditions'] = array(
@@ -59,12 +61,12 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
             'type IN (:types)',
             'id IN (:ids)',
             'copyId = :copyId',
-            'copyId > :copyIdGT'
+            'copyId > :copyIdGT',
         );
 
         $declares['serializes'] = array(
-            'metas'           => 'json',
-            'passedCondition' => 'json'
+            'metas' => 'json',
+            'passedCondition' => 'json',
         );
 
         return $declares;

@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class Init extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -2008,14 +2008,12 @@ class Init extends Migration
 
         $container = $this->getContainer();
         $container['db']->exec($sql);
-
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\File\Event;
 
 use AppBundle\Common\ArrayToolkit;
@@ -18,23 +19,23 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
             'question.update' => 'onQuestionUpdate',
             'question.delete' => 'onQuestionDelete',
 
-            'course.delete'          => 'onCourseDelete',
+            'course.delete' => 'onCourseDelete',
             //'course.lesson.create' => 'onCourseLessonCreate',
-            'course.lesson.delete'   => 'onCourseLessonDelete',
+            'course.lesson.delete' => 'onCourseLessonDelete',
             'course.material.create' => 'onMaterialCreate',
             'course.material.update' => 'onMaterialUpdate',
             'course.material.delete' => 'onMaterialDelete',
 
             'open.course.lesson.delete' => 'onOpenCourseLessonDelete',
-            'open.course.delete'        => 'onOpenCourseDelete',
+            'open.course.delete' => 'onOpenCourseDelete',
 
-            'article.delete'            => 'onArticleDelete',
-            'group.thread.post.delete'  => 'onGroupThreadPostDelete',
-            'group.thread.delete'       => 'onGroupThreadDelete',
-            'course.thread.delete'      => 'onCourseThreadDelete',
+            'article.delete' => 'onArticleDelete',
+            'group.thread.post.delete' => 'onGroupThreadPostDelete',
+            'group.thread.delete' => 'onGroupThreadDelete',
+            'course.thread.delete' => 'onCourseThreadDelete',
             'course.thread.post.delete' => 'onCourseThreadPostDelete',
-            'thread.delete'             => 'onThreadDelete',
-            'thread.post.delete'        => 'onThreadPostDelete'
+            'thread.delete' => 'onThreadDelete',
+            'thread.post.delete' => 'onThreadPostDelete',
         );
     }
 
@@ -158,7 +159,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         $lessons = $this->getCourseService()->getCourse($course['id']);
 
         if (!empty($lessons)) {
-            $fileIds = ArrayToolkit::column($lessons, "mediaId");
+            $fileIds = ArrayToolkit::column($lessons, 'mediaId');
 
             if (!empty($fileIds)) {
                 foreach ($fileIds as $fileId) {
@@ -171,7 +172,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onCourseLessonCreate(Event $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        $lesson = $context['lesson'];
 
         if (in_array($lesson['type'], array('video', 'audio', 'ppt', 'document', 'flash'))) {
             $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], 1);
@@ -181,7 +182,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onCourseLessonDelete(Event $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        $lesson = $context['lesson'];
 
         if (!empty($lesson['mediaId'])) {
             $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], -1);
@@ -199,8 +200,8 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
     public function onMaterialUpdate(Event $event)
     {
-        $material       = $event->getSubject();
-        $argument       = $event->getArgument('argument');
+        $material = $event->getSubject();
+        $argument = $event->getArgument('argument');
         $sourceMaterial = $event->getArgument('sourceMaterial');
 
         if (!$material['lessonId'] && $sourceMaterial['lessonId']) {
@@ -237,7 +238,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onOpenCourseLessonDelete(Event $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        $lesson = $context['lesson'];
 
         if (!empty($lesson['mediaId'])) {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
@@ -254,7 +255,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
 
         if (!empty($lessons)) {
-            $fileIds = ArrayToolkit::column($lessons, "mediaId");
+            $fileIds = ArrayToolkit::column($lessons, 'mediaId');
 
             if (!empty($fileIds)) {
                 foreach ($fileIds as $fileId) {

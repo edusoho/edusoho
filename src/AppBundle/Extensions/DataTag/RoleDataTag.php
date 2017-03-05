@@ -2,13 +2,10 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-use AppBundle\Extensions\DataTag\BaseDataTag;
-
 class RoleDataTag extends BaseDataTag implements DataTag
 {
     /**
-     * 获取公告列表
+     * 获取公告列表.
      *
      * 可传入的参数：
      *   code    必需
@@ -30,7 +27,7 @@ class RoleDataTag extends BaseDataTag implements DataTag
     protected function checkCode(array $arguments)
     {
         if (empty($arguments['code'])) {
-            throw new \InvalidArgumentException("code参数缺失");
+            throw new \InvalidArgumentException('code参数缺失');
         }
     }
 }

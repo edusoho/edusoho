@@ -1,3 +1,4 @@
+/* eslint-disable */
 
 /**
  * You can work around the addEventListener, removeEventListener, Event.preventDefault and 
@@ -79,3 +80,4 @@
     }
   }
 })();
+/* eslint-enable */

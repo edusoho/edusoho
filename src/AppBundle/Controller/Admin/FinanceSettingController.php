@@ -11,31 +11,31 @@ class FinanceSettingController extends BaseController
     {
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
-            'enabled'          => 0,
+            'enabled' => 0,
             'disabled_message' => '尚未开启支付模块，无法购买课程。',
-            'bank_gateway'     => 'none',
-            'alipay_enabled'   => 0,
-            'alipay_key'       => '',
-            'alipay_secret'    => '',
-            'alipay_account'   => '',
-            'alipay_type'      => 'direct',
-            'tenpay_enabled'   => 0,
-            'tenpay_key'       => '',
-            'tenpay_secret'    => '',
-            'wxpay_enabled'    => 0,
-            'wxpay_key'        => '',
-            'wxpay_secret'     => '',
-            'wxpay_account'    => '',
-            'heepay_enabled'   => 0,
-            'heepay_key'       => '',
-            'heepay_secret'    => '',
+            'bank_gateway' => 'none',
+            'alipay_enabled' => 0,
+            'alipay_key' => '',
+            'alipay_secret' => '',
+            'alipay_account' => '',
+            'alipay_type' => 'direct',
+            'tenpay_enabled' => 0,
+            'tenpay_key' => '',
+            'tenpay_secret' => '',
+            'wxpay_enabled' => 0,
+            'wxpay_key' => '',
+            'wxpay_secret' => '',
+            'wxpay_account' => '',
+            'heepay_enabled' => 0,
+            'heepay_key' => '',
+            'heepay_secret' => '',
             'quickpay_enabled' => 0,
-            'quickpay_key'     => '',
-            'quickpay_secret'  => '',
-            'quickpay_aes'     => '',
-            'llpay_enabled'    => 0,
-            'llpay_key'        => '',
-            'llpay_secret'     => ''
+            'quickpay_key' => '',
+            'quickpay_secret' => '',
+            'quickpay_aes' => '',
+            'llpay_enabled' => 0,
+            'llpay_key' => '',
+            'llpay_secret' => '',
         );
 
         $payment = array_merge($default, $payment);
@@ -46,33 +46,32 @@ class FinanceSettingController extends BaseController
 
             $formerPayment = $this->getSettingService()->get('payment');
             if ($payment['enabled'] == 0 && $formerPayment['enabled'] == 1) {
-                $payment['alipay_enabled']   = 0;
-                $payment['wxpay_enabled']    = 0;
-                $payment['heepay_enabled']   = 0;
+                $payment['alipay_enabled'] = 0;
+                $payment['wxpay_enabled'] = 0;
+                $payment['heepay_enabled'] = 0;
                 $payment['quickpay_enabled'] = 0;
-                $payment['llpay_enabled']    = 0;
+                $payment['llpay_enabled'] = 0;
             }
 
             //新增支付方式，加入下列列表计算，以便判断是否关闭支付功能
             $payment = $this->isClosePayment($payment);
             $this->getSettingService()->set('payment', $payment);
             $this->getLogService()->info('system', 'update_settings', '更支付方式设置', $payment);
-            $this->setFlashMessage('success','支付方式设置已保存！');
+            $this->setFlashMessage('success', '支付方式设置已保存！');
         }
 
         return $this->render('admin/system/payment.html.twig', array(
-            'payment' => $payment
+            'payment' => $payment,
         ));
     }
 
     public function isClosePayment($payment)
     {
         $payments = ArrayToolkit::parts($payment, array('alipay_enabled', 'wxpay_enabled', 'heepay_enabled', 'quickpay_enabled', 'llpay_enabled'));
-        $sum      = 0;
+        $sum = 0;
         foreach ($payments as $value) {
             $sum += $value;
         }
-
 
         if ($sum < 1) {
             $payment['enabled'] = 0;
@@ -86,11 +85,11 @@ class FinanceSettingController extends BaseController
     public function refundAction(Request $request)
     {
         $refundSetting = $this->getSettingService()->get('refund', array());
-        $default       = array(
-            'maxRefundDays'       => 0,
-            'applyNotification'   => '',
+        $default = array(
+            'maxRefundDays' => 0,
+            'applyNotification' => '',
             'successNotification' => '',
-            'failedNotification'  => ''
+            'failedNotification' => '',
         );
 
         $refundSetting = array_merge($default, $refundSetting);
@@ -103,7 +102,7 @@ class FinanceSettingController extends BaseController
         }
 
         return $this->render('admin/system/refund.html.twig', array(
-            'refundSetting' => $refundSetting
+            'refundSetting' => $refundSetting,
         ));
     }
 
@@ -134,6 +133,6 @@ class FinanceSettingController extends BaseController
 
     protected function getLogService()
     {
-        return $this->createService('System:LogService');    
+        return $this->createService('System:LogService');
     }
 }

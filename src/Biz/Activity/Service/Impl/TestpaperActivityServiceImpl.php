@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Activity\Service\Impl;
 
 use Biz\BaseService;
@@ -21,6 +22,7 @@ class TestpaperActivityServiceImpl extends BaseService implements TestpaperActiv
     public function findActivitiesByMediaIds($mediaIds)
     {
         $activities = $this->getTestpaperActivityDao()->findActivitiesByMediaIds($mediaIds);
+
         return ArrayToolkit::index($activities, 'mediaId');
     }
 

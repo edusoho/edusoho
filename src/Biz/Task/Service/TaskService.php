@@ -8,7 +8,7 @@ interface TaskService
 
     public function getTask($id);
 
-    public function getCourseTask($courseId,$id);
+    public function getCourseTask($courseId, $id);
 
     public function createTask($task);
 
@@ -37,7 +37,8 @@ interface TaskService
     public function countTasks($conditions);
 
     /**
-     * @param  array $ids
+     * @param array $ids
+     *
      * @return array
      */
     public function findTasksByIds(array $ids);
@@ -47,9 +48,11 @@ interface TaskService
     public function findTasksFetchActivityAndResultByCourseId($courseId);
 
     /**
-     * for question and testpaper ranges
-     * @param  [type]  $userId
-     * @param  [type]  $courseSetId
+     * for question and testpaper ranges.
+     *
+     * @param [type] $userId
+     * @param [type] $courseSetId
+     *
      * @return array
      */
     public function findUserTeachCoursesTasksByCourseSetId($userId, $courseSetId);
@@ -60,6 +63,8 @@ interface TaskService
 
     public function doTask($taskId, $time = self::LEARN_TIME_STEP);
 
+    public function watchTask($taskId, $watchTime = self::WATCH_TIME_STEP);
+
     public function finishTask($taskId);
 
     public function isFinished($taskId);
@@ -69,23 +74,31 @@ interface TaskService
     public function trigger($id, $eventName, $data = array());
 
     /**
-     * return next Task that can be learned of the  course plan, or return empty array()
+     * return next Task that can be learned of the  course plan, or return empty array().
+     *
      * @param  $taskId
+     *
      * @return mixed
      */
     public function getNextTask($taskId);
 
     /**
-     *  return if the task can learn or not
+     *  return if the task can learn or not.
+     *
      * @param  $taskId
-     * @return True|False
+     *
+     * @return true|false
      */
-    public function canLearnTask($taskId); // 任务是否可学
+    public function canLearnTask($taskId);
+
+ // 任务是否可学
 
     /**
-     * return if the task has been learned
+     * return if the task has been learned.
+     *
      * @param  $taskId
-     * @return True|False
+     *
+     * @return true|false
      */
     public function isTaskLearned($taskId);
 
@@ -102,20 +115,22 @@ interface TaskService
     public function findFreeTasksByCourseId($courseId);
 
     /**
-     * 设置当前任务最大可同时进行的人数  如直播任务等
+     * 设置当前任务最大可同时进行的人数  如直播任务等.
      *
      * @param  $taskId
      * @param  $maxNum
+     *
      * @return mixed
      */
     public function setTaskMaxOnlineNum($taskId, $maxNum);
 
     /**
-     * 统计当前时间以后每天的直播次数
+     * 统计当前时间以后每天的直播次数.
      *
      * @param  $courseSetIds
      * @param  $limit
-     * @return array           <string, int|string>
+     *
+     * @return array <string, int|string>
      */
     public function findFutureLiveDatesByCourseSetIdsGroupByDate($courseSetIds, $limit);
 
@@ -134,14 +149,13 @@ interface TaskService
     public function findFutureLiveTasks();
 
     /**
-     * 返回过去直播过的课程ID
+     * 返回过去直播过的课程ID.
      *
      * @return array<int>
      */
     public function findPastLivedCourseSetIds();
 
     /**
-     *
      * 自由式
      * 1.获取所有的在学中的任务结果，如果为空，则学员学员未开始学习或者已经学完，取第一个任务作为下一个学习任务，
      * 2.如果不为空，则按照任务序列返回第一个作为下一个学习任务
@@ -150,14 +164,18 @@ interface TaskService
      * 2.如果不为空，则取关联的三个。
      *
      * 自由式和任务式的逻辑由任务策略完成
+     *
      * @param  $courseId
-     * @return array       tasks
+     *
+     * @return array tasks
      */
     public function findToLearnTasksByCourseId($courseId);
 
     /**
-     * 侧边栏的任务中心不区分课程类型
+     * 侧边栏的任务中心不区分课程类型.
+     *
      * @param $courseId
+     *
      * @return mixed
      */
     public function findToLearnTasksByCourseIdForMission($courseId);
@@ -165,9 +183,22 @@ interface TaskService
     public function getTaskByCourseIdAndActivityId($courseId, $activityId);
 
     /**
-     * 获得课程的总学习时间
+     * 获得课程的总学习时间.
      */
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId);
 
     public function analysisTaskDataByTime($startTime, $endTime);
+
+    /**
+     * 获取用户最近进行的一个任务
+     *
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function getUserRecentlyStartTask($userId);
+
+    public function findPublishedLivingTasksByCourseSetId($courseSetId);
+
+    public function findPublishedTasksByCourseSetId($courseSetId);
 }

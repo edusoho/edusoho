@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Event;
 
 use Codeages\Biz\Framework\Event\Event;
@@ -11,8 +12,8 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         return array(
             'user.registered' => 'onUserRegistered',
-            'user.follow'     => 'onUserFollowed',
-            'user.unfollow'   => 'onUserUnfollowed'
+            'user.follow' => 'onUserFollowed',
+            'user.unfollow' => 'onUserUnfollowed',
         );
     }
 
@@ -25,12 +26,12 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
     public function onUserFollowed(Event $event)
     {
         $friend = $event->getSubject();
-        $user   = $this->getUserService()->getUser($friend['fromId']);
+        $user = $this->getUserService()->getUser($friend['fromId']);
 
         $message = array(
-            'userId'   => $user['id'],
+            'userId' => $user['id'],
             'userName' => $user['nickname'],
-            'opration' => 'follow'
+            'opration' => 'follow',
         );
         $this->getNotificationService()->notify($friend['toId'], 'user-follow', $message);
     }
@@ -38,12 +39,12 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
     public function onUserUnfollowed(Event $event)
     {
         $friend = $event->getSubject();
-        $user   = $this->getUserService()->getUser($friend['fromId']);
+        $user = $this->getUserService()->getUser($friend['fromId']);
 
         $message = array(
-            'userId'   => $user['id'],
+            'userId' => $user['id'],
             'userName' => $user['nickname'],
-            'opration' => 'unfollow'
+            'opration' => 'unfollow',
         );
         $this->getNotificationService()->notify($friend['toId'], 'user-follow', $message);
     }
@@ -86,17 +87,18 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
     protected function getWelcomeBody($user)
     {
-        $site              = $this->getSettingService()->get('site', array());
+        $site = $this->getSettingService()->get('site', array());
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
-        $valuesToReplace   = array($user['nickname'], $site['name'], $site['url']);
+        $valuesToReplace = array($user['nickname'], $site['name'], $site['url']);
 
-        $auth        = $this->getSettingService()->get('auth', array());
+        $auth = $this->getSettingService()->get('auth', array());
         $welcomeBody = '';
         if (!empty($auth) && isset($auth['welcome_body'])) {
             $welcomeBody = $auth['welcome_body'];
         }
 
         $welcomeBody = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
+
         return $welcomeBody;
     }
 

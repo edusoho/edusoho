@@ -1,10 +1,11 @@
 <?php
+
 namespace AppBundle\Controller;
 
-use Biz\Content\Service\FileService;
+use AppBundle\Util\UploadToken;
 use AppBundle\Common\CurlToolkit;
 use AppBundle\Common\FileToolkit;
-use AppBundle\Util\UploadToken;
+use Biz\Content\Service\FileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
@@ -73,8 +74,9 @@ class EditorController extends BaseController
             if ($isWebuploader) {
                 return $this->createJsonResponse(array('message' => $message));
             } else {
-                $funcNum  = $request->query->get('CKEditorFuncNum');
+                $funcNum = $request->query->get('CKEditorFuncNum');
                 $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '', '{$message}');</script>";
+
                 return new Response($response);
             }
         }
@@ -83,10 +85,10 @@ class EditorController extends BaseController
     public function downloadAction(Request $request)
     {
         $token = $request->query->get('token');
-        $url   = $request->request->get('url');
-        $url   = str_replace(' ', '%20', $url);
-        $url   = str_replace('+', '%2B', $url);
-        $url   = str_replace('#', '%23', $url);
+        $url = $request->request->get('url');
+        $url = str_replace(' ', '%20', $url);
+        $url = str_replace('+', '%2B', $url);
+        $url = str_replace('#', '%23', $url);
         $maker = new UploadToken();
         $token = $maker->parse($token);
 
@@ -94,7 +96,7 @@ class EditorController extends BaseController
             throw $this->createAccessDeniedException('上传授权码已过期，请刷新页面后重试！');
         }
 
-        $name = date("Ymdhis")."_formula.jpg";
+        $name = date('Ymdhis').'_formula.jpg';
         $path = $this->get('service_container')->getParameter('topxia.upload.public_directory').'/tmp/'.$name;
 
         $imageData = CurlToolkit::request('POST', $url, array(), array('contentType' => 'plain'));
@@ -103,7 +105,8 @@ class EditorController extends BaseController
         fwrite($tp, $imageData);
         fclose($tp);
         $record = $this->getFileService()->uploadFile($token['group'], new File($path));
-        $url    = $this->get('web.twig.extension')->getFilePath($record['uri']);
+        $url = $this->get('web.twig.extension')->getFilePath($record['uri']);
+
         return new Response($url);
     }
 

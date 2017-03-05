@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\ArrayToolkit;
@@ -14,16 +15,16 @@ class AnnouncementController extends BaseController
         //TODO:这里需要根据用户所拥有的计划的权限展示
         $plans = $this->getCourseService()->findCoursesByCourseSetId($course['courseSetId']);
 
-        $user   = $this->getUser();
+        $user = $this->getUser();
         $member = $user['id'] ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : null;
 
         return $this->render('course/announcement/write-modal.html.twig', array(
             'announcement' => array('id' => '', 'content' => ''),
             'targetObject' => $course,
-            'targetType'   => 'course',
-            'targetId'     => $targetId,
-            'plans'        => $plans,
-            'member'       => $member
+            'targetType' => 'course',
+            'targetId' => $targetId,
+            'plans' => $plans,
+            'member' => $member,
         ));
     }
 
@@ -36,17 +37,17 @@ class AnnouncementController extends BaseController
 
         $conditions = array(
             'targetType' => 'course',
-            'targetIds'  => ArrayToolkit::column($plans, 'id')
+            'targetIds' => ArrayToolkit::column($plans, 'id'),
         );
 
         $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10);
 
         return $this->render('course/announcement/list-modal.html.twig', array(
             'announcements' => $announcements,
-            'targetType'    => 'course',
-            'targetId'      => $course['id'],
-            'canManage'     => true,
-            'plans'         => $plans
+            'targetType' => 'course',
+            'targetId' => $course['id'],
+            'canManage' => true,
+            'plans' => $plans,
         ));
     }
 
@@ -62,9 +63,9 @@ class AnnouncementController extends BaseController
         return $this->render('course/announcement/write-modal.html.twig', array(
             'announcement' => $announcement,
             'targetObject' => $course,
-            'targetType'   => 'course',
-            'targetId'     => $targetId,
-            'plans'        => $plans
+            'targetType' => 'course',
+            'targetId' => $targetId,
+            'plans' => $plans,
         ));
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
@@ -32,13 +33,13 @@ class OpenCourseController extends BaseOpenCourseController
             $pageSize
         );
 
-        $courses  = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', $pageSize);
+        $courses = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', $pageSize);
         $teachers = $this->findCourseTeachers($courses);
 
         return $this->render('open-course/explore.html.twig', array(
-            'courses'   => $courses,
+            'courses' => $courses,
             'paginator' => $paginator,
-            'teachers'  => $teachers
+            'teachers' => $teachers,
         ));
     }
 
@@ -54,10 +55,10 @@ class OpenCourseController extends BaseOpenCourseController
 
     public function showAction(Request $request, $courseId, $lessonId)
     {
-        $course      = $this->getOpenCourseService()->getCourse($courseId);
-        $preview     = $request->query->get('as');
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+        $preview = $request->query->get('as');
         $isWxPreview = $request->query->get('as') === 'preview' && $request->query->get('previewType') === 'wx';
-        $tags        = $this->getTagService()->findTagsByOwner(array('ownerType' => 'openCourse', 'ownerId' => $courseId));
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'openCourse', 'ownerId' => $courseId));
 
         $tagIds = ArrayToolkit::column($tags, 'id');
 
@@ -75,9 +76,9 @@ class OpenCourseController extends BaseOpenCourseController
             return $this->createMessageResponse('error', $message);
             }*/
             return $this->render($template, array(
-                'tagIds'       => $tagIds,
-                'course'       => $course,
-                'wxPreviewUrl' => $this->getWxPreviewQrCodeUrl($course['id'])
+                'tagIds' => $tagIds,
+                'course' => $course,
+                'wxPreviewUrl' => $this->getWxPreviewQrCodeUrl($course['id']),
             ));
         }
 
@@ -93,21 +94,22 @@ class OpenCourseController extends BaseOpenCourseController
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
         $response = $this->renderView($template, array(
-            'tagIds'   => $tagIds,
-            'course'   => $course,
-            'lessonId' => $lessonId
+            'tagIds' => $tagIds,
+            'course' => $course,
+            'lessonId' => $lessonId,
         ));
         $response = new Response($response);
 
         if (!$request->cookies->get('uv')) {
             $expire = strtotime(date('Y-m-d').' 23:59:59');
-            $response->headers->setCookie(new Cookie("uv", uniqid($prefix = "refererToken"), $expire));
+            $response->headers->setCookie(new Cookie('uv', uniqid($prefix = 'refererToken'), $expire));
             //$response->send();
         }
 
         if ('liveOpen' != $course['type']) {
             $this->createRefererLog($request, $course);
         }
+
         return $response;
     }
 
@@ -165,17 +167,17 @@ class OpenCourseController extends BaseOpenCourseController
         $notifyNum = $this->getOpenCourseService()->countMembers(array('courseId' => $course['id'], 'isNotified' => 1));
 
         return $this->render($template, array(
-            'course'    => $course,
-            'lesson'    => $lesson,
-            'member'    => $member,
-            'notifyNum' => $notifyNum
+            'course' => $course,
+            'lesson' => $lesson,
+            'member' => $member,
+            'notifyNum' => $notifyNum,
             // 'nextLesson' => $nextLesson
         ));
     }
 
     public function teachersAction($courseId)
     {
-        $course         = $this->getOpenCourseService()->getCourse($courseId);
+        $course = $this->getOpenCourseService()->getCourse($courseId);
         $teachersNoSort = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
         $teachers = array();
@@ -189,9 +191,9 @@ class OpenCourseController extends BaseOpenCourseController
         $profiles = $this->getUserService()->findUserProfilesByIds($course['teacherIds']);
 
         return $this->render('open-course/open-course-teacher-block.html.twig', array(
-            'course'   => $course,
+            'course' => $course,
             'teachers' => $teachers,
-            'profiles' => $profiles
+            'profiles' => $profiles,
         ));
     }
 
@@ -202,13 +204,13 @@ class OpenCourseController extends BaseOpenCourseController
 
         $member = $this->_getMember($course['id']);
 
-        $user           = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $memberFavorite = $this->getOpenCourseService()->getFavoriteByUserIdAndCourseId($user['id'], $courseId, 'openCourse');
 
         return $this->render('open-course/info-bar-block.html.twig', array(
-            'course'         => $course,
-            'member'         => $member,
-            'memberFavorite' => $memberFavorite
+            'course' => $course,
+            'member' => $member,
+            'memberFavorite' => $memberFavorite,
         ));
     }
 
@@ -216,7 +218,7 @@ class OpenCourseController extends BaseOpenCourseController
     {
         try {
             $favoriteNum = $this->getOpenCourseService()->favoriteCourse($id);
-            $jsonData    = array('result' => true, 'number' => $favoriteNum);
+            $jsonData = array('result' => true, 'number' => $favoriteNum);
         } catch (\Exception $e) {
             $jsonData = array('result' => false, 'message' => $e->getMessage());
         }
@@ -228,10 +230,11 @@ class OpenCourseController extends BaseOpenCourseController
     {
         try {
             $favoriteNum = $this->getOpenCourseService()->unFavoriteCourse($id);
-            $jsonData    = array('result' => true, 'number' => $favoriteNum);
+            $jsonData = array('result' => true, 'number' => $favoriteNum);
         } catch (\Exception $e) {
             $jsonData = array('result' => false, 'message' => $e->getMessage());
         }
+
         return $this->createJsonResponse($jsonData);
     }
 
@@ -259,21 +262,21 @@ class OpenCourseController extends BaseOpenCourseController
 
     protected function getWxPreviewQrCodeUrl($id)
     {
-        $user  = $this->getUserService()->getCurrentUser();
+        $user = $this->getUserService()->getCurrentUser();
         $token = $this->getTokenService()->makeToken('qrcode', array(
-            'userId'   => $user['id'],
-            'data'     => array(
-                'url'    => $this->generateUrl(
+            'userId' => $user['id'],
+            'data' => array(
+                'url' => $this->generateUrl(
                     'open_course_show',
                     array(
                         'courseId' => $id,
-                        'as'       => 'preview'
+                        'as' => 'preview',
                     ),
                     true),
-                'appUrl' => ""
+                'appUrl' => '',
             ),
-            'times'    => 0,
-            'duration' => 3600
+            'times' => 0,
+            'duration' => 3600,
         ));
         $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
@@ -289,9 +292,9 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         $conditions = array(
-            'targetId'   => $course['id'],
+            'targetId' => $course['id'],
             'targetType' => 'openCourse',
-            'parentId'   => 0
+            'parentId' => 0,
         );
 
         $paginator = new Paginator(
@@ -317,12 +320,12 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         return $this->render($template, array(
-            'course'    => $course,
-            'posts'     => $posts,
-            'users'     => $users,
+            'course' => $course,
+            'posts' => $posts,
+            'users' => $users,
             'paginator' => $paginator,
-            'service'   => $this->getThreadService(),
-            'goto'      => $this->generateUrl('open_course_show', array('courseId' => $course['id']))
+            'service' => $this->getThreadService(),
+            'goto' => $this->generateUrl('open_course_show', array('courseId' => $course['id'])),
         ));
     }
 
@@ -333,9 +336,9 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         return $this->forward('AppBundle:Thread:postSave', array(
-            'request'    => $request,
+            'request' => $request,
             'targetType' => 'openCourse',
-            'targetId'   => $id
+            'targetId' => $id,
         ));
     }
 
@@ -345,25 +348,25 @@ class OpenCourseController extends BaseOpenCourseController
             return $this->createMessageResponse('error', '课程不存在，或未发布。');
         }
 
-        $fields               = $request->request->all();
-        $fields['content']    = $this->autoParagraph($fields['content']);
-        $fields['targetId']   = $id;
-        $fields['parentId']   = $postId;
+        $fields = $request->request->all();
+        $fields['content'] = $this->autoParagraph($fields['content']);
+        $fields['targetId'] = $id;
+        $fields['parentId'] = $postId;
         $fields['targetType'] = 'openCourse';
 
         $post = $this->getThreadService()->createPost($fields);
 
         return $this->render('thread/subpost-item.html.twig', array(
-            'post'    => $post,
-            'author'  => $this->getCurrentUser(),
-            'service' => $this->getThreadService()
+            'post' => $post,
+            'author' => $this->getCurrentUser(),
+            'service' => $this->getThreadService(),
         ));
     }
 
     public function memberSmsAction(Request $request, $id)
     {
         $course = $this->getOpenCourseService()->getCourse($id);
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         if (!$course) {
             return $this->createJsonResponse(array('result' => false, 'message' => '该课程不存在或已删除！'));
@@ -378,9 +381,9 @@ class OpenCourseController extends BaseOpenCourseController
         if ($request->getMethod() == 'POST') {
             $member = $this->_memberOperate($request, $id);
 
-            $fields               = $request->request->all();
+            $fields = $request->request->all();
             $fields['isNotified'] = 1;
-            $member               = $this->getOpenCourseService()->updateMember($member['id'], $fields);
+            $member = $this->getOpenCourseService()->updateMember($member['id'], $fields);
 
             $this->_loginMemberMobileBind($fields['mobile']);
 
@@ -390,7 +393,7 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         return $this->render('open-course/member-sms-modal.html.twig', array(
-            'course' => $course
+            'course' => $course,
         ));
     }
 
@@ -403,11 +406,11 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $fields             = $request->request->all();
-            $fields['ip']       = $request->getClientIp();
+            $fields = $request->request->all();
+            $fields['ip'] = $request->getClientIp();
             $fields['courseId'] = $id;
 
-            $member    = $this->getOpenCourseService()->createMember($fields);
+            $member = $this->getOpenCourseService()->createMember($fields);
             $memberNum = $this->getOpenCourseService()->countMembers(array('courseId' => $id));
 
             return $this->createJsonResponse(array('result' => true, 'number' => $memberNum));
@@ -428,8 +431,8 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         return $this->forward('AppBundle:Player:show', array(
-            'id'      => $lesson["mediaId"],
-            'context' => array('hideBeginning' => 1, 'hideQuestion' => 1)
+            'id' => $lesson['mediaId'],
+            'context' => array('hideBeginning' => 1, 'hideQuestion' => 1),
         ));
     }
 
@@ -444,10 +447,10 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         $conditions = array(
-            'courseId'        => $id,
+            'courseId' => $id,
             'excludeLessonId' => 0,
-            'source'          => 'opencoursematerial',
-            'type'            => 'openCourse'
+            'source' => 'opencoursematerial',
+            'type' => 'openCourse',
         );
 
         /*$paginator = new Paginator(
@@ -466,10 +469,10 @@ class OpenCourseController extends BaseOpenCourseController
         $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
         $lessons = ArrayToolkit::index($lessons, 'id');
 
-        return $this->render("open-course/open-course-material-block.html.twig", array(
-            'course'    => $course,
-            'lessons'   => $lessons,
-            'materials' => $materials
+        return $this->render('open-course/open-course-material-block.html.twig', array(
+            'course' => $course,
+            'lessons' => $lessons,
+            'materials' => $materials,
         ));
     }
 
@@ -492,9 +495,9 @@ class OpenCourseController extends BaseOpenCourseController
 
     public function mobileCheckAction(Request $request, $courseId)
     {
-        $user     = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $response = array('success' => true, 'message' => '');
-        $mobile   = $request->query->get('value', '');
+        $mobile = $request->query->get('value', '');
 
         $member = $this->getOpenCourseService()->getCourseMemberByMobile($courseId, $mobile);
         if ($member && $member['isNotified']) {
@@ -514,42 +517,44 @@ class OpenCourseController extends BaseOpenCourseController
 
     public function adModalRecommendCourseAction(Request $request, $id)
     {
-        $num        = $request->query->get('num', 3);
-        $courses    = $this->getOpenCourseRecommendedService()->findRandomRecommendCourses($id, $num);
-        $courses    = array_values($courses);
+        $num = $request->query->get('num', 3);
+        $courses = $this->getOpenCourseRecommendedService()->findRandomRecommendCourses($id, $num);
+        $courses = array_values($courses);
         $conditions = array(
             array(
-                'status'      => 'published',
+                'status' => 'published',
                 'recommended' => 1,
-                'parentId'    => 0
+                'parentId' => 0,
             ),
             array(
-                'status'   => 'published',
-                'parentId' => 0
-            )
+                'status' => 'published',
+                'parentId' => 0,
+            ),
         );
         //数量不够 随机取推荐课程里的课程 还是不够随机取所有课程
         foreach ($conditions as $condition) {
             if (count($courses) < $num) {
-                $needNum                 = $num - count($courses);
+                $needNum = $num - count($courses);
                 $condition['excludeIds'] = ArrayToolkit::column($courses, 'id');
-                $recommendCourses        = $this->getCourseService()->findRandomCourses($condition, $needNum);
-                $courses                 = array_merge($courses, $recommendCourses);
+                $recommendCourses = $this->getCourseService()->findRandomCourses($condition, $needNum);
+                $courses = array_merge($courses, $recommendCourses);
             }
         }
-        $self    = $this;
+        $self = $this;
         $courses = array_map(function ($course) use ($self) {
             foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key) {
                 $course[$key] = $self->get('web.twig.extension')->getFpath($course[$key], 'course.png');
             }
+
             return $course;
         }, $courses);
+
         return $this->createJsonResponse($courses);
     }
 
     private function _getMember($courseId)
     {
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $member = array();
 
         if ($user->isLogin()) {
@@ -570,20 +575,20 @@ class OpenCourseController extends BaseOpenCourseController
 
             if ($file) {
                 $lesson['convertStatus'] = empty($file['convertStatus']) ? 'none' : $file['convertStatus'];
-                $lesson['storage']       = $file['storage'];
+                $lesson['storage'] = $file['storage'];
             }
         } elseif ($lesson['mediaSource'] == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
-                $lesson['mediaUri']    = "http://player.youku.com/embed/{$matches[1]}";
+                $lesson['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
                 $lesson['mediaSource'] = 'iframe';
             }
         } elseif ($lesson['mediaSource'] == 'tudou') {
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
-                $lesson['mediaUri']    = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                $lesson['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
                 $lesson['mediaSource'] = 'iframe';
             }
         }
@@ -612,7 +617,7 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $lessons = $this->getOpenCourseService()->searchLessons(array(
             'courseId' => $courseId,
-            'status'   => 'published'
+            'status' => 'published',
         ),
             array('seq' => 'ASC'), 0, 1
         );
@@ -629,7 +634,7 @@ class OpenCourseController extends BaseOpenCourseController
         //涉及到课程 暂定
         $favoriteNum = $this->getCourseService()->searchCourseFavoriteCount(array(
             'courseId' => $courseId,
-            'type'     => 'openCourse'
+            'type' => 'openCourse',
         )
         );
 
@@ -642,9 +647,9 @@ class OpenCourseController extends BaseOpenCourseController
 
         if ($result['result']) {
             $fields = array(
-                'courseId'      => $courseId,
-                'ip'            => $request->getClientIp(),
-                'lastEnterTime' => time()
+                'courseId' => $courseId,
+                'ip' => $request->getClientIp(),
+                'lastEnterTime' => time(),
             );
             $member = $this->getOpenCourseService()->createMember($fields);
         } else {
@@ -656,7 +661,7 @@ class OpenCourseController extends BaseOpenCourseController
 
     private function _checkExistsMember(Request $request, $courseId)
     {
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $userIp = $request->getClientIp();
 
         if (!$user->isLogin()) {
@@ -681,10 +686,10 @@ class OpenCourseController extends BaseOpenCourseController
     protected function autoParagraph($text)
     {
         if (trim($text) !== '') {
-            $text  = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
-            $text  = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
+            $text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
+            $text = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
             $texts = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY);
-            $text  = '';
+            $text = '';
 
             foreach ($texts as $txt) {
                 $text .= '<p>'.nl2br(trim($txt, "\n"))."</p>\n";
@@ -704,8 +709,8 @@ class OpenCourseController extends BaseOpenCourseController
             $replays = $this->getLiveReplayService()->searchReplays(array(
                 'courseId' => $lesson['courseId'],
                 'lessonId' => $lesson['id'],
-                'hidden'   => 0,
-                'type'     => 'liveOpen'
+                'hidden' => 0,
+                'type' => 'liveOpen',
             ), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         }
 
@@ -717,9 +722,9 @@ class OpenCourseController extends BaseOpenCourseController
         $conditions['recommended'] = 1;
 
         $recommendCount = $this->getOpenCourseService()->countCourses($conditions);
-        $currentPage    = $request->query->get('page') ? $request->query->get('page') : 1;
-        $recommendPage  = intval($recommendCount / $pageSize);
-        $recommendLeft  = $recommendCount % $pageSize;
+        $currentPage = $request->query->get('page') ? $request->query->get('page') : 1;
+        $recommendPage = intval($recommendCount / $pageSize);
+        $recommendLeft = $recommendCount % $pageSize;
 
         $currentPageCourses = $this->getOpenCourseService()->searchCourses(
             $conditions,

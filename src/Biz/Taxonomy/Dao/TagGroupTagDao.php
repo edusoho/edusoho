@@ -1,9 +1,10 @@
 <?php
+
 namespace Biz\Taxonomy\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
-interface TagGroupTagDao extends  GeneralDaoInterface
+interface TagGroupTagDao extends GeneralDaoInterface
 {
     public function findTagRelationsByGroupId($groupId);
 

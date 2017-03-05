@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Group\Dao\Impl;
 
 use Biz\Group\Dao\MemberDao;
@@ -23,13 +24,12 @@ class MemberDaoImpl extends GeneralDaoImpl implements MemberDao
         return array(
             'timestamps' => array('createdTime'),
             'serializes' => array(),
-            'orderbys'   => array('postNum','name', 'createdTime'),
+            'orderbys' => array('postNum', 'name', 'createdTime'),
             'conditions' => array(
                 'groupId = :groupId',
                 'role = :role',
-                'userId = :userId'
-            )
+                'userId = :userId',
+            ),
         );
     }
-
 }

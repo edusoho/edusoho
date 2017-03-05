@@ -3,45 +3,47 @@
 namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Group\Service\ThreadService;
 use Topxia\Service\Common\ServiceKernel;
 
 class HotThreadsDataTag extends BaseDataTag implements DataTag
 {
     /**
-     * 获取最热话题
+     * 获取最热话题.
      *
      * 可传入的参数：
      *
      *   count 必需 话题数量，取值不能超过100
      *
-     * @param  array $arguments     参数
+     * @param array $arguments 参数
+     *
      * @return array 最热话题
      */
-
     public function getData(array $arguments)
     {
         $groupSetting = $this->getSettingService()->get('group', array());
-        $time         = 7 * 24 * 60 * 60;
+        $timeRange = 7 * 24 * 60 * 60;
         if (isset($groupSetting['threadTime_range'])) {
-            $time = $groupSetting['threadTime_range'] * 24 * 60 * 60;
+            $timeRange = $groupSetting['threadTime_range'] * 24 * 60 * 60;
         }
 
         $hotThreads = $this->getThreadService()->searchThreads(
             array(
-                'createdTime' => time() - $time,
-                'status'      => 'open'
+                'createdTime' => time() - $timeRange,
+                'status' => 'open',
             ),
             array(
-                'isStick'     => 'DESC',
-                'postNum'     => 'DESC',
-                'createdTime' => 'DESC'
+                'isStick' => 'DESC',
+                'postNum' => 'DESC',
+                'createdTime' => 'DESC',
             ),
-            0, $arguments['count']
+            0,
+            $arguments['count']
         );
 
         $ownerIds = ArrayToolkit::column($hotThreads, 'userId');
         $groupIds = ArrayToolkit::column($hotThreads, 'groupId');
-        $userIds  = ArrayToolkit::column($hotThreads, 'lastPostMemberId');
+        $userIds = ArrayToolkit::column($hotThreads, 'lastPostMemberId');
 
         $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
 
@@ -62,9 +64,13 @@ class HotThreadsDataTag extends BaseDataTag implements DataTag
                 $hotThreads[$key]['group'] = $groups[$thread['groupId']];
             }
         }
+
         return $hotThreads;
     }
 
+    /**
+     * @return ThreadService
+     */
     private function getThreadService()
     {
         return $this->getServiceKernel()->createService('Group:ThreadService');

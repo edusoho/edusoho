@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Common;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +13,7 @@ class BlockToolkit
             $blockMeta = json_decode(file_get_contents($jsonFile), true);
             if (empty($blockMeta)) {
                 throw new \RuntimeException(ServiceKernel::instance()->trans('插件元信息文件%blockMeta%格式不符合JSON规范，解析失败，请检查元信息文件格式',
-                    array('%blockMeta%' =>$blockMeta )));
+                    array('%blockMeta%' => $blockMeta)));
             }
 
             $blockService = ServiceKernel::instance()->createService('Content:BlockService');
@@ -44,9 +45,9 @@ class BlockToolkit
                         'title' => $meta['title'],
                     ));
                 }
-                
+
                 if (!empty($blocksFolder)) {
-                    $filename = $blocksFolder . "block-" . md5($key) . '.html';
+                    $filename = $blocksFolder.'block-'.md5($key).'.html';
                     if (file_exists($filename)) {
                         $content = file_get_contents($filename);
                     } else {
@@ -60,7 +61,6 @@ class BlockToolkit
                     $content = self::render($blockTemplate, $container);
                     $blockService->updateTemplateContent($blockTemplate['id'], $content);
                 }
-                
             }
         }
     }
@@ -75,6 +75,7 @@ class BlockToolkit
         if (empty($block['templateName']) || empty($block['data'])) {
             return '';
         }
+
         return $container->get('templating')->render($block['templateName'], $block['data']);
     }
 
@@ -83,7 +84,7 @@ class BlockToolkit
         $metas = file_get_contents($metaFilePath);
         $metas = json_decode($metas, true);
         if (empty($metas)) {
-            throw new \RuntimeException(ServiceKernel::instance()->trans('插件元信息文件%metaFilePath%格式不符合JSON规范，解析失败，请检查元信息文件格式', array('%metaFilePath%' =>$metaFilePath )));
+            throw new \RuntimeException(ServiceKernel::instance()->trans('插件元信息文件%metaFilePath%格式不符合JSON规范，解析失败，请检查元信息文件格式', array('%metaFilePath%' => $metaFilePath)));
         }
 
         foreach ($metas as $code => $meta) {
@@ -94,7 +95,7 @@ class BlockToolkit
             $blockTemplate = array('templateName' => $meta['templateName'], 'data' => $data);
             $html = self::render($blockTemplate, $container);
 
-            $filename = "block-".md5($code).'.html';
+            $filename = 'block-'.md5($code).'.html';
             if (!file_exists($dist)) {
                 mkdir($dist);
             }
@@ -162,13 +163,13 @@ class BlockToolkit
             foreach ($data as $key => &$object) {
                 if (in_array($key, array('firstColumnText', 'secondColumnText', 'thirdColumnText', 'fourthColumnText', 'fifthColumnText'))) {
                     $object[0]['value'] = $textMatchs[1][$index];
-                    $index++;
+                    ++$index;
                 }
 
                 if (in_array($key, array('firstColumnLinks', 'secondColumnLinks', 'thirdColumnLinks', 'fourthColumnLinks', 'fifthColumnLinks'))
                         && !empty($dlMatchs[0][$index2])) {
                     $dl = $dlMatchs[0][$index2];
-                    $index2++;
+                    ++$index2;
                     preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/i', $dl, $hrefMatchs);
                     preg_match_all('/< *a[^>]*target *= *["\']?([^"\']*)/i', $dl, $targetMatchs);
                     preg_match_all('/< *a.*?>(.*?)<\/a>/i', $dl, $valuetMatchs);

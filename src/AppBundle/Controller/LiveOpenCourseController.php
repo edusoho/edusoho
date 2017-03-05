@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Util\EdusohoLiveClient;
@@ -24,48 +25,51 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
         $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($lesson);
 
-        $user               = $this->getCurrentUser();
-        $params['id']       = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
+        $user = $this->getCurrentUser();
+        $params['id'] = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
         $params['nickname'] = $user->isLogin() ? $user['nickname'] : $this->getRandomNickname($request, $courseId, $lessonId);
-        $params['isLogin']  = $user->isLogin();
+        $params['isLogin'] = $user->isLogin();
         $this->createRefererLog($request, $course);
 
         return $this->forward('AppBundle:Liveroom:_entry', array(
-            'roomId' => $lesson['mediaId']
+            'roomId' => $lesson['mediaId'],
         ), $params);
     }
 
     protected function getMillisecond()
     {
         list($t1, $t2) = explode(' ', microtime());
+
         return (float) sprintf('%.0f', (floatval($t1) + floatval($t2)) * 1000);
     }
 
     protected function getRandomNickname(Request $request, $courseId, $lessonId)
     {
-        $key          = "live-open-course-nickname-{$courseId}-{$lessonId}";
+        $key = "live-open-course-nickname-{$courseId}-{$lessonId}";
         $sessionValue = $request->getSession()->get($key);
         if (empty($sessionValue)) {
             $sessionValue = '游客'.$this->getRandomString(8);
             $request->getSession()->set($key, $sessionValue);
         }
+
         return $sessionValue;
     }
 
     protected function getRandomUserId(Request $request, $courseId, $lessonId)
     {
-        $key          = "live-open-course-user-id-{$courseId}-{$lessonId}";
+        $key = "live-open-course-user-id-{$courseId}-{$lessonId}";
         $sessionValue = $request->getSession()->get($key);
         if (empty($sessionValue)) {
             $sessionValue = $this->getMillisecond();
             $request->getSession()->set($key, $sessionValue);
         }
+
         return $sessionValue;
     }
 
     protected function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
     {
-        $s       = '';
+        $s = '';
         $cLength = strlen($chars);
 
         while (strlen($s) < $length) {
@@ -78,8 +82,8 @@ class LiveOpenCourseController extends BaseOpenCourseController
     public function verifyAction(Request $request)
     {
         $result = array(
-            "code" => "0",
-            "msg"  => "ok"
+            'code' => '0',
+            'msg' => 'ok',
         );
 
         return $this->createJsonResponse($result);
@@ -88,6 +92,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
     protected function makeSign($string)
     {
         $secret = $this->container->getParameter('secret');
+
         return md5($string.$secret);
     }
 
@@ -106,14 +111,14 @@ class LiveOpenCourseController extends BaseOpenCourseController
             return $this->createJsonResponse($resultList);
         }
 
-        $client              = new EdusohoLiveClient();
-        $lesson              = $this->getOpenCourseService()->getLesson($lessonId);
-        $lesson["isEnd"]     = intval(time() - $lesson["endTime"]) > 0;
+        $client = new EdusohoLiveClient();
+        $lesson = $this->getOpenCourseService()->getLesson($lessonId);
+        $lesson['isEnd'] = intval(time() - $lesson['endTime']) > 0;
         $lesson['canRecord'] = $client->isAvailableRecord($lesson['mediaId']);
 
         return $this->render('live-course-replay-manage/list-item.html.twig', array(
             'course' => $course,
-            'lesson' => $lesson
+            'lesson' => $lesson,
         ));
     }
 
@@ -127,7 +132,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $ids = $request->request->get("visibleReplaies");
+            $ids = $request->request->get('visibleReplaies');
             $this->getLiveReplayService()->updateReplayByLessonId($lessonId, array('hidden' => 1), 'liveOpen');
 
             foreach ($ids as $id) {
@@ -140,7 +145,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $replayLessons = $this->getLiveReplayService()->searchReplays(
             array(
                 'lessonId' => $lessonId,
-                'type'     => 'liveOpen'
+                'type' => 'liveOpen',
             ),
             array('replayId' => 'ASC'),
             0,
@@ -149,9 +154,9 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
         return $this->render('live-course-replay-manage/replay-lesson-modal.html.twig', array(
             'replayLessons' => $replayLessons,
-            'lessonId'      => $lessonId,
-            'courseId'      => $courseId,
-            'lesson'        => $lesson
+            'lessonId' => $lessonId,
+            'courseId' => $courseId,
+            'lesson' => $lesson,
         ));
     }
 
@@ -166,27 +171,29 @@ class LiveOpenCourseController extends BaseOpenCourseController
         }
 
         $this->getLiveReplayService()->updateReplay($replayId, array('title' => $title));
+
         return $this->createJsonResponse(true);
     }
 
     public function replayManageAction(Request $request, $id)
     {
-        $course  = $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
 
         $client = new EdusohoLiveClient();
         foreach ($lessons as $key => $lesson) {
-            $lesson["isEnd"]                   = intval(time() - $lesson["endTime"]) > 0;
-            $lesson["canRecord"]               = !($lesson['replayStatus'] == 'videoGenerated') && $client->isAvailableRecord($lesson['mediaId']);
-            $lesson['file']                    = $this->getLiveReplayMedia($lesson);
+            $lesson['isEnd'] = intval(time() - $lesson['endTime']) > 0;
+            $lesson['canRecord'] = !($lesson['replayStatus'] == 'videoGenerated') && $client->isAvailableRecord($lesson['mediaId']);
+            $lesson['file'] = $this->getLiveReplayMedia($lesson);
             $lessons["lesson-{$lesson['id']}"] = $lesson;
         }
 
         $default = $this->getSettingService()->get('default', array());
+
         return $this->render('live-course-replay-manage/index.html.twig', array(
-            'course'  => $course,
-            'items'   => $lessons,
-            'default' => $default
+            'course' => $course,
+            'items' => $lessons,
+            'default' => $default,
         ));
     }
 
@@ -195,13 +202,14 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $course = $this->getOpenCourseService()->getCourse($courseId);
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
         $this->createRefererLog($request, $course);
-        return $this->render("live-course/classroom.html.twig", array(
+
+        return $this->render('live-course/classroom.html.twig', array(
             'lesson' => $lesson,
-            'url'    => $this->generateUrl('live_open_course_live_replay_url', array(
+            'url' => $this->generateUrl('live_open_course_live_replay_url', array(
                 'courseId' => $courseId,
                 'lessonId' => $lessonId,
-                'replayId' => $replayId
-            ))
+                'replayId' => $replayId,
+            )),
         ));
     }
 
@@ -219,13 +227,13 @@ class LiveOpenCourseController extends BaseOpenCourseController
         }
 
         return $this->createJsonResponse(array(
-            'url'   => $result['url'],
-            'param' => isset($result['param']) ? $result['param'] : null
+            'url' => $result['url'],
+            'param' => isset($result['param']) ? $result['param'] : null,
         ));
     }
 
     /**
-     * [playESLiveReplayAction 播放ES直播回放]
+     * [playESLiveReplayAction 播放ES直播回放].
      */
     public function playESLiveReplayAction(Request $request, $replayId)
     {
@@ -243,11 +251,11 @@ class LiveOpenCourseController extends BaseOpenCourseController
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             if (!empty($file)) {
                 $lesson['media'] = array(
-                    'id'     => $file['id'],
+                    'id' => $file['id'],
                     'status' => $file['convertStatus'],
                     'source' => 'self',
-                    'name'   => $file['filename'],
-                    'uri'    => ''
+                    'name' => $file['filename'],
+                    'uri' => '',
                 );
             } else {
                 $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
@@ -260,9 +268,9 @@ class LiveOpenCourseController extends BaseOpenCourseController
         }
 
         return $this->render('live-course-replay-manage/upload-modal.html.twig', array(
-            'course'     => $course,
-            'lesson'     => $lesson,
-            'targetType' => 'opencourselesson'
+            'course' => $course,
+            'lesson' => $lesson,
+            'targetType' => 'opencourselesson',
         ));
     }
 

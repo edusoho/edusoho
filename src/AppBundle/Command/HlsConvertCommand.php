@@ -1,8 +1,8 @@
 <?php
+
 namespace AppBundle\Command;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Util\CloudClientFactory;
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,10 +25,10 @@ class HlsConvertCommand extends BaseCommand
         $output->writeln('<info>开始HLS转码</info>');
 
         $courseId = $input->getArgument('courseId');
-        $siteUrl  = $input->getArgument('siteUrl');
+        $siteUrl = $input->getArgument('siteUrl');
 
         if (strtolower($courseId) == 'all') {
-            $courses   = $this->getCourseService()->searchCourses(array(), 'latest', 0, 10000);
+            $courses = $this->getCourseService()->searchCourses(array(), 'latest', 0, 10000);
             $courseIds = ArrayToolkit::column($courses, 'id');
         } else {
             $courseIds = array($courseId);
@@ -69,9 +69,9 @@ class HlsConvertCommand extends BaseCommand
             }
 
             $factory = new CloudClientFactory();
-            $client  = $factory->createClient();
+            $client = $factory->createClient();
 
-            $commands   = array_keys($client->getVideoConvertCommands());
+            $commands = array_keys($client->getVideoConvertCommands());
             $convertKey = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
 
             $callbackUrl = $siteUrl.$this->getContainer()->get('router')->generate('uploadfile_cloud_convert_callback', array('key' => $convertKey));

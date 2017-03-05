@@ -12,6 +12,7 @@ class Video extends Activity
 {
     protected function registerListeners()
     {
+        return array('watching' => 'Biz\Activity\Listener\VideoActivityWatchListener');
     }
 
     public function create($fields)
@@ -23,35 +24,34 @@ class Video extends Activity
         $videoActivity = $fields['ext'];
         if (empty($videoActivity['mediaId'])) {
             $videoActivity['mediaId'] = 0;
-        } else {
-            $file                         = $this->getUploadFileService()->getFile($videoActivity['mediaId']);
-            $videoActivity['mediaSource'] = $file['storage'];
         }
         $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
+
         return $videoActivity;
     }
 
     public function copy($activity, $config = array())
     {
-        $video    = $this->getVideoActivityDao()->get($activity['mediaId']);
+        $video = $this->getVideoActivityDao()->get($activity['mediaId']);
         $newVideo = array(
-            'mediaSource'  => $video['mediaSource'],
-            'mediaId'      => $video['mediaId'],
-            'mediaUri'     => $video['mediaUri'],
-            'finishType'   => $video['finishType'],
-            'finishDetail' => $video['finishDetail']
+            'mediaSource' => $video['mediaSource'],
+            'mediaId' => $video['mediaId'],
+            'mediaUri' => $video['mediaUri'],
+            'finishType' => $video['finishType'],
+            'finishDetail' => $video['finishDetail'],
         );
+
         return $this->getVideoActivityDao()->create($newVideo);
     }
 
     public function sync($sourceActivity, $activity)
     {
-        $sourceVideo           = $this->getVideoActivityDao()->get($sourceActivity['mediaId']);
-        $video                 = $this->getVideoActivityDao()->get($activity['mediaId']);
-        $video['mediaSource']  = $sourceVideo['mediaSource'];
-        $video['mediaId']      = $sourceVideo['mediaId'];
-        $video['mediaUri']     = $sourceVideo['mediaUri'];
-        $video['finishType']   = $sourceVideo['finishType'];
+        $sourceVideo = $this->getVideoActivityDao()->get($sourceActivity['mediaId']);
+        $video = $this->getVideoActivityDao()->get($activity['mediaId']);
+        $video['mediaSource'] = $sourceVideo['mediaSource'];
+        $video['mediaId'] = $sourceVideo['mediaId'];
+        $video['mediaUri'] = $sourceVideo['mediaUri'];
+        $video['finishType'] = $sourceVideo['finishType'];
         $video['finishDetail'] = $sourceVideo['finishDetail'];
 
         return $this->getVideoActivityDao()->update($video['id'], $video);
@@ -69,25 +69,24 @@ class Video extends Activity
         if (empty($videoActivity)) {
             throw new \Exception('教学活动不存在');
         }
-        if(!empty($video['mediaId'])) {
-            $file                         = $this->getUploadFileService()->getFile($videoActivity['mediaId']);
-            $video['mediaSource'] = $file['storage'];
-        }
         $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $video);
+
         return $videoActivity;
     }
 
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
-        $video    = $this->getVideoActivityDao()->get($activity['mediaId']);
+        $video = $this->getVideoActivityDao()->get($activity['mediaId']);
         if ($video['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+
             return !empty($result) && $result >= $video['finishDetail'];
         }
 
         if ($video['finishType'] == 'end') {
             $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'video.finish');
+
             return !empty($logs);
         }
 
@@ -96,8 +95,9 @@ class Video extends Activity
 
     public function get($id)
     {
-        $videoActivity         = $this->getVideoActivityDao()->get($id);
+        $videoActivity = $this->getVideoActivityDao()->get($id);
         $videoActivity['file'] = $this->getUploadFileService()->getFullFile($videoActivity['mediaId']);
+
         return $videoActivity;
     }
 
@@ -127,7 +127,7 @@ class Video extends Activity
      */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**
@@ -135,6 +135,6 @@ class Video extends Activity
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service("Activity:ActivityService");
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 }

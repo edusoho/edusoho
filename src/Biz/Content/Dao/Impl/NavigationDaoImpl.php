@@ -1,6 +1,6 @@
 <?php
-namespace Biz\Content\Dao\Impl;
 
+namespace Biz\Content\Dao\Impl;
 
 use Biz\Content\Dao\NavigationDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -19,21 +19,20 @@ class NavigationDaoImpl extends GeneralDaoImpl implements NavigationDao
                 'isNewWin =:isNewWin',
                 'orgId = :orgId',
                 'orgCode = :orgCode',
-                'orgCode LIKE :likeOrgCode'
+                'orgCode LIKE :likeOrgCode',
             ),
             'orderbys' => array(
-                'sequence'
-            )
+                'sequence',
+            ),
         );
     }
 
     public function countByType($type)
     {
         return $this->count(array(
-            'type' => $type
+            'type' => $type,
         ));
     }
-
 
     public function deleteByParentId($parentId)
     {
@@ -49,10 +48,10 @@ class NavigationDaoImpl extends GeneralDaoImpl implements NavigationDao
     {
         return $this->search(
             array(
-                'type' => $type
+                'type' => $type,
             ),
             array(
-                'sequence' => 'ASC'
+                'sequence' => 'ASC',
             ),
             $start,
             $limit
@@ -64,7 +63,7 @@ class NavigationDaoImpl extends GeneralDaoImpl implements NavigationDao
         return $this->search(
             array(),
             array(
-                'sequence' => 'ASC'
+                'sequence' => 'ASC',
             ),
             $start,
             $limit

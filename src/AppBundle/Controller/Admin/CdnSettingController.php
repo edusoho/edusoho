@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CdnSettingController extends BaseController
 {
-
     public function indexAction(Request $request)
     {
         $cdn = $this->getSettingService()->get('cdn', array());
@@ -14,8 +13,8 @@ class CdnSettingController extends BaseController
         $default = array(
             'enabled' => '',
             'defaultUrl' => '',
-            'userUrl'  => '',
-            'contentUrl' => ''
+            'userUrl' => '',
+            'contentUrl' => '',
         );
 
         $cdn = array_merge($default, $cdn);
@@ -28,14 +27,12 @@ class CdnSettingController extends BaseController
         }
 
         return $this->render('admin/system/cdn-setting.html.twig', array(
-            'cdn'=>$cdn
+            'cdn' => $cdn,
         ));
-
     }
 
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
-
 }

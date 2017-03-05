@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -7,10 +8,8 @@ use AppBundle\Common\ArrayToolkit;
 
 class CourseThreadController extends BaseController
 {
-
     public function indexAction(Request $request)
     {
-
         $conditions = $request->query->all();
 
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
@@ -38,7 +37,7 @@ class CourseThreadController extends BaseController
         return $this->render('admin/course-thread/index.html.twig', array(
             'paginator' => $paginator,
             'threads' => $threads,
-            'users'=> $users,
+            'users' => $users,
             'courseSets' => $courseSets,
             'courses' => $courses,
             'tasks' => $tasks,
@@ -48,15 +47,17 @@ class CourseThreadController extends BaseController
     public function deleteAction(Request $request, $id)
     {
         $this->getThreadService()->deleteThread($id);
+
         return $this->createJsonResponse(true);
     }
 
     public function batchDeleteAction(Request $request)
     {
         $ids = $request->request->get('ids');
-        foreach ($ids ? : array() as $id) {
+        foreach ($ids ?: array() as $id) {
             $this->getThreadService()->deleteThread($id);
         }
+
         return $this->createJsonResponse(true);
     }
 

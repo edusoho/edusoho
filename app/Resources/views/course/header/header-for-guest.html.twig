@@ -9,7 +9,7 @@
 {% block course_header_qrcode %}{% endblock %}
 
 {% block course_header_subtitle %}
-  <p class="mt10  text-overflow  mb20">{{ courseSet.subtitle }}</p>
+  <p class="text-overflow  mb10 mt10 pb10">{{ courseSet.subtitle }}</p>
 {% endblock %}
 
 {% block course_header_people_num %}{% endblock %}
@@ -21,6 +21,10 @@
 {% block course_heard_content %}
   <div class="course-detail-bottom">
     <div class="course-detail-img">
+      <img class="img-responsive"
+           src="{{ filepath(courseSet.cover.large|default(null), 'courseSet.png') }}"
+           alt="{{ course.title }} ">
+      <div class="image-overlay"></div>
       {% if previewTask|default(null) %}
         <a href="#modal" data-toggle="modal"
            data-url="{{ path('course_task_preview',{courseId:course.id, id:previewTask.id}) }}"
@@ -28,10 +32,7 @@
           <i class="es-icon es-icon-playcircleoutline"></i>
         </a>
       {% endif %}
-      <img class="img-responsive"
-           src=" {% if not  courseSet.cover.large|default(null) %} /assets/img-course-set/default/course-set.png  {% else %} {{ filepath(courseSet.cover.large) }} {% endif %}"
-           alt="{{ course.title }} ">
-      <div class="image-overlay"></div>
+
       <div class="course-detail-remask">
         {% if setting('course.show_student_num_enabled', '1') == 1 %}
           <i class="es-icon es-icon-people"></i><span class="mhs">{{ courseSet.studentNum|default(0) }}</span>人加入学习
@@ -44,7 +45,7 @@
     </div>
     <div class="course-detail-info text-12 color-gray">
       <div class="mb20">
-          {% include 'course/header/header-for-price.html.twig' %}
+        {% include 'course/header/header-for-price.html.twig' %}
       </div>
       <!-- 有活动显示  -->
       {#<div class="mb10">#}
@@ -56,13 +57,13 @@
       {#</div>#}
       <div class="pv20 bg-color course-detail-gray">
         {% if courseSet.type != 'live' %}
-          <div class="course-detail-nav mb10">
+          <div class="course-detail-content mb10">
             <span class="course-detail-title inline-block">教学计划</span>
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent inline-block ml5">
               {% set current_course = course %}
               {% for course in  courses %}
                 <li class="mb10 mr10 {% if current_course.id == course.id %} active {% endif %}">
-                  <a href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}">{{ course.title }}</a>
+                  <a href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title}}">{{ course.title|sub_text(10) }}</a>
                 </li>
               {% endfor %}
             </ul>

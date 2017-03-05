@@ -15,10 +15,10 @@ class OpenCourseLessonManageController extends BaseController
 {
     public function lessonAction(Request $request, $id)
     {
-        $course      = $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $courseItems = $this->getOpenCourseService()->getLessonItems($course['id']);
-        $lessonIds   = ArrayToolkit::column($courseItems, 'id');
-        $mediaMap    = array();
+        $lessonIds = ArrayToolkit::column($courseItems, 'id');
+        $mediaMap = array();
 
         foreach ($courseItems as $item) {
             if ($item['itemType'] != 'lesson') {
@@ -37,7 +37,7 @@ class OpenCourseLessonManageController extends BaseController
         }
 
         $mediaIds = array_keys($mediaMap);
-        $files    = $this->getUploadFileService()->findFilesByIds($mediaIds);
+        $files = $this->getUploadFileService()->findFilesByIds($mediaIds);
 
         foreach ($files as $file) {
             $lessonIds = $mediaMap[$file['id']];
@@ -49,14 +49,14 @@ class OpenCourseLessonManageController extends BaseController
 
         return $this->render('open-course-manage/lesson-list.html.twig', array(
             'course' => $course,
-            'items'  => $courseItems,
-            'files'  => ArrayToolkit::index($files, 'id')
+            'items' => $courseItems,
+            'files' => ArrayToolkit::index($files, 'id'),
         ));
     }
 
     public function createAction(Request $request, $id)
     {
-        $course   = $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $parentId = $request->query->get('parentId');
 
         if ($this->lessonExists($id)) {
@@ -64,7 +64,7 @@ class OpenCourseLessonManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $lesson             = $request->request->all();
+            $lesson = $request->request->all();
             $lesson['courseId'] = $course['id'];
 
             if ($lesson['media']) {
@@ -84,7 +84,7 @@ class OpenCourseLessonManageController extends BaseController
             if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
                 $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
-                if ($file['type'] == "document" && $file['convertStatus'] == "none") {
+                if ($file['type'] == 'document' && $file['convertStatus'] == 'none') {
                     $convertHash = $this->getUploadFileService()->reconvertFile(
                         $file['id'],
                         $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
@@ -99,29 +99,29 @@ class OpenCourseLessonManageController extends BaseController
             return $this->render('open-course-manage/lesson-list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson,
-                'file'   => $file
+                'file' => $file,
             ));
         }
 
-        $user       = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
-        $filePath   = "opencourselesson/{$course['id']}";
-        $fileKey    = "{$filePath}/".$randString;
+        $filePath = "opencourselesson/{$course['id']}";
+        $fileKey = "{$filePath}/".$randString;
         $convertKey = $randString;
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
         return $this->render('open-course-manage/lesson-modal.html.twig', array(
-            'course'         => $course,
-            'targetType'     => 'opencourselesson',
-            'targetId'       => $course['id'],
-            'filePath'       => $filePath,
-            'fileKey'        => $fileKey,
-            'convertKey'     => $convertKey,
+            'course' => $course,
+            'targetType' => 'opencourselesson',
+            'targetId' => $course['id'],
+            'filePath' => $filePath,
+            'fileKey' => $fileKey,
+            'convertKey' => $convertKey,
             'storageSetting' => $this->setting('storage'),
-            'features'       => $features,
-            'parentId'       => $parentId,
-            'courseType'     => 'openCourse'
+            'features' => $features,
+            'parentId' => $parentId,
+            'courseType' => 'openCourse',
         ));
     }
 
@@ -152,10 +152,10 @@ class OpenCourseLessonManageController extends BaseController
             $file = false;
 
             if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-                $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
                 $lesson['mediaStatus'] = $file['convertStatus'];
 
-                if ($file['type'] == "document" && $file['convertStatus'] == "none") {
+                if ($file['type'] == 'document' && $file['convertStatus'] == 'none') {
                     $convertHash = $this->getUploadFileService()->reconvertFile(
                         $file['id'],
                         $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
@@ -166,7 +166,7 @@ class OpenCourseLessonManageController extends BaseController
             return $this->render('open-course-manage/lesson-list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson,
-                'file'   => $file
+                'file' => $file,
             ));
         }
 
@@ -177,32 +177,32 @@ class OpenCourseLessonManageController extends BaseController
 
             if (!empty($file)) {
                 $lesson['media'] = array(
-                    'id'     => $file['id'],
+                    'id' => $file['id'],
                     'status' => $file['convertStatus'],
                     'source' => 'self',
-                    'name'   => $file['filename'],
-                    'uri'    => ''
+                    'name' => $file['filename'],
+                    'uri' => '',
                 );
             } else {
                 $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
             }
         } else {
-            $name            = $this->hasSelfMedia($lesson) ? '文件已在课程文件中移除' : $lesson['mediaName'];
+            $name = $this->hasSelfMedia($lesson) ? '文件已在课程文件中移除' : $lesson['mediaName'];
             $lesson['media'] = array(
-                'id'     => 0,
+                'id' => 0,
                 'status' => 'none',
                 'source' => $lesson['mediaSource'],
-                'name'   => $name,
-                'uri'    => $lesson['mediaUri']
+                'name' => $name,
+                'uri' => $lesson['mediaUri'],
             );
         }
 
         list($lesson['minute'], $lesson['second']) = $this->secondsToText($lesson['length']);
 
-        $user       = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
-        $filePath   = "opencourselesson/{$course['id']}";
-        $fileKey    = "{$filePath}/".$randString;
+        $filePath = "opencourselesson/{$course['id']}";
+        $fileKey = "{$filePath}/".$randString;
         $convertKey = $randString;
 
         $lesson['title'] = str_replace(array('"', "'"), array('&#34;', '&#39;'), $lesson['title']);
@@ -210,17 +210,17 @@ class OpenCourseLessonManageController extends BaseController
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
         return $this->render('open-course-manage/lesson-modal.html.twig', array(
-            'course'         => $course,
-            'lesson'         => $lesson,
-            'file'           => $file,
-            'targetType'     => 'opencourselesson',
-            'targetId'       => $course['id'],
-            'filePath'       => $filePath,
-            'fileKey'        => $fileKey,
-            'convertKey'     => $convertKey,
+            'course' => $course,
+            'lesson' => $lesson,
+            'file' => $file,
+            'targetType' => 'opencourselesson',
+            'targetId' => $course['id'],
+            'filePath' => $filePath,
+            'fileKey' => $fileKey,
+            'convertKey' => $convertKey,
             'storageSetting' => $this->setting('storage'),
-            'features'       => $features,
-            'courseType'     => 'openCourse'
+            'features' => $features,
+            'courseType' => 'openCourse',
         ));
     }
 
@@ -233,14 +233,14 @@ class OpenCourseLessonManageController extends BaseController
         $file = false;
 
         if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-            $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
         return $this->render('open-course-manage/lesson-list-item.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
-            'file'   => $file
+            'file' => $file,
         ));
     }
 
@@ -250,17 +250,17 @@ class OpenCourseLessonManageController extends BaseController
 
         $course = $this->getOpenCourseService()->getCourse($courseId);
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
-        $file   = false;
+        $file = false;
 
         if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-            $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
         return $this->render('open-course-manage/lesson-list-item.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
-            'file'   => $file
+            'file' => $file,
         ));
     }
 
@@ -270,6 +270,7 @@ class OpenCourseLessonManageController extends BaseController
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         $this->getOpenCourseService()->deleteLesson($lessonId);
+
         return $this->createJsonResponse(true);
     }
 
@@ -294,19 +295,20 @@ class OpenCourseLessonManageController extends BaseController
             array(
                 'courseId' => $courseId,
                 'lessonId' => $lesson['id'],
-                'source'   => 'opencoursematerial',
-                'type'     => 'openCourse'
+                'source' => 'opencoursematerial',
+                'type' => 'openCourse',
             ),
             array('createdTime' => 'DESC'),
             0, PHP_INT_MAX
         );
+
         return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
-            'course'         => $course,
-            'lesson'         => $lesson,
-            'materials'      => $materials,
+            'course' => $course,
+            'lesson' => $lesson,
+            'materials' => $materials,
             'storageSetting' => $this->setting('storage'),
-            'targetType'     => 'opencoursematerial',
-            'courseType'     => 'openCourse'
+            'targetType' => 'opencoursematerial',
+            'courseType' => 'openCourse',
         ));
     }
 
@@ -326,17 +328,17 @@ class OpenCourseLessonManageController extends BaseController
                 throw $this->createNotFoundException();
             }
 
-            $fields['courseId']    = $course['id'];
-            $fields['lessonId']    = $lessonId;
-            $fields['type']        = 'openCourse';
-            $fields['source']      = 'opencoursematerial';
+            $fields['courseId'] = $course['id'];
+            $fields['lessonId'] = $lessonId;
+            $fields['type'] = 'openCourse';
+            $fields['source'] = 'opencoursematerial';
             $fields['courseSetId'] = 0;
 
             $material = $this->getMaterialService()->uploadMaterial($fields);
 
             return $this->render('open-course-manage/material-list-item.html.twig', array(
                 'material' => $material,
-                'course'   => $course
+                'course' => $course,
             ));
         }
     }
@@ -358,7 +360,7 @@ class OpenCourseLessonManageController extends BaseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
 
         $conditions = array();
-        $type       = $request->query->get('type');
+        $type = $request->query->get('type');
         if (!empty($type)) {
             $conditions['type'] = $type;
         }
@@ -366,7 +368,7 @@ class OpenCourseLessonManageController extends BaseController
         $courseMaterialIds = $this->getMaterialService()->searchFileIds(
             array(
                 'courseId' => $course['id'],
-                'type'     => 'openCourse'
+                'type' => 'openCourse',
             ),
             array('createdTime' => 'DESC'),
             0,
@@ -374,7 +376,7 @@ class OpenCourseLessonManageController extends BaseController
         );
 
         $conditions['ids'] = $courseMaterialIds ? $courseMaterialIds : array(-1);
-        $paginator         = new Paginator(
+        $paginator = new Paginator(
             $request,
             $this->getUploadFileService()->searchFileCount($conditions),
             20
@@ -393,14 +395,14 @@ class OpenCourseLessonManageController extends BaseController
     public function draftCreateAction(Request $request)
     {
         $formData = $request->request->all();
-        $user     = $this->getCurrentUser();
-        $userId   = $user['id'];
+        $user = $this->getCurrentUser();
+        $userId = $user['id'];
         $courseId = $formData['courseId'];
 
         if (isset($formData['lessonId'])) {
             $lessonId = $formData['lessonId'];
         } else {
-            $lessonId             = 0;
+            $lessonId = 0;
             $formData['lessonId'] = 0;
         }
 
@@ -426,6 +428,7 @@ class OpenCourseLessonManageController extends BaseController
     {
         $minutes = intval($value / 60);
         $seconds = $value - $minutes * 60;
+
         return array($minutes, $seconds);
     }
 
@@ -449,7 +452,7 @@ class OpenCourseLessonManageController extends BaseController
         foreach ($files as &$file) {
             $file['updatedTime'] = $file['updatedTime'] ? $file['updatedTime'] : $file['createdTime'];
             $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);
-            $file['fileSize']    = FileToolkit::formatFileSize($file['fileSize']);
+            $file['fileSize'] = FileToolkit::formatFileSize($file['fileSize']);
 
             // Delete some file attributes to redunce the json response size
             unset($file['hashId']);
@@ -462,9 +465,10 @@ class OpenCourseLessonManageController extends BaseController
 
         if (!empty($paginator)) {
             $paginator = Paginator::toArray($paginator);
+
             return $this->createJsonResponse(array(
-                'files'     => $files,
-                'paginator' => $paginator
+                'files' => $files,
+                'paginator' => $paginator,
             ));
         } else {
             return $this->createJsonResponse($files);

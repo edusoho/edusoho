@@ -2,17 +2,17 @@
 
 namespace Biz\File\Dao\Impl;
 
-
 use Biz\File\Dao\UploadFileShareHistoryDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class UploadFileShareHistoryDaoImpl extends GeneralDaoImpl implements UploadFileShareHistoryDao
 {
-	protected $table = 'upload_files_share_history';
+    protected $table = 'upload_files_share_history';
 
     public function findByUserId($sourceUserId)
     {
-    	$sql = "SELECT * FROM {$this->table} WHERE sourceUserId = ? ORDER BY createdTime DESC;";
+        $sql = "SELECT * FROM {$this->table} WHERE sourceUserId = ? ORDER BY createdTime DESC;";
+
         return $this->db()->fetchAll($sql, array($sourceUserId)) ?: array();
     }
 
@@ -23,11 +23,11 @@ class UploadFileShareHistoryDaoImpl extends GeneralDaoImpl implements UploadFile
                 'sourceUserId = :sourceUserId',
                 'targetUserId = :targetUserId',
                 'id = :id',
-                'isActive = :isActive'
+                'isActive = :isActive',
             ),
             'orderbys' => array(
-                'createdTime'
-            )
+                'createdTime',
+            ),
         );
     }
 }

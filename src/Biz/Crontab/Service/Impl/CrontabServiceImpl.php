@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Crontab\Service\Impl;
 
 use Biz\BaseService;
@@ -65,17 +66,17 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         if ($job['cycle'] == 'everyhour') {
             $time = time();
             $this->getJobDao()->update($job['id'], array(
-                'executing'          => '0',
+                'executing' => '0',
                 'latestExecutedTime' => $time,
-                'nextExcutedTime'    => strtotime('+1 hours', $time)
+                'nextExcutedTime' => strtotime('+1 hours', $time),
             ));
         }
         if ($job['cycle'] == 'everyday') {
             $time = time();
             $this->getJobDao()->update($job['id'], array(
-                'executing'          => '0',
+                'executing' => '0',
                 'latestExecutedTime' => $time,
-                'nextExcutedTime'    => strtotime(date('Y-m-d', strtotime('+1 day', $time)).' '.$job['cycleTime'])
+                'nextExcutedTime' => strtotime(date('Y-m-d', strtotime('+1 day', $time)).' '.$job['cycleTime']),
             ));
         }
     }
@@ -91,11 +92,13 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         if (empty($job) || $job['executing']) {
             $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");
             $lock->release($lockName);
+
             return false;
         }
 
         $this->getJobDao()->update($job['id'], array('executing' => 1));
         $lock->release($lockName);
+
         return true;
     }
 
@@ -117,12 +120,14 @@ class CrontabServiceImpl extends BaseService implements CrontabService
                 break;
         }
         $jobs = $this->getJobDao()->search($conditions, $sort, $start, $limit);
+
         return $jobs;
     }
 
     public function searchJobsCount($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
+
         return $this->getJobDao()->count($conditions);
     }
 
@@ -134,7 +139,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             throw $this->createInvalidArgumentException('Field nextExcutedTime Required');
         }
 
-        $job['creatorId']   = $user['id'];
+        $job['creatorId'] = $user['id'];
         $job['createdTime'] = time();
 
         $job = $this->getJobDao()->create($job);
@@ -148,6 +153,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     {
         $deleted = $this->getJobDao()->delete($id);
         $this->refreshNextExecutedTime();
+
         return $deleted;
     }
 
@@ -155,14 +161,15 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     {
         $deleted = $this->getJobDao()->deleteByTargetTypeAndTargetId($targetType, $targetId);
         $this->refreshNextExecutedTime();
+
         return $deleted;
     }
 
     public function scheduleJobs()
     {
         $conditions = array(
-            'executing'       => 0,
-            'nextExcutedTime' => time()
+            'executing' => 0,
+            'nextExcutedTime' => time(),
         );
         $job = $this->getJobDao()->search($conditions, array('nextExcutedTime' => 'ASC'), 0, 1);
 
@@ -177,7 +184,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     protected function refreshNextExecutedTime()
     {
         $conditions = array(
-            'executing' => 0
+            'executing' => 0,
         );
 
         $job = $this->getJobDao()->search($conditions, array('nextExcutedTime' => 'ASC'), 0, 1);
@@ -192,17 +199,17 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     public function getNextExcutedTime()
     {
         $filePath = __DIR__.'/../../../../../app/data/crontab_config.yml';
-        $yaml     = new Yaml();
+        $yaml = new Yaml();
 
         if (!file_exists($filePath)) {
             $content = $yaml->dump(array('crontab_next_executed_time' => 0));
-            $fh      = fopen($filePath, "w");
+            $fh = fopen($filePath, 'w');
             fwrite($fh, $content);
             fclose($fh);
         }
 
         $fileContent = file_get_contents($filePath);
-        $config      = $yaml->parse($fileContent);
+        $config = $yaml->parse($fileContent);
 
         return $config['crontab_next_executed_time'];
     }
@@ -210,9 +217,9 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     public function setNextExcutedTime($nextExcutedTime)
     {
         $filePath = __DIR__.'/../../../../../app/data/crontab_config.yml';
-        $yaml     = new Yaml();
-        $content  = $yaml->dump(array('crontab_next_executed_time' => $nextExcutedTime));
-        $fh       = fopen($filePath, "w");
+        $yaml = new Yaml();
+        $content = $yaml->dump(array('crontab_next_executed_time' => $nextExcutedTime));
+        $fh = fopen($filePath, 'w');
         fwrite($fh, $content);
         fclose($fh);
     }
@@ -236,7 +243,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
     {
         if (!empty($conditions['nextExcutedStartTime']) && !empty($conditions['nextExcutedEndTime'])) {
             $conditions['nextExcutedStartTime'] = strtotime($conditions['nextExcutedStartTime']);
-            $conditions['nextExcutedEndTime']   = strtotime($conditions['nextExcutedEndTime']);
+            $conditions['nextExcutedEndTime'] = strtotime($conditions['nextExcutedEndTime']);
         } else {
             unset($conditions['nextExcutedStartTime']);
             unset($conditions['nextExcutedEndTime']);
