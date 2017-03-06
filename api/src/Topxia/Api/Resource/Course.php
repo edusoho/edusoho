@@ -4,36 +4,64 @@ namespace Topxia\Api\Resource;
 
 use Topxia\Api\Util\TagUtil;
 use AppBundle\Common\ArrayToolkit;
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 class Course extends BaseResource
 {
-    public function filter($res)
+    public function get(Application $app, Request $request, $id)
     {
-        $res['createdTime'] = date('c', $res['createdTime']);
-        $res['updatedTime'] = date('c', $res['updatedTime']);
-        $default            = $this->getSettingService()->get('default', array());
+        $course = $this->getCourseService()->getCourse($id);
+        return $this->filter($course);
+    }
 
-        if (empty($res['smallPicture']) && empty($res['middlePicture']) && empty($res['largePicture'])) {
-            $res['smallPicture']  = !isset($default['course.png']) ? '' : $default['course.png'];
-            $res['middlePicture'] = !isset($default['course.png']) ? '' : $default['course.png'];
-            $res['largePicture']  = !isset($default['course.png']) ? '' : $default['course.png'];
+    public function filter($course)
+    {
+        $course = $this->convertOldFields($course);
+        $course = $this->filledCourseByCourseSet($course);
+        return $course;
+    }
+
+    private function convertOldFields($course)
+    {
+        $course['expiryDay'] = $course['expiryDays'];
+        $course['lessonNum'] = $course['taskNum'];
+        $course['userId'] = $course['creator'];
+        $course['tryLookTime']  = $course['tryLookLength'];
+        $course['createdTime'] = date('c', $course['createdTime']);
+        return $course;
+    }
+
+    private function filledCourseByCourseSet($course)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $copyKeys = array('tags', 'hitNum', 'orgCode', 'orgId',
+            'discount', 'categoryId', 'recommended', 'recommendedSeq', 'recommendedTime',
+            'subtitle', 'discountId', 'smallPicture', 'middlePicture', 'largePicture'
+        );
+        if (!empty($courseSet['cover'])) {
+            $courseSetImg = array(
+                'smallPicture' => $courseSet['cover']['small'],
+                'middlePicture' => $courseSet['cover']['middle'],
+                'largePicture' => $courseSet['cover']['large']
+            );
+            $courseSet = array_merge($courseSet, $courseSetImg);
+        };
+
+        foreach ($copyKeys as $value) {
+            $course[$value] = isset($courseSet[$value]) ? $courseSet[$value] : '';
         }
 
-        foreach (array('smallPicture', 'middlePicture', 'largePicture') as $key) {
-            $res[$key] = $this->getFileUrl($res[$key]);
+        $course['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
+        $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
+
+        if ($course['isDefault'] == 1 && $course['title']) {
+            $course['title'] = $courseSet['title'];
+        } else {
+            $course['title'] = $courseSet['title'] . '-' . $course['title'];
         }
 
-        $res['convNo'] = $this->getConversation($res['id']);
-
-        //temp fix for app, will be remove when new app version published
-        $res['expiryDay'] = '0';
-
-        $res['tags'] = TagUtil::buildTags('course', $res['id']);
-        $res['tags'] = ArrayToolkit::column($res['tags'], 'name');
-
-
-
-        return $res;
+        return $course;
     }
 
     public function simplify($res)
@@ -60,11 +88,22 @@ class Course extends BaseResource
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM:ConversationService');
+        return $this->createService('IM:ConversationService');
     }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
 }

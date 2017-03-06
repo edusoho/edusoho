@@ -248,12 +248,8 @@ abstract class BaseResource
 
     protected function getCurrentUser()
     {
-        return $this->getServiceKernel()->getCurrentUser();
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
+        $biz = $this->getBiz();
+        return $biz['user'];
     }
 
     protected function addError($logName, $message)
@@ -275,6 +271,11 @@ abstract class BaseResource
         $this->getLogger($logName)->debug($message);
     }
 
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
     protected function isDebug()
     {
         return 'dev' == $this->getServiceKernel()->getEnvironment();
@@ -287,7 +288,7 @@ abstract class BaseResource
         }
 
         $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
+        $this->logger->pushHandler(new StreamHandler($this->biz['kernel.logs_dir'].'/service.log', Logger::DEBUG));
 
         return $this->logger;
     }
