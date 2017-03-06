@@ -69,6 +69,7 @@ class Courses extends BaseResource
         $total   = $this->getCourseService()->searchCourseCount($conditions);
         $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, $result['showCount']);
         $courses = $this->filter($courses);
+
         foreach ($courses as $key => $value) {
             $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
             $courses[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
@@ -82,6 +83,12 @@ class Courses extends BaseResource
 
     public function filter($courses)
     {
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        foreach($courses as $course) {
+            $course['courseSet'] = $courseSets[$course['courseSetId']];
+        }
         return $this->multicallFilter('Course', $courses);
     }
 
