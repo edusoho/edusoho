@@ -190,18 +190,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $courseId = $this->getParam('courseId');
 
         if ($user->isLogin() && !empty($courseId)) {
-            $taskResults = $this->controller->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
-            $learnStatuses = array();
-            foreach ($taskResults as $result) {
-                if($result['status'] === 'finish'){
-                    $status = 'finished';
-                }else if($result['status'] === 'start'){
-                    $status = 'learning';
-                }else{
-                    continue;
-                }
-                $learnStatuses[$result['courseTaskId']] = $status;
-            }
+            $learnStatuses = $this->_findUserLearnTaskStatus($courseId);
         } else {
             $learnStatuses = array();
         }
@@ -258,11 +247,11 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $user     = $this->controller->getUser();
         $courseId = $this->getParam("courseId");
 
-        $lessons = $this->controller->getCourseService()->getCourseItems($courseId);
+        $lessons = $this->controller->getCourseService()->findCourseItems($courseId);
         $lessons = $this->controller->filterItems($lessons);
 
         if ($user->isLogin()) {
-            $learnStatuses = $this->controller->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+            $learnStatuses = $this->_findUserLearnTaskStatus($courseId);
         } else {
             $learnStatuses = null;
         }
@@ -284,7 +273,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            array('createdTime', 'DESC'),
+            array('createdTime' => 'DESC'),
             0,
             100
         );
@@ -701,6 +690,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
     private function filterLessons($lessons, $files)
     {
         return array_map(function ($lesson) use ($files) {
+            $lesson = call_user_func_array('array_merge', $lesson['tasks']);
             $lesson['content'] = "";
 
             if (isset($lesson["mediaId"])) {
@@ -711,5 +701,23 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
             return $lesson;
         }, $lessons);
+    }
+
+    private function _findUserLearnTaskStatus($courseId)
+    {
+        $taskResults = $this->controller->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
+        $learnStatuses = array();
+        foreach ($taskResults as $result) {
+            if($result['status'] === 'finish'){
+                $status = 'finished';
+            }else if($result['status'] === 'start'){
+                $status = 'learning';
+            }else{
+                continue;
+            }
+            $learnStatuses[$result['courseTaskId']] = $status;
+        }
+
+        return $learnStatuses;
     }
 }
