@@ -15,7 +15,10 @@ class Marketing {
       onkeyup: false,
       rules: {
         originPrice: {
-          currency: true
+          required: function() {
+            return $("[name=isFree]:checked").val() == 0;
+          },
+          positive_currency: true
         },
         tryLookLength: {
           digits: true
@@ -23,8 +26,9 @@ class Marketing {
         tryLookLimit: {
           digits: true
         }
-      },
+      }
     });
+
     $('.js-task-price-setting').on('click', 'li', function (event) {
       let $li = $(this).toggleClass('open');
       let $input = $li.find('input');
