@@ -73,7 +73,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courses = $this->searchCourses(
             array(
                 'courseSetId' => $courseSetId,
-                'status' => 'published',
+                'status'      => 'published'
             ),
             array('createdTime' => 'ASC'),
             0,
@@ -87,7 +87,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $courses = $this->searchCourses(
             array(
-                'courseSetId' => $courseSetId,
+                'courseSetId' => $courseSetId
             ),
             array('createdTime' => 'ASC'),
             0,
@@ -123,24 +123,24 @@ class CourseServiceImpl extends BaseService implements CourseService
             'expiryEndDate',
             'isDefault',
             'isFree',
-            'serializeMode',
+            'serializeMode'
         ));
 
         $course = $this->validateExpiryMode($course);
 
-        $course['status'] = 'draft';
+        $course['status']  = 'draft';
         $course['creator'] = $this->getCurrentUser()->getId();
         try {
             $this->beginTransaction();
 
-            $created = $this->getCourseDao()->create($course);
+            $created     = $this->getCourseDao()->create($course);
             $currentUser = $this->getCurrentUser();
             //set default teacher
             $this->getMemberService()->setCourseTeachers($created['id'], array(
                 array(
-                    'id' => $currentUser['id'],
-                    'isVisible' => 1,
-                ),
+                    'id'        => $currentUser['id'],
+                    'isVisible' => 1
+                )
             ));
 
             $this->commit();
@@ -163,7 +163,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'expiryDays',
             'expiryStartDate',
             'expiryEndDate',
-            'isDefault',
+            'isDefault'
         ));
         $fields = $this->validateExpiryMode($fields);
 
@@ -188,7 +188,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'audiences',
             'enableFinish',
             'serializeMode',
-            'maxStudentNum',
+            'maxStudentNum'
         ));
 
         if ($course['status'] == 'published') {
@@ -244,7 +244,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'watchLimit',
             'buyExpiryTime',
             'services',
-            'approval',
+            'approval'
         ));
 
         $fields = $this->mergeCourseDefaultAttribute($fields);
@@ -256,7 +256,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($fields['isFree'] == 1) {
-            $fields['price'] = 0;
+            $fields['price']      = 0;
             $fields['vipLevelId'] = 0;
         }
 
@@ -266,6 +266,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (!empty($fields['buyExpiryTime'])) {
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
+        } else {
+            $fields['buyExpiryTime'] = 0;
         }
 
         $newCourse = $this->getCourseDao()->update($id, $fields);
@@ -364,7 +366,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $this->tryManageCourse($id);
         $course = $this->getCourseDao()->update($id, array(
-            'status' => 'published',
+            'status' => 'published'
         ));
         $this->dispatchEvent('course.publish', $course);
     }
@@ -376,7 +378,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         if ($course['expiryMode'] === 'days') {
             $course['expiryStartDate'] = null;
-            $course['expiryEndDate'] = null;
+            $course['expiryEndDate']   = null;
         } elseif ($course['expiryMode'] === 'date') {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
@@ -460,14 +462,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->getMemberDao()->count(array(
             'courseId' => $courseId,
-            'role' => 'student',
+            'role'     => 'student'
         ));
     }
 
     public function countThreadsByCourseId($courseId)
     {
         return $this->getThreadDao()->count(array(
-            'courseId' => $courseId,
+            'courseId' => $courseId
         ));
     }
 
@@ -487,7 +489,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $members = $this->getMemberService()->findTeacherMembersByUserIdAndCourseSetId($user['id'], $courseSetId);
-        $ids = ArrayToolkit::column($members, 'courseId');
+        $ids     = ArrayToolkit::column($members, 'courseId');
         if ($onlyPublished) {
             return $this->findPublicCoursesByIds($ids);
         } else {
@@ -512,7 +514,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!$this->canTakeCourse($course)) {
             throw $this->createAccessDeniedException("You have no access to the course#{$courseId} before you buy it");
         }
-        $user = $this->getCurrentUser();
+        $user   = $this->getCurrentUser();
         $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
 
         return array($course, $member);
@@ -566,13 +568,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (in_array($chapter['type'], array('unit', 'lesson'))) {
             list($chapter['number'], $chapter['parentId']) = $this->getNextNumberAndParentId($chapter['courseId']);
         } else {
-            $chapter['number'] = $this->getNextChapterNumber($chapter['courseId']);
+            $chapter['number']   = $this->getNextChapterNumber($chapter['courseId']);
             $chapter['parentId'] = 0;
         }
 
-        $chapter['seq'] = $this->getNextCourseItemSeq($chapter['courseId']);
+        $chapter['seq']         = $this->getNextCourseItemSeq($chapter['courseId']);
         $chapter['createdTime'] = time();
-        $chapter = $this->getChapterDao()->create($chapter);
+        $chapter                = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
 
@@ -601,7 +603,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function getNextCourseItemSeq($courseId)
     {
         $chapterMaxSeq = $this->getChapterDao()->getChapterMaxSeqByCourseId($courseId);
-        $taskMaxSeq = $this->getTaskService()->getMaxSeqByCourseId($courseId);
+        $taskMaxSeq    = $this->getTaskService()->getMaxSeqByCourseId($courseId);
 
         return ($chapterMaxSeq > $taskMaxSeq ? $chapterMaxSeq : $taskMaxSeq) + 1;
     }
@@ -653,7 +655,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function getChapter($courseId, $chapterId)
     {
         $chapter = $this->getChapterDao()->get($chapterId);
-        $course = $this->getCourseDao()->get($courseId);
+        $course  = $this->getCourseDao()->get($courseId);
         if ($course['id'] == $chapter['courseId']) {
             return $chapter;
         }
@@ -684,10 +686,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                 continue;
             }
 
-            $course = $courses[$member['courseId']];
-            $course['memberIsLearned'] = 0;
+            $course                     = $courses[$member['courseId']];
+            $course['memberIsLearned']  = 0;
             $course['memberLearnedNum'] = $member['learnedNum'];
-            $sortedCourses[] = $course;
+            $sortedCourses[]            = $course;
         }
 
         return $sortedCourses;
@@ -703,7 +705,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findUserLearnedCourses($userId, $start, $limit, $filters = array())
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
-        $members = $this->getMemberDao()->findLearnedMembers($conditions, $start, $limit);
+        $members    = $this->getMemberDao()->findLearnedMembers($conditions, $start, $limit);
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
         $courses = ArrayToolkit::index($courses, 'id');
@@ -715,10 +717,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                 continue;
             }
 
-            $course = $courses[$member['courseId']];
-            $course['memberIsLearned'] = 1;
+            $course                     = $courses[$member['courseId']];
+            $course['memberIsLearned']  = 1;
             $course['memberLearnedNum'] = $member['learnedNum'];
-            $sortedCourses[] = $course;
+            $sortedCourses[]            = $course;
         }
 
         return $sortedCourses;
@@ -767,7 +769,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function findTeachingCoursesByUserId($userId, $onlyPublished = true)
     {
-        $members = $this->getMemberService()->findTeacherMembersByUserId($userId);
+        $members   = $this->getMemberService()->findTeacherMembersByUserId($userId);
         $courseIds = ArrayToolkit::column($members, 'courseId');
         if ($onlyPublished) {
             $courses = $this->findPublicCoursesByIds($courseIds);
@@ -789,15 +791,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * @param int $userId
-     *
+     * @param  int     $userId
      * @return mixed
      */
     public function findLearnCoursesByUserId($userId)
     {
-        $members = $this->getMemberService()->findStudentMemberByUserId($userId);
+        $members   = $this->getMemberService()->findStudentMemberByUserId($userId);
         $courseIds = ArrayToolkit::column($members, 'courseId');
-        $courses = $this->findPublicCoursesByIds($courseIds);
+        $courses   = $this->findPublicCoursesByIds($courseIds);
 
         return $courses;
     }
@@ -809,8 +810,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $conditions = array(
-            'status' => 'published',
-            'courseIds' => $ids,
+            'status'    => 'published',
+            'courseIds' => $ids
         );
         $count = $this->searchCourseCount($conditions);
 
@@ -854,7 +855,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($course['parentId'] > 0) {
             $classrooms = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
 
-            $isTeacher = $this->getClassroomService()->isClassroomTeacher($classrooms[0]['classroomId'], $user['id']);
+            $isTeacher     = $this->getClassroomService()->isClassroomTeacher($classrooms[0]['classroomId'], $user['id']);
             $isHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classrooms[0]['classroomId'], $user['id']);
             if ($isTeacher || $isHeadTeacher) {
                 return true;
@@ -876,12 +877,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $userIds = ArrayToolkit::column($members, 'userId');
-        $user = $this->getUserService()->findUsersByIds($userIds);
+        $user    = $this->getUserService()->findUsersByIds($userIds);
         $userMap = ArrayToolkit::index($user, 'id');
         foreach ($members as $index => $member) {
-            $member['nickname'] = $userMap[$member['userId']]['nickname'];
+            $member['nickname']    = $userMap[$member['userId']]['nickname'];
             $member['smallAvatar'] = $userMap[$member['userId']]['smallAvatar'];
-            $members[$index] = $member;
+            $members[$index]       = $member;
         }
 
         return $members;
@@ -899,49 +900,49 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (isset($conditions['date'])) {
             $dates = array(
-                'yesterday' => array(
+                'yesterday'  => array(
                     strtotime('yesterday'),
-                    strtotime('today'),
+                    strtotime('today')
                 ),
-                'today' => array(
+                'today'      => array(
                     strtotime('today'),
-                    strtotime('tomorrow'),
+                    strtotime('tomorrow')
                 ),
-                'this_week' => array(
+                'this_week'  => array(
                     strtotime('Monday this week'),
-                    strtotime('Monday next week'),
+                    strtotime('Monday next week')
                 ),
-                'last_week' => array(
+                'last_week'  => array(
                     strtotime('Monday last week'),
-                    strtotime('Monday this week'),
+                    strtotime('Monday this week')
                 ),
-                'next_week' => array(
+                'next_week'  => array(
                     strtotime('Monday next week'),
-                    strtotime('Monday next week', strtotime('Monday next week')),
+                    strtotime('Monday next week', strtotime('Monday next week'))
                 ),
                 'this_month' => array(
                     strtotime('first day of this month midnight'),
-                    strtotime('first day of next month midnight'),
+                    strtotime('first day of next month midnight')
                 ),
                 'last_month' => array(
                     strtotime('first day of last month midnight'),
-                    strtotime('first day of this month midnight'),
+                    strtotime('first day of this month midnight')
                 ),
                 'next_month' => array(
                     strtotime('first day of next month midnight'),
-                    strtotime('first day of next month midnight', strtotime('first day of next month midnight')),
-                ),
+                    strtotime('first day of next month midnight', strtotime('first day of next month midnight'))
+                )
             );
 
             if (array_key_exists($conditions['date'], $dates)) {
                 $conditions['startTimeGreaterThan'] = $dates[$conditions['date']][0];
-                $conditions['startTimeLessThan'] = $dates[$conditions['date']][1];
+                $conditions['startTimeLessThan']    = $dates[$conditions['date']][1];
                 unset($conditions['date']);
             }
         }
 
         if (isset($conditions['creator']) && !empty($conditions['creator'])) {
-            $user = $this->getUserService()->getUserByNickname($conditions['creator']);
+            $user                 = $this->getUserService()->getUserByNickname($conditions['creator']);
             $conditions['userId'] = $user ? $user['id'] : -1;
             unset($conditions['creator']);
         }
@@ -950,7 +951,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $conditions['categoryIds'] = array();
 
             if (!empty($conditions['categoryId'])) {
-                $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+                $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
                 $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
             }
 
@@ -958,7 +959,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if (isset($conditions['nickname'])) {
-            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $user                 = $this->getUserService()->getUserByNickname($conditions['nickname']);
             $conditions['userId'] = $user ? $user['id'] : -1;
             unset($conditions['nickname']);
         }
@@ -969,7 +970,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function searchCourses($conditions, $sort, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
-        $orderBy = $this->_prepareCourseOrderBy($sort);
+        $orderBy    = $this->_prepareCourseOrderBy($sort);
 
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
@@ -1155,7 +1156,6 @@ class CourseServiceImpl extends BaseService implements CourseService
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
-     *
      * @return array
      */
     protected function mergeCourseDefaultAttribute($course)
@@ -1170,7 +1170,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $default = array(
             'tryLookable' => 0,
-            'originPrice' => 0.00,
+            'originPrice' => 0.00
         );
 
         return array_merge($default, $course);
@@ -1181,15 +1181,14 @@ class CourseServiceImpl extends BaseService implements CourseService
      *
      * @param  $userId
      * @param  $filters
-     *
      * @return array
      */
     protected function prepareUserLearnCondition($userId, $filters)
     {
-        $filters = ArrayToolkit::parts($filters, array('type', 'classroomId', 'locked'));
+        $filters    = ArrayToolkit::parts($filters, array('type', 'classroomId', 'locked'));
         $conditions = array(
             'm.userId' => $userId,
-            'm.role' => 'student',
+            'm.role'   => 'student'
         );
         if (!empty($filters['type'])) {
             $conditions['c.type'] = $filters['type'];
