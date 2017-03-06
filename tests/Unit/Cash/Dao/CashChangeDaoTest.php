@@ -27,7 +27,7 @@ class CashChangeDaoTest extends BaseDaoTestCase
     {
         return array(
             'userId' => 1,
-            'amount' => 1
+            'amount' => 1,
             );
     }
 }

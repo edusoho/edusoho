@@ -1,7 +1,6 @@
 <?php
+
 namespace Biz\Article\Event;
-
-
 
 use Biz\Article\Service\ArticleService;
 use Biz\Taxonomy\TagOwnerManager;
@@ -11,13 +10,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ArticleEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
-
     public static function getSubscribedEvents()
     {
         return array(
-            'article.liked'       => 'onArticleLike',
-            'article.delete'      => 'onArticleDelete',
-            'article.cancelLike'  => 'onArticleCancelLike',
+            'article.liked' => 'onArticleLike',
+            'article.delete' => 'onArticleDelete',
+            'article.cancelLike' => 'onArticleCancelLike',
             'article.post_create' => 'onPostCreate',
             'article.post_delete' => 'onPostDelete',
         );

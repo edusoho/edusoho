@@ -3,7 +3,7 @@
 namespace Tests\Unit\User;
 
 use AppBundle\Common\SimpleValidator;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 // TODO
 
@@ -14,9 +14,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
         $this->assertEquals($user['email'], 'test@edusoho.com');
     }
@@ -24,12 +24,12 @@ class AuthServiceTest extends BaseTestCase
     public function testRegisterWithOtherType()
     {
         $makeToken = $this->getUserService()->makeToken('discuz');
-        $getToken  = $this->getUserService()->getToken('discuz', $makeToken);
-        $user      = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+        $getToken = $this->getUserService()->getToken('discuz', $makeToken);
+        $user = $this->getAuthService()->register(array(
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
             'password' => '123456',
-            'token'    => $getToken
+            'token' => $getToken,
         ), 'discuz');
         $this->assertEquals($user['email'], 'test@edusoho.com');
     }
@@ -56,9 +56,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
 
         $this->getAuthService()->changeNickname($user['id'], 'newName');
@@ -71,9 +71,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
 
         $this->getAuthService()->changeEmail($user['id'], '123456', 'newemail@edusoho.com');
@@ -86,9 +86,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
 
         $this->getAuthService()->changePassword($user['id'], '123456', '654321');
@@ -101,9 +101,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
 
         $this->getAuthService()->changePayPassword($user['id'], '123456', '930919');
@@ -116,9 +116,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
 
         $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], '930919');
@@ -131,9 +131,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'email_or_mobile');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'password'      => '123456',
+            'password' => '123456',
             'emailOrMobile' => '18989492142',
-            'nickname'      => 'testuser'
+            'nickname' => 'testuser',
         ));
         $this->assertNotNull($user);
         $this->getSettingService()->delete('auth');
@@ -144,7 +144,6 @@ class AuthServiceTest extends BaseTestCase
         $result = $this->getAuthService()->checkUserName('yyy');
         $this->assertEquals('success', $result[0]);
         $this->assertEquals('', $result[1]);
-
     }
 
     public function testCheckUserNameWithExistName()
@@ -152,9 +151,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
 
         $this->getAuthService()->checkUserName('test');
@@ -180,9 +179,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
 
         $this->getAuthService()->checkEmail('test@edusoho.com');
@@ -203,14 +202,13 @@ class AuthServiceTest extends BaseTestCase
         $this->getSettingService()->set('auth', $value);
         $this->getAuthService()->register(array(
             'password' => '123456',
-            'mobile'   => '18989492142',
-            'nickname' => 'test'
+            'mobile' => '18989492142',
+            'nickname' => 'test',
         ));
         $result = $this->getAuthService()->checkMobile('18989492142');
         // $this->assertEquals('error_duplicate', $result[0]);
         // $this->assertEquals('手机号码已存在!', $result[1]);
         $this->getSettingService()->delete('auth');
-
     }
 
     public function testCheckEmailOrMobileWithUnexistEmailOrMobile()
@@ -225,9 +223,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'email_or_mobile');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'password'      => '123456',
+            'password' => '123456',
             'emailOrMobile' => '18989492142',
-            'nickname'      => 'test'
+            'nickname' => 'test',
         ));
         $result = $this->getAuthService()->checkEmailOrMobile('18989492142');
         // $this->assertEquals('error_duplicate', $result[0]);
@@ -240,9 +238,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'email_or_mobile');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'password'      => '123456',
+            'password' => '123456',
             'emailOrMobile' => 'test@edusoho.com',
-            'nickname'      => 'test'
+            'nickname' => 'test',
         ));
         $result = $this->getAuthService()->checkEmailOrMobile('test@edusoho.com');
         // $this->assertEquals('error_duplicate', $result[0]);
@@ -258,9 +256,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
 
         $result = $this->getAuthService()->checkPassword($user['id'], '123456');
@@ -272,9 +270,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '12456'
+            'password' => '12456',
         ));
 
         $result = $this->getAuthService()->checkPassword($user['id'], '123456');
@@ -286,9 +284,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
         $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], '123456');
         $result = $this->getAuthService()->checkPayPassword($user['id'], '123456');
@@ -300,14 +298,13 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
         $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], '123456');
         $result = $this->getAuthService()->checkPayPassword($user['id'], '654321');
         $this->assertFalse($result);
-
     }
 
     /* 以下的带有partner的都需要访问Discuz等的API，默认default 返回false */
@@ -316,9 +313,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
 
         $result = $this->getAuthService()->checkPartnerLoginById($user['id'], '123456');
@@ -330,9 +327,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
 
         $result = $this->getAuthService()->checkPartnerLoginByNickname($user['id'], 'test');
@@ -344,9 +341,9 @@ class AuthServiceTest extends BaseTestCase
         $value = array('register_mode' => 'default');
         $this->getSettingService()->set('auth', $value);
         $user = $this->getAuthService()->register(array(
-            'email'    => 'test@edusoho.com',
+            'email' => 'test@edusoho.com',
             'nickname' => 'test',
-            'password' => '123456'
+            'password' => '123456',
         ));
 
         $result = $this->getAuthService()->checkPartnerLoginByEmail($user['id'], 'test@edusoho.com');
@@ -360,7 +357,6 @@ class AuthServiceTest extends BaseTestCase
         $result = $this->getAuthService()->isRegisterEnabled();
         $this->assertTrue($result);
         $this->getSettingService()->delete('auth');
-
     }
 
     public function testIsRegisterEnabledWithOtherTypeByFalse()
@@ -370,7 +366,6 @@ class AuthServiceTest extends BaseTestCase
         $result = $this->getAuthService()->isRegisterEnabled();
         $this->assertFalse($result);
         $this->getSettingService()->delete('auth');
-
     }
 
     public function testIsRegisterEnabledWithDefaultType()

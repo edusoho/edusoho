@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -20,11 +21,11 @@ interface UserService
 
     public function countUsersByMobileNotEmpty();
 
-    public function countUserHasMobile($isVerified=false);
+    public function countUserHasMobile($isVerified = false);
 
-    public function findUsersHasMobile($start, $limit, $isVerified=false);
+    public function findUsersHasMobile($start, $limit, $isVerified = false);
 
-    public function findUnlockedUserMobilesByUserIds($userIds, $needVerified=false);
+    public function findUnlockedUserMobilesByUserIds($userIds, $needVerified = false);
 
     public function getUserByEmail($email);
 
@@ -39,10 +40,12 @@ interface UserService
     public function setEmailVerified($userId);
 
     public function changeUserOrg($userId, $orgCode);
+
     /**
-     * [batchUpdateOrg 对单个或者多个用户更改组织机构]
+     * [batchUpdateOrg 对单个或者多个用户更改组织机构].
+     *
      * @param [String  |        Arrary] $userIds [用户Id]
-     * @param [String] $orgCode [组织机构内部编码]
+     * @param [String]                  $orgCode [组织机构内部编码]
      */
     public function batchUpdateOrg($userIds, $orgCode);
 
@@ -87,29 +90,31 @@ interface UserService
     /**
      * 变更原始密码
      *
-     * @param [integer] $id       用户ID
+     * @param [integer] $id          用户ID
      * @param [string]  $rawPassword 新原始密码
      */
     public function changeRawPassword($id, $rawPassword);
 
     /**
-     * 校验密码是否正确
+     * 校验密码是否正确.
      *
-     * @param  [integer] $id                                                   用户ID
-     * @param  [string]  $password                                             密码
-     * @return [boolean] 密码正确，返回true；错误，返回false。
+     * @param [integer] $id       用户ID
+     * @param [string]  $password 密码
+     *
+     * @return [boolean] 密码正确，返回true；错误，返回false
      */
     public function verifyPassword($id, $password);
 
     /**
-     * 用户注册
+     * 用户注册.
      *
      * 当type为default时，表示用户从自身网站注册。
      * 当type为weibo、qq、renren时，表示用户从第三方网站连接，允许注册信息没有密码。
      *
-     * @param  [type] $registration  用户注册信息
-     * @param  string $type          注册类型
-     * @return array  用户信息
+     * @param [type] $registration 用户注册信息
+     * @param string $type         注册类型
+     *
+     * @return array 用户信息
      */
     public function register($registration, $type = 'default');
 
@@ -168,26 +173,24 @@ interface UserService
     public function findLatestPromotedTeacher($start, $limit);
 
     /**
-     * 更新用户的计数器
+     * 更新用户的计数器.
      *
-     * @param integer $number 用户ID
-     * @param string  $name   计数器名称
-     * @param integer $number 计数器增减的数量
+     * @param int    $number 用户ID
+     * @param string $name   计数器名称
+     * @param int    $number 计数器增减的数量
      */
     public function waveUserCounter($userId, $name, $number);
 
     /**
-     * 清零用户的计数器
+     * 清零用户的计数器.
      *
-     * @param integer $number 用户ID
-     * @param string  $name   计数器名称
+     * @param int    $number 用户ID
+     * @param string $name   计数器名称
      */
     public function clearUserCounter($userId, $name);
 
     /**
-     *
-     * 绑定第三方登录的帐号到系统中的用户帐号
-     *
+     * 绑定第三方登录的帐号到系统中的用户帐号.
      */
     public function bindUser($type, $fromId, $toId, $token);
 
@@ -202,9 +205,8 @@ interface UserService
     public function unBindUserByTypeAndToId($type, $toId);
 
     /**
-     * 用户之间相互关注
+     * 用户之间相互关注.
      */
-
     public function follow($fromId, $toId);
 
     public function unFollow($fromId, $toId);
@@ -229,13 +231,14 @@ interface UserService
     public function findFriendCount($userId);
 
     /**
-     * 过滤得到用户关注中的用户ID列表
+     * 过滤得到用户关注中的用户ID列表.
      *
      * 此方法用于给出一批用户ID($followingIds)，找出哪些用户ID，是已经被用户($userId)关注了的。
      *
-     * @param  integer $userId                               关注者的用户ID
-     * @param  array   $followingIds                         被关注者的用户ID列表
-     * @return array   用户关注中的用户ID列表。
+     * @param int   $userId       关注者的用户ID
+     * @param array $followingIds 被关注者的用户ID列表
+     *
+     * @return array 用户关注中的用户ID列表
      */
     public function filterFollowingIds($userId, array $followingIds);
 
@@ -256,12 +259,12 @@ interface UserService
     public function dropFieldData($fieldName);
 
     /**
-     * 解析文本中@(提)到的用户
+     * 解析文本中@(提)到的用户.
      */
     public function parseAts($text);
 
     /**
-     *  邀请码相关
+     *  邀请码相关.
      */
     public function getUserByInviteCode($inviteCode);
 
@@ -270,9 +273,8 @@ interface UserService
     public function createInviteCode($userId);
 
     /**
-     * 用户授权
+     * 用户授权.
      */
-
     public function getUserPayAgreement($id);
 
     public function getUserPayAgreementByUserIdAndBankAuth($userId, $bankAuth);

@@ -8,7 +8,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Role\Util\PermissionBuilder;
 
-class  RoleServiceTest extends BaseTestCase
+class RoleServiceTest extends BaseTestCase
 {
     public function testrefreshRoles()
     {
@@ -16,8 +16,7 @@ class  RoleServiceTest extends BaseTestCase
         $permissionTree = Tree::buildWithArray($permissions, null, 'code', 'parent');
         $superAdminPermissions = ArrayToolkit::column($permissions, 'code');
 
-
-        $adminForbiddenRootPermissions   = array(
+        $adminForbiddenRootPermissions = array(
             'admin_user_avatar',
             'admin_user_change_password',
             'admin_my_cloud',
@@ -26,19 +25,19 @@ class  RoleServiceTest extends BaseTestCase
             'admin_edu_cloud_search_setting',
             'admin_setting_cloud_attachment',
             'admin_setting_cloud',
-            'admin_system'
+            'admin_system',
         );
 
         $adminForbiddenPermissions = array();
         foreach ($adminForbiddenRootPermissions as $rootPermission) {
-            $adminRoleTree = $permissionTree->find(function ($permissionNode) use ($rootPermission){
+            $adminRoleTree = $permissionTree->find(function ($permissionNode) use ($rootPermission) {
                 return $permissionNode->data['code'] === $rootPermission;
             });
             $adminForbiddenPermissions = array_merge($adminRoleTree->column('code'), $adminForbiddenPermissions);
         }
         $adminPermissions = array_diff($superAdminPermissions, $adminForbiddenPermissions);
 
-        $teacherRoleTree = $permissionTree->find(function ($tree){
+        $teacherRoleTree = $permissionTree->find(function ($tree) {
             return $tree->data['code'] === 'web';
         });
 
@@ -63,14 +62,14 @@ class  RoleServiceTest extends BaseTestCase
             'name' => '管123理员',
             'code' => 'ADMIN',
             'createdUserId' => 1,
-            'data' => array()
+            'data' => array(),
         );
 
         $role2 = array(
             'name' => '用123户',
             'code' => 'USER',
             'createdUserId' => 1,
-            'data' => array()
+            'data' => array(),
         );
 
         $this->getRoleDao()->create($role1);

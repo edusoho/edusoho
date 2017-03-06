@@ -89,38 +89,38 @@ class CourseNoteDaoTest extends BaseDaoTestCase
         $testConditions = array(
             array(
                 'condition' => array(
-                    'courseId' => 1
+                    'courseId' => 1,
                 ),
                 'expectedResults' => array($expected[0], $expected[2], $expected[3], $expected[4], $expected[5]),
-                'expectedCount' => 5
+                'expectedCount' => 5,
             ),
             array(
                 'condition' => array(
-                    'userId' => 2
+                    'userId' => 2,
                 ),
                 'expectedResults' => array($expected[1], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array(
-                    'taskId' => 2
+                    'taskId' => 2,
                 ),
                 'expectedResults' => array($expected[1], $expected[2], $expected[3]),
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array(
-                    'content' => 'i'
+                    'content' => 'i',
                 ),
                 'expectedResults' => array($expected[1], $expected[2], $expected[3], $expected[4]),
-                'expectedCount' => 4
+                'expectedCount' => 4,
             ),
             array(
                 'condition' => array(
-                    'courseSetId' => 2
+                    'courseSetId' => 2,
                 ),
                 'expectedResults' => array($expected[1], $expected[2], $expected[3], $expected[4], $expected[5]),
-                'expectedCount' => 5
+                'expectedCount' => 5,
             ),
         );
     }
@@ -135,7 +135,7 @@ class CourseNoteDaoTest extends BaseDaoTestCase
             'length' => 4,
             'likeNum' => 1,
             'status' => 1,
-            'courseSetId' => 1
+            'courseSetId' => 1,
         );
     }
 }

@@ -10,7 +10,8 @@ interface IpBlacklistService
     const FAILED_DURATION = 3600;
 
     /**
-     * 累计IP的非法访问次数。例：密码输错次数
+     * 累计IP的非法访问次数。例：密码输错次数.
+     *
      * @param string $ip IP
      */
     public function increaseIpFailedCount($ip);
@@ -18,5 +19,4 @@ interface IpBlacklistService
     public function getIpFailedCount($ip);
 
     public function clearFailedIp($ip);
-
 }

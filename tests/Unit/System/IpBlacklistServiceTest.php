@@ -1,7 +1,8 @@
 <?php
+
 namespace Tests\Unit\System;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class IpBlacklistServiceTest extends BaseTestCase
 {
@@ -13,7 +14,7 @@ class IpBlacklistServiceTest extends BaseTestCase
 
     public function testGetIpFailedCount()
     {
-        $ip      = '192.111.22.33';
+        $ip = '192.111.22.33';
         $counter = $this->getIpBlacklistService()->getIpFailedCount($ip);
         $this->assertEquals($counter, 0);
         $counter = $this->getIpBlacklistService()->increaseIpFailedCount($ip);
@@ -22,7 +23,7 @@ class IpBlacklistServiceTest extends BaseTestCase
 
     public function testClearFailedIp()
     {
-        $ip      = '192.111.22.33';
+        $ip = '192.111.22.33';
         $counter = $this->getIpBlacklistService()->increaseIpFailedCount($ip);
         $this->assertEquals($counter, 1);
         $this->getIpBlacklistService()->clearFailedIp($ip);

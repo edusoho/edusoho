@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Role\Dao;
 
 interface RoleDao
@@ -8,5 +9,4 @@ interface RoleDao
     public function getByName($name);
 
     public function findByCodes($codes);
-
 }

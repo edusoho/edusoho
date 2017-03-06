@@ -13,33 +13,29 @@ abstract class Activity
 {
     private $biz;
 
-    /**
-     * @inheritdoc
-     */
     public function create($fields)
     {
     }
 
     /**
      * @param int   $targetId
-     * @param array $fields     fields to update
-     * @param array $activity   existed activity
+     * @param array $fields   fields to update
+     * @param array $activity existed activity
      */
     public function update($targetId, &$fields, $activity)
     {
     }
 
-    /**
-     * @inheritdoc
-     */
     public function delete($targetId)
     {
     }
 
     /**
-     * 实现Activity的复制，这里仅需要处理Activity的附属信息
-     * @param  array   $activity 要复制的Activity
-     * @param  array   $config   : newLiveroom => true/false // 是否新建直播教室（对于直播任务）
+     * 实现Activity的复制，这里仅需要处理Activity的附属信息.
+     *
+     * @param array $activity 要复制的Activity
+     * @param array $config   : newLiveroom => true/false // 是否新建直播教室（对于直播任务）
+     *
      * @return mixed
      */
     public function copy($activity, $config = array())
@@ -48,9 +44,11 @@ abstract class Activity
     }
 
     /**
-     * 实现Activity附属信息的同步
-     * @param  array   $sourceActivity 源activity
-     * @param  array   $activity       目标activity
+     * 实现Activity附属信息的同步.
+     *
+     * @param array $sourceActivity 源activity
+     * @param array $activity       目标activity
+     *
      * @return mixed
      */
     public function sync($sourceActivity, $activity)
@@ -68,9 +66,6 @@ abstract class Activity
         return false;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function get($targetId)
     {
         return array();
@@ -87,7 +82,8 @@ abstract class Activity
     abstract protected function registerListeners();
 
     /**
-     * @param  string     $eventName
+     * @param string $eventName
+     *
      * @return Listener
      */
     final public function getListener($eventName)
@@ -97,10 +93,10 @@ abstract class Activity
             return null;
         }
         $reflection = new \ReflectionClass($map[$eventName]);
-        $listener   = $reflection->newInstanceArgs(array($this->getBiz()));
+        $listener = $reflection->newInstanceArgs(array($this->getBiz()));
 
         if (!$listener instanceof Listener) {
-            throw new UnexpectedValueException("listener class must be Listener Derived Class");
+            throw new UnexpectedValueException('listener class must be Listener Derived Class');
         }
 
         return $listener;

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
@@ -17,22 +18,24 @@ class TaskManageController extends BaseController
 {
     public function createAction(Request $request, $courseId)
     {
-        $course     = $this->tryManageCourse($courseId);
+        $course = $this->tryManageCourse($courseId);
         $categoryId = $request->query->get('categoryId');
-        $chapterId  = $request->query->get('chapterId');
-        $taskMode   = $request->query->get('type');
+        $chapterId = $request->query->get('chapterId');
+        $taskMode = $request->query->get('type');
         if ($request->isMethod('POST')) {
             $task = $request->request->all();
+
             return $this->createTask($request, $task, $course);
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
         return $this->render('task-manage/modal.html.twig', array(
-            'mode'       => 'create',
-            'course'     => $course,
-            'courseSet'  => $courseSet,
+            'mode' => 'create',
+            'course' => $course,
+            'courseSet' => $courseSet,
             'categoryId' => $categoryId,
-            'chapterId'  => $chapterId,
-            'taskMode'   => $taskMode
+            'chapterId' => $chapterId,
+            'taskMode' => $taskMode,
         ));
     }
 
@@ -41,10 +44,11 @@ class TaskManageController extends BaseController
         if (!$course['isDefault']) {
             return $task;
         }
-        $chapter          = $this->getChapterDao()->get($task['categoryId']);
-        $tasks            = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
+        $chapter = $this->getChapterDao()->get($task['categoryId']);
+        $tasks = $this->getTaskService()->findTasksFetchActivityByChapterId($chapter['id']);
         $chapter['tasks'] = $tasks;
-        $chapter['mode']  = $task['mode'];
+        $chapter['mode'] = $task['mode'];
+
         return $chapter;
     }
 
@@ -63,19 +67,20 @@ class TaskManageController extends BaseController
         $mode = $request->query->get('mode');
         if ($request->isMethod('POST')) {
             $fileId = $request->request->get('fileId');
-            $file   = $this->getUploadFileService()->getFile($fileId);
+            $file = $this->getUploadFileService()->getFile($fileId);
 
             if (!in_array($file['type'], array('document', 'video', 'audio', 'ppt', 'flash'))) {
                 throw $this->createAccessDeniedException('不支持的文件类型');
             }
 
-            $course       = $this->getCourseService()->getCourse($courseId);
-            $task         = $this->createTaskByFileAndCourse($file, $course);
+            $course = $this->getCourseService()->getCourse($courseId);
+            $task = $this->createTaskByFileAndCourse($file, $course);
             $task['mode'] = $mode;
+
             return $this->createTask($request, $task, $course);
         }
 
-        $token  = $request->query->get('token');
+        $token = $request->query->get('token');
         $parser = new UploaderToken();
         $params = $parser->parse($token);
 
@@ -84,30 +89,31 @@ class TaskManageController extends BaseController
         }
 
         return $this->render('course-manage/batch-create/batch-create-modal.html.twig', array(
-            'token'      => $token,
+            'token' => $token,
             'targetType' => $params['targetType'],
-            'courseId'   => $courseId,
-            'mode'       => $mode
+            'courseId' => $courseId,
+            'mode' => $mode,
         ));
     }
 
     private function createTaskByFileAndCourse($file, $course)
     {
         $task = array(
-            'mediaType'     => $file['type'],
-            'fromCourseId'  => $course['id'],
+            'mediaType' => $file['type'],
+            'fromCourseId' => $course['id'],
             'courseSetType' => 'normal',
-            'media'         => json_encode(array('source' => 'self', 'id' => $file['id'], 'name' => $file['filename'])),
-            'mediaId'       => $file['id'],
-            'type'          => $file['type'],
-            'length'        => $file['length'],
-            'title'         => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
-            'ext'           => array('mediaSource' => 'self', 'mediaId' => $file['id'])
+            'media' => json_encode(array('source' => 'self', 'id' => $file['id'], 'name' => $file['filename'])),
+            'mediaId' => $file['id'],
+            'type' => $file['type'],
+            'length' => $file['length'],
+            'title' => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
+            'ext' => array('mediaSource' => 'self', 'mediaId' => $file['id']),
         );
         if ($file['type'] == 'document') {
-            $task['type']      = 'doc';
+            $task['type'] = 'doc';
             $task['mediaType'] = 'doc';
         }
+
         return $task;
     }
 
@@ -120,8 +126,8 @@ class TaskManageController extends BaseController
      */
     private function createTask(Request $request, $task, $course)
     {
-        $task['_base_url']       = $request->getSchemeAndHttpHost();
-        $task['fromUserId']      = $this->getUser()->getId();
+        $task['_base_url'] = $request->getSchemeAndHttpHost();
+        $task['fromUserId'] = $this->getUser()->getId();
         $task['fromCourseSetId'] = $course['courseSetId'];
 
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
@@ -129,7 +135,7 @@ class TaskManageController extends BaseController
         if ($course['isDefault'] && isset($task['mode']) && $task['mode'] != 'lesson') {
             return $this->createJsonResponse(array(
                 'append' => false,
-                'html'   => ''
+                'html' => '',
             ));
         }
 
@@ -137,19 +143,19 @@ class TaskManageController extends BaseController
 
         $html = $this->renderView($this->getTaskItemTemplate($course), array(
             'course' => $course,
-            'task'   => $task
+            'task' => $task,
         ));
 
         return $this->createJsonResponse(array(
             'append' => true,
-            'html'   => $html
+            'html' => $html,
         ));
     }
 
     public function updateAction(Request $request, $courseId, $id)
     {
-        $course   = $this->tryManageCourse($courseId);
-        $task     = $this->getTaskService()->getTask($id);
+        $course = $this->tryManageCourse($courseId);
+        $task = $this->getTaskService()->getTask($id);
         $taskMode = $request->query->get('type');
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在计划中');
@@ -158,20 +164,21 @@ class TaskManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $task = $request->request->all();
             $this->getTaskService()->updateTask($id, $this->parseTimeFields($task));
+
             return $this->createJsonResponse(array('append' => false, 'html' => ''));
         }
 
-        $activity  = $this->getActivityService()->getActivity($task['activityId']);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        return $this->render('task-manage/modal.html.twig', array(
-            'mode'        => 'edit',
-            'currentType' => $activity['mediaType'],
-            'course'      => $course,
-            'courseSet'   => $courseSet,
-            'task'        => $task,
-            'taskMode'    => $taskMode
-        ));
 
+        return $this->render('task-manage/modal.html.twig', array(
+            'mode' => 'edit',
+            'currentType' => $activity['mediaType'],
+            'course' => $course,
+            'courseSet' => $courseSet,
+            'task' => $task,
+            'taskMode' => $taskMode,
+        ));
     }
 
     public function publishAction(Request $request, $courseId, $id)
@@ -196,16 +203,18 @@ class TaskManageController extends BaseController
 
         if ($mode === 'create') {
             $type = $request->query->get('type');
+
             return $this->forward('AppBundle:Activity/Activity:create', array(
                 'courseId' => $courseId,
-                'type'     => $type
+                'type' => $type,
             ));
         } else {
-            $id   = $request->query->get('id');
+            $id = $request->query->get('id');
             $task = $this->getTaskService()->getTask($id);
+
             return $this->forward('AppBundle:Activity/Activity:update', array(
-                'id'       => $task['activityId'],
-                'courseId' => $courseId
+                'id' => $task['activityId'],
+                'courseId' => $courseId,
             ));
         }
     }
@@ -213,12 +222,13 @@ class TaskManageController extends BaseController
     public function deleteAction(Request $request, $courseId, $taskId)
     {
         $course = $this->tryManageCourse($courseId);
-        $task   = $this->getTaskService()->getTask($taskId);
+        $task = $this->getTaskService()->getTask($taskId);
         if ($task['courseId'] != $courseId) {
             throw new InvalidArgumentException('任务不在课程中');
         }
 
         $this->getTaskService()->deleteTask($taskId);
+
         return $this->createJsonResponse(array('success' => true));
     }
 
@@ -264,6 +274,7 @@ class TaskManageController extends BaseController
     protected function getActivityActionConfig($type)
     {
         $config = $this->getActivityConfig();
+
         return $config[$type]['actions'];
     }
 

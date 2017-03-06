@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -41,15 +42,15 @@ class BuildUpgradePackageCommand extends BaseCommand
         $output->writeln('<info>开始编制升级包</info>');
 
         $fromVersion = $input->getArgument('fromVersion');
-        $version     = $input->getArgument('version');
+        $version = $input->getArgument('version');
 
         $diffFile = 'build/diff-'.$version;
 
         $this->filesystem = new Filesystem();
-        $this->output     = $output;
-        $this->input      = $input;
-        $this->fromVersion= $fromVersion;
-        $this->version    = $version;
+        $this->output = $output;
+        $this->input = $input;
+        $this->fromVersion = $fromVersion;
+        $this->version = $version;
 
         $this->generateDiffFile();
 
@@ -71,9 +72,9 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function generateFiles($diffFile, array $submoduleDiffFiles, $packageDirectory)
     {
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . '../';
+        $rootDir = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'../';
 
-        $diffFile = $rootDir . $diffFile;
+        $diffFile = $rootDir.$diffFile;
 
         if (!$this->filesystem->exists($diffFile)) {
             $this->output->writeln("<error>差异文件 {$diffFile}, 不存在,无法制作升级包</error>");
@@ -81,17 +82,17 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
 
         $moduleFiles = array_merge(array(
-            '' => $diffFile
+            '' => $diffFile,
         ), $submoduleDiffFiles);
 
-        foreach ($moduleFiles as $module => $filePath){
-            $file = @fopen($filePath, "r");
+        foreach ($moduleFiles as $module => $filePath) {
+            $file = @fopen($filePath, 'r');
             while (!feof($file)) {
                 $line = fgets($file);
 
                 $splitLine = preg_split('/\s+/', $line);
 
-                if(empty($splitLine) || count($splitLine) === 1){
+                if (empty($splitLine) || count($splitLine) === 1) {
                     continue;
                 }
 
@@ -111,9 +112,9 @@ class BuildUpgradePackageCommand extends BaseCommand
                     continue;
                 }
 
-                if(!empty($module)){
-                    $opFile = $module . DIRECTORY_SEPARATOR . $opFile;
-                    $newFile= $module . DIRECTORY_SEPARATOR . $newFile;
+                if (!empty($module)) {
+                    $opFile = $module.DIRECTORY_SEPARATOR.$opFile;
+                    $newFile = $module.DIRECTORY_SEPARATOR.$newFile;
                 }
 
                 if (strpos($opFile, 'app/DoctrineMigrations') === 0) {
@@ -143,7 +144,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
                 $opBundleFile = $this->getBundleFile($opFile);
 
-                if ($op == 'R'){
+                if ($op == 'R') {
                     $this->output->writeln("<info>文件重命名：{$opFile} -> {$newFile}</info>");
                     $this->insertDelete($opFile, $packageDirectory);
                     $this->copyFileAndDir($newFile, $packageDirectory);
@@ -192,7 +193,7 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
 
-        if(!is_file("{$root}/{$opFile}")){
+        if (!is_file("{$root}/{$opFile}")) {
             return;
         }
 
@@ -253,12 +254,12 @@ class BuildUpgradePackageCommand extends BaseCommand
     private function copyUpgradeScript($dir)
     {
         $this->output->writeln("\n\n");
-        $this->output->write("<info>拷贝升级脚本：</info>");
+        $this->output->write('<info>拷贝升级脚本：</info>');
 
         $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$this->version.'.php';
 
         if (!file_exists($path)) {
-            $this->output->writeln("无升级脚本");
+            $this->output->writeln('无升级脚本');
         } else {
             $targetPath = realpath($dir).'/Upgrade.php';
             $this->output->writeln($path." -> {$targetPath}");
@@ -290,13 +291,14 @@ class BuildUpgradePackageCommand extends BaseCommand
     {
         $changeLogPath = $this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG';
         if (!$this->filesystem->exists($changeLogPath)) {
-            $this->output->writeln("<error>CHANGELOG文件不存在,请确认CHANGELOG文件路径</error>");
+            $this->output->writeln('<error>CHANGELOG文件不存在,请确认CHANGELOG文件路径</error>');
+
             return false;
         }
 
-        $this->output->writeln("<info>输出changelog,请确认changelog是否正确</info>");
-        $file     = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', "r");
-        $print    = false;
+        $this->output->writeln('<info>输出changelog,请确认changelog是否正确</info>');
+        $file = @fopen($this->getContainer()->getParameter('kernel.root_dir').'/../CHANGELOG', 'r');
+        $print = false;
         $askPrint = false;
         while (!feof($file)) {
             $line = trim(fgets($file));
@@ -308,14 +310,14 @@ class BuildUpgradePackageCommand extends BaseCommand
                 $askPrint = true;
             }
 
-            if ($askPrint && preg_match("/\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}/", "$line", $matches)) {
+            if ($askPrint && preg_match('/\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}/', "$line", $matches)) {
                 $print = false;
             }
             if ($print) {
                 if (empty($line)) {
                     $this->output->writeln(sprintf("<comment>$line</comment>"));
                 } else {
-                    $this->output->writeln(sprintf("<comment>%s<br/></comment>", $line));
+                    $this->output->writeln(sprintf('<comment>%s<br/></comment>', $line));
                 }
             }
         }
@@ -325,11 +327,11 @@ class BuildUpgradePackageCommand extends BaseCommand
     {
         $rootDir = $this->getContainer()->getParameter('kernel.root_dir').'/../';
 
-        if (!$this->filesystem->exists($rootDir . 'build')) {
+        if (!$this->filesystem->exists($rootDir.'build')) {
             $this->filesystem->mkdir($rootDir.'build');
         }
 
-        $gitTag   = exec("git tag | grep v{$this->fromVersion}");
+        $gitTag = exec("git tag | grep v{$this->fromVersion}");
         $gitRelease = exec("git branch | grep release/{$this->version}");
         if (empty($gitTag)) {
             $this->output->writeln("标签 v{$this->fromVersion} 不存在, 无法生成差异文件");
@@ -348,23 +350,23 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function generateSubmodulesDiffFile(array $submodules)
     {
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . '../';
+        $rootDir = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'../';
 
         $submoduleDiffs = array();
 
-        foreach ($submodules as $submodule){
+        foreach ($submodules as $submodule) {
             $lastCommitHash = exec("git ls-tree v{$this->fromVersion} {$submodule} | awk '{print $3}'");
-            if(empty($lastCommitHash)){
+            if (empty($lastCommitHash)) {
                 $lastCommitHash = 'v7.3.1'; //vendor的上次单独发布的时候的tag
             }
 
             $currentCommitHash = exec("git ls-tree release/{$this->version} {$submodule} | awk '{print $3}'");
 
-            $submoduleDir = $rootDir . $submodule;
+            $submoduleDir = $rootDir.$submodule;
             chdir($submoduleDir);
             $command = "git diff --name-status {$lastCommitHash} {$currentCommitHash} > ../build/diff-{$submodule}-{$this->version}";
             exec($command);
-            $submoduleDiffs[$submodule] = $rootDir . "build/diff-{$submodule}-{$this->version}";
+            $submoduleDiffs[$submodule] = $rootDir."build/diff-{$submodule}-{$this->version}";
         }
 
         return $submoduleDiffs;
@@ -372,13 +374,13 @@ class BuildUpgradePackageCommand extends BaseCommand
 
     private function diffFilePrompt($diffFile, $submoduleDiffFiles)
     {
-        $askDiffFile   = false;
-        $rootDir = $this->getContainer()->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . '../';
+        $askDiffFile = false;
+        $rootDir = $this->getContainer()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'../';
         $this->output->writeln("<info>确认build/diff-{$this->version}差异文件</info>");
 
-        $file = @fopen($rootDir . $diffFile, "r");
+        $file = @fopen($rootDir.$diffFile, 'r');
         while (!feof($file)) {
-            $line   = fgets($file);
+            $line = fgets($file);
             $opFile = trim(substr($line, 1));
             if (!in_array($line[0], array('M', 'A', 'D', 'R')) && !empty($opFile)) {
                 echo "异常的文件更新模式：{$line}";
@@ -395,10 +397,10 @@ class BuildUpgradePackageCommand extends BaseCommand
         }
 
         $askDiffFile = false;
-        foreach ($submoduleDiffFiles as $submodule => $diff){
+        foreach ($submoduleDiffFiles as $submodule => $diff) {
             $file = @fopen($diff, 'r');
             while (!feof($file)) {
-                $line   = fgets($file);
+                $line = fgets($file);
                 $opFile = trim(substr($line, 1));
                 if (!in_array($line[0], array('M', 'A', 'D', 'R')) && !empty($opFile)) {
                     echo "异常的文件更新模式：{$line}";
@@ -415,12 +417,11 @@ class BuildUpgradePackageCommand extends BaseCommand
             $askDiffFile = false;
         }
 
-
         $askAssetsLibs = false;
-        $this->output->writeln("<info>确认web/assets/libs目录文件</info>");
-        $file = @fopen($rootDir . $diffFile, "r");
+        $this->output->writeln('<info>确认web/assets/libs目录文件</info>');
+        $file = @fopen($rootDir.$diffFile, 'r');
         while (!feof($file)) {
-            $line   = fgets($file);
+            $line = fgets($file);
             $opFile = trim(substr($line, 1));
 
             if (strpos($opFile, 'web/assets/libs') === 0) {
@@ -428,20 +429,19 @@ class BuildUpgradePackageCommand extends BaseCommand
                 $this->output->writeln("<comment>web/assets/libs文件：{$line}</comment>");
             }
         }
-        $question = "web/assets/libs下的文件有修改，需要在发布版本中修改seajs-global-config.js升级版本号！修改后请输入y (y/n)";
+        $question = 'web/assets/libs下的文件有修改，需要在发布版本中修改seajs-global-config.js升级版本号！修改后请输入y (y/n)';
         if ($askAssetsLibs && $this->input->isInteractive() && !$this->askConfirmation($question)) {
             $this->output->writeln('<error>制作升级包终止!</error>');
             exit;
         }
         fclose($file);
 
-
-        $submoduleDiffFiles = array_merge(array('' => $rootDir . $diffFile), $submoduleDiffFiles);
+        $submoduleDiffFiles = array_merge(array('' => $rootDir.$diffFile), $submoduleDiffFiles);
         $askSqlUpgrade = false;
-        foreach ($submoduleDiffFiles as $submodule => $diffFilePath){
-            $file = @fopen($diffFilePath, "r");
+        foreach ($submoduleDiffFiles as $submodule => $diffFilePath) {
+            $file = @fopen($diffFilePath, 'r');
             while (!feof($file)) {
-                $line   = fgets($file);
+                $line = fgets($file);
                 $opFile = trim(substr($line, 1));
                 if (preg_match('/^(\w+.*\/)?migrations\/\d+.*\.php$/', $opFile, $matches) === 1) {
                     $askSqlUpgrade = true;
@@ -459,8 +459,8 @@ class BuildUpgradePackageCommand extends BaseCommand
     }
 
     /**
-     *
      * @param  $question
+     *
      * @return bool
      */
     protected function askConfirmation($question)

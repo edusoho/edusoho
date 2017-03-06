@@ -20,6 +20,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     public function findByCourseIdAndUserId($courseId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? and userId = ? ";
+
         return $this->db()->fetchAll($sql, array($courseId, $userId)) ?: array();
     }
 
@@ -27,22 +28,24 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     {
         return $this->getByFields(array(
             'courseTaskId' => $taskId,
-            'userId'       => $userId
+            'userId' => $userId,
         ));
     }
 
     public function findByTaskIdsAndUserId($taskIds, $userId)
     {
         $marks = str_repeat('?,', count($taskIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE courseTaskId IN ({$marks}) and userId = ? ;";
+        $sql = "SELECT * FROM {$this->table} WHERE courseTaskId IN ({$marks}) and userId = ? ;";
 
         $parameters = array_merge($taskIds, array($userId));
+
         return $this->db()->fetchAll($sql, $parameters) ?: array();
     }
 
     public function findByActivityIdAndUserId($activityId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE activityId = ? and userId = ? ";
+
         return $this->db()->fetchAll($sql, array($activityId, $userId)) ?: array();
     }
 
@@ -54,19 +57,21 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     public function countLearnNumByTaskId($taskId)
     {
         $sql = "SELECT count(id) FROM {$this->table()} WHERE courseTaskId = ? ";
+
         return $this->db()->fetchColumn($sql, array($taskId));
     }
 
     public function findFinishedTasksByCourseIdGroupByUserId($courseId)
     {
         $sql = "SELECT count(courseTaskId) as taskCount, userId FROM {$this->table()} WHERE courseId = ? and status='finish' group by userId";
+
         return $this->db()->fetchAll($sql, array($courseId)) ?: array();
     }
 
     public function findFinishedTimeByCourseIdGroupByUserId($courseId)
     {
         //已发布task总数
-        $sql            = "SELECT count(id) FROM course_task WHERE courseId = ? AND status='published'";
+        $sql = "SELECT count(id) FROM course_task WHERE courseId = ? AND status='published'";
         $totalTaskCount = $this->db()->fetchColumn($sql, array($courseId));
 
         if ($totalTaskCount <= 0) {
@@ -80,7 +85,8 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
     public function sumLearnTimeByCourseIdAndUserId($courseId, $userId)
     {
-        $sql = "SELECT sum(TIME) FROM `course_task_result` WHERE `status`= ? AND  `courseId` = ? AND `userId`= ?";
+        $sql = 'SELECT sum(TIME) FROM `course_task_result` WHERE `status`= ? AND  `courseId` = ? AND `userId`= ?';
+
         return $this->db()->fetchColumn($sql, array('finish', $courseId, $userId));
     }
 
@@ -89,6 +95,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         $builder = $this->_createQueryBuilder(array('courseTaskId' => $courseTaskId))
             ->select('sum(time) AS learnedTime')
             ->groupBy('courseTaskId');
+
         return $builder->execute()->fetchColumn();
     }
 
@@ -97,13 +104,14 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         $builder = $this->_createQueryBuilder(array('courseTaskId' => $courseTaskId))
             ->select('sum(watchTime) AS watchTime')
             ->groupBy('courseTaskId');
+
         return $builder->execute()->fetchColumn();
     }
 
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime', 'updatedTime', 'finishedTime'),
+            'orderbys' => array('createdTime', 'updatedTime', 'finishedTime'),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'id = :id',
@@ -119,8 +127,8 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
                 'createdTime >= :createdTime_GE',
                 'createdTime <= :createdTime_LE',
                 'finishedTime >= :finishedTime_GE',
-                'finishedTime <= :finishedTime_LE'
-            )
+                'finishedTime <= :finishedTime_LE',
+            ),
         );
     }
 }

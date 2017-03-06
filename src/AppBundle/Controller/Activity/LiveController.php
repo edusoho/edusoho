@@ -16,7 +16,7 @@ class LiveController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $activity)
     {
-        $live            = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
+        $live = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
         $activity['ext'] = $live;
 
         $format = 'Y-m-d H:i';
@@ -40,24 +40,26 @@ class LiveController extends BaseController implements ActivityActionInterface
 
         $summary = $activity['remark'];
         unset($activity['remark']);
+
         return $this->render('activity/live/show.html.twig', array(
             'activity' => $activity,
-            'summary'  => $summary
+            'summary' => $summary,
         ));
     }
 
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id, true);
+
         return $this->render('activity/live/modal.html.twig', array(
-            'activity' => $this->formatTimeFields($activity)
+            'activity' => $this->formatTimeFields($activity),
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
         return $this->render('activity/live/modal.html.twig', array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
     }
 
@@ -92,7 +94,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         $params = array();
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
             $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
-            $teacher  = array_shift($teachers);
+            $teacher = array_shift($teachers);
 
             if ($teacher['userId'] == $user['id']) {
                 $params['role'] = 'teacher';
@@ -105,11 +107,12 @@ class LiveController extends BaseController implements ActivityActionInterface
             return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
         }
 
-        $params['id']       = $user['id'];
+        $params['id'] = $user['id'];
         $params['nickname'] = $user['nickname'];
+
         return $this->forward('AppBundle:Liveroom:_entry', array(
             'roomId' => $activity['ext']['liveId'],
-            'params' => array('courseId' => $courseId, 'activityId' => $activityId)
+            'params' => array('courseId' => $courseId, 'activityId' => $activityId),
         ), $params);
     }
 
@@ -117,10 +120,10 @@ class LiveController extends BaseController implements ActivityActionInterface
     {
         $this->getCourseService()->tryTakeCourse($courseId);
         $activity = $this->getActivityService()->getActivity($activityId);
-        $live     = $this->getActivityService()->getActivityConfig('live')->get($activity['mediaId']);
+        $live = $this->getActivityService()->getActivityConfig('live')->get($activity['mediaId']);
 
         return $this->render('activity/live/replay-player.html.twig', array(
-            'live' => $live
+            'live' => $live,
         ));
     }
 
@@ -142,7 +145,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         }
 
         //当前业务逻辑：看过即视为完成
-        $task       = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
         //如果尚未开始则标记为开始
         if (empty($taskResult)) {
@@ -164,12 +167,13 @@ class LiveController extends BaseController implements ActivityActionInterface
     {
         if ($activity['ext']['replayStatus'] == LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS) {
             $file = $this->getUploadFileService()->getFullFile($activity['ext']['mediaId']);
+
             return array(
-                'url'   => $this->generateUrl('task_live_replay_player', array(
+                'url' => $this->generateUrl('task_live_replay_player', array(
                     'activityId' => $activity['id'],
-                    'courseId'   => $activity['fromCourseId']
+                    'courseId' => $activity['fromCourseId'],
                 )),
-                'title' => $file['filename']
+                'title' => $file['filename'],
             );
         } else {
             return array();
@@ -182,7 +186,7 @@ class LiveController extends BaseController implements ActivityActionInterface
             $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['id']);
 
             $service = $this->getLiveReplayService();
-            $self    = $this;
+            $self = $this;
             $replays = array_map(function ($replay) use ($service, $activity, $ssl, $self) {
                 $result = $service->entryReplay($replay['id'], $activity['ext']['liveId'], $activity['ext']['liveProvider'], $ssl);
 

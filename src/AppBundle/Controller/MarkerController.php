@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AppBundle\Controller;
 
 use Biz\Activity\Service\ActivityService;
@@ -14,35 +13,36 @@ class MarkerController extends BaseController
 {
     public function manageAction(Request $request, $courseId, $taskId)
     {
-        $course   = $this->getCourseService()->tryManageCourse($courseId);
-        $task     = $this->getTaskService()->getCourseTask($courseId, $taskId);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $task = $this->getTaskService()->getCourseTask($courseId, $taskId);
         $activity = array();
         if (!empty($task)) {
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         }
+
         return $this->render('marker/index.html.twig', array(
-            'course'   => $course,
-            'task'     => $task,
-            'activity' => $activity
+            'course' => $course,
+            'task' => $task,
+            'activity' => $activity,
         ));
     }
 
     public function previewAction(Request $request, $courseId, $taskId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        $task   = $this->getTaskService()->getCourseTask($courseId, $taskId);
+        $task = $this->getTaskService()->getCourseTask($courseId, $taskId);
 
         $activity = array();
         if (!empty($task)) {
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         }
+
         return $this->render('marker/preview.html.twig', array(
-            'course'   => $course,
-            'task'   => $task,
-            'activity' => $activity
+            'course' => $course,
+            'task' => $task,
+            'activity' => $activity,
         ));
     }
-
 
     //驻点合并
     public function mergeAction(Request $request, $courseId, $taskId)
@@ -67,7 +67,7 @@ class MarkerController extends BaseController
         }
 
         $markersMeta = $this->getMarkerService()->findMarkersMetaByMediaId($mediaId);
-        $file        = $this->getUploadFileService()->getFile($mediaId);
+        $file = $this->getUploadFileService()->getFile($mediaId);
 
         foreach ($markersMeta as $key => $value) {
             foreach ($markersMeta[$key]['questionMarkers'] as $index => $questionMarker) {
@@ -81,8 +81,9 @@ class MarkerController extends BaseController
 
         $result = array(
             'markersMeta' => $markersMeta,
-            'videoTime'   => $file['length']
+            'videoTime' => $file['length'],
         );
+
         return $this->createJsonResponse($result);
     }
 
@@ -93,35 +94,36 @@ class MarkerController extends BaseController
             return $this->createJsonResponse(false);
         }
 
-        $data       = $request->request->all();
+        $data = $request->request->all();
         $data['id'] = isset($data['id']) ? $data['id'] : 0;
-        $fields     = array(
+        $fields = array(
             'updatedTime' => time(),
-            'second'      => isset($data['second']) ? $data['second'] : ""
+            'second' => isset($data['second']) ? $data['second'] : '',
         );
-        $marker     = $this->getMarkerService()->updateMarker($data['id'], $fields);
+        $marker = $this->getMarkerService()->updateMarker($data['id'], $fields);
+
         return $this->createJsonResponse($marker);
     }
 
     //获取当前播放器的驻点
     public function showMarkersAction(Request $request, $taskId)
     {
-        $data         = $request->request->all();
-        $task       = $this->getTaskService()->getTask($taskId);
+        $data = $request->request->all();
+        $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        $storage      = $this->getSettingService()->get('storage');
+        $storage = $this->getSettingService()->get('storage');
         $video_header = $this->getUploadFileService()->getFileByTargetType('headLeader');
-        $markers      = $this->getMarkerService()->findMarkersByMediaId($activity['ext']['file']['id']);
-        $results      = array();
-        $user         = $this->getUserService()->getCurrentUser();
+        $markers = $this->getMarkerService()->findMarkersByMediaId($activity['ext']['file']['id']);
+        $results = array();
+        $user = $this->getUserService()->getCurrentUser();
 
-        if ($this->agentInWhiteList($request->headers->get("user-agent")) ? 1 : 0) {
+        if ($this->agentInWhiteList($request->headers->get('user-agent')) ? 1 : 0) {
             return $this->createJsonResponse(array());
         }
 
         foreach ($markers as $key => $marker) {
-            $results[$key]                    = $marker;
-            $results[$key]['finish']          = $this->getMarkerService()->isFinishMarker($user['id'], $marker['id']);
+            $results[$key] = $marker;
+            $results[$key]['finish'] = $this->getMarkerService()->isFinishMarker($user['id'], $marker['id']);
             $results[$key]['videoHeaderTime'] = $storage['video_header'] ? intval($video_header['length']) : 0;
         }
 
@@ -136,7 +138,7 @@ class MarkerController extends BaseController
             return true;
         }
 
-        if (in_array("ROLE_TEACHER", $user['roles'])) {
+        if (in_array('ROLE_TEACHER', $user['roles'])) {
             return true;
         }
 

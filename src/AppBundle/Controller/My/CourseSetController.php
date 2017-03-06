@@ -29,7 +29,7 @@ class CourseSetController extends CourseBaseController
 
         return $this->render('my/learning/course-set/favorite.html.twig', array(
             'courseFavorites' => $courseFavorites,
-            'paginator'       => $paginator
+            'paginator' => $paginator,
         ));
     }
 
@@ -42,11 +42,11 @@ class CourseSetController extends CourseBaseController
         }
 
         $conditions = array(
-            'type' => $filter
+            'type' => $filter,
         );
 
         if ($filter == 'classroom') {
-            $conditions['type']        = 'normal';
+            $conditions['type'] = 'normal';
             $conditions['parentId_GT'] = 0;
         } elseif ($filter == 'normal') {
             $conditions['parentId'] = 0;
@@ -65,10 +65,11 @@ class CourseSetController extends CourseBaseController
             $paginator->getPerPageCount()
         );
 
-        $service    = $this->getCourseService();
+        $service = $this->getCourseService();
         $courseSets = array_map(function ($set) use ($user, $service) {
             $set['canManage'] = $set['creator'] == $user['id'];
-            $set['courses']   = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
+            $set['courses'] = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
+
             return $set;
         }, $courseSets);
 
@@ -79,7 +80,7 @@ class CourseSetController extends CourseBaseController
             $classrooms = ArrayToolkit::index($classrooms, 'courseSetId');
 
             foreach ($classrooms as &$classroom) {
-                $_classroom                  = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+                $_classroom = $this->getClassroomService()->getClassroom($classroom['classroomId']);
                 $classroom['classroomTitle'] = $_classroom['title'];
             }
         }
@@ -87,8 +88,8 @@ class CourseSetController extends CourseBaseController
         return $this->render('my/teaching/course-sets.html.twig', array(
             'courseSets' => $courseSets,
             'classrooms' => $classrooms,
-            'paginator'  => $paginator,
-            'filter'     => $filter
+            'paginator' => $paginator,
+            'filter' => $filter,
         ));
     }
 
@@ -97,15 +98,15 @@ class CourseSetController extends CourseBaseController
         $currentUser = $this->getCurrentUser();
 
         $courseSets = $this->getCourseSetService()->findLearnCourseSetsByUserId($currentUser['id']);
-        $setIds     = ArrayToolkit::column($courseSets, 'id');
-        $courses    = $this->getCourseService()->findCoursesByCourseSetIds($setIds);
-        $courseIds  = ArrayToolkit::column($courses, 'id');
+        $setIds = ArrayToolkit::column($courseSets, 'id');
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds($setIds);
+        $courseIds = ArrayToolkit::column($courses, 'id');
 
         $conditions = array(
-            'status'       => 'published',
+            'status' => 'published',
             'startTime_GE' => time(),
-            'courseIds'    => $courseIds,
-            'type'         => 'live'
+            'courseIds' => $courseIds,
+            'type' => 'live',
         );
 
         $paginator = new Paginator(
@@ -122,23 +123,24 @@ class CourseSetController extends CourseBaseController
         );
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
-        $courses    = ArrayToolkit::index($courses, 'id');
+        $courses = ArrayToolkit::index($courses, 'id');
 
         $newCourseSets = array();
         if (!empty($courseSets)) {
             foreach ($tasks as $key => &$task) {
-                $course                              = $courses[$task['courseId']];
-                $courseSetId                         = $course['courseSetId'];
-                $newCourseSets[$courseSetId]         = $courseSets[$courseSetId];
+                $course = $courses[$task['courseId']];
+                $courseSetId = $course['courseSetId'];
+                $newCourseSets[$courseSetId] = $courseSets[$courseSetId];
                 $newCourseSets[$courseSetId]['task'] = $task;
             }
         }
 
         $default = $this->getSettingService()->get('default', array());
+
         return $this->render('my/learning/course-set/live-list.html.twig', array(
             'courseSets' => $newCourseSets,
-            'paginator'  => $paginator,
-            'default'    => $default
+            'paginator' => $paginator,
+            'default' => $default,
         ));
     }
 

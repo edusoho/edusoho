@@ -1,7 +1,8 @@
 <?php
+
 namespace Tests\Unit\User;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class TokenServiceTest extends BaseTestCase
 {
@@ -20,7 +21,7 @@ class TokenServiceTest extends BaseTestCase
     public function testMakeTimesToken()
     {
         $token = $this->getTokenService()->makeToken('test_token', array(
-            'times' => 1
+            'times' => 1,
         ));
 
         $this->assertEquals(1, $token['times']);
@@ -30,7 +31,7 @@ class TokenServiceTest extends BaseTestCase
     public function testMakeDurationToken()
     {
         $token = $this->getTokenService()->makeToken('test_token', array(
-            'duration' => 3600
+            'duration' => 3600,
         ));
 
         $this->assertEquals(0, $token['times']);
@@ -41,8 +42,8 @@ class TokenServiceTest extends BaseTestCase
     public function testMakeTimesAndDurationToken()
     {
         $token = $this->getTokenService()->makeToken('test_token', array(
-            'times'    => 2,
-            'duration' => 3600
+            'times' => 2,
+            'duration' => 3600,
         ));
 
         $this->assertEquals(2, $token['times']);
@@ -54,5 +55,4 @@ class TokenServiceTest extends BaseTestCase
     {
         return $this->createService('User:TokenService');
     }
-
 }

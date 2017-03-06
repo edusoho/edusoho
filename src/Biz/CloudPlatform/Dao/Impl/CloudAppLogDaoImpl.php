@@ -12,6 +12,7 @@ class CloudAppLogDaoImpl extends GeneralDaoImpl implements CloudAppLogDao
     public function getLastLogByCodeAndToVersion($code, $toVersion)
     {
         $sql = "SELECT * FROM {$this->table} WHERE code = ? AND toVersion = ? ORDER BY createdTime DESC LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($code, $toVersion));
     }
 
@@ -29,8 +30,8 @@ class CloudAppLogDaoImpl extends GeneralDaoImpl implements CloudAppLogDao
     {
         return array(
             'orderbys' => array(
-                'createdTime'
-            )
+                'createdTime',
+            ),
         );
     }
 }

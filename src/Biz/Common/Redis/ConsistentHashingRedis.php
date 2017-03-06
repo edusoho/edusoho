@@ -14,17 +14,17 @@ class ConsistentHashingRedis
     {
         $this->hash = new Flexihash();
 
-        $servers      = $config['servers'];
+        $servers = $config['servers'];
         $redisServers = array();
 
         foreach ($servers as $key => $value) {
             try {
-                $key   = $value['host'].':'.$value['port'];
+                $key = $value['host'].':'.$value['port'];
                 $redis = new Redis();
                 $redis->pconnect($value['host'], $value['port'], $value['timeout'], $value['reserved'], $value['retry_interval']);
                 $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
                 $this->redisPool[$key] = $redis;
-                $redisServers[]        = $key;
+                $redisServers[] = $key;
             } catch (\Exception $e) {
                 throw $e;
             }
@@ -39,7 +39,7 @@ class ConsistentHashingRedis
 
     public function __call($name, $arguments)
     {
-        $key   = $arguments[0];
+        $key = $arguments[0];
         $target = $this->hash->lookup($key);
         $redis = $this->redisPool[$target];
         if (!method_exists($redis, $name)) {

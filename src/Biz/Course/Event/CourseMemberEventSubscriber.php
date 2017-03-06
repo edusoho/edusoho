@@ -23,13 +23,13 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public static function getSubscribedEvents()
     {
         return array(
-            'course.join'           => 'onCourseJoin',
-            'course.quit'           => 'onMemberDelete',
+            'course.join' => 'onCourseJoin',
+            'course.quit' => 'onMemberDelete',
 
             'classroom.course.copy' => 'onClassroomCourseCopy',
 
-            'course.task.delete'    => 'onTaskDelete',
-            'course.task.finish'    => 'onTaskFinish'
+            'course.task.delete' => 'onTaskDelete',
+            'course.task.finish' => 'onTaskFinish',
         );
     }
 
@@ -43,19 +43,19 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     public function onClassroomCourseCopy(Event $event)
     {
-        $course      = $event->getSubject();
+        $course = $event->getSubject();
         $classroomId = $event->getArgument('classroomId');
-        $members     = $this->getClassroomService()->findClassroomStudents($classroomId, 0, PHP_INT_MAX);
+        $members = $this->getClassroomService()->findClassroomStudents($classroomId, 0, PHP_INT_MAX);
         if (empty($members)) {
             return;
         }
         $memberIds = ArrayToolkit::column($members, 'userId');
         //add classroom students to course
         $existedMembers = $this->getCourseMemberService()->findCourseStudents($course['id'], 0, PHP_INT_MAX);
-        $diffMemberIds  = $memberIds;
+        $diffMemberIds = $memberIds;
         if (!empty($existedMembers)) {
             $existedMemberIds = ArrayToolkit::column($existedMembers, 'userId');
-            $diffMemberIds    = array_diff($memberIds, $existedMemberIds);
+            $diffMemberIds = array_diff($memberIds, $existedMemberIds);
         }
 
         if (empty($diffMemberIds)) {
@@ -90,7 +90,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
-        $user   = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($userId);
 
         $setting = $this->getSettingService()->get('course', array());
 
@@ -107,15 +107,15 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $member = $event->getArgument('member');
 
         $status = array(
-            'type'       => $type,
-            'courseId'   => $course['id'],
+            'type' => $type,
+            'courseId' => $course['id'],
             'objectType' => 'course',
-            'objectId'   => $course['id'],
-            'private'    => $course['status'] == 'published' ? 0 : 1,
-            'userId'     => $member['userId'],
+            'objectId' => $course['id'],
+            'private' => $course['status'] == 'published' ? 0 : 1,
+            'userId' => $member['userId'],
             'properties' => array(
-                'course' => $this->simplifyCourse($course)
-            )
+                'course' => $this->simplifyCourse($course),
+            ),
         );
 
         $this->getStatusService()->publishStatus($status);
@@ -135,7 +135,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public function onTaskFinish(Event $event)
     {
         $taskResult = $event->getSubject();
-        $user       = $event->getArgument('user');
+        $user = $event->getArgument('user');
         $this->updateMemberLearnedNum($taskResult['courseId'], $user['id']);
     }
 
@@ -148,21 +148,22 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     protected function getWelcomeMessageBody($user, $course)
     {
-        $setting            = $this->getSettingService()->get('course', array());
-        $valuesToBeReplace  = array('{{nickname}}', '{{course}}');
-        $valuesToReplace    = array($user['nickname'], $course['title']);
+        $setting = $this->getSettingService()->get('course', array());
+        $valuesToBeReplace = array('{{nickname}}', '{{course}}');
+        $valuesToReplace = array($user['nickname'], $course['title']);
         $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
+
         return $welcomeMessageBody;
     }
 
     protected function simplifyCourse($course)
     {
         return array(
-            'id'     => $course['id'],
-            'title'  => $course['title'],
-            'type'   => $course['type'],
+            'id' => $course['id'],
+            'title' => $course['title'],
+            'type' => $course['type'],
             'rating' => $course['rating'],
-            'price'  => $course['price']
+            'price' => $course['price'],
         );
     }
 
@@ -251,9 +252,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
         $conditions = array(
-            'status'   => 'finish',
+            'status' => 'finish',
             'courseId' => $courseId,
-            'userId'   => $userId
+            'userId' => $userId,
         );
         $learnedNum = $this->getTaskResultService()->countTaskResults($conditions);
 

@@ -15,7 +15,7 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
         return array(
             // 'question.create' => 'onQuestionCreate',
             'question.update' => 'onQuestionUpdate',
-            'question.delete' => 'onQuestionDelete'
+            'question.delete' => 'onQuestionDelete',
         );
     }
 
@@ -29,7 +29,7 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
         if (empty($copiedCourses)) {
             return;
         }
-        $courseIds       = ArrayToolkit::column($copiedCourses, 'id');
+        $courseIds = ArrayToolkit::column($copiedCourses, 'id');
         $copiedQuestions = $this->getQuestionService()->search(array('copyId' => $question['id'], 'courseIds' => $courseIds), array(), 0, PHP_INT_MAX);
         if (empty($copiedQuestions)) {
             return;
@@ -46,7 +46,7 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
                 'categoryId',
                 'difficulty',
                 'target',
-                'subCount'
+                'subCount',
             ));
 
             if ($question['lessonId'] > 0) {
@@ -70,7 +70,7 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
         if (empty($copiedCourses)) {
             return;
         }
-        $courseIds       = ArrayToolkit::column($copiedCourses, 'id');
+        $courseIds = ArrayToolkit::column($copiedCourses, 'id');
         $copiedQuestions = $this->getQuestionService()->search(array('copyId' => $question['id'], 'courseIds' => $courseIds), array(), 0, PHP_INT_MAX);
         if (empty($copiedQuestions)) {
             return;

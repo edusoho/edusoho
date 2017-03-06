@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Task\Service\TaskService;
@@ -16,9 +17,9 @@ class TaskController extends BaseController
     {
         $preview = $request->query->get('preview');
 
-        $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
+        $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
 
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
 
@@ -28,7 +29,7 @@ class TaskController extends BaseController
 
         if ($this->canStartTask($task)) {
             $this->getActivityService()->trigger($task['activityId'], 'start', array(
-                'task' => $task
+                'task' => $task,
             ));
         }
 
@@ -39,19 +40,21 @@ class TaskController extends BaseController
         if ($taskResult['status'] == 'finish') {
             list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
         }
+
         return $this->render('task/show.html.twig', array(
-            'course'       => $course,
-            'task'         => $task,
-            'taskResult'   => $taskResult,
-            'nextTask'     => empty($nextTask) ? array() : $nextTask,
-            'finishedRate' => empty($finishedRate) ? 0 : $finishedRate
+            'course' => $course,
+            'task' => $task,
+            'taskResult' => $taskResult,
+            'nextTask' => empty($nextTask) ? array() : $nextTask,
+            'finishedRate' => empty($finishedRate) ? 0 : $finishedRate,
         ));
     }
 
     private function canStartTask($task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        $config   = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+        $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
+
         return $config->allowTaskAutoStart($activity);
     }
 
@@ -87,8 +90,8 @@ class TaskController extends BaseController
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
-            if ($course["parentId"] > 0) {
-                return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
+            if ($course['parentId'] > 0) {
+                return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course['id'])));
             }
 
             return $this->forward('AppBundle:Course/CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $task['id']));
@@ -103,17 +106,17 @@ class TaskController extends BaseController
 
         //TODO vip 插件改造 判断用户是否为VIP
         return $this->render('task/preview.html.twig', array(
-            'course'    => $course,
-            'task'      => $task,
-            'user'      => $user,
-            'vipStatus' => false
+            'course' => $course,
+            'task' => $task,
+            'user' => $user,
+            'vipStatus' => false,
         ));
     }
 
     public function contentPreviewAction($courseId, $id)
     {
         $course = $this->getCourseService()->getCourse($courseId);
-        $task   = $this->getTaskService()->getTask($id);
+        $task = $this->getTaskService()->getTask($id);
 
         if (empty($task) || $task['courseId'] != $courseId) {
             throw $this->createNotFoundException('task is not exist');
@@ -122,6 +125,7 @@ class TaskController extends BaseController
         if (!$this->canPreviewTask($task, $course)) {
             throw $this->createAccessDeniedException('task is not free');
         }
+
         return $this->forward('AppBundle:Activity/Activity:preview', array('task' => $task));
     }
 
@@ -137,6 +141,7 @@ class TaskController extends BaseController
         }
 
         $file = $activity['ext']['file'];
+
         return !empty($file) && $file['storage'] == 'cloud';
     }
 
@@ -153,33 +158,35 @@ class TaskController extends BaseController
         }
 
         $token = $this->getTokenService()->makeToken('qrcode', array(
-            'userId'   => $user['id'],
-            'data'     => array(
-                'url'    => $this->generateUrl('course_task_show', array('courseId' => $courseId, 'id' => $id), true),
-                'appUrl' => $appUrl
+            'userId' => $user['id'],
+            'data' => array(
+                'url' => $this->generateUrl('course_task_show', array('courseId' => $courseId, 'id' => $id), true),
+                'appUrl' => $appUrl,
             ),
-            'times'    => 1,
-            'duration' => 3600
+            'times' => 1,
+            'duration' => 3600,
         ));
-        $url   = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
 
         $response = array(
-            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
+            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true),
         );
+
         return $this->createJsonResponse($response);
     }
 
     public function taskActivityAction(Request $request, $courseId, $id)
     {
         $preview = $request->query->get('preview', 0);
-        $task    = $this->tryLearnTask($courseId, $id, $preview);
+        $task = $this->tryLearnTask($courseId, $id, $preview);
 
         if (empty($preview) && $task['status'] != 'published') {
             return $this->render('task/inform.html.twig');
         }
+
         return $this->forward('AppBundle:Activity/Activity:show', array(
-            'task'    => $task,
-            'preview' => $preview
+            'task' => $task,
+            'preview' => $preview,
         ));
     }
 
@@ -194,30 +201,30 @@ class TaskController extends BaseController
                 'code' => 'task-list',
                 'name' => '课程',
                 'icon' => 'es-icon-menu',
-                'url'  => $this->generateUrl('course_task_show_plugin_task_list', array(
+                'url' => $this->generateUrl('course_task_show_plugin_task_list', array(
                     'courseId' => $courseId,
-                    'taskId'   => $taskId,
-                    'preview'  => $preview
-                ))
+                    'taskId' => $taskId,
+                    'preview' => $preview,
+                )),
             ),
             array(
                 'code' => 'note',
                 'name' => '笔记',
                 'icon' => 'es-icon-edit',
-                'url'  => $this->generateUrl('course_task_plugin_note', array(
+                'url' => $this->generateUrl('course_task_plugin_note', array(
                     'courseId' => $courseId,
-                    'taskId'   => $taskId
-                ))
+                    'taskId' => $taskId,
+                )),
             ),
             array(
                 'code' => 'question',
                 'name' => '问答',
                 'icon' => 'es-icon-help',
-                'url'  => $this->generateUrl('course_task_plugin_threads', array(
+                'url' => $this->generateUrl('course_task_plugin_threads', array(
                     'courseId' => $courseId,
-                    'taskId'   => $taskId
-                ))
-            )
+                    'taskId' => $taskId,
+                )),
+            ),
         ));
     }
 
@@ -225,15 +232,16 @@ class TaskController extends BaseController
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        $eventName      = 'doing';
-        $data           = $request->request->get('data', array());
+        $eventName = 'doing';
+        $data = $request->request->get('data', array());
         $data['taskId'] = $id;
-        $result         = $this->getTaskService()->trigger($id, $eventName, $data);
+        $result = $this->getTaskService()->trigger($id, $eventName, $data);
+
         return $this->createJsonResponse(array(
-            'result'   => $result,
+            'result' => $result,
             'lastTime' => time(),
-            'event'    => $eventName,
-            'data'     => $data
+            'event' => $eventName,
+            'data' => $data,
         ));
     }
 
@@ -255,11 +263,11 @@ class TaskController extends BaseController
         list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
         return $this->render('task/finish-result.html.twig', array(
-            'result'       => $result,
-            'task'         => $task,
-            'nextTask'     => $nextTask,
-            'course'       => $course,
-            'finishedRate' => $finishedRate
+            'result' => $result,
+            'task' => $task,
+            'nextTask' => $nextTask,
+            'course' => $course,
+            'finishedRate' => $finishedRate,
         ));
     }
 
@@ -267,40 +275,42 @@ class TaskController extends BaseController
     {
         $this->getCourseService()->tryTakeCourse($courseId);
         $result = $this->getTaskService()->finishTaskResult($id);
-        $task   = $this->getTaskService()->getTask($id);
+        $task = $this->getTaskService()->getTask($id);
 
         list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
         return $this->render('task/task-finished-prompt.html.twig', array(
-            'result'       => $result,
-            'task'         => $task,
-            'nextTask'     => $nextTask,
-            'course'       => $course,
-            'finishedRate' => $finishedRate
+            'result' => $result,
+            'task' => $task,
+            'nextTask' => $nextTask,
+            'course' => $course,
+            'finishedRate' => $finishedRate,
         ));
     }
 
     public function finishConditionAction($task)
     {
-        $config   = $this->getActivityConfig();
-        $action   = $config[$task['type']]['actions']['finishCondition'];
+        $config = $this->getActivityConfig();
+        $action = $config[$task['type']]['actions']['finishCondition'];
         $activity = $this->getActivityService()->getActivity($task['activityId']);
+
         return $this->forward($action, array('activity' => $activity));
     }
 
     protected function getNextTaskAndFinishedRate($task)
     {
-        $nextTask      = $this->getTaskService()->getNextTask($task['id']);
-        $course        = $this->getCourseService()->getCourse($task['courseId']);
-        $user          = $this->getUser();
-        $conditions    = array(
+        $nextTask = $this->getTaskService()->getNextTask($task['id']);
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $user = $this->getUser();
+        $conditions = array(
             'courseId' => $task['courseId'],
-            'userId'   => $user['id'],
-            'status'   => 'finish'
+            'userId' => $user['id'],
+            'status' => 'finish',
         );
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
         $finishedRate = empty($course['publishedTaskNum']) ? 0 : intval($finishedCount / $course['publishedTaskNum'] * 100);
+
         return array($course, $nextTask, $finishedRate);
     }
 
@@ -325,7 +335,7 @@ class TaskController extends BaseController
 
         return $task;
     }
-    
+
     /**
      * @return CourseService
      */

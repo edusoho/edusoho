@@ -1,10 +1,11 @@
 <?php
+
 namespace Tests\Unit\Cash;
 
 use Biz\Cash\Dao\CashOrdersDao;
 use Biz\Cash\Service\CashOrdersService;
 use Biz\System\Service\SettingService;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class CashOrdersServiceTest extends BaseTestCase
 {
@@ -12,63 +13,60 @@ class CashOrdersServiceTest extends BaseTestCase
     {
         $this->setSettingcoin();
         $order = array(
-            'status'      => 'created',
-            'amount'      => '100.00',
-            'payment'     => 'none',
-            'note'        => 'hello',
-            'userId'      => '1',
-            'createdTime' => time()
+            'status' => 'created',
+            'amount' => '100.00',
+            'payment' => 'none',
+            'note' => 'hello',
+            'userId' => '1',
+            'createdTime' => time(),
         );
         $createOrder = $this->getCashOrdersService()->addOrder($order);
         $this->assertEquals('100.00', $createOrder['amount']);
-
     }
 
     public function testGetOrderBySn()
     {
         $this->setSettingcoin();
         $order = array(
-            'status'      => 'created',
-            'amount'      => '100.00',
-            'payment'     => 'none',
-            'note'        => 'hello',
-            'userId'      => '1',
-            'createdTime' => time()
+            'status' => 'created',
+            'amount' => '100.00',
+            'payment' => 'none',
+            'note' => 'hello',
+            'userId' => '1',
+            'createdTime' => time(),
         );
         $createOrder = $this->getCashOrdersService()->addOrder($order);
-        $order       = $this->getCashOrdersService()->getOrderBySn($createOrder['sn']);
+        $order = $this->getCashOrdersService()->getOrderBySn($createOrder['sn']);
         $this->assertEquals('100.00', $order['amount']);
-
     }
 
     public function testGetOrderByToken()
     {
         $this->setSettingcoin();
         $order = array(
-            'status'      => 'created',
-            'amount'      => '100.00',
-            'payment'     => 'none',
-            'note'        => 'hello',
-            'userId'      => '1',
+            'status' => 'created',
+            'amount' => '100.00',
+            'payment' => 'none',
+            'note' => 'hello',
+            'userId' => '1',
             'createdTime' => time(),
-            'token'       => '12345678'
+            'token' => '12345678',
         );
         $createOrder = $this->getCashOrdersService()->addOrder($order);
-        $order       = $this->getCashOrdersService()->getOrderByToken($createOrder['token']);
+        $order = $this->getCashOrdersService()->getOrderByToken($createOrder['token']);
         $this->assertEquals('100.00', $order['amount']);
-
     }
 
     public function testCreatePayRecord()
     {
         $this->setSettingcoin();
         $order = array(
-            'status'      => 'created',
-            'amount'      => '100.00',
-            'payment'     => 'none',
-            'note'        => 'hello',
-            'userId'      => '1',
-            'createdTime' => time()
+            'status' => 'created',
+            'amount' => '100.00',
+            'payment' => 'none',
+            'note' => 'hello',
+            'userId' => '1',
+            'createdTime' => time(),
         );
         $createOrder = $this->getCashOrdersService()->addOrder($order);
         $this->assertEquals('100.00', $order['amount']);
@@ -76,19 +74,18 @@ class CashOrdersServiceTest extends BaseTestCase
         $this->getCashOrdersService()->createPayRecord($createOrder['id'], $payData);
         $result = $this->getCashOrdersService()->getOrder($createOrder['id']);
         $this->assertEquals($result['data'], json_encode($payData));
-
     }
 
     public function testCancelOrder()
     {
         $this->setSettingcoin();
         $order = array(
-            'status'      => 'created',
-            'amount'      => '100.00',
-            'payment'     => 'none',
-            'note'        => 'hello',
-            'userId'      => '1',
-            'createdTime' => time()
+            'status' => 'created',
+            'amount' => '100.00',
+            'payment' => 'none',
+            'note' => 'hello',
+            'userId' => '1',
+            'createdTime' => time(),
         );
         $createOrder = $this->getCashOrdersService()->addOrder($order);
         $this->assertEquals('100.00', $createOrder['amount']);
@@ -100,17 +97,17 @@ class CashOrdersServiceTest extends BaseTestCase
     {
         $this->setSettingcoin();
         $order = array(
-            'status'      => 'created',
-            'amount'      => '100.00',
-            'payment'     => 'none',
-            'note'        => 'hello',
-            'userId'      => '1',
-            'createdTime' => time()
+            'status' => 'created',
+            'amount' => '100.00',
+            'payment' => 'none',
+            'note' => 'hello',
+            'userId' => '1',
+            'createdTime' => time(),
         );
         $createOrder = $this->getCashOrdersService()->addOrder($order);
         $this->assertEquals('100.00', $createOrder['amount']);
         $fields = array('amount' => '120.00');
-        $order  = $this->getCashOrdersService()->updateOrder($createOrder['id'], $fields);
+        $order = $this->getCashOrdersService()->updateOrder($createOrder['id'], $fields);
         $this->assertEquals('120.00', $order['amount']);
     }
 
@@ -121,14 +118,14 @@ class CashOrdersServiceTest extends BaseTestCase
     {
         $this->setSettingcoin();
         $order = array(
-            'sn'          => '12238551',
-            'status'      => 'created',
-            'title'       => 'hh',
-            'amount'      => 'asd',
-            'payment'     => 'none',
-            'note'        => 'hello',
-            'userId'      => '1',
-            'createdTime' => time()
+            'sn' => '12238551',
+            'status' => 'created',
+            'title' => 'hh',
+            'amount' => 'asd',
+            'payment' => 'none',
+            'note' => 'hello',
+            'userId' => '1',
+            'createdTime' => time(),
         );
         $createOrder = $this->getCashOrdersService()->addOrder($order);
     }
@@ -137,7 +134,7 @@ class CashOrdersServiceTest extends BaseTestCase
     {
         $this->setSettingcoin();
         $createOrder = $this->createOrder('aaa');
-        $getOrder    = $this->getCashOrdersService()->getOrder($createOrder['id']);
+        $getOrder = $this->getCashOrdersService()->getOrder($createOrder['id']);
         $this->assertEquals('100.00', $getOrder['amount']);
     }
 
@@ -145,11 +142,11 @@ class CashOrdersServiceTest extends BaseTestCase
     {
         $this->setSettingcoin();
         $createOrder = $this->createOrder('aaa');
-        $payData     = array(
-            'sn'       => $createOrder['sn'],
-            'status'   => 'success',
-            'amount'   => '100.00',
-            'paidTime' => time()
+        $payData = array(
+            'sn' => $createOrder['sn'],
+            'status' => 'success',
+            'amount' => '100.00',
+            'paidTime' => time(),
         );
         list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
         $this->assertEquals($success, true);
@@ -162,7 +159,7 @@ class CashOrdersServiceTest extends BaseTestCase
     {
         $this->setSettingcoin();
         $payData = array(
-            'sn' => '1'
+            'sn' => '1',
         );
         $this->getCashOrdersService()->payOrder($payData);
     }
@@ -234,14 +231,14 @@ class CashOrdersServiceTest extends BaseTestCase
         $this->setSettingcoin();
 
         $order = array(
-            'sn'          => '12238551',
-            'status'      => 'created',
-            'title'       => 'hh',
-            'amount'      => '100.00',
-            'payment'     => 'none',
-            'note'        => 'hello',
-            'userId'      => '1',
-            'createdTime' => time() - 72 * 3600
+            'sn' => '12238551',
+            'status' => 'created',
+            'title' => 'hh',
+            'amount' => '100.00',
+            'payment' => 'none',
+            'note' => 'hello',
+            'userId' => '1',
+            'createdTime' => time() - 72 * 3600,
         );
         $createOrder = $this->getOrderDao()->create($order);
         $this->getCashOrdersService()->closeOrders();
@@ -253,34 +250,36 @@ class CashOrdersServiceTest extends BaseTestCase
     {
         $this->setSettingcoin();
         $createOrder1 = $this->createOrder('aaa');
-        $result       = $this->getCashOrdersService()->canOrderPay($createOrder1);
+        $result = $this->getCashOrdersService()->canOrderPay($createOrder1);
         $this->assertEquals(true, $result);
     }
 
     private function payOrder($createOrderSn)
     {
         $payData = array(
-            'sn'       => $createOrderSn,
-            'status'   => 'success',
-            'amount'   => '100.00',
-            'paidTime' => time()
+            'sn' => $createOrderSn,
+            'status' => 'success',
+            'amount' => '100.00',
+            'paidTime' => time(),
         );
+
         return $this->getCashOrdersService()->payOrder($payData);
     }
 
     private function createOrder($sn)
     {
         $order = array(
-            'sn'          => $sn,
-            'status'      => 'created',
-            'title'       => $sn.'1',
-            'amount'      => '100.00',
-            'payment'     => 'alipay',
-            'paidTime'    => time(),
-            'note'        => 'hello',
-            'userId'      => '1',
-            'createdTime' => time()
+            'sn' => $sn,
+            'status' => 'created',
+            'title' => $sn.'1',
+            'amount' => '100.00',
+            'payment' => 'alipay',
+            'paidTime' => time(),
+            'note' => 'hello',
+            'userId' => '1',
+            'createdTime' => time(),
         );
+
         return $this->getCashOrdersService()->addOrder($order);
     }
 
@@ -288,10 +287,9 @@ class CashOrdersServiceTest extends BaseTestCase
     {
         $coinSettingsPosted = array(
             'cash_rate' => '1.0',
-            'coin_name' => 'coin'
+            'coin_name' => 'coin',
         );
         $this->getSettingService()->set('coin', $coinSettingsPosted);
-
     }
 
     /**
@@ -317,5 +315,4 @@ class CashOrdersServiceTest extends BaseTestCase
     {
         return $this->createDao('Cash:CashOrdersDao');
     }
-
 }

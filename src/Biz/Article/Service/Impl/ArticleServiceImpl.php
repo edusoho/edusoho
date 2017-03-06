@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Article\Service\Impl;
 
 use Biz\BaseService;
@@ -27,8 +28,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $createdTime = $article['createdTime'];
-        $categoryId  = $article['categoryId'];
-        $category    = $this->getCategoryService()->getCategory($categoryId);
+        $categoryId = $article['categoryId'];
+        $category = $this->getCategoryService()->getCategory($categoryId);
 
         if (empty($category)) {
             throw $this->createNotFoundException('文章分类不存在,操作失败！');
@@ -46,8 +47,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $createdTime = $article['createdTime'];
-        $categoryId  = $article['categoryId'];
-        $category    = $this->getCategoryService()->getCategory($categoryId);
+        $categoryId = $article['categoryId'];
+        $category = $this->getCategoryService()->getCategory($categoryId);
 
         if (empty($category)) {
             $this->createNotFoundException('文章分类不存在,操作失败！');
@@ -147,7 +148,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $event = new Event($article, array(
             'tagIds' => $tagIds,
-            'userId' => $user['id']
+            'userId' => $user['id'],
         ));
         $this->dispatchEvent('article.update', $event);
 
@@ -202,9 +203,9 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $articleLike = array(
-            'articleId'   => $articleId,
-            'userId'      => $user['id'],
-            'createdTime' => time()
+            'articleId' => $articleId,
+            'userId' => $user['id'],
+            'createdTime' => time(),
         );
 
         $this->dispatchEvent('article.liked', $article);
@@ -248,6 +249,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $this->getArticleDao()->update($id, array("{$property}" => $propertyVal));
 
         $this->getLogService()->info('article', 'update_property', "文章#{$id},$article[$property]=>{$propertyVal}");
+
         return $propertyVal;
     }
 
@@ -289,8 +291,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $this->getArticleDao()->update($id, $fields = array('thumb' => '', 'originalThumb' => ''));
-        $this->getFileService()->deleteFileByUri($checkArticle["thumb"]);
-        $this->getFileService()->deleteFileByUri($checkArticle["originalThumb"]);
+        $this->getFileService()->deleteFileByUri($checkArticle['thumb']);
+        $this->getFileService()->deleteFileByUri($checkArticle['originalThumb']);
         $this->getLogService()->info('article', 'removeThumb', "文章#{$id}removeThumb");
     }
 
@@ -305,6 +307,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $this->getArticleDao()->delete($id);
         $this->dispatchEvent('article.delete', $checkArticle);
         $this->getLogService()->info('article', 'delete', "文章#{$id}永久删除");
+
         return true;
     }
 
@@ -331,21 +334,21 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     public function changeIndexPicture($data)
     {
-        $fileIds = ArrayToolkit::column($data, "id");
-        $files   = $this->getFileService()->getFilesByIds($fileIds);
+        $fileIds = ArrayToolkit::column($data, 'id');
+        $files = $this->getFileService()->getFilesByIds($fileIds);
 
-        $data  = ArrayToolkit::index($data, "type");
-        $files = ArrayToolkit::index($files, "id");
+        $data = ArrayToolkit::index($data, 'type');
+        $files = ArrayToolkit::index($files, 'id');
 
         foreach ($data as $key => $value) {
-            if ($key == "origin") {
-                $file               = $this->getFileService()->getFileObject($value["id"]);
-                $file               = $this->getFileService()->uploadFile("article", $file);
-                $data[$key]["file"] = $file;
+            if ($key == 'origin') {
+                $file = $this->getFileService()->getFileObject($value['id']);
+                $file = $this->getFileService()->uploadFile('article', $file);
+                $data[$key]['file'] = $file;
 
-                $this->getFileService()->deleteFileByUri($files[$value["id"]]["uri"]);
+                $this->getFileService()->deleteFileByUri($files[$value['id']]['uri']);
             } else {
-                $data[$key]["file"] = $files[$value["id"]];
+                $data[$key]['file'] = $files[$value['id']];
             }
         }
 
@@ -381,12 +384,12 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             throw $this->createNotFoundException(sprintf('article #%s not found', $articleId));
         }
 
-        $tags = $this->getTagService()->findTagsByOwner(array("ownerType" => 'article', "ownerId" => $articleId));
+        $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'article', 'ownerId' => $articleId));
 
         $tagIds = ArrayToolkit::column($tags, 'id');
 
         $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($tagIds, 'article');
-        $articleIds        = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+        $articleIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
 
         foreach ($articleIds as $key => $articleId) {
             if ($articleId == $article['id']) {
@@ -394,14 +397,15 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             }
         }
 
-        $self             = $this;
+        $self = $this;
         $relativeArticles = array_map(function ($articleId) use ($article, $self) {
             $conditions = array(
                 'articleId' => $articleId,
-                'hasThumb'  => true,
-                'status'    => 'published'
+                'hasThumb' => true,
+                'status' => 'published',
             );
             $articles = $self->searchArticles($conditions, 'normal', 0, PHP_INT_MAX);
+
             return ArrayToolkit::index($articles, 'id');
         }, $articleIds);
 
@@ -409,45 +413,46 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             return array_merge($ret, $articles);
         }, array());
         $ret = array_unique($ret, SORT_REGULAR);
+
         return array_slice($ret, 0, $num);
     }
 
     protected function filterArticleFields($fields, $mode = 'update')
     {
-        $article            = array();
-        $user               = $this->getCurrentUser();
-        $match              = preg_match('/<\s*img.+?src\s*=\s*[\"|\'](.*?)[\"|\']/i', $fields['body'], $matches);
-        $article['picture'] = $match ? $matches[1] : "";
+        $article = array();
+        $user = $this->getCurrentUser();
+        $match = preg_match('/<\s*img.+?src\s*=\s*[\"|\'](.*?)[\"|\']/i', $fields['body'], $matches);
+        $article['picture'] = $match ? $matches[1] : '';
 
-        $article['thumb']         = $fields['thumb'];
+        $article['thumb'] = $fields['thumb'];
         $article['originalThumb'] = $fields['originalThumb'];
-        $article['title']         = $fields['title'];
-        $article['body']          = $fields['body'];
-        $article['featured']      = empty($fields['featured']) ? 0 : 1;
-        $article['promoted']      = empty($fields['promoted']) ? 0 : 1;
-        $article['sticky']        = empty($fields['sticky']) ? 0 : 1;
+        $article['title'] = $fields['title'];
+        $article['body'] = $fields['body'];
+        $article['featured'] = empty($fields['featured']) ? 0 : 1;
+        $article['promoted'] = empty($fields['promoted']) ? 0 : 1;
+        $article['sticky'] = empty($fields['sticky']) ? 0 : 1;
 
-        $article['categoryId']    = $fields['categoryId'];
-        $article['source']        = $fields['source'];
-        $article['sourceUrl']     = $fields['sourceUrl'];
+        $article['categoryId'] = $fields['categoryId'];
+        $article['source'] = $fields['source'];
+        $article['sourceUrl'] = $fields['sourceUrl'];
         $article['publishedTime'] = strtotime($fields['publishedTime']);
-        $article['updatedTime']   = time();
+        $article['updatedTime'] = time();
 
         $fields = $this->fillOrgId($fields);
         if (isset($fields['orgId'])) {
             $article['orgCode'] = $fields['orgCode'];
-            $article['orgId']   = $fields['orgId'];
+            $article['orgId'] = $fields['orgId'];
         }
         if (!empty($fields['tags']) && !is_array($fields['tags'])) {
-            $fields['tags']    = explode(",", $fields['tags']);
+            $fields['tags'] = explode(',', $fields['tags']);
             $article['tagIds'] = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
         } else {
             $article['tagIds'] = array();
         }
 
         if ($mode == 'add') {
-            $article['status']      = 'published';
-            $article['userId']      = $user['id'];
+            $article['status'] = 'published';
+            $article['userId'] = $user['id'];
             $article['createdTime'] = time();
         }
 
@@ -459,7 +464,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $conditions = array_filter($conditions);
 
         if (!empty($conditions['includeChildren']) && isset($conditions['categoryId'])) {
-            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
             $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
             unset($conditions['categoryId']);
             unset($conditions['includeChildren']);
@@ -477,26 +482,26 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         switch ($sort) {
             case 'created':
                 $orderBys = array(
-                    'createdTime' => 'DESC'
+                    'createdTime' => 'DESC',
                 );
                 break;
 
             case 'published':
                 $orderBys = array(
-                    'sticky'        => 'DESC',
-                    'publishedTime' => 'DESC'
+                    'sticky' => 'DESC',
+                    'publishedTime' => 'DESC',
                 );
                 break;
 
             case 'normal':
                 $orderBys = array(
-                    'publishedTime' => 'DESC'
+                    'publishedTime' => 'DESC',
                 );
                 break;
 
             case 'popular':
                 $orderBys = array(
-                    'hits' => 'DESC'
+                    'hits' => 'DESC',
                 );
                 break;
 

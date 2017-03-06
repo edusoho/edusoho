@@ -19,43 +19,43 @@ class CardDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 5
+                'expectedCount' => 5,
                 ),
             array(
                 'condition' => array('cardType' => 'b'),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('deadline' => 1),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('status' => 'used'),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('userId' => 2),
                 'expectedResults' => array($expected[3]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('userIds' => array(2)),
                 'expectedResults' => array($expected[3]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('startDateTime' => 2, 'endDateTime' => 3),
                 'expectedResults' => array($expected[4]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('reciveStartTime' => 0, 'reciveEndTime' => strtotime('2018-1-1')),
                 'expectedResults' => $expected,
-                'expectedCount' => 5
-                )
+                'expectedCount' => 5,
+                ),
             );
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
@@ -109,7 +109,7 @@ class CardDaoTest extends BaseDaoTestCase
         $expected = array();
         $expected[] = $this->mockDataObject(array('cardId' => '1'));
         $expected[] = $this->mockDataObject(array('cardId' => '2'));
-        $res = $this->getDao()->findByCardIds(array(1,2));
+        $res = $this->getDao()->findByCardIds(array(1, 2));
         $this->assertArrayEquals($expected[0], $res[0], $this->getCompareKeys());
         $this->assertArrayEquals($expected[1], $res[1], $this->getCompareKeys());
     }
@@ -122,7 +122,7 @@ class CardDaoTest extends BaseDaoTestCase
             'deadline' => 0,
             'status' => 'receive',
             'useTime' => 0,
-            'userId' => 1
+            'userId' => 1,
             );
     }
 }

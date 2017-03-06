@@ -2,7 +2,6 @@
 
 namespace Biz\Activity\Listener;
 
-
 use Biz\Activity\Service\ActivityLearnLogService;
 
 class ActivityLearnLogListener extends Listener

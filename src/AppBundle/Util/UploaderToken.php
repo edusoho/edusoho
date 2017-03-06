@@ -5,19 +5,19 @@ namespace AppBundle\Util;
 use Topxia\Service\Common\ServiceKernel;
 
 /**
- * 素材库文件上传Token
+ * 素材库文件上传Token.
  */
 class UploaderToken
 {
+    public function make($targetType, $targetId, $bucket, $ttl = 86400)
+    {
+        $user = $this->getCurrentUser();
+        $deadline = time() + $ttl;
+        $key = "{$user['id']}|{$targetType}|{$targetId}|{$bucket}|{$deadline}";
+        $sign = md5("{$key}|{$user['salt']}");
 
-	public function make($targetType, $targetId, $bucket, $ttl = 86400)
-	{
-		$user = $this->getCurrentUser();
-		$deadline = time() + $ttl;
-		$key = "{$user['id']}|{$targetType}|{$targetId}|{$bucket}|{$deadline}";
-		$sign = md5("{$key}|{$user['salt']}");
-		return $this->base64Encode("{$key}|{$sign}");
-	}
+        return $this->base64Encode("{$key}|{$sign}");
+    }
 
     public function parse($token)
     {
@@ -26,7 +26,7 @@ class UploaderToken
             return null;
         }
 
-        list($userId, $targetType, $targetId, $bucket, $deadline, $sign) =  explode('|', $token);
+        list($userId, $targetType, $targetId, $bucket, $deadline, $sign) = explode('|', $token);
 
         if ($deadline < time()) {
             return null;
@@ -47,12 +47,14 @@ class UploaderToken
         );
     }
 
-    private function base64Encode($data) { 
-      return rtrim(strtr(base64_encode($data), '+/', '-_'), '='); 
-    } 
+    private function base64Encode($data)
+    {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    }
 
-    private function base64Decode($data) { 
-      return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT)); 
+    private function base64Decode($data)
+    {
+        return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
     }
 
     private function getCurrentUser()
@@ -64,6 +66,4 @@ class UploaderToken
     {
         return ServiceKernel::instance();
     }
-
-
 }

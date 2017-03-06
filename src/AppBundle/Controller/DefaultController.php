@@ -26,6 +26,7 @@ class DefaultController extends BaseController
         }
 
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
+
         return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks));
     }
 
@@ -48,18 +49,18 @@ class DefaultController extends BaseController
 
             $progress = $this->calculateUserLearnProgress($course, $member);
         } else {
-            $course          = array();
+            $course = array();
             $nextLearnLesson = array();
-            $progress        = array();
-            $teachers        = array();
+            $progress = array();
+            $teachers = array();
         }
 
         return $this->render('default/user-learning.html.twig', array(
-            'user'            => $user,
-            'course'          => $course,
+            'user' => $user,
+            'course' => $course,
             'nextLearnLesson' => $nextLearnLesson,
-            'progress'        => $progress,
-            'teachers'        => $teachers
+            'progress' => $progress,
+            'teachers' => $teachers,
         ));
     }
 
@@ -80,19 +81,20 @@ class DefaultController extends BaseController
         }
 
         return $this->render('default/promoted-teacher-block.html.twig', array(
-            'teacher' => $teacher
+            'teacher' => $teacher,
         ));
     }
 
     public function latestReviewsBlockAction($number)
     {
         $reviews = $this->getReviewService()->searchReviews(array('private' => 0), 'latest', 0, $number);
-        $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
+
         return $this->render('default/latest-reviews-block.html.twig', array(
             'reviews' => $reviews,
-            'users'   => $users,
-            'courses' => $courses
+            'users' => $users,
+            'courses' => $courses,
         ));
     }
 
@@ -102,8 +104,8 @@ class DefaultController extends BaseController
 
         return $this->render('default/top-navigation.html.twig', array(
             'navigations' => $navigations,
-            'siteNav'     => $siteNav,
-            'isMobile'    => $isMobile
+            'siteNav' => $siteNav,
+            'isMobile' => $isMobile,
         ));
     }
 
@@ -112,7 +114,7 @@ class DefaultController extends BaseController
         $navigations = $this->getNavigationService()->findNavigationsByType('foot', 0, 100);
 
         return $this->render('default/foot-navigation.html.twig', array(
-            'navigations' => $navigations
+            'navigations' => $navigations,
         ));
     }
 
@@ -121,7 +123,7 @@ class DefaultController extends BaseController
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
         return $this->render('default/friend-link.html.twig', array(
-            'friendlyLinks' => $friendlyLinks
+            'friendlyLinks' => $friendlyLinks,
         ));
     }
 
@@ -130,7 +132,7 @@ class DefaultController extends BaseController
         $customerServiceSetting = $this->getSettingService()->get('customerService', array());
 
         return $this->render('default/customer-service-online.html.twig', array(
-            'customerServiceSetting' => $customerServiceSetting
+            'customerServiceSetting' => $customerServiceSetting,
         ));
     }
 
@@ -145,17 +147,18 @@ class DefaultController extends BaseController
         }
 
         $jumpScript = "<script type=\"text/javascript\"> if (top.location !== self.location) {top.location = \"{$url}\";}</script>";
+
         return new Response($jumpScript);
     }
 
     public function coursesCategoryAction(Request $request)
     {
-        $conditions             = $request->query->all();
-        $conditions['status']   = 'published';
+        $conditions = $request->query->all();
+        $conditions['status'] = 'published';
         $conditions['parentId'] = 0;
-        $categoryId             = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
-        $orderBy                = $conditions['orderBy'];
-        $courseType             = isset($conditions['courseType']) ? $conditions['courseType'] : 'course';
+        $categoryId = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
+        $orderBy = $conditions['orderBy'];
+        $courseType = isset($conditions['courseType']) ? $conditions['courseType'] : 'course';
 
         $config = $this->getThemeService()->getCurrentThemeConfig();
 
@@ -169,16 +172,16 @@ class DefaultController extends BaseController
                 }
             }
 
-            $config['orderBy']    = $orderBy;
+            $config['orderBy'] = $orderBy;
             $config['categoryId'] = $categoryId;
 
             return $this->render('default/'.$config['code'].'.html.twig', array(
-                'config' => $config
+                'config' => $config,
             ));
         } else {
             return $this->render('default/course-grid-with-condition-index.html.twig', array(
                 'categoryId' => $categoryId,
-                'orderBy'    => $orderBy
+                'orderBy' => $orderBy,
             ));
         }
     }
@@ -193,14 +196,14 @@ class DefaultController extends BaseController
 
         return array(
             'percent' => $percent,
-            'number'  => $member['learnedNum'],
-            'total'   => $course['lessonNum']
+            'number' => $member['learnedNum'],
+            'total' => $course['lessonNum'],
         );
     }
 
     public function translateAction(Request $request)
     {
-        $locale     = $request->query->get('language');
+        $locale = $request->query->get('language');
         $targetPath = $request->query->get('_target_path');
 
         $request->getSession()->set('_locale', $locale);

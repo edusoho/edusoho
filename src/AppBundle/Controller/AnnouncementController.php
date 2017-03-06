@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
@@ -12,23 +13,23 @@ class AnnouncementController extends BaseController
     public function showAction(Request $request, $id, $targetId)
     {
         $announcement = $this->getAnnouncementService()->getAnnouncement($id);
-        $processor    = $this->getAnnouncementProcessor($announcement['targetType']);
+        $processor = $this->getAnnouncementProcessor($announcement['targetType']);
         $targetObject = $processor->getTargetObject($targetId);
 
         return $this->render('announcement/announcement-show-modal.html.twig', array(
             'announcement' => $announcement,
-            'targetObject' => $targetObject
+            'targetObject' => $targetObject,
         ));
     }
 
     public function listAction(Request $request, $targetType, $targetId)
     {
-        $processor  = $this->getAnnouncementProcessor($targetType);
+        $processor = $this->getAnnouncementProcessor($targetType);
         $controller = $processor->getActions('list');
 
         return $this->forward($controller, array(
-            'request'  => $request,
-            'targetId' => $targetId
+            'request' => $request,
+            'targetId' => $targetId,
         ));
     }
 
@@ -36,34 +37,34 @@ class AnnouncementController extends BaseController
     {
         $conditions = array(
             'targetType' => $targetType,
-            'targetId'   => $targetId
+            'targetId' => $targetId,
         );
 
         $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10000);
-        $users         = $this->getUserService()->findUsersByIds(ArrayToolkit::column($announcements, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($announcements, 'userId'));
 
         return $this->render('announcement/announcement-show-all-modal.html.twig', array(
             'announcements' => $announcements,
-            'users'         => $users
+            'users' => $users,
         ));
     }
 
     public function manageAction(Request $request, $targetType, $targetId)
     {
         return $this->render('announcement/announcement-manage-modal.html.twig', array(
-            'targetId'   => $targetId,
-            'targetType' => $targetType
+            'targetId' => $targetId,
+            'targetType' => $targetType,
         ));
     }
 
     public function createAction(Request $request, $targetType, $targetId)
     {
-        $processor    = $this->getAnnouncementProcessor($targetType);
+        $processor = $this->getAnnouncementProcessor($targetType);
         $targetObject = $processor->tryManageObject($targetId);
-        $controller   = $processor->getActions('create');
+        $controller = $processor->getActions('create');
 
         if ($request->getMethod() == 'POST') {
-            $data               = $request->request->all();
+            $data = $request->request->all();
             $data['targetType'] = $targetType;
 
             if ($targetType == 'course') {
@@ -71,15 +72,15 @@ class AnnouncementController extends BaseController
             } else {
                 $data['targetId'] = $targetId;
             }
-            $data['url']       = isset($data['url']) ? $data['url'] : '';
+            $data['url'] = isset($data['url']) ? $data['url'] : '';
             $data['startTime'] = isset($data['startTime']) ? strtotime($data['startTime']) : time();
-            $data['endTime']   = isset($data['endTime']) ? strtotime($data['endTime']) : time();
+            $data['endTime'] = isset($data['endTime']) ? strtotime($data['endTime']) : time();
 
             $announcement = $this->getAnnouncementService()->createAnnouncement($data);
 
             if ($request->request->get('notify') == 'notify') {
                 $targetObjectShowRout = $processor->getTargetShowUrl();
-                $targetObjectShowUrl  = $this->generateUrl($targetObjectShowRout, array('id' => $targetId), true);
+                $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, array('id' => $targetId), true);
 
                 $result = $processor->announcementNotification($targetId, $targetObject, $targetObjectShowUrl);
             }
@@ -88,14 +89,14 @@ class AnnouncementController extends BaseController
         }
 
         return $this->forward($controller, array(
-            'request'  => $request,
-            'targetId' => $targetId
+            'request' => $request,
+            'targetId' => $targetId,
         ));
     }
 
     public function updateAction(Request $request, $id, $targetType, $targetId)
     {
-        $processor    = $this->getAnnouncementProcessor($targetType);
+        $processor = $this->getAnnouncementProcessor($targetType);
         $targetObject = $processor->tryManageObject($targetId);
 
         $announcement = $this->getAnnouncementService()->getAnnouncement($id);
@@ -113,9 +114,10 @@ class AnnouncementController extends BaseController
                 $data['targetId'] = $targetId;
             }
             $data['startTime'] = isset($data['startTime']) ? strtotime($data['startTime']) : time();
-            $data['endTime']   = isset($data['endTime']) ? strtotime($data['endTime']) : time();
+            $data['endTime'] = isset($data['endTime']) ? strtotime($data['endTime']) : time();
 
             $this->getAnnouncementService()->updateAnnouncement($id, $data);
+
             return $this->createJsonResponse(true);
         }
 
@@ -123,13 +125,13 @@ class AnnouncementController extends BaseController
 
         return $this->forward($controller, array(
             'announcementId' => $announcement['id'],
-            'targetId'       => $targetId
+            'targetId' => $targetId,
         ));
     }
 
     public function deleteAction(Request $request, $id, $targetType, $targetId)
     {
-        $processor    = $this->getAnnouncementProcessor($targetType);
+        $processor = $this->getAnnouncementProcessor($targetType);
         $targetObject = $processor->tryManageObject($targetId);
 
         $this->getAnnouncementService()->deleteAnnouncement($id);
@@ -139,12 +141,14 @@ class AnnouncementController extends BaseController
 
     /**
      * @param  $targetType
+     *
      * @return AnnouncementProcessor
      */
     protected function getAnnouncementProcessor($targetType)
     {
-        $biz       = $this->get('biz');
+        $biz = $this->get('biz');
         $processor = $biz['announcement_processor']->create($targetType);
+
         return $processor;
     }
 

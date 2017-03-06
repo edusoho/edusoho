@@ -16,23 +16,23 @@ class RecommendedCourseDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
                 ),
             array(
                 'condition' => array('openCourseId' => 2),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('recommendCourseId' => 2),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('type' => 'b'),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
-                )
+                'expectedCount' => 1,
+                ),
             );
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }

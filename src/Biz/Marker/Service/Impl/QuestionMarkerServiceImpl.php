@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Marker\Service\Impl;
 
 use Biz\BaseService;
@@ -51,7 +52,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         foreach ($questionMarkers as &$questionMarker) {
             if (!empty($markersGroups[$questionMarker['markerId']])) {
                 $questionMarker['mediaId'] = $markersGroups[$questionMarker['markerId']]['mediaId'];
-                $questionMarker['second']  = $markersGroups[$questionMarker['markerId']]['second'];
+                $questionMarker['second'] = $markersGroups[$questionMarker['markerId']]['second'];
             }
         }
 
@@ -74,17 +75,16 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
 
         if (!empty($question)) {
             $questionMarker = array(
-                'markerId'    => $markerId,
-                'questionId'  => $questionId,
-                'seq'         => $seq,
-                'type'        => $question['type'],
-                'stem'        => $question['stem'],
-                'answer'      => $question['answer'],
-                'analysis'    => $question['analysis'],
-                'metas'       => $question['metas'],
-                'difficulty'  => $question['difficulty'],
-                'createdTime' => time()
-
+                'markerId' => $markerId,
+                'questionId' => $questionId,
+                'seq' => $seq,
+                'type' => $question['type'],
+                'stem' => $question['stem'],
+                'answer' => $question['answer'],
+                'analysis' => $question['analysis'],
+                'metas' => $question['metas'],
+                'difficulty' => $question['difficulty'],
+                'createdTime' => time(),
             );
             $questionMarkers = $this->findQuestionMarkersByMarkerId($markerId);
             $this->getQuestionMarkerDao()->waveSeqBehind($markerId, $seq);
@@ -120,6 +120,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         $this->getQuestionMarkerResultService()->deleteByQuestionMarkerId($id);
 
         $this->getLogService()->info('marker', 'delete_question', '删除驻点问题#'.$questionMarker['stem']);
+
         return true;
     }
 
@@ -128,8 +129,8 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         $seq = 0;
 
         foreach ($ids as $itemId) {
-            $seq++;
-            $item   = $this->getQuestionMarker($itemId);
+            ++$seq;
+            $item = $this->getQuestionMarker($itemId);
             $fields = array('seq' => $seq);
 
             if ($fields['seq'] != $item['seq']) {
@@ -143,7 +144,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
     public function merge($sourceMarkerId, $targetMarkerId)
     {
         $targetMaxSeq = $this->getQuestionMarkerDao()->getMaxSeqByMarkerId($targetMarkerId);
-        $maxSeq       = !empty($targetMaxSeq) ? $targetMaxSeq['seq'] : 0;
+        $maxSeq = !empty($targetMaxSeq) ? $targetMaxSeq['seq'] : 0;
 
         return $this->getQuestionMarkerDao()->merge($sourceMarkerId, $targetMarkerId, $maxSeq);
     }

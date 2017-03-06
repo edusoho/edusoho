@@ -14,12 +14,12 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
     {
         return array(
             // 'testpaper.create'      => 'onTestpaperCreate',
-            'exam.update'           => 'onTestpaperUpdate',
-            'exam.delete'           => 'onTestpaperDelete',
+            'exam.update' => 'onTestpaperUpdate',
+            'exam.delete' => 'onTestpaperDelete',
 
             'testpaper.item.create' => 'onTestpaperItemCreate',
             'testpaper.item.update' => 'onTestpaperItemUpdate',
-            'testpaper.item.delete' => 'onTestpaperItemDelete'
+            'testpaper.item.delete' => 'onTestpaperItemDelete',
         );
     }
 
@@ -34,7 +34,7 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
             return;
         }
         $copiedCourseSetIds = ArrayToolkit::column($copiedCourseSets, 'id');
-        $copiedTestpapers   = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($testpaper['copyId'], $copiedCourseSetIds);
+        $copiedTestpapers = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($testpaper['copyId'], $copiedCourseSetIds);
         if (empty($copiedTestpapers)) {
             return;
         }
@@ -53,7 +53,7 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
                 'itemCount',
                 'updatedUserId',
                 'metas',
-                'type'
+                'type',
             ));
 
             $this->getTestpaperDao()->update($ct['id'], $ct);
@@ -75,18 +75,18 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
             return;
         }
         $copiedCourseSetIds = ArrayToolkit::column($copiedCourses, 'courseSetId');
-        $copiedTestpapers   = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($item['copyId'], $copiedCourseSetIds);
+        $copiedTestpapers = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($item['copyId'], $copiedCourseSetIds);
 
         foreach ($copiedTestpapers as $ct) {
             $newItem = array(
-                'testId'       => $ct['id'],
-                'seq'          => $item['seq'],
-                'questionId'   => $item['questionId'], //fixme get question.id by copyId and courseId
+                'testId' => $ct['id'],
+                'seq' => $item['seq'],
+                'questionId' => $item['questionId'], //fixme get question.id by copyId and courseId
                 'questionType' => $item['questionType'],
-                'parentId'     => $item['parentId'], //fixme
-                'score'        => $item['score'],
-                'missScore'    => $item['missScore'],
-                'copyId'       => $item['id']
+                'parentId' => $item['parentId'], //fixme
+                'score' => $item['score'],
+                'missScore' => $item['missScore'],
+                'copyId' => $item['id'],
             );
             $this->getTestpaperItemDao()->create($newItem);
         }
@@ -103,8 +103,8 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
             return;
         }
         $copiedCourseSetIds = ArrayToolkit::column($copiedCourses, 'courseSetId');
-        $copiedTestpapers   = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($item['copyId'], $copiedCourseSetIds);
-        $copiedItems        = $this->getTestpaperItemDao()->findTestpaperItemsByCopyIdAndLockedTestIds($item['id'], ArrayToolkit::column($copiedTestpapers, 'id'));
+        $copiedTestpapers = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($item['copyId'], $copiedCourseSetIds);
+        $copiedItems = $this->getTestpaperItemDao()->findTestpaperItemsByCopyIdAndLockedTestIds($item['id'], ArrayToolkit::column($copiedTestpapers, 'id'));
         if (empty($copiedItems)) {
             return;
         }
@@ -112,7 +112,7 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
             $ci = $this->copyFields($item, $ci, array(
                 'seq',
                 'score',
-                'missScore'
+                'missScore',
             ));
             $this->getTestpaperItemDao()->update($ci['id'], $ci);
         }
@@ -129,8 +129,8 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
             return;
         }
         $copiedCourseSetIds = ArrayToolkit::column($copiedCourses, 'courseSetId');
-        $copiedTestpapers   = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($item['copyId'], $copiedCourseSetIds);
-        $copiedItems        = $this->getTestpaperItemDao()->findTestpaperItemsByCopyIdAndLockedTestIds($item['id'], ArrayToolkit::column($copiedTestpapers, 'id'));
+        $copiedTestpapers = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($item['copyId'], $copiedCourseSetIds);
+        $copiedItems = $this->getTestpaperItemDao()->findTestpaperItemsByCopyIdAndLockedTestIds($item['id'], ArrayToolkit::column($copiedTestpapers, 'id'));
         if (empty($copiedItems)) {
             return;
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Service;
 
 interface ReportService

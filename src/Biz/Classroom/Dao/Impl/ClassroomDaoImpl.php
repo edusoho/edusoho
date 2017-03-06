@@ -14,7 +14,7 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
         return array(
             'timestamps' => array('createdTime'),
             'serializes' => array('assistantIds' => 'json', 'teacherIds' => 'json', 'service' => 'json'),
-            'orderbys'   => array('name', 'createdTime', 'recommendedSeq', 'studentNum'),
+            'orderbys' => array('name', 'createdTime', 'recommendedSeq', 'studentNum'),
             'conditions' => array(
                 'title = :title',
                 'status = :status',
@@ -34,14 +34,15 @@ class ClassroomDaoImpl extends GeneralDaoImpl implements ClassroomDao
                 'orgCode = :orgCode',
                 'orgCode LIKE :likeOrgCode',
                 'headTeacherId = :headTeacherId',
-                'updatedTime >= :updatedTime_GE'
-            )
+                'updatedTime >= :updatedTime_GE',
+            ),
         );
     }
 
     public function getByTitle($title)
     {
         $sql = "SELECT * FROM {$this->table} where title=? LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($title));
     }
 

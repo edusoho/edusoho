@@ -1,15 +1,13 @@
 <?php
+
 namespace Tests\Unit\Content;
 
 use Biz\BaseTestCase;
 use Biz\Content\Service\FileService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-;
-
 class FileServiceTest extends BaseTestCase
 {
-    
     public function testGetFile()
     {
         $this->assertNull(null);

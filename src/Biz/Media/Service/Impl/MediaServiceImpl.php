@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Media\Service\Impl;
 
 use Biz\BaseService;
@@ -10,15 +11,15 @@ class MediaServiceImpl extends BaseService implements MediaService
     public function getVideoPlayUrl($globalId, $options)
     {
         $defaultOptions = array(
-            'format'   => '',
-            'fromApi'  => false,
-            'times'    => 1,
+            'format' => '',
+            'fromApi' => false,
+            'times' => 1,
             'duration' => 3600,
-            'line'     => ''
+            'line' => '',
         );
 
         $options = array_merge($defaultOptions, $options);
-        $file    = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
         if (empty($file)) {
             throw $this->createNotFoundException($this->trans('无效文件'));
         }
@@ -28,16 +29,16 @@ class MediaServiceImpl extends BaseService implements MediaService
         }
 
         $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
+        $client = $factory->createClient();
         if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
             if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                 $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                    'data'     => array(
-                        'id'      => $file['id'],
-                        'fromApi' => $options['fromApi']
+                    'data' => array(
+                        'id' => $file['id'],
+                        'fromApi' => $options['fromApi'],
                     ),
-                    'times'    => $options['times'],
-                    'duration' => $options['duration']
+                    'times' => $options['times'],
+                    'duration' => $options['duration'],
                 ));
 
                 $url = $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?hideBeginning=1&format={$options['format']}&line=".$options['line'];

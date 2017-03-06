@@ -22,7 +22,7 @@ class FavoriteDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject();
         $expected[] = $this->mockDataObject(array('userId' => 2));
         $expected[] = $this->mockDataObject(array('courseId' => 2, 'courseSetId' => 2));
-        
+
         $testConditions = array(
             array(
                 'condition' => array('courseId' => 1),
@@ -77,14 +77,14 @@ class FavoriteDaoTest extends BaseDaoTestCase
 
         $this->assertEquals(2, $res);
     }
-    
+
     protected function getDefaultMockFields()
     {
         return array(
             'courseId' => 1,
             'userId' => 1,
             'type' => 'course',
-            'courseSetId' => 1
+            'courseSetId' => 1,
         );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
@@ -14,11 +15,11 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
         $existIp = $this->getIpBlacklistDao()->getByIpAndType($ip, 'failed');
         if (empty($existIp)) {
             $ip = array(
-                'ip'          => $ip,
-                'type'        => 'failed',
-                'counter'     => 1,
+                'ip' => $ip,
+                'type' => 'failed',
+                'counter' => 1,
                 'expiredTime' => time() + ($setting['temporary_lock_minutes'] * 60),
-                'createdTime' => time()
+                'createdTime' => time(),
             );
             $ip = $this->getIpBlacklistDao()->create($ip);
 
@@ -29,11 +30,11 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
             $this->getIpBlacklistDao()->delete($existIp['id']);
 
             $ip = array(
-                'ip'          => $ip,
-                'type'        => 'failed',
-                'counter'     => 1,
+                'ip' => $ip,
+                'type' => 'failed',
+                'counter' => 1,
                 'expiredTime' => time() + ($setting['temporary_lock_minutes'] * 60),
-                'createdTime' => time()
+                'createdTime' => time(),
             );
             $ip = $this->getIpBlacklistDao()->create($ip);
 
@@ -54,6 +55,7 @@ class IpBlacklistServiceImpl extends BaseService implements IpBlacklistService
 
         if ($this->isIpExpired($ip)) {
             $this->getIpBlacklistDao()->delete($ip['id']);
+
             return 0;
         }
 

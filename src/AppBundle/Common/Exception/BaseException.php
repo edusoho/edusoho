@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Common\Exception;
 
 use Topxia\Service\Common\ServiceKernel;

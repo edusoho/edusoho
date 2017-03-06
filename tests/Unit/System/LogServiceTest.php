@@ -1,8 +1,9 @@
 <?php
+
 namespace Tests\Unit\System;
 
 use Biz\System\Service\LogService;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class LogServiceTest extends BaseTestCase
 {
@@ -12,8 +13,8 @@ class LogServiceTest extends BaseTestCase
         $this->assertArraySubset(array(
             'action' => 'test_info',
             'module' => 'test',
-            'message'=> 'test_message',
-            'level'  => 'info'
+            'message' => 'test_message',
+            'level' => 'info',
         ), $info);
     }
 
@@ -23,8 +24,8 @@ class LogServiceTest extends BaseTestCase
         $this->assertArraySubset(array(
             'action' => 'test_error',
             'module' => 'test',
-            'message'=> 'test_message',
-            'level'  => 'error'
+            'message' => 'test_message',
+            'level' => 'error',
         ), $info);
     }
 
@@ -34,8 +35,8 @@ class LogServiceTest extends BaseTestCase
         $this->assertArraySubset(array(
             'action' => 'test_warning',
             'module' => 'test',
-            'message'=> 'test_message',
-            'level'  => 'warning'
+            'message' => 'test_message',
+            'level' => 'warning',
         ), $info);
     }
 
@@ -84,5 +85,4 @@ class LogServiceTest extends BaseTestCase
     {
         return $this->createService('System:LogService');
     }
-
 }

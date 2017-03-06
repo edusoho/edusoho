@@ -8,11 +8,8 @@ use Biz\Course\Service\CourseService;
 use Biz\User\Service\UserService;
 use Topxia\Service\Course\MaterialService;
 
-;
-
 class NavigationServiceTest extends BaseTestCase
 {
-
     public function testGetNavigation()
     {
         $this->assertNull(null);
@@ -21,12 +18,12 @@ class NavigationServiceTest extends BaseTestCase
     public function testCreateNavigation()
     {
         $fileds = array(
-            'name'     => '测试导航',
+            'name' => '测试导航',
             'parentId' => 0,
-            'url'      => 'http://baidu.com',
-            'isOpen'   => 1,
+            'url' => 'http://baidu.com',
+            'isOpen' => 1,
             'isNewWin' => 0,
-            'type'     => 'top'
+            'type' => 'top',
         );
 
         $navigation = $this->getNavigationService()->createNavigation($fileds);

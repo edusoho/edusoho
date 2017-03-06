@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Event;
 
 use AppBundle\Common\ArrayToolkit;
@@ -15,26 +16,26 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
     public static function getSubscribedEvents()
     {
         return array(
-            'course-set.delete'                        => 'onCourseSetDelete',
-            'course.delete'                            => 'onCourseDelete',
-            'course.activity.create'                   => 'onCourseActivityCreate',
-            'course.activity.delete'                   => 'onCourseActivityDelete',
-            'course.activity.update'                   => 'onCourseActivityUpdate',
-            'upload.file.delete'                       => 'onUploadFileDelete',
-            'upload.file.finish'                       => 'onUploadFileFinish',
+            'course-set.delete' => 'onCourseSetDelete',
+            'course.delete' => 'onCourseDelete',
+            'course.activity.create' => 'onCourseActivityCreate',
+            'course.activity.delete' => 'onCourseActivityDelete',
+            'course.activity.update' => 'onCourseActivityUpdate',
+            'upload.file.delete' => 'onUploadFileDelete',
+            'upload.file.finish' => 'onUploadFileFinish',
 
             //TODO
             // 'course-set.material.create' => 'onMaterialCreate',
             // 'course-set.material.update' => 'onMaterialUpdate',
             // 'course-set.material.delete' => 'onMaterialDelete'
 
-            'open.course.delete'                       => 'onOpenCourseDelete',
-            'open.course.lesson.create'                => 'onOpenCourseLessonCreate',
-            'open.course.lesson.update'                => 'onOpenCourseLessonUpdate',
-            'open.course.lesson.delete'                => 'onOpenCourseLessonDelete',
+            'open.course.delete' => 'onOpenCourseDelete',
+            'open.course.lesson.create' => 'onOpenCourseLessonCreate',
+            'open.course.lesson.update' => 'onOpenCourseLessonUpdate',
+            'open.course.lesson.delete' => 'onOpenCourseLessonDelete',
 
             //'course.lesson.generate.video.replay'      => 'onLiveFileReplay',
-            'open.course.lesson.generate.video.replay' => 'onLiveOpenFileReplay'
+            'open.course.lesson.generate.video.replay' => 'onLiveOpenFileReplay',
         );
     }
 
@@ -59,7 +60,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
 
     public function onCourseActivityCreate(Event $event)
     {
-        $context  = $event->getSubject();
+        $context = $event->getSubject();
         $argument = $context['argument'];
         $activity = $context['activity'];
 
@@ -71,8 +72,8 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             array(
                 'courseId' => $activity['courseId'],
                 'lessonId' => $activity['id'],
-                'fileId'   => $activity['mediaId'],
-                'source'   => 'courseactivity'
+                'fileId' => $activity['mediaId'],
+                'source' => 'courseactivity',
             ),
             array('createdTime' => 'DESC'), 0, 1
         );
@@ -81,8 +82,8 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             $fields = array(
                 'courseId' => $activity['courseId'],
                 'lessonId' => $activity['id'],
-                'fileId'   => $activity['mediaId'],
-                'source'   => 'courseactivity'
+                'fileId' => $activity['mediaId'],
+                'source' => 'courseactivity',
             );
             $this->getMaterialService()->uploadMaterial($fields);
         }
@@ -90,7 +91,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
 
     public function onCourseActivityDelete(Event $event)
     {
-        $context  = $event->getSubject();
+        $context = $event->getSubject();
         $activity = $context['activity'];
         $courseId = $context['courseId'];
 
@@ -98,7 +99,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             array(
                 'courseId' => $activity['courseId'],
                 'lessonId' => $activity['id'],
-                'type'     => 'course'
+                'type' => 'course',
             ),
             array('createdTime' => 'DESC'), 0, PHP_INT_MAX
         );
@@ -111,7 +112,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 $this->getMaterialService()->deleteMaterial($material['courseId'], $material['id']);
             } else {
                 $updateFields = array(
-                    'lessonId' => 0
+                    'lessonId' => 0,
                 );
                 $this->getMaterialService()->updateMaterial($material['id'], $updateFields, array('fileId' => $material['fileId']));
             }
@@ -120,9 +121,9 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
 
     public function onCourseActivityUpdate(Event $event)
     {
-        $context        = $event->getSubject();
-        $argument       = $context['argument'];
-        $activity       = $context['activity'];
+        $context = $event->getSubject();
+        $argument = $context['argument'];
+        $activity = $context['activity'];
         $sourceActivity = $context['sourceActivity'];
 
         if (in_array($activity['type'], array('text', 'testpaper', 'live')) ||
@@ -135,8 +136,8 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             array(
                 'courseId' => $activity['courseId'],
                 'lessonId' => $activity['id'],
-                'source'   => 'courseactivity',
-                'type'     => 'course'
+                'source' => 'courseactivity',
+                'type' => 'course',
             ),
             array('createdTime' => 'DESC'), 0, 1
         );
@@ -148,9 +149,9 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 $fields = array(
                     'courseId' => $activity['courseId'],
                     'lessonId' => $activity['id'],
-                    'fileId'   => $activity['mediaId'],
-                    'source'   => 'courseactivity',
-                    'type'     => 'course'
+                    'fileId' => $activity['mediaId'],
+                    'source' => 'courseactivity',
+                    'type' => 'course',
                 );
                 $this->getMaterialService()->uploadMaterial($fields);
             } elseif ($activity['mediaSource'] != 'self' && $activity['mediaId'] == 0) {
@@ -160,9 +161,9 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             $fields = array(
                 'courseId' => $activity['courseId'],
                 'lessonId' => $activity['id'],
-                'fileId'   => $activity['mediaId'],
-                'source'   => 'courseactivity',
-                'type'     => 'course'
+                'fileId' => $activity['mediaId'],
+                'source' => 'courseactivity',
+                'type' => 'course',
             );
             $this->getMaterialService()->uploadMaterial($fields);
         }
@@ -191,17 +192,17 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
     public function onUploadFileFinish(Event $event)
     {
         $context = $event->getSubject();
-        $file    = $context['file'];
+        $file = $context['file'];
 
         if (in_array($file['targetType'], array('courseactivity', 'courselesson', 'coursematerial', 'opencourselesson', 'opencoursematerial'))) {
             if (in_array($file['targetType'], array('opencourselesson', 'opencoursematerial'))) {
                 $file['courseSetId'] = 0;
-                $file['courseId']    = $file['targetId'];
-                $file['type']        = 'openCourse';
+                $file['courseId'] = $file['targetId'];
+                $file['type'] = 'openCourse';
             } else {
                 $file['courseSetId'] = $file['targetId'];
-                $file['courseId']    = 0;
-                $file['type']        = 'course';
+                $file['courseId'] = 0;
+                $file['type'] = 'course';
             }
 
             $file['fileId'] = $file['id'];
@@ -213,7 +214,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
 
     public function onMaterialCreate(Event $event)
     {
-        $context  = $event->getSubject();
+        $context = $event->getSubject();
         $argument = $context['argument'];
         $material = $context['material'];
 
@@ -221,12 +222,12 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             return false;
         }
 
-        $courses   = $this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1);
+        $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1);
         $courseIds = ArrayToolkit::column($courses, 'id');
 
         if ($courseIds) {
-            $lessons            = $this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($material['lessonId'], $courseIds);
-            $lessonIds          = ArrayToolkit::column($lessons, 'id');
+            $lessons = $this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($material['lessonId'], $courseIds);
+            $lessonIds = ArrayToolkit::column($lessons, 'id');
             $argument['copyId'] = $material['id'];
 
             foreach ($courseIds as $key => $courseId) {
@@ -240,7 +241,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
 
     public function onMaterialUpdate(Event $event)
     {
-        $context  = $event->getSubject();
+        $context = $event->getSubject();
         $argument = $context['argument'];
         $material = $context['material'];
 
@@ -256,7 +257,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             foreach ($copyMaterials as $key => $copyMaterial) {
                 if ($material['lessonId']) {
                     $parentMaterial = $this->getMaterialService()->getMaterial($material['courseId'], $copyMaterial['copyId']);
-                    $copyLesson     = $this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($parentMaterial['lessonId'], array($copyMaterial['courseId']));
+                    $copyLesson = $this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($parentMaterial['lessonId'], array($copyMaterial['courseId']));
 
                     $this->getMaterialService()->updateMaterial($copyMaterial['id'], array('lessonId' => $copyLesson[0]['id']), $argument);
                 } else {
@@ -295,7 +296,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
     public function onOpenCourseLessonCreate(Event $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        $lesson = $context['lesson'];
 
         if (in_array($lesson['type'], array('liveOpen')) || !$lesson['mediaId']) {
             return false;
@@ -303,24 +304,24 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
 
         $material = $this->getMaterialService()->searchMaterials(
             array(
-                'courseId'    => $lesson['courseId'],
-                'lessonId'    => $lesson['id'],
-                'fileId'      => $lesson['mediaId'],
-                'source'      => 'opencourselesson',
-                'type'        => 'openCourse',
-                'courseSetId' => 0
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+                'fileId' => $lesson['mediaId'],
+                'source' => 'opencourselesson',
+                'type' => 'openCourse',
+                'courseSetId' => 0,
             ),
             array('createdTime' => 'DESC'), 0, 1
         );
 
         if (!$material) {
             $fields = array(
-                'courseId'    => $lesson['courseId'],
-                'lessonId'    => $lesson['id'],
-                'fileId'      => $lesson['mediaId'],
-                'source'      => 'opencourselesson',
-                'type'        => 'openCourse',
-                'courseSetId' => 0
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+                'fileId' => $lesson['mediaId'],
+                'source' => 'opencourselesson',
+                'type' => 'openCourse',
+                'courseSetId' => 0,
             );
             $this->getMaterialService()->uploadMaterial($fields);
         }
@@ -328,8 +329,8 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
 
     public function onOpenCourseLessonUpdate(Event $event)
     {
-        $context      = $event->getSubject();
-        $lesson       = $context['lesson'];
+        $context = $event->getSubject();
+        $lesson = $context['lesson'];
         $sourceLesson = $context['sourceLesson'];
 
         if (in_array($lesson['type'], array('liveOpen')) || ($lesson['mediaId'] == $sourceLesson['mediaId'])) {
@@ -338,11 +339,11 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
 
         $material = $this->getMaterialService()->searchMaterials(
             array(
-                'courseId'    => $lesson['courseId'],
-                'lessonId'    => $lesson['id'],
-                'source'      => 'opencourselesson',
-                'type'        => 'openCourse',
-                'courseSetId' => 0
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+                'source' => 'opencourselesson',
+                'type' => 'openCourse',
+                'courseSetId' => 0,
             ),
             array('createdTime' => 'DESC'), 0, 1
         );
@@ -352,12 +353,12 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 $this->_resetExistMaterialLessonId($material[0]);
 
                 $fields = array(
-                    'courseId'    => $lesson['courseId'],
-                    'lessonId'    => $lesson['id'],
-                    'fileId'      => $lesson['mediaId'],
-                    'source'      => 'opencourselesson',
-                    'type'        => 'openCourse',
-                    'courseSetId' => 0
+                    'courseId' => $lesson['courseId'],
+                    'lessonId' => $lesson['id'],
+                    'fileId' => $lesson['mediaId'],
+                    'source' => 'opencourselesson',
+                    'type' => 'openCourse',
+                    'courseSetId' => 0,
                 );
                 $this->getMaterialService()->uploadMaterial($fields);
             } elseif ($lesson['mediaSource'] != 'self' && $lesson['mediaId'] == 0) {
@@ -365,12 +366,12 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             }
         } else {
             $fields = array(
-                'courseId'    => $lesson['courseId'],
-                'lessonId'    => $lesson['id'],
-                'fileId'      => $lesson['mediaId'],
-                'source'      => 'opencourselesson',
-                'type'        => 'openCourse',
-                'courseSetId' => 0
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+                'fileId' => $lesson['mediaId'],
+                'source' => 'opencourselesson',
+                'type' => 'openCourse',
+                'courseSetId' => 0,
             );
             $this->getMaterialService()->uploadMaterial($fields);
         }
@@ -379,13 +380,13 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
     public function onOpenCourseLessonDelete(Event $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        $lesson = $context['lesson'];
 
         $materials = $this->getMaterialService()->searchMaterials(
             array(
                 'courseId' => $lesson['courseId'],
                 'lessonId' => $lesson['id'],
-                'type'     => 'openCourse'
+                'type' => 'openCourse',
             ),
             array('createdTime' => 'DESC'), 0, PHP_INT_MAX
         );
@@ -398,7 +399,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 $this->getMaterialService()->deleteMaterial($material['courseId'], $material['id']);
             } else {
                 $updateFields = array(
-                    'lessonId' => 0
+                    'lessonId' => 0,
                 );
                 $this->getMaterialService()->updateMaterial($material['id'], $updateFields, array('fileId' => $material['fileId']));
             }
@@ -408,7 +409,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
     public function onLiveFileReplay(Event $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        $lesson = $context['lesson'];
 
         if ($lesson['type'] != 'live' || ($lesson['type'] == 'live' && $lesson['replayStatus'] != 'videoGenerated')) {
             return false;
@@ -418,7 +419,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             array(
                 'courseId' => $lesson['courseId'],
                 'lessonId' => $lesson['id'],
-                'source'   => 'courselesson'
+                'source' => 'courselesson',
             ),
             array('createdTime' => 'DESC'), 0, 1
         );
@@ -430,9 +431,9 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
         $fields = array(
             'courseId' => $lesson['courseId'],
             'lessonId' => $lesson['id'],
-            'fileId'   => $lesson['mediaId'],
-            'source'   => 'courselesson',
-            'type'     => 'course'
+            'fileId' => $lesson['mediaId'],
+            'source' => 'courselesson',
+            'type' => 'course',
         );
         $this->getMaterialService()->uploadMaterial($fields);
     }
@@ -440,7 +441,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
     public function onLiveOpenFileReplay(Event $event)
     {
         $context = $event->getSubject();
-        $lesson  = $context['lesson'];
+        $lesson = $context['lesson'];
 
         if ($lesson['type'] != 'liveOpen' || ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] != 'videoGenerated')) {
             return false;
@@ -450,8 +451,8 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             array(
                 'courseId' => $lesson['courseId'],
                 'lessonId' => $lesson['id'],
-                'source'   => 'opencourselesson',
-                'type'     => 'openCourse'
+                'source' => 'opencourselesson',
+                'type' => 'openCourse',
             ),
             array('createdTime' => 'DESC'), 0, 1
         );
@@ -461,12 +462,12 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
         }
 
         $fields = array(
-            'courseId'    => $lesson['courseId'],
-            'lessonId'    => $lesson['id'],
-            'fileId'      => $lesson['mediaId'],
-            'source'      => 'opencourselesson',
-            'type'        => 'openCourse',
-            'courseSetId' => 0
+            'courseId' => $lesson['courseId'],
+            'lessonId' => $lesson['id'],
+            'fileId' => $lesson['mediaId'],
+            'source' => 'opencourselesson',
+            'type' => 'openCourse',
+            'courseSetId' => 0,
         );
         $this->getMaterialService()->uploadMaterial($fields);
     }

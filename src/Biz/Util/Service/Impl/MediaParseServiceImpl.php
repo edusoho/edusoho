@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Util\Service\Impl;
 
 use Biz\BaseService;
@@ -45,27 +46,27 @@ class MediaParseServiceImpl extends BaseService implements MediaParseService
 
         if ($mediaParseExisting) {
             $mediaParse = array(
-                'uuid'        => $media['uuid'],
-                'media'       => json_encode($media),
-                'updatedTime' => time()
+                'uuid' => $media['uuid'],
+                'media' => json_encode($media),
+                'updatedTime' => time(),
             );
             $this->getMediaParseDao()->update($mediaParseExisting['id'], $mediaParse);
         } else {
             $mediaParseExisting = $this->getMediaParseDao()->getMediaParseByUuid($media['uuid']);
             if ($mediaParseExisting) {
                 $mediaParse = array(
-                    'hash'        => md5($media['url']),
-                    'media'       => json_encode($media),
-                    'updatedTime' => time()
+                    'hash' => md5($media['url']),
+                    'media' => json_encode($media),
+                    'updatedTime' => time(),
                 );
                 $this->getMediaParseDao()->update($mediaParseExisting['id'], $mediaParse);
             } else {
                 $mediaParse = array(
-                    'uuid'        => $media['uuid'],
-                    'hash'        => $urlHash,
-                    'media'       => json_encode($media),
+                    'uuid' => $media['uuid'],
+                    'hash' => $urlHash,
+                    'media' => json_encode($media),
                     'createdTime' => time(),
-                    'updatedTime' => time()
+                    'updatedTime' => time(),
                 );
                 $this->getMediaParseDao()->create($mediaParse);
             }

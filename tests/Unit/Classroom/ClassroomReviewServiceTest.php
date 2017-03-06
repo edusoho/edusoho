@@ -2,25 +2,24 @@
 
 namespace Tests\Unit\Classroom;
 
-use Biz\BaseTestCase;;
-use Topxia\Service\Common\ServiceKernel;
+use Biz\BaseTestCase;
 
 class ClassroomReviewServiceTest extends BaseTestCase
 {
     public function testGetReview()
     {
-        $user      = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $classroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $fields = array(
-            'title'       => 'test',
-            'content'     => 'test_content',
-            'userId'      => $user['id'],
+            'title' => 'test',
+            'content' => 'test_content',
+            'userId' => $user['id'],
             'classroomId' => $classroom['id'],
-            'rating'      => 1
+            'rating' => 1,
         );
         $review = $this->getClassRoomReviewService()->saveReview($fields);
         $result = $this->getClassRoomReviewService()->getReview($classroom['id']);
@@ -29,62 +28,61 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testSearchReviews()
     {
-        $user  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $user1 = $this->createStudentUser();
 
         $classroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $fields1 = array(
-            'title'       => 'test1',
-            'content'     => 'test_content',
-            'userId'      => $user1['id'],
+            'title' => 'test1',
+            'content' => 'test_content',
+            'userId' => $user1['id'],
             'classroomId' => $classroom['id'],
-            'rating'      => 1
+            'rating' => 1,
         );
         $this->getClassRoomReviewService()->saveReview($fields1);
 
         $fields2 = array(
-            'title'       => 'test2',
-            'content'     => 'test_content',
-            'userId'      => $user['id'],
+            'title' => 'test2',
+            'content' => 'test_content',
+            'userId' => $user['id'],
             'classroomId' => $classroom['id'],
-            'rating'      => 2
+            'rating' => 2,
         );
         $this->getClassRoomReviewService()->saveReview($fields2);
 
         $results = $this->getClassRoomReviewService()->searchReviews(array('classroomId' => $classroom['id']), array('rating' => 'DESC'), 0, 5);
         $this->assertCount(2, $results);
-
     }
 
     public function testSearchReviewCount()
     {
-        $user  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $user1 = $this->createStudentUser();
 
         $classroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $fields1 = array(
-            'title'       => 'test1',
-            'content'     => 'test_content',
-            'userId'      => $user1['id'],
+            'title' => 'test1',
+            'content' => 'test_content',
+            'userId' => $user1['id'],
             'classroomId' => $classroom['id'],
-            'rating'      => 1
+            'rating' => 1,
         );
         $this->getClassRoomReviewService()->saveReview($fields1);
 
         $fields2 = array(
-            'title'       => 'test2',
-            'content'     => 'test_content',
-            'userId'      => $user['id'],
+            'title' => 'test2',
+            'content' => 'test_content',
+            'userId' => $user['id'],
             'classroomId' => $classroom['id'],
-            'rating'      => 2
+            'rating' => 2,
         );
         $this->getClassRoomReviewService()->saveReview($fields2);
 
@@ -94,68 +92,66 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     public function testGetUserClassroomReviewWithExistId()
     {
-        $user  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $user1 = $this->createStudentUser();
 
         $classroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $fields1 = array(
-            'title'       => 'test1',
-            'content'     => 'test_content',
-            'userId'      => $user1['id'],
+            'title' => 'test1',
+            'content' => 'test_content',
+            'userId' => $user1['id'],
             'classroomId' => $classroom['id'],
-            'rating'      => 1
+            'rating' => 1,
         );
         $this->getClassRoomReviewService()->saveReview($fields1);
 
         $fields2 = array(
-            'title'       => 'test2',
-            'content'     => 'test_content',
-            'userId'      => $user['id'],
+            'title' => 'test2',
+            'content' => 'test_content',
+            'userId' => $user['id'],
             'classroomId' => $classroom['id'],
-            'rating'      => 2
+            'rating' => 2,
         );
         $this->getClassRoomReviewService()->saveReview($fields2);
 
         $result = $this->getClassRoomReviewService()->getUserClassroomReview($user['id'], $classroom['id']);
         $this->assertEquals('test2', $result['title']);
-
     }
 
     public function testGetUserClassroomReviewWithNotExistId()
     {
         $this->setExpectedException('Exception');
-        $user  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $user1 = $this->createStudentUser();
 
         $classroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $fields1 = array(
-            'title'       => 'test1',
-            'content'     => 'test_content',
-            'userId'      => $user1['id'],
+            'title' => 'test1',
+            'content' => 'test_content',
+            'userId' => $user1['id'],
             'classroomId' => $classroom['id'],
-            'rating'      => 1
+            'rating' => 1,
         );
         $this->getClassRoomReviewService()->saveReview($fields1);
 
         $fields2 = array(
-            'title'       => 'test2',
-            'content'     => 'test_content',
-            'userId'      => $user['id'],
+            'title' => 'test2',
+            'content' => 'test_content',
+            'userId' => $user['id'],
             'classroomId' => $classroom['id'],
-            'rating'      => 2
+            'rating' => 2,
         );
         $this->getClassRoomReviewService()->saveReview($fields2);
 
         $result = $this->getClassRoomReviewService()->getUserClassroomReview($user['id'], $classroom['id'] + 1);
-
     }
 
     public function testSaveReviewWithoutUserId()
@@ -163,23 +159,23 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $this->setExpectedException('Exception');
 
         $classroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $fields1 = array(
-            'title'       => 'test1',
-            'content'     => 'test_content',
+            'title' => 'test1',
+            'content' => 'test_content',
             'classroomId' => $classroom['id'],
-            'rating'      => 1
+            'rating' => 1,
         );
         $this->getClassRoomReviewService()->saveReview($fields1);
 
         $fields2 = array(
-            'title'       => 'test2',
-            'content'     => 'test_content',
+            'title' => 'test2',
+            'content' => 'test_content',
             'classroomId' => $classroom['id'],
-            'rating'      => 2
+            'rating' => 2,
         );
         $this->getClassRoomReviewService()->saveReview($fields2);
     }
@@ -191,16 +187,16 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $user1 = $this->createStudentUser();
 
         $classroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $fields1 = array(
-            'title'       => 'test1',
-            'content'     => 'test_content',
-            'userId'      => $user1['id'],
+            'title' => 'test1',
+            'content' => 'test_content',
+            'userId' => $user1['id'],
             'classroomId' => $classroom['id'] + 100,
-            'rating'      => 1
+            'rating' => 1,
         );
         $this->getClassRoomReviewService()->saveReview($fields1);
     }
@@ -211,16 +207,16 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $user = $this->getCurrentUser();
 
         $classroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $fields1 = array(
-            'title'       => 'test1',
-            'content'     => 'test_content',
-            'userId'      => $user['id'] + 10,
+            'title' => 'test1',
+            'content' => 'test_content',
+            'userId' => $user['id'] + 10,
             'classroomId' => $classroom['id'],
-            'rating'      => 1
+            'rating' => 1,
         );
         $this->getClassRoomReviewService()->saveReview($fields1);
     }
@@ -230,23 +226,22 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $user = $this->getCurrentUser();
 
         $classroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $fields1 = array(
-            'title'       => 'test1',
-            'content'     => 'test_content',
-            'userId'      => $user['id'],
+            'title' => 'test1',
+            'content' => 'test_content',
+            'userId' => $user['id'],
             'classroomId' => $classroom['id'],
-            'rating'      => 1
+            'rating' => 1,
         );
         $this->getClassRoomReviewService()->saveReview($fields1);
         $fields1['title'] = 'test2';
-        $result           = $this->getClassRoomReviewService()->saveReview($fields1);
+        $result = $this->getClassRoomReviewService()->saveReview($fields1);
 
         $this->assertEquals('test2', $result['title']);
-
     }
 
     public function testDeleteReviewWithExistReview()
@@ -254,16 +249,16 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $user = $this->getCurrentUser();
 
         $classroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         $fields1 = array(
-            'title'       => 'test1',
-            'content'     => 'test_content',
-            'userId'      => $user['id'],
+            'title' => 'test1',
+            'content' => 'test_content',
+            'userId' => $user['id'],
             'classroomId' => $classroom['id'],
-            'rating'      => 1
+            'rating' => 1,
         );
         $review = $this->getClassRoomReviewService()->saveReview($fields1);
         $this->getClassRoomReviewService()->deleteReview($review['id']);
@@ -276,7 +271,7 @@ class ClassroomReviewServiceTest extends BaseTestCase
         $this->setExpectedException('Exception');
 
         $classroom = array(
-            'title' => 'test'
+            'title' => 'test',
         );
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $this->getClassroomService()->publishClassroom($classroom['id']);
@@ -300,40 +295,40 @@ class ClassroomReviewServiceTest extends BaseTestCase
 
     private function createStudentUser()
     {
-        $user              = array();
-        $user['email']     = "userStudent@userStudent.com";
-        $user['nickname']  = "userStudent";
-        $user['password']  = "userStudent";
-        $user              = $this->getUserService()->register($user);
+        $user = array();
+        $user['email'] = 'userStudent@userStudent.com';
+        $user['nickname'] = 'userStudent';
+        $user['password'] = 'userStudent';
+        $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
-        $user['roles']     = array('ROLE_USER');
-        return $user;
+        $user['roles'] = array('ROLE_USER');
 
+        return $user;
     }
 
     private function createTeacherUser()
     {
-        $user              = array();
-        $user['email']     = "teacherUser@user.com";
-        $user['nickname']  = "teacherUser";
-        $user['password']  = "teacherUser";
-        $user              = $this->getUserService()->register($user);
+        $user = array();
+        $user['email'] = 'teacherUser@user.com';
+        $user['nickname'] = 'teacherUser';
+        $user['password'] = 'teacherUser';
+        $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
-        $user['roles']     = array('ROLE_USER', 'ROLE_TEACHER');
-        return $user;
+        $user['roles'] = array('ROLE_USER', 'ROLE_TEACHER');
 
+        return $user;
     }
 
     private function createNormalUser()
     {
-        $user              = array();
-        $user['email']     = "normal@user.com";
-        $user['nickname']  = "normal";
-        $user['password']  = "user";
-        $user              = $this->getUserService()->register($user);
+        $user = array();
+        $user['email'] = 'normal@user.com';
+        $user['nickname'] = 'normal';
+        $user['password'] = 'user';
+        $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
-        $user['roles']     = array('ROLE_USER');
+        $user['roles'] = array('ROLE_USER');
+
         return $user;
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Common;
 
 use Symfony\Component\Yaml\Yaml;
@@ -28,7 +29,7 @@ class JoinPointToolkit
             foreach ($finder as $dir) {
                 $filepath = $dir->getRealPath().'/join_point.yml';
                 if (file_exists($filepath)) {
-                    $points     = Yaml::parse(file_get_contents($filepath));
+                    $points = Yaml::parse(file_get_contents($filepath));
                     $joinPoints = array_merge_recursive($joinPoints, $points);
                 }
             }

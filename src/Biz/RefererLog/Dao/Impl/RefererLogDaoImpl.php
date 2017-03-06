@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\RefererLog\Dao\Impl;
 
 use Biz\RefererLog\Dao\RefererLogDao;
@@ -12,7 +13,7 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
     {
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys'   => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
+            'orderbys' => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
             'conditions' => array(
                 'targetType = :targetType',
                 'targetId = :targetId',
@@ -22,15 +23,15 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
                 'createdTime >= :startTime',
                 'token = :token',
                 'ip = :ip',
-                'createdTime <= :endTime'
-            )
+                'createdTime <= :endTime',
+            ),
         );
     }
 
     public function findRefererLogsGroupByTargetId($targetType, $orderBy, $startTime, $endTime, $start, $limit)
     {
         $parameters = array($targetType, $targetType);
-        $sql        = "SELECT a.targetId AS targetId, b.hitNum AS hitNum,b.orderCount AS orderCount
+        $sql = "SELECT a.targetId AS targetId, b.hitNum AS hitNum,b.orderCount AS orderCount
                     FROM (SELECT targetId FROM {$this->table} WHERE targetType = ?
                 GROUP BY targetId) AS a LEFT JOIN (SELECT targetId, COUNT(id) AS hitNum, SUM(orderCount) AS orderCount FROM {$this->table}
                 WHERE targetType = ?";
@@ -41,11 +42,12 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
         }
 
         if (!empty($endTime)) {
-            $sql .= "and createdTime <= ?";
+            $sql .= 'and createdTime <= ?';
             $parameters[] = $endTime;
         }
 
         $sql .= "GROUP BY targetId) AS b ON a.targetId = b.targetId ORDER BY {$orderBy[0]} {$orderBy[1]},targetId DESC LIMIT {$start}, {$limit}";
+
         return $this->db()->fetchAll($sql, $parameters);
     }
 
@@ -55,6 +57,7 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
         $builder = $this->createQueryBuilder($conditions, $groupBy)
             ->select('refererName, count(targetId) as count, sum(orderCount) as orderCount')
             ->addOrderBy('count', 'DESC');
+
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -73,6 +76,7 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select("COUNT(DISTINCT {$field})");
+
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -83,6 +87,7 @@ class RefererLogDaoImpl extends GeneralDaoImpl implements RefererLogDao
         if (!empty($groupBy)) {
             $builder->groupBy($groupBy);
         }
+
         return $builder;
     }
 }

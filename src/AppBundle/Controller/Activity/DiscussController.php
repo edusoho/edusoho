@@ -11,7 +11,7 @@ class DiscussController extends BaseController implements ActivityActionInterfac
     public function showAction(Request $request, $activity)
     {
         return $this->render('activity/discuss/show.html.twig', array(
-            'activity' => $activity
+            'activity' => $activity,
         ));
     }
 
@@ -20,14 +20,14 @@ class DiscussController extends BaseController implements ActivityActionInterfac
         $activity = $this->getActivityService()->getActivity($id);
 
         return $this->render('activity/discuss/modal.html.twig', array(
-            'activity' => $activity
+            'activity' => $activity,
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
         return $this->render('activity/discuss/modal.html.twig', array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
     }
 

@@ -14,7 +14,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
 
@@ -37,8 +37,8 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com',
-            'token'    => array('userId' => 999, 'token' => 'token', 'expiredTime' => strtotime('+1 day'))
+            'email' => 'test_email@email.com',
+            'token' => array('userId' => 999, 'token' => 'token', 'expiredTime' => strtotime('+1 day')),
         );
         $registeredUser = $this->getUserService()->register($userInfo, 'qq');
 
@@ -57,79 +57,79 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testRegisterWithErrorEmail()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@error_email.com'
+            'email' => 'test_email@error_email.com',
         );
         $this->getUserService()->register($userInfo);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testRegisterWithRegistedNickname()
     {
         $user1Info = array(
             'nickname' => 'testuser1',
             'password' => 'test_password',
-            'email'    => 'test_email@email1.com'
+            'email' => 'test_email@email1.com',
         );
         $this->getUserService()->register($user1Info);
 
         $user2Info = array(
             'nickname' => 'testuser1',
             'password' => 'test_password',
-            'email'    => 'test_email@email2.com'
+            'email' => 'test_email@email2.com',
         );
         $this->getUserService()->register($user2Info);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testRegisterWithRegistedEmail()
     {
         $user1Info = array(
             'nickname' => 'testuser1',
             'password' => 'test_password',
-            'email'    => 'test_email@registerdemail.com'
+            'email' => 'test_email@registerdemail.com',
         );
         $this->getUserService()->register($user1Info);
 
         $user2Info = array(
             'nickname' => 'testuser2',
             'password' => 'test_password',
-            'email'    => 'test_email@registerdemail.com'
+            'email' => 'test_email@registerdemail.com',
         );
         $this->getUserService()->register($user2Info);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testRegisterWithErrorNickname1()
     {
         $this->getUserService()->register(array(
             'nickname' => 'test_user nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         ));
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testRegisterWithErrorNickname2()
     {
         $this->getUserService()->register(array(
             'nickname' => 'user|!@2',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         ));
     }
 
@@ -138,10 +138,10 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $foundUser      = $this->getUserService()->getUser($registeredUser['id']);
+        $foundUser = $this->getUserService()->getUser($registeredUser['id']);
         $this->assertEquals($registeredUser, $foundUser);
 
         $foundUser = $this->getUserService()->getUser(999);
@@ -153,10 +153,10 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $foundUser      = $this->getUserService()->getUserByNickname($registeredUser['nickname']);
+        $foundUser = $this->getUserService()->getUserByNickname($registeredUser['nickname']);
         $this->assertEquals($registeredUser, $foundUser);
 
         $foundUser = $this->getUserService()->getUserByNickname('not_exist_nickname');
@@ -166,34 +166,34 @@ class UserServiceTest extends BaseTestCase
     public function testGetUserByLoginField()
     {
         $userInfo = array(
-            'nickname'       => 'test_nickname',
-            'password'       => 'test_password',
-            'email'          => 'test_email@email.com',
-            'verifiedMobile' => '13777868634'
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+            'verifiedMobile' => '13777868634',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $keyword        = '13777868634';
-        $result         = $this->getUserService()->getUserByLoginField($keyword);
+        $keyword = '13777868634';
+        $result = $this->getUserService()->getUserByLoginField($keyword);
         $this->assertEquals($result['id'], $registeredUser['id']);
         $keyword = 'test_email@email.com';
-        $result  = $this->getUserService()->getUserByLoginField($keyword);
+        $result = $this->getUserService()->getUserByLoginField($keyword);
         $this->assertEquals($result['id'], $registeredUser['id']);
         $keyword = 'test_nickname';
-        $result  = $this->getUserService()->getUserByLoginField($keyword);
+        $result = $this->getUserService()->getUserByLoginField($keyword);
         $this->assertEquals($result['id'], $registeredUser['id']);
     }
 
     public function testGetUserByVerifiedMobile()
     {
         $userInfo = array(
-            'nickname'       => 'test_nickname',
-            'password'       => 'test_password',
-            'email'          => 'test_email@email.com',
-            'verifiedMobile' => '13777868634'
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+            'verifiedMobile' => '13777868634',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $keyword        = '13777868634';
-        $result         = $this->getUserService()->getUserByLoginField($keyword);
+        $keyword = '13777868634';
+        $result = $this->getUserService()->getUserByLoginField($keyword);
         $this->assertEquals($result['id'], $registeredUser['id']);
     }
 
@@ -202,10 +202,10 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $foundUser      = $this->getUserService()->getUserByEmail('test_email@email.com');
+        $foundUser = $this->getUserService()->getUserByEmail('test_email@email.com');
         $this->assertEquals($registeredUser, $foundUser);
 
         $foundUser = $this->getUserService()->getUserByEmail('not_exist_email@user.com');
@@ -214,9 +214,9 @@ class UserServiceTest extends BaseTestCase
 
     public function testFindUsersByIds()
     {
-        $user1      = $this->createUser('user1');
-        $user2      = $this->createUser('user2');
-        $user3      = $this->createUser('user3');
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $user3 = $this->createUser('user3');
         $foundUsers = $this->getUserService()->findUsersByIds(array($user1['id'], $user2['id']));
 
         $foundUserIds = array_keys($foundUsers);
@@ -224,7 +224,7 @@ class UserServiceTest extends BaseTestCase
         $this->assertContains($user1['id'], $foundUserIds);
         $this->assertContains($user2['id'], $foundUserIds);
 
-        $foundUsers   = $this->getUserService()->findUsersByIds(array($user1['id'], $user2['id'], 99999));
+        $foundUsers = $this->getUserService()->findUsersByIds(array($user1['id'], $user2['id'], 99999));
         $foundUserIds = array_keys($foundUsers);
 
         $this->assertEquals(2, count($foundUserIds));
@@ -236,19 +236,19 @@ class UserServiceTest extends BaseTestCase
         $this->assertEmpty($foundUsers);
     }
 
-/**
- * @group tmp
- */
+    /**
+     * @group tmp
+     */
     public function testSearchUsers()
     {
         $user1 = $this->createUser('user1');
         $user2 = $this->createUser('user2');
 
         $conditions = array(
-            'nickname' => 'user1'
+            'nickname' => 'user1',
         );
         $orderBy = array('createdTime' => 'ASC');
-        $result  = $this->getUserService()->searchUsers($conditions, $orderBy, 0, 20);
+        $result = $this->getUserService()->searchUsers($conditions, $orderBy, 0, 20);
         $this->assertEquals(1, count($result));
     }
 
@@ -258,13 +258,13 @@ class UserServiceTest extends BaseTestCase
         $user2 = $this->createUser('user2');
 
         $foundUserProfiles = $this->getUserService()->findUserProfilesByIds(array($user1['id'], $user2['id']));
-        $userProfileIds    = array_keys($foundUserProfiles);
+        $userProfileIds = array_keys($foundUserProfiles);
         $this->assertEquals(2, count($foundUserProfiles));
         $this->assertContains($user1['id'], $userProfileIds);
         $this->assertContains($user2['id'], $userProfileIds);
 
         $foundUserProfiles = $this->getUserService()->findUserProfilesByIds(array($user1['id'], $user2['id'], 999));
-        $userProfileIds    = array_keys($foundUserProfiles);
+        $userProfileIds = array_keys($foundUserProfiles);
         $this->assertEquals(2, count($foundUserProfiles));
         $this->assertContains($user1['id'], $userProfileIds);
         $this->assertContains($user2['id'], $userProfileIds);
@@ -315,16 +315,16 @@ class UserServiceTest extends BaseTestCase
 
         $foundUsers = $this->getUserService()->searchUsers(array(
             'nickname' => 'user1',
-            'roles'    => 'ROLE_USER',
-            'loginIp'  => '',
-            'email'    => 'user1@user1.com'
+            'roles' => 'ROLE_USER',
+            'loginIp' => '',
+            'email' => 'user1@user1.com',
         ), array('createdTime' => 'DESC'), 0, 10);
 
         $foundUsers = $this->getUserService()->searchUsers(array(
-            'roles'    => 'ROLE_USER',
-            'loginIp'  => '',
+            'roles' => 'ROLE_USER',
+            'loginIp' => '',
             'nickname' => 'user',
-            'email'    => 'user1@user1.com'
+            'email' => 'user1@user1.com',
         ), array('createdTime' => 'DESC'), 0, 10);
     }
 
@@ -335,26 +335,26 @@ class UserServiceTest extends BaseTestCase
 
         $foundUsers = $this->getUserService()->searchUsers(array(
             'nickname' => 'user1',
-            'roles'    => 'ROLE_USER',
-            'loginIp'  => '',
-            'email'    => 'user2@user2.com'
+            'roles' => 'ROLE_USER',
+            'loginIp' => '',
+            'email' => 'user2@user2.com',
         ), array('createdTime' => 'DESC'), 0, 10);
 
         $foundUsers = $this->getUserService()->searchUsers(array(
             'nickname' => 'user2',
-            'roles'    => 'ROLE_ADMIN',
-            'loginIp'  => '',
-            'email'    => 'user1@user1.com'
+            'roles' => 'ROLE_ADMIN',
+            'loginIp' => '',
+            'email' => 'user1@user1.com',
         ), array('createdTime' => 'DESC'), 0, 10);
     }
 
-/**
- * @group tmp
- */
+    /**
+     * @group tmp
+     */
     public function testSearchUserCount()
     {
-        $user1          = $this->createUser('user1');
-        $user2          = $this->createUser('user2');
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
         $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'nickname', 'keyword' => 'user1'));
         $this->assertEquals(1, $foundUserCount);
         $foundUserCount = $this->getUserService()->countUsers(array('keywordType' => 'roles', 'keyword' => '|ROLE_USER|'));
@@ -387,7 +387,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->assertEquals(0, $registeredUser['emailVerified']);
@@ -406,7 +406,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeNickname($registeredUser['id'], 'hello123');
@@ -415,7 +415,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testChangeNicknameOne()
     {
@@ -424,29 +424,29 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testChangeNicknameTwo()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeNickname($registeredUser['id'], 'hell_!!o123');
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testChangeNicknameThree()
     {
-        $user     = $this->createUser('user');
+        $user = $this->createUser('user');
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeNickname($registeredUser['id'], 'user');
@@ -457,7 +457,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeEmail($registeredUser['id'], 'change@change.com');
@@ -466,35 +466,35 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testChangeEmailWithErrorEmailFormat1()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeEmail($registeredUser['id'], 'change@ch_ange.com');
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testChangeEmailWithErrorEmailFormat2()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeEmail($registeredUser['id'], 'changechange.com');
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
     public function testChangeEmailWithExistEmail()
     {
@@ -508,13 +508,13 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
 
         $registeredUser = $this->getUserService()->register($userInfo);
-        $data           = array(
-            'id'   => '1',
-            'type' => 'jpg'
+        $data = array(
+            'id' => '1',
+            'type' => 'jpg',
         );
         //$a              = $this->getUserService()->changeAvatar($registeredUser['id'], $data);
     }
@@ -524,9 +524,9 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $user   = $this->getUserService()->register($userInfo);
+        $user = $this->getUserService()->register($userInfo);
         $result = $this->getUserService()->isEmailAvaliable('test@user.com');
         $this->assertTrue($result);
         $result = $this->getUserService()->isEmailAvaliable('test_email@email.com');
@@ -540,7 +540,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $this->getUserService()->register($userInfo);
 
@@ -565,7 +565,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->assertTrue($this->getUserService()->verifyPassword($registeredUser['id'], $userInfo['password']));
@@ -576,28 +576,28 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testChangePasswordTwice()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changePassword($registeredUser['id'], '');
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testChangePayPasswordOne()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changePayPassword($registeredUser['id'], '');
@@ -608,7 +608,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $newPayPassword = '12345asd';
         $registeredUser = $this->getUserService()->register($userInfo);
@@ -618,13 +618,13 @@ class UserServiceTest extends BaseTestCase
     public function testIsMobileUnique()
     {
         $userInfo = array(
-            'nickname'       => 'test_nickname',
-            'password'       => 'test_password',
-            'email'          => 'test_email@email.com',
-            'verifiedMobile' => '13777868634'
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+            'verifiedMobile' => '13777868634',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $result         = $this->getUserService()->isMobileUnique('13777868634');
+        $result = $this->getUserService()->isMobileUnique('13777868634');
         $this->assertFalse($result);
         $result = $this->getUserService()->isMobileUnique('18777868634');
         $this->assertTrue($result);
@@ -633,47 +633,47 @@ class UserServiceTest extends BaseTestCase
     public function testChangeMobileOne()
     {
         $userInfo = array(
-            'nickname'       => 'test_nickname',
-            'password'       => 'test_password',
-            'email'          => 'test_email@email.com',
-            'verifiedMobile' => '13777868634'
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+            'verifiedMobile' => '13777868634',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $result         = $this->getUserService()->changeMobile($registeredUser['id'], '18257739598');
+        $result = $this->getUserService()->changeMobile($registeredUser['id'], '18257739598');
         $this->assertTrue($result);
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testChangeMobileTwice()
     {
         $userInfo = array(
-            'nickname'       => 'test_nickname',
-            'password'       => 'test_password',
-            'email'          => 'test_email@email.com',
-            'verifiedMobile' => '13777868634'
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+            'verifiedMobile' => '13777868634',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $result         = $this->getUserService()->changeMobile($registeredUser['id'], '');
+        $result = $this->getUserService()->changeMobile($registeredUser['id'], '');
     }
 
     public function testGetUserSecureQuestionsByUserId()
     {
         $userInfo = array(
-            'nickname'       => 'test_nickname',
-            'password'       => 'test_password',
-            'email'          => 'test_email@email.com',
-            'verifiedMobile' => '13777868634'
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+            'verifiedMobile' => '13777868634',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $fields         = array(
+        $fields = array(
             'securityQuestion1' => 'question-1',
-            'securityAnswer1'   => 'answer-1',
+            'securityAnswer1' => 'answer-1',
             'securityQuestion2' => 'question-2',
-            'securityAnswer2'   => 'answer-2',
+            'securityAnswer2' => 'answer-2',
             'securityQuestion3' => 'question-3',
-            'securityAnswer3'   => 'answer-3'
+            'securityAnswer3' => 'answer-3',
         );
         $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'], $fields);
         $result = $this->getUserService()->getUserSecureQuestionsByUserId($registeredUser['id']);
@@ -683,19 +683,19 @@ class UserServiceTest extends BaseTestCase
     public function testAddUserSecureQuestionsWithUnHashedAnswers()
     {
         $userInfo = array(
-            'nickname'       => 'test_nickname',
-            'password'       => 'test_password',
-            'email'          => 'test_email@email.com',
-            'verifiedMobile' => '13777868634'
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email' => 'test_email@email.com',
+            'verifiedMobile' => '13777868634',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $fields         = array(
+        $fields = array(
             'securityQuestion1' => 'question-1',
-            'securityAnswer1'   => 'answer-1',
+            'securityAnswer1' => 'answer-1',
             'securityQuestion2' => 'question-2',
-            'securityAnswer2'   => 'answer-2',
+            'securityAnswer2' => 'answer-2',
             'securityQuestion3' => 'question-3',
-            'securityAnswer3'   => 'answer-3'
+            'securityAnswer3' => 'answer-3',
         );
         $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($registeredUser['id'], $fields);
         $result = $this->getUserService()->getUserSecureQuestionsByUserId($registeredUser['id']);
@@ -704,9 +704,9 @@ class UserServiceTest extends BaseTestCase
 
     public function testVerifyInSaltOut()
     {
-        $in     = 'test';
-        $out    = 'xw4L6lqFZ9b43YFhZKn73sOgZpK52o/GE60emMO4AUo=';
-        $salt   = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $in = 'test';
+        $out = 'xw4L6lqFZ9b43YFhZKn73sOgZpK52o/GE60emMO4AUo=';
+        $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $result = $this->getUserService()->verifyInSaltOut($in, $salt, $out);
         $this->assertFalse($result);
     }
@@ -716,7 +716,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->assertFalse($this->getUserService()->verifyPassword($registeredUser['id'], 'password'));
@@ -724,7 +724,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testVerifyPayPasswordTwice()
     {
@@ -734,39 +734,39 @@ class UserServiceTest extends BaseTestCase
 
     public function testParseRegistration()
     {
-        $auth["register_mode"] = "email_or_mobile";
+        $auth['register_mode'] = 'email_or_mobile';
         $this->getSettingService()->set('auth', $auth);
         $registration['emailOrMobile'] = '627099747@qq.com';
-        $result                        = $this->getUserService()->parseRegistration($registration);
+        $result = $this->getUserService()->parseRegistration($registration);
         $this->assertEquals('627099747@qq.com', $result['emailOrMobile']);
     }
 
     public function testParseRegistrationTwice()
     {
-        $auth["register_mode"] = "email_or_mobile";
+        $auth['register_mode'] = 'email_or_mobile';
         $this->getSettingService()->set('auth', $auth);
         $registration['emailOrMobile'] = '13777777976';
-        $result                        = $this->getUserService()->parseRegistration($registration);
+        $result = $this->getUserService()->parseRegistration($registration);
         $this->assertEquals('13777777976', $result['mobile']);
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testParseRegistrationThird()
     {
-        $auth["register_mode"] = "email_or_mobile";
+        $auth['register_mode'] = 'email_or_mobile';
         $this->getSettingService()->set('auth', $auth);
         $registration['emailOrMobile'] = '';
         $this->getUserService()->parseRegistration($registration);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testParseRegistrationForth()
     {
-        $auth["register_mode"] = "email_or_mobile";
+        $auth['register_mode'] = 'email_or_mobile';
         $this->getSettingService()->set('auth', $auth);
         $registration['emailOrMobile'] = 'x';
         $this->getUserService()->parseRegistration($registration);
@@ -774,30 +774,30 @@ class UserServiceTest extends BaseTestCase
 
     public function testParseRegistrationFifth()
     {
-        $auth["register_mode"] = "mobile";
+        $auth['register_mode'] = 'mobile';
         $this->getSettingService()->set('auth', $auth);
         $registration['mobile'] = '13777822976';
-        $result                 = $this->getUserService()->parseRegistration($registration);
+        $result = $this->getUserService()->parseRegistration($registration);
         $this->assertEquals('13777822976', $result['mobile']);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testParseRegistrationSixth()
     {
-        $auth["register_mode"] = "mobile";
+        $auth['register_mode'] = 'mobile';
         $this->getSettingService()->set('auth', $auth);
         $registration['mobile'] = 'z';
         $this->getUserService()->parseRegistration($registration);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testParseRegistrationSeventh()
     {
-        $auth["register_mode"] = "mobile";
+        $auth['register_mode'] = 'mobile';
         $this->getSettingService()->set('auth', $auth);
         $registration['mobile'] = 'x';
         $this->getUserService()->parseRegistration($registration);
@@ -805,7 +805,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testParseRegistrationEighth()
     {
-        $auth["register_mode"] = "";
+        $auth['register_mode'] = '';
         $this->getSettingService()->set('auth', $auth);
         $registration = null;
         $this->getUserService()->parseRegistration($registration);
@@ -813,7 +813,7 @@ class UserServiceTest extends BaseTestCase
 
     public function testIsMobileRegisterMode()
     {
-        $auth["register_mode"] = "mobile";
+        $auth['register_mode'] = 'mobile';
         $this->getSettingService()->set('auth', $auth);
         $result = $this->getUserService()->IsMobileRegisterMode();
         $this->assertTrue($result);
@@ -823,7 +823,7 @@ class UserServiceTest extends BaseTestCase
     {
         $userInfo = array(
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $nickname = $this->getUserService()->generateNickname($userInfo);
         $this->assertNotNull($nickname);
@@ -833,7 +833,7 @@ class UserServiceTest extends BaseTestCase
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
-            'password' => 'test_password'
+            'password' => 'test_password',
         );
         $email = $this->getUserService()->generateEmail($userInfo);
         $this->assertNotNull($email);
@@ -859,8 +859,8 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com',
-            'token'    => array('userId' => 999, 'token' => 'token', 'expiredTime' => strtotime('+1 day'))
+            'email' => 'test_email@email.com',
+            'token' => array('userId' => 999, 'token' => 'token', 'expiredTime' => strtotime('+1 day')),
         );
         $registeredUser = $this->getUserService()->register($userInfo, 'weibo');
         $this->assertEquals('0', $registeredUser['setup']);
@@ -869,44 +869,44 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testSetupAccountTwice()
     {
-        $user   = null;
+        $user = null;
         $result = $this->getUserService()->setupAccount($user['id']);
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testSetupAccountThird()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $result         = $this->getUserService()->setupAccount($registeredUser['id']);
+        $result = $this->getUserService()->setupAccount($registeredUser['id']);
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testChangePasswordWithEmptyPassword()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changePassword($registeredUser['id'], '');
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testChangePasswordWithNotExistUserId()
     {
@@ -914,7 +914,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testVerifyPasswordTwice()
     {
@@ -922,36 +922,35 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testVerifyPasswordWithNotExistUser()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->verifyPassword(0, 'password');
     }
 
     /**
-     *  error
+     *  error.
      */
     public function testFilterFollowingIds()
     {
-        $fromUser     = $this->createFromUser();
-        $toUser       = $this->createToUser();
-        $followed     = $this->getUserService()->follow($fromUser['id'], $toUser['id']);
+        $fromUser = $this->createFromUser();
+        $toUser = $this->createToUser();
+        $followed = $this->getUserService()->follow($fromUser['id'], $toUser['id']);
         $followingIds = $this->getUserService()->filterFollowingIds($fromUser['id'], array(999, $toUser['id'], 777));
         $this->assertContains($toUser['id'], $followingIds);
     }
 
     public function testFollowOnce() //touser 是被关注者
-
     {
         $fromUser = $this->createFromUser();
-        $toUser   = $this->createToUser();
+        $toUser = $this->createToUser();
         $followed = $this->getUserService()->follow($fromUser['id'], $toUser['id']);
         $this->assertEquals($fromUser['id'], $followed['fromId']);
         $this->assertEquals($toUser['id'], $followed['toId']);
@@ -1033,7 +1032,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testFollowTwice()
     {
@@ -1043,7 +1042,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testFollowThird()
     {
@@ -1052,7 +1051,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testFollowForth()
     {
@@ -1067,32 +1066,32 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $result         = $this->getUserService()->HasAdminRoles($registeredUser['id']);
+        $result = $this->getUserService()->HasAdminRoles($registeredUser['id']);
         $this->assertFalse($result);
         $this->getUserService()->changeUserRoles($registeredUser['id'], array(
-            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'
+            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER',
         ));
         $result = $this->getUserService()->HasAdminRoles($registeredUser['id']);
         $this->assertTrue($result);
     }
 
     /**
-     *  follow
+     *  follow.
      */
     public function testUnFollow()
     {
         $fromUser = $this->createFromUser();
-        $toUser   = $this->createToUser();
+        $toUser = $this->createToUser();
         $this->getUserService()->follow($fromUser['id'], $toUser['id']);
         $result = $this->getUserService()->unFollow($fromUser['id'], $toUser['id']);
         $this->assertEquals(1, $result);
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testUnFollowTwcie()
     {
@@ -1102,7 +1101,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testUnFollowThird()
     {
@@ -1112,34 +1111,36 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  follow
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  follow.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testUnFollowNotExistUser()
     {
         $fromUser = $this->createFromUser();
-        $toUser   = $this->createToUser();
+        $toUser = $this->createToUser();
         $this->getUserService()->unFollow($fromUser['id'], 0);
     }
 
     /**
-     *  follow
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\ServiceException
+     *  follow.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testUnFollowWithoutFollowed()
     {
         $fromUser = $this->createFromUser();
-        $toUser   = $this->createToUser();
+        $toUser = $this->createToUser();
         $this->getUserService()->unFollow($fromUser['id'], $toUser['id']);
     }
 
     /**
-     *   follow
+     *   follow.
      */
     public function testIsFollowed()
     {
         $fromUser = $this->createFromUser();
-        $toUser   = $this->createToUser();
+        $toUser = $this->createToUser();
         $this->assertFalse($this->getUserService()->isFollowed($fromUser['id'], $toUser['id']));
 
         $this->getUserService()->follow($fromUser['id'], $toUser['id']);
@@ -1147,24 +1148,26 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  follow
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  follow.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testIsFollowedTwice()
     {
-        $user1  = null;
+        $user1 = null;
         $toUser = $this->createToUser();
         $this->getUserService()->isFollowed($user1['id'], $toUser['id']);
     }
 
     /**
-     *  follow
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  follow.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testIsFollowedThird()
     {
         $fromUser = $this->createFromUser();
-        $user2    = null;
+        $user2 = null;
         $this->getUserService()->isFollowed($fromUser['id'], $user2['id']);
     }
 
@@ -1173,16 +1176,16 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $result         = $this->getUserService()->getLastestApprovalByUserIdAndStatus($registeredUser['id'], 'approving');
+        $result = $this->getUserService()->getLastestApprovalByUserIdAndStatus($registeredUser['id'], 'approving');
         $this->assertFalse($result);
     }
 
     public function testfindUserApprovalsByUserIds()
     {
-        $users  = array();
+        $users = array();
         $result = $this->getUserService()->findUserApprovalsByUserIds($users);
         $this->assertEquals(0, count($result));
     }
@@ -1192,12 +1195,12 @@ class UserServiceTest extends BaseTestCase
 // {
 
 // }
+
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testApplyUserApprovalTwice()
     {
-
         $file = new \Symfony\Component\HttpFoundation\File\UploadedFile(
             __DIR__.'/Fixtures/test.gif',
             'original.gif',
@@ -1206,10 +1209,10 @@ class UserServiceTest extends BaseTestCase
             null
         );
 
-        $userId    = null;
-        $approval  = null;
-        $faceImg   = $file;
-        $backImg   = $file;
+        $userId = null;
+        $approval = null;
+        $faceImg = $file;
+        $backImg = $file;
         $directory = null;
         $this->getUserService()->applyUserApproval($userId, $approval, $faceImg, $backImg, $directory);
     }
@@ -1219,7 +1222,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testPassApprovalTwice()
     {
@@ -1233,15 +1236,15 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $result         = $this->getUserService()->rejectApproval($registeredUser['id']);
+        $result = $this->getUserService()->rejectApproval($registeredUser['id']);
         $this->assertTrue($result);
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testRejectApprovalTwice()
     {
@@ -1264,32 +1267,32 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $sessionId      = '123.0.0.1';
+        $sessionId = '123.0.0.1';
         $this->getUserService()->rememberLoginSessionId($registeredUser['id'], $sessionId);
         $result = $this->getUserService()->getUser($registeredUser['id']);
         $this->assertNotNull($result['loginSessionId']);
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testRememberLoginSessionIdTwice()
     {
-        $user      = null;
+        $user = null;
         $sessionId = '123.0.0.1';
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
     }
 
     public function testAnalysisRegisterDataByTime()
     {
-        $time1  = time();
-        $user1  = $this->createUser('user1');
-        $user2  = $this->createUser('user2');
-        $user3  = $this->createUser('user3');
-        $time2  = time();
+        $time1 = time();
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $user3 = $this->createUser('user3');
+        $time2 = time();
         $arrays = $this->getUserService()->analysisRegisterDataByTime($time1, $time2);
         $result = $arrays['0'];
         $this->assertGreaterThanOrEqual('3', $result['count']);
@@ -1297,17 +1300,18 @@ class UserServiceTest extends BaseTestCase
 
     public function testParseAts()
     {
-        $user1  = $this->createUser('user1');
-        $user2  = $this->createUser('user2');
-        $user3  = $this->createUser('user3');
-        $text   = '看我召唤三只猪!@user1,@user2,@user3,谢谢!';
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $user3 = $this->createUser('user3');
+        $text = '看我召唤三只猪!@user1,@user2,@user3,谢谢!';
         $result = $this->getUserService()->parseAts($text);
         $this->assertEquals(3, count($result));
     }
 
     /**
-     *   follow
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *   follow.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testIsFollowWithNotExistToId()
     {
@@ -1316,8 +1320,9 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *   follow
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *   follow.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testIsFollowWithNotExistFromId()
     {
@@ -1326,17 +1331,17 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  profile
+     *  profile.
      */
     public function testGetUserProfile()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $userProfile    = $this->getUserService()->getUserProfile($registeredUser['id']);
+        $userProfile = $this->getUserService()->getUserProfile($registeredUser['id']);
 
         $this->assertEmpty($userProfile['truename']);
         $this->assertEquals('secret', $userProfile['gender']);
@@ -1351,27 +1356,27 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  profile
+     *  profile.
      */
     public function testUpdateUserProfile()
     {
         $updateProfileInfo = array(
-            'truename'  => 'truename',
-            'gender'    => 'male',
-            'birthday'  => '2013-01-01',
-            'city'      => '10000',
-            'mobile'    => '13888888888',
-            'qq'        => '123456',
-            'company'   => 'company',
-            'job'       => 'job',
+            'truename' => 'truename',
+            'gender' => 'male',
+            'birthday' => '2013-01-01',
+            'city' => '10000',
+            'mobile' => '13888888888',
+            'qq' => '123456',
+            'company' => 'company',
+            'job' => 'job',
             'signature' => 'signature',
-            'about'     => 'about'
+            'about' => 'about',
         );
 
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->updateUserProfile($registeredUser['id'], $updateProfileInfo);
@@ -1390,102 +1395,106 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  profile
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  profile.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testUpdateUserProfileWithNotExistUser()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->updateUserProfile(999, array('gender' => 'male'));
     }
 
     /**
-     *  profile
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *  profile.
+     *
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testUpdateUserProfileWithErrorGender()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->updateUserProfile($registeredUser['id'], array('gender' => 'xxx'));
     }
 
     /**
-     *  profile
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *  profile.
+     *
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testUpdateUserProfileWithErrorBirthday()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->updateUserProfile($registeredUser['id'], array('birthday' => 'xxx'));
     }
 
     /**
-     *  profile
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *  profile.
+     *
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testUpdateUserProfileWithErrorMobile()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->updateUserProfile($registeredUser['id'], array('mobile' => '8888'));
     }
 
     /**
-     *  profile
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *  profile.
+     *
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testUpdateUserProfileWithErrorQQ()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->updateUserProfile($registeredUser['id'], array('qq' => '1'));
     }
 
     /**
-     *  roles
-     *
+     *  roles.
      */
     public function testChangeUserRoles()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
 
         $this->getUserService()->changeUserRoles($registeredUser['id'], array(
-            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'
+            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER',
         )
         );
         $foundUser = $this->getUserService()->getUser($registeredUser['id']);
         $this->assertEquals(array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'), $foundUser['roles']);
 
         $this->getUserService()->changeUserRoles($registeredUser['id'], array(
-            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'
+            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN',
         )
         );
         $foundUser = $this->getUserService()->getUser($registeredUser['id']);
@@ -1493,65 +1502,66 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  roles
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *  roles.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testChangeUserRolesWithEmptyRoles()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeUserRoles($registeredUser['id'], array());
     }
 
     /**
-     *  roles
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  roles.
      *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testChangeUserRolesWithNotExistUser()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeUserRoles(999, array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
     }
 
     /**
-     *  roles
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *  roles.
      *
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testChangeUserRolesWithIllegalRoles()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeUserRoles($registeredUser['id'], array('ROLE_NOTEXIST_USER'));
     }
 
     /**
-     *  token
+     *  token.
      */
     public function testMakeToken()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $registeredUser    = $this->getUserService()->register($userInfo);
+        $registeredUser = $this->getUserService()->register($userInfo);
         $passwordRestToken = $this->getUserService()->makeToken('password-reset', $registeredUser['id'], 1371801141, 'password-reset-data');
-        $emailVerifyToken  = $this->getUserService()->makeToken('email-verify', $registeredUser['id'], 1371801141, 'data');
+        $emailVerifyToken = $this->getUserService()->makeToken('email-verify', $registeredUser['id'], 1371801141, 'data');
         $this->assertNotNull($passwordRestToken);
         $this->assertNotNull($emailVerifyToken);
     }
@@ -1561,10 +1571,10 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $registeredUser          = $this->getUserService()->register($userInfo);
-        $passwordRestToken       = $this->getUserService()->makeToken('password-reset', $registeredUser['id'], strtotime('+1 day'), 'password-reset-data');
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $passwordRestToken = $this->getUserService()->makeToken('password-reset', $registeredUser['id'], strtotime('+1 day'), 'password-reset-data');
         $foundPasswordResetToken = $this->getUserService()->getToken('password-reset', $passwordRestToken);
         $this->assertEquals($registeredUser['id'], $foundPasswordResetToken['userId']);
         $this->assertEquals('password-reset', $foundPasswordResetToken['type']);
@@ -1572,17 +1582,17 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  token
+     *  token.
      */
     public function testGetTokenSuccess()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $registeredUser          = $this->getUserService()->register($userInfo);
-        $passwordRestToken       = $this->getUserService()->makeToken('password-reset', $registeredUser['id'], strtotime('+1 day'), 'password-reset-data');
+        $registeredUser = $this->getUserService()->register($userInfo);
+        $passwordRestToken = $this->getUserService()->makeToken('password-reset', $registeredUser['id'], strtotime('+1 day'), 'password-reset-data');
         $foundPasswordResetToken = $this->getUserService()->getToken('password-reset', $passwordRestToken);
 
         $this->assertEquals($registeredUser['id'], $foundPasswordResetToken['userId']);
@@ -1591,16 +1601,16 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  token
+     *  token.
      */
     public function testGetTokenFailedWithErrorTypeAndErrorToken()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $registeredUser    = $this->getUserService()->register($userInfo);
+        $registeredUser = $this->getUserService()->register($userInfo);
         $passwordRestToken = $this->getUserService()->makeToken('password-reset', $registeredUser['id'], 1371801141, 'password-reset-data');
 
         $foundPasswordResetToken = $this->getUserService()->getToken('password-reset', 'xxxxxxxxx');
@@ -1611,16 +1621,16 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  token
+     *  token.
      */
     public function testGetTokenFailedWithExpiredTimeLessNow()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $registeredUser    = $this->getUserService()->register($userInfo);
+        $registeredUser = $this->getUserService()->register($userInfo);
         $passwordRestToken = $this->getUserService()->makeToken('password-reset', $registeredUser['id'], 1000, 'password-reset-data');
 
         $foundPasswordResetToken = $this->getUserService()->getToken('password-reset', $passwordRestToken);
@@ -1632,43 +1642,43 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $registeredUser   = $this->getUserService()->register($userInfo);
+        $registeredUser = $this->getUserService()->register($userInfo);
         $emailVerifyToken = $this->getUserService()->makeToken('email-verify', $registeredUser['id'], 1371801141, 'data');
-        $result           = $this->getUserService()->countTokens(array('type' => 'email-verify'));
+        $result = $this->getUserService()->countTokens(array('type' => 'email-verify'));
         $this->assertEquals('1', $result);
     }
 
     /**
-     *  token
+     *  token.
      */
     public function testDeleteToken()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $registeredUser    = $this->getUserService()->register($userInfo);
+        $registeredUser = $this->getUserService()->register($userInfo);
         $passwordRestToken = $this->getUserService()->makeToken('password-reset', $registeredUser['id'], 1000, 'password-reset-data');
-        $deleteResult      = $this->getUserService()->deleteToken('password-reset', $passwordRestToken);
+        $deleteResult = $this->getUserService()->deleteToken('password-reset', $passwordRestToken);
         $this->assertTrue($deleteResult);
     }
 
     /**
-     *  token
+     *  token.
      */
     public function testDeleteTokenFailed()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $registeredUser    = $this->getUserService()->register($userInfo);
+        $registeredUser = $this->getUserService()->register($userInfo);
         $passwordRestToken = $this->getUserService()->makeToken('password-reset', $registeredUser['id'], 1000, 'password-reset-data');
-        $deleteResult      = $this->getUserService()->deleteToken('error_type', $passwordRestToken);
+        $deleteResult = $this->getUserService()->deleteToken('error_type', $passwordRestToken);
         $this->assertFalse($deleteResult);
 
         $deleteResult = $this->getUserService()->deleteToken('password-reset', 'error_token');
@@ -1679,14 +1689,14 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  lock
+     *  lock.
      */
     public function testLockUser()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->assertEquals(0, $registeredUser['locked']);
@@ -1696,8 +1706,9 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *   lock
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *   lock.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testLockUserTwice()
     {
@@ -1706,8 +1717,9 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  lock
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  lock.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testLockNotExistUser()
     {
@@ -1715,14 +1727,14 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  lock
+     *  lock.
      */
     public function testUnLockUser()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->assertEquals(0, $registeredUser['locked']);
@@ -1733,7 +1745,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testUnLockUserTwice()
     {
@@ -1746,7 +1758,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->promoteUser($registeredUser['id'], 1);
@@ -1756,7 +1768,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testPromoteUserTwice()
     {
@@ -1769,7 +1781,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->promoteUser($registeredUser['id'], 1);
@@ -1781,7 +1793,7 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testCancelPromoteUserTwice()
     {
@@ -1794,11 +1806,11 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeUserRoles($registeredUser['id'], array(
-            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'
+            'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER',
         ));
         $this->getUserService()->promoteUser($registeredUser['id'], 1);
         $result = $this->getUserService()->findLatestPromotedTeacher(0, 20);
@@ -1811,7 +1823,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->waveUserCounter($registeredUser['id'], 'newNotificationNum', 1);
@@ -1820,14 +1832,14 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testWaveUserCounterTwice()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->waveUserCounter($registeredUser['id'], 'newMessageNum', 'ss');
@@ -1838,7 +1850,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->waveUserCounter($registeredUser['id'], 'newMessageNum', 1);
@@ -1850,8 +1862,9 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  lock
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  lock.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testUnLockNotExistUser()
     {
@@ -1859,14 +1872,14 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
+     *  bind.
      */
     public function testBindUser()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
@@ -1884,11 +1897,11 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $ip             = '127.0.0.1';
-        $result         = $this->getUserService()->markLoginFailed($registeredUser['id'], $ip);
+        $ip = '127.0.0.1';
+        $result = $this->getUserService()->markLoginFailed($registeredUser['id'], $ip);
         $this->assertNotNull($result);
     }
 
@@ -1897,11 +1910,11 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $ip             = '152.0.1';
-        $result         = $this->getUserService()->markLoginSuccess($registeredUser['id'], $ip);
+        $ip = '152.0.1';
+        $result = $this->getUserService()->markLoginSuccess($registeredUser['id'], $ip);
         $this->assertNull($result);
     }
 
@@ -1910,17 +1923,18 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $ip             = '152.0.1';
-        $result         = $this->getUserService()->checkLoginForbidden($registeredUser['id'], $ip);
+        $ip = '152.0.1';
+        $result = $this->getUserService()->checkLoginForbidden($registeredUser['id'], $ip);
         $this->assertEquals('ok', $result['status']);
     }
 
     /**
-     *  bind
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  bind.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testBindNotExistUser()
     {
@@ -1928,29 +1942,30 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *  bind.
+     *
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testBindUserWithTypeNotInWeiboQQRenren()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $foundBind      = $this->getUserService()->bindUser('douban', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
+        $foundBind = $this->getUserService()->bindUser('douban', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
     }
 
     /**
-     *  bind
+     *  bind.
      */
     public function testGetUserBind()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
@@ -1963,31 +1978,31 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
+     *  bind.
      */
     public function testGetUserBindWithErrorType()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array(
-            'token' => 'token', 'expiredTime' => strtotime('+1 day')
+            'token' => 'token', 'expiredTime' => strtotime('+1 day'),
         ));
         $this->getUserService()->getUserBindByTypeAndFromId('douban', 123123123);
     }
 
     /**
-     *  bind
+     *  bind.
      */
     public function testGetUserBindWithErrorParamaters()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
@@ -1996,14 +2011,14 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
+     *  bind.
      */
     public function testGetUserBindWithExpiredTimeInvalidate()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
@@ -2011,14 +2026,14 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
+     *  bind.
      */
     public function testGetUserBindByTypeAndUserId()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
@@ -2030,41 +2045,44 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  bind.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testGetUserBindByTypeAndUserIdTwice()
     {
         $registeredUser = null;
-        $foundBind      = $this->getUserService()->getUserBindByTypeAndUserId('qq', $registeredUser['id']);
+        $foundBind = $this->getUserService()->getUserBindByTypeAndUserId('qq', $registeredUser['id']);
     }
 
     /**
-     *  bind
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *  bind.
+     *
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testGetUserBindByTypeAndUserIdThird()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $type           = null;
-        $foundBind      = $this->getUserService()->getUserBindByTypeAndUserId($type, $registeredUser['id']);
+        $type = null;
+        $foundBind = $this->getUserService()->getUserBindByTypeAndUserId($type, $registeredUser['id']);
     }
 
     /**
-     *  bind
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  bind.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testGetUserBindWithInvalidateUserId()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
@@ -2072,15 +2090,16 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *  bind.
+     *
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testGetUserBindByTypeAndUserIdWithTypeNotInWeiboQQRenren()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
@@ -2088,21 +2107,21 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
+     *  bind.
      */
     public function testFindBindsByUserIdOne()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 111111, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
         $this->getUserService()->bindUser('renren', 222222, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
         $this->getUserService()->bindUser('weibo', 333333, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
         $userBinds = $this->getUserService()->findBindsByUserId($registeredUser['id']);
-        $fromIds   = array();
+        $fromIds = array();
 
         foreach ($userBinds as $userBind) {
             array_push($fromIds, $userBind['fromId']);
@@ -2114,8 +2133,9 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  bind.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testFindBindsByUserIdTwice()
     {
@@ -2124,15 +2144,16 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  bind.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testFindBindsByErrorUserId()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 111111, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
@@ -2149,7 +2170,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 111111, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
@@ -2162,8 +2183,9 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  bind.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testUnBindUserByTypeAndToIdTwice()
     {
@@ -2173,16 +2195,17 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *  bind.
+     *
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testUnBindUserByTypeAndToIdThird()
     {
-        $type     = null;
+        $type = null;
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->unBindUserByTypeAndToId($type, $registeredUser['id']);
@@ -2193,7 +2216,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
@@ -2205,68 +2228,69 @@ class UserServiceTest extends BaseTestCase
     public function testCreateUserPayAgreement()
     {
         $field = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
-        $bank  = $this->getUserService()->createUserPayAgreement($field);
+        $bank = $this->getUserService()->createUserPayAgreement($field);
         $this->assertEquals('农业银行', $bank['bankName']);
     }
 
     public function testGetUserPayAgreement()
     {
-        $field    = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
-        $bank     = $this->getUserService()->createUserPayAgreement($field);
+        $field = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
+        $bank = $this->getUserService()->createUserPayAgreement($field);
         $authBank = $this->getUserService()->getUserPayAgreement($bank['id']);
         $this->assertEquals('农业银行', $authBank['bankName']);
     }
 
     public function testGetUserPayAgreementByUserIdAndBankAuth()
     {
-        $field    = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
-        $bank     = $this->getUserService()->createUserPayAgreement($field);
+        $field = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
+        $bank = $this->getUserService()->createUserPayAgreement($field);
         $authBank = $this->getUserService()->getUserPayAgreementByUserIdAndBankAuth(1, '0eeeee');
         $this->assertEquals('农业银行', $authBank['bankName']);
     }
 
     public function testGetUserPayAgreementByUserId()
     {
-        $field    = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
-        $bank     = $this->getUserService()->createUserPayAgreement($field);
+        $field = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
+        $bank = $this->getUserService()->createUserPayAgreement($field);
         $authBank = $this->getUserService()->getUserPayAgreementByUserId(1);
         $this->assertEquals('农业银行', $authBank['bankName']);
     }
 
     public function testUpdateUserPayAgreementByUserIdAndBankAuth()
     {
-        $field    = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
-        $bank     = $this->getUserService()->createUserPayAgreement($field);
+        $field = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
+        $bank = $this->getUserService()->createUserPayAgreement($field);
         $authBank = $this->getUserService()->updateUserPayAgreementByUserIdAndBankAuth(1, '0eeeee', array('bankName' => '招商银行'));
         $this->assertEquals(1, 1);
     }
 
     public function testFindUserPayAgreementsByUserId()
     {
-        $field    = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
-        $bank     = $this->getUserService()->createUserPayAgreement($field);
+        $field = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
+        $bank = $this->getUserService()->createUserPayAgreement($field);
         $authBank = $this->getUserService()->findUserPayAgreementsByUserId(1);
         $this->assertEquals('农业银行', $authBank[0]['bankName']);
     }
 
     public function testDeleteUserPayAgreements()
     {
-        $field             = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
-        $bank              = $this->getUserService()->createUserPayAgreement($field);
+        $field = array('userId' => 1, 'type' => 0, 'bankName' => '农业银行', 'bankNumber' => 1124, 'bankAuth' => '0eeeee', 'bankId' => 1);
+        $bank = $this->getUserService()->createUserPayAgreement($field);
         $userPayAgreements = $this->getUserService()->deleteUserPayAgreements(1);
         $this->assertEquals(1, $userPayAgreements);
     }
 
     /**
-     *  bind
-     * @expectedException  Codeages\Biz\Framework\Service\Exception\NotFoundException
+     *  bind.
+     *
+     * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testUnBindUserByTypeAndToIdWithErrorUserId()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 111111, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
@@ -2274,15 +2298,16 @@ class UserServiceTest extends BaseTestCase
     }
 
     /**
-     *  bind
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     *  bind.
+     *
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testUnBindUserByTypeAndToIdWithErrorType()
     {
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->bindUser('qq', 111111, $registeredUser['id'], array('token' => 'token', 'expiredTime' => 100));
@@ -2298,7 +2323,7 @@ class UserServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
         $registeredUser = $this->getUserService()->register($userInfo);
 
@@ -2309,29 +2334,32 @@ class UserServiceTest extends BaseTestCase
 
     protected function createUser($user)
     {
-        $userInfo             = array();
-        $userInfo['email']    = "{$user}@{$user}.com";
+        $userInfo = array();
+        $userInfo['email'] = "{$user}@{$user}.com";
         $userInfo['nickname'] = "{$user}";
         $userInfo['password'] = "{$user}";
-        $userInfo['loginIp']  = '127.0.0.1';
+        $userInfo['loginIp'] = '127.0.0.1';
+
         return $this->getUserService()->register($userInfo);
     }
 
     protected function createFromUser()
     {
-        $fromUser             = array();
-        $fromUser['email']    = 'fromUser@fromUser.com';
+        $fromUser = array();
+        $fromUser['email'] = 'fromUser@fromUser.com';
         $fromUser['nickname'] = 'fromUser';
         $fromUser['password'] = 'fromUser';
+
         return $this->getUserService()->register($fromUser);
     }
 
     protected function createToUser()
     {
-        $toUser             = array();
-        $toUser['email']    = 'toUser@toUser.com';
+        $toUser = array();
+        $toUser['email'] = 'toUser@toUser.com';
         $toUser['nickname'] = 'toUser';
         $toUser['password'] = 'toUser';
+
         return $this->getUserService()->register($toUser);
     }
 
@@ -2344,69 +2372,69 @@ class UserServiceTest extends BaseTestCase
         }
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '默认文件组',
-            'code'   => 'default',
-            'public' => 1
+            'name' => '默认文件组',
+            'code' => 'default',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '缩略图',
-            'code'   => 'thumb',
-            'public' => 1
+            'name' => '缩略图',
+            'code' => 'thumb',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '课程',
-            'code'   => 'course',
-            'public' => 1
+            'name' => '课程',
+            'code' => 'course',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '用户',
-            'code'   => 'user',
-            'public' => 1
+            'name' => '用户',
+            'code' => 'user',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '课程私有文件',
-            'code'   => 'course_private',
-            'public' => 0
+            'name' => '课程私有文件',
+            'code' => 'course_private',
+            'public' => 0,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '资讯',
-            'code'   => 'article',
-            'public' => 1
+            'name' => '资讯',
+            'code' => 'article',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '临时目录',
-            'code'   => 'tmp',
-            'public' => 1
+            'name' => '临时目录',
+            'code' => 'tmp',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '全局设置文件',
-            'code'   => 'system',
-            'public' => 1
+            'name' => '全局设置文件',
+            'code' => 'system',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '小组',
-            'code'   => 'group',
-            'public' => 1
+            'name' => '小组',
+            'code' => 'group',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '编辑区',
-            'code'   => 'block',
-            'public' => 1
+            'name' => '编辑区',
+            'code' => 'block',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '班级',
-            'code'   => 'classroom',
-            'public' => 1
+            'name' => '班级',
+            'code' => 'classroom',
+            'public' => 1,
         ));
     }
 

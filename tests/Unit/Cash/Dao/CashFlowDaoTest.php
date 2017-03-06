@@ -18,33 +18,33 @@ class CashFlowDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 5
+                'expectedCount' => 5,
                 ),
             array(
                 'condition' => array('userId' => 2),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('type' => 'outflow'),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('cashType' => 'Coin'),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('category' => 'b'),
                 'expectedResults' => array($expected[3]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('orderSn' => 'd'),
                 'expectedResults' => array($expected[4]),
-                'expectedCount' => 1
-                )
+                'expectedCount' => 1,
+                ),
             );
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
@@ -96,7 +96,7 @@ class CashFlowDaoTest extends BaseDaoTestCase
             'sn' => 123,
             'name' => 'b',
             'orderSn' => 'c',
-            'createdTime' => 0
+            'createdTime' => 0,
             );
     }
 }

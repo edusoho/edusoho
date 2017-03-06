@@ -22,10 +22,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
-    static $implementor
+    public static $implementor
     = array(
         'local' => 'File:LocalFileImplementor',
-        'cloud' => 'File:CloudFileImplementor'
+        'cloud' => 'File:CloudFileImplementor',
     );
 
     public function getFile($id)
@@ -139,12 +139,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createAccessDeniedException('用户未登录，上传初始化失败！');
         }
 
-        $setting           = $this->getSettingService()->get('storage');
+        $setting = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
 
         $implementor = $this->getFileImplementor($params['storage']);
 
         $auth = $implementor->getUploadAuth($params);
+
         return $auth;
     }
 
@@ -161,7 +162,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $params['userId'] = $user['id'];
-        $params           = ArrayToolkit::parts($params, array(
+        $params = ArrayToolkit::parts($params, array(
             'id',
             'directives',
             'userId',
@@ -171,23 +172,23 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'hash',
             'fileSize',
             'fileName',
-            'watermarks'
+            'watermarks',
         ));
 
-        $setting           = $this->getSettingService()->get('storage');
+        $setting = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
-        $implementor       = $this->getFileImplementor($params['storage']);
+        $implementor = $this->getFileImplementor($params['storage']);
 
         if (isset($params['id'])) {
-            $file       = $this->getUploadFileInitDao()->get($params['id']);
+            $file = $this->getUploadFileInitDao()->get($params['id']);
             $initParams = $implementor->resumeUpload($file, $params);
 
             if ($initParams['resumed'] == 'ok' && $file && $file['status'] != 'ok') {
                 $this->getUploadFileInitDao()->update($file['id'], array(
-                    'filename'   => $params['fileName'],
-                    'fileSize'   => $params['fileSize'],
-                    'targetId'   => $params['targetId'],
-                    'targetType' => $params['targetType']
+                    'filename' => $params['fileName'],
+                    'fileSize' => $params['fileSize'],
+                    'targetId' => $params['targetId'],
+                    'targetType' => $params['targetType'],
                 ));
 
                 return $initParams;
@@ -195,9 +196,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $preparedFile = $implementor->prepareUpload($params);
-        $file         = $this->getUploadFileInitDao()->create($preparedFile);
-        $params       = array_merge($params, $file);
-        $initParams   = $implementor->initUpload($params);
+        $file = $this->getUploadFileInitDao()->create($preparedFile);
+        $params = array_merge($params, $file);
+        $initParams = $implementor->initUpload($params);
 
         if ($params['storage'] == 'cloud') {
             $file = $this->getUploadFileInitDao()->update($file['id'], array('globalId' => $initParams['globalId']));
@@ -212,7 +213,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         $this->beginTransaction();
         try {
-            $setting           = $this->getSettingService()->get('storage');
+            $setting = $this->getSettingService()->get('storage');
             $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
 
             if (empty($params['length'])) {
@@ -222,10 +223,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $implementor = $this->getFileImplementor($params['storage']);
 
             $fields = array(
-                'status'        => 'ok',
+                'status' => 'ok',
                 'convertStatus' => 'none',
-                'length'        => $params['length'],
-                'fileSize'      => $params['size']
+                'length' => $params['length'],
+                'fileSize' => $params['size'],
             );
 
             $file = $this->getUploadFileInitDao()->update($params['id'], array('status' => 'ok'));
@@ -241,7 +242,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             }
 
             $file = $this->getUploadFileDao()->update($file['id'], array(
-                'length' => isset($result['length']) ? $result['length'] : 0
+                'length' => isset($result['length']) ? $result['length'] : 0,
             ));
 
             $this->getLogService()->info('upload_file', 'create', "新增文件(#{$file['id']})", $file);
@@ -258,9 +259,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 }
             }
 
-            $this->dispatchEvent("upload.file.finish", array('file' => $file));
+            $this->dispatchEvent('upload.file.finish', array('file' => $file));
 
             $this->commit();
+
             return $file;
         } catch (\Exception $e) {
             $this->rollback();
@@ -279,7 +281,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $this->getUploadFileInitDao()->getByGlobalId($params['globalId']);
 
             $fields = array(
-                'convertStatus' => 'success'
+                'convertStatus' => 'success',
             );
 
             $this->getUploadFileInitDao()->update($file['id'], $fields);
@@ -370,32 +372,32 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSVideo') {
             $file['convertParams']['hlsKeyUrl'] = 'http://hlskey.edusoho.net/placeholder';
-            $file['convertParams']['hlsKey']    = $this->generateKey(16);
+            $file['convertParams']['hlsKey'] = $this->generateKey(16);
 
             if ($file['convertParams']['videoQuality'] == 'low') {
                 $file['convertParams']['videoQuality'] = 'normal';
-                $file['convertParams']['video']        = array('440k', '640k', '1000K');
+                $file['convertParams']['video'] = array('440k', '640k', '1000K');
             }
 
             $fileNeedUpdateFields['convertParams'] = json_encode($file['convertParams']);
-            $file['convertParams']['convertor']    = 'HLSEncryptedVideo';
+            $file['convertParams']['convertor'] = 'HLSEncryptedVideo';
         }
 
         if (empty($file['convertParams'])) {
             $convertParams = array(
-                'convertor'    => 'HLSEncryptedVideo',
-                'segtime'      => 10,
+                'convertor' => 'HLSEncryptedVideo',
+                'segtime' => 10,
                 'videoQuality' => 'normal',
                 'audioQuality' => 'normal',
-                'video'        => array('440k', '640k', '1000K'),
-                'audio'        => array('48k', '64k', '96k'),
-                'hlsKeyUrl'    => 'http://hlskey.edusoho.net/placeholder',
-                'hlsKey'       => $this->generateKey(16)
+                'video' => array('440k', '640k', '1000K'),
+                'audio' => array('48k', '64k', '96k'),
+                'hlsKeyUrl' => 'http://hlskey.edusoho.net/placeholder',
+                'hlsKey' => $this->generateKey(16),
             );
 
             $file['convertParams'] = $convertParams;
 
-            $convertParams['convertor']            = 'HLSVideo';
+            $convertParams['convertor'] = 'HLSVideo';
             $fileNeedUpdateFields['convertParams'] = json_encode($convertParams);
         }
 
@@ -434,17 +436,19 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         if (empty($collection)) {
             $collection = array(
-                'userId'      => $userId,
-                'fileId'      => $fileId,
+                'userId' => $userId,
+                'fileId' => $fileId,
                 'updatedTime' => time(),
-                'createdTime' => time()
+                'createdTime' => time(),
             );
             $collection = $this->getUploadFileCollectDao()->create($collection);
-            $result     = $this->getUploadFileDao()->get($collection['fileId']);
+            $result = $this->getUploadFileDao()->get($collection['fileId']);
+
             return $result;
         }
 
         $this->getUploadFileCollectDao()->delete($collection['id']);
+
         return false;
     }
 
@@ -455,12 +459,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $collections = $this->getUploadFileCollectDao()->findByUserIdAndFileIds($fileIds, $userId);
+
         return $collections;
     }
 
     public function findCollectionsByUserId($userId)
     {
         $collections = $this->getUploadFileCollectDao()->findByUserId($userId);
+
         return $collections;
     }
 
@@ -498,7 +504,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     protected function searchFilesFromCloud($conditions, $orderBy, $start, $limit)
     {
-        $files     = $this->getUploadFileDao()->search($conditions, $orderBy, 0, PHP_INT_MAX);
+        $files = $this->getUploadFileDao()->search($conditions, $orderBy, 0, PHP_INT_MAX);
         $globalIds = ArrayToolkit::column($files, 'globalId');
 
         if (empty($globalIds)) {
@@ -507,9 +513,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $cloudFileConditions = array(
             'processStatus' => $conditions['processStatus'],
-            'nos'           => implode(',', $globalIds),
-            'start'         => $start,
-            'limit'         => $limit
+            'nos' => implode(',', $globalIds),
+            'start' => $start,
+            'limit' => $limit,
         );
         if (isset($conditions['resType'])) {
             $cloudFileConditions['resType'] = $conditions['resType'];
@@ -532,7 +538,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
             $cloudFileConditions = array(
-                'nos' => implode(',', ArrayToolkit::column($groupFiles['cloud'], 'globalId'))
+                'nos' => implode(',', ArrayToolkit::column($groupFiles['cloud'], 'globalId')),
             );
             if (isset($conditions['resType'])) {
                 $cloudFileConditions['resType'] = $conditions['resType'];
@@ -568,7 +574,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function searchFileCountFromCloud($conditions)
     {
-        $files     = $this->getUploadFileDao()->search($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $files = $this->getUploadFileDao()->search($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         $globalIds = ArrayToolkit::column($files, 'globalId');
 
         if (empty($globalIds)) {
@@ -576,10 +582,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         $cloudFileConditions = array(
-            'processStatus' => $conditions['processStatus']
+            'processStatus' => $conditions['processStatus'],
         );
         $globalArray = array_chunk($globalIds, 20);
-        $count       = 0;
+        $count = 0;
 
         foreach ($globalArray as $key => $globals) {
             $cloudFileConditions['nos'] = implode(',', $globals);
@@ -606,6 +612,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function renameFile($id, $newFilename)
     {
         $this->getUploadFileDao()->update($id, array('filename' => $newFilename));
+
         return $this->getFile($id);
     }
 
@@ -623,7 +630,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $result = $this->getUploadFileDao()->delete($id);
         }
 
-        $this->dispatchEvent("upload.file.delete", $file);
+        $this->dispatchEvent('upload.file.delete', $file);
         $this->getLogService()->info('upload_file', 'delete', "删除文件(#{$id})", $file);
 
         return $result;
@@ -648,8 +655,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $this->getUploadFileDao()->update($id, array(
             'convertStatus' => $file['convertStatus'],
-            'metas2'        => json_encode($file['metas2']),
-            'updatedTime'   => time()
+            'metas2' => json_encode($file['metas2']),
+            'updatedTime' => time(),
         ));
 
         return $this->getFile($id);
@@ -671,8 +678,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         if ($file['convertStatus'] == 'success') {
             $fileNeedUpdateFields['convertParams'] = json_encode($file['convertParams']);
-            $fileNeedUpdateFields['metas2']        = json_encode($file['metas2']);
-            $fileNeedUpdateFields['updatedTime']   = time();
+            $fileNeedUpdateFields['metas2'] = json_encode($file['metas2']);
+            $fileNeedUpdateFields['updatedTime'] = time();
             $this->getUploadFileDao()->update($id, $fileNeedUpdateFields);
         }
 
@@ -697,8 +704,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $this->getUploadFileDao()->update($id, array(
             'convertStatus' => $file['convertStatus'],
-            'metas2'        => $file['metas2'],
-            'updatedTime'   => time()
+            'metas2' => $file['metas2'],
+            'updatedTime' => time(),
         ));
 
         return $this->getFile($id);
@@ -716,8 +723,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $fields = array(
             'convertStatus' => 'waiting',
-            'convertHash'   => $convertHash,
-            'updatedTime'   => time()
+            'convertHash' => $convertHash,
+            'updatedTime' => time(),
         );
         $this->getUploadFileDao()->update($id, $fields);
 
@@ -763,7 +770,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return $file;
         }
 
-        if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
+        if (!$user->isAdmin() && $user['id'] != $file['createdUserId']) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
 
@@ -788,7 +795,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return $file;
         }
 
-        if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
+        if (!$user->isAdmin() && $user['id'] != $file['createdUserId']) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
 
@@ -871,6 +878,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 }
             }
         }
+
         return true;
     }
 
@@ -884,9 +892,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $fileShareFields = array(
             'sourceUserId' => $sourceUserId,
             'targetUserId' => $targetUserId,
-            'isActive'     => 1,
-            'createdTime'  => time(),
-            'updatedTime'  => time()
+            'isActive' => 1,
+            'createdTime' => time(),
+            'updatedTime' => time(),
         );
 
         return $this->getUploadFileShareDao()->create($fileShareFields);
@@ -895,8 +903,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function updateShare($shareHistoryId)
     {
         $fileShareFields = array(
-            'isActive'    => 1,
-            'updatedTime' => time()
+            'isActive' => 1,
+            'updatedTime' => time(),
         );
 
         return $this->getUploadFileShareDao()->update($shareHistoryId, $fileShareFields);
@@ -908,8 +916,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         if (!empty($shareHistory)) {
             $fileShareFields = array(
-                'isActive'    => 0,
-                'updatedTime' => time()
+                'isActive' => 0,
+                'updatedTime' => time(),
             );
 
             $this->getUploadFileShareDao()->update($shareHistory['id'], $fileShareFields);
@@ -942,7 +950,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function _prepareSearchConditions($conditions)
     {
         if ($this->hasProcessStatusCondition($conditions)) {
-            $conditions['storage']       = 'cloud';
+            $conditions['storage'] = 'cloud';
             $conditions['existGlobalId'] = 0;
         }
 
@@ -953,7 +961,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 $sharedToMe = $this->getUploadFileShareDao()->findByTargetUserIdAndIsActive($conditions['currentUserId']);
 
                 if ($sharedToMe) {
-                    $conditions['createdUserIds'] = ArrayToolkit::column($sharedToMe, "sourceUserId");
+                    $conditions['createdUserIds'] = ArrayToolkit::column($sharedToMe, 'sourceUserId');
                 } else {
                     $conditions['createdUserIds'] = array();
                 }
@@ -997,8 +1005,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'favorite') && !empty($conditions['currentUserId'])) {
-            $collections       = $this->findCollectionsByUserId($conditions['currentUserId']);
-            $fileIds           = ArrayToolkit::column($collections, 'fileId');
+            $collections = $this->findCollectionsByUserId($conditions['currentUserId']);
+            $fileIds = ArrayToolkit::column($collections, 'fileId');
             $conditions['ids'] = $fileIds ? $fileIds : array(0);
             unset($conditions['createdUserId']);
             unset($conditions['createdUserIds']);
@@ -1028,7 +1036,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         if (!empty($conditions['tagId'])) {
             $files = $this->getUploadFileTagDao()->findByTagId($conditions['tagId']);
-            $ids   = ArrayToolkit::column($files, 'fileId');
+            $ids = ArrayToolkit::column($files, 'fileId');
 
             if (isset($conditions['ids'])) {
                 if ($ids) {
@@ -1062,7 +1070,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function createUseFiles($fileIds, $targetId, $targetType, $type)
     {
-        $fileIds    = empty($fileIds) ? array() : explode(",", $fileIds);
+        $fileIds = empty($fileIds) ? array() : explode(',', $fileIds);
         $newFileIds = $this->findCreatedFileIds($fileIds, $targetType, $targetId);
         if (empty($newFileIds)) {
             return false;
@@ -1070,12 +1078,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $attachments = array_map(function ($fileId) use ($targetType, $targetId, $type) {
             $attachment = array(
-                'fileId'      => $fileId,
-                'targetType'  => $targetType,
-                'targetId'    => $targetId,
-                'type'        => $type,
-                'createdTime' => time()
+                'fileId' => $fileId,
+                'targetType' => $targetType,
+                'targetId' => $targetId,
+                'type' => $type,
+                'createdTime' => time(),
             );
+
             return $attachment;
         }, $newFileIds);
 
@@ -1094,22 +1103,24 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
     {
         $conditions = array(
-            'type'       => $type,
+            'type' => $type,
             'targetType' => $targetType,
-            'targetId'   => $targetId
+            'targetId' => $targetId,
         );
 
-        $limit       = $this->getFileUsedDao()->count($conditions);
+        $limit = $this->getFileUsedDao()->count($conditions);
         $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, $limit);
         $this->bindFiles($attachments);
+
         return $attachments;
     }
 
     public function searchUseFiles($conditions)
     {
-        $limit       = $this->getFileUsedDao()->count($conditions);
+        $limit = $this->getFileUsedDao()->count($conditions);
         $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, $limit);
         $this->bindFiles($attachments);
+
         return $attachments;
     }
 
@@ -1117,22 +1128,23 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         $attachment = $this->getFileUsedDao()->get($id);
         $this->bindFile($attachment);
+
         return $attachment;
     }
 
     public function deleteUseFile($id)
     {
         $attachment = $this->getFileUsedDao()->get($id);
-        $file       = $this->getFile($attachment['fileId']);
+        $file = $this->getFile($attachment['fileId']);
 
         if (empty($file)) {
-            $this->createNotFoundException("该附件不存在,或已被删除");
+            $this->createNotFoundException('该附件不存在,或已被删除');
         }
 
         $fireWall = $this->getFireWallFactory()->create($attachment['targetType']);
 
         if (!$fireWall->canAccess($attachment)) {
-            $this->createAccessDeniedException("您无全删除该附件");
+            $this->createAccessDeniedException('您无全删除该附件');
         }
 
         $this->beginTransaction();
@@ -1151,17 +1163,17 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         $conditions = array(
             'targetType' => $targetType,
-            'targetId'   => $targetId
+            'targetId' => $targetId,
         );
         $existUseFiles = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, 100);
-        $existFileIds  = ArrayToolkit::column($existUseFiles, 'fileId');
+        $existFileIds = ArrayToolkit::column($existUseFiles, 'fileId');
 
         return array_diff($fileIds, $existFileIds);
     }
 
     /**
      * Impure Function
-     * 每个attachment 增加key file
+     * 每个attachment 增加key file.
      *
      * @param array $attachments
      */
@@ -1185,7 +1197,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     /**
      * Impure Function
-     * attachment 增加key file
+     * attachment 增加key file.
      *
      * @param $attachment
      */
@@ -1205,7 +1217,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $key = '';
 
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $key .= $chars[mt_rand(0, strlen($chars) - 1)];
         }
 
@@ -1246,13 +1258,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     /**
      * @param  $key
+     *
      * @throws \Codeages\Biz\Framework\Service\Exception\ServiceException
+     *
      * @return FileImplementor
      */
     protected function getFileImplementor($key)
     {
         if (!array_key_exists($key, self::$implementor)) {
-            throw $this->createServiceException(sprintf("`%s` File Implementor is not allowed.", $key));
+            throw $this->createServiceException(sprintf('`%s` File Implementor is not allowed.', $key));
         }
 
         return $this->biz->service(self::$implementor[$key]);

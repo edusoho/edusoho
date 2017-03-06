@@ -5,12 +5,12 @@ use Phpmig\Migration\Migration;
 class DownloadFileRecords extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
+        $db = $biz['db'];
 
         $db->exec("
             CREATE TABLE `download_file_record` (
@@ -28,10 +28,9 @@ class DownloadFileRecords extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-
     }
 }

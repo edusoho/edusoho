@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Content\Service;
 
 interface NavigationService

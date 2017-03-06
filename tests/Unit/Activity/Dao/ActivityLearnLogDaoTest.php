@@ -17,30 +17,30 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('userId' => 1),
                 'expectedResults' => array($expected[0], $expected[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('activityId' => 1),
                 'expectedResults' => array($expected[0], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('userId' => 1, 'activityId' => 1),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
             ),
             array(
                 'condition' => array('userId' => 2, 'activityId' => 2),
                 'expectedResults' => array(),
-                'expectedCount' => 0
+                'expectedCount' => 0,
             ),
         );
-        
+
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
 
@@ -71,7 +71,7 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
     public function testSumLearnedTimeByCourseIdAndUserId()
     {
         $mockActivity = $this->mockActivity();
-        
+
         $expected = array();
         $expected[] = $this->mockDataObject();
         $expected[] = $this->mockDataObject();
@@ -99,7 +99,7 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
     public function testCountLearnedDaysByCourseIdAndUserId()
     {
         $mockActivity = $this->mockActivity();
-        
+
         $expected = array();
         $expected[] = $this->mockDataObject();
         $expected[] = $this->mockDataObject();
@@ -126,7 +126,7 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         $this->assertEquals(1, $res[1]);
         $this->assertEquals(0, $res[2]);
     }
-    
+
     protected function fetchAndAssembleIds(array $rawInput)
     {
         $res = array();
@@ -165,7 +165,7 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
             'event' => 'ffff',
             'data' => array('a'),
             'learnedTime' => 1,
-            'courseTaskId' => 1
+            'courseTaskId' => 1,
         );
     }
 
@@ -182,10 +182,11 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
             'fromCourseSetId' => 1,
             'fromUserId' => 1,
             'startTime' => 1,
-            'endTime' => 10
+            'endTime' => 10,
         );
 
         $fields = array_merge($defaultFields, $fields);
+
         return $this->getActivityDao()->create($fields);
     }
 

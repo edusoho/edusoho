@@ -1,23 +1,24 @@
 <?php
+
 namespace Tests\Unit\Group;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class ThreadServiceTest extends BaseTestCase
 {
     public function testAddThread()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
@@ -25,131 +26,129 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals($testThread['content'], $thread['content']);
         $this->assertEquals($testThread['groupId'], $thread['groupId']);
         $this->assertEquals($testThread['userId'], $thread['userId']);
-
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testAddThreadWithEmptyTitle()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'test',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => '',
+            'title' => '',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testAddThreadWithEmptyContent()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'test',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'xxx',
+            'title' => 'xxx',
             'content' => '',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testAddThreadWithEmptyGroupId()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'test',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'xxx',
+            'title' => 'xxx',
             'content' => 'xxx',
             'groupId' => '',
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     public function testAddThreadWithEmptyUserId()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'test',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => '',
+            'title' => '',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => '');
+            'userId' => '', );
 
         $thread = $this->getThreadService()->addThread($testThread);
     }
 
     public function testGetThread()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
         $thread1 = $this->getThreadService()->getThread($thread['id']);
 
         $this->assertEquals($thread, $thread1);
-
     }
 
     public function testSearchThreads()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
-        $thread      = $this->getThreadService()->addThread($testThread);
+        $thread = $this->getThreadService()->addThread($testThread);
         $testThread1 = array(
-            'title'   => 'test1',
+            'title' => 'test1',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread1 = $this->getThreadService()->addThread($testThread1);
 
@@ -160,24 +159,24 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testSearchThreadsCount()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
-        $thread      = $this->getThreadService()->addThread($testThread);
+        $thread = $this->getThreadService()->addThread($testThread);
         $testThread1 = array(
-            'title'   => 'test1',
+            'title' => 'test1',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread1 = $this->getThreadService()->addThread($testThread1);
 
@@ -187,24 +186,24 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testGetThreadsByIds()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
-        $thread      = $this->getThreadService()->addThread($testThread);
+        $thread = $this->getThreadService()->addThread($testThread);
         $testThread1 = array(
-            'title'   => 'test1',
+            'title' => 'test1',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread1 = $this->getThreadService()->addThread($testThread1);
 
@@ -218,17 +217,17 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testCloseThread()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'test',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
@@ -241,17 +240,17 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testOpenThread()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'test',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
@@ -266,43 +265,42 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testPostThread()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
-        $post = $this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content' => "xxaaaaa"), $group['id'], $user['id'], $thread['id']);
+        $post = $this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content' => 'xxaaaaa'), $group['id'], $user['id'], $thread['id']);
 
         $this->assertEquals('xxaaaaa', $post['content']);
-
     }
 
     public function testGetPost()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
-        $post = $this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content' => "xxaaaaa"), $group['id'], $user['id'], $thread['id']);
+        $post = $this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content' => 'xxaaaaa'), $group['id'], $user['id'], $thread['id']);
 
         $post1 = $this->getThreadService()->getPost($post['id']);
 
@@ -314,22 +312,22 @@ class ThreadServiceTest extends BaseTestCase
      */
     public function testSearchPosts()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
-        $post  = $this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content' => 'aaaaaa'), $group['id'], $user['id'], $thread['id']);
-        $post1 = $this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content' => "test1"), $group['id'], $user['id'], $thread['id']);
+        $post = $this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content' => 'aaaaaa'), $group['id'], $user['id'], $thread['id']);
+        $post1 = $this->getThreadService()->postThread(array('fromUserId' => $user['id'], 'content' => 'test1'), $group['id'], $user['id'], $thread['id']);
 
         $posts = $this->getThreadService()->searchPosts(array('userId' => $user['id']), array('createdTime' => 'DESC'), 0, 10);
         $this->assertCount(2, $posts);
@@ -337,17 +335,17 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testDeletePost()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
@@ -362,17 +360,17 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testDeleteThread()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
@@ -385,17 +383,17 @@ class ThreadServiceTest extends BaseTestCase
 
     public function testSetElite()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
@@ -403,22 +401,21 @@ class ThreadServiceTest extends BaseTestCase
         $thread = $this->getThreadService()->getThread($thread['id']);
 
         $this->assertEquals(1, $thread['isElite']);
-
     }
 
     public function testRemoveElite()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
@@ -427,22 +424,21 @@ class ThreadServiceTest extends BaseTestCase
         $thread = $this->getThreadService()->getThread($thread['id']);
 
         $this->assertEquals(0, $thread['isElite']);
-
     }
 
     public function testSetStick()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
@@ -450,7 +446,6 @@ class ThreadServiceTest extends BaseTestCase
         $thread = $this->getThreadService()->getThread($thread['id']);
 
         $this->assertEquals(1, $thread['isStick']);
-
     }
 
     /**
@@ -458,17 +453,17 @@ class ThreadServiceTest extends BaseTestCase
      */
     public function testRemoveStick()
     {
-        $user      = $this->createUser();
+        $user = $this->createUser();
         $textGroup = array(
             'title' => 'textgroup',
-            'about' => "aaaaaa"
+            'about' => 'aaaaaa',
         );
-        $group      = $this->getGroupService()->addGroup($user, $textGroup);
+        $group = $this->getGroupService()->addGroup($user, $textGroup);
         $testThread = array(
-            'title'   => 'test',
+            'title' => 'test',
             'content' => 'xxx',
             'groupId' => $group['id'],
-            'userId'  => $user['id']);
+            'userId' => $user['id'], );
 
         $thread = $this->getThreadService()->addThread($testThread);
 
@@ -477,7 +472,6 @@ class ThreadServiceTest extends BaseTestCase
         $thread = $this->getThreadService()->getThread($thread['id']);
 
         $this->assertEquals(0, $thread['isStick']);
-
     }
 
     protected function getGroupService()
@@ -497,19 +491,21 @@ class ThreadServiceTest extends BaseTestCase
 
     protected function createUser()
     {
-        $user             = array();
-        $user['email']    = "user@user.com";
-        $user['nickname'] = "user";
-        $user['password'] = "user";
+        $user = array();
+        $user['email'] = 'user@user.com';
+        $user['nickname'] = 'user';
+        $user['password'] = 'user';
+
         return $this->getUserService()->register($user);
     }
 
     protected function createUser1()
     {
-        $user             = array();
-        $user['email']    = "user1@user1.com";
-        $user['nickname'] = "user1";
-        $user['password'] = "user1";
+        $user = array();
+        $user['email'] = 'user1@user1.com';
+        $user['nickname'] = 'user1';
+        $user['password'] = 'user1';
+
         return $this->getUserService()->register($user);
     }
 }

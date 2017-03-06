@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class C2AddStatisticsFields extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -18,7 +18,7 @@ class C2AddStatisticsFields extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {

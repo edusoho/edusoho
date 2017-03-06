@@ -1,11 +1,10 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
-use AppBundle\Common\AppConnectionFactory;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-
 
 abstract class BaseCommand extends ContainerAwareCommand
 {
@@ -22,10 +21,10 @@ abstract class BaseCommand extends ContainerAwareCommand
 
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
-            'id'        => 0,
-            'nickname'  => '游客',
+            'id' => 0,
+            'nickname' => '游客',
             'currentIp' => '127.0.0.1',
-            'roles'     => array()
+            'roles' => array(),
         ));
         $serviceKernel->setCurrentUser($currentUser);
     }
@@ -36,5 +35,4 @@ abstract class BaseCommand extends ContainerAwareCommand
 
         return $translator->trans($message, $arguments, $domain, $locale); // works fine! :)
     }
-
 }
