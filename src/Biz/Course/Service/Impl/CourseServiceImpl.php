@@ -102,7 +102,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
-
         if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
             throw $this->createInvalidArgumentException('Param Invalid: LearnMode');
         }
@@ -129,16 +128,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->validateExpiryMode($course);
 
         $course['status']  = 'draft';
+
+
         $course['creator'] = $this->getCurrentUser()->getId();
         try {
             $this->beginTransaction();
-
-            $created     = $this->getCourseDao()->create($course);
+            $created = $this->getCourseDao()->create($course);
             $currentUser = $this->getCurrentUser();
             //set default teacher
             $this->getMemberService()->setCourseTeachers($created['id'], array(
                 array(
-                    'id'        => $currentUser['id'],
+                    'id' => $currentUser['id'],
                     'isVisible' => 1
                 )
             ));
