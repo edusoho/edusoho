@@ -53,6 +53,11 @@ class Course extends BaseResource
 
         $course['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
         $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
+
+        if ($course['isDefault'] == 1 && $course['title']) {
+            $course['title'] = $courseSet['title'];
+        }
+
         return $course;
     }
 
