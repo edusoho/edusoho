@@ -2,9 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-use AppBundle\Common\ArrayToolkit;
-
 class TagMarksDataTag extends CourseBaseDataTag implements DataTag
 {
     public function getData(array $arguments)
@@ -14,13 +11,13 @@ class TagMarksDataTag extends CourseBaseDataTag implements DataTag
         krsort($arguments['tags']);
 
         foreach ($arguments['tags'] as $groupId => $tagId) {
-            $tag     = $this->getTagService()->getTag($tagId);
+            $tag = $this->getTagService()->getTag($tagId);
             $tagName = $tag['name'];
 
             $tagMarks[] = array(
                 'tagName' => $tagName,
-                'tagId'   => $tagId,
-                'groupId' => $groupId
+                'tagId' => $tagId,
+                'groupId' => $groupId,
             );
         }
 

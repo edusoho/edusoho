@@ -1,6 +1,6 @@
 <?php
-namespace Biz\Cash\Service\Impl;
 
+namespace Biz\Cash\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Cash\Dao\CashAccountDao;
@@ -15,6 +15,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
     public function createAccount($userId)
     {
         $fields = array('userId' => $userId, 'cash' => 0);
+
         return $this->getAccountDao()->create($fields);
     }
 
@@ -53,7 +54,6 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
         $coinSetting = $this->getSettingService()->get('coin', array());
 
         try {
-
             $this->beginTransaction();
 
             $account = $this->getAccountDao()->getByUserId($userId, true);
@@ -62,13 +62,13 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
             }
 
             $inflow = array(
-                'userId'      => $userId,
-                'sn'          => $this->makeSn(),
-                'type'        => 'inflow',
-                'amount'      => $coinAmount,
-                'name'        => '兑换' . $coinAmount . $coinSetting['coin_name'],
-                'category'    => "exchange",
-                'orderSn'     => 'E' . $this->makeSn(),
+                'userId' => $userId,
+                'sn' => $this->makeSn(),
+                'type' => 'inflow',
+                'amount' => $coinAmount,
+                'name' => '兑换'.$coinAmount.$coinSetting['coin_name'],
+                'category' => 'exchange',
+                'orderSn' => 'E'.$this->makeSn(),
                 'createdTime' => time(),
             );
 
@@ -82,7 +82,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
 
             $message = array(
                 'value' => $coinAmount,
-                'type'  => 'changing'
+                'type' => 'changing',
             );
             $this->getNotificationService()->notify($userId, 'cash-account', $message);
 
@@ -109,15 +109,14 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
     {
         if (!is_numeric($value)) {
             throw $this->createInvalidArgumentException('充值金额必须为整数!');
-
         }
-        $coinSetting              = $this->getSettingService()->get('coin', array());
+        $coinSetting = $this->getSettingService()->get('coin', array());
         $coinSetting['coin_name'] = isset($coinSetting['coin_name']) ? $coinSetting['coin_name'] : '虚拟币';
 
         $account = $this->getAccount($id);
         $message = array(
             'value' => $value,
-            'type'  => 'changeOk'
+            'type' => 'changeOk',
         );
         $this->getNotificationService()->notify($account['userId'], 'cash-account', $message);
 
@@ -130,14 +129,13 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
             throw $this->createInvalidArgumentException('充值金额必须为整数!');
         }
 
-        $coinSetting              = $this->getSettingService()->get('coin', array());
+        $coinSetting = $this->getSettingService()->get('coin', array());
         $coinSetting['coin_name'] = isset($coinSetting['coin_name']) ? $coinSetting['coin_name'] : '虚拟币';
-        $account                  = $this->getAccountDao()->get($id);
-
+        $account = $this->getAccountDao()->get($id);
 
         $message = array(
             'value' => $value,
-            'type'  => 'deduct'
+            'type' => 'deduct',
         );
         $this->getNotificationService()->notify($account['userId'], 'cash-account', $message);
 
@@ -146,7 +144,6 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
 
     public function reward($amount, $name, $userId, $type = null)
     {
-
         try {
             $this->beginTransaction();
             $account = $this->getAccountDao()->getByUserId($userId, true);
@@ -155,33 +152,30 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
                 $account = $this->createAccount($userId);
             }
 
-            if ($type == "cut") {
-
+            if ($type == 'cut') {
                 $inflow = array(
-                    'userId'      => $userId,
-                    'sn'          => $this->makeSn(),
-                    'type'        => 'outflow',
-                    'amount'      => $amount,
-                    'name'        => $name,
-                    'category'    => "exchange",
-                    'orderSn'     => 'R' . $this->makeSn(),
+                    'userId' => $userId,
+                    'sn' => $this->makeSn(),
+                    'type' => 'outflow',
+                    'amount' => $amount,
+                    'name' => $name,
+                    'category' => 'exchange',
+                    'orderSn' => 'R'.$this->makeSn(),
                     'createdTime' => time(),
                 );
 
                 $inflow = $this->getFlowDao()->create($inflow);
 
                 $this->getAccountDao()->waveDownCashField($account['id'], $amount);
-
             } else {
-
                 $inflow = array(
-                    'userId'      => $userId,
-                    'sn'          => $this->makeSn(),
-                    'type'        => 'inflow',
-                    'amount'      => $amount,
-                    'name'        => $name,
-                    'category'    => "exchange",
-                    'orderSn'     => 'R' . $this->makeSn(),
+                    'userId' => $userId,
+                    'sn' => $this->makeSn(),
+                    'type' => 'inflow',
+                    'amount' => $amount,
+                    'name' => $name,
+                    'category' => 'exchange',
+                    'orderSn' => 'R'.$this->makeSn(),
                     'createdTime' => time(),
                 );
 
@@ -191,6 +185,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
             }
 
             $this->commit();
+
             return $inflow;
         } catch (\Exception $e) {
             $this->rollback();
@@ -208,7 +203,7 @@ class CashAccountServiceImpl extends BaseService implements CashAccountService
 
     protected function makeSn()
     {
-        return date('YmdHis') . rand(10000, 99999);
+        return date('YmdHis').rand(10000, 99999);
     }
 
     /**

@@ -14,9 +14,9 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 
         if (!$goto) {
             if ($this->isMicroMessenger($request) && $this->isWeixinEnabled()) {
-                $goto = "homepage";
+                $goto = 'homepage';
             } else {
-                $goto = "login";
+                $goto = 'login';
             }
         }
 
@@ -24,15 +24,16 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 
         if ($this->getAuthService()->hasPartnerAuth()) {
             $user = ServiceKernel::instance()->getCurrentUser();
-            setcookie("REMEMBERME");
+            setcookie('REMEMBERME');
 
             if (!$user->isLogin()) {
                 return parent::onLogoutSuccess($request);
             }
 
-            $url     = $this->httpUtils->generateUri($request, 'partner_logout');
+            $url = $this->httpUtils->generateUri($request, 'partner_logout');
             $queries = array('userId' => $user['id'], 'goto' => $this->targetUrl);
-            $url     = $url.'?'.http_build_query($queries);
+            $url = $url.'?'.http_build_query($queries);
+
             return $this->httpUtils->createRedirectResponse($request, $url);
         }
 
@@ -44,6 +45,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
     protected function isWeixinEnabled()
     {
         $setting = $this->getSettingService()->get('login_bind');
+
         return isset($setting['enabled']) && isset($setting['weixinmob_enabled']) && $setting['enabled'] && $setting['weixinmob_enabled'];
     }
 

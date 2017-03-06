@@ -9,7 +9,7 @@ class ThreadDaoTest extends BaseDaoTestCase
     public function testSearch()
     {
         $expected = array();
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $expected[] = $this->mockDataObject();
         }
 
@@ -17,78 +17,78 @@ class ThreadDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('courseId' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('courseSetId' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('taskId' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('userId' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('type' => 'discussion'),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('types' => array('discussion', 'question')),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('isStick' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('isElite' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('postNum' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('postNumLargerThan' => 0),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('title' => '哼'),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('content' => '爱上地方'),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('courseIds', array(1, 2)),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
+                'expectedCount' => 10,
             ),
             array(
                 'condition' => array('private' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 10
-            )
+                'expectedCount' => 10,
+            ),
         );
 
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
@@ -116,7 +116,7 @@ class ThreadDaoTest extends BaseDaoTestCase
             'hitNum' => 1,
             'followNum' => 1,
             'latestPostTime' => time(),
-            'courseSetId' => 1
+            'courseSetId' => 1,
         );
     }
 }

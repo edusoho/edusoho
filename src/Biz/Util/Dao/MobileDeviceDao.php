@@ -7,6 +7,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 interface MobileDeviceDao extends GeneralDaoInterface
 {
     public function addMobileDevice(array $parames);
+
     public function getMobileDeviceById($id);
+
     public function findMobileDeviceByIMEI($imei);
 }

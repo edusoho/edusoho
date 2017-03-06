@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\RefererLog\Service\Impl;
 
 use Biz\BaseService;
@@ -16,28 +17,30 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
             return false;
         }
         if (!ArrayToolkit::requireds($refererlog, array('targetId', 'targetType', 'refererUrl'))) {
-            throw $this->createServiceException("缺少字段添加RefererLog,增加失败");
+            throw $this->createServiceException('缺少字段添加RefererLog,增加失败');
         }
 
         if (!in_array($refererlog['targetType'], array('course', 'openCourse', 'classroom', 'vip'))) {
             throw $this->createServiceException("模块 {$refererlog['targetType']} 不允许添加RefererLog");
         }
-        $user                        = $this->getCurrentUser();
-        $refererlog                  = $this->prepareRefererUrl($refererlog);
+        $user = $this->getCurrentUser();
+        $refererlog = $this->prepareRefererUrl($refererlog);
         $refererlog['createdUserId'] = $user['id'];
+
         return $this->getRefererLogDao()->create($refererlog);
     }
 
     private function ignoreLog($refererlog)
     {
         //公开课管理页面不记录访问日志
-        if (!!preg_match('/open\/course\/\d\/manage/', $refererlog['refererUrl'])) {
+        if ((bool) preg_match('/open\/course\/\d\/manage/', $refererlog['refererUrl'])) {
             return true;
         }
         //后台管理页面
-        if (!!preg_match('/admin/', $refererlog['refererUrl'])) {
+        if ((bool) preg_match('/admin/', $refererlog['refererUrl'])) {
             return true;
         }
+
         return false;
     }
 
@@ -59,6 +62,7 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
     public function analysisSummary($conditions)
     {
         $analysisSummary = $this->getRefererLogDao()->analysisSummary($conditions);
+
         return $this->prepareAnalysisSummary($analysisSummary);
     }
 
@@ -67,9 +71,11 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         $analysisSummaryList = $this->getRefererLogDao()->searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
 
         $totalCount = array_sum(ArrayToolkit::column($analysisSummaryList, 'count'));
+
         return array_map(function ($referelog) use ($totalCount) {
-            $referelog['percent']      = empty($totalCount) ? '0%' : round($referelog['count'] / $totalCount * 100, 2).'%';
+            $referelog['percent'] = empty($totalCount) ? '0%' : round($referelog['count'] / $totalCount * 100, 2).'%';
             $referelog['orderPercent'] = empty($referelog['count']) ? '0%' : round($referelog['orderCount'] / $referelog['count'] * 100, 2).'%';
+
             return $referelog;
         }, $analysisSummaryList);
     }
@@ -98,9 +104,10 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
     {
         $timeRangeRefererLogCount = $this->countRefererLogs($conditions);
 
-        $timeRangeRefererLogs     = $this->searchRefererLogs($conditions, array('createdTime'=>'ASC'), 0, $timeRangeRefererLogCount);
-        $timeRangeRefererLogs     = array_map(function ($log) {
-            $log['createdTime'] = date("Y-m-d", $log['createdTime']);
+        $timeRangeRefererLogs = $this->searchRefererLogs($conditions, array('createdTime' => 'ASC'), 0, $timeRangeRefererLogCount);
+        $timeRangeRefererLogs = array_map(function ($log) {
+            $log['createdTime'] = date('Y-m-d', $log['createdTime']);
+
             return $log;
         }, $timeRangeRefererLogs);
 
@@ -150,19 +157,20 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         }
         $lenght = 6;
 
-        $analysisDatas      = array_slice($refererlogDatas, 0, $lenght);
+        $analysisDatas = array_slice($refererlogDatas, 0, $lenght);
         $otherAnalysisDatas = count($refererlogDatas) >= $lenght ? array_slice($refererlogDatas, $lenght) : array();
 
-        $totalCount           = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
-        $othertotalCount      = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
+        $totalCount = array_sum(ArrayToolkit::column($refererlogDatas, 'count'));
+        $othertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'count'));
         $otherOrdertotalCount = array_sum(ArrayToolkit::column($otherAnalysisDatas, 'orderCount'));
         if (!empty($otherAnalysisDatas)) {
             array_push($analysisDatas, array('count' => $othertotalCount, 'orderCount' => $otherOrdertotalCount, 'refererName' => '其他'));
         }
 
         return array_map(function ($data) use ($totalCount) {
-            $data['percent']      = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
+            $data['percent'] = empty($totalCount) ? '0%' : round($data['count'] / $totalCount * 100, 2).'%';
             $data['orderPercent'] = empty($data['count']) ? '0%' : round($data['orderCount'] / $data['count'] * 100, 2).'%';
+
             return $data;
         }, $analysisDatas);
     }
@@ -176,16 +184,18 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
         if (strpos($refererlog['userAgent'], 'MicroMessenger') !== false) {
             if ($refererlog['refererUrl'] == null || strpos($refererlog['refererUrl'], $host) !== false) {
                 $refererlog['refererHost'] = 'mp.weixin.qq.com';
-                $refererlog['refererUrl']  = 'mp.weixin.qq.com';
+                $refererlog['refererUrl'] = 'mp.weixin.qq.com';
                 $refererlog['refererName'] = $this->arrayFind($refererMap, $refererlog['refererHost']);
+
                 return $refererlog;
             }
         }
         //直接访问url
         if ($refererlog['refererUrl'] == null) {
-            $refererlog['refererUrl']  = $refererlog['uri'];
+            $refererlog['refererUrl'] = $refererlog['uri'];
             $refererlog['refererHost'] = $host;
             $refererlog['refererName'] = '直接访问';
+
             return $refererlog;
         }
 
@@ -217,23 +227,25 @@ class RefererLogServiceImpl extends BaseService implements RefererLogService
                 return $value;
             }
         }
+
         return $existsKey;
     }
 
     private function getRefererMap()
     {
-        $host =ServiceKernel::instance()->getEnvVariable('host');
-        return array(
-            'open/course/explore'  => '公开课列表',
-            'open/course'          => '公开课详情页',
-            'my/courses/favorited' => '我的收藏',
-            $host                  => '首页',
+        $host = ServiceKernel::instance()->getEnvVariable('host');
 
-            'baidu.com'        => '百度',
-            'www.so.com'       => '360搜索',
-            'www.sogou.com'    => '搜狗搜索',
+        return array(
+            'open/course/explore' => '公开课列表',
+            'open/course' => '公开课详情页',
+            'my/courses/favorited' => '我的收藏',
+            $host => '首页',
+
+            'baidu.com' => '百度',
+            'www.so.com' => '360搜索',
+            'www.sogou.com' => '搜狗搜索',
             'mp.weixin.qq.com' => '微信',
-            'weibo.com'        => '微博'
+            'weibo.com' => '微博',
         );
     }
 }

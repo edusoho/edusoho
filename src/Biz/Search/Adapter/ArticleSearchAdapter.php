@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Search\Adapter;
 
 class ArticleSearchAdapter extends AbstractSearchAdapter
@@ -12,14 +13,14 @@ class ArticleSearchAdapter extends AbstractSearchAdapter
 
             if (!empty($articleLocal)) {
                 $article['publishedTime'] = $articleLocal['publishedTime'];
-                $article['thumb']         = $articleLocal['thumb'];
-                $article['id']            = $articleLocal['id'];
-                $article['body']          = $article['content'];
-                $article['category']      = array('name' => $article['category']);
-            }else{
-                  $article['publishedTime'] = $article['updatedTime'];
-                  $article['body']          = $article['content'];
-                  $article['category']      = array('name' => $article['category']);
+                $article['thumb'] = $articleLocal['thumb'];
+                $article['id'] = $articleLocal['id'];
+                $article['body'] = $article['content'];
+                $article['category'] = array('name' => $article['category']);
+            } else {
+                $article['publishedTime'] = $article['updatedTime'];
+                $article['body'] = $article['content'];
+                $article['category'] = array('name' => $article['category']);
             }
             array_push($adaptResult, $article);
         }

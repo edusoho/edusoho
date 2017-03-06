@@ -1,30 +1,31 @@
 <?php
+
 namespace AppBundle\Component\MediaParser\AlbumParser;
 
 use AppBundle\Component\MediaParser\ParseException;
 
 class YoukuVideoAlbumParser extends AbstractAlbumParser
 {
-	private $patterns = array(
-		'p1' => '/^http:\/\/www\.youku\.com\/playlist_show\/id_(\d+)/s',
-	); 
+    private $patterns = array(
+        'p1' => '/^http:\/\/www\.youku\.com\/playlist_show\/id_(\d+)/s',
+    );
 
-	public function parse($url)
-	{
-		$response = $this->fetchUrl($url);
-		if ($response['code'] != 200) {
-			throw new ParseException(array('获取优酷视频专辑(%url%)页面内容失败！', array('%url%' =>$url )));
-		}
+    public function parse($url)
+    {
+        $response = $this->fetchUrl($url);
+        if ($response['code'] != 200) {
+            throw new ParseException(array('获取优酷视频专辑(%url%)页面内容失败！', array('%url%' => $url)));
+        }
 
         $album = array();
         $album['id'] = $this->parseId($url);
-        $album['uuid'] = 'YoukuVideoAlbum:' . $album['id'];
+        $album['uuid'] = 'YoukuVideoAlbum:'.$album['id'];
         $album['title'] = $this->parseTitle($response['content']);
         $album['number'] = $this->parseNumber($response['content']);
         $album['items'] = $this->parseItems($album);
 
-		return $album;
-	}
+        return $album;
+    }
 
     private function parseId($url)
     {
@@ -32,6 +33,7 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
         if (empty($matched)) {
             throw new ParseException('获取优酷视频专辑ID失败');
         }
+
         return $matches[1];
     }
 
@@ -41,6 +43,7 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
         if (empty($matched)) {
             throw new ParseException('获取优酷视频专辑标题失败');
         }
+
         return $matches[1];
     }
 
@@ -50,6 +53,7 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
         if (empty($matched)) {
             throw new ParseException('获取优酷视频专辑视频数量失败');
         }
+
         return $matches[1];
     }
 
@@ -71,7 +75,7 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
             foreach ($matches as $match) {
                 $items[] = array(
                     'id' => $match[1],
-                    'uuid' => 'YoukuVideo:'. $match[1],
+                    'uuid' => 'YoukuVideo:'.$match[1],
                     'url' => "http://v.youku.com/v_show/id_{$match[1]}.html",
                     'picture' => $match[2],
                     'title' => $match[3],
@@ -79,16 +83,17 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
                 );
             }
         }
+
         return $items;
     }
 
     public function detect($url)
     {
-        return !! preg_match('/^http:\/\/www\.youku\.com\/playlist_show\/id_(\d+)/s', $url);
+        return (bool) preg_match('/^http:\/\/www\.youku\.com\/playlist_show\/id_(\d+)/s', $url);
     }
+
     protected function getServiceKernel()
     {
-            return ServiceKernel::instance();
-     }
-
+        return ServiceKernel::instance();
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -7,9 +8,9 @@ use AppBundle\Common\ArrayToolkit;
 
 class CourseDiskController extends BaseController
 {
-	public function indexAction(Request $request)
-	{
-		$conditions = $request->query->all();
+    public function indexAction(Request $request)
+    {
+        $conditions = $request->query->all();
         $paginator = new Paginator(
             $request,
             $this->getCourseDiskService()->searchFileCount($conditions),
@@ -22,16 +23,18 @@ class CourseDiskController extends BaseController
             $paginator->getPerPageCount()
         );
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'userId'));
-		return $this->render('admin/course-disk/index.html.twig',array(
+
+        return $this->render('admin/course-disk/index.html.twig', array(
             'files' => $files,
             'paginator' => $paginator,
-            'users'=>$users,
-		));
-	}
+            'users' => $users,
+        ));
+    }
 
     public function deleteAction(Request $request, $id)
     {
         $this->getCourseDiskService()->deleteFile($id);
+
         return $this->createJsonResponse(true);
     }
 
@@ -47,5 +50,4 @@ class CourseDiskController extends BaseController
     {
         return $this->createService('User:DiskService');
     }
-
 }

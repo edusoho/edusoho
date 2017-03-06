@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
@@ -9,11 +10,11 @@ class SensitiveController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $fields     = $request->query->all();
+        $fields = $request->query->all();
         $conditions = array(
-            'keyword'       => '',
+            'keyword' => '',
             'searchKeyWord' => '',
-            'state'         => ''
+            'state' => '',
         );
 
         if (empty($fields)) {
@@ -21,12 +22,12 @@ class SensitiveController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
-        $paginator  = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount($conditions), 20);
-        $keywords   = $this->getSensitiveService()->searchKeywords($conditions, array('id' => 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $paginator = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount($conditions), 20);
+        $keywords = $this->getSensitiveService()->searchKeywords($conditions, array('id' => 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         return $this->render('admin/sensitive/index.html.twig', array(
-            'keywords'  => $keywords,
-            'paginator' => $paginator
+            'keywords' => $keywords,
+            'paginator' => $paginator,
         ));
     }
 
@@ -36,7 +37,7 @@ class SensitiveController extends BaseController
             $keyword = $request->request->get('name');
             $keyword = trim($keyword);
             $keyword = preg_split('/\r/', $keyword, -1, PREG_SPLIT_NO_EMPTY);
-            $state   = $request->request->get('state');
+            $state = $request->request->get('state');
 
             foreach ($keyword as $key => $value) {
                 $value = trim($value);
@@ -59,6 +60,7 @@ class SensitiveController extends BaseController
     public function deleteAction(Request $request, $id)
     {
         $this->getSensitiveService()->deleteKeyword($id);
+
         return $this->redirect($this->generateUrl('admin_keyword'));
     }
 
@@ -73,16 +75,17 @@ class SensitiveController extends BaseController
         }
 
         $this->getSensitiveService()->updateKeyword($id, $conditions);
+
         return $this->redirect($this->generateUrl('admin_keyword'));
     }
 
     public function banlogsAction(Request $request)
     {
-        $fields     = $request->query->all();
+        $fields = $request->query->all();
         $conditions = array(
-            'keyword'      => '',
+            'keyword' => '',
             'searchBanlog' => '',
-            'state'        => ''
+            'state' => '',
         );
 
         if (empty($fields)) {
@@ -117,32 +120,33 @@ class SensitiveController extends BaseController
             }
             foreach ($userIds as $value) {
                 $conditions['userId'] = $value;
-                $countTemp            = $this->getSensitiveService()->searchBanlogsCount($conditions);
+                $countTemp = $this->getSensitiveService()->searchBanlogsCount($conditions);
                 $count += $countTemp;
             }
             $paginator = new Paginator($this->get('request'), $count, 20);
-            $banlogs   = $this->getSensitiveService()->searchBanlogsByUserIds($userIds, array(
-                'id' => 'DESC'
+            $banlogs = $this->getSensitiveService()->searchBanlogsByUserIds($userIds, array(
+                'id' => 'DESC',
             ), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         } else {
-            $count     = $this->getSensitiveService()->searchBanlogsCount($conditions);
+            $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
             $paginator = new Paginator($this->get('request'), $count, 20);
 
             $banlogs = $this->getSensitiveService()->searchBanlogs($conditions, array(
-                'id' => 'DESC'
+                'id' => 'DESC',
             ), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         }
 
         foreach ($banlogs as &$value) {
-            $value['text'] = str_replace($value['keywordName'], "<span style='color:#FF0000'>".$value['keywordName']."</span>", $value['text']);
-            $value['text'] = preg_replace("/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i", "", $value['text']);
+            $value['text'] = str_replace($value['keywordName'], "<span style='color:#FF0000'>".$value['keywordName'].'</span>', $value['text']);
+            $value['text'] = preg_replace("/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i", '', $value['text']);
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($banlogs, 'userId'));
+
         return $this->render('admin/sensitive/banlogs.html.twig', array(
-            'banlogs'   => $banlogs,
-            'users'     => $users,
-            'paginator' => $paginator
+            'banlogs' => $banlogs,
+            'users' => $users,
+            'paginator' => $paginator,
         ));
     }
 

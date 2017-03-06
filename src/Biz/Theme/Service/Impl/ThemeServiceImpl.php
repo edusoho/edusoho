@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Theme\Service\Impl;
 
 use Biz\BaseService;
@@ -17,13 +18,13 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         try {
-            $this->defaultConfig = $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_default");
-            $this->allConfig     = $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_all");
-            $this->themeName     = $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_name");
+            $this->defaultConfig = $this->getKernel()->getParameter("theme_{$currentTheme['uri']}_default");
+            $this->allConfig = $this->getKernel()->getParameter("theme_{$currentTheme['uri']}_all");
+            $this->themeName = $this->getKernel()->getParameter("theme_{$currentTheme['uri']}_name");
         } catch (\Exception $e) {
             $this->defaultConfig = array();
-            $this->allConfig     = array();
-            $this->themeName     = null;
+            $this->allConfig = array();
+            $this->themeName = null;
         }
     }
 
@@ -49,24 +50,25 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     public function createThemeConfig($name, $config)
     {
         return $this->getThemeConfigDao()->create(array(
-            'name'          => $name,
-            'config'        => $config,
-            'updatedTime'   => time(),
-            'createdTime'   => time(),
-            'updatedUserId' => $this->getCurrentUser()->id
+            'name' => $name,
+            'config' => $config,
+            'updatedTime' => time(),
+            'createdTime' => time(),
+            'updatedUserId' => $this->getCurrentUser()->id,
         ));
     }
 
     public function editThemeConfig($name, $config)
     {
-        $config['updatedTime']   = time();
+        $config['updatedTime'] = time();
         $config['updatedUserId'] = $this->getCurrentUser()->id;
+
         return $this->getThemeConfigDao()->updateThemeConfigByName($name, $config);
     }
 
     public function getThemeConfigByName($name)
     {
-        $config              = $this->getThemeConfigDao()->getThemeConfigByName($name);
+        $config = $this->getThemeConfigDao()->getThemeConfigByName($name);
         $config['allConfig'] = $this->allConfig;
 
         if (empty($config['config'])) {
@@ -122,7 +124,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         }
 
         return $this->editThemeConfig($currentTheme['name'], array(
-            'config' => $config
+            'config' => $config,
         ));
     }
 
@@ -131,7 +133,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getCurrentThemeConfig();
 
         return $this->editThemeConfig($currentTheme['name'], array(
-            'confirmConfig' => $currentTheme['config']
+            'confirmConfig' => $currentTheme['config'],
         ));
     }
 
@@ -167,6 +169,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         }
 
         $config['config'] = empty($currentTheme['confirmConfig']) ? $this->defaultConfig : $currentTheme['confirmConfig'];
+
         return $this->editThemeConfig($currentTheme['name'], $config);
     }
 

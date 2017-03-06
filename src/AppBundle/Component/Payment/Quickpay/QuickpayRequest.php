@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\Payment\Quickpay;
 
 use AppBundle\Component\Payment\Request;
@@ -8,21 +9,22 @@ use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
 class QuickpayRequest extends Request
 {
-    protected $url       = 'Https://Pay.Heepay.com/ShortPay/SubmitOrder.aspx';
+    protected $url = 'Https://Pay.Heepay.com/ShortPay/SubmitOrder.aspx';
     protected $submitUrl = '';
 
     public function form()
     {
-        $form           = array();
+        $form = array();
         $form['method'] = 'get';
         $form['params'] = $this->convertParams($this->params);
         $form['action'] = $this->submitUrl;
+
         return $form;
     }
 
     public function signParams($params)
     {
-        $params['key']      = $this->options['secret'];
+        $params['key'] = $this->options['secret'];
         $params['agent_id'] = $this->options['key'];
         ksort($params);
         $sign = '';
@@ -31,19 +33,20 @@ class QuickpayRequest extends Request
             $sign .= $key.'='.$value.'&';
         }
 
-        $sign = trim($sign, "&");
+        $sign = trim($sign, '&');
+
         return md5(strtolower($sign));
     }
 
     protected function convertParams($params)
     {
-        $isMobile   = $this->isMobile($params['userAgent']);
+        $isMobile = $this->isMobile($params['userAgent']);
         $mobileType = $this->mobileType($params['userAgent']);
 
-        $converted                  = array();
-        $converted['version']       = 1;
-        $converted['user_identity'] = $this->options['key']."_".$params['userId'];
-        $converted['hy_auth_uid']   = '';
+        $converted = array();
+        $converted['version'] = 1;
+        $converted['user_identity'] = $this->options['key'].'_'.$params['userId'];
+        $converted['hy_auth_uid'] = '';
 
         if (isset($params['authBank']['bankAuth'])) {
             $converted['hy_auth_uid'] = $params['authBank']['bankAuth'];
@@ -59,7 +62,7 @@ class QuickpayRequest extends Request
             $converted['device_type'] = 1;
         }
 
-        $converted['device_id']   = '';
+        $converted['device_id'] = '';
         $converted['custom_page'] = 0;
 
         if ($isMobile) {
@@ -76,10 +79,10 @@ class QuickpayRequest extends Request
             $converted['notify_url'] = $params['notifyUrl'];
         }
 
-        $converted['agent_bill_id']   = $this->generateOrderToken($params);
-        $converted['agent_bill_time'] = date("YmdHis", time());
-        $converted['pay_amt']         = $params['amount'];
-        $converted['goods_name']      = mb_substr($this->filterText($params['targetTitle']), 0, 15, 'utf-8');
+        $converted['agent_bill_id'] = $this->generateOrderToken($params);
+        $converted['agent_bill_time'] = date('YmdHis', time());
+        $converted['pay_amt'] = $params['amount'];
+        $converted['goods_name'] = mb_substr($this->filterText($params['targetTitle']), 0, 15, 'utf-8');
 
         if (strlen($converted['goods_name']) >= 45) {
             $converted['goods_name'] .= '...';
@@ -91,19 +94,19 @@ class QuickpayRequest extends Request
             $converted['goods_note'] .= '...';
         }
 
-        $converted['goods_num']      = 1;
-        $converted['user_ip']        = $this->getClientIp();
-        $converted['ext_param1']     = '';
-        $converted['ext_param2']     = '';
+        $converted['goods_num'] = 1;
+        $converted['user_ip'] = $this->getClientIp();
+        $converted['ext_param1'] = '';
+        $converted['ext_param2'] = '';
         $converted['auth_card_type'] = -1;
-        $converted['timestamp']      = time() * 1000;
-        $sign                        = $this->signParams($converted);
-        $encryptData                 = urlencode(base64_encode($this->encrypt(http_build_query($converted), $this->options['aes'])));
-        $url                         = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encryptData."&sign=".$sign;
-        $result                      = $this->curlRequest($url);
-        $xml                         = simplexml_load_string($result);
+        $converted['timestamp'] = time() * 1000;
+        $sign = $this->signParams($converted);
+        $encryptData = urlencode(base64_encode($this->encrypt(http_build_query($converted), $this->options['aes'])));
+        $url = $this->url.'?agent_id='.$this->options['key'].'&encrypt_data='.$encryptData.'&sign='.$sign;
+        $result = $this->curlRequest($url);
+        $xml = simplexml_load_string($result);
 
-        $redir    = (string) $xml->encrypt_data;
+        $redir = (string) $xml->encrypt_data;
         $redirurl = $this->decrypt($redir, $this->options['aes']);
 
         parse_str($redirurl, $tip);
@@ -112,7 +115,7 @@ class QuickpayRequest extends Request
 
         $this->submitUrl = $tip['redirect_url'];
         unset($tip['ret_code'], $tip['ret_msg'], $tip['redirect_url']);
-        $converted             = array();
+        $converted = array();
         $converted['agent_id'] = $this->options['key'];
 
         foreach ($tip as $key => $value) {
@@ -125,14 +128,15 @@ class QuickpayRequest extends Request
     private function generateOrderToken($params)
     {
         $processor = OrderProcessorFactory::create($params['targetType']);
+
         return $processor->generateOrderToken();
     }
 
     public function updateBankAuth($sn, $params)
     {
-        $order     = $this->getOrderService()->getOrderBySn($sn);
-        $userAuth  = array('hy_auth_uid' => $params['hy_auth_uid'], 'hy_token_id' => $params['hy_token_id']);
-        $userAuth  = json_encode($userAuth);
+        $order = $this->getOrderService()->getOrderBySn($sn);
+        $userAuth = array('hy_auth_uid' => $params['hy_auth_uid'], 'hy_token_id' => $params['hy_token_id']);
+        $userAuth = json_encode($userAuth);
         $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($order['userId']);
 
         if (!empty($authBanks)) {
@@ -192,7 +196,7 @@ class QuickpayRequest extends Request
     private function encrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
-        $iv        = substr($decodeKey, 0, 16);
+        $iv = substr($decodeKey, 0, 16);
 
         $rijndael = new Rijndael();
         $rijndael->setIV($iv);
@@ -200,8 +204,8 @@ class QuickpayRequest extends Request
         $rijndael->disablePadding();
 
         $length = strlen($data);
-        $pad    = 16 - ($length % 16);
-        $data   = str_pad($data, $length + $pad, "\0");
+        $pad = 16 - ($length % 16);
+        $data = str_pad($data, $length + $pad, "\0");
 
         $encrypted = $rijndael->encrypt($data);
 
@@ -211,8 +215,8 @@ class QuickpayRequest extends Request
     private function decrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
-        $data      = base64_decode($data);
-        $iv        = substr($decodeKey, 0, 16);
+        $data = base64_decode($data);
+        $iv = substr($decodeKey, 0, 16);
 
         $rijndael = new Rijndael();
         $rijndael->setIV($iv);

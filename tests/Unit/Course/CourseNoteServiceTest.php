@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Course;
 
 use Biz\Task\Service\TaskService;
@@ -11,7 +12,7 @@ class NoteServiceTest extends BaseTestCase
 {
     public function testGetNote()
     {
-        $note      = $this->createNote();
+        $note = $this->createNote();
         $foundNote = $this->getNoteService()->getNote($note['id']);
         $this->assertEquals($note['userId'], $foundNote['userId']);
     }
@@ -35,38 +36,38 @@ class NoteServiceTest extends BaseTestCase
 
     public function testsearchNoteCount()
     {
-        $user      = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $courseSet = $this->createCourseSet();
-        $course    = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
         $task1 = $this->getTaskService()->createTask(array(
-            'fromCourseId'    => $course['id'],
-            'title'           => 'test task',
-            'mode'            => 'lesson',
-            'mediaType'       => 'text',
-            'content'         => 'task content',
-            'fromCourseSetId' => $courseSet['id']
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
         ));
 
         $task2 = $this->getTaskService()->createTask(array(
-            'fromCourseId'    => $course['id'],
-            'title'           => 'test task',
-            'mode'            => 'lesson',
-            'mediaType'       => 'text',
-            'content'         => 'task content',
-            'fromCourseSetId' => $courseSet['id']
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
         ));
 
         $createdNote1 = $this->getNoteService()->saveNote(array(
-            'content'  => 'note_content1',
-            'taskId'   => $task1['id'],
-            'courseId' => $task1['courseId']
+            'content' => 'note_content1',
+            'taskId' => $task1['id'],
+            'courseId' => $task1['courseId'],
         ));
 
         $createdNote2 = $this->getNoteService()->saveNote(array(
-            'content'  => 'note_content1',
-            'taskId'   => $task2['id'],
-            'courseId' => $task2['courseId']
+            'content' => 'note_content1',
+            'taskId' => $task2['id'],
+            'courseId' => $task2['courseId'],
         ));
 
         $resultCount = $this->getNoteService()->countCourseNotes(array('courseId' => $task1['courseId'], 'taskId' => $task2['id']));
@@ -77,38 +78,38 @@ class NoteServiceTest extends BaseTestCase
 
     public function testSearchNotes()
     {
-        $user      = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $courseSet = $this->createCourseSet();
-        $course    = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
         $task1 = $this->getTaskService()->createTask(array(
-            'fromCourseId'    => $course['id'],
-            'title'           => 'test task',
-            'mode'            => 'lesson',
-            'mediaType'       => 'text',
-            'content'         => 'task content',
-            'fromCourseSetId' => $courseSet['id']
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
         ));
 
         $task2 = $this->getTaskService()->createTask(array(
-            'fromCourseId'    => $course['id'],
-            'title'           => 'test task',
-            'mode'            => 'lesson',
-            'mediaType'       => 'text',
-            'content'         => 'task content',
-            'fromCourseSetId' => $courseSet['id']
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
         ));
 
         $createdNote1 = $this->getNoteService()->saveNote(array(
-            'content'  => 'note_content1',
-            'taskId'   => $task1['id'],
-            'courseId' => $task1['courseId']
+            'content' => 'note_content1',
+            'taskId' => $task1['id'],
+            'courseId' => $task1['courseId'],
         ));
 
         $createdNote2 = $this->getNoteService()->saveNote(array(
-            'content'  => 'note_content1',
-            'taskId'   => $task2['id'],
-            'courseId' => $task2['courseId']
+            'content' => 'note_content1',
+            'taskId' => $task2['id'],
+            'courseId' => $task2['courseId'],
         ));
 
         $searchedNotes = $this->getNoteService()->searchNotes(
@@ -123,9 +124,9 @@ class NoteServiceTest extends BaseTestCase
         $note = $this->createNote();
 
         $savedNote = $this->getNoteService()->saveNote(array(
-            'content'  => 'Save Second Time',
-            'taskId'   => $note['taskId'],
-            'courseId' => $note['courseId']
+            'content' => 'Save Second Time',
+            'taskId' => $note['taskId'],
+            'courseId' => $note['courseId'],
         ));
 
         $this->assertNotNull($savedNote);
@@ -149,41 +150,41 @@ class NoteServiceTest extends BaseTestCase
 
     public function testDeleteNotes()
     {
-        $user      = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $courseSet = $this->createCourseSet();
-        $course    = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
 
         $task1 = $this->getTaskService()->createTask(array(
-            'fromCourseId'    => $course['id'],
-            'title'           => 'test task',
-            'mode'            => 'lesson',
-            'mediaType'       => 'text',
-            'content'         => 'task content',
-            'fromCourseSetId' => $courseSet['id']
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
         ));
 
         $task2 = $this->getTaskService()->createTask(array(
-            'fromCourseId'    => $course['id'],
-            'title'           => 'test task',
-            'mode'            => 'lesson',
-            'mediaType'       => 'text',
-            'content'         => 'task content',
-            'fromCourseSetId' => $courseSet['id']
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
         ));
 
         $createdNote1 = $this->getNoteService()->saveNote(array(
-            'content'  => 'note_content1',
-            'taskId'   => $task1['id'],
-            'courseId' => $task1['courseId']
+            'content' => 'note_content1',
+            'taskId' => $task1['id'],
+            'courseId' => $task1['courseId'],
         ));
 
         $createdNote2 = $this->getNoteService()->saveNote(array(
-            'content'  => 'note_content1',
-            'taskId'   => $task2['id'],
-            'courseId' => $task2['courseId']
+            'content' => 'note_content1',
+            'taskId' => $task2['id'],
+            'courseId' => $task2['courseId'],
         ));
 
-        $ids    = array($createdNote1['id'], $createdNote2['id']);
+        $ids = array($createdNote1['id'], $createdNote2['id']);
         $result = $this->getNoteService()->deleteNotes($ids);
 
         $note1 = $this->getNoteService()->getNote($createdNote1['id']);
@@ -197,7 +198,7 @@ class NoteServiceTest extends BaseTestCase
     {
         $courseSet = $this->getCourseSetService()->createCourseSet(array(
             'title' => 'test set',
-            'type'  => 'normal'
+            'type' => 'normal',
         ));
 
         return $courseSet;
@@ -206,14 +207,14 @@ class NoteServiceTest extends BaseTestCase
     protected function createTask()
     {
         $courseSet = $this->createCourseSet();
-        $course    = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
-        $task      = $this->getTaskService()->createTask(array(
-            'fromCourseId'    => $course['id'],
-            'title'           => 'test task',
-            'mode'            => 'lesson',
-            'mediaType'       => 'text',
-            'content'         => 'task content',
-            'fromCourseSetId' => $courseSet['id']
+        $course = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
+        $task = $this->getTaskService()->createTask(array(
+            'fromCourseId' => $course['id'],
+            'title' => 'test task',
+            'mode' => 'lesson',
+            'mediaType' => 'text',
+            'content' => 'task content',
+            'fromCourseSetId' => $courseSet['id'],
         ));
 
         return $task;
@@ -223,9 +224,9 @@ class NoteServiceTest extends BaseTestCase
     {
         $task = $this->createTask();
         $note = $this->getNoteService()->saveNote(array(
-            'content'  => 'note content',
-            'taskId'   => $task['id'],
-            'courseId' => $task['courseId']
+            'content' => 'note content',
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
         ));
 
         return $note;

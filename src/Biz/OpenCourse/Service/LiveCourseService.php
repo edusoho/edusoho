@@ -15,5 +15,4 @@ interface LiveCourseService
     public function checkCourseUserRole($lesson);
 
     public function findBeginingLiveCourse($afterSecond);
-
 }

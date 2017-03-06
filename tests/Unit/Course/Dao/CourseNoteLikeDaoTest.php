@@ -122,7 +122,7 @@ class CourseNoteLikeDaoTest extends BaseDaoTestCase
     {
         return array(
             'noteId' => 1,
-            'userId' => 1
+            'userId' => 1,
         );
     }
 }

@@ -15,7 +15,7 @@ class Doc extends Activity
     {
         return array(
             'name' => '文档',
-            'icon' => 'es-icon es-icon-description'
+            'icon' => 'es-icon es-icon-description',
         );
     }
 
@@ -23,8 +23,8 @@ class Doc extends Activity
     {
         return array(
             'create' => 'AppBundle:Doc:create',
-            'edit'   => 'AppBundle:Doc:edit',
-            'show'   => 'AppBundle:Doc:show'
+            'edit' => 'AppBundle:Doc:edit',
+            'show' => 'AppBundle:Doc:show',
         );
     }
 
@@ -38,26 +38,27 @@ class Doc extends Activity
         $doc = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail'
+            'finishDetail',
         ));
 
-        $biz                  = $this->getBiz();
+        $biz = $this->getBiz();
         $doc['createdUserId'] = $biz['user']['id'];
-        $doc['createdTime']   = time();
+        $doc['createdTime'] = time();
 
         $doc = $this->getDocActivityDao()->create($doc);
+
         return $doc;
     }
 
     public function copy($activity, $config = array())
     {
-        $biz    = $this->getBiz();
-        $doc    = $this->getDocActivityDao()->get($activity['mediaId']);
+        $biz = $this->getBiz();
+        $doc = $this->getDocActivityDao()->get($activity['mediaId']);
         $newDoc = array(
-            'mediaId'       => $doc['mediaId'],
-            'finishType'    => $doc['finishType'],
-            'finishDetail'  => $doc['finishDetail'],
-            'createdUserId' => $biz['user']['id']
+            'mediaId' => $doc['mediaId'],
+            'finishType' => $doc['finishType'],
+            'finishDetail' => $doc['finishDetail'],
+            'createdUserId' => $biz['user']['id'],
         );
 
         return $this->getDocActivityDao()->create($newDoc);
@@ -65,10 +66,10 @@ class Doc extends Activity
 
     public function sync($sourceActivity, $activity)
     {
-        $sourceDoc           = $this->getDocActivityDao()->get($sourceActivity['mediaId']);
-        $doc                 = $this->getDocActivityDao()->get($activity['mediaId']);
-        $doc['mediaId']      = $sourceDoc['mediaId'];
-        $doc['finishType']   = $sourceDoc['finishType'];
+        $sourceDoc = $this->getDocActivityDao()->get($sourceActivity['mediaId']);
+        $doc = $this->getDocActivityDao()->get($activity['mediaId']);
+        $doc['mediaId'] = $sourceDoc['mediaId'];
+        $doc['finishType'] = $sourceDoc['finishType'];
         $doc['finishDetail'] = $sourceDoc['finishDetail'];
 
         return $this->getDocActivityDao()->update($doc['id'], $doc);
@@ -77,11 +78,13 @@ class Doc extends Activity
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
-        $doc      = $this->getDocActivityDao()->get($activity['mediaId']);
+        $doc = $this->getDocActivityDao()->get($activity['mediaId']);
         if ($doc['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+
             return $result >= $doc['finishDetail'];
         }
+
         return false;
     }
 
@@ -90,10 +93,11 @@ class Doc extends Activity
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail'
+            'finishDetail',
         ));
 
         $updateFields['updatedTime'] = time();
+
         return $this->getDocActivityDao()->update($targetId, $updateFields);
     }
 
@@ -107,6 +111,7 @@ class Doc extends Activity
         $activity = $this->getDocActivityDao()->get($targetId);
 
         $activity['file'] = $this->getUploadFileService()->getFullFile($activity['mediaId']);
+
         return $activity;
     }
 
@@ -123,7 +128,7 @@ class Doc extends Activity
      */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**
@@ -131,7 +136,7 @@ class Doc extends Activity
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service("Activity:ActivityService");
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     /**

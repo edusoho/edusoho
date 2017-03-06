@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Content\Service\ContentService;
@@ -9,10 +10,10 @@ use AppBundle\Common\ArrayToolkit;
 
 class ContentController extends BaseController
 {
-
     public function articleShowAction(Request $request, $alias)
     {
         $content = $this->getContentByAlias('article', $alias);
+
         return $this->render('content/show.html.twig', array(
             'type' => 'article',
             'content' => $content,
@@ -59,6 +60,7 @@ class ContentController extends BaseController
     public function activityShowAction(Request $request, $alias)
     {
         $content = $this->getContentByAlias('activity', $alias);
+
         return $this->render('content/show.html.twig', array(
             'type' => 'activity',
             'content' => $content,
@@ -80,8 +82,8 @@ class ContentController extends BaseController
             $template = 'content/page-show.html.twig';
         } elseif ($content['template'] == 'blank') {
             $template = 'content/blank.html.twig';
-        } else{
-            $alias = $content['alias'] ? : $content['id'];
+        } else {
+            $alias = $content['alias'] ?: $content['id'];
             $template = "@customize/content/page/{$alias}/index.html.twig";
         }
 
@@ -125,5 +127,4 @@ class ContentController extends BaseController
     {
         return $this->getBiz()->service('Taxonomy:CategoryService');
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace Biz\File\Convertor;
 
-
 class AudioConvertor extends BaseConvertor
 {
     protected $name = 'audio';
@@ -15,7 +14,7 @@ class AudioConvertor extends BaseConvertor
     {
         return array(
             'convertor' => $this->name,
-            'shd'       => 'mp3'
+            'shd' => 'mp3',
         );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Role\Service\Impl;
 
 use Biz\BaseService;
@@ -24,16 +25,17 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function createRole($role)
     {
-        $role['createdTime']   = time();
-        $user                  = $this->getCurrentUser();
+        $role['createdTime'] = time();
+        $user = $this->getCurrentUser();
         $role['createdUserId'] = $user['id'];
-        $role                  = ArrayToolkit::parts($role, array('name', 'code', 'data', 'createdTime', 'createdUserId'));
+        $role = ArrayToolkit::parts($role, array('name', 'code', 'data', 'createdTime', 'createdUserId'));
 
         if (!ArrayToolkit::requireds($role, array('name', 'code'))) {
             throw new UnexpectedValueException('缺乏必要字段');
         }
 
         $this->getLogService()->info('role', 'create_role', '新增权限用户组"'.$role['name'].'"', $role);
+
         return $this->getRoleDao()->create($role);
     }
 
@@ -47,8 +49,9 @@ class RoleServiceImpl extends BaseService implements RoleService
         }
 
         $fields['updatedTime'] = time();
-        $role                  = $this->getRoleDao()->update($id, $fields);
+        $role = $this->getRoleDao()->update($id, $fields);
         $this->getLogService()->info('role', 'update_role', '更新权限用户组"'.$role['name'].'"', $role);
+
         return $role;
     }
 
@@ -77,12 +80,14 @@ class RoleServiceImpl extends BaseService implements RoleService
                 $sort = array('createdTime' => 'DESC');
                 break;
         }
+
         return $this->getRoleDao()->search($conditions, $sort, $start, $limit);
     }
 
     public function searchRolesCount($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
+
         return $this->getRoleDao()->count($conditions);
     }
 
@@ -101,7 +106,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         $tree = Tree::buildWithArray($permissions, null, 'code', 'parent');
 
         $getSuperAdminRoles = $tree->column('code');
-        $adminForbidRoles   = array(
+        $adminForbidRoles = array(
             'admin_user_avatar',
             'admin_user_change_password',
             'admin_my_cloud',
@@ -110,7 +115,7 @@ class RoleServiceImpl extends BaseService implements RoleService
             'admin_edu_cloud_search_setting',
             'admin_setting_cloud_attachment',
             'admin_setting_cloud',
-            'admin_system'
+            'admin_system',
         );
 
         $getAdminForbidRoles = array();
@@ -132,10 +137,10 @@ class RoleServiceImpl extends BaseService implements RoleService
         $getTeacherRoles = $getTeacherRoles->column('code');
 
         $roles = array(
-            'ROLE_USER'        => array(),
-            'ROLE_TEACHER'     => $getTeacherRoles,
-            'ROLE_ADMIN'       => array_diff($getSuperAdminRoles, $getAdminForbidRoles),
-            'ROLE_SUPER_ADMIN' => $getSuperAdminRoles
+            'ROLE_USER' => array(),
+            'ROLE_TEACHER' => $getTeacherRoles,
+            'ROLE_ADMIN' => array_diff($getSuperAdminRoles, $getAdminForbidRoles),
+            'ROLE_SUPER_ADMIN' => $getSuperAdminRoles,
         );
 
         foreach ($roles as $key => $value) {
@@ -153,26 +158,28 @@ class RoleServiceImpl extends BaseService implements RoleService
     {
         $userRoles = array(
             'ROLE_SUPER_ADMIN' => array('name' => '超级管理员', 'code' => 'ROLE_SUPER_ADMIN'),
-            'ROLE_ADMIN'       => array('name' => '管理员', 'code' => 'ROLE_ADMIN'),
-            'ROLE_TEACHER'     => array('name' => '教师', 'code' => 'ROLE_TEACHER'),
-            'ROLE_USER'        => array('name' => '学员', 'code' => 'ROLE_USER')
+            'ROLE_ADMIN' => array('name' => '管理员', 'code' => 'ROLE_ADMIN'),
+            'ROLE_TEACHER' => array('name' => '教师', 'code' => 'ROLE_TEACHER'),
+            'ROLE_USER' => array('name' => '学员', 'code' => 'ROLE_USER'),
         );
         $userRole = $userRoles[$code];
 
-        $userRole['data']          = $role;
-        $userRole['createdTime']   = time();
+        $userRole['data'] = $role;
+        $userRole['createdTime'] = time();
         $userRole['createdUserId'] = $this->getCurrentUser()->getId();
         $this->getLogService()->info('role', 'init_create_role', '初始化四个角色"'.$userRole['name'].'"', $userRole);
+
         return $this->getRoleDao()->create($userRole);
     }
 
     private function checkChangeRole($id)
     {
-        $role           = $this->getRoleDao()->get($id);
+        $role = $this->getRoleDao()->get($id);
         $notUpdateRoles = array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
         if (in_array($role['code'], $notUpdateRoles)) {
             throw new AccessDeniedException('该权限不能修改！');
         }
+
         return $role;
     }
 
@@ -180,7 +187,7 @@ class RoleServiceImpl extends BaseService implements RoleService
     {
         if (!empty($conditions['nextExcutedStartTime']) && !empty($conditions['nextExcutedEndTime'])) {
             $conditions['nextExcutedStartTime'] = strtotime($conditions['nextExcutedStartTime']);
-            $conditions['nextExcutedEndTime']   = strtotime($conditions['nextExcutedEndTime']);
+            $conditions['nextExcutedEndTime'] = strtotime($conditions['nextExcutedEndTime']);
         } else {
             unset($conditions['nextExcutedStartTime']);
             unset($conditions['nextExcutedEndTime']);
@@ -204,6 +211,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         }
 
         $role = $this->getRoleDao()->getByName($name);
+
         return $role ? false : true;
     }
 

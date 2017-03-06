@@ -1,34 +1,35 @@
 <?php
+
 namespace AppBundle\Common;
 
 class JsonToolkit
 {
-	public static function prettyPrint( $json )
+    public static function prettyPrint($json)
     {
         $result = '';
         $level = 0;
         $inQuotes = false;
         $inEscape = false;
-        $endsLineLevel = NULL;
-        $jsonLength = strlen( $json );
+        $endsLineLevel = null;
+        $jsonLength = strlen($json);
 
-        for( $i = 0; $i < $jsonLength; $i++ ) {
+        for ($i = 0; $i < $jsonLength; ++$i) {
             $char = $json[$i];
-            $newLineLevel = NULL;
-            $post = "";
-            if( $endsLineLevel !== NULL ) {
+            $newLineLevel = null;
+            $post = '';
+            if ($endsLineLevel !== null) {
                 $newLineLevel = $endsLineLevel;
-                $endsLineLevel = NULL;
+                $endsLineLevel = null;
             }
-            if ( $inEscape ) {
+            if ($inEscape) {
                 $inEscape = false;
-            } else if( $char === '"' ) {
+            } elseif ($char === '"') {
                 $inQuotes = !$inQuotes;
-            } else if( ! $inQuotes ) {
-                switch( $char ) {
+            } elseif (!$inQuotes) {
+                switch ($char) {
                     case '}': case ']':
                         $level--;
-                        $endsLineLevel = NULL;
+                        $endsLineLevel = null;
                         $newLineLevel = $level;
                         break;
 
@@ -39,20 +40,20 @@ class JsonToolkit
                         break;
 
                     case ':':
-                        $post = " ";
+                        $post = ' ';
                         break;
 
-                    case " ": case "\t": case "\n": case "\r":
-                        $char = "";
+                    case ' ': case "\t": case "\n": case "\r":
+                        $char = '';
                         $endsLineLevel = $newLineLevel;
-                        $newLineLevel = NULL;
+                        $newLineLevel = null;
                         break;
                 }
-            } else if ( $char === '\\' ) {
+            } elseif ($char === '\\') {
                 $inEscape = true;
             }
-            if( $newLineLevel !== NULL ) {
-                $result .= "\n".str_repeat( "\t", $newLineLevel );
+            if ($newLineLevel !== null) {
+                $result .= "\n".str_repeat("\t", $newLineLevel);
             }
             $result .= $char.$post;
         }

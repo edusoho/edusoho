@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
@@ -15,7 +16,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     }
 
     /**
-     * [findCourseReviews description]
+     * [findCourseReviews description].
      *
      * @deprecated to be removed in 8.0. Use searchReviews() instead.
      *
@@ -32,11 +33,11 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     }
 
     /**
-     * [findCourseReviews description]
+     * [findCourseReviews description].
      *
      * @deprecated to be removed in 8.0. Use searchReviewsCount() instead.
      *
-     * @return integer
+     * @return int
      */
     public function getCourseReviewCount($courseId)
     {
@@ -65,12 +66,14 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $orderBy = $this->checkOrderBy($sort);
 
         $conditions = $this->prepareReviewSearchConditions($conditions);
+
         return $this->getReviewDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function searchReviewsCount($conditions)
     {
         $conditions = $this->prepareReviewSearchConditions($conditions);
+
         return $this->getReviewDao()->count($conditions);
     }
 
@@ -83,11 +86,10 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
             return !empty($value);
         }
-
         );
 
         if (!empty($conditions['author'])) {
-            $author               = $this->getUserService()->getUserByNickname($conditions['author']);
+            $author = $this->getUserService()->getUserByNickname($conditions['author']);
             $conditions['userId'] = $author ? $author['id'] : -1;
         }
 
@@ -125,23 +127,23 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 
         if (empty($review) || ($review && $fields['parentId'] > 0)) {
             $review = $this->getReviewDao()->create(array(
-                'userId'      => $user['id'],
-                'courseId'    => $fields['courseId'],
+                'userId' => $user['id'],
+                'courseId' => $fields['courseId'],
                 'courseSetId' => $course['courseSetId'],
-                'rating'      => $fields['rating'],
-                'private'     => $course['status'] == 'published' ? 0 : 1,
-                'parentId'    => $fields['parentId'],
-                'content'     => empty($fields['content']) ? '' : $fields['content'],
-                'meta'        => $meta
+                'rating' => $fields['rating'],
+                'private' => $course['status'] == 'published' ? 0 : 1,
+                'parentId' => $fields['parentId'],
+                'content' => empty($fields['content']) ? '' : $fields['content'],
+                'meta' => $meta,
             ));
 
             $this->dispatchEvent('course.review.add', new Event($review));
         } else {
             $review = $this->getReviewDao()->update($review['id'], array(
-                'rating'      => $fields['rating'],
-                'content'     => empty($fields['content']) ? '' : $fields['content'],
+                'rating' => $fields['rating'],
+                'content' => empty($fields['content']) ? '' : $fields['content'],
                 'updatedTime' => time(),
-                'meta'        => $meta
+                'meta' => $meta,
             ));
 
             $this->dispatchEvent('course.review.update', new Event($review));
@@ -170,42 +172,46 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     }
 
     /**
-     * [countRatingByCourseId description]
-     * @param  integer $courseId
+     * [countRatingByCourseId description].
+     *
+     * @param int $courseId
+     *
      * @return array
      */
     public function countRatingByCourseId($courseId)
     {
         $conditions = array(
             'courseId' => $courseId,
-            'parentId' => 0
+            'parentId' => 0,
         );
         $ratingNum = $this->searchReviewsCount($conditions);
-        $rating    = $this->getReviewDao()->sumRatingByParams($conditions);
+        $rating = $this->getReviewDao()->sumRatingByParams($conditions);
 
         return array(
             'ratingNum' => $ratingNum,
-            'rating'    => $ratingNum ? $rating / $ratingNum : 0
+            'rating' => $ratingNum ? $rating / $ratingNum : 0,
         );
     }
 
     /**
-     * [countRatingByCourseSetId description]
-     * @param  integer $courseSetId
+     * [countRatingByCourseSetId description].
+     *
+     * @param int $courseSetId
+     *
      * @return array
      */
     public function countRatingByCourseSetId($courseSetId)
     {
         $conditions = array(
             'courseSetId' => $courseSetId,
-            'parentId'    => 0
+            'parentId' => 0,
         );
         $ratingNum = $this->searchReviewsCount($conditions);
-        $rating    = $this->getReviewDao()->sumRatingByParams($conditions);
+        $rating = $this->getReviewDao()->sumRatingByParams($conditions);
 
         return array(
             'ratingNum' => $ratingNum,
-            'rating'    => $ratingNum ? $rating / $ratingNum : 0
+            'rating' => $ratingNum ? $rating / $ratingNum : 0,
         );
     }
 

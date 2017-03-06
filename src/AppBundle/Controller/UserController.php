@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\User\CurrentUser;
@@ -25,7 +26,7 @@ class UserController extends BaseController
     public function headerBlockAction($user)
     {
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
-        $user        = array_merge($user, $userProfile);
+        $user = array_merge($user, $userProfile);
 
         if ($this->getCurrentUser()->isLogin()) {
             $isFollowed = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']);
@@ -39,20 +40,20 @@ class UserController extends BaseController
         $follower = $this->getUserService()->findUserFollowerCount($user['id']);
 
         return $this->render('user/header-block.html.twig', array(
-            'user'       => $user,
+            'user' => $user,
             'isFollowed' => $isFollowed,
-            'following'  => $following,
-            'follower'   => $follower
+            'following' => $following,
+            'follower' => $follower,
         ));
     }
 
     public function showAction(Request $request, $id)
     {
-        $user                 = $this->tryGetUser($id);
-        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
-        $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
-        $user                 = array_merge($user, $userProfile);
+        $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
+        $user = array_merge($user, $userProfile);
 
         if (in_array('ROLE_TEACHER', $user['roles'])) {
             return $this->_teachAction($user);
@@ -74,38 +75,41 @@ class UserController extends BaseController
 
     public function learnAction(Request $request, $id)
     {
-        $user                 = $this->tryGetUser($id);
-        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
-        $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
-        $user                 = array_merge($user, $userProfile);
+        $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
+        $user = array_merge($user, $userProfile);
+
         return $this->_learnAction($user);
     }
 
     public function aboutAction(Request $request, $id)
     {
         $user = $this->tryGetUser($id);
+
         return $this->_aboutAction($user);
     }
 
     public function teachAction(Request $request, $id)
     {
-        $user                 = $this->tryGetUser($id);
-        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
-        $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
-        $user                 = array_merge($user, $userProfile);
+        $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
+        $user = array_merge($user, $userProfile);
+
         return $this->_teachAction($user);
     }
 
     public function learningAction(Request $request, $id)
     {
-        $user                 = $this->tryGetUser($id);
-        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
-        $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
-        $user                 = array_merge($user, $userProfile);
-        $classrooms           = array();
+        $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
+        $user = array_merge($user, $userProfile);
+        $classrooms = array();
 
         $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user['id']), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
         $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user['id']), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
@@ -116,9 +120,9 @@ class UserController extends BaseController
 
         if (!empty($classroomIds)) {
             $conditions = array(
-                'status'       => 'published',
-                'showable'     => '1',
-                'classroomIds' => $classroomIds
+                'status' => 'published',
+                'showable' => '1',
+                'classroomIds' => $classroomIds,
             );
 
             $paginator = new Paginator(
@@ -141,7 +145,7 @@ class UserController extends BaseController
                     $classroomTeacherIds = $classroom['teacherIds'];
                 }
 
-                $teachers                     = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+                $teachers = $this->getUserService()->findUsersByIds($classroomTeacherIds);
                 $classrooms[$key]['teachers'] = $teachers;
             }
         } else {
@@ -152,23 +156,23 @@ class UserController extends BaseController
             );
         }
 
-        return $this->render("user/classroom-learning.html.twig", array(
-            'paginator'  => $paginator,
+        return $this->render('user/classroom-learning.html.twig', array(
+            'paginator' => $paginator,
             'classrooms' => $classrooms,
-            'user'       => $user
+            'user' => $user,
         ));
     }
 
     public function teachingAction(Request $request, $id)
     {
-        $user                 = $this->tryGetUser($id);
-        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
-        $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
-        $user                 = array_merge($user, $userProfile);
-        $conditions           = array(
-            'roles'  => array('teacher', 'headTeacher'),
-            'userId' => $user['id']
+        $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
+        $user = array_merge($user, $userProfile);
+        $conditions = array(
+            'roles' => array('teacher', 'headTeacher'),
+            'userId' => $user['id'],
         );
         $classroomMembers = $this->getClassroomService()->searchMembers($conditions, array('createdTime' => 'desc'), 0, PHP_INT_MAX);
 
@@ -182,9 +186,9 @@ class UserController extends BaseController
             $classrooms = array();
         } else {
             $conditions = array(
-                'status'       => 'published',
-                'showable'     => '1',
-                'classroomIds' => $classroomIds
+                'status' => 'published',
+                'showable' => '1',
+                'classroomIds' => $classroomIds,
             );
 
             $paginator = new Paginator(
@@ -207,24 +211,25 @@ class UserController extends BaseController
                     $classroomTeacherIds = $classroom['teacherIds'];
                 }
 
-                $teachers                     = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+                $teachers = $this->getUserService()->findUsersByIds($classroomTeacherIds);
                 $classrooms[$key]['teachers'] = $teachers;
             }
         }
+
         return $this->render('user/classroom-teaching.html.twig', array(
-            'paginator'  => $paginator,
+            'paginator' => $paginator,
             'classrooms' => $classrooms,
-            'user'       => $user
+            'user' => $user,
         ));
     }
 
     public function favoritedAction(Request $request, $id)
     {
-        $user                 = $this->tryGetUser($id);
-        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
-        $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
-        $user                 = array_merge($user, $userProfile);
+        $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
+        $user = array_merge($user, $userProfile);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -237,28 +242,28 @@ class UserController extends BaseController
         );
 
         return $this->render('user/courses_favorited.html.twig', array(
-            'user'            => $user,
+            'user' => $user,
             'courseFavorites' => $favorites,
-            'paginator'       => $paginator,
-            'type'            => 'favorited'
+            'paginator' => $paginator,
+            'type' => 'favorited',
         ));
     }
 
     public function groupAction(Request $request, $id)
     {
-        $user                 = $this->tryGetUser($id);
-        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
-        $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
-        $user                 = array_merge($user, $userProfile);
-        $admins               = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'admin'),
-            array('createdTime' => "DESC"), 0, 1000
+        $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
+        $user = array_merge($user, $userProfile);
+        $admins = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'admin'),
+            array('createdTime' => 'DESC'), 0, 1000
         );
         $owners = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'owner'),
-            array('createdTime' => "DESC"), 0, 1000
+            array('createdTime' => 'DESC'), 0, 1000
         );
-        $members     = array_merge($admins, $owners);
-        $groupIds    = ArrayToolkit::column($members, 'groupId');
+        $members = array_merge($admins, $owners);
+        $groupIds = ArrayToolkit::column($members, 'groupId');
         $adminGroups = $this->getGroupService()->getGroupsByIds($groupIds);
 
         $paginator = new Paginator(
@@ -267,28 +272,28 @@ class UserController extends BaseController
             20
         );
 
-        $members = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'member'), array('createdTime' => "DESC"), $paginator->getOffsetCount(),
+        $members = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'member'), array('createdTime' => 'DESC'), $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
         $groupIds = ArrayToolkit::column($members, 'groupId');
-        $groups   = $this->getGroupService()->getGroupsByids($groupIds);
+        $groups = $this->getGroupService()->getGroupsByids($groupIds);
 
         return $this->render('user/group.html.twig', array(
-            'user'        => $user,
-            'type'        => 'group',
+            'user' => $user,
+            'type' => 'group',
             'adminGroups' => $adminGroups,
-            'paginator'   => $paginator,
-            'groups'      => $groups
+            'paginator' => $paginator,
+            'groups' => $groups,
         ));
     }
 
     public function followingAction(Request $request, $id)
     {
-        $user                 = $this->tryGetUser($id);
-        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
-        $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
-        $user                 = array_merge($user, $userProfile);
+        $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
+        $user = array_merge($user, $userProfile);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -299,31 +304,31 @@ class UserController extends BaseController
         $followings = $this->getUserService()->findUserFollowing($user['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         if ($followings) {
-            $followingIds          = ArrayToolkit::column($followings, 'id');
+            $followingIds = ArrayToolkit::column($followings, 'id');
             $followingUserProfiles = ArrayToolkit::index($this->getUserService()->searchUserProfiles(array('ids' => $followingIds), array('id' => 'ASC'), 0, count($followingIds)), 'id');
         }
 
         $myfollowings = $this->_getUserFollowing();
 
         return $this->render('user/friend.html.twig', array(
-            'user'           => $user,
-            'paginator'      => $paginator,
-            'friends'        => $followings,
-            'userProfile'    => $userProfile,
-            'myfollowings'   => $myfollowings,
+            'user' => $user,
+            'paginator' => $paginator,
+            'friends' => $followings,
+            'userProfile' => $userProfile,
+            'myfollowings' => $myfollowings,
             'allUserProfile' => isset($followingUserProfiles) ? $followingUserProfiles : array(),
-            'friendNav'      => 'following'
+            'friendNav' => 'following',
         ));
     }
 
     public function followerAction(Request $request, $id)
     {
-        $user                 = $this->tryGetUser($id);
-        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->tryGetUser($id);
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['about'] = strip_tags($userProfile['about'], '');
-        $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
-        $user                 = array_merge($user, $userProfile);
-        $myfollowings         = $this->_getUserFollowing();
+        $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
+        $user = array_merge($user, $userProfile);
+        $myfollowings = $this->_getUserFollowing();
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -334,28 +339,28 @@ class UserController extends BaseController
         $followers = $this->getUserService()->findUserFollowers($user['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         if ($followers) {
-            $followerIds          = ArrayToolkit::column($followers, 'id');
+            $followerIds = ArrayToolkit::column($followers, 'id');
             $followerUserProfiles = ArrayToolkit::index($this->getUserService()->searchUserProfiles(array('ids' => $followerIds), array('id' => 'ASC'), 0, count($followerIds)), 'id');
         }
 
         return $this->render('user/friend.html.twig', array(
-            'user'           => $user,
-            'paginator'      => $paginator,
-            'friends'        => $followers,
-            'userProfile'    => $userProfile,
-            'myfollowings'   => $myfollowings,
+            'user' => $user,
+            'paginator' => $paginator,
+            'friends' => $followers,
+            'userProfile' => $userProfile,
+            'myfollowings' => $myfollowings,
             'allUserProfile' => isset($followerUserProfiles) ? $followerUserProfiles : array(),
-            'friendNav'      => 'follower'
+            'friendNav' => 'follower',
         ));
     }
 
     public function remindCounterAction(Request $request)
     {
-        $user    = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $counter = array('newMessageNum' => 0, 'newNotificationNum' => 0);
 
         if ($user->isLogin()) {
-            $counter['newMessageNum']      = $user['newMessageNum'];
+            $counter['newMessageNum'] = $user['newMessageNum'];
             $counter['newNotificationNum'] = $user['newNotificationNum'];
         }
 
@@ -390,7 +395,7 @@ class UserController extends BaseController
 
     public function checkPasswordAction(Request $request)
     {
-        $password    = $request->query->get('value');
+        $password = $request->query->get('value');
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isLogin()) {
@@ -408,30 +413,30 @@ class UserController extends BaseController
 
     public function cardShowAction(Request $request, $userId)
     {
-        $user        = $this->tryGetUser($userId);
+        $user = $this->tryGetUser($userId);
         $currentUser = $this->getCurrentUser();
-        $profile     = $this->getUserService()->getUserProfile($userId);
-        $isFollowed  = false;
+        $profile = $this->getUserService()->getUserProfile($userId);
+        $isFollowed = false;
 
         if ($currentUser->isLogin()) {
             $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $userId);
         }
 
-        $user['learningNum']  = $this->getCourseService()->countUserLearningCourses($userId);
+        $user['learningNum'] = $this->getCourseService()->countUserLearningCourses($userId);
         $user['followingNum'] = $this->getUserService()->findUserFollowingCount($userId);
-        $user['followerNum']  = $this->getUserService()->findUserFollowerCount($userId);
-        $levels               = array();
+        $user['followerNum'] = $this->getUserService()->findUserFollowerCount($userId);
+        $levels = array();
 
         if ($this->isPluginInstalled('Vip')) {
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), null, 0, 100), 'id');
         }
 
         return $this->render('user/card-show.html.twig', array(
-            'user'       => $user,
-            'profile'    => $profile,
+            'user' => $user,
+            'profile' => $profile,
             'isFollowed' => $isFollowed,
-            'levels'     => $levels,
-            'nowTime'    => time()
+            'levels' => $levels,
+            'nowTime' => time(),
         ));
     }
 
@@ -467,7 +472,7 @@ class UserController extends BaseController
                 'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5',
                 'dateField1', 'dateField2', 'dateField3', 'dateField4', 'dateField5',
                 'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
-                'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10'
+                'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10',
             ));
 
             if (isset($formData['email']) && !empty($formData['email'])) {
@@ -488,12 +493,12 @@ class UserController extends BaseController
 
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $userFields = ArrayToolkit::index($userFields, 'fieldName');
-        $userInfo   = $this->getUserService()->getUserProfile($user['id']);
+        $userInfo = $this->getUserService()->getUserProfile($user['id']);
 
         return $this->render('user/fill-userinfo-fields.html.twig', array(
             'userFields' => $userFields,
-            'user'       => $userInfo,
-            'goto'       => $goto
+            'user' => $userInfo,
+            'goto' => $goto,
         ));
     }
 
@@ -511,10 +516,11 @@ class UserController extends BaseController
     protected function _aboutAction($user)
     {
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
+
         return $this->render('user/about.html.twig', array(
-            'user'        => $user,
+            'user' => $user,
             'userProfile' => $userProfile,
-            'type'        => 'about'
+            'type' => 'about',
         ));
     }
 
@@ -533,17 +539,17 @@ class UserController extends BaseController
         );
 
         return $this->render('user/course-sets.html.twig', array(
-            'user'       => $user,
+            'user' => $user,
             'courseSets' => $courseSets,
-            'paginator'  => $paginator,
-            'type'       => 'learn'
+            'paginator' => $paginator,
+            'type' => 'learn',
         ));
     }
 
     protected function _teachAction($user)
     {
         $conditions = array(
-            'status' => 'published'
+            'status' => 'published',
         );
         $paginator = new Paginator(
             $this->get('request'),
@@ -559,19 +565,20 @@ class UserController extends BaseController
         );
 
         return $this->render('user/course-sets.html.twig', array(
-            'user'       => $user,
+            'user' => $user,
             'courseSets' => $sets,
-            'paginator'  => $paginator,
-            'type'       => 'teach'
+            'paginator' => $paginator,
+            'type' => 'teach',
         ));
     }
 
     protected function _getUserFollowing()
     {
-        $user         = $this->getCurrentUser();
-        $followings   = $this->getUserService()->findAllUserFollowing($user['id']);
+        $user = $this->getCurrentUser();
+        $followings = $this->getUserService()->findAllUserFollowing($user['id']);
         $followingIds = ArrayToolkit::column($followings, 'id');
         $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $followingIds);
+
         return $myfollowings;
     }
 

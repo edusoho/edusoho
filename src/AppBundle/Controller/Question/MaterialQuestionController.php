@@ -15,10 +15,10 @@ class MaterialQuestionController extends BaseController
 
     public function editAction(Request $request, $courseSetId, $questionId)
     {
-        $user        = $this->getUser();
-        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $user = $this->getUser();
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $courseTasks = $this->getCourseTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
-        $question    = $this->getQuestionService()->get($questionId);
+        $question = $this->getQuestionService()->get($questionId);
 
         $parentQuestion = array();
         if ($question['parentId'] > 0) {
@@ -26,25 +26,25 @@ class MaterialQuestionController extends BaseController
         }
 
         return $this->render('question-manage/material-form.html.twig', array(
-            'courseSet'      => $courseSet,
-            'question'       => $question,
+            'courseSet' => $courseSet,
+            'question' => $question,
             'parentQuestion' => $parentQuestion,
-            'type'           => $question['type'],
-            'courseTasks'    => $courseTasks
+            'type' => $question['type'],
+            'courseTasks' => $courseTasks,
         ));
     }
 
     public function createAction(Request $request, $courseSetId, $type)
     {
-        $user        = $this->getUser();
-        $courseSet   = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $user = $this->getUser();
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $courseTasks = $this->getCourseTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
 
         return $this->render('question-manage/material-form.html.twig', array(
-            'courseSet'      => $courseSet,
+            'courseSet' => $courseSet,
             'parentQuestion' => array(),
-            'courseTasks'    => $courseTasks,
-            'type'           => $type
+            'courseTasks' => $courseTasks,
+            'type' => $type,
         ));
     }
 

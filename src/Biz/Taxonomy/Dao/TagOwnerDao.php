@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Taxonomy\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;

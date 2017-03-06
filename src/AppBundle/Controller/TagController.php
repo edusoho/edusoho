@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Course\Service\CourseService;
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class TagController extends BaseController
 {
     /**
-     * 获取所有标签，以JSONM的方式返回数据
+     * 获取所有标签，以JSONM的方式返回数据.
      *
      * @return JSONM Response
      */
@@ -24,6 +25,7 @@ class TagController extends BaseController
         foreach ($tags as $tag) {
             $data[] = array('id' => $tag['id'], 'name' => $tag['name']);
         }
+
         return $this->createJsonmResponse($data);
     }
 
@@ -32,7 +34,7 @@ class TagController extends BaseController
         $tags = $this->getTagService()->findAllTags(0, 100);
 
         return $this->render('tag/index.html.twig', array(
-            'tags' => $tags
+            'tags' => $tags,
         ));
     }
 
@@ -52,15 +54,14 @@ class TagController extends BaseController
             }
 
             $conditions = array(
-                'status'    => 'published',
+                'status' => 'published',
                 'courseIds' => $courseIds,
-                'parentId'  => 0
+                'parentId' => 0,
             );
 
             $paginator = new Paginator(
                 $this->get('request'),
-                $this->getCourseService()->searchCourseCount($conditions)
-                , 12
+                $this->getCourseService()->searchCourseCount($conditions), 12
             );
 
             $courses = $this->getCourseService()->searchCourses(
@@ -70,22 +71,24 @@ class TagController extends BaseController
                 $paginator->getPerPageCount()
             );
         }
+
         return $this->render('tag/show.html.twig', array(
-            'tag'       => $tag,
-            'courses'   => $courses,
-            'paginator' => $paginator
+            'tag' => $tag,
+            'courses' => $courses,
+            'paginator' => $paginator,
         ));
     }
 
     public function matchAction(Request $request)
     {
-        $data        = array();
+        $data = array();
         $queryString = $request->query->get('q');
-        $callback    = $request->query->get('callback');
-        $tags        = $this->getTagService()->getTagByLikeName($queryString);
+        $callback = $request->query->get('callback');
+        $tags = $this->getTagService()->getTagByLikeName($queryString);
         foreach ($tags as $tag) {
             $data[] = array('id' => $tag['id'], 'name' => $tag['name']);
         }
+
         return new JsonResponse($data);
     }
 

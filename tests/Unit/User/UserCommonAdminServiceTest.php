@@ -2,16 +2,16 @@
 
 namespace Tests\Unit\User;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class UserCommonAdminServiceTest extends BaseTestCase
 {
     public function testAddCommonAdmin()
     {
         $field = array(
-            'url'    => "http://www.esdev.com:81/",
-            'title'  => "ceshi",
-            'userId' => 1
+            'url' => 'http://www.esdev.com:81/',
+            'title' => 'ceshi',
+            'userId' => 1,
         );
 
         $returnField = $this->getUserCommonAdminService()->addCommonAdmin($field);
@@ -20,15 +20,14 @@ class UserCommonAdminServiceTest extends BaseTestCase
         $this->assertEquals('http://www.esdev.com:81/', $returnField['url']);
         $this->assertEquals($field['title'], $returnField['title']);
         $this->assertEquals($field['userId'], $returnField['userId']);
-
     }
 
     public function testgetCommonAdmin()
     {
         $field = array(
-            'url'    => "http://www.esdev.com:81/",
-            'title'  => "ceshi",
-            'userId' => 4
+            'url' => 'http://www.esdev.com:81/',
+            'title' => 'ceshi',
+            'userId' => 4,
         );
 
         $returnField = $this->getUserCommonAdminService()->addCommonAdmin($field);
@@ -36,15 +35,14 @@ class UserCommonAdminServiceTest extends BaseTestCase
         $fields = $this->getUserCommonAdminService()->getCommonAdmin($returnField['id']);
 
         $this->assertEquals(true, is_array($fields));
-
     }
 
     public function testFindCommonAdminByUserId()
     {
         $field = array(
-            'url'    => "http://www.esdev.com:81/",
-            'title'  => "ceshi",
-            'userId' => 2
+            'url' => 'http://www.esdev.com:81/',
+            'title' => 'ceshi',
+            'userId' => 2,
         );
 
         $returnField = $this->getUserCommonAdminService()->addCommonAdmin($field);
@@ -52,15 +50,14 @@ class UserCommonAdminServiceTest extends BaseTestCase
         $fields = $this->getUserCommonAdminService()->findCommonAdminByUserId($field['userId']);
 
         $this->assertEquals(true, is_array($fields));
-
     }
 
     public function testGetCommonAdminByUserIdAndUrl()
     {
         $field = array(
-            'url'    => "http://www.esdev.com:81/",
-            'title'  => "ceshi",
-            'userId' => 3
+            'url' => 'http://www.esdev.com:81/',
+            'title' => 'ceshi',
+            'userId' => 3,
         );
 
         $returnField = $this->getUserCommonAdminService()->addCommonAdmin($field);
@@ -68,7 +65,6 @@ class UserCommonAdminServiceTest extends BaseTestCase
         $fields = $this->getUserCommonAdminService()->getCommonAdminByUserIdAndUrl($field['userId'], $field['url']);
 
         $this->assertEquals(true, is_array($fields));
-
     }
 
     /**
@@ -77,9 +73,9 @@ class UserCommonAdminServiceTest extends BaseTestCase
     public function testDeleteCommonAdmin()
     {
         $field = array(
-            'url'    => "http://www.esdev.com/",
-            'title'  => "ceshi",
-            'userId' => 1
+            'url' => 'http://www.esdev.com/',
+            'title' => 'ceshi',
+            'userId' => 1,
         );
 
         $returnField = $this->getUserCommonAdminService()->addCommonAdmin($field);
@@ -92,10 +88,11 @@ class UserCommonAdminServiceTest extends BaseTestCase
 
     protected function createUser()
     {
-        $user             = array();
-        $user['email']    = "user@user.com";
-        $user['nickname'] = "user";
-        $user['password'] = "user";
+        $user = array();
+        $user['email'] = 'user@user.com';
+        $user['nickname'] = 'user';
+        $user['password'] = 'user';
+
         return $this->getUserService()->register($user);
     }
 

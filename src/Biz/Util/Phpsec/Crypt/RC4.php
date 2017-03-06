@@ -35,24 +35,19 @@
  * </code>
  *
  * @category  Crypt
- * @package   RC4
  *
  * @author    Jim Wigginton <terrafrost@php.net>
  * @copyright 2007 Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  *
- * @link      http://phpseclib.sourceforge.net
+ * @see      http://phpseclib.sourceforge.net
  */
 
 namespace Biz\Util\Phpsec\Crypt;
 
-use Biz\Util\Phpsec\Crypt\Base;
-
 /**
  * Pure-PHP implementation of RC4.
  *
- * @access  public
- * @package RC4
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
@@ -67,32 +62,32 @@ class RC4 extends Base
     /**#@-*/
 
     /**
-     * Block Length of the cipher
+     * Block Length of the cipher.
      *
      * RC4 is a stream cipher
      * so we the block_size to 0
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::block_size
      */
     public $block_size = 0;
 
     /**
-     * The default password key_size used by setPassword()
+     * The default password key_size used by setPassword().
      *
-     * @var Integer
-     * @access private
+     * @var int
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::password_key_size
      * @see \Biz\Util\Phpsec\Crypt\Base::setPassword()
      */
     public $password_key_size = 128; // = 1024 bits
 
     /**
-     * The mcrypt specific name of the cipher
+     * The mcrypt specific name of the cipher.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::cipher_name_mcrypt
      */
     public $cipher_name_mcrypt = 'arcfour';
@@ -101,25 +96,25 @@ class RC4 extends Base
      * Holds whether performance-optimized $inline_crypt() can/should be used.
      *
      * @var mixed
-     * @access private
+     *
      * @see \Biz\Util\Phpsec\Crypt\Base::inline_crypt
      */
     public $use_inline_crypt = false; // currently not available
 
     /**
-     * The Key
+     * The Key.
      *
-     * @var String
-     * @access private
+     * @var string
+     *
      * @see \Biz\Util\Phpsec\Crypt\RC4::setKey()
      */
     public $key = "\0";
 
     /**
-     * The Key Stream for decryption and encryption
+     * The Key Stream for decryption and encryption.
      *
-     * @var Array
-     * @access private
+     * @var array
+     *
      * @see \Biz\Util\Phpsec\Crypt\RC4::setKey()
      */
     public $stream;
@@ -129,7 +124,6 @@ class RC4 extends Base
      *
      * Determines whether or not the mcrypt extension should be used.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::__construct()
      *
      * @return \Biz\Util\Phpsec\Crypt\RC4
@@ -140,15 +134,15 @@ class RC4 extends Base
     }
 
     /**
-     * Test for engine validity
+     * Test for engine validity.
      *
      * This is mainly just a wrapper to set things up for Crypt_Base::isValidEngine()
      *
-     * @access public
      * @see Crypt_Base::Crypt_Base()
      *
-     * @param  Integer   $engine
-     * @return Boolean
+     * @param int $engine
+     *
+     * @return bool
      */
     public function isValidEngine($engine)
     {
@@ -188,10 +182,9 @@ class RC4 extends Base
      * {@link http://www.rsa.com/rsalabs/node.asp?id=2009 http://www.rsa.com/rsalabs/node.asp?id=2009}
      * {@link http://en.wikipedia.org/wiki/Related_key_attack http://en.wikipedia.org/wiki/Related_key_attack}
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\RC4::setKey()
      *
-     * @param String $iv
+     * @param string $iv
      */
     public function setIV($iv)
     {
@@ -203,10 +196,9 @@ class RC4 extends Base
      * Keys can be between 1 and 256 bytes long.  If they are longer then 256 bytes, the first 256 bytes will
      * be used.  If no key is explicitly set, it'll be assumed to be a single null byte.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::setKey()
      *
-     * @param String $key
+     * @param string $key
      */
     public function setKey($key)
     {
@@ -216,12 +208,12 @@ class RC4 extends Base
     /**
      * Encrypts a message.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::decrypt()
      * @see \Biz\Util\Phpsec\Crypt\RC4::_crypt()
      *
-     * @param  String $plaintext
-     * @return String $ciphertext
+     * @param string $plaintext
+     *
+     * @return string $ciphertext
      */
     public function encrypt($plaintext)
     {
@@ -238,12 +230,12 @@ class RC4 extends Base
      * $this->decrypt($this->encrypt($plaintext)) == $this->encrypt($this->encrypt($plaintext)).
      * At least if the continuous buffer is disabled.
      *
-     * @access public
      * @see \Biz\Util\Phpsec\Crypt\Base::encrypt()
      * @see \Biz\Util\Phpsec\Crypt\RC4::_crypt()
      *
-     * @param  String $ciphertext
-     * @return String $plaintext
+     * @param string $ciphertext
+     *
+     * @return string $plaintext
      */
     public function decrypt($ciphertext)
     {
@@ -255,10 +247,9 @@ class RC4 extends Base
     }
 
     /**
-     * Encrypts a block
+     * Encrypts a block.
      *
-     * @access private
-     * @param String $in
+     * @param string $in
      */
     public function _encryptBlock($in)
     {
@@ -266,10 +257,9 @@ class RC4 extends Base
     }
 
     /**
-     * Decrypts a block
+     * Decrypts a block.
      *
-     * @access private
-     * @param String $in
+     * @param string $in
      */
     public function _decryptBlock($in)
     {
@@ -277,43 +267,42 @@ class RC4 extends Base
     }
 
     /**
-     * Setup the key (expansion)
+     * Setup the key (expansion).
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\Base::_setupKey()
      */
     public function _setupKey()
     {
-        $key       = $this->key;
+        $key = $this->key;
         $keyLength = strlen($key);
         $keyStream = range(0, 255);
-        $j         = 0;
+        $j = 0;
 
-        for ($i = 0; $i < 256; $i++) {
-            $j             = ($j + $keyStream[$i] + ord($key[$i % $keyLength])) & 255;
-            $temp          = $keyStream[$i];
+        for ($i = 0; $i < 256; ++$i) {
+            $j = ($j + $keyStream[$i] + ord($key[$i % $keyLength])) & 255;
+            $temp = $keyStream[$i];
             $keyStream[$i] = $keyStream[$j];
             $keyStream[$j] = $temp;
         }
 
-        $this->stream                = array();
+        $this->stream = array();
         $this->stream[self::DECRYPT] = $this->stream[self::ENCRYPT] = array(
             0, // index $i
             0, // index $j
-            $keyStream
+            $keyStream,
         );
     }
 
     /**
      * Encrypts or decrypts a message.
      *
-     * @access private
      * @see \Biz\Util\Phpsec\Crypt\RC4::encrypt()
      * @see \Biz\Util\Phpsec\Crypt\RC4::decrypt()
      *
-     * @param  String  $text
-     * @param  Integer $mode
-     * @return String  $text
+     * @param string $text
+     * @param int    $mode
+     *
+     * @return string $text
      */
     public function _crypt($text, $mode)
     {
@@ -325,26 +314,26 @@ class RC4 extends Base
         $stream = &$this->stream[$mode];
 
         if ($this->continuousBuffer) {
-            $i         = &$stream[0];
-            $j         = &$stream[1];
+            $i = &$stream[0];
+            $j = &$stream[1];
             $keyStream = &$stream[2];
         } else {
-            $i         = $stream[0];
-            $j         = $stream[1];
+            $i = $stream[0];
+            $j = $stream[1];
             $keyStream = $stream[2];
         }
 
         $len = strlen($text);
 
         for ($k = 0; $k < $len; ++$k) {
-            $i   = ($i + 1) & 255;
+            $i = ($i + 1) & 255;
             $ksi = $keyStream[$i];
-            $j   = ($j + $ksi) & 255;
+            $j = ($j + $ksi) & 255;
             $ksj = $keyStream[$j];
 
             $keyStream[$i] = $ksj;
             $keyStream[$j] = $ksi;
-            $text[$k]      = $text[$k] ^ chr($keyStream[($ksj + $ksi) & 255]);
+            $text[$k] = $text[$k] ^ chr($keyStream[($ksj + $ksi) & 255]);
         }
 
         return $text;

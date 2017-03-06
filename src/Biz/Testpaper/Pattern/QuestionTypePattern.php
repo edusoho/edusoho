@@ -1,9 +1,9 @@
 <?php
+
 namespace Biz\Testpaper\Pattern;
 
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
-use Biz\Testpaper\Pattern\TestpaperPatternInterface;
 
 class QuestionTypePattern implements TestpaperPatternInterface
 {
@@ -55,8 +55,9 @@ class QuestionTypePattern implements TestpaperPatternInterface
 
     public function canBuild($options)
     {
-        $questions      = $this->getQuestions($options);
+        $questions = $this->getQuestions($options);
         $typedQuestions = ArrayToolkit::group($questions, 'type');
+
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
@@ -74,7 +75,7 @@ class QuestionTypePattern implements TestpaperPatternInterface
         }
 
         if ($stillNeedCount) {
-            $questions         = array_slice(array_values($indexedQuestions), 0, $stillNeedCount);
+            $questions = array_slice(array_values($indexedQuestions), 0, $stillNeedCount);
             $selectedQuestions = array_merge($selectedQuestions, $questions);
         }
 
@@ -91,7 +92,7 @@ class QuestionTypePattern implements TestpaperPatternInterface
             }
 
             if (!empty($difficultiedQuestions[$difficulty])) {
-                $questions         = array_slice($difficultiedQuestions[$difficulty], 0, $subNeedCount);
+                $questions = array_slice($difficultiedQuestions[$difficulty], 0, $subNeedCount);
                 $selectedQuestions = array_merge($selectedQuestions, $questions);
             }
         }
@@ -113,15 +114,15 @@ class QuestionTypePattern implements TestpaperPatternInterface
                 $missing[$type] = $needCount;
                 continue;
             }
-            if ($type == "material") {
+            if ($type == 'material') {
                 $validatedMaterialQuestionNum = 0;
-                foreach ($questions["material"] as $materialQuestion) {
+                foreach ($questions['material'] as $materialQuestion) {
                     if ($materialQuestion['subCount'] > 0) {
                         $validatedMaterialQuestionNum += 1;
                     }
                 }
                 if ($validatedMaterialQuestionNum < $needCount) {
-                    $missing["material"] = $needCount - $validatedMaterialQuestionNum;
+                    $missing['material'] = $needCount - $validatedMaterialQuestionNum;
                 }
                 continue;
             }
@@ -141,7 +142,7 @@ class QuestionTypePattern implements TestpaperPatternInterface
     {
         $conditions = array(
             'parentId' => 0,
-            'courseId' => $options['courseId']
+            'courseId' => $options['courseId'],
         );
 
         if (!empty($options['ranges']['start'])) {
@@ -165,31 +166,32 @@ class QuestionTypePattern implements TestpaperPatternInterface
     protected function convertQuestionsToItems($testpaper, $questions, $count, $options)
     {
         $items = array();
-        for ($i = 0; $i < $count; $i++) {
-            $question  = $questions[$i];
-            $score     = empty($options['scores'][$question['type']]) ? 0 : $options['scores'][$question['type']];
+        for ($i = 0; $i < $count; ++$i) {
+            $question = $questions[$i];
+            $score = empty($options['scores'][$question['type']]) ? 0 : $options['scores'][$question['type']];
             $missScore = empty($options['missScores'][$question['type']]) ? 0 : $options['missScores'][$question['type']];
-            $items[]   = $this->makeItem($testpaper, $question, $score, $missScore);
+            $items[] = $this->makeItem($testpaper, $question, $score, $missScore);
             if ($question['subCount'] > 0) {
                 $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id'], 0, $question['subCount']);
                 foreach ($subQuestions as $subQuestion) {
                     $missScore = empty($options['missScores'][$subQuestion['type']]) ? 0 : $options['missScores'][$subQuestion['type']];
-                    $items[]   = $this->makeItem($testpaper, $subQuestion, $score, $missScore);
+                    $items[] = $this->makeItem($testpaper, $subQuestion, $score, $missScore);
                 }
             }
         }
+
         return $items;
     }
 
     protected function makeItem($testpaper, $question, $score, $missScore)
     {
         return array(
-            'testId'       => $testpaper['id'],
-            'questionId'   => $question['id'],
+            'testId' => $testpaper['id'],
+            'questionId' => $question['id'],
             'questionType' => $question['type'],
-            'parentId'     => $question['parentId'],
-            'score'        => $score,
-            'missScore'    => $missScore
+            'parentId' => $question['parentId'],
+            'score' => $score,
+            'missScore' => $missScore,
         );
     }
 

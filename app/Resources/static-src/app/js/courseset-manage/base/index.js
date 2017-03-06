@@ -64,8 +64,21 @@ class Base {
       onkeyup: false,
       rules: {
         title: {
-          required: true,
+          required: {
+            depends:function(){
+                $(this).val($.trim($(this).val()));
+                return true;
+            }
+          },
           open_live_course_title: true
+        },
+        subtitle: {
+          required: {
+            depends:function(){
+                $(this).val($.trim($(this).val()));
+                return false;
+            }
+          }
         }
       },
       messages: {

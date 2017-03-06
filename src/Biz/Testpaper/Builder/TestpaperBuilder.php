@@ -1,11 +1,10 @@
 <?php
+
 namespace Biz\Testpaper\Builder;
 
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Common\Exception\RuntimeException;
-use Biz\Testpaper\Builder\TestpaperBuilderInterface;
 
 class TestpaperBuilder implements TestpaperBuilderInterface
 {
@@ -40,14 +39,15 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
     public function canBuild($options)
     {
-        $questions      = $this->getQuestions($options);
+        $questions = $this->getQuestions($options);
         $typedQuestions = ArrayToolkit::group($questions, 'type');
+
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
     public function showTestItems($testId, $resultId = 0)
     {
-        $test  = $this->getTestpaperService()->getTestpaper($testId);
+        $test = $this->getTestpaperService()->getTestpaper($testId);
         $items = $this->getTestpaperService()->findItemsByTestId($test['id']);
         if (!$items) {
             return array();
@@ -62,7 +62,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         }
 
         $questionIds = ArrayToolkit::column($items, 'questionId');
-        $questions   = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         $formatItems = array();
         foreach ($items as $questionId => $item) {
@@ -70,17 +70,17 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
             if (!$question) {
                 $question = array(
-                    'id'        => $item['questionId'],
+                    'id' => $item['questionId'],
                     'isDeleted' => true,
-                    'stem'      => $this->getServiceKernel()->trans('此题已删除'),
-                    'score'     => 0,
-                    'answer'    => '',
-                    'type'      => $item['questionType']
+                    'stem' => $this->getServiceKernel()->trans('此题已删除'),
+                    'score' => 0,
+                    'answer' => '',
+                    'type' => $item['questionType'],
                 );
             }
 
-            $question['score']     = $item['score'];
-            $question['seq']       = $item['seq'];
+            $question['score'] = $item['score'];
+            $question['seq'] = $item['seq'];
             $question['missScore'] = $item['missScore'];
 
             if (!empty($itemResults[$questionId])) {
@@ -136,7 +136,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             'itemCount',
             'copyId',
             'pattern',
-            'metas'
+            'metas',
         ));
 
         return $fields;
@@ -145,32 +145,32 @@ class TestpaperBuilder implements TestpaperBuilderInterface
     public function updateSubmitedResult($resultId, $usedTime)
     {
         $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
-        $testpaper       = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
-        $items           = $this->getTestpaperService()->findItemsByTestId($testpaperResult['testId']);
-        $itemResults     = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
+        $items = $this->getTestpaperService()->findItemsByTestId($testpaperResult['testId']);
+        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
 
         $questionIds = ArrayToolkit::column($items, 'questionId');
 
         $hasEssay = $this->getQuestionService()->hasEssay($questionIds);
 
         $fields = array(
-            'status' => $hasEssay ? 'reviewing' : 'finished'
+            'status' => $hasEssay ? 'reviewing' : 'finished',
         );
 
-        $accuracy                 = $this->getTestpaperService()->sumScore($itemResults);
+        $accuracy = $this->getTestpaperService()->sumScore($itemResults);
         $fields['objectiveScore'] = $accuracy['sumScore'];
 
         $fields['score'] = 0;
 
         if (!$hasEssay) {
-            $fields['score']       = $fields['objectiveScore'];
+            $fields['score'] = $fields['objectiveScore'];
             $fields['checkedTime'] = time();
         }
 
         $fields['passedStatus'] = $fields['score'] >= $testpaper['passedCondition'][0] ? 'passed' : 'unpassed';
 
         $fields['usedTime'] = $usedTime + $testpaperResult['usedTime'];
-        $fields['endTime']  = time();
+        $fields['endTime'] = time();
 
         $fields['rightItemCount'] = $accuracy['rightItemCount'];
 
@@ -180,7 +180,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
     protected function createQuestionItems($questions)
     {
         $testpaperItems = array();
-        $seq            = 1;
+        $seq = 1;
 
         foreach ($questions as $item) {
             $questionType = $this->getQuestionService()->getQuestionConfig($item['questionType']);
@@ -188,7 +188,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
             $item['seq'] = $seq;
 
             if ($item['questionType'] != 'material') {
-                $seq++;
+                ++$seq;
             }
 
             $testpaperItems[] = $this->getTestpaperService()->createItem($item);
@@ -213,7 +213,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
         $fields = array(
             'itemCount' => $count,
-            'score'     => $score
+            'score' => $score,
         );
 
         return $this->getTestpaperService()->updateTestpaper($testpaperId, $fields);
@@ -221,7 +221,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
 
     protected function getQuestions($options)
     {
-        $conditions        = array();
+        $conditions = array();
         $options['ranges'] = array_filter($options['ranges']);
 
         if (!empty($options['ranges'])) {
@@ -249,15 +249,15 @@ class TestpaperBuilder implements TestpaperBuilderInterface
                 $missing[$type] = $needCount;
                 continue;
             }
-            if ($type == "material") {
+            if ($type == 'material') {
                 $validatedMaterialQuestionNum = 0;
-                foreach ($questions["material"] as $materialQuestion) {
+                foreach ($questions['material'] as $materialQuestion) {
                     if ($materialQuestion['subCount'] > 0) {
                         $validatedMaterialQuestionNum += 1;
                     }
                 }
                 if ($validatedMaterialQuestionNum < $needCount) {
-                    $missing["material"] = $needCount - $validatedMaterialQuestionNum;
+                    $missing['material'] = $needCount - $validatedMaterialQuestionNum;
                 }
                 continue;
             }

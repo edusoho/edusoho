@@ -8,35 +8,35 @@ class UserDataProvider extends TestDataProvider
 {
     protected $rows = array(
         array(
-            'id'       => 1,
+            'id' => 1,
             'username' => 'username_aaa',
-            'password' => 'password_aaa'
+            'password' => 'password_aaa',
         ),
         array(
-            'id'       => 2,
+            'id' => 2,
             'username' => 'username_bbb',
-            'password' => 'password_aaa'
+            'password' => 'password_aaa',
         ),
         array(
-            'id'       => 3,
+            'id' => 3,
             'username' => 'admin',
-            'password' => '123456'
+            'password' => '123456',
         ),
         array(
-            'id'       => 4,
+            'id' => 4,
             'username' => 'username_ddd',
-            'password' => 'password_aaa'
+            'password' => 'password_aaa',
         ),
         array(
-            'id'       => 5,
+            'id' => 5,
             'username' => 'username_eee',
-            'password' => 'password_aaa'
+            'password' => 'password_aaa',
         ),
         array(
-            'id'       => 6,
+            'id' => 6,
             'username' => 'username_fff',
-            'password' => 'password_aaa'
-        )
+            'password' => 'password_aaa',
+        ),
     );
 
     protected $dropSql = 'DROP TABLE IF EXISTS user';

@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class FixPptActivityCreatedAndUpdatedTime extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -15,10 +15,9 @@ class FixPptActivityCreatedAndUpdatedTime extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-
     }
 }

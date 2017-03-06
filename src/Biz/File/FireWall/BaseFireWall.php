@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\File\FireWall;
-
 
 use Codeages\Biz\Framework\Context\Biz;
 

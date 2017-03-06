@@ -25,6 +25,7 @@ abstract class BaseDaoTestCase extends BaseTestCase
     protected function mockDataObject($fields = array())
     {
         $fields = array_merge($this->getDefaultMockFields(), $fields);
+
         return $this->getDao()->create($fields);
     }
 
@@ -52,7 +53,7 @@ abstract class BaseDaoTestCase extends BaseTestCase
 
     /**
      * 用在对createdTime和id等排序时
-     * 第二个参数condition内部条件的顺序是唯一确定，不可改变的，这很关键
+     * 第二个参数condition内部条件的顺序是唯一确定，不可改变的，这很关键.
      */
     protected function sort(array &$tar, array $condition)
     {
@@ -69,6 +70,7 @@ abstract class BaseDaoTestCase extends BaseTestCase
                 if ($a[$key] == $b[$key]) {
                     continue;
                 }
+
                 return $a[$key] < $b[$key] ? -1 * $val : $val;
             }
         });

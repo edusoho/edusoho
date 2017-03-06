@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\IM\Dao\Impl;
 
 use Biz\IM\Dao\ConversationDao;
@@ -14,6 +15,7 @@ class ConversationDaoImpl extends GeneralDaoImpl implements ConversationDao
             return array();
         }
         $ids = '|'.implode('|', $memberIds).'|';
+
         return $this->getByFields(array('memberIds' => $ids));
     }
 
@@ -41,15 +43,15 @@ class ConversationDaoImpl extends GeneralDaoImpl implements ConversationDao
     {
         return array(
             'timestamps' => array('createdTime'),
-            'orderbys'   => array('createdTime'),
+            'orderbys' => array('createdTime'),
             'serializes' => array(
-                'memberIds' => 'delimiter'
+                'memberIds' => 'delimiter',
             ),
             'conditions' => array(
                 'targetType IN (:targetTypes)',
                 'targetId IN (:targetIds)',
-                'convNo = :convNo'
-            )
+                'convNo = :convNo',
+            ),
         );
     }
 }

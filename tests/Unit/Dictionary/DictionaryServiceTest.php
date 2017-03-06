@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Dictionary;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class DictionaryServiceTest extends BaseTestCase
 {
@@ -10,7 +10,7 @@ class DictionaryServiceTest extends BaseTestCase
     {
         $dict = array(
             'name' => '字典007',
-            'type' => 'dict_007'
+            'type' => 'dict_007',
         );
         $result = $this->getDictionaryService()->addDictionary($dict);
         $this->assertTrue($result['id'] > 0);
@@ -20,7 +20,7 @@ class DictionaryServiceTest extends BaseTestCase
     {
         $dict = array(
             'name' => '字典007',
-            'type' => 'dict_007'
+            'type' => 'dict_007',
         );
         $this->getDictionaryService()->addDictionary($dict);
         $dicts = $this->getDictionaryService()->findAllDictionaries();
@@ -32,7 +32,7 @@ class DictionaryServiceTest extends BaseTestCase
         $item = array(
             'type' => 'dict_007',
             'code' => 'item_001',
-            'name' => '这是第一个字典项'
+            'name' => '这是第一个字典项',
         );
         $item = $this->getDictionaryService()->addDictionaryItem($item);
         $this->assertTrue($item['id'] > 0);
@@ -43,7 +43,7 @@ class DictionaryServiceTest extends BaseTestCase
         $item = array(
             'type' => 'dict_007',
             'code' => 'item_001',
-            'name' => '这是第一个字典项'
+            'name' => '这是第一个字典项',
         );
         $item = $this->getDictionaryService()->addDictionaryItem($item);
         $this->getDictionaryService()->deleteDictionaryItem($item['id']);
@@ -56,12 +56,12 @@ class DictionaryServiceTest extends BaseTestCase
         $item = array(
             'type' => 'dict_007',
             'code' => 'item_001',
-            'name' => '这是第一个字典项'
+            'name' => '这是第一个字典项',
         );
         $created = $this->getDictionaryService()->addDictionaryItem($item);
 
         $created['name'] = '字典项名字变啦';
-        $updated         = $this->getDictionaryService()->updateDictionaryItem($created['id'], $created);
+        $updated = $this->getDictionaryService()->updateDictionaryItem($created['id'], $created);
         $this->assertTrue($updated['name'] != $item['name']);
     }
 
@@ -70,7 +70,7 @@ class DictionaryServiceTest extends BaseTestCase
         $item = array(
             'type' => 'dict_007',
             'code' => 'item_001',
-            'name' => '这是第一个字典项'
+            'name' => '这是第一个字典项',
         );
         $created = $this->getDictionaryService()->addDictionaryItem($item);
         $this->assertTrue($created['id'] > 0);
@@ -79,18 +79,18 @@ class DictionaryServiceTest extends BaseTestCase
     public function testFindAllDictionaryItemsOrderByWeight()
     {
         $item = array(
-            'type'   => 'dict_007',
-            'code'   => 'item_001',
-            'name'   => '这是第一个字典项',
-            'weight' => 11
+            'type' => 'dict_007',
+            'code' => 'item_001',
+            'name' => '这是第一个字典项',
+            'weight' => 11,
         );
         $this->getDictionaryService()->addDictionaryItem($item);
 
         $item2 = array(
-            'type'   => 'dict_007',
-            'code'   => 'item_002',
-            'name'   => '这是第一个字典项',
-            'weight' => 22
+            'type' => 'dict_007',
+            'code' => 'item_002',
+            'name' => '这是第一个字典项',
+            'weight' => 22,
         );
         $this->getDictionaryService()->addDictionaryItem($item2);
         $items = $this->getDictionaryService()->findAllDictionaryItemsOrderByWeight();
@@ -100,10 +100,10 @@ class DictionaryServiceTest extends BaseTestCase
     public function testFindDictionaryItemByName()
     {
         $item = array(
-            'type'   => 'dict_007',
-            'code'   => 'item_001',
-            'name'   => '大杭州',
-            'weight' => 11
+            'type' => 'dict_007',
+            'code' => 'item_001',
+            'name' => '大杭州',
+            'weight' => 11,
         );
         $this->getDictionaryService()->addDictionaryItem($item);
 
@@ -117,10 +117,10 @@ class DictionaryServiceTest extends BaseTestCase
     public function testFindDictionaryItemByType()
     {
         $item = array(
-            'type'   => 'dict_007',
-            'code'   => 'item_001',
-            'name'   => '大杭州',
-            'weight' => 11
+            'type' => 'dict_007',
+            'code' => 'item_001',
+            'name' => '大杭州',
+            'weight' => 11,
         );
         $this->getDictionaryService()->addDictionaryItem($item);
 

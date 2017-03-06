@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
@@ -10,9 +11,9 @@ class BatchNotificationController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user       = $this->getUser();
+        $user = $this->getUser();
         $conditions = array();
-        $paginator  = new Paginator(
+        $paginator = new Paginator(
             $this->get('request'),
             $this->getBatchNotificationService()->countBatchNotifications($conditions),
             10
@@ -24,11 +25,12 @@ class BatchNotificationController extends BaseController
             $paginator->getPerPageCount()
         );
         $userIds = ArrayToolkit::column($batchnotifications, 'fromId');
-        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
         return $this->render('admin/notification/index.html.twig', array(
-            'paginator'          => $paginator,
+            'paginator' => $paginator,
             'batchnotifications' => $batchnotifications,
-            'users'              => $users
+            'users' => $users,
         ));
     }
 
@@ -36,7 +38,7 @@ class BatchNotificationController extends BaseController
     {
         $user = $this->getUser();
 
-        if ($request->getMethod() == "POST") {
+        if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
 
             if (empty($formData['title']) || empty($formData['content'])) {
@@ -47,12 +49,13 @@ class BatchNotificationController extends BaseController
 
             return $this->redirect($this->generateUrl('admin_batch_notification'));
         }
+
         return $this->render('admin/notification/notification-modal.html.twig');
     }
 
     public function editAction(Request $request, $id)
     {
-        $user              = $this->getUser();
+        $user = $this->getUser();
         $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
         if (empty($batchnotification)) {
             throw new NotFoundException('Notification not found!');
@@ -65,15 +68,16 @@ class BatchNotificationController extends BaseController
         }
 
         return $this->render('admin/notification/notification-modal.html.twig', array(
-            'batchnotification' => $batchnotification
+            'batchnotification' => $batchnotification,
         ));
     }
 
     public function sendAction(Request $request, $id)
     {
-        if ($request->getMethod() == "POST") {
+        if ($request->getMethod() == 'POST') {
             $this->getBatchNotificationService()->publishBatchNotification($id);
         }
+
         return $this->createJsonResponse(array('status' => 'success'));
     }
 
@@ -97,7 +101,7 @@ class BatchNotificationController extends BaseController
         }
 
         return $this->render('admin/notification/notification-modal.html.twig', array(
-            'batchnotification' => $batchnotification
+            'batchnotification' => $batchnotification,
         ));
     }
 

@@ -1,7 +1,8 @@
 <?php
+
 namespace Tests\Unit\User;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class StatusServiceTest extends BaseTestCase
 {

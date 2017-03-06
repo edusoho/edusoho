@@ -2,20 +2,19 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-
 /**
  * @todo  rename LatestClassroomsDataTag
  */
 class ClassroomsDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     * 获取最新课程列表
+     * 获取最新课程列表.
      *
      * 可传入的参数：
      *   count    必需 课程数量，取值不能超过100
      *
-     * @param  array $arguments     参数
+     * @param array $arguments 参数
+     *
      * @return array 班级列表
      */
     public function getData(array $arguments)
@@ -23,7 +22,7 @@ class ClassroomsDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
 
         $conditions = array(
-            'status' => 'published'
+            'status' => 'published',
         );
 
         $classrooms = $this->getClassroomService()->searchClassrooms(

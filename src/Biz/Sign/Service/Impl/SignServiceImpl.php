@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Sign\Service\Impl;
 
 use Biz\BaseService;
@@ -24,13 +25,13 @@ class SignServiceImpl extends BaseService implements SignService
             throw $this->createServiceException($this->getKernel()->trans('今日已签到!'), 403);
         }
 
-        $sign                = array();
-        $sign['userId']      = $userId;
-        $sign['targetId']    = $targetId;
-        $sign['targetType']  = $targetType;
+        $sign = array();
+        $sign['userId'] = $userId;
+        $sign['targetId'] = $targetId;
+        $sign['targetType'] = $targetType;
         $sign['createdTime'] = time();
 
-        $sign       = $this->getSignUserLogDao()->create($sign);
+        $sign = $this->getSignUserLogDao()->create($sign);
         $statistics = $this->targetSignedNumIncrease($targetType, $targetId, date('Ymd', time()));
         $this->getSignUserLogDao()->update($sign['id'], array('rank' => $statistics['signedNum']));
         $this->refreshKeepDays($userId, $targetType, $targetId);
@@ -43,7 +44,7 @@ class SignServiceImpl extends BaseService implements SignService
     public function isSignedToday($userId, $targetType, $targetId)
     {
         $startTimeToday = strtotime(date('y-n-d 0:0:0'));
-        $endTimeToday   = strtotime(date('y-n-d 23:59:59'));
+        $endTimeToday = strtotime(date('y-n-d 23:59:59'));
 
         $signs = $this->getSignUserLogDao()->findSignLogByPeriod($userId, $targetType, $targetId, $startTimeToday, $endTimeToday);
 
@@ -53,7 +54,7 @@ class SignServiceImpl extends BaseService implements SignService
     public function isYestodaySigned($userId, $targetType, $targetId)
     {
         $startTimeToday = strtotime(date('y-n-d 0:0:0', strtotime('-1 days')));
-        $endTimeToday   = strtotime(date('y-n-d 23:59:59', strtotime('-1 days')));
+        $endTimeToday = strtotime(date('y-n-d 23:59:59', strtotime('-1 days')));
 
         $signs = $this->getSignUserLogDao()->findSignLogByPeriod($userId, $targetType, $targetId, $startTimeToday, $endTimeToday);
 
@@ -63,8 +64,8 @@ class SignServiceImpl extends BaseService implements SignService
     public function findSignRecordsByPeriod($userId, $targetType, $targetId, $startDay, $endDay)
     {
         $startTime = strtotime(date('y-n-d 0:0:0', strtotime($startDay)));
-        $endTime   = strtotime(date('y-n-d 23:59:59', strtotime($endDay)));
-        $signs     = $this->getSignUserLogDao()->findSignLogByPeriod($userId, $targetType, $targetId, $startTime, $endTime);
+        $endTime = strtotime(date('y-n-d 23:59:59', strtotime($endDay)));
+        $signs = $this->getSignUserLogDao()->findSignLogByPeriod($userId, $targetType, $targetId, $startTime, $endTime);
 
         return $signs;
     }
@@ -82,6 +83,7 @@ class SignServiceImpl extends BaseService implements SignService
     public function getTodayRank($userId, $targetType, $targetId)
     {
         $todaySign = $this->findSignRecordsByPeriod($userId, $targetType, $targetId, date('y-n-d'), date('y-n-d'));
+
         return $todaySign ? $todaySign['0']['rank'] : -1;
     }
 
@@ -97,12 +99,12 @@ class SignServiceImpl extends BaseService implements SignService
                 $this->getSignUserStatisticsDao()->update($statistics['id'], array('keepDays' => 1));
             }
         } else {
-            $statistics['userId']      = $userId;
-            $statistics['targetType']  = $targetType;
-            $statistics['targetId']    = $targetId;
-            $statistics['keepDays']    = 1;
+            $statistics['userId'] = $userId;
+            $statistics['targetType'] = $targetType;
+            $statistics['targetId'] = $targetId;
+            $statistics['keepDays'] = 1;
             $statistics['createdTime'] = time();
-            $statistics                = $this->getSignUserStatisticsDao()->create($statistics);
+            $statistics = $this->getSignUserStatisticsDao()->create($statistics);
         }
 
         return $statistics;
@@ -113,16 +115,16 @@ class SignServiceImpl extends BaseService implements SignService
         $statistics = $this->getSignTargetStatisticsDao()->getByTargetTypeAndTargetIdAndDate($targetType, $targetId, $date);
 
         if ($statistics) {
-            $fields              = array();
+            $fields = array();
             $fields['signedNum'] = $statistics['signedNum'] + 1;
-            $statistics          = $this->getSignTargetStatisticsDao()->update($statistics['id'], $fields);
+            $statistics = $this->getSignTargetStatisticsDao()->update($statistics['id'], $fields);
         } else {
-            $statistics['targetType']  = $targetType;
-            $statistics['targetId']    = $targetId;
-            $statistics['signedNum']   = 1;
-            $statistics['date']        = $date;
+            $statistics['targetType'] = $targetType;
+            $statistics['targetId'] = $targetId;
+            $statistics['signedNum'] = 1;
+            $statistics['date'] = $date;
             $statistics['createdTime'] = time();
-            $statistics                = $this->getSignTargetStatisticsDao()->create($statistics);
+            $statistics = $this->getSignTargetStatisticsDao()->create($statistics);
         }
 
         return $statistics;

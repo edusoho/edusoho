@@ -10,16 +10,16 @@ class LiveActivityServiceTest extends BaseTestCase
     public function testCreate()
     {
         $live = array(
-            'title'           => 'test live activity',
-            'remark'          => 'remark ...',
-            'mediaType'       => 'live',
-            'fromCourseId'    => 1,
+            'title' => 'test live activity',
+            'remark' => 'remark ...',
+            'mediaType' => 'live',
+            'fromCourseId' => 1,
             'fromCourseSetId' => 1,
-            'fromUserId'      => '1',
-            'startTime'       => time() + 1000,
-            'endTime'         => time() + 3000,
-            'length'          => 2000,
-            '_base_url'       => 'url...'
+            'fromUserId' => '1',
+            'startTime' => time() + 1000,
+            'endTime' => time() + 3000,
+            'length' => 2000,
+            '_base_url' => 'url...',
         );
         $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
         $this->assertNotNull($savedActivity['id']);
@@ -30,38 +30,38 @@ class LiveActivityServiceTest extends BaseTestCase
     public function testUpdate()
     {
         $live = array(
-            'title'           => 'test live activity 2',
-            'remark'          => 'remark ...',
-            'mediaType'       => 'live',
-            'fromCourseId'    => 1,
+            'title' => 'test live activity 2',
+            'remark' => 'remark ...',
+            'mediaType' => 'live',
+            'fromCourseId' => 1,
             'fromCourseSetId' => 1,
-            'fromUserId'      => '1',
-            'startTime'       => time() + 1000,
-            'endTime'         => time() + 4000,
-            'length'          => 3
+            'fromUserId' => '1',
+            'startTime' => time() + 1000,
+            'endTime' => time() + 4000,
+            'length' => 3,
         );
-        $savedActivity              = $this->getLiveActivityService()->createLiveActivity($live);
-        $savedActivity              = array_merge($savedActivity, $live);
+        $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
+        $savedActivity = array_merge($savedActivity, $live);
         $savedActivity['startTime'] = time() + 2000;
-        $savedActivity['endTime']   = time() + 5000;
-        $updatedData                = array('length' => 100, 'endTime' => time() + 100000);
-        $updatedActivity            = $this->getLiveActivityService()->updateLiveActivity($savedActivity['id'], $updatedData, $savedActivity);
+        $savedActivity['endTime'] = time() + 5000;
+        $updatedData = array('length' => 100, 'endTime' => time() + 100000);
+        $updatedActivity = $this->getLiveActivityService()->updateLiveActivity($savedActivity['id'], $updatedData, $savedActivity);
         $this->assertEquals($savedActivity['liveId'], $updatedActivity['liveId']);
     }
 
     public function testDelete()
     {
         $live = array(
-            'title'           => 'test live activity 2',
-            'remark'          => 'remark ...',
-            'mediaType'       => 'live',
-            'fromCourseId'    => 1,
+            'title' => 'test live activity 2',
+            'remark' => 'remark ...',
+            'mediaType' => 'live',
+            'fromCourseId' => 1,
             'fromCourseSetId' => 1,
-            'fromUserId'      => '1',
-            'startTime'       => time() + 1000,
-            'endTime'         => time() + 4000,
-            'length'          => 3000,
-            '_base_url'       => 'url...'
+            'fromUserId' => '1',
+            'startTime' => time() + 1000,
+            'endTime' => time() + 4000,
+            'length' => 3000,
+            '_base_url' => 'url...',
         );
         $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
         $this->getLiveActivityService()->deleteLiveActivity($savedActivity['id']);
@@ -76,10 +76,11 @@ class LiveActivityServiceTest extends BaseTestCase
     {
         $service = $this->createService('Activity:LiveActivityService');
         //mock client
-        $class      = new \ReflectionClass(get_class($service));
+        $class = new \ReflectionClass(get_class($service));
         $clientProp = $class->getProperty('client');
         $clientProp->setAccessible(true);
         $clientProp->setValue($service, new MockEdusohoLiveClient());
+
         return $service;
     }
 }
@@ -96,8 +97,8 @@ class MockEdusohoLiveClient
     public function createLive($live)
     {
         return array(
-            'id'       => rand(1, 1000),
-            'provider' => rand(1, 10)
+            'id' => rand(1, 1000),
+            'provider' => rand(1, 10),
         );
     }
 
@@ -109,8 +110,8 @@ class MockEdusohoLiveClient
     public function deleteLive($id, $provider)
     {
         return array(
-            'id'       => $id,
-            'provider' => $provider
+            'id' => $id,
+            'provider' => $provider,
         );
     }
 }

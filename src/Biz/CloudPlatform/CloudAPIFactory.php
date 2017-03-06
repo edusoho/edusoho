@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\CloudPlatform;
 
 use Biz\CloudPlatform\Client\CloudAPI;
@@ -13,13 +14,12 @@ class CloudAPIFactory
 {
     public static function create($type = 'root')
     {
-
         /**
-         * @var $setting SettingService
+         * @var SettingService
          */
         $setting = ServiceKernel::instance()->getBiz()->service('System:SettingService');
 
-        $storage   = $setting->get('storage', array());
+        $storage = $setting->get('storage', array());
         $developer = $setting->get('developer', array());
 
         $logger = new Logger('CloudAPI');
@@ -29,24 +29,24 @@ class CloudAPIFactory
             $api = new CloudAPI(array(
                 'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
                 'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
-                'apiUrl'    => empty($storage['cloud_api_tui_server']) ? 'http://estui.edusoho.net' : $storage['cloud_api_tui_server'],
-                'debug'     => empty($developer['debug']) ? false : true
+                'apiUrl' => empty($storage['cloud_api_tui_server']) ? 'http://estui.edusoho.net' : $storage['cloud_api_tui_server'],
+                'debug' => empty($developer['debug']) ? false : true,
             ));
             $api->setLogger($logger);
         } elseif ($type == 'event') {
             $api = new EventCloudAPI(array(
                 'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
                 'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
-                'apiUrl'    => empty($storage['cloud_api_event_server']) ? 'http://event.edusoho.net' : $storage['cloud_api_event_server'],
-                'debug'     => empty($developer['debug']) ? false : true
+                'apiUrl' => empty($storage['cloud_api_event_server']) ? 'http://event.edusoho.net' : $storage['cloud_api_event_server'],
+                'debug' => empty($developer['debug']) ? false : true,
             ));
             $api->setLogger($logger);
         } else {
             $api = new FailoverCloudAPI(array(
                 'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
                 'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
-                'apiUrl'    => empty($storage['cloud_api_server']) ? '' : $storage['cloud_api_server'],
-                'debug'     => empty($developer['debug']) ? false : true
+                'apiUrl' => empty($storage['cloud_api_server']) ? '' : $storage['cloud_api_server'],
+                'debug' => empty($developer['debug']) ? false : true,
             ));
             $api->setLogger($logger);
 

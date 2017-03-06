@@ -15,18 +15,18 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 2
+                'expectedCount' => 2,
                 ),
             array(
                 'condition' => array('classroomId' => 2),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('courseId' => 2),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
-                )
+                'expectedCount' => 1,
+                ),
             );
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
@@ -130,7 +130,7 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
         $res = $this->getDao()->findEnabledByCoursesIds(array(1, 2, 3));
         $testFields = $this->getCompareKeys();
         foreach ($res as $key => $result) {
-            $this->assertArrayEquals($expected[$key+1], $result, $testFields);
+            $this->assertArrayEquals($expected[$key + 1], $result, $testFields);
         }
     }
 
@@ -143,7 +143,7 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
         $res = $this->getDao()->findActiveCoursesByClassroomId(1);
         $testFields = $this->getCompareKeys();
         foreach ($res as $key => $result) {
-            $this->assertArrayEquals($expected[$key+1], $result, $testFields);
+            $this->assertArrayEquals($expected[$key + 1], $result, $testFields);
         }
     }
 
@@ -152,7 +152,7 @@ class ClassroomCourseDaoTest extends BaseDaoTestCase
         return array(
             'classroomId' => 1,
             'courseId' => 1,
-            'parentCourseId' =>2
+            'parentCourseId' => 2,
             );
     }
 }

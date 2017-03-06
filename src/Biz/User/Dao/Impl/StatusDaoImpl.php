@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\StatusDao;
@@ -11,20 +12,20 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
     public function deleteByUserIdAndTypeAndObject($userId, $type, $objectType, $objectId)
     {
         return $this->db()->delete($this->table, array(
-            'userId'     => $userId,
-            'type'       => $type,
+            'userId' => $userId,
+            'type' => $type,
             'objectType' => $objectType,
-            'objectId'   => $objectId
+            'objectId' => $objectId,
         ));
     }
 
     public function deleteByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId)
     {
         return $this->db()->delete($this->table, array(
-            'courseId'   => $courseId,
-            'type'       => $type,
+            'courseId' => $courseId,
+            'type' => $type,
             'objectType' => $objectType,
-            'objectId'   => $objectId
+            'objectId' => $objectId,
         ));
     }
 
@@ -42,9 +43,9 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
     {
         return array(
             'serializes' => array(
-                'properties' => 'json'
+                'properties' => 'json',
             ),
-            'orderbys'   => array('createdTime'),
+            'orderbys' => array('createdTime'),
             'conditions' => array(
                 'courseId = :courseId',
                 'courseId IN ( :courseIds )',
@@ -54,8 +55,8 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
                 'objectId = :objectId',
                 'userId = :userId',
                 'userId IN ( :userIds )',
-                'private = :private'
-            )
+                'private = :private',
+            ),
         );
     }
 }

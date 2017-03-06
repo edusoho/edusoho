@@ -1,24 +1,24 @@
 <?php
+
 namespace Biz\Order\OrderRefundProcessor;
 
-interface OrderRefundProcessor 
+interface OrderRefundProcessor
 {
-	public function getLayout();
-	
-	public function getRefundLayout();
+    public function getLayout();
 
-	public function findByLikeTitle($title);
+    public function getRefundLayout();
 
-	public function removeStudent($targetId, $userId);
+    public function findByLikeTitle($title);
 
-	public function auditRefundOrder($id, $pass, $data);
+    public function removeStudent($targetId, $userId);
 
-	public function cancelRefundOrder($id);
+    public function auditRefundOrder($id, $pass, $data);
 
-	public function getTarget($id);
+    public function cancelRefundOrder($id);
 
-	public function applyRefundOrder($orderId, $amount, $reason, $container);
+    public function getTarget($id);
 
-	public function getTargetMember($targetId, $userId);
+    public function applyRefundOrder($orderId, $amount, $reason, $container);
 
+    public function getTargetMember($targetId, $userId);
 }

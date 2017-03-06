@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\TreeToolkit;
@@ -10,16 +11,16 @@ class OrgManageController extends BaseController
     public function indexAction(Request $request)
     {
         $user = $this->getUser();
-        $org  = $this->getOrgService()->getOrg($user['orgId']);
+        $org = $this->getOrgService()->getOrg($user['orgId']);
         $orgs = $this->getOrgService()->findOrgsByPrefixOrgCode();
 
-        $treeOrgs     = TreeToolkit::makeTree($orgs, 'seq', $org['parentId']);
-        $userIds      = ArrayToolkit::column($orgs, 'createdUserId');
+        $treeOrgs = TreeToolkit::makeTree($orgs, 'seq', $org['parentId']);
+        $userIds = ArrayToolkit::column($orgs, 'createdUserId');
         $createdUsers = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('admin/org-manage/index.html.twig', array(
-            'orgs'         => $treeOrgs,
-            'createdUsers' => $createdUsers
+            'orgs' => $treeOrgs,
+            'createdUsers' => $createdUsers,
         ));
     }
 
@@ -28,11 +29,13 @@ class OrgManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $org = $request->request->all();
             $this->getOrgService()->createOrg($org);
+
             return $this->redirect($this->generateUrl('admin_org'));
         }
 
         $parentId = $request->query->get('parentId', 0);
-        $org      = array('parentId' => $parentId);
+        $org = array('parentId' => $parentId);
+
         return $this->render('org-manage/modal.html.twig', array('org' => $org));
     }
 
@@ -41,12 +44,14 @@ class OrgManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $org = $request->request->all();
             $this->getOrgService()->updateOrg($id, $org);
+
             return $this->redirect($this->generateUrl('admin_org'));
         }
 
         $org = $this->getOrgService()->getOrg($id);
+
         return $this->render('org-manage/modal.html.twig', array(
-            'org' => $org
+            'org' => $org,
         ));
     }
 
@@ -55,14 +60,16 @@ class OrgManageController extends BaseController
         $relatedDatas = $this->getOrgService()->findRelatedModuleDatas($id);
         if (empty($relatedDatas)) {
             $this->getOrgService()->deleteOrg($id);
+
             return $this->createJsonResponse(array('status' => 'success'));
         }
+
         return $this->createJsonResponse(array('status' => 'error', 'data' => $relatedDatas));
     }
 
     public function checkCodeAction(Request $request)
     {
-        $value   = $request->query->get('value');
+        $value = $request->query->get('value');
         $exclude = $request->query->get('exclude');
 
         $isAvaliable = $this->getOrgService()->isCodeAvaliable($value, $exclude);
@@ -78,9 +85,9 @@ class OrgManageController extends BaseController
 
     public function checkNameAction(Request $request)
     {
-        $parentId    = $request->query->get('parentId');
-        $name        = $request->query->get('value');
-        $exclude     = $request->query->get('exclude');
+        $parentId = $request->query->get('parentId');
+        $name = $request->query->get('value');
+        $exclude = $request->query->get('exclude');
         $isAvaliable = $this->getOrgService()->isNameAvaliable($name, $parentId, $exclude);
 
         if ($isAvaliable) {
@@ -88,6 +95,7 @@ class OrgManageController extends BaseController
         } else {
             $response = array('success' => false, 'message' => '名称已被占用,请换一个');
         }
+
         return $this->createJsonResponse($response);
     }
 
@@ -95,25 +103,28 @@ class OrgManageController extends BaseController
     {
         $ids = $request->request->get('ids');
         $this->getOrgService()->sortOrg($ids);
+
         return $this->createJsonResponse(true);
     }
 
     /**
      * @param  Request
      * @param  [string]  module 要更新的模块名
+     *
      * @return [type]
      */
     public function batchUpdateAction(Request $request, $module)
     {
         if ($request->getMethod() == 'POST') {
-            $ids     = $request->request->get('ids');
+            $ids = $request->request->get('ids');
             $orgCode = $request->request->get('orgCode');
             $this->getOrgService()->batchUpdateOrg($module, $ids, $orgCode);
+
             return $this->createJsonResponse(true);
         }
+
         return $this->render('org/batch-update-org-modal.html.twig', array('module' => $module));
     }
-
 
     /**
      * @return OrgServiceImpl

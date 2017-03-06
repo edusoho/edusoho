@@ -57,21 +57,23 @@ class LogServiceImpl extends BaseService implements LogService
     public function searchLogCount($conditions)
     {
         $conditions = $this->prepareSearchConditions($conditions);
+
         return $this->getLogDao()->count($conditions);
     }
 
     protected function addLog($level, $module, $action, $message, array $data = null)
     {
         $user = $this->getCurrentUser();
+
         return $this->getLogDao()->create(array(
-            'module'      => Logger::getModule($module),
-            'action'      => $action,
-            'message'     => $message,
-            'data'        => empty($data) ? '' : json_encode($data),
-            'userId'      => $user['id'],
-            'ip'          => $user['currentIp'],
+            'module' => Logger::getModule($module),
+            'action' => $action,
+            'message' => $message,
+            'data' => empty($data) ? '' : json_encode($data),
+            'userId' => $user['id'],
+            'ip' => $user['currentIp'],
             'createdTime' => time(),
-            'level'       => $level
+            'level' => $level,
         ));
     }
 
@@ -88,7 +90,7 @@ class LogServiceImpl extends BaseService implements LogService
     public function getLogModuleDicts()
     {
         $moduleDicts = Logger::getLogModuleDict();
-        $modules     = $this->getLogModules();
+        $modules = $this->getLogModules();
 
         $dealModuleDicts = array();
         foreach ($modules as $module) {
@@ -96,6 +98,7 @@ class LogServiceImpl extends BaseService implements LogService
                 $dealModuleDicts[$module] = $moduleDicts[$module];
             }
         }
+
         return $dealModuleDicts;
     }
 
@@ -109,6 +112,7 @@ class LogServiceImpl extends BaseService implements LogService
         if (isset($actions[$module])) {
             return $actions[$module];
         }
+
         return array();
     }
 
@@ -131,15 +135,15 @@ class LogServiceImpl extends BaseService implements LogService
     protected function prepareSearchConditions($conditions)
     {
         if (!empty($conditions['nickname'])) {
-            $existsUser           = $this->getUserService()->getUserByNickname($conditions['nickname']);
-            $userId               = $existsUser ? $existsUser['id'] : -1;
+            $existsUser = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $userId = $existsUser ? $existsUser['id'] : -1;
             $conditions['userId'] = $userId;
             unset($conditions['nickname']);
         }
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
             $conditions['startDateTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endDateTime']   = strtotime($conditions['endDateTime']);
+            $conditions['endDateTime'] = strtotime($conditions['endDateTime']);
         } else {
             unset($conditions['startDateTime']);
             unset($conditions['endDateTime']);

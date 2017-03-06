@@ -27,12 +27,14 @@ class FriendDaoImpl extends GeneralDaoImpl implements FriendDao
     public function findFollowingsByFromId($fromId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE fromId = ? ORDER BY createdTime DESC ";
+
         return $this->db()->fetchAll($sql, array($fromId));
     }
 
     public function findFollowersByToId($toId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE toId = ? ORDER BY createdTime DESC ";
+
         return $this->db()->fetchAll($sql, array($toId));
     }
 
@@ -47,10 +49,11 @@ class FriendDaoImpl extends GeneralDaoImpl implements FriendDao
             return array();
         }
 
-        $toIds     = array_values($toIds);
-        $marks     = str_repeat('?,', count($toIds) - 1).'?';
+        $toIds = array_values($toIds);
+        $marks = str_repeat('?,', count($toIds) - 1).'?';
         $parmaters = array_merge(array($fromId), $toIds);
-        $sql       = "SELECT * FROM {$this->table} WHERE fromId = ? AND toId IN ({$marks});";
+        $sql = "SELECT * FROM {$this->table} WHERE fromId = ? AND toId IN ({$marks});";
+
         return $this->db()->fetchAll($sql, $parmaters);
     }
 
@@ -65,9 +68,9 @@ class FriendDaoImpl extends GeneralDaoImpl implements FriendDao
             'conditions' => array(
                 'fromId = :fromId',
                 'toId = :toId',
-                'pair = :pair'
+                'pair = :pair',
             ),
-            'orderbys'   => array('createdTime')
+            'orderbys' => array('createdTime'),
         );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Finder\Finder;
@@ -17,12 +18,12 @@ class CountChangelogCommand extends BaseCommand
     {
         $output->writeln('<info>开始统计changelog中发布版本数量</info>');
 
-        $baseDir  = realpath($this->getContainer()->getParameter('kernel.root_dir').'/..');
+        $baseDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/..');
         $filename = 'CHANGELOG';
 
         $extPluginsCount = array( //班级和教学资料库插件合到主程序里面之前的迭代版本数量
-            'ClassRoom'   => 11,
-            'MaterialLib' => 10
+            'ClassRoom' => 11,
+            'MaterialLib' => 10,
         );
 
         $mainCount = $this->countChangelog($baseDir.'/'.$filename);
@@ -38,7 +39,7 @@ class CountChangelogCommand extends BaseCommand
         $finder->directories()->depth('== 0')->in($baseDir.'/plugins');
 
         foreach ($finder as $dir) {
-            $pluginName  = $dir->getRelativePathname();
+            $pluginName = $dir->getRelativePathname();
             $pluginCount = $this->countChangelog($dir->getRealPath().'/'.$filename);
             if ($pluginCount === false) {
                 $output->writeln("<error>插件`{$pluginName}`目录下没有{$filename}</error>");
@@ -48,10 +49,10 @@ class CountChangelogCommand extends BaseCommand
             }
         }
 
-        $output->writeln("<info>*************************************</info>");
+        $output->writeln('<info>*************************************</info>');
         $totalCount = $mainCount + $pluginsCount;
         $output->writeln("<info>*</info>主程序和插件累计一共发布了<info>$totalCount</info>个版本<info>*</info>");
-        $output->writeln("<info>*************************************</info>");
+        $output->writeln('<info>*************************************</info>');
 
         $output->writeln('<info>统计完毕</info>');
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Order\OrderProcessor;
 
 use AppBundle\Common\JoinPointToolkit;
@@ -21,7 +22,8 @@ class OrderProcessorFactory
         }
 
         $class = $map[$type]['processor'];
-    	$biz = ServiceKernel::instance()->getBiz();
+        $biz = ServiceKernel::instance()->getBiz();
+
         return new $class($biz);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\CloudPlatform\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;

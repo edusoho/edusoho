@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\Payment\Quickpay;
 
 use AppBundle\Component\Payment\Payment;
@@ -21,10 +22,10 @@ class QuickpayResponse extends Response
             throw new \RuntimeException($this->getServiceKernel()->trans('快捷支付失败'));
         }
 
-        $order = $this->getOrder($result["agent_bill_id"]);
+        $order = $this->getOrder($result['agent_bill_id']);
         $this->createUserAuth('quickpay', $result, $order);
 
-        $data            = array();
+        $data = array();
         $data['payment'] = 'quickpay';
 
         $data['sn'] = $order['sn'];
@@ -54,21 +55,21 @@ class QuickpayResponse extends Response
 
     private function confirmSellerSendGoods($sn)
     {
-        $params                     = $this->params;
-        $converted                  = array();
+        $params = $this->params;
+        $converted = array();
         $converted['agent_bill_id'] = $sn;
-        $converted['agent_id']      = $params['agent_id'];
-        $converted['timestamp']     = time() * 1000;
-        $converted['version']       = 1;
+        $converted['agent_id'] = $params['agent_id'];
+        $converted['timestamp'] = time() * 1000;
+        $converted['version'] = 1;
 
-        $sign        = $this->signParams($converted);
-        $aesArr      = array('version' => 1, 'agent_bill_id' => $sn, 'timestamp' => $converted['timestamp']);
+        $sign = $this->signParams($converted);
+        $aesArr = array('version' => 1, 'agent_bill_id' => $sn, 'timestamp' => $converted['timestamp']);
         $encryptData = urlencode(base64_encode($this->encrypt(http_build_query($aesArr), $this->options['aes'])));
 
-        $url      = $this->url."?agent_id=".$params['agent_id']."&encrypt_data=".$encryptData."&sign=".$sign;
-        $result   = $this->curlRequest($url);
-        $xml      = simplexml_load_string($result);
-        $redir    = (string) $xml->encrypt_data;
+        $url = $this->url.'?agent_id='.$params['agent_id'].'&encrypt_data='.$encryptData.'&sign='.$sign;
+        $result = $this->curlRequest($url);
+        $xml = simplexml_load_string($result);
+        $redir = (string) $xml->encrypt_data;
         $redirurl = $this->decrypt($redir, $this->options['aes']);
         parse_str($redirurl, $tip);
 
@@ -105,27 +106,28 @@ class QuickpayResponse extends Response
         $signStr = $signStr.'&key='.$this->options['secret'];
         $signStr = $signStr.'&timestamp='.time() * 1000;
         $signStr = $signStr.'&version='. 1;
-        $sign    = md5(strtolower($signStr));
+        $sign = md5(strtolower($signStr));
+
         return $sign;
     }
 
     public function createUserAuth($name, $params, $order)
     {
         $authBankRequest = $this->createAuthBankRequest($name, $params, $order);
-        $authBanks       = $authBankRequest->form();
+        $authBanks = $authBankRequest->form();
 
         foreach ($authBanks as $authBank) {
             $bankAuth = $this->getUserService()->getUserPayAgreementByUserIdAndBankAuth($order['userId'], $authBank['bankAuth']);
 
             if (empty($bankAuth)) {
                 $field = array(
-                    'userId'      => $order['userId'],
-                    'type'        => $authBank['type'],
-                    'bankName'    => $authBank['bankName'],
-                    'bankNumber'  => $authBank['bankNumber'],
-                    'bankAuth'    => $authBank['bankAuth'],
-                    'bankId'      => $authBank['bankId'],
-                    'createdTime' => time()
+                    'userId' => $order['userId'],
+                    'type' => $authBank['type'],
+                    'bankName' => $authBank['bankName'],
+                    'bankNumber' => $authBank['bankNumber'],
+                    'bankAuth' => $authBank['bankAuth'],
+                    'bankId' => $authBank['bankId'],
+                    'createdTime' => time(),
                 );
                 $this->getUserService()->createUserPayAgreement($field);
             }
@@ -136,16 +138,17 @@ class QuickpayResponse extends Response
     {
         $options = $this->getPaymentOptions($name);
         $request = Payment::createAuthBankRequest($name, $options);
+
         return $request->setParams(array('userId' => $order['userId']));
     }
 
     protected function getPaymentOptions($payment)
     {
         $settings = $this->getSettingService()->get('payment');
-        $options  = array(
-            'key'    => $settings["{$payment}_key"],
+        $options = array(
+            'key' => $settings["{$payment}_key"],
             'secret' => $settings["{$payment}_secret"],
-            'aes'    => $settings["{$payment}_aes"]
+            'aes' => $settings["{$payment}_aes"],
         );
 
         return $options;
@@ -167,7 +170,7 @@ class QuickpayResponse extends Response
     private function encrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
-        $iv        = substr($decodeKey, 0, 16);
+        $iv = substr($decodeKey, 0, 16);
 
         $rijndael = new Rijndael();
         $rijndael->setIV($iv);
@@ -175,8 +178,8 @@ class QuickpayResponse extends Response
         $rijndael->disablePadding();
 
         $length = strlen($data);
-        $pad    = 16 - ($length % 16);
-        $data   = str_pad($data, $length + $pad, "\0");
+        $pad = 16 - ($length % 16);
+        $data = str_pad($data, $length + $pad, "\0");
 
         $encrypted = $rijndael->encrypt($data);
 
@@ -186,8 +189,8 @@ class QuickpayResponse extends Response
     private function decrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
-        $data      = base64_decode($data);
-        $iv        = substr($decodeKey, 0, 16);
+        $data = base64_decode($data);
+        $iv = substr($decodeKey, 0, 16);
 
         $rijndael = new Rijndael();
         $rijndael->setIV($iv);

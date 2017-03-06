@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class ClassroomCoursesAddCourseSetId extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -14,11 +14,11 @@ class ClassroomCoursesAddCourseSetId extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `classroom_courses` DROP COLUMN `courseSetId`");
+        $biz['db']->exec('ALTER TABLE `classroom_courses` DROP COLUMN `courseSetId`');
     }
 }

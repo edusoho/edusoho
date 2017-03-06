@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Importer;
 
 use AppBundle\Common\FileToolkit;
@@ -18,21 +19,21 @@ class VipImporter extends Importer
             $viplevel = $this->getLevelService()->getLevelByName($userData['viplevelName']);
 
             $order = $this->getOrderService()->createOrder(array(
-                'userId'     => $user['id'],
-                'title'      => $this->getKernel()->trans('批量导入会员'),
+                'userId' => $user['id'],
+                'title' => $this->getKernel()->trans('批量导入会员'),
                 'targetType' => 'vip',
-                'targetId'   => $viplevel['id'],
-                'amount'     => '0',
+                'targetId' => $viplevel['id'],
+                'amount' => '0',
                 'totalPrice' => '0',
-                'payment'    => 'none',
-                'snPrefix'   => 'V'
+                'payment' => 'none',
+                'snPrefix' => 'V',
             ));
 
             $this->getOrderService()->payOrder(array(
-                'sn'       => $order['sn'],
-                'status'   => 'success',
-                'amount'   => $order['amount'],
-                'paidTime' => time()
+                'sn' => $order['sn'],
+                'status' => 'success',
+                'amount' => $order['amount'],
+                'paidTime' => time(),
             ));
 
             if (isset($userData['upgradeWay']) && $userData['upgradeWay'] == 'renew') {
@@ -48,16 +49,16 @@ class VipImporter extends Importer
             $this->getNotificationService()->notify($user['id'], 'default', $message);
         }
 
-        return "finished";
+        return 'finished';
     }
 
     public function check(Request $request)
     {
         $allUserData = array();
-        $userCount   = 0;
-        $errorInfo   = array();
-        $checkInfo   = array();
-        $file        = $request->files->get('excel');
+        $userCount = 0;
+        $errorInfo = array();
+        $checkInfo = array();
+        $file = $request->files->get('excel');
 
         if (!is_object($file)) {
             return $this->createDangerResponse($this->getKernel()->trans('请选择上传的文件'));
@@ -67,11 +68,11 @@ class VipImporter extends Importer
             return $this->createDangerResponse($this->getKernel()->trans('Excel格式不正确！'));
         }
 
-        $objPHPExcel  = \PHPExcel_IOFactory::load($file);
+        $objPHPExcel = \PHPExcel_IOFactory::load($file);
         $objWorksheet = $objPHPExcel->getActiveSheet();
-        $highestRow   = $objWorksheet->getHighestRow();
+        $highestRow = $objWorksheet->getHighestRow();
 
-        $highestColumn      = $objWorksheet->getHighestColumn();
+        $highestColumn = $objWorksheet->getHighestColumn();
         $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
 
         if ($highestRow > 1000) {
@@ -81,9 +82,9 @@ class VipImporter extends Importer
         //预设字段
         $fieldArray = $this->getFieldArray();
 
-        for ($col = 0; $col < $highestColumnIndex; $col++) {
+        for ($col = 0; $col < $highestColumnIndex; ++$col) {
             $fieldTitle = $objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
-            $strs[$col] = $fieldTitle."";
+            $strs[$col] = $fieldTitle.'';
         }
 
         //excel字段名
@@ -99,12 +100,12 @@ class VipImporter extends Importer
 
         $repeatInfo = $this->checkRepeatData($row = 3, $fieldSort, $highestRow, $objWorksheet);
 
-        for ($row = 3; $row <= $highestRow; $row++) {
+        for ($row = 3; $row <= $highestRow; ++$row) {
             $strs = array();
 
-            for ($col = 0; $col < $highestColumnIndex; $col++) {
-                $infoData   = $objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
-                $strs[$col] = $infoData."";
+            for ($col = 0; $col < $highestColumnIndex; ++$col) {
+                $infoData = $objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
+                $strs[$col] = $infoData.'';
                 unset($infoData);
             }
 
@@ -120,8 +121,8 @@ class VipImporter extends Importer
             //字段校验
             $emptyData = array_count_values($userData);
 
-            if (isset($emptyData[""]) && count($userData) == $emptyData[""]) {
-                $checkInfo[] = "第".$row."行为空行，已跳过";
+            if (isset($emptyData['']) && count($userData) == $emptyData['']) {
+                $checkInfo[] = '第'.$row.'行为空行，已跳过';
                 continue;
             }
 
@@ -134,12 +135,12 @@ class VipImporter extends Importer
             $tempUser = $this->getUserData($userData);
 
             if (!$tempUser) {
-                $checkInfo[] = "第".$row."行的用户不存在，已跳过";
+                $checkInfo[] = '第'.$row.'行的用户不存在，已跳过';
                 continue;
             }
 
             if ($userData['viplevelTime'] == 0) {
-                $checkInfo[] = "第".$row."行的用户会员时效不能为0，已跳过";
+                $checkInfo[] = '第'.$row.'行的用户会员时效不能为0，已跳过';
                 continue;
             }
 
@@ -159,7 +160,7 @@ class VipImporter extends Importer
 
             if (!empty($member)) {
                 if ($member['deadline'] > time()) {
-                    $checkInfo[] = "第".$row."行的用户已是会员，已跳过";
+                    $checkInfo[] = '第'.$row.'行的用户已是会员，已跳过';
                     continue;
                 } else {
                     $userData['upgradeWay'] = $this->checkMemberCanRenewOrUpgradeOrBecome($member, $userData['viplevelName']);
@@ -187,7 +188,7 @@ class VipImporter extends Importer
     public function getTemplate(Request $request)
     {
         return $this->render('VipBundle:VipAdmin:import.html.twig', array(
-            'importerType' => $this->type
+            'importerType' => $this->type,
         ));
     }
 
@@ -204,47 +205,48 @@ class VipImporter extends Importer
         $userFieldArray = array();
 
         $fieldArray = array(
-            "nickname"       => '用户名',
-            "email"          => '邮箱',
-            "verifiedMobile" => '手机',
-            "viplevelName"   => '会员名称',
-            "viplevelTime"   => '会员时效(整数)月'
+            'nickname' => '用户名',
+            'email' => '邮箱',
+            'verifiedMobile' => '手机',
+            'viplevelName' => '会员名称',
+            'viplevelTime' => '会员时效(整数)月',
         );
 
         $fieldArray = array_merge($fieldArray, $userFieldArray);
+
         return $fieldArray;
     }
 
     private function checkNecessaryFields($data)
     {
-        $data = implode("", $data);
+        $data = implode('', $data);
         $data = $this->trim($data);
 
-        $nickname_array = explode("用户名", $data);
+        $nickname_array = explode('用户名', $data);
 
         if (count($nickname_array) <= 1) {
             return false;
         }
 
-        $email_array = explode("邮箱", $data);
+        $email_array = explode('邮箱', $data);
 
         if (count($email_array) <= 1) {
             return false;
         }
 
-        $verifiedMobile_array = explode("手机", $data);
+        $verifiedMobile_array = explode('手机', $data);
 
         if (count($verifiedMobile_array) <= 1) {
             return false;
         }
 
-        $viplevelName_array = explode("会员名称", $data);
+        $viplevelName_array = explode('会员名称', $data);
 
         if (count($viplevelName_array) <= 1) {
             return false;
         }
 
-        $viplevelTime_array = explode("会员时效(整数)月", $data);
+        $viplevelTime_array = explode('会员时效(整数)月', $data);
 
         if (count($viplevelTime_array) <= 1) {
             return false;
@@ -263,7 +265,7 @@ class VipImporter extends Importer
             if (in_array($value, $fieldArray)) {
                 foreach ($fieldArray as $fieldKey => $fieldValue) {
                     if ($value == $fieldValue) {
-                        $fieldSort[] = array("num" => $key, "fieldName" => $fieldKey);
+                        $fieldSort[] = array('num' => $key, 'fieldName' => $fieldKey);
                         break;
                     }
                 }
@@ -275,11 +277,11 @@ class VipImporter extends Importer
 
     private function checkRepeatData($row, $fieldSort, $highestRow, $objWorksheet)
     {
-        $errorInfo   = array();
+        $errorInfo = array();
         $checkFields = array(
             'nickname',
             'verifiedMobile',
-            'email'
+            'email',
         );
 
         foreach ($checkFields as $checkField) {
@@ -291,10 +293,10 @@ class VipImporter extends Importer
                 }
             }
 
-            for ($row = 3; $row <= $highestRow; $row++) {
+            for ($row = 3; $row <= $highestRow; ++$row) {
                 $nickNameColData = $objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();
 
-                $nicknameData[] = $nickNameColData."";
+                $nicknameData[] = $nickNameColData.'';
             }
 
             $info = $this->arrayRepeat($nicknameData, $nickNameCol);
@@ -307,34 +309,34 @@ class VipImporter extends Importer
 
     private function validFields($userData, $row, $fieldCol)
     {
-        $errorInfo   = array();
+        $errorInfo = array();
         $targetLevel = $this->getLevelService()->getLevelByName($userData['viplevelName']);
-        $tempUser    = $this->getUserData($userData);
-        $member      = $this->getVipService()->getMemberByUserId($tempUser['id']);
-        $tempLevel   = $this->getLevelService()->getLevel($member['levelId']);
+        $tempUser = $this->getUserData($userData);
+        $member = $this->getVipService()->getMemberByUserId($tempUser['id']);
+        $tempLevel = $this->getLevelService()->getLevel($member['levelId']);
 
-        if (!empty($userData['nickname']) && !SimpleValidator::nickname($userData["nickname"])) {
-            $errorInfo[] = "第 ".$row."行".$fieldCol["nickname"]." 列 的数据存在问题，请检查。";
+        if (!empty($userData['nickname']) && !SimpleValidator::nickname($userData['nickname'])) {
+            $errorInfo[] = '第 '.$row.'行'.$fieldCol['nickname'].' 列 的数据存在问题，请检查。';
         }
 
-        if (!empty($userData['email']) && !SimpleValidator::email($userData["email"])) {
-            $errorInfo[] = "第 ".$row."行".$fieldCol["email"]." 列 的数据存在问题，请检查。";
+        if (!empty($userData['email']) && !SimpleValidator::email($userData['email'])) {
+            $errorInfo[] = '第 '.$row.'行'.$fieldCol['email'].' 列 的数据存在问题，请检查。';
         }
 
-        if (!empty($userData['verifiedMobile']) && !SimpleValidator::mobile($userData["verifiedMobile"])) {
-            $errorInfo[] = "第 ".$row."行".$fieldCol["verifiedMobile"]." 列 的数据存在问题，请检查。";
+        if (!empty($userData['verifiedMobile']) && !SimpleValidator::mobile($userData['verifiedMobile'])) {
+            $errorInfo[] = '第 '.$row.'行'.$fieldCol['verifiedMobile'].' 列 的数据存在问题，请检查。';
         }
 
         if (!SimpleValidator::numbers($userData['viplevelTime'])) {
-            $errorInfo[] = "第 ".$row."行".$fieldCol["viplevelTime"]." 列 的数据存在问题，请检查。";
+            $errorInfo[] = '第 '.$row.'行'.$fieldCol['viplevelTime'].' 列 的数据存在问题，请检查。';
         }
 
         if (empty($targetLevel) || (empty($targetLevel['enabled']))) {
-            $errorInfo[] = "第 ".$row."行".$fieldCol["viplevelName"]." 列 的会员等级不存在或已关闭，请检查。";
+            $errorInfo[] = '第 '.$row.'行'.$fieldCol['viplevelName'].' 列 的会员等级不存在或已关闭，请检查。';
         }
 
         if ($tempLevel['seq'] > $targetLevel['seq']) {
-            $errorInfo[] = "第 ".$row."行".$fieldCol["viplevelName"]." 列 的会员等级低于用户现有等级，请检查。";
+            $errorInfo[] = '第 '.$row.'行'.$fieldCol['viplevelName'].' 列 的会员等级低于用户现有等级，请检查。';
         }
 
         return $errorInfo;
@@ -373,16 +375,16 @@ class VipImporter extends Importer
 
         $repeatArrayCount = array_count_values($array);
 
-        $repeatRow = "";
+        $repeatRow = '';
 
         foreach ($repeatArrayCount as $key => $value) {
             if ($value > 1 && !empty($key)) {
-                $repeatRow .= '第'.($nickNameCol + 1)."列重复:<br>";
+                $repeatRow .= '第'.($nickNameCol + 1).'列重复:<br>';
 
-                for ($i = 1; $i <= $value; $i++) {
+                for ($i = 1; $i <= $value; ++$i) {
                     $row = array_search($key, $array) + 3;
 
-                    $repeatRow .= "第".$row."行"."    ".$key."<br>";
+                    $repeatRow .= '第'.$row.'行'.'    '.$key.'<br>';
 
                     unset($array[$row - 3]);
                 }
@@ -395,7 +397,7 @@ class VipImporter extends Importer
     private function checkMemberCanRenewOrUpgradeOrBecome($member, $viplevelName)
     {
         $targetLevel = $this->getLevelService()->getLevelByName($viplevelName);
-        $tempLevel   = $this->getLevelService()->getLevel($member['levelId']);
+        $tempLevel = $this->getLevelService()->getLevel($member['levelId']);
 
         if ($targetLevel['seq'] > $tempLevel['seq']) {
             return 'upgrade';
@@ -408,7 +410,7 @@ class VipImporter extends Importer
 
     private function checkPassedRepeatData($passedUsers)
     {
-        $ids  = array();
+        $ids = array();
         $rows = array();
 
         $repeatRow = array();
@@ -429,19 +431,19 @@ class VipImporter extends Importer
         }
 
         $repeatRowInfo = '';
-        $repeatArray   = array();
+        $repeatArray = array();
 
         if (!empty($repeatRow)) {
-            $repeatRowInfo .= "字段对应用户数据重复</br>";
+            $repeatRowInfo .= '字段对应用户数据重复</br>';
 
             foreach ($repeatRow as $row) {
-                $repeatRowInfo .= "重复行：</br>";
+                $repeatRowInfo .= '重复行：</br>';
 
                 foreach ($row as $value) {
-                    $repeatRowInfo .= "第".$value."行 ";
+                    $repeatRowInfo .= '第'.$value.'行 ';
                 }
 
-                $repeatRowInfo .= "</br>";
+                $repeatRowInfo .= '</br>';
 
                 $repeatArray[] = $repeatRowInfo;
                 $repeatRowInfo = '';

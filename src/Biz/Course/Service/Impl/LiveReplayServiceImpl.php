@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
@@ -25,12 +26,12 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     {
         $user = $this->getCurrentUser();
 
-        $replay['userId']      = $user['id'];
+        $replay['userId'] = $user['id'];
         $replay['createdTime'] = time();
 
         $replay = $this->getLessonReplayDao()->create($replay);
 
-        $this->dispatchEvent("live.replay.create", array('replay' => $replay));
+        $this->dispatchEvent('live.replay.create', array('replay' => $replay));
 
         return $replay;
     }
@@ -38,7 +39,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     public function deleteReplayByLessonId($lessonId, $lessonType = 'live')
     {
         $result = $this->getLessonReplayDao()->deleteByLessonId($lessonId, $lessonType);
-        $this->dispatchEvent("live.replay.delete", array('lessonId' => $lessonId));
+        $this->dispatchEvent('live.replay.delete', array('lessonId' => $lessonId));
 
         return $result;
     }
@@ -46,7 +47,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     public function deleteReplaysByCourseId($courseId, $lessonType = 'live')
     {
         $result = $this->getLessonReplayDao()->deleteByCourseId($courseId, $lessonType);
-        $this->dispatchEvent("live.replay.delete", array('courseId' => $courseId));
+        $this->dispatchEvent('live.replay.delete', array('courseId' => $courseId));
 
         return $result;
     }
@@ -63,7 +64,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 
         $replay = $this->getLessonReplayDao()->update($id, $fields);
 
-        $this->dispatchEvent("live.replay.update", array('replay' => $replay));
+        $this->dispatchEvent('live.replay.update', array('replay' => $replay));
 
         return $replay;
     }
@@ -93,14 +94,14 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     public function entryReplay($replayId, $liveId, $liveProvider, $ssl = false)
     {
         $replay = $this->getReplay($replayId);
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
 
         $args = array(
-            'liveId'   => $liveId,
+            'liveId' => $liveId,
             'replayId' => $replay['replayId'],
             'provider' => $liveProvider,
-            'user'     => $user->isLogin() ? $user['email'] : '',
-            'nickname' => $user->isLogin() ? $user['nickname'] : 'guest'
+            'user' => $user->isLogin() ? $user['email'] : '',
+            'nickname' => $user->isLogin() ? $user['nickname'] : 'guest',
         );
 
         if ($ssl) {
@@ -131,9 +132,9 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 
     public function generateReplay($liveId, $courseId, $lessonId, $liveProvider, $type)
     {
-        try{
-            $replayList = $this->createLiveClient()->createReplayList($liveId, "录播回放", $liveProvider);
-        }catch (CloudAPIIOException $cloudAPIIOException){
+        try {
+            $replayList = $this->createLiveClient()->createReplayList($liveId, '录播回放', $liveProvider);
+        } catch (CloudAPIIOException $cloudAPIIOException) {
             return array();
         }
 
@@ -152,10 +153,10 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             $fields = array(
                 'courseId' => $courseId,
                 'lessonId' => $lessonId,
-                'title'    => $replay['subject'],
+                'title' => $replay['subject'],
                 'replayId' => $replay['id'],
                 'globalId' => !empty($replay['resourceNo']) ? $replay['resourceNo'] : 0,
-                'type'     => $type
+                'type' => $type,
             );
 
             $replays[] = $this->addReplay($fields);
@@ -167,7 +168,8 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     }
 
     /**
-     * only for mock
+     * only for mock.
+     *
      * @param [type] $liveClient [description]
      */
     public function setLiveClient($liveClient)

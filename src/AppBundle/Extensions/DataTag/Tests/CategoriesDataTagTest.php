@@ -2,12 +2,11 @@
 
 namespace AppBundle\Extensions\DataTag\Test;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\CategoriesDataTag;
 
 class CategoriesDataTagTest extends BaseTestCase
-{   
-
+{
     public function testGetData()
     {
         $group = $this->getCategoryService()->addGroup(array('name' => '课程', 'code' => 'course', 'depth' => 2));
@@ -17,7 +16,7 @@ class CategoriesDataTagTest extends BaseTestCase
             'code' => 'c1',
             'groupId' => $group['id'],
             'weight' => 1,
-            'parentId' => 0
+            'parentId' => 0,
         ));
 
         $category2 = $this->getCategoryService()->createCategory(array(
@@ -25,7 +24,7 @@ class CategoriesDataTagTest extends BaseTestCase
             'code' => 'c2',
             'groupId' => $group['id'],
             'weight' => 1,
-            'parentId' => 0
+            'parentId' => 0,
         ));
 
         $category1_1 = $this->getCategoryService()->createCategory(array(
@@ -76,5 +75,4 @@ class CategoriesDataTagTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
-
 }

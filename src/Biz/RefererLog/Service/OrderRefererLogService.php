@@ -1,5 +1,6 @@
 <?php
-namespace Biz\RefererLog\Service;;
+
+namespace Biz\RefererLog\Service;
 
 interface OrderRefererLogService
 {

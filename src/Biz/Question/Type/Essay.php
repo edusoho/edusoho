@@ -53,7 +53,7 @@ class Essay implements TypeInterface
             'passedTimes',
             'userId',
             'updatedTime',
-            'createdTime'
+            'createdTime',
         ));
 
         return $fields;

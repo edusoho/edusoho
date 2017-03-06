@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\File\Service\UploadFileService;
@@ -54,13 +55,14 @@ class CloudController extends BaseController
         $fileId = $request->query->get('id');
         $pipeline = $request->query->get('pipeline');
 
-        if ($sign != md5($fileId . $setting['cloud_secret_key'])) {
+        if ($sign != md5($fileId.$setting['cloud_secret_key'])) {
             return $this->createJsonResponse(array('error' => 'sign error.'));
         }
 
         $callback = $this->generateUrl('uploadfile_cloud_convert_callback3', array(), true);
 
         $result = $this->getUploadFileService()->reconvertOldFile($fileId, $callback, $pipeline);
+
         return $this->createJsonResponse($result);
     }
 
@@ -85,12 +87,12 @@ class CloudController extends BaseController
         );
         $count = $this->getUploadFileService()->searchFileCount($conditions);
 
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime','DESC'), 0, $count);
+        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), 0, $count);
 
         foreach ($files as &$file) {
-            $file['metas'] = empty($file['metas']) ?  array() : json_decode($file['metas'], true);
-            $file['metas2'] = empty($file['metas2']) ?  array() : json_decode($file['metas2'], true);
-            $file['convertParams'] = empty($file['convertParams']) ?  array() : json_decode($file['convertParams'], true);
+            $file['metas'] = empty($file['metas']) ? array() : json_decode($file['metas'], true);
+            $file['metas2'] = empty($file['metas2']) ? array() : json_decode($file['metas2'], true);
+            $file['convertParams'] = empty($file['convertParams']) ? array() : json_decode($file['convertParams'], true);
         }
 
         return $this->createJsonResponse($files);
@@ -148,7 +150,7 @@ class CloudController extends BaseController
         } else {
             $watermark = '';
         }
-  
+
         return $this->createJsonResponse($watermark);
     }
 
@@ -157,15 +159,16 @@ class CloudController extends BaseController
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
         $values = array_merge($user, $profile);
-        $values = array_filter($values, function($value){
+        $values = array_filter($values, function ($value) {
             return !is_array($value);
         });
+
         return $this->get('web.twig.extension')->simpleTemplateFilter($pattern, $values);
     }
 
     protected function checkSign($server, $sign, $secretKey)
     {
-        return md5($server . $secretKey) == $sign;
+        return md5($server.$secretKey) == $sign;
     }
 
     /**
@@ -191,5 +194,4 @@ class CloudController extends BaseController
     {
         return $this->getBiz()->service('File:UploadFileService');
     }
-
 }

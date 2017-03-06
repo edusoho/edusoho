@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\CloudPlatform\Client;
 
 use AppBundle\System;
@@ -26,7 +27,8 @@ class EduSohoAppClient implements AppClient
     private $secretKey;
 
     /**
-     * tmp dir path
+     * tmp dir path.
+     *
      * @var string
      */
     private $tmpDir;
@@ -40,7 +42,7 @@ class EduSohoAppClient implements AppClient
             $this->apiUrl = $options['apiUrl'];
         }
 
-        $this->debug  = empty($options['debug']) ? false : true;
+        $this->debug = empty($options['debug']) ? false : true;
         $this->tmpDir = empty($options['tmpDir']) ? sys_get_temp_dir() : $options['tmpDir'];
     }
 
@@ -48,7 +50,7 @@ class EduSohoAppClient implements AppClient
     {
         $loginToken = $this->getLoginToken();
 
-        $url = str_replace('app_api', '', $this->apiUrl).'token_login?token='.$loginToken["token"].'&goto='.$routingName;
+        $url = str_replace('app_api', '', $this->apiUrl).'token_login?token='.$loginToken['token'].'&goto='.$routingName;
 
         if (!empty($params)) {
             $url .= '&param='.urldecode(json_encode($params));
@@ -67,88 +69,98 @@ class EduSohoAppClient implements AppClient
     public function getBinded()
     {
         $args = array();
+
         return $this->callRemoteApi('GET', 'HasBinded', $args);
     }
 
     public function getMessages()
     {
         $args = array();
+
         return $this->callRemoteApi('GET', 'GetMessages', $args);
     }
 
     public function checkUpgradePackages($apps, $extInfos)
     {
         $args = array('apps' => $apps, 'extInfo' => $extInfos);
+
         return $this->callRemoteApi('POST', 'CheckUpgradePackages', $args);
     }
 
     public function submitRunLog($log)
     {
         $args = array('log' => $log);
+
         return $this->callRemoteApi('POST', 'SubmitRunLog', $args);
     }
 
     public function downloadPackage($packageId)
     {
-        $args                   = array('packageId' => (string) $packageId);
+        $args = array('packageId' => (string) $packageId);
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams('DownloadPackage', $args);
-        $url                    = $url.(strpos($url, '?') ? '&' : '?').http_build_query($httpParams);
+        $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($httpParams);
+
         return $this->download($url);
     }
 
     public function checkDownloadPackage($packageId)
     {
         $args = array('packageId' => (string) $packageId);
+
         return $this->callRemoteApi('GET', 'CheckDownloadPackage', $args);
     }
 
     public function getPackage($id)
     {
         $args = array('packageId' => (string) $id);
+
         return $this->callRemoteApi('GET', 'GetPackage', $args);
     }
 
     public function repairProblem($token)
     {
         $args = array('token' => $token);
+
         return $this->callRemoteApi('POST', 'RepairProblem', $args);
     }
 
     public function getLoginToken()
     {
         $args = array();
+
         return $this->callRemoteApi('POST', 'GetLoginToken', $args);
     }
 
     public function getAppStatusByCode($code)
     {
         $args = array('appCode' => $code);
+
         return $this->callRemoteApi('GET', 'GetMyAppStatus', $args);
     }
 
     protected function callRemoteApi($httpMethod, $action, array $args)
     {
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
-        $result                 = $this->sendRequest($httpMethod, $url, $httpParams);
+        $result = $this->sendRequest($httpMethod, $url, $httpParams);
 
         return json_decode($result, true);
     }
 
     protected function assembleCallRemoteApiUrlAndParams($action, array $args)
     {
-        $url     = "{$this->apiUrl}?action={$action}";
+        $url = "{$this->apiUrl}?action={$action}";
         $edusoho = array(
             'edition' => 'opensource',
-            'host'    => $_SERVER['HTTP_HOST'],
+            'host' => $_SERVER['HTTP_HOST'],
             'version' => System::VERSION,
-            'debug'   => $this->debug ? '1' : '0'
+            'debug' => $this->debug ? '1' : '0',
         );
         $args['_edusoho'] = $edusoho;
 
-        $httpParams              = array();
+        $httpParams = array();
         $httpParams['accessKey'] = $this->accessKey;
-        $httpParams['args']      = $args;
-        $httpParams['sign']      = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
+        $httpParams['args'] = $args;
+        $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
 
         return array($url, $httpParams);
     }

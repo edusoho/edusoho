@@ -3,7 +3,6 @@
 namespace Tests\Functional\Tests;
 
 use Facebook\WebDriver\Remote\RemoteWebDriver;
-use Facebook\WebDriver\Remote\WebDriverCapabilityType;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 
 abstract class BaseTestCase extends \PHPUnit_Framework_TestCase

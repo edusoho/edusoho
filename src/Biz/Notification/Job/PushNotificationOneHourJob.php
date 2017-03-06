@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Notification\Job;
 
 use Biz\Crontab\Service\Job;
@@ -9,7 +10,7 @@ class PushNotificationOneHourJob implements Job
     public function execute($params)
     {
         $targetType = $params['targetType'];
-        $targetId   = $params['targetId'];
+        $targetId = $params['targetId'];
         if ($targetType == 'lesson') {
             $lesson = $this->getCourseService()->getLesson($targetId);
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
@@ -32,6 +33,7 @@ class PushNotificationOneHourJob implements Job
         $path = str_replace('public://', '', $path);
         $path = str_replace('files/', '', $path);
         $path = "http://{$_SERVER['HTTP_HOST']}/files/{$path}";
+
         return $path;
     }
 

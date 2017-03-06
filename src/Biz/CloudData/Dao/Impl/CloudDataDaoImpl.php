@@ -2,7 +2,6 @@
 
 namespace Biz\CloudData\Dao\Impl;
 
-
 use Biz\CloudData\Dao\CloudDataDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -14,8 +13,8 @@ class CloudDataDaoImpl extends GeneralDaoImpl implements CloudDataDao
     {
         return array(
             'serializes' => array(
-                'body' => 'json'
-            )
+                'body' => 'json',
+            ),
         );
     }
 }
