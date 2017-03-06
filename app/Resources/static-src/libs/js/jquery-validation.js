@@ -169,6 +169,10 @@ $.validator.addMethod('positive_integer', function (value, element) {
   return this.optional(element) || parseInt(value) > 0;
 }, jQuery.validator.format("请输入正整数"));
 
+$.validator.addMethod("open_live_course_title", function (value, element, params) {
+  return !params || /^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
+}, Translator.trans('直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符'));
+
 $.validator.addMethod("currency", function (value, element, params) {
   return this.optional(element) || /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
 }, Translator.trans('请输入有效价格，最多两位小数，整数位不超个8位！'));
