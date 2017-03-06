@@ -273,6 +273,25 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testUpdateMemberDeadline()
     {
+        $user          = $this->getCurrentUser();
+        $textClassroom = array(
+            'title' => 'test066'
+        );
+        $classroom = $this->getClassroomService()->addClassroom($textClassroom);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        $classroom = $this->getClassroomService()->updateClassroom($classroom['id'], $textClassroom);
+
+        $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+
+        $time = time();
+        $deadline = ClassroomToolkit::buildMemberDeadline(array(
+            'expiryMode' => 'date',
+            'expiryValue' => $time
+        ));
+        $student = $this->getClassroomService()->updateMemberDeadline($student['id'], array(
+            'deadline' => $deadline
+        ));
+        $this->assertEquals($time, $student['deadline']);
     }
     public function testUpdateMembersDeadlineByClassroomId()
     {
@@ -286,9 +305,10 @@ class ClassroomServiceTest extends BaseTestCase
 
         $student = $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
 
+        $time = time();
         $deadline = ClassroomToolkit::buildMemberDeadline(array(
             'expiryMode' => 'date',
-            'expiryValue' => '1488433547'
+            'expiryValue' => $time
         ));
 
         $student = $this->getClassroomService()->updateMembersDeadlineByClassroomId($classroom['id'], $deadline);
