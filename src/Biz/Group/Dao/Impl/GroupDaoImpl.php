@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Group\Dao\Impl;
 
 use Biz\Group\Dao\GroupDao;
@@ -23,6 +24,7 @@ class GroupDaoImpl extends GeneralDaoImpl implements GroupDao
         if (isset($conditions['title'])) {
             $conditions['title'] = '%'.$conditions['title'].'%';
         }
+
         return parent::_createQueryBuilder($conditions);
     }
 
@@ -31,12 +33,12 @@ class GroupDaoImpl extends GeneralDaoImpl implements GroupDao
         return array(
             'timestamps' => array('createdTime'),
             'serializes' => array('tagIds' => 'json'),
-            'orderbys'   => array('createdTime', 'memberNum'),
+            'orderbys' => array('createdTime', 'memberNum'),
             'conditions' => array(
                 'ownerId=:ownerId',
                 'status = :status',
-                'title like :title'
-            )
+                'title like :title',
+            ),
         );
     }
 }

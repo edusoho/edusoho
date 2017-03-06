@@ -66,7 +66,7 @@ class ReviewServiceTest extends BaseTestCase
         $review2 = $this->createReview($course2['id']);
 
         $conditions = array(
-            'courseId' => $course1['id']
+            'courseId' => $course1['id'],
         );
 
         $reviews = $this->getReviewService()->searchReviews($conditions, array('createdTime' => 'DESC'), 0, 10);
@@ -83,7 +83,7 @@ class ReviewServiceTest extends BaseTestCase
         $review2 = $this->createReview($course2['id']);
 
         $conditions = array(
-            'courseId' => $course1['id']
+            'courseId' => $course1['id'],
         );
         $count = $this->getReviewService()->searchReviewsCount($conditions);
 
@@ -95,12 +95,12 @@ class ReviewServiceTest extends BaseTestCase
         $course = $this->createCourse();
 
         $fields = array(
-            'courseId'    => $course['id'],
-            'rating'      => 3,
-            'parentId'    => 0,
-            'content'     => 'review content',
+            'courseId' => $course['id'],
+            'rating' => 3,
+            'parentId' => 0,
+            'content' => 'review content',
             'courseSetId' => 1,
-            'createdTime' => time()
+            'createdTime' => time(),
         );
         $review = $this->getReviewService()->saveReview($fields);
 
@@ -151,23 +151,24 @@ class ReviewServiceTest extends BaseTestCase
     protected function createReview($courseId)
     {
         $fields = array(
-            'courseId'    => $courseId,
-            'rating'      => 3,
-            'parentId'    => 0,
-            'content'     => 'review content',
-            'createdTime' => time()
+            'courseId' => $courseId,
+            'rating' => 3,
+            'parentId' => 0,
+            'content' => 'review content',
+            'createdTime' => time(),
         );
+
         return $this->getReviewService()->saveReview($fields);
     }
 
     protected function createCourse()
     {
         $course = array(
-            'title'       => '第一个教学计划',
+            'title' => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'lockMode',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0
+            'learnMode' => 'lockMode',
+            'expiryMode' => 'days',
+            'expiryDays' => 0,
         );
 
         return $this->getCourseService()->createCourse($course);
@@ -176,11 +177,11 @@ class ReviewServiceTest extends BaseTestCase
     protected function createCourse1()
     {
         $course = array(
-            'title'       => '第二个教学计划',
+            'title' => '第二个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'lockMode',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0
+            'learnMode' => 'lockMode',
+            'expiryMode' => 'days',
+            'expiryDays' => 0,
         );
 
         return $this->getCourseService()->createCourse($course);

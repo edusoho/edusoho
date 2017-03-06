@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class TestpaperItemAddCopyId extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -14,11 +14,11 @@ class TestpaperItemAddCopyId extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `testpaper_item` DROP COLUMN `copyId`;");
+        $biz['db']->exec('ALTER TABLE `testpaper_item` DROP COLUMN `copyId`;');
     }
 }

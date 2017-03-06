@@ -1,10 +1,10 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Redis;
-
 
 class RedisFlushallCommand extends BaseCommand
 {
@@ -30,14 +30,14 @@ class RedisFlushallCommand extends BaseCommand
         if (!$redisConfigFile) {
             $output->writeln('<info>Redis未开启</info>');
         } else {
-            $redisConfig  = include $redisConfigFile;
+            $redisConfig = include $redisConfigFile;
             $cnf = $redisConfig['default'];
             if (empty($cnf['servers'])) {
                 $this->flushall($cnf);
             } else {
                 foreach ($cnf['servers'] as $server) {
                     $this->flushall($server);
-                }                
+                }
             }
         }
     }

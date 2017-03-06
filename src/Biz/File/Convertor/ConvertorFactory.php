@@ -1,18 +1,18 @@
 <?php
-namespace Biz\File\Convertor;
 
+namespace Biz\File\Convertor;
 
 use Biz\Util\CloudClient;
 
 class ConvertorFactory
 {
-
     /**
      * @param $name                        string      转码器名
      * @param $cloudClient                 CloudClient 云平台Client
      * @param $cloudConvertorDefaultConfig array       转码配置
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public static function create($name, CloudClient $cloudClient, array $cloudConvertorDefaultConfig)
@@ -21,10 +21,8 @@ class ConvertorFactory
             throw new \Exception('转码类型不存在');
         }
 
-        $class = __NAMESPACE__ . '\\' . ucfirst($name) . 'Convertor';
+        $class = __NAMESPACE__.'\\'.ucfirst($name).'Convertor';
 
         return new $class($cloudClient, $cloudConvertorDefaultConfig);
     }
 }
-
-

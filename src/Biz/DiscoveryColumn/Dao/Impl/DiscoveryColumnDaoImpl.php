@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\DiscoveryColumn\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -16,6 +17,7 @@ class DiscoveryColumnDaoImpl extends GeneralDaoImpl implements DiscoveryColumnDa
     public function findAllOrderBySeq()
     {
         $sql = "SELECT * FROM {$this->table} ORDER BY seq";
+
         return $this->db()->fetchAll($sql);
     }
 
@@ -23,10 +25,10 @@ class DiscoveryColumnDaoImpl extends GeneralDaoImpl implements DiscoveryColumnDa
     {
         return array(
             'timestamps' => array('createdTime', 'updateTime'),
-            'orderbys'   => array('seq'),
+            'orderbys' => array('seq'),
             'conditions' => array(
-                'title = :title'
-            )
+                'title = :title',
+            ),
         );
     }
 }

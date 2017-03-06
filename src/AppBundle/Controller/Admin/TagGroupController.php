@@ -1,19 +1,19 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
-
 use AppBundle\Common\ArrayToolkit;
 
 class TagGroupController extends BaseController
 {
     public function indexAction(Request $request)
-    {   
+    {
         $tagGroups = $this->getTagService()->findTagGroups();
 
-        return $this->render('admin/tag-group/index.html.twig',array(
-            'tagGroups' => $tagGroups
+        return $this->render('admin/tag-group/index.html.twig', array(
+            'tagGroups' => $tagGroups,
         ));
     }
 
@@ -29,7 +29,7 @@ class TagGroupController extends BaseController
             $tagGroup = $this->getTagService()->addTagGroup($fields);
 
             return $this->render('admin/tag-group/list-tr.html.twig', array(
-                'tagGroup' => $tagGroup
+                'tagGroup' => $tagGroup,
             ));
         }
 
@@ -46,23 +46,24 @@ class TagGroupController extends BaseController
             }
 
             $tagGroup = $this->getTagService()->updateTagGroup($groupId, $fields);
-            
+
             return $this->render('admin/tag-group/list-tr.html.twig', array(
-                'tagGroup' => $tagGroup
+                'tagGroup' => $tagGroup,
             ));
         }
 
         $tagGroup = $this->getTagService()->getTagGroup($groupId);
         $tags = $this->getTagService()->findTagsByGroupId($groupId);
+
         return $this->render('admin/tag-group/tag-group-modal.html.twig', array(
             'tagGroup' => $tagGroup,
-            'tags' => ArrayToolkit::column($tags, 'name')
+            'tags' => ArrayToolkit::column($tags, 'name'),
         ));
     }
 
     public function checkNameAction(Request $request)
     {
-        $name    = $request->query->get('value');
+        $name = $request->query->get('value');
         $exclude = $request->query->get('exclude');
 
         $avalieable = $this->getTagService()->isTagGroupNameAvailable($name, $exclude);
@@ -95,6 +96,7 @@ class TagGroupController extends BaseController
         }
 
         $tags = $this->getTagService()->findTagsByNames($tags);
+
         return ArrayToolkit::column($tags, 'id');
     }
 

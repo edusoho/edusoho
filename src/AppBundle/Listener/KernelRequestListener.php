@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Listener;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -72,16 +73,16 @@ class KernelRequestListener
             if ($token != $expectedToken) {
                 // @todo 需要区分ajax的response
                 if ($request->getPathInfo() == '/admin') {
-                    $token  = $request->request->get('token');
+                    $token = $request->request->get('token');
                     $result = ServiceKernel::instance()->createService('CloudPlatform:AppService')->repairProblem($token);
 
                     $this->container->set('Topxia.RepairProblem', $result);
                 } else {
                     $response = $this->container->get('templating')->renderResponse('default/message.html.twig', array(
-                        'type'     => 'error',
-                        'message'  => $this->getServiceKernel()->trans('页面已过期，请重新提交数据！'),
-                        'goto'     => '',
-                        'duration' => 0
+                        'type' => 'error',
+                        'message' => $this->getServiceKernel()->trans('页面已过期，请重新提交数据！'),
+                        'goto' => '',
+                        'duration' => 0,
                     ));
                     $response->setStatusCode(403);
                     $event->setResponse($response);
@@ -105,10 +106,10 @@ class KernelRequestListener
     {
         $ipConfigEntry = trim($ipConfigEntry);
 
-        if(strlen($ipConfigEntry) > 0) {
-            $regex = str_replace(".", "\.", $ipConfigEntry);
-            $regex = str_replace("*", "\d{1,3}", $regex);
-            $regex = "/^" . $regex . "/";
+        if (strlen($ipConfigEntry) > 0) {
+            $regex = str_replace('.', "\.", $ipConfigEntry);
+            $regex = str_replace('*', "\d{1,3}", $regex);
+            $regex = '/^'.$regex.'/';
 
             return preg_match($regex, $clientIp);
         } else {

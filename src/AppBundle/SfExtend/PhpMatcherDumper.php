@@ -51,12 +51,12 @@ class PhpMatcherDumper extends MatcherDumper
     public function dump(array $options = array())
     {
         $options = array_replace(array(
-            'class'      => 'ProjectUrlMatcher',
+            'class' => 'ProjectUrlMatcher',
             'base_class' => 'Symfony\\Component\\Routing\\Matcher\\UrlMatcher',
         ), $options);
 
         // trailing slash support is only enabled if we know how to redirect the user
-        $interfaces           = class_implements($options['base_class']);
+        $interfaces = class_implements($options['base_class']);
         $supportsRedirections = isset($interfaces['Symfony\\Component\\Routing\\Matcher\\RedirectableUrlMatcherInterface']);
 
         return <<<EOF
@@ -132,7 +132,7 @@ EOF;
         $fetchedHost = false;
 
         $groups = $this->groupRoutesByHostRegex($routes);
-        $code   = '';
+        $code = '';
 
         foreach ($groups as $collection) {
             if (null !== $regex = $collection->getAttribute('host_regex')) {
@@ -144,7 +144,7 @@ EOF;
                 $code .= sprintf("        if (preg_match(%s, \$host, \$hostMatches)) {\n", var_export($regex, true));
             }
 
-            $tree      = $this->buildPrefixTree($collection);
+            $tree = $this->buildPrefixTree($collection);
             $groupCode = $this->compilePrefixRoutes($tree, $supportsRedirections);
 
             if (null !== $regex) {
@@ -171,9 +171,9 @@ EOF;
      */
     private function compilePrefixRoutes(DumperPrefixCollection $collection, $supportsRedirections, $parentPrefix = '')
     {
-        $code            = '';
-        $prefix          = $collection->getPrefix();
-        $optimizable     = 1 < strlen($prefix) && 1 < count($collection->all());
+        $code = '';
+        $prefix = $collection->getPrefix();
+        $optimizable = 1 < strlen($prefix) && 1 < count($collection->all());
         $optimizedPrefix = $parentPrefix;
 
         if ($optimizable) {
@@ -186,7 +186,7 @@ EOF;
             if ($route instanceof DumperCollection) {
                 $code .= $this->compilePrefixRoutes($route, $supportsRedirections, $optimizedPrefix);
             } else {
-                $code .= $this->compileRoute($route->getRoute(), $route->getName(), $supportsRedirections, $optimizedPrefix) . "\n";
+                $code .= $this->compileRoute($route->getRoute(), $route->getName(), $supportsRedirections, $optimizedPrefix)."\n";
             }
         }
 
@@ -213,13 +213,13 @@ EOF;
      */
     private function compileRoute(Route $route, $name, $supportsRedirections, $parentPrefix = null)
     {
-        $code             = '';
-        $compiledRoute    = $route->compile();
-        $conditions       = array();
+        $code = '';
+        $compiledRoute = $route->compile();
+        $conditions = array();
         $hasTrailingSlash = false;
-        $matches          = false;
-        $hostMatches      = false;
-        $methods          = $route->getMethods();
+        $matches = false;
+        $hostMatches = false;
+        $methods = $route->getMethods();
 
         // GET and HEAD are equivalent
         if (in_array('GET', $methods) && !in_array('HEAD', $methods)) {
@@ -230,7 +230,7 @@ EOF;
 
         if (!count($compiledRoute->getPathVariables()) && false !== preg_match('#^(.)\^(?P<url>.*?)\$\1#', $compiledRoute->getRegex(), $m)) {
             if ($supportsTrailingSlash && substr($m['url'], -1) === '/') {
-                $conditions[]     = sprintf("rtrim(\$pathinfo, '/') === %s", var_export(rtrim(str_replace('\\', '', $m['url']), '/'), true));
+                $conditions[] = sprintf("rtrim(\$pathinfo, '/') === %s", var_export(rtrim(str_replace('\\', '', $m['url']), '/'), true));
                 $hasTrailingSlash = true;
             } else {
                 $conditions[] = sprintf('$pathinfo === %s', var_export(str_replace('\\', '', $m['url']), true));
@@ -242,7 +242,7 @@ EOF;
 
             $regex = $compiledRoute->getRegex();
             if ($supportsTrailingSlash && $pos = strpos($regex, '/$')) {
-                $regex            = substr($regex, 0, $pos) . '/?$' . substr($regex, $pos + 2);
+                $regex = substr($regex, 0, $pos).'/?$'.substr($regex, $pos + 2);
                 $hasTrailingSlash = true;
             }
             $conditions[] = sprintf('preg_match(%s, $pathinfo, $matches)', var_export($regex, true));
@@ -266,7 +266,7 @@ EOF;
 
 EOF;
 
-        $gotoname = 'not_' . preg_replace('/[^A-Za-z0-9_]/', '', $name);
+        $gotoname = 'not_'.preg_replace('/[^A-Za-z0-9_]/', '', $name);
         if ($methods) {
             if (1 === count($methods)) {
                 $code .= <<<EOF
@@ -317,7 +317,7 @@ EOF;
 
         if (method_exists($route, 'getPermissions')) {
             $permission = $route->getPermissions();
-        }else{
+        } else {
             $permission = '';
         }
 
@@ -391,7 +391,7 @@ EOF;
      */
     private function buildPrefixTree(DumperCollection $collection)
     {
-        $tree    = new DumperPrefixCollection();
+        $tree = new DumperPrefixCollection();
         $current = $tree;
 
         foreach ($collection as $route) {

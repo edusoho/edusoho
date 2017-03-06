@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Subtitle\Service\Impl;
 
 use Biz\BaseService;
@@ -25,9 +26,9 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
     public function getSubtitle($id)
     {
         $subtitle = $this->getSubtitleDao()->get($id);
-        $fileId   = $subtitle['subtitleId'];
-        $file     = $this->getUploadFileService()->getFile($fileId);
-        if (empty($file) || $file["type"] != "subtitle") {
+        $fileId = $subtitle['subtitleId'];
+        $file = $this->getUploadFileService()->getFile($fileId);
+        if (empty($file) || $file['type'] != 'subtitle') {
             throw $this->createNotFoundException("subtitleUploadFile{#$fileId} not found");
         }
 
@@ -51,11 +52,12 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
             throw $this->createServiceException('at most four subtitles to be allowed');
         }
 
-        $subtitle                = $this->filterSubtitleFields($subtitle);
+        $subtitle = $this->filterSubtitleFields($subtitle);
         $subtitle['createdTime'] = time();
 
-        $record    = $this->getSubtitleDao()->create($subtitle);
+        $record = $this->getSubtitleDao()->create($subtitle);
         $subtitles = $this->fillMetas(array($record));
+
         return array_pop($subtitles);
     }
 
@@ -63,7 +65,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
     {
         $subtitle = $this->getSubtitle($id);
         if (empty($subtitle)) {
-            throw $this->createNotFoundException("subtitle{#id} not found");
+            throw $this->createNotFoundException('subtitle{#id} not found');
         }
 
         $this->getSubtitleDao()->delete($id);
@@ -79,7 +81,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
         $fileIds = ArrayToolkit::column($subtitles, 'subtitleId');
         $files = $this->getUploadFileService()->findFilesByIds($fileIds, true, array('resType' => 'sub'));
         foreach ($files as $file) {
-            if (!($file["type"] == "subtitle" || $file["targetType"] == "subtitle")) {
+            if (!($file['type'] == 'subtitle' || $file['targetType'] == 'subtitle')) {
                 continue;
             }
             $downloadFile = $this->getUploadFileService()->getDownloadMetas($file['id'], $ssl);
@@ -105,7 +107,7 @@ class SubtitleServiceImpl extends BaseService implements SubtitleService
             $subtitle['ext'] = $fields['ext'];
         }
         $subtitle['subtitleId'] = $fields['subtitleId'];
-        $subtitle['mediaId']    = $fields['mediaId'];
+        $subtitle['mediaId'] = $fields['mediaId'];
 
         return $subtitle;
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
@@ -9,28 +10,27 @@ use AppBundle\Common\StringToolkit;
 
 class OrderRefundController extends BaseController
 {
-	public function refundsAction(Request $request,$targetType)
+    public function refundsAction(Request $request, $targetType)
     {
         $conditions = $this->prepareRefundSearchConditions($request->query->all());
-        
+
         $processor = $this->getOrderRefundProcessor($targetType);
 
         $conditions['targetType'] = $targetType;
-        if (!empty($conditions['title'])){
-
+        if (!empty($conditions['title'])) {
             $targets = $processor->findByLikeTitle(trim($conditions['title']));
             $conditions['targetIds'] = ArrayToolkit::column($targets, 'id');
-            if (count($conditions['targetIds']) == 0){
+            if (count($conditions['targetIds']) == 0) {
                 return $this->render('admin/order-refund/refunds.html.twig', array(
-		                'refunds' => array(),
-		                'users' => array(),
-		                'orders' => array(),
-		                'paginator' => new Paginator($request,0,20),
-		                'layout' => $processor->getRefundLayout(),
-		                'targetType' => $targetType
-		            )
+                        'refunds' => array(),
+                        'users' => array(),
+                        'orders' => array(),
+                        'paginator' => new Paginator($request, 0, 20),
+                        'layout' => $processor->getRefundLayout(),
+                        'targetType' => $targetType,
+                    )
                 );
-            }              
+            }
         }
 
         $paginator = new Paginator(
@@ -41,7 +41,7 @@ class OrderRefundController extends BaseController
 
         $refunds = $this->getOrderService()->searchRefunds(
             $conditions,
-            array('createdTime'=> 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -55,7 +55,7 @@ class OrderRefundController extends BaseController
             'orders' => $orders,
             'paginator' => $paginator,
             'layout' => $processor->getRefundLayout(),
-            'targetType' => $targetType
+            'targetType' => $targetType,
         ));
     }
 
@@ -80,8 +80,9 @@ class OrderRefundController extends BaseController
 
     public function cancelRefundAction(Request $request, $id)
     {
-    	$order = $this->getOrderService()->getOrder($id);
-    	$this->getOrderRefundProcessor($order["targetType"])->cancelRefundOrder($id);
+        $order = $this->getOrderService()->getOrder($id);
+        $this->getOrderRefundProcessor($order['targetType'])->cancelRefundOrder($id);
+
         return $this->createJsonResponse(true);
     }
 
@@ -95,16 +96,16 @@ class OrderRefundController extends BaseController
             $pass = $data['result'] == 'pass' ? true : false;
 
             $this->getOrderService()->auditRefundOrder($order['id'], $pass, $data['amount'], $data['note']);
-            $orderRefundProcessor = $this->getOrderRefundProcessor($order["targetType"]);
+            $orderRefundProcessor = $this->getOrderRefundProcessor($order['targetType']);
             $orderRefundProcessor->auditRefundOrder($id, $pass, $data);
 
-            if($order['targetType'] == 'course') {
-                $this->sendAuditRefundNotification($orderRefundProcessor,$order, $data);
+            if ($order['targetType'] == 'course') {
+                $this->sendAuditRefundNotification($orderRefundProcessor, $order, $data);
             } else {
                 if ($pass) {
-                    $this->getNotificationService()->notify($order['userId'],'default','您的退款申请已通过管理员审核');
-                }else{  
-                    $this->getNotificationService()->notify($order['userId'],'default',"您的退款申请因{$data['note']}未通过审核");
+                    $this->getNotificationService()->notify($order['userId'], 'default', '您的退款申请已通过管理员审核');
+                } else {
+                    $this->getNotificationService()->notify($order['userId'], 'default', "您的退款申请因{$data['note']}未通过审核");
                 }
             }
 
@@ -114,7 +115,6 @@ class OrderRefundController extends BaseController
         return $this->render('admin/order-refund/refund-confirm-modal.html.twig', array(
             'order' => $order,
         ));
-
     }
 
     protected function sendAuditRefundNotification($orderRefundProcessor, $order, $data)
@@ -134,12 +134,12 @@ class OrderRefundController extends BaseController
             return false;
         }
 
-        $targetUrl = $this->generateUrl($order["targetType"].'_show', array('id' => $order['targetId']));
+        $targetUrl = $this->generateUrl($order['targetType'].'_show', array('id' => $order['targetId']));
         $variables = array(
-            "item" => "<a href='{$targetUrl}'>{$target['title']}</a>",
+            'item' => "<a href='{$targetUrl}'>{$target['title']}</a>",
             // "{$order['targetType']}" => "<a href='{$targetUrl}'>{$target['title']}</a>",
-            "amount" => $data["amount"],
-            "note" => $data["note"],
+            'amount' => $data['amount'],
+            'note' => $data['note'],
         );
 
         $message = StringToolkit::template($message, $variables);
@@ -148,7 +148,7 @@ class OrderRefundController extends BaseController
 
     protected function getOrderRefundProcessor($targetType)
     {
-    	return OrderRefundProcessorFactory::create($targetType);
+        return OrderRefundProcessorFactory::create($targetType);
     }
 
     protected function getOrderService()

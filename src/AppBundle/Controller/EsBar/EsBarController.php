@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\EsBar;
 
 use AppBundle\Common\ArrayToolkit;
@@ -23,20 +24,20 @@ class EsBarController extends BaseController
         }
 
         $conditions = array(
-            'userId'      => $user->id,
-            'locked'      => 0,
+            'userId' => $user->id,
+            'locked' => 0,
             'classroomId' => 0,
-            'role'        => 'student'
+            'role' => 'student',
         );
-        $sort             = array('createdTime' => 'DESC');
-        $members          = $this->getCourseMemberService()->searchMembers($conditions, $sort, 0, 15);
-        $courseIds        = ArrayToolkit::column($members, 'courseId');
+        $sort = array('createdTime' => 'DESC');
+        $members = $this->getCourseMemberService()->searchMembers($conditions, $sort, 0, 15);
+        $courseIds = ArrayToolkit::column($members, 'courseId');
         $courseConditions = array(
             'courseIds' => $courseIds,
-            'parentId'  => 0
+            'parentId' => 0,
         );
-        $courses       = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, 15);
-        $courses       = ArrayToolkit::index($courses, 'id');
+        $courses = $this->getCourseService()->searchCourses($courseConditions, 'default', 0, 15);
+        $courses = ArrayToolkit::index($courses, 'id');
         $sortedCourses = array();
 
         if (!empty($courses)) {
@@ -57,8 +58,8 @@ class EsBarController extends BaseController
             }
         }
 
-        return $this->render("es-bar/list-content/study-place/my-course.html.twig", array(
-            'courses' => $sortedCourses
+        return $this->render('es-bar/list-content/study-place/my-course.html.twig', array(
+            'courses' => $sortedCourses,
         ));
     }
 
@@ -73,14 +74,14 @@ class EsBarController extends BaseController
         $memberConditions = array(
             'userId' => $user->id,
             'locked' => 0,
-            'role'   => 'student'
+            'role' => 'student',
         );
         $sort = array('createdTime' => 'DESC');
 
         $members = $this->getClassroomService()->searchMembers($memberConditions, $sort, 0, 15);
 
-        $classroomIds     = ArrayToolkit::column($members, 'classroomId');
-        $classrooms       = array();
+        $classroomIds = ArrayToolkit::column($members, 'classroomId');
+        $classrooms = array();
         $sortedClassrooms = array();
 
         if (!empty($classroomIds)) {
@@ -97,8 +98,8 @@ class EsBarController extends BaseController
             $sortedClassrooms[] = $classroom;
         }
 
-        return $this->render("es-bar/list-content/study-place/my-classroom.html.twig", array(
-            'classrooms' => $sortedClassrooms
+        return $this->render('es-bar/list-content/study-place/my-classroom.html.twig', array(
+            'classrooms' => $sortedClassrooms,
         ));
     }
 
@@ -114,7 +115,7 @@ class EsBarController extends BaseController
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
 
         return $this->render('es-bar/list-content/notification/notify.html.twig', array(
-            'notifications' => $notifications
+            'notifications' => $notifications,
         ));
     }
 
@@ -129,19 +130,19 @@ class EsBarController extends BaseController
         $conditions = array(
             'status' => $status,
             'userId' => $user['id'],
-            'type'   => 'homework'
+            'type' => 'homework',
         );
-        $sort            = array('updateTime' => 'DESC');
+        $sort = array('updateTime' => 'DESC');
         $homeworkResults = $this->getTestpaperService()->searchTestpaperResults($conditions, $sort, 0, 10);
-        $courseIds       = ArrayToolkit::column($homeworkResults, 'courseId');
-        $courses         = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseIds = ArrayToolkit::column($homeworkResults, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $homeworkActivityIds = ArrayToolkit::column($homeworkResults, 'lessonId');
 
         $conditions = array(
             'status' => $status,
             'userId' => $user['id'],
-            'type'   => 'testpaper'
+            'type' => 'testpaper',
         );
         $sort = array('endTime' => 'DESC');
 
@@ -150,14 +151,14 @@ class EsBarController extends BaseController
         $testpaperActivityIds = ArrayToolkit::column($testPaperResults, 'lessonId');
 
         $activityIds = array_merge($homeworkActivityIds, $testpaperActivityIds);
-        $tasks       = $this->getTaskService()->findTasksByActivityIds($activityIds);
+        $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
 
         return $this->render('es-bar/list-content/practice/practice.html.twig', array(
             'testPaperResults' => $testPaperResults,
-            'courses'          => $courses,
-            'tasks'            => $tasks,
-            'homeworkResults'  => $homeworkResults,
-            'status'           => $status
+            'courses' => $courses,
+            'tasks' => $tasks,
+            'homeworkResults' => $homeworkResults,
+            'status' => $status,
         ));
     }
 

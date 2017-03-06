@@ -1,10 +1,9 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Topxia\Service\Common\ServiceKernel;
 
 class CommonAdminController extends BaseController
 {
@@ -14,8 +13,8 @@ class CommonAdminController extends BaseController
 
         $user = $this->getUser();
 
-        $admin['url']    = $data['url'];
-        $admin['title']  = $data['title'];
+        $admin['url'] = $data['url'];
+        $admin['title'] = $data['title'];
         $admin['userId'] = $user['id'];
 
         if ($this->getUserCommonAdminService()->getCommonAdminByUserIdAndUrl($user['id'], $admin['url'])) {
@@ -28,7 +27,7 @@ class CommonAdminController extends BaseController
 
         if (count($commonAdmins) > 10) {
             $deleteCommons = array_slice($commonAdmins, 10, count($commonAdmins) - 10);
-            $ids           = ArrayToolkit::column($deleteCommons, 'id');
+            $ids = ArrayToolkit::column($deleteCommons, 'id');
 
             foreach ($ids as $key => $id) {
                 $this->getUserCommonAdminService()->deleteCommonAdmin($id);
@@ -36,13 +35,13 @@ class CommonAdminController extends BaseController
         }
 
         return $this->render('admin/common-admin/li.html.twig', array(
-            'admin' => $admin));
+            'admin' => $admin, ));
     }
 
     public function commonAdminAction(Request $request)
     {
         $user = $this->getUser();
-        $url  = $_SERVER['REQUEST_URI'];
+        $url = $_SERVER['REQUEST_URI'];
 
         $isCollect = 0;
 
@@ -53,8 +52,8 @@ class CommonAdminController extends BaseController
         $admins = $this->getUserCommonAdminService()->findCommonAdminByUserId($user['id']);
 
         return $this->render('admin/common-admin/main.html.twig', array(
-            'admins'    => $admins,
-            'isCollect' => $isCollect));
+            'admins' => $admins,
+            'isCollect' => $isCollect, ));
     }
 
     public function commonRemoveAction(Request $request, $id)
@@ -73,8 +72,8 @@ class CommonAdminController extends BaseController
         $admins = $this->getUserCommonAdminService()->findCommonAdminByUserId($user['id']);
 
         return $this->render('admin/common-admin/main.html.twig', array(
-            'admins'    => $admins,
-            'isCollect' => $isCollect));
+            'admins' => $admins,
+            'isCollect' => $isCollect, ));
     }
 
     protected function getUserCommonAdminService()

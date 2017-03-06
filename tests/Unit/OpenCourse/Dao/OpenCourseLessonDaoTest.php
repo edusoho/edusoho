@@ -26,88 +26,88 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 13
+                'expectedCount' => 13,
                 ),
             array(
                 'condition' => array('courseId' => 2),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('updatedTime_GE' => 2),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('status' => 'unpublished'),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('type' => 'b'),
                 'expectedResults' => array($expected[3]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('free' => 2),
                 'expectedResults' => array($expected[4]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('userId' => 2),
                 'expectedResults' => array($expected[5]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('mediaId' => 2),
                 'expectedResults' => array($expected[6]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('number' => 2),
                 'expectedResults' => array($expected[7]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('startTimeGreaterThan' => 2),
                 'expectedResults' => array($expected[8]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('endTimeLessThan' => 2),
                 'expectedResults' => $expected,
-                'expectedCount' => 13
+                'expectedCount' => 13,
                 ),
             array(
                 'condition' => array('startTimeLessThan' => 2),
                 'expectedResults' => $expected,
-                'expectedCount' => 13
+                'expectedCount' => 13,
                 ),
             array(
                 'condition' => array('endTimeGreaterThan' => 0),
                 'expectedResults' => $expected,
-                'expectedCount' => 13
+                'expectedCount' => 13,
                 ),
             array(
                 'condition' => array('titleLike' => 'b'),
                 'expectedResults' => array($expected[10]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('startTime' => '2', 'endTime' => '3'),
                 'expectedResults' => array($expected[11]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('copyId' => 2),
                 'expectedResults' => array($expected[12]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('courseIds' => array(2)),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
-                )
+                'expectedCount' => 1,
+                ),
             );
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
@@ -176,7 +176,7 @@ class OpenCourseLessonDaoTest extends BaseDaoTestCase
             'endTime' => 1,
             'title' => 'a',
             'createdTime' => 1,
-            'copyId' => 1
+            'copyId' => 1,
             );
     }
 }

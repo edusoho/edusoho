@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -10,7 +11,7 @@ class ArticleCategoryController extends BaseController
         $categories = $this->getCategoryService()->getCategoryStructureTree();
 
         return $this->render('admin/article-category/index.html.twig', array(
-            'categories' => $categories
+            'categories' => $categories,
         ));
     }
 
@@ -18,25 +19,27 @@ class ArticleCategoryController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $category = $this->getCategoryService()->createCategory($request->request->all());
+
             return $this->renderTbody();
         }
         $category = array(
-            'id'             => 0,
-            'name'           => '',
-            'code'           => '',
-            'parentId'       => (int) $request->query->get('parentId', 0),
-            'weight'         => 0,
+            'id' => 0,
+            'name' => '',
+            'code' => '',
+            'parentId' => (int) $request->query->get('parentId', 0),
+            'weight' => 0,
             'publishArticle' => 1,
-            'seoTitle'       => '',
-            'seoKeyword'     => '',
-            'seoDesc'        => '',
-            'published'      => 1
+            'seoTitle' => '',
+            'seoKeyword' => '',
+            'seoDesc' => '',
+            'published' => 1,
         );
 
         $categoryTree = $this->getCategoryService()->getCategoryTree();
+
         return $this->render('admin/article-category/modal.html.twig', array(
-            'category'     => $category,
-            'categoryTree' => $categoryTree
+            'category' => $category,
+            'categoryTree' => $categoryTree,
         ));
     }
 
@@ -60,13 +63,14 @@ class ArticleCategoryController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $category = $this->getCategoryService()->updateCategory($id, $request->request->all());
+
             return $this->renderTbody();
         }
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         return $this->render('admin/article-category/modal.html.twig', array(
-            'category'     => $category,
-            'categoryTree' => $categoryTree
+            'category' => $category,
+            'categoryTree' => $categoryTree,
         ));
     }
 
@@ -81,6 +85,7 @@ class ArticleCategoryController extends BaseController
             return $this->createJsonResponse(array('status' => 'error', 'message' => '此栏目有子栏目，无法删除'));
         } else {
             $this->getCategoryService()->deleteCategory($id);
+
             return $this->createJsonResponse(array('status' => 'success', 'message' => '栏目已删除'));
         }
     }
@@ -127,8 +132,8 @@ class ArticleCategoryController extends BaseController
         $categories = $this->getCategoryService()->getCategoryTree();
 
         return $this->render('admin/article-category/tbody.html.twig', array(
-            'categories'   => $categories,
-            'categoryTree' => $categories
+            'categories' => $categories,
+            'categoryTree' => $categories,
         ));
     }
 

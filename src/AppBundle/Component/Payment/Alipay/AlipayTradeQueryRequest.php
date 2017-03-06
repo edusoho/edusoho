@@ -1,10 +1,9 @@
 <?php
+
 namespace AppBundle\Component\Payment\Alipay;
 
-use AppBundle\Component\Payment\Request;
-
-class AlipayTradeQueryRequest {
-
+class AlipayTradeQueryRequest
+{
     protected $url = 'https://mapi.alipay.com/gateway.do';
 
     public function __construct(array $options = null)
@@ -15,35 +14,36 @@ class AlipayTradeQueryRequest {
     public function setParams(array $params)
     {
         $this->params = $params;
+
         return $this;
     }
 
-    public function tradeQuery() 
+    public function tradeQuery()
     {
         $result = $this->postRequest($this->url, $this->convertParams($this->params));
+
         return $this->parseResponse($result);
     }
-
 
     private function parseResponse($result)
     {
         $doc = new \DOMDocument('1.0', 'UTF-8');
         $doc->loadXML($result);
 
-        if( ! empty($doc->getElementsByTagName( "alipay" )->item(0)->nodeValue) ) {
-            $success = $doc->getElementsByTagName( "is_success" )->item(0)->nodeValue;
-            if('F' == $success) {
+        if (!empty($doc->getElementsByTagName('alipay')->item(0)->nodeValue)) {
+            $success = $doc->getElementsByTagName('is_success')->item(0)->nodeValue;
+            if ('F' == $success) {
                 return array(
                     'success' => false,
-                    'msg' => $doc->getElementsByTagName( "error" )->item(0)->nodeValue
+                    'msg' => $doc->getElementsByTagName('error')->item(0)->nodeValue,
                 );
-            } else if('T' == $success){
+            } elseif ('T' == $success) {
                 return array(
-                    'success' => true
+                    'success' => true,
                 );
             }
-
         }
+
         return array();
     }
 
@@ -51,7 +51,7 @@ class AlipayTradeQueryRequest {
     {
         $curl = curl_init();
 
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_USERAGENT, 'Topxia Payment Client 1.0');
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
@@ -59,10 +59,10 @@ class AlipayTradeQueryRequest {
         curl_setopt($curl, CURLOPT_HEADER, 0);
 
         if (!empty($params)) {
-            $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
+            $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
         }
 
-        curl_setopt($curl, CURLOPT_URL, $url );
+        curl_setopt($curl, CURLOPT_URL, $url);
 
         $response = curl_exec($curl);
         curl_close($curl);
@@ -70,8 +70,8 @@ class AlipayTradeQueryRequest {
         return $response;
     }
 
-
-    private function signParams($params) {
+    private function signParams($params)
+    {
         unset($params['sign_type']);
         unset($params['sign']);
 
@@ -82,10 +82,10 @@ class AlipayTradeQueryRequest {
             if (empty($value)) {
                 continue;
             }
-            $sign .= $key . '=' . $value . '&';
+            $sign .= $key.'='.$value.'&';
         }
-        $sign = substr($sign, 0, - 1);
-        $sign .=$this->options['secret'];
+        $sign = substr($sign, 0, -1);
+        $sign .= $this->options['secret'];
 
         return md5($sign);
     }
@@ -104,5 +104,4 @@ class AlipayTradeQueryRequest {
 
         return $converted;
     }
-
 }

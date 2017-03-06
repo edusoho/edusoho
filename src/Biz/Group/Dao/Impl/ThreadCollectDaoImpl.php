@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Group\Dao\Impl;
 
 use Biz\Group\Dao\ThreadCollectDao;
@@ -23,11 +24,11 @@ class ThreadCollectDaoImpl extends GeneralDaoImpl implements ThreadCollectDao
         return array(
             'timestamps' => array('createdTime'),
             'serializes' => array('tagIds' => 'json'),
-            'orderbys'   => array('name', 'createdTime', 'id'),
+            'orderbys' => array('name', 'createdTime', 'id'),
             'conditions' => array(
                 'userId = :userId',
-                'threadId = :threadId'
-            )
+                'threadId = :threadId',
+            ),
         );
     }
 }

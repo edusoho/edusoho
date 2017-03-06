@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\ArrayToolkit;
@@ -14,16 +15,16 @@ class CourseNoteController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         $classroomCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        $courseIds        = ArrayToolkit::column($classroomCourses, 'id');
-        $courses          = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseIds = ArrayToolkit::column($classroomCourses, 'id');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $user = $this->getCurrentUser();
 
         $classroomSetting = $this->setting('classroom', array());
-        $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
+        $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
         $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-        
+
         $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
         if (!$canLook) {
             return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}11111，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
@@ -38,17 +39,18 @@ class CourseNoteController extends BaseController
         } else {
             $classroomDescription = $classroom['about'];
             $classroomDescription = strip_tags($classroomDescription, '');
-            $classroomDescription = preg_replace("/ /", "", $classroomDescription);
+            $classroomDescription = preg_replace('/ /', '', $classroomDescription);
         }
+
         return $this->render('classroom/course/notes-list.html.twig', array(
-            'layout'               => $layout,
-            'filters'              => $this->getNoteSearchFilters($request),
-            'canLook'              => $canLook,
-            'classroom'            => $classroom,
-            'courseIds'            => $courseIds,
-            'courses'              => $courses,
-            'member'               => $member,
-            'classroomDescription' => $classroomDescription
+            'layout' => $layout,
+            'filters' => $this->getNoteSearchFilters($request),
+            'canLook' => $canLook,
+            'classroom' => $classroom,
+            'courseIds' => $courseIds,
+            'courses' => $courses,
+            'member' => $member,
+            'classroomDescription' => $classroomDescription,
         ));
     }
 
@@ -57,7 +59,7 @@ class CourseNoteController extends BaseController
         $filters = array();
 
         $filters['courseId'] = $request->query->get('courseId', '');
-        $filters['sort']     = $request->query->get('sort');
+        $filters['sort'] = $request->query->get('sort');
 
         if (!in_array($filters['sort'], array('latest', 'likeNum'))) {
             $filters['sort'] = 'latest';

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Order\OrderProcessor;
 
 use Exception;
@@ -31,6 +32,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         if (!$classroom['buyable']) {
             $classroomSetting = $this->getSettingService()->get('classroom');
+
             return array('error' => $this->getKernel()->trans('该%name%不可购买，如有需要，请联系客服', array('%name%' => $classroomSetting['name'])));
         }
 
@@ -45,9 +47,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             throw new Exception($this->getKernel()->trans('找不到要购买的班级!'));
         }
 
-        $courses   = $this->getClassroomService()->findCoursesByClassroomId($targetId);
-        $courseIds = $courses = ArrayToolkit::column($courses, "parentId");
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+        $courseIds = $courses = ArrayToolkit::column($courses, 'parentId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $users = array();
 
@@ -55,20 +57,20 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             $users = array_merge($this->getUserService()->findUsersByIds($course['teacherIds']), $users);
         }
 
-        $users       = ArrayToolkit::index($users, "id");
-        $headTeacher = $this->getUserService()->getUser($classroom["headTeacherId"]);
+        $users = ArrayToolkit::index($users, 'id');
+        $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
 
         list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
 
-        $courseIds = ArrayToolKit::column($courses, "id");
+        $courseIds = ArrayToolKit::column($courses, 'id');
 
         $currentUser = $this->getUserService()->getCurrentUser();
 
-        $classroomSetting = $this->getSettingService()->get("classroom");
+        $classroomSetting = $this->getSettingService()->get('classroom');
 
         $paidCourses = array();
 
-        if (!isset($classroomSetting["discount_buy"]) || $classroomSetting["discount_buy"] != 0) {
+        if (!isset($classroomSetting['discount_buy']) || $classroomSetting['discount_buy'] != 0) {
             $paidCourses = $this->getPaidCourses($currentUser, $courseIds);
 
             foreach ($paidCourses as $key => $paidCourse) {
@@ -77,7 +79,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
                 if ($afterDiscountPrice <= 0) {
                     unset($paidCourses[$key]);
                 } else {
-                    $paidCourses[$key]["afterDiscountPrice"] = $afterDiscountPrice;
+                    $paidCourses[$key]['afterDiscountPrice'] = $afterDiscountPrice;
                 }
             }
         }
@@ -85,7 +87,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $paidCoursesTotalPrice = $this->getCoursesTotalPrice($paidCourses);
 
         if (!$coinEnable) {
-            $totalPrice = $classroom["price"];
+            $totalPrice = $classroom['price'];
             $totalPrice = $totalPrice - $paidCoursesTotalPrice;
             $totalPrice = NumberToolkit::roundUp($totalPrice);
 
@@ -94,21 +96,21 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             }
 
             return array(
-                'totalPrice'  => $totalPrice,
-                'targetId'    => $targetId,
-                'targetType'  => "classroom",
+                'totalPrice' => $totalPrice,
+                'targetId' => $targetId,
+                'targetType' => 'classroom',
 
-                'classroom'   => empty($classroom) ? null : $classroom,
-                'courses'     => $courses,
+                'classroom' => empty($classroom) ? null : $classroom,
+                'courses' => $courses,
                 'paidCourses' => $paidCourses,
-                'users'       => $users,
-                'headTeacher' => $headTeacher
+                'users' => $users,
+                'headTeacher' => $headTeacher,
             );
         }
 
-        $totalPrice = $classroom["price"];
+        $totalPrice = $classroom['price'];
 
-        if ($priceType == "Coin") {
+        if ($priceType == 'Coin') {
             $totalPrice = NumberToolkit::roundUp($totalPrice * $cashRate);
         }
 
@@ -120,7 +122,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
-        if ($priceType == "Coin") {
+        if ($priceType == 'Coin') {
             $maxCoin = $coinPayAmount;
         } else {
             $maxCoin = NumberToolkit::roundUp($classroom['price'] * $classroom['maxRate'] / 100 * $cashRate);
@@ -129,21 +131,21 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $totalPrice = NumberToolkit::roundUp($totalPrice);
 
         return array(
-            'classroom'      => empty($classroom) ? null : $classroom,
-            'courses'        => $courses,
-            'paidCourses'    => $paidCourses,
-            'users'          => $users,
-            'headTeacher'    => $headTeacher,
+            'classroom' => empty($classroom) ? null : $classroom,
+            'courses' => $courses,
+            'paidCourses' => $paidCourses,
+            'users' => $users,
+            'headTeacher' => $headTeacher,
 
-            'totalPrice'     => $totalPrice,
-            'targetId'       => $targetId,
-            'targetType'     => "classroom",
-            'cashRate'       => $cashRate,
-            'priceType'      => $priceType,
-            'account'        => $account,
+            'totalPrice' => $totalPrice,
+            'targetId' => $targetId,
+            'targetType' => 'classroom',
+            'cashRate' => $cashRate,
+            'priceType' => $priceType,
+            'account' => $account,
             'hasPayPassword' => $hasPayPassword,
-            'coinPayAmount'  => $coinPayAmount,
-            'maxCoin'        => $maxCoin
+            'coinPayAmount' => $coinPayAmount,
+            'maxCoin' => $maxCoin,
         );
     }
 
@@ -161,16 +163,16 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields)
     {
         $totalPrice = 0;
-        $classroom  = $this->getClassroomService()->getClassroom($targetId);
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
 
-        if ($priceType == "RMB") {
-            $totalPrice = $classroom["price"];
-        } elseif ($priceType == "Coin") {
-            $totalPrice = $classroom["price"] * $cashRate;
+        if ($priceType == 'RMB') {
+            $totalPrice = $classroom['price'];
+        } elseif ($priceType == 'Coin') {
+            $totalPrice = $classroom['price'] * $cashRate;
         }
 
         $totalPrice = (float) $totalPrice;
-        $amount     = $totalPrice;
+        $amount = $totalPrice;
 
         $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
 
@@ -178,20 +180,20 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             throw new Exception($this->getKernel()->trans('班级中还未设置课程，请联系管理员!'));
         }
 
-        $courseIds = $courses = ArrayToolkit::column($courses, "parentId");
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseIds = $courses = ArrayToolkit::column($courses, 'parentId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $coursesTotalPrice = $this->getCoursesTotalPrice($courses);
 
-        $courseIds = ArrayToolKit::column($courses, "id");
+        $courseIds = ArrayToolKit::column($courses, 'id');
 
         $currentUser = $this->getUserService()->getCurrentUser();
 
-        $classroomSetting      = $this->getSettingService()->get("classroom");
+        $classroomSetting = $this->getSettingService()->get('classroom');
         $paidCoursesTotalPrice = 0;
-        $paidCourses           = array();
+        $paidCourses = array();
 
-        if (!isset($classroomSetting["discount_buy"]) || $classroomSetting["discount_buy"] != 0) {
+        if (!isset($classroomSetting['discount_buy']) || $classroomSetting['discount_buy'] != 0) {
             $paidCourses = $this->getPaidCourses($currentUser, $courseIds);
         }
 
@@ -213,9 +215,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         //优惠码优惠价格
 
-        if (!empty($fields["couponCode"]) && trim($fields["couponCode"]) != "") {
+        if (!empty($fields['couponCode']) && trim($fields['couponCode']) != '') {
             $couponResult = $this->afterCouponPay(
-                $fields["couponCode"],
+                $fields['couponCode'],
                 'classroom',
                 $targetId,
                 $amount,
@@ -223,25 +225,25 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
                 $cashRate
             );
 
-            if (isset($couponResult["useable"]) && $couponResult["useable"] == "yes" && isset($couponResult["afterAmount"])) {
-                $amount = $couponResult["afterAmount"];
+            if (isset($couponResult['useable']) && $couponResult['useable'] == 'yes' && isset($couponResult['afterAmount'])) {
+                $amount = $couponResult['afterAmount'];
             }
         }
 
         //虚拟币优惠价格
 
-        if (array_key_exists("coinPayAmount", $fields)) {
+        if (array_key_exists('coinPayAmount', $fields)) {
             $amount = $this->afterCoinPay(
                 $coinEnabled,
                 $priceType,
                 $cashRate,
                 $amount,
                 $fields['coinPayAmount'],
-                $fields["payPassword"]
+                $fields['payPassword']
             );
         }
 
-        if ($priceType == "Coin") {
+        if ($priceType == 'Coin') {
             $amount = $amount / $cashRate;
         }
 
@@ -250,18 +252,20 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         $amount = NumberToolkit::roundUp($amount);
+
         return array(
             $amount,
             $totalPrice,
-            empty($couponResult) ? null : $couponResult
+            empty($couponResult) ? null : $couponResult,
         );
     }
 
     protected function getPaidCourses($currentUser, $courseIds)
     {
         $courseMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($currentUser->id, $courseIds);
-        $courseMembers = ArrayToolkit::index($courseMembers, "courseId");
-        $paidCourseIds = ArrayToolkit::column($courseMembers, "courseId");
+        $courseMembers = ArrayToolkit::index($courseMembers, 'courseId');
+        $paidCourseIds = ArrayToolkit::column($courseMembers, 'courseId');
+
         return $this->getCourseService()->findCoursesByIds($paidCourseIds);
     }
 
@@ -283,7 +287,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function afterDiscountPrice($course)
     {
-        return $course["originPrice"];
+        return $course['originPrice'];
     }
 
     protected function getCoursesTotalPrice($courses)
@@ -291,7 +295,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         $coursesTotalPrice = 0;
 
         foreach ($courses as $key => $course) {
-            $coursesTotalPrice += $course["originPrice"];
+            $coursesTotalPrice += $course['originPrice'];
         }
 
         return $coursesTotalPrice;
@@ -310,12 +314,14 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     public function getNote($targetId)
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
+
         return str_replace(' ', '', strip_tags($classroom['about']));
     }
 
     public function getTitle($targetId)
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
+
         return str_replace(' ', '', strip_tags($classroom['title']));
     }
 
@@ -326,7 +332,8 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function callbackUrl($order, $container)
     {
-        $goto = $container->get('router')->generate('classroom_show', array('id' => $order["targetId"]), true);
+        $goto = $container->get('router')->generate('classroom_show', array('id' => $order['targetId']), true);
+
         return $goto;
     }
 
@@ -347,7 +354,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderInfoTemplate()
     {
-        return "AppBundle:Classroom/Classroom:orderInfo";
+        return 'AppBundle:Classroom/Classroom:orderInfo';
     }
 
     public function isTargetExist($targetId)
@@ -383,7 +390,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getClassroomOrderService()
     {
-        return $this->getBiz()->service("Classroom:ClassroomOrderService");
+        return $this->getBiz()->service('Classroom:ClassroomOrderService');
     }
 
     protected function getOrderService()

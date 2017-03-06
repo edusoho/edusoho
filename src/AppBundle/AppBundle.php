@@ -2,7 +2,6 @@
 
 namespace AppBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use AppBundle\DependencyInjection\Compiler\ExtensionPass;
 use AppBundle\Common\ExtensionalBundle;

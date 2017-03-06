@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -20,11 +21,11 @@ class HomeworkController extends BaseController
 
         if ($result['status'] == 'doing') {
             return $this->redirect($this->generateUrl('homework_show', array(
-                'resultId' => $result['id']
+                'resultId' => $result['id'],
             )));
         } else {
             return $this->redirect($this->generateUrl('homework_result_show', array(
-                'resultId' => $result['id']
+                'resultId' => $result['id'],
             )));
         }
     }
@@ -48,13 +49,13 @@ class HomeworkController extends BaseController
         $activity = $this->getActivityService()->getActivity($result['lessonId']);
 
         return $this->render('homework/do.html.twig', array(
-            'paper'       => $homework,
-            'questions'   => $questions,
-            'course'      => $course,
+            'paper' => $homework,
+            'questions' => $questions,
+            'course' => $course,
             'paperResult' => $result,
-            'activity'    => $activity,
+            'activity' => $activity,
             'showTypeBar' => 0,
-            'showHeader'  => 0
+            'showHeader' => 0,
         ));
     }
 
@@ -78,7 +79,7 @@ class HomeworkController extends BaseController
             throw new AccessDeniedException($this->getServiceKernel()->trans('无权查看作业！'));
         }
 
-        $builder   = $this->getTestpaperService()->getTestpaperBuilder($homework['type']);
+        $builder = $this->getTestpaperService()->getTestpaperBuilder($homework['type']);
         $questions = $builder->showTestItems($homework['id'], $homeworkResult['id']);
 
         $student = $this->getUserService()->getUser($homeworkResult['userId']);
@@ -86,16 +87,16 @@ class HomeworkController extends BaseController
         $attachments = $this->getTestpaperService()->findAttachments($homework['id']);
 
         $activity = $this->getActivityService()->getActivity($homeworkResult['lessonId']);
-        $task     = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->render('homework/do.html.twig', array(
-            'questions'   => $questions,
-            'paper'       => $homework,
+            'questions' => $questions,
+            'paper' => $homework,
             'paperResult' => $homeworkResult,
-            'student'     => $student,
+            'student' => $student,
             'attachments' => $attachments,
-            'task'        => $task,
-            'action'      => $request->query->get('action', '')
+            'task' => $task,
+            'action' => $request->query->get('action', ''),
         ));
     }
 

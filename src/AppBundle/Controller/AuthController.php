@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\User\CurrentUser;
@@ -29,12 +30,12 @@ class AuthController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-
             $data = $request->request->all();
 
             $isPasswordOk = $this->getAuthService()->checkPassword($user['id'], $data['password']);
             if (!$isPasswordOk) {
                 $this->setFlashMessage('danger', '密码不正确，请重试。');
+
                 return $this->redirect($this->generateUrl('auth_email_confirm', array('token' => $token['token'])));
             }
 
@@ -45,7 +46,7 @@ class AuthController extends BaseController
             $this->getTokenService()->destoryToken($token['token']);
 
             $user['currentIp'] = $this->container->get('request')->getClientIp();
-            $currentUser       = new CurrentUser();
+            $currentUser = new CurrentUser();
             $currentUser->fromArray($user);
 
             $this->switchUser($request, $currentUser);
@@ -54,7 +55,7 @@ class AuthController extends BaseController
         }
 
         return $this->render('auth/email-confirm.html.twig', array(
-            'newEmail' => $newEmail
+            'newEmail' => $newEmail,
         ));
     }
 

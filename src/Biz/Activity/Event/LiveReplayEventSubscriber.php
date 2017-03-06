@@ -6,7 +6,6 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -37,7 +36,7 @@ class LiveReplayEventSubscriber extends EventSubscriber implements EventSubscrib
         $activityId = $replay['lessonId'];
 
         $liveActivityFields = array(
-            'replayStatus' => LiveReplayService::REPLAY_GENERATE_STATUS
+            'replayStatus' => LiveReplayService::REPLAY_GENERATE_STATUS,
         );
 
         $activity = $this->getActivityService()->getActivity($activityId);
@@ -71,6 +70,7 @@ class LiveReplayEventSubscriber extends EventSubscriber implements EventSubscrib
     protected function getLogger($name)
     {
         $biz = $this->getBiz();
+
         return $biz['logger'];
     }
 }

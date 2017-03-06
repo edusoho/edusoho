@@ -2,7 +2,6 @@
 
 namespace Biz\Cash\Dao\Impl;
 
-
 use Biz\Cash\Dao\CashChangeDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -12,13 +11,15 @@ class CashChangeDaoImpl extends GeneralDaoImpl implements CashChangeDao
 
     public function getByUserId($userId, $lock = false)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1" . ($lock ? ' FOR UPDATE' : '');
-        return $this->db()->fetchAssoc($sql, array($userId)) ? : null;
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? LIMIT 1".($lock ? ' FOR UPDATE' : '');
+
+        return $this->db()->fetchAssoc($sql, array($userId)) ?: null;
     }
 
     public function waveCashField($id, $value)
     {
         $sql = "UPDATE {$this->table} SET amount = amount + ? WHERE id = ? LIMIT 1";
+
         return $this->db()->executeQuery($sql, array($value, $id));
     }
 

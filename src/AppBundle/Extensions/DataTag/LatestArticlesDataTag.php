@@ -3,12 +3,11 @@
 namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Extensions\DataTag\DataTag;
 
 class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     * 获取最新资讯列表
+     * 获取最新资讯列表.
      *
      * 可传入的参数：
      *   count    必需 课程数量，取值不能超过100
@@ -18,7 +17,8 @@ class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
      *          sticky    可选  是否置顶
      *   categoryId: 分类ID
      *
-     * @param  array $arguments      参数
+     * @param array $arguments 参数
+     *
      * @return array 资讯列表
      */
     public function getData(array $arguments)
@@ -40,12 +40,12 @@ class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
         }
 
         if (!empty($arguments['categoryId'])) {
-            $conditions['categoryId']      = (int) $arguments['categoryId'];
+            $conditions['categoryId'] = (int) $arguments['categoryId'];
             $conditions['includeChildren'] = 1;
         }
 
         $conditions['status'] = 'published';
-        $articles             = $this->getArticleService()->searchArticles($conditions, 'created', 0, $arguments['count']);
+        $articles = $this->getArticleService()->searchArticles($conditions, 'created', 0, $arguments['count']);
 
         $categorise = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($articles, 'categoryId'));
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\CloudPlatform\Client;
 
 use Biz\System\Service\SettingService;
@@ -48,6 +49,7 @@ class AbstractCloudAPI
     public function setApiUrl($url)
     {
         $this->apiUrl = rtrim($url, '/');
+
         return $this;
     }
 
@@ -92,12 +94,13 @@ class AbstractCloudAPI
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
+
         return $this;
     }
 
     protected function _request($method, $uri, $params, $headers)
     {
-		$requestId = substr(md5(uniqid('', true)), -16);
+        $requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl.'/'.self::VERSION.$uri;
 
@@ -105,6 +108,7 @@ class AbstractCloudAPI
             if ($this->debug && $this->logger) {
                 $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
             }
+
             return array('network' => 'off');
         }
 
@@ -147,7 +151,7 @@ class AbstractCloudAPI
         $curlinfo = curl_getinfo($curl);
 
         $header = substr($response, 0, $curlinfo['header_size']);
-        $body   = substr($response, $curlinfo['header_size']);
+        $body = substr($response, $curlinfo['header_size']);
 
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] CURL_INFO", $curlinfo);
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] RESPONSE_HEADER {$header}");
@@ -157,8 +161,8 @@ class AbstractCloudAPI
 
         $context = array(
             'CURLINFO' => $curlinfo,
-            'HEADER'   => $header,
-            'BODY'     => $body
+            'HEADER' => $header,
+            'BODY' => $body,
         );
 
         if (empty($curlinfo['namelookup_time'])) {
@@ -223,5 +227,4 @@ class AbstractCloudAPI
     {
         return ServiceKernel::instance()->createService('System:SettingService');
     }
-
 }

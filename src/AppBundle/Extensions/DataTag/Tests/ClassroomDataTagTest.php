@@ -2,7 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag\Test;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\ClassroomDataTag;
 
 class ClassroomDataTagTest extends BaseTestCase
@@ -11,12 +11,12 @@ class ClassroomDataTagTest extends BaseTestCase
     {
         $classroom = array(
             'title' => 'classroom1',
-            'about' => 'classroom about 1'
+            'about' => 'classroom about 1',
         );
 
         $classroom = $this->getClassroomService()->addClassroom($classroom);
 
-        $datatag       = new ClassroomDataTag();
+        $datatag = new ClassroomDataTag();
         $distClassroom = $datatag->getData(array('classroomId' => $classroom['id']));
         $this->assertEquals($classroom['id'], $distClassroom['id']);
     }
@@ -25,5 +25,4 @@ class ClassroomDataTagTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Classroom:ClassroomService');
     }
-
 }

@@ -5,12 +5,12 @@ use Phpmig\Migration\Migration;
 class DownloadActivityAddFileIds extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
+        $db = $biz['db'];
         $db->exec("
             DROP TABLE IF EXISTS `download_file`;
             DROP  TABLE IF EXISTS `download_file_record`;
@@ -30,10 +30,9 @@ class DownloadActivityAddFileIds extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-
     }
 }

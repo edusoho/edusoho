@@ -20,7 +20,7 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
         }
         $activeUserLog = array();
 
-        $activeUserLog['userId']     = $userId;
+        $activeUserLog['userId'] = $userId;
         $activeUserLog['activeTime'] = date('Ymd', time());
 
         return $this->getActiveUserDao()->create($activeUserLog);
@@ -34,10 +34,11 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
     public function isActiveUser($userId = null)
     {
         if (empty($userId)) {
-            $user   = $this->getCurrentUser();
+            $user = $this->getCurrentUser();
             $userId = $user->getId();
         }
         $activeUser = $this->getActiveUser($userId);
+
         return !empty($activeUser);
     }
 
@@ -60,6 +61,7 @@ class UserActiveServiceImpl extends BaseService implements UserActiveService
     public function getFilePath($userId)
     {
         $rootDir = realpath($this->getKernel()->getParameter('kernel.root_dir').'/../');
+
         return $rootDir."/app/data/active_user/{$userId}/".date('Y_m_d', time());
     }
 

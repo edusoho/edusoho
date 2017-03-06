@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\Payment\Heepay;
 
 use AppBundle\Component\Payment\Request;
@@ -10,10 +11,11 @@ class HeepayRequest extends Request
 
     public function form()
     {
-        $form           = array();
+        $form = array();
         $form['action'] = $this->url;
         $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
+
         return $form;
     }
 
@@ -31,19 +33,20 @@ class HeepayRequest extends Request
         }
 
         $sign .= 'key='.$this->options['secret'];
+
         return md5($sign);
     }
 
     protected function convertParams($params)
     {
-        $converted                    = array();
-        $converted['version']         = 1;
-        $converted['agent_id']        = $this->options['key'];
-        $converted['agent_bill_id']   = strtolower($this->generateOrderToken($params));
-        $converted['agent_bill_time'] = date("YmdHis", time());
-        $converted['pay_type']        = '20';
-        $converted['pay_code']        = '0';
-        $converted['pay_amt']         = $params['amount'];
+        $converted = array();
+        $converted['version'] = 1;
+        $converted['agent_id'] = $this->options['key'];
+        $converted['agent_bill_id'] = strtolower($this->generateOrderToken($params));
+        $converted['agent_bill_time'] = date('YmdHis', time());
+        $converted['pay_type'] = '20';
+        $converted['pay_code'] = '0';
+        $converted['pay_amt'] = $params['amount'];
 
         if (!empty($params['notifyUrl'])) {
             $converted['notify_url'] = $params['notifyUrl'];
@@ -53,10 +56,11 @@ class HeepayRequest extends Request
             $converted['return_url'] = $params['returnUrl'];
         }
 
-        $converted['user_ip']    = str_replace(".", "_", $this->getClientIp());
+        $converted['user_ip'] = str_replace('.', '_', $this->getClientIp());
         $converted['goods_name'] = urlencode(mb_substr($this->filterText($params['title']), 0, 15, 'utf-8'));
-        $converted['remark']     = '';
-        $converted['sign']       = $this->signParams($converted);
+        $converted['remark'] = '';
+        $converted['sign'] = $this->signParams($converted);
+
         return $converted;
     }
 
@@ -79,6 +83,7 @@ class HeepayRequest extends Request
     private function generateOrderToken($params)
     {
         $processor = OrderProcessorFactory::create($params['targetType']);
+
         return $processor->generateOrderToken();
     }
 }

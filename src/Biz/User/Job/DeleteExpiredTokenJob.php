@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Job;
 
 use Biz\User\Service\TokenService;
@@ -9,7 +10,7 @@ class DeleteExpiredTokenJob implements Job
 {
     public function execute($params)
     {
-        $limit  = 10000;
+        $limit = 10000;
         $this->getTokenService()->deleteExpiredTokens($limit);
     }
 

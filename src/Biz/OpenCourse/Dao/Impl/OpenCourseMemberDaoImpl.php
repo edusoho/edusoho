@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\OpenCourse\Dao\Impl;
 
 use Biz\OpenCourse\Dao\OpenCourseMemberDao;
@@ -13,7 +14,7 @@ class OpenCourseMemberDaoImpl extends GeneralDaoImpl implements OpenCourseMember
         return array(
             'timestamps' => array('createdTime'),
             'serializes' => array(),
-            'orderbys'   => array('createdTime', 'seq', 'lastEnterTime'),
+            'orderbys' => array('createdTime', 'seq', 'lastEnterTime'),
             'conditions' => array(
                 'userId = :userId',
                 'userId > :userIdGT',
@@ -24,8 +25,8 @@ class OpenCourseMemberDaoImpl extends GeneralDaoImpl implements OpenCourseMember
                 'createdTime < :startTimeLessThan',
                 'courseId IN (:courseIds)',
                 'userId IN (:userIds)',
-                'mobile = :mobile'
-            )
+                'mobile = :mobile',
+            ),
         );
     }
 
@@ -57,6 +58,7 @@ class OpenCourseMemberDaoImpl extends GeneralDaoImpl implements OpenCourseMember
     public function findByCourseIdAndRole($courseId, $role, $start, $limit)
     {
         $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC LIMIT {$start}, {$limit}";
+
         return $this->db()->fetchAll($sql, array($courseId, $role));
     }
 }

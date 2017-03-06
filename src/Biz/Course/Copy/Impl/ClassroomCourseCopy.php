@@ -15,7 +15,7 @@ class ClassroomCourseCopy extends CourseCopy
      * CourseSet 课程信息
      * - Course 教学计划及相关信息
      * - Testpaper (课程下创建的Testpaper)
-     * - Material （课程下上传的Material）
+     * - Material （课程下上传的Material）.
      *
      *
      * @param $biz
@@ -37,18 +37,18 @@ class ClassroomCourseCopy extends CourseCopy
 
         $course = $this->getCourseDao()->get($config['courseId']);
 
-        $user        = $this->biz['user'];
+        $user = $this->biz['user'];
         $courseSetId = $newCourseSet['id'];
 
-        $newCourse                = $this->doCopy($course);
-        $newCourse['isDefault']   = $course['isDefault'];
-        $modeChange               = false;
-        $newCourse['parentId']    = $course['id'];
-        $newCourse['locked']      = 1; //默认锁定
+        $newCourse = $this->doCopy($course);
+        $newCourse['isDefault'] = $course['isDefault'];
+        $modeChange = false;
+        $newCourse['parentId'] = $course['id'];
+        $newCourse['locked'] = 1; //默认锁定
         $newCourse['courseSetId'] = $courseSetId;
-        $newCourse['creator']     = $user['id'];
-        $newCourse['status']      = 'published';
-        $newCourse['teacherIds']  = array($user['id']);
+        $newCourse['creator'] = $user['id'];
+        $newCourse['status'] = 'published';
+        $newCourse['teacherIds'] = array($user['id']);
 
         $newCourse = $this->getCourseDao()->create($newCourse);
         $this->doCopyCourseMember($course, $newCourse);
@@ -58,9 +58,9 @@ class ClassroomCourseCopy extends CourseCopy
         $this->doCopyTestpaper($course, $newCourseSet);
 
         $this->childrenCopy($course, array(
-            'newCourse'  => $newCourse,
+            'newCourse' => $newCourse,
             'modeChange' => $modeChange,
-            'isCopy'     => true // 用于标记是复制还是clone，clone不需要记录parentId
+            'isCopy' => true, // 用于标记是复制还是clone，clone不需要记录parentId
         ));
 
         return $newCourse;
@@ -86,13 +86,13 @@ class ClassroomCourseCopy extends CourseCopy
             'discountId',
             'discount',
             'orgId',
-            'orgCode'
+            'orgCode',
         );
         $newCourseSet = array(
             'parentId' => $courseSet['id'],
-            'status'   => 'published',
-            'creator'  => $this->biz['user']['id'],
-            'locked'   => 1 // 默认锁定
+            'status' => 'published',
+            'creator' => $this->biz['user']['id'],
+            'locked' => 1, // 默认锁定
         );
 
         foreach ($fields as $field) {
@@ -119,7 +119,7 @@ class ClassroomCourseCopy extends CourseCopy
             'fileUri',
             'fileMime',
             'fileSize',
-            'type'
+            'type',
         );
 
         foreach ($materials as $material) {
@@ -130,11 +130,11 @@ class ClassroomCourseCopy extends CourseCopy
 
             $newMaterial = array(
                 'courseSetId' => $newCourseSet['id'],
-                'courseId'    => 0,
-                'lessonId'    => 0,
-                'source'      => 'coursematerial',
-                'userId'      => $this->biz['user']['id'],
-                'copyId'      => $material['id']
+                'courseId' => 0,
+                'lessonId' => 0,
+                'source' => 'coursematerial',
+                'userId' => $this->biz['user']['id'],
+                'copyId' => $material['id'],
             );
 
             foreach ($fields as $field) {
@@ -163,8 +163,8 @@ class ClassroomCourseCopy extends CourseCopy
                 }
                 $this->getClassroomMemberDao()->create(array(
                     'classroomId' => $classroomId,
-                    'userId'      => $teacher['userId'],
-                    'role'        => array('teacher')
+                    'userId' => $teacher['userId'],
+                    'role' => array('teacher'),
                 ));
             }
         }

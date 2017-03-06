@@ -10,6 +10,7 @@ class EdusohoTuiClient extends BaseService
     public function getToken()
     {
         $result = CloudAPIFactory::create('tui')->get('/token');
+
         return $result;
     }
 
@@ -19,18 +20,20 @@ class EdusohoTuiClient extends BaseService
             sprintf('/tui/message/%s/list', $userId),
             array('lastMaxId' => $lastMaxId, 'limit' => 20)
         );
+
         return $result;
     }
 
     public function addStudent($user)
     {
         $result = CloudAPIFactory::create('tui')->post('/tui/student/add', array(
-            'id'       => $user['id'],
+            'id' => $user['id'],
             'username' => $user['nickname'],
-            'email'    => $user['email'],
-            'name'     => '',
-            'mobile'   => ''
+            'email' => $user['email'],
+            'name' => '',
+            'mobile' => '',
         ));
+
         return $result;
     }
 
@@ -39,11 +42,12 @@ class EdusohoTuiClient extends BaseService
         $result = CloudAPIFactory::create('tui')->post(
             sprintf('/tui/message/%s/friend/%s/send', $message['fromId'], $message['toId']),
             array(
-                'type'    => $message['type'],
-                'title'   => $message['title'],
+                'type' => $message['type'],
+                'title' => $message['title'],
                 'content' => $message['content'],
-                'custom'  => $message['custom']
+                'custom' => $message['custom'],
             ));
+
         return $result;
     }
 
@@ -51,10 +55,10 @@ class EdusohoTuiClient extends BaseService
     {
         $result = CloudAPIFactory::create('tui')->post('/tui/message/bulletin/send', array(
             'esBulletinId' => $announcement['id'],
-            'title'        => $this->getKernel()->trans('网校公告'),
-            'content'      => $announcement['content']
+            'title' => $this->getKernel()->trans('网校公告'),
+            'content' => $announcement['content'],
         ));
+
         return $result;
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\CloudPlatform\Client;
 
 class EventCloudAPI extends AbstractCloudAPI
@@ -6,13 +7,13 @@ class EventCloudAPI extends AbstractCloudAPI
     public function push($name, array $body = array(), $timestamp = 0)
     {
         $event = array(
-            'name'      => $name,
-            'body'      => $body,
+            'name' => $name,
+            'body' => $body,
             'timestamp' => $timestamp,
-            'nonce'     => substr(md5(uniqid('', true)), -16)
+            'nonce' => substr(md5(uniqid('', true)), -16),
         );
 
-        $event['user']      = $this->accessKey;
+        $event['user'] = $this->accessKey;
         $event['signature'] = $this->makeSignature($event);
 
         return $this->_request('POST', '/events', $event);
@@ -28,6 +29,7 @@ class EventCloudAPI extends AbstractCloudAPI
             if ($this->debug && $this->logger) {
                 $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
             }
+
             return array('network' => 'off');
         }
 
@@ -69,7 +71,7 @@ class EventCloudAPI extends AbstractCloudAPI
         $curlinfo = curl_getinfo($curl);
 
         $header = substr($response, 0, $curlinfo['header_size']);
-        $body   = substr($response, $curlinfo['header_size']);
+        $body = substr($response, $curlinfo['header_size']);
 
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] CURL_INFO", $curlinfo);
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] RESPONSE_HEADER {$header}");
@@ -79,8 +81,8 @@ class EventCloudAPI extends AbstractCloudAPI
 
         $context = array(
             'CURLINFO' => $curlinfo,
-            'HEADER'   => $header,
-            'BODY'     => $body
+            'HEADER' => $header,
+            'BODY' => $body,
         );
 
         if (empty($curlinfo['namelookup_time'])) {
@@ -123,6 +125,7 @@ class EventCloudAPI extends AbstractCloudAPI
             ksort($event['body']);
             $text .= ':'.http_build_query($event['body']);
         }
+
         return hash_hmac('sha1', $text, $this->secretKey);
     }
 }

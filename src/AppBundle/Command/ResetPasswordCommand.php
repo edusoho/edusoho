@@ -1,16 +1,14 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-
 use Topxia\Service\Common\ServiceKernel;
-use Biz\User\CurrentUser;
 
 class ResetPasswordCommand extends BaseCommand
 {
-
     protected function configure()
     {
         $this->setName('topxia:reset-password')
@@ -28,13 +26,11 @@ class ResetPasswordCommand extends BaseCommand
         $output->writeln("<comment>重置用户ID: {$userid} 的密码为：{$password}</comment>");
         $this->getUserService()->changePassword($userid, $password);
 
-        $output->writeln("<info>密码重置成功....</info>");
-
+        $output->writeln('<info>密码重置成功....</info>');
     }
 
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User:UserService');
     }
-
 }

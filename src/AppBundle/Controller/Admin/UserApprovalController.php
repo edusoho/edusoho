@@ -11,13 +11,13 @@ class UserApprovalController extends BaseController
 {
     public function approvalsAction(Request $request, $approvalStatus)
     {
-        $fields     = $request->query->all();
-        $user       = $this->getUser();
+        $fields = $request->query->all();
+        $user = $this->getUser();
         $conditions = array(
-            'roles'          => '',
-            'keywordType'    => '',
-            'keyword'        => '',
-            'approvalStatus' => $approvalStatus
+            'roles' => '',
+            'keywordType' => '',
+            'keyword' => '',
+            'approvalStatus' => $approvalStatus,
         );
         $conditions = array_merge($conditions, $fields);
         $conditions = $this->fillOrgCode($conditions);
@@ -28,12 +28,12 @@ class UserApprovalController extends BaseController
 
         if (isset($fields['keywordType']) && ($fields['keywordType'] == 'truename' || $fields['keywordType'] == 'idcard')) {
             //根据条件从user_approval表里查找数据
-            $userCount   = $this->getUserService()->searchApprovalsCount($conditions);
-            $profiles        = $this->getUserService()->searchApprovals($conditions, array('id' => 'DESC'), 0, $userCount);
+            $userCount = $this->getUserService()->searchApprovalsCount($conditions);
+            $profiles = $this->getUserService()->searchApprovals($conditions, array('id' => 'DESC'), 0, $userCount);
             $userApprovingId = ArrayToolkit::column($profiles, 'userId');
         } else {
-            $userCount       = $this->getUserService()->searchUserCount($conditions);
-            $profiles        = $this->getUserService()->searchUsers($conditions, array('id' => 'DESC'), 0, $userCount);
+            $userCount = $this->getUserService()->searchUserCount($conditions);
+            $profiles = $this->getUserService()->searchUsers($conditions, array('id' => 'DESC'), 0, $userCount);
             $userApprovingId = ArrayToolkit::column($profiles, 'id');
         }
 
@@ -47,7 +47,7 @@ class UserApprovalController extends BaseController
         if (!empty($userApprovingId)) {
             $users = $this->getUserService()->searchUsers(
                 $conditions,
-                array('id'=>'DESC'),
+                array('id' => 'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
@@ -56,11 +56,12 @@ class UserApprovalController extends BaseController
         //最终结果
         $userProfiles = $this->getUserService()->findUserApprovalsByUserIds(ArrayToolkit::column($users, 'id'));
         $userProfiles = ArrayToolkit::index($userProfiles, 'userId');
+
         return $this->render('admin/user/approvals.html.twig', array(
-            'users'          => $users,
-            'paginator'      => $paginator,
-            'userProfiles'   => $userProfiles,
-            'approvalStatus' => $approvalStatus
+            'users' => $users,
+            'paginator' => $paginator,
+            'userProfiles' => $userProfiles,
+            'approvalStatus' => $approvalStatus,
         ));
     }
 
@@ -90,8 +91,8 @@ class UserApprovalController extends BaseController
 
         return $this->render('admin/user/user-approve-modal.html.twig',
             array(
-                'user'             => $user,
-                'userApprovalInfo' => $userApprovalInfo
+                'user' => $user,
+                'userApprovalInfo' => $userApprovalInfo,
             )
         );
     }
@@ -102,8 +103,8 @@ class UserApprovalController extends BaseController
 
         return $this->render('admin/user/user-approve-info-modal.html.twig',
             array(
-                'user'             => $user,
-                'userApprovalInfo' => $userApprovalInfo
+                'user' => $user,
+                'userApprovalInfo' => $userApprovalInfo,
             )
         );
     }
@@ -113,12 +114,13 @@ class UserApprovalController extends BaseController
         $user = $this->getUserService()->getUser($id);
 
         $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
+
         return array($user, $userApprovalInfo);
     }
 
     public function showIdcardAction($userId, $type)
     {
-        $user        = $this->getUserService()->getUser($userId);
+        $user = $this->getUserService()->getUser($userId);
         $currentUser = $this->getUser();
 
         if (empty($currentUser)) {
@@ -127,8 +129,8 @@ class UserApprovalController extends BaseController
 
         $userApprovalInfo = $this->getUserService()->getLastestApprovalByUserIdAndStatus($user['id'], 'approving');
 
-        $idcardPath      = $type === 'back' ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
-        $imgConverToData = new ImgConverToData;
+        $idcardPath = $type === 'back' ? $userApprovalInfo['backImg'] : $userApprovalInfo['faceImg'];
+        $imgConverToData = new ImgConverToData();
         $imgConverToData->getImgDir($idcardPath);
         $imgConverToData->img2Data();
         $imgData = $imgConverToData->data2Img();

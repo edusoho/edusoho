@@ -19,7 +19,7 @@ class TagGroupDaoTest extends BaseDaoTestCase
     {
         return array(
             'name' => 'default',
-            'tagNum' => '1'
+            'tagNum' => '1',
         );
     }
 }

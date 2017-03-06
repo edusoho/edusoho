@@ -2,22 +2,22 @@
 
 namespace Tests\Unit\User;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class BatchNotificationServiceTest extends BaseTestCase
 {
     public function testsendBatchNotification()
     {
         $fields = array(
-            'type'        => 'text',
-            'fromId'      => 1,
-            'title'       => 'asmd',
-            'content'     => 'sdncsdn',
-            'targetType'  => 'global',
-            'targetId'    => 0,
+            'type' => 'text',
+            'fromId' => 1,
+            'title' => 'asmd',
+            'content' => 'sdncsdn',
+            'targetType' => 'global',
+            'targetId' => 0,
             'createdTime' => 0,
-            'sendedTime'  => 0,
-            'published'   => 0
+            'sendedTime' => 0,
+            'published' => 0,
         );
         $notification = $this->getBatchNotificationService()->createBatchNotification($fields);
         $this->getBatchNotificationService()->createBatchNotification($fields);
@@ -26,11 +26,11 @@ class BatchNotificationServiceTest extends BaseTestCase
         $notification2 = $this->getBatchNotificationService()->getBatchNotification(2);
 
         $conditions = array('fromId' => 1);
-        $num        = $this->getBatchNotificationService()->countBatchNotifications($conditions);
+        $num = $this->getBatchNotificationService()->countBatchNotifications($conditions);
 
         $notifications = $this->getBatchNotificationService()->searchBatchNotifications($conditions, array('createdTime' => 'ASC'), 0, 9999);
 
-        $user   = $this->createUser();
+        $user = $this->createUser();
         $result = $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         $this->getBatchNotificationService()->deleteBatchNotification(1);
         $notification2 = $this->getBatchNotificationService()->getBatchNotification(1);
@@ -42,10 +42,11 @@ class BatchNotificationServiceTest extends BaseTestCase
 
     protected function createUser()
     {
-        $user             = array();
-        $user['email']    = "user@user.com";
-        $user['nickname'] = "user";
-        $user['password'] = "user";
+        $user = array();
+        $user['email'] = 'user@user.com';
+        $user['nickname'] = 'user';
+        $user['password'] = 'user';
+
         return $this->getUserService()->register($user);
     }
 

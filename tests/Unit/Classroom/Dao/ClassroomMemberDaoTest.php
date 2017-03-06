@@ -8,15 +8,14 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
 {
     public function testCountMobileFilledMembersByClassroomId()
     {
-
         $this->mockDataObject();
         $res = $this->getDao()->countMobileFilledMembersByClassroomId(1);
         $this->assertEquals(0, $res);
 
         $this->getUserSerivice()->register(array(
-            'nickname'  => 'test',
-            'email'     => 'test@admin.com',
-            'password'  => 'test',
+            'nickname' => 'test',
+            'email' => 'test@admin.com',
+            'password' => 'test',
             'verifiedMobile' => '13967340627',
             'mobile' => '13967340627',
         ));
@@ -25,21 +24,21 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
         $this->assertEquals(1, $res);
 
         $this->getUserSerivice()->register(array(
-            'nickname'  => 'test2',
-            'email'     => 'test2@admin.com',
-            'password'  => 'test2',
+            'nickname' => 'test2',
+            'email' => 'test2@admin.com',
+            'password' => 'test2',
             'verifiedMobile' => '13967340600',
             'mobile' => '13967340600',
         ));
         $this->getUserSerivice()->lockUser(3);
         $this->mockDataObject(array('userId' => 3));
-        $res = $this->getDao()->countMobileFilledMembersByClassroomId(1,1);
+        $res = $this->getDao()->countMobileFilledMembersByClassroomId(1, 1);
         $this->assertEquals(1, $res);
 
         $this->getUserSerivice()->register(array(
-            'nickname'  => 'test3',
-            'email'     => 'test3@admin.com',
-            'password'  => 'test3',
+            'nickname' => 'test3',
+            'email' => 'test3@admin.com',
+            'password' => 'test3',
             'verifiedMobile' => '13967340627',
             'mobile' => '13967340627',
         ));
@@ -47,6 +46,7 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
         $res = $this->getDao()->countMobileFilledMembersByClassroomId(1);
         $this->assertEquals(2, $res);
     }
+
     public function testSearch()
     {
         $expected = array();
@@ -59,45 +59,45 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 5
+                'expectedCount' => 5,
                 ),
             array(
                 'condition' => array('userId' => 2),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('classroomId' => 2),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('noteNumGreaterThan' => 1),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('role' => 'teacher'),
                 'expectedResults' => array($expected[3]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('startTimeGreaterThan' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 5
+                'expectedCount' => 5,
                 ),
             array(
                 'condition' => array('createdTime_GE' => 2),
                 'expectedResults' => $expected,
-                'expectedCount' => 5
+                'expectedCount' => 5,
                 ),
             array(
                 'condition' => array('startTimeLessThan' => 3),
                 'expectedResults' => array($expected[4]),
-                'expectedCount' => 0
-                )
+                'expectedCount' => 0,
+                ),
             );
-            $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
+        $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
 
     public function testCountStudents()
@@ -131,7 +131,7 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
         $expected = array();
         $expected[] = $this->mockDataObject(array('classroomId' => 1));
         $expected[] = $this->mockDataObject(array('classroomId' => 2));
-        $res = $this->getDao()->findByUserIdAndClassroomIds(1, array(1, 2))     ;
+        $res = $this->getDao()->findByUserIdAndClassroomIds(1, array(1, 2));
         $this->assertArrayEquals($expected, $res);
     }
 
@@ -189,7 +189,7 @@ class ClassroomMemberDaoTest extends BaseDaoTestCase
             'classroomId' => 1,
             'noteNum' => 1,
             'role' => array('student'),
-            'createdTime' => 0
+            'createdTime' => 0,
             );
     }
 

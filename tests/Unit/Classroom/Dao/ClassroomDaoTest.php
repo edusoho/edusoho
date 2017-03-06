@@ -24,73 +24,73 @@ class ClassroomDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 11
+                'expectedCount' => 11,
                 ),
             array(
                 'condition' => array('status' => 'closed'),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('title' => 'b'),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('titleLike' => 'b'),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('price' => 55.5),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('price_GT' => 50),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('private' => 1),
                 'expectedResults' => array($expected[3]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('categoryId' => 2),
                 'expectedResults' => array($expected[4]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('recommended' => 1),
                 'expectedResults' => array($expected[5]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('showable' => 0),
                 'expectedResults' => array($expected[6]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('buyable' => 0),
                 'expectedResults' => array($expected[7]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('vipLevelId' => 1),
                 'expectedResults' => array($expected[8]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('orgCode' => '0'),
                 'expectedResults' => array($expected[9]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('headTeacherId' => 1),
                 'expectedResults' => array($expected[10]),
-                'expectedCount' => 1
-                )
+                'expectedCount' => 1,
+                ),
             );
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
@@ -118,7 +118,7 @@ class ClassroomDaoTest extends BaseDaoTestCase
         $expected = array();
         $expected[] = $this->mockDataObject(array('title' => 'ahaha'));
         $expected[] = $this->mockDataObject(array('title' => 'ahaha'));
-        $res = $this->getDao()->findByIds(array(1,2));
+        $res = $this->getDao()->findByIds(array(1, 2));
         $this->assertArrayEquals($expected[0], $res[0], $this->getCompareKeys());
         $this->assertArrayEquals($expected[1], $res[1], $this->getCompareKeys());
     }
@@ -136,7 +136,7 @@ class ClassroomDaoTest extends BaseDaoTestCase
             'buyable' => 1,
             'vipLevelId' => 0,
             'orgCode' => '1',
-            'headTeacherId' => 0
+            'headTeacherId' => 0,
             );
     }
 }

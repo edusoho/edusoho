@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Marker\Dao\Impl;
 
 use Biz\Marker\Dao\QuestionMarkerDao;
@@ -11,12 +12,14 @@ class QuestionMarkerDaoImpl extends GeneralDaoImpl implements QuestionMarkerDao
     public function getMaxSeqByMarkerId($id)
     {
         $sql = "SELECT max(seq) seq FROM {$this->table} WHERE markerId = ? LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($id));
     }
 
     public function merge($sourceMarkerId, $targetMarkerId, $maxSeq)
     {
         $sql = "UPDATE {$this->table} SET seq = seq + {$maxSeq}, markerId = {$targetMarkerId} WHERE markerId = ? ";
+
         return $this->db()->executeQuery($sql, array($sourceMarkerId));
     }
 
@@ -28,6 +31,7 @@ class QuestionMarkerDaoImpl extends GeneralDaoImpl implements QuestionMarkerDao
     public function findByMarkerId($markerId)
     {
         $sql = "SELECT * FROM {$this->table} where markerId = ? order by seq asc";
+
         return $this->db()->fetchAll($sql, array($markerId));
     }
 
@@ -40,6 +44,7 @@ class QuestionMarkerDaoImpl extends GeneralDaoImpl implements QuestionMarkerDao
         $marks = str_repeat('?,', count($markerIds) - 1).'?';
 
         $sql = "SELECT * FROM {$this->table} where markerId IN ({$marks}) order by markerId asc, seq asc";
+
         return $this->db()->fetchAll($sql, $markerIds);
     }
 
@@ -51,12 +56,14 @@ class QuestionMarkerDaoImpl extends GeneralDaoImpl implements QuestionMarkerDao
     public function waveSeqBehind($markerId, $seq)
     {
         $sql = "UPDATE {$this->table} SET seq = seq + 1 WHERE markerId = ? AND seq >= ? ";
+
         return $this->db()->executeQuery($sql, array($markerId, $seq));
     }
 
     public function waveSeqForward($markerId, $seq)
     {
         $sql = "UPDATE {$this->table} SET seq = seq - 1 WHERE markerId = ? AND seq >= ? ";
+
         return $this->db()->executeQuery($sql, array($markerId, $seq));
     }
 
@@ -64,20 +71,20 @@ class QuestionMarkerDaoImpl extends GeneralDaoImpl implements QuestionMarkerDao
     {
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys'   => array('createdTime', 'seq'),
+            'orderbys' => array('createdTime', 'seq'),
             'serializes' => array(
                 'answer' => 'json',
-                'metas'  => 'json'
+                'metas' => 'json',
             ),
             'conditions' => array(
-                "id IN ( :ids )",
+                'id IN ( :ids )',
                 'seq = :seq',
                 'markerId = :markerId',
                 'questionId = :questionId',
                 'difficulty = :difficulty',
                 'type = :type',
-                'stem LIKE :stem'
-            )
+                'stem LIKE :stem',
+            ),
         );
     }
 }

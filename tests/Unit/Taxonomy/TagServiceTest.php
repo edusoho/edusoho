@@ -1,9 +1,9 @@
 <?php
+
 namespace  Tests\Taxonomy;
 
-
 use Biz\Taxonomy\Service\TagService;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class TagServiceTest extends BaseTestCase
 {
@@ -12,9 +12,9 @@ class TagServiceTest extends BaseTestCase
      */
     public function testAddTag()
     {
-        $tag         = array();
+        $tag = array();
         $tag['name'] = '测试标签';
-        $tag         = $this->getTagService()->addTag($tag);
+        $tag = $this->getTagService()->addTag($tag);
         $this->assertNotEmpty($tag);
         $this->assertEquals('测试标签', $tag['name']);
         $this->assertEquals('1', $tag['id']);
@@ -30,8 +30,8 @@ class TagServiceTest extends BaseTestCase
 
         $tagGroup = array(
             'name' => '测试标签组',
-            'tagIds' => array(1,2),
-            'tagNum' => 2
+            'tagIds' => array(1, 2),
+            'tagNum' => 2,
         );
 
         $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
@@ -40,11 +40,11 @@ class TagServiceTest extends BaseTestCase
 
     /**
      * @group add
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testAddTagWithEmptyTagName()
     {
-        $tag         = array();
+        $tag = array();
         $tag['name'] = null;
         $this->getTagService()->addTag($tag);
         $tag['name'] = '';
@@ -58,14 +58,14 @@ class TagServiceTest extends BaseTestCase
      */
     public function testAddTagWithTooLongTagName()
     {
-        $tag         = array();
+        $tag = array();
         $tag['name'] = '过长的标签名称过长的标签名称过长的标签名称过长的标签名称';
         $this->getTagService()->addTag($tag);
     }
 
     /**
      * @group add
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testAddMultiTagNameTag()
     {
@@ -78,7 +78,7 @@ class TagServiceTest extends BaseTestCase
      */
     public function testGetTag()
     {
-        $tag      = $this->getTagService()->addTag(array('name' => '测试标签'));
+        $tag = $this->getTagService()->addTag(array('name' => '测试标签'));
         $foundTag = $this->getTagService()->getTag($tag['id']);
 
         $this->assertEquals('测试标签', $foundTag['name']);
@@ -88,8 +88,8 @@ class TagServiceTest extends BaseTestCase
     public function testGetTagGroup()
     {
         $tagGroup = $this->getTagService()->addTagGroup(array(
-            'name'        => '测试标签组',
-            'tagNum'      => 0
+            'name' => '测试标签组',
+            'tagNum' => 0,
         ));
 
         $foundTagGroup = $this->getTagService()->getTagGroup($tagGroup['id']);
@@ -98,14 +98,14 @@ class TagServiceTest extends BaseTestCase
 
     public function testGetTagWithNotExistTagId()
     {
-        $tag      = $this->getTagService()->addTag(array('name' => '测试标签'));
+        $tag = $this->getTagService()->addTag(array('name' => '测试标签'));
         $foundTag = $this->getTagService()->getTag(999);
         $this->assertNull($foundTag);
     }
 
     public function testGetTagByName()
     {
-        $tag       = $this->getTagService()->addTag(array('name' => '测试标签'));
+        $tag = $this->getTagService()->addTag(array('name' => '测试标签'));
         $tagByName = $this->getTagService()->getTagByName('测试标签');
 
         $this->assertNotEmpty($tagByName);
@@ -115,7 +115,7 @@ class TagServiceTest extends BaseTestCase
 
     public function testGetTagByNameWithNotExistTagName()
     {
-        $tag      = $this->getTagService()->addTag(array('name' => '测试标签'));
+        $tag = $this->getTagService()->addTag(array('name' => '测试标签'));
         $foundTag = $this->getTagService()->getTagByName('xxx');
         $this->assertFalse($foundTag);
     }
@@ -123,9 +123,9 @@ class TagServiceTest extends BaseTestCase
     public function testGetTagOwnerRelationByTagIdAndOwner()
     {
         $fields = array(
-            'tagId'     => 1,
+            'tagId' => 1,
             'ownerType' => 'course',
-            'ownerId'   => 1
+            'ownerId' => 1,
         );
 
         $this->getTagService()->addTagOwnerRelation($fields);
@@ -170,7 +170,7 @@ class TagServiceTest extends BaseTestCase
         $tagB = array('name' => '测试标签2');
         $tagA = $this->getTagService()->addTag($tagA);
         $tagB = $this->getTagService()->addTag($tagB);
-        $ids  = array($tagA['id'], $tagB['id']);
+        $ids = array($tagA['id'], $tagB['id']);
         $tags = $this->getTagService()->findTagsByIds($ids);
         $this->assertEquals(2, count($tags));
     }
@@ -205,7 +205,7 @@ class TagServiceTest extends BaseTestCase
     }
 
     public function testFindTagsByGroupId()
-    {   
+    {
         $tagA = array('name' => '测试标签1');
         $tagB = array('name' => '测试标签2');
         $tagA = $this->getTagService()->addTag($tagA);
@@ -213,8 +213,8 @@ class TagServiceTest extends BaseTestCase
 
         $tagGroup = array(
             'name' => '测试标签组',
-            'tagIds' => array(1,2),
-            'tagNum' => 2
+            'tagIds' => array(1, 2),
+            'tagNum' => 2,
         );
 
         $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
@@ -243,24 +243,24 @@ class TagServiceTest extends BaseTestCase
      */
     public function testUpdateTag()
     {
-        $tag         = array();
+        $tag = array();
         $tag['name'] = '修改前的分类名称';
-        $tag         = $this->getTagService()->addTag($tag);
-        $updateTag   = array('name' => '修改后的分类名称');
-        $updatedTag  = $this->getTagService()->updateTag($tag['id'], $updateTag);
+        $tag = $this->getTagService()->addTag($tag);
+        $updateTag = array('name' => '修改后的分类名称');
+        $updatedTag = $this->getTagService()->updateTag($tag['id'], $updateTag);
         $this->assertEquals('修改后的分类名称', $updatedTag['name']);
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testUpdateTagWithNotExistId()
     {
-        $tag         = array();
+        $tag = array();
         $tag['name'] = '修改前的分类名称';
-        $tag         = $this->getTagService()->addTag($tag);
-        $updateTag   = array('name' => '修改后的分类名称');
-        $updatedTag  = $this->getTagService()->updateTag(999, $updateTag);
+        $tag = $this->getTagService()->addTag($tag);
+        $updateTag = array('name' => '修改后的分类名称');
+        $updatedTag = $this->getTagService()->updateTag(999, $updateTag);
         $this->assertFalse($updatedTag);
     }
 
@@ -269,23 +269,23 @@ class TagServiceTest extends BaseTestCase
      */
     public function testUpdateTagWithTooLongName()
     {
-        $tag         = array();
+        $tag = array();
         $tag['name'] = '修改前的分类名称';
-        $tag         = $this->getTagService()->addTag($tag);
-        $updateTag   = array('name' => '修改后的分类名称修改后的分类名称修改后的分类名称修改后的分类名称修改后的分类名称修改后的分类名称修改后的分类名称');
+        $tag = $this->getTagService()->addTag($tag);
+        $updateTag = array('name' => '修改后的分类名称修改后的分类名称修改后的分类名称修改后的分类名称修改后的分类名称修改后的分类名称修改后的分类名称');
         $this->getTagService()->updateTag($tag['id'], $updateTag);
     }
 
     /**
      * @group update
-     * @expectedException Codeages\Biz\Framework\Service\Exception\ServiceException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\ServiceException
      */
     public function testUpdateTagWithEmptyName()
     {
-        $tag         = array();
+        $tag = array();
         $tag['name'] = '修改前的分类名称';
-        $tag         = $this->getTagService()->addTag($tag);
-        $updateTag   = array('name' => '');
+        $tag = $this->getTagService()->addTag($tag);
+        $updateTag = array('name' => '');
         $this->getTagService()->updateTag($tag['id'], $updateTag);
     }
 
@@ -298,8 +298,8 @@ class TagServiceTest extends BaseTestCase
 
         $tagGroup = array(
             'name' => '测试标签组',
-            'tagIds' => array(1,2),
-            'tagNum' => 2
+            'tagIds' => array(1, 2),
+            'tagNum' => 2,
         );
 
         $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
@@ -336,8 +336,8 @@ class TagServiceTest extends BaseTestCase
 
         $tagGroup = array(
             'name' => '测试标签组',
-            'tagIds' => array(1,2),
-            'tagNum' => 2
+            'tagIds' => array(1, 2),
+            'tagNum' => 2,
         );
 
         $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
@@ -349,7 +349,7 @@ class TagServiceTest extends BaseTestCase
     public function testFindTagGroups()
     {
         $tagGroup = array(
-            'name' => '测试标签组'
+            'name' => '测试标签组',
         );
 
         $this->getTagService()->addTagGroup($tagGroup);
@@ -365,12 +365,12 @@ class TagServiceTest extends BaseTestCase
 
         $tagGroup = array(
             'name' => '测试标签组',
-            'tagIds' => array(1,2),
-            'tagNum' => 2
+            'tagIds' => array(1, 2),
+            'tagNum' => 2,
         );
 
         $tagGroup = $this->getTagService()->addTagGroup($tagGroup);
-        $this->assertEquals(2, count($this->getTagService()->findTagRelationsByTagIds(array(1,2))));
+        $this->assertEquals(2, count($this->getTagService()->findTagRelationsByTagIds(array(1, 2))));
     }
 
     public function testSearchTags()
@@ -395,7 +395,7 @@ class TagServiceTest extends BaseTestCase
     public function testIsTagGroupNameAvailable()
     {
         $tagGroup = array(
-            'name' => '测试标签组'
+            'name' => '测试标签组',
         );
 
         $this->getTagService()->addTagGroup($tagGroup);

@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Resource;
 
+use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\ServiceKernel;
@@ -10,7 +11,30 @@ abstract class BaseResource
 {
     private $logger;
 
+    /**
+     * @var Biz
+     */
+    private $biz;
+
+    public function __construct(Biz $biz)
+    {
+        $this->biz = $biz;
+    }
+
+    /**
+     * @return Biz
+     */
+    final protected function getBiz()
+    {
+        return $this->biz;
+    }
+
     abstract public function filter($res);
+
+    final protected function createService($service)
+    {
+        return $this->getBiz()->service($service);
+    }
 
     protected function callFilter($name, $res)
     {
@@ -224,12 +248,8 @@ abstract class BaseResource
 
     protected function getCurrentUser()
     {
-        return $this->getServiceKernel()->getCurrentUser();
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
+        $biz = $this->getBiz();
+        return $biz['user'];
     }
 
     protected function addError($logName, $message)
@@ -251,6 +271,11 @@ abstract class BaseResource
         $this->getLogger($logName)->debug($message);
     }
 
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
     protected function isDebug()
     {
         return 'dev' == $this->getServiceKernel()->getEnvironment();
@@ -263,7 +288,7 @@ abstract class BaseResource
         }
 
         $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/service.log', Logger::DEBUG));
+        $this->logger->pushHandler(new StreamHandler($this->biz['kernel.logs_dir'].'/service.log', Logger::DEBUG));
 
         return $this->logger;
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -22,7 +23,7 @@ class UpgradeScriptsCommand extends BaseCommand
     {
         $this->initServiceKernel();
 
-        $code     = $input->getArgument('code');
+        $code = $input->getArgument('code');
         $filePath = $input->getArgument('filePath');
 
         $file = file($filePath);
@@ -32,14 +33,14 @@ class UpgradeScriptsCommand extends BaseCommand
             $output->writeln("<info>执行脚本{$version}</info>");
 
             $this->updateApp($code, $version);
-            $output->writeln("<info>元数据更新</info>");
+            $output->writeln('<info>元数据更新</info>');
         }
 
         $this->removeCache();
-        $output->writeln("<info>删除缓存</info>");
+        $output->writeln('<info>删除缓存</info>');
 
         $this->updateApp($code, $version);
-        $output->writeln("<info>元数据更新</info>");
+        $output->writeln('<info>元数据更新</info>');
     }
 
     protected function executeScript($code, $version, $index = 0)
@@ -62,7 +63,7 @@ class UpgradeScriptsCommand extends BaseCommand
 
     protected function removeCache()
     {
-        $cachePath  = $this->getServiceKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getServiceKernel()->getEnvironment();
+        $cachePath = $this->getServiceKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getServiceKernel()->getEnvironment();
         $filesystem = new Filesystem();
         $filesystem->remove($cachePath);
 
@@ -76,13 +77,14 @@ class UpgradeScriptsCommand extends BaseCommand
         $app = $this->getAppService()->getAppByCode($code);
 
         $newApp = array(
-            'code'        => $code,
-            'version'     => $version,
+            'code' => $code,
+            'version' => $version,
             'fromVersion' => $app['version'],
-            'updatedTime' => time()
+            'updatedTime' => time(),
         );
 
         $this->getLogService()->info('system', 'update_app_version', "命令行更新应用「{$app['name']}」版本为「{$version}」");
+
         return $this->getAppDao()->updateApp($app['id'], $newApp);
     }
 

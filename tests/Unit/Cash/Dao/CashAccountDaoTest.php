@@ -14,8 +14,8 @@ class CashAccountDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array('id' => 1),
                 'expectedResults' => $expected,
-                'expectedCount' => 1
-                )
+                'expectedCount' => 1,
+                ),
             );
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
@@ -58,12 +58,12 @@ class CashAccountDaoTest extends BaseDaoTestCase
         $res = $this->getDao()->getByUserId(1);
         $this->assertEquals('63.2', $res['cash']);
     }
-    
+
     protected function getDefaultMockfields()
     {
         return array(
             'userId' => 1,
-            'cash' => 66.6
+            'cash' => 66.6,
             );
     }
 }

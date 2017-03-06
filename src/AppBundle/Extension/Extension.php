@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Extension;
 
 abstract class Extension implements ExtensionInterface
@@ -17,5 +18,4 @@ abstract class Extension implements ExtensionInterface
     {
         return array();
     }
-
 }

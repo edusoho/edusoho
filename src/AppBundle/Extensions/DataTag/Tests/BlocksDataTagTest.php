@@ -2,12 +2,11 @@
 
 namespace AppBundle\Extensions\DataTag\Test;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\BlocksDataTag;
 
 class BlocksDataTagTest extends BaseTestCase
-{   
-
+{
     public function testGetData()
     {
         $datatag = new BlocksDataTag();
@@ -15,7 +14,5 @@ class BlocksDataTagTest extends BaseTestCase
 
         $this->assertArrayHasKey('test1', $contents);
         $this->assertArrayHasKey('test2', $contents);
-
     }
-
 }

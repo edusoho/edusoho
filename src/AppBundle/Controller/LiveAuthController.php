@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Course\Service\CourseService;
@@ -38,13 +39,13 @@ class LiveAuthController extends BaseController
         }
 
         return new Response('pass');
-
     }
 
     protected function makeSign($string)
     {
         $secret = $this->container->getParameter('secret');
-        return md5($string . $secret);
+
+        return md5($string.$secret);
     }
 
     /**
@@ -55,7 +56,6 @@ class LiveAuthController extends BaseController
         return $this->getBiz()->service('Course:CourseService');
     }
 
-
     /**
      * @return MemberService
      */
@@ -63,5 +63,4 @@ class LiveAuthController extends BaseController
     {
         return $this->getBiz()->service('Course:MemberService');
     }
-
 }

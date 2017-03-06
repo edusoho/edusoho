@@ -2,19 +2,18 @@
 
 namespace Tests\Unit\Sensitive;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
+class SensitiveServiceTest extends BaseTestCase
+{
+    public function testscanText()
+    {
+        $str2 = 'ｈｔｔｐ：／／ＪＢ５１．ｎｅｔ／　－　脚本之家';
+        $msg = $this->getSensitiveService()->scanText($str2);
+    }
 
-class  SensitiveServiceTest extends BaseTestCase{
-
-
-	public function testscanText(){
-		$str2 = "ｈｔｔｐ：／／ＪＢ５１．ｎｅｔ／　－　脚本之家";
-		$msg = $this->getSensitiveService()->scanText($str2);
-	}
-
-	private function getSensitiveService()
-	{
-		return $this->createService('Sensitive:SensitiveService');
-	}
+    private function getSensitiveService()
+    {
+        return $this->createService('Sensitive:SensitiveService');
+    }
 }

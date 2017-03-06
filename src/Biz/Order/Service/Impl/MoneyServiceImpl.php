@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Order\Service\Impl;
 
 use Biz\MoneyCard\Dao\MoneyCardDao;
@@ -11,6 +12,7 @@ class MoneyServiceImpl extends BaseService implements MoneyService
     public function countMoneyRecords($conditions)
     {
         $conditions = array_filter($conditions);
+
         return $this->getMoneyRecordsDao()->count($conditions);
     }
 
@@ -18,7 +20,7 @@ class MoneyServiceImpl extends BaseService implements MoneyService
     {
         $orderBy = $this->checkOrderBy($sort);
 
-        $conditions   = array_filter($conditions);
+        $conditions = array_filter($conditions);
         $moneyRecords = $this->getMoneyRecordsDao()->search($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::index($moneyRecords, 'id');

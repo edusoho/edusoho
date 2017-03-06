@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller\My;
-
 
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseService;
@@ -28,9 +26,9 @@ class ThreadController extends BaseController
 
         if (empty($myTeachingCourseCount)) {
             return $this->render('my/teaching/threads.html.twig', array(
-                'type'       => $type,
+                'type' => $type,
                 'threadType' => 'course',
-                'threads'    => array()
+                'threads' => array(),
             ));
         }
 
@@ -38,7 +36,7 @@ class ThreadController extends BaseController
 
         $conditions = array(
             'courseIds' => ArrayToolkit::column($myTeachingCourses, 'id'),
-            'type'      => $type
+            'type' => $type,
         );
 
         $paginator = new Paginator(
@@ -54,25 +52,25 @@ class ThreadController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($threads, 'courseId'));
         $courses = ArrayToolKit::index($courses, 'id');
 
-        $setIds     = ArrayToolKit::column($courses, 'courseSetId');
+        $setIds = ArrayToolKit::column($courses, 'courseSetId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($setIds);
         $courseSets = ArrayToolKit::index($courseSets, 'id');
 
         $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($threads, 'taskId'));
 
         return $this->render('my/teaching/threads.html.twig', array(
-            'paginator'  => $paginator,
-            'threads'    => $threads,
-            'users'      => $users,
+            'paginator' => $paginator,
+            'threads' => $threads,
+            'users' => $users,
             'courseSets' => $courseSets,
-            'courses'    => $courses,
-            'tasks'      => $tasks,
-            'type'       => $type,
-            'threadType' => 'course'
+            'courses' => $courses,
+            'tasks' => $tasks,
+            'type' => $type,
+            'threadType' => 'course',
         ));
     }
 
@@ -82,7 +80,7 @@ class ThreadController extends BaseController
 
         $conditions = array(
             'userId' => $user['id'],
-            'type'   => 'discussion'
+            'type' => 'discussion',
         );
 
         $paginator = new Paginator(
@@ -102,19 +100,18 @@ class ThreadController extends BaseController
         $courses = ArrayToolkit::index($courses, 'id');
 
         $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
-        $courseSets   = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-        $courseSets   = ArrayToolkit::index($courseSets, 'id');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
-        return $this->render('my/learning/thread/discussions.html.twig',array(
-
+        return $this->render('my/learning/thread/discussions.html.twig', array(
             'threadType' => 'course',
-            'courses'    => $courses,
-            'users'      => $users,
-            'threads'    => $threads,
-            'paginator'  => $paginator,
-            'courseSets' => $courseSets
+            'courses' => $courses,
+            'users' => $users,
+            'threads' => $threads,
+            'paginator' => $paginator,
+            'courseSets' => $courseSets,
         ));
     }
 
@@ -124,7 +121,7 @@ class ThreadController extends BaseController
 
         $conditions = array(
             'userId' => $user['id'],
-            'type'   => 'question',
+            'type' => 'question',
         );
 
         $paginator = new Paginator(
@@ -144,17 +141,17 @@ class ThreadController extends BaseController
         $courses = ArrayToolkit::index($courses, 'id');
 
         $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
-        $courseSets   = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
-        $courseSets   = ArrayToolkit::index($courseSets, 'id');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'latestPostUserId'));
 
         return $this->render('my/learning/thread/questions.html.twig', array(
-            'courses'    => $courses,
-            'users'      => $users,
-            'threads'    => $threads,
-            'paginator'  => $paginator,
-            'courseSets' => $courseSets
+            'courses' => $courses,
+            'users' => $users,
+            'threads' => $threads,
+            'paginator' => $paginator,
+            'courseSets' => $courseSets,
         ));
     }
 

@@ -25,10 +25,11 @@ class CourseDraftServiceImpl extends BaseService implements CourseDraftService
 
     public function createCourseDraft($draft)
     {
-        $draft                = ArrayToolkit::parts($draft, array('userId', 'title', 'courseId', 'summary', 'content', 'lessonId', 'createdTime'));
-        $draft['userId']      = $this->getCurrentUser()->id;
+        $draft = ArrayToolkit::parts($draft, array('userId', 'title', 'courseId', 'summary', 'content', 'lessonId', 'createdTime'));
+        $draft['userId'] = $this->getCurrentUser()->id;
         $draft['createdTime'] = time();
-        $draft                = $this->getCourseDraftDao()->create($draft);
+        $draft = $this->getCourseDraftDao()->create($draft);
+
         return $draft;
     }
 
@@ -55,11 +56,12 @@ class CourseDraftServiceImpl extends BaseService implements CourseDraftService
     protected function _filterDraftFields($fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
-            'title'       => '',
-            'summary'     => '',
-            'content'     => '',
-            'createdTime' => 0
+            'title' => '',
+            'summary' => '',
+            'content' => '',
+            'createdTime' => 0,
         ));
+
         return $fields;
     }
 

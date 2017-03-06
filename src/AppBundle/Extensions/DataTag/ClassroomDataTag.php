@@ -2,22 +2,22 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Extensions\DataTag\DataTag;
-
 class ClassroomDataTag extends BaseDataTag implements DataTag
 {
     /**
-     * 获取一个班级
+     * 获取一个班级.
      *
      * 可传入的参数：
      *   classroomId 必需 班级ID
      *
-     * @param  array $arguments 参数
+     * @param array $arguments 参数
+     *
      * @return array 班级
      */
     public function getData(array $arguments)
     {
         $this->checkClassroomId($arguments);
+
         return $this->getClassroomService()->getClassroom($arguments['classroomId']);
     }
 

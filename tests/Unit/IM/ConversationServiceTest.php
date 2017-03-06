@@ -1,9 +1,10 @@
 <?php
+
 namespace Tests\Unit\IM;
 
 use Mockery;
 use AppBundle\Common\ArrayToolkit;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use Biz\CloudPlatform\CloudAPIFactory;
 
 class ConversationServiceTest extends BaseTestCase
@@ -11,8 +12,8 @@ class ConversationServiceTest extends BaseTestCase
     public function testGetConversationByMemberIds()
     {
         $data = array(
-            'no'        => 'abcdefg',
-            'memberIds' => array(1, 2)
+            'no' => 'abcdefg',
+            'memberIds' => array(1, 2),
         );
 
         $added = $this->getConversationService()->addConversation($data);
@@ -26,7 +27,7 @@ class ConversationServiceTest extends BaseTestCase
     {
         $members = array(
             array('id' => 1, 'nickname' => 'username1'),
-            array('id' => 2, 'nickname' => 'username2')
+            array('id' => 2, 'nickname' => 'username2'),
         );
 
         $this->createApiMock('3b5db36d838e8252db2ebc170693db66');
@@ -42,7 +43,7 @@ class ConversationServiceTest extends BaseTestCase
     public function testGetConversationByTarget()
     {
         $members = array(
-            array('id' => 1, 'nickname' => 'nickname1')
+            array('id' => 1, 'nickname' => 'nickname1'),
         );
 
         $this->createApiMock('3b5db36d838e8252db2ebc170693db66');
@@ -67,7 +68,7 @@ class ConversationServiceTest extends BaseTestCase
     {
         $members = array(
             array('id' => 1, 'nickname' => 'username1'),
-            array('id' => 2, 'nickname' => 'username2')
+            array('id' => 2, 'nickname' => 'username2'),
         );
 
         $this->createApiMock('3b5db36d838e8252db2ebc170693db66');
@@ -80,7 +81,7 @@ class ConversationServiceTest extends BaseTestCase
 
         $this->createApiMock('8fdb36d838e8252db2ebc170693db89');
         $conversation1 = $this->getConversationService()->createConversation('testIm', 'private', '0', $members);
-        $title         = join(ArrayToolkit::column($members, 'nickname'), '-').'的私聊';
+        $title = join(ArrayToolkit::column($members, 'nickname'), '-').'的私聊';
 
         $this->assertEquals('8fdb36d838e8252db2ebc170693db89', $conversation1['no']);
         $this->assertEquals('private', $conversation1['targetType']);
@@ -89,14 +90,14 @@ class ConversationServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\NotFoundException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testCreateCloudConversation()
     {
         $this->createApiMock('3b5db36d838e8252db2ebc170693db66');
 
         $members = array(array('id' => 1, 'nickname' => 'nickname1'));
-        $convNo  = $this->getConversationService()->createCloudConversation('conversation1', $members);
+        $convNo = $this->getConversationService()->createCloudConversation('conversation1', $members);
 
         $this->assertEquals('3b5db36d838e8252db2ebc170693db66', $convNo);
 
@@ -106,11 +107,11 @@ class ConversationServiceTest extends BaseTestCase
     public function testAddConversation()
     {
         $createConversation1 = array(
-            'no'         => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'no' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'title'      => 'conversation1',
-            'memberIds'  => array()
+            'title' => 'conversation1',
+            'memberIds' => array(),
         );
 
         $conversation1 = $this->getConversationService()->addConversation($createConversation1);
@@ -119,11 +120,11 @@ class ConversationServiceTest extends BaseTestCase
         $this->assertEquals(implode('|', $createConversation1['memberIds']), implode('|', $conversation1['memberIds']));
 
         $createConversation2 = array(
-            'no'         => '8fdb36d838e8252db2ebc170693db89',
-            'targetId'   => 1,
+            'no' => '8fdb36d838e8252db2ebc170693db89',
+            'targetId' => 1,
             'targetType' => 'private',
-            'title'      => 'conversation1',
-            'memberIds'  => array('1', '2')
+            'title' => 'conversation1',
+            'memberIds' => array('1', '2'),
         );
 
         $conversation2 = $this->getConversationService()->addConversation($createConversation2);
@@ -134,20 +135,20 @@ class ConversationServiceTest extends BaseTestCase
     public function testSearchConversations()
     {
         $createConversation1 = array(
-            'no'         => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'no' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'title'      => 'conversation1',
-            'memberIds'  => array()
+            'title' => 'conversation1',
+            'memberIds' => array(),
         );
         $this->getConversationService()->addConversation($createConversation1);
 
         $createConversation2 = array(
-            'no'         => '8fdb36d838e8252db2ebc170693db89',
-            'targetId'   => 1,
+            'no' => '8fdb36d838e8252db2ebc170693db89',
+            'targetId' => 1,
             'targetType' => 'classroom',
-            'title'      => 'conversation2',
-            'memberIds'  => array()
+            'title' => 'conversation2',
+            'memberIds' => array(),
         );
         $this->getConversationService()->addConversation($createConversation2);
 
@@ -162,20 +163,20 @@ class ConversationServiceTest extends BaseTestCase
     public function testSearchConversationCount()
     {
         $createConversation1 = array(
-            'no'         => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'no' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'title'      => 'conversation1',
-            'memberIds'  => array()
+            'title' => 'conversation1',
+            'memberIds' => array(),
         );
         $this->getConversationService()->addConversation($createConversation1);
 
         $createConversation2 = array(
-            'no'         => '8fdb36d838e8252db2ebc170693db89',
-            'targetId'   => 1,
+            'no' => '8fdb36d838e8252db2ebc170693db89',
+            'targetId' => 1,
             'targetType' => 'classroom',
-            'title'      => 'conversation2',
-            'memberIds'  => array()
+            'title' => 'conversation2',
+            'memberIds' => array(),
         );
         $this->getConversationService()->addConversation($createConversation2);
 
@@ -187,20 +188,20 @@ class ConversationServiceTest extends BaseTestCase
     public function testDeleteConversationByTargetIdAndTargetType()
     {
         $createConversation1 = array(
-            'no'         => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'no' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'title'      => 'conversation1',
-            'memberIds'  => array()
+            'title' => 'conversation1',
+            'memberIds' => array(),
         );
         $conversation1 = $this->getConversationService()->addConversation($createConversation1);
 
         $createConversation2 = array(
-            'no'         => '8fdb36d838e8252db2ebc170693db89',
-            'targetId'   => 1,
+            'no' => '8fdb36d838e8252db2ebc170693db89',
+            'targetId' => 1,
             'targetType' => 'classroom',
-            'title'      => 'conversation2',
-            'memberIds'  => array()
+            'title' => 'conversation2',
+            'memberIds' => array(),
         );
         $this->getConversationService()->addConversation($createConversation2);
 
@@ -214,10 +215,10 @@ class ConversationServiceTest extends BaseTestCase
     public function testGetMember()
     {
         $createMember = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
         $member = $this->getConversationService()->addMember($createMember);
 
@@ -230,18 +231,18 @@ class ConversationServiceTest extends BaseTestCase
     public function testGetMemberByConvNoAndUserId()
     {
         $createMember1 = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
         $member1 = $this->getConversationService()->addMember($createMember1);
 
         $createMember2 = array(
-            'convNo'     => '8fdb36d838e8252db2ebc170693db89',
-            'targetId'   => 1,
+            'convNo' => '8fdb36d838e8252db2ebc170693db89',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
         $this->getConversationService()->addMember($createMember2);
 
@@ -254,18 +255,18 @@ class ConversationServiceTest extends BaseTestCase
     public function testFindMembersByConvNo()
     {
         $createMember1 = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
         $this->getConversationService()->addMember($createMember1);
 
         $createMember2 = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 2
+            'userId' => 2,
         );
         $this->getConversationService()->addMember($createMember2);
 
@@ -277,18 +278,18 @@ class ConversationServiceTest extends BaseTestCase
     public function testFindMembersByUserIdAndTargetType()
     {
         $createMember1 = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
         $this->getConversationService()->addMember($createMember1);
 
         $createMember2 = array(
-            'convNo'     => '8fdb36d838e8252db2ebc170693db89',
-            'targetId'   => 1,
+            'convNo' => '8fdb36d838e8252db2ebc170693db89',
+            'targetId' => 1,
             'targetType' => 'classroom',
-            'userId'     => 1
+            'userId' => 1,
         );
         $this->getConversationService()->addMember($createMember2);
 
@@ -300,10 +301,10 @@ class ConversationServiceTest extends BaseTestCase
     public function testAddMember()
     {
         $createMember = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
 
         $member = $this->getConversationService()->addMember($createMember);
@@ -315,10 +316,10 @@ class ConversationServiceTest extends BaseTestCase
     public function testDeleteMember()
     {
         $createMember = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
 
         $member = $this->getConversationService()->addMember($createMember);
@@ -332,10 +333,10 @@ class ConversationServiceTest extends BaseTestCase
     public function testDeleteMemberByConvNoAndUserId()
     {
         $createMember = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
 
         $member = $this->getConversationService()->addMember($createMember);
@@ -348,18 +349,18 @@ class ConversationServiceTest extends BaseTestCase
     public function testDeleteMembersByTargetIdAndTargetType()
     {
         $createMember1 = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
         $this->getConversationService()->addMember($createMember1);
 
         $createMember2 = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 2
+            'userId' => 2,
         );
         $this->getConversationService()->addMember($createMember2);
         $this->getConversationService()->deleteMembersByTargetIdAndTargetType('1', 'course');
@@ -372,15 +373,15 @@ class ConversationServiceTest extends BaseTestCase
     public function testJoinConversation()
     {
         $createConversation1 = array(
-            'no'         => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'no' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'title'      => 'conversation1',
-            'memberIds'  => array()
+            'title' => 'conversation1',
+            'memberIds' => array(),
         );
         $conversation1 = $this->getConversationService()->addConversation($createConversation1);
 
-        $api        = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);
         $mockObject->shouldReceive('post')->times(1)->andReturn(array('success' => true));
         $this->getConversationService()->setImApi($mockObject);
@@ -395,23 +396,23 @@ class ConversationServiceTest extends BaseTestCase
     public function testQuitConversation()
     {
         $createConversation1 = array(
-            'no'         => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'no' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'title'      => 'conversation1',
-            'memberIds'  => array()
+            'title' => 'conversation1',
+            'memberIds' => array(),
         );
         $conversation1 = $this->getConversationService()->addConversation($createConversation1);
 
         $createMember1 = array(
-            'convNo'     => $conversation1['no'],
-            'targetId'   => 1,
+            'convNo' => $conversation1['no'],
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
         $member1 = $this->getConversationService()->addMember($createMember1);
 
-        $api        = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);
         $mockObject->shouldReceive('delete')->times(1)->andReturn(array('success' => true));
         $this->getConversationService()->setImApi($mockObject);
@@ -425,14 +426,14 @@ class ConversationServiceTest extends BaseTestCase
 
     public function testAddConversationMember()
     {
-        $api        = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);
         $mockObject->shouldReceive('post')->times(1)->andReturn(array('success' => true));
         $this->getConversationService()->setImApi($mockObject);
 
         $members = array(
             array('id' => 1, 'nickname' => 'nickname1'),
-            array('id' => 2, 'nickname' => 'nickname2')
+            array('id' => 2, 'nickname' => 'nickname2'),
         );
         $result = $this->getConversationService()->addConversationMember('3b5db36d838e8252db2ebc170693db66', $members);
 
@@ -441,7 +442,7 @@ class ConversationServiceTest extends BaseTestCase
 
     public function testRemoveConversationMember()
     {
-        $api        = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);
         $mockObject->shouldReceive('delete')->times(1)->andReturn(array('success' => true));
         $this->getConversationService()->setImApi($mockObject);
@@ -453,7 +454,7 @@ class ConversationServiceTest extends BaseTestCase
 
     public function testIsImMemberFull()
     {
-        $api        = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);
         $mockObject->shouldReceive('get')->times(1)->andReturn(array('offline' => array(array('id' => 1)), 'online' => array(array('id' => 2))));
         $this->getConversationService()->setImApi($mockObject);
@@ -466,19 +467,19 @@ class ConversationServiceTest extends BaseTestCase
     public function testsearchMembers()
     {
         $createMember1 = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
 
         $this->getConversationService()->addMember($createMember1);
 
         $createMember2 = array(
-            'convNo'     => '8fdb36d838e8252db2ebc170693db89',
-            'targetId'   => 1,
+            'convNo' => '8fdb36d838e8252db2ebc170693db89',
+            'targetId' => 1,
             'targetType' => 'classroom',
-            'userId'     => 1
+            'userId' => 1,
         );
 
         $this->getConversationService()->addMember($createMember2);
@@ -490,19 +491,19 @@ class ConversationServiceTest extends BaseTestCase
     public function testsearchMemberCount()
     {
         $createMember1 = array(
-            'convNo'     => '3b5db36d838e8252db2ebc170693db66',
-            'targetId'   => 1,
+            'convNo' => '3b5db36d838e8252db2ebc170693db66',
+            'targetId' => 1,
             'targetType' => 'course',
-            'userId'     => 1
+            'userId' => 1,
         );
 
         $this->getConversationService()->addMember($createMember1);
 
         $createMember2 = array(
-            'convNo'     => '8fdb36d838e8252db2ebc170693db89',
-            'targetId'   => 1,
+            'convNo' => '8fdb36d838e8252db2ebc170693db89',
+            'targetId' => 1,
             'targetType' => 'classroom',
-            'userId'     => 1
+            'userId' => 1,
         );
         $this->getConversationService()->addMember($createMember2);
 
@@ -513,7 +514,7 @@ class ConversationServiceTest extends BaseTestCase
 
     protected function createApiMock($no)
     {
-        $api        = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);
         $mockObject->shouldReceive('post')->times(1)->andReturn(array('no' => $no));
         $this->getConversationService()->setImApi($mockObject);

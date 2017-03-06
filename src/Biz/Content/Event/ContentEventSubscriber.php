@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Content\Event;
 
 use Biz\Taxonomy\TagOwnerManager;
@@ -13,7 +14,7 @@ class ContentEventSubscriber extends EventSubscriber implements EventSubscriberI
         return array(
             'content.delete' => 'onContentDelete',
             'content.create' => 'onContentCreate',
-            'content.update' => 'onContentUpdate'
+            'content.update' => 'onContentUpdate',
         );
     }
 
@@ -30,8 +31,8 @@ class ContentEventSubscriber extends EventSubscriber implements EventSubscriberI
         $fields = $event->getSubject();
 
         $contentId = $fields['contentId'];
-        $tagIds    = $fields['tagIds'];
-        $userId    = $fields['userId'];
+        $tagIds = $fields['tagIds'];
+        $userId = $fields['userId'];
 
         $tagOwnerManager = new TagOwnerManager('content', $contentId, $tagIds, $userId);
         $tagOwnerManager->create();
@@ -42,8 +43,8 @@ class ContentEventSubscriber extends EventSubscriber implements EventSubscriberI
         $fields = $event->getSubject();
 
         $contentId = $fields['contentId'];
-        $tagIds    = $fields['tagIds'];
-        $userId    = $fields['userId'];
+        $tagIds = $fields['tagIds'];
+        $userId = $fields['userId'];
 
         $tagOwnerManager = new TagOwnerManager('content', $contentId, $tagIds, $userId);
         $tagOwnerManager->update();

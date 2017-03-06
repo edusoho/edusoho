@@ -13,27 +13,29 @@ class DownloadController extends BaseController implements ActivityActionInterfa
 {
     public function showAction(Request $request, $activity)
     {
-        $download  = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
+        $download = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
         $materials = $this->getMaterialService()->findMaterialsByLessonIdAndSource($activity['id'], 'coursematerial');
+
         return $this->render('activity/download/show.html.twig', array(
             'materials' => $materials,
-            'activity'  => $activity,
-            'download'  => $download
+            'activity' => $activity,
+            'download' => $download,
         ));
     }
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $activity  = $this->getActivityService()->getActivity($id, $fetchMedia = true);
+        $activity = $this->getActivityService()->getActivity($id, $fetchMedia = true);
         $materials = $this->getMaterialService()->findMaterialsByLessonIdAndSource($activity['id'], 'coursematerial');
 
         foreach ($materials as $material) {
-            $id                                = empty($material['fileId']) ? $material['link'] : $material['fileId'];
+            $id = empty($material['fileId']) ? $material['link'] : $material['fileId'];
             $activity['ext']['materials'][$id] = array('id' => $material['fileId'], 'size' => $material['fileSize'], 'name' => $material['title'], 'link' => $material['link']);
         }
+
         return $this->render('activity/download/modal.html.twig', array(
             'activity' => $activity,
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
     }
 
@@ -41,7 +43,7 @@ class DownloadController extends BaseController implements ActivityActionInterfa
     {
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        $materialId   = $request->query->get('materialId');
+        $materialId = $request->query->get('materialId');
         $downloadFile = $this->getDownloadActivityService()->downloadActivityFile($activityId, $materialId);
 
         if (!empty($downloadFile['link'])) {
@@ -49,7 +51,7 @@ class DownloadController extends BaseController implements ActivityActionInterfa
         } else {
             return $this->forward('AppBundle:UploadFile:download', array(
                 'request' => $request,
-                'fileId'  => $downloadFile['fileId']
+                'fileId' => $downloadFile['fileId'],
             ));
         }
     }
@@ -57,7 +59,7 @@ class DownloadController extends BaseController implements ActivityActionInterfa
     public function createAction(Request $request, $courseId)
     {
         return $this->render('activity/download/modal.html.twig', array(
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
     }
 

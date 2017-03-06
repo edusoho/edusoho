@@ -2,10 +2,8 @@
 
 namespace  Biz\Activity\Dao;
 
-
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
-interface DownloadFileRecordDao extends  GeneralDaoInterface
+interface DownloadFileRecordDao extends GeneralDaoInterface
 {
-
 }

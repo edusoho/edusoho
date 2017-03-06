@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class DocActivity extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -26,12 +26,12 @@ class DocActivity extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        $db->exec("DROP TABLE IF EXISTS `doc_activity`");
+        $db->exec('DROP TABLE IF EXISTS `doc_activity`');
     }
 }

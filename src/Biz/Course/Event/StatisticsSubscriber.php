@@ -16,15 +16,15 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     public static function getSubscribedEvents()
     {
         return array(
-            'course.task.create'    => 'onTaskCreate',
-            'course.task.delete'    => 'onTaskDelete',
-            'course.task.publish'   => 'onPublishTaskNumberChange',
+            'course.task.create' => 'onTaskCreate',
+            'course.task.delete' => 'onTaskDelete',
+            'course.task.publish' => 'onPublishTaskNumberChange',
             'course.task.unpublish' => 'onPublishTaskNumberChange',
 
             'course.thread.create' => 'onCourseThreadChange',
             'course.thread.delete' => 'onCourseThreadChange',
 
-            'course.review.add'    => 'onReviewNumberChange',
+            'course.review.add' => 'onReviewNumberChange',
             'course.review.update' => 'onReviewNumberChange',
             'course.review.delete' => 'onReviewNumberChange',
 
@@ -61,7 +61,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $task = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($task['courseId'], array(
-            'publishedTaskNum'
+            'publishedTaskNum',
         ));
     }
 
@@ -69,7 +69,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $thread = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($thread['courseId'], array(
-            'threadNum'
+            'threadNum',
         ));
     }
 
@@ -78,7 +78,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $review = $event->getSubject();
 
         $this->getCourseService()->updateCourseStatistics($review['courseId'], array(
-            'ratingNum'
+            'ratingNum',
         ));
     }
 

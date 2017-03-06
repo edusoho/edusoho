@@ -29,8 +29,8 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
             if (!$exitsRecommendCourse) {
                 $fields = array(
                     'recommendCourseId' => $courseId,
-                    'openCourseId'      => $openCourseId,
-                    'type'              => $type
+                    'openCourseId' => $openCourseId,
+                    'type' => $type,
                 );
                 $recommendCourses[] = $this->getRecommendedCourseDao()->create($fields);
             }
@@ -39,6 +39,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         $recommendIds = ArrayToolkit::column($recommendCourses, 'id');
 
         $this->refreshCoursesSeq($openCourseId, $recommendIds);
+
         return $recommendCourses;
     }
 
@@ -82,7 +83,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
 
             if ($existing) {
                 $this->getRecommendedCourseDao()->update($existing['id'], array('seq' => $seq));
-                $seq++;
+                ++$seq;
             }
         }
 
@@ -112,8 +113,8 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         foreach ($recommendCourseIds as $key => $courseId) {
             $recommended = array(
                 'recommendCourseId' => $courseId,
-                'openCourseId'      => $openCourseId,
-                'type'              => $type
+                'openCourseId' => $openCourseId,
+                'type' => $type,
             );
             $this->getRecommendedCourseDao()->create($recommended);
         }

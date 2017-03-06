@@ -10,7 +10,7 @@ class LiveExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('live_can_record', array($this, 'canRecord'))
+            new \Twig_SimpleFunction('live_can_record', array($this, 'canRecord')),
         );
     }
 
@@ -18,9 +18,9 @@ class LiveExtension extends \Twig_Extension
     {
         $client = new EdusohoLiveClient();
 
-        try{
+        try {
             return (bool) $client->isAvailableRecord($liveId);
-        }catch (CloudAPIIOException $cloudAPIIOException){
+        } catch (CloudAPIIOException $cloudAPIIOException) {
             return false;
         }
     }
