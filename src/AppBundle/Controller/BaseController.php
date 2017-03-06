@@ -6,7 +6,6 @@ use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
-use Biz\CloudPlatform\Service\AppService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Codeages\Biz\Framework\Service\BaseService;
@@ -150,13 +149,7 @@ class BaseController extends Controller
      */
     protected function isPluginInstalled($pluginName)
     {
-        /**
-         * @var AppService
-         */
-        $appService = $this->getBiz()->service('CloudPlatform:AppService');
-        $app = $appService->getAppByCode($pluginName);
-
-        return !empty($app);
+        return $this->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($pluginName);
     }
 
     protected function getTargetPath(Request $request)
