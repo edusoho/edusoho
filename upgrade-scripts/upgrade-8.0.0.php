@@ -29,16 +29,16 @@ class EduSohoUpgrade extends AbstractUpdater
         $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
-        ServiceKernel::instance()->createService('System.SettingService')->set('developer', $developerSetting);
-        ServiceKernel::instance()->createService('System.SettingService')->set("crontab_next_executed_time", time());
+        ServiceKernel::instance()->createService('System:SettingService')->set('developer', $developerSetting);
+        ServiceKernel::instance()->createService('System:SettingService')->set("crontab_next_executed_time", time());
     }
 
     protected function batchUpdate($index)
     {
-        $this->c2courseSetMigrate();
-        $this->c2courseMigrate();
+        // $this->c2courseSetMigrate();
+        // $this->c2courseMigrate();
         $this->c2CourseLessonMigrate();
-        $this->c2testpaperMigrate();
+        // $this->c2testpaperMigrate();
     }
 
     protected function c2courseSetMigrate()
@@ -78,81 +78,85 @@ class EduSohoUpgrade extends AbstractUpdater
                 `locked` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '是否锁住',
                 `minCoursePrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最低价格',
                 `maxCoursePrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最高价格',
-                `oldCourseId` int(11) unsigned NOT NULL DEFAULT '0',
                 PRIMARY KEY (`id`)
               ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 
             $result = $this->getConnection()->exec($sql);
         }
 
-        $sql
-        = "INSERT INTO `c2_course_set` (
-            `oldCourseId`
-            ,`title`
-            ,`subtitle`
-            ,`status`
-            ,`type`
-            ,`serializeMode`
-            ,`rating`
-            ,`ratingNum`
-            ,`categoryId`
-            ,`goals`
-            ,`audiences`
-            ,`recommended`
-            ,`recommendedSeq`
-            ,`recommendedTime`
-            ,`studentNum`
-            ,`hitNum`
-            ,`discountId`
-            ,`discount`
-            ,`createdTime`
-            ,`updatedTime`
-            ,`parentId`
-            ,`noteNum`
-            ,`locked`
-            ,`maxRate`
-            ,`orgId`
-            ,`orgCode`
-            ,`cover`
-            ,`creator`
-            ,`summary`
-        ) SELECT
-            `id`
-            ,`title`
-            ,`subtitle`
-            ,`status`
-            ,`type`
-            ,`serializeMode`
-            ,`rating`
-            ,`ratingNum`
-            ,`categoryId`
-            ,`goals`
-            ,`audiences`
-            ,`recommended`
-            ,`recommendedSeq`
-            ,`recommendedTime`
-            ,`studentNum`
-            ,`hitNum`
-            ,`discountId`
-            ,`discount`
-            ,`createdTime`
-            ,`updatedTime`
-            ,`parentId`
-            ,`noteNum`
-            ,`locked`
-            ,`maxRate`
-            ,`orgId`
-            ,`orgCode`
-            ,concat('{\"large\":\"',largePicture,'\",\"middle\":\"',middlePicture,'\",\"small\":\"',smallPicture,'\"}') as cover
-            ,`userId`
-            ,`about`
-        FROM `course` where `id` not in (select `oldCourseId` from `c2_course_set`);";
-        $result = $this->getConnection()->exec($sql);
+        $sqls = array(
+            "alter table c2_course_set change id id int(10);"
+            ,"alter table c2_course_set drop primary key;"
+            ,"INSERT INTO `c2_course_set` (
+              `id`
+              ,`title`
+              ,`subtitle`
+              ,`status`
+              ,`type`
+              ,`serializeMode`
+              ,`rating`
+              ,`ratingNum`
+              ,`categoryId`
+              ,`goals`
+              ,`audiences`
+              ,`recommended`
+              ,`recommendedSeq`
+              ,`recommendedTime`
+              ,`studentNum`
+              ,`hitNum`
+              ,`discountId`
+              ,`discount`
+              ,`createdTime`
+              ,`updatedTime`
+              ,`parentId`
+              ,`noteNum`
+              ,`locked`
+              ,`maxRate`
+              ,`orgId`
+              ,`orgCode`
+              ,`cover`
+              ,`creator`
+              ,`summary`
+          ) SELECT
+              `id`
+              ,`title`
+              ,`subtitle`
+              ,`status`
+              ,`type`
+              ,`serializeMode`
+              ,`rating`
+              ,`ratingNum`
+              ,`categoryId`
+              ,`goals`
+              ,`audiences`
+              ,`recommended`
+              ,`recommendedSeq`
+              ,`recommendedTime`
+              ,`studentNum`
+              ,`hitNum`
+              ,`discountId`
+              ,`discount`
+              ,`createdTime`
+              ,`updatedTime`
+              ,`parentId`
+              ,`noteNum`
+              ,`locked`
+              ,`maxRate`
+              ,`orgId`
+              ,`orgCode`
+              ,concat('{\"large\":\"',largePicture,'\",\"middle\":\"',middlePicture,'\",\"small\":\"',smallPicture,'\"}') as cover
+              ,`userId`
+              ,`about`
+          FROM `course` where `id` not in (select `id` from `c2_course_set`);"
+          ,"alter table c2_course_set add primary key(id);"
+          ,"alter table c2_course_set change id id int(10) not null auto_increment;"
+        );
 
-        $sql = "UPDATE `c2_course_set` AS `c` SET `c`.`parentId` =  (select `id` from `c2_course_set` where `oldCourseId` = `c`.`oldCourseId`)";
-        $result = $this->getConnection()->exec($sql);
+        foreach ($sqls as $sql) {
+          $result = $this->getConnection()->exec($sql);
+        }
 
-        $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseSetId FROM `course_material` GROUP BY courseSetId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseSetId`;";
+        $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseId`;";
         $result = $this->getConnection()->exec($sql);
     }
 
@@ -161,7 +165,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isTableExist('c2_course')) {
             $sql = "CREATE TABLE `c2_course` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                  `courseSetId` int(11) NOT NULL,
+                  `courseSetId` int(11) NOT NULL DEFAULT 0,
                   `title` varchar(1024) DEFAULT NULL,
                   `learnMode` varchar(32) DEFAULT NULL COMMENT 'lockMode, freeMode',
                   `expiryMode` varchar(32) DEFAULT NULL COMMENT 'days, date',
@@ -218,140 +222,133 @@ class EduSohoUpgrade extends AbstractUpdater
                   `materialNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传的资料数量',
                   `maxRate` tinyint(3) DEFAULT 0 COMMENT '最大抵扣百分比',
                   `publishedTaskNum` INT(10) DEFAULT '0' COMMENT '已发布的任务数',
-                  `oldCourseId` int(11) unsigned NOT NULL DEFAULT '0',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 
             $result = $this->getConnection()->exec($sql);
         }
 
-        $sql
-        = "INSERT INTO `c2_course` (
-            `oldCourseId`
-            ,`title`
-            ,`status`
-            ,`type`
-            ,`maxStudentNum`
-            ,`price`
-            ,`originCoinPrice`
-            ,`coinPrice`
-            ,`originPrice`
-            ,`expiryMode`
-            ,`showStudentNumType`
-            ,`serializeMode`
-            ,`income`
-            ,`giveCredit`
-            ,`rating`
-            ,`ratingNum`
-            ,`about`
-            ,`teacherIds`
-            ,`goals`
-            ,`audiences`
-            ,`locationId`
-            ,`address`
-            ,`studentNum`
-            ,`deadlineNotify`
-            ,`daysOfNotifyBeforeDeadline`
-            ,`useInClassroom`
-            ,`watchLimit`
-            ,`singleBuy`
-            ,`createdTime`
-            ,`updatedTime`
-            ,`freeStartTime`
-            ,`freeEndTime`
-            ,`approval`
-            ,`parentId`
-            ,`noteNum`
-            ,`locked`
-            ,`buyable`
-            ,`buyExpiryTime`
-            ,`tryLookable`
-            ,`summary`
-            ,`cloneId`
-            ,`cover`
-            ,`creator`
-            ,`vipLevelId`
-            ,`tryLookLength`
-            ,`taskNum`
-            ,`copyCourseId`
-            ,`isDefault`
-            ,`isFree`
-            ,`threadNum`
-            ,`enableFinish`
-            ,`learnMode`
-        ) SELECT
-            `id`
-            ,`title`
-            ,`status`
-            ,`type`
-            ,`maxStudentNum`
-            ,`price`
-            ,`originCoinPrice`
-            ,`coinPrice`
-            ,`originPrice`
-            ,`expiryMode`
-            ,`showStudentNumType`
-            ,`serializeMode`
-            ,`income`
-            ,`giveCredit`
-            ,`rating`
-            ,`ratingNum`
-            ,`about`
-            ,`teacherIds`
-            ,`goals`
-            ,`audiences`
-            ,`locationId`
-            ,`address`
-            ,`studentNum`
-            ,`deadlineNotify`
-            ,`daysOfNotifyBeforeDeadline`
-            ,`useInClassroom`
-            ,`watchLimit`
-            ,`singleBuy`
-            ,`createdTime`
-            ,`updatedTime`
-            ,`freeStartTime`
-            ,`freeEndTime`
-            ,`approval`
-            ,`parentId`
-            ,`noteNum`
-            ,`locked`
-            ,`buyable`
-            ,`buyExpiryTime`
-            ,`tryLookable`
-            ,`about`
-            ,`parentId` as `cloneId`
-            ,concat('{\"large\":\"',largePicture,'\",\"middle\":\"',middlePicture,'\",\"small\":\"',smallPicture,'\"}') as cover
-            ,`userId` as `creator`
-            ,`vipLevelId`
-            ,`tryLookTime`
-            ,`lessonNum` as `taskNum`
-            ,`parentId` as `copyCourseId`
-            ,1
-            ,case when `originPrice` = 0 then 1 else 0 end
-            ,0
-            ,1
-            ,'freeMode'
-        FROM `course` where `id` not in (select `oldCourseId` from `c2_course`);";
-        $result = $this->getConnection()->exec($sql);
+        $sqls = array(
+            "alter table c2_course change id id int(10);"
+            ,"alter table c2_course drop primary key;"
+            ,"INSERT INTO `c2_course` (
+              `id`
+              ,`title`
+              ,`status`
+              ,`type`
+              ,`maxStudentNum`
+              ,`price`
+              ,`originCoinPrice`
+              ,`coinPrice`
+              ,`originPrice`
+              ,`expiryMode`
+              ,`showStudentNumType`
+              ,`serializeMode`
+              ,`income`
+              ,`giveCredit`
+              ,`rating`
+              ,`ratingNum`
+              ,`about`
+              ,`teacherIds`
+              ,`goals`
+              ,`audiences`
+              ,`locationId`
+              ,`address`
+              ,`studentNum`
+              ,`deadlineNotify`
+              ,`daysOfNotifyBeforeDeadline`
+              ,`useInClassroom`
+              ,`watchLimit`
+              ,`singleBuy`
+              ,`createdTime`
+              ,`updatedTime`
+              ,`freeStartTime`
+              ,`freeEndTime`
+              ,`approval`
+              ,`parentId`
+              ,`noteNum`
+              ,`locked`
+              ,`buyable`
+              ,`buyExpiryTime`
+              ,`tryLookable`
+              ,`summary`
+              ,`cover`
+              ,`creator`
+              ,`vipLevelId`
+              ,`tryLookLength`
+              ,`taskNum`
+              ,`isDefault`
+              ,`isFree`
+              ,`threadNum`
+              ,`enableFinish`
+              ,`learnMode`
+          ) SELECT
+              `id`
+              ,`title`
+              ,`status`
+              ,`type`
+              ,`maxStudentNum`
+              ,`price`
+              ,`originCoinPrice`
+              ,`coinPrice`
+              ,`originPrice`
+              ,`expiryMode`
+              ,`showStudentNumType`
+              ,`serializeMode`
+              ,`income`
+              ,`giveCredit`
+              ,`rating`
+              ,`ratingNum`
+              ,`about`
+              ,`teacherIds`
+              ,`goals`
+              ,`audiences`
+              ,`locationId`
+              ,`address`
+              ,`studentNum`
+              ,`deadlineNotify`
+              ,`daysOfNotifyBeforeDeadline`
+              ,`useInClassroom`
+              ,`watchLimit`
+              ,`singleBuy`
+              ,`createdTime`
+              ,`updatedTime`
+              ,`freeStartTime`
+              ,`freeEndTime`
+              ,`approval`
+              ,`parentId`
+              ,`noteNum`
+              ,`locked`
+              ,`buyable`
+              ,`buyExpiryTime`
+              ,`tryLookable`
+              ,`about`
+              ,concat('{\"large\":\"',largePicture,'\",\"middle\":\"',middlePicture,'\",\"small\":\"',smallPicture,'\"}') as cover
+              ,`userId` as `creator`
+              ,`vipLevelId`
+              ,`tryLookTime`
+              ,`lessonNum` as `taskNum`
+              ,1
+              ,case when `originPrice` = 0 then 1 else 0 end
+              ,0
+              ,1
+              ,'freeMode'
+          FROM `course` where `id` not in (select `id` from `c2_course`);"
+          ,"alter table c2_course add primary key(id);"
+          ,"alter table c2_course change id id int(10) not null auto_increment;"
+        );
+        foreach ($sqls as $sql) {
+          $result = $this->getConnection()->exec($sql);
+        }
 
-        $sql = "UPDATE `c2_course` AS `c` SET `c`.`courseSetId` =  (select `id` from `c2_course_set` where `oldCourseId` = `c`.`oldCourseId`)";
-        $result = $this->getConnection()->exec($sql);
-
-        $sql = "UPDATE `c2_course` AS `c` SET `c`.`parentId` =  (select `id` from `c2_course` where `oldCourseId` = `c`.`oldCourseId`)";
-        $result = $this->getConnection()->exec($sql);
-
-        $sql = "UPDATE `c2_course` AS `c` SET `c`.`copyCourseId` = `c`.`parentId`";
-        $result = $this->getConnection()->exec($sql);
-
-        $sql = "UPDATE `c2_course` AS `c` SET `c`.`cloneId` = `c`.`parentId`";
+        $sql = "UPDATE `c2_course` AS `c` SET `c`.`courseSetId` =  `c`.`id`";
         $result = $this->getConnection()->exec($sql);
 
         $sql = "UPDATE `c2_course` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.courseId;";
         $result = $this->getConnection()->exec($sql);
 
-        $sql = "UPDATE `c2_course_set` cs, `c2_course` c,
-        SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where c.courseSetId = cs.id";
+        $sql = "UPDATE `c2_course_set` cs, `c2_course` c
+        SET cs.minCoursePrice = c.price, cs.maxCoursePrice = c.price where cs.id = c.id";
         $result = $this->getConnection()->exec($sql);
     }
 
@@ -363,19 +360,19 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function c2CourseLessonMigrate()
     {
         $this->c2CourseTaskMigrate();
-        $this->c2Activity();
+        // $this->c2Activity();
 
-        $this->c2VideoActivity();
-        $this->c2TextActivity();
-        $this->c2AudioActivity();
-        $this->c2FlashActivity();
-        $this->c2PPtActivity();
-        $this->c2DocActivity();
-        $this->c2TestPaperActivity();
+        // $this->c2VideoActivity();
+        // $this->c2TextActivity();
+        // $this->c2AudioActivity();
+        // $this->c2FlashActivity();
+        // $this->c2PPtActivity();
+        // $this->c2DocActivity();
+        // $this->c2TestPaperActivity();
 
-        $this->c2CourseTaskView();
+        // $this->c2CourseTaskView();
 
-        $this->c2CourseTaskResult();
+        // $this->c2CourseTaskResult();
     }
 
     /**
@@ -1387,12 +1384,9 @@ class EduSohoUpgrade extends AbstractUpdater
         return empty($result) ? false : true;
     }
 
-    /**
-     * @return \Topxia\Service\System\Impl\SettingServiceImpl
-     */
     private function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }
 
