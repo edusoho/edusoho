@@ -312,6 +312,11 @@ class MobileBaseController extends BaseController
         foreach ($copyKeys as $value) {
             $course[$value] = $courseSet[$value];
         }
+        if ($course['isDefault'] == 1 && $course['title'] =='默认教学计划' ) {
+            $course['title'] = $courseSet['title'];
+        } else {
+            $course['title'] = $courseSet['title'] . '-' . $course['title'];
+        }
         return $course;
     }
 
