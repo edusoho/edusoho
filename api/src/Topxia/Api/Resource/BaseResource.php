@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Resource;
 
+use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\ServiceKernel;
@@ -10,7 +11,30 @@ abstract class BaseResource
 {
     private $logger;
 
+    /**
+     * @var Biz
+     */
+    private $biz;
+
+    public function __construct(Biz $biz)
+    {
+        $this->biz = $biz;
+    }
+
+    /**
+     * @return Biz
+     */
+    final protected function getBiz()
+    {
+        return $this->biz;
+    }
+
     abstract public function filter($res);
+
+    final protected function createService($service)
+    {
+        return $this->getBiz()->service($service);
+    }
 
     protected function callFilter($name, $res)
     {
