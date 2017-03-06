@@ -115,6 +115,10 @@ $.extend($.validator.messages, {
   min: $.validator.format("请输入不小于 {0} 的数值")
 });
 
+$.validator.addMethod("trim", function (value, element, params) {
+  return $.trim(value).length > 0;
+}, jQuery.validator.format("请输入%display%"));
+
 $.validator.addMethod("idcardNumber", function (value, element, params) {
   let _check = function (idcardNumber) {
     let reg = /^\d{17}[0-9xX]$/i;
@@ -157,13 +161,17 @@ $.validator.addMethod("idcardNumber", function (value, element, params) {
   return this.optional(element) || _check(value);
 }, "请正确输入您的身份证号码");
 
-jQuery.validator.addMethod("visible_character", function (value, element, params) {
+$.validator.addMethod("visible_character", function (value, element, params) {
   return this.optional(element) || $.trim(value).length > 0;
-}, jQuery.validator.format("{0}请输入可见性字符"));
+}, jQuery.validator.format("请输入可见性字符"));
 
 $.validator.addMethod('positive_integer', function (value, element) {
   return this.optional(element) || parseInt(value) > 0;
 }, jQuery.validator.format("请输入正整数"));
+
+$.validator.addMethod("open_live_course_title", function (value, element, params) {
+  return !params || /^[^(<|>|'|"|&|‘|’|”|“)]*$/.test(value);
+}, Translator.trans('直播公开课标题暂不支持<、>、\"、&、‘、’、”、“字符'));
 
 $.validator.addMethod("currency", function (value, element, params) {
   return this.optional(element) || /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);

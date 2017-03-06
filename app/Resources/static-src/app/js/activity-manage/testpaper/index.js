@@ -46,7 +46,9 @@ class Testpaper {
         onkeyup: false,
         rules: {
             title: {
-              required:true
+              required:true,
+              trim: true,
+              maxlength: 50,
             },
             mediaId: {
               required: true,

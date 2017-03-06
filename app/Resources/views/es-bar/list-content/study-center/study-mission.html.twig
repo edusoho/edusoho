@@ -32,9 +32,9 @@
         {% if tasks|default(null) %}
           {% for task in tasks %}
             {% if task.targetType == 'homework' %}
-              <li><span class="es-icon es-icon-undone"></span><a class="link-dark {% if task.timeStatus == 'behind' %}text-danger{% endif %}" href="{{ path('course_homework_start_do', {courseId:task.meta.courseId,homeworkId:task.targetId}) }}" title="{{ task.title}}" target="_blank">{{ task.title }}</a></li>
+              <li><span class="es-icon es-icon-undone"></span><a class="link-dark {% if task.timeStatus == 'behind' %}color-danger{% endif %}" href="{{ path('course_homework_start_do', {courseId:task.meta.courseId,homeworkId:task.targetId}) }}" title="{{ task.title}}" target="_blank">{{ task.title }}</a></li>
             {% else %}
-              <li><span class="es-icon es-icon-undone"></span><a class="link-dark {% if task.timeStatus == 'behind' %}text-danger{% endif %}" href="{{ path('course_task_show', {courseId:task.meta.courseId, id:task.targetId}) }}" title="{{ task.title}}" target="_blank">{{ task.title }}</a></li>
+              <li><span class="es-icon es-icon-undone"></span><a class="link-dark {% if task.timeStatus == 'behind' %}color-danger{% endif %}" href="{{ path('course_task_show', {courseId:task.meta.courseId, id:task.targetId}) }}" title="{{ task.title}}" target="_blank">{{ task.title }}</a></li>
             {% endif %}
           {% endfor %}
         {% elseif classroom['tasks'] %}

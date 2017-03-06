@@ -58,7 +58,7 @@
 
 {% block footer %}
   <button id = 'begin-smsSend' data-url="{{ path('publish_sms_send',{targetType:targetType,id:item.id,count:count,index:0,url:url}) }}" data-submiting-text="{{'正在提交'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#smsSend-form" style="display:none;">{{'发送'|trans}}</button>
-  <strong class="text text-danger" id="updating-hint" style="display:none;">{{'正在发送，请不要关闭当前窗口'|trans}}...</strong>
+  <strong class="text color-danger" id="updating-hint" style="display:none;">{{'正在发送，请不要关闭当前窗口'|trans}}...</strong>
   <button id = 'cancle-smsSend'type="button" class="btn btn-link pull-right" data-dismiss="modal" style="display:none;">{{'取消'|trans}}</button>
   <button id="finish-smsSend" data-loading-text="{{'正在发送, 请稍等'|trans}}..." class="btn btn-primary" style="display:none">{{'发送完成'|trans}}</button>
   <script>app.load('/../../../../topxiaweb/js/controller/sms/sms-send')</script>
