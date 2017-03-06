@@ -36,6 +36,7 @@ class Live {
       $('[name="remark"]').val(editor.getData());
     });
   }
+
   _initStep2Form() {
     var $step2_form = $("#step2-form");
     var validator = $step2_form.data('validator', validator);
@@ -65,6 +66,8 @@ class Live {
     });
     initEditor($('[name="remark"]'), validator);
   }
+
+  
 
   _dateTimePicker() {
     let $starttime = $('#startTime');
