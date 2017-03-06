@@ -58,8 +58,8 @@
       <div class="pv20 bg-color course-detail-gray">
         {% if courseSet.type != 'live' %}
           <div class="course-detail-content mb10">
-            <span class="course-detail-title inline-block">教学计划</span>
-            <ul class="nav nav-pills nav-pills-sm nav-pills-transparent inline-block ml5">
+            <span class="course-detail-title inline-block vertical-top mt10">教学计划</span>
+            <ul class="nav nav-pills nav-pills-sm nav-pills-transparent inline-block ">
               {% set current_course = course %}
               {% for course in  courses %}
                 <li class="mb10 mr10 {% if current_course.id == course.id %} active {% endif %}">
