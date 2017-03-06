@@ -79,12 +79,13 @@ class UpgradeScriptCommand extends BaseCommand
 
         $this->getLogService()->info('system', 'update_app_version', "命令行更新应用「{$app['name']}」版本为「{$version}」");
 
-        return $this->getAppDao()->updateApp($app['id'], $newApp);
+        return $this->getAppDao()->update($app['id'], $newApp);
     }
 
     protected function getAppDao()
     {
-        return $this->getServiceKernel()->createDao('CloudPlatform:CloudAppDao');
+        $biz = $this->getServiceKernel()->getBiz();
+        return $biz->dao('CloudPlatform:CloudAppDao');
     }
 
     protected function getAppService()

@@ -80,8 +80,6 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            console.log(data);
-
             for(var i=0; i<data.length; i++){
                 var file=data[i];
                 if($.inArray(file.type, ['video','ppt','document'])>-1){
