@@ -240,14 +240,19 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->get($id);
     }
 
-    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId)
+    public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId)
     {
-        return $this->getTestpaperResultDao()->getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
+        return $this->getTestpaperResultDao()->getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId);
     }
 
-    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type)
+    public function getUserFinishedResult($testId, $courseId, $activityId, $type, $userId)
     {
-        return $this->getTestpaperResultDao()->getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
+        return $this->getTestpaperResultDao()->getUserFinishedResult($testId, $courseId, $activityId, $type, $userId);
+    }
+
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type)
+    {
+        return $this->getTestpaperResultDao()->getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type);
     }
 
     public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds)
