@@ -21,7 +21,7 @@
     </a>
     
     {% if setting('developer.debug') and uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'ppt', 'document'] %}
-      <a href="javascript:;" data-url="{{ convertUrl }}" class="convert-file-btn text-danger">{{'重新转换(调试模式)'|trans}}</a>
+      <a href="javascript:;" data-url="{{ convertUrl }}" class="convert-file-btn color-danger ml5">{{'重新转换(调试模式)'|trans}}</a>
     {% endif %}
     <br>
 

@@ -47,7 +47,8 @@ export default class InputGroup extends Component {
   }
 
   handleNameChange(event) {
-    let value = trim(event.currentTarget.value);
+    // let value = trim(event.currentTarget.value);
+    let value = event.currentTarget.value;
     this.setState({
       itemName: value,
       searchResult: [],
@@ -70,7 +71,7 @@ export default class InputGroup extends Component {
   }
 
   handleAdd() {
-    if (this.state.itemName.length > 0) {
+    if (trim(this.state.itemName).length > 0) {
       this.context.addItem(this.state.itemName, this.state.itemData);
     }
     this.setState({

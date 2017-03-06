@@ -6,14 +6,13 @@ class Live {
   }
   _init() {
     this._extendValidator();
-    this._dateTimePicker();
     this._initStep2Form();
   }
 
   _extendValidator() {
     $.validator.addMethod(
       "after",
-      function(value, element, params) {
+      function (value, element, params) {
         var now = new Date();
         return value && now < new Date(value);
       },
@@ -36,6 +35,7 @@ class Live {
       $('[name="remark"]').val(editor.getData());
     });
   }
+
   _initStep2Form() {
     var $step2_form = $("#step2-form");
     var validator = $step2_form.data('validator', validator);
@@ -45,6 +45,7 @@ class Live {
         title: {
           required: true,
           maxlength: 50,
+          trim: true,
         },
         startTime: {
           required: true,
@@ -62,18 +63,22 @@ class Live {
         },
       },
     });
-    initEditor($('[name="remark"]'),validator);
+    initEditor($('[name="remark"]'), validator);
+    this._dateTimePicker(validator);
   }
 
-  _dateTimePicker() {
-    let $starttime = $('#startTime');
 
+
+  _dateTimePicker(validator) {
+    let $starttime = $('#startTime');
     $starttime.datetimepicker({
       format: 'yyyy-mm-dd hh:ii',
       language: "zh",
       autoclose: true,
-      endDate: new Date(Date.now() + 86400*365*100*1000)
-    });
+      endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
+    }).on('hide',()=>{
+      validator.form();
+    })
     $starttime.datetimepicker('setStartDate', new Date());
   }
 }

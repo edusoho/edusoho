@@ -1,7 +1,7 @@
 import AttachmentActions from '../../attachment/widget/attachment-actions';
 
 class QuestionFormBase {
-  constructor($form){
+  constructor($form) {
     this.$form = $form;
     this.titleFieldId = 'question-stem-field';
     this.analysisFieldId = 'question-analysis-field';
@@ -17,7 +17,7 @@ class QuestionFormBase {
   }
 
   _initEvent() {
-    this.$form.on('click','[data-role=submit]',event=>this.submitForm(event));
+    this.$form.on('click', '[data-role=submit]', event => this.submitForm(event));
   }
 
   submitForm(event) {
@@ -25,7 +25,7 @@ class QuestionFormBase {
     this.$form.find('[name=submission]').val(submitType);
     let self = this;
 
-    if(this.validator.form()){
+    if (this.validator.form()) {
       $(event.currentTarget).button('loading');
       self.$form.submit();
     }
@@ -46,44 +46,44 @@ class QuestionFormBase {
         },
         score: {
           required: true,
-          number:true,
-          max:999,
-          min:0
+          number: true,
+          max: 999,
+          min: 0
         }
       },
       messages: {
         '[data-role="target"]': "请选择从属",
-        difficulty : "请选择难度"
+        difficulty: "请选择难度"
       }
     });
     this.validator = validator;
   }
 
   initTitleEditor(validator) {
-    let $target = $('#'+this.titleFieldId);
+    let $target = $('#' + this.titleFieldId);
     let editor = CKEDITOR.replace(this.titleFieldId, {
       toolbar: this.titleEditorToolBarName,
       filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
       height: $target.height()
     });
 
-    editor.on( 'change', () => {    
+    editor.on('change', () => {
       $target.val(editor.getData());
     });
-    editor.on('blur', function() {
+    editor.on('blur', () => {
       validator.form();
     });
   }
 
   initAnalysisEditor() {
-    let $target = $('#'+this.analysisFieldId);
+    let $target = $('#' + this.analysisFieldId);
     let editor = CKEDITOR.replace(this.analysisFieldId, {
       toolbar: this.titleEditorToolBarName,
       filebrowserImageUploadUrl: $target.data('imageUploadUrl'),
       height: $target.height()
     });
 
-    editor.on( 'change', () => {    
+    editor.on('change', () => {
       $target.val(editor.getData());
     });
   }
@@ -91,7 +91,7 @@ class QuestionFormBase {
   set titleEditorToolBarName(toolbarName) {
     this._titleEditorToolBarName = toolbarName;
   }
- 
+
   get titleEditorToolBarName() {
     return this._titleEditorToolBarName;
   }

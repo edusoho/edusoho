@@ -50,13 +50,14 @@
             <td>
               <div class="btn-group">
                 {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
-                  <a class="btn btn-default btn-sm" href="{{ path('open_course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
+                  <a class="mr10" href="{{ path('open_course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
                 {% elseif 'ROLE_TEACHER' in app.user.roles %}
-                  <a class="btn btn-default btn-sm" href="{{ path('open_course_manage', {id:course.id}) }}">{{'查看'|trans}}</a>
+                  <a class="mr10" href="{{ path('open_course_manage', {id:course.id}) }}">{{'查看'|trans}}</a>
                 {% endif %}
 
-                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
+                <a href="#" type="button" class=" dropdown-toggle" data-toggle="dropdown">
+                  更多
+                  <i class="es-icon es-icon-arrowdropdown"></i>
                 </a>
                 <ul class="dropdown-menu pull-right">
                   {% if course.type != 'liveOpen' %}
