@@ -26,8 +26,12 @@ class Courses extends BaseResource
         $courses  = $this->getCourseService()->searchCourses($conditions, $order, $start, $limit);
         $courses  = $this->assemblyCourses($courses);
         $courses = $this->filter($courses);
-        $next = isset($conditions['cursor']) ? $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses) :
-            $this->getCourseService()->searchCourseCount($conditions);
+
+        if (isset($conditions['cursor'])) {
+            $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses);
+        } else {
+            $next = $this->getCourseService()->searchCourseCount($conditions);
+        }
         return $this->wrap($courses, $next);
     }
 
@@ -86,7 +90,7 @@ class Courses extends BaseResource
         $courseIds = ArrayToolkit::column($courses, 'id');
         $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
-        foreach($courses as $course) {
+        foreach($courses as &$course) {
             $course['courseSet'] = $courseSets[$course['courseSetId']];
         }
         return $this->multicallFilter('Course', $courses);
