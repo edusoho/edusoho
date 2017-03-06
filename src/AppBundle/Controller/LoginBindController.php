@@ -26,8 +26,8 @@ class LoginBindController extends BaseController
             }
         }
 
-        $inviteCode  = $request->query->get('inviteCode', null);
-        $client      = $this->createOAuthClient($type);
+        $inviteCode = $request->query->get('inviteCode', null);
+        $client = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
 
         if ($inviteCode) {
@@ -46,13 +46,13 @@ class LoginBindController extends BaseController
 
     public function callbackAction(Request $request, $type)
     {
-        $code        = $request->query->get('code');
-        $inviteCode  = $request->query->get('inviteCode');
+        $code = $request->query->get('code');
+        $inviteCode = $request->query->get('inviteCode');
 
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
-        $token       = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+        $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
 
-        $bind        = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
+        $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
 
         $request->getSession()->set('oauth_token', $token);
 
@@ -84,16 +84,16 @@ class LoginBindController extends BaseController
 
     public function chooseAction(Request $request, $type)
     {
-        $token      = $request->getSession()->get('oauth_token');
+        $token = $request->getSession()->get('oauth_token');
         $inviteCode = $request->query->get('inviteCode', '');
         $inviteUser = $inviteCode ? $inviteUser = $this->getUserService()->getUserByInviteCode($inviteCode) : array();
 
-        $client      = $this->createOAuthClient($type);
+        $client = $this->createOAuthClient($type);
         $clientMetas = OAuthClientFactory::clients();
-        $clientMeta  = $clientMetas[$type];
+        $clientMeta = $clientMetas[$type];
 
         try {
-            $oauthUser         = $client->getUserInfo($token);
+            $oauthUser = $client->getUserInfo($token);
             $oauthUser['name'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $oauthUser['name']);
             $oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
         } catch (\Exception $e) {
@@ -101,7 +101,7 @@ class LoginBindController extends BaseController
 
             if ($message == 'unaudited') {
                 $message = sprintf('抱歉！暂时无法通过第三方帐号登录。原因：%s登录连接的审核还未通过。', $clientMeta['name']);
-            } elseif($message == 'unAuthorize') {
+            } elseif ($message == 'unAuthorize') {
                 return $this->redirect($this->generateUrl('login'));
             } else {
                 $message = sprintf('抱歉！暂时无法通过第三方帐号登录。原因：%s', $message);
@@ -113,12 +113,13 @@ class LoginBindController extends BaseController
         }
 
         $name = $this->mateName($type);
+
         return $this->render('login/bind-choose.html.twig', array(
-            'inviteUser'     => $inviteUser,
-            'oauthUser'      => $oauthUser,
-            'type'           => $type,
-            'name'           => $name,
-            'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth()
+            'inviteUser' => $inviteUser,
+            'oauthUser' => $oauthUser,
+            'type' => $type,
+            'name' => $name,
+            'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
         ));
     }
 
@@ -136,8 +137,8 @@ class LoginBindController extends BaseController
             goto response;
         }
 
-        $client                 = $this->createOAuthClient($type);
-        $oauthUser              = $client->getUserInfo($token);
+        $client = $this->createOAuthClient($type);
+        $oauthUser = $client->getUserInfo($token);
         $oauthUser['createdIp'] = $request->getClientIp();
 
         if (empty($oauthUser['id'])) {
@@ -174,7 +175,7 @@ class LoginBindController extends BaseController
     public function weixinIndexAction(Request $request)
     {
         return $this->render('login/bind-weixin.html.twig', array(
-            'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth()
+            'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
         ));
     }
 
@@ -199,8 +200,8 @@ class LoginBindController extends BaseController
             goto response;
         }
 
-        $client                 = $this->createOAuthClient($type);
-        $oauthUser              = $client->getUserInfo($token);
+        $client = $this->createOAuthClient($type);
+        $oauthUser = $client->getUserInfo($token);
         $oauthUser['createdIp'] = $request->getClientIp();
 
         if (empty($oauthUser['id'])) {
@@ -233,7 +234,7 @@ class LoginBindController extends BaseController
         }
 
         $redirectUrl = $this->generateUrl('register_success', array(
-            'goto' => $this->getTargetPath($request)
+            'goto' => $this->getTargetPath($request),
         ));
         $response = array('success' => true, '_target_path' => $redirectUrl);
 
@@ -243,8 +244,8 @@ class LoginBindController extends BaseController
 
     protected function generateUser($type, $token, $oauthUser, $setData)
     {
-        $registration      = array();
-        $randString        = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $registration = array();
+        $randString = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $oauthUser['name'] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $oauthUser['name']);
         $oauthUser['name'] = str_replace(array('-'), array('_'), $oauthUser['name']);
 
@@ -269,11 +270,11 @@ class LoginBindController extends BaseController
         }
 
         if (!empty($setData['nickname']) && !empty($setData['email'])) {
-            $registration['nickname']      = $setData['nickname'];
-            $registration['email']         = $setData['email'];
+            $registration['nickname'] = $setData['nickname'];
+            $registration['email'] = $setData['email'];
             $registration['emailOrMobile'] = $setData['email'];
         } else {
-            $nicknames   = array();
+            $nicknames = array();
             $nicknames[] = isset($setData['nickname']) ? $setData['nickname'] : $oauthUser['name'];
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8').substr($randString, 0, 3);
             $nicknames[] = mb_substr($oauthUser['name'], 0, 8, 'utf-8').substr($randString, 3, 3);
@@ -297,12 +298,12 @@ class LoginBindController extends BaseController
             return $this->createMessageResponse('error', '用户名中含有敏感词！');
         }
 
-        $registration['password']  = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
-        $registration['token']     = $token;
+        $registration['password'] = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
+        $registration['token'] = $token;
         $registration['createdIp'] = $oauthUser['createdIp'];
 
         if (isset($setData['mobile']) && !empty($setData['mobile'])) {
-            $registration['mobile']        = $setData['mobile'];
+            $registration['mobile'] = $setData['mobile'];
             $registration['emailOrMobile'] = $setData['mobile'];
         }
 
@@ -317,18 +318,18 @@ class LoginBindController extends BaseController
 
     public function existAction(Request $request, $type)
     {
-        $token     = $request->getSession()->get('oauth_token');
-        $client    = $this->createOAuthClient($type);
+        $token = $request->getSession()->get('oauth_token');
+        $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
-        $data      = $request->request->all();
+        $data = $request->request->all();
 
         $message = 'Email地址或手机号码输入错误';
 
         if (SimpleValidator::email($data['emailOrMobile'])) {
-            $user    = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
+            $user = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
             $message = '该Email地址尚未注册';
         } elseif (SimpleValidator::mobile($data['emailOrMobile'])) {
-            $user    = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
+            $user = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
             $message = '该手机号码尚未注册';
         }
 
@@ -351,21 +352,21 @@ class LoginBindController extends BaseController
 
     public function existBindAction(Request $request)
     {
-        $token     = $request->getSession()->get('oauth_token');
-        $type      = 'weixinmob';
-        $client    = $this->createOAuthClient($type);
+        $token = $request->getSession()->get('oauth_token');
+        $type = 'weixinmob';
+        $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
-        $olduser   = $this->getCurrentUser();
+        $olduser = $this->getCurrentUser();
         $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $olduser->id);
-        $data      = $request->request->all();
+        $data = $request->request->all();
 
         $message = 'Email地址或手机号码输入错误';
 
         if (SimpleValidator::email($data['emailOrMobile'])) {
-            $user    = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
+            $user = $this->getUserService()->getUserByEmail($data['emailOrMobile']);
             $message = '该Email地址尚未注册';
         } elseif (SimpleValidator::mobile($data['emailOrMobile'])) {
-            $user    = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
+            $user = $this->getUserService()->getUserByVerifiedMobile($data['emailOrMobile']);
             $message = '该手机号码尚未注册或绑定';
         }
 
@@ -394,14 +395,15 @@ class LoginBindController extends BaseController
             return $this->createMessageResponse('error', '页面已过期，请重新登录。');
         }
 
-        $client    = $this->createOAuthClient($type);
+        $client = $this->createOAuthClient($type);
         $oauthUser = $client->getUserInfo($token);
-        $name      = $this->mateExistName($type);
+        $name = $this->mateExistName($type);
+
         return $this->render('login/bind-choose-exist.html.twig', array(
-            'oauthUser'      => $oauthUser,
-            'type'           => $type,
-            'name'           => $name,
-            'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth()
+            'oauthUser' => $oauthUser,
+            'type' => $type,
+            'name' => $name,
+            'hasPartnerAuth' => $this->getAuthService()->hasPartnerAuth(),
         ));
     }
 

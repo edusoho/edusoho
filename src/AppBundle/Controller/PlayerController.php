@@ -33,15 +33,15 @@ class PlayerController extends BaseController
             if (!$this->isHiddenVideoHeader()) {
                 // 加入片头信息
                 $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
-                if (!empty($videoHeaderFile) && $videoHeaderFile['convertStatus'] == "success") {
-                    $context["videoHeaderLength"] = $videoHeaderFile["length"];
+                if (!empty($videoHeaderFile) && $videoHeaderFile['convertStatus'] == 'success') {
+                    $context['videoHeaderLength'] = $videoHeaderFile['length'];
                 }
             }
 
             if (!empty($file['convertParams']['hasVideoWatermark'])) {
                 $file['videoWatermarkEmbedded'] = 1;
             }
-            $ssl    = $request->isSecure() ? true : false;
+            $ssl = $request->isSecure() ? true : false;
             $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
             if (isset($result['subtitles'])) {
@@ -54,18 +54,19 @@ class PlayerController extends BaseController
                 //手机浏览器不弹题
                 $context['hideQuestion'] = 1;
                 if (isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
-                    $player = "local-video-player";
+                    $player = 'local-video-player';
                     $mp4Url = isset($result['mp4url']) ? $result['mp4url'] : '';
                 }
             }
         }
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context);
+
         return $this->render('player/show.html.twig', array(
-            'file'             => $file,
-            'url'              => isset($url) ? $url : null,
-            'context'          => $context,
-            'player'           => $player,
-            'agentInWhiteList' => $agentInWhiteList
+            'file' => $file,
+            'url' => isset($url) ? $url : null,
+            'context' => $context,
+            'player' => $player,
+            'agentInWhiteList' => $agentInWhiteList,
         ));
     }
 
@@ -77,7 +78,7 @@ class PlayerController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if (!in_array($file["type"], array("audio", "video"))) {
+        if (!in_array($file['type'], array('audio', 'video'))) {
             throw $this->createAccessDeniedException();
         }
 
@@ -94,6 +95,7 @@ class PlayerController extends BaseController
         if ($mimeType) {
             $response->headers->set('Content-Type', $mimeType);
         }
+
         return $response;
     }
 
@@ -122,13 +124,13 @@ class PlayerController extends BaseController
         }
 
         $tokenFields = array(
-            'data'     => array(
-                'globalId'      => $file['no'],
-                'level'         => $level,
-                'keyencryption' => 0
+            'data' => array(
+                'globalId' => $file['no'],
+                'level' => $level,
+                'keyencryption' => 0,
             ),
-            'times'    => 1,
-            'duration' => 3600
+            'times' => 1,
+            'duration' => 3600,
         );
 
         if (!empty($token['userId'])) {
@@ -137,12 +139,12 @@ class PlayerController extends BaseController
 
         $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
 
-        $params           = array();
+        $params = array();
         $params['keyUrl'] = $this->generateUrl('global_file_hls_clef', array(
             'globalId' => $file['no'],
-            'token'    => $token['token']
+            'token' => $token['token'],
         ), true);
-        $params['key']    = $file['metas']['levels'][$level]['key'];
+        $params['key'] = $file['metas']['levels'][$level]['key'];
         $params['fileId'] = $file['id'];
 
         $api = CloudAPIFactory::create('leaf');
@@ -154,8 +156,8 @@ class PlayerController extends BaseController
         }
 
         return new Response($stream['stream'], 200, array(
-            'Content-Type'        => 'application/vnd.apple.mpegurl',
-            'Content-Disposition' => 'inline; filename="stream.m3u8"'
+            'Content-Type' => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="stream.m3u8"',
         ));
     }
 
@@ -187,11 +189,11 @@ class PlayerController extends BaseController
             }
 
             $tokenFields = array(
-                'data'     => array(
-                    'globalId' => $file['no'].$level
+                'data' => array(
+                    'globalId' => $file['no'].$level,
                 ),
-                'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
-                'duration' => 3600
+                'times' => $this->agentInWhiteList($request->headers->get('user-agent')) ? 0 : 1,
+                'duration' => 3600,
             );
 
             if (!empty($token['userId'])) {
@@ -202,8 +204,8 @@ class PlayerController extends BaseController
 
             $params = array(
                 'globalId' => $file['no'],
-                'level'    => $level,
-                'token'    => $token['token']
+                'level' => $level,
+                'token' => $token['token'],
             );
 
             $streams[$level] = $this->generateUrl('global_file_hls_stream', $params, true);
@@ -213,10 +215,11 @@ class PlayerController extends BaseController
 
         $qualities = array(
             'video' => $file['directives']['videoQuality'],
-            'audio' => $file['directives']['audioQuality']
+            'audio' => $file['directives']['audioQuality'],
         );
 
         $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+
         return $this->createJsonResponse($playlist);
     }
 
@@ -225,18 +228,19 @@ class PlayerController extends BaseController
         if ($file['storage'] == 'cloud') {
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $hideBeginning            = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
+                    $hideBeginning = isset($context['hideBeginning']) ? $context['hideBeginning'] : false;
                     $context['hideBeginning'] = $this->isHiddenVideoHeader($hideBeginning);
-                    $token                    = $this->makeToken('hls.playlist', $file['id'], $context);
-                    $params                   = array(
-                        'id'    => $file['id'],
-                        'token' => $token['token']
+                    $token = $this->makeToken('hls.playlist', $file['id'], $context);
+                    $params = array(
+                        'id' => $file['id'],
+                        'token' => $token['token'],
                     );
+
                     return $this->generateUrl('hls_playlist', $params, true);
                 } else {
                     $factory = new CloudClientFactory();
-                    $client  = $factory->createClient();
-                    $result  = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                    $client = $factory->createClient();
+                    $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
             } else {
                 if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
@@ -249,12 +253,14 @@ class PlayerController extends BaseController
                     $result = $this->getMaterialLibService()->player($file['globalId']);
                 }
             }
+
             return isset($result['url']) ? $result['url'] : '';
         } else {
             $token = $this->makeToken('local.media', $file['id']);
+
             return $this->generateUrl('player_local_media', array(
-                'id'    => $file['id'],
-                'token' => $token['token']
+                'id' => $file['id'],
+                'token' => $token['token'],
             ));
         }
     }
@@ -262,13 +268,12 @@ class PlayerController extends BaseController
     protected function makeToken($type, $fileId, $context = array())
     {
         $fields = array(
-
-            'data'     => array(
-                'id' => $fileId
+            'data' => array(
+                'id' => $fileId,
             ),
-            'times'    => 3,
+            'times' => 3,
             'duration' => 3600,
-            'userId'   => $this->getUser()->getId()
+            'userId' => $this->getUser()->getId(),
         );
 
         if (isset($context['watchTimeLimit'])) {
@@ -286,7 +291,7 @@ class PlayerController extends BaseController
 
     protected function getPlayer($file)
     {
-        switch ($file["type"]) {
+        switch ($file['type']) {
             case 'audio':
                 return 'audio-player';
             case 'video':
@@ -298,8 +303,8 @@ class PlayerController extends BaseController
 
     protected function isHiddenVideoHeader($isHidden = false)
     {
-        $storage = $this->setting("storage");
-        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"] && !$isHidden) {
+        $storage = $this->setting('storage');
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
             return false;
         } else {
             return true;
@@ -308,7 +313,7 @@ class PlayerController extends BaseController
 
     protected function agentInWhiteList($userAgent)
     {
-        $whiteList = array("iPhone", "iPad", "Android", "HTC");
+        $whiteList = array('iPhone', 'iPad', 'Android', 'HTC');
 
         return ArrayToolkit::some($whiteList, function ($agent) use ($userAgent) {
             return strpos($userAgent, $agent) > -1;

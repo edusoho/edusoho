@@ -7,14 +7,15 @@ use Topxia\Service\Common\ServiceKernel;
 class OpenCourseDataTag extends BaseDataTag implements DataTag
 {
     /**
-     * 获取单个公开课
+     * 获取单个公开课.
      *
      * 可传入的参数：
      *   courseId 必需 课程ID
      *
      * 该DataTag返回了单个公开课对象
      *
-     * @param  array $arguments 参数
+     * @param array $arguments 参数
+     *
      * @return array 栏目
      */
     public function getData(array $arguments)

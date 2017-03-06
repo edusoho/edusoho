@@ -25,7 +25,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
             $title = '';
         }
         $title = '%'.$title.'%';
-        $sql   = "SELECT * FROM {$this->table} WHERE title LIKE ?";
+        $sql = "SELECT * FROM {$this->table} WHERE title LIKE ?";
 
         return $this->db()->fetchAll($sql, array($title));
     }
@@ -36,6 +36,13 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
             group by from_unixtime(createdTime,'%Y-%m-%d') order by date ASC";
 
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
+    }
+
+    public function clearSubtitle($id)
+    {
+        $sql = "UPDATE {$this->table} SET subtitle = '' WHERE id = ?";
+
+        return $this->db()->executeUpdate($sql, array($id));
     }
 
     protected function _createQueryBuilder($conditions)
@@ -71,26 +78,27 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'parentId > :parentId_GT',
                 'createdTime >= :startTime',
                 'createdTime <= :endTime',
-                'minCoursePrice = :minCoursePrice'
+                'minCoursePrice = :minCoursePrice',
+                'maxCoursePrice > :maxCoursePrice_GT',
             ),
             'serializes' => array(
-                'tags'      => 'delimiter',
-                'goals'     => 'delimiter',
+                'tags' => 'delimiter',
+                'goals' => 'delimiter',
                 'audiences' => 'delimiter',
-                'cover'     => 'json'
+                'cover' => 'json',
             ),
-            'orderbys'   => array(
+            'orderbys' => array(
                 'createdTime',
                 'updatedTime',
                 'recommendedSeq',
                 'hitNum',
                 'recommendedTime',
                 'rating',
-                'studentNum'
+                'studentNum',
             ),
             'timestamps' => array(
-                'createdTime', 'updatedTime'
-            )
+                'createdTime', 'updatedTime',
+            ),
         );
     }
 }

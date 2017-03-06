@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class LiveActivityAddReplayStatus extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -14,11 +14,11 @@ class LiveActivityAddReplayStatus extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-        $sql = "ALTER TABLE `live_activity` DROP COLUMN  `replayStatus`;";
+        $sql = 'ALTER TABLE `live_activity` DROP COLUMN  `replayStatus`;';
         $this->getContainer()->offsetGet('db')->exec($sql);
     }
 }

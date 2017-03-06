@@ -21,13 +21,12 @@ class Live extends Activity
 
     public function copy($activity, $config = array())
     {
-        $biz         = $this->getBiz();
-        $live        = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
-        $refLiveroom = $config['refLiveroom'];
-        if (!$refLiveroom) {
+        $biz = $this->getBiz();
+        $live = $this->getLiveActivityService()->getLiveActivity($activity['mediaId']);
+        if (empty($config['refLiveroom'])) {
             $activity['fromUserId'] = $biz['user']['id'];
-            $activity['_base_url']  = ''; //todo 临时赋值
             unset($activity['id']);
+
             return $this->getLiveActivityService()->createLiveActivity($activity, true);
         }
 
@@ -38,6 +37,11 @@ class Live extends Activity
     {
         //引用的是同一个直播教室，无需同步
         return null;
+    }
+
+    public function allowTaskAutoStart($activity)
+    {
+        return $activity['startTime'] <= time() && $activity['endTime'] >= time();
     }
 
     public function update($id, &$fields, $activity)
@@ -58,6 +62,7 @@ class Live extends Activity
     public function isFinished($activityId)
     {
         $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'live.finish');
+
         return !empty($result);
     }
 
@@ -74,6 +79,6 @@ class Live extends Activity
      */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 }

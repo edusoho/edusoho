@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Job;
 
 use Biz\Crontab\Service\Job;
@@ -9,7 +10,7 @@ class DeleteSessionJob implements Job
     public function execute($params)
     {
         $retentionTime = time() - 7200;
-        $limit         = 500;
+        $limit = 500;
         //$number = $this->getSessionService()->deleteInvalidSession($retentionTime, $limit);
     }
 

@@ -6,26 +6,27 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 /**
  * Interface CourseMemberDao
- * TODO course2.0 所有的api 需要重构，很多的api可以合并，还有名字不规范
- * @package Biz\Course\Dao
+ * TODO course2.0 所有的api 需要重构，很多的api可以合并，还有名字不规范.
  */
 interface CourseMemberDao extends GeneralDaoInterface
 {
     /**
      * @before getMemberByCourseIdAndUserId
+     *
      * @param  $courseId
      * @param  $userId
+     *
      * @return mixed
      */
     public function getByCourseIdAndUserId($courseId, $userId);
 
-    public function countLearningMembersByUserId($userId);
+    public function countLearningMembers($conditions);
 
-    public function findLearningMembers($userId, $start, $limit);
+    public function findLearningMembers($conditions, $start, $limit);
 
-    public function countLearnedMembersByUserId($userId);
+    public function countLearnedMembers($conditions);
 
-    public function findLearnedMembers($userId, $start, $limit);
+    public function findLearnedMembers($conditions, $start, $limit);
 
     public function findLearnedByCourseIdAndUserId($courseId, $userId);
 
@@ -34,15 +35,19 @@ interface CourseMemberDao extends GeneralDaoInterface
     /**
      * @before getMembersByCourseIds
      * @before findMembersByCourseIds
+     *
      * @param  $courseIds
+     *
      * @return mixed
      */
     public function findByCourseIds($courseIds);
 
     /**
      * @before findMembersByUserIdAndRole
+     *
      * @param  $userId
      * @param  $role
+     *
      * @return mixed
      */
     public function findByUserIdAndRole($userId, $role);
@@ -58,14 +63,16 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     /**
      * @before findMembersByUserIdAndRole
+     *
      * @param  $userId
      * @param  $role
      * @param  $start
      * @param  $limit
-     * @param  bool $onlyPublished
+     * @param bool $onlyPublished
+     *
      * @return mixed
      */
-    public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true); //
+    public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true);
 
     public function findByCourseIdAndRole($courseId, $role);
 

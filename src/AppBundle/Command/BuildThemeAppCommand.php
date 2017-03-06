@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,7 +23,7 @@ class BuildThemeAppCommand extends BaseCommand
 
     protected function configure()
     {
-        $this->setName ( 'build:theme-app' )
+        $this->setName('build:theme-app')
             ->addArgument('name', InputArgument::REQUIRED, 'theme name');
     }
 
@@ -46,19 +47,19 @@ class BuildThemeAppCommand extends BaseCommand
             $this->filesystem->mirror($scriptDir, $distScriptDir);
             $this->output->writeln("<info>    * 拷贝脚本：{$scriptDir} -> {$distScriptDir}</info>");
         } else {
-            $this->output->writeln("<comment>    * 拷贝脚本：无</comment>");
+            $this->output->writeln('<comment>    * 拷贝脚本：无</comment>');
         }
 
-        $this->output->writeln("<info>    * 生成安装引导脚本：Upgrade.php</info>");
+        $this->output->writeln('<info>    * 生成安装引导脚本：Upgrade.php</info>');
 
-        $this->filesystem->copy(__DIR__ . '/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
+        $this->filesystem->copy(__DIR__.'/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
     }
 
     private function _generateBlocks($themeDir, $distDir, $container)
     {
-        if (file_exists($themeDir . '/block.json')) {
-            $this->filesystem->copy($themeDir . '/block.json', $distDir . '/block.json');
-            BlockToolkit::generateBlcokContent($themeDir . '/block.json', $distDir . '/blocks', $container);
+        if (file_exists($themeDir.'/block.json')) {
+            $this->filesystem->copy($themeDir.'/block.json', $distDir.'/block.json');
+            BlockToolkit::generateBlcokContent($themeDir.'/block.json', $distDir.'/blocks', $container);
         }
     }
 
@@ -71,18 +72,18 @@ class BuildThemeAppCommand extends BaseCommand
         $this->_copyScript($themeDir, $distDir);
         $this->_generateBlocks($themeDir, $distDir, $this->getContainer());
         $this->_copyMeta($themeDir, $distDir);
-        file_put_contents($distDir . '/ThemeApp', '');
+        file_put_contents($distDir.'/ThemeApp', '');
         $this->_cleanGit($sourceDistDir);
         $this->_zip($distDir);
     }
 
     private function _copySource($name, $themeDir, $distDir)
     {
-        $sourceTargetDir = $distDir . '/source/' . $name;
+        $sourceTargetDir = $distDir.'/source/'.$name;
         $this->output->writeln("<info>    * 拷贝代码：{$themeDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($themeDir, $sourceTargetDir);
 
-        $this->filesystem->remove($sourceTargetDir . '/dev' );
+        $this->filesystem->remove($sourceTargetDir.'/dev');
 
         return $sourceTargetDir;
     }
@@ -91,7 +92,7 @@ class BuildThemeAppCommand extends BaseCommand
     {
         if (is_dir("{$sourceDistDir}/.git/")) {
             $this->output->writeln("<info>    * 移除'.git'目录：{$sourceDistDir}/.git/</info>");
-            $this->filesystem->remove("{$sourceDistDir}/.git/"); 
+            $this->filesystem->remove("{$sourceDistDir}/.git/");
         } else {
             $this->output->writeln("<comment>    * 移除'.git'目录： 无");
         }
@@ -105,7 +106,7 @@ class BuildThemeAppCommand extends BaseCommand
     }
 
     private function _zip($distDir)
-    {   
+    {
         $buildDir = dirname($distDir);
         $filename = basename($distDir);
 
@@ -115,38 +116,37 @@ class BuildThemeAppCommand extends BaseCommand
 
         $this->output->writeln("<info>    * 制作ZIP包：{$buildDir}/{$filename}.zip</info>");
 
-        $z = new ZipArchive(); 
-        $z->open("{$buildDir}/{$filename}.zip", ZIPARCHIVE::CREATE); 
-        $z->addEmptyDir($filename); 
-        self::folderToZip($distDir, $z, strlen("$buildDir/")); 
-        $z->close(); 
+        $z = new ZipArchive();
+        $z->open("{$buildDir}/{$filename}.zip", ZIPARCHIVE::CREATE);
+        $z->addEmptyDir($filename);
+        self::folderToZip($distDir, $z, strlen("$buildDir/"));
+        $z->close();
     }
 
-    private static function folderToZip($folder, ZipArchive &$zipFile, $exclusiveLength) {
+    private static function folderToZip($folder, ZipArchive &$zipFile, $exclusiveLength)
+    {
+        $handle = opendir($folder);
+        while (false !== $f = readdir($handle)) {
+            if ($f != '.' && $f != '..') {
+                $filePath = "$folder/$f";
 
-        $handle = opendir($folder); 
-        while (false !== $f = readdir($handle)) { 
-          if ($f != '.' && $f != '..') { 
-            $filePath = "$folder/$f"; 
-           
-            $localPath = substr($filePath, $exclusiveLength); 
-            if (is_file($filePath)) { 
-              $zipFile->addFile($filePath, $localPath); 
-            } elseif (is_dir($filePath)) { 
- 
-              $zipFile->addEmptyDir($localPath); 
-              self::folderToZip($filePath, $zipFile, $exclusiveLength); 
-            } 
-          } 
-        } 
-        closedir($handle); 
-    } 
+                $localPath = substr($filePath, $exclusiveLength);
+                if (is_file($filePath)) {
+                    $zipFile->addFile($filePath, $localPath);
+                } elseif (is_dir($filePath)) {
+                    $zipFile->addEmptyDir($localPath);
+                    self::folderToZip($filePath, $zipFile, $exclusiveLength);
+                }
+            }
+        }
+        closedir($handle);
+    }
 
     private function _makeDistDirectory($name)
     {
         $version = $this->getThemeVersion($name);
 
-        $distDir = dirname("{$this->getContainer()->getParameter('kernel.root_dir')}") . "/build/{$name}-{$version}";
+        $distDir = dirname("{$this->getContainer()->getParameter('kernel.root_dir')}")."/build/{$name}-{$version}";
 
         if ($this->filesystem->exists($distDir)) {
             $this->output->writeln("<info>    清理目录：{$distDir}</info>");
@@ -173,7 +173,7 @@ class BuildThemeAppCommand extends BaseCommand
         }
 
         if (empty($themeJson['version'])) {
-            throw new \RuntimeException("主题元信息版本号不存在");
+            throw new \RuntimeException('主题元信息版本号不存在');
         }
 
         return $themeJson['version'];
@@ -181,7 +181,7 @@ class BuildThemeAppCommand extends BaseCommand
 
     private function getThemeDirectory($name)
     {
-        $themeDir = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../web/themes/' . $name);
+        $themeDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../web/themes/'.$name);
 
         if (empty($themeDir)) {
             throw new \RuntimeException("${themeDir}目录不存在");

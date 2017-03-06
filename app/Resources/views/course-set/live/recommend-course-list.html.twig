@@ -9,11 +9,12 @@
   
   <div class="panel-body">
   	{% for courseSet in recommendCourseSets if courseSet %}
-      {% set course = data('CourseByCourseSet', {courseSetId: courseSet.id}) %}
+      {% set course = data('PublishedCourseByCourseSet', {courseSetId: courseSet.id}) %}
+        {% set courseSet = courseSet|merge({'course' : course}) %}
 	    <div class="media">
 	      <div class="media-left">
 	      	<a href="{{ path('course_set_show',{id: courseSet.id}) }}" title="{{ courseSet.title }}" target="_blank">
-            <img src="{{ filepath(courseSet.cover.smallPicture|default(null), 'course.png') }}" class="img-responsive">
+            <img src="{{ filepath(courseSet.cover.small|default(null), 'courseSet.png') }}" class="img-responsive">
           </a>
 	        
 	      </div>

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
@@ -32,7 +33,7 @@ class WebExtension extends \Twig_Extension
     public function __construct($container, Biz $biz)
     {
         $this->container = $container;
-        $this->biz       = $biz;
+        $this->biz = $biz;
     }
 
     public function getFilters()
@@ -69,7 +70,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('number_to_human', array($this, 'numberFilter')),
             new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn')),
             new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale')),
-            new \Twig_SimpleFilter('cdn', array($this, 'cdn'))
+            new \Twig_SimpleFilter('cdn', array($this, 'cdn')),
         );
     }
 
@@ -132,7 +133,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
             new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
             new \Twig_SimpleFunction('array_index', array($this, 'arrayIndex')),
-            new \Twig_SimpleFunction('cdn', array($this, 'getCdn'))
+            new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
         );
     }
 
@@ -155,7 +156,7 @@ class WebExtension extends \Twig_Extension
     public function pluginUpdateNotify()
     {
         $count = $this->getAppService()->findAppCount();
-        $apps  = $this->getAppService()->findApps(0, $count);
+        $apps = $this->getAppService()->findApps(0, $count);
 
         $notifies = array_reduce($apps, function ($notifies, $app) {
             if ($app['type'] === 'plugin' && !PluginVersionToolkit::dependencyVersion($app['code'], $app['version'])) {
@@ -175,14 +176,15 @@ class WebExtension extends \Twig_Extension
 
     public function getCdn($type = 'default')
     {
-        $cdn    = new CdnUrl();
+        $cdn = new CdnUrl();
         $cdnUrl = $cdn->get($type);
+
         return $cdnUrl;
     }
 
     public function cdn($content)
     {
-        $cdn    = new CdnUrl();
+        $cdn = new CdnUrl();
         $cdnUrl = $cdn->get('content');
 
         if ($cdnUrl) {
@@ -203,17 +205,17 @@ class WebExtension extends \Twig_Extension
     public function weixinConfig()
     {
         $weixinmob_enabled = $this->getSetting('login_bind.weixinmob_enabled');
-        if (!(bool)$weixinmob_enabled) {
+        if (!(bool) $weixinmob_enabled) {
             return null;
         }
         $jsApiTicket = $this->createService('User:TokenService')->getTokenByType('jsapi.ticket');
 
-        $key    = $this->getSetting('login_bind.weixinmob_key');
+        $key = $this->getSetting('login_bind.weixinmob_key');
         $secret = $this->getSetting('login_bind.weixinmob_secret');
         if (empty($jsApiTicket)) {
-            $config      = array('key' => $key, 'secret' => $secret);
+            $config = array('key' => $key, 'secret' => $secret);
             $weixinshare = new WeixinShare($config);
-            $token       = $weixinshare->getJsApiTicket();
+            $token = $weixinshare->getJsApiTicket();
 
             $jsApiTicket = $this->createService('User:TokenService')->makeToken(
                 'jsapi.ticket',
@@ -222,24 +224,25 @@ class WebExtension extends \Twig_Extension
         }
 
         $config = array(
-            'appId'     => $key,
+            'appId' => $key,
             'timestamp' => time(),
-            'nonceStr'  => uniqid($prefix = "edusoho"),
-            'jsApiList' => array('onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ')
+            'nonceStr' => uniqid($prefix = 'edusoho'),
+            'jsApiList' => array('onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ'),
         );
 
-        $jsapi_ticket        = $jsApiTicket['data']['ticket'];
-        $url                 = $this->container->get('request')->getUri();
-        $string              = "jsapi_ticket=".$jsapi_ticket."&noncestr=".$config['nonceStr']."&timestamp=".$config['timestamp']."&url=".$url;
-        $config['string']    = $string;
+        $jsapi_ticket = $jsApiTicket['data']['ticket'];
+        $url = $this->container->get('request')->getUri();
+        $string = 'jsapi_ticket='.$jsapi_ticket.'&noncestr='.$config['nonceStr'].'&timestamp='.$config['timestamp'].'&url='.$url;
+        $config['string'] = $string;
         $config['signature'] = sha1($string);
+
         return json_encode($config);
     }
 
     public function renderNotification($notification)
     {
         if ($notification) {
-            $manager                 = ExtensionManager::instance();
+            $manager = ExtensionManager::instance();
             $notification['message'] = $manager->renderNotification($notification);
         }
 
@@ -249,13 +252,15 @@ class WebExtension extends \Twig_Extension
     public function routeExists($name)
     {
         $router = $this->container->get('router');
+
         return (null === $router->getRouteCollection()->get($name)) ? false : true;
     }
 
     public function isWithoutNetwork()
     {
         $network = $this->getSetting('developer.without_network', $default = false);
-        return (bool)$network;
+
+        return (bool) $network;
     }
 
     public function getUserVipLevel($userId)
@@ -269,15 +274,15 @@ class WebExtension extends \Twig_Extension
 
         if (isset($BaseUrl['query'])) {
             if (strstr($BaseUrl['query'], '&')) {
-                $parameter  = explode('&', $BaseUrl['query']);
+                $parameter = explode('&', $BaseUrl['query']);
                 $parameters = array();
 
                 foreach ($parameter as $key => $value) {
                     $parameters[$key] = explode('=', $value);
                 }
             } else {
-                $parameter     = explode('=', $BaseUrl['query']);
-                $parameters    = array();
+                $parameter = explode('=', $BaseUrl['query']);
+                $parameters = array();
                 $parameters[0] = $parameter;
             }
         } else {
@@ -289,7 +294,8 @@ class WebExtension extends \Twig_Extension
 
     public function spaceToNbsp($content)
     {
-        $content = str_replace(" ", "&nbsp;", $content);
+        $content = str_replace(' ', '&nbsp;', $content);
+
         return $content;
     }
 
@@ -314,7 +320,7 @@ class WebExtension extends \Twig_Extension
             return '';
         }
 
-        $user = $this->getUserService()->getUser($user["id"]);
+        $user = $this->getUserService()->getUser($user['id']);
 
         // @todo 如果配置用户的关键信息，这个方法存在信息泄漏风险，更换新播放器后解决这个问题。
         $pattern = $this->getSetting('magic.video_fingerprint');
@@ -322,8 +328,8 @@ class WebExtension extends \Twig_Extension
         if ($pattern) {
             $fingerprint = $this->parsePattern($pattern, $user);
         } else {
-            $request     = $this->container->get('request');
-            $host        = $request->getHttpHost();
+            $request = $this->container->get('request');
+            $host = $request->getHttpHost();
             $fingerprint = "{$host} {$user['nickname']}";
         }
 
@@ -338,8 +344,8 @@ class WebExtension extends \Twig_Extension
         $values = array_filter($values, function ($value) {
             return !is_array($value);
         }
-
         );
+
         return $this->simpleTemplateFilter($pattern, $values);
     }
 
@@ -347,7 +353,7 @@ class WebExtension extends \Twig_Extension
     {
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, $start, $length, 'UTF-8');
@@ -356,28 +362,29 @@ class WebExtension extends \Twig_Extension
         return $text;
     }
 
-    public function getOutCash($userId, $timeType = "oneWeek")
+    public function getOutCash($userId, $timeType = 'oneWeek')
     {
-        $time      = $this->filterTime($timeType);
+        $time = $this->filterTime($timeType);
         $condition = array(
-            'userId'    => $userId,
-            'type'      => "outflow",
-            'cashType'  => 'Coin',
-            'startTime' => $time
+            'userId' => $userId,
+            'type' => 'outflow',
+            'cashType' => 'Coin',
+            'startTime' => $time,
         );
 
         return $this->createService('Cash:CashService')->analysisAmount($condition);
     }
 
-    public function getInCash($userId, $timeType = "oneWeek")
+    public function getInCash($userId, $timeType = 'oneWeek')
     {
-        $time      = $this->filterTime($timeType);
+        $time = $this->filterTime($timeType);
         $condition = array(
-            'userId'    => $userId,
-            'type'      => "inflow",
-            'cashType'  => 'Coin',
-            'startTime' => $time
+            'userId' => $userId,
+            'type' => 'inflow',
+            'cashType' => 'Coin',
+            'startTime' => $time,
         );
+
         return $this->createService('Cash:CashService')->analysisAmount($condition);
     }
 
@@ -425,7 +432,7 @@ class WebExtension extends \Twig_Extension
 
     public function getThemeGlobalScript()
     {
-        $theme    = $this->getSetting('theme.uri', 'default');
+        $theme = $this->getSetting('theme.uri', 'default');
         $filePath = realpath($this->container->getParameter('kernel.root_dir')."/../web/themes/{$theme}/js/global-script.js");
 
         if ($filePath) {
@@ -460,8 +467,7 @@ class WebExtension extends \Twig_Extension
 
     public function getJsPaths()
     {
-
-        $cdnUrl   = new CdnUrl();
+        $cdnUrl = new CdnUrl();
         $basePath = $cdnUrl->get();
 
         if (empty($basePath)) {
@@ -471,7 +477,7 @@ class WebExtension extends \Twig_Extension
         $theme = $this->getSetting('theme.uri', 'default');
 
         $plugins = $this->container->get('kernel')->getPlugins();
-        $names   = array();
+        $names = array();
 
         foreach ($plugins as $plugin) {
             if (is_array($plugin)) {
@@ -485,8 +491,8 @@ class WebExtension extends \Twig_Extension
             }
         }
 
-        $names[] = "customweb";
-        $names[] = "customadmin";
+        $names[] = 'customweb';
+        $names[] = 'customadmin';
         $names[] = 'topxiaweb';
         $names[] = 'topxiaadmin';
         $names[] = 'classroom';
@@ -497,11 +503,11 @@ class WebExtension extends \Twig_Extension
 
         $paths = array(
             'common' => 'common',
-            'theme'  => "{$basePath}/themes/{$theme}/js"
+            'theme' => "{$basePath}/themes/{$theme}/js",
         );
 
         foreach ($names as $name) {
-            $name                   = strtolower($name);
+            $name = strtolower($name);
             $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
         }
 
@@ -512,12 +518,12 @@ class WebExtension extends \Twig_Extension
 
     public function getContextValue($context, $key)
     {
-        $keys  = explode('.', $key);
+        $keys = explode('.', $key);
         $value = $context;
 
         foreach ($keys as $key) {
             if (!isset($value[$key])) {
-                throw new \InvalidArgumentException(sprintf("Key `%s` is not in context with %s", $key, implode(array_keys($context), ', ')));
+                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key, implode(array_keys($context), ', ')));
             }
 
             $value = $value[$key];
@@ -529,6 +535,7 @@ class WebExtension extends \Twig_Extension
     public function isFeatureEnabled($feature)
     {
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
         return in_array($feature, $features);
     }
 
@@ -544,6 +551,7 @@ class WebExtension extends \Twig_Extension
     public function makeUpoadToken($group, $type = 'image', $duration = 18000)
     {
         $maker = new UploadToken();
+
         return $maker->make($group, $type, $duration);
     }
 
@@ -612,8 +620,8 @@ class WebExtension extends \Twig_Extension
 
     public function remainTimeFilter($value, $timeType = '')
     {
-        $remainTime = "";
-        $remain     = $value - time();
+        $remainTime = '';
+        $remain = $value - time();
 
         if ($remain <= 0 && empty($timeType)) {
             return $remainTime['second'] = '0分钟';
@@ -647,13 +655,13 @@ class WebExtension extends \Twig_Extension
         }
 
         $countdown['days'] = intval($remain / 86400);
-        $remain            = $remain - 86400 * $countdown['days'];
+        $remain = $remain - 86400 * $countdown['days'];
 
         $countdown['hours'] = intval($remain / 3600);
-        $remain             = $remain - 3600 * $countdown['hours'];
+        $remain = $remain - 3600 * $countdown['hours'];
 
         $countdown['minutes'] = intval($remain / 60);
-        $remain               = $remain - 60 * $countdown['minutes'];
+        $remain = $remain - 60 * $countdown['minutes'];
 
         $countdown['seconds'] = $remain;
 
@@ -664,6 +672,7 @@ class WebExtension extends \Twig_Extension
     {
         $minutes = intval($value / 60);
         $seconds = $value - $minutes * 60;
+
         return sprintf('%02d', $minutes).':'.sprintf('%02d', $seconds);
     }
 
@@ -699,6 +708,7 @@ class WebExtension extends \Twig_Extension
         $startSecond = empty($startTime) ? strtotime(date('Y-m-d', time())) : $startTime;
 
         $diffDay = round(ceil($endSecond - $startSecond) / 86400);
+
         return $diffDay > 0 ? $diffDay : 0;
     }
 
@@ -708,7 +718,7 @@ class WebExtension extends \Twig_Extension
             return '';
         }
 
-        $tags  = $this->createService('Taxonomy:TagService')->findTagsByIds($tagIds);
+        $tags = $this->createService('Taxonomy:TagService')->findTagsByIds($tagIds);
         $names = ArrayToolkit::column($tags, 'name');
 
         return join($names, ',');
@@ -716,7 +726,7 @@ class WebExtension extends \Twig_Extension
 
     public function navigationUrlFilter($url)
     {
-        $url = (string)$url;
+        $url = (string) $url;
 
         if (strpos($url, '://')) {
             return $url;
@@ -732,19 +742,21 @@ class WebExtension extends \Twig_Extension
     /**
      *                            P -> 省全称,     p -> 省简称
      *                            C -> 城市全称,    c -> 城市简称
-     *                            D -> 区全称,     d -> 区简称
-     * @param  [type] $districeId     [description]
-     * @param  string $format 格式，默认格式'P C D'。
+     *                            D -> 区全称,     d -> 区简称.
+     *
+     * @param [type] $districeId [description]
+     * @param string $format     格式，默认格式'P C D'
+     *
      * @return [type] [description]
      */
     public function locationTextFilter($districeId, $format = 'P C D')
     {
-        $text  = '';
+        $text = '';
         $names = $this->createService('Taxonomy:LocationService')->getLocationFullName($districeId);
 
         $len = strlen($format);
 
-        for ($i = 0; $i < $len; $i++) {
+        for ($i = 0; $i < $len; ++$i) {
             switch ($format[$i]) {
                 case 'P':
                     $text .= $names['province'];
@@ -779,10 +791,10 @@ class WebExtension extends \Twig_Extension
     public function tagsHtmlFilter($tags, $class = '')
     {
         $links = array();
-        $tags  = $this->createService('Taxonomy:TagService')->findTagsByIds($tags);
+        $tags = $this->createService('Taxonomy:TagService')->findTagsByIds($tags);
 
         foreach ($tags as $tag) {
-            $url     = $this->container->get('router')->generate('course_explore', array('tagId' => $tag['id']));
+            $url = $this->container->get('router')->generate('course_explore', array('tagId' => $tag['id']));
             $links[] = "<a href=\"{$url}\" class=\"{$class}\">{$tag['name']}</a>";
         }
 
@@ -792,12 +804,13 @@ class WebExtension extends \Twig_Extension
     public function parseFileUri($uri)
     {
         $kernel = ServiceKernel::instance();
+
         return $kernel->createService('Content:FileService')->parseFileUri($uri);
     }
 
     public function getFilePath($uri, $default = '', $absolute = false)
     {
-        $assets  = $this->container->get('templating.helper.assets');
+        $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
 
         if (empty($uri)) {
@@ -812,7 +825,7 @@ class WebExtension extends \Twig_Extension
             return $url;
         }
 
-        if (strpos($uri, "http://") !== false) {
+        if (strpos($uri, 'http://') !== false) {
             return $uri;
         }
 
@@ -831,18 +844,18 @@ class WebExtension extends \Twig_Extension
         }
     }
 
-    public function getDefaultPath($category, $uri = "", $size = '', $absolute = false)
+    public function getDefaultPath($category, $uri = '', $size = '', $absolute = false)
     {
-        $assets  = $this->container->get('templating.helper.assets');
+        $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
 
         if (empty($uri)) {
             $publicUrlpath = 'assets/img/default/';
-            $url           = $assets->getUrl($publicUrlpath.$size.$category);
+            $url = $assets->getUrl($publicUrlpath.$size.$category);
 
             $defaultSetting = $this->createService('System:SettingService')->get('default', array());
 
-            $key      = 'default'.ucfirst($category);
+            $key = 'default'.ucfirst($category);
             $fileName = $key.'FileName';
 
             if (array_key_exists($key, $defaultSetting) && array_key_exists($fileName, $defaultSetting)) {
@@ -850,7 +863,7 @@ class WebExtension extends \Twig_Extension
                     $url = $assets->getUrl($publicUrlpath.$size.$defaultSetting[$fileName]);
                 }
             } elseif (array_key_exists($key, $defaultSetting) && $defaultSetting[$key]) {
-                $uri = $defaultSetting[$size."Default".ucfirst($category)."Uri"];
+                $uri = $defaultSetting[$size.'Default'.ucfirst($category).'Uri'];
             } else {
                 return $url;
             }
@@ -867,16 +880,16 @@ class WebExtension extends \Twig_Extension
 
     private function parseUri($uri, $absolute = false, $package = 'content')
     {
-        if (strpos($uri, "http://") !== false || strpos($uri, "https://") !== false) {
+        if (strpos($uri, 'http://') !== false || strpos($uri, 'https://') !== false) {
             return $uri;
         }
 
-        $assets  = $this->container->get('templating.helper.assets');
+        $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
 
         if (strpos($uri, '://')) {
             $uri = $this->parseFileUri($uri);
-            $url = "";
+            $url = '';
 
             if ($uri['access'] == 'public') {
                 $url = $uri['path'];
@@ -891,16 +904,18 @@ class WebExtension extends \Twig_Extension
 
     public function getSystemDefaultPath($defaultKey, $absolute = false)
     {
-        $assets         = $this->container->get('templating.helper.assets');
-        $defaultSetting = $this->getSetting("default", array());
+        $assets = $this->container->get('templating.helper.assets');
+        $defaultSetting = $this->getSetting('default', array());
 
         if (array_key_exists($defaultKey, $defaultSetting)
             && $defaultSetting[$defaultKey]
         ) {
             $path = $defaultSetting[$defaultKey];
+
             return $this->parseUri($path, $absolute);
         } else {
             $path = $assets->getUrl('assets/img/default/'.$defaultKey);
+
             return $this->addHost($path, $absolute);
         }
     }
@@ -908,6 +923,7 @@ class WebExtension extends \Twig_Extension
     public function makeLazyImg($src, $class = '', $alt = '', $img = 'lazyload_course.png')
     {
         $imgpath = $path = $this->container->get('templating.helper.assets')->getUrl('assets/img/default/'.$img);
+
         return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, $alt, $class, $src);
     }
 
@@ -933,7 +949,7 @@ class WebExtension extends \Twig_Extension
 
     public function getFileUrl($uri, $default = '', $absolute = false)
     {
-        $assets  = $this->container->get('templating.helper.assets');
+        $assets = $this->container->get('templating.helper.assets');
         $request = $this->container->get('request');
 
         if (empty($uri)) {
@@ -972,7 +988,7 @@ class WebExtension extends \Twig_Extension
         $assets = $this->container->get('templating.helper.assets');
 
         if (empty($path)) {
-            $defaultSetting = $this->getSetting("default", array());
+            $defaultSetting = $this->getSetting('default', array());
 
             if ((($defaultKey == 'course.png' && array_key_exists('defaultCoursePicture', $defaultSetting) && $defaultSetting['defaultCoursePicture'] == 1)
                     || ($defaultKey == 'avatar.png' && array_key_exists('defaultAvatar', $defaultSetting) && $defaultSetting['defaultAvatar'] == 1))
@@ -980,6 +996,7 @@ class WebExtension extends \Twig_Extension
                     && $defaultSetting[$defaultKey])
             ) {
                 $path = $defaultSetting[$defaultKey];
+
                 return $this->parseUri($path, $absolute, $package);
             } else {
                 return $this->addHost('/assets/img/default/'.$defaultKey, $absolute, $package);
@@ -991,14 +1008,14 @@ class WebExtension extends \Twig_Extension
 
     private function addHost($path, $absolute, $package = 'content')
     {
-        $cdn    = new CdnUrl();
+        $cdn = new CdnUrl();
         $cdnUrl = $cdn->get($package);
 
         if ($cdnUrl) {
             $path = $cdnUrl.$path;
         } elseif ($absolute) {
             $request = $this->container->get('request');
-            $path    = $request->getSchemeAndHttpHost().$path;
+            $path = $request->getSchemeAndHttpHost().$path;
         }
 
         return $path;
@@ -1007,11 +1024,11 @@ class WebExtension extends \Twig_Extension
     public function fileSizeFilter($size)
     {
         $currentValue = $currentUnit = null;
-        $unitExps     = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3);
+        $unitExps = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3);
 
         foreach ($unitExps as $unit => $exp) {
-            $divisor      = pow(1000, $exp);
-            $currentUnit  = $unit;
+            $divisor = pow(1000, $exp);
+            $currentUnit = $unit;
             $currentValue = $size / $divisor;
 
             if ($currentValue < 1000) {
@@ -1029,11 +1046,11 @@ class WebExtension extends \Twig_Extension
         }
 
         $currentValue = $currentUnit = null;
-        $unitExps     = array('千' => 3, '万' => 4, '亿' => 8);
+        $unitExps = array('千' => 3, '万' => 4, '亿' => 8);
 
         foreach ($unitExps as $unit => $exp) {
-            $divisor      = pow(10, $exp);
-            $currentUnit  = $unit;
+            $divisor = pow(10, $exp);
+            $currentUnit = $unit;
             $currentValue = $number / $divisor;
 
             if ($currentValue < 10) {
@@ -1070,7 +1087,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1088,7 +1105,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text, 'utf-8') > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1100,7 +1117,7 @@ class WebExtension extends \Twig_Extension
 
     public function getFileType($fileName, $string = null)
     {
-        $fileName = explode(".", $fileName);
+        $fileName = explode('.', $fileName);
 
         if ($string) {
             $name = strtolower($fileName[count($fileName) - 1]).$string;
@@ -1123,8 +1140,8 @@ class WebExtension extends \Twig_Extension
         $data = explode('[/hide]', $thread['content']);
 
         foreach ($data as $key => $value) {
-            $value = " ".$value;
-            sscanf($value, "%[^[][hide=reply]%[^$$]", $replyContent, $replyHideContent);
+            $value = ' '.$value;
+            sscanf($value, '%[^[][hide=reply]%[^$$]', $replyContent, $replyHideContent);
 
             if ($replyHideContent) {
                 return true;
@@ -1144,6 +1161,7 @@ class WebExtension extends \Twig_Extension
 
         $bbCode = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function ($matches) use ($ext) {
             $src = $ext->getFileUrl($matches[1]);
+
             return "<img src='{$src}' />";
         }, $bbCode);
 
@@ -1159,7 +1177,7 @@ class WebExtension extends \Twig_Extension
         $text = number_format($text, 1, '.', '');
 
         if (intval($text) == $text) {
-            return (string)intval($text);
+            return (string) intval($text);
         }
 
         return $text;
@@ -1182,10 +1200,12 @@ class WebExtension extends \Twig_Extension
     public function fillQuestionStemHtmlFilter($stem)
     {
         $index = 0;
-        $stem  = preg_replace_callback('/\[\[.+?\]\]/', function ($matches) use (&$index) {
-            $index++;
+        $stem = preg_replace_callback('/\[\[.+?\]\]/', function ($matches) use (&$index) {
+            ++$index;
+
             return "<span class='question-stem-fill-blank'>({$index})</span>";
         }, $stem);
+
         return $stem;
     }
 
@@ -1193,6 +1213,7 @@ class WebExtension extends \Twig_Extension
     {
         $target = explode('/', $target);
         $target = explode('-', $target[0]);
+
         return $target[1];
     }
 
@@ -1203,10 +1224,10 @@ class WebExtension extends \Twig_Extension
         }
 
         $config = array(
-            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier'
+            'cacheDir' => ServiceKernel::instance()->getParameter('kernel.cache_dir').'/htmlpurifier',
         );
 
-        $factory  = new HTMLPurifierFactory($config);
+        $factory = new HTMLPurifierFactory($config);
         $purifier = $factory->create($trusted);
 
         return $purifier->purify($html);
@@ -1277,7 +1298,7 @@ class WebExtension extends \Twig_Extension
         $coinSettings = $this->createService('System:SettingService')->get('coin', array());
 
         if (!isset($coinSettings['price_type'])) {
-            $coinSettings['price_type'] = "RMB";
+            $coinSettings['price_type'] = 'RMB';
         }
 
         if (!isset($coinSettings['coin_enabled'])) {
@@ -1289,7 +1310,7 @@ class WebExtension extends \Twig_Extension
                 $default = '余额支付';
             } else {
                 $dictExtension = $this->container->get('codeages_plugin.dict_twig_extension');
-                $default       = $dictExtension->getDictText('payment', $order['payment']);
+                $default = $dictExtension->getDictText('payment', $order['payment']);
             }
         }
 
@@ -1323,6 +1344,7 @@ class WebExtension extends \Twig_Extension
     public function arrayMerge($text, $content)
     {
         $array = array_merge($text, $content);
+
         return $array;
     }
 
@@ -1334,6 +1356,7 @@ class WebExtension extends \Twig_Extension
     public function getCategoryChoices($groupName, $indent = '　')
     {
         $builder = new CategoryBuilder();
+
         return $builder->buildChoices($groupName, $indent);
     }
 
@@ -1376,14 +1399,16 @@ class WebExtension extends \Twig_Extension
     {
         $head = substr($phoneNum, 0, 3);
         $tail = substr($phoneNum, -4, 4);
-        return ($head.'****'.$tail);
+
+        return $head.'****'.$tail;
     }
 
     public function blur_idcard_number($idcardNum)
     {
         $head = substr($idcardNum, 0, 4);
         $tail = substr($idcardNum, -2, 2);
-        return ($head.'************'.$tail);
+
+        return $head.'************'.$tail;
     }
 
     protected function createService($alias)
@@ -1400,7 +1425,7 @@ class WebExtension extends \Twig_Extension
     {
         $html = strip_tags($html, '');
 
-        return preg_replace("/(\s|\&nbsp\;|　|\xc2\xa0)/", "", $html);
+        return preg_replace("/(\s|\&nbsp\;|　|\xc2\xa0)/", '', $html);
     }
 
     public function arrayColumn($array, $column)

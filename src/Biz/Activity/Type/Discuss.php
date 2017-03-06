@@ -16,6 +16,7 @@ class Discuss extends Activity
     public function isFinished($activityId)
     {
         $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'discuss.finish');
+
         return !empty($result);
     }
 
@@ -24,6 +25,6 @@ class Discuss extends Activity
      */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 }

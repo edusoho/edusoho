@@ -2,7 +2,6 @@
 
 namespace Biz\CloudPlatform\Dao\Impl;
 
-
 use Biz\CloudPlatform\Dao\CloudAppDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -13,7 +12,7 @@ class CloudAppDaoImpl extends GeneralDaoImpl implements CloudAppDao
     public function getByCode($code)
     {
         return $this->getByFields(array(
-            'code' => $code
+            'code' => $code,
         ));
     }
 
@@ -36,8 +35,8 @@ class CloudAppDaoImpl extends GeneralDaoImpl implements CloudAppDao
     {
         return array(
             'orderbys' => array(
-                'installedTime'
-            )
+                'installedTime',
+            ),
         );
     }
 }

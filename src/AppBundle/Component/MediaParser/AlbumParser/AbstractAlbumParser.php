@@ -6,5 +6,4 @@ use AppBundle\Component\MediaParser\AbstractParser;
 
 abstract class AbstractAlbumParser extends AbstractParser
 {
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\MediaParser\ItemParser;
 
 use AppBundle\Component\MediaParser\ParseException;
@@ -10,8 +11,8 @@ class YoukuVideoItemParser extends AbstractItemParser
         'p2' => '/http:\/\/player\.youku\.com\/player\.php.*?\/sid\/(.+?)\/v.swf/s',
     );
 
-	public function parse($url)
-	{
+    public function parse($url)
+    {
         $matched = preg_match($this->patterns['p2'], $url, $matches);
         if ($matched) {
             $url = "http://v.youku.com/v_show/id_{$matches[1]}.html";
@@ -32,14 +33,14 @@ class YoukuVideoItemParser extends AbstractItemParser
         $item = array();
         $item['type'] = 'video';
         $item['source'] = 'youku';
-        $item['uuid'] = 'youku:' . $videoId;
+        $item['uuid'] = 'youku:'.$videoId;
 
         $matched = preg_match('/id="s_baidu1"\s+href="(.*?)"/s', $response['content'], $matches);
         if (empty($matched)) {
             throw new ParseException('解析优酷视频页面信息失败');
         }
         $queryString = substr($matches[1], strpos($matches[1], '?') + 1);
-        $queryString = substr($queryString, 0, strpos($queryString, '#') ? : strlen($queryString));
+        $queryString = substr($queryString, 0, strpos($queryString, '#') ?: strlen($queryString));
         parse_str($queryString, $query);
 
         if (empty($query) || empty($query['title'])) {
@@ -55,7 +56,7 @@ class YoukuVideoItemParser extends AbstractItemParser
         );
 
         return $item;
-	}
+    }
 
     public function detect($url)
     {
@@ -68,6 +69,4 @@ class YoukuVideoItemParser extends AbstractItemParser
             return true;
         }
     }
-
-
 }

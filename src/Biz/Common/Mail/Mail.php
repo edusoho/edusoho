@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Common\Mail;
 
 use Biz\System\Service\SettingService;
@@ -20,9 +21,9 @@ abstract class Mail
 
     public function __get($name)
     {
-        if(!array_key_exists($name, $this->options)){
+        if (!array_key_exists($name, $this->options)) {
             return null;
-        };
+        }
 
         return $this->options[$name];
     }
@@ -30,12 +31,12 @@ abstract class Mail
     public function __unset($name)
     {
         unset($this->options[$name]);
+
         return $this;
     }
 
     protected function setting($name, $default = '')
     {
-        
         $names = explode('.', $name);
 
         $name = array_shift($names);
@@ -44,7 +45,7 @@ abstract class Mail
             return $default;
         }
 
-        $value = $this->getSettingService()->get($name,$default);
+        $value = $this->getSettingService()->get($name, $default);
 
         if (!isset($value)) {
             return $default;
@@ -67,7 +68,7 @@ abstract class Mail
         return $result;
     }
 
-    public abstract function send();
+    abstract public function send();
 
     /**
      * @return SettingService

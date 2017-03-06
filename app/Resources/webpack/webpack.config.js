@@ -6,7 +6,8 @@ const config = {
   },
   libs: {
     'vendor': ['libs/vendor.js'], //可以是一个js文件
-    'fix-ie': ['console-polyfill','html5shiv', 'respond-js'], //也可以是一个npm依赖包
+    'html5shiv': ['html5shiv'],
+    'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     'jquery-insertAtCaret': ['libs/js/jquery-insertAtCaret.js'],
     'jquery-form': ['jquery-form'],
     'jquery-nouislider':['nouislider'],
@@ -14,6 +15,7 @@ const config = {
     'jquery-sortable':['jquery-sortable'],
     'jquery-validation': ['libs/js/jquery-validation.js'],
     'jquery-blurr': ['jquery-blurr'],
+    'jquery-waypoints': ['jquery-waypoints'],
     'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
     'iframe-resizer':['libs/js/iframe-resizer.js'],
     'iframe-resizer-contentWindow':['libs/js/iframe-resizer-contentWindow.js'],
@@ -21,8 +23,10 @@ const config = {
     'es-image-crop':['libs/js/es-image-crop.js'],
     'easy-pie-chart':['libs/js/easy-pie-chart.js'],
     'jquery-timer':['libs/js/jquery-timer.js'],
+    'jquery-cycle2': ['jquery-cycle2'],
+    'excanvas-compiled':['libs/js/excanvas-compiled.js'],
     'echo-js': ['echo-js'],
-    'jquery-waypoints': ['jquery-waypoints']
+    'swiper':['swiper'],
   },
   noParseDeps: [ //these node modules will use a dist version to speed up compilation
     'jquery/dist/jquery.js',
@@ -42,6 +46,7 @@ const config = {
     'moment/moment.js',
     'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
     'jquery-sortable/source/js/jquery-sortable.js',
+    'jquery.cycle2/src/jquery.cycle2.min.js',
     'nouislider/distribute/nouislider.js',
     'echo-js/dist/echo.js',
     'jquery-blurr/dist/jquery.blurr.js',

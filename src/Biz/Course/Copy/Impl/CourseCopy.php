@@ -12,7 +12,8 @@ class CourseCopy extends AbstractEntityCopy
      * 复制链说明：
      * Course 教学计划信息
      * - Testpaper （教学计划下创建的Testpaper，实际被Activity引用）
-     * - Task 任务列表
+     * - Task 任务列表.
+     *
      * @param $biz
      */
     public function __construct($biz)
@@ -26,7 +27,7 @@ class CourseCopy extends AbstractEntityCopy
      */
     protected function _copy($source, $config = array())
     {
-        $user        = $this->biz['user'];
+        $user = $this->biz['user'];
         $courseSetId = $source['courseSetId'];
         if (!empty($config['newCourseSet'])) {
             $courseSetId = $config['newCourseSet']['id'];
@@ -36,13 +37,13 @@ class CourseCopy extends AbstractEntityCopy
         //通过教学计划复制出来的教学计划一定不是默认的。
         $new['isDefault'] = $courseSetId == $source['courseSetId'] ? 0 : $source['isDefault'];
         //标记是否是从默认教学计划转成非默认的，如果是则需要对chapter-task结构进行调整
-        $modeChange         = $new['isDefault'] != $source['isDefault'];
-        $new['parentId']    = $source['id'];
-        $new['locked']      = 0;
+        $modeChange = $new['isDefault'] != $source['isDefault'];
+        $new['parentId'] = 0;
+        $new['locked'] = 0;
         $new['courseSetId'] = $courseSetId;
-        $new['creator']     = $user['id'];
-        $new['status']      = 'draft';
-        $new['teacherIds']  = array($user['id']);
+        $new['creator'] = $user['id'];
+        $new['status'] = 'draft';
+        $new['teacherIds'] = array($user['id']);
 
         //course的自定义配置
         if (!empty($config['title'])) {
@@ -58,7 +59,7 @@ class CourseCopy extends AbstractEntityCopy
                 $new['expiryDays'] = $config['expiryDays'];
             } else {
                 $new['expiryStartDate'] = $config['expiryStartDate'];
-                $new['expiryEndDate']   = $config['expiryEndDate'];
+                $new['expiryEndDate'] = $config['expiryEndDate'];
             }
         }
 
@@ -113,7 +114,8 @@ class CourseCopy extends AbstractEntityCopy
             'locked',
             'maxRate',
             'cover',
-            'enableFinish'
+            'enableFinish',
+            'publishedTaskNum',
         );
 
         $new = array();
@@ -133,12 +135,15 @@ class CourseCopy extends AbstractEntityCopy
             $teacherIds = array();
             foreach ($members as $member) {
                 $member = array(
-                    'courseId'    => $newCourse['id'],
+                    'courseId' => $newCourse['id'],
                     'courseSetId' => $newCourse['courseSetId'],
-                    'userId'      => $member['userId'],
-                    'role'        => 'teacher',
-                    'seq'         => $member['seq'],
-                    'isVisible'   => $member['isVisible']
+                    'userId' => $member['userId'],
+                    'role' => 'teacher',
+                    'seq' => $member['seq'],
+                    'isVisible' => $member['isVisible'],
+                    'remark' => $member['remark'],
+                    'deadline' => $member['deadline'],
+                    'deadlineNotified' => $member['deadlineNotified'],
                 );
                 if ($member['isVisible']) {
                     $teacherIds[] = $member['userId'];

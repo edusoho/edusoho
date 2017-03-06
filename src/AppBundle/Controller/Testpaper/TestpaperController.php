@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Testpaper;
 
 use AppBundle\Common\ArrayToolkit;
@@ -32,7 +33,7 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('info', $result['message']);
         }
 
-        $fields          = $this->getTestpaperFields($lessonId);
+        $fields = $this->getTestpaperFields($lessonId);
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
         if (in_array($testpaperResult['status'], array('doing'))) {
@@ -60,7 +61,7 @@ class TestpaperController extends BaseController
 
         $favorites = $this->getQuestionService()->findUserFavoriteQuestions($testpaperResult['userId']);
 
-        $activity          = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
+        $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
         if ($testpaperActivity['testMode'] == 'realTime') {
@@ -71,18 +72,18 @@ class TestpaperController extends BaseController
         $limitedTime = ($testpaperActivity['limitedTime'] - $testpaperResult['usedTime']) ? $testpaperResult['limitedTime'] : $testpaperActivity['limitedTime'];
 
         return $this->render('testpaper/start-do-show.html.twig', array(
-            'questions'         => $questions,
-            'limitedTime'       => $limitedTime,
-            'paper'             => $testpaper,
-            'paperResult'       => $testpaperResult,
-            'activity'          => $activity,
+            'questions' => $questions,
+            'limitedTime' => $limitedTime,
+            'paper' => $testpaper,
+            'paperResult' => $testpaperResult,
+            'activity' => $activity,
             'testpaperActivity' => $testpaperActivity,
-            'favorites'         => ArrayToolkit::column($favorites, 'questionId'),
-            'total'             => $total,
-            'attachments'       => $attachments,
-            'questionTypes'     => $this->getCheckedQuestionType($testpaper),
-            'showTypeBar'       => 1,
-            'showHeader'        => 0
+            'favorites' => ArrayToolkit::column($favorites, 'questionId'),
+            'total' => $total,
+            'attachments' => $attachments,
+            'questionTypes' => $this->getCheckedQuestionType($testpaper),
+            'showTypeBar' => 1,
+            'showHeader' => 0,
         ));
     }
 
@@ -106,7 +107,7 @@ class TestpaperController extends BaseController
         throw new AccessDeniedException($this->getServiceKernel()->trans('无权查看试卷！'));
         }*/
 
-        $builder   = $this->getTestpaperService()->getTestpaperBuilder($testpaper['type']);
+        $builder = $this->getTestpaperService()->getTestpaperBuilder($testpaper['type']);
         $questions = $builder->showTestItems($testpaper['id'], $testpaperResult['id']);
 
         $accuracy = $this->getTestpaperService()->makeAccuracy($testpaperResult['id']);
@@ -119,25 +120,25 @@ class TestpaperController extends BaseController
 
         $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
 
-        $activity          = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
+        $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        $task              = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         return $this->render('testpaper/result.html.twig', array(
-            'questions'     => $questions,
-            'accuracy'      => $accuracy,
-            'paper'         => $testpaper,
-            'paperResult'   => $testpaperResult,
-            'favorites'     => ArrayToolkit::column($favorites, 'questionId'),
-            'total'         => $total,
-            'student'       => $student,
-            'source'        => $request->query->get('source', 'course'),
-            'attachments'   => $attachments,
+            'questions' => $questions,
+            'accuracy' => $accuracy,
+            'paper' => $testpaper,
+            'paperResult' => $testpaperResult,
+            'favorites' => ArrayToolkit::column($favorites, 'questionId'),
+            'total' => $total,
+            'student' => $student,
+            'source' => $request->query->get('source', 'course'),
+            'attachments' => $attachments,
             'questionTypes' => $this->getCheckedQuestionType($testpaper),
-            'limitedTime'   => 0,
-            'task'          => $task,
-            'action'        => $request->query->get('action', ''),
-            'target'        => $testpaperActivity
+            'limitedTime' => 0,
+            'task' => $task,
+            'action' => $request->query->get('action', ''),
+            'target' => $testpaperActivity,
         ));
     }
 
@@ -184,6 +185,7 @@ class TestpaperController extends BaseController
 
         if (empty($testPaper)) {
             $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('试卷不存在'));
+
             return $this->createJsonResponse($response);
         }
 
@@ -222,8 +224,8 @@ class TestpaperController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $data     = $request->request->all();
-            $answers  = !empty($data['data']) ? $data['data'] : array();
+            $data = $request->request->all();
+            $answers = !empty($data['data']) ? $data['data'] : array();
             $usedTime = $data['usedTime'];
 
             $results = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers);
@@ -237,8 +239,8 @@ class TestpaperController extends BaseController
     public function submitTestAction(Request $request, $resultId)
     {
         if ($request->getMethod() == 'POST') {
-            $data     = $request->request->all();
-            $answers  = !empty($data['data']) ? $data['data'] : array();
+            $data = $request->request->all();
+            $answers = !empty($data['data']) ? $data['data'] : array();
             $usedTime = $data['usedTime'];
 
             $results = $this->getTestpaperService()->submitAnswers($$resultId, $answers);
@@ -258,7 +260,7 @@ class TestpaperController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $activity          = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
+            $activity = $this->getActivityService()->getActivity($testpaperResult['lessonId']);
             $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
             if ($activity['startTime'] && $activity['startTime'] > time()) {
@@ -291,11 +293,11 @@ class TestpaperController extends BaseController
 
         foreach ($testpaper['metas']['counts'] as $type => $count) {
             if (empty($items[$type])) {
-                $total[$type]['score']     = 0;
-                $total[$type]['number']    = 0;
+                $total[$type]['score'] = 0;
+                $total[$type]['number'] = 0;
                 $total[$type]['missScore'] = 0;
             } else {
-                $total[$type]['score']  = array_sum(ArrayToolkit::column($items[$type], 'score'));
+                $total[$type]['score'] = array_sum(ArrayToolkit::column($items[$type], 'score'));
                 $total[$type]['number'] = count($items[$type]);
 
                 if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($type, $testpaper['metas']['missScore'])) {
@@ -325,7 +327,7 @@ class TestpaperController extends BaseController
         }
 
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        $testpaperResult   = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $activity['fromCourseSetId'], $activityId, $testpaper['type']);
+        $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $testpaper['id'], $activity['fromCourseSetId'], $activityId, $testpaper['type']);
 
         if ($testpaperActivity['doTimes'] && $testpaperResult && $testpaperResult['status'] == 'finished') {
             return array('result' => false, 'message' => $this->getServiceKernel()->trans('该试卷只能考一次，不能再考！'));
@@ -341,7 +343,7 @@ class TestpaperController extends BaseController
 
     protected function getTestpaperFields($activityId)
     {
-        $activity          = $this->getActivityService()->getActivity($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
         if (!$activity || !$testpaperActivity) {
@@ -349,9 +351,9 @@ class TestpaperController extends BaseController
         }
 
         return array(
-            'lessonId'    => $activityId,
-            'courseId'    => $activity['fromCourseId'],
-            'limitedTime' => $testpaperActivity['limitedTime']
+            'lessonId' => $activityId,
+            'courseId' => $activity['fromCourseId'],
+            'limitedTime' => $testpaperActivity['limitedTime'],
         );
     }
 

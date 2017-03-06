@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Course;
 
 use Biz\Course\Service\CourseService;
@@ -41,7 +42,7 @@ abstract class CourseBaseController extends BaseController
     protected function tryBuildCourseLayoutData($request, $courseId)
     {
         list($course, $member) = $this->buildCourseLayoutData($request, $courseId);
-        $response              = null;
+        $response = null;
 
         $user = $this->getCurrentUser();
 
@@ -59,8 +60,9 @@ abstract class CourseBaseController extends BaseController
     protected function getCourseMember(Request $request, $course)
     {
         $previewAs = $request->query->get('previewAs');
-        $user      = $this->getCurrentUser();
-        $member    = $user['id'] ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : null;
+        $user = $this->getCurrentUser();
+        $member = $user['id'] ? $this->getMemberService()->getCourseMember($course['id'], $user['id']) : null;
+
         return $this->previewAsMember($previewAs, $member, $course);
     }
 
@@ -75,21 +77,22 @@ abstract class CourseBaseController extends BaseController
         if (in_array($as, array('member', 'guest'))) {
             if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                 $member = array(
-                    'id'          => 0,
-                    'courseId'    => $course['id'],
-                    'userId'      => $user['id'],
-                    'levelId'     => 0,
-                    'learnedNum'  => 0,
-                    'isLearned'   => 0,
-                    'seq'         => 0,
-                    'isVisible'   => 0,
-                    'orderId'     => 0,
-                    'joinedType'  => 'course',
-                    'role'        => 'teacher',
-                    'fake'        => true,
-                    'locked'      => 0,
+                    'id' => 0,
+                    'courseId' => $course['id'],
+                    'userId' => $user['id'],
+                    'levelId' => 0,
+                    'learnedNum' => 0,
+                    'isLearned' => 0,
+                    'seq' => 0,
+                    'isVisible' => 0,
+                    'orderId' => 0,
+                    'joinedType' => 'course',
+                    'role' => 'teacher',
+                    'fake' => true,
+                    'locked' => 0,
                     'createdTime' => time(),
-                    'deadline'    => 0
+                    'deadline' => 0,
+                    'previewAs' => 1,
                 );
             }
 

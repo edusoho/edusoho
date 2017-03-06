@@ -4,6 +4,8 @@ namespace Biz\Task\Event;
 
 use Biz\Task\Dao\TaskDao;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\ActivityDao;
+use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\StrategyContext;
 use Codeages\Biz\Framework\Event\Event;
@@ -15,12 +17,12 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     public static function getSubscribedEvents()
     {
         return array(
-            'course.task.create'    => 'onCourseTaskCreate',
-            'course.task.update'    => 'onCourseTaskUpdate',
-            'course.task.delete'    => 'onCourseTaskDelete',
+            'course.task.create' => 'onCourseTaskCreate',
+            'course.task.update' => 'onCourseTaskUpdate',
+            'course.task.delete' => 'onCourseTaskDelete',
 
-            'course.task.publish'   => 'onCourseTaskUpdate',
-            'course.task.unpublish' => 'onCourseTaskUpdate'
+            'course.task.publish' => 'onCourseTaskPublish',
+            'course.task.unpublish' => 'onCourseTaskUnpublish',
         );
     }
 
@@ -39,28 +41,28 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             $newActivity = $this->createActivity($activity, $cc);
 
             $newTask = array(
-                'courseId'        => $cc['id'],
+                'courseId' => $cc['id'],
                 'fromCourseSetId' => $cc['courseSetId'],
-                'createdUserId'   => $task['createdUserId'],
-                'seq'             => $task['seq'],
-                'categoryId'      => $task['categoryId'],
-                'activityId'      => $newActivity['id'],
-                'title'           => $task['title'],
-                'isFree'          => $task['isFree'],
-                'isOptional'      => $task['isOptional'],
-                'startTime'       => $task['startTime'],
-                'endTime'         => $task['endTime'],
-                'number'          => $task['number'],
-                'mode'            => $task['mode'],
-                'type'            => $task['type'],
-                'mediaSource'     => $task['mediaSource'],
-                'copyId'          => $task['id'],
-                'maxOnlineNum'    => $task['maxOnlineNum'],
-                'status'          => $task['status']
+                'createdUserId' => $task['createdUserId'],
+                'seq' => $task['seq'],
+                'categoryId' => $task['categoryId'],
+                'activityId' => $newActivity['id'],
+                'title' => $task['title'],
+                'isFree' => $task['isFree'],
+                'isOptional' => $task['isOptional'],
+                'startTime' => $task['startTime'],
+                'endTime' => $task['endTime'],
+                'number' => $task['number'],
+                'mode' => $task['mode'],
+                'type' => $task['type'],
+                'mediaSource' => $task['mediaSource'],
+                'copyId' => $task['id'],
+                'maxOnlineNum' => $task['maxOnlineNum'],
+                'status' => $task['status'],
             );
 
             if (!empty($task['mode'])) {
-                $newChapter            = $this->getChapterDao()->getByCopyIdAndLockedCourseId($task['categoryId'], $cc['id']);
+                $newChapter = $this->getChapterDao()->getByCopyIdAndLockedCourseId($task['categoryId'], $cc['id']);
                 $newTask['categoryId'] = $newChapter['id'];
             }
 
@@ -80,7 +82,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
 
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedTasks     = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
+        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
             $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId']);
             $ct = $this->copyFields($task, $ct, array(
@@ -93,10 +95,42 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
                 'number',
                 'mediaSource',
                 'maxOnlineNum',
-                'status'
+                'status',
             ));
-
             $this->getTaskDao()->update($ct['id'], $ct);
+        }
+    }
+
+    public function onCourseTaskPublish(Event $event)
+    {
+        $task = $event->getSubject();
+        $this->syncTaskStatus($task, true);
+    }
+
+    public function onCourseTaskUnpublish(Event $event)
+    {
+        $task = $event->getSubject();
+        $this->syncTaskStatus($task, false);
+    }
+
+    protected function syncTaskStatus($task, $published)
+    {
+        if ($task['copyId'] > 0) {
+            return;
+        }
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        if (empty($copiedCourses)) {
+            return;
+        }
+
+        $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
+        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
+        foreach ($copiedTasks as $ct) {
+            if ($published) {
+                $this->getTaskService()->publishTask($ct['id']);
+            } else {
+                $this->getTaskService()->unpublishTask($ct['id']);
+            }
         }
     }
 
@@ -113,7 +147,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
         $copiedCourseMap = ArrayToolkit::index($copiedCourses, 'id');
-        $copiedTasks     = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
+        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
             $this->deleteTask($ct['id'], $copiedCourseMap[$ct['courseId']]);
         }
@@ -126,19 +160,19 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
         $testId = empty($testpaper) ? 0 : $testpaper['id'];
 
-        $ext         = $this->getActivityConfig($activity['mediaType'])->copy($activity, array('testId' => $testId));
+        $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array('testId' => $testId));
         $newActivity = array(
-            'title'           => $activity['title'],
-            'remark'          => $activity['remark'],
-            'mediaType'       => $activity['mediaType'],
-            'content'         => $activity['content'],
-            'length'          => $activity['length'],
-            'fromCourseId'    => $copiedCourse['id'],
+            'title' => $activity['title'],
+            'remark' => $activity['remark'],
+            'mediaType' => $activity['mediaType'],
+            'content' => $activity['content'],
+            'length' => $activity['length'],
+            'fromCourseId' => $copiedCourse['id'],
             'fromCourseSetId' => $copiedCourse['courseSetId'],
-            'fromUserId'      => $activity['fromUserId'],
-            'startTime'       => $activity['startTime'],
-            'endTime'         => $activity['endTime'],
-            'copyId'          => $activity['id']
+            'fromUserId' => $activity['fromUserId'],
+            'startTime' => $activity['startTime'],
+            'endTime' => $activity['endTime'],
+            'copyId' => $activity['id'],
         );
 
         if (!empty($ext)) {
@@ -174,11 +208,11 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
                 'fileSize',
                 'source',
                 'userId',
-                'type'
+                'type',
             ));
-            $newMaterial['copyId']      = $material['id'];
+            $newMaterial['copyId'] = $material['id'];
             $newMaterial['courseSetId'] = $copiedCourse['courseSetId'];
-            $newMaterial['courseId']    = $copiedCourse['id'];
+            $newMaterial['courseId'] = $copiedCourse['id'];
 
             if ($material['lessonId'] > 0) {
                 $newMaterial['lessonId'] = $activity['id'];
@@ -194,14 +228,14 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
         return $testpaperCopy->copy($activity, array(
             'newCourseSetId' => $copiedCourse['courseSetId'],
-            'newCourseId'    => $copiedCourse['id'],
-            'isCopy'         => 1
+            'newCourseId' => $copiedCourse['id'],
+            'isCopy' => 1,
         ));
     }
 
     protected function updateActivity($activityId, $courseSetId, $courseId)
     {
-        $activity       = $this->getActivityDao()->get($activityId);
+        $activity = $this->getActivityDao()->get($activityId);
         $sourceActivity = $this->getActivityDao()->get($activity['copyId']);
 
         $testpaper = $this->syncTestpaper($sourceActivity, array('id' => $courseId, 'courseSetId' => $courseSetId));
@@ -212,7 +246,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'content',
             'length',
             'startTime',
-            'endTime'
+            'endTime',
         ));
 
         if (!empty($testpaper)) {
@@ -239,6 +273,14 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     }
 
     /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
+    }
+
+    /**
      * @return TaskDao
      */
     protected function getTaskDao()
@@ -248,11 +290,21 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
     /**
      * @param  $type
+     *
      * @return Activity
      */
     protected function getActivityConfig($type)
     {
         $biz = $this->getBiz();
+
         return $biz["activity_type.{$type}"];
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    protected function getActivityDao()
+    {
+        return $this->getBiz()->dao('Activity:ActivityDao');
     }
 }

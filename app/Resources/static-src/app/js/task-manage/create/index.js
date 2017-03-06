@@ -1,6 +1,8 @@
 import loadAnimation from 'common/load-animation'
 import 'jquery-sortable';
 import notify from "common/notify";
+import { sortablelist } from "app/js/course-manage/help";
+
 
 class Editor {
   constructor($modal) {
@@ -65,19 +67,19 @@ class Editor {
     let type = $this.data('type');
     $('[name="mediaType"]').val(type);
     this.contentUrl = $this.data('contentUrl');
-    this.type !== type ? (this.loaded = false) : (this.loaded = true);
+    this.loaded = this.type === type;
     this.type = type;
-    this._renderNext(true);
+    this._onNext(event);
   }
 
-  _askSave(){
+  _askSave() {
     const isCreateOperation = $('#task-create-type').data('editor-mode') == 'create';
     const isDaysMode = $('#courseExpiryMode').val() == 'days';
     const isNormalCourseSet = $('#courseSetType').val() == 'normal';
     const isLiveType = this.type == 'live';
     let confirmResult = true;
     console.log($('#courseExpiryMode').val());
-    if(isCreateOperation && isDaysMode && isNormalCourseSet && isLiveType){
+    if (isCreateOperation && isDaysMode && isNormalCourseSet && isLiveType) {
       confirmResult = confirm('本计划的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。确定要添加吗？');
     }
 
@@ -89,7 +91,7 @@ class Editor {
       return;
     }
 
-    if(!this._askSave()){
+    if (!this._askSave()) {
       return;
     }
 
@@ -97,49 +99,50 @@ class Editor {
     let postData = $('#step1-form').serializeArray()
       .concat(this.$iframe_body.find('#step2-form').serializeArray())
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
-
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
+        const needAppend = response.append;
+        const html = response.html;
         this.$element.modal('hide');
-        if (response && response.append !== undefined && response.append === false) {
-          let data = $('#sortable-list').sortable("serialize").get();
-          $.post($('#sortable-list').data('sortUrl'), {ids: data}, (response) => {
-            if (response) {
-              document.location.reload();
-            }
-          });
+        if (needAppend === false) {
+          // @TODO这里也需要返回html,进行替换          
+          document.location.reload();
         }
-        let html = response;
+
         let chapterId = postData.find(function (input) {
           return input.name == 'chapterId';
-        })
+        });
 
-        var add = 0;
+        let add = 0;
         let $parent = $('#' + chapterId.value);
+        let $item = null;
 
         if ($parent.length) {
           $parent.nextAll().each(function () {
             if ($(this).hasClass('task-manage-chapter')) {
               $(this).before(html);
               add = 1;
+              sortablelist('#sortable-list');
               return false;
             }
             if ($parent.hasClass('task-manage-unit') && $(this).hasClass('task-manage-unit')) {
               $(this).before(html);
               add = 1;
+              sortablelist('#sortable-list');
               return false;
             }
           });
           if (add != 1) {
-            $("#sortable-list").append(html);
+            $item = $(html);
+            $("#sortable-list").append($item);
             add = 1;
           }
         } else {
-          $("#sortable-list").append(html);
+          $item = $(html);
+          $("#sortable-list").append($item);
         }
-
-        let data = $('#sortable-list').sortable("serialize").get();
-        $.post($('#sortable-list').data('sortUrl'), {ids: data});
+        this.showDefaultSetting($item);
+        sortablelist('#sortable-list');
       })
       .fail((response) => {
         let msg = '';
@@ -150,6 +153,13 @@ class Editor {
         notify('warning', '保存出错: ' + msg);
         $("#course-tasks-submit").attr('disabled', null);
       });
+  }
+
+  showDefaultSetting($item = null) {
+    if ($item && $item.hasClass('js-task-manage-item')) {
+      $('.js-task-manage-item').removeClass('active').find('.js-settings-list').slideUp();;
+      $item.addClass('active').find('.js-settings-list').slideDown();
+    }
   }
 
   _onDelete(event) {

@@ -4,7 +4,8 @@
 
 {% set submenu = 'aduitor' %}
 
-{% set script_controller = 'topxiawebbundle/controller/classroom/students' %}
+{# {% set script_controller = 'topxiawebbundle/controller/classroom-manage/students' %} #}
+{% do script(['app/js/classroom-manage/students-manage/index.js']) %}
 
 {% block maincontent %}
  <div class="alert alert-info "><i class="es-icon es-icon-infooutline mrm"></i>{{'旁听生是%name%的潜在购买者,只能参加该%classroomName%下的话题互动。'|trans({'%name%':setting('classroom.name')|default('班级'|trans),'%classroomName%':setting('classroom.name')|default('班级'|trans)})}}</div>

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Marker\Service\Impl;
 
 use Biz\BaseService;
@@ -15,6 +16,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     public function getMarkersByIds($ids)
     {
         $markers = $this->getMarkerDao()->findByIds($ids);
+
         return ArrayToolkit::index($markers, 'id');
     }
 
@@ -25,7 +27,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     public function findMarkersMetaByMediaId($mediaId)
     {
-        $markers = $this->findByMediaId($mediaId);
+        $markers = $this->findMarkersByMediaId($mediaId);
 
         if (empty($markers)) {
             return array();
@@ -33,7 +35,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
         $markerIds = ArrayToolkit::column($markers, 'id');
 
-        $questionMarkers      = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds($markerIds);
+        $questionMarkers = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds($markerIds);
         $questionMarkerGroups = ArrayToolkit::group($questionMarkers, 'markerId');
 
         foreach ($markers as $index => $marker) {
@@ -70,20 +72,21 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
         if (empty($media)) {
             $media['id'] = 0;
-            $this->getLogService()->error('marker', 'mediaId_notExist', "视频文件不存在！");
+            $this->getLogService()->error('marker', 'mediaId_notExist', '视频文件不存在！');
         }
 
-        if (!isset($fields['second']) || $fields['second'] == "") {
+        if (!isset($fields['second']) || $fields['second'] == '') {
             throw $this->createInvalidArgumentException('Field Second Required');
         }
 
         $marker = array(
             'mediaId' => $media['id'],
-            'second'  => $fields['second']
+            'second' => $fields['second'],
         );
         $marker = $this->getMarkerDao()->create($marker);
         $this->getLogService()->info('marker', 'create', "增加驻点#{$marker['id']}");
         $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['questionId'], $marker['id'], 1);
+
         return $question;
     }
 
@@ -144,6 +147,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     {
         $this->getQuestionMarkerService()->merge($sourceMarkerId, $targetMarkerId);
         $this->deleteMarker($sourceMarkerId);
+
         return true;
     }
 

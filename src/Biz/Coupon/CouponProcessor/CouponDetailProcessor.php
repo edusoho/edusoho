@@ -2,8 +2,6 @@
 
 namespace Biz\Coupon\CouponProcessor;
 
-
-
 use Biz\Card\DetailProcessor\DetailProcessor;
 use Biz\Coupon\Service\CouponService;
 use Topxia\Service\Common\ServiceKernel;

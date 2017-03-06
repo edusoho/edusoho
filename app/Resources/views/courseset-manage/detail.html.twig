@@ -5,7 +5,7 @@
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/courseset-manage/detail/index.js']) %}
 
 {% block main %}
-<div class="panel panel-default panel-col">
+<div class="panel panel-default" role="courseSet-manage-detail">
   <div class="panel-heading">{{'详细信息'|trans}}</div>
   <div class="panel-body">
     <form id="courseset-detail-form" class="form-horizontal" action="{{path('course_set_manage_detail', {id: courseSet.id})}}" method="post">
@@ -15,7 +15,7 @@
         <div class="col-md-2 control-label"><label>{{'课程简介'|trans}}</label></div>
         <div class="col-md-8 controls">
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          <textarea name="summary" rows="10" id="courseset-summary-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course_set')}) }}">{{ field_value(courseSet, 'summary') }}</textarea>
+          <textarea name="summary" rows="10" id="courseset-summary-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(courseSet, 'summary') }}</textarea>
         </div>
       </div>
 

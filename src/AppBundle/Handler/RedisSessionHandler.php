@@ -16,12 +16,11 @@ use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
 /**
  * RedisSessionHandler.
- *
  */
 class RedisSessionHandler implements \SessionHandlerInterface
 {
     /**
-     * @var \Redis driver.
+     * @var \Redis driver
      */
     private $redis;
 
@@ -31,7 +30,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
     private $ttl;
 
     /**
-     * @var string Key prefix for shared environments.
+     * @var string key prefix for shared environments
      */
     private $prefix;
 
@@ -44,7 +43,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
      * RedisSessionHandler constructor.
      * List of available options:
      *  prefix: The prefix to use for the redis keys in order to avoid collision
-     *  expiretime: The time to live in seconds
+     *  expiretime: The time to live in seconds.
      *
      * @param              $redisFactory
      * @param TokenStorage $storage
@@ -58,8 +57,8 @@ class RedisSessionHandler implements \SessionHandlerInterface
             ));
         }
 
-        $this->redis  = $redisFactory->getRedis();
-        $this->ttl    = isset($options['expiretime']) ? (int) $options['expiretime'] : 86400;
+        $this->redis = $redisFactory->getRedis();
+        $this->ttl = isset($options['expiretime']) ? (int) $options['expiretime'] : 86400;
         $this->prefix = isset($options['prefix']) ? $options['prefix'] : 'session';
 
         $this->storage = $storage;
@@ -102,6 +101,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
 
         $this->redis->zAdd($this->prefix.':online', $time, $sessionId);
         $this->redis->setTimeout($this->prefix.':online', $this->ttl);
+
         return $this->redis->setex($this->prefix.':'.$sessionId, $this->ttl, $data);
     }
 
@@ -112,6 +112,7 @@ class RedisSessionHandler implements \SessionHandlerInterface
     {
         $this->redis->delete($this->prefix.':'.$sessionId);
         $this->redis->zRem($this->prefix.':logined', $sessionId);
+
         return $this->redis->zRem($this->prefix.':online', $sessionId);
     }
 
@@ -121,10 +122,11 @@ class RedisSessionHandler implements \SessionHandlerInterface
     public function gc($maxlifetime)
     {
         // not required here because memcache will auto expire the records anyhow.
-        $end   = time() - $this->ttl;
+        $end = time() - $this->ttl;
         $start = 0;
         $this->redis->zRemRangeByScore($this->prefix.':logined', $start, $end);
         $this->redis->zRemRangeByScore($this->prefix.':online', $start, $end);
+
         return true;
     }
 

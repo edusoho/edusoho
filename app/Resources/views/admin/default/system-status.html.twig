@@ -7,8 +7,8 @@
         <span class="text-lg">{{ mainAppUpgrade.package.fromVersion }}</span>
         <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> 有更新</a>
       {% else %}
-        <span class="glyphicon glyphicon-ok-sign text-success"></span>
-        <span class="text-lg">{{ constant('Topxia\\System::VERSION') }}</span>
+        <span class="glyphicon glyphicon-ok-sign color-success"></span>
+        <span class="text-lg">{{ constant('AppBundle\\System::VERSION') }}</span>
       {% endif %}
     </div>
   </li>
@@ -16,7 +16,7 @@
     <div class="title">网校应用</div>
     <div class="info">
       {% if upgradeAppCount == 0 %}
-        <span class="glyphicon glyphicon-ok-sign text-success"></span>
+        <span class="glyphicon glyphicon-ok-sign color-success"></span>
         <span class="text-lg">已更新</span>
       {% else %}
         <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
@@ -33,7 +33,7 @@
           <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
           <a class="text-lg link-underline text-danger" href="{{path('admin_my_cloud_overview')}}">{{ disabledCloudServiceCount }}个未开启</a>
         {% else %}
-          <span class="glyphicon glyphicon-ok-sign text-success"></span>
+          <span class="glyphicon glyphicon-ok-sign color-success"></span>
           <span class="text-lg">已开启</span>
         {% endif %}
         <div class="status-card">
@@ -87,7 +87,7 @@
     <div class="title">移动客户端</div>
     <div class="info">
       {% if setting("mobile").enabled|default(null) %}
-        <span class="glyphicon glyphicon-ok-sign text-success"></span>
+        <span class="glyphicon glyphicon-ok-sign color-success"></span>
         <span class="text-lg">已开启</span>
       {% else %}
         <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>

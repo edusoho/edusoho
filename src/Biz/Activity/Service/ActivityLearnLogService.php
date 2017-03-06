@@ -12,6 +12,8 @@ interface ActivityLearnLogService
 //得到活动的总观看时间
     public function sumLearnedTimeByActivityId($activityId);
 
+    public function sumWatchTimeByActivityIdAndUserId($activityId, $userId);
+
     public function findMyLearnLogsByActivityIdAndEvent($activityId, $event);
 
     public function calcLearnProcessByCourseIdAndUserId($courseId, $userId);

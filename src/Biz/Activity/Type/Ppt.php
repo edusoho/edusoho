@@ -13,9 +13,9 @@ class Ppt extends Activity
     public function registerActions()
     {
         return array(
-            'edit'   => 'AppBundle:Ppt:edit',
-            'show'   => 'AppBundle:Ppt:show',
-            'create' => 'AppBundle:Ppt:create'
+            'edit' => 'AppBundle:Ppt:edit',
+            'show' => 'AppBundle:Ppt:show',
+            'create' => 'AppBundle:Ppt:create',
         );
     }
 
@@ -27,22 +27,24 @@ class Ppt extends Activity
     {
         return array(
             'name' => 'PPT',
-            'icon' => 'es-icon es-icon-pptclass'
+            'icon' => 'es-icon es-icon-pptclass',
         );
     }
 
     public function isFinished($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
-        $ppt      = $this->getPptActivityDao()->get($activity['mediaId']);
+        $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
 
         if ($ppt['finishType'] == 'time') {
             $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+
             return !empty($result) && $result >= $ppt['finishDetail'];
         }
 
         if ($ppt['finishType'] == 'end') {
             $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'ppt.finish');
+
             return !empty($logs);
         }
 
@@ -54,36 +56,38 @@ class Ppt extends Activity
         $ppt = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail'
+            'finishDetail',
         ));
 
-        $biz                  = $this->getBiz();
+        $biz = $this->getBiz();
         $ppt['createdUserId'] = $biz['user']['id'];
-        $ppt['createdTime']   = time();
+        $ppt['createdTime'] = time();
 
         $ppt = $this->getPptActivityDao()->create($ppt);
+
         return $ppt;
     }
 
     public function copy($activity, $config = array())
     {
-        $biz    = $this->getBiz();
-        $ppt    = $this->getPptActivityDao()->get($activity['mediaId']);
+        $biz = $this->getBiz();
+        $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
         $newPpt = array(
-            'mediaId'       => $ppt['mediaId'],
-            'finishType'    => $ppt['finishType'],
-            'finishDetail'  => $ppt['finishDetail'],
-            'createdUserId' => $biz['user']['id']
+            'mediaId' => $ppt['mediaId'],
+            'finishType' => $ppt['finishType'],
+            'finishDetail' => $ppt['finishDetail'],
+            'createdUserId' => $biz['user']['id'],
         );
+
         return $this->getPptActivityDao()->create($newPpt);
     }
 
     public function sync($sourceActivity, $activity)
     {
-        $sourcePpt           = $this->getPptActivityDao()->get($sourceActivity['mediaId']);
-        $ppt                 = $this->getPptActivityDao()->get($activity['mediaId']);
-        $ppt['mediaId']      = $sourcePpt['mediaId'];
-        $ppt['finishType']   = $sourcePpt['finishType'];
+        $sourcePpt = $this->getPptActivityDao()->get($sourceActivity['mediaId']);
+        $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
+        $ppt['mediaId'] = $sourcePpt['mediaId'];
+        $ppt['finishType'] = $sourcePpt['finishType'];
         $ppt['finishDetail'] = $sourcePpt['finishDetail'];
 
         return $this->getPptActivityDao()->update($ppt['id'], $ppt);
@@ -94,10 +98,11 @@ class Ppt extends Activity
         $updateFields = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
-            'finishDetail'
+            'finishDetail',
         ));
 
         $updateFields['updatedTime'] = time();
+
         return $this->getPptActivityDao()->update($targetId, $updateFields);
     }
 
@@ -124,7 +129,7 @@ class Ppt extends Activity
      */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**
@@ -132,6 +137,6 @@ class Ppt extends Activity
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service("Activity:ActivityService");
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 }

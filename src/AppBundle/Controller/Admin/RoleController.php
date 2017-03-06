@@ -1,7 +1,7 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Controller\Admin\BaseController;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Role\Util\PermissionBuilder;
@@ -14,8 +14,8 @@ class RoleController extends BaseController
     {
         $fields = $request->query->all();
         $fields = ArrayToolkit::filter($fields, array(
-            'keyword'     => '',
-            'keywordType' => ''
+            'keyword' => '',
+            'keywordType' => '',
         ));
         $conditons = array();
 
@@ -36,30 +36,32 @@ class RoleController extends BaseController
         );
 
         $userIds = ArrayToolkit::column($roles, 'createdUserId');
-        $users   = $this->getUserService()->findUsersByIds($userIds);
-        $users   = ArrayToolkit::index($users, 'id');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, 'id');
 
         return $this->render('admin/role/index.html.twig', array(
-            'roles'     => $roles,
-            'users'     => $users,
-            'paginator' => $paginator
+            'roles' => $roles,
+            'users' => $users,
+            'paginator' => $paginator,
         ));
     }
 
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
-            $params         = $request->request->all();
+            $params = $request->request->all();
             $params['data'] = json_decode($params['data'], true);
             $this->getRoleService()->createRole($params);
+
             return $this->createJsonResponse(true);
         }
 
         $tree = PermissionBuilder::instance()->getOriginPermissionTree();
-        $res  = $tree->toArray();
+        $res = $tree->toArray();
+
         return $this->render('admin/role/role-modal.html.twig', array(
             'menus' => json_encode($res['children']),
-            'model' => 'create'
+            'model' => 'create',
         ));
     }
 
@@ -68,9 +70,10 @@ class RoleController extends BaseController
         $role = $this->getRoleService()->getRole($id);
 
         if ('POST' == $request->getMethod()) {
-            $params         = $request->request->all();
+            $params = $request->request->all();
             $params['data'] = json_decode($params['data'], true);
-            $role           = $this->getRoleService()->updateRole($id, $params);
+            $role = $this->getRoleService()->updateRole($id, $params);
+
             return $this->createJsonResponse(true);
         }
 
@@ -89,13 +92,14 @@ class RoleController extends BaseController
         return $this->render('admin/role/role-modal.html.twig', array(
             'menus' => json_encode($originPermissions['children']),
             'model' => 'edit',
-            'role'  => $role
+            'role' => $role,
         ));
     }
 
     public function deleteAction(Request $request, $id)
     {
         $this->getRoleService()->deleteRole($id);
+
         return $this->createJsonResponse(array('result' => true));
     }
 
@@ -117,13 +121,13 @@ class RoleController extends BaseController
         return $this->render('admin/role/role-modal.html.twig', array(
             'menus' => json_encode($treeArray['children']),
             'model' => 'show',
-            'role'  => $role
+            'role' => $role,
         ));
     }
 
     public function checkNameAction(Request $request)
     {
-        $name    = $request->query->get('value');
+        $name = $request->query->get('value');
         $exclude = $request->query->get('exclude');
 
         $avaliable = $this->getRoleService()->isRoleNameAvalieable($name, $exclude);
@@ -139,7 +143,7 @@ class RoleController extends BaseController
 
     public function checkCodeAction(Request $request)
     {
-        $code    = $request->query->get('value');
+        $code = $request->query->get('value');
         $exclude = $request->query->get('exclude');
 
         $avaliable = $this->getRoleService()->isRoleCodeAvalieable($code, $exclude);

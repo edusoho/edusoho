@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use AppBundle\Common\ArrayToolkit;
@@ -21,21 +22,21 @@ class TransGenerateCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dir = $input->getArgument('dir');
-        $type =  $input->getArgument('type') == 'untranslate' ? $input->getArgument('type'): 'default';
+        $type = $input->getArgument('type') == 'untranslate' ? $input->getArgument('type') : 'default';
         $dir = rtrim($dir, "\/");
 
-        $output->writeln("<comment>正在扫描模版文件的语言串:</comment>");
+        $output->writeln('<comment>正在扫描模版文件的语言串:</comment>');
         $viewKeywords = $this->scanViewTrans($dir, $output);
         $this->printScanResult($viewKeywords, $output);
 
-        $output->writeln("<comment>正在扫描模版文件Radio的语言串:</comment>");
+        $output->writeln('<comment>正在扫描模版文件Radio的语言串:</comment>');
         $viewRadioKeywords = $this->scanViewRadioTrans($dir, $output);
         $this->printScanResult($viewRadioKeywords, $output);
 
-        $output->writeln("<comment>正在扫描模版文件Default的语言串:</comment>");
+        $output->writeln('<comment>正在扫描模版文件Default的语言串:</comment>');
         $viewDefaultKeywords = $this->scanViewDefaultTrans($dir, $output);
         $this->printScanResult($viewDefaultKeywords, $output);
-        
+
         $output->writeln("<comment>\n正在扫描菜单配置文件的语言串:</comment>");
         $menuKeywords = $this->scanMenuTrans($dir, $output);
         $this->printScanResult($menuKeywords, $output);
@@ -53,7 +54,7 @@ class TransGenerateCommand extends BaseCommand
         $this->printScanResult($menuKeywords, $output);
 
         $output->writeln("<comment>\n语言串总和:</comment>");
-        $keywords = array_merge($viewKeywords, $viewRadioKeywords, $viewDefaultKeywords, $menuKeywords, $dictsKeywords, $phpKeywords,$jsKeywords);
+        $keywords = array_merge($viewKeywords, $viewRadioKeywords, $viewDefaultKeywords, $menuKeywords, $dictsKeywords, $phpKeywords, $jsKeywords);
 
         $this->printScanResult($keywords, $output);
         $keywords = array_values(array_unique($keywords));
@@ -64,32 +65,31 @@ class TransGenerateCommand extends BaseCommand
 
         //去掉WebBundle已有的key
         if ($dir != 'src/Topxia/WebBundle') {
-            $webTransFile = sprintf("%s/%s/Resources/translations/messages.%s.yml", dirname($this->getRootDir()), 'src/Topxia/WebBundle', $locale);
+            $webTransFile = sprintf('%s/%s/Resources/translations/messages.%s.yml', dirname($this->getRootDir()), 'src/Topxia/WebBundle', $locale);
             $webBundleTrans = array();
             if (!file_exists($webTransFile)) {
-                $output->writeln("WebBundle语言包不存在!");
+                $output->writeln('WebBundle语言包不存在!');
             } else {
                 $content = file_get_contents($webTransFile);
 
-                $yaml       = new Yaml();
+                $yaml = new Yaml();
                 $webBundleTrans = $yaml->parse($content);
-                $output->writeln("扫描WebBundle语言包");
+                $output->writeln('扫描WebBundle语言包');
             }
 
-            $addCount   = 0;
+            $addCount = 0;
             $webExistCount = 0;
             foreach ($keywords as $key => $keyword) {
                 if (array_key_exists($keyword, $webBundleTrans)) {
-                    $webExistCount++;
+                    ++$webExistCount;
                     unset($keywords[$key]);
                 }
             }
 
             $output->writeln("<info>共找到和WebBundle重叠的语言串为: {$webExistCount}</info>");
-
         }
 
-        $tranFile = sprintf("%s/%s/Resources/translations/messages.%s.yml", dirname($this->getRootDir()), $dir, $locale);
+        $tranFile = sprintf('%s/%s/Resources/translations/messages.%s.yml', dirname($this->getRootDir()), $dir, $locale);
 
         $existTrans = array();
 
@@ -98,19 +98,19 @@ class TransGenerateCommand extends BaseCommand
         } else {
             $content = file_get_contents($tranFile);
 
-            $yaml       = new Yaml();
+            $yaml = new Yaml();
             $existTrans = $yaml->parse($content);
 
             $output->writeln("语言文件 <info>{$tranFile}</info> 已经存在");
         }
 
-        $addCount   = 0;
+        $addCount = 0;
         $existCount = 0;
         $newTrans = array();
         $unTrans = array();
         foreach ($keywords as $keyword) {
             if (array_key_exists($keyword, $existTrans)) {
-                $existCount++;
+                ++$existCount;
                 if ($type == 'untranslate' && $existTrans[$keyword] == $keyword) {
                     $unTrans[$keyword] = $existTrans[$keyword];
                 } else {
@@ -118,20 +118,18 @@ class TransGenerateCommand extends BaseCommand
                 }
             } else {
                 $output->writeln(" - {$keyword} <info>... 新增</info>");
-                $addCount++;
+                ++$addCount;
                 if ($type == 'untranslate') {
                     $unTrans[$keyword] = $keyword;
-
                 } else {
                     $newTrans[$keyword] = $keyword;
                 }
-
             }
         }
 
         $output->writeln("<info>已存在{$existCount}个语言串，本次新增{$addCount}个语言串</info>");
         $output->writeln('<question>END</question>');
-        $yaml    = new Yaml();
+        $yaml = new Yaml();
         $content = $yaml->dump($newTrans);
         if ($type == 'untranslate') {
             $content .= $yaml->dump($unTrans);
@@ -154,8 +152,8 @@ class TransGenerateCommand extends BaseCommand
 
     protected function printScanResult($keywords, $output)
     {
-        $total       = count($keywords);
-        $keywords    = array_values(array_unique($keywords));
+        $total = count($keywords);
+        $keywords = array_values(array_unique($keywords));
         $uniqueTotal = count($keywords);
 
         $output->writeln("<info>共找到{$total}个语言串，去除重复语言串后，共有{$uniqueTotal}个语言串。</info>");
@@ -176,13 +174,13 @@ class TransGenerateCommand extends BaseCommand
 
         foreach ($finder as $file) {
             $output->write("{$file->getRealpath()}");
-            $yaml         = new Yaml();
-            $menus        = $yaml->parse(file_get_contents($file->getRealpath()));
-            $names        = ArrayToolkit::column($menus, 'name');
-            $fullnames    = ArrayToolkit::column($menus, 'fullname');
+            $yaml = new Yaml();
+            $menus = $yaml->parse(file_get_contents($file->getRealpath()));
+            $names = ArrayToolkit::column($menus, 'name');
+            $fullnames = ArrayToolkit::column($menus, 'fullname');
             $menuKeywords = array_merge($names, $fullnames);
-            $keywords     = array_merge($keywords, $menuKeywords);
-            $output->writeln(sprintf("<info> ... %s</info>", count($menuKeywords)));
+            $keywords = array_merge($keywords, $menuKeywords);
+            $output->writeln(sprintf('<info> ... %s</info>', count($menuKeywords)));
         }
 
         return $keywords;
@@ -196,6 +194,7 @@ class TransGenerateCommand extends BaseCommand
 
         if (empty($path)) {
             $output->writeln("<error>不存在{$dir}/Extensions目录。</error>");
+
             return $keywords;
         }
 
@@ -204,10 +203,10 @@ class TransGenerateCommand extends BaseCommand
 
         foreach ($finder as $file) {
             $output->write("{$file->getRealpath()}");
-            $yaml     = new Yaml();
-            $dicts    = $yaml->parse(file_get_contents($file->getRealpath()));
+            $yaml = new Yaml();
+            $dicts = $yaml->parse(file_get_contents($file->getRealpath()));
             $keywords = $this->arrayReduce($dicts);
-            $output->writeln(sprintf("<info> ... %s</info>", count($keywords)));
+            $output->writeln(sprintf('<info> ... %s</info>', count($keywords)));
         }
 
         return $keywords;
@@ -388,7 +387,7 @@ class TransGenerateCommand extends BaseCommand
 
         $path = realpath($this->getRootDir().'/../web/assets/libs/common');
         if (empty($path)) {
-            $output->write("<error>js is not exist.</error>");
+            $output->write('<error>js is not exist.</error>');
         }
 
         $finder = new Finder();
@@ -423,7 +422,9 @@ class TransGenerateCommand extends BaseCommand
 
         if (empty($path)) {
             $output->write("<error>{$dir}/Controller is not exist.</error>");
-            return $keywords;exit;
+
+            return $keywords;
+            exit;
         }
 
         $finder = new Finder();
@@ -465,7 +466,7 @@ class TransGenerateCommand extends BaseCommand
         return array(
             'src/Topxia/AdminBundle',
             'src/Topxia/MobileBundle',
-            'src/Topxia/MobileBundleV2'
+            'src/Topxia/MobileBundleV2',
         );
     }
 
@@ -474,11 +475,11 @@ class TransGenerateCommand extends BaseCommand
         $additionalPath = array(
             realpath($this->getRootDir().'/../'.$dir.'/../Service'),
             realpath($this->getRootDir().'/../'.$dir.'/../Common'),
-            realpath($this->getRootDir().'/../'.$dir.'/../Component')
+            realpath($this->getRootDir().'/../'.$dir.'/../Component'),
         );
 
         return array_filter($additionalPath, function ($additional) {
-            return (!is_bool($additional));
+            return !is_bool($additional);
         });
     }
 

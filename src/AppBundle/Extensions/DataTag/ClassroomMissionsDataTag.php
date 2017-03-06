@@ -14,15 +14,16 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
      * 可传入的参数：
      *   userId         用户
      *   count          班级数量
-     *   missionCount   任务数量
+     *   missionCount   任务数量.
      *
-     * @param  array $arguments 参数
+     * @param array $arguments 参数
+     *
      * @return array 按班级分组的任务列表
      */
     public function getData(array $arguments)
     {
         if (!ArrayToolkit::requireds($arguments, array('userId', 'count', 'missionCount'))) {
-            throw new \InvalidArgumentException("参数缺失");
+            throw new \InvalidArgumentException('参数缺失');
         }
 
         return $this->getClassroomStudyMissions($arguments);
@@ -37,15 +38,15 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
         $memberConditions = array(
             'userId' => $userId,
             'locked' => 0,
-            'role'   => 'student'
+            'role' => 'student',
         );
-        $sort             = array('createdTime' => 'DESC');
-        $classroomMems    = $this->getClassroomService()->searchMembers($memberConditions, $sort, 0, $arguments['count']);
-        $classroomIds     = ArrayToolkit::column($classroomMems, 'classroomId');
+        $sort = array('createdTime' => 'DESC');
+        $classroomMems = $this->getClassroomService()->searchMembers($memberConditions, $sort, 0, $arguments['count']);
+
+        $classroomIds = ArrayToolkit::column($classroomMems, 'classroomId');
 
         if (!empty($classroomIds)) {
             $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
-
             foreach ($classroomMems as $member) {
                 if (empty($classrooms[$member['classroomId']])) {
                     continue;
@@ -55,38 +56,40 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
 
                 $sortedClassrooms[] = $classroom;
             }
-
             foreach ($sortedClassrooms as $key => &$classroom) {
                 $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
 
                 if (!empty($courses)) {
                     $courseIds = ArrayToolkit::column($courses, 'id');
+
                     /**
-                     * 找出学过的课时
+                     * 找出学过的任务
                      */
                     $learnedConditions = array(
-                        'userId'    => $userId,
-                        'courseIds' => $courseIds
+                        'userId' => $userId,
+                        'courseIds' => $courseIds,
                     );
-                    $sort              = array('finishedTime' => 'ASC');
-                    $taskCount         = $this->getTaskResultService()->countTaskResults($learnedConditions);
-                    $tasks             = $this->getTaskResultService()->searchTaskResults($learnedConditions, $sort, 0, $taskCount);
-                    $taskGroupStatus   = ArrayToolkit::group($tasks, 'status');
 
-                    $finishTasks   = isset($taskGroupStatus['finish']) ? $taskGroupStatus['finish'] : array();
-                    $finishTaskIds = ArrayToolkit::column($finishTasks, 'lessonId');
+                    $sort = array('finishedTime' => 'ASC');
+                    $taskCount = $this->getTaskResultService()->countTaskResults($learnedConditions);
+                    $tasks = $this->getTaskResultService()->searchTaskResults($learnedConditions, $sort, 0, $taskCount);
+                    $taskGroupStatus = ArrayToolkit::group($tasks, 'status');
 
-                    $learningTasks   = isset($taskGroupStatus['learning']) ? $taskGroupStatus['learning'] : array();
-                    $learningTaskIds = ArrayToolkit::column($learningTasks, 'lessonId');
+                    $finishTasks = isset($taskGroupStatus['finish']) ? $taskGroupStatus['finish'] : array();
+                    $finishTaskIds = ArrayToolkit::column($finishTasks, 'courseTaskId');
+
+                    $learningTasks = isset($taskGroupStatus['learning']) ? $taskGroupStatus['learning'] : array();
+                    $learningTaskIds = ArrayToolkit::column($learningTasks, 'courseTaskId');
 
                     $notLearnedConditions = array(
-                        'status'     => 'published',
-                        'courseIds'  => $courseIds,
-                        'excludeIds' => $finishTaskIds
+                        'status' => 'published',
+                        'courseIds' => $courseIds,
                     );
-                    $sort                 = array('seq' => 'ASC');
-                    $notLearnedLessons    = $this->getTaskService()->searchTasks($notLearnedConditions, $sort, 0, $arguments['missionCount']);
-
+                    if (!empty($finishTaskIds)) {
+                        $notLearnedConditions['excludeIds'] = $finishTaskIds;
+                    }
+                    $sort = array('seq' => 'ASC');
+                    $notLearnedLessons = $this->getTaskService()->searchTasks($notLearnedConditions, $sort, 0, $arguments['missionCount']);
                     $classroomTaskNum = 0;
 
                     foreach ($courses as $course) {
@@ -105,9 +108,9 @@ class ClassroomMissionsDataTag extends BaseDataTag implements DataTag
                             }
                         }
 
-                        $classroom['tasks']          = $notLearnedLessons;
+                        $classroom['tasks'] = $notLearnedLessons;
                         $classroom['learnedTaskNum'] = count($finishTaskIds);
-                        $classroom['allTaskNum']     = $classroomTaskNum;
+                        $classroom['allTaskNum'] = $classroomTaskNum;
                     }
                 } else {
                     unset($sortedClassrooms[$key]);

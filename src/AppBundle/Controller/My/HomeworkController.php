@@ -17,13 +17,13 @@ class HomeworkController extends BaseController
         }
 
         $teacherCourses = $this->getCourseMemberService()->findTeacherMembersByUserId($user['id']);
-        $courseIds      = ArrayToolkit::column($teacherCourses, 'courseId');
-        $courses        = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseIds = ArrayToolkit::column($teacherCourses, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $conditions = array(
-            'status'    => $status,
-            'type'      => 'homework',
-            'courseIds' => $courseIds
+            'status' => $status,
+            'type' => 'homework',
+            'courseIds' => $courseIds,
         );
 
         $paginator = new Paginator(
@@ -43,26 +43,26 @@ class HomeworkController extends BaseController
 
         $userIds = ArrayToolkit::column($paperResults, 'userId');
         $userIds = array_merge($userIds, ArrayToolkit::column($paperResults, 'checkTeacherId'));
-        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         $courseSetIds = ArrayToolkit::column($paperResults, 'courseSetId');
-        $courseSets   = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
 
         $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
-        $testpapers   = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
 
         $activityIds = ArrayToolkit::column($paperResults, 'lessonId');
-        $tasks       = $this->getTaskService()->findTasksByActivityIds($activityIds);
+        $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
 
         return $this->render('my/homework/check-list.html.twig', array(
             'paperResults' => $paperResults,
-            'paginator'    => $paginator,
-            'courses'      => $courses,
-            'courseSets'   => $courseSets,
-            'users'        => $users,
-            'status'       => $status,
-            'testpapers'   => $testpapers,
-            'tasks'        => $tasks
+            'paginator' => $paginator,
+            'courses' => $courses,
+            'courseSets' => $courseSets,
+            'users' => $users,
+            'status' => $status,
+            'testpapers' => $testpapers,
+            'tasks' => $tasks,
         ));
     }
 
@@ -72,8 +72,8 @@ class HomeworkController extends BaseController
 
         $conditions = array(
             'status' => $status,
-            'type'   => 'homework',
-            'userId' => $user['id']
+            'type' => 'homework',
+            'userId' => $user['id'],
         );
 
         $paginator = new Paginator(
@@ -90,41 +90,41 @@ class HomeworkController extends BaseController
         );
 
         $courseIds = ArrayToolkit::column($paperResults, 'courseId');
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courseSetIds = ArrayToolkit::column($paperResults, 'courseSetId');
-        $courseSets   = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
 
         $activityIds = ArrayToolkit::column($paperResults, 'lessonId');
-        $tasks       = $this->getTaskService()->findTasksByActivityIds($activityIds);
+        $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
 
         $homeworkIds = ArrayToolkit::column($paperResults, 'testId');
-        $homeworks   = $this->getTestpaperService()->findTestpapersByIds($homeworkIds);
+        $homeworks = $this->getTestpaperService()->findTestpapersByIds($homeworkIds);
 
         return $this->render('my/homework/my-homework-list.html.twig', array(
             'paperResults' => $paperResults,
-            'paginator'    => $paginator,
-            'courses'      => $courses,
-            'courseSets'   => $courseSets,
-            'status'       => $status,
-            'homeworks'    => $homeworks,
-            'tasks'        => $tasks
+            'paginator' => $paginator,
+            'courses' => $courses,
+            'courseSets' => $courseSets,
+            'status' => $status,
+            'homeworks' => $homeworks,
+            'tasks' => $tasks,
         ));
     }
 
     protected function _getHomeworkDoTime($homeworkResults)
     {
-        $homeworkIds     = ArrayToolkit::column($homeworkResults, 'testId');
+        $homeworkIds = ArrayToolkit::column($homeworkResults, 'testId');
         $homeworkIdCount = array_count_values($homeworkIds);
-        $time            = 1;
-        $homeworkId      = 0;
+        $time = 1;
+        $homeworkId = 0;
 
         foreach ($homeworkResults as $key => $homeworkResult) {
             if ($homeworkId == $homeworkResult['testId']) {
-                $time--;
+                --$time;
             } else {
                 $homeworkId = $homeworkResult['testId'];
-                $time       = $homeworkIdCount[$homeworkResult['testId']];
+                $time = $homeworkIdCount[$homeworkResult['testId']];
             }
 
             $homeworkResults[$key]['seq'] = $time;

@@ -1,0 +1,19 @@
+{% if courseSet.type != 'live' %}
+  <ul class="nav nav-pills hidden-xs mb20" role="tablist">
+    {% if member %}
+      {% set route = 'my_course_show' %}
+    {% else %}
+      {% set route = 'course_show' %}
+    {% endif %}
+
+    <li role="presentation" {% if 0 == selectedCourseId %}class="active"{% endif %}>
+      <a href="{{ path(route, {id: course.id, tab: tab, selectedCourse: 0 }) }}#{{ tab }}">全部教学计划</a>
+    </li>
+
+    {% for selectCourse in courses %}
+      <li role="presentation" {% if selectCourse.id == selectedCourseId %}class="active"{% endif %}>
+        <a href="{{ path(route, {id: course.id, selectedCourse: selectCourse.id, tab: tab}) }}#{{ tab }}">{{ selectCourse.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\MoneyCard\Dao\Impl;
 
 use Biz\MoneyCard\Dao\MoneyCardBatchDao;
@@ -13,10 +14,10 @@ class MoneyCardBatchDaoImpl extends GeneralDaoImpl implements MoneyCardBatchDao
         return array(
             'timestamps' => array(),
             'serializes' => array(),
-            'orderbys'   => array('id', 'createdTime'),
+            'orderbys' => array('id', 'createdTime'),
             'conditions' => array(
                 'cardPrefix = :cardPrefix',
-                'batchName LIKE :batchName'
+                'batchName LIKE :batchName',
             ),
         );
     }
@@ -25,7 +26,7 @@ class MoneyCardBatchDaoImpl extends GeneralDaoImpl implements MoneyCardBatchDao
     {
         $sql = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
         if ($locked) {
-            $sql = $sql." for update";
+            $sql = $sql.' for update';
         }
 
         return $this->db()->fetchAssoc($sql, array($token)) ?: null;

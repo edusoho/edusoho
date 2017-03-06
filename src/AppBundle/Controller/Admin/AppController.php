@@ -30,10 +30,10 @@ class AppController extends BaseController
         }
 
         $theme = array();
-        $app   = array();
+        $app = array();
 
         foreach ($apps as $key => $value) {
-            $value['code']      = strtolower($value['code']);
+            $value['code'] = strtolower($value['code']);
             $apps[$key]['code'] = $value['code'];
 
             if ($value['type'] == 'theme') {
@@ -54,15 +54,15 @@ class AppController extends BaseController
             $installedApps[$key] = $value;
         }
 
-        $showType = $request->query->get("showType");
+        $showType = $request->query->get('showType');
 
         return $this->render('admin/app/center.html.twig', array(
-            'apps'           => $apps,
-            'theme'          => $theme,
-            'allApp'         => $app,
-            'installedApps'  => $installedApps,
-            'type'           => $postStatus,
-            'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null
+            'apps' => $apps,
+            'theme' => $theme,
+            'allApp' => $app,
+            'installedApps' => $installedApps,
+            'type' => $postStatus,
+            'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null,
         ));
     }
 
@@ -75,14 +75,14 @@ class AppController extends BaseController
         $appsInstalled = $this->getAppService()->findApps(0, 100);
         $appsInstalled = ArrayToolkit::index($appsInstalled, 'code');
 
-        $dir     = dirname(dirname(dirname(dirname(__DIR__))));
+        $dir = dirname(dirname(dirname(dirname(__DIR__))));
         $appMeta = array();
 
         foreach ($apps as $key => $value) {
             unset($apps[$key]);
 
             $appInfo = $value;
-            $code    = strtolower($key);
+            $code = strtolower($key);
 
             $apps[$code] = $appInfo;
         }
@@ -92,14 +92,14 @@ class AppController extends BaseController
             unset($appsInstalled[$key]);
 
             $appInfo = $value;
-            $key     = strtolower($key);
+            $key = strtolower($key);
 
-            $appsInstalled[$key]              = $appInfo;
+            $appsInstalled[$key] = $appInfo;
             $appsInstalled[$key]['installed'] = 1;
-            $appsInstalled[$key]['icon']      = !empty($apps[$key]['icon']) ? $apps[$key]['icon'] : null;
+            $appsInstalled[$key]['icon'] = !empty($apps[$key]['icon']) ? $apps[$key]['icon'] : null;
 
             if ($key != 'MAIN') {
-                if (in_array($key, array("vip", "coupon"))) {
+                if (in_array($key, array('vip', 'coupon'))) {
                     $key = ucfirst($appItem);
                 } else {
                     $key = $appItem;
@@ -115,7 +115,7 @@ class AppController extends BaseController
 
         $apps = array_merge($apps, $appsInstalled);
 
-        $theme  = array();
+        $theme = array();
         $plugin = array();
 
         foreach ($apps as $key => $value) {
@@ -127,11 +127,11 @@ class AppController extends BaseController
         }
 
         return $this->render('admin/app/installed.html.twig', array(
-            'apps'    => $apps,
-            'theme'   => $theme,
-            'plugin'  => $plugin,
-            'type'    => $postStatus,
-            'appMeta' => $appMeta
+            'apps' => $apps,
+            'theme' => $theme,
+            'plugin' => $plugin,
+            'type' => $postStatus,
+            'appMeta' => $appMeta,
         ));
     }
 
@@ -152,9 +152,10 @@ class AppController extends BaseController
         }
 
         $version = $this->getAppService()->getMainVersion();
+
         return $this->render('admin/app/upgrades.html.twig', array(
-            'apps'    => $apps,
-            'version' => $version
+            'apps' => $apps,
+            'version' => $version,
         ));
     }
 
@@ -179,10 +180,11 @@ class AppController extends BaseController
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
+
         return $this->render('admin/app/logs.html.twig', array(
-            'logs'      => $logs,
-            'users'     => $users,
-            'paginator' => $paginator
+            'logs' => $logs,
+            'users' => $users,
+            'paginator' => $paginator,
         ));
     }
 

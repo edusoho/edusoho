@@ -18,10 +18,11 @@ class ClassroomThreadController extends BaseController
         $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
         if (!$canLook) {
             $classroomName = $this->setting('classroom.name', '班级');
+
             return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         $layout = ($member && $member['locked'] == '0') ? 'classroom/join-layout.html.twig' : 'classroom/layout.html.twig';
@@ -31,17 +32,17 @@ class ClassroomThreadController extends BaseController
         } else {
             $classroomDescription = $classroom['about'];
             $classroomDescription = strip_tags($classroomDescription, '');
-            $classroomDescription = preg_replace("/ /", "", $classroomDescription);
+            $classroomDescription = preg_replace('/ /', '', $classroomDescription);
         }
 
         return $this->render('classroom-thread/list.html.twig', array(
-            'classroom'            => $classroom,
-            'filters'              => $this->getThreadSearchFilters($request),
-            'canLook'              => $canLook,
-            'service'              => $this->getThreadService(),
-            'layout'               => $layout,
-            'member'               => $member,
-            'classroomDescription' => $classroomDescription
+            'classroom' => $classroom,
+            'filters' => $this->getThreadSearchFilters($request),
+            'canLook' => $canLook,
+            'service' => $this->getThreadService(),
+            'layout' => $layout,
+            'member' => $member,
+            'classroomDescription' => $classroomDescription,
         ));
     }
 
@@ -54,6 +55,7 @@ class ClassroomThreadController extends BaseController
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             $request->getSession()->set('_target_path', $this->generateUrl('classroom_thread_create', array('classroomId' => $classroomId, 'type' => $type)));
+
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
@@ -78,18 +80,18 @@ class ClassroomThreadController extends BaseController
 
         return $this->render('classroom-thread/create.html.twig', array(
             'classroom' => $classroom,
-            'layout'    => $layout,
-            'type'      => $type,
-            'member'    => $member
+            'layout' => $layout,
+            'type' => $type,
+            'member' => $member,
         ));
     }
 
     public function updateAction(Request $request, $classroomId, $threadId)
     {
         $classroomSetting = $this->getSettingService()->get('classroom');
-        $classroom        = $this->getClassroomService()->getClassroom($classroomId);
-        $thread           = $this->getThreadService()->getThread($threadId);
-        $user             = $this->getCurrentUser();
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $thread = $this->getThreadService()->getThread($threadId);
+        $user = $this->getCurrentUser();
 
         if (!($user->isAdmin()
             || $this->getClassroomService()->canManageClassroom($classroomId)
@@ -100,14 +102,14 @@ class ClassroomThreadController extends BaseController
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($request->getMethod() == 'POST') {
-            return $this->forward('Appbundle:Thread:update', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id']), 'thread' => $thread));
+            return $this->forward('AppBundle:Thread:update', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id']), 'thread' => $thread));
         }
 
         return $this->render('classroom-thread/create.html.twig', array(
             'classroom' => $classroom,
-            'thread'    => $thread,
-            'type'      => $thread['type'],
-            'member'    => $member
+            'thread' => $thread,
+            'type' => $thread['type'],
+            'member' => $member,
         ));
     }
 
@@ -116,16 +118,16 @@ class ClassroomThreadController extends BaseController
         $classroomSetting = $this->getSettingService()->get('classroom');
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $thread    = $this->getThreadService()->getThread($threadId);
-        $author    = $this->getUserService()->getUser($thread['userId']);
-        $user      = $this->getCurrentUser();
-        $adopted   = $request->query->get('adopted');
-        $filter    = array();
+        $thread = $this->getThreadService()->getThread($threadId);
+        $author = $this->getUserService()->getUser($thread['userId']);
+        $user = $this->getCurrentUser();
+        $adopted = $request->query->get('adopted');
+        $filter = array();
         if (!empty($adopted)) {
             $filter = array('adopted' => $adopted);
         }
 
-        $member  = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         $canLook = $this->getClassroomService()->canLookClassroom($classroom['id']);
         if (!$canLook) {
             return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
@@ -138,20 +140,21 @@ class ClassroomThreadController extends BaseController
         if ($member && !$member['locked']) {
             $layout = 'classroom/join-layout.html.twig';
         }
+
         return $this->render('classroom-thread/show.html.twig', array(
             'classroom' => $classroom,
-            'thread'    => $thread,
-            'author'    => $author,
-            'member'    => $member,
-            'layout'    => $layout,
-            'filter'    => $filter,
-            'canLook'   => $canLook
+            'thread' => $thread,
+            'author' => $author,
+            'member' => $member,
+            'layout' => $layout,
+            'filter' => $filter,
+            'canLook' => $canLook,
         ));
     }
 
     private function getThreadSearchFilters($request)
     {
-        $filters         = array();
+        $filters = array();
         $filters['type'] = $request->query->get('type');
         if (!in_array($filters['type'], array('all', 'question', 'nice'))) {
             $filters['type'] = 'all';

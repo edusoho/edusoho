@@ -1,6 +1,6 @@
 <?php
-namespace Biz\Article\Dao\Impl;
 
+namespace Biz\Article\Dao\Impl;
 
 use Biz\Article\Dao\ArticleDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -13,12 +13,14 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
     public function getPrevious($categoryId, $createdTime)
     {
         $sql = "SELECT * FROM {$this->table} WHERE `categoryId` = ? AND createdTime < ? ORDER BY `createdTime` DESC LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($categoryId, $createdTime)) ?: array();
     }
 
     public function getNext($categoryId, $createdTime)
     {
         $sql = "SELECT * FROM {$this->table} WHERE  `categoryId` = ? AND createdTime > ? ORDER BY `createdTime` ASC LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($categoryId, $createdTime)) ?: array();
     }
 
@@ -30,6 +32,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
     public function findAll()
     {
         $sql = "SELECT * FROM {$this->table};";
+
         return $this->db()->fetchAll($sql, array()) ?: array();
     }
 
@@ -37,7 +40,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
     {
         return $this->search(
             array(
-                'categoryIds' => $categoryIds
+                'categoryIds' => $categoryIds,
             ),
             array('createdTime' => 'DESC'),
             $start,
@@ -50,6 +53,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
         if (empty($categoryIds)) {
             throw new InvalidArgumentException(sprintf('参数不允许为空数组'));
         }
+
         return $this->count(array('categoryIds' => $categoryIds));
     }
 
@@ -62,7 +66,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
         }
 
         return $this->wave(array($id), array(
-            $field => $diff
+            $field => $diff,
         ));
     }
 
@@ -71,13 +75,13 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
         $conditions = array_filter($conditions);
 
         if (array_key_exists('property', $conditions)) {
-            $key              = $conditions['property'];
+            $key = $conditions['property'];
             $conditions[$key] = 1;
         }
 
         if (array_key_exists('hasPicture', $conditions)) {
             if ($conditions['hasPicture']) {
-                $conditions['pictureNull'] = "";
+                $conditions['pictureNull'] = '';
                 unset($conditions['hasPicture']);
             }
         }
@@ -92,7 +96,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
         }
 
         if (isset($conditions['likeOrgCode'])) {
-            $conditions['likeOrgCode'] = $conditions['likeOrgCode'] . '%';
+            $conditions['likeOrgCode'] = $conditions['likeOrgCode'].'%';
             unset($conditions['orgCode']);
         }
 
@@ -102,11 +106,11 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
     public function declares()
     {
         return array(
-            'orderbys'   => array(
+            'orderbys' => array(
                 'createdTime',
                 'publishedTime',
                 'sticky',
-                'hits'
+                'hits',
             ),
             'conditions' => array(
                 'status = :status',
@@ -124,7 +128,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
                 'id = :articleId',
                 'thumb != :thumbNotEqual',
                 'orgCode = :orgCode',
-            )
+            ),
         );
     }
 }

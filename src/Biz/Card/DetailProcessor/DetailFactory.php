@@ -2,7 +2,6 @@
 
 namespace Biz\Card\DetailProcessor;
 
-
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class DetailFactory
@@ -11,6 +10,7 @@ class DetailFactory
      * @param $cardType
      *
      * @return DetailProcessor
+     *
      * @throws InvalidArgumentException
      */
     public static function create($cardType)
@@ -19,15 +19,14 @@ class DetailFactory
             throw new InvalidArgumentException('卡的类型不存在');
         }
 
-        if ($cardType == "coupon") {
-            $class = "Biz\\Coupon\\CouponProcessor\\CouponDetailProcessor";
+        if ($cardType == 'coupon') {
+            $class = 'Biz\\Coupon\\CouponProcessor\\CouponDetailProcessor';
         }
 
-        if ($cardType == "moneyCard") {
-            $class = "Topxia\\Service\\MoneyCard\\MoneyCardProcessor\\MoneyCardDetailProcessor";
+        if ($cardType == 'moneyCard') {
+            $class = 'Biz\\MoneyCard\\MoneyCardProcessor\\MoneyCardDetailProcessor';
         }
 
         return new $class();
     }
-
 }

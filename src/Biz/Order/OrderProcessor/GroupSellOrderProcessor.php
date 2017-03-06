@@ -1,14 +1,14 @@
 <?php
+
 namespace Biz\Order\OrderProcessor;
 
 use Exception;
 use AppBundle\Common\NumberToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-    protected $router    = "";
-    protected $orderType = "groupSell";
+    protected $router = '';
+    protected $orderType = 'groupSell';
 
     public function getTarget($targetId)
     {
@@ -20,15 +20,15 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
         $group = $this->getGroupSellService()->getGroupSell($targetId);
 
         if (empty($group)) {
-            return array("error" => $this->getKernel()->trans('找不到要购买的组合!'));
+            return array('error' => $this->getKernel()->trans('找不到要购买的组合!'));
         }
 
         if ($group['startTime'] > time()) {
-            return array("error" => $this->getKernel()->trans('活动还没有开始'));
+            return array('error' => $this->getKernel()->trans('活动还没有开始'));
         }
 
         if ($group['endTime'] < time()) {
-            return array("error" => $this->getKernel()->trans('活动已经结束'));
+            return array('error' => $this->getKernel()->trans('活动已经结束'));
         }
 
         return array();
@@ -44,11 +44,11 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
 
         //组合购买不支持使用虚拟币等其他形式
         return array(
-            'totalPrice' => $group["groupPrice"],
-            'targetId'   => $targetId,
+            'totalPrice' => $group['groupPrice'],
+            'targetId' => $targetId,
             'targetType' => $this->orderType,
             'showCoupon' => false,
-            "group"      => $group
+            'group' => $group,
         );
     }
 
@@ -59,12 +59,12 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
         $amount = $totalPrice;
 
         $totalPrice = NumberToolkit::roundUp($totalPrice);
-        $amount     = NumberToolkit::roundUp($amount);
+        $amount = NumberToolkit::roundUp($amount);
 
         return array(
             $amount,
             $totalPrice,
-            null
+            null,
         );
     }
 
@@ -76,9 +76,10 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getTotalPrice($targetId, $priceType)
     {
         $totalPrice = 0;
-        $group      = $this->getGroupSellService()->getGroupSell($targetId);
+        $group = $this->getGroupSellService()->getGroupSell($targetId);
 
         $totalPrice = (float) $group['groupPrice'];
+
         return $totalPrice;
     }
 
@@ -106,12 +107,14 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
     public function getNote($targetId)
     {
         $group = $this->getGroupSellService()->getGroupSell($targetId);
+
         return $group['about'];
     }
 
     public function getTitle($targetId)
     {
         $group = $this->getGroupSellService()->getGroupSell($targetId);
+
         return $group['title'];
     }
 
@@ -138,18 +141,19 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function callbackUrl($order, $container)
     {
-        $group      = $this->getGroupSellService()->getGroupSell($order['targetId']);
+        $group = $this->getGroupSellService()->getGroupSell($order['targetId']);
         $targetType = $group['type'];
 
         if ($targetType == 'course') {
-            $router = "my_courses_learning";
+            $router = 'my_courses_learning';
         } elseif ($targetType == 'classroom') {
-            $router = "my_classrooms";
+            $router = 'my_classrooms';
         } else {
-            $router = "homepage";
+            $router = 'homepage';
         }
 
         $goto = $container->get('router')->generate($router, array(), true);
+
         return $goto;
     }
 
@@ -170,7 +174,7 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderInfoTemplate()
     {
-        return "GroupSellBundle:GroupSell:orderInfo";
+        return 'GroupSellBundle:GroupSell:orderInfo';
     }
 
     protected function getGroupSellOrderService()

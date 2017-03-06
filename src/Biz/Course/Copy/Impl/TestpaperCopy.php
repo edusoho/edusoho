@@ -13,7 +13,8 @@ class TestpaperCopy extends AbstractEntityCopy
      * 复制链说明：
      * Testpaper 试卷/作业/练习
      * - TestpaperItem 题目列表
-     *   - Question 题目内容
+     *   - Question 题目内容.
+     *
      * @param $biz
      */
     public function __construct($biz, $node)
@@ -47,18 +48,19 @@ class TestpaperCopy extends AbstractEntityCopy
             'passedCondition',
             'itemCount',
             'metas',
-            'type'
+            'type',
         );
         $newTestpaper = array(
-            'lessonId'      => 0,
+            'lessonId' => 0,
             'createdUserId' => $this->biz['user']['id'],
-            'copyId'        => $isCopy ? $testpaper['id'] : 0
+            'copyId' => $isCopy ? $testpaper['id'] : 0,
         );
         foreach ($fields as $field) {
             if (!empty($testpaper[$field]) || $testpaper[$field] == 0) {
                 $newTestpaper[$field] = $testpaper[$field];
             }
         }
+
         return $newTestpaper;
     }
 
@@ -71,9 +73,6 @@ class TestpaperCopy extends AbstractEntityCopy
 
         $copyQuestions = $this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseSetId'], $isCopy);
 
-        // $copyQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($newTestpaper['courseSetId']);
-        // $copyQuestions = ArrayToolkit::index($copyQuestions, 'copyId');
-
         foreach ($items as $item) {
             $question = empty($copyQuestions[$item['questionId']]) ? array() : $copyQuestions[$item['questionId']];
 
@@ -81,14 +80,14 @@ class TestpaperCopy extends AbstractEntityCopy
                 continue;
             }
             $newItem = array(
-                'testId'       => $newTestpaper['id'],
-                'seq'          => $item['seq'],
-                'questionId'   => $question['id'],
+                'testId' => $newTestpaper['id'],
+                'seq' => $item['seq'],
+                'questionId' => $question['id'],
                 'questionType' => $item['questionType'],
-                'parentId'     => $item['parentId'] > 0 ? $copyQuestions[$item['parentId']]['id'] : 0,
-                'score'        => $item['score'],
-                'missScore'    => $item['missScore'],
-                'copyId'       => $isCopy ? $item['id'] : 0
+                'parentId' => $item['parentId'] > 0 ? $copyQuestions[$item['parentId']]['id'] : 0,
+                'score' => $item['score'],
+                'missScore' => $item['missScore'],
+                'copyId' => $isCopy ? $item['id'] : 0,
             );
 
             $this->getTestpaperService()->createItem($newItem);
@@ -102,16 +101,16 @@ class TestpaperCopy extends AbstractEntityCopy
     {
         $copyQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($newCourseSetId);
 
+        $copyQuestions = ArrayToolkit::index($copyQuestions, 'copyId');
         $copyQuestionIds = ArrayToolkit::column($copyQuestions, 'copyId');
 
         $diff = array_values(array_diff($ids, $copyQuestionIds));
         if (empty($diff)) {
-            return array();
+            return $copyQuestions;
         }
 
-        $copyQuestions = ArrayToolkit::index($copyQuestions, 'copyId');
-        $questions     = $this->getQuestionService()->findQuestionsByIds($diff);
-        $questions     = $this->questionSort($questions);
+        $questions = $this->getQuestionService()->findQuestionsByIds($diff);
+        $questions = $this->questionSort($questions);
 
         $questionMap = array();
         foreach ($questions as $question) {
@@ -124,10 +123,9 @@ class TestpaperCopy extends AbstractEntityCopy
 
             $newQuestion = $this->getQuestionService()->create($newQuestion);
 
-            $questionMap[$question['id']] = array($newQuestion['id'], $newQuestion['parentId']);
+            $copyQuestions[$newQuestion['copyId']] = $newQuestion;
         }
 
-        // return $questionMap;
         return $copyQuestions;
     }
 
@@ -137,6 +135,7 @@ class TestpaperCopy extends AbstractEntityCopy
             if ($a['parentId'] == $b['parentId']) {
                 return 0;
             }
+
             return $a['parentId'] < $b['parentId'] ? -1 : 1;
         });
 
@@ -153,15 +152,15 @@ class TestpaperCopy extends AbstractEntityCopy
             'analysis',
             'metas',
             'categoryId',
-            'difficulty'
+            'difficulty',
         );
 
-        $newQuestion             = ArrayToolkit::parts($question, $fields);
+        $newQuestion = ArrayToolkit::parts($question, $fields);
         $newQuestion['courseId'] = $newCourseSetId;
         $newQuestion['lessonId'] = 0;
-        $newQuestion['copyId']   = $isCopy ? $question['id'] : 0;
-        $newQuestion['userId']   = $this->biz['user']['id'];
-        $newQuestion['target']   = 'course-'.$newCourseSetId;
+        $newQuestion['copyId'] = $isCopy ? $question['id'] : 0;
+        $newQuestion['userId'] = $this->biz['user']['id'];
+        $newQuestion['target'] = 'course-'.$newCourseSetId;
 
         return $newQuestion;
     }

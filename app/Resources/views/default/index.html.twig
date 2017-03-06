@@ -5,7 +5,8 @@
 
 {% set bodyClass = 'homepage' %}
 {% set siteNav = '/' %}
-{#{% set script_controller = 'index' %}#}
+
+{% do script(['libs/echo-js.js','app/js/index/index.js'])%}
 {% set _target_path = path('homepage') %}
 
 {% set currentTheme = current_theme() %}
@@ -14,8 +15,6 @@
 
 {% set isIndex = true %}
 {% set consultDisplay = true %}
-
-{% do script(['libs/echo-js.js','app/js/default/index.js']) %}
 
 {% block full_content %}
     {% cache 'jianmo/home/top/banner' 600 %}

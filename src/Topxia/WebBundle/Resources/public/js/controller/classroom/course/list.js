@@ -19,14 +19,14 @@ define(function(require, exports, module) {
             onExpandCourse: function(e) {
                 var $target = $(e.currentTarget);
                 var $parent = $target.parents(".course-item");
-                var $lessonList = $target.parents(".media").siblings(".period-list");
+                var $lessonList = $target.parents(".media").siblings(".course-detail-content");
                 var self = this;
                 if ($lessonList.length > 0) {
                     this._lessonListSHow($lessonList)
                 } else {
                     $.get($target .data('lessonUrl'), {'visibility':0}, function(html){
                         $parent.append(html);
-                        self._lessonListSHow($parent.siblings(".period-list"));
+                        self._lessonListSHow($parent.siblings(".course-detail-content"));
                     });
                 }
                 
@@ -34,7 +34,7 @@ define(function(require, exports, module) {
             },
             onCollapseCourse: function(e) {
                 var $target = $(e.currentTarget);
-                this._lessonListSHow($target.parents(".media").siblings(".period-list"));
+                this._lessonListSHow($target.parents(".media").siblings(".course-detail-content"));
                 $target.addClass('es-icon-keyboardarrowdown').removeClass('es-icon-keyboardarrowup');
             },
             _lessonListSHow: function($list) {

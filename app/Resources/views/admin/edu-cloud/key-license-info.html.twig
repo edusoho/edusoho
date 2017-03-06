@@ -38,7 +38,7 @@
     <div class="form-group">
       <label class="col-md-3 control-label">{{'授权域名'|trans}}</label>
       <div class="col-md-6">
-        <p class="form-control-static text-success">{% if info.licenseDomainCount|default(1) == 1 %}{{ info.licenseDomains }}{% else %}<span class="license-domain" data-toggle="tooltip" data-placement="bottom" title="{% for doman in info.licenseDomains|split(';') %}{{doman}}
+        <p class="form-control-static color-success">{% if info.licenseDomainCount|default(1) == 1 %}{{ info.licenseDomains }}{% else %}<span class="license-domain" data-toggle="tooltip" data-placement="bottom" title="{% for doman in info.licenseDomains|split(';') %}{{doman}}
         {% endfor %}">{{info.licenseDomainCount}}个</span>{% endif %}</p>
         {% if currentHost not in info.licenseDomains|split(';') %}
           <div class="alert alert-danger">

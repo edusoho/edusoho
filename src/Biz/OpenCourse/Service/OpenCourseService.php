@@ -5,7 +5,7 @@ namespace Biz\OpenCourse\Service;
 interface OpenCourseService
 {
     /**
-     * open_course
+     * open_course.
      */
     public function getCourse($id);
 
@@ -15,6 +15,7 @@ interface OpenCourseService
 
     /**
      * @param $conditions
+     *
      * @return mixed
      * @before  searchCourseCount
      */
@@ -45,7 +46,7 @@ interface OpenCourseService
     public function findCourseTeachers($courseId);
 
     /**
-     * open_course_lesson
+     * open_course_lesson.
      */
     public function getLesson($id);
 
@@ -59,6 +60,7 @@ interface OpenCourseService
 
     /**
      * @param $conditions
+     *
      * @return mixed
      * @before  searchLessonCount
      */
@@ -89,7 +91,7 @@ interface OpenCourseService
     public function generateLessonVideoReplay($courseId, $lessonId, $fileId);
 
     /**
-     * open_course_member
+     * open_course_member.
      */
     public function getMember($id);
 
@@ -103,6 +105,7 @@ interface OpenCourseService
 
     /**
      * @param $conditions
+     *
      * @return mixed
      * @before  searchMemberCount
      */
@@ -117,5 +120,4 @@ interface OpenCourseService
     public function deleteMember($id);
 
     public function setCourseTeachers($courseId, $teachers);
-
 }

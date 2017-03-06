@@ -53,9 +53,10 @@ class EdusohoCloudClient extends BaseService implements CloudClient
     public function makeUploadParams($params)
     {
         $params = ArrayToolkit::parts($params, array(
-            'convertor', 'convertCallback', 'convertParams', 'duration', 'user'
+            'convertor', 'convertCallback', 'convertParams', 'duration', 'user',
         ));
         $params = $this->callRemoteApiWithBase64('GET', 'MakeUploadToken', $params);
+
         return $params;
     }
 
@@ -63,7 +64,7 @@ class EdusohoCloudClient extends BaseService implements CloudClient
     {
         $url = $this->apiServer.'/api.m3u8?action=HLSQualitiyList';
 
-        $names      = array('sd' => '标清', 'hd' => '高清', 'shd' => '超清');
+        $names = array('sd' => '标清', 'hd' => '高清', 'shd' => '超清');
         $bandwidths = array('sd' => '245760', 'hd' => '450560', 'shd' => '655360');
 
         $items = array();
@@ -74,22 +75,22 @@ class EdusohoCloudClient extends BaseService implements CloudClient
             }
 
             $items[] = array(
-                'name'      => $names[$type],
+                'name' => $names[$type],
                 'bandwidth' => $bandwidths[$type],
-                'key'       => $videos[$type]['key']
+                'key' => $videos[$type]['key'],
             );
         }
 
         $args = array(
-            'items'     => $items,
+            'items' => $items,
             'timestamp' => (string) time(),
-            'duration'  => (string) $duration
+            'duration' => (string) $duration,
         );
 
-        $httpParams              = array();
+        $httpParams = array();
         $httpParams['accessKey'] = $this->accessKey;
-        $httpParams['args']      = $args;
-        $httpParams['sign']      = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
+        $httpParams['args'] = $args;
+        $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
 
         $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($httpParams);
 
@@ -97,7 +98,7 @@ class EdusohoCloudClient extends BaseService implements CloudClient
     }
 
     /**
-     * update
+     * update.
      */
     public function generateFileUrl($key, $duration)
     {
@@ -105,7 +106,7 @@ class EdusohoCloudClient extends BaseService implements CloudClient
 
         $encodedParams = base64_encode(json_encode($params));
 
-        $sign  = hash_hmac('sha1', $encodedParams, $this->secretKey);
+        $sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
         $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
 
         $content = $this->getRequest($this->apiServer.'/file_url.php', array('token' => $token));
@@ -138,12 +139,12 @@ class EdusohoCloudClient extends BaseService implements CloudClient
     }
 
     /**
-     * 即将废除
+     * 即将废除.
      */
     public function deleteFiles(array $keys, array $prefixs = array())
     {
-        $args            = array();
-        $args['keys']    = $keys;
+        $args = array();
+        $args['keys'] = $keys;
         $args['prefixs'] = $prefixs;
 
         $args = array_filter($args);
@@ -153,30 +154,33 @@ class EdusohoCloudClient extends BaseService implements CloudClient
 
     public function deleteFilesByKeys($storageType, array $keys)
     {
-        $args                = array();
+        $args = array();
         $args['storageType'] = $storageType;
-        $args['keys']        = $keys;
+        $args['keys'] = $keys;
+
         return $this->callRemoteApiWithBase64('POST', 'FilesDeleteByKeys', $args);
     }
 
     public function deleteFilesByPrefixs($storageType, array $prefixs)
     {
-        $args                = array();
+        $args = array();
         $args['storageType'] = $storageType;
-        $args['prefixs']     = $prefixs;
+        $args['prefixs'] = $prefixs;
+
         return $this->callRemoteApiWithBase64('POST', 'FilesDeleteByPrefixs', $args);
     }
 
     public function moveFiles(array $files)
     {
-        $args          = array();
+        $args = array();
         $args['moves'] = $files;
+
         return $this->callRemoteApiWithBase64('POST', 'FileMove', $args);
     }
 
     public function makeToken($type, array $tokenArgs = array())
     {
-        $args         = array();
+        $args = array();
         $args['type'] = $type;
         $args['args'] = $tokenArgs;
 
@@ -187,11 +191,11 @@ class EdusohoCloudClient extends BaseService implements CloudClient
     {
         $url = $this->makeApiUrl($action);
 
-        $httpParams              = array();
+        $httpParams = array();
         $httpParams['accessKey'] = $this->accessKey;
-        $httpParams['args']      = $args;
-        $httpParams['sign']      = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
-        $result                  = $this->sendRequest($httpMethod, $url, $httpParams);
+        $httpParams['args'] = $args;
+        $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
+        $result = $this->sendRequest($httpMethod, $url, $httpParams);
 
         return json_decode($result, true);
     }
@@ -200,11 +204,11 @@ class EdusohoCloudClient extends BaseService implements CloudClient
     {
         $url = $this->makeApiUrl($action);
 
-        $httpParams              = array();
+        $httpParams = array();
         $httpParams['accessKey'] = $this->accessKey;
-        $httpParams['args']      = $this->urlsafeBase64Encode(json_encode($args));
-        $httpParams['encode']    = 'base64';
-        $httpParams['sign']      = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
+        $httpParams['args'] = $this->urlsafeBase64Encode(json_encode($args));
+        $httpParams['encode'] = 'base64';
+        $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
 
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
 
@@ -213,8 +217,9 @@ class EdusohoCloudClient extends BaseService implements CloudClient
 
     protected function urlsafeBase64Encode($string)
     {
-        $find    = array('+', '/');
+        $find = array('+', '/');
         $replace = array('-', '_');
+
         return str_replace($find, $replace, base64_encode($string));
     }
 
@@ -226,7 +231,7 @@ class EdusohoCloudClient extends BaseService implements CloudClient
     {
         $encodedParams = base64_encode(json_encode(array()));
 
-        $sign  = hash_hmac('sha1', $encodedParams, $this->secretKey);
+        $sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
         $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
 
         $content = $this->getRequest($this->getBillUrl(), array('token' => $token));
@@ -236,10 +241,10 @@ class EdusohoCloudClient extends BaseService implements CloudClient
 
     public function convertVideo($key, $commands, $notifyUrl)
     {
-        $params        = array('key' => $key, 'commands' => $commands, 'notifyUrl' => $notifyUrl);
+        $params = array('key' => $key, 'commands' => $commands, 'notifyUrl' => $notifyUrl);
         $encodedParams = base64_encode(json_encode($params));
 
-        $sign  = hash_hmac('sha1', $encodedParams, $this->secretKey);
+        $sign = hash_hmac('sha1', $encodedParams, $this->secretKey);
         $token = "{$this->accessKey}:{$encodedParams}:{$sign}";
 
         $content = $this->getRequest($this->getConvertUrl(), array('token' => $token));
@@ -250,19 +255,21 @@ class EdusohoCloudClient extends BaseService implements CloudClient
     public function reconvertFile($key, $params)
     {
         $params['key'] = $key;
+
         return $this->callRemoteApiWithBase64('POST', 'FileReconvert', $params);
     }
 
     public function checkKey()
     {
-        $args       = array();
+        $args = array();
         $args['_t'] = time();
+
         return $this->callRemoteApiWithBase64('GET', 'CheckKey', $args);
     }
 
     public function convertPPT($key, $notifyUrl = null)
     {
-        $args        = array();
+        $args = array();
         $args['key'] = $key;
 
         if ($notifyUrl) {
@@ -274,17 +281,19 @@ class EdusohoCloudClient extends BaseService implements CloudClient
 
     public function pptImages($key, $length)
     {
-        $args           = array();
-        $args['key']    = $key;
+        $args = array();
+        $args['key'] = $key;
         $args['length'] = $length;
+
         return $this->callRemoteApi('GET', 'PPTImages', $args);
     }
 
     public function getMediaInfo($key, $mediaType)
     {
-        $args             = array();
-        $args['key']      = $key;
-        $args['duration'] = "3600";
+        $args = array();
+        $args['key'] = $key;
+        $args['duration'] = '3600';
+
         return json_decode($this->callRemoteApi('GET', 'GetMediaInfo', $args), true);
     }
 

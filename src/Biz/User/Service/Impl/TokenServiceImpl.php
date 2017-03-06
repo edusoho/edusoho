@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
@@ -8,15 +9,15 @@ class TokenServiceImpl extends BaseService implements TokenService
 {
     public function makeToken($type, array $args = array())
     {
-        $token                  = array();
-        $token['type']          = $type;
-        $token['token']         = $this->_makeTokenValue(32);
-        $token['data']          = !isset($args['data']) ? '' : $args['data'];
-        $token['times']         = empty($args['times']) ? 0 : intval($args['times']);
+        $token = array();
+        $token['type'] = $type;
+        $token['token'] = $this->_makeTokenValue(32);
+        $token['data'] = !isset($args['data']) ? '' : $args['data'];
+        $token['times'] = empty($args['times']) ? 0 : intval($args['times']);
         $token['remainedTimes'] = $token['times'];
-        $token['userId']        = empty($args['userId']) ? 0 : $args['userId'];
-        $token['expiredTime']   = empty($args['duration']) ? 0 : time() + $args['duration'];
-        $token['createdTime']   = time();
+        $token['userId'] = empty($args['userId']) ? 0 : $args['userId'];
+        $token['expiredTime'] = empty($args['duration']) ? 0 : time() + $args['duration'];
+        $token['createdTime'] = time();
 
         return $this->getTokenDao()->create($token);
     }
@@ -81,11 +82,13 @@ class TokenServiceImpl extends BaseService implements TokenService
     {
         if (($token['times'] > 0) && ($token['remainedTimes'] <= 1)) {
             $this->getTokenDao()->delete($token['id']);
+
             return;
         }
 
         if (($token['expiredTime'] > 0) && ($token['expiredTime'] < time())) {
             $this->getTokenDao()->delete($token['id']);
+
             return;
         }
 
@@ -98,7 +101,7 @@ class TokenServiceImpl extends BaseService implements TokenService
 
         $value = '';
 
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $value .= $chars[mt_rand(0, strlen($chars) - 1)];
         }
 

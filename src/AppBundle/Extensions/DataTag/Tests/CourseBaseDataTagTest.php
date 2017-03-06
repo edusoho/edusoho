@@ -2,15 +2,11 @@
 
 namespace AppBundle\Extensions\DataTag\Test;
 
-use Biz\BaseTestCase;;
-use AppBundle\Extensions\DataTag\CourseBaseDataTag;
+use Biz\BaseTestCase;
 
 class CourseBaseDataTagTest extends BaseTestCase
-{   
-
+{
     public function testGetData()
     {
-
     }
-
 }

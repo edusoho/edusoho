@@ -5,6 +5,7 @@ namespace Biz\Task\Service\Impl;
 use Biz\BaseService;
 use Biz\Task\Dao\TaskResultDao;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 
 class TaskResultServiceImpl extends BaseService implements TaskResultService
@@ -53,7 +54,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
             'activityId',
             'courseId',
             'courseTaskId',
-            'userId'
+            'userId',
         ));
 
         $user = $this->biz['user'];
@@ -64,7 +65,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
         $taskResult['status'] = 'start';
 
-        $this->getTaskResultDao()->create($taskResult);
+        return $this->getTaskResultDao()->create($taskResult);
     }
 
     public function updateTaskResult($id, $taskResult)
@@ -75,8 +76,44 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     public function waveLearnTime($id, $time)
     {
         return $this->getTaskResultDao()->wave(array($id), array(
-            'time' => $time
+            'time' => $time,
         ));
+    }
+
+    public function waveWatchTime($id, $watchTime)
+    {
+        $maxAllowWatchTime = 200;
+        if ($watchTime <= $maxAllowWatchTime) {
+            $this->getTaskResultDao()->wave(array($id), array(
+                'watchTime' => $watchTime,
+            ));
+
+            return $this->getTaskResultDao()->get($id);
+        }
+    }
+
+    public function checkUserWatchNum($taskId)
+    {
+        $task = $this->getTaskService()->getTask($taskId);
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+
+        //只有视频课程才限制观看时长
+        if (empty($course['watchLimit']) || $task['type'] != 'video') {
+            return array('status' => 'ignore');
+        }
+
+        $taskResult = $this->getUserTaskResultByTaskId($taskId);
+        $watchLimitTime = $task['length'] * $course['watchLimit'];
+
+        if (empty($taskResult)) {
+            return array('status' => 'ok', 'watchedTime' => 0, 'watchLimitTime' => $watchLimitTime);
+        }
+
+        if ($taskResult['watchTime'] < $watchLimitTime) {
+            return array('status' => 'ok', 'watchedTime' => $taskResult['watchTime'], 'watchLimitTime' => $watchLimitTime);
+        }
+
+        return array('status' => 'error', 'watchedTime' => $taskResult['watchTime'], 'watchLimitTime' => $watchLimitTime);
     }
 
     public function findUserProgressingTaskResultByActivityId($activityId)
@@ -89,11 +126,12 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
         $conditions = array(
             'activityId' => $activityId,
-            'userId'     => $user['id'],
-            'status'     => 'start'
+            'userId' => $user['id'],
+            'status' => 'start',
         );
 
         $count = $this->getTaskResultDao()->count($conditions);
+
         return $this->getTaskResultDao()->search($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
@@ -107,11 +145,12 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
         $conditions = array(
             'courseId' => $courseId,
-            'userId'   => $user['id'],
-            'status'   => 'start'
+            'userId' => $user['id'],
+            'status' => 'start',
         );
 
         $count = $this->getTaskResultDao()->count($conditions);
+
         return $this->getTaskResultDao()->search($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
@@ -128,12 +167,13 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
             throw $this->createAccessDeniedException('unlogin');
         }
         $conditions = array(
-            'userId'   => $user->getId(),
-            'status'   => 'finish',
-            'courseId' => $courseId
+            'userId' => $user->getId(),
+            'status' => 'finish',
+            'courseId' => $courseId,
         );
         $taskResults = $this->getTaskResultDao()->search($conditions, array('updatedTime' => 'DESC'), 0, 1);
-        $result      = array_shift($taskResults);
+        $result = array_shift($taskResults);
+
         return $result;
     }
 
@@ -147,6 +187,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         if (empty($taskIds)) {
             return array();
         }
+
         return $this->getTaskResultDao()->findByTaskIdsAndUserId($taskIds, $user->getId());
     }
 
@@ -160,7 +201,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     }
 
     /**
-     * 统计某个任务的学习次数，学习的定义为task_result的status为start、finish，不对用户去重；
+     * 统计某个任务的学习次数，学习的定义为task_result的status为start、finish，不对用户去重；.
      */
     public function countLearnNumByTaskId($taskId)
     {
@@ -195,7 +236,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId)
     {
         return $this->getTaskResultDao()->getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId);
-    } 
+    }
 
     /**
      * @return TaskResultDao
@@ -203,5 +244,21 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     protected function getTaskResultDao()
     {
         return $this->createDao('Task:TaskResultDao');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 }

@@ -1,10 +1,8 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
-
-use Codeages\Biz\Framework\UnitTests\UnitTestsBootstrap;
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Common\AppConnectionFactory;
+use Symfony\Component\HttpFoundation\Request;
+use Codeages\Biz\Framework\UnitTests\UnitTestsBootstrap;
 
 $loader = require __DIR__.'/../app/autoload.php';
 
@@ -31,6 +29,8 @@ $bootstrap->boot();
 // init service kernel env
 ServiceKernel::instance()
     ->setEnvVariable(array(
-        'host'          => 'test.com',
-        'schemeAndHost' => 'http://test.com'));
-
+        'host' => 'test.com',
+        'schemeAndHost' => 'http://test.com',
+        'basePath' => '/',
+        'baseUrl' => 'http://test.com/',
+    ));

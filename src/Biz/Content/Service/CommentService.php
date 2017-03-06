@@ -1,11 +1,12 @@
 <?php
+
 namespace Biz\Content\Service;
 
 interface CommentService
 {
-    CONST COMMENT_OBJECTTYPE_COURSE = 'course';
-    CONST COMMENT_OBJECTTYPE_TEACHER = 'teacher';
-    CONST COMMENT_OBJECTTYPE_QUESTION = 'question';
+    const COMMENT_OBJECTTYPE_COURSE = 'course';
+    const COMMENT_OBJECTTYPE_TEACHER = 'teacher';
+    const COMMENT_OBJECTTYPE_QUESTION = 'question';
 
     public function createComment(array $comment);
 

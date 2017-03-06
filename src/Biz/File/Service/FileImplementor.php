@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\File\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -7,8 +8,8 @@ interface FileImplementor
 {
     const CONVERT_STATUS_PENDING = 'waiting';
     const CONVERT_STATUS_SUCCESS = 'success';
-    const CONVERT_STATUS_NOT     = 'none';
-    const CONVERT_STATUS_ERROR   = 'error';
+    const CONVERT_STATUS_NOT = 'none';
+    const CONVERT_STATUS_ERROR = 'error';
 
     public function getFile($file);
 

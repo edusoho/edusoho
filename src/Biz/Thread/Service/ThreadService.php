@@ -5,9 +5,8 @@ namespace Biz\Thread\Service;
 interface ThreadService
 {
     /**
-     * thread
+     * thread.
      */
-
     public function getThread($threadId);
 
     public function createThread($thread);
@@ -37,9 +36,8 @@ interface ThreadService
     public function waveThread($id, $field, $diff);
 
     /**
-     * thread_post
+     * thread_post.
      */
-
     public function getPost($id);
 
     public function createPost($fields);
@@ -57,9 +55,8 @@ interface ThreadService
     public function wavePost($id, $field, $diff);
 
     /**
-     * thread_member
+     * thread_member.
      */
-
     public function getMemberByThreadIdAndUserId($threadId, $userId);
 
     public function createMember($fields);
@@ -73,8 +70,7 @@ interface ThreadService
     public function searchMemberCount($conditions);
 
     /**
-     * thread_vote
+     * thread_vote.
      */
-
     public function voteUpPost($id);
 }

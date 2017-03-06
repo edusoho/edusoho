@@ -5,11 +5,11 @@ use Phpmig\Migration\Migration;
 class AudioActivity extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
-        $biz        = $this->getContainer();
+        $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("DROP TABLE  IF EXISTS `audio_activity`;
            CREATE TABLE `audio_activity` (
@@ -21,10 +21,9 @@ class AudioActivity extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-
     }
 }

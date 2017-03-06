@@ -1,10 +1,10 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Content\Service\CommentService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
-
 use AppBundle\Common\ArrayToolkit;
 
 class CommentWidgetController extends BaseController
@@ -12,18 +12,19 @@ class CommentWidgetController extends BaseController
     public function initAction(Request $request)
     {
         $objectType = $request->query->get('objectType');
-        $objectId   = $request->query->get('objectId');
+        $objectId = $request->query->get('objectId');
 
-        $comment  = array(
+        $comment = array(
             'objectType' => $objectType,
-            'objectId'   => $objectId,
+            'objectId' => $objectId,
         );
         $comments = $this->getCommentService()->findComments($objectType, $objectId, 0, 1000);
-        $users    = $this->getUserService()->findUsersByIds(ArrayToolkit::column($comments, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($comments, 'userId'));
+
         return $this->render('comment-widget/init.html.twig', array(
             'comments' => $comments,
-            'comment'  => $comment,
-            'users'    => $users,
+            'comment' => $comment,
+            'users' => $users,
         ));
     }
 
@@ -32,9 +33,10 @@ class CommentWidgetController extends BaseController
         if ($request->getMethod() == 'POST') {
             $comment = $request->request->all();
             $comment = $this->getCommentService()->createComment($comment);
+
             return $this->render('comment-widget/item.html.twig', array(
                 'comment' => $comment,
-                'user'    => $this->getCurrentUser(),
+                'user' => $this->getCurrentUser(),
             ));
         }
     }
@@ -43,6 +45,7 @@ class CommentWidgetController extends BaseController
     {
         $id = $request->query->get('id');
         $this->getCommentService()->deleteComment($id);
+
         return $this->createJsonResponse(true);
     }
 
@@ -61,5 +64,4 @@ class CommentWidgetController extends BaseController
     {
         return $this->getBiz()->service('User:UserService');
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Announcement\Processor;
 
 use Codeages\Biz\Framework\Context\Biz;
@@ -26,4 +27,6 @@ abstract class AnnouncementProcessor
     abstract public function tryManageObject($targetId);
 
     abstract public function getTargetObject($targetId);
+
+    abstract public function getActions($action);
 }

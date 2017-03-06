@@ -1,0 +1,18 @@
+{% set coinSetting = setting('coin') %}
+
+<span class="course-detail-title inline-block">价格</span>
+<!-- 折扣价 -->
+
+{% if course.price == 0 %}
+    <span class="gray-darker mrm vertical-middle inline-block"><b class="text-24">免费</b></span>
+{% else %}
+    {% if coinSetting.coin_enabled|default(false) and coinSetting.price_type == 'Coin' %}
+        <span class="gray-darker mrm">¥<b class="text-24">{{ course.price * coinSetting.cash_rate }} {{ coinSetting.coin_name|default('虚拟币'|trans) }}</b></span>
+    {% else %}
+        <span class="gray-darker mrm">¥<b class="text-24">{{ course.price }}</b></span>
+        {% if course.price < course.originPrice %}
+            <span class="original-price">¥<span class="price">{{ course.originPrice }}</span></span>
+            <span class="tag-discount"><span class="discount-font">xx折</span></span>
+        {% endif %}
+    {% endif %}
+{% endif %}

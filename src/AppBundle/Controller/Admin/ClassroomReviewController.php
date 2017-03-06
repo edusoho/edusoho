@@ -1,11 +1,10 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-
-use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomReviewController extends BaseController
 {
@@ -18,14 +17,14 @@ class ClassroomReviewController extends BaseController
         }
 
         if (!empty($conditions['classroomTitle'])) {
-            $classrooms                 = $this->getClassroomService()->findClassroomsByLikeTitle(trim($conditions['classroomTitle']));
+            $classrooms = $this->getClassroomService()->findClassroomsByLikeTitle(trim($conditions['classroomTitle']));
             $conditions['classroomIds'] = ArrayToolkit::column($classrooms, 'id');
             if (count($conditions['classroomIds']) == 0) {
                 return $this->render('classroom-review/index.html.twig', array(
-                    'reviews'    => array(),
-                    'users'      => array(),
+                    'reviews' => array(),
+                    'users' => array(),
                     'classrooms' => array(),
-                    'paginator'  => new Paginator($request, 0, 20)
+                    'paginator' => new Paginator($request, 0, 20),
                 ));
             }
         }
@@ -39,18 +38,18 @@ class ClassroomReviewController extends BaseController
 
         $reviews = $this->getClassroomReviewService()->searchReviews(
             $conditions,
-            array('createdTime'=>'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $users      = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $classrooms = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($reviews, 'classroomId'));
 
-        return $this->render('classroom-Review/index.html.twig', array(
-            'reviews'    => $reviews,
-            'users'      => $users,
+        return $this->render('classroom-review/index.html.twig', array(
+            'reviews' => $reviews,
+            'users' => $users,
             'classrooms' => $classrooms,
-            'paginator'  => $paginator
+            'paginator' => $paginator,
         ));
     }
 

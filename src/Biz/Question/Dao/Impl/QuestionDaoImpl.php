@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Question\Dao\Impl;
 
 use Biz\Question\Dao\QuestionDao;
@@ -42,7 +43,7 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
     {
         $declares['orderbys'] = array(
             'createdTime',
-            'updatedTime'
+            'updatedTime',
         );
 
         $declares['conditions'] = array(
@@ -55,16 +56,18 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
             'subCount <> :subCount',
             'id NOT IN ( :excludeIds )',
             'courseId = :courseId',
+            'courseId IN (:courseIds)',
             'lessonId = :lessonId',
             'lessonId >= :lessonIdGT',
             'lessonId <= :lessonIdLT',
             'lessonId IN ( :lessonIds)',
-            'copyId IN (:copyIds)'
+            'copyId = :copyId',
+            'copyId IN (:copyIds)',
         );
 
         $declares['serializes'] = array(
             'answer' => 'json',
-            'metas'  => 'json'
+            'metas' => 'json',
         );
 
         return $declares;

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Listener;
 
 use Biz\User\Service\UserActiveService;
@@ -21,11 +22,10 @@ class KernelResponseListener
             return;
         }
 
-        $request     = $event->getRequest();
+        $request = $event->getRequest();
         $currentUser = $this->getUserService()->getCurrentUser();
 
         $this->generateUserActiveLog($request);
-
 
         $auth = $this->getSettingService()->get('auth');
 
@@ -47,6 +47,7 @@ class KernelResponseListener
 
                 $response = new RedirectResponse($url);
                 $event->setResponse($response);
+
                 return;
             }
         }
@@ -56,20 +57,20 @@ class KernelResponseListener
     {
         $session = $request->getSession();
 
-        if(empty($session)){
+        if (empty($session)) {
             return;
         }
 
         $activeUserTime = $session->get('active_user_time', 0);
 
         //当天登录激活
-        if ($activeUserTime != strtotime("today")) {
-            $currentUser  = $this->getUserService()->getCurrentUser();
+        if ($activeUserTime != strtotime('today')) {
+            $currentUser = $this->getUserService()->getCurrentUser();
             $isActiveUser = $this->getUserActiveLogService()->isActiveUser($currentUser->getId());
             if (!$isActiveUser) {
                 $this->getUserActiveLogService()->createActiveUser($currentUser->getId());
             }
-            $request->getSession()->set('active_user_time', strtotime("today"));
+            $request->getSession()->set('active_user_time', strtotime('today'));
         }
     }
 
@@ -86,9 +87,8 @@ class KernelResponseListener
             '/login/bind/qq/new', '/login/bind/weibo/new', '/login/bind/renren/new',
             '/login/bind/weixinmob/new', '/login/bind/weixinweb/new',
             '/partner/discuz/api/notify', '/partner/phpwind/api/notify', '/partner/login', '/partner/logout',
-            '/login/weixinmob', '/login/bind/weixinmob/existbind'
+            '/login/weixinmob', '/login/bind/weixinmob/existbind',
         );
-
     }
 
     protected function generateUrl($router, $params = array(), $withHost = false)
@@ -128,7 +128,6 @@ class KernelResponseListener
             || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'qq'))
             || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'weibo'))
             || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'renren'))
-
         ) {
             $targetPath = $this->generateUrl('homepage');
         }
@@ -138,8 +137,8 @@ class KernelResponseListener
 
     private function checkUserinfoFieldsFill($user)
     {
-        $auth                 = $this->getSettingService()->get('auth');
-        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        $auth = $this->getSettingService()->get('auth');
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['email'] = strstr($user['email'], '@edusoho.net') ? '' : $user['email'];
 
         $isFillUserInfo = true;
@@ -177,5 +176,4 @@ class KernelResponseListener
     {
         return ServiceKernel::instance()->createService('User:UserActiveService');
     }
-
 }

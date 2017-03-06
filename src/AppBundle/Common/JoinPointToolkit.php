@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Common;
 
 use Symfony\Component\Yaml\Yaml;
@@ -17,9 +18,10 @@ class JoinPointToolkit
         } else {
             $finder = new Finder();
             $finder->directories()->depth('== 0');
-
             foreach (ServiceKernel::instance()->getModuleDirectories() as $dir) {
-                if (glob($dir.'/*/*/Resources', GLOB_ONLYDIR)) {
+                if (glob($dir.'/*/Resources', GLOB_ONLYDIR)) {
+                    $finder->in($dir.'/*/Resources');
+                } elseif (glob($dir.'/*/*/Resources', GLOB_ONLYDIR)) {
                     $finder->in($dir.'/*/*/Resources');
                 }
             }
@@ -27,7 +29,7 @@ class JoinPointToolkit
             foreach ($finder as $dir) {
                 $filepath = $dir->getRealPath().'/join_point.yml';
                 if (file_exists($filepath)) {
-                    $points     = Yaml::parse(file_get_contents($filepath));
+                    $points = Yaml::parse(file_get_contents($filepath));
                     $joinPoints = array_merge_recursive($joinPoints, $points);
                 }
             }

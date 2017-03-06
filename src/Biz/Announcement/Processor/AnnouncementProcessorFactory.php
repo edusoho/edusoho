@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Announcement\Processor;
 
 use Codeages\Biz\Framework\Context\Biz;
@@ -20,6 +21,7 @@ class AnnouncementProcessorFactory
      * @param $target
      *
      * @return AnnouncementProcessor
+     *
      * @throws InvalidArgumentException
      */
     public function create($target)

@@ -8,19 +8,19 @@ class HLSVideoConvertor extends BaseConvertor
 
     public function getCovertParams($params)
     {
-        $videoQuality     = empty($params['videoQuality']) ? 'low' : $params['videoQuality'];
+        $videoQuality = empty($params['videoQuality']) ? 'low' : $params['videoQuality'];
         $videoDefinitions = $this->config['video'][$videoQuality];
 
-        $audioQuality     = empty($params['audioQuality']) ? 'low' : $params['audioQuality'];
+        $audioQuality = empty($params['audioQuality']) ? 'low' : $params['audioQuality'];
         $audioDefinitions = $this->config['audio'][$audioQuality];
 
         return array(
-            'convertor'    => $this->name,
-            'segtime'      => $this->config['segtime'],
+            'convertor' => $this->name,
+            'segtime' => $this->config['segtime'],
             'videoQuality' => $videoQuality,
             'audioQuality' => $audioQuality,
-            'video'        => $videoDefinitions,
-            'audio'        => $audioDefinitions
+            'video' => $videoDefinitions,
+            'audio' => $audioDefinitions,
         );
     }
 
@@ -32,11 +32,11 @@ class HLSVideoConvertor extends BaseConvertor
         $metas = array();
 
         foreach (array_values($items) as $index => $item) {
-            $type         = $types[$index];
+            $type = $types[$index];
             $metas[$type] = array(
                 'type' => $type,
-                'cmd'  => $item['cmd'],
-                'key'  => $item['key']
+                'cmd' => $item['cmd'],
+                'key' => $item['key'],
             );
         }
 
@@ -44,7 +44,7 @@ class HLSVideoConvertor extends BaseConvertor
         unset($file['metas2']['sd']);
         unset($file['metas2']['hd']);
         unset($file['metas2']['shd']);
-        $file['metas2']        = array_merge($file['metas2'], $metas);
+        $file['metas2'] = array_merge($file['metas2'], $metas);
         $file['convertStatus'] = 'success';
 
         return $file;

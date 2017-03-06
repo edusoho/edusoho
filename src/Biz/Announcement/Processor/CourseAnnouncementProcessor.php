@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Announcement\Processor;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -31,16 +32,16 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
     {
         $conditions = array(
             'courseId' => $targetId,
-            'role'     => 'student'
+            'role' => 'student',
         );
-        $count   = $this->getCourseMemberService()->countMembers($conditions);
+        $count = $this->getCourseMemberService()->countMembers($conditions);
         $members = $this->getCourseMemberService()->findCourseStudents($targetId, 0, $count);
 
         $result = false;
         if ($members) {
             $message = array('title' => $targetObject['title'],
-                'url'                    => $targetObjectShowUrl,
-                'type'                   => 'course');
+                'url' => $targetObjectShowUrl,
+                'type' => 'course', );
             foreach ($members as $member) {
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
@@ -64,9 +65,9 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
     public function getActions($action)
     {
         $config = array(
-            'create' => 'AppBundle:Course/CourseAnnouncement:create',
-            'edit'   => 'AppBundle:Course/CourseAnnouncement:edit',
-            'list'   => 'AppBundle:Course/CourseAnnouncement:list'
+            'create' => 'AppBundle:Course/Announcement:create',
+            'edit' => 'AppBundle:Course/Announcement:edit',
+            'list' => 'AppBundle:Course/Announcement:list',
         );
 
         return $config[$action];

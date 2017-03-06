@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\UpgradeNoticeDao;
@@ -11,9 +12,9 @@ class UpgradeNoticeDaoImpl extends GeneralDaoImpl implements UpgradeNoticeDao
     public function getByUserIdAndVersionAndCode($userId, $version, $code)
     {
         return $this->getByFields(array(
-            'userId'  => $userId,
+            'userId' => $userId,
             'version' => $version,
-            'code'    => $code
+            'code' => $code,
         ));
     }
 
@@ -23,8 +24,8 @@ class UpgradeNoticeDaoImpl extends GeneralDaoImpl implements UpgradeNoticeDao
             'conditions' => array(
                 'userId = :userId',
                 'version = :version',
-                'code = :code'
-            )
+                'code = :code',
+            ),
         );
     }
 }

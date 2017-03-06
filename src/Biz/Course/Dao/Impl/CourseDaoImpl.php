@@ -19,6 +19,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         if (empty($status)) {
             return $this->findByFields(array('courseSetId' => $courseSetId));
         }
+
         return $this->findByFields(array('courseSetId' => $courseSetId, 'status' => $status));
     }
 
@@ -34,7 +35,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         }
 
         $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE isDefault=1 AND courseSetId IN ({$marks});";
+        $sql = "SELECT * FROM {$this->table} WHERE isDefault=1 AND courseSetId IN ({$marks});";
 
         return $this->db()->fetchAll($sql, $courseSetIds);
     }
@@ -57,6 +58,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
 
         $sql = "SELECT MIN(price) AS minPrice, MAX(price) AS maxPrice,courseSetId FROM {$this->table} WHERE courseSetId IN ({$marks}) GROUP BY courseSetId";
+
         return $this->db()->fetchAll($sql, $courseSetIds) ?: null;
     }
 
@@ -69,6 +71,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                         SELECT count(id) as count FROM  `{$this->getTable()}` i WHERE i.createdTime<=o.createdTime and i.parentId = 0
                     )  as Count from `{$this->getTable()}`  o  where o.createdTime<={$endTime} order by 1,2
                 ) as a group by date ";
+
         return $this->getConnection()->fetchAll($sql);
     }
 
@@ -79,7 +82,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         }
 
         $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
-        $sql   = "SELECT courseSetId,sum(`income`) as income FROM {$this->table} WHERE courseSetId IN ({$marks}) group by courseSetId;";
+        $sql = "SELECT courseSetId,sum(`income`) as income FROM {$this->table} WHERE courseSetId IN ({$marks}) group by courseSetId;";
 
         return $this->db()->fetchAll($sql, $courseSetIds);
     }
@@ -92,22 +95,28 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
-    public function getMinPublishedCoursePriceByCourseSetId($courseSetId)
+    public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
     {
-        $sql = "SELECT ifnull(min(price),0) as price FROM `c2_course` WHERE courseSetId = {$courseSetId} and status = 'published'";
+        $sql = "SELECT ifnull(min(price),0) as minPrice, ifnull(max(price),0) as maxPrice FROM {$this->table} WHERE courseSetId = {$courseSetId} and status = 'published'";
+
         return $this->db()->fetchAssoc($sql);
+    }
+
+    public function updateMaxRateByCourseSetId($courseSetId, $updateFields)
+    {
+        return $this->db()->update($this->table, $updateFields, array('courseSetId' => $courseSetId));
     }
 
     public function declares()
     {
         return array(
             'serializes' => array(
-                'goals'      => 'delimiter',
-                'audiences'  => 'delimiter',
-                'services'   => 'delimiter',
-                'teacherIds' => 'delimiter'
+                'goals' => 'delimiter',
+                'audiences' => 'delimiter',
+                'services' => 'delimiter',
+                'teacherIds' => 'delimiter',
             ),
-            'orderbys'   => array('hitNum', 'recommendedTime', 'rating', 'studentNum', 'recommendedSeq', 'createdTime'),
+            'orderbys' => array('hitNum', 'recommendedTime', 'rating', 'studentNum', 'recommendedSeq', 'createdTime', 'originPrice'),
             'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'courseSetId = :courseSetId',
@@ -144,12 +153,12 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
                 'locked = :locked',
                 'lessonNum > :lessonNumGT',
                 'orgCode = :orgCode',
-                'orgCode LIKE :likeOrgCode'
-            )
+                'orgCode LIKE :likeOrgCode',
+            ),
         );
     }
 
-    protected function _createSearchQueryBuilder($conditions)
+    protected function _createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
             $conditions['titleLike'] = "%{$conditions['title']}%";
@@ -165,7 +174,7 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         }
 
         if (isset($conditions['likeOrgCode'])) {
-            $conditions['likeOrgCode'] .= "%";
+            $conditions['likeOrgCode'] .= '%';
         }
 
         $builder = parent::_createQueryBuilder($conditions);

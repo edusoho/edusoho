@@ -67,13 +67,13 @@
   </div>
 {% endblock %}
 {% block footer %}
-  {% if task|default(false) %}
+  {% if task|default(false) and taskMode|default('') and taskMode != 'lesson' %}
     <button id="course-tasks-delete" type="submit" class="btn btn-danger pull-left delete-task"
             data-url="{{ path('course_manage_task_delete', {taskId:task.id, courseId:task.courseId}) }}">
       <i class="es-icon es-icon-delete"></i>{{ '删除'|trans }}</button>
   {% endif %}
   <button id="course-tasks-prev" type="submit" class="btn btn-default hidden">{{ '上一步'|trans }}</button>
-  <button id="course-tasks-next" type="submit" class="btn btn-primary">{{ '下一步'|trans }}</button>
+  <button id="course-tasks-next" type="submit" class="btn btn-primary hidden">{{ '下一步'|trans }}</button>
   <button id="course-tasks-submit" type="submit" class="btn btn-info hidden"
           data-submiting-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
 {% endblock %}

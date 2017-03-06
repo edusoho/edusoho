@@ -29,5 +29,4 @@ interface TestpaperItemDao extends GeneralDaoInterface
     public function deleteItemByIds(array $ids);
 
     public function updateItemsMissScoreByPaperIds(array $ids, $missScore);
-
 }

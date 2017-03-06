@@ -1,6 +1,6 @@
 <?php
-namespace AppBundle\Controller;
 
+namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -24,27 +24,28 @@ class LoginController extends BaseController
 
         if ($this->getWebExtension()->isMicroMessenger() && $this->setting('login_bind.enabled', 0) && $this->setting('login_bind.weixinmob_enabled', 0)) {
             $inviteCode = $request->query->get('inviteCode');
+
             return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request), 'inviteCode' => $inviteCode)));
         }
 
         return $this->render('login/index.html.twig', array(
             'last_username' => $request->getSession()->get(Security::LAST_USERNAME),
-            'error'         => $error,
-            '_target_path'  => $this->getTargetPath($request)
+            'error' => $error,
+            '_target_path' => $this->getTargetPath($request),
         ));
     }
 
     public function ajaxAction(Request $request)
     {
         return $this->render('login/ajax.html.twig', array(
-            '_target_path' => $this->getTargetPath($request)
+            '_target_path' => $this->getTargetPath($request),
         ));
     }
 
     public function checkEmailAction(Request $request)
     {
         $email = $request->query->get('value');
-        $user  = $this->getUserService()->getUserByEmail($email);
+        $user = $this->getUserService()->getUserByEmail($email);
 
         if ($user) {
             $response = array('success' => true, 'message' => '该Email地址可以登录');
@@ -58,10 +59,11 @@ class LoginController extends BaseController
     public function oauth2LoginsBlockAction($targetPath, $displayName = true)
     {
         $clients = OAuthClientFactory::clients();
+
         return $this->render('login/oauth2-logins-block.html.twig', array(
-            'clients'     => $clients,
-            'targetPath'  => $targetPath,
-            'displayName' => $displayName
+            'clients' => $clients,
+            'targetPath' => $targetPath,
+            'displayName' => $displayName,
         ));
     }
 

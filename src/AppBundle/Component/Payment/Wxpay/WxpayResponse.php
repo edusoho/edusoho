@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\Payment\Wxpay;
 
 use AppBundle\Component\Payment\Response;
@@ -8,14 +9,15 @@ use Symfony\Component\DependencyInjection\SimpleXMLElement;
 class WxpayResponse extends Response
 {
     protected $orderQueryUrl = 'https://api.mch.weixin.qq.com/pay/orderquery';
+
     public function getPayData()
     {
-        $params          = $this->params;
-        $data            = array();
+        $params = $this->params;
+        $data = array();
         $data['payment'] = 'wxpay';
-        $data['sn']      = $params['out_trade_no'];
-        $result          = $this->confirmSellerSendGoods($data['sn']);
-        $returnArray     = $this->fromXml($result);
+        $data['sn'] = $params['out_trade_no'];
+        $result = $this->confirmSellerSendGoods($data['sn']);
+        $returnArray = $this->fromXml($result);
         if ($returnArray['return_code'] != 'SUCCESS' || $returnArray['result_code'] != 'SUCCESS' || $returnArray['trade_state'] != 'SUCCESS') {
             throw new \RuntimeException($this->getServiceKernel()->trans('微信支付失败'));
         }
@@ -41,17 +43,18 @@ class WxpayResponse extends Response
 
     private function confirmSellerSendGoods($trade_no)
     {
-        $params                    = $this->params;
-        $converted                 = array();
-        $converted['appid']        = $this->options['key'];
-        $settings                  = $this->getSettingService()->get('payment');
-        $converted['mch_id']       = $settings["wxpay_account"];
-        $converted['nonce_str']    = $this->getNonceStr();
+        $params = $this->params;
+        $converted = array();
+        $converted['appid'] = $this->options['key'];
+        $settings = $this->getSettingService()->get('payment');
+        $converted['mch_id'] = $settings['wxpay_account'];
+        $converted['nonce_str'] = $this->getNonceStr();
         $converted['out_trade_no'] = $trade_no;
-        $converted['sign']         = strtoupper($this->signParams($converted));
+        $converted['sign'] = strtoupper($this->signParams($converted));
 
-        $xml      = $this->toXml($converted);
+        $xml = $this->toXml($converted);
         $response = $this->postRequest($this->orderQueryUrl, $xml);
+
         return $response;
     }
 
@@ -115,15 +118,16 @@ class WxpayResponse extends Response
     private function fromXml($xml)
     {
         $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+
         return $array;
     }
 
     private function getNonceStr($length = 32)
     {
-        $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-        $str   = "";
+        $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        $str = '';
 
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
         }
 

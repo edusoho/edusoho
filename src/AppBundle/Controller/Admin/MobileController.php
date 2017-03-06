@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Common\ArrayToolkit;
@@ -44,7 +43,7 @@ class MobileController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $operationMobile = $request->request->all();
-            $mobile = array_merge($courseGrids,$settingMobile,$operationMobile);
+            $mobile = array_merge($courseGrids, $settingMobile, $operationMobile);
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
@@ -53,19 +52,19 @@ class MobileController extends BaseController
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
 
-        $bannerCourse1 = ($mobile['bannerJumpToCourseId1'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']) : null;
-        $bannerCourse2 = ($mobile['bannerJumpToCourseId2'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId2']) : null;
-        $bannerCourse3 = ($mobile['bannerJumpToCourseId3'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId3']) : null;
-        $bannerCourse4 = ($mobile['bannerJumpToCourseId4'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']) : null;
-        $bannerCourse5 = ($mobile['bannerJumpToCourseId5'] != " ") ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']) : null;
+        $bannerCourse1 = ($mobile['bannerJumpToCourseId1'] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']) : null;
+        $bannerCourse2 = ($mobile['bannerJumpToCourseId2'] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId2']) : null;
+        $bannerCourse3 = ($mobile['bannerJumpToCourseId3'] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId3']) : null;
+        $bannerCourse4 = ($mobile['bannerJumpToCourseId4'] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']) : null;
+        $bannerCourse5 = ($mobile['bannerJumpToCourseId5'] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']) : null;
 
         return $this->render('admin/system/mobile.html.twig', array(
             'mobile' => $mobile,
-            "bannerCourse1" => $bannerCourse1,
-            "bannerCourse2" => $bannerCourse2,
-            "bannerCourse3" => $bannerCourse3,
-            "bannerCourse4" => $bannerCourse4,
-            "bannerCourse5" => $bannerCourse5,
+            'bannerCourse1' => $bannerCourse1,
+            'bannerCourse2' => $bannerCourse2,
+            'bannerCourse3' => $bannerCourse3,
+            'bannerCourse4' => $bannerCourse4,
+            'bannerCourse5' => $bannerCourse5,
         ));
     }
 
@@ -93,7 +92,7 @@ class MobileController extends BaseController
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
 
-        $courseIds = explode(",", $mobile['courseIds']);
+        $courseIds = explode(',', $mobile['courseIds']);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses = ArrayToolkit::index($courses, 'id');
         $sortedCourses = array();
@@ -116,7 +115,7 @@ class MobileController extends BaseController
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename = 'mobile_picture' . time() . '.' . $file->getClientOriginalExtension();
+        $filename = 'mobile_picture'.time().'.'.$file->getClientOriginalExtension();
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file = $file->move($directory, $filename);
 
@@ -138,7 +137,7 @@ class MobileController extends BaseController
 
     public function mobilePictureRemoveAction(Request $request, $type)
     {
-        $setting = $this->getSettingService()->get("mobile");
+        $setting = $this->getSettingService()->get('mobile');
         $setting[$type] = '';
 
         $this->getSettingService()->set('mobile', $setting);

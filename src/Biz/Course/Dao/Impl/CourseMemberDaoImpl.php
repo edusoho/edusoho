@@ -14,31 +14,36 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ?";
+
         return $this->db()->executeQuery($sql, array($courseId))->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     public function findByUserId($userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ?";
+
         return $this->db()->executeQuery($sql, array($userId))->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     public function findByCourseIds($courseIds)
     {
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table()} WHERE courseId IN ({$marks})";
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId IN ({$marks})";
+
         return $this->db()->fetchAll($sql, $courseIds);
     }
 
     public function getByCourseIdAndUserId($courseId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? and userId = ? LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($courseId, $userId)) ?: null;
     }
 
     public function findLearnedByCourseIdAndUserId($courseId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? AND userId = ? AND isLearned = 1";
+
         return $this->db()->fetchAll($sql, array($courseId, $userId));
     }
 
@@ -52,6 +57,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findByUserIdAndJoinType($userId, $joinedType)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE  userId = ? AND joinedType = ?";
+
         return $this->db()->fetchAll($sql, array($userId, $joinedType));
     }
 
@@ -68,44 +74,60 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findByUserIdAndCourseIds($studentId, $courseIds)
     {
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
+        $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role = 'student' AND courseId in ($marks)";
+
         return $this->db()->fetchAll($sql, array_merge(array($studentId), $courseIds));
     }
 
-    public function countLearningMembersByUserId($userId)
+    public function countLearningMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
-        $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
-        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND (m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized')";
-        return $this->db()->fetchColumn($sql, array($userId));
+        $sql .= 'INNER JOIN c2_course c ON m.courseId = c.id ';
+        $sql .= 'WHERE ';
+
+        list($sql, $params) = $this->applySqlParams($conditions, $sql);
+
+        $sql .= "(m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized')";
+
+        return $this->db()->fetchColumn($sql, $params);
     }
 
-    public function findLearningMembers($userId, $start, $limit)
+    public function findLearningMembers($conditions, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
-        $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
-        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND (m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized') ";
+        $sql .= 'INNER JOIN c2_course c ON m.courseId = c.id ';
+        $sql .= 'WHERE ';
+
+        list($sql, $params) = $this->applySqlParams($conditions, $sql);
+
+        $sql .= "(m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized') ";
         $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->db()->fetchAll($sql, array($userId)) ?: array();
+
+        return $this->db()->fetchAll($sql, $params) ?: array();
     }
 
-    public function countLearnedMembersByUserId($userId)
+    public function countLearnedMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
-        $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
-        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
+        $sql .= 'INNER JOIN c2_course c ON m.courseId = c.id ';
+        $sql .= 'WHERE ';
 
-        return $this->db()->fetchColumn($sql, array($userId));
+        list($sql, $params) = $this->applySqlParams($conditions, $sql);
+        $sql .= "m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
+
+        return $this->db()->fetchColumn($sql, $params);
     }
 
-    public function findLearnedMembers($userId, $start, $limit)
+    public function findLearnedMembers($conditions, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
-        $sql .= "INNER JOIN c2_course c ON m.courseId = c.id ";
-        $sql .= "WHERE m.userId = ? AND  m.role = 'student' AND m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
+        $sql .= 'INNER JOIN c2_course c ON m.courseId = c.id ';
+        $sql .= 'WHERE ';
+        list($sql, $params) = $this->applySqlParams($conditions, $sql);
+        $sql .= "m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
         $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
-        return $this->db()->fetchAll($sql, array($userId)) ?: array();
+        return $this->db()->fetchAll($sql, $params) ?: array();
     }
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit)
@@ -123,6 +145,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findByUserIdAndRole($userId, $role)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role =  ?";
+
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
 
@@ -130,14 +153,15 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
      * @param  $userId
      * @param  $courseSetId
      * @param  $role
+     *
      * @return array
      */
     public function findByUserIdAndCourseSetIdAndRole($userId, $courseSetId, $role)
     {
         return $this->findByFields(array(
-            'userId'      => $userId,
+            'userId' => $userId,
             'courseSetId' => $courseSetId,
-            'role'        => $role
+            'role' => $role,
         ));
     }
 
@@ -145,7 +169,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     {
         $sql = "SELECT m.* FROM {$this->table} m ";
         $sql .= ' JOIN  c2_course AS c ON m.userId = ? ';
-        $sql .= " AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0";
+        $sql .= ' AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0';
 
         if ($onlyPublished) {
             $sql .= " AND c.status = 'published' ";
@@ -188,18 +212,21 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function countThreadsByCourseIdAndUserId($courseId, $userId, $type = 'discuss')
     {
         $sql = "SELECT count(id) FROM course_thread WHERE type='{$type}' AND courseId = ? AND userId = ?";
+
         return $this->db()->fetchColumn($sql, array($courseId, $userId));
     }
 
     public function countActivitiesByCourseIdAndUserId($courseId, $userId)
     {
-        $sql = "SELECT count(distinct(activityId)) FROM course_task_result WHERE courseId = ? AND userId = ?";
+        $sql = 'SELECT count(distinct(activityId)) FROM course_task_result WHERE courseId = ? AND userId = ?';
+
         return $this->db()->fetchColumn($sql, array($courseId, $userId));
     }
 
     public function countPostsByCourseIdAndUserId($courseId, $userId)
     {
         $sql = "SELECT count(id) FROM course_thread_post WHERE userId = ? and threadId IN (SELECT id FROM course_thread WHERE courseId = ? AND type='discussion')";
+
         return $this->db()->fetchColumn($sql, array($userId, $courseId));
     }
 
@@ -209,6 +236,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             if ($value === '' || $value === null) {
                 return false;
             }
+
             return true;
         });
 
@@ -233,7 +261,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     {
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys'   => array('createdTime'),
+            'orderbys' => array('createdTime'),
             'conditions' => array(
                 'userId = :userId',
                 'courseId = :courseId',
@@ -248,8 +276,28 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'userId IN (:userIds)',
                 'learnedNum >= :learnedNumGreaterThan',
                 'learnedNum < :learnedNumLessThan',
-                'deadline >= :deadlineGreaterThan'
-            )
+                'deadline >= :deadlineGreaterThan',
+            ),
         );
+    }
+
+    /**
+     * @param $conditions
+     * @param $sql
+     *
+     * @return array
+     */
+    protected function applySqlParams($conditions, $sql)
+    {
+        $params = array();
+        $conditions = array_filter($conditions, function ($value) {
+            return !empty($value);
+        });
+        foreach ($conditions as $key => $value) {
+            $sql .= $key.' = ? AND ';
+            array_push($params, $value);
+        }
+
+        return array($sql, $params);
     }
 }

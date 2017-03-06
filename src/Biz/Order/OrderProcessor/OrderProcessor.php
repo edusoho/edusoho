@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Order\OrderProcessor;
 
 interface OrderProcessor

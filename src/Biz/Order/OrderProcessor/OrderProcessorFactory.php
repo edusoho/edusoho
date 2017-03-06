@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Order\OrderProcessor;
 
 use AppBundle\Common\JoinPointToolkit;
@@ -7,6 +8,11 @@ use Topxia\Service\Common\ServiceKernel;
 
 class OrderProcessorFactory
 {
+    /**
+     * @param $type
+     *
+     * @return OrderProcessor
+     */
     public static function create($type)
     {
         $map = JoinPointToolkit::load('order');
@@ -16,7 +22,8 @@ class OrderProcessorFactory
         }
 
         $class = $map[$type]['processor'];
-    	$biz = ServiceKernel::instance()->getBiz();
+        $biz = ServiceKernel::instance()->getBiz();
+
         return new $class($biz);
     }
 }

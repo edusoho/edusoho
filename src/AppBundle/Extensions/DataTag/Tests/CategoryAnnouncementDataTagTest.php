@@ -2,13 +2,12 @@
 
 namespace AppBundle\Extensions\DataTag\Test;
 
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\CategoryAnnouncementDataTag;
 
 class CategoryAnnouncementDataTagTest extends BaseTestCase
 {
-
-   /* public function testGetData()
+    /* public function testGetData()
     {
        //添加category
         $groupId = $this->getCategoryService()->addGroup(array(
@@ -16,7 +15,7 @@ class CategoryAnnouncementDataTagTest extends BaseTestCase
         "name" => "课程分类",
         "depth" => "2"
         ));
-       
+
         $CategoryId1 = $this->getCategoryService()->createCategory(array(
         "code" => "default",
         "name" => "默认分类",

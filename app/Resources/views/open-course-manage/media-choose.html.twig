@@ -292,7 +292,7 @@
                    data-role="import-url">
             <span class="input-group-btn">
               <button type="button" class="btn btn-default" data-role="import"
-                      data-url="{{ path('course_manage_media_import', {id:course.id}) }}"
+                      data-url="{{ path('media_video_import', {courseId:course.id}) }}"
                       data-loading-text="{{ '正在导入，请稍等'|trans }}">{{ '导入'|trans }}</button>
             </span>
           </div>

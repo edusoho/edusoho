@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Importer;
 
 use AppBundle\Common\JoinPointToolkit;
@@ -22,6 +23,7 @@ class ImporterFactory
         }
 
         $class = $map[$importerType];
+
         return new $class();
     }
 }

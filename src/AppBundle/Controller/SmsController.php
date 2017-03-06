@@ -10,30 +10,32 @@ use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\StringToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class SmsController extends BaseController
 {
     public function prepareAction(Request $request, $targetType, $id)
     {
-        $item               = array();
-        $mobileNum          = 0;
+        $item = array();
+        $mobileNum = 0;
         $mobileNeedVerified = false;
-        $url                = '';
-        $smsType            = 'sms_'.$targetType.'_publish';
+        $url = '';
+        $smsType = 'sms_'.$targetType.'_publish';
+        $smsInfo = $this->getCloudSmsInfo();
 
         if ($targetType == 'classroom') {
-            $item      = $this->getClassroomService()->getClassroom($id);
+            $item = $this->getClassroomService()->getClassroom($id);
             $mobileNum = $this->getUserService()->countUserHasMobile($mobileNeedVerified);
-            $url       = $this->generateUrl('classroom_show', array('id' => $id));
+            $url = $this->generateUrl('classroom_show', array('id' => $id));
         } elseif ($targetType == 'course') {
             $item = $this->getCourseSetService()->getCourseSet($id);
-            $url  = $this->generateUrl('course_set_show', array('id' => $id));
+            $url = $this->generateUrl('course_set_show', array('id' => $id));
 
             if ($item['parentId']) {
                 $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($item['id']);
 
                 if ($classroomCourse) {
-                    $mobileNum = $this->getClassroomService()->countMobileVerifiedMembersByClassroomId($classroomCourse['classroomId'], 1);
+                    $mobileNum = $this->getClassroomService()->countMobileFilledMembersByClassroomId($classroomCourse['classroomId'], 1);
                 }
             } else {
                 $mobileNum = $this->getUserService()->countUserHasMobile($mobileNeedVerified);
@@ -41,48 +43,50 @@ class SmsController extends BaseController
         }
 
         $item['title'] = StringToolkit::cutter($item['title'], 20, 15, 4);
+
         return $this->render('sms/sms-send.html.twig', array(
-            'item'       => $item,
+            'item' => $item,
             'targetType' => $targetType,
-            'url'        => $url,
-            'count'      => $mobileNum,
-            'index'      => 1,
-            'isOpen'     => $this->getSmsService()->isOpen($smsType)
+            'url' => $url,
+            'count' => $mobileNum,
+            'index' => 1,
+            'isOpen' => $this->getSmsService()->isOpen($smsType),
+            'smsInfo' => $smsInfo,
         ));
     }
 
     public function sendAction(Request $request, $targetType, $id)
     {
-        $smsType            = 'sms_'.$targetType.'_publish';
-        $index              = $request->query->get('index');
-        $onceSendNum        = 100;
-        $url                = $request->query->get('url');
-        $count              = $request->query->get('count');
-        $parameters         = array();
+        $smsType = 'sms_'.$targetType.'_publish';
+        $index = $request->query->get('index');
+        $onceSendNum = 100;
+        $url = $request->query->get('url');
+        $count = $request->query->get('count');
+        $parameters = array();
         $mobileNeedVerified = false;
         $description = '';
         $courseSet = array();
 
         if ($targetType == 'classroom') {
-            $classroom                     = $this->getClassroomService()->getClassroom($id);
-            $classroomSetting              = $this->getSettingService()->get("classroom");
-            $classroomName                 = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
-            $classroom['title']            = StringToolkit::cutter($classroom['title'], 20, 15, 4);
+            $classroom = $this->getClassroomService()->getClassroom($id);
+            $classroomSetting = $this->getSettingService()->get('classroom');
+            $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
+            $classroom['title'] = StringToolkit::cutter($classroom['title'], 20, 15, 4);
             $parameters['classroom_title'] = $classroomName.'：《'.$classroom['title'].'》';
-            $description                   = $parameters['classroom_title'].'发布';
-            $students                      = $this->getUserService()->findUsersHasMobile($index, $onceSendNum, $mobileNeedVerified);
+            $description = $parameters['classroom_title'].'发布';
+            $students = $this->getUserService()->findUsersHasMobile($index, $onceSendNum, $mobileNeedVerified);
         } elseif ($targetType == 'course') {
-            $courseSet                     = $this->getCourseSetService()->getCourseSet($id);
-            $courseSet['title']            = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
+            $courseSet = $this->getCourseSetService()->getCourseSet($id);
+            $courseSet['title'] = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
             $parameters['course_title'] = '课程'.'：《'.$courseSet['title'].'》';
-            $description                = $parameters['course_title'].'发布';
+            $description = $parameters['course_title'].'发布';
 
             if ($courseSet['parentId']) {
                 $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
 
                 if ($classroomCourse) {
-                    $count    = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroomCourse['classroomId']));
-                    $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroomCourse['classroomId']), array('createdTime', 'Desc'), $index, $onceSendNum);
+                    $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroomCourse['classroomId']));
+                    $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroomCourse['classroomId']), array('createdTime' => 'Desc'), $index, $onceSendNum);
                 }
             } else {
                 $students = $this->getUserService()->findUsersHasMobile($index, $onceSendNum, $mobileNeedVerified);
@@ -117,9 +121,17 @@ class SmsController extends BaseController
         $url .= $request->query->get('url');
 
         $shortUrl = SmsToolkit::getShortLink($url);
-        $url      = empty($shortUrl) ? 'http://'.$url : $shortUrl;
+        $url = empty($shortUrl) ? 'http://'.$url : $shortUrl;
 
         return $this->createJsonResponse(array('url' => $url.' '));
+    }
+
+    private function getCloudSmsInfo()
+    {
+        $api = CloudAPIFactory::create('root');
+        $smsInfo = $api->get('/me/sms_account');
+
+        return $smsInfo;
     }
 
     /**

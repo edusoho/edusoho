@@ -1,9 +1,7 @@
 {% extends 'classroom-manage/layout.html.twig' %}
-
 {% block title %}{{'封面图片'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'picture' %}
-{% set script_controller = 'topxiawebbundle/controller/classroom/picture-crop' %}
+{% do script(['app/js/classroom-manage/set-picture-crop/index.js']) %}
 
 {% block main %}
 <div class="panel panel-default panel-col">
@@ -22,7 +20,7 @@
     <div class="form-group clearfix">
       <div class="col-md-offset-2 col-md-8 controls">
 
-        <a class="btn btn-fat btn-primary" id="upload-picture-btn" 
+        <a class="btn btn-fat btn-primary upload-picture-btn" id="upload-picture-btn" 
         data-url="{{path('classroom_manage_picture_crop', {id: classroom.id})}}"
         data-goto-url="{{path('classroom_manage_set_picture',{id: classroom.id})}}"
         >{{'保存'|trans}}</a>

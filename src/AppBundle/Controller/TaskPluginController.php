@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller;
-
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
@@ -27,13 +25,14 @@ class TaskPluginController extends BaseController
 
         $preview = $request->query->get('preview', false);
 
-        $activity    = $this->getActivityService()->getActivity($task['activityId']);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
         $courseItems = $this->getCourseService()->findCourseItems($courseId);
+
         return $this->render('task/plugin/task-list.html.twig', array(
             'courseItems' => $courseItems,
-            'course'      => $course,
-            'activity'    => $activity,
-            'preview'     => $preview
+            'course' => $course,
+            'activity' => $activity,
+            'preview' => $preview,
         ));
     }
 
@@ -49,7 +48,7 @@ class TaskPluginController extends BaseController
 
         return $this->render('task/plugin/note.html.twig', array(
             'note' => $note,
-            'task' => $task
+            'task' => $task,
         ));
     }
 
@@ -66,10 +65,10 @@ class TaskPluginController extends BaseController
         $threads = $this->getThreadService()->searchThreads(
             array(
                 'taskId' => $task['id'],
-                'type'   => 'question'
+                'type' => 'question',
             ),
             array(
-                'createdTime' => 'DESC'
+                'createdTime' => 'DESC',
             ),
             0, 20
         );
@@ -78,14 +77,14 @@ class TaskPluginController extends BaseController
 
         $form = $this->createQuestionForm(array(
             'courseId' => $course['id'],
-            'taskId'   => $taskId
+            'taskId' => $taskId,
         ));
 
         return $this->render('task/plugin/questions.html.twig', array(
             'threads' => $threads,
-            'task'    => $task,
-            'form'    => $form->createView(),
-            'users'   => $users
+            'task' => $task,
+            'form' => $form->createView(),
+            'users' => $users,
         ));
     }
 
@@ -95,15 +94,16 @@ class TaskPluginController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $question         = $form->getData();
+            $question = $form->getData();
             $question['type'] = 'question';
 
             $thread = $this->getThreadService()->createThread($question);
-            $task   = $this->getTaskService()->getTask($taskId);
-            return $this->render("task/plugin/question/item.html.twig", array(
+            $task = $this->getTaskService()->getTask($taskId);
+
+            return $this->render('task/plugin/question/item.html.twig', array(
                 'thread' => $thread,
-                'task'   => $task,
-                'user'   => $this->getCurrentUser()
+                'task' => $task,
+                'user' => $this->getCurrentUser(),
             ));
         } else {
             return $this->createJsonResponse(false);
@@ -134,23 +134,23 @@ class TaskPluginController extends BaseController
         );
 
         $threader = $this->getUserService()->getUser($thread['userId']);
-        $users    = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         $form = $this->createPostForm(array(
             'courseId' => $course['id'],
-            'threadId' => $thread['id']
+            'threadId' => $thread['id'],
         ));
 
         $isManager = false;
 
         return $this->render('task/plugin/question/question.html.twig', array(
-            'course'    => $course,
-            'thread'    => $thread,
-            'threader'  => $threader,
-            'posts'     => $posts,
-            'users'     => $users,
+            'course' => $course,
+            'thread' => $thread,
+            'threader' => $threader,
+            'posts' => $posts,
+            'users' => $users,
             'isManager' => $isManager,
-            'form'      => $form->createView()
+            'form' => $form->createView(),
         ));
     }
 
@@ -165,9 +165,9 @@ class TaskPluginController extends BaseController
             $post = $this->getThreadService()->createPost($post);
 
             return $this->render('task/plugin/question/post-item.html.twig', array(
-                'post'   => $post,
-                'user'   => $this->getUserService()->getUser($post['userId']),
-                'course' => $this->getCourseService()->getCourse($post['courseId'])
+                'post' => $post,
+                'user' => $this->getUserService()->getUser($post['userId']),
+                'course' => $this->getCourseService()->getCourse($post['courseId']),
             ));
         } else {
             return $this->createJsonResponse(false);
@@ -177,6 +177,7 @@ class TaskPluginController extends BaseController
     private function createQuestionForm(array $data = array())
     {
         $form = $this->get('form.factory')->createNamedBuilder('question', 'form', $data, array());
+
         return $form
             ->add('title', 'Symfony\Component\Form\Extension\Core\Type\TextType')
             ->add('content', 'Symfony\Component\Form\Extension\Core\Type\TextareaType')
@@ -234,4 +235,3 @@ class TaskPluginController extends BaseController
         return $this->createService('Course:ThreadService');
     }
 }
-

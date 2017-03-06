@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
@@ -23,6 +24,7 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
         if (!$this->canTakeBlacklist($userId)) {
             throw $this->createAccessDeniedException('Access Denied');
         }
+
         return $this->getBlacklistDao()->findByUserId($userId);
     }
 
@@ -74,6 +76,7 @@ class BlacklistServiceImpl extends BaseService implements BlacklistService
         if ($user['id'] == $userId || $user->isAdmin()) {
             return true;
         }
+
         return false;
     }
 

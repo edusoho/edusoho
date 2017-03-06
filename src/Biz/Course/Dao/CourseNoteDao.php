@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
@@ -14,5 +15,4 @@ interface CourseNoteDao extends GeneralDaoInterface
     public function countByUserIdAndCourseId($userId, $courseId);
 
     public function deleteByCourseId($courseId);
-
 }

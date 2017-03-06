@@ -2,7 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Announcement\Service\AnnouncementService;
 
 /**
@@ -11,14 +10,15 @@ use Biz\Announcement\Service\AnnouncementService;
 class CourseAnnouncementsDataTag extends BaseDataTag implements DataTag
 {
     /**
-     * 获取课程公告列表
+     * 获取课程公告列表.
      *
      * 可传入的参数：
      *   courseSetId  必需
      *   courseId     可选
      *   count        必需 取值不超过10
      *
-     * @param  array $arguments     参数
+     * @param array $arguments 参数
+     *
      * @return array 公告列表
      */
     public function getData(array $arguments)
@@ -27,7 +27,7 @@ class CourseAnnouncementsDataTag extends BaseDataTag implements DataTag
 
         $conditions = array(
             'targetType' => 'course',
-            'endTime'    => time()
+            'endTime' => time(),
         );
 
         if (!empty($arguments['courseId'])) {

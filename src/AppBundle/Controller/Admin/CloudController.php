@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Biz\System\Service\SettingService;
@@ -11,7 +12,7 @@ class CloudController extends BaseController
     public function billAction(Request $request)
     {
         $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
+        $client = $factory->createClient();
 
         $result = $client->getBills();
         if (!empty($result['error'])) {
@@ -20,7 +21,7 @@ class CloudController extends BaseController
 
         return $this->render('admin/cloud/bill.html.twig', array(
             'money' => $result['money'],
-            'bills' => $result['bills']
+            'bills' => $result['bills'],
         ));
     }
 
@@ -72,6 +73,7 @@ class CloudController extends BaseController
     public function serviceOverviewAction(Request $request, $type)
     {
         $url = 'service_'.$type.'_overview';
+
         return $this->redirectUrl($url);
     }
 
@@ -103,6 +105,7 @@ class CloudController extends BaseController
     public function buyAction(Request $request, $type)
     {
         $params = array('type' => $type);
+
         return $this->redirectUrl('edu_cloud_buy_custom', $params);
     }
 
@@ -114,36 +117,42 @@ class CloudController extends BaseController
     public function emailBuyAction(Request $request, $type)
     {
         $params = array('type' => $type);
+
         return $this->redirectUrl('edu_cloud_buy_custom', $params);
     }
 
     public function tlpAction(Request $request)
     {
         $params = array('type' => 'tlp');
+
         return $this->redirectUrl('edu_cloud_show', $params);
     }
 
     public function videoAction(Request $request)
     {
         $params = array('type' => 'video');
+
         return $this->redirectUrl('edu_cloud_show', $params);
     }
 
     public function docAction(Request $request)
     {
         $params = array('type' => 'doc');
+
         return $this->redirectUrl('edu_cloud_show', $params);
     }
 
     public function searchAction(Request $request)
     {
         $params = array('type' => 'search');
+
         return $this->redirectUrl('edu_cloud_show', $params);
     }
 
     public function liveAction(Request $request)
     {
         $params = array('type' => 'live');
+
         return $this->redirectUrl('edu_cloud_show', $params);
     }
 
@@ -185,20 +194,21 @@ class CloudController extends BaseController
     protected function redirectUrl($routingName, $params = array())
     {
         $url = $this->getAppService()->getTokenLoginUrl($routingName, $params);
+
         return $this->redirect($url);
     }
 
     protected function createAppClient()
     {
         if (!isset($this->client)) {
-            $cloud     = $this->getSettingService()->get('storage', array());
+            $cloud = $this->getSettingService()->get('storage', array());
             $developer = $this->getSettingService()->get('developer', array());
 
             $options = array(
                 'accessKey' => empty($cloud['cloud_access_key']) ? null : $cloud['cloud_access_key'],
                 'secretKey' => empty($cloud['cloud_secret_key']) ? null : $cloud['cloud_secret_key'],
-                'apiUrl'    => empty($developer['app_api_url']) ? null : $developer['app_api_url'],
-                'debug'     => empty($developer['debug']) ? false : true
+                'apiUrl' => empty($developer['app_api_url']) ? null : $developer['app_api_url'],
+                'debug' => empty($developer['debug']) ? false : true,
             );
 
             $this->client = new EduSohoAppClient($options);

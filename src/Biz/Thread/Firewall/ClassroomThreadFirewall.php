@@ -1,8 +1,8 @@
 <?php
+
 namespace Biz\Thread\Firewall;
 
 use Topxia\Service\Common\ServiceKernel;
-use Biz\Thread\Firewall\AbstractThreadFirewall;
 
 class ClassroomThreadFirewall extends AbstractThreadFirewall
 {
@@ -13,7 +13,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     public function accessThreadCreate($thread)
     {
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $member = $this->getClassroomService()->getClassroomMember($thread['targetId'], $user['id']);
 
         $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
@@ -81,6 +81,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
     public function accessPostAdopted($post)
     {
         $result = $this->getClassroomService()->canLookClassroom($post['targetId']);
+
         return $result;
     }
 
@@ -126,7 +127,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     protected function getVipService()
     {
-        return ServiceKernel::instance()->createService('Vip:Vip:VipService');
+        return ServiceKernel::instance()->createService('VipPlugin:Vip:VipService');
     }
 
     protected function getKernel()
@@ -137,6 +138,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
     protected function isVipPluginEnabled()
     {
         $setting = $this->getSettingService()->get('vip');
+
         return $this->isPluginInstalled('Vip') && !empty($setting['enabled']);
     }
 

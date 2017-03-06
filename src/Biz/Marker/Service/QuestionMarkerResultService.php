@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Marker\Service;
 
 interface QuestionMarkerResultService
@@ -11,10 +12,9 @@ interface QuestionMarkerResultService
 
     public function deleteByQuestionMarkerId($questionMarkerId);
 
-    public function finishCurrentQuestion($markerId, $userId, $questionMarkerId, $answer, $type, $lessonId);
+    public function finishCurrentQuestion($markerId, $userId, $questionMarkerId, $answer, $type);
 
     public function findByUserIdAndMarkerId($userId, $markerId);
 
     public function findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
-
 }

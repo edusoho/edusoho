@@ -9,21 +9,21 @@ use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CommentController extends BaseController
 {
-
-    public function indexAction (Request $request)
-    {   
+    public function indexAction(Request $request)
+    {
         $comments = array();
         $total = $this->getCommentService()->getCommentsCountByType('course');
         $paginator = new Paginator($this->get('request'), $total, 30);
         $comments = $this->getCommentService()->getCommentsByType('course', $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $userIds = ArrayToolkit::column($comments, 'userId');
-        return $this->render('admin/comment/index.html.twig',array(
+
+        return $this->render('admin/comment/index.html.twig', array(
             'comments' => $comments,
             'userList' => $this->getUserService()->findUsersByIds($userIds),
-            'paginator' => $paginator));
+            'paginator' => $paginator, ));
     }
 
-    public function deleteAction (Request $request, $id)
+    public function deleteAction(Request $request, $id)
     {
         $comment = $this->getCommentService()->getComment($id);
         if (empty($comment)) {
@@ -31,8 +31,9 @@ class CommentController extends BaseController
         }
         try {
             $this->getCommentService()->deleteComment($id);
+
             return $this->createJsonResponse(array('status' => 'ok'));
-        } catch(ServiceException $e) {
+        } catch (ServiceException $e) {
             return $this->createJsonResponse(array('status' => 'ok', 'error' => array($e->getMessage())));
         }
     }
@@ -41,5 +42,4 @@ class CommentController extends BaseController
     {
         return $this->createService('Content:CommentService');
     }
-
 }

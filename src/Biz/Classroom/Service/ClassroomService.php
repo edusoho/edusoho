@@ -34,23 +34,21 @@ interface ClassroomService
     public function addCoursesToClassroom($classroomId, $courseIds);
 
     /**
-     * 是否可参与班级的活动，只有正式学员、教师、网站管理员才能参与班级的活动，旁听生不能参与活动
-     *
+     * 是否可参与班级的活动，只有正式学员、教师、网站管理员才能参与班级的活动，旁听生不能参与活动.
      */
     public function canTakeClassroom($id, $includeAuditor = false);
 
     public function tryTakeClassroom($id, $includeAuditor = false);
 
     /**
-     * 是否可处理班级事务（批改作业，试卷等）
-     *
+     * 是否可处理班级事务（批改作业，试卷等）.
      */
     public function canHandleClassroom($id);
 
     public function tryHandleClassroom($id);
 
     /**
-     * 是否可查看班级，　所有班级成员、网站管理员都可以查看
+     * 是否可查看班级，　所有班级成员、网站管理员都可以查看.
      */
     public function canLookClassroom($id);
 
@@ -75,18 +73,21 @@ interface ClassroomService
     public function publishClassroom($id);
 
     /**
-     * 班级课程API
-     *
+     * 班级课程API.
      */
     public function updateClassroomCourses($classroomId, $activeCourseIds);
 
     public function findClassroomsByCoursesIds($courseIds);
 
+    public function findClassroomsByCourseSetIds(array $courseSetIds);
+
     public function findClassroomCourseByCourseSetIds($courseSetIds);
 
     /**
      * @before findClassroomByCourseId
+     *
      * @param  $courseId
+     *
      * @return mixed
      */
     public function getClassroomByCourseId($courseId);
@@ -142,8 +143,10 @@ interface ClassroomService
 
     /**
      * @before findClassroomCourse
+     *
      * @param  $classroomId
      * @param  $courseId
+     *
      * @return mixed
      */
     public function getClassroomCourse($classroomId, $courseId);
@@ -172,4 +175,7 @@ interface ClassroomService
 
     public function updateLearndNumByClassroomIdAndUserId($classroomId, $userId);
 
+    public function countCoursesByClassroomId($classroomId);
+
+    public function countMobileFilledMembersByClassroomId($classroomId, $locked = 0);
 }

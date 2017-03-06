@@ -5,12 +5,12 @@ use Phpmig\Migration\Migration;
 class CourseAddPublishedTaskNum extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
+        $db = $biz['db'];
         $db->exec("
             ALTER TABLE `c2_course` ADD COLUMN `publishedTaskNum` INT(10) DEFAULT '0' COMMENT '已发布的任务数' AFTER `taskNum`;
             CREATE VIEW view_course_task AS
@@ -20,14 +20,14 @@ class CourseAddPublishedTaskNum extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
-        $db->exec("
+        $db = $biz['db'];
+        $db->exec('
            ALTER TABLE `c2_course` DROP COLUMN `publishedTaskNum`;
-        ");
+        ');
     }
 }

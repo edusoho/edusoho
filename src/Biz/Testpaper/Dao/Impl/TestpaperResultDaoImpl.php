@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Testpaper\Dao\Impl;
 
 use Biz\Testpaper\Dao\TestpaperResultDao;
@@ -11,19 +12,27 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
     public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND courseId = ? AND lessonId = ? AND type = ? AND userId = ? AND status != 'finished' ORDER BY id DESC ";
+
         return $this->db()->fetchAssoc($sql, array($testId, $courseId, $lessonId, $type, $userId)) ?: null;
     }
 
     public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND testId = ? AND courseSetId = ? AND lessonId = ? AND type = ? ORDER BY id DESC ";
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND testId = ? AND courseId = ? AND lessonId = ? AND type = ? ORDER BY id DESC ";
+
         return $this->db()->fetchAssoc($sql, array($userId, $testId, $courseId, $lessonId, $type)) ?: null;
     }
 
-    public function findPaperResultsStatusNumGroupByStatus($testId)
+    public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds)
     {
-        $sql = "SELECT status,COUNT(id) AS num FROM {$this->table} WHERE testId=? GROUP BY status";
-        return $this->db()->fetchAll($sql, array($testId)) ?: array();
+        if (empty($courseIds)) {
+            return array();
+        }
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $sql = "SELECT status,COUNT(id) AS num FROM {$this->table} WHERE testId=? AND courseId IN ($marks)  GROUP BY status";
+
+        return $this->db()->fetchAll($sql, array_merge(array($testId), $courseIds)) ?: array();
     }
 
     public function sumScoreByParames($conditions)
@@ -43,7 +52,7 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
             'beginTime',
             'endTime',
             'checkedTime',
-            'updateTime'
+            'updateTime',
         );
 
         $declares['conditions'] = array(
@@ -61,7 +70,7 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
             'status = :status',
             'courseId IN ( :courseIds)',
             'type = :type',
-            'type IN ( :types )'
+            'type IN ( :types )',
         );
 
         return $declares;

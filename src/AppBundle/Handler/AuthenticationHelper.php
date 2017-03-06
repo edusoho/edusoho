@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Handler;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -9,14 +10,14 @@ class AuthenticationHelper
     {
         $setting = self::getSettingService()->get('login_bind', array());
         $default = array(
-            'temporary_lock_enabled'       => 0,
+            'temporary_lock_enabled' => 0,
             'temporary_lock_allowed_times' => 5,
-            'temporary_lock_minutes'       => 20
+            'temporary_lock_minutes' => 20,
         );
         $setting = array_merge($default, $setting);
 
         $username = $request->request->get('_username');
-        $user     = self::getUserService()->getUserByLoginField($username);
+        $user = self::getUserService()->getUserByLoginField($username);
 
         $result = self::getUserService()->checkLoginForbidden($user ? $user['id'] : 0, $request->getClientIp());
 
