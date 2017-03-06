@@ -57,7 +57,9 @@
       <div class="text-muted mtl">
         {{ '提示：试卷一旦发布不能修改，发布后的试卷需要'|trans }}
         <strong>
-          {{ '添加到课时'|trans }}
+          <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class="color-danger" target="_blank">
+            {{ '添加到课时'|trans }}
+          </a>
         </strong>
         {{ '中才能正常使用。'|trans }}
       </div>

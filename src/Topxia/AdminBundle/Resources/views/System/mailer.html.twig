@@ -142,7 +142,7 @@
           <div class="col-md-3 control-label"></div>
           <div class="controls col-md-8">
             <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
-            {% if mailer.enabled and status == 'mailer'%}
+            {% if mailer.enabled %}
               <a class="btn btn-primary js-self-test" data-url="{{ path('admin_setting_mailer_test') }}" href="javascript:;">{{'验证'|trans}}</a>
               <div class="mtl ptm">
                 <div class="alert alert-info" role="alert">

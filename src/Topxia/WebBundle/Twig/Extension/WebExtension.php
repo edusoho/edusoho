@@ -126,10 +126,22 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('plugin_update_notify', array($this, 'pluginUpdateNotify')),
             new \Twig_SimpleFunction('tag_equal', array($this, 'tag_equal')),
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
-            new \Twig_SimpleFunction('cdn', array($this, 'getCdn'))
+            new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
+            new \Twig_SimpleFunction('can_try_look', array($this, 'canTryLook')),
+            new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright'))
         );
     }
-
+    public function isESCopyright()
+    {
+        $copyright = $this->getSetting('copyright');
+        $request    = $this->container->get('request');
+        $host          = $request->getHttpHost();
+        if ($copyright) {
+            $result = !( isset($copyright['owned']) && isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] != 2 && isset($copyright['licenseDomains'])  && in_array($host,  explode(';', $copyright['licenseDomains'])) || (isset($copyright['thirdCopyright']) && $copyright['thirdCopyright'] == 2) );
+            return $result;
+        }
+        return true;
+    }
     public function tag_equal($tags, $target_tagId, $target_tagGroupId)
     {
         foreach ($tags as $groupId => $tagId) {
@@ -373,6 +385,11 @@ class WebExtension extends \Twig_Extension
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    private function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
     }
 
     public function getAccount($userId)
@@ -1315,6 +1332,11 @@ class WebExtension extends \Twig_Extension
         return NumberToolkit::roundUp($price);
     }
 
+    public function canTryLook($courseId, $type)
+    {
+        return $this->getCourseService()->canTryLook($courseId, $type);
+    }
+
     public function getCategoryChoices($groupName, $indent = '　')
     {
         $builder = new CategoryBuilder();
@@ -1394,8 +1416,13 @@ class WebExtension extends \Twig_Extension
 
     public function isShowMobilePage()
     {
-        $pcVersion = $this->container->get('request')->cookies->get("PCVersion",0);
-        if($pcVersion){
+        $wapSetting = $this->getSetting('wap', array());
+        if (empty($wapSetting['enabled'])) {
+            return false;
+        }
+
+        $pcVersion = $this->container->get('request')->cookies->get("PCVersion", 0);
+        if ($pcVersion) {
             return false;
         }
         return DeviceToolkit::isMobileClient();

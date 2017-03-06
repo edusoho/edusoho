@@ -240,7 +240,8 @@ class EduCloudController extends BaseController
             'video_watermark_position'    => 'topright',
             'video_fingerprint'           => 0,
             'video_fingerprint_time'      => 0.5,
-            'video_header'                => null
+            'video_header'                => null,
+            'video_auto_play'             => 'true'
         );
 
         if ($request->getMethod() == 'POST') {
@@ -926,7 +927,13 @@ class EduCloudController extends BaseController
         if ($cloud_search_settting['status'] == 'ok' || $cloud_search_settting['status'] == 'waiting') {
             $this->getSettingService()->set('cloud_search', array(
                 'search_enabled' => 1,
-                'status'         => $cloud_search_settting['status']
+                'status'         => $cloud_search_settting['status'],
+                'type'           => array(
+                    'course'     => 1,
+                    'teacher'    => 1,
+                    'thread'     => 1, 
+                    'article'    => 1
+                )
             ));
         }
 
@@ -943,6 +950,26 @@ class EduCloudController extends BaseController
         ));
 
         return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
+    }
+
+    public function setSearchResultTypeAction(Request $request)
+    {
+        $newSetting = $request->query->all();
+
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search');
+
+        $differentSetting = array_diff_assoc($cloud_search_setting['type'], $newSetting);
+        foreach ($cloud_search_setting['type'] as $key => &$type) {
+            if (array_key_exists($key, $differentSetting) && $key != 'course') {
+                $type = 0;
+            } else {
+                $type = 1;
+            }
+        }
+
+        $this->getSettingService()->set('cloud_search', $cloud_search_setting);
+
+        return $this->redirect($this->generateUrl('admin_edu_cloud_setting_search'));
     }
 
     public function keyApplyAction(Request $request)

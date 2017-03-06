@@ -5287,7 +5287,7 @@ a.homework-essay-textarea-pack-up {
 }
 .nav.nav-tabs .badge {
   margin-left: 5px;
-  background-color: #919191;
+  background-color: #0081e6;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -7543,7 +7543,7 @@ textarea {
   bottom: 0;
   right: -230px;
   width: 265px;
-  z-index: 888;
+  z-index: 1002;
   background-color: #fff;
 }
 .es-bar .go-top {
@@ -8664,6 +8664,9 @@ textarea {
 }
 .open-course-list-section .course-item .course-img .img-responsive {
   padding: 0;
+}
+.open-course-list-section .course-list .course-item .metas .comment {
+  display: inline-block;
 }
 .dynamic-section-main .panel {
   height: 300px;
@@ -15825,6 +15828,15 @@ textarea {
 }
 .es-mobile .modal {
   z-index: 9999;
+}
+.es-mobile body.homepage.has-app .es-wrap,
+.es-mobile body.course-list-page.has-app .es-wrap,
+.es-mobile body.open-course-list.has-app .es-wrap,
+.es-mobile body.course-dashboard-page.has-app .es-wrap,
+.es-mobile body.login.has-app .es-wrap,
+.es-mobile body.register.has-app .es-wrap,
+.es-mobile body.my-course.has-app .es-wrap {
+  padding-top: 110px;
 }
 .es-mobile body.homepage .es-wrap,
 .es-mobile body.course-list-page .es-wrap,

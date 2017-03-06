@@ -69,7 +69,7 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
                 foreach ($courseIds as $key => $courseId) {
                     if (array_key_exists('type', $argument) && $argument['type'] == 'testpaper') {
                         $target = 'course-'.$courseId;
-                        $argument['mediaId'] = $testpaperTargets[$target];
+                        $argument['mediaId'] = $testpaperTargets[$target]['id'];
                     }
 
                     $argument['courseId'] = $courseId;

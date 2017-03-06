@@ -12,7 +12,7 @@
       </label>
       <label class="checkbox-inline" >
         <input type="checkbox" name="select2" value={{config.select2}} checked={{config.select2}}>
-        {{'最新资讯'|trans}}
+      {{'最新%article_name%'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)})}}
       </label>
       <label class="checkbox-inline" >
         <input type="checkbox" name="select3" value={{config.select3}} checked={{config.select3}}>

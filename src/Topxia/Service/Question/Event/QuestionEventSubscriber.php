@@ -71,7 +71,6 @@ class QuestionEventSubscriber implements EventSubscriberInterface
         $context = $event->getSubject();
         $question = $context['question'];
         $argument = $context['argument'];
-        $copyId = $question['id'];
         $questionOldTarget = explode('/', $argument['question']['target']);
         $questionOldCourseTarget = explode('-',$questionOldTarget[0]);
         $courseId = $questionOldCourseTarget[1];
@@ -90,7 +89,7 @@ class QuestionEventSubscriber implements EventSubscriberInterface
             if($oldNum > 1){
                 $questionOldLessonTarget = explode('-',$questionOldTarget[1]);
                 $oldLessonId = $questionOldLessonTarget[1];
-                $oldLessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($lessonId,$courseIds),'id');
+                $oldLessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($oldLessonId,$courseIds),'id');
             }
             $lockedTarget = '';
             foreach ($courseIds as $key => $courseId) {

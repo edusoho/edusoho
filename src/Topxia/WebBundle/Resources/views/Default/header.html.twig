@@ -60,7 +60,7 @@
               {% if mobile %}
                 <li class="mobile-switch js-switch-pc visible-xs"><a href="javascript:;">
                   <i class="es-icon es-icon-qiehuan"></i>{{'切换电脑版'|trans}}</a></li>
-              {% else %}
+              {% elseif setting('wap.enabled') == 1 %}
                 <li class="mobile-switch js-switch-mobile visible-xs"><a href="javascript:;">
                   <i class="es-icon es-icon-qiehuan"></i>{{'切换触屏版'|trans}}</a></li>
               {% endif %}
@@ -119,7 +119,7 @@
                 <li class="mobile-switch js-switch-pc"><a href="javascript:;">
                   <i class="es-icon es-icon-qiehuan"></i>
                   {{'切换电脑版'|trans}}</a></li>
-              {% else %}
+              {% elseif setting('wap.enabled') == 1  %}
                 <li class="mobile-switch js-switch-mobile"><a href="javascript:;">
                   <i class="es-icon es-icon-qiehuan"></i>              
                   {{'切换触屏版'|trans}}</a></li>
