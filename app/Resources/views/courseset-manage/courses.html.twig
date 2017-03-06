@@ -17,28 +17,31 @@
 
     <div class="panel-body">
       <table id="course-table" class="table table-striped">
-        <thead>
-        <th width="40%">{{ '名称'|trans }}</th>
-        <th>{{ '任务数'|trans }}</th>
-        <th>{{ '学员'|trans }}</th>
-        <th>{{ '价格（元）'|trans }}</th>
-        <th>{{ '状态'|trans }}</th>
-        <th>{{ '操作'|trans }}</th>
-        </thead>
-        <tbody>
-        {% for course in courses %}
-          <tr>
-            <td>{{ course.title }}</td>
-            <td>{{ course.taskNum|default(0) }}</td>
-            <td>{{ course.studentNum|default(0) }}</td>
-            <td>{{ course.price }}{{ '元'|trans }}
-              {{ slot('course_set_manage.courses.price', {course: course}) }}
-              <span class="ml5 text-12 color-warning">{{ '6折'|trans }}</span></td> {# 货币国际化？ #}
-            <td>
-              {% if course.status == 'published' %}
-                <span class="color-success">{{ '已发布'|trans }}</span>
-              {% elseif course.status=='closed' %}
-                <span class="color-danger">{{ '已关闭'|trans }}</span>
+      	<thead>
+      	  <th width="40%">{{'名称'|trans}}</th>
+          <th>{{'任务数'|trans}}</th>
+          <th>{{'学员'|trans}}</th>
+          <th>{{'价格（元）'|trans}}</th>
+          <th>{{'状态'|trans}}</th>
+          <th>{{'操作'|trans}}</th>
+      	</thead>
+      	<tbody>
+      		{% for course in courses %}
+      		<tr>
+      			<td>{{course.title}}</td>
+      			<td>{{course.taskNum|default(0)}}</td>
+      			<td>{{course.studentNum|default(0)}}</td>
+      			<td>{{course.price}}{{'元'|trans}}
+
+			{{ slot('course.marketing.extension', {'course':course}) }}
+
+
+			<td>
+             {% if course.status == 'published' %}
+              <span class="color-success">{{'已发布'|trans}}</span>
+              {% elseif course.status=='closed'%}             
+              <span class="color-danger">{{'已关闭'|trans}}</span>
+
               {% else %}
                 <span class="text-muted">{{ '未发布'|trans }}</span>
               {% endif %}

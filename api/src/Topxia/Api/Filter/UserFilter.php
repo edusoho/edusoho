@@ -42,7 +42,7 @@ class UserFilter implements Filter
         $data['approvalTime'] = date('c', $data['approvalTime']);
         $data['createdTime'] = date('c', $data['createdTime']);
         
-        $host = ServiceKernel::instance()->getParameter('host');
+        $host = ServiceKernel::instance()->getEnvVariable('schemeAndHost');
         $smallAvatar = empty($data['smallAvatar']) ? '' : $fileService->parseFileUri($data['smallAvatar']);
         $data['smallAvatar'] = empty($smallAvatar) ? $host.'/assets/img/default/avatar.png' : $host.'/files/'.$smallAvatar['path'];
         $mediumAvatar = empty($data['mediumAvatar']) ? '' : $fileService->parseFileUri($data['mediumAvatar']);
@@ -155,12 +155,12 @@ class UserFilter implements Filter
 
     protected function getVipLevelService()
     {
-        return ServiceKernel::instance()->createService('Vip:Vip.LevelService');
+        return ServiceKernel::instance()->createService('VipPlugin:Vip:LevelService');
     }
 
     protected function getVipService()
     {
-        return ServiceKernel::instance()->createService('Vip:Vip.VipService');
+        return ServiceKernel::instance()->createService('VipPlugin:Vip:VipService');
     }
 }
 
