@@ -30,6 +30,7 @@ function _inItStep2form() {
       title: {
         required: true,
         maxlength: 50,
+        trim: true,
       },
       minute: 'required unsigned_integer time_length',
       second: 'required time_range time_length',

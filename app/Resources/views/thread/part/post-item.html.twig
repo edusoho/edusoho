@@ -10,7 +10,7 @@
       <a href="{{ path('user_show', {id:author.id}) }}" class="nickname">{{ author.nickname }}</a>
       <span class="bullet">•</span>
       <span class="text-muted">{{post.createdTime|smart_time}} </span>
-      {% if author.badgeTitle|default(null) %}<span class="mll text-danger">({{ dict_text('classroomRoles', author.badgeTitle) }}) </span>{% endif %}
+      {% if author.badgeTitle|default(null) %}<span class="mll color-danger">({{ dict_text('classroomRoles', author.badgeTitle) }}) </span>{% endif %}
     </div>
     <div class="editor-text">{{ post.content|at(post.ats)|raw }}</div>
     {% include 'attachment/widget/list.html.twig' with {targetType:'classroom.thread.post', targetId:post.id} %}

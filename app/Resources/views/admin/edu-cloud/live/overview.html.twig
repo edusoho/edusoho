@@ -24,7 +24,7 @@
     <a href="{{ path('admin_cloud_live_upgrade') }}" target="_blank">升级</a>｜
     {% if account.renewInfo.status == true %} 
       <span class="text-muted">已续费</span>
-      <span class="text-danger pts">
+      <span class="color-danger pts">
         {{account.renewInfo.message|default('')}}
       </span>
     {% else %}
@@ -39,7 +39,7 @@
     <div class="pll pbm">
       服务期限：
       <span class="color-gray plm">{{account.effective|date("Y-m-d")}} ~ {{ account.expire|date("Y-m-d") }}</span>
-      <div class="text-danger pts">
+      <div class="color-danger pts">
         {{account.message}}
       </div>
     </div>

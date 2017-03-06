@@ -574,6 +574,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $chapter['seq'] = $this->getNextCourseItemSeq($chapter['courseId']);
         $chapter['createdTime'] = time();
+
         $chapter = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
