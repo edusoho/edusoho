@@ -3,6 +3,7 @@
 namespace Topxia\MobileBundleV2\Controller;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
@@ -560,6 +561,9 @@ class MobileBaseController extends BaseController
         return $this->createService('Course:MaterialService');
     }
 
+    /**
+     * @return CourseService
+     */
     public function getCourseService()
     {
         return $this->createService('Course:CourseService');
@@ -628,6 +632,11 @@ class MobileBaseController extends BaseController
     public function getLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    public function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     public function getTokenService()
