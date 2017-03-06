@@ -5,7 +5,6 @@ namespace Topxia\Api;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\Role\Util\PermissionBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
 class ApiAuth
