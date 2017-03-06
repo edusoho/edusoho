@@ -127,7 +127,7 @@
       {% if user.verifiedMobile %}
         {{ user.verifiedMobile|default('')}}<span class="color-success">({{'已绑定'|trans}})</span> 
       {% elseif profile.mobile %}
-        {{ profile.mobile }}<span class="text-danger">({{'未绑定'|trans}})</span>
+        {{ profile.mobile }}<span class="color-danger">({{'未绑定'|trans}})</span>
       {% else %}
         {{ profile.mobile|default('暂无'|trans) }}
       {% endif %}

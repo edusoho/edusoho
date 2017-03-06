@@ -42,7 +42,7 @@
               </button>
             </div>
             <div class="col-md-10">
-              <span class="text-danger text-sm">{{'抱歉，您尚未接入教育云，不能使用云搜索服务！'|trans}}</span>
+              <span class="color-danger text-sm">{{'抱歉，您尚未接入教育云，不能使用云搜索服务！'|trans}}</span>
               <p><a href="http://open.edusoho.com/educloud" target="_blank">{{'立即接入'|trans}}</a></p>
             </div>
           {% elseif data.status == 'unbinded' %}
@@ -51,7 +51,7 @@
               </button>
             </div>
             <div class="col-md-10">
-              <span class="text-danger text-sm">{{'未绑定授权域名不能开通云搜索！'|trans}}</span>
+              <span class="color-danger text-sm">{{'未绑定授权域名不能开通云搜索！'|trans}}</span>
               <p><a href="{{ path('admin_setting_cloud') }}">{{'立即设置'|trans}}</a></p>
             </div>
           {% elseif data.status == 'binded_error' %}
@@ -60,7 +60,7 @@
               </button>
             </div>
             <div class="col-md-10">
-              <span class="text-danger text-sm">{{'当前域名与授权域名不符，不能开通云搜索！'|trans}}</span>
+              <span class="color-danger text-sm">{{'当前域名与授权域名不符，不能开通云搜索！'|trans}}</span>
               <p><a href="{{ path('admin_setting_cloud') }}" target="_blank">{{'立即设置'|trans}}</a></p>
             </div>
           {% elseif data.status == 'closed' %}
@@ -273,7 +273,7 @@
     <label for="" class="col-sm-3 control-label" style="padding-top:12px;">重建索引：</label>
     <div class="controls col-md-9 radios">
       <button type="button" class="btn btn-primary" data-toggle="modal" data-url="{{path('admin_cloud_buildindex_modal')}}" data-target="#modal">重建索引</button>
-      <i class="es-icon es-icon-warning text-danger plm " data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="right" data-html="true" data-content="警告:<li>1.如果无法通过云搜索搜索某一课程，请尝试更新课程信息后10分钟再搜索。</li><li>2.如果按照1操作后仍无法搜索该课程，再考虑使用重建索引。</li><li>3.请勿频繁使用重建索引功能</li>"></i>
+      <i class="es-icon es-icon-warning color-danger plm " data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="right" data-html="true" data-content="警告:<li>1.如果无法通过云搜索搜索某一课程，请尝试更新课程信息后10分钟再搜索。</li><li>2.如果按照1操作后仍无法搜索该课程，再考虑使用重建索引。</li><li>3.请勿频繁使用重建索引功能</li>"></i>
       <div class="color-gray ptm">用于重新构建云搜索的索引数据。</div>
     </div>
   </div>
