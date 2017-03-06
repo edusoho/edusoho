@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Common\Mail;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -36,6 +37,7 @@ class NormalMail extends Mail
             }
 
             $mailer->send($email);
+
             return true;
         }
 
@@ -46,7 +48,7 @@ class NormalMail extends Mail
     {
         $empty = array(
             'title' => '',
-            'body'  => ''
+            'body' => '',
         );
 
         if (is_null($this->template)) {
@@ -65,7 +67,7 @@ class NormalMail extends Mail
     {
         return array(
             'title' => $this->getKernel()->trans('重置您的%sitename%帐号密码', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name'))),
-            'body'  => $this->renderBody('effect-reset.txt.twig')
+            'body' => $this->renderBody('effect-reset.txt.twig'),
         );
     }
 
@@ -73,7 +75,7 @@ class NormalMail extends Mail
     {
         return array(
             'title' => $this->getKernel()->trans('重设%nickname%在%sitename%的密码', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name', 'EDUSOHO'))),
-            'body'  => $this->renderBody('reset.txt.twig')
+            'body' => $this->renderBody('reset.txt.twig'),
         );
     }
 
@@ -81,23 +83,23 @@ class NormalMail extends Mail
     {
         return array(
             'title' => $this->getKernel()->trans('【%sitename%】系统自检邮件', array('%sitename%' => $this->params['sitename'])),
-            'body'  => $this->getKernel()->trans('系统邮件发送检测测试，请不要回复此邮件！')
+            'body' => $this->getKernel()->trans('系统邮件发送检测测试，请不要回复此邮件！'),
         );
     }
 
     private function on_email_registration()
     {
-        $emailTitle        = $this->setting('auth.email_activation_title', $this->getKernel()->trans('请激活你的帐号 完成注册'));
-        $emailBody         = $this->setting('auth.email_activation_body', $this->getKernel()->trans(' 验证邮箱内容'));
-        $valuesToReplace   = array($this->params['nickname'], $this->params['sitename'], $this->params['siteurl'], $this->params['verifyurl']);
+        $emailTitle = $this->setting('auth.email_activation_title', $this->getKernel()->trans('请激活你的帐号 完成注册'));
+        $emailBody = $this->setting('auth.email_activation_body', $this->getKernel()->trans(' 验证邮箱内容'));
+        $valuesToReplace = array($this->params['nickname'], $this->params['sitename'], $this->params['siteurl'], $this->params['verifyurl']);
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
 
         $emailTitle = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
-        $emailBody  = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
+        $emailBody = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
 
         return array(
             'title' => $emailTitle,
-            'body'  => $emailBody
+            'body' => $emailBody,
         );
     }
 
@@ -105,7 +107,7 @@ class NormalMail extends Mail
     {
         return array(
             'title' => $this->getKernel()->trans('重设%nickname%在%sitename%的电子邮箱', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name', 'EDUSOHO'))),
-            'body'  => $this->renderBody('email-change.txt.twig')
+            'body' => $this->renderBody('email-change.txt.twig'),
         );
     }
 
@@ -113,14 +115,15 @@ class NormalMail extends Mail
     {
         return array(
             'title' => $this->getKernel()->trans('验证%nickname%在%sitename%的电子邮箱', array('%nickname%' => $this->params['nickname'], '%sitename%' => $this->setting('site.name', 'EDUSOHO'))),
-            'body'  => $this->renderBody('email-verify.txt.twig')
+            'body' => $this->renderBody('email-verify.txt.twig'),
         );
     }
 
     private function renderBody($view)
     {
-        $loader = new \Twig_Loader_Filesystem(__DIR__."/template");
+        $loader = new \Twig_Loader_Filesystem(__DIR__.'/template');
         $twig = new \Twig_Environment($loader);
+
         return  $twig->render($view, $this->params);
     }
 

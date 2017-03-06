@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class QuestionFavoriteDaoImpl extends GeneralDaoImpl implements QuestionFavoriteDao
 {
-    protected $table = "question_favorite";
+    protected $table = 'question_favorite';
 
     public function findUserFavoriteQuestions($userId)
     {
@@ -16,20 +16,20 @@ class QuestionFavoriteDaoImpl extends GeneralDaoImpl implements QuestionFavorite
 
     public function deleteFavoriteByQuestionId($questionId)
     {
-        return $this->getConnection()->delete($this->table, array("questionId" => $questionId));
+        return $this->getConnection()->delete($this->table, array('questionId' => $questionId));
     }
 
     public function declares()
     {
         $declares['orderbys'] = array(
-            'createdTime'
+            'createdTime',
         );
 
         $declares['conditions'] = array(
             'targetType = :targetType',
             'targetId = :targetId',
             'userId = :userId',
-            'questionId IN ( :questionIds )'
+            'questionId IN ( :questionIds )',
         );
 
         return $declares;

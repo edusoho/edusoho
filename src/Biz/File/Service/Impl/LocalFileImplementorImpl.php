@@ -1,11 +1,11 @@
 <?php
+
 namespace Biz\File\Service\Impl;
 
 use Biz\BaseService;
 use Biz\File\Dao\UploadFileDao;
 use Biz\File\Service\FileImplementor;
 use AppBundle\Common\FileToolkit;
-
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Biz\User\Service\UserService;
 
@@ -14,7 +14,8 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     public function getFile($file)
     {
         $file['fullpath'] = $this->getFileFullPath($file);
-        $file['webpath']  = '';
+        $file['webpath'] = '';
+
         return $file;
     }
 
@@ -36,23 +37,23 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         $uploadFile['filename'] = $originalFile->getClientOriginalName();
 
-        $uploadFile['ext']      = FileToolkit::getFileExtension($originalFile);
+        $uploadFile['ext'] = FileToolkit::getFileExtension($originalFile);
         $uploadFile['fileSize'] = $originalFile->getSize();
 
         $filename = FileToolkit::generateFilename($uploadFile['ext']);
 
         $uploadFile['hashId'] = "{$uploadFile['targetType']}/{$uploadFile['targetId']}/{$filename}";
 
-        $uploadFile['convertHash']   = "ch-{$uploadFile['hashId']}";
+        $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
         $uploadFile['convertStatus'] = 'none';
 
         $uploadFile['type'] = FileToolkit::getFileTypeByExtension($uploadFile['ext']);
 
-        $uploadFile['isPublic']    = empty($fileInfo['isPublic']) ? 0 : 1;
+        $uploadFile['isPublic'] = empty($fileInfo['isPublic']) ? 0 : 1;
         $uploadFile['canDownload'] = empty($uploadFile['canDownload']) ? 0 : 1;
 
         $uploadFile['updatedUserId'] = $uploadFile['createdUserId'] = $this->getCurrentUser()->id;
-        $uploadFile['updatedTime']   = $uploadFile['createdTime']   = time();
+        $uploadFile['updatedTime'] = $uploadFile['createdTime'] = time();
 
         $targetPath = $this->getFilePath($targetType, $targetId);
 
@@ -78,9 +79,9 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     {
         $uploadParams = array();
 
-        $uploadParams['storage']             = 'local';
-        $uploadParams['url']                 = $params['defaultUploadUrl'];
-        $uploadParams['postParams']          = array();
+        $uploadParams['storage'] = 'local';
+        $uploadParams['url'] = $params['defaultUploadUrl'];
+        $uploadParams['postParams'] = array();
         $uploadParams['postParams']['token'] = $this->getUserService()->makeToken('fileupload', $params['user'], strtotime('+ 2 hours'));
 
         return $uploadParams;
@@ -110,29 +111,29 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     public function prepareUpload($params)
     {
-        $file             = array();
+        $file = array();
         $file['filename'] = empty($params['fileName']) ? '' : $params['fileName'];
 
-        $pos         = strrpos($file['filename'], '.');
+        $pos = strrpos($file['filename'], '.');
         $file['ext'] = empty($pos) ? '' : substr($file['filename'], $pos + 1);
 
-        $file['fileSize']   = empty($params['fileSize']) ? 0 : $params['fileSize'];
-        $file['status']     = 'uploading';
-        $file['targetId']   = $params['targetId'];
+        $file['fileSize'] = empty($params['fileSize']) ? 0 : $params['fileSize'];
+        $file['status'] = 'uploading';
+        $file['targetId'] = $params['targetId'];
         $file['targetType'] = $params['targetType'];
-        $file['storage']    = 'local';
+        $file['storage'] = 'local';
 
         $file['type'] = FileToolkit::getFileTypeByExtension($file['ext']);
 
         $file['updatedUserId'] = empty($params['userId']) ? 0 : $params['userId'];
-        $file['updatedTime']   = time();
+        $file['updatedTime'] = time();
         $file['createdUserId'] = $file['updatedUserId'];
-        $file['createdTime']   = $file['updatedTime'];
+        $file['createdTime'] = $file['updatedTime'];
 
-        $filename       = FileToolkit::generateFilename($file['ext']);
+        $filename = FileToolkit::generateFilename($file['ext']);
         $file['hashId'] = "{$file['targetType']}/{$file['targetId']}/{$filename}";
 
-        $file['convertHash']   = "ch-{$file['hashId']}";
+        $file['convertHash'] = "ch-{$file['hashId']}";
         $file['convertStatus'] = 'none';
 
         return $file;
@@ -149,7 +150,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         $targetPath = $this->getFilePath($targetType, $targetId);
 
-        $filename = str_replace("{$targetType}/{$targetId}/", "", $data['hashId']);
+        $filename = str_replace("{$targetType}/{$targetId}/", '', $data['hashId']);
         $originalFile->move($targetPath, $filename);
     }
 
@@ -157,7 +158,6 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     {
         return null;
     }
-
 
     public function finishedUpload($file, $params)
     {
@@ -177,6 +177,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     {
         $filename = $this->getFileFullPath($file);
         @unlink($filename);
+
         return array('success' => true);
     }
 
@@ -202,9 +203,9 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     {
         $uploadParams = array();
 
-        $uploadParams['uploadMode']          = 'local';
-        $uploadParams['url']                 = $this->getUploadUrl($params);
-        $uploadParams['postParams']          = array();
+        $uploadParams['uploadMode'] = 'local';
+        $uploadParams['url'] = $this->getUploadUrl($params);
+        $uploadParams['postParams'] = array();
         $uploadParams['postParams']['token'] = $this->getUserService()->makeToken(
             'fileupload',
             $params['userId'],
@@ -226,7 +227,8 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     protected function getFileFullPath($file)
     {
         $baseDirectory = $this->biz['topxia.disk.local_directory'];
-        return $baseDirectory . DIRECTORY_SEPARATOR . $file['hashId'];
+
+        return $baseDirectory.DIRECTORY_SEPARATOR.$file['hashId'];
     }
 
     protected function getFileWebPath($file)
@@ -235,17 +237,19 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
             return '';
         }
 
-        return $this->biz['topxia.upload.public_url_path'] . DIRECTORY_SEPARATOR . $file['hashId'];
+        return $this->biz['topxia.upload.public_url_path'].DIRECTORY_SEPARATOR.$file['hashId'];
     }
 
     protected function getFilePath($targetType, $targetId)
     {
         $baseDirectory = $this->biz['topxia.disk.local_directory'];
-        return $baseDirectory . DIRECTORY_SEPARATOR . $targetType . DIRECTORY_SEPARATOR . $targetId;
+
+        return $baseDirectory.DIRECTORY_SEPARATOR.$targetType.DIRECTORY_SEPARATOR.$targetId;
     }
 
     /**
-     * only support for cloud file
+     * only support for cloud file.
+     *
      * @param $globalId
      *
      * @return array
@@ -256,7 +260,8 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     }
 
     /**
-     * only support for cloud file
+     * only support for cloud file.
+     *
      * @param $globalId
      *
      * @return array
@@ -267,7 +272,8 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     }
 
     /**
-     * only support for cloud file
+     * only support for cloud file.
+     *
      * @param $globalId
      * @param $options
      *
@@ -279,7 +285,8 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     }
 
     /**
-     * only support for cloud file
+     * only support for cloud file.
+     *
      * @param $options
      *
      * @return array
@@ -290,14 +297,14 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     }
 
     /**
-     *
      * @param $globalId
      * @param bool $ssl
      *
      * @deprecated only support for cloud file use CloudFileImplementorImpl
+     *
      * @return array
      */
-    public function player($globalId, $ssl=false)
+    public function player($globalId, $ssl = false)
     {
         return array();
     }

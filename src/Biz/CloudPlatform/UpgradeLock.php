@@ -2,9 +2,7 @@
 
 namespace Biz\CloudPlatform;
 
-
 use Symfony\Component\Filesystem\Filesystem;
-
 
 class UpgradeLock
 {
@@ -26,7 +24,6 @@ class UpgradeLock
 
     private static function _getFile()
     {
-        return __DIR__ . '/../../../app/data/' . 'upgrade.lock';
+        return __DIR__.'/../../../app/data/'.'upgrade.lock';
     }
-
 }

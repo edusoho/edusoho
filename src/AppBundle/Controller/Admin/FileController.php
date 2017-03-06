@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -10,17 +11,19 @@ class FileController extends BaseController
         $form = $this->buildFileSearchForm();
         $form->bind($request);
         $conditions = $form->getData();
-        $group      = empty($conditions['group']) ? null : $conditions['group'];
-        $files      = $this->getFileService()->getFiles($group, 0, 30);
+        $group = empty($conditions['group']) ? null : $conditions['group'];
+        $files = $this->getFileService()->getFiles($group, 0, 30);
+
         return $this->render('admin/file/index.html.twig', array(
             'files' => $files,
-            'form'  => $form->createView()
+            'form' => $form->createView(),
         ));
     }
 
     public function deleteAction(Request $request, $id)
     {
         $this->getFileService()->deleteFile($id);
+
         return $this->createNewJsonResponse(true);
     }
 
@@ -35,9 +38,9 @@ class FileController extends BaseController
 
         return $this->createFormBuilder()
             ->add('group', 'choice', array(
-                'choices'     => $groupChoices,
+                'choices' => $groupChoices,
                 'empty_value' => '--文件组--',
-                'required'    => false
+                'required' => false,
             ))
             ->getForm();
     }

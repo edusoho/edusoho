@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\ArrayToolkit;
@@ -18,28 +19,28 @@ class HomeworkManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
 
         return $this->forward('AppBundle:HomeworkManage:check', array(
-            'request'  => $request,
+            'request' => $request,
             'resultId' => $resultId,
-            'source'   => 'course',
-            'targetId' => $course['id']
+            'source' => 'course',
+            'targetId' => $course['id'],
         ));
     }
 
     public function checkListAction(Request $request, $id)
     {
-        $course    = $this->getCourseService()->getCourse($id);
-        $course    = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
+        $course = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $user      = $this->getUser();
+        $user = $this->getUser();
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'homework');
 
         return $this->render('course-manage/homework-check/check-list.html.twig', array(
-            'courseSet'   => $courseSet,
-            'course'      => $course,
-            'isTeacher'   => $isTeacher,
-            'homeworkIds' => ArrayToolkit::column($activities, 'mediaId')
+            'courseSet' => $courseSet,
+            'course' => $course,
+            'isTeacher' => $isTeacher,
+            'homeworkIds' => ArrayToolkit::column($activities, 'mediaId'),
         ));
     }
 
@@ -87,5 +88,4 @@ class HomeworkManageController extends BaseController
     {
         return $this->createService('Course:MemberService');
     }
-
 }

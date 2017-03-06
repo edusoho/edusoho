@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
@@ -9,9 +10,9 @@ class TagController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $total     = $this->getTagService()->searchTagCount($conditions = array());
+        $total = $this->getTagService()->searchTagCount($conditions = array());
         $paginator = new Paginator($request, $total, 20);
-        $tags      = $this->getTagService()->searchTags($conditions = array(), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $tags = $this->getTagService()->searchTags($conditions = array(), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         foreach ($tags as &$tag) {
             $tagGroups = $this->getTagService()->findTagGroupsByTagId($tag['id']);
@@ -25,8 +26,8 @@ class TagController extends BaseController
         }
 
         return $this->render('admin/tag/index.html.twig', array(
-            'tags'      => $tags,
-            'paginator' => $paginator
+            'tags' => $tags,
+            'paginator' => $paginator,
         ));
     }
 
@@ -38,13 +39,13 @@ class TagController extends BaseController
             $tagRelation = $this->getTagService()->findTagRelationsByTagIds(array($tag['id']));
 
             return $this->render('admin/tag/list-tr.html.twig', array(
-                'tag'          => $tag,
-                'tagRelations' => $tagRelation
+                'tag' => $tag,
+                'tagRelations' => $tagRelation,
             ));
         }
 
         return $this->render('admin/tag/tag-modal.html.twig', array(
-            'tag' => array('id' => 0, 'name' => '')
+            'tag' => array('id' => 0, 'name' => ''),
         ));
     }
 
@@ -58,13 +59,14 @@ class TagController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $tag = $this->getTagService()->updateTag($id, $request->request->all());
+
             return $this->render('admin/tag/list-tr.html.twig', array(
-                'tag' => $tag
+                'tag' => $tag,
             ));
         }
 
         return $this->render('admin/tag/tag-modal.html.twig', array(
-            'tag' => $tag
+            'tag' => $tag,
         ));
     }
 
@@ -77,7 +79,7 @@ class TagController extends BaseController
 
     public function checkNameAction(Request $request)
     {
-        $name    = $request->query->get('value');
+        $name = $request->query->get('value');
         $exclude = $request->query->get('exclude');
 
         $avaliable = $this->getTagService()->isTagNameAvailable($name, $exclude);

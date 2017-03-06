@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Testpaper\Builder;
 
 interface TestpaperBuilderInterface

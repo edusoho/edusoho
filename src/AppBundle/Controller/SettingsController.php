@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Content\Service\FileService;
@@ -44,23 +45,24 @@ class SettingsController extends BaseController
 
         $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
-        if (array_key_exists('idcard', $profile) && $profile['idcard'] == "0") {
-            $profile['idcard'] = "";
+        if (array_key_exists('idcard', $profile) && $profile['idcard'] == '0') {
+            $profile['idcard'] = '';
         }
 
         $fromCourse = $request->query->get('fromCourse');
+
         return $this->render('settings/profile.html.twig', array(
-            'profile'    => $profile,
-            'fields'     => $fields,
+            'profile' => $profile,
+            'fields' => $fields,
             'fromCourse' => $fromCourse,
-            'user'       => $user
+            'user' => $user,
         ));
     }
 
     public function approvalSubmitAction(Request $request)
     {
-        $user              = $this->getCurrentUser();
-        $profile           = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->getCurrentUser();
+        $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['idcard'] = substr_replace($profile['idcard'], '************', 4, 12);
 
         if ($request->getMethod() == 'POST') {
@@ -69,16 +71,18 @@ class SettingsController extends BaseController
 
             if (abs(filesize($faceImg)) > 2 * 1024 * 1024 || abs(filesize($backImg)) > 2 * 1024 * 1024) {
                 $this->setFlashMessage('danger', '上传文件过大，请上传较小的文件!');
+
                 return $this->render('settings/approval.html.twig', array(
-                    'profile' => $profile
+                    'profile' => $profile,
                 ));
             }
 
             if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
                 // return $this->createMessageResponse('error', $this->getServiceKernel()->trans('上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。'));
                 $this->setFlashMessage('danger', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+
                 return $this->render('settings/approval.html.twig', array(
-                    'profile' => $profile
+                    'profile' => $profile,
                 ));
             }
 
@@ -89,7 +93,7 @@ class SettingsController extends BaseController
         }
 
         return $this->render('settings/approval.html.twig', array(
-            'profile' => $profile
+            'profile' => $profile,
         ));
     }
 
@@ -108,11 +112,13 @@ class SettingsController extends BaseController
 
             if ($this->getSensitiveService()->scanText($nickname)) {
                 $this->setFlashMessage('danger', '用户名中含有敏感词，更新失败！');
+
                 return $this->redirect($this->generateUrl('settings'));
             }
 
             $this->getAuthService()->changeNickname($user['id'], $nickname);
             $this->setFlashMessage('success', '用户名修改成功！');
+
             return $this->redirect($this->generateUrl('settings'));
         }
 
@@ -122,7 +128,7 @@ class SettingsController extends BaseController
 
     public function nicknameCheckAction(Request $request)
     {
-        $nickname    = $request->query->get('value');
+        $nickname = $request->query->get('value');
         $currentUser = $this->getUserService()->getCurrentUser();
 
         if ($currentUser['nickname'] == $nickname) {
@@ -157,13 +163,14 @@ class SettingsController extends BaseController
         }
 
         $fromCourse = $request->query->get('fromCourse');
-        $goto       = $request->query->get('goto');
+        $goto = $request->query->get('goto');
+
         return $this->render('settings/avatar.html.twig', array(
-            'form'          => $form->createView(),
-            'user'          => $this->getUserService()->getUser($user['id']),
+            'form' => $form->createView(),
+            'user' => $this->getUserService()->getUser($user['id']),
             'partnerAvatar' => $partnerAvatar,
-            'fromCourse'    => $fromCourse,
-            'goto'          => $goto
+            'fromCourse' => $fromCourse,
+            'goto' => $goto,
         ));
     }
 
@@ -173,19 +180,20 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
-            $this->getUserService()->changeAvatar($currentUser['id'], $options["images"]);
+            $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
+
             return $this->redirect($this->generateUrl('settings_avatar'));
         }
 
-        $fileId                                      = $request->getSession()->get("fileId");
+        $fileId = $request->getSession()->get('fileId');
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
-        $goto                                        = $request->query->get('goto');
-        return $this->render('settings/avatar-crop.html.twig', array(
-            'pictureUrl'  => $pictureUrl,
-            'naturalSize' => $naturalSize,
-            'scaledSize'  => $scaledSize,
-            'goto'        => $goto
+        $goto = $request->query->get('goto');
 
+        return $this->render('settings/avatar-crop.html.twig', array(
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
+            'goto' => $goto,
         ));
     }
 
@@ -195,20 +203,22 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
-            $this->getUserService()->changeAvatar($currentUser['id'], $options["images"]);
-            $user   = $this->getUserService()->getUser($currentUser['id']);
+            $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
+            $user = $this->getUserService()->getUser($currentUser['id']);
             $avatar = $this->getWebExtension()->getFpath($user['largeAvatar']);
+
             return $this->createJsonResponse(array(
                 'status' => 'success',
-                'avatar' => $avatar));
+                'avatar' => $avatar, ));
         }
 
-        $fileId                                      = $request->getSession()->get("fileId");
+        $fileId = $request->getSession()->get('fileId');
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+
         return $this->render('settings/avatar-crop-modal.html.twig', array(
-            'pictureUrl'  => $pictureUrl,
+            'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize'  => $scaledSize
+            'scaledSize' => $scaledSize,
         ));
     }
 
@@ -224,57 +234,58 @@ class SettingsController extends BaseController
 
         if (empty($url)) {
             $this->setFlashMessage('danger', '获取论坛头像地址失败！');
+
             return $this->createJsonResponse(true);
         }
 
-        $imgUrl    = $request->request->get('imgUrl');
-        $file      = new File($this->downloadImg($imgUrl));
-        $groupCode = "tmp";
-        $imgs      = array(
-            'large'  => array("200", "200"),
-            'medium' => array("120", "120"),
-            'small'  => array("48", "48")
+        $imgUrl = $request->request->get('imgUrl');
+        $file = new File($this->downloadImg($imgUrl));
+        $groupCode = 'tmp';
+        $imgs = array(
+            'large' => array('200', '200'),
+            'medium' => array('120', '120'),
+            'small' => array('48', '48'),
         );
         $options = array(
-            'x'      => "0",
-            'y'      => "0",
-            'x2'     => "200",
-            'y2'     => "200",
-            'w'      => "200",
-            'h'      => "200",
-            'width'  => "200",
-            'height' => "200",
-            'imgs'   => $imgs
+            'x' => '0',
+            'y' => '0',
+            'x2' => '200',
+            'y2' => '200',
+            'w' => '200',
+            'h' => '200',
+            'width' => '200',
+            'height' => '200',
+            'imgs' => $imgs,
         );
 
         if (empty($options['group'])) {
-            $options['group'] = "default";
+            $options['group'] = 'default';
         }
 
-        $record    = $this->getFileService()->uploadFile($groupCode, $file);
-        $parsed    = $this->getFileService()->parseFileUri($record['uri']);
-        $filePaths = FileToolKit::cropImages($parsed["fullpath"], $options);
+        $record = $this->getFileService()->uploadFile($groupCode, $file);
+        $parsed = $this->getFileService()->parseFileUri($record['uri']);
+        $filePaths = FileToolKit::cropImages($parsed['fullpath'], $options);
 
         $fields = array();
 
         foreach ($filePaths as $key => $value) {
-            $file     = $this->getFileService()->uploadFile($options["group"], new File($value));
+            $file = $this->getFileService()->uploadFile($options['group'], new File($value));
             $fields[] = array(
-                "type" => $key,
-                "id"   => $file['id']
+                'type' => $key,
+                'id' => $file['id'],
             );
         }
 
-        if (isset($options["deleteOriginFile"]) && $options["deleteOriginFile"] == 0) {
+        if (isset($options['deleteOriginFile']) && $options['deleteOriginFile'] == 0) {
             $fields[] = array(
-                "type" => "origin",
-                "id"   => $record['id']
+                'type' => 'origin',
+                'id' => $record['id'],
             );
         } else {
-            $this->getFileService()->deleteFileByUri($record["uri"]);
+            $this->getFileService()->deleteFileByUri($record['uri']);
         }
 
-        $this->getUserService()->changeAvatar($currentUser["id"], $fields);
+        $this->getUserService()->changeAvatar($currentUser['id'], $fields);
 
         return $this->createJsonResponse(true);
     }
@@ -287,17 +298,17 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup'));
         }
 
-        $hasLoginPassword           = strlen($user['password']) > 0;
-        $hasPayPassword             = strlen($user['payPassword']) > 0;
-        $userSecureQuestions        = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+        $hasLoginPassword = strlen($user['password']) > 0;
+        $hasPayPassword = strlen($user['payPassword']) > 0;
+        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
-        $hasVerifiedMobile          = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
+        $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
 
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
-        $showBindMobile  = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1')
+        $showBindMobile = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1')
             && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
 
-        $itemScore     = floor(100.0 / (3.0 + ($showBindMobile ? 1.0 : 0)));
+        $itemScore = floor(100.0 / (3.0 + ($showBindMobile ? 1.0 : 0)));
         $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0);
 
         if ($progressScore <= 1) {
@@ -305,11 +316,11 @@ class SettingsController extends BaseController
         }
 
         return $this->render('settings/security.html.twig', array(
-            'progressScore'              => $progressScore,
-            'hasLoginPassword'           => $hasLoginPassword,
-            'hasPayPassword'             => $hasPayPassword,
+            'progressScore' => $progressScore,
+            'hasLoginPassword' => $hasLoginPassword,
+            'hasPayPassword' => $hasPayPassword,
             'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion,
-            'hasVerifiedMobile'          => $hasVerifiedMobile
+            'hasVerifiedMobile' => $hasVerifiedMobile,
         ));
     }
 
@@ -321,6 +332,7 @@ class SettingsController extends BaseController
 
         if ($hasPayPassword) {
             $this->setFlashMessage('danger', '不能直接设置新支付密码。');
+
             return $this->redirect($this->generateUrl('settings_reset_pay_password'));
         }
 
@@ -332,6 +344,7 @@ class SettingsController extends BaseController
 
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_pay_password'));
+
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
@@ -343,6 +356,7 @@ class SettingsController extends BaseController
 
                 if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
                     $this->setFlashMessage('danger', '当前用户登录密码不正确，请重试！');
+
                     return $this->redirect($this->generateUrl('settings_pay_password'));
                 } else {
                     $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
@@ -354,7 +368,7 @@ class SettingsController extends BaseController
         }
 
         return $this->render('settings/pay-password.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ));
     }
 
@@ -384,13 +398,14 @@ class SettingsController extends BaseController
                     return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登录密码不正确，请重试！'));
                 } else {
                     $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
+
                     return $this->createJsonResponse(array('ACK' => 'success', 'message' => '新支付密码设置成功！'));
                 }
             }
         }
 
         return $this->render('settings/pay-password-modal.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ));
     }
 
@@ -420,13 +435,13 @@ class SettingsController extends BaseController
                     ->getForm();
 
                 return $this->render('settings/pay-password-modal.html.twig', array(
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
                 ));
             }
         }
 
         return $this->render('settings/password-modal.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ));
     }
 
@@ -465,7 +480,7 @@ class SettingsController extends BaseController
         }
 
         return $this->render('settings/reset-pay-password.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ));
     }
 
@@ -473,16 +488,17 @@ class SettingsController extends BaseController
     {
         $token = $this->getUserService()->makeToken('pay-password-reset', $userId, strtotime('+1 day'));
         $request->request->set('token', $token);
+
         return $this->forward('settings/updatePayPassword', array(
-            'request' => $request
+            'request' => $request,
         ));
     }
 
     protected function updatePayPasswordReturn($form, $token)
     {
         return $this->render('settings/update-pay-password-from-email-or-secure-questions.html.twig', array(
-            'form'  => $form->createView(),
-            'token' => $token ?: null
+            'form' => $form->createView(),
+            'token' => $token ?: null,
         ));
     }
 
@@ -508,12 +524,14 @@ class SettingsController extends BaseController
 
                 if ($data['payPassword'] != $data['confirmPayPassword']) {
                     $this->setFlashMessage('danger', '两次输入的支付密码不一致。');
+
                     return $this->updatePayPasswordReturn($form, $token);
                 }
 
                 if ($this->getAuthService()->checkPassword($token['userId'], $data['currentUserLoginPassword'])) {
                     $this->getAuthService()->changePayPassword($token['userId'], $data['currentUserLoginPassword'], $data['payPassword']);
                     $this->getUserService()->deleteToken('pay-password-reset', $token['token']);
+
                     return $this->render('TopxiaWebBundle:Settings:pay-password-success.html.twig');
                 } else {
                     $this->setFlashMessage('danger', '用户登录密码错误。');
@@ -527,23 +545,24 @@ class SettingsController extends BaseController
     protected function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
     {
         $questionNum = rand(0, 2);
-        $question    = $userSecureQuestions[$questionNum]['securityQuestionCode'];
+        $question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
+
         return $this->render('settings/find-pay-password.html.twig', array(
-            'question'             => $question,
-            'questionNum'          => $questionNum,
+            'question' => $question,
+            'questionNum' => $questionNum,
             'hasSecurityQuestions' => $hasSecurityQuestions,
-            'hasVerifiedMobile'    => $hasVerifiedMobile
+            'hasVerifiedMobile' => $hasVerifiedMobile,
         ));
     }
 
     public function findPayPasswordAction(Request $request)
     {
-        $user                 = $this->getCurrentUser();
-        $userSecureQuestions  = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+        $user = $this->getCurrentUser();
+        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
-        $verifiedMobile       = $user['verifiedMobile'];
-        $hasVerifiedMobile    = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
-        $canSmsFind           = ($hasVerifiedMobile) &&
+        $verifiedMobile = $user['verifiedMobile'];
+        $hasVerifiedMobile = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
+        $canSmsFind = ($hasVerifiedMobile) &&
             ($this->setting('cloud_sms.sms_enabled') == '1') &&
             ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
 
@@ -553,12 +572,13 @@ class SettingsController extends BaseController
 
         if (!$hasSecurityQuestions) {
             $this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
+
             return $this->forward('settings/security-questions');
         }
 
         if ($request->getMethod() == 'POST') {
             $questionNum = $request->request->get('questionNum');
-            $answer      = $request->request->get('answer');
+            $answer = $request->request->get('answer');
 
             $userSecureQuestion = $userSecureQuestions[$questionNum];
 
@@ -567,10 +587,12 @@ class SettingsController extends BaseController
 
             if (!$isAnswerRight) {
                 $this->setFlashMessage('danger', '回答错误。');
+
                 return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
             }
 
             $this->setFlashMessage('success', '回答正确，你可以开始更新支付密码。');
+
             return $this->setPayPasswordPage($request, $user['id']);
         }
 
@@ -579,7 +601,7 @@ class SettingsController extends BaseController
 
     public function findPayPasswordBySmsAction(Request $request)
     {
-        $scenario = "sms_forget_pay_password";
+        $scenario = 'sms_forget_pay_password';
 
         if ($this->setting('cloud_sms.sms_enabled') != '1' || $this->setting("cloud_sms.{$scenario}") != 'on') {
             return $this->render('settings/edu-cloud-error.html.twig', array());
@@ -587,13 +609,14 @@ class SettingsController extends BaseController
 
         $currentUser = $this->getCurrentUser();
 
-        $userSecureQuestions  = $this->getUserService()->getUserSecureQuestionsByUserId($currentUser['id']);
+        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($currentUser['id']);
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
-        $verifiedMobile       = $currentUser['verifiedMobile'];
-        $hasVerifiedMobile    = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
+        $verifiedMobile = $currentUser['verifiedMobile'];
+        $hasVerifiedMobile = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
 
         if (!$hasVerifiedMobile) {
             $this->setFlashMessage('danger', '您还没有绑定手机，请先绑定。');
+
             return $this->redirect($this->generateUrl('settings_bind_mobile', array(
             )));
         }
@@ -609,6 +632,7 @@ class SettingsController extends BaseController
 
             if ($result) {
                 $this->setFlashMessage('success', '验证通过，你可以开始更新支付密码。');
+
                 return $this->setPayPasswordPage($request, $currentUser['id']);
             } else {
                 $this->setFlashMessage('danger', '验证错误。');
@@ -618,8 +642,8 @@ class SettingsController extends BaseController
         response:
         return $this->render('settings/find-pay-password-by-sms.html.twig', array(
             'hasSecurityQuestions' => $hasSecurityQuestions,
-            'hasVerifiedMobile'    => $hasVerifiedMobile,
-            'verifiedMobile'       => $verifiedMobile
+            'hasVerifiedMobile' => $hasVerifiedMobile,
+            'verifiedMobile' => $verifiedMobile,
         ));
     }
 
@@ -637,26 +661,28 @@ class SettingsController extends BaseController
 
         return $this->render('settings/security-questions.html.twig', array(
             'hasSecurityQuestions' => $hasSecurityQuestions,
-            'question1'            => $question1,
-            'question2'            => $question2,
-            'question3'            => $question3
+            'question1' => $question1,
+            'question2' => $question2,
+            'question3' => $question3,
         ));
     }
 
     public function securityQuestionsAction(Request $request)
     {
-        $user                 = $this->getCurrentUser();
-        $userSecureQuestions  = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+        $user = $this->getCurrentUser();
+        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_security_questions'));
+
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
         if ($request->getMethod() == 'POST') {
             if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
                 $this->setFlashMessage('danger', '您的登录密码错误，不能设置安全问题。');
+
                 return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
             }
 
@@ -672,16 +698,16 @@ class SettingsController extends BaseController
 
             $fields = array(
                 'securityQuestion1' => $request->request->get('question-1'),
-                'securityAnswer1'   => $request->request->get('answer-1'),
+                'securityAnswer1' => $request->request->get('answer-1'),
                 'securityQuestion2' => $request->request->get('question-2'),
-                'securityAnswer2'   => $request->request->get('answer-2'),
+                'securityAnswer2' => $request->request->get('answer-2'),
                 'securityQuestion3' => $request->request->get('question-3'),
-                'securityAnswer3'   => $request->request->get('answer-3')
+                'securityAnswer3' => $request->request->get('answer-3'),
             );
             $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($user['id'], $fields);
             $this->setFlashMessage('success', '安全问题设置成功。');
             $hasSecurityQuestions = true;
-            $userSecureQuestions  = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
+            $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         }
 
         return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
@@ -691,15 +717,15 @@ class SettingsController extends BaseController
     {
         return $this->render('settings/bind-mobile.html.twig', array(
             'hasVerifiedMobile' => $hasVerifiedMobile,
-            'setMobileResult'   => $setMobileResult,
-            'verifiedMobile'    => $verifiedMobile
+            'setMobileResult' => $setMobileResult,
+            'verifiedMobile' => $verifiedMobile,
         ));
     }
 
     public function bindMobileAction(Request $request)
     {
-        $currentUser       = $this->getCurrentUser()->toArray();
-        $verifiedMobile    = '';
+        $currentUser = $this->getCurrentUser()->toArray();
+        $verifiedMobile = '';
         $hasVerifiedMobile = (isset($currentUser['verifiedMobile']) && (strlen($currentUser['verifiedMobile']) > 0));
 
         if ($hasVerifiedMobile) {
@@ -708,7 +734,7 @@ class SettingsController extends BaseController
 
         $setMobileResult = 'none';
 
-        $scenario = "sms_bind";
+        $scenario = 'sms_bind';
 
         if ($this->setting('cloud_sms.sms_enabled') != '1' || $this->setting("cloud_sms.{$scenario}") != 'on') {
             return $this->render('settings/edu-cloud-error.html.twig', array());
@@ -718,6 +744,7 @@ class SettingsController extends BaseController
 
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_bind_mobile'));
+
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
@@ -727,6 +754,7 @@ class SettingsController extends BaseController
             if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
                 $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您的登录密码错误'));
                 SmsToolkit::clearSmsSession($request, $scenario);
+
                 return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
             }
 
@@ -750,7 +778,7 @@ class SettingsController extends BaseController
     public function passwordCheckAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
-        $password    = $request->request->get('value');
+        $password = $request->request->get('value');
 
         if (strlen($password) > 0) {
             $passwordRight = $this->getUserService()->verifyPassword($currentUser['id'], $password);
@@ -783,6 +811,7 @@ class SettingsController extends BaseController
 
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_security'));
+
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
@@ -804,14 +833,14 @@ class SettingsController extends BaseController
         }
 
         return $this->render('settings/password.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ));
     }
 
     public function emailAction(Request $request)
     {
-        $user       = $this->getCurrentUser();
-        $mailer     = $this->getSettingService()->get('mailer', array());
+        $user = $this->getCurrentUser();
+        $mailer = $this->getSettingService()->get('mailer', array());
         $cloudEmail = $this->getSettingService()->get('cloud_email', array());
 
         if (empty($user['setup'])) {
@@ -827,11 +856,12 @@ class SettingsController extends BaseController
             $form->bind($request);
 
             if ($form->isValid()) {
-                $data         = $form->getData();
+                $data = $form->getData();
                 $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
 
                 if (!$isPasswordOk) {
                     $this->setFlashMessage('danger', '密码不正确，请重试。');
+
                     return $this->redirect($this->generateUrl('settings_email'));
                 }
 
@@ -839,27 +869,29 @@ class SettingsController extends BaseController
 
                 if ($userOfNewEmail && $userOfNewEmail['id'] == $user['id']) {
                     $this->setFlashMessage('danger', '新邮箱，不能跟当前邮箱一样。');
+
                     return $this->redirect($this->generateUrl('settings_email'));
                 }
 
                 if ($userOfNewEmail && $userOfNewEmail['id'] != $user['id']) {
                     $this->setFlashMessage('danger', '新邮箱已经被注册，请换一个试试。');
+
                     return $this->redirect($this->generateUrl('settings_email'));
                 }
 
                 $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $data['email']);
 
                 try {
-                    $site        = $this->setting('site', array());
+                    $site = $this->setting('site', array());
                     $mailOptions = array(
-                        'to'       => $data['email'],
+                        'to' => $data['email'],
                         'template' => 'email_reset_email',
-                        'params'   => array(
-                            'sitename'  => $site['name'],
-                            'siteurl'   => $site['url'],
+                        'params' => array(
+                            'sitename' => $site['name'],
+                            'siteurl' => $site['url'],
                             'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
-                            'nickname'  => $user['nickname']
-                        )
+                            'nickname' => $user['nickname'],
+                        ),
                     );
                     $mail = MailFactory::create($mailOptions);
                     $mail->send();
@@ -868,33 +900,34 @@ class SettingsController extends BaseController
                     $this->setFlashMessage('danger', '邮箱变更确认邮件发送失败，请联系管理员。');
                     $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
                 }
+
                 return $this->redirect($this->generateUrl('settings_email'));
             }
         }
 
-        return $this->render("settings/email.html.twig", array(
-            'form'       => $form->createView(),
-            'mailer'     => $mailer,
-            'cloudEmail' => $cloudEmail
+        return $this->render('settings/email.html.twig', array(
+            'form' => $form->createView(),
+            'mailer' => $mailer,
+            'cloudEmail' => $cloudEmail,
         ));
     }
 
     public function emailVerifyAction()
     {
-        $user      = $this->getCurrentUser();
-        $token     = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
+        $user = $this->getCurrentUser();
+        $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
         $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
-        $site      = $this->setting('site', array());
+        $site = $this->setting('site', array());
         try {
             $mailOptions = array(
-                'to'       => $user['email'],
+                'to' => $user['email'],
                 'template' => 'email_verify_email',
-                'params'   => array(
+                'params' => array(
                     'verifyurl' => $verifyurl,
-                    'nickname'  => $user['nickname'],
-                    'sitename'  => $site['name'],
-                    'siteurl'   => $site['url']
-                )
+                    'nickname' => $user['nickname'],
+                    'sitename' => $site['name'],
+                    'siteurl' => $site['url'],
+                ),
             );
             $mail = MailFactory::create($mailOptions);
             $mail->send();
@@ -909,8 +942,8 @@ class SettingsController extends BaseController
 
     public function bindsAction(Request $request)
     {
-        $user      = $this->getCurrentUser();
-        $clients   = OAuthClientFactory::clients();
+        $user = $this->getCurrentUser();
+        $clients = OAuthClientFactory::clients();
         $userBinds = $this->getUserService()->findBindsByUserId($user->id) ?: array();
 
         foreach ($userBinds as $userBind) {
@@ -922,7 +955,7 @@ class SettingsController extends BaseController
         }
 
         return $this->render('settings/binds.html.twig', array(
-            'clients' => $clients
+            'clients' => $clients,
         ));
     }
 
@@ -931,6 +964,7 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
         $this->checkBindsName($type);
         $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $user->id);
+
         return $this->redirect($this->generateUrl('settings_binds'));
     }
 
@@ -939,8 +973,8 @@ class SettingsController extends BaseController
         $this->checkBindsName($type);
         $callback = $this->generateUrl('settings_binds_bind_callback', array('type' => $type), true);
         $settings = $this->setting('login_bind');
-        $config   = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
-        $client   = OAuthClientFactory::create($type, $config);
+        $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
+        $client = OAuthClientFactory::create($type, $config);
 
         return $this->redirect($client->getAuthorizeUrl($callback));
     }
@@ -1001,6 +1035,7 @@ class SettingsController extends BaseController
             $this->getAuthService()->changeNickname($user['id'], $data['nickname']);
             $user = $this->getUserService()->setupAccount($user['id']);
             $this->authenticateUser($user);
+
             return $this->createJsonResponse(true);
         }
 
@@ -1023,12 +1058,13 @@ class SettingsController extends BaseController
             if ($form->isValid()) {
                 $passwords = $form->getData();
                 $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+
                 return $this->redirect($targetPath);
             }
         }
 
         return $this->render('settings/setup-password.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ));
     }
 
@@ -1146,9 +1182,9 @@ class SettingsController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
 //        $filename    = md5($url).'_'.time();
-        $filePath    = $this->container->getParameter('topxia.upload.public_directory').'/tmp/'.$currentUser['id'].'_'.time().'.jpg';
+        $filePath = $this->container->getParameter('topxia.upload.public_directory').'/tmp/'.$currentUser['id'].'_'.time().'.jpg';
 
-        $fp  = fopen($filePath, 'w');
+        $fp = fopen($filePath, 'w');
         $img = fopen($url, 'r');
         stream_get_meta_data($img);
         $result = '';
@@ -1159,6 +1195,7 @@ class SettingsController extends BaseController
         fclose($img);
         fwrite($fp, $result);
         fclose($fp);
+
         return $filePath;
     }
 }

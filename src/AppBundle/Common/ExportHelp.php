@@ -55,8 +55,9 @@ class ExportHelp
     public static function genereateExportCsvFileName($contentName = '')
     {
         $rootPath = ServiceKernel::instance()->getParameter('topxia.upload.private_directory');
-        $user     = ServiceKernel::instance()->getCurrentUser();
-        return $rootPath."/export_content_".$contentName.'_'.$user['id'].time().".txt";
+        $user = ServiceKernel::instance()->getCurrentUser();
+
+        return $rootPath.'/export_content_'.$contentName.'_'.$user['id'].time().'.txt';
     }
 
     public static function exportCsv($request, $fileName)

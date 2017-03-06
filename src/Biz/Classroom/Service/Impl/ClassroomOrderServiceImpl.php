@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Classroom\Service\Impl;
 
 use Biz\BaseService;
@@ -50,27 +51,27 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 throw $this->createServiceException('该班级是封闭班级，学员不能自行加入！');
             }
 
-            $order               = array();
-            $classroomSetting    = $this->getSettingService()->get('classroom');
-            $classroomName       = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
-            $order['userId']     = $user['id'];
-            $order['title']      = "购买{$classroomName}《{$classroom['title']}》";
+            $order = array();
+            $classroomSetting = $this->getSettingService()->get('classroom');
+            $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
+            $order['userId'] = $user['id'];
+            $order['title'] = "购买{$classroomName}《{$classroom['title']}》";
             $order['targetType'] = 'classroom';
-            $order['targetId']   = $classroom['id'];
-            $order['payment']    = $info['payment'];
-            $order['amount']     = empty($info['amount']) ? 0 : $info['amount'];
-            $order['priceType']  = $info['priceType'];
-            $order['totalPrice'] = $info["totalPrice"];
-            $order['coinRate']   = $info['coinRate'];
+            $order['targetId'] = $classroom['id'];
+            $order['payment'] = $info['payment'];
+            $order['amount'] = empty($info['amount']) ? 0 : $info['amount'];
+            $order['priceType'] = $info['priceType'];
+            $order['totalPrice'] = $info['totalPrice'];
+            $order['coinRate'] = $info['coinRate'];
             $order['coinAmount'] = $info['coinAmount'];
-            $order['snPrefix']   = 'CR';
+            $order['snPrefix'] = 'CR';
 
             if (!empty($info['note'])) {
                 $order['data'] = array('note' => $info['note']);
             }
 
             if (!empty($info['coupon'])) {
-                $order['coupon']         = $info['coupon'];
+                $order['coupon'] = $info['coupon'];
                 $order['couponDiscount'] = $info['couponDiscount'];
             }
 
@@ -83,17 +84,17 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             // 免费班级或VIP会员，就直接将订单置为已购买
 
             if ((intval($order['amount'] * 100) == 0 && intval($order['coinAmount'] * 100) == 0
-                && empty($order['coupon'])) || !empty($info["becomeUseMember"])) {
+                && empty($order['coupon'])) || !empty($info['becomeUseMember'])) {
                 list($success, $order) = $this->getOrderService()->payOrder(array(
-                    'sn'       => $order['sn'],
-                    'status'   => 'success',
-                    'amount'   => $order['amount'],
-                    'paidTime' => time()
+                    'sn' => $order['sn'],
+                    'status' => 'success',
+                    'amount' => $order['amount'],
+                    'paidTime' => time(),
                 ));
 
                 $info = array(
                     'orderId' => $order['id'],
-                    'remark'  => empty($order['data']['note']) ? '' : $order['data']['note']
+                    'remark' => empty($order['data']['note']) ? '' : $order['data']['note'],
                 );
                 $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
             }
@@ -117,17 +118,17 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
         $info = array(
             'orderId' => $order['id'],
-            'remark'  => empty($order['data']['note']) ? '' : $order['data']['note']
+            'remark' => empty($order['data']['note']) ? '' : $order['data']['note'],
         );
 
         $classroomSetting = $this->getSettingService()->get('classroom');
-        $classroomName    = empty($classroomSetting['name']) ? '班级' : $classroomSetting['name'];
+        $classroomName = empty($classroomSetting['name']) ? '班级' : $classroomSetting['name'];
 
         if (!$this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
-            $this->getOrderService()->createOrderLog($order['id'], "pay_success", "当前用户已经是{$classroomName}学员，支付宝支付成功。", $order);
-            $this->getLogService()->warning("classroom_order", "pay_success", "当前用户已经是{$classroomName}学员，支付宝支付成功。", $order);
+            $this->getOrderService()->createOrderLog($order['id'], 'pay_success', "当前用户已经是{$classroomName}学员，支付宝支付成功。", $order);
+            $this->getLogService()->warning('classroom_order', 'pay_success', "当前用户已经是{$classroomName}学员，支付宝支付成功。", $order);
         }
 
         return;
@@ -135,7 +136,7 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
 
     public function applyRefundOrder($id, $amount, $reason, $container)
     {
-        $user  = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
 
         if (empty($order)) {
@@ -147,25 +148,25 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
         if ($refund['status'] == 'created') {
             $this->getClassroomService()->lockStudent($order['targetId'], $order['userId']);
 
-            $setting      = $this->getSettingService()->get('refund');
-            $message      = (empty($setting) || empty($setting['applyNotification'])) ? '' : $setting['applyNotification'];
-            $classroom    = $this->getClassroomService()->getClassroom($order["targetId"]);
+            $setting = $this->getSettingService()->get('refund');
+            $message = (empty($setting) || empty($setting['applyNotification'])) ? '' : $setting['applyNotification'];
+            $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
             $classroomUrl = $container->get('router')->generate('classroom_show', array('id' => $classroom['id']));
 
             if ($message) {
                 $variables = array(
-                    'item' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>"
+                    'item' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
                 );
                 $message = StringToolkit::template($message, $variables);
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);
             }
 
-            $classroomSetting         = $this->getSettingService()->get('classroom');
+            $classroomSetting = $this->getSettingService()->get('classroom');
             $classroomSetting['name'] = empty($classroomSetting['name']) ? '班级' : $classroomSetting['name'];
 
             $adminMessage = "用户{$user['nickname']}申请退款<a href='{$classroomUrl}'>{$classroom['title']}</a>{$classroomSetting['name']}，请审核。";
-            $adminCount   = $this->getUserService()->searchUserCount(array('roles' => 'ADMIN'));
-            $admins       = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id' => 'DESC'), 0, $adminCount);
+            $adminCount = $this->getUserService()->searchUserCount(array('roles' => 'ADMIN'));
+            $admins = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id' => 'DESC'), 0, $adminCount);
 
             foreach ($admins as $key => $admin) {
                 $this->getNotificationService()->notify($admin['id'], 'default', $adminMessage);

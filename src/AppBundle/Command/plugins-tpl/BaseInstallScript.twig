@@ -4,17 +4,16 @@ use Symfony\Component\Filesystem\Filesystem;
 
 abstract class BaseInstallScript
 {
-
     protected $meta;
 
     protected $kernel;
 
     protected $installMode = 'appstore';
 
-    public function __construct ($kernel)
+    public function __construct($kernel)
     {
         $this->kernel = $kernel;
-        $this->meta = json_decode(file_get_contents(__DIR__ .'/../plugin.json'), true);
+        $this->meta = json_decode(file_get_contents(__DIR__.'/../plugin.json'), true);
     }
 
     abstract public function install();
@@ -22,11 +21,11 @@ abstract class BaseInstallScript
     public function execute()
     {
         $this->getConnection()->beginTransaction();
-        try{
+        try {
             $this->install();
             $this->installAssets();
             $this->getConnection()->commit();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
         }
@@ -46,13 +45,13 @@ abstract class BaseInstallScript
         $code = $this->meta['code'];
 
         $rootDir = realpath($this->kernel->getParameter('kernel.root_dir').'/../');
-        
+
         $originDir = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/public";
         if (!is_dir($originDir)) {
             return false;
         }
 
-        $targetDir = "{$rootDir}/web/bundles/" . strtolower($code);
+        $targetDir = "{$rootDir}/web/bundles/".strtolower($code);
 
         $filesystem = new Filesystem();
         if ($filesystem->exists($targetDir)) {
@@ -80,5 +79,4 @@ abstract class BaseInstallScript
     {
         return $this->kernel->getConnection();
     }
-
 }

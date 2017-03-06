@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Article\Service;
 
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -12,6 +13,7 @@ interface ArticleService
      * @param $currentArticleId
      *
      * @throws NotFoundException
+     *
      * @return array
      */
     public function getArticlePrevious($currentArticleId);
@@ -20,6 +22,7 @@ interface ArticleService
      * @param $currentArticleId
      *
      * @throws NotFoundException
+     *
      * @return array
      */
     public function getArticleNext($currentArticleId);
@@ -53,7 +56,8 @@ interface ArticleService
      * @param $property
      *
      * @throws NotFoundException
-     * @return integer
+     *
+     * @return int
      */
     public function setArticleProperty($id, $property);
 
@@ -62,33 +66,38 @@ interface ArticleService
      * @param $property
      *
      * @throws NotFoundException
-     * @return integer
+     *
+     * @return int
      */
     public function cancelArticleProperty($id, $property);
 
     /**
-     * move article to trash
+     * move article to trash.
+     *
      * @param $id
      *
      * @throws NotFoundException
-     * @return void
      */
     public function trashArticle($id);
 
     /**
-     * delete article at trash
+     * delete article at trash.
      *
      * @param $id
      *
      * @throws NotFoundException
+     *
      * @return bool
      */
     public function deleteArticle($id);
 
     /**
-     * batch delete articles at trash
+     * batch delete articles at trash.
+     *
      * @param array $ids
+     *
      * @throws NotFoundException
+     *
      * @return mixed
      */
     public function deleteArticlesByIds(array $ids);
@@ -96,19 +105,21 @@ interface ArticleService
     public function removeArticlethumb($id);
 
     /**
-     * like article
+     * like article.
+     *
      * @param $articleId
      *
      * @throws NotFoundException
      * @throws AccessDeniedException
+     *
      * @return array
      */
     public function like($articleId);
 
     /**
      * @param $articleId
+     *
      * @throws NotFoundException
-     * @return void
      */
     public function cancelLike($articleId);
 
@@ -125,5 +136,4 @@ interface ArticleService
     public function findPublishedArticlesByTagIdsAndCount($tagIds, $count);
 
     public function findRelativeArticles($articleId, $num = 3);
-
 }

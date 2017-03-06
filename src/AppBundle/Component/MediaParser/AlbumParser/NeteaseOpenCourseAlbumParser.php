@@ -1,24 +1,25 @@
 <?php
+
 namespace AppBundle\Component\MediaParser\AlbumParser;
 
 use AppBundle\Component\MediaParser\ParseException;
 
 class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
 {
-	private $patterns = array(
-		'p1' => '/^http:\/\/v\.163\.com\/special\/(.*?)[\/|(\.html)]$/s',
-	); 
+    private $patterns = array(
+        'p1' => '/^http:\/\/v\.163\.com\/special\/(.*?)[\/|(\.html)]$/s',
+    );
 
-	public function parse($url)
-	{
-		$response = $this->fetchUrl($url);
-		if ($response['code'] != 200) {
-            throw new ParseException(array('获取网易公开课专辑(%url%)页面内容失败', array('%url%' =>$url )));
+    public function parse($url)
+    {
+        $response = $this->fetchUrl($url);
+        if ($response['code'] != 200) {
+            throw new ParseException(array('获取网易公开课专辑(%url%)页面内容失败', array('%url%' => $url)));
         }
 
         $album = array();
         $album['id'] = $this->parseId($url);
-        $album['uuid'] = 'NeteaseOpenCourseAlbum:' . $album['id'];
+        $album['uuid'] = 'NeteaseOpenCourseAlbum:'.$album['id'];
 
         $internationalAlbum = $this->parseInternationalAlbum($response['content']);
         if ($internationalAlbum) {
@@ -31,7 +32,7 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
         }
 
         throw new ParseException('解析网易公开课专辑信息失败');
-	}
+    }
 
     private function parseInternationalAlbum($content)
     {
@@ -61,14 +62,14 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
         }
         $album['title'] = iconv('gb2312', 'utf-8', trim(substr($matches[1], 0, strpos($matches[1], '_'))));
 
-        $matched = preg_match( iconv('utf-8', 'gb2312', '/<h2>课程介绍<\/h2>.*?<span\sclass\=\"cdblan\">(.*?)<\/span>/s') , $content, $matches);
+        $matched = preg_match(iconv('utf-8', 'gb2312', '/<h2>课程介绍<\/h2>.*?<span\sclass\=\"cdblan\">(.*?)<\/span>/s'), $content, $matches);
         if (empty($matched)) {
             throw new ParseException('解析网易公开课专辑摘要失败！');
         }
         $album['summary'] = iconv('gb2312', 'utf-8', trim($matches[1]));
         $album['picture'] = '';
         $album['items'] = $this->parseChineseItems($content);
-        $album['number']= count($album['items']);
+        $album['number'] = count($album['items']);
 
         return $album;
     }
@@ -79,6 +80,7 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
         if (empty($matched)) {
             throw new ParseException('获取网易公开课专辑ID失败');
         }
+
         return $matches[1];
     }
 
@@ -134,7 +136,6 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
 
     public function detect($url)
     {
-        return !!preg_match($this->patterns['p1'], $url);
+        return (bool) preg_match($this->patterns['p1'], $url);
     }
-
 }

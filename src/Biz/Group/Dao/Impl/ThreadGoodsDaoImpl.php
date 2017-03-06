@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Group\Dao\Impl;
 
 use Biz\Group\Dao\ThreadGoodsDao;
@@ -11,6 +12,7 @@ class ThreadGoodsDaoImpl extends GeneralDaoImpl implements ThreadGoodsDao
     public function deleteByThreadIdAndType($id, $type)
     {
         $sql = "DELETE FROM {$this->table} WHERE threadId = ? AND type = ? ";
+
         return $this->db()->executeUpdate($sql, array($id, $type));
     }
 
@@ -18,6 +20,7 @@ class ThreadGoodsDaoImpl extends GeneralDaoImpl implements ThreadGoodsDao
     {
         $builder = $this->_createQueryBuilder($conditions)
             ->select('sum(coin)');
+
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -25,15 +28,15 @@ class ThreadGoodsDaoImpl extends GeneralDaoImpl implements ThreadGoodsDao
     {
         return array(
             'serializes' => array(
-                'tagIds' => 'json'
+                'tagIds' => 'json',
             ),
-            'orderbys'   => array('name', 'createdTime', 'id'),
+            'orderbys' => array('name', 'createdTime', 'id'),
             'conditions' => array(
                 'threadId = :threadId',
                 'fileId = :fileId',
                 'postId = :postId',
-                'type = :type'
-            )
+                'type = :type',
+            ),
         );
     }
 }

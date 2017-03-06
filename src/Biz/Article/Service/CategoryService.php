@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Article\Service;
 
 interface CategoryService

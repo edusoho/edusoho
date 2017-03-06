@@ -1,17 +1,17 @@
 <?php
+
 namespace Biz\RefererLog\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
-
 
 class OrderRefererLogEventSubscriber extends EventSubscriber
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'order.service.paid'    => 'onOrderPaid',
-            'order.service.created' => 'onOrderCreated'
+            'order.service.paid' => 'onOrderPaid',
+            'order.service.created' => 'onOrderCreated',
         );
     }
 
@@ -19,7 +19,7 @@ class OrderRefererLogEventSubscriber extends EventSubscriber
     {
         global $kernel;
 
-        if(empty($kernel)){
+        if (empty($kernel)) {
             return false;
         }
 
@@ -30,11 +30,11 @@ class OrderRefererLogEventSubscriber extends EventSubscriber
         if (empty($token)) {
             return false;
         }
-        $order    = $event->getSubject();
-        $orderIds = explode("|", trim($token['orderIds'], "|"));
+        $order = $event->getSubject();
+        $orderIds = explode('|', trim($token['orderIds'], '|'));
         array_push($orderIds, $order['id']);
 
-        $token['orderIds'] = '|'.implode($orderIds, "|").'|';
+        $token['orderIds'] = '|'.implode($orderIds, '|').'|';
 
         $this->getRefererLogService()->updateOrderReferer($token['id'], $token);
     }
@@ -63,13 +63,13 @@ class OrderRefererLogEventSubscriber extends EventSubscriber
 
         foreach ($refererLogs as $key => $refererLog) {
             $fields = array(
-                'refererLogId'     => $refererLog['id'],
-                'orderId'          => $order['id'],
-                'sourceTargetId'   => $refererLog['targetId'],
+                'refererLogId' => $refererLog['id'],
+                'orderId' => $order['id'],
+                'sourceTargetId' => $refererLog['targetId'],
                 'sourceTargetType' => $refererLog['targetType'],
-                'targetType'       => $order['targetType'],
-                'targetId'         => $order['targetId'],
-                'createdUserId'    => $order['userId']
+                'targetType' => $order['targetType'],
+                'targetId' => $order['targetId'],
+                'createdUserId' => $order['userId'],
             );
 
             $this->getOrderRefererLogService()->addOrderRefererLog($fields);

@@ -23,7 +23,7 @@ class GlobalFilePlayerController extends BaseController
             return $this->audioPlayer($file);
         } elseif (in_array($file['type'], array('ppt', 'document', 'image', 'flash'))) {
             return $this->render("material-lib/player/{$file['type']}-player.html.twig", array(
-                'file' => $file
+                'file' => $file,
             ));
         }
     }
@@ -53,11 +53,12 @@ class GlobalFilePlayerController extends BaseController
     public function audioPlayer($file)
     {
         $result = $this->getMaterialLibService()->player($file['no']);
+
         return $this->render('material-lib/player/global-video-player.html.twig', array(
-            'file'             => $file,
-            'url'              => $result['url'],
-            'player'           => 'audio-player',
-            'agentInWhiteList' => $this->agentInWhiteList($this->getRequest()->headers->get("user-agent"))
+            'file' => $file,
+            'url' => $result['url'],
+            'player' => 'audio-player',
+            'agentInWhiteList' => $this->agentInWhiteList($this->getRequest()->headers->get('user-agent')),
         ));
     }
 
@@ -66,17 +67,17 @@ class GlobalFilePlayerController extends BaseController
         $url = $this->getPlayUrl($file);
 
         return $this->render('material-lib/player/global-video-player.html.twig', array(
-            'file'             => $file,
-            'url'              => $url,
-            'player'           => 'balloon-cloud-video-player',
-            'params'           => $request->query->all(),
-            'agentInWhiteList' => $this->agentInWhiteList($this->getRequest()->headers->get("user-agent"))
+            'file' => $file,
+            'url' => $url,
+            'player' => 'balloon-cloud-video-player',
+            'params' => $request->query->all(),
+            'agentInWhiteList' => $this->agentInWhiteList($this->getRequest()->headers->get('user-agent')),
         ));
     }
 
     protected function getPlayUrl($file)
     {
-        if (!in_array($file["type"], array("audio", "video"))) {
+        if (!in_array($file['type'], array('audio', 'video'))) {
             throw $this->createAccessDeniedException();
         }
 
@@ -84,7 +85,7 @@ class GlobalFilePlayerController extends BaseController
 
         $params = array(
             'globalId' => $file['no'],
-            'token'    => $token['token']
+            'token' => $token['token'],
         );
 
         return $this->generateUrl('global_file_hls_playlist', $params, true);
@@ -118,11 +119,11 @@ class GlobalFilePlayerController extends BaseController
             }
 
             $tokenFields = array(
-                'data'     => array(
-                    'globalId' => $file['no'].$level
+                'data' => array(
+                    'globalId' => $file['no'].$level,
                 ),
-                'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
-                'duration' => 3600
+                'times' => $this->agentInWhiteList($request->headers->get('user-agent')) ? 0 : 1,
+                'duration' => 3600,
             );
 
             if (!empty($token['userId'])) {
@@ -133,8 +134,8 @@ class GlobalFilePlayerController extends BaseController
 
             $params = array(
                 'globalId' => $file['no'],
-                'level'    => $level,
-                'token'    => $token['token']
+                'level' => $level,
+                'token' => $token['token'],
             );
 
             $streams[$level] = $this->generateUrl('global_file_hls_stream', $params, true);
@@ -144,12 +145,12 @@ class GlobalFilePlayerController extends BaseController
 
         $qualities = array(
             'video' => $file['directives']['videoQuality'],
-            'audio' => $file['directives']['audioQuality']
+            'audio' => $file['directives']['audioQuality'],
         );
 
         $playlist = $api->get('/hls/playlist', array(
-            'streams'   => $streams,
-            'qualities' => $qualities
+            'streams' => $streams,
+            'qualities' => $qualities,
         ));
 
         if (empty($playlist['playlist'])) {
@@ -157,8 +158,8 @@ class GlobalFilePlayerController extends BaseController
         }
 
         return new Response($playlist['playlist'], 200, array(
-            'Content-Type'        => 'application/vnd.apple.mpegurl',
-            'Content-Disposition' => 'inline; filename="playlist.m3u8"'
+            'Content-Type' => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="playlist.m3u8"',
         ));
     }
 
@@ -187,13 +188,13 @@ class GlobalFilePlayerController extends BaseController
         }
 
         $tokenFields = array(
-            'data'     => array(
-                'globalId'      => $file['no'],
-                'level'         => $level,
-                'keyencryption' => 0
+            'data' => array(
+                'globalId' => $file['no'],
+                'level' => $level,
+                'keyencryption' => 0,
             ),
-            'times'    => 1,
-            'duration' => 3600
+            'times' => 1,
+            'duration' => 3600,
         );
 
         if (!empty($token['userId'])) {
@@ -202,12 +203,12 @@ class GlobalFilePlayerController extends BaseController
 
         $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
 
-        $params           = array();
+        $params = array();
         $params['keyUrl'] = $this->generateUrl('global_file_hls_clef', array(
             'globalId' => $file['no'],
-            'token'    => $token['token']
+            'token' => $token['token'],
         ), true);
-        $params['key']    = $file['metas']['levels'][$level]['key'];
+        $params['key'] = $file['metas']['levels'][$level]['key'];
         $params['fileId'] = $file['extno'];
 
         $api = CloudAPIFactory::create('leaf');
@@ -219,8 +220,8 @@ class GlobalFilePlayerController extends BaseController
         }
 
         return new Response($stream['stream'], 200, array(
-            'Content-Type'        => 'application/vnd.apple.mpegurl',
-            'Content-Disposition' => 'inline; filename="stream.m3u8"'
+            'Content-Type' => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="stream.m3u8"',
         ));
     }
 
@@ -254,15 +255,16 @@ class GlobalFilePlayerController extends BaseController
     protected function makeToken($type, $globalId)
     {
         $fileds = array(
-            'data'     => array(
-                'globalId' => $globalId
+            'data' => array(
+                'globalId' => $globalId,
             ),
-            'times'    => 3,
+            'times' => 3,
             'duration' => 3600,
-            'userId'   => $this->getCurrentUser()->getId()
+            'userId' => $this->getCurrentUser()->getId(),
         );
 
         $token = $this->getTokenService()->makeToken($type, $fileds);
+
         return $token;
     }
 

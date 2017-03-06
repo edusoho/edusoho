@@ -3,7 +3,7 @@
 namespace AppBundle\Common\Tests;
 
 use AppBundle\Common\FileToolkit;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class FileTookitTest extends BaseTestCase
 {
@@ -14,12 +14,10 @@ class FileTookitTest extends BaseTestCase
 
         $extension = FileToolkit::getMimeTypeByExtension('zip');
         $this->assertEquals('application/zip', $extension);
-        
+
         $extension = FileToolkit::getMimeTypeByExtension('mpg');
         $this->assertEquals('video/mpeg', $extension);
-
     }
-
 
     public function testGetFileTypeByVideoExtension()
     {
@@ -52,23 +50,19 @@ class FileTookitTest extends BaseTestCase
 
         $extension = FileToolkit::getFileTypeByExtension('m4v');
         $this->assertEquals('video', $extension);
-
     }
 
     public function testGetFileTypeByAudioExtension()
     {
-
         $extension = FileToolkit::getFileTypeByExtension('mp3');
         $this->assertEquals('audio', $extension);
 
         $extension = FileToolkit::getFileTypeByExtension('wma');
         $this->assertEquals('audio', $extension);
-
     }
 
     public function testGetFileTypeByImageExtension()
     {
-        
         $extension = FileToolkit::getFileTypeByExtension('jpg');
         $this->assertEquals('image', $extension);
 
@@ -83,12 +77,10 @@ class FileTookitTest extends BaseTestCase
 
         $extension = FileToolkit::getFileTypeByExtension('bmp');
         $this->assertEquals('image', $extension);
-
     }
 
     public function testGetFileTypeByDocumentExtension()
     {
-        
         $extension = FileToolkit::getFileTypeByExtension('doc');
         $this->assertEquals('document', $extension);
 
@@ -109,18 +101,15 @@ class FileTookitTest extends BaseTestCase
 
         $extension = FileToolkit::getFileTypeByExtension('odt');
         $this->assertEquals('document', $extension);
-
     }
 
     public function testGetFileTypeByPptExtension()
     {
-        
         $extension = FileToolkit::getFileTypeByExtension('ppt');
         $this->assertEquals('ppt', $extension);
 
         $extension = FileToolkit::getFileTypeByExtension('pptx');
         $this->assertEquals('ppt', $extension);
-
     }
 
     public function testGetFileTypeByFlashExtension()
@@ -140,5 +129,4 @@ class FileTookitTest extends BaseTestCase
         $extension = FileToolkit::getFileTypeByExtension('exe');
         $this->assertEquals('other', $extension);
     }
-
 }

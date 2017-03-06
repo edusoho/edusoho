@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Cash\Service;
 
 interface CashOrdersService

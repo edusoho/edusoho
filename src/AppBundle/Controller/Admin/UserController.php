@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
@@ -15,10 +16,10 @@ class UserController extends BaseController
         $fields = $request->query->all();
 
         $conditions = array(
-            'roles'           => '',
-            'keywordType'     => '',
-            'keyword'         => '',
-            'keywordUserType' => ''
+            'roles' => '',
+            'keywordType' => '',
+            'keyword' => '',
+            'keywordUserType' => '',
         );
 
         $conditions = array_merge($conditions, $fields);
@@ -42,9 +43,9 @@ class UserController extends BaseController
 
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile' && !empty($conditions['keyword'])) {
             $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
-            $userProfiles  = $this->getUserService()->searchUserProfiles(
+            $userProfiles = $this->getUserService()->searchUserProfiles(
                 array('mobile' => $conditions['keyword']),
-                array('id'=>'DESC'),
+                array('id' => 'DESC'),
                 0,
                 $profilesCount
             );
@@ -65,32 +66,32 @@ class UserController extends BaseController
 
             $users = $this->getUserService()->searchUsers(
                 $conditions,
-                array('createdTime'=>'DESC'),
+                array('createdTime' => 'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
         }
 
-        $app = $this->getAppService()->findInstallApp("UserImporter");
+        $app = $this->getAppService()->findInstallApp('UserImporter');
 
         $showUserExport = false;
 
         if (!empty($app) && array_key_exists('version', $app)) {
-            $showUserExport = version_compare($app['version'], "1.0.2", ">=");
+            $showUserExport = version_compare($app['version'], '1.0.2', '>=');
         }
 
-        $userIds  = ArrayToolkit::column($users, 'id');
+        $userIds = ArrayToolkit::column($users, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         $allRoles = $this->getAllRoles();
 
         return $this->render('admin/user/index.html.twig', array(
-            'users'          => $users,
-            'allRoles'       => $allRoles,
-            'userCount'      => $userCount,
-            'paginator'      => $paginator,
-            'profiles'       => $profiles,
-            'showUserExport' => $showUserExport
+            'users' => $users,
+            'allRoles' => $allRoles,
+            'userCount' => $userCount,
+            'paginator' => $paginator,
+            'profiles' => $profiles,
+            'showUserExport' => $showUserExport,
         ));
     }
 
@@ -102,37 +103,42 @@ class UserController extends BaseController
         foreach ($roles as $role) {
             $roleDicts[$role['code']] = $role['name'];
         }
+
         return $roleDicts;
     }
 
     public function emailCheckAction(Request $request)
     {
-        $email                  = $request->query->get('value');
-        $email                  = str_replace('!', '.', $email);
+        $email = $request->query->get('value');
+        $email = str_replace('!', '.', $email);
         list($result, $message) = $this->getAuthService()->checkEmail($email);
+
         return $this->validateResult($result, $message);
     }
 
     public function mobileCheckAction(Request $request)
     {
-        $mobile                 = $request->query->get('value');
-        $mobile                 = str_replace('!', '.', $mobile);
+        $mobile = $request->query->get('value');
+        $mobile = str_replace('!', '.', $mobile);
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
+
         return $this->validateResult($result, $message);
     }
 
     public function nicknameCheckAction(Request $request)
     {
-        $nickname               = $request->query->get('value');
+        $nickname = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkUsername($nickname);
+
         return $this->validateResult($result, $message);
     }
 
     public function emailOrMobileCheckAction(Request $request)
     {
-        $emailOrMobile          = $request->query->get('value');
-        $emailOrMobile          = str_replace('!', '.', $emailOrMobile);
+        $emailOrMobile = $request->query->get('value');
+        $emailOrMobile = str_replace('!', '.', $emailOrMobile);
         list($result, $message) = $this->getAuthService()->checkEmailOrMobile($emailOrMobile);
+
         return $this->validateResult($result, $message);
     }
 
@@ -150,10 +156,10 @@ class UserController extends BaseController
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $formData         = $request->request->all();
+            $formData = $request->request->all();
             $formData['type'] = 'import';
-            $registration     = $this->getRegisterData($formData, $request->getClientIp());
-            $user             = $this->getAuthService()->register($registration);
+            $registration = $this->getRegisterData($formData, $request->getClientIp());
+            $user = $this->getAuthService()->register($registration);
 
             $this->get('session')->set('registed_email', $user['email']);
 
@@ -185,10 +191,10 @@ class UserController extends BaseController
             $userData['mobile'] = $formData['mobile'];
         }
 
-        $userData['nickname']  = $formData['nickname'];
-        $userData['password']  = $formData['password'];
+        $userData['nickname'] = $formData['nickname'];
+        $userData['password'] = $formData['password'];
         $userData['createdIp'] = $clientIp;
-        $userData['type']      = $formData['type'];
+        $userData['type'] = $formData['type'];
 
         if (isset($formData['orgCode'])) {
             $userData['orgCode'] = $formData['orgCode'];
@@ -214,7 +220,7 @@ class UserController extends BaseController
     {
         $user = $this->getUserService()->getUser($id);
 
-        $profile          = $this->getUserService()->getUserProfile($user['id']);
+        $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
 
         if ($request->getMethod() == 'POST') {
@@ -233,9 +239,9 @@ class UserController extends BaseController
         $fields = $this->getFields();
 
         return $this->render('admin/user/edit-modal.html.twig', array(
-            'user'    => $user,
+            'user' => $user,
             'profile' => $profile,
-            'fields'  => $fields
+            'fields' => $fields,
         ));
     }
 
@@ -249,29 +255,31 @@ class UserController extends BaseController
         }
 
         $org = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
+
         return $this->render('admin/user/update-org-modal.html.twig', array(
             'user' => $user,
-            'org'  => $org
+            'org' => $org,
         ));
     }
 
     public function showAction(Request $request, $id)
     {
-        $user             = $this->getUserService()->getUser($id);
-        $profile          = $this->getUserService()->getUserProfile($id);
+        $user = $this->getUserService()->getUser($id);
+        $profile = $this->getUserService()->getUserProfile($id);
         $profile['title'] = $user['title'];
 
         $fields = $this->getFields();
+
         return $this->render('admin/user/show-modal.html.twig', array(
-            'user'    => $user,
+            'user' => $user,
             'profile' => $profile,
-            'fields'  => $fields
+            'fields' => $fields,
         ));
     }
 
     public function rolesAction(Request $request, $id)
     {
-        $user        = $this->getUserService()->getUser($id);
+        $user = $this->getUserService()->getUser($id);
         $currentUser = $this->getUser();
 
         if ($request->getMethod() == 'POST') {
@@ -280,36 +288,37 @@ class UserController extends BaseController
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
             if (!empty($roles)) {
-                $roleSet          = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
+                $roleSet = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
                 $rolesByIndexCode = ArrayToolkit::index($roleSet, 'code');
-                $roleNames        = $this->getRoleNames($roles, $rolesByIndexCode);
+                $roleNames = $this->getRoleNames($roles, $rolesByIndexCode);
 
                 $message = array(
-                    'userId'   => $currentUser['id'],
+                    'userId' => $currentUser['id'],
                     'userName' => $currentUser['nickname'],
-                    'role'     => implode(',', $roleNames)
+                    'role' => implode(',', $roleNames),
                 );
 
                 $this->getNotifiactionService()->notify($user['id'], 'role', $message);
             }
             $user = $this->getUserService()->getUser($id);
+
             return $this->render('admin/user/user-table-tr.html.twig', array(
-                'user'    => $user,
-                'profile' => $this->getUserService()->getUserProfile($id)
+                'user' => $user,
+                'profile' => $this->getUserService()->getUserProfile($id),
             ));
         }
 
         return $this->render('admin/user/roles-modal.html.twig', array(
-            'user' => $user
+            'user' => $user,
         ));
     }
 
     protected function getRoleNames($roles, $roleSet)
     {
         $roleNames = array();
-        $roles     = array_unique($roles);
+        $roles = array_unique($roles);
 
-        $userRoleDict =$this->get('codeages_plugin.dict_twig_extension')->getDict('userRole');
+        $userRoleDict = $this->get('codeages_plugin.dict_twig_extension')->getDict('userRole');
 
         $roleDictCodes = array_keys($userRoleDict);
 
@@ -319,7 +328,7 @@ class UserController extends BaseController
             } elseif ($role == 'ROLE_BACKEND') {
                 continue;
             } else {
-                $role        = $roleSet[$role];
+                $role = $roleSet[$role];
                 $roleNames[] = $role['name'];
             }
         }
@@ -340,8 +349,8 @@ class UserController extends BaseController
         }
 
         return $this->render('admin/user/user-avatar-modal.html.twig', array(
-            'user'          => $user,
-            'partnerAvatar' => $partnerAvatar
+            'user' => $user,
+            'partnerAvatar' => $partnerAvatar,
         ));
     }
 
@@ -349,25 +358,25 @@ class UserController extends BaseController
     {
         $fields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
-        for ($i = 0; $i < count($fields); $i++) {
-            if (strstr($fields[$i]['fieldName'], "textField")) {
-                $fields[$i]['type'] = "text";
+        for ($i = 0; $i < count($fields); ++$i) {
+            if (strstr($fields[$i]['fieldName'], 'textField')) {
+                $fields[$i]['type'] = 'text';
             }
 
-            if (strstr($fields[$i]['fieldName'], "varcharField")) {
-                $fields[$i]['type'] = "varchar";
+            if (strstr($fields[$i]['fieldName'], 'varcharField')) {
+                $fields[$i]['type'] = 'varchar';
             }
 
-            if (strstr($fields[$i]['fieldName'], "intField")) {
-                $fields[$i]['type'] = "int";
+            if (strstr($fields[$i]['fieldName'], 'intField')) {
+                $fields[$i]['type'] = 'int';
             }
 
-            if (strstr($fields[$i]['fieldName'], "floatField")) {
-                $fields[$i]['type'] = "float";
+            if (strstr($fields[$i]['fieldName'], 'floatField')) {
+                $fields[$i]['type'] = 'float';
             }
 
-            if (strstr($fields[$i]['fieldName'], "dateField")) {
-                $fields[$i]['type'] = "date";
+            if (strstr($fields[$i]['fieldName'], 'dateField')) {
+                $fields[$i]['type'] = 'date';
             }
         }
 
@@ -380,19 +389,19 @@ class UserController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
-            $this->getUserService()->changeAvatar($id, $options["images"]);
+            $this->getUserService()->changeAvatar($id, $options['images']);
 
             return $this->createJsonResponse(true);
         }
 
-        $fileId                                      = $request->getSession()->get("fileId");
+        $fileId = $request->getSession()->get('fileId');
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         return $this->render('admin/user/user-avatar-crop-modal.html.twig', array(
-            'user'        => $user,
-            'pictureUrl'  => $pictureUrl,
+            'user' => $user,
+            'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize'  => $scaledSize
+            'scaledSize' => $scaledSize,
         ));
     }
 
@@ -400,9 +409,10 @@ class UserController extends BaseController
     {
         $this->getUserService()->lockUser($id);
         $this->kickUserLogout($id);
+
         return $this->render('admin/user/user-table-tr.html.twig', array(
-            'user'    => $this->getUserService()->getUser($id),
-            'profile' => $this->getUserService()->getUserProfile($id)
+            'user' => $this->getUserService()->getUser($id),
+            'profile' => $this->getUserService()->getUserProfile($id),
         ));
     }
 
@@ -411,8 +421,8 @@ class UserController extends BaseController
         $this->getUserService()->unlockUser($id);
 
         return $this->render('admin/user/user-table-tr.html.twig', array(
-            'user'    => $this->getUserService()->getUser($id),
-            'profile' => $this->getUserService()->getUserProfile($id)
+            'user' => $this->getUserService()->getUser($id),
+            'profile' => $this->getUserService()->getUserProfile($id),
         ));
     }
 
@@ -425,17 +435,17 @@ class UserController extends BaseController
         }
 
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
-        $site  = $this->setting('site', array());
+        $site = $this->setting('site', array());
         try {
             $mailOptions = array(
-                'to'       => $user['email'],
+                'to' => $user['email'],
                 'template' => 'email_reset_password',
-                'params'   => array(
-                    'nickname'  => $user['nickname'],
+                'params' => array(
+                    'nickname' => $user['nickname'],
                     'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
-                    'sitename'  => $site['name'],
-                    'siteurl'   => $site['url']
-                )
+                    'sitename' => $site['name'],
+                    'siteurl' => $site['url'],
+                ),
             );
             $mail = MailFactory::create($mailOptions);
             $mail->send();
@@ -458,19 +468,19 @@ class UserController extends BaseController
 
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
 
-        $site      = $this->getSettingService()->get('site', array());
+        $site = $this->getSettingService()->get('site', array());
         $verifyurl = $this->generateUrl('register_email_verify', array('token' => $token), true);
 
         try {
             $mailOptions = array(
-                'to'       => $user['email'],
+                'to' => $user['email'],
                 'template' => 'email_registration',
-                'params'   => array(
-                    'sitename'  => $site['name'],
-                    'siteurl'   => $site['url'],
+                'params' => array(
+                    'sitename' => $site['name'],
+                    'siteurl' => $site['url'],
                     'verifyurl' => $verifyurl,
-                    'nickname'  => $user['nickname']
-                )
+                    'nickname' => $user['nickname'],
+                ),
             );
 
             $mail = MailFactory::create($mailOptions);
@@ -492,11 +502,12 @@ class UserController extends BaseController
             $formData = $request->request->all();
             $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
             $this->kickUserLogout($user['id']);
+
             return $this->createJsonResponse(true);
         }
 
         return $this->render('admin/user/change-password-modal.html.twig', array(
-            'user' => $user
+            'user' => $user,
         ));
     }
 

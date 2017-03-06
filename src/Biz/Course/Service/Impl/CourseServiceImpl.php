@@ -34,6 +34,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findCoursesByIds($ids)
     {
         $courses = $this->getCourseDao()->findCoursesByIds($ids);
+
         return ArrayToolkit::index($courses, 'id');
     }
 
@@ -99,11 +100,11 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function createCourse($course)
     {
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
-            throw $this->createInvalidArgumentException("Lack of required fields");
+            throw $this->createInvalidArgumentException('Lack of required fields');
         }
 
         if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
-            throw $this->createInvalidArgumentException("Param Invalid: LearnMode");
+            throw $this->createInvalidArgumentException('Param Invalid: LearnMode');
         }
 
         if (!isset($course['isDefault'])) {
@@ -167,6 +168,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = $this->validateExpiryMode($fields);
 
         $entityCopy = new CourseCopy($this->biz);
+
         return $entityCopy->copy($course, $fields);
     }
 
@@ -199,16 +201,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         $existCourse = $this->getCourse($id);
         if (isset($existCourse['status']) && $existCourse['status'] === 'published') {
             if (!ArrayToolkit::requireds($course, array('title', 'courseSetId'))) {
-                throw $this->createInvalidArgumentException("Lack of required fields");
+                throw $this->createInvalidArgumentException('Lack of required fields');
             }
         } elseif (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode'))) {
-            throw $this->createInvalidArgumentException("Lack of required fields");
+            throw $this->createInvalidArgumentException('Lack of required fields');
         } else {
             $fields = $this->validateExpiryMode($fields);
         }
 
         $course = $this->getCourseDao()->update($id, $fields);
         $this->dispatchEvent('course.update', new Event($course));
+
         return $course;
     }
 
@@ -216,12 +219,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->getCourseDao()->update($id, array('maxRate' => $maxRate));
         $this->dispatchEvent('course.update', new Event($course));
+
         return $course;
     }
 
     public function updateMaxRateByCourseSetId($courseSetId, $maxRate)
     {
         $course = $this->getCourseDao()->updateMaxRateByCourseSetId($courseSetId, array('updatedTime' => time(), 'maxRate' => $maxRate));
+
         return $course;
     }
 
@@ -261,6 +266,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (!empty($fields['buyExpiryTime'])) {
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime']);
+        } else {
+            $fields['buyExpiryTime'] = 0;
         }
 
         $newCourse = $this->getCourseDao()->update($id, $fields);
@@ -308,6 +315,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourseDao()->update($id, $updateFields);
         $this->dispatchEvent('course.update', new Event($course));
+
         return $course;
     }
 
@@ -315,7 +323,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->tryManageCourse($id);
         if ($course['status'] == 'published') {
-            throw $this->createAccessDeniedException("Deleting published Course is not allowed");
+            throw $this->createAccessDeniedException('Deleting published Course is not allowed');
         }
         $subCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
@@ -325,6 +333,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($courseCount <= 1) {
             throw $this->createAccessDeniedException('课程下至少需保留一个教学计划');
         }
+
         return $this->getCourseDeleteService()->deleteCourse($id);
     }
 
@@ -375,31 +384,32 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (isset($course['expiryStartDate'])) {
                 $course['expiryStartDate'] = strtotime($course['expiryStartDate']);
             } else {
-                throw $this->createInvalidArgumentException("Param Required: expiryStartDate");
+                throw $this->createInvalidArgumentException('Param Required: expiryStartDate');
             }
             if (isset($course['expiryEndDate'])) {
                 $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
             } else {
-                throw $this->createInvalidArgumentException("Param Required: expiryEndDate");
+                throw $this->createInvalidArgumentException('Param Required: expiryEndDate');
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
-                throw $this->createInvalidArgumentException("Value of Params expiryEndDate must later than expiryStartDate");
+                throw $this->createInvalidArgumentException('Value of Params expiryEndDate must later than expiryStartDate');
             }
         } else {
-            throw $this->createInvalidArgumentException("Param Invalid: expiryMode");
+            throw $this->createInvalidArgumentException('Param Invalid: expiryMode');
         }
 
         return $course;
     }
 
-    public function findCourseItems($courseId)
+    public function findCourseItems($courseId, $limitNum = 0)
     {
         $course = $this->getCourse($courseId);
         if (empty($course)) {
             throw $this->createNotFoundException("Course#{$courseId} Not Found");
         }
         $tasks = $this->findTasksByCourseId($course);
-        return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks);
+
+        return $this->createCourseStrategy($course)->prepareCourseItems($courseId, $tasks, $limitNum);
     }
 
     protected function findTasksByCourseId($course)
@@ -408,6 +418,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($user->isLogin()) {
             return $this->getTaskService()->findTasksFetchActivityAndResultByCourseId($course['id']);
         }
+
         return $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
     }
 
@@ -415,7 +426,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException("Unauthorized");
+            throw $this->createAccessDeniedException('Unauthorized');
         }
 
         $course = $this->getCourseDao()->get($courseId);
@@ -427,7 +438,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException('Invalid Argument: Course#{$courseId} not in CoruseSet#{$courseSetId}');
         }
         if (!$this->hasCourseManagerRole($courseId)) {
-            throw $this->createAccessDeniedException("Unauthorized");
+            throw $this->createAccessDeniedException('Unauthorized');
         }
 
         return $course;
@@ -465,6 +476,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function getUserRoleInCourse($courseId, $userId)
     {
         $member = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
+
         return empty($member) ? null : $member['role'];
     }
 
@@ -488,6 +500,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function findPriceIntervalByCourseSetIds($courseSetIds)
     {
         $results = $this->getCourseDao()->findPriceIntervalByCourseSetIds($courseSetIds);
+
         return ArrayToolkit::index($results, 'courseSetId');
     }
 
@@ -503,6 +516,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
         $user   = $this->getCurrentUser();
         $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'], $user['id']);
+
         return array($course, $member);
     }
 
@@ -548,7 +562,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function createChapter($chapter)
     {
         if (!in_array($chapter['type'], array('chapter', 'unit', 'lesson'))) {
-            throw $this->createInvalidArgumentException("Invalid Chapter Type");
+            throw $this->createInvalidArgumentException('Invalid Chapter Type');
         }
 
         if (in_array($chapter['type'], array('unit', 'lesson'))) {
@@ -582,6 +596,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         //有逻辑缺陷
         $counter = $this->getChapterDao()->getChapterCountByCourseIdAndType($courseId, 'chapter');
+
         return $counter + 1;
     }
 
@@ -589,6 +604,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $chapterMaxSeq = $this->getChapterDao()->getChapterMaxSeqByCourseId($courseId);
         $taskMaxSeq    = $this->getTaskService()->getMaxSeqByCourseId($courseId);
+
         return ($chapterMaxSeq > $taskMaxSeq ? $chapterMaxSeq : $taskMaxSeq) + 1;
     }
 
@@ -605,6 +621,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $chapter = $this->getChapterDao()->update($chapterId, $fields);
         $this->dispatchEvent('course.chapter.update', new Event($chapter));
+
         return $chapter;
     }
 
@@ -642,6 +659,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($course['id'] == $chapter['courseId']) {
             return $chapter;
         }
+
         return array();
     }
 
@@ -680,6 +698,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function countUserLearnedCourses($userId, $filters = array())
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
+
         return $this->getMemberDao()->countLearnedMembers($conditions);
     }
 
@@ -780,6 +799,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $members   = $this->getMemberService()->findStudentMemberByUserId($userId);
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses   = $this->findPublicCoursesByIds($courseIds);
+
         return $courses;
     }
 
@@ -794,6 +814,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'courseIds' => $ids
         );
         $count = $this->searchCourseCount($conditions);
+
         return $this->searchCourses($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
@@ -983,12 +1004,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         } else {
             $orderBy = array('createdTime' => 'DESC');
         }
+
         return $orderBy;
     }
 
     public function searchCourseCount($conditions)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
+
         return $this->getCourseDao()->count($conditions);
     }
 
@@ -1005,6 +1028,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function hasAdminRole()
     {
         $user = $this->getCurrentUser();
+
         return $user->hasPermission('admin_course_content_manage');
     }
 
@@ -1130,6 +1154,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * 当默认值未设置时，合并默认值
+     *
      * @param  $course
      * @return array
      */
@@ -1152,7 +1177,8 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
-     * used for search userLearn userLearning userLearned
+     * used for search userLearn userLearning userLearned.
+     *
      * @param  $userId
      * @param  $filters
      * @return array
@@ -1164,16 +1190,17 @@ class CourseServiceImpl extends BaseService implements CourseService
             'm.userId' => $userId,
             'm.role'   => 'student'
         );
-        if (!empty($filters["type"])) {
-            $conditions['c.type'] = $filters["type"];
+        if (!empty($filters['type'])) {
+            $conditions['c.type'] = $filters['type'];
         }
-        if (!empty($filters["classroomId"])) {
-            $conditions['m.classroomId'] = $filters["classroomId"];
+        if (!empty($filters['classroomId'])) {
+            $conditions['m.classroomId'] = $filters['classroomId'];
         }
 
-        if (!empty($filters["locked"])) {
-            $conditions['m.locked'] = $filters["locked"];
+        if (!empty($filters['locked'])) {
+            $conditions['m.locked'] = $filters['locked'];
         }
+
         return $conditions;
     }
 }

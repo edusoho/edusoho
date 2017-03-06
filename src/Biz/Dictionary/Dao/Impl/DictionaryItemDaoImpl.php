@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Dictionary\Dao\Impl;
 
 use Biz\Dictionary\Dao\DictionaryItemDao;
@@ -11,6 +12,7 @@ class DictionaryItemDaoImpl extends GeneralDaoImpl implements DictionaryItemDao
     public function findAllOrderByWeight()
     {
         $sql = "SELECT * FROM {$this->table} ORDER BY weight DESC";
+
         return $this->db()->fetchAll($sql, array());
     }
 
@@ -28,11 +30,11 @@ class DictionaryItemDaoImpl extends GeneralDaoImpl implements DictionaryItemDao
     {
         return array(
             'timestamps' => array('createdTime', 'updateTime'),
-            'orderbys'   => array('weight'),
+            'orderbys' => array('weight'),
             'conditions' => array(
                 'name = :name',
-                'type = :type'
-            )
+                'type = :type',
+            ),
         );
     }
 }

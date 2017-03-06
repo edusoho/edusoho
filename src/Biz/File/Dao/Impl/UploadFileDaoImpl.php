@@ -2,7 +2,6 @@
 
 namespace Biz\File\Dao\Impl;
 
-
 use Biz\File\Dao\UploadFileDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -12,32 +11,33 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
 
     public function create($fields)
     {
-        if(!isset($fields['id'])){
+        if (!isset($fields['id'])) {
             return array();
         }
 
         parent::create($fields);
+
         return $this->get($fields['id']);
     }
 
     public function getByHashId($hash)
     {
         return $this->getByFields(array(
-            'hashId' => $hash
+            'hashId' => $hash,
         ));
     }
 
     public function getByGlobalId($globalId)
     {
         return $this->getByFields(array(
-            'globalId' => $globalId
+            'globalId' => $globalId,
         ));
     }
 
     public function getByConvertHash($hash)
     {
         return $this->getByFields(array(
-            'convertHash' => $hash
+            'convertHash' => $hash,
         ));
     }
 
@@ -52,8 +52,9 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($targetIds) - 1) . '?';
-        $sql   = "SELECT * FROM {$this->table()} WHERE targetType = ? AND targetId IN ({$marks})";
+        $marks = str_repeat('?,', count($targetIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table()} WHERE targetType = ? AND targetId IN ({$marks})";
+
         return $this->db()->fetchAll($sql, array_merge(array($targetType), $targetIds)) ?: array();
     }
 
@@ -63,8 +64,9 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks}) and storage='cloud' and globalId!='0';";
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE id IN ({$marks}) and storage='cloud' and globalId!='0';";
+
         return $this->db()->fetchAll($sql, $ids);
     }
 
@@ -80,26 +82,28 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
     public function deleteByGlobalId($globalId)
     {
         $result = $this->db()->delete($this->table, array('globalId' => $globalId));
+
         return $result;
     }
 
     public function waveUsedCount($id, $num)
     {
         return $this->wave(array($id), array(
-            'usedCount' => $num
+            'usedCount' => $num,
         ));
     }
 
     public function getByTargetType($targetType)
     {
         return $this->getByFields(array(
-            'targetType' => $targetType
+            'targetType' => $targetType,
         ));
     }
 
     public function findHeadLeaderFiles()
     {
         $sql = "SELECT * FROM {$this->table()} WHERE targetType = 'headLeader'";
+
         return $this->db()->fetchAll($sql, array());
     }
 
@@ -132,16 +136,16 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
                 'usedCount < :endCount',
                 'createdUserId IN ( :createdUserIds )',
                 'createdUserId = :createdUserId',
-                'id IN ( :idsOr )'
+                'id IN ( :idsOr )',
             ),
             'serializes' => array(
-                'metas2'        => 'json',
-                'convertParams' => 'json'
+                'metas2' => 'json',
+                'convertParams' => 'json',
             ),
             'orderbys' => array(
                 'createdTime',
                 'id',
-            )
+            ),
         );
     }
 

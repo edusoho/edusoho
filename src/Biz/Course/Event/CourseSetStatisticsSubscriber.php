@@ -13,9 +13,9 @@ class CourseSetStatisticsSubscriber extends EventSubscriber implements EventSubs
     public static function getSubscribedEvents()
     {
         return array(
-            'course.review.add'    => 'onReviewNumberChange',
+            'course.review.add' => 'onReviewNumberChange',
             'course.review.update' => 'onReviewNumberChange',
-            'course.review.delete' => 'onReviewNumberChange'
+            'course.review.delete' => 'onReviewNumberChange',
         );
     }
 
@@ -24,7 +24,7 @@ class CourseSetStatisticsSubscriber extends EventSubscriber implements EventSubs
         $review = $event->getSubject();
 
         $this->getCourseSetService()->updateCourseSetStatistics($review['courseSetId'], array(
-            'ratingNum'
+            'ratingNum',
         ));
     }
 

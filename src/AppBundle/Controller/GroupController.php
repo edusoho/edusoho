@@ -17,18 +17,18 @@ class GroupController extends BaseController
 {
     public function indexAction()
     {
-        $activeGroup = $this->getGroupService()->searchGroups(array('status' => 'open'), array('memberNum'=>'DESC'), 0, 12);
+        $activeGroup = $this->getGroupService()->searchGroups(array('status' => 'open'), array('memberNum' => 'DESC'), 0, 12);
         $recentlyThread = $this->getThreadService()->searchThreads(
             array(
                 'createdTime' => time() - 30 * 24 * 60 * 60,
-                'status'      => 'open'
+                'status' => 'open',
             ),
             $this->filterSort('byStick'), 0, 25
         );
 
         $ownerIds = ArrayToolkit::column($recentlyThread, 'userId');
         $groupIds = ArrayToolkit::column($recentlyThread, 'groupId');
-        $userIds  = ArrayToolkit::column($recentlyThread, 'lastPostMemberId');
+        $userIds = ArrayToolkit::column($recentlyThread, 'lastPostMemberId');
 
         $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
 
@@ -39,14 +39,14 @@ class GroupController extends BaseController
         list($user, $myJoinGroup, $newGroups) = $this->_getGroupList();
 
         return $this->render('group/index.html.twig', array(
-            'activeGroup'     => $activeGroup,
-            'myJoinGroup'     => $myJoinGroup,
+            'activeGroup' => $activeGroup,
+            'myJoinGroup' => $myJoinGroup,
             'lastPostMembers' => $lastPostMembers,
-            'owners'          => $owners,
-            'newGroups'       => $newGroups,
-            'groupinfo'       => $groups,
-            'user'            => $user,
-            'recentlyThread'  => $recentlyThread
+            'owners' => $owners,
+            'newGroups' => $newGroups,
+            'groupinfo' => $groups,
+            'user' => $user,
+            'recentlyThread' => $recentlyThread,
         ));
     }
 
@@ -66,25 +66,25 @@ class GroupController extends BaseController
             if (empty($title)) {
                 $this->setFlashMessage('danger', '小组名称不能为空！');
 
-                return $this->render("group/groupadd.html.twig");
+                return $this->render('group/groupadd.html.twig');
             }
 
             $group = array(
                 'title' => $mygroup['group']['grouptitle'],
-                'about' => $mygroup['group']['about']
+                'about' => $mygroup['group']['about'],
             );
 
             $group = $this->getGroupService()->addGroup($user, $group);
+
             return $this->redirect($this->generateUrl('group_logo_set', array('id' => $group['id'])));
         }
 
-        return $this->render("group/groupadd.html.twig");
+        return $this->render('group/groupadd.html.twig');
     }
-
 
     public function searchAction(Request $request)
     {
-        $keyWord = $request->query->get('keyWord') ?: "";
+        $keyWord = $request->query->get('keyWord') ?: '';
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -94,18 +94,19 @@ class GroupController extends BaseController
 
         $groups = $this->getGroupService()->searchGroups(
             array('title' => $keyWord, 'status' => 'open'),
-            array('createdTime'=>'DESC'), $paginator->getOffsetCount(),
+            array('createdTime' => 'DESC'), $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         list($user, $myJoinGroup, $newGroups) = $this->_getGroupList();
-        return $this->render("group/search.html.twig", array(
-            'paginator'   => $paginator,
-            'groups'      => $groups,
-            'user'        => $user,
+
+        return $this->render('group/search.html.twig', array(
+            'paginator' => $paginator,
+            'groups' => $groups,
+            'user' => $user,
             'myJoinGroup' => $myJoinGroup,
-            'newGroups'   => $newGroups,
-            'keyWord'     => $keyWord
+            'newGroups' => $newGroups,
+            'keyWord' => $keyWord,
         ));
     }
 
@@ -113,7 +114,7 @@ class GroupController extends BaseController
     {
         $group = $this->getGroupService()->getGroup($id);
 
-        if ($group['status'] == "close") {
+        if ($group['status'] == 'close') {
             return $this->createMessageResponse('info', '该小组已被关闭');
         }
 
@@ -144,28 +145,29 @@ class GroupController extends BaseController
         $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
 
         $activeMembers = $this->getGroupService()->searchMembers(array('groupId' => $id, 'role' => 'member'),
-            array('postNum'=>'DESC'), 0, 15);
+            array('postNum' => 'DESC'), 0, 15);
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
 
         $groupAbout = strip_tags($group['about'], '');
 
-        $groupAbout = preg_replace("/ /", "", $groupAbout);
-        return $this->render("group/groupindex.html.twig", array(
-            'groupinfo'          => $group,
-            'is_groupmember'     => $this->getGroupMemberRole($id),
+        $groupAbout = preg_replace('/ /', '', $groupAbout);
+
+        return $this->render('group/groupindex.html.twig', array(
+            'groupinfo' => $group,
+            'is_groupmember' => $this->getGroupMemberRole($id),
             'recentlyJoinMember' => $recentlyJoinMember,
-            'owner'              => $owners,
-            'user'               => $user,
-            'groupOwner'         => $groupOwner,
-            'id'                 => $id,
-            'threads'            => $threads,
-            'paginator'          => $paginator,
-            'condition'          => $filters,
-            'lastPostMembers'    => $lastPostMembers,
-            'userIsGroupMember'  => $userIsGroupMember,
-            'members'            => $recentlyMembers,
-            'groupAbout'         => $groupAbout
+            'owner' => $owners,
+            'user' => $user,
+            'groupOwner' => $groupOwner,
+            'id' => $id,
+            'threads' => $threads,
+            'paginator' => $paginator,
+            'condition' => $filters,
+            'lastPostMembers' => $lastPostMembers,
+            'userIsGroupMember' => $userIsGroupMember,
+            'members' => $recentlyMembers,
+            'groupAbout' => $groupAbout,
         ));
     }
 
@@ -173,7 +175,7 @@ class GroupController extends BaseController
     {
         $group = $this->getGroupService()->getGroup($id);
 
-        if ($group['status'] == "close") {
+        if ($group['status'] == 'close') {
             return $this->createMessageResponse('info', '该小组已被关闭');
         }
 
@@ -186,7 +188,7 @@ class GroupController extends BaseController
         );
 
         $members = $this->getGroupService()->searchMembers(array('groupId' => $id, 'role' => 'member'),
-            array('createdTime'=>'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount());
 
@@ -196,27 +198,27 @@ class GroupController extends BaseController
         $owner = $this->getUserService()->getUser($group['ownerId']);
 
         $groupAdmin = $this->getGroupService()->searchMembers(array('groupId' => $id, 'role' => 'admin'),
-            array('createdTime'=>'DESC'),
+            array('createdTime' => 'DESC'),
             0,
             1000);
 
-        $groupAdminIds  = ArrayToolkit::column($groupAdmin, 'userId');
+        $groupAdminIds = ArrayToolkit::column($groupAdmin, 'userId');
         $usersLikeAdmin = $this->getUserService()->findUsersByIds($groupAdminIds);
 
-        return $this->render("group/groupmember.html.twig", array(
-            'groupinfo'          => $group,
-            'is_groupmember'     => $this->getGroupMemberRole($id),
-            'groupmember_info'   => $members,
-            'owner_info'         => $owner,
-            'paginator'          => $paginator,
-            'members'            => $users,
-            'usersLikeAdmin'     => $usersLikeAdmin,
-            'groupAdmin'         => $groupAdmin,
-            'user'               => $user,
-            'userIsGroupMember'  => $userIsGroupMember,
-            'groupOwner'         => $groupOwner,
+        return $this->render('group/groupmember.html.twig', array(
+            'groupinfo' => $group,
+            'is_groupmember' => $this->getGroupMemberRole($id),
+            'groupmember_info' => $members,
+            'owner_info' => $owner,
+            'paginator' => $paginator,
+            'members' => $users,
+            'usersLikeAdmin' => $usersLikeAdmin,
+            'groupAdmin' => $groupAdmin,
+            'user' => $user,
+            'userIsGroupMember' => $userIsGroupMember,
+            'groupOwner' => $groupOwner,
             'recentlyJoinMember' => $recentlyJoinMember,
-            'recentlyMembers'    => $recentlyMembers
+            'recentlyMembers' => $recentlyMembers,
         ));
     }
 
@@ -270,9 +272,9 @@ class GroupController extends BaseController
             foreach ($deleteMemberIds as $memberId) {
                 $this->getGroupService()->deleteMemberByGroupIdAndUserId($id, $memberId);
                 $message = array(
-                    'id'    => $id,
+                    'id' => $id,
                     'title' => $group['title'],
-                    'type'  => 'remove');
+                    'type' => 'remove', );
                 $this->getNotifiactionService()->notify($memberId, 'group-profile', $message);
             }
         }
@@ -287,7 +289,7 @@ class GroupController extends BaseController
         }
 
         $memberIds = $request->request->all();
-        $group     = $this->getGroupService()->getGroup($id);
+        $group = $this->getGroupService()->getGroup($id);
 
         if (isset($memberIds['memberId'])) {
             $memberIds = $memberIds['memberId'];
@@ -296,9 +298,9 @@ class GroupController extends BaseController
                 $member = $this->getGroupService()->getMemberByGroupIdAndUserId($id, $memberId);
                 $this->getGroupService()->updateMember($member['id'], array('role' => 'admin'));
                 $message = array(
-                    'id'    => $id,
+                    'id' => $id,
                     'title' => $group['title'],
-                    'type'  => 'setAdmin');
+                    'type' => 'setAdmin', );
                 $this->getNotifiactionService()->notify($memberId, 'group-profile', $message);
             }
         }
@@ -318,10 +320,10 @@ class GroupController extends BaseController
 
         if (isset($memberIds['adminId'])) {
             $memberIds = $memberIds['adminId'];
-            $message   = array(
-                'id'    => $id,
+            $message = array(
+                'id' => $id,
                 'title' => $group['title'],
-                'type'  => 'removeAdmin');
+                'type' => 'removeAdmin', );
 
             foreach ($memberIds as $memberId) {
                 $member = $this->getGroupService()->getMemberByGroupIdAndUserId($id, $memberId);
@@ -341,12 +343,12 @@ class GroupController extends BaseController
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        return $this->render("group/setting-info.html.twig", array(
-            'groupinfo'      => $group,
+        return $this->render('group/setting-info.html.twig', array(
+            'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
-            'id'             => $id,
-            'logo'           => $group['logo'],
-            'backgroundLogo' => $group['backgroundLogo'])
+            'id' => $id,
+            'logo' => $group['logo'],
+            'backgroundLogo' => $group['backgroundLogo'], )
         );
     }
 
@@ -361,26 +363,26 @@ class GroupController extends BaseController
         if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
 
-            if ($request->query->get('page') == "backGroundLogoCrop") {
-                $this->getGroupService()->changeGroupImg($id, "backgroundLogo", $options["images"]);
+            if ($request->query->get('page') == 'backGroundLogoCrop') {
+                $this->getGroupService()->changeGroupImg($id, 'backgroundLogo', $options['images']);
             } else {
-                $this->getGroupService()->changeGroupImg($id, "logo", $options["images"]);
+                $this->getGroupService()->changeGroupImg($id, 'logo', $options['images']);
             }
 
             return $this->redirect($this->generateUrl('group_show', array(
-                'id' => $id
+                'id' => $id,
             )));
         }
 
-        $fileId                                      = $request->getSession()->get("fileId");
+        $fileId = $request->getSession()->get('fileId');
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 1140, 150);
 
         return $this->render('group/setting-logo-crop.html.twig', array(
-            'groupinfo'      => $group,
+            'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
-            'pictureUrl'     => $pictureUrl,
-            'naturalSize'    => $naturalSize,
-            'scaledSize'     => $scaledSize
+            'pictureUrl' => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize' => $scaledSize,
         ));
     }
 
@@ -392,12 +394,12 @@ class GroupController extends BaseController
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        return $this->render("group/setting-logo.html.twig", array(
-            'groupinfo'      => $group,
+        return $this->render('group/setting-logo.html.twig', array(
+            'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
-            'id'             => $id,
-            'logo'           => $group['logo'],
-            'backgroundLogo' => $group['backgroundLogo'])
+            'id' => $id,
+            'logo' => $group['logo'],
+            'backgroundLogo' => $group['backgroundLogo'], )
         );
     }
 
@@ -409,21 +411,21 @@ class GroupController extends BaseController
             return $this->createMessageResponse('info', '您没有权限!');
         }
 
-        return $this->render("group/setting-background.html.twig", array(
-            'groupinfo'      => $group,
+        return $this->render('group/setting-background.html.twig', array(
+            'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
-            'id'             => $id,
-            'logo'           => $group['backgroundLogo'])
+            'id' => $id,
+            'logo' => $group['backgroundLogo'], )
         );
     }
 
     public function hotGroupAction($count = 15, $colNum = 4)
     {
-        $hotGroups = $this->getGroupService()->searchGroups(array('status' => 'open'), array('memberNum'=>'DESC'), 0, $count);
+        $hotGroups = $this->getGroupService()->searchGroups(array('status' => 'open'), array('memberNum' => 'DESC'), 0, $count);
 
         return $this->render('group/groups-ul.html.twig', array(
             'groups' => $hotGroups,
-            'colNum' => $colNum
+            'colNum' => $colNum,
         )
         );
     }
@@ -441,14 +443,14 @@ class GroupController extends BaseController
         $hotThreads = $this->getThreadService()->searchThreads(
             array(
                 'createdTime' => time() - $time,
-                'status'      => 'open'
+                'status' => 'open',
             ),
             $this->filterSort('byPostNum'), 0, 11
         );
 
         return $this->render('group/hot-thread.html.twig', array(
             'hotThreads' => $hotThreads,
-            'textNum'    => $textNum
+            'textNum' => $textNum,
         )
         );
     }
@@ -487,11 +489,11 @@ class GroupController extends BaseController
         try {
             $this->getGroupService()->joinGroup($user, $id);
         } catch (\Exception $e) {
-            $this->setFlashMessage("danger", $e->getMessage());
+            $this->setFlashMessage('danger', $e->getMessage());
         }
 
         return $this->redirect($this->generateUrl('group_show', array(
-            'id' => $id
+            'id' => $id,
         )));
     }
 
@@ -501,7 +503,7 @@ class GroupController extends BaseController
         $this->getGroupService()->exitGroup($user, $id);
 
         return $this->redirect($this->generateUrl('group_show', array(
-            'id' => $id
+            'id' => $id,
         )));
     }
 
@@ -512,18 +514,18 @@ class GroupController extends BaseController
         }
 
         $groupinfo = $request->request->all();
-        $group     = array();
+        $group = array();
 
         if ($groupinfo) {
             $group = array(
                 'title' => $groupinfo['group']['grouptitle'],
-                'about' => $groupinfo['group']['about']);
+                'about' => $groupinfo['group']['about'], );
         }
 
         $this->getGroupService()->updateGroup($id, $group);
 
         return $this->redirect($this->generateUrl('group_show', array(
-            'id' => $id
+            'id' => $id,
         )));
     }
 
@@ -531,17 +533,17 @@ class GroupController extends BaseController
     {
         switch ($sort) {
             case 'byPostNum':
-                $orderBys = array('isStick'=>'DESC','postNum'=>'DESC','createdTime'=>'DESC');
+                $orderBys = array('isStick' => 'DESC', 'postNum' => 'DESC', 'createdTime' => 'DESC');
                 break;
             case 'byStick':
             case 'byCreatedTime':
-                $orderBys = array('isStick'=>'DESC','createdTime'=>'DESC' );
+                $orderBys = array('isStick' => 'DESC', 'createdTime' => 'DESC');
                 break;
             case 'byLastPostTime':
-                $orderBys = array('isStick'=>'DESC','lastPostTime'=>'DESC');
+                $orderBys = array('isStick' => 'DESC', 'lastPostTime' => 'DESC');
                 break;
             case 'byCreatedTimeOnly':
-                $orderBys = array('createdTime'=>'DESC');
+                $orderBys = array('createdTime' => 'DESC');
                 break;
             default:
 
@@ -553,7 +555,7 @@ class GroupController extends BaseController
 
     protected function getThreadSearchFilters($request)
     {
-        $filters         = array();
+        $filters = array();
         $filters['type'] = $request->query->get('type');
 
         if (!in_array($filters['type'], array('all', 'elite', 'reward'))) {
@@ -591,6 +593,7 @@ class GroupController extends BaseController
         }
 
         $conditions['num'] = $filters['num'];
+
         return $conditions;
     }
 
@@ -605,14 +608,14 @@ class GroupController extends BaseController
 
             $start = $membersCount > 12 ? rand(0, $membersCount - 12) : 0;
 
-            $members = $this->getGroupService()->searchMembers(array('userId' => $user['id']), array('createdTime'=>'DESC'), $start, 12);
+            $members = $this->getGroupService()->searchMembers(array('userId' => $user['id']), array('createdTime' => 'DESC'), $start, 12);
 
             $groupIds = ArrayToolkit::column($members, 'groupId');
 
             $myJoinGroup = $this->getGroupService()->getGroupsByids($groupIds);
         }
 
-        $newGroups = $this->getGroupService()->searchGroups(array('status' => 'open'), array('createdTime'=>'DESC'), 0, 8);
+        $newGroups = $this->getGroupService()->searchGroups(array('status' => 'open'), array('createdTime' => 'DESC'), 0, 8);
 
         return array($user, $myJoinGroup, $newGroups);
     }
@@ -623,7 +626,7 @@ class GroupController extends BaseController
 
         $groupOwner = $this->getUserService()->getUser($group['ownerId']);
 
-        $recentlyJoinMember = $this->getGroupService()->searchMembers(array('groupId' => $group['id']), array('createdTime'=>'DESC'), 0, 20);
+        $recentlyJoinMember = $this->getGroupService()->searchMembers(array('groupId' => $group['id']), array('createdTime' => 'DESC'), 0, 20);
 
         $memberIds = ArrayToolkit::column($recentlyJoinMember, 'userId');
 

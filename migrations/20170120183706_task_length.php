@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class TaskLength extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -13,10 +13,10 @@ class TaskLength extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-        $this->container['db']->exec("ALTER TABLE `course_task` DROP COLUMN `length`");
+        $this->container['db']->exec('ALTER TABLE `course_task` DROP COLUMN `length`');
     }
 }

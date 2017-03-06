@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Random Number Generator
+ * Random Number Generator.
  *
  * PHP version 5
  *
@@ -15,30 +15,19 @@
  * </code>
  *
  * @category  Crypt
- * @package   Random
  *
  * @author    Jim Wigginton <terrafrost@php.net>
  * @copyright 2007 Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  *
- * @link      http://phpseclib.sourceforge.net
+ * @see      http://phpseclib.sourceforge.net
  */
 
 namespace Biz\Util\Phpsec\Crypt;
 
-use Biz\Util\Phpsec\Crypt\AES;
-use Biz\Util\Phpsec\Crypt\DES;
-use Biz\Util\Phpsec\Crypt\RC4;
-use Biz\Util\Phpsec\Crypt\Base;
-use Biz\Util\Phpsec\Crypt\Twofish;
-use Biz\Util\Phpsec\Crypt\Blowfish;
-use Biz\Util\Phpsec\Crypt\TripleDES;
-
 /**
- * Pure-PHP Random Number Generator
+ * Pure-PHP Random Number Generator.
  *
- * @access  public
- * @package Random
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
@@ -51,8 +40,9 @@ class Random
      * microoptimizations because this function has the potential of being called a huge number of times.
      * eg. for RSA key generation.
      *
-     * @param  Integer  $length
-     * @return String
+     * @param int $length
+     *
+     * @return string
      */
     public static function string($length)
     {
@@ -136,10 +126,10 @@ class Random
 
         if ($crypto === false) {
             // save old session data
-            $old_session_id            = session_id();
-            $old_use_cookies           = ini_get('session.use_cookies');
+            $old_session_id = session_id();
+            $old_use_cookies = ini_get('session.use_cookies');
             $old_session_cache_limiter = session_cache_limiter();
-            $_OLD_SESSION              = isset($_SESSION) ? $_SESSION : false;
+            $_OLD_SESSION = isset($_SESSION) ? $_SESSION : false;
 
             if ($old_session_id != '') {
                 session_write_close();
@@ -158,7 +148,7 @@ class Random
                 $_SESSION['count'] = 0;
             }
 
-            $_SESSION['count']++;
+            ++$_SESSION['count'];
 
             session_write_close();
 
@@ -187,7 +177,7 @@ class Random
             //
             // see the is_string($crypto) part for an example of how to expand the keys
             $key = pack('H*', sha1($seed.'A'));
-            $iv  = pack('H*', sha1($seed.'C'));
+            $iv = pack('H*', sha1($seed.'C'));
 
             // ciphers are used as per the nist.gov link below. also, see this link:
             //
@@ -214,6 +204,7 @@ class Random
                     break;
                 default:
                     user_error(__CLASS__.' requires at least one symmetric cipher be loaded');
+
                     return false;
             }
 

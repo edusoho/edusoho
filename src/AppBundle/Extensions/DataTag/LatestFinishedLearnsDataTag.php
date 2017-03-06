@@ -3,26 +3,25 @@
 namespace AppBundle\Extensions\DataTag;
 
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Extensions\DataTag\DataTag;
 use AppBundle\Common\ArrayToolkit;
 
-class LatestFinishedLearnsDataTag extends BaseDataTag implements DataTag  
+class LatestFinishedLearnsDataTag extends BaseDataTag implements DataTag
 {
-
     /**
-     * 获取最近完成学习列表
+     * 获取最近完成学习列表.
      *
      * 可传入的参数：
      *   count    必需 课程数量，取值不能超过100
-     * 
-     * @param  array $arguments 参数
+     *
+     * @param array $arguments 参数
+     *
      * @return array 课程列表
      */
     public function getData(array $arguments)
     {
         if (empty($arguments['count'])) {
             $arguments['count'] = 5;
-        }   
+        }
 
         $learns = $this->getCourseService()->findLatestFinishedLearns(0, $arguments['count']);
 
@@ -32,12 +31,10 @@ class LatestFinishedLearnsDataTag extends BaseDataTag implements DataTag
 
         foreach ($learns as $key => $learn) {
             if ($learn['userId'] == $users[$learn['userId']]['id']) {
-
                 $learns[$key]['user'] = $users[$learn['userId']];
             }
 
             if (!empty($lessons[$learn['lessonId']]['id']) && $learn['lessonId'] == $lessons[$learn['lessonId']]['id']) {
-
                 $learns[$key]['lesson'] = $lessons[$learn['lessonId']];
             }
         }
@@ -54,5 +51,4 @@ class LatestFinishedLearnsDataTag extends BaseDataTag implements DataTag
     {
         return ServiceKernel::instance()->createService('User:UserService');
     }
-
 }

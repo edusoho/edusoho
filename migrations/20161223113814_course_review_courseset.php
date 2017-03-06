@@ -5,12 +5,12 @@ use Phpmig\Migration\Migration;
 class CourseReviewCourseset extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
+        $db = $biz['db'];
         $db->exec("
             ALTER TABLE course_review add COLUMN courseSetId int(10) UNSIGNED NOT NULL DEFAULT '0';
         ");
@@ -23,16 +23,16 @@ class CourseReviewCourseset extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
-        $db->exec("ALTER TABLE `course_review` DROP COLUMN `courseSetId`;");
-        $db->exec("ALTER TABLE `c2_course` DROP COLUMN `ratingNum`;");
-        $db->exec("ALTER TABLE `c2_course` DROP COLUMN `rating`;");
-        $db->exec("ALTER TABLE `c2_course_set` DROP COLUMN `ratingNum`;");
-        $db->exec("ALTER TABLE `c2_course_set` DROP COLUMN `rating`;");
+        $db = $biz['db'];
+        $db->exec('ALTER TABLE `course_review` DROP COLUMN `courseSetId`;');
+        $db->exec('ALTER TABLE `c2_course` DROP COLUMN `ratingNum`;');
+        $db->exec('ALTER TABLE `c2_course` DROP COLUMN `rating`;');
+        $db->exec('ALTER TABLE `c2_course_set` DROP COLUMN `ratingNum`;');
+        $db->exec('ALTER TABLE `c2_course_set` DROP COLUMN `rating`;');
     }
 }

@@ -11,5 +11,4 @@ interface DictionaryItemDao extends GeneralDaoInterface
     public function findByName($name);
 
     public function findByType($type);
-
 }

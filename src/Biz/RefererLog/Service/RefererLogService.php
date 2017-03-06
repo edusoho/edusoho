@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\RefererLog\Service;
 
 interface RefererLogService
@@ -8,19 +9,23 @@ interface RefererLogService
     public function getRefererLogById($id);
 
     /**
-     * [searchAnalysisSummary 公开课数据统计 ->来源分析->汇总]
-     * @param  [type] $conditions     [description]
-     * @param  [type] $groupBy        [description]
+     * [searchAnalysisSummary 公开课数据统计 ->来源分析->汇总].
+     *
+     * @param [type] $conditions [description]
+     * @param [type] $groupBy    [description]
+     *
      * @return [type] [description]
      */
     public function analysisSummary($conditions);
 
     /**
-     * [searchAnalysisSummaryList 统计公开课的列表信息]
-     * @param  [type] $conditions     [description]
-     * @param  [type] $groupBy        [description]
-     * @param  [type] $start          [description]
-     * @param  [type] $limit          [description]
+     * [searchAnalysisSummaryList 统计公开课的列表信息].
+     *
+     * @param [type] $conditions [description]
+     * @param [type] $groupBy    [description]
+     * @param [type] $start      [description]
+     * @param [type] $limit      [description]
+     *
      * @return [type] [description]
      */
     public function searchAnalysisSummaryList($conditions, $groupBy, $start, $limit);
@@ -30,9 +35,11 @@ interface RefererLogService
     public function findRefererLogsGroupByTargetId($targetType, $orderBy, $startTime, $endTime, $start, $limit);
 
     /**
-     * [searchAnalysisSummaryListCount description]
-     * @param  [type] $conditions     [description]
-     * @param  [type] $field          [description]
+     * [searchAnalysisSummaryListCount description].
+     *
+     * @param [type] $conditions [description]
+     * @param [type] $field      [description]
+     *
      * @return [type] [description]
      */
     public function countDistinctLogsByField($conditions, $field);
@@ -41,6 +48,7 @@ interface RefererLogService
 
     /**
      * @param $conditions
+     *
      * @return mixed
      * @before searchRefererLogCount
      */
@@ -51,8 +59,10 @@ interface RefererLogService
      * return: array(
      *     '2016-06-21' => logs,
      *     '2016-06-22' => logs,
-     * )
+     * ).
+     *
      * @param  $conditions array
+     *
      * @return mixed
      */
     public function findRefererLogsGroupByDate($conditions);

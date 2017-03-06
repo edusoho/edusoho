@@ -16,19 +16,20 @@ class AccountController extends BaseController
             'seasonDate' => $this->getStartTime('quarter'),
             'yearDate' => $this->getStartTime('year'),
         );
+
         return $this->render('admin/operation-analysis/index.html.twig', array(
-            'dates' => $weekAndMonthDate
+            'dates' => $weekAndMonthDate,
         ));
     }
 
     public function accountAnalysisAction(Request $request)
     {
         $weekTimeStart = $this->getStartTime('week');
-        $weekTimeEnd   = strtotime(date("Y-m-d", time()));
+        $weekTimeEnd = strtotime(date('Y-m-d', time()));
         $weekTotalPrice = $this->getAccountAnalysisData($weekTimeStart, $weekTimeEnd);
 
         $monthTimeStart = $this->getStartTime('month');
-        $monthTimeEnd   = strtotime(date("Y-m-d", time()));
+        $monthTimeEnd = strtotime(date('Y-m-d', time()));
         $monthTotalPrice = $this->getAccountAnalysisData($monthTimeStart, $monthTimeEnd);
 
         return $this->render('admin/operation-analysis/account-analysis-dashbord.html.twig', array(
@@ -39,12 +40,12 @@ class AccountController extends BaseController
 
     private function getAccountAnalysisData($start, $endTime)
     {
-        $totalPrice    = $this->getOrderService()->analysisAmount(array("paidStartTime" => $start, "paidEndTime" => $endTime, "status" => "paid"));
-        $coinTotalPrice = $this->getOrderService()->analysisAmount(array("paidStartTime" => $start, "paidEndTime" => $endTime, "status" => "paid", 'payment'=>'coin'));
+        $totalPrice = $this->getOrderService()->analysisAmount(array('paidStartTime' => $start, 'paidEndTime' => $endTime, 'status' => 'paid'));
+        $coinTotalPrice = $this->getOrderService()->analysisAmount(array('paidStartTime' => $start, 'paidEndTime' => $endTime, 'status' => 'paid', 'payment' => 'coin'));
         $cashTotalPrice = $totalPrice - $coinTotalPrice;
-        $courseTotalPrice = $this->getOrderService()->analysisAmount(array("paidStartTime" => $start, "paidEndTime" => $endTime, "status" => "paid", 'targetType' => 'course'));
-        $classroomTotalPrice = $this->getOrderService()->analysisAmount(array("paidStartTime" => $start, "paidEndTime" => $endTime, "status" => "paid", 'targetType' => 'classroom'));
-        $vipTotalPrice = $this->getOrderService()->analysisAmount(array("paidStartTime" => $start, "paidEndTime" => $endTime, "status" => "paid", 'targetType' => 'vip'));
+        $courseTotalPrice = $this->getOrderService()->analysisAmount(array('paidStartTime' => $start, 'paidEndTime' => $endTime, 'status' => 'paid', 'targetType' => 'course'));
+        $classroomTotalPrice = $this->getOrderService()->analysisAmount(array('paidStartTime' => $start, 'paidEndTime' => $endTime, 'status' => 'paid', 'targetType' => 'classroom'));
+        $vipTotalPrice = $this->getOrderService()->analysisAmount(array('paidStartTime' => $start, 'paidEndTime' => $endTime, 'status' => 'paid', 'targetType' => 'vip'));
 
         return array(
             'totalPrice' => $totalPrice,
@@ -60,7 +61,7 @@ class AccountController extends BaseController
     {
         $type = $request->query->get('type');
         $monthTimeStart = $this->getStartTime('month');
-        $monthTimeEnd   = strtotime(date("Y-m-d", time()));
+        $monthTimeEnd = strtotime(date('Y-m-d', time()));
 
         $conditions = array(
             'targetType' => $type,
@@ -75,7 +76,7 @@ class AccountController extends BaseController
 
         $analysisAmounts = $this->getOrderService()->analysisAmountsDataByTitle(
             $conditions,
-            array('count'=>'DESC'),
+            array('count' => 'DESC'),
             0,
             10
         );
@@ -86,7 +87,7 @@ class AccountController extends BaseController
         }
 
         return $this->render('admin/operation-analysis/account-analysis-rank-tr.html.twig', array(
-            'analysisAmounts' => $analysisAmounts
+            'analysisAmounts' => $analysisAmounts,
         ));
     }
 
@@ -94,7 +95,7 @@ class AccountController extends BaseController
     {
         $type = $request->query->get('type');
         $monthTimeStart = $this->getStartTime('month');
-        $monthTimeEnd   = strtotime(date("Y-m-d", time()));
+        $monthTimeEnd = strtotime(date('Y-m-d', time()));
 
         $conditions = array(
             'paidStartTime' => $monthTimeStart,
@@ -110,7 +111,7 @@ class AccountController extends BaseController
 
         $amounts = $this->getOrderService()->analysisAmountsDataByUserId(
             $conditions,
-            array('count'=>'DESC'),
+            array('count' => 'DESC'),
             0,
             10
         );
@@ -120,7 +121,7 @@ class AccountController extends BaseController
 
         return $this->render('admin/operation-analysis/account-analysis-payment-rank-table.html.twig', array(
             'amounts' => $amounts,
-            'users' => $users
+            'users' => $users,
         ));
     }
 
@@ -129,7 +130,7 @@ class AccountController extends BaseController
         $series = array();
         $startTime = $this->getStartTime($period);
         $endTime = time();
-        $days = floor(($endTime-$startTime)/3600/24);
+        $days = floor(($endTime - $startTime) / 3600 / 24);
 
         $conditions = array(
             'paidStartTime' => $startTime,
@@ -140,22 +141,22 @@ class AccountController extends BaseController
 
         $series['coinAmounts'] = $this->getOrderService()->analysisAmountsDataByTime(
             $conditions,
-            array('count'=>'DESC'),
+            array('count' => 'DESC'),
             0,
             10
         );
-        
+
         unset($conditions['payment']);
         $conditions['cashPayment'] = 'coin';
         $series['cashAmounts'] = $this->getOrderService()->analysisAmountsDataByTime(
             $conditions,
-            array('count'=>'DESC'),
+            array('count' => 'DESC'),
             0,
             10
         );
-        
+
         $amountAnalysis = EchartsBuilder::createLineDefaultData($days, 'Y/m/d', $series);
-        
+
         return $this->createJsonResponse($amountAnalysis);
     }
 
@@ -163,11 +164,11 @@ class AccountController extends BaseController
     {
         switch ($period) {
             case 'day':
-                $startTime = strtotime(date('Y-m-d',time()));
+                $startTime = strtotime(date('Y-m-d', time()));
                 break;
-            
+
             case 'week':
-                $startTime = mktime(0, 0, 0, date('m'), date('d')-date('w')+1, date('Y'));
+                $startTime = mktime(0, 0, 0, date('m'), date('d') - date('w') + 1, date('Y'));
                 break;
 
             case 'month':
@@ -175,7 +176,7 @@ class AccountController extends BaseController
                 break;
 
             case 'quarter':
-                $startTime = mktime(0, 0, 0, floor((date('m')-1)/3)*3+1, 1,date('Y')); 
+                $startTime = mktime(0, 0, 0, floor((date('m') - 1) / 3) * 3 + 1, 1, date('Y'));
                 break;
 
             case 'year':
@@ -183,10 +184,10 @@ class AccountController extends BaseController
                 break;
 
             default:
-                
+
                 break;
         }
-        
+
         return $startTime;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\IM\Dao\Impl;
 
 use Biz\IM\Dao\ConversationMemberDao;
@@ -36,15 +37,15 @@ class ConversationMemberDaoImpl extends GeneralDaoImpl implements ConversationMe
     public function declares()
     {
         return array(
-            'orderbys'   => array('createdTime'),
+            'orderbys' => array('createdTime'),
             'conditions' => array(
                 'targetType IN (:targetTypes)',
                 'targetType = :targetType',
                 'targetId = :targetId',
                 'targetId IN (:targetIds)',
                 'userId = :userId',
-                'convNo = :convNo'
-            )
+                'convNo = :convNo',
+            ),
         );
     }
 }

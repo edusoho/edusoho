@@ -11,8 +11,8 @@ class FileUtil
     {
         $path .= DIRECTORY_SEPARATOR.uniqid(mt_rand()).'.tmp';
         $fileSystem = new FileSystem();
-        $rm         = $fileSystem->exists($path);
-        $f          = fopen($path, 'a');
+        $rm = $fileSystem->exists($path);
+        $f = fopen($path, 'a');
         if ($f === false) {
             return false;
         }
@@ -20,6 +20,7 @@ class FileUtil
         if (!$rm) {
             $fileSystem->remove($path);
         }
+
         return true;
     }
 
@@ -67,13 +68,14 @@ class FileUtil
                     $fileSystem->mkdir($destFile, 0777);
                 }
             } else {
-                if (strpos($path->getFilename(), ".") === 0) {
+                if (strpos($path->getFilename(), '.') === 0) {
                     continue;
                 }
                 $fileSystem->copy($path->getPathname(), $destFile, true);
-                $fileCount++;
+                ++$fileCount;
             }
         }
+
         return $fileCount;
     }
 }

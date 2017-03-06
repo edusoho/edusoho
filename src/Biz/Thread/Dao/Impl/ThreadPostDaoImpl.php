@@ -24,7 +24,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
         $declares['orderbys'] = array(
             'createdTime',
             'updatedTime',
-            'ups'
+            'ups',
         );
 
         $declares['conditions'] = array(
@@ -42,11 +42,11 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
             'targetId = :targetId',
             'targetId IN (:targetIds)',
             'targetType = :targetType',
-            'adopted = :adopted'
+            'adopted = :adopted',
         );
 
         $declares['serializes'] = array(
-            'ats' => 'json'
+            'ats' => 'json',
         );
 
         return $declares;

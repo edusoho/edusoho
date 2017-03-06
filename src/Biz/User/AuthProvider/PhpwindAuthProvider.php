@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\User\AuthProvider;
 
 use Biz\BaseService;
@@ -23,33 +24,38 @@ class PhpwindAuthProvider extends BaseService implements AuthProvider
     public function syncLogin($userId)
     {
         $api = $this->getWindidApi('user');
+
         return $api->synLogin($userId);
     }
 
     public function syncLogout($userId)
     {
         $api = $this->getWindidApi('user');
+
         return $api->synLogout($userId);
     }
 
     public function changeNickname($userId, $newName)
     {
-        $api    = $this->getWindidApi('user');
+        $api = $this->getWindidApi('user');
         $result = $api->editUser($userId, null, array('username' => $newName));
+
         return $result == 1;
     }
 
     public function changeEmail($userId, $password, $newEmail)
     {
-        $api    = $this->getWindidApi('user');
+        $api = $this->getWindidApi('user');
         $result = $api->editUser($userId, null, array('email' => $newEmail));
+
         return $result == 1;
     }
 
     public function changePassword($userId, $oldPassword, $newPassword)
     {
-        $api    = $this->getWindidApi('user');
+        $api = $this->getWindidApi('user');
         $result = $api->editUser($userId, $oldPassword, array('password' => $newPassword));
+
         return $result == 1;
     }
 
@@ -80,8 +86,9 @@ class PhpwindAuthProvider extends BaseService implements AuthProvider
 
     public function checkPassword($userId, $password)
     {
-        $api                    = $this->getWindidApi('user');
+        $api = $this->getWindidApi('user');
         list($result, $apiUser) = $api->login($userId, $password, 1);
+
         return $result == 1;
     }
 
@@ -95,11 +102,11 @@ class PhpwindAuthProvider extends BaseService implements AuthProvider
         }
 
         return array(
-            'id'          => $apiUser['uid'],
-            'nickname'    => $apiUser['username'],
-            'email'       => $apiUser['email'],
+            'id' => $apiUser['uid'],
+            'nickname' => $apiUser['username'],
+            'email' => $apiUser['email'],
             'createdTime' => $apiUser['regdate'],
-            'createdIp'   => $apiUser['regip']
+            'createdIp' => $apiUser['regip'],
         );
     }
 
@@ -113,11 +120,11 @@ class PhpwindAuthProvider extends BaseService implements AuthProvider
         }
 
         return array(
-            'id'          => $apiUser['uid'],
-            'nickname'    => $apiUser['username'],
-            'email'       => $apiUser['email'],
+            'id' => $apiUser['uid'],
+            'nickname' => $apiUser['username'],
+            'email' => $apiUser['email'],
             'createdTime' => $apiUser['regdate'],
-            'createdIp'   => $apiUser['regip']
+            'createdIp' => $apiUser['regip'],
         );
     }
 
@@ -131,11 +138,11 @@ class PhpwindAuthProvider extends BaseService implements AuthProvider
         }
 
         return array(
-            'id'          => $apiUser['uid'],
-            'nickname'    => $apiUser['username'],
-            'email'       => $apiUser['email'],
+            'id' => $apiUser['uid'],
+            'nickname' => $apiUser['username'],
+            'email' => $apiUser['email'],
             'createdTime' => $apiUser['regdate'],
-            'createdIp'   => $apiUser['regip']
+            'createdIp' => $apiUser['regip'],
         );
     }
 
@@ -160,6 +167,7 @@ class PhpwindAuthProvider extends BaseService implements AuthProvider
     {
         define('WEKIT_TIMESTAMP', time());
         require_once __DIR__.'/../../../../../vendor_user/windid_client/src/windid/WindidApi.php';
+
         return \WindidApi::api($name);
     }
 
@@ -203,6 +211,7 @@ class PhpwindAuthProvider extends BaseService implements AuthProvider
     public function checkUrlExist($url)
     {
         $headers = get_headers($url);
+
         return strpos($headers[0], ' 200 ') > 0;
     }
 

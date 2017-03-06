@@ -14,5 +14,5 @@ interface CashFlowDao extends GeneralDaoInterface
 
     public function findUserIdsByFlows($type, $createdTime, $orderBy, $start, $limit);
 
-    public function countByTypeAndGTECreatedTime($type,$createdTime);
+    public function countByTypeAndGTECreatedTime($type, $createdTime);
 }

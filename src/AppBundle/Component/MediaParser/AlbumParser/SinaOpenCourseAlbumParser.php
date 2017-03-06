@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\MediaParser\AlbumParser;
 
 use AppBundle\Component\MediaParser\ParseException;
@@ -6,7 +7,7 @@ use AppBundle\Component\MediaParser\ParseException;
 class SinaOpenCourseAlbumParser extends AbstractAlbumParser
 {
     private $patterns = array(
-        'p1' => '/^http:\/\/open.sina.com.cn\/course\/id_(\d+)/s'
+        'p1' => '/^http:\/\/open.sina.com.cn\/course\/id_(\d+)/s',
     );
 
     public function parse($url)
@@ -16,12 +17,12 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
             throw new ParseException(array('获取新浪公开课专辑(%url%)页面内容失败！', array('%url%' => $url)));
         }
 
-        $album            = array();
-        $album['id']      = $this->parseId($url);
-        $album['uuid']    = 'SinaOpenCourseAlbum:'.$album['id'];
-        $album['title']   = $this->parseTitle($response['content']);
+        $album = array();
+        $album['id'] = $this->parseId($url);
+        $album['uuid'] = 'SinaOpenCourseAlbum:'.$album['id'];
+        $album['title'] = $this->parseTitle($response['content']);
         $album['summary'] = $this->parseSummary($response['content']);
-        $album['items']   = $this->parseItems($url, $response['content']);
+        $album['items'] = $this->parseItems($url, $response['content']);
 
         return $album;
     }
@@ -32,6 +33,7 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
         if (empty($matched)) {
             throw new ParseException('获取新浪公开课专辑ID失败');
         }
+
         return 'course_'.$matches[1];
     }
 
@@ -41,6 +43,7 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
         if (empty($matched)) {
             throw new ParseException('获取新浪公开课专辑标题失败');
         }
+
         return $matches[1];
     }
 
@@ -50,6 +53,7 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
         if (empty($matched)) {
             throw new ParseException('获取新浪公开课专辑摘要失败');
         }
+
         return $matches[1];
     }
 
@@ -70,9 +74,9 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
         foreach ($matches as $match) {
             $matched = preg_match('/<a\shref="(.*?)"/s', $match[0], $matchesInItem);
             $items[] = array(
-                'url'     => empty($matched) ? $url : $matchesInItem[1],
-                'title'   => $match[1],
-                'picture' => $match[2]
+                'url' => empty($matched) ? $url : $matchesInItem[1],
+                'title' => $match[1],
+                'picture' => $match[2],
             );
         }
 
@@ -81,7 +85,7 @@ class SinaOpenCourseAlbumParser extends AbstractAlbumParser
 
     public function detect($url)
     {
-        return !!preg_match($this->patterns['p1'], $url);
+        return (bool) preg_match($this->patterns['p1'], $url);
     }
 
     protected function getServiceKernel()

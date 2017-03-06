@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\OpenCourse\Event;
 
 use Codeages\Biz\Framework\Event\Event;

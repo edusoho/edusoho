@@ -2,7 +2,6 @@
 
 namespace Biz\Content\Dao\Impl;
 
-
 use Biz\Content\Dao\BlockTemplateDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -15,24 +14,24 @@ class BlockTemplateDaoImpl extends GeneralDaoImpl implements BlockTemplateDao
         return array(
             'serializes' => array(
                 'meta' => 'json',
-                'data' => 'json'
+                'data' => 'json',
             ),
             'conditions' => array(
                 'id = :id',
                 'category = :category',
                 'code IN ( :codes )',
-                'title LIKE :title'
+                'title LIKE :title',
             ),
-            'orderbys'   => array(
-                'updateTime', 'createdTime'
-            )
+            'orderbys' => array(
+                'updateTime', 'createdTime',
+            ),
         );
     }
 
     public function getByCode($code)
     {
         return $this->getByFields(array(
-            'code' => $code
+            'code' => $code,
         ));
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Order\Service\OrderService;
@@ -9,17 +10,17 @@ class OrderRefundController extends BaseController
 {
     public function refundAction(Request $request, $id)
     {
-        $targetType = $request->query->get("targetType");
+        $targetType = $request->query->get('targetType');
 
-        if (!in_array($targetType, array("course", "classroom"))) {
+        if (!in_array($targetType, array('course', 'classroom'))) {
             throw $this->createAccessDeniedException('参数不对。');
         }
 
         $processor = OrderRefundProcessorFactory::create($targetType);
 
         $target = $processor->getTarget($id);
-        $user   = $this->getCurrentUser();
-        $member = $processor->getTargetMember($id, $user["id"]);
+        $user = $this->getCurrentUser();
+        $member = $processor->getTargetMember($id, $user['id']);
 
         if (empty($member) || empty($member['orderId'])) {
             throw $this->createAccessDeniedException('您不是学员或尚未购买，不能退学。');
@@ -36,31 +37,33 @@ class OrderRefundController extends BaseController
         }
 
         if ('POST' == $request->getMethod()) {
-            $data   = $request->request->all();
+            $data = $request->request->all();
             $reason = empty($data['reason']) ? array() : $data['reason'];
             $amount = empty($data['applyRefund']) ? 0 : null;
 
             $reason['operator'] = $user['id'];
             $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
+
             return $this->createJsonResponse(true);
         }
 
         $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
         $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
+
         return $this->render('order-refund/refund-modal.html.twig', array(
-            'target'        => $target,
-            'targetType'    => $targetType,
-            'order'         => $order,
+            'target' => $target,
+            'targetType' => $targetType,
+            'order' => $order,
             'maxRefundDays' => $maxRefundDays,
-            'refundOverdue' => $refundOverdue
+            'refundOverdue' => $refundOverdue,
         ));
     }
 
     public function cancelRefundAction(Request $request, $id)
     {
-        $targetType = $request->query->get("targetType");
+        $targetType = $request->query->get('targetType');
 
-        if (!in_array($targetType, array("course", "classroom"))) {
+        if (!in_array($targetType, array('course', 'classroom'))) {
             throw $this->createAccessDeniedException('参数不对。');
         }
 

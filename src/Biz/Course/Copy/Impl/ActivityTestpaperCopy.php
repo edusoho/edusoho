@@ -20,12 +20,12 @@ class ActivityTestpaperCopy extends TestpaperCopy
 
     public function doCopyTestpaper($activity, $newCourseSetId, $newCourseId, $isCopy)
     {
-        $mediaType   = $activity['mediaType'];
+        $mediaType = $activity['mediaType'];
         $testpaperId = 0;
 
         if ($mediaType == 'testpaper') {
             $testpaperActivity = $this->getActivityConfig($mediaType)->get($activity['mediaId']);
-            $testpaperId       = $testpaperActivity['mediaId'];
+            $testpaperId = $testpaperActivity['mediaId'];
         } elseif ($mediaType == 'homework' || $mediaType == 'exercise') {
             $testpaperId = $activity['mediaId'];
         }
@@ -43,9 +43,9 @@ class ActivityTestpaperCopy extends TestpaperCopy
         if (!empty($existed)) {
             return $existed; //已复制过，不要重复复制
         }
-        $newTestpaper                = $this->baseCopyTestpaper($testpaper, $isCopy);
+        $newTestpaper = $this->baseCopyTestpaper($testpaper, $isCopy);
         $newTestpaper['courseSetId'] = $newCourseSetId;
-        $newTestpaper['courseId']    = $newCourseId;
+        $newTestpaper['courseId'] = $newCourseId;
 
         $newTestpaper = $this->getTestpaperService()->createTestpaper($newTestpaper);
 

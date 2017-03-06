@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\OpenCourse\Processor;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -8,7 +9,7 @@ class CourseProcessorFactory
     public static function create($type)
     {
         if (!in_array($type, array('normal', 'live', 'open', 'liveOpen', 'course', 'openCourse'))) {
-            throw new \Exception("课程类型不存在");
+            throw new \Exception('课程类型不存在');
         }
 
         if (in_array($type, array('normal', 'live', 'course'))) {

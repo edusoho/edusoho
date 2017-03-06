@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -12,8 +13,8 @@ class ExerciseManageController extends BaseController
 
         $fields = $request->request->all();
 
-        $fields['courseId']                   = $course['id'];
-        $fields['lessonId']                   = 0;
+        $fields['courseId'] = $course['id'];
+        $fields['lessonId'] = 0;
         $fields['excludeUnvalidatedMaterial'] = 1;
 
         $result = $this->getTestpaperService()->canBuildTestpaper('exercise', $fields);

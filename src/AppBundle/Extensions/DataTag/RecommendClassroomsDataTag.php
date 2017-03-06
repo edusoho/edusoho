@@ -3,17 +3,17 @@
 namespace AppBundle\Extensions\DataTag;
 
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Extensions\DataTag\DataTag;
 
 class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     * 获取推荐班级列表
+     * 获取推荐班级列表.
      *
      * 可传入的参数：
      *   count    必需 班级数量，取值不能超过100
      *
-     * @param  array $arguments           参数
+     * @param array $arguments 参数
+     *
      * @return array 班级推荐列表
      */
     public function getData(array $arguments)
@@ -21,9 +21,9 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
 
         $conditions = array(
-            'status'      => 'published',
-            'showable'    => 1,
-            'recommended' => 1
+            'status' => 'published',
+            'showable' => 1,
+            'recommended' => 1,
         );
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
@@ -55,7 +55,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
                 $classroomTeacherIds = $classroom['teacherIds'];
             }
 
-            $users              = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+            $users = $this->getUserService()->findUsersByIds($classroomTeacherIds);
             $classroom['users'] = $users;
         }
 

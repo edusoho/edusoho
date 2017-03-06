@@ -1,10 +1,10 @@
 <?php
+
 namespace Biz\Order\OrderProcessor;
 
 use Codeages\Biz\Framework\Context\Biz;
 use Exception;
 use AppBundle\Common\NumberToolkit;
-use Topxia\Service\Common\ServiceKernel;
 
 class BaseProcessor
 {
@@ -32,15 +32,16 @@ class BaseProcessor
 
     public function callbackUrl($order, $container)
     {
-        $goto = $container->get('router')->generate($this->router, array('id' => $order["targetId"]), true);
+        $goto = $container->get('router')->generate($this->router, array('id' => $order['targetId']), true);
+
         return $goto;
     }
 
     protected function afterCoinPay($coinEnabled, $priceType, $cashRate, $amount, $coinPayAmount, $payPassword)
     {
         if (!empty($coinPayAmount) && $coinPayAmount > 0 && $coinEnabled) {
-            $user    = $this->getAuthService()->getCurrentUser();
-            $isRight = $this->getAuthService()->checkPayPassword($user["id"], $payPassword);
+            $user = $this->getAuthService()->getCurrentUser();
+            $isRight = $this->getAuthService()->checkPayPassword($user['id'], $payPassword);
 
             if (!$isRight) {
                 throw new Exception($this->getKernel()->trans('支付密码不正确，创建订单失败!'));
@@ -49,9 +50,9 @@ class BaseProcessor
 
         $coinPreferentialPrice = 0;
 
-        if ($priceType == "RMB") {
+        if ($priceType == 'RMB') {
             $coinPreferentialPrice = $coinPayAmount / $cashRate;
-        } elseif ($priceType == "Coin") {
+        } elseif ($priceType == 'Coin') {
             $coinPreferentialPrice = $coinPayAmount;
         }
 
@@ -61,25 +62,26 @@ class BaseProcessor
     protected function afterCouponPay($couponCode, $targetType, $targetId, $amount, $priceType, $cashRate)
     {
         $couponResult = $this->getCouponService()->checkCouponUseable(trim($couponCode), $targetType, $targetId, $amount);
+
         return $couponResult;
     }
 
     protected function getCoinSetting()
     {
-        $coinSetting = $this->getSettingService()->get("coin");
+        $coinSetting = $this->getSettingService()->get('coin');
 
-        $coinEnable = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $coinEnable = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'] == 1;
 
         $cashRate = 1;
 
-        if ($coinEnable && array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
+        if ($coinEnable && array_key_exists('cash_rate', $coinSetting)) {
+            $cashRate = $coinSetting['cash_rate'];
         }
 
-        $priceType = "RMB";
+        $priceType = 'RMB';
 
-        if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
-            $priceType = $coinSetting["price_type"];
+        if ($coinEnable && !empty($coinSetting) && array_key_exists('price_type', $coinSetting)) {
+            $priceType = $coinSetting['price_type'];
         }
 
         return array($coinEnable, $priceType, $cashRate);
@@ -89,21 +91,21 @@ class BaseProcessor
     {
         $user = $this->getUserService()->getCurrentUser();
 
-        $account     = $this->getCashAccountService()->getAccountByUserId($user["id"]);
-        $accountCash = empty($account["cash"]) ? 0 : $account["cash"];
+        $account = $this->getCashAccountService()->getAccountByUserId($user['id']);
+        $accountCash = empty($account['cash']) ? 0 : $account['cash'];
 
         $coinPayAmount = 0;
 
         $hasPayPassword = strlen($user['payPassword']) > 0;
 
         if ($hasPayPassword) {
-            if ($priceType == "Coin") {
+            if ($priceType == 'Coin') {
                 if ($totalPrice * 100 > $accountCash * 100) {
                     $coinPayAmount = $accountCash;
                 } else {
                     $coinPayAmount = $totalPrice;
                 }
-            } elseif ($priceType == "RMB") {
+            } elseif ($priceType == 'RMB') {
                 if ($totalPrice * 100 > $accountCash / $cashRate * 100) {
                     $coinPayAmount = $accountCash;
                 } else {
@@ -112,7 +114,7 @@ class BaseProcessor
             }
         }
 
-        $totalPrice    = NumberToolkit::roundUp($totalPrice);
+        $totalPrice = NumberToolkit::roundUp($totalPrice);
         $coinPayAmount = NumberToolkit::roundUp($coinPayAmount);
 
         return array($totalPrice, $coinPayAmount, $account, $hasPayPassword);

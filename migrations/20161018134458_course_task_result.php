@@ -5,11 +5,11 @@ use Phpmig\Migration\Migration;
 class CourseTaskResult extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
-        $biz        = $this->getContainer();
+        $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("CREATE TABLE `course_task_result` (
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -36,13 +36,13 @@ class CourseTaskResult extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-        $biz        = $this->getContainer();
+        $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE IF EXISTS `course_task_result`");
-        $connection->exec("DROP TABLE IF EXISTS `course_activity_result`");
+        $connection->exec('DROP TABLE IF EXISTS `course_task_result`');
+        $connection->exec('DROP TABLE IF EXISTS `course_activity_result`');
     }
 }

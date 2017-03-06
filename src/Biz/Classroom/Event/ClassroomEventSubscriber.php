@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Classroom\Event;
 
 use AppBundle\Common\StringToolkit;
@@ -20,7 +21,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
             'classroom.course.delete' => 'onClassroomCourseChange',
             'classroom.course.update' => 'onClassroomCourseChange',
             'classroom.update' => 'onClassroomUpdate',
-            'classReview.add'  => 'onReviewCreate'
+            'classReview.add' => 'onReviewCreate',
         );
     }
 
@@ -46,7 +47,7 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     public function onClassroomUpdate(Event $event)
     {
         $fields = $event->getSubject();
-        $userId      = $fields['userId'];
+        $userId = $fields['userId'];
         $classroomId = $fields['classroomId'];
 
         if (isset($fields['tagIds'])) {
@@ -68,10 +69,10 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
             }
 
             $message = array(
-                'title'      => $classroom['title'],
-                'targetId'   => $review['classroomId'],
+                'title' => $classroom['title'],
+                'targetId' => $review['classroomId'],
                 'targetType' => 'classroom',
-                'userId'     => $review['userId']
+                'userId' => $review['userId'],
             );
             $this->getNotifiactionService()->notify($parentReview['userId'], 'comment-post',
                 $message);
@@ -81,11 +82,11 @@ class ClassroomEventSubscriber extends EventSubscriber implements EventSubscribe
     private function simplifyClassroom($classroom)
     {
         return array(
-            'id'      => $classroom['id'],
-            'title'   => $classroom['title'],
+            'id' => $classroom['id'],
+            'title' => $classroom['title'],
             'picture' => $classroom['middlePicture'],
-            'about'   => StringToolkit::plain($classroom['about'], 100),
-            'price'   => $classroom['price']
+            'about' => StringToolkit::plain($classroom['about'], 100),
+            'price' => $classroom['price'],
         );
     }
 

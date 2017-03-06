@@ -14,7 +14,7 @@ class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
         }
 
         $targetTypes = explode('.', $attachment['targetType']);
-        $type        = array_pop($targetTypes);
+        $type = array_pop($targetTypes);
         if ($type === 'thread') {
             $thread = $this->getThreadService()->getThread($attachment['targetId']);
 
@@ -40,6 +40,7 @@ class ClassroomFileFireWall extends BaseFireWall implements FireWallInterface
                 return true;
             }
         }
+
         return false;
     }
 

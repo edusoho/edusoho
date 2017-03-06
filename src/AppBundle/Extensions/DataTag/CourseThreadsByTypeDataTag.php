@@ -3,21 +3,20 @@
 namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Extensions\DataTag\DataTag;
 
 class CourseThreadsByTypeDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     * 获取加精的课程话题列表
+     * 获取加精的课程话题列表.
      *
      * 可传入的参数：
      *   type 选填 话题类型
      *   count 必需 课程话题数量，取值不能超过100
      *
-     * @param  array $arguments     参数
+     * @param array $arguments 参数
+     *
      * @return array 课程话题
      */
-
     public function getData(array $arguments)
     {
         $this->checkCount($arguments);
