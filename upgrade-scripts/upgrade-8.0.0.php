@@ -37,8 +37,8 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         // $this->c2courseSetMigrate();
         // $this->c2courseMigrate();
-        $this->c2CourseLessonMigrate();
-        // $this->c2testpaperMigrate();
+        // $this->c2CourseLessonMigrate();
+        $this->c2testpaperMigrate();
     }
 
     protected function c2courseSetMigrate()
@@ -360,19 +360,19 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function c2CourseLessonMigrate()
     {
         $this->c2CourseTaskMigrate();
-        // $this->c2Activity();
+        $this->c2Activity();
 
-        // $this->c2VideoActivity();
-        // $this->c2TextActivity();
-        // $this->c2AudioActivity();
-        // $this->c2FlashActivity();
-        // $this->c2PPtActivity();
-        // $this->c2DocActivity();
+        $this->c2VideoActivity();
+        $this->c2TextActivity();
+        $this->c2AudioActivity();
+        $this->c2FlashActivity();
+        $this->c2PPtActivity();
+        $this->c2DocActivity();
         // $this->c2TestPaperActivity();
 
-        // $this->c2CourseTaskView();
+        $this->c2CourseTaskView();
 
-        // $this->c2CourseTaskResult();
+        $this->c2CourseTaskResult();
     }
 
     /**
@@ -451,7 +451,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `number`,
                 `type`,
                 `mediaSource`,
-                `length`,
+                CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
                 `maxOnlineNum`,
                 `copyId`,
                 `id` as `lessonId`
@@ -508,7 +508,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `mediaId`,
                 CASE WHEN `type` = 'document' THEN 'doc'  ELSE TYPE END AS 'type',
                 `content`,
-                `length`,
+                CASE WHEN `length` is null THEN 0  ELSE `length` END AS `length`,
                 `courseId`,
                 `userId`,
                 `startTime`,
