@@ -137,7 +137,7 @@ $.validator.addMethod("idcardNumber", function (value, element, params) {
     let IW = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1];
     let iSum = 0;
     for (let i = 0; i < 17; i++) {
-      iSum += parseInt(idcardNumber.charAt(i)) * iW[i];
+      iSum += parseInt(idcardNumber.charAt(i)) * IW[i];
     }
     let iJYM = iSum % 11;
     let sJYM = ''
@@ -175,4 +175,8 @@ $.validator.addMethod("open_live_course_title", function (value, element, params
 
 $.validator.addMethod("currency", function (value, element, params) {
   return this.optional(element) || /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
-}, Translator.trans('请输入有效价格，最多两位小数，整数位不超个8位！'));
+}, jQuery.validator.format('请输入有效价格，最多两位小数，整数位不超个8位！'));
+
+$.validator.addMethod("positive_currency", function (value, element, params) {
+  return this.optional(element) || /^[1-9]{0,8}(\.\d{0,2})?$/.test(value);
+}, jQuery.validator.format('请输入大于0的有效价格，最多两位小数，整数位不超个8位！'));
