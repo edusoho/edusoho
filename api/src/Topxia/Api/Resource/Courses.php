@@ -7,31 +7,28 @@ use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\Common\ServiceKernel;
 
-class Courses extends BaseResource
+class Courses extends CourseBaseResource
 {
     public function get(Application $app, Request $request)
     {
         $conditions = $request->query->all();
-
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
-
         if (isset($conditions['cursor'])) {
             $conditions['status']         = 'published';
             $conditions['parentId']       = 0;
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $courses                      = $this->getCourseService()->searchCourses($conditions, array('updatedTime' => 'ASC'), $start, $limit);
-            $courses                      = $this->assemblyCourses($courses);
-            $next                         = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses);
-
-            return $this->wrap($this->filter($courses), $next);
+            $order = array('updatedTime' => 'ASC');
         } else {
-            $total   = $this->getCourseService()->searchCourseCount($conditions);
-            $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), $start, $limit);
-            $courses = $this->assemblyCourses($courses);
-
-            return $this->wrap($this->filter($courses), $total);
+            $order = array('createdTime' => 'DESC');
         }
+
+        $courses  = $this->getCourseService()->searchCourses($conditions, $order, $start, $limit);
+        $courses  = $this->assemblyCourses($courses);
+
+        $next = isset($conditions['cursor']) ? $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses) :
+            $this->getCourseService()->searchCourseCount($conditions);
+        return $this->wrap($this->multicallFilter('Courses', $courses), $next);
     }
 
     public function discoveryColumn(Application $app, Request $request)
@@ -83,16 +80,28 @@ class Courses extends BaseResource
         return $this->wrap($courses, min($result['showCount'], $total));
     }
 
+    public function filter($course)
+    {
+        $course = $this->convertOldFields($course);
+        return $course;
+    }
+
     public function post(Application $app, Request $request)
     {
+
     }
 
     protected function assemblyCourses($courses)
     {
         $categoryIds = ArrayToolkit::column($courses, 'categoryId');
         $categories  = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
 
         foreach ($courses as &$course) {
+            $course = $this->filledCourseByCourseSet($course, $courseSets[$course['courseSetId']]);
             if (isset($categories[$course['categoryId']])) {
                 $course['category'] = array(
                     'id'   => $categories[$course['categoryId']]['id'],
@@ -106,14 +115,14 @@ class Courses extends BaseResource
         return $courses;
     }
 
-    public function filter($res)
-    {
-        return $this->multicallFilter('Course', $res);
-    }
-
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseSetService');
     }
 
     protected function getCategoryService()
