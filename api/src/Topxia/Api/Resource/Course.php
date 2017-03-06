@@ -28,6 +28,7 @@ class Course extends BaseResource
         $course['lessonNum'] = $course['taskNum'];
         $course['userId'] = $course['creator'];
         $course['tryLookTime']  = $course['tryLookLength'];
+        $course['createdTime'] = date('c', $course['createdTime']);
         return $course;
     }
 
@@ -40,9 +41,9 @@ class Course extends BaseResource
         );
         if (!empty($courseSet['cover'])) {
             $courseSetImg = array(
-                'smallPicture' => $this->getFileUrl($courseSet['cover']['small']),
-                'middlePicture' => $this->getFileUrl($courseSet['cover']['middle']),
-                'largePicture' => $this->getFileUrl($courseSet['cover']['large'])
+                'smallPicture' => $courseSet['cover']['small'],
+                'middlePicture' => $courseSet['cover']['middle'],
+                'largePicture' => $courseSet['cover']['large']
             );
             $courseSet = array_merge($courseSet, $courseSetImg);
         };
