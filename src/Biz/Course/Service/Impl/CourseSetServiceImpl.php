@@ -409,7 +409,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $this->updateCourseSerializeMode($courseSet, $fields);
         if (empty($fields['subtitle'])) {
-            $this->getCourseSetDao()->clearSubtitle($courseSet['id']);
+            $fields['subtitle'] = null;
         }
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
