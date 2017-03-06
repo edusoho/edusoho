@@ -25,7 +25,16 @@ class Marketing {
         },
         tryLookLimit: {
           digits: true
+        },
+        buyExpiryTime: {
+          required: function(){
+            return $('input[name="enableBuyExpiryTime"]:checked').val() == 1;
+          },
+          date: true
         }
+      },
+      messages: {
+        buyExpiryTime: '请选择有效的购买截止日期'
       }
     });
 
@@ -64,6 +73,7 @@ class Marketing {
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
     });
+    $('input[name="buyExpiryTime"]').datetimepicker('setStartDate', new Date());
 
     $('input[name="tryLookable"]').on('change', function (event) {
       if ($('input[name="tryLookable"]:checked').val() == 1) {
