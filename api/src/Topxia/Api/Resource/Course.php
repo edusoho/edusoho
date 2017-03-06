@@ -12,15 +12,14 @@ class Course extends BaseResource
     public function get(Application $app, Request $request, $id)
     {
         $course = $this->getCourseService()->getCourse($id);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
-        $course = $this->convertOldFields($course);
-        $course = $this->filledCourseByCourseSet($course, $courseSet);
-        return $course;
+        return $this->filter($course);
     }
 
     public function filter($course)
     {
+        $course = $this->convertOldFields($course);
+        $course = $this->filledCourseByCourseSet($course);
+        return $course;
     }
 
     private function convertOldFields($course)
@@ -32,28 +31,28 @@ class Course extends BaseResource
         return $course;
     }
 
-    private function filledCourseByCourseSet($course, $courseSet)
+    private function filledCourseByCourseSet($course)
     {
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $copyKeys = array('tags', 'hitNum', 'orgCode', 'orgId',
             'discount', 'categoryId', 'recommended', 'recommendedSeq', 'recommendedTime',
             'subtitle', 'discountId', 'smallPicture', 'middlePicture', 'largePicture'
         );
-        if (empty($courseSet['cover'])) {
-            $courseSet = array(
-                'smallPicture' => '',
-                'middlePicture' => '',
-                'largePicture' => ''
+        if (!empty($courseSet['cover'])) {
+            $courseSetImg = array(
+                'smallPicture' => $this->getFileUrl($courseSet['cover']['small']),
+                'middlePicture' => $this->getFileUrl($courseSet['cover']['middle']),
+                'largePicture' => $this->getFileUrl($courseSet['cover']['large'])
             );
-        } else {
-            $courseSet = array(
-                'smallPicture' => $courseSet['cover']['small'],
-                'middlePicture' => $courseSet['cover']['middle'],
-                'largePicture' => $courseSet['cover']['large']
-            );
+            $courseSet = array_merge($courseSet, $courseSetImg);
         };
+
         foreach ($copyKeys as $value) {
-            $course[$value] = $courseSet[$value];
+            $course[$value] = isset($courseSet[$value]) ? $courseSet[$value] : '';
         }
+
+        $course['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
+        $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
         return $course;
     }
 
