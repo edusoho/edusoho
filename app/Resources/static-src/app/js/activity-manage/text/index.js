@@ -19,6 +19,7 @@ class Text {
         title: {
           required: true,
           maxlength: 50,
+          trim: true,
         },
         content: {
           required:true,

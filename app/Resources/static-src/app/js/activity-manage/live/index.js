@@ -13,7 +13,7 @@ class Live {
   _extendValidator() {
     $.validator.addMethod(
       "after",
-      function(value, element, params) {
+      function (value, element, params) {
         var now = new Date();
         return value && now < new Date(value);
       },
@@ -45,6 +45,7 @@ class Live {
         title: {
           required: true,
           maxlength: 50,
+          trim: true,
         },
         startTime: {
           required: true,
@@ -62,7 +63,7 @@ class Live {
         },
       },
     });
-    initEditor($('[name="remark"]'),validator);
+    initEditor($('[name="remark"]'), validator);
   }
 
   _dateTimePicker() {
@@ -72,7 +73,7 @@ class Live {
       format: 'yyyy-mm-dd hh:ii',
       language: "zh",
       autoclose: true,
-      endDate: new Date(Date.now() + 86400*365*100*1000)
+      endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
     });
     $starttime.datetimepicker('setStartDate', new Date());
   }
