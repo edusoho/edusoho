@@ -6,7 +6,6 @@ use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
-use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Codeages\Biz\Framework\Service\BaseService;

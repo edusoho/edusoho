@@ -133,12 +133,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         try {
             $this->beginTransaction();
 
-            $created     = $this->getCourseDao()->create($course);
+            $created = $this->getCourseDao()->create($course);
             $currentUser = $this->getCurrentUser();
             //set default teacher
             $this->getMemberService()->setCourseTeachers($created['id'], array(
                 array(
-                    'id'        => $currentUser['id'],
+                    'id' => $currentUser['id'],
                     'isVisible' => 1
                 )
             ));
@@ -256,7 +256,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($fields['isFree'] == 1) {
-            $fields['price']      = 0;
+            $fields['price']     = 0;
             $fields['vipLevelId'] = 0;
         }
 
@@ -462,7 +462,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         return $this->getMemberDao()->count(array(
             'courseId' => $courseId,
-            'role'     => 'student'
+            'role'  => 'student'
         ));
     }
 
@@ -574,7 +574,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $chapter['seq']         = $this->getNextCourseItemSeq($chapter['courseId']);
         $chapter['createdTime'] = time();
-        $chapter                = $this->getChapterDao()->create($chapter);
+        $chapter              = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
 
@@ -854,7 +854,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if ($course['parentId'] > 0) {
             $classrooms = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
-
             $isTeacher     = $this->getClassroomService()->isClassroomTeacher($classrooms[0]['classroomId'], $user['id']);
             $isHeadTeacher = $this->getClassroomService()->isClassroomHeadTeacher($classrooms[0]['classroomId'], $user['id']);
             if ($isTeacher || $isHeadTeacher) {
