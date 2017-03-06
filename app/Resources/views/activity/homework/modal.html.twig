@@ -13,11 +13,15 @@
     </div>
 
     {% if not activity|default(null) %}
-      <div class="form-group text-right">
-        <input type="hidden" name="questionLength" value="{% if questions|default(null) %} questionItems.lenght {% endif %}">
-        <button  id="picker_homework_items" data-url="{{ path('course_set_manage_homework_question_picker',{id:courseSetId,target:'homework'}) }}" class="btn btn-info btn-sm" data-role="pick-item"　><span class="es-icon es-icon-anonymous-iconfont"></span> 选择题目</button>
+      <div class="form-group">
+        <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">选择题目</label></div>
+        <div class="col-sm-8">
+          <a id="picker_homework_items" data-url="{{ path('course_set_manage_homework_question_picker',{id:courseSetId,target:'homework'}) }}" class="btn btn-info btn-sm" data-role="pick-item"　><i class="es-icon es-icon-anonymous-iconfont"></i>
+          选择题目
+          </a>
+          <input type="hidden" name="questionLength" value="{% if questions|default(null) %} questionItems.lenght {% endif %}">
+        </div>
       </div>
-
       <table class="table table-striped table-hover tab-content" id="question-table">
         <thead>
           <tr>

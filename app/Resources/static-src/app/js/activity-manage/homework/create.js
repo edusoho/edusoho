@@ -5,6 +5,7 @@ export default class Homework {
     this.$element = $iframeContent;
     this.$step2_form = this.$element.find('#step2-form');
     this.$step3_form = this.$element.find('#step3-form');
+    this.validator2 = null;
     this.init();
   }
 
@@ -22,6 +23,9 @@ export default class Homework {
     this.$questionPickedModal.on('hidden.bs.modal', () => {
       this.$homeworkModal.show();
       this.$questionPickedModal.html('');
+      if(this.validator2) {
+        this.validator2.form();
+      }
     });
   }
 
@@ -74,8 +78,10 @@ export default class Homework {
         'questionLength': "请选择题目",
       },
     });
+    this.validator2 = validator;
     this.initCkeditor(validator);
     this.$step2_form.data('validator', validator);
+
   }
 
   setValidateRule() {

@@ -37,7 +37,7 @@
         {% if setting('course.show_student_num_enabled', '1') == 1 %}
           <i class="es-icon es-icon-people"></i><span class="mhs">{{ courseSet.studentNum|default(0) }}</span>人加入学习
         {% endif %}
-        <div class="score pull-right">
+        <div class="score pull-right mb0">
           {{ web_macro.star(courseSet.rating|default(0)) }}
           <span class="vertical-middle">{{ courseSet.ratingNum|default(0) }}</span>
         </div>

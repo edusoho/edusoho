@@ -6,7 +6,6 @@ class Live {
   }
   _init() {
     this._extendValidator();
-    this._dateTimePicker();
     this._initStep2Form();
   }
 
@@ -65,19 +64,21 @@ class Live {
       },
     });
     initEditor($('[name="remark"]'), validator);
+    this._dateTimePicker(validator);
   }
 
-  
 
-  _dateTimePicker() {
+
+  _dateTimePicker(validator) {
     let $starttime = $('#startTime');
-
     $starttime.datetimepicker({
       format: 'yyyy-mm-dd hh:ii',
       language: "zh",
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 100 * 1000)
-    });
+    }).on('hide',()=>{
+      validator.form();
+    })
     $starttime.datetimepicker('setStartDate', new Date());
   }
 }
