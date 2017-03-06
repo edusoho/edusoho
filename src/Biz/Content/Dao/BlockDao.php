@@ -10,7 +10,7 @@ interface BlockDao extends GeneralDaoInterface
 
     public function getByCode($code);
 
-    public function getByTemplateIdAndOrgId($blockTemplateId,$orgId=0);
+    public function getByTemplateIdAndOrgId($blockTemplateId, $orgId = 0);
 
     public function getByTemplateId($blockTemplateId);
 }

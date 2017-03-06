@@ -5,20 +5,20 @@ use Phpmig\Migration\Migration;
 class C2CourseTimestamps extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("
+        $biz['db']->exec('
             ALTER TABLE `c2_course` DROP COLUMN created;
             ALTER TABLE `c2_course` DROP COLUMN updated;
             ALTER TABLE `c2_course` DROP COLUMN deleted;
-        ");
+        ');
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {

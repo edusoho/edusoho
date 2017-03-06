@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\System\Service\Impl;
 
 use Biz\BaseService;
@@ -12,6 +13,7 @@ class CacheServiceImpl extends BaseService implements CacheService
         if (empty($datas)) {
             return null;
         }
+
         return reset($datas);
     }
 
@@ -23,15 +25,16 @@ class CacheServiceImpl extends BaseService implements CacheService
             return array();
         }
 
-        $datas  = array();
+        $datas = array();
         $caches = $this->getCacheDao()->findByNames($names);
-        $now    = time();
+        $now = time();
         foreach ($caches as $cache) {
             if ($cache['expiredTime'] > 0 && $cache['expiredTime'] < $now) {
                 continue;
             }
             $datas[$cache['name']] = $cache['serialized'] ? unserialize($cache['data']) : $cache['data'];
         }
+
         return $datas;
     }
 
@@ -40,11 +43,11 @@ class CacheServiceImpl extends BaseService implements CacheService
         $serialized = is_string($data) ? 0 : 1;
 
         $cache = array(
-            'name'        => $name,
-            'data'        => $serialized ? serialize($data) : $data,
-            'serialized'  => $serialized,
+            'name' => $name,
+            'data' => $serialized ? serialize($data) : $data,
+            'serialized' => $serialized,
             'expiredTime' => $expiredTime,
-            'createdTime' => time()
+            'createdTime' => time(),
         );
 
         $cached = $this->getCacheDao()->findByNames(array($name));

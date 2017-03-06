@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Thread\Event;
 
 use Codeages\Biz\Framework\Event\Event;
@@ -10,13 +11,13 @@ class ThreadEventSubscriber extends EventSubscriber implements EventSubscriberIn
     public static function getSubscribedEvents()
     {
         return array(
-            'thread.delete'      => 'onThreadDelete',
-            'thread.create'      => 'onThreadCreate',
-            'thread.nice'        => 'onThreadNice',
-            'thread.sticky'      => 'onThreadSticky',
+            'thread.delete' => 'onThreadDelete',
+            'thread.create' => 'onThreadCreate',
+            'thread.nice' => 'onThreadNice',
+            'thread.sticky' => 'onThreadSticky',
             'thread.post.create' => 'onPostCreate',
             'thread.post.delete' => 'onPostDelete',
-            'thread.post.vote'   => 'onPostVote'
+            'thread.post.vote' => 'onPostVote',
         );
     }
 
@@ -60,7 +61,7 @@ class ThreadEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $subject = $event->getSubject();
 
         $targetType = $subject['targetType'];
-        $biz        = $this->getBiz();
+        $biz = $this->getBiz();
 
         if (!isset($biz["thread_event_processor.{$targetType}"])) {
             return;

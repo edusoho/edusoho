@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\MoneyCard\Dao;
-
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 

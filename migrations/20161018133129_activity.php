@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class Activity extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -31,12 +31,12 @@ class Activity extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE IF EXISTS `activity`");
+        $connection->exec('DROP TABLE IF EXISTS `activity`');
     }
 }

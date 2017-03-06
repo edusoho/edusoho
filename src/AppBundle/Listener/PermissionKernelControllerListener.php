@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Listener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -13,7 +14,7 @@ class PermissionKernelControllerListener
     public function __construct(ContainerInterface $container, $paths)
     {
         $this->container = $container;
-        $this->paths     = $paths;
+        $this->paths = $paths;
     }
 
     public function onKernelController(FilterControllerEvent $event)
@@ -22,7 +23,7 @@ class PermissionKernelControllerListener
             return;
         }
 
-        $request     = $event->getRequest();
+        $request = $event->getRequest();
         $currentUser = ServiceKernel::instance()->getCurrentUser();
         $requestPath = $request->getPathInfo();
 

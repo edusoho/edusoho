@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: Simon
  * Date: 12/12/2016
- * Time: 17:11
+ * Time: 17:11.
  */
 
 namespace Biz\Taxonomy\Dao;
-
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 

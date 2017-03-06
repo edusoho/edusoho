@@ -5,12 +5,12 @@ use Phpmig\Migration\Migration;
 class C2Course extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
+        $db = $biz['db'];
         $db->exec("CREATE TABLE `c2_course` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `courseSetId` int(11) NOT NULL,
@@ -38,12 +38,12 @@ class C2Course extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
-        $db->exec("DROP TABLE IF EXISTS `c2_course`");
+        $db = $biz['db'];
+        $db->exec('DROP TABLE IF EXISTS `c2_course`');
     }
 }

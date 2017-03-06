@@ -2,19 +2,18 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-
 class FreeCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 {
-
     /**
-     * 获取最新课程列表
+     * 获取最新课程列表.
      *
      * 可传入的参数：
      *   categoryId/categoryCode 可选 分类ID/分类编码
      *   orderby 可选 课程排序方式
      *   count    必需 课程数量，取值不能超过100
-     * 
-     * @param  array $arguments 参数
+     *
+     * @param array $arguments 参数
+     *
      * @return array 课程列表
      */
     public function getData(array $arguments)

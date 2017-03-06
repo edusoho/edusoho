@@ -5,11 +5,11 @@ use Phpmig\Migration\Migration;
 class LiveActivity extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
-        $biz        = $this->getContainer();
+        $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("CREATE TABLE `live_activity` (
           `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -20,12 +20,12 @@ class LiveActivity extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-        $biz        = $this->getContainer();
+        $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("DROP TABLE IF EXISTS `live_activity`");
+        $connection->exec('DROP TABLE IF EXISTS `live_activity`');
     }
 }

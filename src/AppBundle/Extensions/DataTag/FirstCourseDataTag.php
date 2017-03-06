@@ -2,20 +2,18 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-
-
 class FirstCourseDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     * 获取第一个创建的教学计划
+     * 获取第一个创建的教学计划.
      *
      * 可传入的参数：
      *   courseSetId 必需 课程ID
      *
-     * @param  array $arguments 参数
+     * @param array $arguments 参数
+     *
      * @return array 计划
      */
-
     public function getData(array $arguments)
     {
         if (empty($arguments['courseSetId'])) {
@@ -30,7 +28,7 @@ class FirstCourseDataTag extends CourseBaseDataTag implements DataTag
             0,
             1
         );
+
         return array_shift($courses);
     }
 }
-

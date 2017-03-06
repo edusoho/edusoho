@@ -75,6 +75,7 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         'F' => 
         array (
             'Flexihash\\' => 10,
+            'Facebook\\WebDriver\\' => 19,
         ),
         'E' => 
         array (
@@ -214,6 +215,10 @@ class ComposerStaticInita9081f4c3a072b5bb824f60da08fba6f
         'Flexihash\\' => 
         array (
             0 => __DIR__ . '/..' . '/flexihash/flexihash/src',
+        ),
+        'Facebook\\WebDriver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/facebook/webdriver/lib',
         ),
         'Endroid\\QrCode\\' => 
         array (

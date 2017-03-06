@@ -25,7 +25,7 @@ class BaseStrategy
 
     public function createTask($fields)
     {
-        $fields           = ArrayToolkit::parts($fields, array(
+        $fields = ArrayToolkit::parts($fields, array(
             'courseId',
             'fromCourseSetId',
             'seq',
@@ -41,9 +41,9 @@ class BaseStrategy
             'endTime',
             'length',
             'status',
-            'createdUserId'
+            'createdUserId',
         ));
-        $number           = $this->getTaskService()->getMaxNumberByCourseId($fields['courseId']);
+        $number = $this->getTaskService()->getMaxNumberByCourseId($fields['courseId']);
         $fields['number'] = $number + 1;
 
         return $this->getTaskDao()->create($fields);
@@ -59,7 +59,7 @@ class BaseStrategy
             'endTime',
             'length',
             'status',
-            'mediaSource'
+            'mediaSource',
         ));
 
         return $this->getTaskDao()->update($id, $fields);
@@ -69,7 +69,7 @@ class BaseStrategy
     {
         if (!ArrayToolkit::requireds($task, array(
             'title',
-            'fromCourseId'
+            'fromCourseId',
         ))
         ) {
             return true;

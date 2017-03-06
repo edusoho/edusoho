@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Common;
 
 class FieldSerializer
@@ -18,7 +19,7 @@ class FieldSerializer
 
             $fields[$key] = $this->getSerializeAlgorithm($algorithm)->serialize($fields[$key]);
         }
-        
+
         return $fields;
     }
 
@@ -45,13 +46,14 @@ class FieldSerializer
             $this->unserialize($fields, $serializeFields);
             unset($fields);
         }
+
         return $fieldsList;
     }
 
     protected function getSerializeAlgorithm($algorithm)
     {
         if (!isset($this->cachedAlgorithm[$algorithm])) {
-            $class = __NAMESPACE__ . '\\' . ucfirst($algorithm) . 'SerializeAlgorithm';
+            $class = __NAMESPACE__.'\\'.ucfirst($algorithm).'SerializeAlgorithm';
             if (!class_exists($class)) {
                 throw new \RuntimeException("serialize algorithm {$algorithm} is not exist.");
             }
@@ -98,10 +100,9 @@ class PhpserializeSerializeAlgorithm implements SerializeAlgorithm
 
 class SawSerializeAlgorithm implements SerializeAlgorithm
 {
-    
     public function serialize($value)
     {
-        return '|' . implode('|', $value) . '|';
+        return '|'.implode('|', $value).'|';
     }
 
     public function unserialize($value)

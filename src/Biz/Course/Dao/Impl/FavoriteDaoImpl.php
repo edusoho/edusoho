@@ -13,7 +13,7 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
     {
         return array(
             'timestamps' => array('createdTime'),
-            'orderbys'   => array('replayId', 'createdTime'),
+            'orderbys' => array('replayId', 'createdTime'),
             'conditions' => array(
                 'courseId = :courseId',
                 'userId = :userId',
@@ -22,7 +22,7 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
                 'courseSetId = :courseSetId',
                 'courseSetId IN ( :courseSetIds )',
                 'courseId NOT IN ( :excludeCourseIds )',
-            )
+            ),
         );
     }
 
@@ -35,7 +35,7 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
     {
         return $this->search(
             array(
-                'userId' => $userId
+                'userId' => $userId,
             ),
             array('createdTime' => 'DESC'),
             $start,
@@ -46,16 +46,16 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
     public function getByUserIdAndCourseSetId($userId, $courseSetId, $type = 'course')
     {
         return $this->getByFields(array(
-            'userId'      => $userId,
+            'userId' => $userId,
             'courseSetId' => $courseSetId,
-            'type'        => $type
+            'type' => $type,
         ));
     }
 
     public function countByUserId($userId)
     {
         return $this->count(array(
-            'userId' => $userId
+            'userId' => $userId,
         ));
     }
 

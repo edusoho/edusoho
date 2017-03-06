@@ -62,8 +62,8 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
                 'invitedUserCardId <> :invitedUserCardIdNotEqual',
                 'inviteTime >= :startDateTime',
                 'invitedUserId IN ( :invitedUserIds)',
-                'inviteTime < :endDateTime'
-            )
+                'inviteTime < :endDateTime',
+            ),
         );
     }
 }

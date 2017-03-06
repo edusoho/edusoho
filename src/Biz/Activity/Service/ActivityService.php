@@ -25,7 +25,8 @@ interface ActivityService
     public function count($conditions);
 
     /**
-     * @param  string     $type 活动类型
+     * @param string $type 活动类型
+     *
      * @return Activity
      */
     public function getActivityConfig($type);

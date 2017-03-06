@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Dictionary\Service\Impl;
 
 use Biz\BaseService;
@@ -31,6 +32,7 @@ class DictionaryServiceImpl extends BaseService implements DictionaryService
     public function updateDictionaryItem($id, $fields)
     {
         $fields = ArrayToolkit::parts($fields, array('type', 'type', 'name', 'weight'));
+
         return $this->getDictionaryItemDao()->update($id, $fields);
     }
 

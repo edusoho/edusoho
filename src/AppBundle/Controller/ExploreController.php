@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
@@ -17,11 +18,11 @@ class ExploreController extends BaseController
     {
         $conditions = $request->query->all();
 
-        $selectedTag        = '';
+        $selectedTag = '';
         $selectedTagGroupId = '';
-        $tags               = array();
-        $categoryArray      = array();
-        $levels             = array();
+        $tags = array();
+        $categoryArray = array();
+        $levels = array();
 
         if (!empty($conditions['tag'])) {
             if (!empty($conditions['tag']['tags'])) {
@@ -29,7 +30,7 @@ class ExploreController extends BaseController
             }
 
             if (!empty($conditions['tag']['selectedTag'])) {
-                $selectedTag        = $conditions['tag']['selectedTag']['tag'];
+                $selectedTag = $conditions['tag']['selectedTag']['tag'];
                 $selectedTagGroupId = $conditions['tag']['selectedTag']['group'];
             }
         }
@@ -39,7 +40,7 @@ class ExploreController extends BaseController
         foreach ($tags as $groupId => $tagId) {
             if ($groupId == $selectedTagGroupId && $tagId != $selectedTag) {
                 $tags[$groupId] = $selectedTag;
-                $flag           = true;
+                $flag = true;
                 break;
             }
 
@@ -65,8 +66,8 @@ class ExploreController extends BaseController
             $tagIdsNum = count($conditions['tagIds']);
 
             $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'course-set');
-            $courseSetIds      = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
-            $flag              = array_count_values($courseSetIds);
+            $courseSetIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+            $flag = array_count_values($courseSetIds);
 
             $courseSetIds = array_unique($courseSetIds);
 
@@ -87,7 +88,7 @@ class ExploreController extends BaseController
 
         unset($conditions['tag']);
 
-        $subCategory        = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
         $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
 
         if (!empty($conditions['subCategory']) && empty($conditions['selectedthirdLevelCategory'])) {
@@ -105,18 +106,18 @@ class ExploreController extends BaseController
         }
 
         $category = array(
-            'category'           => $category,
-            'subCategory'        => $subCategory,
-            'thirdLevelCategory' => $thirdLevelCategory
+            'category' => $category,
+            'subCategory' => $subCategory,
+            'thirdLevelCategory' => $thirdLevelCategory,
         );
 
         unset($conditions['code']);
 
         if (!isset($conditions['filter'])) {
             $conditions['filter'] = array(
-                'type'           => 'all',
-                'price'          => 'all',
-                'currentLevelId' => 'all'
+                'type' => 'all',
+                'price' => 'all',
+                'currentLevelId' => 'all',
             );
         }
 
@@ -134,7 +135,7 @@ class ExploreController extends BaseController
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100), 'id');
 
             if ($filter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
+                $vipLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
                 $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
             }
         }
@@ -152,7 +153,7 @@ class ExploreController extends BaseController
         unset($conditions['orderBy']);
 
         $conditions['parentId'] = 0;
-        $conditions['status']   = 'published';
+        $conditions['status'] = 'published';
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -172,10 +173,10 @@ class ExploreController extends BaseController
 
         if ($orderBy == 'recommendedSeq') {
             $conditions['recommended'] = 1;
-            $recommendCount            = $this->getCourseSetService()->countCourseSets($conditions);
-            $currentPage               = $request->query->get('page') ? $request->query->get('page') : 1;
-            $recommendPage             = intval($recommendCount / 20);
-            $recommendLeft             = $recommendCount % 20;
+            $recommendCount = $this->getCourseSetService()->countCourseSets($conditions);
+            $currentPage = $request->query->get('page') ? $request->query->get('page') : 1;
+            $recommendPage = intval($recommendCount / 20);
+            $recommendLeft = $recommendCount % 20;
 
             if ($currentPage <= $recommendPage) {
                 $courseSets = $this->getCourseSetService()->searchCourseSets(
@@ -192,7 +193,7 @@ class ExploreController extends BaseController
                     20
                 );
                 $conditions['recommended'] = 0;
-                $coursesTemp               = $this->getCourseSetService()->searchCourseSets(
+                $coursesTemp = $this->getCourseSetService()->searchCourseSets(
                     $conditions,
                     array('createdTime' => 'DESC'),
                     0,
@@ -201,7 +202,7 @@ class ExploreController extends BaseController
                 $courseSets = array_merge($courseSets, $coursesTemp);
             } else {
                 $conditions['recommended'] = 0;
-                $courseSets                = $this->getCourseSetService()->searchCourseSets(
+                $courseSets = $this->getCourseSetService()->searchCourseSets(
                     $conditions,
                     array('createdTime' => 'DESC'),
                     (20 - $recommendLeft) + ($currentPage - $recommendPage - 2) * 20,
@@ -215,7 +216,7 @@ class ExploreController extends BaseController
         } else {
             $categoryArrayDescription = $categoryArray['description'];
             $categoryArrayDescription = strip_tags($categoryArrayDescription, '');
-            $categoryArrayDescription = preg_replace("/ /", "", $categoryArrayDescription);
+            $categoryArrayDescription = preg_replace('/ /', '', $categoryArrayDescription);
             $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
         }
 
@@ -230,17 +231,17 @@ class ExploreController extends BaseController
         }
 
         return $this->render('course-set/explore.html.twig', array(
-            'courseSets'               => $courseSets,
-            'category'                 => $category,
-            'filter'                   => $filter,
-            'orderBy'                  => $orderBy,
-            'paginator'                => $paginator,
-            'consultDisplay'           => true,
-            'categoryArray'            => $categoryArray,
+            'courseSets' => $courseSets,
+            'category' => $category,
+            'filter' => $filter,
+            'orderBy' => $orderBy,
+            'paginator' => $paginator,
+            'consultDisplay' => true,
+            'categoryArray' => $categoryArray,
             'categoryArrayDescription' => $categoryArrayDescription,
-            'categoryParent'           => $categoryParent,
-            'levels'                   => $levels,
-            'tags'                     => $tags
+            'categoryParent' => $categoryParent,
+            'levels' => $levels,
+            'tags' => $tags,
         ));
     }
 
@@ -248,13 +249,13 @@ class ExploreController extends BaseController
     {
         $conditions = $request->query->all();
 
-        $conditions['status']   = 'published';
+        $conditions['status'] = 'published';
         $conditions['showable'] = 1;
 
-        $selectedTag        = '';
+        $selectedTag = '';
         $selectedTagGroupId = '';
-        $tags               = array();
-        $categoryArray      = array();
+        $tags = array();
+        $categoryArray = array();
 
         if (!empty($conditions['tag'])) {
             if (!empty($conditions['tag']['tags'])) {
@@ -262,7 +263,7 @@ class ExploreController extends BaseController
             }
 
             if (!empty($conditions['tag']['selectedTag'])) {
-                $selectedTag        = $conditions['tag']['selectedTag']['tag'];
+                $selectedTag = $conditions['tag']['selectedTag']['tag'];
                 $selectedTagGroupId = $conditions['tag']['selectedTag']['group'];
             }
         }
@@ -274,7 +275,7 @@ class ExploreController extends BaseController
         foreach ($tags as $groupId => $tagId) {
             if ($groupId == $selectedTagGroupId && $tagId != $selectedTag) {
                 $tags[$groupId] = $selectedTag;
-                $flag           = true;
+                $flag = true;
                 break;
             }
 
@@ -300,8 +301,8 @@ class ExploreController extends BaseController
             $tagIdsNum = count($conditions['tagIds']);
 
             $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType($conditions['tagIds'], 'classroom');
-            $classroomIds      = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
-            $flag              = array_count_values($classroomIds);
+            $classroomIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
+            $flag = array_count_values($classroomIds);
 
             $classroomIds = array_unique($classroomIds);
 
@@ -320,7 +321,7 @@ class ExploreController extends BaseController
             unset($conditions['tagIds']);
         }
 
-        $subCategory        = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+        $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
         $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
 
         if (!empty($conditions['subCategory']) && empty($conditions['selectedthirdLevelCategory'])) {
@@ -338,17 +339,17 @@ class ExploreController extends BaseController
         }
 
         $category = array(
-            'category'           => $category,
-            'subCategory'        => $subCategory,
-            'thirdLevelCategory' => $thirdLevelCategory
+            'category' => $category,
+            'subCategory' => $subCategory,
+            'thirdLevelCategory' => $thirdLevelCategory,
         );
 
         unset($conditions['code']);
 
         if (!isset($conditions['filter'])) {
             $conditions['filter'] = array(
-                'price'          => 'all',
-                'currentLevelId' => 'all'
+                'price' => 'all',
+                'currentLevelId' => 'all',
             );
         }
 
@@ -365,7 +366,7 @@ class ExploreController extends BaseController
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), array(), 0, 100), 'id');
 
             if (!$filter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
+                $vipLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
                 $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
             }
         }
@@ -380,7 +381,7 @@ class ExploreController extends BaseController
 
         if ($sort == 'recommendedSeq') {
             $conditions['recommended'] = 1;
-            $orderBy                   = array($sort => 'asc');
+            $orderBy = array($sort => 'asc');
         } else {
             $orderBy = array($sort => 'desc');
         }
@@ -405,7 +406,7 @@ class ExploreController extends BaseController
         } else {
             $categoryArrayDescription = $categoryArray['description'];
             $categoryArrayDescription = strip_tags($categoryArrayDescription, '');
-            $categoryArrayDescription = preg_replace("/ /", "", $categoryArrayDescription);
+            $categoryArrayDescription = preg_replace('/ /', '', $categoryArrayDescription);
             $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
         }
 
@@ -420,19 +421,19 @@ class ExploreController extends BaseController
         }
 
         return $this->render('classroom/explore.html.twig', array(
-            'paginator'                => $paginator,
-            'classrooms'               => $classrooms,
-            'path'                     => 'classroom_explore',
-            'category'                 => $category,
-            'subCategory'              => $subCategory,
-            'categoryArray'            => $categoryArray,
+            'paginator' => $paginator,
+            'classrooms' => $classrooms,
+            'path' => 'classroom_explore',
+            'category' => $category,
+            'subCategory' => $subCategory,
+            'categoryArray' => $categoryArray,
             'categoryArrayDescription' => $categoryArrayDescription,
-            'categoryParent'           => $categoryParent,
-            'filter'                   => $filter,
-            'levels'                   => $levels,
-            'orderBy'                  => $sort,
-            'tags'                     => $tags,
-            'group'                    => 'classroom'
+            'categoryParent' => $categoryParent,
+            'filter' => $filter,
+            'levels' => $levels,
+            'orderBy' => $sort,
+            'tags' => $tags,
+            'group' => 'classroom',
         ));
     }
 
@@ -497,7 +498,7 @@ class ExploreController extends BaseController
 
     protected function getVipService()
     {
-        return $this->createService('Vip:Vip:VipService');
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 
     protected function getLevelService()

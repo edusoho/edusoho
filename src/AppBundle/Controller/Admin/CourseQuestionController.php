@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
@@ -16,7 +17,7 @@ class CourseQuestionController extends BaseController
             $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
             $conditions['courseSetIds'] = !empty($conditions['courseSetIds']) ?: array(-1);
         }
-        
+
         $conditions['type'] = 'question';
         if ($postStatus == 'unPosted') {
             $conditions['postNum'] = 0;
@@ -35,7 +36,7 @@ class CourseQuestionController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($questions, 'courseSetId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($questions, 'courseId'));
         $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($questions, 'taskId'));
@@ -43,17 +44,18 @@ class CourseQuestionController extends BaseController
         return $this->render('admin/course-question/index.html.twig', array(
             'paginator' => $paginator,
             'questions' => $questions,
-            'users'     => $users,
+            'users' => $users,
             'courseSets' => $courseSets,
-            'courses'   => $courses,
-            'tasks'   => $tasks,
-            'type'      => $postStatus
+            'courses' => $courses,
+            'tasks' => $tasks,
+            'type' => $postStatus,
         ));
     }
 
     public function deleteAction(Request $request, $id)
     {
         $this->getThreadService()->deleteThread($id);
+
         return $this->createJsonResponse(true);
     }
 
@@ -63,6 +65,7 @@ class CourseQuestionController extends BaseController
         foreach ($ids ?: array() as $id) {
             $this->getThreadService()->deleteThread($id);
         }
+
         return $this->createJsonResponse(true);
     }
 

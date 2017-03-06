@@ -26,7 +26,8 @@ class SessionServiceImpl extends BaseService implements SessionService
     public function deleteInvalidSession($sessionTime, $limit)
     {
         $sessions = $this->getSessionDao()->searchBySessionTime($sessionTime, $limit);
-        $ids      = ArrayToolKit::column($sessions, "session_id");
+        $ids = ArrayToolKit::column($sessions, 'session_id');
+
         return $this->getSessionDao()->deleteByIds($ids);
     }
 
@@ -34,5 +35,4 @@ class SessionServiceImpl extends BaseService implements SessionService
     {
         return $this->createDao('System:SessionDao');
     }
-
 }

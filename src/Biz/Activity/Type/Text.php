@@ -22,21 +22,22 @@ class Text extends Activity
 
     public function copy($activity, $config = array())
     {
-        $biz     = $this->getBiz();
-        $text    = $this->getTextActivityDao()->get($activity['mediaId']);
+        $biz = $this->getBiz();
+        $text = $this->getTextActivityDao()->get($activity['mediaId']);
         $newText = array(
-            'finishType'    => $text['finishType'],
-            'finishDetail'  => $text['finishDetail'],
-            'createdUserId' => $biz['user']['id']
+            'finishType' => $text['finishType'],
+            'finishDetail' => $text['finishDetail'],
+            'createdUserId' => $biz['user']['id'],
         );
+
         return $this->getTextActivityDao()->create($newText);
     }
 
     public function sync($sourceActivity, $activity)
     {
-        $sourceText           = $this->getTextActivityDao()->get($sourceActivity['mediaId']);
-        $text                 = $this->getTextActivityDao()->get($activity['mediaId']);
-        $text['finishType']   = $sourceText['finishType'];
+        $sourceText = $this->getTextActivityDao()->get($sourceActivity['mediaId']);
+        $text = $this->getTextActivityDao()->get($activity['mediaId']);
+        $text['finishType'] = $sourceText['finishType'];
         $text['finishDetail'] = $sourceText['finishDetail'];
 
         return $this->getTextActivityDao()->update($text['id'], $text);
@@ -46,18 +47,19 @@ class Text extends Activity
     {
         $text = ArrayToolkit::parts($fields, array(
             'finishType',
-            'finishDetail'
+            'finishDetail',
         ));
 
-        $biz                   = $this->getBiz();
+        $biz = $this->getBiz();
         $text['createdUserId'] = $biz['user']['id'];
+
         return $this->getTextActivityDao()->update($targetId, $text);
     }
 
     public function isFinished($activityId)
     {
-        $result       = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
-        $activity     = $this->getActivityService()->getActivity($activityId);
+        $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+        $activity = $this->getActivityService()->getActivity($activityId);
         $textActivity = $this->getTextActivityDao()->get($activity['mediaId']);
 
         return !empty($result)
@@ -74,10 +76,11 @@ class Text extends Activity
     {
         $text = ArrayToolkit::parts($fields, array(
             'finishType',
-            'finishDetail'
+            'finishDetail',
         ));
-        $biz                   = $this->getBiz();
+        $biz = $this->getBiz();
         $text['createdUserId'] = $biz['user']['id'];
+
         return $this->getTextActivityDao()->create($text);
     }
 
@@ -104,5 +107,4 @@ class Text extends Activity
     {
         return $this->getBiz()->service('Activity:ActivityService');
     }
-
 }

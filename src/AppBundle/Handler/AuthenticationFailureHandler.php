@@ -6,7 +6,6 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use AppBundle\Handler\AuthenticationHelper;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler;
 
@@ -21,10 +20,10 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         }
 
         $default = array(
-            'temporary_lock_enabled'          => 0,
-            'temporary_lock_allowed_times'    => 5,
+            'temporary_lock_enabled' => 0,
+            'temporary_lock_allowed_times' => 5,
             'ip_temporary_lock_allowed_times' => 20,
-            'temporary_lock_minutes'          => 20
+            'temporary_lock_minutes' => 20,
         );
         $setting = $this->getSettingService()->get('login_bind', array());
         $setting = array_merge($default, $setting);
@@ -36,7 +35,7 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         $forbidden = AuthenticationHelper::checkLoginForbidden($request);
 
         if ($forbidden['status'] == 'error') {
-            $message   = $forbidden['message'];
+            $message = $forbidden['message'];
             $exception = new AuthenticationException($message);
         } else {
             $failed = $this->getUserService()->markLoginFailed($forbidden['user'] ? $forbidden['user']['id'] : 0, $request->getClientIp());
@@ -59,8 +58,9 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
         if ($request->isXmlHttpRequest()) {
             $content = array(
                 'success' => false,
-                'message' => empty($message) ? $exception->getMessage() : $message
+                'message' => empty($message) ? $exception->getMessage() : $message,
             );
+
             return new JsonResponse($content, 400);
         }
 

@@ -2,7 +2,6 @@
 
 namespace Biz\Activity\Dao\Impl;
 
-
 use Biz\Activity\Dao\DownloadActivityDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 

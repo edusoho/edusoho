@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Classroom;
 
 use Biz\Task\Service\TaskService;
@@ -13,19 +14,20 @@ class CourseTaskController extends BaseController
         $classroom = $this->getClassroomService()->getClassroomByCourseId($courseId);
 
         return $this->render('classroom/hint-modal.html.twig', array(
-            'classroom' => $classroom
+            'classroom' => $classroom,
         ));
     }
 
     public function listAction($classroomId, $courseId)
     {
-        $user   = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroomId, $user['id']) : null;
         $course = $this->getCourseService()->getCourse($courseId);
+
         return $this->render('classroom/course/tasks-list.html.twig', array(
             'classroomId' => $classroomId,
-            'course'      => $course,
-            'member'      => $member
+            'course' => $course,
+            'member' => $member,
         ));
     }
 

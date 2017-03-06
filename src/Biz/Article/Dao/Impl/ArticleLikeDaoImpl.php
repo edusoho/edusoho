@@ -12,6 +12,7 @@ class ArticleLikeDaoImpl extends GeneralDaoImpl implements ArticleLikeDao
     public function getByArticleIdAndUserId($articleId, $userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE articleId = ? AND userId=? LIMIT 1";
+
         return $this->db()->fetchAssoc($sql, array($articleId, $userId)) ?: null;
     }
 
@@ -23,12 +24,14 @@ class ArticleLikeDaoImpl extends GeneralDaoImpl implements ArticleLikeDao
     public function findByUserId($userId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? ORDER BY createdTime DESC";
+
         return $this->db()->fetchAll($sql, array($userId));
     }
 
     public function findByArticleId($articleId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE articleId = ? ORDER BY createdTime DESC";
+
         return $this->db()->fetchAll($sql, array($articleId));
     }
 
@@ -46,6 +49,7 @@ class ArticleLikeDaoImpl extends GeneralDaoImpl implements ArticleLikeDao
         $marks = str_repeat('?,', count($articleIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND articleId IN ({$marks});";
         $articleIds = array_merge(array($userId), $articleIds);
+
         return $this->db()->fetchAll($sql, $articleIds);
     }
 

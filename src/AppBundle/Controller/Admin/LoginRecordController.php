@@ -1,25 +1,25 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ConvertIpToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class LoginRecordController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user           = $this->getUser();
-        $userConditions = $conditions     = $request->query->all();
+        $user = $this->getUser();
+        $userConditions = $conditions = $request->query->all();
 
-        unset( $userConditions['startDateTime']);
-        unset( $userConditions['endDateTime']);
-        
+        unset($userConditions['startDateTime']);
+        unset($userConditions['endDateTime']);
+
         $userConditions = $this->fillOrgCode($userConditions);
 
-        $users   = $this->getUserService()->searchUsers($userConditions, array('createdTime'=>'DESC'), 0, 2000);
+        $users = $this->getUserService()->searchUsers($userConditions, array('createdTime' => 'DESC'), 0, 2000);
         $userIds = ArrayToolkit::column($users, 'id');
 
         if ($userIds) {
@@ -31,10 +31,11 @@ class LoginRecordController extends BaseController
                 0,
                 20
             );
+
             return $this->render('admin/login-record/index.html.twig', array(
                 'logRecords' => array(),
-                'users'      => array(),
-                'paginator'  => $paginator
+                'users' => array(),
+                'paginator' => $paginator,
             ));
         }
 
@@ -61,8 +62,8 @@ class LoginRecordController extends BaseController
 
         return $this->render('admin/login-record/index.html.twig', array(
             'logRecords' => $logRecords,
-            'users'      => $users,
-            'paginator'  => $paginator
+            'users' => $users,
+            'paginator' => $paginator,
         ));
     }
 
@@ -73,7 +74,7 @@ class LoginRecordController extends BaseController
         $conditions = array(
             'userId' => $user['id'],
             'action' => 'login_success',
-            'module' => 'user'
+            'module' => 'user',
         );
 
         $paginator = new Paginator(
@@ -92,9 +93,9 @@ class LoginRecordController extends BaseController
         $loginRecords = ConvertIpToolkit::ConvertIps($loginRecords);
 
         return $this->render('admin/login-record/login-record-details.html.twig', array(
-            'user'                 => $user,
-            'loginRecords'         => $loginRecords,
-            'loginRecordPaginator' => $paginator
+            'user' => $user,
+            'loginRecords' => $loginRecords,
+            'loginRecordPaginator' => $paginator,
         ));
     }
 

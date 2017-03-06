@@ -1,19 +1,16 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-use Topxia\Service\Common\ServiceKernel;
-use Biz\User\CurrentUser;
-
 class GenerateQuestionCommand extends BaseCommand
 {
-
     protected function configure()
     {
-        $this->setName ( 'topxia:generate-question' )
+        $this->setName('topxia:generate-question')
             ->addArgument('target', InputArgument::REQUIRED, 'target')
             ->addArgument('type', InputArgument::REQUIRED, 'type')
             ->addArgument('count', InputArgument::REQUIRED, 'count')
@@ -45,17 +42,17 @@ class GenerateQuestionCommand extends BaseCommand
         }
     }
 
-    private function generateSingleChoiceQuestions($target, $count, $difficulty = null, $parentId=0)
+    private function generateSingleChoiceQuestions($target, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
-        for ($i=0; $i<$count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $answers = array('0', '1', '2', '3');
             shuffle($answers);
             $answers = array_slice($answers, 0, 1);
 
             $question = array(
                 'type' => 'choice',
-                'stem' => "单选题选择题 {$i}，正确答案：" . implode('/', $answers),
+                'stem' => "单选题选择题 {$i}，正确答案：".implode('/', $answers),
                 'choices' => array(
                     '选项0',
                     '选项1',
@@ -69,14 +66,14 @@ class GenerateQuestionCommand extends BaseCommand
 
             $questions[] = $this->getQuestionService()->createQuestion($question);
         }
+
         return $questions;
     }
 
-
-    private function generateChoiceQuestions($target, $count, $difficulty = null, $parentId=0)
+    private function generateChoiceQuestions($target, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
-        for ($i=0; $i<$count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $answers = array('0', '1', '2', '3');
             $answerCount = rand(2, 4);
             shuffle($answers);
@@ -85,7 +82,7 @@ class GenerateQuestionCommand extends BaseCommand
             $question = array(
                 'type' => 'choice',
                 'parentId' => $parentId,
-                'stem' => "多选题选择题 {$i}，正确答案：" . implode('/', $answers),
+                'stem' => "多选题选择题 {$i}，正确答案：".implode('/', $answers),
                 'choices' => array(
                     '多选题选项0',
                     '多选题选项1',
@@ -99,13 +96,14 @@ class GenerateQuestionCommand extends BaseCommand
 
             $questions[] = $this->getQuestionService()->createQuestion($question);
         }
+
         return $questions;
     }
 
-    private function generateDetermineQuestions($target, $count, $difficulty = null, $parentId=0)
+    private function generateDetermineQuestions($target, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
-        for ($i=0; $i<$count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $answer = rand(0, 1);
             $question = array(
                 'type' => 'determine',
@@ -118,13 +116,14 @@ class GenerateQuestionCommand extends BaseCommand
 
             $questions[] = $this->getQuestionService()->createQuestion($question);
         }
+
         return $questions;
     }
 
-    private function generateFillQuestions($target, $count, $difficulty = null, $parentId=0)
+    private function generateFillQuestions($target, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
-        for ($i=0; $i<$count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $question = array(
                 'type' => 'fill',
                 'parentId' => $parentId,
@@ -135,13 +134,14 @@ class GenerateQuestionCommand extends BaseCommand
 
             $questions[] = $this->getQuestionService()->createQuestion($question);
         }
+
         return $questions;
     }
 
-    private function generateEssayQuestions($target, $count, $difficulty = null, $parentId=0)
+    private function generateEssayQuestions($target, $count, $difficulty = null, $parentId = 0)
     {
         $questions = array();
-        for ($i=0; $i<$count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $question = array(
                 'type' => 'essay',
                 'parentId' => $parentId,
@@ -153,13 +153,14 @@ class GenerateQuestionCommand extends BaseCommand
 
             $questions[] = $this->getQuestionService()->createQuestion($question);
         }
+
         return $questions;
     }
 
     private function generateMaterialQuestions($target, $count, $difficulty = null)
     {
         $questions = array();
-        for ($i=0; $i<$count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $question = array(
                 'type' => 'material',
                 'stem' => "材料题 {$i}",
@@ -172,6 +173,7 @@ class GenerateQuestionCommand extends BaseCommand
             $this->generateChoiceQuestions($target, 3, $difficulty, $question['id']);
             $this->generateEssayQuestions($target, 2, $difficulty, $question['id']);
         }
+
         return $questions;
     }
 
@@ -179,5 +181,4 @@ class GenerateQuestionCommand extends BaseCommand
     {
         return $this->getServiceKernel()->createService('Question:QuestionService');
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\OpenCourse\Service\Impl;
 
 use Biz\BaseService;
@@ -74,7 +75,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         if (!$user->isLogin() && $lesson['type'] == 'liveOpen') {
             return 'student';
         } elseif (!$user->isLogin() && $lesson['type'] != 'liveOpen') {
-            throw $this->createServiceException("您还未登录，不能参加直播！");
+            throw $this->createServiceException('您还未登录，不能参加直播！');
         }
 
         $courseMember = $this->getOpenCourseService()->getCourseMember($lesson['courseId'], $user['id']);
@@ -83,8 +84,8 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             throw $this->createServiceException('您不是课程学员，不能参加直播！');
         }
 
-        $role              = 'student';
-        $courseTeachers    = $this->getOpenCourseService()->findCourseTeachers($lesson['courseId']);
+        $role = 'student';
+        $courseTeachers = $this->getOpenCourseService()->findCourseTeachers($lesson['courseId']);
         $courseTeachersIds = ArrayToolkit::column($courseTeachers, 'userId');
 
         if (in_array($user['id'], $courseTeachersIds)) {
@@ -111,9 +112,9 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         foreach ($lessons as $key => $lesson) {
             $member = $this->getCourseMemberService()->getCourseMember($lesson['courseId'], $currentUser['id']);
             if (!empty($member)) {
-                $lesson['course']   = $this->getCourseService()->getCourse($lesson['courseId']);
-                $teacherMembers     = $this->getCourseService()->findCourseTeachers($lesson['courseId']);
-                $teacherIds         = ArrayToolkit::column($teacherMembers, 'userId');
+                $lesson['course'] = $this->getCourseService()->getCourse($lesson['courseId']);
+                $teacherMembers = $this->getCourseService()->findCourseTeachers($lesson['courseId']);
+                $teacherIds = ArrayToolkit::column($teacherMembers, 'userId');
                 $lesson['teachers'] = $this->getUserService()->findUsersByIds($teacherIds);
 
                 return $lesson;
@@ -124,7 +125,8 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     }
 
     /**
-     * only for mock
+     * only for mock.
+     *
      * @param [type] $liveClient [description]
      */
     public function setLiveClient($liveClient)
@@ -144,7 +146,8 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     private function _getSpeaker($courseTeachers)
     {
         $speakerId = current($courseTeachers);
-        $speaker   = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
+        $speaker = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
+
         return $speaker ? $speaker['nickname'] : '老师';
     }
 
@@ -152,18 +155,18 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     {
         $params = array(
             'summary' => isset($lesson['summary']) ? $lesson['summary'] : '',
-            'title'   => $lesson['title'],
+            'title' => $lesson['title'],
             'speaker' => $this->_getSpeaker($courseTeacherIds),
             'authUrl' => $container->get('router')->generate('live_auth', array(), true),
-            'jumpUrl' => $container->get('router')->generate('live_jump', array('id' => $lesson['courseId']), true)
+            'jumpUrl' => $container->get('router')->generate('live_jump', array('id' => $lesson['courseId']), true),
         );
 
         if ($actionType == 'add') {
             $params['liveLogoUrl'] = $this->_getLiveLogo();
-            $params['startTime']   = $lesson['startTime'].'';
-            $params['endTime']     = ($lesson['startTime'] + $lesson['length'] * 60).'';
+            $params['startTime'] = $lesson['startTime'].'';
+            $params['endTime'] = ($lesson['startTime'] + $lesson['length'] * 60).'';
         } elseif ($actionType == 'update') {
-            $params['liveId']   = $lesson['mediaId'];
+            $params['liveId'] = $lesson['mediaId'];
             $params['provider'] = $lesson['liveProvider'];
 
             if (isset($lesson['startTime']) && !empty($lesson['startTime'])) {
@@ -180,11 +183,11 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 
     private function _getLiveLogo()
     {
-        $liveLogo    = $this->getSettingService()->get('course');
-        $liveLogoUrl = "";
+        $liveLogo = $this->getSettingService()->get('course');
+        $liveLogoUrl = '';
 
-        if (!empty($liveLogo) && isset($liveLogo['live_logo']) && !empty($liveLogo["live_logo"])) {
-            $liveLogoUrl = ServiceKernel::instance()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
+        if (!empty($liveLogo) && isset($liveLogo['live_logo']) && !empty($liveLogo['live_logo'])) {
+            $liveLogoUrl = ServiceKernel::instance()->getEnvVariable('baseUrl').'/'.$liveLogo['live_logo'];
         }
 
         return $liveLogoUrl;

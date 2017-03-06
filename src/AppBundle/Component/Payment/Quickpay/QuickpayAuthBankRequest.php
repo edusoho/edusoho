@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\Payment\Quickpay;
 
 use AppBundle\Component\Payment\Request;
@@ -11,12 +12,12 @@ class QuickpayAuthBankRequest extends Request
     public function form()
     {
         $encryptData = $this->convertParams($this->params);
-        $sign        = $this->signParams($this->params);
-        $url         = $this->url."?agent_id=".$this->options['key']."&encrypt_data=".$encryptData."&sign=".$sign;
-        $result      = $this->curlRequest($url);
+        $sign = $this->signParams($this->params);
+        $url = $this->url.'?agent_id='.$this->options['key'].'&encrypt_data='.$encryptData.'&sign='.$sign;
+        $result = $this->curlRequest($url);
 
-        $xml      = simplexml_load_string($result);
-        $redir    = (string) $xml->encrypt_data;
+        $xml = simplexml_load_string($result);
+        $redir = (string) $xml->encrypt_data;
         $redirurl = $this->decrypt($redir, $this->options['aes']);
         parse_str($redirurl, $authBanks);
 
@@ -29,21 +30,21 @@ class QuickpayAuthBankRequest extends Request
         $signStr = $signStr.'agent_id='.$this->options['key'];
         $signStr = $signStr.'&key='.$this->options['secret'];
         $signStr = $signStr.'&timestamp='.time() * 1000;
-        $signStr = $signStr.'&user_identity='.$this->options['key']."_".$params['userId'];
+        $signStr = $signStr.'&user_identity='.$this->options['key'].'_'.$params['userId'];
         $signStr = $signStr.'&version='. 1;
-        $sign    = md5(strtolower($signStr));
+        $sign = md5(strtolower($signStr));
 
         return $sign;
     }
 
     protected function convertParams($params)
     {
-        $converted                  = array();
-        $converted['agent_id']      = $this->options['key'];
-        $converted['timestamp']     = time() * 1000;
-        $converted['version']       = 1;
-        $converted['user_identity'] = $this->options['key']."_".$params['userId'];
-        $encryptData                = urlencode(base64_encode($this->encrypt(http_build_query($converted), $this->options['aes'])));
+        $converted = array();
+        $converted['agent_id'] = $this->options['key'];
+        $converted['timestamp'] = time() * 1000;
+        $converted['version'] = 1;
+        $converted['user_identity'] = $this->options['key'].'_'.$params['userId'];
+        $encryptData = urlencode(base64_encode($this->encrypt(http_build_query($converted), $this->options['aes'])));
 
         return $encryptData;
     }
@@ -58,6 +59,7 @@ class QuickpayAuthBankRequest extends Request
         curl_setopt($curl, CURLOPT_URL, $url);
         $response = curl_exec($curl);
         curl_close($curl);
+
         return $response;
     }
 
@@ -67,11 +69,11 @@ class QuickpayAuthBankRequest extends Request
 
         if (array_key_exists('auth_uid_Info', $authBanks)) {
             $authBanks['auth_uid_Info'] = trim($authBanks['auth_uid_Info'], ';');
-            $banks                      = explode(";", $authBanks['auth_uid_Info']);
+            $banks = explode(';', $authBanks['auth_uid_Info']);
 
             foreach ($banks as $key => $bank) {
-                $bankInfos = explode("_", $bank);
-                $data      = array();
+                $bankInfos = explode('_', $bank);
+                $data = array();
 
                 foreach ($bankInfos as $bankInfo) {
                     $data[] = $bankInfo;
@@ -87,7 +89,7 @@ class QuickpayAuthBankRequest extends Request
     private function encrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
-        $iv        = substr($decodeKey, 0, 16);
+        $iv = substr($decodeKey, 0, 16);
 
         $rijndael = new Rijndael();
         $rijndael->setIV($iv);
@@ -95,8 +97,8 @@ class QuickpayAuthBankRequest extends Request
         $rijndael->disablePadding();
 
         $length = strlen($data);
-        $pad    = 16 - ($length % 16);
-        $data   = str_pad($data, $length + $pad, "\0");
+        $pad = 16 - ($length % 16);
+        $data = str_pad($data, $length + $pad, "\0");
 
         $encrypted = $rijndael->encrypt($data);
 
@@ -106,8 +108,8 @@ class QuickpayAuthBankRequest extends Request
     private function decrypt($data, $key)
     {
         $decodeKey = base64_decode($key);
-        $data      = base64_decode($data);
-        $iv        = substr($decodeKey, 0, 16);
+        $data = base64_decode($data);
+        $iv = substr($decodeKey, 0, 16);
 
         $rijndael = new Rijndael();
         $rijndael->setIV($iv);

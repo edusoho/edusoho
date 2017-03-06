@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Announcement\Processor;
 
 use Codeages\Biz\Framework\Context\Biz;

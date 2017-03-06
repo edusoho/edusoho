@@ -1,16 +1,14 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Yaml\Yaml;
 
-
 class NotHasPermissionRoutingsCommand extends BaseCommand
 {
-
     protected function configure()
     {
         $this->setName('util:not-has-permission')
@@ -40,19 +38,17 @@ class NotHasPermissionRoutingsCommand extends BaseCommand
         );
 
         foreach ($configs as $routingConfig) {
-            
             $routings = Yaml::parse($routingConfig);
-            
-            if(empty($routings)){
+
+            if (empty($routings)) {
                 continue;
             }
 
             foreach ($routings as $key => $routing) {
-                if(!isset($routing['permissions'])){
+                if (!isset($routing['permissions'])) {
                     echo $key.'\n';
                 }
             }
         }
-
     }
 }

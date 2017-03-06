@@ -15,9 +15,9 @@ class OpenCourseFileManageController extends BaseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         $conditions = array(
-            'courseId'    => $course['id'],
-            'type'        => 'openCourse',
-            'courseSetId' => 0
+            'courseId' => $course['id'],
+            'type' => 'openCourse',
+            'courseSetId' => 0,
         );
 
         $paginator = new Paginator(
@@ -35,32 +35,32 @@ class OpenCourseFileManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $files      = $this->getMaterialService()->findFullFilesAndSort($materials);
-        $fileIds    = ArrayToolkit::column($files, 'fileId');
+        $files = $this->getMaterialService()->findFullFilesAndSort($materials);
+        $fileIds = ArrayToolkit::column($files, 'fileId');
         $filesQuote = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
         return $this->render('courseset-manage/file/index.html.twig', array(
-            'courseSet'  => $course,
-            'course'     => $course,
-            'files'      => $files,
-            'users'      => ArrayToolkit::index($users, 'id'),
-            'paginator'  => $paginator,
-            'now'        => time(),
-            'filesQuote' => $filesQuote
+            'courseSet' => $course,
+            'course' => $course,
+            'files' => $files,
+            'users' => ArrayToolkit::index($users, 'id'),
+            'paginator' => $paginator,
+            'now' => time(),
+            'filesQuote' => $filesQuote,
         ));
     }
 
     public function showAction(Request $request, $id, $fileId)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        $file   = $this->getUploadFileService()->getFile($fileId);
+        $file = $this->getUploadFileService()->getFile($fileId);
 
         $materialCount = $this->getMaterialService()->countMaterials(
             array(
                 'courseId' => $id,
-                'fileId'   => $fileId
+                'fileId' => $fileId,
             )
         );
 
@@ -101,16 +101,16 @@ class OpenCourseFileManageController extends BaseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         return $this->render('TopxiaWebBundle:CourseFileManage:modal-upload-course-files.html.twig', array(
-            'course'         => $course,
+            'course' => $course,
             'storageSetting' => $this->setting('storage', array()),
-            'targetType'     => $targetType,
-            'targetId'       => $id
+            'targetType' => $targetType,
+            'targetId' => $id,
         ));
     }
 
     public function batchUploadCourseFilesAction(Request $request, $id, $targetType)
     {
-        if ("materiallib" != $targetType) {
+        if ('materiallib' != $targetType) {
             $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
         } else {
             $course = null;
@@ -119,15 +119,15 @@ class OpenCourseFileManageController extends BaseController
         $fileExts = '';
 
         if ('opencourselesson' == $targetType) {
-            $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.mpg;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf";
+            $fileExts = '*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.mpg;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf';
         }
 
         return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
-            'course'         => $course,
+            'course' => $course,
             'storageSetting' => $this->setting('storage', array()),
-            'targetType'     => $targetType,
-            'targetId'       => $id,
-            'fileExts'       => $fileExts
+            'targetType' => $targetType,
+            'targetId' => $id,
+            'fileExts' => $fileExts,
         ));
     }
 
@@ -152,8 +152,8 @@ class OpenCourseFileManageController extends BaseController
         }
 
         return $this->render('courseset-manage/file/file-delete-modal.html.twig', array(
-            'course'    => $course,
-            'courseSet' => $course
+            'course' => $course,
+            'courseSet' => $course,
         ));
     }
 
@@ -161,17 +161,17 @@ class OpenCourseFileManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $fileIds   = $request->request->get('ids');
+        $fileIds = $request->request->get('ids');
         $materials = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
-        $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
-        $files     = ArrayToolkit::index($files, 'id');
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
+        $files = ArrayToolkit::index($files, 'id');
 
         return $this->render('courseset-manage/file/file-delete-modal.html.twig', array(
-            'course'    => $course,
+            'course' => $course,
             'courseSet' => $course,
             'materials' => $materials,
-            'files'     => $files,
-            'ids'       => $fileIds
+            'files' => $files,
+            'ids' => $fileIds,
         ));
     }
 
@@ -185,13 +185,14 @@ class OpenCourseFileManageController extends BaseController
             array('createdTime' => 'DESC'),
             0, 100
         );
+
         return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
-            'course'         => $course,
-            'lesson'         => $lesson,
-            'materials'      => $materials,
+            'course' => $course,
+            'lesson' => $lesson,
+            'materials' => $materials,
             'storageSetting' => $this->setting('storage'),
-            'targetType'     => 'coursematerial',
-            'targetId'       => $course['id']
+            'targetType' => 'coursematerial',
+            'targetId' => $course['id'],
         ));
     }
 

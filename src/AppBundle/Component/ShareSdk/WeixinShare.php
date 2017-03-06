@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\ShareSdk;
 
 class WeixinShare
@@ -22,16 +23,17 @@ class WeixinShare
     public function getAccessToken()
     {
         $params = array(
-            'appid'      => $this->config['key'],
-            'secret'     => $this->config['secret'],
-            'grant_type' => 'client_credential'
+            'appid' => $this->config['key'],
+            'secret' => $this->config['secret'],
+            'grant_type' => 'client_credential',
         );
-        $result   = $this->getRequest(self::ACCESS_TOKEN_URL, $params);
+        $result = $this->getRequest(self::ACCESS_TOKEN_URL, $params);
         $rawToken = array();
         $rawToken = json_decode($result, true);
+
         return array(
-            'expires_in'   => $rawToken['expires_in'],
-            'access_token' => $rawToken['access_token']
+            'expires_in' => $rawToken['expires_in'],
+            'access_token' => $rawToken['access_token'],
         );
     }
 
@@ -40,15 +42,16 @@ class WeixinShare
         $token = $this->getAccessToken();
 
         $params = array(
-            'type'         => 'jsapi',
-            'access_token' => $token['access_token']
+            'type' => 'jsapi',
+            'access_token' => $token['access_token'],
         );
-        $result   = $this->getRequest(self::JSAPI_TICKET_URL, $params);
+        $result = $this->getRequest(self::JSAPI_TICKET_URL, $params);
         $rawToken = array();
         $rawToken = json_decode($result, true);
+
         return array(
-            'ticket'     => $rawToken['ticket'],
-            'expires_in' => $rawToken['expires_in']
+            'ticket' => $rawToken['ticket'],
+            'expires_in' => $rawToken['expires_in'],
         );
     }
 
@@ -73,5 +76,4 @@ class WeixinShare
 
         return $response;
     }
-
 }

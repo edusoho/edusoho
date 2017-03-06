@@ -1,6 +1,6 @@
 <?php
-namespace AppBundle\Twig;
 
+namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
 
@@ -18,7 +18,7 @@ class ThemeExtension extends \Twig_Extension
     public function __construct($container, Biz $biz)
     {
         $this->container = $container;
-        $this->biz       = $biz;
+        $this->biz = $biz;
     }
 
     public function getFilters()
@@ -29,13 +29,14 @@ class ThemeExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('current_theme', array($this, 'getCurrentTheme'))
+            new \Twig_SimpleFunction('current_theme', array($this, 'getCurrentTheme')),
         );
     }
 
     public function getCurrentTheme()
     {
         $currentTheme = $this->getThemeService()->getCurrentThemeConfig();
+
         return $currentTheme;
     }
 

@@ -1,14 +1,15 @@
 <?php
+
 namespace Biz\Order\OrderRefundProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
 
 class CourseOrderRefundProcessor implements OrderRefundProcessor
 {
-	public function getLayout()
-	{
-		return "TopxiaAdminBundle:Course:layout.html.twig";
-	}
+    public function getLayout()
+    {
+        return 'TopxiaAdminBundle:Course:layout.html.twig';
+    }
 
     public function removeStudent($targetId, $userId)
     {
@@ -17,18 +18,18 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
 
     public function getRefundLayout()
     {
-        return "TopxiaAdminBundle:Course:refund.layout.html.twig";
+        return 'TopxiaAdminBundle:Course:refund.layout.html.twig';
     }
 
-	public function findByLikeTitle($title)
-	{
-		return $this->getCourseService()->findCoursesByLikeTitle($title);
-	}
+    public function findByLikeTitle($title)
+    {
+        return $this->getCourseService()->findCoursesByLikeTitle($title);
+    }
 
-	public function auditRefundOrder($id, $pass, $data)
-	{
-		$order = $this->getOrderService()->getOrder($id);
-		if ($pass) {
+    public function auditRefundOrder($id, $pass, $data)
+    {
+        $order = $this->getOrderService()->getOrder($id);
+        if ($pass) {
             if ($this->getCourseMemberService()->isCourseStudent($order['targetId'], $order['userId'])) {
                 $this->getCourseMemberService()->removeStudent($order['targetId'], $order['userId']);
             }
@@ -37,13 +38,12 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
                 $this->getCourseMemberService()->unlockStudent($order['targetId'], $order['userId']);
             }
         }
+    }
 
-	}
-
-	public function cancelRefundOrder($id)
-	{
-		$this->getCourseOrderService()->cancelRefundOrder($id);
-	}
+    public function cancelRefundOrder($id)
+    {
+        $this->getCourseOrderService()->cancelRefundOrder($id);
+    }
 
     public function getTarget($id)
     {
@@ -65,7 +65,7 @@ class CourseOrderRefundProcessor implements OrderRefundProcessor
         return ServiceKernel::instance()->createService('Course:CourseOrderService');
     }
 
-	protected function getCourseService()
+    protected function getCourseService()
     {
         return ServiceKernel::instance()->createService('Course:CourseService');
     }

@@ -1,8 +1,8 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
-
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 
@@ -51,6 +51,7 @@ class ClassroomThreadAdminController extends BaseController
 
         return $this->createJsonResponse(true);
     }
+
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');

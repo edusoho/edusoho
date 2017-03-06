@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\ArrayToolkit;
@@ -18,19 +19,34 @@ class TestpaperManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
 
         return $this->forward('AppBundle:Testpaper/Manage:check', array(
-            'request'  => $request,
+            'request' => $request,
             'resultId' => $resultId,
-            'source'   => 'course',
-            'targetId' => $course['id']
+            'source' => 'course',
+            'targetId' => $course['id'],
+        ));
+    }
+
+    /**
+     * 仅作为8.0之前版本通知使用.
+     */
+    public function checkForwordAction(Request $request, $resultId)
+    {
+        $result = $this->getTestpaperService()->getTestpaperResult($resultId);
+
+        return $this->forward('AppBundle:Course/TestpaperManage:check', array(
+            'request' => $request,
+            'resultId' => $result['id'],
+            'source' => 'course',
+            'targetId' => $result['courseId'],
         ));
     }
 
     public function checkListAction(Request $request, $id)
     {
-        $course    = $this->getCourseService()->getCourse($id);
-        $course    = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
+        $course = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $user      = $this->getUser();
+        $user = $this->getUser();
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
         $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'testpaper');
@@ -40,19 +56,19 @@ class TestpaperManageController extends BaseController
         $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByIds($testpaperActivityIds);
 
         return $this->render('course-manage/testpaper-check/check-list.html.twig', array(
-            'courseSet'    => $courseSet,
-            'course'       => $course,
-            'isTeacher'    => $isTeacher,
-            'testpaperIds' => ArrayToolkit::column($testpaperActivities, 'mediaId')
+            'courseSet' => $courseSet,
+            'course' => $course,
+            'isTeacher' => $isTeacher,
+            'testpaperIds' => ArrayToolkit::column($testpaperActivities, 'mediaId'),
         ));
     }
 
     public function resultListAction(Request $request, $id, $testpaperId)
     {
-        $course    = $this->getCourseService()->getCourse($id);
-        $course    = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
+        $course = $this->getCourseService()->getCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($course['id'], $course['courseSetId']);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $user      = $this->getUser();
+        $user = $this->getUser();
 
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
 
@@ -63,10 +79,10 @@ class TestpaperManageController extends BaseController
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
 
         return $this->render('course-manage/testpaper-check/result-list.html.twig', array(
-            'course'    => $course,
+            'course' => $course,
             'courseSet' => $courseSet,
             'testpaper' => $testpaper,
-            'isTeacher' => $isTeacher
+            'isTeacher' => $isTeacher,
         ));
     }
 

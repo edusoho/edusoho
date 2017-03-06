@@ -5,8 +5,8 @@ namespace Biz\Course\Copy\Impl;
 use AppBundle\Common\ArrayToolkit;
 
 /**
- * Class CourseSetTestpaperCopy
- * @package Biz\Course\Copy\Impl
+ * Class CourseSetTestpaperCopy.
+ *
  * @deprecated
  * @see ActivityTestpaperCopy
  */
@@ -44,10 +44,10 @@ class CourseSetTestpaperCopy extends TestpaperCopy
 
         $newTestpapers = array();
         foreach ($testpapers as $testpaper) {
-            $newTestpaper                = $this->baseCopyTestpaper($testpaper, $isCopy);
+            $newTestpaper = $this->baseCopyTestpaper($testpaper, $isCopy);
             $newTestpaper['courseSetId'] = $newCourseSet['id'];
-            $newTestpaper['courseId']    = 0;
-            $newTestpaper['target']      = 'course-'.$newCourseSet['id'];
+            $newTestpaper['courseId'] = 0;
+            $newTestpaper['target'] = 'course-'.$newCourseSet['id'];
 
             $newTestpaper = $this->getTestpaperService()->createTestpaper($newTestpaper);
             $this->doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy);

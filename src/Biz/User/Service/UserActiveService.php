@@ -9,5 +9,4 @@ interface UserActiveService
     public function isActiveUser($userId);
 
     public function analysisActiveUser($startTime, $endTime);
-
 }

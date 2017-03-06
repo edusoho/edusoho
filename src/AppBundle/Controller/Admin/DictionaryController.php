@@ -1,36 +1,39 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
 
 class DictionaryController extends BaseController
 {
-	public function indexAction(Request $Request)
-	{
-		$dictionaryItems = $this->getDictionaryService()->findAllDictionaryItemsOrderByWeight();
+    public function indexAction(Request $Request)
+    {
+        $dictionaryItems = $this->getDictionaryService()->findAllDictionaryItemsOrderByWeight();
         $dictionaries = $this->getDictionaryService()->findAllDictionaries();
-		return $this->render('admin/dictionary/index.html.twig',array(
-			'dictionaryItems' => $dictionaryItems,
-            'dictionaries' => $dictionaries
-			));
-	}
 
-	public function createAction(Request $request, $type)
+        return $this->render('admin/dictionary/index.html.twig', array(
+            'dictionaryItems' => $dictionaryItems,
+            'dictionaries' => $dictionaries,
+            ));
+    }
+
+    public function createAction(Request $request, $type)
     {
         if ($request->getMethod() == 'POST') {
-        	$conditions = $request->request->all();
-        	$conditions['type'] = $type;
-        	$conditions['createdTime'] = time();
+            $conditions = $request->request->all();
+            $conditions['type'] = $type;
+            $conditions['createdTime'] = time();
             $dictionaryItem = $this->getDictionaryService()->addDictionaryItem($conditions);
             $dictionaryItems = $this->getDictionaryService()->findAllDictionaryItemsOrderByWeight();
             $dictionaries = $this->getDictionaryService()->findAllDictionaries();
-            return $this->render('admin/dictionary/tbody.html.twig',array(
-            	'dictionaryItems' => $dictionaryItems,
-                'dictionaries' => $dictionaries
-            	));
+
+            return $this->render('admin/dictionary/tbody.html.twig', array(
+                'dictionaryItems' => $dictionaryItems,
+                'dictionaries' => $dictionaries,
+                ));
         }
 
-        return $this->render('admin/dictionary/modal.html.twig',array('type'=>$type));
+        return $this->render('admin/dictionary/modal.html.twig', array('type' => $type));
     }
 
     public function checkNameAction(Request $request, $id)
@@ -70,14 +73,15 @@ class DictionaryController extends BaseController
             $dictionaryItem = $this->getDictionaryService()->updateDictionaryItem($id, $request->request->all());
             $dictionaryItems = $this->getDictionaryService()->findAllDictionaryItemsOrderByWeight();
             $dictionaries = $this->getDictionaryService()->findAllDictionaries();
-            return $this->render('admin/dictionary/tbody.html.twig',array(
-            	'dictionaryItems' => $dictionaryItems,
-                'dictionaries' => $dictionaries
-            	));
+
+            return $this->render('admin/dictionary/tbody.html.twig', array(
+                'dictionaryItems' => $dictionaryItems,
+                'dictionaries' => $dictionaries,
+                ));
         }
 
         return $this->render('admin/dictionary/modal.html.twig', array(
-            'dictionaryItem' => $dictionaryItem
+            'dictionaryItem' => $dictionaryItem,
         ));
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Order\Service\Impl;
 
 use Biz\BaseService;
@@ -32,12 +33,14 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function findOrdersByIds(array $ids)
     {
         $orders = $this->getOrderDao()->findByIds($ids);
+
         return ArrayToolkit::index($orders, 'id');
     }
 
     public function findOrdersBySns(array $sns)
     {
         $orders = $this->getOrderDao()->findBySns($sns);
+
         return ArrayToolkit::index($orders, 'id');
     }
 
@@ -64,7 +67,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             'coupon',
             'couponDiscount',
             'discountId',
-            'discount'
+            'discount',
         ));
 
         $orderUser = $this->getUserService()->getUser($order['userId']);
@@ -105,13 +108,14 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $this->_createLog($order['id'], 'created', $this->getKernel()->trans('创建订单'));
         $this->dispatchEvent('order.service.created', new Event($order));
+
         return $order;
     }
 
     public function payOrder($payData)
     {
         $success = false;
-        $order   = $this->getOrderDao()->getBySn($payData['sn']);
+        $order = $this->getOrderDao()->getBySn($payData['sn']);
 
         if (empty($order)) {
             throw $this->createServiceException("订单({$payData['sn']})已被删除，支付失败。");
@@ -128,8 +132,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             if ($this->canOrderPay($order)) {
                 $payFields = array(
-                    'status'   => 'paid',
-                    'paidTime' => $payData['paidTime']
+                    'status' => 'paid',
+                    'paidTime' => $payData['paidTime'],
                 );
 
                 !empty($payData['payment']) ? $payFields['payment'] = $payData['payment'] : '';
@@ -164,10 +168,10 @@ class OrderServiceImpl extends BaseService implements OrderService
         $newOrder = $this->createOrder($order);
 
         $this->payOrder(array(
-            'sn'       => $newOrder['sn'],
-            'status'   => 'success',
-            'amount'   => $newOrder['amount'],
-            'paidTime' => time()
+            'sn' => $newOrder['sn'],
+            'status' => 'success',
+            'amount' => $newOrder['amount'],
+            'paidTime' => time(),
         ));
 
         return $newOrder;
@@ -216,18 +220,21 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function analysisAmount($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getOrderDao()->analysisAmount($conditions);
     }
 
     public function analysisCoinAmount($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getOrderDao()->analysisCoinAmount($conditions);
     }
 
     public function analysisTotalPrice($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getOrderDao()->analysisTotalPrice($conditions);
     }
 
@@ -268,7 +275,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function generateOrderSn($order)
     {
-        $prefix = empty($order['snPrefix']) ? 'E' : (string)$order['snPrefix'];
+        $prefix = empty($order['snPrefix']) ? 'E' : (string) $order['snPrefix'];
+
         return $prefix.date('YmdHis', time()).mt_rand(10000, 99999);
     }
 
@@ -288,13 +296,13 @@ class OrderServiceImpl extends BaseService implements OrderService
         $user = $this->getCurrentUser();
 
         $log = array(
-            'orderId'     => $orderId,
-            'type'        => $type,
-            'message'     => $message,
-            'data'        => json_encode($data),
-            'userId'      => $user->id,
-            'ip'          => $user->currentIp,
-            'createdTime' => time()
+            'orderId' => $orderId,
+            'type' => $type,
+            'message' => $message,
+            'data' => json_encode($data),
+            'userId' => $user->id,
+            'ip' => $user->currentIp,
+            'createdTime' => time(),
         );
 
         return $this->getOrderLogDao()->create($log);
@@ -312,11 +320,11 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('当前订单状态不能取消订单！');
         }
 
-        $payment = $this->getSettingService()->get("payment");
+        $payment = $this->getSettingService()->get('payment');
 
-        if (isset($payment["enabled"]) && $payment["enabled"] == 1
-            && isset($payment[$order["payment"]."_enabled"]) && $payment[$order["payment"]."_enabled"] == 1
-            && isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1
+        if (isset($payment['enabled']) && $payment['enabled'] == 1
+            && isset($payment[$order['payment'].'_enabled']) && $payment[$order['payment'].'_enabled'] == 1
+            && isset($payment['close_trade_enabled']) && $payment['close_trade_enabled'] == 1
         ) {
             $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
         }
@@ -331,7 +339,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function createPayRecord($id, array $payData)
     {
         $order = $this->getOrder($id);
-        $data  = $order['data'];
+        $data = $order['data'];
 
         if (!is_array($data)) {
             $data = json_decode($order['data'], true);
@@ -342,7 +350,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $fields = array('data' => $data);
-        $order  = $this->updateOrder($id, $fields);
+        $order = $this->updateOrder($id, $fields);
         $this->_createLog($order['id'], 'pay_create', '创建交易', $payData);
     }
 
@@ -420,25 +428,25 @@ class OrderServiceImpl extends BaseService implements OrderService
 
             if (intval($expectedAmount * 100) === 0) {
                 $status = 'success';
-            };
+            }
         }
 
         $refund = $this->getOrderRefundDao()->create(array(
-            'orderId'        => $order['id'],
-            'userId'         => $order['userId'],
-            'targetType'     => $order['targetType'],
-            'targetId'       => $order['targetId'],
-            'status'         => $status,
+            'orderId' => $order['id'],
+            'userId' => $order['userId'],
+            'targetType' => $order['targetType'],
+            'targetId' => $order['targetId'],
+            'status' => $status,
             'expectedAmount' => $expectedAmount,
-            'reasonType'     => empty($reason['type']) ? 'other' : $reason['type'],
-            'reasonNote'     => empty($reason['note']) ? '' : $reason['note'],
-            'updatedTime'    => time(),
-            'createdTime'    => time(),
-            'operator'       => empty($reason['operator']) ? 0 : $reason['operator']
+            'reasonType' => empty($reason['type']) ? 'other' : $reason['type'],
+            'reasonNote' => empty($reason['note']) ? '' : $reason['note'],
+            'updatedTime' => time(),
+            'createdTime' => time(),
+            'operator' => empty($reason['operator']) ? 0 : $reason['operator'],
         ));
         $this->getOrderDao()->update($order['id'], array(
-            'status'   => ($refund['status'] == 'success') ? 'paid' : 'refunding',
-            'refundId' => $refund['id']
+            'status' => ($refund['status'] == 'success') ? 'paid' : 'refunding',
+            'refundId' => $refund['id'],
         ));
 
         if ($refund['status'] == 'success') {
@@ -483,29 +491,29 @@ class OrderServiceImpl extends BaseService implements OrderService
                 $actualAmount = 0;
             }
 
-            $actualAmount = number_format((float)$actualAmount, 2, '.', '');
+            $actualAmount = number_format((float) $actualAmount, 2, '.', '');
 
             $this->getOrderRefundDao()->update($refund['id'], array(
-                'status'       => 'success',
-                'operator'     => $user->id,
+                'status' => 'success',
+                'operator' => $user->id,
                 'actualAmount' => $actualAmount,
-                'updatedTime'  => time()
+                'updatedTime' => time(),
             ));
 
             $this->getOrderDao()->update($order['id'], array(
-                'status' => 'refunded'
+                'status' => 'refunded',
             ));
 
             $this->_createLog($order['id'], 'refund_success', "退款申请(ID:{$refund['id']})已审核通过：{$note}");
         } else {
             $this->getOrderRefundDao()->update($refund['id'], array(
-                'status'      => 'failed',
-                'operator'    => $user->id,
-                'updatedTime' => time()
+                'status' => 'failed',
+                'operator' => $user->id,
+                'updatedTime' => time(),
             ));
 
             $this->getOrderDao()->update($order['id'], array(
-                'status' => 'paid'
+                'status' => 'paid',
             ));
 
             $this->_createLog($order['id'], 'refund_failed', "退款申请(ID:{$refund['id']})已审核未通过：{$note}");
@@ -545,13 +553,13 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $this->getOrderRefundDao()->update($refund['id'], array(
-            'status'      => 'cancelled',
-            'operator'    => $user->id,
-            'updatedTime' => time()
+            'status' => 'cancelled',
+            'operator' => $user->id,
+            'updatedTime' => time(),
         ));
 
         $this->getOrderDao()->update($order['id'], array(
-            'status' => 'paid'
+            'status' => 'paid',
         ));
 
         $this->getLogService()->info('order', 'refund_cancel', "审核退款申请#{$refund['id']}");
@@ -560,7 +568,6 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function searchOrders($conditions, $sort, $start, $limit)
     {
-
         if (!is_array($sort)) {
             if ($sort == 'early') {
                 $orderBy = array('createdTime' => 'ASC');
@@ -581,6 +588,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function countUserBillNum($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getOrderDao()->countBill($conditions);
     }
 
@@ -592,6 +600,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function countOrders($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getOrderDao()->count($conditions);
     }
 
@@ -620,43 +629,43 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         if (isset($conditions['date'])) {
             $dates = array(
-                'yesterday'  => array(
+                'yesterday' => array(
                     strtotime('yesterday'),
-                    strtotime('today')
-                ),
-                'today'      => array(
                     strtotime('today'),
-                    strtotime('tomorrow')
                 ),
-                'this_week'  => array(
+                'today' => array(
+                    strtotime('today'),
+                    strtotime('tomorrow'),
+                ),
+                'this_week' => array(
                     strtotime('Monday this week'),
-                    strtotime('Monday next week')
-                ),
-                'last_week'  => array(
-                    strtotime('Monday last week'),
-                    strtotime('Monday this week')
-                ),
-                'next_week'  => array(
                     strtotime('Monday next week'),
-                    strtotime('Monday next week', strtotime('Monday next week'))
+                ),
+                'last_week' => array(
+                    strtotime('Monday last week'),
+                    strtotime('Monday this week'),
+                ),
+                'next_week' => array(
+                    strtotime('Monday next week'),
+                    strtotime('Monday next week', strtotime('Monday next week')),
                 ),
                 'this_month' => array(
                     strtotime('first day of this month midnight'),
-                    strtotime('first day of next month midnight')
+                    strtotime('first day of next month midnight'),
                 ),
                 'last_month' => array(
                     strtotime('first day of last month midnight'),
-                    strtotime('first day of this month midnight')
+                    strtotime('first day of this month midnight'),
                 ),
                 'next_month' => array(
                     strtotime('first day of next month midnight'),
-                    strtotime('first day of next month midnight', strtotime('first day of next month midnight'))
-                )
+                    strtotime('first day of next month midnight', strtotime('first day of next month midnight')),
+                ),
             );
 
             if (array_key_exists($conditions['date'], $dates)) {
                 $conditions['paidStartTime'] = $dates[$conditions['date']][0];
-                $conditions['paidEndTime']   = $dates[$conditions['date']][1];
+                $conditions['paidEndTime'] = $dates[$conditions['date']][1];
                 unset($conditions['date']);
             }
         }
@@ -669,15 +678,15 @@ class OrderServiceImpl extends BaseService implements OrderService
         unset($conditions['keyword']);
 
         if (isset($conditions['buyer'])) {
-            $user                 = $this->getUserService()->getUserByNickname($conditions['buyer']);
+            $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
         if (isset($conditions['mobile'])) {
-            $user                 = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
+            $user = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
         if (isset($conditions['email'])) {
-            $user                 = $this->getUserService()->getUserByEmail($conditions['email']);
+            $user = $this->getUserService()->getUserByEmail($conditions['email']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
 
@@ -696,7 +705,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException('更新订单失败：支付流水号不存在。');
         }
 
-        $this->getOrderDao()->update($id, array("cashSn" => $cashSn));
+        $this->getOrderDao()->update($id, array('cashSn' => $cashSn));
     }
 
     public function analysisPaidOrderGroupByTargetType($startTime, $groupBy)
@@ -782,5 +791,4 @@ class OrderServiceImpl extends BaseService implements OrderService
     {
         return $this->createService('PayCenter:PayCenterService');
     }
-
 }

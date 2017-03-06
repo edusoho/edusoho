@@ -2,31 +2,30 @@
 
 namespace AppBundle\Extensions\DataTag\Test;
 
-use Biz\BaseTestCase;;
-use AppBundle\Common\ArrayToolkit;
+use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\ArticleCategoryDataTag;
 
 class ArticleCategoryDataTagTest extends BaseTestCase
-{   
+{
     /**
      * @group current
+     *
      * @return [type] [description]
      */
     public function testGetData()
     {
-
         $category1 = $this->getCategoryService()->createCategory(array(
             'name' => 'category 1',
             'code' => 'c1',
             'weight' => 1,
-            'parentId' => 0
+            'parentId' => 0,
         ));
 
         $category2 = $this->getCategoryService()->createCategory(array(
             'name' => 'category 2',
             'code' => 'c2',
             'weight' => 1,
-            'parentId' => 0
+            'parentId' => 0,
         ));
 
         $category1_1 = $this->getCategoryService()->createCategory(array(
@@ -67,5 +66,4 @@ class ArticleCategoryDataTagTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Article:CategoryService');
     }
-
 }

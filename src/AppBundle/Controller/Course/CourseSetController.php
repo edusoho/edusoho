@@ -39,6 +39,7 @@ class CourseSetController extends BaseController
             if (!empty($set['course']['teacherIds']) && is_array($set['course']['teacherIds'])) {
                 $userIds = array_merge($userIds, $set['course']['teacherIds']);
             }
+
             return $set;
         }, $courseSets);
 
@@ -46,28 +47,30 @@ class CourseSetController extends BaseController
 
         return $this->render("course-set/block/course-block-{$view}.html.twig", array(
             'courseSets' => $courseSets,
-            'users'      => $users,
-            'mode'       => $mode
+            'users' => $users,
+            'mode' => $mode,
         ));
     }
 
     public function favoriteAction($id)
     {
         $success = $this->getCourseSetService()->favorite($id);
+
         return $this->createJsonResponse($success);
     }
 
     public function unfavoriteAction($id)
     {
         $success = $this->getCourseSetService()->unfavorite($id);
+
         return $this->createJsonResponse($success);
     }
 
     public function archiveAction()
     {
         $conditions = array(
-            'status'   => 'published',
-            'parentId' => '0'
+            'status' => 'published',
+            'parentId' => '0',
         );
 
         $paginator = new Paginator(
@@ -86,53 +89,55 @@ class CourseSetController extends BaseController
         $userIds = array();
 
         foreach ($courseSets as &$courseSet) {
-            $tagIds            = $this->getTagIdsByCourseSet($courseSet);
+            $tagIds = $this->getTagIdsByCourseSet($courseSet);
             $courseSet['tags'] = $this->getTagService()->findTagsByIds($tagIds);
-            $userIds           = array_merge($userIds, array($courseSet['creator']));
+            $userIds = array_merge($userIds, array($courseSet['creator']));
         }
 
         $users = $this->getUserService()->findUsersByIds($userIds);
+
         return $this->render('course-set/archive/index.html.twig', array(
             'courseSets' => $courseSets,
-            'paginator'  => $paginator,
-            'users'      => $users
+            'paginator' => $paginator,
+            'users' => $users,
         ));
     }
 
     public function archiveDetailAction($courseSetId)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($courseSet['id']);
+        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($courseSet['id']);
 
-        $tasks    = $this->getTaskService()->findTasksByCourseId($course['id']);
-        $tagIds   = $this->getTagIdsByCourseSet($courseSet);
-        $tags     = $this->getTagService()->findTagsByIds($tagIds);
+        $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
+        $tagIds = $this->getTagIdsByCourseSet($courseSet);
+        $tags = $this->getTagService()->findTagsByIds($tagIds);
         $category = $this->getCategoryService()->getCategory($courseSet['categoryId']);
         if (!$course) {
             $courseDescription = array();
         } else {
             $courseDescription = $course['about'];
             $courseDescription = strip_tags($courseDescription, '');
-            $courseDescription = preg_replace("/ /", "", $courseDescription);
+            $courseDescription = preg_replace('/ /', '', $courseDescription);
             $courseDescription = substr($courseDescription, 0, 100);
         }
+
         return $this->render('course-set/archive/course.html.twig', array(
-            'courseSet'         => $courseSet,
-            'course'            => $course,
-            'tasks'             => $tasks,
-            'tags'              => $tags,
-            'category'          => $category,
-            'courseDescription' => $courseDescription
+            'courseSet' => $courseSet,
+            'course' => $course,
+            'tasks' => $tasks,
+            'tags' => $tags,
+            'category' => $category,
+            'courseDescription' => $courseDescription,
         ));
     }
 
     public function archiveTaskAction($courseSetId, $taskId)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course    = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($courseSet['id']);
+        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($courseSet['id']);
 
         $tagIds = $this->getTagIdsByCourseSet($courseSet);
-        $tags   = $this->getTagService()->findTagsByIds($tagIds);
+        $tags = $this->getTagService()->findTagsByIds($tagIds);
 
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
         if ($taskId == '' && $tasks != null) {
@@ -140,18 +145,20 @@ class CourseSetController extends BaseController
         } else {
             $currentTask = $this->getTaskService()->getTask($taskId);
         }
+
         return $this->render('course-set/archive/task.html.twig', array(
-            'course'      => $course,
-            'courseSet'   => $courseSet,
-            'tasks'       => $tasks,
+            'course' => $course,
+            'courseSet' => $courseSet,
+            'tasks' => $tasks,
             'currentTask' => $currentTask,
-            'tags'        => $tags
+            'tags' => $tags,
         ));
     }
 
     protected function getTagIdsByCourseSet(array $courseSet)
     {
         $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'course-set', 'ownerId' => $courseSet['id']));
+
         return ArrayToolkit::column($tags, 'id');
     }
 

@@ -15,13 +15,13 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
         }
 
         $fields = array(
-            'activityId'  => $activity['id'],
-            'userId'      => $this->getCurrentUser()->getId(),
-            'event'       => $eventName,
-            'watchTime'   => !empty($data['watchTime']) ? $data['watchTime'] : 0,
+            'activityId' => $activity['id'],
+            'userId' => $this->getCurrentUser()->getId(),
+            'event' => $eventName,
+            'watchTime' => !empty($data['watchTime']) ? $data['watchTime'] : 0,
             'learnedTime' => !empty($data['learnedTime']) ? $data['learnedTime'] : 0,
-            'data'        => $data,
-            'createdTime' => time()
+            'data' => $data,
+            'createdTime' => time(),
         );
 
         if (!empty($data['task'])) {
@@ -45,23 +45,24 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
         return $this->getActivityLearnLogDao()->sumWatchTimeByActivityIdAndUserId($activityId, $userId);
     }
 
-
     public function sumMyLearnedTimeByActivityId($activityId)
     {
         $user = $this->getCurrentUser();
+
         return $this->getActivityLearnLogDao()->sumLearnedTimeByActivityIdAndUserId($activityId, $user['id']);
     }
 
     public function findMyLearnLogsByActivityIdAndEvent($activityId, $event)
     {
         $user = $this->getCurrentUser();
+
         return $this->getActivityLearnLogDao()->findByActivityIdAndUserIdAndEvent($activityId, $user['id'], $event);
     }
 
     public function calcLearnProcessByCourseIdAndUserId($courseId, $userId)
     {
-        $daysCount         = $this->getActivityLearnLogDao()->countLearnedDaysByCourseIdAndUserId($courseId, $userId);
-        $learnedTime       = $this->getActivityLearnLogDao()->sumLearnedTimeByCourseIdAndUserId($courseId, $userId);
+        $daysCount = $this->getActivityLearnLogDao()->countLearnedDaysByCourseIdAndUserId($courseId, $userId);
+        $learnedTime = $this->getActivityLearnLogDao()->sumLearnedTimeByCourseIdAndUserId($courseId, $userId);
         $learnedTimePerDay = $daysCount > 0 ? $learnedTime / $daysCount : 0;
 
         return array($daysCount, $learnedTime, $learnedTimePerDay);
@@ -70,6 +71,7 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
     public function sumLearnTime($conditions)
     {
         $result = $this->getActivityLearnLogDao()->sumLearnTime($conditions);
+
         return intval($result / 60);
     }
 

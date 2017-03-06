@@ -1,9 +1,9 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
-use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,7 +14,7 @@ class PartnerDiscuzController extends BaseController
         $this->initUcenter();
 
         $_DCACHE = $get = $post = array();
-        $code    = @$_GET['code'];
+        $code = @$_GET['code'];
         parse_str(uc_authcode($code, 'DECODE', UC_KEY), $get);
         if (MAGIC_QUOTES_GPC) {
             $get = $this->stripslashes($get);
@@ -31,7 +31,7 @@ class PartnerDiscuzController extends BaseController
 
         $this->requireClientFile('lib/xml.class.php');
 
-        $xml  = file_get_contents('php://input');
+        $xml = file_get_contents('php://input');
         $post = xml_unserialize($xml);
 
         if (!in_array($get['action'], array('test', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcreditsettings', 'updatecreditsettings'))) {
@@ -40,6 +40,7 @@ class PartnerDiscuzController extends BaseController
 
         $method = 'do'.ucfirst($get['action']);
         $result = $this->$method($request, $get, $post);
+
         return new Response($result);
     }
 
@@ -63,7 +64,7 @@ class PartnerDiscuzController extends BaseController
         }
 
         $bindUser = $this->getUserService()->getUserBindByTypeAndFromId('discuz', $get['uid']);
-        $user     = $this->getUserService()->getUser($bindUser['toId']);
+        $user = $this->getUserService()->getUser($bindUser['toId']);
         $this->getUserService()->changeNickname($user['id'], $get['newusername']);
 
         return API_RETURN_SUCCEED;
@@ -90,12 +91,12 @@ class PartnerDiscuzController extends BaseController
 
         if (empty($bind)) {
             $registration = array(
-                'nickname'    => $get['username'],
-                'email'       => $partnerUser[2],
-                'password'    => substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8),
+                'nickname' => $get['username'],
+                'email' => $partnerUser[2],
+                'password' => substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8),
                 'createdTime' => $get['time'],
-                'createdIp'   => $request->getClientIp(),
-                'token'       => array('userId' => $get['uid'])
+                'createdIp' => $request->getClientIp(),
+                'token' => array('userId' => $get['uid']),
             );
 
             if (!$this->getAuthService()->isRegisterEnabled()) {
@@ -140,12 +141,13 @@ class PartnerDiscuzController extends BaseController
         if (is_array($post)) {
             foreach ($post as $k => $v) {
                 $data['findpattern'][$k] = $v['findpattern'];
-                $data['replace'][$k]     = $v['replacement'];
+                $data['replace'][$k] = $v['replacement'];
             }
         }
         $content = "<?php\r\n";
         $content .= '$_CACHE[\'badwords\'] = '.var_export($data, true).";\r\n";
         $this->writeCacheFile('badwords.php', $content);
+
         return API_RETURN_SUCCEED;
     }
 
@@ -157,6 +159,7 @@ class PartnerDiscuzController extends BaseController
         $content = "<?php\r\n";
         $content .= '$_CACHE[\'hosts\'] = '.var_export($post, true).";\r\n";
         $this->writeCacheFile('hosts.php', $content);
+
         return API_RETURN_SUCCEED;
     }
 
@@ -235,7 +238,7 @@ class PartnerDiscuzController extends BaseController
 
         defined('MAGIC_QUOTES_GPC') || define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
 
-        $setting      = $this->getSettingService()->get('user_partner');
+        $setting = $this->getSettingService()->get('user_partner');
         $discuzConfig = $setting['partner_config']['discuz'];
 
         foreach ($discuzConfig as $key => $value) {
@@ -260,7 +263,7 @@ class PartnerDiscuzController extends BaseController
         }
 
         $cachefile = $cacheDirectory.$filename;
-        $fp        = fopen($cachefile, 'w');
+        $fp = fopen($cachefile, 'w');
         fwrite($fp, $content);
         fclose($fp);
     }
@@ -274,6 +277,7 @@ class PartnerDiscuzController extends BaseController
         } else {
             $string = stripslashes($string);
         }
+
         return $string;
     }
 
@@ -292,5 +296,4 @@ class PartnerDiscuzController extends BaseController
     {
         return $this->getBiz()->service('System:SettingService');
     }
-
 }

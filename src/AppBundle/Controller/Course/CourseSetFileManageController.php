@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
@@ -20,14 +21,14 @@ class CourseSetFileManageController extends BaseController
 
         if ($courseSet['locked']) {
             return $this->redirectToRoute('course_set_manage_sync', array(
-                'id'      => $id,
-                'sideNav' => 'files'
+                'id' => $id,
+                'sideNav' => 'files',
             ));
         }
 
         $conditions = array(
             'courseSetId' => $courseSet['id'],
-            'type'        => 'course'
+            'type' => 'course',
         );
         // XXX
         // if ($courseSet['parentId'] > 0 && $courseSet['locked'] == 1) {
@@ -54,12 +55,12 @@ class CourseSetFileManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
         return $this->render('courseset-manage/file/index.html.twig', array(
-            'courseSet'  => $courseSet,
-            'files'      => $files,
-            'users'      => ArrayToolkit::index($users, 'id'),
-            'paginator'  => $paginator,
-            'now'        => time(),
-            'filesQuote' => $filesQuote
+            'courseSet' => $courseSet,
+            'files' => $files,
+            'users' => ArrayToolkit::index($users, 'id'),
+            'paginator' => $paginator,
+            'now' => time(),
+            'filesQuote' => $filesQuote,
         ));
     }
 
@@ -89,7 +90,7 @@ class CourseSetFileManageController extends BaseController
         $materialCount = $this->getMaterialService()->countMaterials(
             array(
                 'courseSetId' => $id,
-                'fileId'      => $fileId
+                'fileId' => $fileId,
             )
         );
 
@@ -130,11 +131,12 @@ class CourseSetFileManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         $storageSetting = $this->getSettingService()->get('storage', array());
+
         return $this->render('courseset-manage/file/modal-upload-course-files.html.twig', array(
-            'courseSet'      => $courseSet,
+            'courseSet' => $courseSet,
             'storageSetting' => $storageSetting,
-            'targetType'     => $targetType,
-            'targetId'       => $id
+            'targetType' => $targetType,
+            'targetId' => $id,
         ));
     }
 
@@ -142,16 +144,16 @@ class CourseSetFileManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
-        $fileIds   = $request->request->get('ids');
+        $fileIds = $request->request->get('ids');
         $materials = $this->getMaterialService()->findUsedCourseMaterials($fileIds, $id);
-        $files     = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
-        $files     = ArrayToolkit::index($files, 'id');
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds, 0);
+        $files = ArrayToolkit::index($files, 'id');
 
         return $this->render('courseset-manage/file/file-delete-modal.html.twig', array(
             'courseSet' => $courseSet,
             'materials' => $materials,
-            'files'     => $files,
-            'ids'       => $fileIds
+            'files' => $files,
+            'ids' => $fileIds,
         ));
     }
 
@@ -217,7 +219,7 @@ class CourseSetFileManageController extends BaseController
         $file['filename'] = urlencode($file['filename']);
         $file['filename'] = str_replace('+', '%20', $file['filename']);
 
-        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+        if (preg_match('/MSIE/i', $request->headers->get('User-Agent'))) {
             $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
         } else {
             $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Common;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -11,6 +12,7 @@ class PluginToolkit
         if (isset($plugins[$code])) {
             return true;
         }
+
         return false;
     }
 
@@ -18,8 +20,9 @@ class PluginToolkit
     {
         $plugins = self::getPlugins();
         if (isset($plugins[$code])) {
-            return $plugins[$code]["version"];
+            return $plugins[$code]['version'];
         }
+
         return null;
     }
 
@@ -28,8 +31,10 @@ class PluginToolkit
         $dir = ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/plugin_installed.php';
         if (file_exists($dir)) {
             $plugins = include $dir;
-            return $plugins["installed"];
+
+            return $plugins['installed'];
         }
+
         return array();
     }
 }

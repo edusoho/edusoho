@@ -1,16 +1,18 @@
 <?php
+
 namespace AppBundle\Common;
 
 class TreeToolkit
 {
     /**
-     * [maketree description]
-     * @param  array    $data       需要排序的数组,本身要支持层级关系
-     * @param  [string] $parentId
-     * @param  string   $sort       排序的字段
-     * @return [array]  tree data
+     * [maketree description].
+     *
+     * @param array    $data     需要排序的数组,本身要支持层级关系
+     * @param [string] $parentId
+     * @param string   $sort     排序的字段
+     *
+     * @return [array] tree data
      */
-
     public static function makeTree(array $data, $sort, $parentId = 0)
     {
         $tree = self::makeParentTree($data, $sort, $parentId);
@@ -39,6 +41,7 @@ class TreeToolkit
         $sortArray = ArrayToolkit::column($filtered, $sort);
 
         array_multisort($sortArray, $filtered);
+
         return $filtered;
     }
 
@@ -46,6 +49,7 @@ class TreeToolkit
     {
         $parentIds = ArrayToolkit::column($data, 'parentId');
         sort($parentIds);
+
         return array_shift($parentIds);
     }
 }

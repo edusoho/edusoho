@@ -2,7 +2,6 @@
 
 namespace Biz\Taxonomy\Service\Impl;
 
-
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Dao\TagDao;
@@ -17,7 +16,7 @@ class TagServiceImpl extends BaseService implements TagService
 {
     private $allowFields
         = array(
-            'name', 'scope', 'tagNum'
+            'name', 'scope', 'tagNum',
         );
 
     public function getTag($id)
@@ -100,12 +99,14 @@ class TagServiceImpl extends BaseService implements TagService
     public function searchTags($conditions, $start, $limit)
     {
         $conditions = $this->_prepareConditions($conditions);
+
         return $this->getTagDao()->search($conditions, array(), $start, $limit);
     }
 
     public function searchTagCount($conditions)
     {
         $conditions = $this->_prepareConditions($conditions);
+
         return $this->getTagDao()->count($conditions);
     }
 
@@ -114,7 +115,7 @@ class TagServiceImpl extends BaseService implements TagService
         $magic = $this->getSettingService()->get('magic');
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
-            $user                = $this->getCurrentUser();
+            $user = $this->getCurrentUser();
             $conditions['orgId'] = !empty($user['org']) ? $user['org']['id'] : null;
         }
 
@@ -163,11 +164,11 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function addTag(array $tag)
     {
-        $tag                = ArrayToolkit::parts($tag, array('name'));
-        $tag                = $this->filterTagFields($tag);
+        $tag = ArrayToolkit::parts($tag, array('name'));
+        $tag = $this->filterTagFields($tag);
         $tag['createdTime'] = time();
-        $tag                = $this->setTagOrg($tag);
-        $tag                = $this->getTagDao()->create($tag);
+        $tag = $this->setTagOrg($tag);
+        $tag = $this->getTagDao()->create($tag);
 
         $this->getLogService()->info('tag', 'create', "添加标签{$tag['name']}(#{$tag['id']})");
 
@@ -177,11 +178,11 @@ class TagServiceImpl extends BaseService implements TagService
     public function addTagGroup($fields)
     {
         if (empty($fields['name'])) {
-            throw $this->createServiceException("标签组名字未填写，请添加");
+            throw $this->createServiceException('标签组名字未填写，请添加');
         }
 
         if ($this->getTagGroupDao()->getByName($fields['name'])) {
-            throw $this->createServiceException("标签组名字已存在，请重新填写");
+            throw $this->createServiceException('标签组名字已存在，请重新填写');
         }
 
         $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
@@ -194,7 +195,7 @@ class TagServiceImpl extends BaseService implements TagService
 
         foreach ($tagIds as $tagId) {
             $this->getTagGroupTagDao()->create(array(
-                'tagId'   => $tagId,
+                'tagId' => $tagId,
                 'groupId' => $tagGroup['id'],
             ));
         }
@@ -217,14 +218,14 @@ class TagServiceImpl extends BaseService implements TagService
             return $tag;
         }
 
-        $user       = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $currentOrg = $user['org'];
 
         if (empty($currentOrg)) {
             return $tag;
         }
 
-        $tag['orgId']   = $currentOrg['id'];
+        $tag['orgId'] = $currentOrg['id'];
         $tag['orgCode'] = $currentOrg['orgCode'];
 
         return $tag;
@@ -242,6 +243,7 @@ class TagServiceImpl extends BaseService implements TagService
         $this->filterTagFields($fields, $tag);
 
         $this->getLogService()->info('tag', 'update', "编辑标签{$fields['name']}(#{$id})");
+
         return $this->getTagDao()->update($id, $fields);
     }
 
@@ -296,7 +298,7 @@ class TagServiceImpl extends BaseService implements TagService
 
         $this->getTagDao()->delete($id);
 
-        $this->dispatchEvent("tag.delete", array('tagId' => $id));
+        $this->dispatchEvent('tag.delete', array('tagId' => $id));
         $this->getLogService()->info('tag', 'delete', "编辑标签#{$id}");
     }
 
@@ -320,7 +322,7 @@ class TagServiceImpl extends BaseService implements TagService
             throw $this->createServiceException($this->getKernel()->trans('标签名不能为空，添加失败！'));
         }
 
-        $tag['name'] = (string)$tag['name'];
+        $tag['name'] = (string) $tag['name'];
 
         $exclude = $relatedTag ? $relatedTag['name'] : null;
 
@@ -330,7 +332,6 @@ class TagServiceImpl extends BaseService implements TagService
 
         return $tag;
     }
-
 
     protected function filterTagGroupFields($fields)
     {
@@ -386,5 +387,4 @@ class TagServiceImpl extends BaseService implements TagService
     {
         return ServiceKernel::instance();
     }
-
 }
