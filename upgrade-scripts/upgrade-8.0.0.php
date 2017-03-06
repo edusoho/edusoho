@@ -35,9 +35,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function batchUpdate($index)
     {
-        // $this->c2courseSetMigrate();
-        // $this->c2courseMigrate();
-        // $this->c2CourseLessonMigrate();
+        $this->c2courseSetMigrate();
+        $this->c2courseMigrate();
+        $this->c2CourseLessonMigrate();
         $this->c2testpaperMigrate();
     }
 
@@ -86,8 +86,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $sqls = array(
             "alter table c2_course_set change id id int(10);"
-            ,"alter table c2_course_set drop primary key;"
-            ,"INSERT INTO `c2_course_set` (
+            , "alter table c2_course_set drop primary key;"
+            , "INSERT INTO `c2_course_set` (
               `id`
               ,`title`
               ,`subtitle`
@@ -148,12 +148,12 @@ class EduSohoUpgrade extends AbstractUpdater
               ,`userId`
               ,`about`
           FROM `course` where `id` not in (select `id` from `c2_course_set`);"
-          ,"alter table c2_course_set add primary key(id);"
-          ,"alter table c2_course_set change id id int(10) not null auto_increment;"
+            , "alter table c2_course_set add primary key(id);"
+            , "alter table c2_course_set change id id int(10) not null auto_increment;",
         );
 
         foreach ($sqls as $sql) {
-          $result = $this->getConnection()->exec($sql);
+            $result = $this->getConnection()->exec($sql);
         }
 
         $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseId`;";
@@ -230,8 +230,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $sqls = array(
             "alter table c2_course change id id int(10);"
-            ,"alter table c2_course drop primary key;"
-            ,"INSERT INTO `c2_course` (
+            , "alter table c2_course drop primary key;"
+            , "INSERT INTO `c2_course` (
               `id`
               ,`title`
               ,`status`
@@ -334,11 +334,11 @@ class EduSohoUpgrade extends AbstractUpdater
               ,1
               ,'freeMode'
           FROM `course` where `id` not in (select `id` from `c2_course`);"
-          ,"alter table c2_course add primary key(id);"
-          ,"alter table c2_course change id id int(10) not null auto_increment;"
+            , "alter table c2_course add primary key(id);"
+            , "alter table c2_course change id id int(10) not null auto_increment;",
         );
         foreach ($sqls as $sql) {
-          $result = $this->getConnection()->exec($sql);
+            $result = $this->getConnection()->exec($sql);
         }
 
         $sql = "UPDATE `c2_course` AS `c` SET `c`.`courseSetId` =  `c`.`id`";
@@ -1027,11 +1027,9 @@ class EduSohoUpgrade extends AbstractUpdater
             }
             $passedCondition = empty($testpaper['passedStatus']) ? '' : json_encode(array($testpaper['passedStatus']));
 
-            $courseSql = "select * from c2_course where oldCourseId = ".$courseArr[1];
-            $newCourse = $this->getConnection()->fetchAssoc($courseSql);
-            $courseSetId = $newCourse['courseSetId'];
+            $courseSetId = $courseArr[1];
 
-            $insertSql = "insert into c2_testpaper (id,name,description,courseId,lessonId,limitedTime,pattern,target,status,score,passedCondition,itemCount,createdUserId,createdTime,updatedUserId,updatedTime,metas,copyId,type,courseSetId,oldTestId) values({$testpaper['id']},'".$testpaper['name']."','".$testpaper['description']."',{$courseArr[1]},{$lessonId},{$testpaper['limitedTime']},'questionType','".$testpaper['target']."','".$testpaper['status']."',{$testpaper['score']},'".$passedCondition."',{$testpaper['itemCount']},{$testpaper['createdUserId']},{$testpaper['createdTime']},{$testpaper['updatedUserId']},{$testpaper['updatedTime']},'".$testpaper['metas']."',{$testpaper['copyId']},'testpaper',{$courseSetId},{$testpaper['id']})";
+            $insertSql = "insert into c2_testpaper (id,name,description,courseId,lessonId,limitedTime,pattern,target,status,score,passedCondition,itemCount,createdUserId,createdTime,updatedUserId,updatedTime,metas,copyId,type,courseSetId,oldTestId) values({$testpaper['id']},'".$testpaper['name']."','".$testpaper['description']."',{$courseSetId},{$lessonId},{$testpaper['limitedTime']},'questionType','".$testpaper['target']."','".$testpaper['status']."',{$testpaper['score']},'".$passedCondition."',{$testpaper['itemCount']},{$testpaper['createdUserId']},{$testpaper['createdTime']},{$testpaper['updatedUserId']},{$testpaper['updatedTime']},'".$testpaper['metas']."',{$testpaper['copyId']},'testpaper',{$courseSetId},{$testpaper['id']})";
             $this->getConnection()->exec($insertSql);
         }
 
@@ -1040,7 +1038,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->exec($sql);
 
         //testpaper_result
-        $sql = "insert into c2_testpaper_result(id,paperName,testId,userId,courseId,lessonId,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,oldResultId,type) select (id,paperName,testId,userId,courseId,lessonId,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,id,'testpaper') from c2_testpaper_result";
+        $sql = "insert into c2_testpaper_result(id,paperName,testId,userId,courseId,lessonId,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,oldResultId,type) select id,paperName,testId,userId,0,0,score,objectiveScore,subjectiveScore,teacherSay,rightItemCount,passedStatus,limitedTime,beginTime,endTime,updateTime,active,status,target,checkTeacherId,checkedTime,usedTime,id as oldResultId,'testpaper' from testpaper_result";
         $this->getConnection()->exec($sql);
 
         $sql = "select * from c2_testpaper_result";
@@ -1050,16 +1048,18 @@ class EduSohoUpgrade extends AbstractUpdater
             $courseArr = explode('-', $targetArr[0]);
             $lessonArr = explode('-', $targetArr[1]);
 
-            $courseSql = "select * from c2_course where oldCourseId = ".$courseArr[1];
-            $newCourse = $this->getConnection()->fetchAssoc($courseSql);
+            $courseSql = "select * from c2_course where id = ".$courseArr[1];
+            $course = $this->getConnection()->fetchAssoc($courseSql);
 
-            $sql = "update c2_testpaper_result set courseId={$newCourse['id']},courseSetId={$newCourse['courseSetId']} where id={$testpaperResult['id']}";
+            $lessonId = empty($lessonArr[1]) ? 0 : $lessonArr[1];
+
+            $sql = "update c2_testpaper_result set courseId={$course['id']},courseSetId={$course['courseSetId']},lessonId = {$lessonId} where id={$testpaperResult['id']}";
 
             $this->getConnection()->exec($sql);
         }
 
         //testpaper_item_result
-        $sql = "insert into c2_testpaper_item_result (id,itemId,testId,resultId,userId,questionId,status,score,answer,teacherSay,pId,oldItemResultId,type) select(id,itemId,testId,testPaperResultId,userId,questionId,status,score,answer,teacherSay,pId,id,'testpaper') from testpaper_item_result";
+        $sql = "insert into c2_testpaper_item_result (id,itemId,testId,resultId,userId,questionId,status,score,answer,teacherSay,pId,oldItemResultId,type) select id,itemId,testId,testPaperResultId,userId,questionId,status,score,answer,teacherSay,pId,id,'testpaper' from testpaper_item_result";
         $this->getConnection()->exec($sql);
 
         $sql = "update c2_testpaper_item_result as ir set ir.testId = (select id from c2_testpaper where oldTestId = ir.testId)";
@@ -1089,9 +1089,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         foreach ($homeworks as $homework) {
-            $courseSql = "select * from c2_course where oldCourseId = ".$courseArr[1];
-            $newCourse = $this->getConnection()->fetchAssoc($courseSql);
-            $courseSetId = $newCourse['courseSetId'];
+            $courseSetId = $homework['courseId'];
 
             $passedCondition = !empty($homework['correctPercent']) ? $homework['correctPercent'] : null;
 
@@ -1128,7 +1126,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 teacherSay,
                 rightItemCount,
                 passedStatus,
-                updatedTime,
+                updateTime,
                 status,
                 checkTeacherId,
                 checkedTime,
@@ -1157,8 +1155,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $sql = "update c2_testpaper_result as tr set
             testId = (select id from c2_testpaper where oldTestId = tr.testId and type='homework'),
-            courseId = (select id from c2_course where oldCourseId = tr.courseId),
-            courseSetId = (select id from c2_course_set where oldCourseId = tr.courseId),
+            courseId = (select id from c2_course where id = tr.courseId),
+            courseSetId = (select id from c2_course_set where id = tr.courseId),
             lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='homework')
             where type = 'homework'";
         $this->exec($sql);
@@ -1209,9 +1207,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         foreach ($exercises as $exercise) {
-            $courseSql = "select * from c2_course where oldCourseId = ".$courseArr[1];
-            $newCourse = $this->getConnection()->fetchAssoc($courseSql);
-            $courseSetId = $newCourse['courseSetId'];
+            $courseSetId = $exercise['courseId'];
 
             $passedCondition = json_encode(array('type' => 'submit'));
             $metas = null;
@@ -1266,7 +1262,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 courseId,
                 lessonId,
                 rightItemCount,
-                updatedTime,
+                updateTime,
                 status,
                 usedTime,
                 type,
@@ -1288,8 +1284,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $sql = "update c2_testpaper_result as tr set
             testId = (select id from c2_testpaper where oldTestId = tr.testId and type='exercise'),
-            courseId = (select id from c2_course where oldCourseId = tr.courseId),
-            courseSetId = (select id from c2_course_set where oldCourseId = tr.courseId),
+            courseId = (select id from c2_course where id = tr.courseId),
+            courseSetId = (select id from c2_course_set where id = tr.courseId),
             lessonId = (select activityId from course_task where lessonId = tr.lessonId and type='exercise')
             where type = 'exercise'";
         $this->exec($sql);
