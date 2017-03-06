@@ -28,7 +28,7 @@ class Courses extends CourseBaseResource
 
         $next = isset($conditions['cursor']) ? $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses) :
             $this->getCourseService()->searchCourseCount($conditions);
-        return $this->wrap($this->multicallFilter('Courses', $courses), $next);
+        return $this->wrap($courses, $next);
     }
 
     public function discoveryColumn(Application $app, Request $request)
@@ -82,7 +82,6 @@ class Courses extends CourseBaseResource
 
     public function filter($course)
     {
-        $course = $this->convertOldFields($course);
         return $course;
     }
 
@@ -102,6 +101,7 @@ class Courses extends CourseBaseResource
 
         foreach ($courses as &$course) {
             $course = $this->filledCourseByCourseSet($course, $courseSets[$course['courseSetId']]);
+            $course = $this->convertOldFields($course);
             if (isset($categories[$course['categoryId']])) {
                 $course['category'] = array(
                     'id'   => $categories[$course['categoryId']]['id'],
