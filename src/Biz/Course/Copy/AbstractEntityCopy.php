@@ -21,9 +21,9 @@ abstract class AbstractEntityCopy
 
     public function __construct($biz, $node)
     {
-        $this->biz  = $biz;
+        $this->biz = $biz;
         $this->node = $node;
-        $chain      = call_user_func($this->biz['course_copy.chains'], $node);
+        $chain = call_user_func($this->biz['course_copy.chains'], $node);
         if (!empty($chain) && !empty($chain['children'])) {
             $this->children = $chain['children'];
         } else {
@@ -34,10 +34,12 @@ abstract class AbstractEntityCopy
     /**
      * 当前copy实体的业务逻辑，注意：
      * 1. 不需要考虑事务
-     * 2. 不需要考虑子实体的复制
-     * @param  mixed   $source   要copy的对象
-     * @param  mixed   $parent
-     * @param  array   $config
+     * 2. 不需要考虑子实体的复制.
+     *
+     * @param mixed $source 要copy的对象
+     * @param mixed $parent
+     * @param array $config
+     *
      * @return mixed
      */
     abstract protected function _copy($source, $config = array());
@@ -54,10 +56,12 @@ abstract class AbstractEntityCopy
     }
 
     /**
-     * copy链中的各环节在一个事务中
-     * @param  mixed   $source 要copy的对象
-     * @param  mixed   $parent copy链中已创建的直接父类对象
-     * @param  array   $config 配置信息
+     * copy链中的各环节在一个事务中.
+     *
+     * @param mixed $source 要copy的对象
+     * @param mixed $parent copy链中已创建的直接父类对象
+     * @param array $config 配置信息
+     *
      * @return mixed
      */
     public function copy($source, $config = array())
@@ -75,6 +79,7 @@ abstract class AbstractEntityCopy
             $result = $this->_copy($source, $config);
 
             $this->biz['db']->commit();
+
             return $result;
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
@@ -90,6 +95,7 @@ abstract class AbstractEntityCopy
             $result = $callback();
 
             $this->biz['db']->commit();
+
             return $result;
         } catch (\Exception $e) {
             $this->biz['db']->rollback();

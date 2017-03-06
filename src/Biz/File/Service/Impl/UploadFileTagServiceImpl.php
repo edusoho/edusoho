@@ -2,7 +2,6 @@
 
 namespace Biz\File\Service\Impl;
 
-
 use Biz\BaseService;
 use Biz\File\Dao\UploadFileTagDao;
 use Biz\File\Service\UploadFileTagService;
@@ -37,12 +36,14 @@ class UploadFileTagServiceImpl extends BaseService implements UploadFileTagServi
     public function deleteByFileId($fileId)
     {
         $result = $this->getUploadFileTagDao()->deleteByFileId($fileId);
+
         return $result;
     }
 
     public function deleteByTagId($tagId)
     {
         $result = $this->getUploadFileTagDao()->deleteByTagId($tagId);
+
         return $result;
     }
 
@@ -56,16 +57,16 @@ class UploadFileTagServiceImpl extends BaseService implements UploadFileTagServi
             foreach ($tagIds as $tagId) {
                 $condition = array(
                     'fileId' => $fileId,
-                    'tagId'  => $tagId
+                    'tagId' => $tagId,
                 );
-                $result    = $this->getUploadFileTagDao()->create($condition);
+                $result = $this->getUploadFileTagDao()->create($condition);
             }
         }
         if (empty($result)) {
             $result = array();
         }
-        return $result;
 
+        return $result;
     }
 
     /**

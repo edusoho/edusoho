@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
@@ -12,10 +13,10 @@ class MaterialController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         $conditions = array(
-            'courseId'        => $course['id'],
+            'courseId' => $course['id'],
             'excludeLessonId' => 0,
-            'source'          => 'coursematerial',
-            'type'            => 'course'
+            'source' => 'coursematerial',
+            'type' => 'course',
         );
 
         $paginator = new Paginator(
@@ -26,7 +27,7 @@ class MaterialController extends CourseBaseController
 
         $materials = $this->getMaterialService()->searchMaterials(
             $conditions,
-            array('createdTime'=> 'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -34,13 +35,13 @@ class MaterialController extends CourseBaseController
         $tasks = $this->getTaskService()->searchTasks(array('courseId' => $course['id'], 'type' => 'download'), array(), 0, 100);
         $tasks = ArrayToolkit::index($tasks, 'activityId');
 
-        return $this->render("course/tabs/material.html.twig", array(
+        return $this->render('course/tabs/material.html.twig', array(
             'courseSet' => $courseSet,
-            'course'    => $course,
-            'member'    => $member,
-            'tasks'     => $tasks,
+            'course' => $course,
+            'member' => $member,
+            'tasks' => $tasks,
             'materials' => $materials,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
@@ -89,6 +90,7 @@ class MaterialController extends CourseBaseController
         $course = $this->getCourseService()->tryManageCourse($id);
 
         $this->getCourseService()->deleteCourseMaterial($id, $materialId);
+
         return $this->createJsonResponse(true);
     }
 

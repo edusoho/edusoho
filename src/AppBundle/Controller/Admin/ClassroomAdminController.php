@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +13,7 @@ class ClassroomAdminController extends BaseController
         $conditions = $request->query->all();
 
         $conditions = $this->fillOrgCode($conditions);
-        $paginator  = new Paginator(
+        $paginator = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->searchClassroomsCount($conditions),
             10
@@ -27,18 +28,18 @@ class ClassroomAdminController extends BaseController
 
         $classroomIds = ArrayToolkit::column($classroomInfo, 'id');
 
-        $coinPriceAll        = array();
-        $priceAll            = array();
+        $coinPriceAll = array();
+        $priceAll = array();
         $classroomCoursesNum = array();
 
         $cashRate = $this->getCashRate();
 
         foreach ($classroomIds as $key => $value) {
-            $courses                     = $this->getClassroomService()->findActiveCoursesByClassroomId($value);
+            $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($value);
             $classroomCoursesNum[$value] = count($courses);
 
             $coinPrice = 0;
-            $price     = 0;
+            $price = 0;
 
             foreach ($courses as $course) {
                 $coinPrice += $course['price'] * $cashRate;
@@ -46,18 +47,18 @@ class ClassroomAdminController extends BaseController
             }
 
             $coinPriceAll[$value] = $coinPrice;
-            $priceAll[$value]     = $price;
+            $priceAll[$value] = $price;
         }
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classroomInfo, 'categoryId'));
 
         return $this->render('admin/classroom/index.html.twig', array(
-            'classroomInfo'       => $classroomInfo,
-            'paginator'           => $paginator,
+            'classroomInfo' => $classroomInfo,
+            'paginator' => $paginator,
             'classroomCoursesNum' => $classroomCoursesNum,
-            'priceAll'            => $priceAll,
-            'coinPriceAll'        => $coinPriceAll,
-            'categories'          => $categories
+            'priceAll' => $priceAll,
+            'coinPriceAll' => $coinPriceAll,
+            'categories' => $categories,
         ));
     }
 
@@ -66,7 +67,7 @@ class ClassroomAdminController extends BaseController
         $classroomSetting = $this->getSettingService()->get('classroom', array());
 
         $default = array(
-            'explore_default_orderBy' => 'createdTime'
+            'explore_default_orderBy' => 'createdTime',
         );
 
         $classroomSetting = array_merge($default, $classroomSetting);
@@ -81,7 +82,7 @@ class ClassroomAdminController extends BaseController
         }
 
         return $this->render('admin/classroom/set.html.twig', array(
-            'classroomSetting' => $classroomSetting
+            'classroomSetting' => $classroomSetting,
         ));
     }
 
@@ -105,7 +106,7 @@ class ClassroomAdminController extends BaseController
             if (empty($title)) {
                 $this->setFlashMessage('danger', '班级名称不能为空！');
 
-                return $this->render("admin/classroom/classroomadd.html.twig");
+                return $this->render('admin/classroom/classroomadd.html.twig');
             }
 
             $isClassroomExisted = $this->getClassroomService()->findClassroomByTitle($title);
@@ -113,7 +114,7 @@ class ClassroomAdminController extends BaseController
             if (!empty($isClassroomExisted)) {
                 $this->setFlashMessage('danger', '班级名称已被使用，创建班级失败！');
 
-                return $this->render("admin/classroom/classroomadd.html.twig");
+                return $this->render('admin/classroom/classroomadd.html.twig');
             }
 
             if (!array_key_exists('buyable', $myClassroom)) {
@@ -121,9 +122,9 @@ class ClassroomAdminController extends BaseController
             }
 
             $classroom = array(
-                'title'    => $myClassroom['title'],
+                'title' => $myClassroom['title'],
                 'showable' => $myClassroom['showable'],
-                'buyable'  => $myClassroom['buyable']
+                'buyable' => $myClassroom['buyable'],
             );
 
             if (array_key_exists('orgCode', $myClassroom)) {
@@ -137,7 +138,7 @@ class ClassroomAdminController extends BaseController
             return $this->redirect($this->generateUrl('classroom_manage', array('id' => $classroom['id'])));
         }
 
-        return $this->render("admin/classroom/classroomadd.html.twig");
+        return $this->render('admin/classroom/classroomadd.html.twig');
     }
 
     public function closeClassroomAction($id)
@@ -168,7 +169,7 @@ class ClassroomAdminController extends BaseController
     public function recommendAction(Request $request, $id)
     {
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $ref       = $request->query->get('ref');
+        $ref = $request->query->get('ref');
 
         if ($request->getMethod() == 'POST') {
             $number = $request->request->get('number');
@@ -177,7 +178,7 @@ class ClassroomAdminController extends BaseController
 
             if ($ref == 'recommendList') {
                 return $this->render('admin/classroom/recommend-tr.html.twig', array(
-                    'classroom' => $classroom
+                    'classroom' => $classroom,
                 ));
             }
 
@@ -186,18 +187,18 @@ class ClassroomAdminController extends BaseController
 
         return $this->render('admin/classroom/recommend-modal.html.twig', array(
             'classroom' => $classroom,
-            'ref'       => $ref
+            'ref' => $ref,
         ));
     }
 
     public function cancelRecommendAction(Request $request, $id)
     {
         $classroom = $this->getClassroomService()->cancelRecommendClassroom($id);
-        $ref       = $request->query->get('ref');
+        $ref = $request->query->get('ref');
 
         if ($ref == 'recommendList') {
             return $this->render('admin/classroom/recommend-tr.html.twig', array(
-                'classroom' => $classroom
+                'classroom' => $classroom,
             ));
         }
 
@@ -207,8 +208,8 @@ class ClassroomAdminController extends BaseController
     public function recommendListAction()
     {
         $conditions = array(
-            'status'      => 'published',
-            'recommended' => 1
+            'status' => 'published',
+            'recommended' => 1,
         );
 
         $paginator = new Paginator(
@@ -228,27 +229,27 @@ class ClassroomAdminController extends BaseController
 
         return $this->render('admin/classroom/recommend-list.html.twig', array(
             'classrooms' => $classrooms,
-            'users'      => $users,
-            'paginator'  => $paginator,
-            'ref'        => 'recommendList'
+            'users' => $users,
+            'paginator' => $paginator,
+            'ref' => 'recommendList',
         ));
     }
 
     public function chooserAction(Request $request)
     {
-        $conditions             = $request->query->all();
-        $conditions["parentId"] = 0;
+        $conditions = $request->query->all();
+        $conditions['parentId'] = 0;
 
-        if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
-            unset($conditions["categoryId"]);
+        if (isset($conditions['categoryId']) && $conditions['categoryId'] == '') {
+            unset($conditions['categoryId']);
         }
 
-        if (isset($conditions["status"]) && $conditions["status"] == "") {
-            unset($conditions["status"]);
+        if (isset($conditions['status']) && $conditions['status'] == '') {
+            unset($conditions['status']);
         }
 
-        if (isset($conditions["title"]) && $conditions["title"] == "") {
-            unset($conditions["title"]);
+        if (isset($conditions['title']) && $conditions['title'] == '') {
+            unset($conditions['title']);
         }
 
         $count = $this->getClassroomService()->searchClassroomsCount($conditions);
@@ -272,20 +273,20 @@ class ClassroomAdminController extends BaseController
             'conditions' => $conditions,
             'classrooms' => $classrooms,
             'categories' => $categories,
-            'paginator'  => $paginator
+            'paginator' => $paginator,
         ));
     }
 
     private function renderClassroomTr($id, $classroom)
     {
-        $coinPrice                = 0;
-        $price                    = 0;
-        $coinPriceAll             = array();
-        $priceAll                 = array();
-        $classroomCoursesNum      = array();
-        $courses                  = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
+        $coinPrice = 0;
+        $price = 0;
+        $coinPriceAll = array();
+        $priceAll = array();
+        $classroomCoursesNum = array();
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
         $classroomCoursesNum[$id] = count($courses);
-        $cashRate                 = $this->getCashRate();
+        $cashRate = $this->getCashRate();
 
         foreach ($courses as $course) {
             $coinPrice += $course['price'] * $cashRate;
@@ -293,21 +294,22 @@ class ClassroomAdminController extends BaseController
         }
 
         $coinPriceAll[$id] = $coinPrice;
-        $priceAll[$id]     = $price;
+        $priceAll[$id] = $price;
 
         return $this->render('admin/classroom/table-tr.html.twig', array(
-            'classroom'           => $classroom,
+            'classroom' => $classroom,
             'classroomCoursesNum' => $classroomCoursesNum,
-            'coinPriceAll'        => $coinPriceAll,
-            'priceAll'            => $priceAll
+            'coinPriceAll' => $coinPriceAll,
+            'priceAll' => $priceAll,
         ));
     }
 
     protected function getCashRate()
     {
-        $coinSetting = $this->getSettingService()->get("coin");
-        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $cashRate    = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting["cash_rate"] : 1;
+        $coinSetting = $this->getSettingService()->get('coin');
+        $coinEnable = isset($coinSetting['coin_enabled']) && $coinSetting['coin_enabled'] == 1;
+        $cashRate = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting['cash_rate'] : 1;
+
         return $cashRate;
     }
 

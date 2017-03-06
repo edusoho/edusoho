@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Activity\Service;
 
 interface TestpaperActivityService

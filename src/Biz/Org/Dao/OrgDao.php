@@ -13,5 +13,4 @@ interface OrgDao
     public function findByPrefixOrgCode($orgCode);
 
     public function findByNameAndParentId($name, $parentId);
-
 }

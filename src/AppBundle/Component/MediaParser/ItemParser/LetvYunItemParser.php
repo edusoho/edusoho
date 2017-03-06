@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\MediaParser\ItemParser;
 
 use AppBundle\Component\MediaParser\ParseException;
@@ -6,7 +7,7 @@ use AppBundle\Component\MediaParser\ParseException;
 class LetvYunItemParser extends AbstractItemParser
 {
     private $patterns = array(
-        'p1' => '/^http:\/\/yuntv\.letv\.com\/bcloud\.html/s'
+        'p1' => '/^http:\/\/yuntv\.letv\.com\/bcloud\.html/s',
     );
 
     public function parse($url)
@@ -17,20 +18,20 @@ class LetvYunItemParser extends AbstractItemParser
             throw new ParseException('获取乐视视频信息失败！');
         }
 
-        $url  = str_replace('width=640&height=360', 'width=100%&height=100%', $url);
+        $url = str_replace('width=640&height=360', 'width=100%&height=100%', $url);
         $item = array(
-            "type"     => "video",
-            "source"   => "letv",
-            "uuid"     => "",
-            "name"     => "letv".md5(time().mt_rand(0, 1000)),
-            "summary"  => "",
-            "page"     => "",
-            "pictures" => array(
-                "url" => ""),
-            "files"    => array(
+            'type' => 'video',
+            'source' => 'letv',
+            'uuid' => '',
+            'name' => 'letv'.md5(time().mt_rand(0, 1000)),
+            'summary' => '',
+            'page' => '',
+            'pictures' => array(
+                'url' => '', ),
+            'files' => array(
                 array(
-                    "url"  => $url,
-                    "type" => "swf"))
+                    'url' => $url,
+                    'type' => 'swf', ), ),
         );
 
         return $item;
@@ -38,6 +39,6 @@ class LetvYunItemParser extends AbstractItemParser
 
     public function detect($url)
     {
-        return !!preg_match($this->patterns['p1'], $url);
+        return (bool) preg_match($this->patterns['p1'], $url);
     }
 }

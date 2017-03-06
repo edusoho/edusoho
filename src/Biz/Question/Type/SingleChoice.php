@@ -66,7 +66,7 @@ class SingleChoice implements TypeInterface
             'passedTimes',
             'userId',
             'updatedTime',
-            'createdTime'
+            'createdTime',
         ));
 
         return $fields;

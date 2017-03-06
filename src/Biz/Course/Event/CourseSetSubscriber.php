@@ -14,22 +14,23 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         return array(
             'courseSet.maxRate.update' => 'onCourseSetMaxRateUpdate',
-            'classroom.course.delete'  => 'onClassroomCourseDelete'
+            'classroom.course.delete' => 'onClassroomCourseDelete',
         );
     }
 
     public function onCourseSetMaxRateUpdate(Event $event)
     {
-        $subject   = $event->getSubject();
+        $subject = $event->getSubject();
         $courseSet = $subject['courseSet'];
-        $maxRate   = $subject['maxRate'];
+        $maxRate = $subject['maxRate'];
+
         return $this->getCourseService()->updateMaxRateByCourseSetId($courseSet['id'], $maxRate);
     }
 
     public function onClassroomCourseDelete(Event $event)
     {
         $courseId = $event->getArgument('deleteCourseId');
-        $course   = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
         if (empty($course) || empty($course['parentId'])) {
             return;
         }

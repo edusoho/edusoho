@@ -17,52 +17,52 @@ class AnnouncementDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('startTime' => 1),
                 'expectedResults' => array($expected[1], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('targetType' => 'varchar'),
                 'expectedResults' => array($expected[0], $expected[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('targetId' => 1),
                 'expectedResults' => array($expected[0], $expected[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('targetIds' => array(1, 2)),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('endTime' => 3),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
             ),
             array(
                 'condition' => array('orgCode' => 'varchar'),
                 'expectedResults' => array($expected[0], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('likeOrgCode' => 'var'),
                 'expectedResults' => array($expected[0], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('copyId' => 1),
                 'expectedResults' => array($expected[0], $expected[1]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
             array(
                 'condition' => array('userId' => 1),
                 'expectedResults' => array($expected[0], $expected[2]),
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ),
         );
 

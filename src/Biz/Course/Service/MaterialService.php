@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Service;
 
 interface MaterialService
@@ -36,21 +37,24 @@ interface MaterialService
     public function searchMaterialCountGroupByFileId($conditions);
 
     /**
-     * for opencourse
+     * for opencourse.
+     *
      * @param  $fileIds
      * @param  $courseId
+     *
      * @return mixed
      */
     public function findUsedCourseMaterials($fileIds, $courseId);
 
     /**
-     * for courseSet in course2.0
+     * for courseSet in course2.0.
+     *
      * @param  $fileIds
      * @param  $courseSetId
+     *
      * @return mixed
      */
     public function findUsedCourseSetMaterials($fileIds, $courseSetId);
 
     public function findFullFilesAndSort($materials);
-
 }

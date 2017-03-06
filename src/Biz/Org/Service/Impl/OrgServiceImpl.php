@@ -50,10 +50,10 @@ class OrgServiceImpl extends BaseService implements OrgService
 
         if (empty($parentOrg)) {
             $fields['orgCode'] = $org['id'].'.';
-            $fields['depth']   = 1;
+            $fields['depth'] = 1;
         } else {
             $fields['orgCode'] = $parentOrg['orgCode'].$org['id'].'.';
-            $fields['depth']   = $parentOrg['depth'] + 1;
+            $fields['depth'] = $parentOrg['depth'] + 1;
         }
 
         return $this->getOrgDao()->update($org['id'], $fields);
@@ -70,6 +70,7 @@ class OrgServiceImpl extends BaseService implements OrgService
         }
 
         $org = $this->getOrgDao()->update($id, $fields);
+
         return $org;
     }
 
@@ -97,7 +98,7 @@ class OrgServiceImpl extends BaseService implements OrgService
     {
         $user = $this->getCurrentUser();
 
-        $data              = $user->toArray();
+        $data = $user->toArray();
         $data['selectOrg'] = $this->checkBeforeProccess($id);
         $user->fromArray($data);
         $this->getKernel()->setCurrentUser($user);
@@ -122,8 +123,8 @@ class OrgServiceImpl extends BaseService implements OrgService
     {
         //是否需要对该api做用户权限处理
         if (empty($orgCode)) {
-            $user    = $this->getCurrentUser();
-            $org     = $this->getOrg($user['orgId']);
+            $user = $this->getCurrentUser();
+            $org = $this->getOrg($user['orgId']);
             $orgCode = $org['orgCode'];
         }
 
@@ -137,7 +138,8 @@ class OrgServiceImpl extends BaseService implements OrgService
         if (empty($org)) {
             return true;
         }
-        return ($org['code'] === $exclude);
+
+        return $org['code'] === $exclude;
     }
 
     private function checkBeforeProccess($id)
@@ -177,6 +179,7 @@ class OrgServiceImpl extends BaseService implements OrgService
             $orgs = ArrayToolkit::index($orgs, 'id');
             ksort($orgs);
             $orgs = ArrayToolkit::column($orgs, 'name');
+
             return implode($orgs, '->');
         }
     }
@@ -192,19 +195,21 @@ class OrgServiceImpl extends BaseService implements OrgService
         if (empty($org)) {
             return true;
         }
-        return ($org['id'] == $exclude);
+
+        return $org['id'] == $exclude;
     }
 
     public function findRelatedModuleDatas($orgId)
     {
-        $org          = $this->getOrg($orgId);
-        $modules      = OrgBatchUpdateFactory::getModules();
+        $org = $this->getOrg($orgId);
+        $modules = OrgBatchUpdateFactory::getModules();
         $modalesDatas = array();
-        $conditions   = array('likeOrgCode' => $org['orgCode']);
+        $conditions = array('likeOrgCode' => $org['orgCode']);
         foreach ($modules as $module => $service) {
-            $dispay                = OrgBatchUpdateFactory::getDispayModuleName($module);
+            $dispay = OrgBatchUpdateFactory::getDispayModuleName($module);
             $modalesDatas[$dispay] = $this->createService($service)->searchCount($conditions);
         }
+
         return array_filter($modalesDatas);
     }
 

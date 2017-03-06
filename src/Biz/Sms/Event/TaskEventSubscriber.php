@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Sms\Event;
-
 
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Crontab\Service\CrontabService;
@@ -16,15 +14,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return array(
             'course.task.unpublish' => 'onTaskUnpublish',
-            'course.task.publish'   => 'onTaskPublish',
-            'course.task.update'    => 'onTaskUpdate',
-            'course.task.delete'    => 'onTaskDelete'
+            'course.task.publish' => 'onTaskPublish',
+            'course.task.update' => 'onTaskUpdate',
+            'course.task.delete' => 'onTaskDelete',
         );
     }
 
@@ -74,13 +72,13 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         }
 
         if ($this->getSmsService()->isOpen($smsType)) {
-            $processor    = SmsProcessorFactory::create('task');
-            $return       = $processor->getUrls($task['id'], $smsType);
+            $processor = SmsProcessorFactory::create('task');
+            $return = $processor->getUrls($task['id'], $smsType);
             $callbackUrls = $return['urls'];
-            $count        = ceil($return['count'] / 1000);
+            $count = ceil($return['count'] / 1000);
             try {
-                $api    = CloudAPIFactory::create('root');
-                $result = $api->post("/sms/sendBatch", array('total' => $count, 'callbackUrls' => $callbackUrls));
+                $api = CloudAPIFactory::create('root');
+                $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
             } catch (\Exception $e) {
                 throw new ServiceException('发送失败！');
             }
@@ -89,31 +87,31 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
     protected function createJob($task, $targetType)
     {
-        $daySmsType  = 'sms_live_play_one_day';
+        $daySmsType = 'sms_live_play_one_day';
         $hourSmsType = 'sms_live_play_one_hour';
-        $dayIsOpen   = $this->getSmsService()->isOpen($daySmsType);
-        $hourIsOpen  = $this->getSmsService()->isOpen($hourSmsType);
+        $dayIsOpen = $this->getSmsService()->isOpen($daySmsType);
+        $hourIsOpen = $this->getSmsService()->isOpen($hourSmsType);
 
         if ($dayIsOpen && $task['startTime'] >= (time() + 24 * 60 * 60)) {
             $startJob = array(
-                'name'            => "SmsSendOneDayJob",
-                'cycle'           => 'once',
+                'name' => 'SmsSendOneDayJob',
+                'cycle' => 'once',
                 'nextExcutedTime' => $task['startTime'] - 24 * 60 * 60,
-                'jobClass'        => substr(__NAMESPACE__, 0, -5) . 'Job\\SmsSendOneDayJob',
-                'targetType'      => $targetType,
-                'targetId'        => $task['id']
+                'jobClass' => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneDayJob',
+                'targetType' => $targetType,
+                'targetId' => $task['id'],
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }
 
         if ($hourIsOpen && $task['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
-                'name'            => "SmsSendOneHourJob",
-                'cycle'           => 'once',
+                'name' => 'SmsSendOneHourJob',
+                'cycle' => 'once',
                 'nextExcutedTime' => $task['startTime'] - 60 * 60,
-                'jobClass'        => substr(__NAMESPACE__, 0, -5) . 'Job\\SmsSendOneHourJob',
-                'targetType'      => $targetType,
-                'targetId'        => $task['id']
+                'jobClass' => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneHourJob',
+                'targetType' => $targetType,
+                'targetId' => $task['id'],
             );
             $startJob = $this->getCrontabService()->createJob($startJob);
         }

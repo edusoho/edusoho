@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Common\Exception;
 
 class ResourceNotFoundException extends BaseException
@@ -12,7 +13,7 @@ class ResourceNotFoundException extends BaseException
         parent::__construct(404, array('找不到资源%resourceType%#%resourceId%', array('%resourceType%' => $resourceType, '%resourceId%' => $resourceId), $message), null, $headers, $code);
 
         $this->resourceType = $resourceType;
-        $this->resourceId   = $resourceId;
+        $this->resourceId = $resourceId;
     }
 
     public function getResourceType()

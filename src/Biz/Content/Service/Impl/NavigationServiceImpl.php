@@ -1,7 +1,6 @@
 <?php
+
 namespace Biz\Content\Service\Impl;
-
-
 
 use Biz\BaseService;
 use Biz\Content\Dao\NavigationDao;
@@ -40,12 +39,14 @@ class NavigationServiceImpl extends BaseService implements NavigationService
     public function searchNavigationCount($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getNavigationDao()->count($conditions);
     }
 
     public function searchNavigations($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getNavigationDao()->search($conditions, $orderBy, $start, $limit);
     }
 
@@ -55,7 +56,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $magic = $this->getSettingService()->get('magic');
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
-            $user                = $this->getCurrentUser();
+            $user = $this->getCurrentUser();
             $conditions['orgId'] = $user->getSelectOrgId();
         }
 
@@ -64,15 +65,15 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     public function getOpenedNavigationsTreeByType($type)
     {
-        $user       = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $conditions = array(
-            'type'   => $type,
+            'type' => $type,
             'isOpen' => 1,
-            'orgId'  => $user->getSelectOrgId()
+            'orgId' => $user->getSelectOrgId(),
         );
 
-        $count       = $this->searchNavigationCount($conditions);
-        if($count==0){
+        $count = $this->searchNavigationCount($conditions);
+        if ($count == 0) {
             return array();
         }
 
@@ -130,8 +131,8 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     public function getNavigationsListByType($type)
     {
-        $conditions  = array('type' => $type);
-        $count       = $this->searchNavigationCount($conditions);
+        $conditions = array('type' => $type);
+        $count = $this->searchNavigationCount($conditions);
         $navigations = $this->searchNavigations(
             $conditions,
             array('sequence' => 'ASC'),
@@ -163,14 +164,14 @@ class NavigationServiceImpl extends BaseService implements NavigationService
     protected function makeNavigationTreeList(&$tree, &$navigations, $parentId)
     {
         static $depth = 0;
-        static $leaf  = false;
+        static $leaf = false;
         if (isset($navigations[$parentId]) && is_array($navigations[$parentId])) {
             foreach ($navigations[$parentId] as $nav) {
-                $depth++;
+                ++$depth;
                 $nav['depth'] = $depth;
-                $tree[]       = $nav;
+                $tree[] = $nav;
                 $this->makeNavigationTreeList($tree, $navigations, $nav['id']);
-                $depth--;
+                --$depth;
             }
         }
 
@@ -179,7 +180,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
 
     public function createNavigation($fields)
     {
-        $keysArray    = array('name', 'url', 'isOpen', 'isNewWin', 'type', 'sequence', 'parentId');
+        $keysArray = array('name', 'url', 'isOpen', 'isNewWin', 'type', 'sequence', 'parentId');
         $keysOfFields = array_keys($fields);
         foreach ($keysOfFields as $key => $keyOfFields) {
             if (!in_array($keyOfFields, $keysArray)) {
@@ -187,10 +188,10 @@ class NavigationServiceImpl extends BaseService implements NavigationService
             }
         }
 
-        $fields                = $this->setNavigationOrg($fields);
+        $fields = $this->setNavigationOrg($fields);
         $fields['createdTime'] = $fields['updateTime'] = time();
-        $fields['sequence']    = $this->getNavigationDao()->countByType($fields['type']) + 1;
-        $result                = $this->getNavigationDao()->create($fields);
+        $fields['sequence'] = $this->getNavigationDao()->countByType($fields['type']) + 1;
+        $result = $this->getNavigationDao()->create($fields);
 
         $this->getLogService()->info('info', 'navigation_create', "创建导航{$fields['name']}");
 
@@ -205,18 +206,18 @@ class NavigationServiceImpl extends BaseService implements NavigationService
             return $fields;
         }
 
-        $user       = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $currentOrg = $user['org'];
 
         if (empty($fields['parentId'])) {
             if (empty($user['org'])) {
                 return $fields;
             }
-            $fields['orgId']   = $currentOrg['id'];
+            $fields['orgId'] = $currentOrg['id'];
             $fields['orgCode'] = $currentOrg['orgCode'];
         } else {
-            $parentNavigation  = $this->getNavigation($fields['parentId']);
-            $fields['orgId']   = $parentNavigation['orgId'];
+            $parentNavigation = $this->getNavigation($fields['parentId']);
+            $fields['orgId'] = $parentNavigation['orgId'];
             $fields['orgCode'] = $parentNavigation['orgCode'];
         }
 
@@ -241,7 +242,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $index = 1;
         foreach ($ids as $key => $id) {
             $this->updateNavigation($id, array('sequence' => $index));
-            $index++;
+            ++$index;
         }
     }
 

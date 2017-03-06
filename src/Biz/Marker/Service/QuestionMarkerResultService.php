@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Marker\Service;
 
 interface QuestionMarkerResultService
@@ -16,5 +17,4 @@ interface QuestionMarkerResultService
     public function findByUserIdAndMarkerId($userId, $markerId);
 
     public function findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
-
 }

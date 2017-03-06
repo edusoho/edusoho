@@ -17,13 +17,13 @@ class CourseSetDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array('id' => range(1, 3)),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
             array(
                 'condition' => array('status' => 'draft'),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
-            )
+                'expectedCount' => 3,
+            ),
         );
 
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
@@ -32,10 +32,10 @@ class CourseSetDaoTest extends BaseDaoTestCase
     public function testFindByIds()
     {
         $expected = array();
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $expected[] = $this->mockDataObject();
         }
-        
+
         $res = $this->getDao()->findByIds(range(1, 10));
 
         $this->assertEquals($expected, $res);
@@ -64,7 +64,7 @@ class CourseSetDaoTest extends BaseDaoTestCase
             'ratingNum' => 1,
             'rating' => 1,
             'noteNum' => 1,
-            'studentNum' => 1
+            'studentNum' => 1,
         );
     }
 }

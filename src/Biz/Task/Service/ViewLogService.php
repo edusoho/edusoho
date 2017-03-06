@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Task\Service;
-
 
 interface ViewLogService
 {

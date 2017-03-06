@@ -26,7 +26,7 @@ class DiscoveryColumnController extends BaseController
             $conditions = array();
 
             if ($discoveryColumn['type'] == 'classroom') {
-                $conditions['status']   = 'published';
+                $conditions['status'] = 'published';
                 $conditions['showable'] = 1;
 
                 if ($discoveryColumn['orderType'] == 'recommend') {
@@ -34,7 +34,7 @@ class DiscoveryColumnController extends BaseController
                 }
 
                 if ($discoveryColumn['categoryId']) {
-                    $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($discoveryColumn['categoryId']);
+                    $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($discoveryColumn['categoryId']);
                     $conditions['categoryIds'] = array_merge(array($discoveryColumn['categoryId']), $childrenIds);
                 }
 
@@ -59,15 +59,15 @@ class DiscoveryColumnController extends BaseController
                 }
 
                 $conditions['parentId'] = 0;
-                $conditions['status']   = 'published';
-                $courses                = $this->getCourseSetService()->searchCourseSets($conditions, 'createdTime', 0, $discoveryColumn['showCount']);
+                $conditions['status'] = 'published';
+                $courses = $this->getCourseSetService()->searchCourseSets($conditions, 'createdTime', 0, $discoveryColumn['showCount']);
 
                 $discoveryColumns[$key]['count'] = count($courses);
             }
         }
 
         return $this->render('admin/discovery-column/index.html.twig', array(
-            'discoveryColumns' => $discoveryColumns
+            'discoveryColumns' => $discoveryColumns,
         ));
     }
 
@@ -76,7 +76,7 @@ class DiscoveryColumnController extends BaseController
         $categoryId = array();
 
         if ($request->getMethod() == 'POST') {
-            $conditions                = $request->request->all();
+            $conditions = $request->request->all();
             $conditions['createdTime'] = time();
 
             if (empty($conditions['categoryId'])) {
@@ -106,7 +106,7 @@ class DiscoveryColumnController extends BaseController
 
         return $this->render('admin/discovery-column/discovery-column-modal.html.twig', array(
             'discoveryColumn' => $discoveryColumn,
-            'categoryId'      => $categoryId
+            'categoryId' => $categoryId,
         ));
     }
 
@@ -130,18 +130,19 @@ class DiscoveryColumnController extends BaseController
             }
 
             $discoveryColumn = $this->getDiscoveryColumnService()->updateDiscoveryColumn($id, $conditions);
+
             return $this->redirect($this->generateUrl('admin_discovery_column_index'));
         }
 
         return $this->render('admin/discovery-column/discovery-column-modal.html.twig', array(
             'discoveryColumn' => $discoveryColumn,
-            'categoryId'      => $discoveryColumn['categoryId']
+            'categoryId' => $discoveryColumn['categoryId'],
         ));
     }
 
     public function checkTitleAction(Request $request, $id)
     {
-        $title           = $request->query->get('value');
+        $title = $request->query->get('value');
         $discoveryColumn = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle($title);
 
         if (empty($title)) {
@@ -158,7 +159,7 @@ class DiscoveryColumnController extends BaseController
     public function sortAction(Request $request)
     {
         $data = $request->request->get('data');
-        $ids  = ArrayToolkit::column($data, 'id');
+        $ids = ArrayToolkit::column($data, 'id');
 
         if (!empty($ids)) {
             $this->getDiscoveryColumnService()->sortDiscoveryColumns($ids);

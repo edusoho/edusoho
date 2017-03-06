@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
@@ -13,24 +14,24 @@ class OpenCourseController extends BaseController
 
         $conditions['types'] = array('open', 'liveOpen');
 
-        if (empty($conditions["categoryId"])) {
-            unset($conditions["categoryId"]);
+        if (empty($conditions['categoryId'])) {
+            unset($conditions['categoryId']);
         }
 
-        if (empty($conditions["title"])) {
-            unset($conditions["title"]);
+        if (empty($conditions['title'])) {
+            unset($conditions['title']);
         }
 
-        if (empty($conditions["creator"])) {
-            unset($conditions["creator"]);
+        if (empty($conditions['creator'])) {
+            unset($conditions['creator']);
         }
 
         $count = $this->getOpenCourseService()->countCourses($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
-        $courses   = $this->getOpenCourseService()->searchCourses(
+        $courses = $this->getOpenCourseService()->searchCourses(
             $conditions,
-            array('createdTime'=>'DESC'),
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -42,14 +43,14 @@ class OpenCourseController extends BaseController
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render('admin/open-course/index.html.twig', array(
-            'tags'       => empty($tags) ? '' : $tags,
-            'courses'    => $courses,
+            'tags' => empty($tags) ? '' : $tags,
+            'courses' => $courses,
             'categories' => $categories,
-            'users'      => $users,
-            'paginator'  => $paginator,
-            'default'    => $default,
+            'users' => $users,
+            'paginator' => $paginator,
+            'default' => $default,
             'classrooms' => array(),
-            'filter'     => $filter
+            'filter' => $filter,
         ));
     }
 
@@ -73,6 +74,7 @@ class OpenCourseController extends BaseController
     public function closeAction(Request $request, $id)
     {
         $this->getOpenCourseService()->closeCourse($id);
+
         return $this->renderOpenCourseTr($id, $request);
     }
 
@@ -92,6 +94,7 @@ class OpenCourseController extends BaseController
 
         if ($course['status'] == 'draft') {
             $result = $this->getOpenCourseService()->deleteCourse($courseId);
+
             return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
         }
 
@@ -114,8 +117,8 @@ class OpenCourseController extends BaseController
 
     public function recommendListAction(Request $request)
     {
-        $conditions                = $request->query->all();
-        $conditions['status']      = 'published';
+        $conditions = $request->query->all();
+        $conditions['status'] = 'published';
         $conditions['recommended'] = 1;
 
         $paginator = new Paginator(
@@ -126,7 +129,7 @@ class OpenCourseController extends BaseController
 
         $courses = $this->getOpenCourseService()->searchCourses(
             $conditions,
-            array('recommendedSeq'=>'ASC'),
+            array('recommendedSeq' => 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -136,10 +139,10 @@ class OpenCourseController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courses, 'categoryId'));
 
         return $this->render('admin/open-course/recommend-list.html.twig', array(
-            'courses'    => $courses,
-            'users'      => $users,
-            'paginator'  => $paginator,
-            'categories' => $categories
+            'courses' => $courses,
+            'users' => $users,
+            'paginator' => $paginator,
+            'categories' => $categories,
         ));
     }
 
@@ -147,12 +150,12 @@ class OpenCourseController extends BaseController
     {
         $course = $this->getOpenCourseService()->getCourse($id);
 
-        $ref    = $request->query->get('ref');
+        $ref = $request->query->get('ref');
         $filter = $request->query->get('filter');
 
         if ($request->getMethod() == 'POST') {
-            $formData['recommended']     = 1;
-            $formData['recommendedSeq']  = $request->request->get('number');
+            $formData['recommended'] = 1;
+            $formData['recommendedSeq'] = $request->request->get('number');
             $formData['recommendedTime'] = time();
 
             $course = $this->getOpenCourseService()->updateCourse($id, $formData);
@@ -162,7 +165,7 @@ class OpenCourseController extends BaseController
             if ($ref == 'recommendList') {
                 return $this->render('admin/open-course/recommend-tr.html.twig', array(
                     'course' => $course,
-                    'user'   => $user
+                    'user' => $user,
                 ));
             }
 
@@ -171,8 +174,8 @@ class OpenCourseController extends BaseController
 
         return $this->render('admin/open-course/recommend-modal.html.twig', array(
             'course' => $course,
-            'ref'    => $ref,
-            'filter' => $filter
+            'ref' => $ref,
+            'filter' => $filter,
         ));
     }
 
@@ -182,7 +185,7 @@ class OpenCourseController extends BaseController
 
         if ($target == 'recommend_list') {
             return $this->forward('AppBundle:Admin/OpenCourse:recommendList', array(
-                'request' => $request
+                'request' => $request,
             ));
         }
 
@@ -193,16 +196,16 @@ class OpenCourseController extends BaseController
 
     protected function renderOpenCourseTr($courseId, $request)
     {
-        $fields  = $request->query->all();
-        $course  = $this->getOpenCourseService()->getCourse($courseId);
+        $fields = $request->query->all();
+        $course = $this->getOpenCourseService()->getCourse($courseId);
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render('admin/open-course/tr.html.twig', array(
-            'user'     => $this->getUserService()->getUser($course['userId']),
+            'user' => $this->getUserService()->getUser($course['userId']),
             'category' => $this->getCategoryService()->getCategory($course['categoryId']),
-            'course'   => $course,
-            'default'  => $default,
-            'filter'   => $fields["filter"]
+            'course' => $course,
+            'default' => $default,
+            'filter' => $fields['filter'],
         ));
     }
 
@@ -211,7 +214,8 @@ class OpenCourseController extends BaseController
         $dataDictionary = array('lessons' => '课时', 'recommend' => '推荐课程', 'members' => '课程成员', 'course' => '课程', 'materials' => '课程文件');
 
         if ($result > 0) {
-            $message = $dataDictionary[$type]."数据删除";
+            $message = $dataDictionary[$type].'数据删除';
+
             return array('success' => true, 'message' => $message);
         }
     }

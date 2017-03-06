@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Activity;
 
 use Biz\BaseTestCase;
@@ -16,11 +17,10 @@ class ActivityServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'tryManageCourse',
-                    'returnValue'  => array('id' => 1)
-                )
+                    'returnValue' => array('id' => 1),
+                ),
             )
         );
-
     }
 
     /**
@@ -29,7 +29,7 @@ class ActivityServiceTest extends BaseTestCase
     public function testCreateActivityWhenInvalidArgument()
     {
         $activity = array(
-            'title' => 'test activity'
+            'title' => 'test activity',
         );
 
         $savedActivity = $this->getActivityService()->createActivity($activity);
@@ -52,10 +52,10 @@ class ActivityServiceTest extends BaseTestCase
     public function testCreateActivity()
     {
         $activity = array(
-            'title'           => 'test activity',
-            'mediaType'       => 'text',
-            'fromCourseId'    => 1,
-            'fromCourseSetId' => 1
+            'title' => 'test activity',
+            'mediaType' => 'text',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
         );
         $savedActivity = $this->getActivityService()->createActivity($activity);
         $this->assertEquals($activity['title'], $savedActivity['title']);
@@ -64,15 +64,15 @@ class ActivityServiceTest extends BaseTestCase
     public function testUpdateActivity()
     {
         $activity = array(
-            'title'           => 'test activity',
-            'mediaType'       => 'text',
-            'fromCourseId'    => 1,
-            'fromCourseSetId' => 1
+            'title' => 'test activity',
+            'mediaType' => 'text',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
         );
         $savedActivity = $this->getActivityService()->createActivity($activity);
 
         $activity['title'] = 'course activity';
-        $savedActivity     = $this->getActivityService()->updateActivity($savedActivity['id'], $activity);
+        $savedActivity = $this->getActivityService()->updateActivity($savedActivity['id'], $activity);
 
         $this->assertEquals($activity['title'], $savedActivity['title']);
     }
@@ -80,10 +80,10 @@ class ActivityServiceTest extends BaseTestCase
     public function testDeleteActivity()
     {
         $activity = array(
-            'title'           => 'test activity',
-            'mediaType'       => 'text',
-            'fromCourseId'    => 1,
-            'fromCourseSetId' => 1
+            'title' => 'test activity',
+            'mediaType' => 'text',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
         );
         $savedActivity = $this->getActivityService()->createActivity($activity);
 
@@ -98,19 +98,19 @@ class ActivityServiceTest extends BaseTestCase
     public function testFinishTrigger()
     {
         $course = array(
-            'id'          => 1,
-            'title'       => 'test',
+            'id' => 1,
+            'title' => 'test',
             'courseSetId' => 1,
-            'expiryMode'  => 'days',
-            'learnMode'   => 'lockMode',
-            'expiryDays'  => 0,
-            'isDefault'   => 0,
-            'status'      => 'published',
-            'parentId'    => 0,
-            'type'        => 'normal',
-            'rating'      => 0,
-            'summary'     => '',
-            'price'       => 0
+            'expiryMode' => 'days',
+            'learnMode' => 'lockMode',
+            'expiryDays' => 0,
+            'isDefault' => 0,
+            'status' => 'published',
+            'parentId' => 0,
+            'type' => 'normal',
+            'rating' => 0,
+            'summary' => '',
+            'price' => 0,
         );
 
         $this->mockBiz(
@@ -118,33 +118,33 @@ class ActivityServiceTest extends BaseTestCase
             array(
                 array(
                     'functionName' => 'tryManageCourse',
-                    'returnValue'  => 1
+                    'returnValue' => 1,
                 ),
                 array(
                     'functionName' => 'getCourse',
-                    'returnValue'  => $course
+                    'returnValue' => $course,
                 ),
                 array(
                     'functionName' => 'getNextCourseItemSeq',
-                    'returnValue'  => 1
+                    'returnValue' => 1,
                 ),
                 array(
                     'functionName' => 'updateCourseStatistics',
-                    'returnValue'  => 1
-                )
+                    'returnValue' => 1,
+                ),
             )
         );
 
         $task = array(
-            'title'           => 'test1 task',
-            'mediaType'       => 'text',
-            'fromCourseId'    => $course['id'],
-            'fromCourseSetId' => 1
+            'title' => 'test1 task',
+            'mediaType' => 'text',
+            'fromCourseId' => $course['id'],
+            'fromCourseSetId' => 1,
         );
         $savedTask = $this->getTaskService()->createTask($task);
 
         $data = array(
-            'task' => $savedTask
+            'task' => $savedTask,
         );
 
         $this->getActivityService()->trigger($savedTask['activityId'], 'start', $data);
@@ -154,24 +154,24 @@ class ActivityServiceTest extends BaseTestCase
     public function testSearch()
     {
         $activity1 = array(
-            'title'           => 'test activity',
-            'mediaType'       => 'text',
-            'fromCourseId'    => 1,
-            'fromCourseSetId' => 1
+            'title' => 'test activity',
+            'mediaType' => 'text',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
         );
         $savedActivity1 = $this->getActivityService()->createActivity($activity1);
 
         $activity2 = array(
-            'title'           => 'test activity2',
-            'mediaType'       => 'text',
-            'fromCourseId'    => 2,
-            'fromCourseSetId' => 1
+            'title' => 'test activity2',
+            'mediaType' => 'text',
+            'fromCourseId' => 2,
+            'fromCourseSetId' => 1,
         );
         $savedActivity2 = $this->getActivityService()->createActivity($activity2);
 
         $conditions = array(
             'fromCourseId' => 1,
-            'mediaType'    => 'text'
+            'mediaType' => 'text',
         );
         $activities = $this->getActivityService()->search($conditions, null, 0, 10);
 
@@ -182,24 +182,24 @@ class ActivityServiceTest extends BaseTestCase
     public function testCount()
     {
         $activity1 = array(
-            'title'           => 'test activity',
-            'mediaType'       => 'text',
-            'fromCourseId'    => 1,
-            'fromCourseSetId' => 1
+            'title' => 'test activity',
+            'mediaType' => 'text',
+            'fromCourseId' => 1,
+            'fromCourseSetId' => 1,
         );
         $savedActivity1 = $this->getActivityService()->createActivity($activity1);
 
         $activity2 = array(
-            'title'           => 'test activity2',
-            'mediaType'       => 'text',
-            'fromCourseId'    => 2,
-            'fromCourseSetId' => 1
+            'title' => 'test activity2',
+            'mediaType' => 'text',
+            'fromCourseId' => 2,
+            'fromCourseSetId' => 1,
         );
         $savedActivity2 = $this->getActivityService()->createActivity($activity2);
 
         $conditions = array(
             'fromCourseId' => 1,
-            'mediaType'    => 'text'
+            'mediaType' => 'text',
         );
         $count = $this->getActivityService()->count($conditions);
 

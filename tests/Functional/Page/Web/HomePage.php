@@ -3,12 +3,10 @@
 namespace Tests\Functional\Page\Web;
 
 use Tests\Functional\Page\Page;
-use Tests\Functional\Page\Web\LoginPage;
 use Facebook\WebDriver\WebDriverBy;
 
 class HomePage extends Page
 {
-
     public function isShowUserAvatarVisible()
     {
         try {
@@ -21,7 +19,7 @@ class HomePage extends Page
     }
 
     /**
-     * Open the home page
+     * Open the home page.
      */
     public function open()
     {
@@ -29,7 +27,7 @@ class HomePage extends Page
     }
 
     /**
-     * Click on the "Login" btn
+     * Click on the "Login" btn.
      *
      * @return LoginPage
      */
@@ -38,6 +36,7 @@ class HomePage extends Page
         /** @var \WebDriverLocatable|\WebDriverElement $element */
         $element = $this->driver->findElement(WebDriverBy::xpath('//li[@class="hidden-xs"]//a[@href="/login?goto=/"]'));
         $element->click();
+
         return new LoginPage($this->driver);
     }
 }

@@ -4,7 +4,6 @@ namespace Tests\Unit\Course;
 
 use Mockery;
 use Biz\BaseTestCase;
-use Topxia\Service\Common\ServiceKernel;
 
 class LiveReplayServiceTest extends BaseTestCase
 {
@@ -29,7 +28,6 @@ class LiveReplayServiceTest extends BaseTestCase
         $this->assertEquals(1, count($replays));
         $this->assertEquals($replay1['title'], $replays[0]['title']);
         $this->assertEquals($replay1['globalId'], $replays[0]['globalId']);
-
     }
 
     public function testAddReplay()
@@ -37,10 +35,10 @@ class LiveReplayServiceTest extends BaseTestCase
         $fields = array(
             'courseId' => 1,
             'lessonId' => 1,
-            'title'    => 'live replay',
+            'title' => 'live replay',
             'replayId' => 1,
             'globalId' => '5aac664d11ca403a853749sssss12345',
-            'type'     => 'liveOpen'
+            'type' => 'liveOpen',
         );
 
         $replay = $this->getLiveReplayService()->addReplay($fields);
@@ -57,7 +55,7 @@ class LiveReplayServiceTest extends BaseTestCase
 
         $this->getLiveReplayService()->deleteReplayByLessonId(1, 'live');
 
-        $result  = $this->getLiveReplayService()->getReplay($replay2['id']);
+        $result = $this->getLiveReplayService()->getReplay($replay2['id']);
         $result1 = $this->getLiveReplayService()->getReplay($replay1['id']);
 
         $this->assertNull($result);
@@ -91,8 +89,8 @@ class LiveReplayServiceTest extends BaseTestCase
         $replay = $this->createLiveReplay();
 
         $fields = array(
-            'title'  => 'live replay update',
-            'hidden' => 1
+            'title' => 'live replay update',
+            'hidden' => 1,
         );
         $result = $this->getLiveReplayService()->updateReplay($replay['id'], $fields);
 
@@ -107,7 +105,7 @@ class LiveReplayServiceTest extends BaseTestCase
         $replay3 = $this->createLiveReplay2();
 
         $fields = array(
-            'hidden' => 1
+            'hidden' => 1,
         );
 
         $this->getLiveReplayService()->updateReplayByLessonId(1, $fields, 'live');
@@ -128,7 +126,7 @@ class LiveReplayServiceTest extends BaseTestCase
         $replay3 = $this->createLiveReplay2();
 
         $conditions = array(
-            'type' => 'live'
+            'type' => 'live',
         );
         $count = $this->getLiveReplayService()->searchCount($conditions);
 
@@ -142,7 +140,7 @@ class LiveReplayServiceTest extends BaseTestCase
         $replay3 = $this->createLiveReplay2();
 
         $conditions = array(
-            'type' => 'live'
+            'type' => 'live',
         );
 
         $results = $this->getLiveReplayService()->searchReplays($conditions, array('replayId' => 'ASC'), 0, 10);
@@ -167,10 +165,10 @@ class LiveReplayServiceTest extends BaseTestCase
         $fields = array(
             'courseId' => 1,
             'lessonId' => 1,
-            'title'    => 'live replay',
+            'title' => 'live replay',
             'replayId' => 1,
             'globalId' => '5aac664d11ca403a853749sssss12345',
-            'type'     => 'liveOpen'
+            'type' => 'liveOpen',
         );
 
         return $this->getLiveReplayService()->addReplay($fields);
@@ -181,10 +179,10 @@ class LiveReplayServiceTest extends BaseTestCase
         $fields = array(
             'courseId' => 1,
             'lessonId' => 1,
-            'title'    => 'live replay2',
+            'title' => 'live replay2',
             'replayId' => 4,
             'globalId' => 0,
-            'type'     => 'live'
+            'type' => 'live',
         );
 
         return $this->getLiveReplayService()->addReplay($fields);
@@ -195,10 +193,10 @@ class LiveReplayServiceTest extends BaseTestCase
         $fields = array(
             'courseId' => 1,
             'lessonId' => 2,
-            'title'    => 'live replay3',
+            'title' => 'live replay3',
             'replayId' => 5,
             'globalId' => 0,
-            'type'     => 'live'
+            'type' => 'live',
         );
 
         return $this->getLiveReplayService()->addReplay($fields);
@@ -206,7 +204,7 @@ class LiveReplayServiceTest extends BaseTestCase
 
     protected function createApiMock($no)
     {
-        $api        = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
         $mockObject = Mockery::mock($api);
         $mockObject->shouldReceive('post')->times(1)->andReturn(array('no' => $no));
         $this->getLiveReplayService()->createLiveClient($mockObject);

@@ -237,11 +237,9 @@
     </div>
   {% endif %}
 
-  {% include 'seajs_loader_compatible.html.twig' %}
+  {% include 'seajs_loader_compatible.html.twig' with { topxiawebbundle: true } %}
   <script>
-    app.lazyLoad = function() {
-      app.load('uploader/batch-upload-modal')
-    };
+      app.load('uploader/batch-upload-modal');
   </script>
 {% endblock %}
 {% block footer %}

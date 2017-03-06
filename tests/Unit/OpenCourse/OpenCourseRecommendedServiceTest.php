@@ -10,9 +10,9 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
 {
     public function testAddRecommendedCourses()
     {
-        $course1             = $this->createCourse("test1");
-        $course2             = $this->createCourse("test2");
-        $openCourse          = $this->createOpenCourse('录播公开课');
+        $course1 = $this->createCourse('test1');
+        $course2 = $this->createCourse('test2');
+        $openCourse = $this->createOpenCourse('录播公开课');
         $recommendCourseIds1 = array($course1['id'], $course2['id']);
         $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds1, 'course');
 
@@ -29,12 +29,12 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
 
     public function testUpdateOpenCourseRecommendedCourses()
     {
-        $course1            = $this->createCourse("test1");
-        $course2            = $this->createCourse("test2");
-        $course3            = $this->createCourse("test3");
-        $openCourse         = $this->createOpenCourse('openCourse1');
+        $course1 = $this->createCourse('test1');
+        $course2 = $this->createCourse('test2');
+        $course3 = $this->createCourse('test3');
+        $openCourse = $this->createOpenCourse('openCourse1');
         $recommendCourseIds = array($course1['id'], $course2['id'], $course3['id']);
-        $recommendCourses   = $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds, 'course');
+        $recommendCourses = $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds, 'course');
 
         $activiteRecommendIds = array($recommendCourses[0]['id']);
         $this->getCourseRecommendedService()->updateOpenCourseRecommendedCourses($openCourse['id'], $activiteRecommendIds);
@@ -46,8 +46,8 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
 
     public function testFindRecommendedCoursesByOpenCourseId()
     {
-        $course1            = $this->createCourse("test1");
-        $openCourse         = $this->createOpenCourse('openCourse');
+        $course1 = $this->createCourse('test1');
+        $openCourse = $this->createOpenCourse('openCourse');
         $recommendCourseIds = array($course1['id']);
         $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds, 'normal');
         $recommendCourse1 = $this->getCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($openCourse['id']);
@@ -58,9 +58,9 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
 
     public function testSearchRecommendCount()
     {
-        $course1             = $this->createCourse("test1");
-        $course2             = $this->createCourse("test2");
-        $openCourse          = $this->createOpenCourse('录播公开课');
+        $course1 = $this->createCourse('test1');
+        $course2 = $this->createCourse('test2');
+        $openCourse = $this->createOpenCourse('录播公开课');
         $recommendCourseIds1 = array($course1['id'], $course2['id']);
         $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds1, 'course');
 
@@ -71,13 +71,13 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
 
     public function testSearchRecommends()
     {
-        $course1             = $this->createCourse("test1");
-        $course2             = $this->createCourse("test2");
-        $openCourse          = $this->createOpenCourse('录播公开课');
+        $course1 = $this->createCourse('test1');
+        $course2 = $this->createCourse('test2');
+        $openCourse = $this->createOpenCourse('录播公开课');
         $recommendCourseIds1 = array($course1['id'], $course2['id']);
         $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds1, 'course');
 
-        $recommendedCourses = $this->getCourseRecommendedService()->searchRecommends(array('courseId' => $openCourse['id']), array('createdTime'=> 'DESC'), 0, 2);
+        $recommendedCourses = $this->getCourseRecommendedService()->searchRecommends(array('courseId' => $openCourse['id']), array('createdTime' => 'DESC'), 0, 2);
         $recommendedCourses = ArrayToolkit::index($recommendedCourses, 'id');
 
         $this->assertEquals(2, count($recommendedCourses));
@@ -87,9 +87,9 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
 
     public function testRecommendedCoursesSort()
     {
-        $course1             = $this->createCourse("test1");
-        $course2             = $this->createCourse("test2");
-        $openCourse          = $this->createOpenCourse('录播公开课');
+        $course1 = $this->createCourse('test1');
+        $course2 = $this->createCourse('test2');
+        $openCourse = $this->createOpenCourse('录播公开课');
         $recommendCourseIds1 = array($course1['id'], $course2['id']);
         $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $recommendCourseIds1, 'course');
 
@@ -103,13 +103,13 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
     public function testFindRandomRecommendCourses()
     {
         $openCourse = $this->createOpenCourse('公开课1');
-        $courseIds  = array();
+        $courseIds = array();
         foreach (range(1, 10) as $i) {
-            $course      = $this->createCourse('course'.$i);
+            $course = $this->createCourse('course'.$i);
             $courseIds[] = $course['id'];
         }
         $this->getCourseRecommendedService()->addRecommendedCourses($openCourse['id'], $courseIds, 'course');
-        $needNum       = 5;
+        $needNum = 5;
         $randomCourses = $this->getCourseRecommendedService()->findRandomRecommendCourses($openCourse['id'], $needNum);
 
         $this->assertEquals(count($randomCourses), $needNum);
@@ -117,14 +117,15 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
 
     protected function createCourse($title)
     {
-        $course       = array(
-            'title'       => $title,
-            'type'        => 'normal',
+        $course = array(
+            'title' => $title,
+            'type' => 'normal',
             'courseSetId' => '1',
-            'expiryMode'  => 'days',
-            'learnMode'   => 'freeMode'
+            'expiryMode' => 'days',
+            'learnMode' => 'freeMode',
         );
         $createCourse = $this->getCourseService()->createCourse($course);
+
         return $createCourse;
     }
 
@@ -132,7 +133,7 @@ class OpenCourseRecommendedServiceTest extends BaseTestCase
     {
         $course = array(
             'title' => $title,
-            'type'  => 'open'
+            'type' => 'open',
         );
 
         $createCourse = $this->getOpenCourseService()->createCourse($course);

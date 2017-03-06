@@ -24,68 +24,68 @@ class OpenCourseDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 11
+                'expectedCount' => 11,
                 ),
             array(
                 'condition' => array('updatedTime_GE' => 2),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('status' => 'closed'),
                 'expectedResults' => array($expected[1]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('type' => 'b'),
                 'expectedResults' => array($expected[2]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('titleLike' => 'b'),
                 'expectedResults' => array($expected[3]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('userId' => 2),
                 'expectedResults' => array($expected[4]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('startTime' => 2, 'endTime' => 3),
                 'expectedResults' => array($expected[5]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('smallPicture' => 'b'),
                 'expectedResults' => array($expected[6]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('parentId' => 3),
                 'expectedResults' => array($expected[7]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('recommended' => 2),
                 'expectedResults' => array($expected[8]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('locked' => 0),
                 'expectedResults' => array($expected[9]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('categoryId' => 2),
                 'expectedResults' => array($expected[10]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
                 ),
             array(
                 'condition' => array('categoryIds' => array(2)),
                 'expectedResults' => array($expected[10]),
-                'expectedCount' => 1
-                )
+                'expectedCount' => 1,
+                ),
             );
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
@@ -96,7 +96,7 @@ class OpenCourseDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject();
         $expected[] = $this->mockDataObject();
         $expected[] = $this->mockDataObject();
-        $res = $this->getDao()->findByIds(array(1,2,3));
+        $res = $this->getDao()->findByIds(array(1, 2, 3));
         $testFields = $this->getCompareKeys();
         foreach ($res as $key => $result) {
             $this->assertArrayEquals($expected[$key], $result, $testFields);
@@ -116,7 +116,7 @@ class OpenCourseDaoTest extends BaseDaoTestCase
             'smallPicture' => 'a',
             'parentId' => 2,
             'recommended' => 1,
-            'locked' => 1
+            'locked' => 1,
             );
     }
 }

@@ -60,7 +60,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     protected function initDevelopSetting()
     {
         $this->getServiceKernel()->createService('System:SettingService')->set('developer', array(
-            'without_network' => '1'
+            'without_network' => '1',
         ));
 
         return $this;
@@ -73,35 +73,35 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         $currentUser = new CurrentUser();
         //由于创建管理员用户时，当前用户（CurrentUser）必须有管理员权限，所以在register之前先mock一个临时管理员用户作为CurrentUser
         $currentUser->fromArray(array(
-            'id'        => 0,
-            'nickname'  => '游客',
+            'id' => 0,
+            'nickname' => '游客',
             'currentIp' => '127.0.0.1',
-            'roles'     => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
-            'org'       => array('id' => 1)
+            'roles' => array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'),
+            'org' => array('id' => 1),
         ));
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $user = $userService->register(array(
-            'nickname'  => 'admin',
-            'email'     => 'admin@admin.com',
-            'password'  => 'admin',
+            'nickname' => 'admin',
+            'email' => 'admin@admin.com',
+            'password' => 'admin',
             'createdIp' => '127.0.0.1',
-            'orgCode'   => '1.',
-            'orgId'     => '1'
+            'orgCode' => '1.',
+            'orgId' => '1',
         ));
-        $roles             = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
-        $user              = $userService->changeUserRoles($user['id'], $roles);
+        $roles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $user = $userService->changeUserRoles($user['id'], $roles);
         $user['currentIp'] = $user['createdIp'];
-        $user['org']       = array('id' => 1);
-        $currentUser       = new CurrentUser();
+        $user['org'] = array('id' => 1);
+        $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->grantPermissionToUser($currentUser);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getServiceKernel()->createService('Role:RoleService')->refreshRoles();
         $this->getServiceKernel()->getCurrentUser()->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 
-        $biz         = $this->getBiz();
+        $biz = $this->getBiz();
         $biz['user'] = $this->getCurrentUser();
 
         return $this;
@@ -113,7 +113,6 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
      * @param string $objectName mock的类名
      * @param array  $params     mock对象时的参数,array,包含 $functionName,$withParams,$runTimes和$returnValue
      */
-
     protected function mock($objectName, $params = array())
     {
         $newService = explode('.', $objectName);
@@ -123,7 +122,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
             $mockObject->shouldReceive($param['functionName'])->times($param['runTimes'])->withAnyArgs()->andReturn($param['returnValue']);
         }
 
-        $pool              = array();
+        $pool = array();
         $pool[$objectName] = $mockObject;
         $this->setPool($pool);
     }
@@ -138,16 +137,16 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
             $mockObj->shouldReceive($param['functionName'])->withAnyArgs()->andReturn($param['returnValue']);
         }
 
-        $biz               = $this->getBiz();
+        $biz = $this->getBiz();
         $biz['@'.$alias] = $mockObj;
     }
 
     protected function setPool($object)
     {
         $reflectionObject = new \ReflectionObject($this->getServiceKernel());
-        $pool             = $reflectionObject->getProperty("pool");
+        $pool = $reflectionObject->getProperty('pool');
         $pool->setAccessible(true);
-        $value   = $pool->getValue($this->getServiceKernel());
+        $value = $pool->getValue($this->getServiceKernel());
         $objects = array_merge($value, $object);
         $pool->setValue($this->getServiceKernel(), $objects);
     }
@@ -155,7 +154,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     protected function flushPool()
     {
         $reflectionObject = new \ReflectionObject($this->getServiceKernel());
-        $pool             = $reflectionObject->getProperty("pool");
+        $pool = $reflectionObject->getProperty('pool');
         $pool->setAccessible(true);
         $pool->setValue($this->getServiceKernel(), array());
 
@@ -165,6 +164,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     protected static function getContainer()
     {
         global $kernel;
+
         return $kernel->getContainer();
     }
 
@@ -191,7 +191,7 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
     protected function grantPermissionToUser($currentUser)
     {
-        $permissions                                = new \ArrayObject();
+        $permissions = new \ArrayObject();
         $permissions['admin_course_content_manage'] = true;
         $currentUser->setPermissions($permissions);
     }

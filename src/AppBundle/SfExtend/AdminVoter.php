@@ -2,7 +2,6 @@
 
 namespace AppBundle\SfExtend;
 
-
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Biz\User\CurrentUser;
@@ -24,21 +23,21 @@ class AdminVoter implements VoterInterface
 
     public function vote(TokenInterface $token, $object, array $attributes)
     {
-        foreach ($attributes as $attribute){
-            if(!$this->supportsAttribute($attribute)){
+        foreach ($attributes as $attribute) {
+            if (!$this->supportsAttribute($attribute)) {
                 return self::ACCESS_ABSTAIN;
             }
         }
 
         $user = $token->getUser();
 
-        if(empty($user) || !$user instanceof CurrentUser){
+        if (empty($user) || !$user instanceof CurrentUser) {
             return self::ACCESS_DENIED;
         }
 
-        if($token->getUser()->isAdmin()){
+        if ($token->getUser()->isAdmin()) {
             return self::ACCESS_GRANTED;
-        }else{
+        } else {
             return self::ACCESS_DENIED;
         }
     }

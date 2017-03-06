@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Component\Payment\Heepay;
 
 use AppBundle\Component\Payment\Response;
@@ -11,21 +12,21 @@ class HeepayResponse extends Response
     public function getPayData()
     {
         $params = $this->params;
-        $error  = $this->hasError($params);
+        $error = $this->hasError($params);
 
         if ($error) {
-            throw new \RuntimeException(sprintf($this->getServiceKernel()->trans('网银支付校验失败(%error%)。', array('%error%' =>$error ))));
+            throw new \RuntimeException(sprintf($this->getServiceKernel()->trans('网银支付校验失败(%error%)。', array('%error%' => $error))));
         }
 
         $data['payment'] = 'heepay';
-        $data['sn']      = $this->getOrderSn($params['agent_bill_id']);
+        $data['sn'] = $this->getOrderSn($params['agent_bill_id']);
 
         $order = $this->getOrderService()->getOrderBySn($data['sn']);
 
         if ($order['status'] == 'paid') {
             $data['status'] = 'success';
         } else {
-            $result      = $this->confirmSellerSendGoods();
+            $result = $this->confirmSellerSendGoods();
             $returnArray = $this->toArray($result);
 
             if ($returnArray['result'] != 1) {
@@ -39,7 +40,7 @@ class HeepayResponse extends Response
             }
         }
 
-        $data['amount']   = $params['pay_amt'];
+        $data['amount'] = $params['pay_amt'];
         $data['paidTime'] = time();
 
         $data['raw'] = $params;
@@ -58,16 +59,17 @@ class HeepayResponse extends Response
 
     private function confirmSellerSendGoods()
     {
-        $params                  = $this->params;
-        $data                    = array();
-        $data['version']         = 1;
-        $data['agent_id']        = $params['agent_id'];
-        $data['agent_bill_id']   = $params['agent_bill_id'];
-        $data['agent_bill_time'] = date("YmdHis", time());
-        $data['remark']          = $params['remark'];
-        $data['return_mode']     = 1;
-        $data['sign']            = $this->signParams($data);
-        $response                = $this->postRequest($this->url, $data);
+        $params = $this->params;
+        $data = array();
+        $data['version'] = 1;
+        $data['agent_id'] = $params['agent_id'];
+        $data['agent_bill_id'] = $params['agent_bill_id'];
+        $data['agent_bill_time'] = date('YmdHis', time());
+        $data['remark'] = $params['remark'];
+        $data['return_mode'] = 1;
+        $data['sign'] = $this->signParams($data);
+        $response = $this->postRequest($this->url, $data);
+
         return $response;
     }
 
@@ -111,19 +113,20 @@ class HeepayResponse extends Response
     {
         unset($params['sign'], $params['pay_message'], $params['remark']);
         $params = array_filter($params);
-        $sign   = '';
+        $sign = '';
 
         foreach ($params as $key => $value) {
             $sign .= $key.'='.strtolower($value).'&';
         }
 
         $sign .= 'key='.$this->options['secret'];
+
         return md5($sign);
     }
 
     private function toArray($result)
     {
-        $data = explode("|", $result);
+        $data = explode('|', $result);
 
         if (count($data) <= 1) {
             throw new \RuntimeException(sprintf($this->getServiceKernel()->trans('该笔单据查询超过１次,请过15分钟之后查询')));
@@ -133,7 +136,7 @@ class HeepayResponse extends Response
 
         if (is_array($data)) {
             foreach ($data as $value) {
-                $arr            = explode("=", $value);
+                $arr = explode('=', $value);
                 $param[$arr[0]] = $arr[1];
             }
         }

@@ -8,17 +8,17 @@ class TaskResultDaoTest extends BaseDaoTestCase
 {
     public function testGetLearnedTimeByCourseIdGroupByCourseTaskId()
     {
-        $taksResult = $this->mockTaskResult(array('time'=> 3));
-        $taksResult = $this->mockTaskResult(array('time'=> 1));
-        $taksResult = $this->mockTaskResult(array('time'=> 2));
-        $taksResult = $this->mockTaskResult(array('time'=> 5, 'courseTaskId' => 1));
+        $taksResult = $this->mockTaskResult(array('time' => 3));
+        $taksResult = $this->mockTaskResult(array('time' => 1));
+        $taksResult = $this->mockTaskResult(array('time' => 2));
+        $taksResult = $this->mockTaskResult(array('time' => 5, 'courseTaskId' => 1));
         $learnedTime = $this->getDao()->getLearnedTimeByCourseIdGroupByCourseTaskId(2);
         $this->assertEquals(6, $learnedTime);
     }
 
     public function testGetWatchTimeByCourseIdGroupByCourseTaskId()
     {
-        $taksResult = $this->mockTaskResult(array('watchTime'=> 3));
+        $taksResult = $this->mockTaskResult(array('watchTime' => 3));
         $taksResult = $this->mockTaskResult();
         $taksResult = $this->mockTaskResult();
         $taksResult = $this->mockTaskResult(array('watchTime' => 4));
@@ -32,7 +32,7 @@ class TaskResultDaoTest extends BaseDaoTestCase
 
     protected function mockTaskResult($fields = array())
     {
-        $taskReult =  array_merge($this->getDefaultMockFields(), $fields);
+        $taskReult = array_merge($this->getDefaultMockFields(), $fields);
         $this->getDao()->create($taskReult);
     }
 

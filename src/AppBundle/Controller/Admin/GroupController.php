@@ -1,5 +1,7 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Common\Paginator;
@@ -7,42 +9,41 @@ use AppBundle\Common\ArrayToolkit;
 
 class GroupController extends BaseController
 {
-
-	public function IndexAction(Request $request)
+    public function IndexAction(Request $request)
     {
-		$fields = $request->query->all();
+        $fields = $request->query->all();
 
         $conditions = array(
-            'status'=>'',
-            'title'=>'',
-            'ownerName'=>'',
+            'status' => '',
+            'title' => '',
+            'ownerName' => '',
         );
 
-        if(!empty($fields)){
-            $conditions =$fields;
-        } 
+        if (!empty($fields)) {
+            $conditions = $fields;
+        }
 
-		$paginator = new Paginator(
+        $paginator = new Paginator(
             $this->get('request'),
             $this->getGroupService()->searchGroupsCount($conditions),
             10
         );
 
-		$groupinfo=$this->getGroupService()->searchGroups(
+        $groupinfo = $this->getGroupService()->searchGroups(
                 $conditions,
                 array('createdTime' => 'desc'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
         );
 
-        $ownerIds =  ArrayToolkit::column($groupinfo, 'ownerId');
+        $ownerIds = ArrayToolkit::column($groupinfo, 'ownerId');
         $owners = $this->getUserService()->findUsersByIds($ownerIds);
 
-		return $this->render('admin/group/index.html.twig',array(
-			'groupinfo'=>$groupinfo,
-            'owners'=>$owners,
-			'paginator' => $paginator));
-	}
+        return $this->render('admin/group/index.html.twig', array(
+            'groupinfo' => $groupinfo,
+            'owners' => $owners,
+            'paginator' => $paginator, ));
+    }
 
     public function threadAction(Request $request)
     {
@@ -55,7 +56,7 @@ class GroupController extends BaseController
             10
         );
 
-        $threadinfo=$this->getThreadService()->searchThreads(
+        $threadinfo = $this->getThreadService()->searchThreads(
             $conditions,
             $this->filterSort('byCreatedTime'),
             $paginator->getOffsetCount(),
@@ -66,222 +67,220 @@ class GroupController extends BaseController
 
         $owners = $this->getUserService()->findUsersByIds($memberIds);
 
-        $groupIds =  ArrayToolkit::column($threadinfo, 'groupId');
+        $groupIds = ArrayToolkit::column($threadinfo, 'groupId');
 
+        $group = $this->getGroupService()->getGroupsByIds($groupIds);
 
-        $group=$this->getGroupService()->getGroupsByIds($groupIds);
-
-        return $this->render('admin/group/thread.html.twig',array(
-            'threadinfo'=>$threadinfo,
-            'owners'=>$owners,
-            'group'=>$group,
-            'paginator' => $paginator));
+        return $this->render('admin/group/thread.html.twig', array(
+            'threadinfo' => $threadinfo,
+            'owners' => $owners,
+            'group' => $group,
+            'paginator' => $paginator, ));
     }
 
     public function batchDeleteThreadAction(Request $request)
     {
-        $threadIds=$request->request->all();
-         $user = $this->getUser();
+        $threadIds = $request->request->all();
+        $user = $this->getUser();
         foreach ($threadIds['ID'] as $threadId) {
-            $thread=$this->getThreadService()->getThread($threadId);
+            $thread = $this->getThreadService()->getThread($threadId);
             $message = array(
                 'title' => $thread['title'],
-                'type' =>'delete',
+                'type' => 'delete',
                 'userId' => $user['id'],
-                'userName' => $user['nickname']);
-            $this->getNotifiactionService()->notify($thread['userId'],'group-thread',
+                'userName' => $user['nickname'], );
+            $this->getNotifiactionService()->notify($thread['userId'], 'group-thread',
                 $message);
-            $this->getThreadService()->deleteThread($threadId); 
+            $this->getThreadService()->deleteThread($threadId);
         }
+
         return new Response('success');
     }
 
     public function threadPostAction()
     {
-        return $this->render('admin/group/threadPost.html.twig',array(
+        return $this->render('admin/group/threadPost.html.twig', array(
            ));
-
     }
+
     public function openGroupAction($id)
     {
         $this->getGroupService()->openGroup($id);
 
-        $groupinfo=$this->getGroupService()->getGroup($id);
+        $groupinfo = $this->getGroupService()->getGroup($id);
 
-        $owners=$this->getUserService()->findUsersByIds(array('0'=>$groupinfo['ownerId']));
+        $owners = $this->getUserService()->findUsersByIds(array('0' => $groupinfo['ownerId']));
 
         return $this->render('admin/group/table-tr.html.twig', array(
             'group' => $groupinfo,
-            'owners'=>$owners,
+            'owners' => $owners,
         ));
     }
-    public function  closeGroupAction($id)
+
+    public function closeGroupAction($id)
     {
         $this->getGroupService()->closeGroup($id);
 
-        $groupinfo=$this->getGroupService()->getGroup($id);
-        
-        $owners=$this->getUserService()->findUsersByIds(array('0'=>$groupinfo['ownerId']));
+        $groupinfo = $this->getGroupService()->getGroup($id);
+
+        $owners = $this->getUserService()->findUsersByIds(array('0' => $groupinfo['ownerId']));
 
         return $this->render('admin/group/table-tr.html.twig', array(
             'group' => $groupinfo,
-            'owners'=>$owners,
+            'owners' => $owners,
         ));
     }
 
-    public function transferGroupAction(Request $request,$groupId)
+    public function transferGroupAction(Request $request, $groupId)
     {
-        $data=$request->request->all();
+        $data = $request->request->all();
         $currentUser = $this->getUser();
-        $user=$this->getUserService()->getUserByNickname($data['user']['nickname']);
+        $user = $this->getUserService()->getUserByNickname($data['user']['nickname']);
 
-        $group=$this->getGroupService()->getGroup($groupId);
+        $group = $this->getGroupService()->getGroup($groupId);
 
-        $ownerId=$group['ownerId'];
+        $ownerId = $group['ownerId'];
 
-        $member=$this->getGroupService()->getMemberByGroupIdAndUserId($groupId,$ownerId);
+        $member = $this->getGroupService()->getMemberByGroupIdAndUserId($groupId, $ownerId);
 
-        $this->getGroupService()->updateMember($member['id'],array('role'=>'member'));
+        $this->getGroupService()->updateMember($member['id'], array('role' => 'member'));
 
-        if ($currentUser['id'] != $group['ownerId'] ) {
+        if ($currentUser['id'] != $group['ownerId']) {
             $message = array(
                 'id' => $group['id'],
                 'title' => $group['title'],
                 'userId' => $user['id'],
                 'userName' => $user['nickname'],
-                'type' =>'chownout');
-            $this->getNotifiactionService()->notify($group['ownerId'],'group-profile',$message);
-            
+                'type' => 'chownout', );
+            $this->getNotifiactionService()->notify($group['ownerId'], 'group-profile', $message);
         }
 
-        $this->getGroupService()->updateGroup($groupId,array('ownerId'=>$user['id']));
+        $this->getGroupService()->updateGroup($groupId, array('ownerId' => $user['id']));
 
         if ($currentUser['id'] != $user['id']) {
             $message = array(
                 'id' => $group['id'],
                 'title' => $group['title'],
-                'type' =>'chownin');
-            $this->getNotifiactionService()->notify($user['id'],'group-profile',$message);
-            
+                'type' => 'chownin', );
+            $this->getNotifiactionService()->notify($user['id'], 'group-profile', $message);
         }
 
-        $member=$this->getGroupService()->getMemberByGroupIdAndUserId($groupId,$user['id']);
+        $member = $this->getGroupService()->getMemberByGroupIdAndUserId($groupId, $user['id']);
 
-        if($member){
-            $this->getGroupService()->updateMember($member['id'],array('role'=>'owner'));
-        }else{
-            $this->getGroupService()->addOwner($groupId,$user['id']);
+        if ($member) {
+            $this->getGroupService()->updateMember($member['id'], array('role' => 'owner'));
+        } else {
+            $this->getGroupService()->addOwner($groupId, $user['id']);
         }
 
-        return new Response("success");
+        return new Response('success');
     }
 
     public function removeEliteAction($threadId)
     {
-        return $this->postAction($threadId,'removeElite');
-
+        return $this->postAction($threadId, 'removeElite');
     }
+
     public function setEliteAction($threadId)
     {
-        return $this->postAction($threadId,'setElite');
-
+        return $this->postAction($threadId, 'setElite');
     }
+
     public function removeStickAction($threadId)
     {
-        return $this->postAction($threadId,'removeStick');
-
+        return $this->postAction($threadId, 'removeStick');
     }
+
     public function setStickAction($threadId)
     {
-        return $this->postAction($threadId,'setStick');
-
+        return $this->postAction($threadId, 'setStick');
     }
+
     public function closeThreadAction($threadId)
     {
-        return $this->postAction($threadId,'closeThread');
-
+        return $this->postAction($threadId, 'closeThread');
     }
+
     public function openThreadAction($threadId)
     {
-        return $this->postAction($threadId,'openThread');
-
+        return $this->postAction($threadId, 'openThread');
     }
+
     public function deleteThreadAction($threadId)
-    {   
-        $thread=$this->getThreadService()->getThread($threadId);
+    {
+        $thread = $this->getThreadService()->getThread($threadId);
         $this->getThreadService()->deleteThread($threadId);
 
         $user = $this->getUser();
 
         $message = array(
             'title' => $thread['title'],
-            'type' =>'delete',
+            'type' => 'delete',
             'userId' => $user['id'],
-            'userName' => $user['nickname']);
-        $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message);
-        return $this->createJsonResponse('success');
+            'userName' => $user['nickname'], );
+        $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
 
+        return $this->createJsonResponse('success');
     }
-    protected function postAction($threadId,$action)
+
+    protected function postAction($threadId, $action)
     {
-        $thread=$this->getThreadService()->getThread($threadId);
+        $thread = $this->getThreadService()->getThread($threadId);
         $message = array(
-            'title'=> $thread['title'],
-            'groupId' =>$thread['groupId'],
+            'title' => $thread['title'],
+            'groupId' => $thread['groupId'],
             'threadId' => $thread['id'],
             );
-        if($action=='setElite'){
-           $this->getThreadService()->setElite($threadId); 
+        if ($action == 'setElite') {
+            $this->getThreadService()->setElite($threadId);
             $message['type'] = 'elite';
-           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message); 
+            $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
         }
-        if($action=='removeElite'){
-           $this->getThreadService()->removeElite($threadId); 
-           $message['type'] = 'unelite';
-           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message); 
+        if ($action == 'removeElite') {
+            $this->getThreadService()->removeElite($threadId);
+            $message['type'] = 'unelite';
+            $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
         }
-        if($action=='setStick'){
-           $this->getThreadService()->setStick($threadId); 
+        if ($action == 'setStick') {
+            $this->getThreadService()->setStick($threadId);
             $message['type'] = 'top';
-           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message); 
+            $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
         }
-        if($action=='removeStick'){
-           $this->getThreadService()->removeStick($threadId); 
+        if ($action == 'removeStick') {
+            $this->getThreadService()->removeStick($threadId);
             $message['type'] = 'untop';
-           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message);
+            $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
         }
-        if($action=='closeThread'){
-           $this->getThreadService()->closeThread($threadId); 
+        if ($action == 'closeThread') {
+            $this->getThreadService()->closeThread($threadId);
             $message['type'] = 'close';
-           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message);
+            $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
         }
-        if($action=='openThread'){
-           $this->getThreadService()->openThread($threadId); 
-             $message['type'] = 'open';
-           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message);
+        if ($action == 'openThread') {
+            $this->getThreadService()->openThread($threadId);
+            $message['type'] = 'open';
+            $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
         }
 
-        $thread=$this->getThreadService()->getThread($threadId);
+        $thread = $this->getThreadService()->getThread($threadId);
 
-        $owners=$this->getUserService()->findUsersByIds(array('0'=>$thread['userId']));
+        $owners = $this->getUserService()->findUsersByIds(array('0' => $thread['userId']));
 
-        $group=$this->getGroupService()->getGroupsByIds(array('0'=>$thread['groupId']));
-
+        $group = $this->getGroupService()->getGroupsByIds(array('0' => $thread['groupId']));
 
         return $this->render('admin/group/thread-table-tr.html.twig', array(
             'thread' => $thread,
-            'owners'=>$owners,
-            'group'=>$group,
+            'owners' => $owners,
+            'group' => $group,
         ));
-
     }
 
-	  protected function getGroupService()
+    protected function getGroupService()
     {
         return $this->createService('Group:GroupService');
     }
 
-     protected function getThreadService()
+    protected function getThreadService()
     {
         return $this->createService('Group:ThreadService');
     }
@@ -295,25 +294,25 @@ class GroupController extends BaseController
     {
         switch ($sort) {
             case 'byPostNum':
-                $orderBys=array(
+                $orderBys = array(
                     'isStick' => 'DESC',
                     'postNum' => 'DESC',
                     'createdTime' => 'DESC',
                 );
                 break;
             case 'byStick':
-                $orderBys=array(
+                $orderBys = array(
                     'isStick' => 'DESC',
                     'createdTime' => 'DESC',
                 );
                 break;
             case 'byCreatedTime':
-                $orderBys=array(
+                $orderBys = array(
                     'createdTime' => 'DESC',
                 );
                 break;
             case 'byLastPostTime':
-                $orderBys=array(
+                $orderBys = array(
                     'isStick' => 'DESC',
                     'lastPostTime' => 'DESC',
                 );
@@ -321,6 +320,7 @@ class GroupController extends BaseController
             default:
                 throw $this->createServiceException('参数sort不正确。');
         }
+
         return $orderBys;
     }
 
@@ -331,36 +331,33 @@ class GroupController extends BaseController
 
     protected function prepareThreadConditions($conditions)
     {
-
         if (isset($conditions['threadType']) && !empty($conditions['threadType'])) {
             $conditions[$conditions['threadType']] = 1;
             unset($conditions['threadType']);
         }
 
-        if (isset($conditions['groupName']) && $conditions['groupName'] !== "") {
-            $group=$this->getGroupService()->findGroupByTitle($conditions['groupName']);
+        if (isset($conditions['groupName']) && $conditions['groupName'] !== '') {
+            $group = $this->getGroupService()->findGroupByTitle($conditions['groupName']);
             if (!empty($group)) {
-              $conditions['groupId']=$group[0]['id'];  
+                $conditions['groupId'] = $group[0]['id'];
             } else {
-              $conditions['groupId']=0;  
+                $conditions['groupId'] = 0;
             }
         }
-        
 
-        if (isset($conditions['userName']) && $conditions['userName'] !== "") {
-            $user=$this->getUserService()->getUserByNickname($conditions['userName']);
+        if (isset($conditions['userName']) && $conditions['userName'] !== '') {
+            $user = $this->getUserService()->getUserByNickname($conditions['userName']);
             if (!empty($user)) {
-              $conditions['userId']=$user['id'];  
+                $conditions['userId'] = $user['id'];
             } else {
-              $conditions['userId']=0;  
-            } 
+                $conditions['userId'] = 0;
+            }
         }
-        
+
         if (empty($conditions['status'])) {
             unset($conditions['status']);
         }
 
         return $conditions;
     }
-
 }

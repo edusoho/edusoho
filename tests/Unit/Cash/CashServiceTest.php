@@ -1,11 +1,12 @@
 <?php
+
 namespace Tests\Unit\Cash;
 
 use Biz\Cash\Service\CashAccountService;
 use Biz\Cash\Service\CashService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
-use Biz\BaseTestCase;;
+use Biz\BaseTestCase;
 
 class CashServiceTest extends BaseTestCase
 {
@@ -14,9 +15,9 @@ class CashServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $user    = $this->getUserService()->register($userInfo);
+        $user = $this->getUserService()->register($userInfo);
         $account = $this->getCashAccountService()->createAccount($user['id']);
         $this->getCashAccountService()->waveCashField($account['id'], '10000');
 
@@ -37,9 +38,9 @@ class CashServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $user    = $this->getUserService()->register($userInfo);
+        $user = $this->getUserService()->register($userInfo);
         $account = $this->getCashAccountService()->createAccount($user['id']);
         $this->getCashAccountService()->waveCashField($account['id'], '10000');
 
@@ -55,16 +56,16 @@ class CashServiceTest extends BaseTestCase
     public function testInflowByCoin()
     {
         $inflow = array(
-            'userId'      => 1,
-            'type'        => 'inflow',
-            'name'        => 'note6',
-            'note'        => 'sumsung',
-            'amount'      => 200.00,
-            'cashType'    => 'Coin',
-            'orderSn'     => 'V73263188923084',
-            'payment'     => 'alipay',
-            'category'    => 'guess',
-            'createdTime' => time()
+            'userId' => 1,
+            'type' => 'inflow',
+            'name' => 'note6',
+            'note' => 'sumsung',
+            'amount' => 200.00,
+            'cashType' => 'Coin',
+            'orderSn' => 'V73263188923084',
+            'payment' => 'alipay',
+            'category' => 'guess',
+            'createdTime' => time(),
         );
         $inflow = $this->getCashService()->inflowByCoin($inflow);
         $this->assertEquals($inflow['type'], 'inflow');
@@ -77,23 +78,23 @@ class CashServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $user    = $this->getUserService()->register($userInfo);
+        $user = $this->getUserService()->register($userInfo);
         $account = $this->getCashAccountService()->createAccount($user['id']);
         $this->getCashAccountService()->waveCashField($account['id'], '10000');
 
         $outflow = array(
-            'userId'      => $user['id'],
-            'type'        => 'outflow',
-            'name'        => 'note6',
-            'note'        => 'sumsung',
-            'amount'      => 10.00,
-            'cashType'    => 'Coin',
-            'orderSn'     => 'V73263188923084',
-            'payment'     => 'alipay',
-            'category'    => 'guess',
-            'createdTime' => time()
+            'userId' => $user['id'],
+            'type' => 'outflow',
+            'name' => 'note6',
+            'note' => 'sumsung',
+            'amount' => 10.00,
+            'cashType' => 'Coin',
+            'orderSn' => 'V73263188923084',
+            'payment' => 'alipay',
+            'category' => 'guess',
+            'createdTime' => time(),
         );
         $outflow = $this->getCashService()->outflowByCoin($outflow);
         $this->assertEquals($outflow['type'], 'outflow');
@@ -104,16 +105,16 @@ class CashServiceTest extends BaseTestCase
     public function testInflowByRmb()
     {
         $inflow = array(
-            'userId'      => 1,
-            'type'        => 'inflow',
-            'name'        => 'note6',
-            'note'        => 'sumsung',
-            'amount'      => 200.00,
-            'cashType'    => 'RMB',
-            'orderSn'     => 'V73263188923084',
-            'payment'     => 'alipay',
-            'category'    => 'gucci',
-            'createdTime' => time()
+            'userId' => 1,
+            'type' => 'inflow',
+            'name' => 'note6',
+            'note' => 'sumsung',
+            'amount' => 200.00,
+            'cashType' => 'RMB',
+            'orderSn' => 'V73263188923084',
+            'payment' => 'alipay',
+            'category' => 'gucci',
+            'createdTime' => time(),
         );
         $inflow = $this->getCashService()->inflowByRmb($inflow);
         $this->assertEquals($inflow['payment'], 'alipay');
@@ -126,23 +127,23 @@ class CashServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $user    = $this->getUserService()->register($userInfo);
+        $user = $this->getUserService()->register($userInfo);
         $account = $this->getCashAccountService()->createAccount($user['id']);
         $this->getCashAccountService()->waveCashField($account['id'], '10000');
 
         $outflow = array(
-            'userId'      => $user['id'],
-            'type'        => 'outflow',
-            'name'        => 'note6',
-            'note'        => 'sumsung',
-            'amount'      => 10.00,
-            'cashType'    => 'RMB',
-            'orderSn'     => 'V73263188923084',
-            'payment'     => 'alipay',
-            'category'    => 'guess',
-            'createdTime' => time()
+            'userId' => $user['id'],
+            'type' => 'outflow',
+            'name' => 'note6',
+            'note' => 'sumsung',
+            'amount' => 10.00,
+            'cashType' => 'RMB',
+            'orderSn' => 'V73263188923084',
+            'payment' => 'alipay',
+            'category' => 'guess',
+            'createdTime' => time(),
         );
         $outflow = $this->getCashService()->outflowByRmb($outflow);
         $this->assertEquals($outflow['type'], 'outflow');
@@ -155,25 +156,25 @@ class CashServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $user    = $this->getUserService()->register($userInfo);
+        $user = $this->getUserService()->register($userInfo);
         $account = $this->getCashAccountService()->createAccount($user['id']);
         $this->getCashAccountService()->waveCashField($account['id'], '10000');
 
         $this->setSettingcoin();
 
         $rmbOutFlow = array(
-            'userId'      => $user['id'],
-            'type'        => 'outflow',
-            'name'        => 'note6',
-            'note'        => 'sumsung',
-            'amount'      => 10.00,
-            'cashType'    => 'RMB',
-            'orderSn'     => 'V73263188923084',
-            'payment'     => 'alipay',
-            'category'    => 'guess',
-            'createdTime' => time()
+            'userId' => $user['id'],
+            'type' => 'outflow',
+            'name' => 'note6',
+            'note' => 'sumsung',
+            'amount' => 10.00,
+            'cashType' => 'RMB',
+            'orderSn' => 'V73263188923084',
+            'payment' => 'alipay',
+            'category' => 'guess',
+            'createdTime' => time(),
         );
 
         $inflow = $this->getCashService()->changeRmbToCoin($rmbOutFlow);
@@ -185,9 +186,9 @@ class CashServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $user    = $this->getUserService()->register($userInfo);
+        $user = $this->getUserService()->register($userInfo);
         $account = $this->getCashAccountService()->createAccount($user['id']);
         $this->getCashAccountService()->waveCashField($account['id'], '10000');
 
@@ -205,18 +206,18 @@ class CashServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $user    = $this->getUserService()->register($userInfo);
+        $user = $this->getUserService()->register($userInfo);
         $account = $this->getCashAccountService()->createAccount($user['id']);
         $this->getCashAccountService()->waveCashField($account['id'], '10000');
 
         $userInfo2 = array(
             'nickname' => 'test_nickname2',
             'password' => 'test_password2',
-            'email'    => 'test_email2@email.com'
+            'email' => 'test_email2@email.com',
         );
-        $user2    = $this->getUserService()->register($userInfo2);
+        $user2 = $this->getUserService()->register($userInfo2);
         $account2 = $this->getCashAccountService()->createAccount($user2['id']);
         $this->getCashAccountService()->waveCashField($account2['id'], '8888');
 
@@ -234,18 +235,18 @@ class CashServiceTest extends BaseTestCase
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
-            'email'    => 'test_email@email.com'
+            'email' => 'test_email@email.com',
         );
-        $user    = $this->getUserService()->register($userInfo);
+        $user = $this->getUserService()->register($userInfo);
         $account = $this->getCashAccountService()->createAccount($user['id']);
         $this->getCashAccountService()->waveCashField($account['id'], '10000');
 
         $userInfo2 = array(
             'nickname' => 'test_nickname2',
             'password' => 'test_password2',
-            'email'    => 'test_email2@email.com'
+            'email' => 'test_email2@email.com',
         );
-        $user2    = $this->getUserService()->register($userInfo2);
+        $user2 = $this->getUserService()->register($userInfo2);
         $account2 = $this->getCashAccountService()->createAccount($user2['id']);
         $this->getCashAccountService()->waveCashField($account2['id'], '10000');
 
@@ -260,16 +261,16 @@ class CashServiceTest extends BaseTestCase
     private function createInflowOrOutflow($flowType, $userId, $coinType)
     {
         $info = array(
-            'userId'      => $userId,
-            'type'        => $flowType,
-            'name'        => 'note6',
-            'note'        => 'sumsung',
-            'amount'      => 10.00,
-            'cashType'    => 'RMB',
-            'orderSn'     => 'V73263188923084',
-            'payment'     => 'alipay',
-            'category'    => 'guess',
-            'createdTime' => time()
+            'userId' => $userId,
+            'type' => $flowType,
+            'name' => 'note6',
+            'note' => 'sumsung',
+            'amount' => 10.00,
+            'cashType' => 'RMB',
+            'orderSn' => 'V73263188923084',
+            'payment' => 'alipay',
+            'category' => 'guess',
+            'createdTime' => time(),
         );
 
         switch ($flowType) {
@@ -301,7 +302,7 @@ class CashServiceTest extends BaseTestCase
     {
         $coinSettingsPosted = array(
             'cash_rate' => '1.0',
-            'coin_name' => 'coin'
+            'coin_name' => 'coin',
         );
         $this->getSettingService()->set('coin', $coinSettingsPosted);
     }

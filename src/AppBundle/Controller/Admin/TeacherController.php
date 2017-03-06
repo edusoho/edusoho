@@ -1,10 +1,9 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Common\ServiceKernel;
 
 class TeacherController extends BaseController
 {
@@ -27,8 +26,8 @@ class TeacherController extends BaseController
         );
 
         return $this->render('admin/teacher/index.html.twig', array(
-            'users'     => $users,
-            'paginator' => $paginator
+            'users' => $users,
+            'paginator' => $paginator,
         ));
     }
 
@@ -39,8 +38,8 @@ class TeacherController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $number = $request->request->get('number');
-            $user   = $this->getUserService()->promoteUser($id, $number);
-            $type   = $request->request->get('type');
+            $user = $this->getUserService()->promoteUser($id, $number);
+            $type = $request->request->get('type');
 
             if ($type == 'promoteList') {
                 return $this->render('admin/teacher/teacher-promote-tr.html.twig', array('user' => $user));
@@ -53,17 +52,17 @@ class TeacherController extends BaseController
 
         return $this->render('admin/teacher/teacher-promote-modal.html.twig', array(
             'user' => $user,
-            'type' => $type
+            'type' => $type,
         ));
     }
 
     public function promoteListAction(Request $request)
     {
         $user = $this->getUser();
-        $fields     = $request->query->all();
+        $fields = $request->query->all();
         $conditions = array(
-            'roles'    => 'ROLE_TEACHER',
-            'promoted' => 1
+            'roles' => 'ROLE_TEACHER',
+            'promoted' => 1,
         );
         $conditions = array_merge($conditions, $fields);
         $conditions = $this->fillOrgCode($conditions);
@@ -82,8 +81,8 @@ class TeacherController extends BaseController
         );
 
         return $this->render('admin/teacher/teacher-promote-list.html.twig', array(
-            'users'     => $users,
-            'paginator' => $paginator
+            'users' => $users,
+            'paginator' => $paginator,
         ));
     }
 

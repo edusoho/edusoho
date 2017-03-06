@@ -13,11 +13,11 @@ class CourseServiceTest extends BaseTestCase
     public function testFindCoursesByCourseSetId()
     {
         $course = array(
-            'title'       => '第一个教学计划',
+            'title' => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'lockMode',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0
+            'learnMode' => 'lockMode',
+            'expiryMode' => 'days',
+            'expiryDays' => 0,
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -29,11 +29,11 @@ class CourseServiceTest extends BaseTestCase
     public function testCreateAndGet()
     {
         $course = array(
-            'title'       => '第一个教学计划',
+            'title' => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'lockMode',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0
+            'learnMode' => 'lockMode',
+            'expiryMode' => 'days',
+            'expiryDays' => 0,
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -46,11 +46,11 @@ class CourseServiceTest extends BaseTestCase
     public function testUpdate()
     {
         $course = array(
-            'title'       => '第一个教学计划',
+            'title' => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'lockMode',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0
+            'learnMode' => 'lockMode',
+            'expiryMode' => 'days',
+            'expiryDays' => 0,
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -66,24 +66,24 @@ class CourseServiceTest extends BaseTestCase
     public function testUpdateCourseMarketing()
     {
         $course = array(
-            'title'       => '第一个教学计划',
+            'title' => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'lockMode',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0
+            'learnMode' => 'lockMode',
+            'expiryMode' => 'days',
+            'expiryDays' => 0,
         );
 
         $result = $this->getCourseService()->createCourse($course);
 
-        $result['isFree']        = 0;
-        $result['originPrice']   = 111;
-        $result['vipLevelId']    = 1;
-        $result['buyable']       = 1;
-        $result['tryLookable']   = 1;
+        $result['isFree'] = 0;
+        $result['originPrice'] = 111;
+        $result['vipLevelId'] = 1;
+        $result['buyable'] = 1;
+        $result['tryLookable'] = 1;
         $result['tryLookLength'] = 2;
-        $result['watchLimit']    = 3;
-        $result['services']      = array('xxx', 'yy', 'zzz');
-        $updated                 = $this->getCourseService()->updateCourseMarketing($result['id'], $result);
+        $result['watchLimit'] = 3;
+        $result['services'] = array('xxx', 'yy', 'zzz');
+        $updated = $this->getCourseService()->updateCourseMarketing($result['id'], $result);
 
         $this->assertEquals($result['originPrice'], $updated['price']);
         $this->assertEquals($result['vipLevelId'], $updated['vipLevelId']);
@@ -97,11 +97,11 @@ class CourseServiceTest extends BaseTestCase
     public function testDelete()
     {
         $course = array(
-            'title'       => '第一个教学计划',
+            'title' => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'lockMode',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0
+            'learnMode' => 'lockMode',
+            'expiryMode' => 'days',
+            'expiryDays' => 0,
         );
 
         $this->getCourseService()->createCourse($course);
@@ -115,11 +115,11 @@ class CourseServiceTest extends BaseTestCase
     public function testCloseCourse()
     {
         $course = array(
-            'title'       => '第一个教学计划',
+            'title' => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'lockMode',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0
+            'learnMode' => 'lockMode',
+            'expiryMode' => 'days',
+            'expiryDays' => 0,
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -134,11 +134,11 @@ class CourseServiceTest extends BaseTestCase
     public function testPublishCourse()
     {
         $course = array(
-            'title'       => '第一个教学计划',
+            'title' => '第一个教学计划',
             'courseSetId' => 1,
-            'learnMode'   => 'lockMode',
-            'expiryMode'  => 'days',
-            'expiryDays'  => 0
+            'learnMode' => 'lockMode',
+            'expiryMode' => 'days',
+            'expiryDays' => 0,
         );
 
         $result = $this->getCourseService()->createCourse($course);
@@ -155,17 +155,16 @@ class CourseServiceTest extends BaseTestCase
     public function testFindLearnedCoursesByCourseIdAndUserId()
     {
         $course1 = array(
-            'title'       => 'test course 1',
+            'title' => 'test course 1',
             'courseSetId' => 1,
-            'expiryMode'  => 'days',
-            'learnMode'   => 'lockMode'
+            'expiryMode' => 'days',
+            'learnMode' => 'lockMode',
         );
         $course2 = array(
-            'title'       => 'test course 2',
+            'title' => 'test course 2',
             'courseSetId' => 1,
-            'expiryMode'  => 'days',
-            'learnMode'   => 'lockMode'
-
+            'expiryMode' => 'days',
+            'learnMode' => 'lockMode',
         );
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $createCourse2 = $this->getCourseService()->createCourse($course2);
@@ -173,30 +172,30 @@ class CourseServiceTest extends BaseTestCase
         $publishCourse = $this->getCourseService()->publishCourse($createCourse2['id']);
 
         $lesson1 = array(
-            'courseId'    => $createCourse1['id'],
-            'chapterId'   => 0,
-            'free'        => 0,
-            'title'       => 'test lesson',
-            'number'      => '1',
-            'summary'     => '',
-            'type'        => 'text',
-            'seq'         => '1',
-            'parentId'    => 1,
-            'userId'      => 1,
-            'createdTime' => time()
+            'courseId' => $createCourse1['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test lesson',
+            'number' => '1',
+            'summary' => '',
+            'type' => 'text',
+            'seq' => '1',
+            'parentId' => 1,
+            'userId' => 1,
+            'createdTime' => time(),
         );
         $lesson2 = array(
-            'courseId'    => $createCourse2['id'],
-            'chapterId'   => 0,
-            'free'        => 0,
-            'title'       => 'test lesson',
-            'number'      => '1',
-            'summary'     => '',
-            'type'        => 'text',
-            'seq'         => '1',
-            'parentId'    => 1,
-            'userId'      => 1,
-            'createdTime' => time()
+            'courseId' => $createCourse2['id'],
+            'chapterId' => 0,
+            'free' => 0,
+            'title' => 'test lesson',
+            'number' => '1',
+            'summary' => '',
+            'type' => 'text',
+            'seq' => '1',
+            'parentId' => 1,
+            'userId' => 1,
+            'createdTime' => time(),
         );
 
         $user = $this->createNormalUser();
@@ -218,13 +217,14 @@ class CourseServiceTest extends BaseTestCase
 
     private function createNormalUser()
     {
-        $user              = array();
-        $user['email']     = "normal@user.com";
-        $user['nickname']  = "normal";
-        $user['password']  = "user";
-        $user              = $this->getUserService()->register($user);
+        $user = array();
+        $user['email'] = 'normal@user.com';
+        $user['nickname'] = 'normal';
+        $user['password'] = 'user';
+        $user = $this->getUserService()->register($user);
         $user['currentIp'] = '127.0.0.1';
-        $user['roles']     = array('ROLE_USER');
+        $user['roles'] = array('ROLE_USER');
+
         return $user;
     }
 

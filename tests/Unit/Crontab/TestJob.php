@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\Crontab;
 
 use Biz\Crontab\Service\Job;

@@ -23,25 +23,19 @@
  * </code>
  *
  * @category  Net
- * @package   SCP
  *
  * @author    Jim Wigginton <terrafrost@php.net>
  * @copyright 2010 Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  *
- * @link      http://phpseclib.sourceforge.net
+ * @see      http://phpseclib.sourceforge.net
  */
 
 namespace Biz\Util\Phpsec\Net;
 
-use Biz\Util\Phpsec\Net\SSH1;
-use Biz\Util\Phpsec\Net\SSH2;
-
 /**
  * Pure-PHP implementations of SCP.
  *
- * @access  public
- * @package SCP
  *
  * @author  Jim Wigginton <terrafrost@php.net>
  */
@@ -77,26 +71,23 @@ class SCP
     /**#@-*/
 
     /**
-     * SSH Object
+     * SSH Object.
      *
-     * @var Object
-     * @access private
+     * @var object
      */
     public $ssh;
 
     /**
-     * Packet Size
+     * Packet Size.
      *
-     * @var Integer
-     * @access private
+     * @var int
      */
     public $packet_size;
 
     /**
-     * Mode
+     * Mode.
      *
-     * @var Integer
-     * @access private
+     * @var int
      */
     public $mode;
 
@@ -105,10 +96,10 @@ class SCP
      *
      * Connects to an SSH server
      *
-     * @access public
-     * @param  String                                $host
-     * @param  optional                              Integer $port
-     * @param  optional                              Integer $timeout
+     * @param string                                        $host
+     * @param optional                              Integer $port
+     * @param optional                              Integer $timeout
+     *
      * @return \Biz\Util\Phpsec\Net\SCP
      */
     public function __construct($ssh)
@@ -117,7 +108,7 @@ class SCP
             $this->mode = self::MODE_SSH2;
         } elseif ($ssh instanceof SSH1) {
             $this->packet_size = 50000;
-            $this->mode        = self::MODE_SSH1;
+            $this->mode = self::MODE_SSH1;
         } else {
             return;
         }
@@ -139,12 +130,12 @@ class SCP
      * Currently, only binary mode is supported.  As such, if the line endings need to be adjusted, you will need to take
      * care of that, yourself.
      *
-     * @access public
-     * @param  String     $remote_file
-     * @param  String     $data
-     * @param  optional   Integer         $mode
-     * @param  optional   Callable        $callback
-     * @return Boolean
+     * @param string              $remote_file
+     * @param string              $data
+     * @param optional   Integer  $mode
+     * @param optional   Callable $callback
+     *
+     * @return bool
      */
     public function put($remote_file, $data, $mode = self::SOURCE_STRING, $callback = null)
     {
@@ -174,6 +165,7 @@ class SCP
         } else {
             if (!is_file($data)) {
                 user_error("$data is not a valid file", E_USER_NOTICE);
+
                 return false;
             }
 
@@ -222,10 +214,10 @@ class SCP
      * the operation was unsuccessful.  If $local_file is defined, returns true or false depending on the success of the
      * operation
      *
-     * @access public
-     * @param  String   $remote_file
-     * @param  optional String         $local_file
-     * @return Mixed
+     * @param string          $remote_file
+     * @param optional String $local_file
+     *
+     * @return mixed
      */
     public function get($remote_file, $local_file = false)
     {
@@ -274,6 +266,7 @@ class SCP
 
         if ($local_file !== false) {
             fclose($fp);
+
             return true;
         }
 
@@ -281,10 +274,9 @@ class SCP
     }
 
     /**
-     * Sends a packet to an SSH server
+     * Sends a packet to an SSH server.
      *
-     * @access private
-     * @param String $data
+     * @param string $data
      */
     public function _send($data)
     {
@@ -299,10 +291,9 @@ class SCP
     }
 
     /**
-     * Receives a packet from an SSH server
+     * Receives a packet from an SSH server.
      *
-     * @access private
-     * @return String
+     * @return string
      */
     public function _receive()
     {
@@ -321,6 +312,7 @@ class SCP
                     switch ($response[SSH1::RESPONSE_TYPE]) {
                     case NET_SSH1_SMSG_STDOUT_DATA:
                             extract(unpack('Nlength', $response[SSH1::RESPONSE_DATA]));
+
                             return $this->ssh->_string_shift($response[SSH1::RESPONSE_DATA], $length);
                     case NET_SSH1_SMSG_STDERR_DATA:
                             break;
@@ -328,9 +320,11 @@ class SCP
                             $this->ssh->_send_binary_packet(chr(NET_SSH1_CMSG_EXIT_CONFIRMATION));
                             fclose($this->ssh->fsock);
                             $this->ssh->bitmap = 0;
+
                             return false;
                     default:
                             user_error('Unknown packet received', E_USER_NOTICE);
+
                             return false;
                     }
                 }
@@ -338,9 +332,7 @@ class SCP
     }
 
     /**
-     * Closes the connection to an SSH server
-     *
-     * @access private
+     * Closes the connection to an SSH server.
      */
     public function _close()
     {

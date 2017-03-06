@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
@@ -19,7 +20,7 @@ class CourseReviewController extends BaseController
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['courseTitle']);
             $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
             unset($conditions['courseTitle']);
-            $conditions['courseSetIds'] = $conditions['courseSetIds'] ? : array(-1);
+            $conditions['courseSetIds'] = $conditions['courseSetIds'] ?: array(-1);
         }
 
         $paginator = new Paginator(
@@ -37,22 +38,23 @@ class CourseReviewController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds(ArrayToolkit::column($reviews, 'courseSetId'));
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($reviews, 'courseId'));
 
         return $this->render('admin/course-review/index.html.twig', array(
-            'reviews'   => $reviews,
-            'users'     => $users,
-            'courses'   => $courses,
-            'courseSets'   => $courseSets,
-            'paginator' => $paginator
+            'reviews' => $reviews,
+            'users' => $users,
+            'courses' => $courses,
+            'courseSets' => $courseSets,
+            'paginator' => $paginator,
         ));
     }
 
     public function deleteAction(Request $request, $id)
     {
         $this->getReviewService()->deleteReview($id);
+
         return $this->createJsonResponse(true);
     }
 
@@ -62,6 +64,7 @@ class CourseReviewController extends BaseController
         foreach ($ids as $id) {
             $this->getReviewService()->deleteReview($id);
         }
+
         return $this->createJsonResponse(true);
     }
 

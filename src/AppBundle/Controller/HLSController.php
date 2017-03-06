@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\File\Service\UploadFileService;
@@ -13,12 +14,12 @@ class HLSController extends BaseController
 {
     public function playlistAction(Request $request, $id, $token)
     {
-        $line       = $request->query->get('line', null);
-        $format     = $request->query->get('format', "");
-        $levelParam = $request->query->get('level', "");
+        $line = $request->query->get('line', null);
+        $format = $request->query->get('format', '');
+        $levelParam = $request->query->get('level', '');
 
-        $token    = $this->getTokenService()->verifyToken('hls.playlist', $token);
-        $fromApi  = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
+        $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
+        $fromApi = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
         $clientIp = $request->getClientIp();
 
         if (empty($token)) {
@@ -37,8 +38,8 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $streams     = array();
-        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $streams = array();
+        $inWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
         foreach (array('sd', 'hd', 'shd') as $level) {
             if (empty($file['metas2'][$level])) {
                 continue;
@@ -46,12 +47,12 @@ class HLSController extends BaseController
 
             if (empty($levelParam) || (!empty($levelParam) && strtolower($levelParam) == $level)) {
                 $tokenFields = array(
-                    'data'     => array(
-                        'id'      => $file['id'].$level,
-                        'fromApi' => $fromApi
+                    'data' => array(
+                        'id' => $file['id'].$level,
+                        'fromApi' => $fromApi,
                     ),
-                    'times'    => $inWhiteList ? 0 : 1,
-                    'duration' => 3600
+                    'times' => $inWhiteList ? 0 : 1,
+                    'duration' => 3600,
                 );
 
                 if (!empty($token['userId'])) {
@@ -72,9 +73,9 @@ class HLSController extends BaseController
             }
 
             $params = array(
-                'id'    => $file['id'],
+                'id' => $file['id'],
                 'level' => $level,
-                'token' => $token['token']
+                'token' => $token['token'],
             );
 
             if ($line) {
@@ -90,20 +91,21 @@ class HLSController extends BaseController
 
         $qualities = array(
             'video' => $file['convertParams']['videoQuality'],
-            'audio' => $file['convertParams']['audioQuality']
+            'audio' => $file['convertParams']['audioQuality'],
         );
         $api = CloudAPIFactory::create('leaf');
 
         //新版api需要返回json形式的m3u8
         if (strtolower($format) == 'json') {
             $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+
             return $this->createJsonResponse($playlist);
         }
 
         $playlist = $api->get('/hls/playlist', array(
-            'streams'   => $streams,
+            'streams' => $streams,
             'qualities' => $qualities,
-            'clientIp'  => $clientIp
+            'clientIp' => $clientIp,
         ));
 
         if (empty($playlist['playlist'])) {
@@ -111,15 +113,15 @@ class HLSController extends BaseController
         }
 
         return $this->responseEnhanced($playlist['playlist'], array(
-            'Content-Type'        => 'application/vnd.apple.mpegurl',
-            'Content-Disposition' => 'inline; filename="playlist.m3u8"'
+            'Content-Type' => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="playlist.m3u8"',
         ));
     }
 
     public function streamAction(Request $request, $id, $level, $token)
     {
-        $token    = $this->getTokenService()->verifyToken('hls.stream', $token);
-        $fromApi  = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
+        $token = $this->getTokenService()->verifyToken('hls.stream', $token);
+        $fromApi = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
         $clientIp = $request->getClientIp();
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -143,33 +145,33 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $params                 = array();
-        $params['accessKey']    = $this->setting('storage.cloud_access_key');
-        $params['key']          = $file['metas2'][$level]['key'];
-        $params['fileId']       = $file['id'];
+        $params = array();
+        $params['accessKey'] = $this->setting('storage.cloud_access_key');
+        $params['key'] = $file['metas2'][$level]['key'];
+        $params['fileId'] = $file['id'];
         $params['fileGlobalId'] = $file['globalId'];
-        $params['clientIp']     = $clientIp;
+        $params['clientIp'] = $clientIp;
 
         if (!empty($token['data']['watchTimeLimit'])) {
             $params['limitSecond'] = $token['data']['watchTimeLimit'];
         }
 
-        $inWhiteList   = $this->agentInWhiteList($request->headers->get("user-agent"));
-        $tokenFields   = array(
-            'data'     => array(
-                'id'            => $file['id'],
-                'level'         => $level,
+        $inWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
+        $tokenFields = array(
+            'data' => array(
+                'id' => $file['id'],
+                'level' => $level,
                 'fromApi' => $fromApi,
             ),
-            'times'    => $inWhiteList ? 0 : 1,
-            'duration' => 3600
+            'times' => $inWhiteList ? 0 : 1,
+            'duration' => 3600,
         );
 
         if (!empty($token['userId'])) {
             $tokenFields['userId'] = $token['userId'];
-            $params['userId']      = $token['userId'];
-            $user                  = $this->getUserService()->getUser($token['userId']);
-            $params['userName']    = $user['nickname'];
+            $params['userId'] = $token['userId'];
+            $user = $this->getUserService()->getUser($token['userId']);
+            $params['userName'] = $user['nickname'];
         }
 
         $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
@@ -179,8 +181,8 @@ class HLSController extends BaseController
         $hideBeginning = isset($streamToken['data']['hideBeginning']) ? $streamToken['data']['hideBeginning'] : false;
         if (!$inWhiteList && !$this->isHiddenVideoHeader($hideBeginning)) {
             $beginning = $this->getVideoBeginning($request, $level, array(
-                'userId'        => $token['userId'],
-                'fromApi' => $fromApi
+                'userId' => $token['userId'],
+                'fromApi' => $fromApi,
             ));
 
             if ($beginning['beginningKey']) {
@@ -207,15 +209,15 @@ class HLSController extends BaseController
         }
 
         return $this->responseEnhanced($stream['stream'], array(
-            'Content-Type'        => 'application/vnd.apple.mpegurl',
-            'Content-Disposition' => 'inline; filename="stream.m3u8"'
+            'Content-Type' => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="stream.m3u8"',
         ));
     }
 
     public function clefAction(Request $request, $id, $token)
     {
         $inWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
-        $token       = $this->getTokenService()->verifyToken('hls.clef', $token);
+        $token = $this->getTokenService()->verifyToken('hls.clef', $token);
         if (empty($token)) {
             return $this->makeFakeTokenString();
         }
@@ -252,9 +254,10 @@ class HLSController extends BaseController
             return $this->responseEnhanced($file['metas2'][$token['data']['level']]['hlsKey']);
         }
 
-        if ($this->isHlsEncryptionPlusEnabled() || !$inWhiteList ) {
+        if ($this->isHlsEncryptionPlusEnabled() || !$inWhiteList) {
             $api = CloudAPIFactory::create('leaf');
             $result = $api->get("/hls/clef_plus/{$file['metas2'][$token['data']['level']]['hlsKey']}");
+
             return $this->responseEnhanced($result['key']);
         }
 
@@ -266,8 +269,8 @@ class HLSController extends BaseController
         $headers = array_merge(
             array(
                 'Access-Control-Allow-Headers' => 'origin, content-type, accept',
-                'Access-Control-Allow-Origin'  => '*',
-                'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS'
+                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, PATCH, OPTIONS',
             ),
             $headers
         );
@@ -282,13 +285,14 @@ class HLSController extends BaseController
     protected function makeFakeTokenString()
     {
         $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+
         return $this->responseEnhanced($fakeKey);
     }
 
     protected function isHiddenVideoHeader($isHidden = false)
     {
-        $storage = $this->setting("storage");
-        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"] && !$isHidden) {
+        $storage = $this->setting('storage');
+        if (!empty($storage) && array_key_exists('video_header', $storage) && $storage['video_header'] && !$isHidden) {
             return false;
         } else {
             return true;
@@ -298,23 +302,24 @@ class HLSController extends BaseController
     protected function isHlsEncryptionPlusEnabled()
     {
         $enabled = $this->setting('storage.enable_hls_encryption_plus');
+
         return $enabled;
     }
 
     protected function getVideoBeginning(Request $request, $level, $params = array())
     {
         $beginning = array(
-            'beginningKey'    => null,
-            'beginningKeyUrl' => null
+            'beginningKey' => null,
+            'beginningKeyUrl' => null,
         );
 
-        $storage = $this->getSettingService()->get("storage");
+        $storage = $this->getSettingService()->get('storage');
 
         if (!empty($storage['video_header'])) {
-            $file       = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
             $beginnings = $file['metas2'];
-            $levels     = array($level);
-            $levels     = array_merge($levels, array_diff(array('shd', 'hd', 'sd'), $levels));
+            $levels = array($level);
+            $levels = array_merge($levels, array_diff(array('shd', 'hd', 'sd'), $levels));
 
             foreach ($levels as $level) {
                 if (empty($beginnings[$level])) {
@@ -322,20 +327,20 @@ class HLSController extends BaseController
                 }
 
                 $beginning['beginningKey'] = $beginnings[$level]['key'];
-                $token                     = $this->getTokenService()->makeToken('hls.clef', array(
-                    'data'     => array(
-                        'id'            => $file['id'],
-                        'level'         => $level,
-                        'fromApi' => $params['fromApi']
+                $token = $this->getTokenService()->makeToken('hls.clef', array(
+                    'data' => array(
+                        'id' => $file['id'],
+                        'level' => $level,
+                        'fromApi' => $params['fromApi'],
                     ),
-                    'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
+                    'times' => $this->agentInWhiteList($request->headers->get('user-agent')) ? 0 : 1,
                     'duration' => 3600,
-                    'userId'   => $params['userId']
+                    'userId' => $params['userId'],
                 ));
 
                 $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array(
-                    'id'    => $file['id'],
-                    'token' => $token['token']
+                    'id' => $file['id'],
+                    'token' => $token['token'],
                 ), true);
                 break;
             }

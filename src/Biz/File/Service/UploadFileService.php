@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\File\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -110,6 +111,7 @@ interface UploadFileService
      * @param  $id
      * @param  $field
      * @param  $diff
+     *
      * @return mixed
      */
     public function waveUploadFile($id, $field, $diff);

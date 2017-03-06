@@ -1,8 +1,8 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Yaml\Yaml;
-use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,14 +27,14 @@ class NoUsedRoutingCommand extends BaseCommand
             $rootPath.'src/Classroom/ClassroomBundle/Resources/config/routing.yml',
             $rootPath.'src/Classroom/ClassroomBundle/Resources/config/routing_admin.yml',
             $rootPath.'src/MaterialLib/MaterialLibBundle/Resources/config/routing.yml',
-            $rootPath.'src/MaterialLib/MaterialLibBundle/Resources/config/routing_admin.yml'
+            $rootPath.'src/MaterialLib/MaterialLibBundle/Resources/config/routing_admin.yml',
         );
 
         $bundls = array(
-            'TopxiaWebBundle'   => 'Topxia\\WebBundle\\Controller',
+            'TopxiaWebBundle' => 'Topxia\\WebBundle\\Controller',
             'TopxiaAdminBundle' => 'Topxia\\AdminBundle\\Controller',
-            'ClassroomBundle'   => 'Classroom\\ClassroomBundle\\Controller',
-            'MaterialLibBundle' => 'MaterialLib\\MaterialLibBundle\\Controller'
+            'ClassroomBundle' => 'Classroom\\ClassroomBundle\\Controller',
+            'MaterialLibBundle' => 'MaterialLib\\MaterialLibBundle\\Controller',
         );
 
         foreach ($configs as $routingConfig) {
@@ -49,9 +49,9 @@ class NoUsedRoutingCommand extends BaseCommand
                     $controller = $routing['defaults']['_controller'];
                     $controller = explode(':', $controller);
 
-                    $bandleName     = $controller[0];
+                    $bandleName = $controller[0];
                     $controllerName = str_replace('/', '\\', $controller[1]);
-                    $methodName     = $controller[2];
+                    $methodName = $controller[2];
 
                     $classExists = class_exists($bundls[$bandleName].'\\'.$controllerName.'Controller');
                     if (!$classExists) {

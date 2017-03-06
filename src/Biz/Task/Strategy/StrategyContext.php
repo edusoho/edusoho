@@ -2,10 +2,7 @@
 
 namespace Biz\Task\Strategy;
 
-
 use Biz\Task\Strategy\Impl\DefaultStrategy;
-use Biz\Task\Strategy\Impl\FreeModeStrategy;
-use Biz\Task\Strategy\Impl\LockModeStrategy;
 use Biz\Task\Strategy\Impl\PlanStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
@@ -16,7 +13,7 @@ class StrategyContext
 
     private $strategyMap = array();
 
-    private static $_instance = NULL;
+    private static $_instance = null;
 
     private function __construct()
     {
@@ -25,7 +22,7 @@ class StrategyContext
     public static function getInstance()
     {
         if (is_null(self::$_instance)) {
-            self::$_instance = new StrategyContext();
+            self::$_instance = new self();
         }
 
         return self::$_instance;
@@ -33,7 +30,7 @@ class StrategyContext
 
     public function createStrategy($strategyType, $biz)
     {
-        if(!empty($this->strategyMap[$strategyType])) {
+        if (!empty($this->strategyMap[$strategyType])) {
             return $this->strategyMap[$strategyType];
         }
 
@@ -41,7 +38,7 @@ class StrategyContext
             case self::PLAN_STRATEGY:
                 $this->strategyMap[self::PLAN_STRATEGY] = new PlanStrategy($biz);
                 break;
-            case self::DEFAULT_STRATEGY :
+            case self::DEFAULT_STRATEGY:
                 $this->strategyMap[self::DEFAULT_STRATEGY] = new DefaultStrategy($biz);
                 break;
             default:

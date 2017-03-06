@@ -2,7 +2,6 @@
 
 namespace Biz\Taxonomy\Service\Impl;
 
-
 use Biz\BaseService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -45,7 +44,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             throw $this->createServiceException("分类Group #{$groupId}，不存在");
         }
 
-        $prepare    = function ($categories) {
+        $prepare = function ($categories) {
             $prepared = array();
 
             foreach ($categories as $category) {
@@ -58,7 +57,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
             return $prepared;
         };
-        $data       = $this->findCategories($groupId);
+        $data = $this->findCategories($groupId);
         $categories = $prepare($data);
 
         $tree = array();
@@ -90,8 +89,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $magic = $this->getSettingService()->get('magic');
 
         if (isset($magic['enable_org']) && $magic['enable_org']) {
-            $user  = $this->getCurrentUser();
+            $user = $this->getCurrentUser();
             $orgId = !empty($user['org']) ? $user['org']['id'] : null;
+
             return $this->getCategoryDao()->findByGroupIdAndOrgId($group['id'], $orgId);
         } else {
             return $this->getCategoryDao()->findByGroupId($group['id']);
@@ -125,7 +125,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $tree = $this->getCategoryTree($category['groupId']);
 
         $childrenIds = array();
-        $depth       = 0;
+        $depth = 0;
 
         foreach ($tree as $node) {
             if ($node['id'] == $category['id']) {
@@ -148,7 +148,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function findCategoryBreadcrumbs($categoryId)
     {
         $breadcrumbs = array();
-        $category    = $this->getCategory($categoryId);
+        $category = $this->getCategory($categoryId);
 
         if (empty($category)) {
             return array();
@@ -163,7 +163,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                 break;
             }
 
-            $category      = $indexedCategories[$categoryId];
+            $category = $indexedCategories[$categoryId];
             $breadcrumbs[] = $category;
 
             if (empty($category['parentId'])) {
@@ -183,27 +183,28 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         if (empty($code)) {
             return array($rootCagoies, array(), array());
         } else {
-            $category    = $this->getCategoryByCode($code);
-            $parentId    = $category['id'];
-            $categories  = array();
-            $activeIds   = array();
+            $category = $this->getCategoryByCode($code);
+            $parentId = $category['id'];
+            $categories = array();
+            $activeIds = array();
             $activeIds[] = $category['id'];
-            $level       = 1;
+            $level = 1;
 
             while ($parentId) {
                 $activeIds[] = $parentId;
-                $sibling     = $this->findAllCategoriesByParentId($parentId);
+                $sibling = $this->findAllCategoriesByParentId($parentId);
 
                 if ($sibling) {
                     $categories[$level] = $sibling;
-                    $level++;
+                    ++$level;
                 }
 
-                $parent   = $this->getCategory($parentId);
+                $parent = $this->getCategory($parentId);
                 $parentId = $parent['parentId'];
             }
 
             $categories = array_reverse($categories);
+
             return array($rootCagoies, $categories, $activeIds);
         }
     }
@@ -259,18 +260,18 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             return $category;
         }
 
-        $user       = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $currentOrg = $user['org'];
 
         if (empty($category['parentId'])) {
             if (empty($user['org'])) {
                 return $category;
             }
-            $category['orgId']   = $currentOrg['id'];
+            $category['orgId'] = $currentOrg['id'];
             $category['orgCode'] = $currentOrg['orgCode'];
         } else {
-            $parentOrg           = $this->getCategory($category['parentId']);
-            $category['orgId']   = $parentOrg['orgId'];
+            $parentOrg = $this->getCategory($category['parentId']);
+            $category['orgId'] = $parentOrg['orgId'];
             $category['orgCode'] = $parentOrg['orgCode'];
         }
 
@@ -311,7 +312,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             throw $this->createNotFoundException();
         }
 
-        $ids   = $this->findCategoryChildrenIds($id);
+        $ids = $this->findCategoryChildrenIds($id);
         $ids[] = $id;
 
         foreach ($ids as $id) {
@@ -357,11 +358,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         if (isset($categories[$parentId]) && is_array($categories[$parentId])) {
             foreach ($categories[$parentId] as $category) {
-                $depth++;
+                ++$depth;
                 $category['depth'] = $depth;
-                $tree[]            = $category;
+                $tree[] = $category;
                 $this->makeCategoryTree($tree, $categories, $category['id']);
-                $depth--;
+                --$depth;
             }
         }
 
@@ -373,7 +374,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         foreach (array_keys($category) as $key) {
             switch ($key) {
                 case 'name':
-                    $category['name'] = (string)$category['name'];
+                    $category['name'] = (string) $category['name'];
 
                     if (empty($category['name'])) {
                         throw $this->createServiceException('名称不能为空，保存分类失败');
@@ -384,7 +385,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                     if (empty($category['code'])) {
                         throw $this->createServiceException('编码不能为空，保存分类失败');
                     } else {
-                        if (!preg_match("/^[a-zA-Z0-9_]+$/i", $category['code'])) {
+                        if (!preg_match('/^[a-zA-Z0-9_]+$/i', $category['code'])) {
                             throw $this->createServiceException("编码({$category['code']})含有非法字符，保存分类失败");
                         }
 
@@ -400,8 +401,8 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
                     break;
                 case 'groupId':
-                    $category['groupId'] = (int)$category['groupId'];
-                    $group               = $this->getGroup($category['groupId']);
+                    $category['groupId'] = (int) $category['groupId'];
+                    $group = $this->getGroup($category['groupId']);
 
                     if (empty($group)) {
                         throw $this->createServiceException("分类分组ID({$category['groupId']})不存在，保存分类失败");
@@ -409,7 +410,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
                     break;
                 case 'parentId':
-                    $category['parentId'] = (int)$category['parentId'];
+                    $category['parentId'] = (int) $category['parentId'];
 
                     if ($category['parentId'] > 0) {
                         $parentCategory = $this->getCategory($category['parentId']);
@@ -472,5 +473,4 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     {
         return $this->biz->service('System:SettingService');
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
@@ -25,8 +26,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function searchThreads($conditions, $sort, $start, $limit)
     {
-        $orderBys   = $this->filterSort($sort);
+        $orderBys = $this->filterSort($sort);
         $conditions = $this->prepareThreadSearchConditions($conditions);
+
         return $this->getThreadDao()->search($conditions, $orderBys, $start, $limit);
     }
 
@@ -73,7 +75,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function searchThreadInCourseIds($conditions, $sort, $start, $limit)
     {
-        $orderBys   = $this->filterSort($sort);
+        $orderBys = $this->filterSort($sort);
         $conditions = $this->prepareThreadSearchConditions($conditions);
 
         return $this->getThreadDao()->search($conditions, $orderBys, $start, $limit);
@@ -114,19 +116,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $thread['content'] = $this->sensitiveFilter($thread['content'], 'course-thread-create');
-        $thread['title']   = $this->sensitiveFilter($thread['title'], 'course-thread-create');
+        $thread['title'] = $this->sensitiveFilter($thread['title'], 'course-thread-create');
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
 
-        $thread['userId']      = $this->getCurrentUser()->id;
-        $thread['title']       = $this->biz['html_helper']->purify(empty($thread['title']) ? '' : $thread['title']);
+        $thread['userId'] = $this->getCurrentUser()->id;
+        $thread['title'] = $this->biz['html_helper']->purify(empty($thread['title']) ? '' : $thread['title']);
         $thread['courseSetId'] = $course['courseSetId'];
         //创建thread过滤html
-        $thread['content']          = $this->biz['html_helper']->purify($thread['content']);
-        $thread['createdTime']      = time();
+        $thread['content'] = $this->biz['html_helper']->purify($thread['content']);
+        $thread['createdTime'] = time();
         $thread['latestPostUserId'] = $thread['userId'];
-        $thread['latestPostTime']   = $thread['createdTime'];
-        $thread['private']          = $course['status'] == 'published' ? 0 : 1;
+        $thread['latestPostTime'] = $thread['createdTime'];
+        $thread['private'] = $course['status'] == 'published' ? 0 : 1;
 
         $thread = $this->getThreadDao()->create($thread);
 
@@ -140,13 +142,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             }
 
             $this->getNotifiactionService()->notify($teacherId, 'thread', array(
-                'threadId'           => $thread['id'],
-                'threadUserId'       => $thread['userId'],
+                'threadId' => $thread['id'],
+                'threadUserId' => $thread['userId'],
                 'threadUserNickname' => $this->getCurrentUser()->nickname,
-                'threadTitle'        => $thread['title'],
-                'threadType'         => $thread['type'],
-                'courseId'           => $course['id'],
-                'courseTitle'        => $course['title']
+                'threadTitle' => $thread['title'],
+                'threadType' => $thread['type'],
+                'courseId' => $course['id'],
+                'courseTitle' => $course['title'],
             ));
         }
 
@@ -164,7 +166,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-update');
-        $fields['title']   = $this->sensitiveFilter($fields['title'], 'course-thread-update');
+        $fields['title'] = $this->sensitiveFilter($fields['title'], 'course-thread-update');
 
         if ($this->getCurrentUser()->getId() != $thread['userId']) {
             $this->getCourseService()->tryManageCourse($thread['courseId'], 'admin_course_thread');
@@ -181,6 +183,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $thread = $this->getThreadDao()->update($threadId, $fields);
         $this->dispatchEvent('course.thread.update', new Event($thread));
+
         return $thread;
     }
 
@@ -327,19 +330,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($post['courseId']);
 
-        $post['userId']      = $this->getCurrentUser()->id;
-        $post['isElite']     = $this->getMemberService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
+        $post['userId'] = $this->getCurrentUser()->id;
+        $post['isElite'] = $this->getMemberService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
         $post['createdTime'] = time();
 
         //创建post过滤html
         $post['content'] = $this->biz['html_helper']->purify($post['content']);
-        $post            = $this->getThreadPostDao()->create($post);
+        $post = $this->getThreadPostDao()->create($post);
 
         // 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
         $threadFields = array(
-            'postNum'          => $thread['postNum'] + 1,
+            'postNum' => $thread['postNum'] + 1,
             'latestPostUserId' => $post['userId'],
-            'latestPostTime'   => $post['createdTime']
+            'latestPostTime' => $post['createdTime'],
         );
         $this->getThreadDao()->update($thread['id'], $threadFields);
 
@@ -369,8 +372,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         //更新post过滤html
         $fields['content'] = $this->biz['html_helper']->purify($fields['content']);
-        $post              = $this->getThreadPostDao()->update($id, $fields);
+        $post = $this->getThreadPostDao()->update($id, $fields);
         $this->dispatchEvent('course.thread.post.update', $post);
+
         return $post;
     }
 
@@ -410,7 +414,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         if (isset($conditions['author'])) {
-            $author               = $this->getUserService()->getUserByNickname($conditions['author']);
+            $author = $this->getUserService()->getUserByNickname($conditions['author']);
             $conditions['userId'] = $author ? $author['id'] : -1;
         }
 
@@ -480,7 +484,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
      */
     protected function getSensitiveService()
     {
-        return $this->createService("Sensitive:SensitiveService");
+        return $this->createService('Sensitive:SensitiveService');
     }
 
     /**

@@ -14,7 +14,7 @@ interface MaterialLibService
 
     public function batchDelete($ids);
 
-    public function batchTagEdit($fileIds,$tagNames);
+    public function batchTagEdit($fileIds, $tagNames);
 
     public function batchShare($ids);
 
@@ -31,5 +31,4 @@ interface MaterialLibService
     public function player($globalId, $ssl = false);
 
     public function synData();
-
 }

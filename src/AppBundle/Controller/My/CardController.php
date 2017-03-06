@@ -12,7 +12,7 @@ class CardController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user     = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $cardType = $request->query->get('cardType');
 
         if (!$user->isLogin()) {
@@ -22,19 +22,19 @@ class CardController extends BaseController
         if ($cardType == 'moneyCard') {
             if (!$this->isPluginInstalled('moneyCard') || ($this->isPluginInstalled('moneyCard') && version_compare($this->getWebExtension()->getPluginVersion('moneyCard'), '1.1.1', '<='))) {
                 return $this->render('card/index.html.twig', array(
-                    'cards' => null
+                    'cards' => null,
                 ));
             }
         }
 
         if (empty($cardType) || !in_array($cardType, array('coupon', 'moneyCard'))) {
-            $cardType = "coupon";
+            $cardType = 'coupon';
         }
 
-        $cards   = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], $cardType);
+        $cards = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], $cardType);
         $cardIds = ArrayToolkit::column($cards, 'cardId');
-        $cards   = $this->sortCards($cards);
-        $filter  = $request->query->get('filter');
+        $cards = $this->sortCards($cards);
+        $filter = $request->query->get('filter');
 
         if (!empty($filter)) {
             $groupCards = ArrayToolkit::group($cards, 'status');
@@ -51,9 +51,10 @@ class CardController extends BaseController
         }
 
         $cardsDetail = $this->getCardService()->findCardDetailsByCardTypeAndCardIds($cardType, $cardIds);
+
         return $this->render('card/index.html.twig', array(
-            'cards'       => empty($cards) ? null : $cards,
-            'cardDetails' => ArrayToolkit::index($cardsDetail, 'id')
+            'cards' => empty($cards) ? null : $cards,
+            'cardDetails' => ArrayToolkit::index($cardsDetail, 'id'),
         ));
     }
 
@@ -65,13 +66,13 @@ class CardController extends BaseController
             return $this->redirect($this->generateUrl('login'));
         }
 
-        $cards      = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], 'coupon');
-        $cards      = $this->sortCards($cards);
+        $cards = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], 'coupon');
+        $cards = $this->sortCards($cards);
         $groupCards = ArrayToolkit::group($cards, 'status');
 
         if (isset($groupCards['useable'])) {
-            $cardIds      = ArrayToolkit::column($groupCards['useable'], 'cardId');
-            $cardDetails  = $this->getCardService()->findCardDetailsByCardTypeAndCardIds('coupon', $cardIds);
+            $cardIds = ArrayToolkit::column($groupCards['useable'], 'cardId');
+            $cardDetails = $this->getCardService()->findCardDetailsByCardTypeAndCardIds('coupon', $cardIds);
             $useableCards = array();
 
             foreach ($cardDetails as $key => $value) {
@@ -80,38 +81,38 @@ class CardController extends BaseController
                 if ($useable) {
                     if ($value['type'] == 'minus') {
                         $cardDetails[$key]['truePrice'] = $totalPrice - $value['rate'];
-                        $useableCards[]                 = $cardDetails[$key];
+                        $useableCards[] = $cardDetails[$key];
                     } else {
                         $cardDetails[$key]['truePrice'] = $totalPrice * ($value['rate'] / 10);
-                        $useableCards[]                 = $cardDetails[$key];
+                        $useableCards[] = $cardDetails[$key];
                     }
                 }
             }
 
             $higherTop = array();
-            $lowerTop  = array();
+            $lowerTop = array();
 
             foreach ($useableCards as $key => $useableCard) {
                 if ($useableCard['truePrice'] > 0) {
                     $useableCards[$key]['decrease'] = 0 - $useableCard['truePrice'];
-                    $lowerTop[]                     = $useableCards[$key];
+                    $lowerTop[] = $useableCards[$key];
                 } else {
                     $useableCards[$key]['decrease'] = 0 - $useableCard['truePrice'];
-                    $higherTop[]                    = $useableCards[$key];
+                    $higherTop[] = $useableCards[$key];
                 }
             }
 
-            $higherTop    = $this->getCardService()->sortArrayByField($higherTop, 'decrease');
-            $lowerTop     = $this->getCardService()->sortArrayByField($lowerTop, 'decrease');
+            $higherTop = $this->getCardService()->sortArrayByField($higherTop, 'decrease');
+            $lowerTop = $this->getCardService()->sortArrayByField($lowerTop, 'decrease');
             $useableCards = array_merge(array_reverse($higherTop), $lowerTop);
         }
 
         return $this->render('order/order-item-coupon.html.twig', array(
             'targetType' => $targetType,
-            'targetId'   => $targetId,
+            'targetId' => $targetId,
             'totalPrice' => $totalPrice,
-            'priceType'  => $priceType,
-            'coupons'    => isset($useableCards) ? $useableCards : null
+            'priceType' => $priceType,
+            'coupons' => isset($useableCards) ? $useableCards : null,
         ));
     }
 
@@ -129,28 +130,29 @@ class CardController extends BaseController
     public function cardInfoAction(Request $request)
     {
         $cardType = $request->query->get('cardType');
-        $cardId   = $request->query->get('cardId');
-        $card     = $this->getCardService()->getCardByCardIdAndCardType($cardId, $cardType);
+        $cardId = $request->query->get('cardId');
+        $card = $this->getCardService()->getCardByCardIdAndCardType($cardId, $cardType);
 
         $cardDetail = $this->getCardService()->findCardDetailByCardTypeAndCardId($cardType, $cardId);
-        $response   = $this->render('card/receive-show.html.twig', array(
-            'cardType'   => $cardType,
-            'cardId'     => $cardId,
-            'cardDetail' => $cardDetail
+        $response = $this->render('card/receive-show.html.twig', array(
+            'cardType' => $cardType,
+            'cardId' => $cardId,
+            'cardDetail' => $cardDetail,
         ));
 
-        $response->headers->setCookie(new Cookie("modalOpened", '0'));
+        $response->headers->setCookie(new Cookie('modalOpened', '0'));
+
         return $response;
     }
 
     protected function sortCards($cards)
     {
-        $cards       = $this->getCardService()->sortArrayByField($cards, 'createdTime');
-        $cards       = ArrayToolkit::group($cards, 'status');
+        $cards = $this->getCardService()->sortArrayByField($cards, 'createdTime');
+        $cards = ArrayToolkit::group($cards, 'status');
         $sortedCards = array();
 
-        $currentTime  = time();
-        $usedCards    = isset($cards['used']) ? $cards['used'] : array();
+        $currentTime = time();
+        $usedCards = isset($cards['used']) ? $cards['used'] : array();
         $invalidCards = isset($cards['invalid']) ? $cards['invalid'] : array();
         $outDateCards = array();
         $receiveCards = array();

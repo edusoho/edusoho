@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
@@ -18,12 +19,13 @@ class DataExtension extends \Twig_Extension
     public function __construct($container, Biz $biz)
     {
         $this->container = $container;
-        $this->biz       = $biz;
+        $this->biz = $biz;
     }
 
     public function getFunctions()
     {
         $options = array('is_safe' => array('html'));
+
         return array(
             new \Twig_SimpleFunction('data', array($this, 'getData'), $options),
             new \Twig_SimpleFunction('datas', array($this, 'getDatas'), $options),
@@ -37,24 +39,27 @@ class DataExtension extends \Twig_Extension
     public function getData($name, $arguments)
     {
         $datatag = ExtensionManager::instance()->getDataTag($name);
+
         return $datatag->getData($arguments);
     }
 
     public function getDatas($name, $conditions, $sort = null, $start = null, $limit = null)
     {
-        $method = 'get' . ucfirst($name) . 'Datas';
+        $method = 'get'.ucfirst($name).'Datas';
         if (!method_exists($this, $method)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('尚未定义批量获取"%name%"数据', array('%name%' =>$name )));
+            throw new \RuntimeException($this->getServiceKernel()->trans('尚未定义批量获取"%name%"数据', array('%name%' => $name)));
         }
+
         return $this->{$method}($conditions, $sort, $start, $limit);
     }
 
     public function getDatasCount($name, $conditions)
     {
-        $method = 'get' . ucfirst($name) . 'DatasdeCount';
+        $method = 'get'.ucfirst($name).'DatasdeCount';
         if (!method_exists($this, $method)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('尚未定义获取"%name%"数据的记录条数', array('%name%' =>$name )));
+            throw new \RuntimeException($this->getServiceKernel()->trans('尚未定义获取"%name%"数据的记录条数', array('%name%' => $name)));
         }
+
         return $this->{$method}($conditions);
     }
 
@@ -65,12 +70,12 @@ class DataExtension extends \Twig_Extension
 
     /**
      * @deprecated  即将废弃，不要再使用
-     *
      */
     public function callService($name, $method, $arguments)
     {
         $service = $this->biz->service($name);
         $reflectionClass = new \ReflectionClass($service);
+
         return $reflectionClass->getMethod($method)->invokeArgs($service, $arguments);
     }
 
@@ -84,7 +89,7 @@ class DataExtension extends \Twig_Extension
         return $this->biz->service('CloudPlatform:EduCloudService');
     }
 
-    public function getName ()
+    public function getName()
     {
         return 'topxia_data_twig';
     }

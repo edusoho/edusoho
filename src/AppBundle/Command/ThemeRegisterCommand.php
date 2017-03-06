@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use AppBundle\Common\BlockToolkit;
@@ -30,25 +31,25 @@ class ThemeRegisterCommand extends BaseCommand
             throw new \RuntimeException($this->trans('主题目录%themeDir%不存在！', array('%themeDir%' => $themeDir)));
         }
 
-        $output->writeln("<comment>  - 检查主题目录...</comment><info>OK</info>");
+        $output->writeln('<comment>  - 检查主题目录...</comment><info>OK</info>');
 
         $meta = $this->parseMeta($code, $themeDir);
-        $output->writeln("<comment>  - 获取主题元信息...</comment><info>OK</info>");
+        $output->writeln('<comment>  - 获取主题元信息...</comment><info>OK</info>');
 
         $this->executeInstall($themeDir);
-        $output->writeln("<comment>  - 执行安装脚本...</comment><info>OK</info>");
+        $output->writeln('<comment>  - 执行安装脚本...</comment><info>OK</info>');
 
-        $meta["type"] = "theme";
-        $app          = $this->getAppService()->registerApp($meta);
-        $output->writeln("<comment>  - 添加应用记录...</comment><info>OK</info>");
+        $meta['type'] = 'theme';
+        $app = $this->getAppService()->registerApp($meta);
+        $output->writeln('<comment>  - 添加应用记录...</comment><info>OK</info>');
 
         $this->initBlock($themeDir.'/block.json', $this->getContainer());
-        $output->writeln("<comment>  - 插入编辑区元信息成功...</comment><info>OK</info>");
+        $output->writeln('<comment>  - 插入编辑区元信息成功...</comment><info>OK</info>');
 
         PluginUtil::refresh();
-        $output->writeln("<comment>  - 刷新主题缓存...</comment><info>OK</info>");
+        $output->writeln('<comment>  - 刷新主题缓存...</comment><info>OK</info>');
 
-        $output->writeln("<info>注册成功....</info>");
+        $output->writeln('<info>注册成功....</info>');
     }
 
     private function executeInstall($pluginDir)
@@ -83,7 +84,7 @@ class ThemeRegisterCommand extends BaseCommand
         }
 
         if (empty($meta['code']) || empty($meta['name']) || empty($meta['version'])) {
-            throw new \RuntimeException("插件元信息必须包含code、name、version属性");
+            throw new \RuntimeException('插件元信息必须包含code、name、version属性');
         }
 
         if ($meta['code'] != $code) {
@@ -107,5 +108,4 @@ class ThemeRegisterCommand extends BaseCommand
     {
         return $this->getServiceKernel()->createService('Content:BlockService');
     }
-
 }
