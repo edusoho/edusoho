@@ -1507,7 +1507,7 @@ class EduCloudController extends BaseController
 
     protected function getConversationService()
     {
-        return $this->createService('IM.ConversationService');
+        return $this->createService('IM:ConversationService');
     }
 
     // 添加云直播
