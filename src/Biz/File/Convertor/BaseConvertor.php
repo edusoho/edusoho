@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\File\Convertor;
-
 
 use Biz\Util\CloudClient;
 
@@ -35,11 +33,12 @@ abstract class BaseConvertor
         $this->config = $config[$this->name];
     }
 
-    public abstract function saveConvertResult($file, $result);
+    abstract public function saveConvertResult($file, $result);
 
     /**
      * @param $params
+     *
      * @return array
      */
-    public abstract function getCovertParams($params);
+    abstract public function getCovertParams($params);
 }

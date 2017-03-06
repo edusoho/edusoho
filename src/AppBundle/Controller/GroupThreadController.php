@@ -34,7 +34,7 @@ class GroupThreadController extends BaseController
             return $this->createMessageResponse('info', '只有小组成员可以发言');
         }
 
-        if ($request->getMethod() == "POST") {
+        if ($request->getMethod() == 'POST') {
             try {
                 $threadData = $request->request->all();
 
@@ -45,17 +45,17 @@ class GroupThreadController extends BaseController
 
                     return $this->render('group/add-thread.html.twig',
                         array(
-                            'id'             => $id,
-                            'groupinfo'      => $groupinfo,
-                            'is_groupmember' => $this->getGroupMemberRole($id)
+                            'id' => $id,
+                            'groupinfo' => $groupinfo,
+                            'is_groupmember' => $this->getGroupMemberRole($id),
                         ));
                 }
 
                 $info = array(
-                    'title'   => $threadData['thread']['title'],
+                    'title' => $threadData['thread']['title'],
                     'content' => $threadData['thread']['content'],
                     'groupId' => $id,
-                    'userId'  => $user['id']
+                    'userId' => $user['id'],
                 );
 
                 $thread = $this->getThreadService()->addThread($info);
@@ -69,8 +69,8 @@ class GroupThreadController extends BaseController
                 }
 
                 return $this->redirect($this->generateUrl('group_thread_show', array(
-                    'id'       => $id,
-                    'threadId' => $thread['id']
+                    'id' => $id,
+                    'threadId' => $thread['id'],
                 )));
             } catch (\Exception $e) {
                 return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
@@ -79,15 +79,15 @@ class GroupThreadController extends BaseController
 
         return $this->render('group/add-thread.html.twig',
             array(
-                'id'             => $id,
-                'groupinfo'      => $groupinfo,
-                'is_groupmember' => $this->getGroupMemberRole($id)
+                'id' => $id,
+                'groupinfo' => $groupinfo,
+                'is_groupmember' => $this->getGroupMemberRole($id),
             ));
     }
 
     public function updateThreadAction(Request $request, $id, $threadId)
     {
-        $user      = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $groupinfo = $this->getGroupService()->getGroup($id);
 
         if (!$groupinfo) {
@@ -102,14 +102,14 @@ class GroupThreadController extends BaseController
 
         $thread = $this->getThreadService()->getThread($threadId);
 
-        $attachs = $this->getThreadService()->searchGoods(array("threadId" => $thread['id'], 'type' => 'attachment'), array('createdTime' => 'DESC'), 0, 1000);
+        $attachs = $this->getThreadService()->searchGoods(array('threadId' => $thread['id'], 'type' => 'attachment'), array('createdTime' => 'DESC'), 0, 1000);
 
-        if ($request->getMethod() == "POST") {
+        if ($request->getMethod() == 'POST') {
             try {
                 $threadData = $request->request->all();
-                $fields     = array(
-                    'title'   => $threadData['thread']['title'],
-                    'content' => $threadData['thread']['content']
+                $fields = array(
+                    'title' => $threadData['thread']['title'],
+                    'content' => $threadData['thread']['content'],
                 );
 
                 $thread = $this->getThreadService()->updateThread($threadId, $fields);
@@ -124,17 +124,17 @@ class GroupThreadController extends BaseController
 
                 if ($user->isAdmin()) {
                     $message = array(
-                        'id'       => $id,
+                        'id' => $id,
                         'threadId' => $thread['id'],
-                        'title'    => $thread['title'],
-                        'type'     => 'modify'
+                        'title' => $thread['title'],
+                        'type' => 'modify',
                     );
                     $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
                 }
 
                 return $this->redirect($this->generateUrl('group_thread_show', array(
-                    'id'       => $id,
-                    'threadId' => $threadId
+                    'id' => $id,
+                    'threadId' => $threadId,
                 )));
             } catch (\Exception $e) {
                 return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
@@ -142,11 +142,11 @@ class GroupThreadController extends BaseController
         }
 
         return $this->render('group/add-thread.html.twig', array(
-            'id'             => $id,
-            'groupinfo'      => $groupinfo,
-            'thread'         => $thread,
-            'attachs'        => $attachs,
-            'is_groupmember' => $this->getGroupMemberRole($id)
+            'id' => $id,
+            'groupinfo' => $groupinfo,
+            'thread' => $thread,
+            'attachs' => $attachs,
+            'is_groupmember' => $this->getGroupMemberRole($id),
         ));
     }
 
@@ -168,13 +168,13 @@ class GroupThreadController extends BaseController
 
         $this->getThreadService()->deleteGoods($goodsId);
 
-        return new Response("true");
+        return new Response('true');
     }
 
     public function checkUserAction(Request $request)
     {
         $nickname = $request->query->get('value');
-        $result   = $this->getUserService()->isNicknameAvaliable($nickname);
+        $result = $this->getUserService()->isNicknameAvaliable($nickname);
 
         if ($result) {
             $response = array('success' => false, 'message' => '该用户不存在');
@@ -198,12 +198,12 @@ class GroupThreadController extends BaseController
         $this->getThreadService()->threadCollect($user['id'], $threadId);
 
         $message = array(
-            'id'       => $threadMain['groupId'],
+            'id' => $threadMain['groupId'],
             'threadId' => $threadMain['id'],
-            'title'    => $threadMain['title'],
-            'userId'   => $user['id'],
+            'title' => $threadMain['title'],
+            'userId' => $user['id'],
             'userName' => $user['nickname'],
-            'type'     => 'collect'
+            'type' => 'collect',
         );
         $this->getNotifiactionService()->notify($threadMain['userId'], 'group-thread', $message);
 
@@ -223,12 +223,12 @@ class GroupThreadController extends BaseController
         $this->getThreadService()->unThreadCollect($user['id'], $threadId);
 
         $message = array(
-            'id'       => $threadMain['groupId'],
+            'id' => $threadMain['groupId'],
             'threadId' => $threadMain['id'],
-            'title'    => $threadMain['title'],
-            'userId'   => $user['id'],
+            'title' => $threadMain['title'],
+            'userId' => $user['id'],
             'userName' => $user['nickname'],
-            'type'     => 'uncollect'
+            'type' => 'uncollect',
         );
         $this->getNotifiactionService()->notify($threadMain['userId'], 'group-thread', $message);
 
@@ -239,7 +239,7 @@ class GroupThreadController extends BaseController
     {
         $group = $this->getGroupService()->getGroup($id);
 
-        if ($group['status'] == "close") {
+        if ($group['status'] == 'close') {
             return $this->createMessageResponse('info', '该小组已被关闭');
         }
 
@@ -251,11 +251,11 @@ class GroupThreadController extends BaseController
             return $this->createMessageResponse('info', '该话题已被管理员删除');
         }
 
-        if ($threadMain['status'] == "close") {
+        if ($threadMain['status'] == 'close') {
             return $this->createMessageResponse('info', '该话题已被关闭');
         }
 
-        if ($threadMain['status'] != "close") {
+        if ($threadMain['status'] != 'close') {
             $isCollected = $this->getThreadService()->isCollected($this->getCurrentUser()->id, $threadMain['id']);
         } else {
             $isCollected = false;
@@ -293,15 +293,15 @@ class GroupThreadController extends BaseController
 
         $postId = ArrayToolkit::column($post, 'id');
 
-        $postReplyAll       = array();
-        $postReply          = array();
-        $postReplyCount     = array();
+        $postReplyAll = array();
+        $postReply = array();
+        $postReplyCount = array();
         $postReplyPaginator = array();
-        $postFiles          = array();
-        $postAttachs        = array();
+        $postFiles = array();
+        $postAttachs = array();
 
         foreach ($postId as $value) {
-            $replyCount     = $this->getThreadService()->searchPostsCount(array('postId' => $value));
+            $replyCount = $this->getThreadService()->searchPostsCount(array('postId' => $value));
             $replyPaginator = new Paginator(
                 $this->get('request'),
                 $replyCount,
@@ -312,8 +312,8 @@ class GroupThreadController extends BaseController
                 $replyPaginator->getOffsetCount(),
                 $replyPaginator->getPerPageCount());
 
-            $postReplyCount[$value]     = $replyCount;
-            $postReply[$value]          = $reply;
+            $postReplyCount[$value] = $replyCount;
+            $postReply[$value] = $reply;
             $postReplyPaginator[$value] = $replyPaginator;
 
             if ($reply) {
@@ -326,24 +326,24 @@ class GroupThreadController extends BaseController
 
             $files = $this->getFileService()->getFilesByIds($postFileIds);
 
-            $postFiles[$value]   = $files;
+            $postFiles[$value] = $files;
             $postAttachs[$value] = $attachs;
         }
 
         $postReplyMembers = $this->getUserService()->findUsersByIds($postReplyAll);
-        $postMember       = $this->getUserService()->findUsersByIds($postMemberIds);
+        $postMember = $this->getUserService()->findUsersByIds($postMemberIds);
 
         $activeMembers = $this->getGroupService()->searchMembers(array('groupId' => $id),
             array('postNum' => 'DESC'), 0, 20);
 
         $memberIds = ArrayToolkit::column($activeMembers, 'userId');
-        $members   = $this->getUserService()->findUsersByIds($memberIds);
+        $members = $this->getUserService()->findUsersByIds($memberIds);
 
         $isAdopt = $this->getThreadService()->searchPosts(array('adopt' => 1, 'threadId' => $threadId), array('createdTime' => 'DESC'), 0, 1);
 
         $threadMain = $this->hideThings($threadMain);
 
-        $attachs = $this->getThreadService()->searchGoods(array("threadId" => $threadMain['id'], 'type' => 'attachment'), array('createdTime' => 'DESC'), 0, 1000);
+        $attachs = $this->getThreadService()->searchGoods(array('threadId' => $threadMain['id'], 'type' => 'attachment'), array('createdTime' => 'DESC'), 0, 1000);
 
         $fileIds = ArrayToolkit::column($attachs, 'fileId');
 
@@ -351,32 +351,32 @@ class GroupThreadController extends BaseController
 
         $threadMainContent = strip_tags($threadMain['content'], '');
 
-        $threadMainContent = preg_replace("/ /", "", $threadMainContent);
+        $threadMainContent = preg_replace('/ /', '', $threadMainContent);
 
         return $this->render('group/thread.html.twig', array(
-            'groupinfo'          => $group,
-            'isCollected'        => $isCollected,
-            'threadMain'         => $threadMain,
-            'user'               => $user,
-            'owner'              => $owner,
-            'post'               => $post,
-            'paginator'          => $paginator,
-            'postMember'         => $postMember,
-            'filters'            => $filters,
-            'postCount'          => $postCount,
-            'postReply'          => $postReply,
-            'activeMembers'      => $activeMembers,
-            'postReplyMembers'   => $postReplyMembers,
-            'members'            => $members,
-            'postReplyCount'     => $postReplyCount,
+            'groupinfo' => $group,
+            'isCollected' => $isCollected,
+            'threadMain' => $threadMain,
+            'user' => $user,
+            'owner' => $owner,
+            'post' => $post,
+            'paginator' => $paginator,
+            'postMember' => $postMember,
+            'filters' => $filters,
+            'postCount' => $postCount,
+            'postReply' => $postReply,
+            'activeMembers' => $activeMembers,
+            'postReplyMembers' => $postReplyMembers,
+            'members' => $members,
+            'postReplyCount' => $postReplyCount,
             'postReplyPaginator' => $postReplyPaginator,
-            'isAdopt'            => $isAdopt,
-            'attachs'            => $attachs,
-            'files'              => $files,
-            'postFiles'          => $postFiles,
-            'postAttachs'        => $postAttachs,
-            'threadMainContent'  => $threadMainContent,
-            'is_groupmember'     => $this->getGroupMemberRole($id)
+            'isAdopt' => $isAdopt,
+            'attachs' => $attachs,
+            'files' => $files,
+            'postFiles' => $postFiles,
+            'postAttachs' => $postAttachs,
+            'threadMainContent' => $threadMainContent,
+            'is_groupmember' => $this->getGroupMemberRole($id),
         ));
     }
 
@@ -401,12 +401,13 @@ class GroupThreadController extends BaseController
         }
 
         $postReplyMembers = $this->getUserService()->findUsersByIds($postReplyAll);
+
         return $this->render('group/thread-reply-list.html.twig', array(
-            'postMain'           => array('id' => $postId),
-            'postReply'          => $postReply,
-            'postReplyMembers'   => $postReplyMembers,
-            'postReplyCount'     => $replyCount,
-            'postReplyPaginator' => $postReplyPaginator
+            'postMain' => array('id' => $postId),
+            'postReply' => $postReply,
+            'postReplyMembers' => $postReplyMembers,
+            'postReplyCount' => $replyCount,
+            'postReplyPaginator' => $postReplyPaginator,
         ));
     }
 
@@ -440,7 +441,7 @@ class GroupThreadController extends BaseController
         $filename = $this->get('web.twig.extension')->getFilePath($file['uri']);
 
         $filename = substr($filename, 1);
-        $filename = explode("?", $filename);
+        $filename = explode('?', $filename);
         $filename = $filename[0];
 
         $response = BinaryFileResponse::create($filename, 200, array(), false);
@@ -448,20 +449,20 @@ class GroupThreadController extends BaseController
         $goods['title'] = urlencode($goods['title']);
         $goods['title'] = str_replace('+', '%20', $goods['title']);
 
-        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+        if (preg_match('/MSIE/i', $request->headers->get('User-Agent'))) {
             $response->headers->set('Content-Disposition', 'attachment; filename="'.$goods['title'].'"');
         } else {
             $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$goods['title']);
         }
 
-        $response->headers->set('Content-type', "application/octet-stream");
+        $response->headers->set('Content-type', 'application/octet-stream');
 
         return $response;
     }
 
     public function buyAttachAction(Request $request, $attachId)
     {
-        $user    = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $account = $this->getCashAccountService()->getAccountByUserId($user->id, true);
 
         $attach = $this->getThreadService()->getGoods($attachId);
@@ -472,7 +473,7 @@ class GroupThreadController extends BaseController
 
         $trade = $this->getThreadService()->getTradeByUserIdAndGoodsId($user->id, $attach['id']);
 
-        if ($request->getMethod() == "POST") {
+        if ($request->getMethod() == 'POST') {
             $amount = $request->request->get('amount');
 
             if (!isset($account['cash']) || $account['cash'] < $amount) {
@@ -483,9 +484,9 @@ class GroupThreadController extends BaseController
                 $this->getCashAccountService()->reward($attach['coin'], '下载附件'.'<'.$attach['title'].'>', $user->id, 'cut');
 
                 $data = array(
-                    'GoodsId'     => $attach['id'],
-                    'userId'      => $user->id,
-                    'createdTime' => time()
+                    'GoodsId' => $attach['id'],
+                    'userId' => $user->id,
+                    'createdTime' => time(),
                 );
                 $this->getThreadService()->addTrade($data);
 
@@ -502,10 +503,10 @@ class GroupThreadController extends BaseController
         }
 
         return $this->render('group/buy-attach-modal.html.twig', array(
-            'account'  => $account,
-            'attach'   => $attach,
-            'Trade'    => $trade,
-            'attachId' => $attachId
+            'account' => $account,
+            'attach' => $attach,
+            'Trade' => $trade,
+            'attachId' => $attachId,
         ));
     }
 
@@ -526,8 +527,8 @@ class GroupThreadController extends BaseController
         $postContent = $request->request->all();
 
         $fromUserId = empty($postContent['fromUserId']) ? 0 : $postContent['fromUserId'];
-        $content    = array(
-            'content' => $postContent['content'], 'fromUserId' => $fromUserId
+        $content = array(
+            'content' => $postContent['content'], 'fromUserId' => $fromUserId,
         );
 
         if (isset($postContent['postId'])) {
@@ -545,14 +546,14 @@ class GroupThreadController extends BaseController
         $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $post['id'], $attachment['targetType'], $attachment['type']);
 
         $message = array(
-            'id'       => $groupId,
+            'id' => $groupId,
             'threadId' => $thread['id'],
-            'title'    => $thread['title'],
-            'userId'   => $user['id'],
+            'title' => $thread['title'],
+            'userId' => $user['id'],
             'userName' => $user['nickname'],
-            'page'     => $this->getPostPage($post['id'], $threadId),
-            'post'     => $post['id'],
-            'type'     => 'reply'
+            'page' => $this->getPostPage($post['id'], $threadId),
+            'post' => $post['id'],
+            'type' => 'reply',
         );
 
         if ($user->id != $thread['userId']) {
@@ -576,15 +577,15 @@ class GroupThreadController extends BaseController
 
     public function searchResultAction(Request $request, $id)
     {
-        $keyWord = $request->query->get('keyWord') ?: "";
-        $group   = $this->getGroupService()->getGroup($id);
+        $keyWord = $request->query->get('keyWord') ?: '';
+        $group = $this->getGroupService()->getGroup($id);
 
         $paginator = new Paginator(
             $this->get('request'),
             $this->getThreadService()->countThreads(array('status' => 'open', 'title' => $keyWord, 'groupId' => $id)),
             15
         );
-        $threads   = $this->getThreadService()->searchThreads(
+        $threads = $this->getThreadService()->searchThreads(
             array('status' => 'open', 'title' => $keyWord, 'groupId' => $id),
             array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
@@ -599,13 +600,13 @@ class GroupThreadController extends BaseController
         $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('group/group-search-result.html.twig', array(
-            'groupinfo'       => $group,
-            'keyWord'         => $keyWord,
-            'threads'         => $threads,
-            'owner'           => $owner,
-            'paginator'       => $paginator,
+            'groupinfo' => $group,
+            'keyWord' => $keyWord,
+            'threads' => $threads,
+            'owner' => $owner,
+            'paginator' => $paginator,
             'lastPostMembers' => $lastPostMembers,
-            'is_groupmember'  => $this->getGroupMemberRole($id)
+            'is_groupmember' => $this->getGroupMemberRole($id),
         ));
     }
 
@@ -652,7 +653,7 @@ class GroupThreadController extends BaseController
         }
 
         return new Response($this->generateUrl('group_show', array(
-            'id' => $thread['groupId']
+            'id' => $thread['groupId'],
         )));
     }
 
@@ -669,32 +670,32 @@ class GroupThreadController extends BaseController
         if ($user['id'] == $post['userId'] || $groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
             $this->getThreadService()->deletePost($postId);
 
-            $thread  = $this->getThreadService()->getThread($post['threadId']);
+            $thread = $this->getThreadService()->getThread($post['threadId']);
             $message = array(
-                'id'       => $thread['groupId'],
+                'id' => $thread['groupId'],
                 'threadId' => $thread['id'],
-                'title'    => $thread['title'],
-                'type'     => 'delete-post'
+                'title' => $thread['title'],
+                'type' => 'delete-post',
             );
             $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
         }
 
         return new Response($this->generateUrl('group_thread_show', array(
-            'id' => $thread['groupId'], 'threadId' => $post['threadId']
+            'id' => $thread['groupId'], 'threadId' => $post['threadId'],
         )));
     }
 
     public function rewardAction(Request $request, $threadId)
     {
-        $user    = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $account = $this->getCashAccountService()->getAccountByUserId($user->id, true);
 
         if (isset($account['cash'])) {
             $account['cash'] = intval($account['cash']);
         }
 
-        if ($request->getMethod() == "POST") {
-            $thread          = $this->getThreadService()->getThread($threadId);
+        if ($request->getMethod() == 'POST') {
+            $thread = $this->getThreadService()->getThread($threadId);
             $groupMemberRole = $this->getGroupMemberRole($thread['groupId']);
 
             if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
@@ -706,22 +707,22 @@ class GroupThreadController extends BaseController
 
                 $this->getCashAccountService()->reward($amount, '发布悬赏话题'.'<'.$thread['title'].'>', $user->id, 'cut');
 
-                $thread['type']       = 'reward';
+                $thread['type'] = 'reward';
                 $thread['rewardCoin'] = $amount;
                 $this->getThreadService()->updateThread($threadId, $thread);
             }
         }
 
         return $this->render('group/reward-modal.html.twig', array(
-            'account'  => $account,
-            'threadId' => $threadId
+            'account' => $account,
+            'threadId' => $threadId,
         ));
     }
 
     public function cancelRewardAction($threadId)
     {
-        $user            = $this->getCurrentUser();
-        $thread          = $this->getThreadService()->getThread($threadId);
+        $user = $this->getCurrentUser();
+        $thread = $this->getThreadService()->getThread($threadId);
         $groupMemberRole = $this->getGroupMemberRole($thread['groupId']);
 
         $post = $this->getThreadService()->searchPosts(array('adopt' => 1, 'threadId' => $threadId), array('createdTime', 'desc'), 0, 1);
@@ -735,15 +736,15 @@ class GroupThreadController extends BaseController
 
             $this->getCashAccountService()->waveCashField($account['id'], $thread['rewardCoin']);
 
-            $thread['type']       = 'default';
+            $thread['type'] = 'default';
             $thread['rewardCoin'] = 0;
             $this->getThreadService()->updateThread($threadId, $thread);
         }
 
         response:
         return new Response($this->generateUrl('group_thread_show', array(
-            'id'       => $thread['groupId'],
-            'threadId' => $threadId
+            'id' => $thread['groupId'],
+            'threadId' => $threadId,
         )));
     }
 
@@ -769,13 +770,13 @@ class GroupThreadController extends BaseController
 
         response:
         return new Response($this->generateUrl('group_thread_show', array(
-            'id' => $thread['groupId'], 'threadId' => $post['threadId']
+            'id' => $thread['groupId'], 'threadId' => $post['threadId'],
         )));
     }
 
     public function hideAction($threadId, Request $request)
     {
-        $user    = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
         $account = $this->getCashAccountService()->getAccountByUserId($user->id, true);
 
         if (isset($account['cash'])) {
@@ -784,7 +785,7 @@ class GroupThreadController extends BaseController
 
         $need = $this->getThreadService()->sumGoodsCoinsByThreadId($threadId);
 
-        if ($request->getMethod() == "POST") {
+        if ($request->getMethod() == 'POST') {
             $thread = $this->getThreadService()->getThread($threadId);
 
             if (!isset($account['cash']) || $account['cash'] < $need) {
@@ -807,21 +808,21 @@ class GroupThreadController extends BaseController
         }
 
         return $this->render('group/hide-modal.html.twig', array(
-            'account'  => $account,
+            'account' => $account,
             'threadId' => $threadId,
-            'need'     => $need
+            'need' => $need,
         ));
     }
 
     protected function postAction($threadId, $action)
     {
-        $thread          = $this->getThreadService()->getThread($threadId);
+        $thread = $this->getThreadService()->getThread($threadId);
         $groupMemberRole = $this->getGroupMemberRole($thread['groupId']);
 
         $message = array(
-            'title'    => $thread['title'],
-            'groupId'  => $thread['groupId'],
-            'threadId' => $thread['id']
+            'title' => $thread['title'],
+            'groupId' => $thread['groupId'],
+            'threadId' => $thread['id'],
         );
 
         if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
@@ -851,8 +852,8 @@ class GroupThreadController extends BaseController
         }
 
         return new Response($this->generateUrl('group_thread_show', array(
-            'id'       => $thread['groupId'],
-            'threadId' => $threadId
+            'id' => $thread['groupId'],
+            'threadId' => $threadId,
         )));
     }
 
@@ -869,39 +870,41 @@ class GroupThreadController extends BaseController
         $url = $this->generateUrl('group_thread_show', array('id' => $id, 'threadId' => $threadId));
 
         $url = $url."?page=$page#post-$postId";
+
         return $url;
     }
 
     public function getPostPage($postId, $threadId)
     {
         $count = $this->getThreadService()->countThreads(array('threadId' => $threadId, 'status' => 'open', 'id' => $postId, 'postId' => 0));
+
         return floor(($count) / 30) + 1;
     }
 
     public function hideThings($thread)
     {
-        $thread['content'] = str_replace("#", "<!--></>", $thread['content']);
-        $thread['content'] = str_replace("[hide=reply", "#[hide=reply", $thread['content']);
-        $thread['content'] = str_replace("[hide=coin", "#[hide=coin", $thread['content']);
-        $data              = explode('[/hide]', $thread['content']);
+        $thread['content'] = str_replace('#', '<!--></>', $thread['content']);
+        $thread['content'] = str_replace('[hide=reply', '#[hide=reply', $thread['content']);
+        $thread['content'] = str_replace('[hide=coin', '#[hide=coin', $thread['content']);
+        $data = explode('[/hide]', $thread['content']);
 
-        $user    = $this->getCurrentUser();
-        $role    = $this->getGroupMemberRole($thread['groupId']);
-        $context = "";
-        $count   = 0;
+        $user = $this->getCurrentUser();
+        $role = $this->getGroupMemberRole($thread['groupId']);
+        $context = '';
+        $count = 0;
 
         foreach ($data as $value) {
-            $value = " ".$value;
-            sscanf($value, "%[^#]#[hide=coin%[^]]]%[^$$]", $content, $coin, $hideContent);
+            $value = ' '.$value;
+            sscanf($value, '%[^#]#[hide=coin%[^]]]%[^$$]', $content, $coin, $hideContent);
 
-            sscanf($value, "%[^#]#[hide=reply]%[^$$]", $replyContent, $replyHideContent);
+            sscanf($value, '%[^#]#[hide=reply]%[^$$]', $replyContent, $replyHideContent);
 
             $trade = $this->getThreadService()->getTradeByUserIdAndThreadId($user->id, $thread['id']);
 
             if ($role == 2 || $role == 3 || $user['id'] == $thread['userId'] || !empty($trade)) {
                 if ($coin) {
                     if ($role == 2 || $role == 3 || $user['id'] == $thread['userId']) {
-                        $context .= $content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>".'隐藏区域'."</span>".$hideContent."</div>";
+                        $context .= $content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>".'隐藏区域'.'</span>'.$hideContent.'</div>';
                     } else {
                         $context .= $content.$hideContent;
                     }
@@ -913,9 +916,9 @@ class GroupThreadController extends BaseController
                     $count = 1;
 
                     if ($user['id']) {
-                        $context .= $content."<div class=\"hideContent mtl mbl\"><h4> <a href=\"javascript:\" data-toggle=\"modal\" data-target=\"#modal\" data-urL=\"/thread/{$thread['id']}/hide\">".'点击查看'."</a>".'本话题隐藏内容'."</h4></div>";
+                        $context .= $content."<div class=\"hideContent mtl mbl\"><h4> <a href=\"javascript:\" data-toggle=\"modal\" data-target=\"#modal\" data-urL=\"/thread/{$thread['id']}/hide\">".'点击查看'.'</a>'.'本话题隐藏内容'.'</h4></div>';
                     } else {
-                        $context .= $content."<div class=\"hideContent mtl mbl\"><h4>".'游客,如果您要查看本话题隐藏内容请先'."<a href=\"/login\">".'登录'."</a>".'或'."<a href=\"/register\">".'注册'."</a>！</h4></div>";
+                        $context .= $content.'<div class="hideContent mtl mbl"><h4>'.'游客,如果您要查看本话题隐藏内容请先'.'<a href="/login">'.'登录'.'</a>'.'或'.'<a href="/register">'.'注册'.'</a>！</h4></div>';
                     }
                 } else {
                     $context .= $content;
@@ -939,24 +942,26 @@ class GroupThreadController extends BaseController
 
         $thread['count'] = $count;
 
-        $thread['content'] = str_replace("<!--></>", "#", $thread['content']);
+        $thread['content'] = str_replace('<!--></>', '#', $thread['content']);
+
         return $thread;
     }
 
     protected function replyCanSee($role, $thread, $content, $replyHideContent)
     {
-        $context = "";
-        $user    = $this->getCurrentUser();
+        $context = '';
+        $user = $this->getCurrentUser();
 
         if ($replyHideContent) {
             if ($role == 2 || $role == 3 || $user['id'] == $thread['userId']) {
-                $context = $content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>".'回复可见区域'."</span>".$replyHideContent."</div>";
+                $context = $content."<div class=\"hideContent mtl mbl clearfix\"><span class=\"pull-right\" style='font-size:10px;'>".'回复可见区域'.'</span>'.$replyHideContent.'</div>';
 
                 return $context;
             }
 
             if (!$user['id']) {
-                $context .= $content."<div class=\"hideContent mtl mbl\"><h4>".'游客,如果您要查看本话题隐藏内容请先'."<a href=\"/login\">".'登录'."</a>或<a href=\"/register\">".'注册'."</a>！</h4></div>";
+                $context .= $content.'<div class="hideContent mtl mbl"><h4>'.'游客,如果您要查看本话题隐藏内容请先'.'<a href="/login">'.'登录'.'</a>或<a href="/register">'.'注册'.'</a>！</h4></div>';
+
                 return $context;
             }
 
@@ -965,7 +970,7 @@ class GroupThreadController extends BaseController
             if ($count > 0) {
                 $context .= $content.$replyHideContent;
             } else {
-                $context .= $content."<div class=\"hideContent mtl mbl\"><h4> <a href=\"#post-thread-form\">".'回复'."</a>".'本话题可见'."</h4></div>";
+                $context .= $content.'<div class="hideContent mtl mbl"><h4> <a href="#post-thread-form">'.'回复'.'</a>'.'本话题可见'.'</h4></div>';
             }
         }
 
@@ -975,7 +980,7 @@ class GroupThreadController extends BaseController
     public function uploadAction(Request $request)
     {
         $group = $request->query->get('group');
-        $file  = $this->get('request')->files->get('file');
+        $file = $this->get('request')->files->get('file');
 
         if (!is_object($file)) {
             throw $this->createNotFoundException('上传文件不能为空!');
@@ -993,12 +998,14 @@ class GroupThreadController extends BaseController
 
         unset($record['uri']);
         $record['name'] = $file->getClientOriginalName();
+
         return new Response(json_encode($record));
     }
 
     protected function isFeatureEnabled($feature)
     {
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
         return in_array($feature, $features);
     }
 
@@ -1044,7 +1051,6 @@ class GroupThreadController extends BaseController
             return array('createdTime' => 'desc');
         }
     }
-
 
     protected function getGroupMemberRole($groupId)
     {
@@ -1164,4 +1170,3 @@ class GroupThreadController extends BaseController
         return $this->getBiz()->service('Group:GroupService');
     }
 }
-

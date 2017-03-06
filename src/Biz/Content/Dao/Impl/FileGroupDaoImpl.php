@@ -2,7 +2,6 @@
 
 namespace Biz\Content\Dao\Impl;
 
-
 use Biz\Content\Dao\FileGroupDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -16,16 +15,16 @@ class FileGroupDaoImpl extends GeneralDaoImpl implements FileGroupDao
     }
 
     public function getByCode($code)
-	{
-	    return $this->getByFields(array(
-	        'code' => $code
+    {
+        return $this->getByFields(array(
+            'code' => $code,
         ));
-	}
+    }
 
-	public function findAll()
-	{
-		$sql = "SELECT * FROM {$this->table}";
+    public function findAll()
+    {
+        $sql = "SELECT * FROM {$this->table}";
+
         return $this->db()->fetchAll($sql);
-	}
-
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Sms\SmsProcessor;
 
 use AppBundle\Common\SmsToolkit;
@@ -14,17 +15,17 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
     {
         $lesson = $this->getOpenCourseService()->getLesson($targetId);
         $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
-        $count  = 0;
+        $count = 0;
 
         $count = $this->getOpenCourseService()->countMembers(array('courseId' => $course['id']));
 
         global $kernel;
-        $api                = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
 
         $site = $this->getSettingService()->get('site');
         $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
-        for ($i = 0; $i <= intval($count / 1000); $i++) {
-            $urls[$i] = empty($url)? $kernel->getContainer()->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'liveOpenLesson', 'targetId' => $targetId), true): $url.$kernel->getContainer()->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'liveOpenLesson', 'targetId' => $targetId));
+        for ($i = 0; $i <= intval($count / 1000); ++$i) {
+            $urls[$i] = empty($url) ? $kernel->getContainer()->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'liveOpenLesson', 'targetId' => $targetId), true) : $url.$kernel->getContainer()->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'liveOpenLesson', 'targetId' => $targetId));
             $urls[$i] .= '?index='.($i * 1000);
             $urls[$i] .= '&smsType='.$smsType;
             $sign = $this->getSignEncoder()->encodePassword($urls[$i], $api->getAccessKey());
@@ -37,7 +38,7 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
 
     public function getSmsInfo($targetId, $index, $smsType)
     {
-        $lesson             = $this->getOpenCourseService()->getLesson($targetId);
+        $lesson = $this->getOpenCourseService()->getLesson($targetId);
 
         if (empty($lesson)) {
             throw new \RuntimeException('课时不存在');
@@ -47,12 +48,12 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
         $site = $this->getSettingService()->get('site');
         $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
 
-        $originUrl = empty($url)? $kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']), true) : $url.$kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']));
+        $originUrl = empty($url) ? $kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']), true) : $url.$kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']));
 
         $shortUrl = SmsToolkit::getShortLink($originUrl);
-        $url      = empty($shortUrl) ? $originUrl : $shortUrl;
-        $course   = $this->getOpenCourseService()->getCourse($lesson['courseId']);
-        $to       = '';
+        $url = empty($shortUrl) ? $originUrl : $shortUrl;
+        $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
+        $to = '';
 
         $students = $this->getOpenCourseService()->searchMembers(array('courseId' => $course['id']), array('createdTime' => 'Desc'), $index, 1000);
 
@@ -62,10 +63,10 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
         $parameters['lesson_title'] = '';
 
         if ($lesson['type'] == 'liveOpen') {
-            $parameters['startTime'] = date("Y-m-d H:i:s", $lesson['startTime']);
+            $parameters['startTime'] = date('Y-m-d H:i:s', $lesson['startTime']);
         }
 
-        $course['title']            = StringToolkit::cutter($course['title'], 20, 15, 4);
+        $course['title'] = StringToolkit::cutter($course['title'], 20, 15, 4);
         $parameters['course_title'] = '直播公开课：《'.$course['title'].'》';
 
         $description = $parameters['course_title'].' '.$parameters['lesson_title'].'预告';

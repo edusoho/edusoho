@@ -50,7 +50,7 @@ class PathPackage extends Package
 
         $cdn = new CdnUrl();
         $cdnUrl = $cdn->get();
-        $this->basePath = $cdnUrl . $this->basePath;
+        $this->basePath = $cdnUrl.$this->basePath;
     }
 
     /**

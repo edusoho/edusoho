@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Common\Redis;
 
 class RedisFactory
@@ -38,6 +39,7 @@ class RedisFactory
 
             if ($redisPool) {
                 $this->redis = $redisPool->getRedis($group);
+
                 return $this->redis;
             }
 
@@ -52,8 +54,9 @@ class RedisFactory
         $redisConfigFile = $this->container->getParameter('kernel.root_dir').'/data/redis.php';
 
         if (file_exists($redisConfigFile)) {
-            $redisConfig     = include $redisConfigFile;
+            $redisConfig = include $redisConfigFile;
             $this->redisPool = RedisPool::init($redisConfig);
+
             return $this->redisPool;
         }
 

@@ -1,6 +1,6 @@
 <?php
-namespace Biz\Cash\Service\Impl;
 
+namespace Biz\Cash\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Cash\Dao\CashOrdersDao;
@@ -26,10 +26,10 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
             throw $this->createInvalidArgumentException('充值金额必须为整数!');
         }
 
-        $coin                 = $coinSetting['cash_rate'] * $order['amount'];
-        $order['sn']          = "O".date('YmdHis').rand(10000, 99999);
-        $order['status']      = "created";
-        $order['title']       =  '充值购买' . $coin.$coinSetting['coin_name'];
+        $coin = $coinSetting['cash_rate'] * $order['amount'];
+        $order['sn'] = 'O'.date('YmdHis').rand(10000, 99999);
+        $order['status'] = 'created';
+        $order['title'] = '充值购买'.$coin.$coinSetting['coin_name'];
         $order['createdTime'] = time();
 
         return $this->getOrderDao()->create($order);
@@ -79,7 +79,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
             $order = $this->getOrderDao()->getBySn($payData['sn'], true);
 
             if (empty($order)) {
-                throw $this->createNotFoundException(sprintf('订单(%s)已被删除，支付失败。', $payData['sn'] ));
+                throw $this->createNotFoundException(sprintf('订单(%s)已被删除，支付失败。', $payData['sn']));
             }
 
             if ($payData['status'] == 'success') {
@@ -92,41 +92,40 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
                 }
 
                 if ($this->canOrderPay($order)) {
-
                     $this->getOrderDao()->update($order['id'], array(
-                        'status'   => 'paid',
-                        'paidTime' => $payData['paidTime']
+                        'status' => 'paid',
+                        'paidTime' => $payData['paidTime'],
                     ));
 
                     $this->_createLog($order['id'], 'pay_success', '付款成功', $payData);
 
-                    $userId = $order["userId"];
+                    $userId = $order['userId'];
                     $inFlow = array(
-                        'userId'   => $userId,
-                        'amount'   => $order["amount"],
-                        'name'     => '入账',
-                        'orderSn'  => $order['sn'],
+                        'userId' => $userId,
+                        'amount' => $order['amount'],
+                        'name' => '入账',
+                        'orderSn' => $order['sn'],
                         'category' => 'outflow',
-                        'note'     => '',
-                        'payment'  => $order['payment']
+                        'note' => '',
+                        'payment' => $order['payment'],
                     );
 
                     $rmbInFlow = $this->getCashService()->inflowByRmb($inFlow);
 
                     $rmbOutFlow = array(
-                        'userId'   => $userId,
-                        'amount'   => $order["amount"],
-                        'name'     => '出账',
-                        'orderSn'  => $order['sn'],
+                        'userId' => $userId,
+                        'amount' => $order['amount'],
+                        'name' => '出账',
+                        'orderSn' => $order['sn'],
                         'category' => 'inflow',
-                        'note'     => '',
-                        'parentSn' => $rmbInFlow['sn']
+                        'note' => '',
+                        'parentSn' => $rmbInFlow['sn'],
                     );
 
                     $this->getCashService()->changeRmbToCoin($rmbOutFlow);
 
                     $success = true;
-                    $this->dispatchEvent("order.pay.success",
+                    $this->dispatchEvent('order.pay.success',
                         new Event($order, array('targetType' => 'coin'))
                     );
                 } else {
@@ -143,6 +142,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         }
 
         $order = $this->getOrderDao()->get($order['id']);
+
         return array($success, $order);
     }
 
@@ -176,7 +176,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
     public function createPayRecord($id, array $payData)
     {
         $order = $this->getOrder($id);
-        $data  = $order['data'];
+        $data = $order['data'];
 
         if (!is_array($data)) {
             $data = json_decode($order['data'], true);
@@ -187,7 +187,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         }
 
         $fields = array('data' => json_encode($data));
-        $order  = $this->updateOrder($id, $fields);
+        $order = $this->updateOrder($id, $fields);
         $this->_createLog($order['id'], 'cash_pay_create', '创建交易', $payData);
     }
 
@@ -196,13 +196,13 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         $user = $this->getCurrentUser();
 
         $log = array(
-            'orderId'     => $orderId,
-            'type'        => $type,
-            'message'     => $message,
-            'data'        => json_encode($data),
-            'userId'      => $user['id'],
-            'ip'          => $user['currentIp'],
-            'createdTime' => time()
+            'orderId' => $orderId,
+            'type' => $type,
+            'message' => $message,
+            'data' => json_encode($data),
+            'userId' => $user['id'],
+            'ip' => $user['currentIp'],
+            'createdTime' => time(),
         );
 
         return $this->getOrderLogDao()->create($log);
@@ -225,17 +225,16 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
     protected function _prepareSearchConditions($conditions)
     {
         if (isset($conditions['mobile'])) {
-            $user                 = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
+            $user = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
         if (isset($conditions['email'])) {
-            $user                 = $this->getUserService()->getUserByEmail($conditions['email']);
+            $user = $this->getUserService()->getUserByEmail($conditions['email']);
             $conditions['userId'] = $user ? $user['id'] : -1;
         }
 
         return $conditions;
     }
-
 
     /**
      * @return CashOrdersDao

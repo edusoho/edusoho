@@ -16,6 +16,7 @@ class QuestionFileFireWall extends BaseFireWall implements FireWallInterface
         if ($user['id'] == $question['userId']) {
             return true;
         }
+
         return false;
     }
 

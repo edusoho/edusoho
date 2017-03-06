@@ -7,12 +7,11 @@ use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class CoinOrderController extends BaseController
 {
     public function ordersAction(Request $request)
     {
-        $fields     = $request->query->all();
+        $fields = $request->query->all();
         $conditions = array();
 
         if (!empty($fields)) {
@@ -22,8 +21,8 @@ class CoinOrderController extends BaseController
         if (isset($conditions['keywordType'])) {
             if ($conditions['keywordType'] == 'userName') {
                 $conditions['keywordType'] = 'userId';
-                $userFindbyNickName        = $this->getUserService()->getUserByNickname($conditions['keyword']);
-                $conditions['keyword']     = $userFindbyNickName ? $userFindbyNickName['id'] : -1;
+                $userFindbyNickName = $this->getUserService()->getUserByNickname($conditions['keyword']);
+                $conditions['keyword'] = $userFindbyNickName ? $userFindbyNickName['id'] : -1;
             }
         }
 
@@ -53,49 +52,49 @@ class CoinOrderController extends BaseController
         );
 
         foreach ($orders as $index => $expiredOrderToBeUpdated) {
-            if ((($expiredOrderToBeUpdated["createdTime"] + 48 * 60 * 60) < time()) && ($expiredOrderToBeUpdated["status"] == 'created')) {
+            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time()) && ($expiredOrderToBeUpdated['status'] == 'created')) {
                 $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
                 $orders[$index]['status'] = 'cancelled';
             }
         }
 
         $userIds = ArrayToolkit::column($orders, 'userId');
-        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
         return $this->render('admin/coin/coin-orders.html.twig', array(
-            'request'   => $request,
-            'users'     => $users,
-            'orders'    => $orders,
-            'paginator' => $paginator
+            'request' => $request,
+            'users' => $users,
+            'orders' => $orders,
+            'paginator' => $paginator,
         ));
     }
 
     public function logsAction($id)
     {
         $order = $this->getCashOrdersService()->getOrder($id);
-        $user  = $this->getUserService()->getUser($order['userId']);
+        $user = $this->getUserService()->getUser($order['userId']);
 
         $orderLogs = $this->getCashOrdersService()->getLogsByOrderId($order['id']);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orderLogs, 'userId'));
 
         return $this->render('admin/coin/order-log-modal.html.twig', array(
-            'order'     => $order,
-            'user'      => $user,
+            'order' => $order,
+            'user' => $user,
             'orderLogs' => $orderLogs,
-            'users'     => $users
+            'users' => $users,
         ));
     }
 
     public function exportCsvAction(Request $request) //coin
-
     {
         $conditions = $request->query->all();
 
         if (isset($conditions['keywordType'])) {
             if ($conditions['keywordType'] == 'userName') {
                 $conditions['keywordType'] = 'userId';
-                $userFindbyNickName        = $this->getUserService()->getUserByNickname($conditions['keyword']);
-                $conditions['keyword']     = $userFindbyNickName ? $userFindbyNickName['id'] : -1;
+                $userFindbyNickName = $this->getUserService()->getUserByNickname($conditions['keyword']);
+                $conditions['keyword'] = $userFindbyNickName ? $userFindbyNickName['id'] : -1;
             }
         }
 
@@ -107,12 +106,12 @@ class CoinOrderController extends BaseController
 
         if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
             $conditions['startTime'] = strtotime($conditions['startTime']);
-            $conditions['endTime']   = strtotime($conditions['endTime']);
+            $conditions['endTime'] = strtotime($conditions['endTime']);
         }
 
-        $status  = array('created' => '未付款', 'paid' => '已付款', 'cancelled' => '已关闭');
+        $status = array('created' => '未付款', 'paid' => '已付款', 'cancelled' => '已关闭');
         $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
-        $orders  = $this->getCashOrdersService()->searchOrders($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $orders = $this->getCashOrdersService()->searchOrders($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
@@ -129,23 +128,23 @@ class CoinOrderController extends BaseController
         $results = array();
 
         foreach ($orders as $key => $orders) {
-            $member = "";
-            $member .= $orders['sn'].",";
-            $member .= $status[$orders['status']].",";
-            $member .= $orders['title'].",";
-            $member .= $users[$orders['userId']]['nickname'].",";
-            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
-            $member .= $orders['amount'].",";
+            $member = '';
+            $member .= $orders['sn'].',';
+            $member .= $status[$orders['status']].',';
+            $member .= $orders['title'].',';
+            $member .= $users[$orders['userId']]['nickname'].',';
+            $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename'].',' : '-'.',';
+            $member .= $orders['amount'].',';
 
             $orderPayment = empty($orders['payment']) ? 'none' : $orders['payment'];
-            $member .= $payment[$orderPayment].",";
+            $member .= $payment[$orderPayment].',';
 
-            $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $member .= date('Y-n-d H:i:s', $orders['createdTime']).',';
 
             if ($orders['paidTime'] != 0) {
-                $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+                $member .= date('Y-n-d H:i:s', $orders['paidTime']).',';
             } else {
-                $member .= "-".",";
+                $member .= '-'.',';
             }
 
             $results[] = $member;
@@ -154,7 +153,7 @@ class CoinOrderController extends BaseController
         $str .= implode("\r\n", $results);
         $str = chr(239).chr(187).chr(191).$str;
 
-        $filename = sprintf("coin-order-(%s).csv", date('Y-n-d'));
+        $filename = sprintf('coin-order-(%s).csv', date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');

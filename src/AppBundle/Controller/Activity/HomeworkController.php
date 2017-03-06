@@ -17,33 +17,33 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
     {
         if ($preview) {
             return $this->forward('AppBundle:Activity/Homework:preview', array(
-                'id'       => $activity['id'],
-                'courseId' => $activity['fromCourseId']
+                'id' => $activity['id'],
+                'courseId' => $activity['fromCourseId'],
             ));
         }
 
         $user = $this->getUser();
 
-        $activity       = $this->getActivityService()->getActivity($activity['id']);
-        $homework       = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
+        $activity = $this->getActivityService()->getActivity($activity['id']);
+        $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
         $homeworkResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $homework['id'], $activity['fromCourseSetId'], $activity['id'], $activity['mediaType']);
 
         if (!$homeworkResult || ($homeworkResult['status'] == 'doing' && !$homeworkResult['updateTime'])) {
             return $this->render('activity/homework/show.html.twig', array(
-                'activity'       => $activity,
+                'activity' => $activity,
                 'homeworkResult' => $homeworkResult,
-                'homework'       => $homework,
-                'courseId'       => $activity['fromCourseId']
+                'homework' => $homework,
+                'courseId' => $activity['fromCourseId'],
             ));
         } elseif ($homeworkResult['status'] == 'finished') {
             return $this->forward('AppBundle:Homework:showResult', array(
-                'resultId' => $homeworkResult['id']
+                'resultId' => $homeworkResult['id'],
             ));
         }
 
         return $this->forward('AppBundle:Homework:startDo', array(
-            'lessonId'   => $activity['id'],
-            'homeworkId' => $activity['mediaId']
+            'lessonId' => $activity['id'],
+            'homeworkId' => $activity['mediaId'],
         ));
     }
 
@@ -56,20 +56,20 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
             return $this->createMessageResponse('error', 'homework not found');
         }
 
-        $questions   = $this->getTestpaperService()->showTestpaperItems($homework['id']);
+        $questions = $this->getTestpaperService()->showTestpaperItems($homework['id']);
         $attachments = $this->getTestpaperService()->findAttachments($homework['id']);
 
         return $this->render('activity/homework/preview.html.twig', array(
-            'paper'       => $homework,
-            'questions'   => $questions,
+            'paper' => $homework,
+            'questions' => $questions,
             'paperResult' => array(),
-            'activity'    => $activity
+            'activity' => $activity,
         ));
     }
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $course   = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
         $activity = $this->getActivityService()->getActivity($id);
 
         $homeworkActivity = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
@@ -85,20 +85,21 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
         $questions = $this->getQuestionService()->findQuestionsByIds(ArrayToolkit::column($questionItems, 'questionId'));
 
         return $this->render('activity/homework/modal.html.twig', array(
-            'activity'      => $activity,
-            'courseId'      => $activity['fromCourseId'],
+            'activity' => $activity,
+            'courseId' => $activity['fromCourseId'],
             'questionItems' => $questionItems,
-            'questions'     => $questions,
-            'courseSetId'   => $course['courseSetId']
+            'questions' => $questions,
+            'courseSetId' => $course['courseSetId'],
         ));
     }
 
     public function createAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+
         return $this->render('activity/homework/modal.html.twig', array(
-            'courseId'    => $courseId,
-            'courseSetId' => $course['courseSetId']
+            'courseId' => $courseId,
+            'courseSetId' => $course['courseSetId'],
         ));
     }
 
@@ -107,7 +108,7 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
         $homework = $this->getTestpaperService()->getTestpaper($activity['mediaId']);
 
         return $this->render('activity/homework/finish-condition.html.twig', array(
-            'homework' => $homework
+            'homework' => $homework,
         ));
     }
 
@@ -115,7 +116,7 @@ class HomeworkController extends BaseController implements ActivityActionInterfa
     {
         $conditions = array(
             'courseId' => $courseId,
-            'status'   => 'open'
+            'status' => 'open',
         );
 
         $testpapers = $this->getTestpaperService()->searchTestpapers(

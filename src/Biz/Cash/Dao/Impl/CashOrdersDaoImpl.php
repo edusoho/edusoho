@@ -2,7 +2,6 @@
 
 namespace Biz\Cash\Dao\Impl;
 
-
 use Biz\Cash\Dao\CashOrdersDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -12,20 +11,22 @@ class CashOrdersDaoImpl extends GeneralDaoImpl implements CashOrdersDao
 
     public function getBySn($sn, $lock = false)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE sn = ?  LIMIT 1" . ($lock ? ' FOR UPDATE' : '');
+        $sql = "SELECT * FROM {$this->table} WHERE sn = ?  LIMIT 1".($lock ? ' FOR UPDATE' : '');
+
         return $this->db()->fetchAssoc($sql, array($sn)) ?: array();
     }
 
     public function getByToken($token)
     {
         return $this->getByFields(array(
-            'token' => $token
+            'token' => $token,
         ));
     }
 
     public function closeOrders($time)
     {
         $sql = "UPDATE {$this->table} set status ='cancelled' WHERE status = 'created' AND createdTime < ?";
+
         return $this->db()->executeUpdate($sql, array($time));
     }
 
@@ -42,10 +43,10 @@ class CashOrdersDaoImpl extends GeneralDaoImpl implements CashOrdersDao
     {
         return array(
             'serializes' => array(
-                'data' => 'json'
+                'data' => 'json',
             ),
             'orderbys' => array(
-                'createdTime'
+                'createdTime',
             ),
             'conditions' => array(
                 'status = :status',
@@ -55,7 +56,7 @@ class CashOrdersDaoImpl extends GeneralDaoImpl implements CashOrdersDao
                 'createdTime >= :startTime',
                 'createdTime < :endTime',
                 'sn = :sn',
-            )
+            ),
         );
     }
 }

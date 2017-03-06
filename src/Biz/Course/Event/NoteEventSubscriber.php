@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Course\Event;
-
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -17,10 +15,10 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
     public static function getSubscribedEvents()
     {
         return array(
-            'course.note.create'     => 'onCourseNoteCreate',
-            'course.note.update'     => 'onCourseNoteUpdate',
-            'course.note.delete'     => 'onCourseNoteDelete',
-            'course.note.liked'      => 'onCourseNoteLike',
+            'course.note.create' => 'onCourseNoteCreate',
+            'course.note.update' => 'onCourseNoteUpdate',
+            'course.note.delete' => 'onCourseNoteDelete',
+            'course.note.liked' => 'onCourseNoteLike',
             'course.note.cancelLike' => 'onCourseNoteCancelLike',
         );
     }
@@ -29,7 +27,6 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $note = $event->getSubject();
         //$classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
-
 
         // @TODO 班级功能改造完后完善
         /*if ($classroom && $note['status']) {
@@ -43,7 +40,7 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
     public function onCourseNoteUpdate(Event $event)
     {
-        $note      = $event->getSubject();
+        $note = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
         $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], array('noteNum'));
         $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
@@ -57,12 +54,11 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
         if ($classroom && !$note['status'] && $preStatus) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);
         }*/
-
     }
 
     public function onCourseNoteDelete(Event $event)
     {
-        $note      = $event->getSubject();
+        $note = $event->getSubject();
         /*$classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
         if ($classroom) {
             $this->getClassroomService()->waveClassroom($classroom['classroomId'], 'noteNum', -1);

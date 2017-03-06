@@ -5,11 +5,11 @@ use Phpmig\Migration\Migration;
 class DownloadActivity extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
-        $biz        = $this->getContainer();
+        $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
             DROP TABLE IF EXISTS `download_activity`;
@@ -39,10 +39,9 @@ class DownloadActivity extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
-
     }
 }

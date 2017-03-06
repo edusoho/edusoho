@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Marker\Service\Impl;
 
 use Biz\BaseService;
@@ -56,12 +57,13 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         }
 
         $questionMarkerResult = $this->findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
+
         return $this->addQuestionMarkerResult(array(
-            'markerId'         => $markerId,
+            'markerId' => $markerId,
             'questionMarkerId' => $questionMarkerId,
-            'userId'           => $userId,
-            'status'           => $status,
-            'answer'           => serialize($answer)
+            'userId' => $userId,
+            'status' => $status,
+            'answer' => serialize($answer),
         ));
     }
 

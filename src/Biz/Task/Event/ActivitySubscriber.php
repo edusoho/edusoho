@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Task\Event;
 
 use Biz\Task\Service\TaskService;
@@ -11,8 +12,8 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
     public static function getSubscribedEvents()
     {
         return array(
-            'activity.start'    => 'onActivityStart',
-            'activity.doing'    => 'onActivityDoing'
+            'activity.start' => 'onActivityStart',
+            'activity.doing' => 'onActivityDoing',
         );
     }
 

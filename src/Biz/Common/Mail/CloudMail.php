@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Common\Mail;
 
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -13,16 +14,18 @@ class CloudMail extends Mail
         $cloudConfig = $this->setting('cloud_email', array());
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            $api    = CloudAPIFactory::create('leaf');
-            $site   = $this->setting('site', array());
+            $api = CloudAPIFactory::create('leaf');
+            $site = $this->setting('site', array());
             $params = array(
-                'to'       => $this->to,
+                'to' => $this->to,
                 'template' => $this->template,
-                'params'   => $this->params
+                'params' => $this->params,
             );
-            $result = $api->post("/emails", $params);
+            $result = $api->post('/emails', $params);
+
             return true;
         }
+
         return false;
     }
 }

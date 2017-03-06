@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Announcement\Service;
 
 interface AnnouncementService

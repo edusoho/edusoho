@@ -12,23 +12,24 @@ use AppBundle\Common\ArrayToolkit;
 class Audio extends Activity
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function create($fields)
     {
         if (empty($fields['ext'])) {
             throw $this->createInvalidArgumentException('参数不正确');
         }
-        $audio = ArrayToolkit::parts($fields['ext'],array('mediaId'));
+        $audio = ArrayToolkit::parts($fields['ext'], array('mediaId'));
         $audioActivity = $this->getAudioActivityDao()->create($audio);
+
         return $audioActivity;
     }
 
     public function copy($activity, $config = array())
     {
-        $audio    = $this->getAudioActivityDao()->get($activity['mediaId']);
+        $audio = $this->getAudioActivityDao()->get($activity['mediaId']);
         $newAudio = array(
-            'mediaId' => $audio['mediaId']
+            'mediaId' => $audio['mediaId'],
         );
 
         return $this->getAudioActivityDao()->create($newAudio);
@@ -36,15 +37,15 @@ class Audio extends Activity
 
     public function sync($sourceActivity, $activity)
     {
-        $sourceAudio      = $this->getAudioActivityDao()->get($sourceActivity['mediaId']);
-        $audio            = $this->getAudioActivityDao()->get($activity['mediaId']);
+        $sourceAudio = $this->getAudioActivityDao()->get($sourceActivity['mediaId']);
+        $audio = $this->getAudioActivityDao()->get($activity['mediaId']);
         $audio['mediaId'] = $sourceAudio['mediaId'];
 
         return $this->getAudioActivityDao()->update($audio['id'], $audio);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function update($targetId, &$fields, $activity)
     {
@@ -55,17 +56,19 @@ class Audio extends Activity
             throw $this->createNotFoundException('教学活动不存在');
         }
         $audioActivity = $this->getAudioActivityDao()->update($fields['mediaId'], $audioActivityFields);
+
         return $audioActivity;
     }
 
     public function isFinished($activityId)
     {
         $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'audio.finish');
+
         return !empty($logs);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function delete($id)
     {
@@ -73,12 +76,13 @@ class Audio extends Activity
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($id)
     {
-        $audioActivity         = $this->getAudioActivityDao()->get($id);
+        $audioActivity = $this->getAudioActivityDao()->get($id);
         $audioActivity['file'] = $this->getUploadFileService()->getFullFile($audioActivity['mediaId']);
+
         return $audioActivity;
     }
 
@@ -92,7 +96,7 @@ class Audio extends Activity
      */
     protected function getAudioActivityDao()
     {
-        return $this->getBiz()->dao("Activity:AudioActivityDao");
+        return $this->getBiz()->dao('Activity:AudioActivityDao');
     }
 
     /**
@@ -100,7 +104,7 @@ class Audio extends Activity
      */
     protected function getActivityLearnLogService()
     {
-        return $this->getBiz()->service("Activity:ActivityLearnLogService");
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**
@@ -108,7 +112,7 @@ class Audio extends Activity
      */
     protected function getActivityService()
     {
-        return $this->getBiz()->service("Activity:ActivityService");
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     /**

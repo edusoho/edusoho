@@ -30,14 +30,14 @@ class MessageController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('admin/message/index.html.twig', array(
-            'users'     => $users,
-            'messages'  => $messages,
-            'paginator' => $paginator));
+            'users' => $users,
+            'messages' => $messages,
+            'paginator' => $paginator, ));
     }
 
     public function deleteChoosedMessagesAction(Request $request)
     {
-        $ids    = $request->request->get('ids');
+        $ids = $request->request->get('ids');
         $result = $this->getMessageService()->deleteMessagesByIds($ids);
 
         if ($result) {

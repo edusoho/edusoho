@@ -1,20 +1,21 @@
 <?php
+
 namespace AppBundle\Component\OAuthClient;
 
 abstract class AbstractOAuthClient
 {
-	protected $config;
+    protected $config;
 
-	protected $userAgent = 'Topxia OAuth Client 1.0';
+    protected $userAgent = 'Topxia OAuth Client 1.0';
 
-	protected $connectTimeout = 30;
+    protected $connectTimeout = 30;
 
-	protected $timeout = 30;
+    protected $timeout = 30;
 
-	public function __construct($config)
-	{
-		$this->config = $config;
-	}
+    public function __construct($config)
+    {
+        $this->config = $config;
+    }
 
     abstract public function getAuthorizeUrl($callbackUrl);
 
@@ -23,53 +24,54 @@ abstract class AbstractOAuthClient
     abstract public function getUserInfo($token);
 
     /**
-     * HTTP POST
-     * @param  string 	$url    要请求的url地址
-     * @param  array 	$params 请求的参数
+     * HTTP POST.
+     *
+     * @param string $url    要请求的url地址
+     * @param array  $params 请求的参数
+     *
      * @return string
      */
     public function postRequest($url, $params)
     {
-    	$curl = curl_init();
+        $curl = curl_init();
 
-    	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-    	curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
-		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
-		curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_HEADER, 0);
-		curl_setopt($curl, CURLOPT_POST, 1);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-		curl_setopt($curl, CURLOPT_URL, $url );
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($curl, CURLOPT_URL, $url);
 
-		// curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
+        // curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
 
-		$response = curl_exec($curl);
+        $response = curl_exec($curl);
 
-		curl_close($curl);
+        curl_close($curl);
 
-		return $response;
+        return $response;
     }
 
     public function getRequest($url, $params)
     {
+        $curl = curl_init();
 
-    	$curl = curl_init();
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
 
-    	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-    	curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
-		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
-		curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_HEADER, 0);
+        $url = $url.'?'.http_build_query($params);
+        curl_setopt($curl, CURLOPT_URL, $url);
 
-    	$url = $url . '?' . http_build_query($params);
-		curl_setopt($curl, CURLOPT_URL, $url );
+        $response = curl_exec($curl);
 
-		$response = curl_exec($curl);
+        curl_close($curl);
 
-		curl_close($curl);
-
-		return $response;
+        return $response;
     }
 }

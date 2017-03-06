@@ -4,7 +4,6 @@ namespace Biz\Order\Service;
 
 interface OrderService
 {
-
     const TARGETTYPE_COURSE = 'course';
 
     const SNPREFIX_C = 'C';
@@ -27,6 +26,7 @@ interface OrderService
 
     /**
      * @param $conditions
+     *
      * @return mixed
      * @before searchOrderCount
      */
@@ -39,15 +39,17 @@ interface OrderService
     public function payOrder($payData);
 
     /**
-     * [createSystemOrder 创建系统内部订单，如VIP，免费加入，导入加入等]
-     * @param  [type] $order [description]
-     * @return [type]        [description]
+     * [createSystemOrder 创建系统内部订单，如VIP，免费加入，导入加入等].
+     *
+     * @param [type] $order [description]
+     *
+     * @return [type] [description]
      */
     public function createSystemOrder($order);
 
     public function canOrderPay($order);
 
-    public function cancelOrder($id, $message='', $data = array());
+    public function cancelOrder($id, $message = '', $data = array());
 
     public function sumOrderPriceByTarget($targetType, $targetId);
 
@@ -63,6 +65,7 @@ interface OrderService
 
     /**
      * @param $conditions
+     *
      * @return mixed
      * @before  searchRefundCount
      */
@@ -70,6 +73,7 @@ interface OrderService
 
     /**
      * @param $orderId
+     *
      * @return mixed
      * @before findRefundByOrderId
      */
@@ -77,12 +81,12 @@ interface OrderService
 
     /**
      * 申请退款
-     * $expectedAmount, 0代表无需退款，NULL代表退款额度未知
+     * $expectedAmount, 0代表无需退款，NULL代表退款额度未知.
      */
     public function applyRefundOrder($id, $expectedAmount = null, $reason = array());
 
     /**
-     * 审核退款申请
+     * 审核退款申请.
      *
      * $pass, TRUE为通过退款, FALSE为退款失败
      * $actualAmount为实际退款金额

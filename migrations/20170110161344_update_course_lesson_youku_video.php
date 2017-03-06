@@ -1,17 +1,16 @@
 <?php
 
 use Phpmig\Migration\Migration;
-use AppBundle\Common\ArrayToolkit;
 
 class UpdateCourseLessonYoukuVideo extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
+        $db = $biz['db'];
 
         $courseLessons = $db->fetchAll("select * from course_lesson where mediaSource = 'youku'");
 
@@ -28,7 +27,7 @@ class UpdateCourseLessonYoukuVideo extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {

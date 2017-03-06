@@ -9,13 +9,17 @@
     </div>
     <div class="col-sm-10 controls">
       <select id="testpaper-media" class="form-control" name="mediaId"  data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
-      {#<select id="testpaper-media" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">#}
+      
         <option value="">{{ '请选择试卷'|trans }}</option>
         {% for testpaper in testpapers if testpaper %}
           <option value="{{ testpaper.id }}" {% if testpaper.id == activity.testpaperMediaId|default('') %}selected{% endif %} data-score="{{ testpaper.score }}">{{ testpaper.name }}</option>
         {% endfor %}
       </select>
-      <div class="help-block">{{'如果找不到试卷，请先确定该试卷已经发布'|trans}}</div>
+      {% if testpapers is empty %}
+        <div class="help-block color-danger">还没有试卷，请先去<a href="{{ path('course_set_manage_testpaper',{id:course.courseSetId}) }}" target="_parent">创建</a></div>
+      {% else %}
+        <div class="help-block">{{'如果找不到试卷，请先确定该试卷已经发布'|trans}}</div>
+      {% endif %}
     </div>
   </div>
 

@@ -1,41 +1,43 @@
 <?php
+
 namespace Biz\Order\OrderRefundProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomOrderRefundProcessor implements OrderRefundProcessor
 {
-	public function getLayout()
-	{
-		return 'ClassroomBundle:ClassroomAdmin:layout.html.twig';
-	}
+    public function getLayout()
+    {
+        return 'ClassroomBundle:ClassroomAdmin:layout.html.twig';
+    }
 
     public function getRefundLayout()
     {
-        return "ClassroomBundle:ClassroomAdmin:refund.layout.html.twig";
+        return 'ClassroomBundle:ClassroomAdmin:refund.layout.html.twig';
     }
 
-	public function findByLikeTitle($title)
-	{
+    public function findByLikeTitle($title)
+    {
         $conditions = array(
-            'title' => $title
+            'title' => $title,
         );
-		return $this->getClassroomService()->searchClassrooms(
-            $conditions, 
+
+        return $this->getClassroomService()->searchClassrooms(
+            $conditions,
             array('createdTime' => 'desc'),
             0,
             100
         );
-	}
+    }
 
     public function removeStudent($targetId, $userId)
     {
         $this->getClassroomService()->removeStudent($targetId, $userId);
     }
 
-	public function auditRefundOrder($id, $pass, $data)
-	{
-		$order = $this->getOrderService()->getOrder($id);
+    public function auditRefundOrder($id, $pass, $data)
+    {
+        $order = $this->getOrderService()->getOrder($id);
 
         if ($pass) {
             if ($this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
@@ -46,13 +48,12 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
                 $this->getClassroomService()->unlockStudent($order['targetId'], $order['userId']);
             }
         }
+    }
 
-	}
-
-	public function cancelRefundOrder($id)
-	{
-		$this->getClassroomOrderService()->cancelRefundOrder($id);
-	}
+    public function cancelRefundOrder($id)
+    {
+        $this->getClassroomOrderService()->cancelRefundOrder($id);
+    }
 
     public function getTarget($id)
     {
@@ -69,7 +70,7 @@ class ClassroomOrderRefundProcessor implements OrderRefundProcessor
         return $this->getClassroomService()->getClassroomMember($targetId, $userId);
     }
 
-	protected function getNotificationService()
+    protected function getNotificationService()
     {
         return ServiceKernel::instance()->createService('User:NotificationService');
     }

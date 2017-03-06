@@ -3,23 +3,22 @@
 namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Extensions\DataTag\DataTag;
+
 // use Topxia\Service\Article\ArticleService;
 
-class CourseRelatedArticlesDataTag extends CourseBaseDataTag implements DataTag  
+class CourseRelatedArticlesDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
-     *  根据课程id取相同标签的已经发布的资讯
+     *  根据课程id取相同标签的已经发布的资讯.
+     *
      *  @return  array 资讯
      */
-
     public function getData(array $arguments)
     {
-        $this->checkCourseId( $arguments);
+        $this->checkCourseId($arguments);
         $course = $this->getCourseService()->getCourse($arguments['courseId']);
 
-        if(empty($course))
-        {
+        if (empty($course)) {
             return array();
         }
 
@@ -27,13 +26,14 @@ class CourseRelatedArticlesDataTag extends CourseBaseDataTag implements DataTag
 
         $tagIds = ArrayToolkit::column($tags, 'id');
 
-        $count=$arguments['count'];
+        $count = $arguments['count'];
 
-        if(empty($count)){
-            $count=5;
+        if (empty($count)) {
+            $count = 5;
         }
 
-        $articles = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount($tagIds,$count);
+        $articles = $this->getArticleService()->findPublishedArticlesByTagIdsAndCount($tagIds, $count);
+
         return $articles;
     }
 

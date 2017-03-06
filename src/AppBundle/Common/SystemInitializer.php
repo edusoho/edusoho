@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Common;
-
 
 use Biz\Content\Service\BlockService;
 use Biz\Content\Service\ContentService;
@@ -58,24 +56,24 @@ class SystemInitializer
     protected function _initDictionary()
     {
         $this->output->write('  初始化字典  ');
-        
+
         $dictionary = $this->getDictionaryService()->addDictionary(array(
             'name' => '退学原因',
-            'type' => 'refund_reason'
+            'type' => 'refund_reason',
         ));
 
         $this->getDictionaryService()->addDictionaryItem(array(
             'type' => $dictionary['type'],
             'name' => '课程内容质量差',
             'createdTime' => time(),
-            'updateTime' => time()
+            'updateTime' => time(),
         ));
 
         $this->getDictionaryService()->addDictionaryItem(array(
             'type' => $dictionary['type'],
             'name' => '老师服务态度不好',
             'createdTime' => time(),
-            'updateTime' => time()
+            'updateTime' => time(),
         ));
 
         $this->output->writeln(' ...<info>成功</info>');
@@ -92,7 +90,7 @@ class SystemInitializer
             $user = $this->getUserService()->register($fields);
         }
 
-        $user['roles']     = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
+        $user['roles'] = array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN');
         $user['currentIp'] = '127.0.0.1';
 
         $currentUser = new CurrentUser();
@@ -111,13 +109,13 @@ class SystemInitializer
         $this->output->write('  初始化邮件服务器设置');
 
         $default = array(
-            'enabled'  => 0,
-            'host'     => 'smtp.exmail.qq.com',
-            'port'     => '25',
+            'enabled' => 0,
+            'host' => 'smtp.exmail.qq.com',
+            'port' => '25',
             'username' => 'user@example.com',
             'password' => '',
-            'from'     => 'user@example.com',
-            'name'     => ''
+            'from' => 'user@example.com',
+            'name' => '',
         );
         $this->getSettingService()->set('mailer', $default);
 
@@ -129,8 +127,8 @@ class SystemInitializer
         $this->output->write('  初始化magic设置');
         $default = array(
             'export_allow_count' => 100000,
-            'export_limit'       => 10000,
-            'enable_org'         => 0
+            'export_limit' => 10000,
+            'enable_org' => 0,
         );
 
         $this->getSettingService()->set('magic', $default);
@@ -143,20 +141,20 @@ class SystemInitializer
         $this->output->write('  初始化客服设置');
 
         $default = array(
-            'enabled'    => 0,
-            'worktime'   => '9:00 - 17:00',
-            'qq'         => array(
-                array('name' => '', 'number' => '')
+            'enabled' => 0,
+            'worktime' => '9:00 - 17:00',
+            'qq' => array(
+                array('name' => '', 'number' => ''),
             ),
-            'qqgroup'    => array(
-                array('name' => '', 'number' => '')
+            'qqgroup' => array(
+                array('name' => '', 'number' => ''),
             ),
-            'phone'      => array(
-                array('name' => '', 'number' => '')
+            'phone' => array(
+                array('name' => '', 'number' => ''),
             ),
             'webchatURI' => '',
-            'email'      => '',
-            'color'      => 'default'
+            'email' => '',
+            'color' => 'default',
         );
 
         $this->getSettingService()->set('contact', $default);
@@ -169,10 +167,10 @@ class SystemInitializer
         $this->output->write('  初始化退款设置');
 
         $setting = array(
-            'maxRefundDays'       => 10,
-            'applyNotification'   => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
+            'maxRefundDays' => 10,
+            'applyNotification' => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
             'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
-            'failedNotification'  => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。'
+            'failedNotification' => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。',
         );
         $this->getSettingService()->set('refund', $setting);
         $this->output->writeln(' ...<info>成功</info>');
@@ -183,17 +181,17 @@ class SystemInitializer
         $this->output->write('  初始化站点设置');
 
         $default = array(
-            'name'            => 'EDUSOHO测试站',
-            'slogan'          => '强大的在线教育解决方案',
-            'url'             => 'http://demo.edusoho.com',
-            'logo'            => '',
-            'seo_keywords'    => 'edusoho, 在线教育软件, 在线在线教育解决方案',
+            'name' => 'EDUSOHO测试站',
+            'slogan' => '强大的在线教育解决方案',
+            'url' => 'http://demo.edusoho.com',
+            'logo' => '',
+            'seo_keywords' => 'edusoho, 在线教育软件, 在线在线教育解决方案',
             'seo_description' => 'edusoho是强大的在线教育开源软件',
-            'master_email'    => 'test@edusoho.com',
-            'icp'             => ' 浙ICP备13006852号-1',
-            'analytics'       => '',
-            'status'          => 'open',
-            'closed_note'     => ''
+            'master_email' => 'test@edusoho.com',
+            'icp' => ' 浙ICP备13006852号-1',
+            'analytics' => '',
+            'status' => 'open',
+            'closed_note' => '',
         );
 
         $this->getSettingService()->set('site', $default);
@@ -205,11 +203,11 @@ class SystemInitializer
         $this->output->write('  初始化支付设置');
 
         $default = array(
-            'enabled'        => 0,
-            'bank_gateway'   => 'none',
+            'enabled' => 0,
+            'bank_gateway' => 'none',
             'alipay_enabled' => 0,
-            'alipay_key'     => '',
-            'alipay_secret'  => ''
+            'alipay_key' => '',
+            'alipay_secret' => '',
         );
 
         $this->getSettingService()->set('payment', $default);
@@ -222,31 +220,31 @@ class SystemInitializer
         $this->output->write('  初始化章节的默认设置');
         $settingService = $this->getSettingService();
 
-        $defaultSetting                 = array();
+        $defaultSetting = array();
         $defaultSetting['chapter_name'] = '章';
-        $defaultSetting['user_name']    = '学员';
-        $defaultSetting['part_name']    = '节';
+        $defaultSetting['user_name'] = '学员';
+        $defaultSetting['part_name'] = '节';
 
-        $default        = $settingService->get('default', array());
+        $default = $settingService->get('default', array());
         $defaultSetting = array_merge($default, $defaultSetting);
 
         $settingService->set('default', $defaultSetting);
 
         $setting = array(
             'rules' => array(
-                'thread'            => array(
+                'thread' => array(
                     'fiveMuniteRule' => array(
                         'interval' => 300,
-                        'postNum'  => 100
-                    )
+                        'postNum' => 100,
+                    ),
                 ),
                 'threadLoginedUser' => array(
                     'fiveMuniteRule' => array(
                         'interval' => 300,
-                        'postNum'  => 50
-                    )
-                )
-            )
+                        'postNum' => 50,
+                    ),
+                ),
+            ),
         );
         $settingService->set('post_num_rules', $setting);
 
@@ -262,10 +260,10 @@ class SystemInitializer
         $this->output->write('  初始化云服务器设置');
 
         $default = array(
-            'upload_mode'      => 'local',
+            'upload_mode' => 'local',
             'cloud_api_server' => 'http://api.edusoho.net',
             'cloud_access_key' => '',
-            'cloud_secret_key' => ''
+            'cloud_secret_key' => '',
         );
 
         $this->getSettingService()->set('storage', $default);
@@ -296,14 +294,14 @@ Hi, {{nickname}}
 EOD;
 
         $default = array(
-            'register_mode'          => 'email',
+            'register_mode' => 'email',
             'email_activation_title' => '请激活您的{{sitename}}帐号',
-            'email_activation_body'  => trim($emailBody),
-            'welcome_enabled'        => 'opened',
-            'welcome_sender'         => $user['nickname'],
-            'welcome_methods'        => array(),
-            'welcome_title'          => '欢迎加入{{sitename}}',
-            'welcome_body'           => '您好{{nickname}}，我是{{sitename}}的管理员，欢迎加入{{sitename}}，祝您学习愉快。如有问题，随时与我联系。'
+            'email_activation_body' => trim($emailBody),
+            'welcome_enabled' => 'opened',
+            'welcome_sender' => $user['nickname'],
+            'welcome_methods' => array(),
+            'welcome_title' => '欢迎加入{{sitename}}',
+            'welcome_body' => '您好{{nickname}}，我是{{sitename}}的管理员，欢迎加入{{sitename}}，祝您学习愉快。如有问题，随时与我联系。',
         );
 
         $this->getSettingService()->set('auth', $default);
@@ -329,34 +327,33 @@ EOD;
 
         $courseGroup = $this->getCategoryService()->getGroupByCode('course');
 
-        if(empty($courseGroup)){
+        if (empty($courseGroup)) {
             $courseGroup = $this->getCategoryService()->addGroup(array(
-                'name'  => '课程分类',
-                'code'  => 'course',
-                'depth' => 3
+                'name' => '课程分类',
+                'code' => 'course',
+                'depth' => 3,
             ));
         }
 
         $courseCategory = $this->getCategoryService()->getCategoryByCode('default');
 
-        if(empty($courseCategory)){
+        if (empty($courseCategory)) {
             $this->getCategoryService()->createCategory(array(
-                'name'     => '默认分类',
-                'code'     => 'default',
-                'weight'   => 100,
-                'groupId'  => $courseGroup['id'],
-                'parentId' => 0
+                'name' => '默认分类',
+                'code' => 'default',
+                'weight' => 100,
+                'groupId' => $courseGroup['id'],
+                'parentId' => 0,
             ));
         }
-
 
         $classroomGroup = $this->getCategoryService()->getGroupByCode('classroom');
 
         if (!$classroomGroup) {
             $classroomGroup = $this->getCategoryService()->addGroup(array(
-                'name'  => '班级分类',
-                'code'  => 'classroom',
-                'depth' => 3
+                'name' => '班级分类',
+                'code' => 'classroom',
+                'depth' => 3,
             ));
         }
 
@@ -364,11 +361,11 @@ EOD;
 
         if (!$classroomCategory) {
             $this->getCategoryService()->createCategory(array(
-                'name'     => '默认分类',
-                'code'     => 'classroomdefault',
-                'weight'   => 100,
-                'groupId'  => $classroomGroup['id'],
-                'parentId' => 0
+                'name' => '默认分类',
+                'code' => 'classroomdefault',
+                'weight' => 100,
+                'groupId' => $classroomGroup['id'],
+                'parentId' => 0,
             ));
         }
 
@@ -386,69 +383,69 @@ EOD;
         }
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '默认文件组',
-            'code'   => 'default',
-            'public' => 1
+            'name' => '默认文件组',
+            'code' => 'default',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '缩略图',
-            'code'   => 'thumb',
-            'public' => 1
+            'name' => '缩略图',
+            'code' => 'thumb',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '课程',
-            'code'   => 'course',
-            'public' => 1
+            'name' => '课程',
+            'code' => 'course',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '用户',
-            'code'   => 'user',
-            'public' => 1
+            'name' => '用户',
+            'code' => 'user',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '课程私有文件',
-            'code'   => 'course_private',
-            'public' => 0
+            'name' => '课程私有文件',
+            'code' => 'course_private',
+            'public' => 0,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '资讯',
-            'code'   => 'article',
-            'public' => 1
+            'name' => '资讯',
+            'code' => 'article',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '临时目录',
-            'code'   => 'tmp',
-            'public' => 1
+            'name' => '临时目录',
+            'code' => 'tmp',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '全局设置文件',
-            'code'   => 'system',
-            'public' => 1
+            'name' => '全局设置文件',
+            'code' => 'system',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '小组',
-            'code'   => 'group',
-            'public' => 1
+            'name' => '小组',
+            'code' => 'group',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '编辑区',
-            'code'   => 'block',
-            'public' => 1
+            'name' => '编辑区',
+            'code' => 'block',
+            'public' => 1,
         ));
 
         $this->getFileService()->addFileGroup(array(
-            'name'   => '班级',
-            'code'   => 'classroom',
-            'public' => 1
+            'name' => '班级',
+            'code' => 'classroom',
+            'public' => 1,
         ));
 
         $this->output->writeln(' ...<info>成功</info>');
@@ -457,21 +454,21 @@ EOD;
     protected function _initPages()
     {
         $this->getContentService()->createContent(array(
-            'title'    => '关于我们',
-            'type'     => 'page',
-            'alias'    => 'aboutus',
-            'body'     => '',
+            'title' => '关于我们',
+            'type' => 'page',
+            'alias' => 'aboutus',
+            'body' => '',
             'template' => 'default',
-            'status'   => 'published'
+            'status' => 'published',
         ));
 
         $this->getContentService()->createContent(array(
-            'title'    => '常见问题',
-            'type'     => 'page',
-            'alias'    => 'questions',
-            'body'     => '',
+            'title' => '常见问题',
+            'type' => 'page',
+            'alias' => 'questions',
+            'body' => '',
             'template' => 'default',
-            'status'   => 'published'
+            'status' => 'published',
         ));
     }
 
@@ -480,9 +477,9 @@ EOD;
         $this->output->write('  初始化虚拟币');
 
         $default = array(
-            'cash_model'   => "none",
-            'cash_rate'    => 1,
-            'coin_enabled' => 0
+            'cash_model' => 'none',
+            'cash_rate' => 1,
+            'coin_enabled' => 0,
         );
 
         $this->getSettingService()->set('coin', $default);
@@ -495,30 +492,30 @@ EOD;
         $this->output->write('  初始化导航');
 
         $this->getNavigationService()->createNavigation(array(
-            'name'     => '师资力量',
-            'url'      => 'teacher',
+            'name' => '师资力量',
+            'url' => 'teacher',
             'sequence' => 1,
             'isNewWin' => 0,
-            'isOpen'   => 1,
-            'type'     => 'top'
+            'isOpen' => 1,
+            'type' => 'top',
         ));
 
         $this->getNavigationService()->createNavigation(array(
-            'name'     => '常见问题',
-            'url'      => 'page/questions',
+            'name' => '常见问题',
+            'url' => 'page/questions',
             'sequence' => 2,
             'isNewWin' => 0,
-            'isOpen'   => 1,
-            'type'     => 'top'
+            'isOpen' => 1,
+            'type' => 'top',
         ));
 
         $this->getNavigationService()->createNavigation(array(
-            'name'     => '关于我们',
-            'url'      => 'page/aboutus',
+            'name' => '关于我们',
+            'url' => 'page/aboutus',
             'sequence' => 2,
             'isNewWin' => 0,
-            'isOpen'   => 1,
-            'type'     => 'top'
+            'isOpen' => 1,
+            'type' => 'top',
         ));
 
         $this->output->writeln(' ...<info>成功</info>');
@@ -531,14 +528,14 @@ EOD;
 
     protected function _initBlocks()
     {
-        $themeDir = ServiceKernel::instance()->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . '../web/themes';
+        $themeDir = ServiceKernel::instance()->getParameter('kernel.root_dir').DIRECTORY_SEPARATOR.'../web/themes';
         $this->output->write('  初始化编辑区');
 
         $metaFiles = array(
-            'system'  => "{$themeDir}/block.json",
+            'system' => "{$themeDir}/block.json",
             'default' => "{$themeDir}/default/block.json",
-            'autumn'  => "{$themeDir}/autumn/block.json",
-            'jianmo'  => "{$themeDir}/jianmo/block.json"
+            'autumn' => "{$themeDir}/autumn/block.json",
+            'jianmo' => "{$themeDir}/jianmo/block.json",
         );
 
         foreach ($metaFiles as $category => $file) {
@@ -552,16 +549,16 @@ EOD;
                     $data[$key] = $item['default'];
                 }
 
-                $filename = __DIR__ . '/blocks/' . "block-" . md5($code) . '.html';
+                $filename = __DIR__.'/blocks/'.'block-'.md5($code).'.html';
 
                 if (file_exists($filename)) {
                     $content = file_get_contents($filename);
                     $content = preg_replace_callback('/(<img[^>]+>)/i', function ($matches) {
                         preg_match_all('/<\s*img[^>]*src\s*=\s*["\']?([^"\']*)/is', $matches[0], $srcs);
                         preg_match_all('/<\s*img[^>]*alt\s*=\s*["\']?([^"\']*)/is', $matches[0], $alts);
-                        $URI = preg_replace('/' . INSTALL_URI . '.*/i', '', $_SERVER['REQUEST_URI']);
+                        $URI = preg_replace('/'.INSTALL_URI.'.*/i', '', $_SERVER['REQUEST_URI']);
                         $src = preg_replace('/\b\?[\d]+.[\d]+.[\d]+/i', '', $srcs[1][0]);
-                        $src = $URI . trim($src);
+                        $src = $URI.trim($src);
 
                         $img = "<img src='{$src}'";
 
@@ -569,7 +566,7 @@ EOD;
                             $alt = $alts[1][0];
                             $img .= " alt='{$alt}'>";
                         } else {
-                            $img .= ">";
+                            $img .= '>';
                         }
 
                         return $img;
@@ -578,44 +575,43 @@ EOD;
                     $content = '';
                 }
                 $blockTemplate = $this->getBlockService()->getBlockTemplateByCode($code);
-                if(empty($blockTemplate)){
+                if (empty($blockTemplate)) {
                     $blockTemplate = $this->getBlockService()->createBlockTemplate(array(
-                        'title'        => $meta['title'],
-                        'mode'         => 'template',
+                        'title' => $meta['title'],
+                        'mode' => 'template',
                         'templateName' => $meta['templateName'],
-                        'content'      => $content,
-                        'code'         => $code,
-                        'meta'         => $meta,
-                        'data'         => $data,
-                        'category'     => $category
+                        'content' => $content,
+                        'code' => $code,
+                        'meta' => $meta,
+                        'data' => $data,
+                        'category' => $category,
                     ));
-                }else{
+                } else {
                     $blockTemplate = $this->getBlockService()->updateBlockTemplate($blockTemplate['id'], array(
                         'mode' => 'template',
                         'category' => empty($meta['category']) ? 'system' : $meta['category'],
                         'meta' => $meta,
                         'data' => $data,
-                        'content'      => $content,
+                        'content' => $content,
                         'templateName' => $meta['templateName'],
                         'title' => $meta['title'],
                     ));
                 }
 
                 $block = $this->getBlockService()->getBlockByCode($code);
-                if(empty($block)){
+                if (empty($block)) {
                     $this->getBlockService()->createBlock(array(
                         'blockTemplateId' => $blockTemplate['id'],
-                        'code'            => $code,
-                        'content'         => $content,
-                        'data'            => $data
+                        'code' => $code,
+                        'content' => $content,
+                        'data' => $data,
                     ));
-                }else{
+                } else {
                     $this->getBlockService()->updateBlockTemplate($block['id'], array(
                         'content' => $content,
-                        'data'    => $data
+                        'data' => $data,
                     ));
                 }
-
             }
         }
 
@@ -626,24 +622,24 @@ EOD;
     {
         $this->output->write('  初始化CrontabJob');
         $this->getCrontabService()->createJob(array(
-            'name'            => 'CancelOrderJob',
-            'cycle'           => 'everyhour',
-            'jobClass'        => 'Topxia\\Service\\Order\\Job\\CancelOrderJob',
+            'name' => 'CancelOrderJob',
+            'cycle' => 'everyhour',
+            'jobClass' => 'Topxia\\Service\\Order\\Job\\CancelOrderJob',
             'nextExcutedTime' => time(),
-            'jobParams'       => '{}',
-            'createdTime'     => time()
+            'jobParams' => '{}',
+            'createdTime' => time(),
         ));
 
         $this->getCrontabService()->createJob(array(
-            'name'            => 'DeleteExpiredTokenJob',
-            'cycle'           => 'everyhour',
-            'jobClass'        => 'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
-            'jobParams'       => '{}',
+            'name' => 'DeleteExpiredTokenJob',
+            'cycle' => 'everyhour',
+            'jobClass' => 'Topxia\\Service\\User\\Job\\DeleteExpiredTokenJob',
+            'jobParams' => '{}',
             'nextExcutedTime' => time(),
-            'createdTime'     => time()
+            'createdTime' => time(),
         ));
 
-        $this->getSettingService()->set("crontab_next_executed_time", time());
+        $this->getSettingService()->set('crontab_next_executed_time', time());
 
         $this->output->writeln(' ...<info>成功</info>');
     }
@@ -652,13 +648,13 @@ EOD;
     {
         $org = $this->getOrgService()->getOrgByCode('FullSite');
 
-        if(!empty($org)){
+        if (!empty($org)) {
             return;
         }
 
         $org = array(
             'name' => '全站',
-            'code' => 'FullSite'
+            'code' => 'FullSite',
         );
 
         $this->getOrgService()->createOrg($org);
@@ -667,9 +663,9 @@ EOD;
     public function initFolders()
     {
         $folders = array(
-            ServiceKernel::instance()->getParameter('kernel.root_dir') . '/data/udisk',
-            ServiceKernel::instance()->getParameter('kernel.root_dir') . '/data/private_files',
-            ServiceKernel::instance()->getParameter('kernel.root_dir') . '/../web/files'
+            ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/udisk',
+            ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/private_files',
+            ServiceKernel::instance()->getParameter('kernel.root_dir').'/../web/files',
         );
 
         $filesystem = new Filesystem();
@@ -691,8 +687,8 @@ EOD;
     public function initLockFile()
     {
         $this->output->write('  初始化install.lock');
-        touch(ServiceKernel::instance()->getParameter('kernel.root_dir') . '/data/install.lock');
-        touch(ServiceKernel::instance()->getParameter('kernel.root_dir') . '/config/routing_plugins.yml');
+        touch(ServiceKernel::instance()->getParameter('kernel.root_dir').'/data/install.lock');
+        touch(ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/routing_plugins.yml');
 
         $this->output->writeln(' ...<info>成功</info>');
     }

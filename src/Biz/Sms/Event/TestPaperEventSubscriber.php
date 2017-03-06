@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Sms\Event;
-
 
 use AppBundle\Common\StringToolkit;
 use Biz\Activity\Service\ActivityService;
@@ -17,7 +15,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class TestPaperEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
@@ -32,7 +30,7 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
 
         if ($paperResult['type'] === 'homework') {
             $this->notifyHomeworkResult($paperResult);
-        } else if ($paperResult['type'] === 'testpaper') {
+        } elseif ($paperResult['type'] === 'testpaper') {
             $this->notifyTestpaperResult($paperResult);
         }
     }
@@ -47,15 +45,15 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
             $courseSet = $this->getCourseSetService()->getCourseSet($result['courseSetId']);
 
             if (!empty($courseSet)) {
-                $courseSet['title']         = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
-                $task                       = $this->getTaskService()->getTaskByCourseIdAndActivityId(
+                $courseSet['title'] = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
+                $task = $this->getTaskService()->getTaskByCourseIdAndActivityId(
                     $result['courseId'],
                     $result['lessonId']
                 );
                 $parameters['lesson_title'] = '《'.$task['title'].'》的试卷';
                 $parameters['course_title'] = '《'.$courseSet['title'].'》';
-                $description                = $parameters['course_title'].' '.$parameters['lesson_title'].'批阅提醒';
-                $userId                     = $result['userId'];
+                $description = $parameters['course_title'].' '.$parameters['lesson_title'].'批阅提醒';
+                $userId = $result['userId'];
                 $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
             }
         }
@@ -71,15 +69,15 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
             $courseSet = $this->getCourseSetService()->getCourseSet($result['courseSetId']);
 
             if (!empty($courseSet)) {
-                $courseSet['title']         = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
-                $task                       = $this->getTaskService()->getTaskByCourseIdAndActivityId(
+                $courseSet['title'] = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
+                $task = $this->getTaskService()->getTaskByCourseIdAndActivityId(
                     $result['courseId'],
                     $result['lessonId']
                 );
                 $parameters['lesson_title'] = '《'.$task['title'].'》的作业';
                 $parameters['course_title'] = '《'.$courseSet['title'].'》';
-                $description                = $parameters['course_title'].' '.$parameters['lesson_title'].'批阅提醒';
-                $userId                     = $result['userId'];
+                $description = $parameters['course_title'].' '.$parameters['lesson_title'].'批阅提醒';
+                $userId = $result['userId'];
                 $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
             }
         }
@@ -124,5 +122,4 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         return $this->getBiz()->service('Sms:SmsService');
     }
-
 }

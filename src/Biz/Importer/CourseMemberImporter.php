@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Importer;
 
 use AppBundle\Common\ArrayToolkit;
@@ -9,11 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CourseMemberImporter extends Importer
 {
-    protected $necessaryFields  = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
+    protected $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
     protected $objWorksheet;
-    protected $rowTotal         = 0;
-    protected $colTotal         = 0;
-    protected $excelFields      = array();
+    protected $rowTotal = 0;
+    protected $colTotal = 0;
+    protected $excelFields = array();
     protected $passValidateUser = array();
 
     protected $type = 'course-member';
@@ -21,11 +22,11 @@ class CourseMemberImporter extends Importer
     public function import(Request $request)
     {
         $importData = $request->request->get('importData');
-        $courseId   = $request->request->get('courseId');
-        $price      = $request->request->get('price');
-        $remark     = $request->request->get('remark');
-        $course     = $this->getCourseService()->getCourse($courseId);
-        $orderData  = array(
+        $courseId = $request->request->get('courseId');
+        $price = $request->request->get('price');
+        $remark = $request->request->get('remark');
+        $course = $this->getCourseService()->getCourse($courseId);
+        $orderData = array(
             'amount' => $price,
             'remark' => $remark,
         );
@@ -36,8 +37,8 @@ class CourseMemberImporter extends Importer
     protected function excelDataImporting($course, $userData, $orderData)
     {
         $existsUserCount = 0;
-        $successCount    = 0;
-        $courseSet       = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $successCount = 0;
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         foreach ($userData as $key => $user) {
             if (!empty($user['nickname'])) {
                 $user = $this->getUserService()->getUserByNickname($user['nickname']);
@@ -53,24 +54,24 @@ class CourseMemberImporter extends Importer
             $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']);
 
             if ($isCourseStudent || $isCourseTeacher) {
-                $existsUserCount++;
+                ++$existsUserCount;
             } else {
                 $currentUser = $this->biz['user'];
 
                 $order = $this->getOrderService()->createOrder(
                     array(
-                        'userId'     => $user['id'],
-                        'title'      => $this->getServiceKernel()->trans(
+                        'userId' => $user['id'],
+                        'title' => $this->getServiceKernel()->trans(
                             '购买课程《%courseSetTitle%》-%courseTitle%(管理员添加)',
                             array('%courseSetTitle%' => $courseSet['title'], '%courseTitle%' => $course['title'])
                         ),
                         'targetType' => 'course',
-                        'targetId'   => $course['id'],
+                        'targetId' => $course['id'],
                         'totalPrice' => $course['price'],
-                        'amount'     => empty($orderData['amount']) ? 0 : $orderData['amount'],
-                        'payment'    => 'outside',
-                        'snPrefix'   => 'C',
-                        'note'       => empty($orderData['remark']) ? $this->getServiceKernel()->trans(
+                        'amount' => empty($orderData['amount']) ? 0 : $orderData['amount'],
+                        'payment' => 'outside',
+                        'snPrefix' => 'C',
+                        'note' => empty($orderData['remark']) ? $this->getServiceKernel()->trans(
                             '通过批量导入添加'
                         ) : $orderData['remark'],
                     )
@@ -78,9 +79,9 @@ class CourseMemberImporter extends Importer
 
                 $this->getOrderService()->payOrder(
                     array(
-                        'sn'       => $order['sn'],
-                        'status'   => 'success',
-                        'amount'   => $order['amount'],
+                        'sn' => $order['sn'],
+                        'status' => 'success',
+                        'amount' => $order['amount'],
                         'paidTime' => time(),
                     )
                 );
@@ -90,17 +91,17 @@ class CourseMemberImporter extends Importer
                 );
 
                 if ($this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
-                    $successCount++;
-                };
+                    ++$successCount;
+                }
 
                 $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
                 $message = array(
-                    'courseId'    => $course['id'],
+                    'courseId' => $course['id'],
                     'courseTitle' => $courseSet['title'],
-                    'userId'      => $currentUser['id'],
-                    'userName'    => $currentUser['nickname'],
-                    'type'        => 'create',
+                    'userId' => $currentUser['id'],
+                    'userName' => $currentUser['nickname'],
+                    'type' => 'create',
                 );
 
                 $this->getNotificationService()->notify($member['userId'], 'course-student', $message);
@@ -118,11 +119,11 @@ class CourseMemberImporter extends Importer
 
     public function check(Request $request)
     {
-        $file     = $request->files->get('excel');
+        $file = $request->files->get('excel');
         $courseId = $request->request->get('courseId');
-        $price    = $request->request->get('price');
-        $remark   = $request->request->get('remark');
-        $danger   = $this->validateExcelFile($file);
+        $price = $request->request->get('price');
+        $remark = $request->request->get('remark');
+        $danger = $this->validateExcelFile($file);
         if (!empty($danger)) {
             return $danger;
         }
@@ -148,8 +149,8 @@ class CourseMemberImporter extends Importer
             $importData['checkInfo'],
             array(
                 'courseId' => $courseId,
-                'price'    => $price,
-                'remark'   => $remark,
+                'price' => $price,
+                'remark' => $remark,
             )
         );
     }
@@ -157,9 +158,9 @@ class CourseMemberImporter extends Importer
     protected function checkPassedRepeatData()
     {
         $passedUsers = $this->passValidateUser;
-        $ids         = array();
-        $repeatRow   = array();
-        $repeatIds   = array();
+        $ids = array();
+        $repeatRow = array();
+        $repeatIds = array();
 
         foreach ($passedUsers as $key => $passedUser) {
             if (in_array($passedUser['id'], $ids) && !in_array($passedUser['id'], $repeatIds)) {
@@ -176,7 +177,7 @@ class CourseMemberImporter extends Importer
         }
 
         $repeatRowInfo = '';
-        $repeatArray   = array();
+        $repeatArray = array();
 
         if (!empty($repeatRow)) {
             $repeatRowInfo .= $this->getServiceKernel()->trans('字段对应用户数据重复').'</br>';
@@ -188,7 +189,7 @@ class CourseMemberImporter extends Importer
                     $repeatRowInfo .= $this->getServiceKernel()->trans('第%value%行 ', array('%value%' => $value));
                 }
 
-                $repeatRowInfo .= "</br>";
+                $repeatRowInfo .= '</br>';
 
                 $repeatArray[] = $repeatRowInfo;
                 $repeatRowInfo = '';
@@ -200,15 +201,15 @@ class CourseMemberImporter extends Importer
 
     protected function getUserData()
     {
-        $userCount   = 0;
-        $fieldSort   = $this->getFieldSort();
-        $validate    = array();
+        $userCount = 0;
+        $fieldSort = $this->getFieldSort();
+        $validate = array();
         $allUserData = array();
 
-        for ($row = 3; $row <= $this->rowTotal; $row++) {
-            for ($col = 0; $col < $this->colTotal; $col++) {
-                $infoData          = $this->objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
-                $columnsData[$col] = $infoData."";
+        for ($row = 3; $row <= $this->rowTotal; ++$row) {
+            for ($col = 0; $col < $this->colTotal; ++$col) {
+                $infoData = $this->objWorksheet->getCellByColumnAndRow($col, $row)->getFormattedValue();
+                $columnsData[$col] = $infoData.'';
             }
 
             foreach ($fieldSort as $sort) {
@@ -218,7 +219,7 @@ class CourseMemberImporter extends Importer
 
             $emptyData = array_count_values($userData);
 
-            if (isset($emptyData[""]) && count($userData) == $emptyData[""]) {
+            if (isset($emptyData['']) && count($userData) == $emptyData['']) {
                 $checkInfo[] = $this->getServiceKernel()->trans('第%row%行为空行，已跳过', array('%row%' => $row));
                 continue;
             }
@@ -226,7 +227,7 @@ class CourseMemberImporter extends Importer
             $info = $this->validExcelFieldValue($userData, $row, $fieldCol);
             empty($info) ? '' : $errorInfo[] = $info;
 
-            $userCount     = $userCount + 1;
+            $userCount = $userCount + 1;
             $allUserData[] = $userData;
 
             if (empty($errorInfo)) {
@@ -245,9 +246,9 @@ class CourseMemberImporter extends Importer
 
         $this->passValidateUser = $validate;
 
-        $data['errorInfo']   = empty($errorInfo) ? array() : $errorInfo;
-        $data['checkInfo']   = empty($checkInfo) ? array() : $checkInfo;
-        $data['userCount']   = $userCount;
+        $data['errorInfo'] = empty($errorInfo) ? array() : $errorInfo;
+        $data['checkInfo'] = empty($checkInfo) ? array() : $checkInfo;
+        $data['userCount'] = $userCount;
         $data['allUserData'] = empty($this->passValidateUser) ? array() : $this->passValidateUser;
 
         return $data;
@@ -307,9 +308,9 @@ class CourseMemberImporter extends Importer
 
     protected function checkRepeatData()
     {
-        $errorInfo   = array();
+        $errorInfo = array();
         $checkFields = array_keys($this->necessaryFields);
-        $fieldSort   = $this->getFieldSort();
+        $fieldSort = $this->getFieldSort();
 
         foreach ($checkFields as $checkField) {
             $nicknameData = array();
@@ -320,10 +321,10 @@ class CourseMemberImporter extends Importer
                 }
             }
 
-            for ($row = 3; $row <= $this->rowTotal; $row++) {
+            for ($row = 3; $row <= $this->rowTotal; ++$row) {
                 $nickNameColData = $this->objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();
 
-                $nicknameData[] = $nickNameColData."";
+                $nicknameData[] = $nickNameColData.'';
             }
 
             $info = $this->arrayRepeat($nicknameData, $nickNameCol);
@@ -337,7 +338,7 @@ class CourseMemberImporter extends Importer
     protected function arrayRepeat($array, $nickNameCol)
     {
         $repeatArrayCount = array_count_values($array);
-        $repeatRow        = "";
+        $repeatRow = '';
 
         foreach ($repeatArrayCount as $key => $value) {
             if ($value > 1 && !empty($key)) {
@@ -346,7 +347,7 @@ class CourseMemberImporter extends Importer
                         array('%col%' => ($nickNameCol + 1))
                     ).'<br>';
 
-                for ($i = 1; $i <= $value; $i++) {
+                for ($i = 1; $i <= $value; ++$i) {
                     $row = array_search($key, $array) + 3;
 
                     $repeatRow .= $this->getServiceKernel()->trans(
@@ -364,15 +365,15 @@ class CourseMemberImporter extends Importer
 
     protected function getFieldSort()
     {
-        $fieldSort       = array();
+        $fieldSort = array();
         $necessaryFields = $this->getNecessaryFields();
-        $excelFields     = $this->excelFields;
+        $excelFields = $this->excelFields;
 
         foreach ($excelFields as $key => $value) {
             if (in_array($value, $necessaryFields)) {
                 foreach ($necessaryFields as $fieldKey => $fieldValue) {
                     if ($value == $fieldValue) {
-                        $fieldSort[$fieldKey] = array("num" => $key, "fieldName" => $fieldKey);
+                        $fieldSort[$fieldKey] = array('num' => $key, 'fieldName' => $fieldKey);
                         break;
                     }
                 }
@@ -384,14 +385,14 @@ class CourseMemberImporter extends Importer
 
     protected function excelAnalyse($file)
     {
-        $objPHPExcel        = \PHPExcel_IOFactory::load($file);
-        $objWorksheet       = $objPHPExcel->getActiveSheet();
-        $highestRow         = $objWorksheet->getHighestRow();
-        $highestColumn      = $objWorksheet->getHighestColumn();
+        $objPHPExcel = \PHPExcel_IOFactory::load($file);
+        $objWorksheet = $objPHPExcel->getActiveSheet();
+        $highestRow = $objWorksheet->getHighestRow();
+        $highestColumn = $objWorksheet->getHighestColumn();
         $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
-        $excelFields        = array();
+        $excelFields = array();
 
-        for ($col = 0; $col < $highestColumnIndex; $col++) {
+        for ($col = 0; $col < $highestColumnIndex; ++$col) {
             $fieldTitle = $objWorksheet->getCellByColumnAndRow($col, 2)->getValue();
             empty($fieldTitle) ? '' : $excelFields[$col] = $this->trim($fieldTitle);
         }
@@ -399,9 +400,9 @@ class CourseMemberImporter extends Importer
         $rowAndCol = array('rowLength' => $highestRow, 'colLength' => $highestColumnIndex);
 
         $this->objWorksheet = $objWorksheet;
-        $this->rowTotal     = $highestRow;
-        $this->colTotal     = $highestColumnIndex;
-        $this->excelFields  = $excelFields;
+        $this->rowTotal = $highestRow;
+        $this->colTotal = $highestColumnIndex;
+        $this->excelFields = $excelFields;
 
         return array($objWorksheet, $rowAndCol, $excelFields);
     }
@@ -419,12 +420,12 @@ class CourseMemberImporter extends Importer
     public function getTemplate(Request $request)
     {
         $courseId = $request->query->get('courseId');
-        $course   = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
 
         return $this->render(
             'course-manage/student/import.html.twig',
             array(
-                'course'       => $course,
+                'course' => $course,
                 'importerType' => $this->type,
             )
         );

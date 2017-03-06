@@ -9,5 +9,4 @@ interface SensitiveDao
     public function findAllKeywords();
 
     public function findByState($state);
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Course\Service\CourseService;
@@ -24,14 +25,14 @@ class SubtitleController extends BaseController
         }
 
         return $this->render('media-manage/subtitle/manage.html.twig', array(
-            'media'     => $media,
-            'goto'      => $request->query->get('goto'),
-            'subtitles' => $subtitles
+            'media' => $media,
+            'goto' => $request->query->get('goto'),
+            'subtitles' => $subtitles,
         ));
     }
 
     /**
-     * 获取某一视频下所有的字幕
+     * 获取某一视频下所有的字幕.
      */
     public function listAction(Request $request, $mediaId)
     {
@@ -43,7 +44,7 @@ class SubtitleController extends BaseController
         $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId, $ssl);
 
         return $this->createJsonResponse(array(
-            'subtitles' => $subtitles
+            'subtitles' => $subtitles,
         ));
     }
 
@@ -76,9 +77,9 @@ class SubtitleController extends BaseController
         return $this->render('media-manage/preview.html.twig', array(
             'mediaId' => $mediaId,
             'context' => array(
-                'hideQuestion'  => 1,
-                'hideBeginning' => true
-            )
+                'hideQuestion' => 1,
+                'hideBeginning' => true,
+            ),
         ));
     }
 
@@ -92,10 +93,11 @@ class SubtitleController extends BaseController
         $ssl = $request->isSecure() ? true : false;
         $subtitles = $this->getSubtitleService()->findSubtitlesByMediaId($mediaId, $ssl);
 
-        $media     = $this->getUploadFileService()->getFile($mediaId);
+        $media = $this->getUploadFileService()->getFile($mediaId);
+
         return $this->render('media-manage/subtitle/dialog.html.twig', array(
             'subtitles' => $subtitles,
-            'media'     => $media
+            'media' => $media,
         ));
     }
 

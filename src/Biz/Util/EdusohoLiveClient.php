@@ -7,9 +7,10 @@ use Biz\CloudPlatform\CloudAPIFactory;
 class EdusohoLiveClient
 {
     /**
-     * 创建直播
+     * 创建直播.
      *
-     * @param  array  $args           直播参数，支持的参数有：title, speaker, startTime, endTime, authUrl, jumpUrl, errorJumpUrl
+     * @param array $args 直播参数，支持的参数有：title, speaker, startTime, endTime, authUrl, jumpUrl, errorJumpUrl
+     *
      * @return [type] [description]
      */
     public function createLive(array $args)
@@ -25,8 +26,9 @@ class EdusohoLiveClient
     public function getCapacity()
     {
         $args = array(
-            'timestamp' => time().''
+            'timestamp' => time().'',
         );
+
         return CloudAPIFactory::create('leaf')->get('/lives/capacity', $args);
     }
 
@@ -38,17 +40,19 @@ class EdusohoLiveClient
     public function deleteLive($liveId, $provider)
     {
         $args = array(
-            "liveId"   => $liveId,
-            "provider" => $provider
+            'liveId' => $liveId,
+            'provider' => $provider,
         );
+
         return CloudAPIFactory::create('root')->delete('/lives/'.$liveId, $args);
     }
 
     public function getMaxOnline($liveId)
     {
         $args = array(
-            'liveId' => $liveId
+            'liveId' => $liveId,
         );
+
         return CloudAPIFactory::create('leaf')->get('/lives/'.$liveId.'/max_online', $args);
     }
 
@@ -65,20 +69,21 @@ class EdusohoLiveClient
     public function createReplayList($liveId, $title, $provider)
     {
         $args = array(
-            "liveId"   => $liveId,
-            "title"    => $title,
-            "provider" => $provider
+            'liveId' => $liveId,
+            'title' => $title,
+            'provider' => $provider,
         );
+
         return CloudAPIFactory::create('root')->post('/lives/'.$liveId.'/records', $args);
     }
 
     public function isAvailableRecord($liveId, $server = 'root')
     {
         $args = array(
-            'liveId' => $liveId
+            'liveId' => $liveId,
         );
         $response = CloudAPIFactory::create($server)->get('/lives/'.$liveId.'/available_record', $args);
+
         return isset($response['success']) ? true : false;
     }
-
 }

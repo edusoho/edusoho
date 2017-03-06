@@ -2,7 +2,6 @@
 
 namespace Biz\Card\Dao\Impl;
 
-
 use Biz\Card\Dao\CardDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
@@ -13,34 +12,36 @@ class CardDaoImpl extends GeneralDaoImpl implements CardDao
     public function getByCardId($cardId)
     {
         return $this->getByFields(array(
-            'cardId' => $cardId
+            'cardId' => $cardId,
         ));
     }
 
     public function getByUserId($userId)
     {
         return $this->getByFields(array(
-            'userId' => $userId
+            'userId' => $userId,
         ));
     }
 
     public function updateByCardIdAndCardType($fields, $cardId, $cardType)
     {
         $this->db()->update($this->table, $fields, array('cardId' => $cardId, 'cardType' => $cardType));
+
         return $this->getByCardIdAndCardType($cardId, $cardType);
     }
 
     public function getByCardIdAndCardType($cardId, $cardType)
     {
         return $this->getByFields(array(
-            'cardId'   => $cardId,
-            'cardType' => $cardType
+            'cardId' => $cardId,
+            'cardType' => $cardType,
         ));
     }
 
     public function findByUserIdAndCardType($userId, $cardType)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND cardType = ?";
+
         return $this->db()->fetchAll($sql, array($userId, $cardType)) ?: array();
     }
 
@@ -54,7 +55,7 @@ class CardDaoImpl extends GeneralDaoImpl implements CardDao
         return array(
             'orderbys' => array(
                 'createdTime',
-                'id'
+                'id',
             ),
             'conditions' => array(
                 'cardType = :cardType',

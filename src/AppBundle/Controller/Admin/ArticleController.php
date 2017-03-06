@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Admin;
 
 use Biz\File\Service\UploadFileService;
@@ -18,7 +19,7 @@ class ArticleController extends BaseController
 
         if (!empty($conditions['categoryId'])) {
             $conditions['includeChildren'] = true;
-            $categoryId                    = $conditions['categoryId'];
+            $categoryId = $conditions['categoryId'];
         }
 
         $conditions = $this->fillOrgCode($conditions);
@@ -35,23 +36,23 @@ class ArticleController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $categoryIds  = ArrayToolkit::column($articles, 'categoryId');
-        $categories   = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+        $categoryIds = ArrayToolkit::column($articles, 'categoryId');
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         return $this->render('admin/article/index.html.twig', array(
-            'articles'     => $articles,
-            'categories'   => $categories,
-            'paginator'    => $paginator,
+            'articles' => $articles,
+            'categories' => $categories,
+            'paginator' => $paginator,
             'categoryTree' => $categoryTree,
-            'categoryId'   => $categoryId
+            'categoryId' => $categoryId,
         ));
     }
 
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $formData        = $request->request->all();
+            $formData = $request->request->all();
 
             $article['tags'] = array_filter(explode(',', $formData['tags']));
 
@@ -59,6 +60,7 @@ class ArticleController extends BaseController
 
             $attachment = $request->request->get('attachment');
             $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $article['id'], $attachment['targetType'], $attachment['type']);
+
             return $this->redirect($this->generateUrl('admin_article'));
         }
 
@@ -66,7 +68,7 @@ class ArticleController extends BaseController
 
         return $this->render('admin/article/article-modal.html.twig', array(
             'categoryTree' => $categoryTree,
-            'category'     => array('id' => 0, 'parentId' => 0)
+            'category' => array('id' => 0, 'parentId' => 0),
         ));
     }
 
@@ -80,62 +82,67 @@ class ArticleController extends BaseController
 
         $tags = $this->getTagService()->findTagsByOwner(array(
             'ownerType' => 'article',
-            'ownerId'   => $id
+            'ownerId' => $id,
         ));
 
         $tagNames = ArrayToolkit::column($tags, 'name');
 
         $categoryId = $article['categoryId'];
-        $category   = $this->getCategoryService()->getCategory($categoryId);
+        $category = $this->getCategoryService()->getCategory($categoryId);
 
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-            $article  = $this->getArticleService()->updateArticle($id, $formData);
+            $article = $this->getArticleService()->updateArticle($id, $formData);
 
             $attachment = $request->request->get('attachment');
 
             $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $article['id'], $attachment['targetType'], $attachment['type']);
+
             return $this->redirect($this->generateUrl('admin_article'));
         }
 
         return $this->render('admin/article/article-modal.html.twig', array(
-            'article'      => $article,
+            'article' => $article,
             'categoryTree' => $categoryTree,
-            'category'     => $category,
-            'tagNames'     => $tagNames
+            'category' => $category,
+            'tagNames' => $tagNames,
         ));
     }
 
     public function setArticlePropertyAction(Request $request, $id, $property)
     {
         $this->getArticleService()->setArticleProperty($id, $property);
+
         return $this->createJsonResponse(true);
     }
 
     public function cancelArticlePropertyAction(Request $request, $id, $property)
     {
         $this->getArticleService()->cancelArticleProperty($id, $property);
+
         return $this->createJsonResponse(true);
     }
 
     public function trashAction(Request $request, $id)
     {
         $this->getArticleService()->trashArticle($id);
+
         return $this->createJsonResponse(true);
     }
 
     public function thumbRemoveAction(Request $request, $id)
     {
         $this->getArticleService()->removeArticlethumb($id);
+
         return $this->createJsonResponse(true);
     }
 
     public function deleteAction(Request $request)
     {
         $ids = $request->request->get('ids', array());
-        $id  = $request->query->get('id', null);
+        $id = $request->query->get('id', null);
 
         if ($id) {
             array_push($ids, $id);
@@ -144,28 +151,30 @@ class ArticleController extends BaseController
         $result = $this->getArticleService()->deleteArticlesByIds($ids);
 
         if ($result) {
-            return $this->createJsonResponse(array("status" => "failed"));
+            return $this->createJsonResponse(array('status' => 'failed'));
         } else {
-            return $this->createJsonResponse(array("status" => "success"));
+            return $this->createJsonResponse(array('status' => 'success'));
         }
     }
 
     public function publishAction(Request $request, $id)
     {
         $this->getArticleService()->publishArticle($id);
+
         return $this->createJsonResponse(true);
     }
 
     public function unpublishAction(Request $request, $id)
     {
         $this->getArticleService()->unpublishArticle($id);
+
         return $this->createJsonResponse(true);
     }
 
     public function showUploadAction(Request $request)
     {
         return $this->render('admin/article/aticle-picture-modal.html.twig', array(
-            'pictureUrl' => ""
+            'pictureUrl' => '',
         ));
     }
 
@@ -173,22 +182,22 @@ class ArticleController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
-            $files   = $this->getArticleService()->changeIndexPicture($options["images"]);
+            $files = $this->getArticleService()->changeIndexPicture($options['images']);
 
             foreach ($files as $key => $file) {
-                $files[$key]["file"]['url'] = $this->get('web.twig.extension')->getFilePath($file["file"]['uri']);
+                $files[$key]['file']['url'] = $this->get('web.twig.extension')->getFilePath($file['file']['uri']);
             }
 
             return new JsonResponse($files);
         }
 
-        $fileId                                      = $request->getSession()->get("fileId");
+        $fileId = $request->getSession()->get('fileId');
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
 
         return $this->render('admin/article/article-picture-crop-modal.html.twig', array(
-            'pictureUrl'  => $pictureUrl,
+            'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize'  => $scaledSize
+            'scaledSize' => $scaledSize,
         ));
     }
 

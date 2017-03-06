@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller\Testpaper;
 
 use AppBundle\Common\Paginator;
@@ -15,14 +16,14 @@ class ManageController extends BaseController
 
         if ($courseSet['locked']) {
             return $this->redirectToRoute('course_set_manage_sync', array(
-                'id'      => $id,
-                'sideNav' => 'testpaper'
+                'id' => $id,
+                'sideNav' => 'testpaper',
             ));
         }
 
         $conditions = array(
             'courseSetId' => $courseSet['id'],
-            'type'        => 'testpaper'
+            'type' => 'testpaper',
         );
 
         if ($courseSet['parentId'] > 0) {
@@ -45,16 +46,16 @@ class ManageController extends BaseController
         );
 
         $userIds = ArrayToolkit::column($testpapers, 'updatedUserId');
-        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         $testpaperActivities = $this->getTestpaperActivityService()->findActivitiesByMediaIds(ArrayToolkit::column($testpapers, 'id'));
 
         return $this->render('testpaper/manage/index.html.twig', array(
-            'courseSet'           => $courseSet,
-            'testpapers'          => $testpapers,
-            'users'               => $users,
-            'paginator'           => $paginator,
-            'testpaperActivities' => $testpaperActivities
+            'courseSet' => $courseSet,
+            'testpapers' => $testpapers,
+            'users' => $users,
+            'paginator' => $paginator,
+            'testpaperActivities' => $testpaperActivities,
         ));
     }
 
@@ -66,8 +67,8 @@ class ManageController extends BaseController
             $fields = $request->request->all();
 
             $fields['courseSetId'] = $courseSet['id'];
-            $fields['courseId']    = 0;
-            $fields['pattern']     = 'questionType';
+            $fields['courseId'] = 0;
+            $fields['pattern'] = 'questionType';
 
             $testpaper = $this->getTestpaperService()->buildTestpaper($fields, 'testpaper');
 
@@ -77,22 +78,22 @@ class ManageController extends BaseController
         $types = $this->getQuestionTypes();
 
         $conditions = array(
-            'types'    => array_keys($types),
+            'types' => array_keys($types),
             'courseId' => $courseSet['id'],
-            'parentId' => 0
+            'parentId' => 0,
         );
 
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $questionNums = ArrayToolkit::index($questionNums, 'type');
 
-        $user   = $this->getUser();
+        $user = $this->getUser();
         $ranges = $this->getTaskService()->findUserTeachCoursesTasksByCourseSetId($user['id'], $courseSet['id']);
 
         return $this->render('testpaper/manage/create.html.twig', array(
-            'courseSet'    => $courseSet,
-            'ranges'       => $ranges,
-            'types'        => $types,
-            'questionNums' => $questionNums
+            'courseSet' => $courseSet,
+            'ranges' => $ranges,
+            'types' => $types,
+            'questionNums' => $questionNums,
         ));
     }
 
@@ -104,8 +105,8 @@ class ManageController extends BaseController
 
         $conditions = array(
             'status' => 'open',
-            'type'   => $type,
-            'ids'    => $testpaperIds
+            'type' => $type,
+            'ids' => $testpaperIds,
         );
 
         $paginator = new Paginator(
@@ -123,7 +124,7 @@ class ManageController extends BaseController
 
         $courseIds = array($targetId);
         if ($targetType == 'classroom') {
-            $courses   = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
             $courseIds = ArrayToolkit::column($courses, 'id');
         }
 
@@ -133,9 +134,9 @@ class ManageController extends BaseController
 
         return $this->render('testpaper/manage/check-list.html.twig', array(
             'testpapers' => ArrayToolkit::index($testpapers, 'id'),
-            'paginator'  => $paginator,
-            'targetId'   => $targetId,
-            'targetType' => $targetType
+            'paginator' => $paginator,
+            'targetId' => $targetId,
+            'targetType' => $targetType,
         ));
     }
 
@@ -168,22 +169,22 @@ class ManageController extends BaseController
 
         $essayQuestions = $this->getCheckedEssayQuestions($questions);
 
-        $student  = $this->getUserService()->getUser($result['userId']);
+        $student = $this->getUserService()->getUser($result['userId']);
         $accuracy = $this->getTestpaperService()->makeAccuracy($result['id']);
-        $total    = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
+        $total = $this->getTestpaperService()->countQuestionTypes($testpaper, $questions);
 
         return $this->render('testpaper/manage/teacher-check.html.twig', array(
-            'paper'         => $testpaper,
-            'paperResult'   => $result,
-            'questions'     => $essayQuestions,
-            'student'       => $student,
-            'accuracy'      => $accuracy,
+            'paper' => $testpaper,
+            'paperResult' => $result,
+            'questions' => $essayQuestions,
+            'student' => $student,
+            'accuracy' => $accuracy,
             'questionTypes' => $this->getCheckedQuestionType($testpaper),
-            'total'         => $total,
-            'source'        => $source,
-            'targetId'      => $targetId,
-            'isTeacher'     => true,
-            'action'        => $request->query->get('action', '')
+            'total' => $total,
+            'source' => $source,
+            'targetId' => $targetId,
+            'isTeacher' => true,
+            'action' => $request->query->get('action', ''),
         ));
     }
 
@@ -196,7 +197,7 @@ class ManageController extends BaseController
             throw $this->createResourceNotFoundException('testpaper', $testpaperId);
         }
 
-        $status  = $request->query->get('status', 'finished');
+        $status = $request->query->get('status', 'finished');
         $keyword = $request->query->get('keyword', '');
 
         if (!in_array($status, array('all', 'finished', 'reviewing', 'doing'))) {
@@ -210,13 +211,13 @@ class ManageController extends BaseController
         $conditions['type'] = $testpaper['type'];
 
         if (!empty($keyword)) {
-            $searchUser           = $this->getUserService()->getUserByNickname($keyword);
+            $searchUser = $this->getUserService()->getUserByNickname($keyword);
             $conditions['userId'] = $searchUser ? $searchUser['id'] : '-1';
         }
 
         $courseIds = array($targetId);
         if ($source == 'classroom') {
-            $courses   = $this->getClassroomService()->findCoursesByClassroomId($id);
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($id);
             $courseIds = ArrayToolkit::column($courses, 'id');
         }
         $conditions['courseIds'] = $courseIds;
@@ -237,18 +238,18 @@ class ManageController extends BaseController
         );
 
         $userIds = ArrayToolkit::column($testpaperResults, 'userId');
-        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('testpaper/manage/result-list.html.twig', array(
-            'testpaper'    => $testpaper,
-            'status'       => $status,
+            'testpaper' => $testpaper,
+            'status' => $status,
             'paperResults' => $testpaperResults,
-            'paginator'    => $paginator,
-            'users'        => $users,
-            'source'       => $source,
-            'targetId'     => $targetId,
-            'isTeacher'    => true,
-            'keyword'      => $keyword
+            'paginator' => $paginator,
+            'users' => $users,
+            'source' => $source,
+            'targetId' => $targetId,
+            'isTeacher' => true,
+            'keyword' => $keyword,
         ));
     }
 
@@ -256,9 +257,10 @@ class ManageController extends BaseController
     {
         $course = $this->getCourseSetService()->tryManageCourseSet($courseId);
 
-        $data           = $request->request->all();
+        $data = $request->request->all();
         $data['ranges'] = empty($data['ranges']) ? array() : explode(',', $data['ranges']);
-        $result         = $this->getTestpaperService()->canBuildTestpaper('testpaper', $data);
+        $result = $this->getTestpaperService()->canBuildTestpaper('testpaper', $data);
+
         return $this->createJsonResponse($result);
     }
 
@@ -273,16 +275,17 @@ class ManageController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $data      = $request->request->all();
+            $data = $request->request->all();
             $testpaper = $this->getTestpaperService()->updateTestpaper($testpaper['id'], $data);
 
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('试卷信息保存成功！'));
+
             return $this->redirect($this->generateUrl('course_set_manage_testpaper', array('id' => $courseSet['id'])));
         }
 
         return $this->render('testpaper/manage/update.html.twig', array(
             'courseSet' => $courseSet,
-            'testpaper' => $testpaper
+            'testpaper' => $testpaper,
         ));
     }
 
@@ -316,8 +319,8 @@ class ManageController extends BaseController
 
         return $this->render('testpaper/manage/testpaper-list-tr.html.twig', array(
             'testpaper' => $testpaper,
-            'user'      => $user,
-            'courseSet' => $courseSet
+            'user' => $user,
+            'courseSet' => $courseSet,
         ));
     }
 
@@ -331,8 +334,8 @@ class ManageController extends BaseController
 
         return $this->render('testpaper/manage/testpaper-list-tr.html.twig', array(
             'testpaper' => $testpaper,
-            'user'      => $user,
-            'courseSet' => $courseSet
+            'user' => $user,
+            'courseSet' => $courseSet,
         ));
     }
 
@@ -362,11 +365,11 @@ class ManageController extends BaseController
             $this->setFlashMessage('success', $this->getServiceKernel()->trans('试卷题目保存成功！'));
 
             return $this->createJsonResponse(array(
-                'goto' => $this->generateUrl('course_set_manage_testpaper', array('id' => $courseSetId))
+                'goto' => $this->generateUrl('course_set_manage_testpaper', array('id' => $courseSetId)),
             ));
         }
 
-        $items     = $this->getTestpaperService()->findItemsByTestId($testpaper['id']);
+        $items = $this->getTestpaperService()->findItemsByTestId($testpaper['id']);
         $questions = $this->getTestpaperService()->showTestpaperItems($testpaper['id']);
 
         $hasEssay = $this->getQuestionService()->hasEssay(ArrayToolkit::column($items, 'questionId'));
@@ -374,12 +377,12 @@ class ManageController extends BaseController
         $passedScoreDefault = empty($testpaper['passedCondition']) ? ceil($testpaper['score'] * 0.6) : $testpaper['passedCondition'][0];
 
         return $this->render('testpaper/manage/question.html.twig', array(
-            'courseSet'          => $courseSet,
-            'testpaper'          => $testpaper,
-            'questions'          => $questions,
-            'hasEssay'           => $hasEssay,
+            'courseSet' => $courseSet,
+            'testpaper' => $testpaper,
+            'questions' => $questions,
+            'hasEssay' => $hasEssay,
             'passedScoreDefault' => $passedScoreDefault,
-            'targetChoices'      => $this->getQuestionRanges($courseSet['id'])
+            'targetChoices' => $this->getQuestionRanges($courseSet['id']),
         ));
     }
 
@@ -395,7 +398,7 @@ class ManageController extends BaseController
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        $items    = $this->getTestpaperService()->getItemsCountByParams(array('testId' => $testpaperId, 'parentIdDefault' => 0), $gourpBy = 'questionType');
+        $items = $this->getTestpaperService()->getItemsCountByParams(array('testId' => $testpaperId, 'parentIdDefault' => 0), $gourpBy = 'questionType');
         $subItems = $this->getTestpaperService()->getItemsCountByParams(array('testId' => $testpaperId, 'parentId' => 0));
 
         $items = ArrayToolkit::index($items, 'questionType');
@@ -403,7 +406,7 @@ class ManageController extends BaseController
         $items['material'] = $subItems[0];
 
         return $this->render('testpaper/manage/item-get-table.html.twig', array(
-            'items' => $items
+            'items' => $items,
         ));
     }
 
@@ -427,13 +430,13 @@ class ManageController extends BaseController
         $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
 
         return $this->render('testpaper/manage/preview.html.twig', array(
-            'questions'     => $questions,
-            'limitedTime'   => $testpaper['limitedTime'],
-            'paper'         => $testpaper,
-            'paperResult'   => array(),
-            'total'         => $total,
-            'attachments'   => $attachments,
-            'questionTypes' => $this->getCheckedQuestionType($testpaper)
+            'questions' => $questions,
+            'limitedTime' => $testpaper['limitedTime'],
+            'paper' => $testpaper,
+            'paperResult' => array(),
+            'total' => $total,
+            'attachments' => $attachments,
+            'questionTypes' => $this->getCheckedQuestionType($testpaper),
         ));
     }
 
@@ -477,8 +480,8 @@ class ManageController extends BaseController
         $types = array();
         foreach ($typesConfig as $type => $typeConfig) {
             $types[$type] = array(
-                'name'         => $typeConfig['name'],
-                'hasMissScore' => $typeConfig['hasMissScore']
+                'name' => $typeConfig['name'],
+                'hasMissScore' => $typeConfig['hasMissScore'],
             );
         }
 
@@ -487,10 +490,11 @@ class ManageController extends BaseController
 
     protected function getQuestionRanges($courseSetId)
     {
-        $courses   = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
         $courseIds = ArrayToolkit::column($courses, 'id');
 
         $courseTasks = $this->getCourseTaskService()->findTasksByCourseIds($courseIds);
+
         return ArrayToolkit::index($courseTasks, 'id');
     }
 

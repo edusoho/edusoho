@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller\My;
-
 
 use AppBundle\Controller\BaseController;
 use Biz\Course\Service\CourseNoteService;
@@ -20,8 +18,8 @@ class NotebookController extends BaseController
         $user = $this->getUser();
 
         $conditions = array(
-            'userId'             => $user['id'],
-            'noteNumGreaterThan' => 0
+            'userId' => $user['id'],
+            'noteNumGreaterThan' => 0,
         );
 
         $paginator = new Paginator(
@@ -37,11 +35,10 @@ class NotebookController extends BaseController
 
         return $this->render('my/learning/notebook/index.html.twig', array(
             'courseMembers' => $courseMembers,
-            'paginator'     => $paginator,
-            'courses'       => $courses
+            'paginator' => $paginator,
+            'courses' => $courses,
         ));
     }
-
 
     public function showAction(Request $request, $courseId)
     {
@@ -49,25 +46,25 @@ class NotebookController extends BaseController
 
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $notes   = $this->getCourseNoteService()->findCourseNotesByUserIdAndCourseId($user['id'], $course['id']);
+        $notes = $this->getCourseNoteService()->findCourseNotesByUserIdAndCourseId($user['id'], $course['id']);
         $taskIds = ArrayToolkit::column($notes, 'taskId');
 
         $tasks = $this->getTaskService()->findTasksByIds($taskIds);
         $tasks = ArrayToolkit::index($tasks, 'id');
 
-
         $notes = $this->sortNotesByTaskSeq($notes, $tasks);
 
         return $this->render('my/learning/notebook/show.html.twig', array(
             'course' => $course,
-            'tasks'  => $tasks,
-            'notes'  => $notes
+            'tasks' => $tasks,
+            'notes' => $notes,
         ));
     }
 
     public function deleteAction($id)
     {
         $this->getCourseNoteService()->deleteNote($id);
+
         return $this->createJsonResponse(true);
     }
 
@@ -107,6 +104,7 @@ class NotebookController extends BaseController
     /**
      * @param $notes
      * @param $tasks
+     *
      * @return array
      */
     protected function sortNotesByTaskSeq($notes, $tasks)
@@ -119,8 +117,10 @@ class NotebookController extends BaseController
             if ($note1['seq'] == 0 || $note2['seq'] == 0) {
                 return true;
             }
+
             return $note1['seq'] > $note2['seq'];
         });
+
         return $notes;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Command;
 
-
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,8 +23,7 @@ class ProducePluginRegisterCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $tmp = sys_get_temp_dir();
-        $url = "http://demo.edusoho.com/abc.zip";
-
+        $url = 'http://demo.edusoho.com/abc.zip';
 
         $biz = $this->getContainer()->get('biz');
         $code = $input->getArgument('code');
@@ -36,64 +34,63 @@ class ProducePluginRegisterCommand extends BaseCommand
 
         $installer = new PluginRegister($rootDir, 'plugins', $biz);
         //下载
-        $fileName = $this->download($url,$tmp,$code);
+        $fileName = $this->download($url, $tmp, $code);
         $pluginDir = $installer->getPluginDirectory($code);
-        
+
         $this->unzipPackageFile($fileName, $pluginDir);
         $pluginRoot = $rootDir.DIRECTORY_SEPARATOR.'plugins';
 
-        $this->_replaceFileForPackageUpdate($pluginDir,$pluginRoot);
+        $this->_replaceFileForPackageUpdate($pluginDir, $pluginRoot);
 
-
-
-        $output->write("  - Parse meta file plugin.json");
+        $output->write('  - Parse meta file plugin.json');
         $metas = $installer->parseMetas($code);
-        $output->writeln("  <info>[Ok]</info>");
+        $output->writeln('  <info>[Ok]</info>');
 
-        $output->write("  - Execute create database scripts.");
+        $output->write('  - Execute create database scripts.');
         $executed = $installer->executeDatabaseScript($code);
-        $output->writeln($executed ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
+        $output->writeln($executed ? '  <info>[Ok]</info>' : '  <info>[Ignore]</info>');
 
-        $output->write("  - Execute install script.");
+        $output->write('  - Execute install script.');
         $executed = $installer->executeScript($code);
-        $output->writeln($executed ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
+        $output->writeln($executed ? '  <info>[Ok]</info>' : '  <info>[Ignore]</info>');
 
-        $output->write("  - Install block.");
+        $output->write('  - Install block.');
         BlockToolkit::init($installer->getPluginDirectory($code).'/block.json', $this->getContainer());
-        $output->writeln("  <info>[Ok]</info>");
+        $output->writeln('  <info>[Ok]</info>');
 
-        $output->write("  - register plugin to app.");
+        $output->write('  - register plugin to app.');
         // var_dump($metas);exit();
         $this->updateAppForPackageUpdate($metas);
 
-        $output->write("  - Create plugin installed record.");
+        $output->write('  - Create plugin installed record.');
         PluginUtil::refresh();
-        $output->writeln($executed ? "  <info>[Ok]</info>" : "  <info>[Ignore]</info>");
+        $output->writeln($executed ? '  <info>[Ok]</info>' : '  <info>[Ignore]</info>');
 
-        $output->write("  - Refresh plugin cache.");
+        $output->write('  - Refresh plugin cache.');
         $this->deleteCache();
 
         $output->writeln("<info>Finished!</info>\n");
     }
 
-     protected function updateAppForPackageUpdate($metas)
+    protected function updateAppForPackageUpdate($metas)
     {
         $newApp = array(
-            'code'              => $metas['code'],
-            'name'              => $metas['name'],
-            'description'       => $metas['description'],
-            'version'           => $metas['version'],
-            'icon'              => '',
-            'developerName'     => $metas['author'],
+            'code' => $metas['code'],
+            'name' => $metas['name'],
+            'description' => $metas['description'],
+            'version' => $metas['version'],
+            'icon' => '',
+            'developerName' => $metas['author'],
             'edusohoMinVersion' => $metas['support_version'],
-            'protocol'          => $metas['protocol'],
-            'updatedTime'       => time()
+            'protocol' => $metas['protocol'],
+            'updatedTime' => time(),
         );
 
         $app = $this->getAppDao()->getAppByCode($metas['code']);
 
         if (empty($app)) {
             $newApp['installedTime'] = time();
+
             return $this->getAppDao()->addApp($newApp);
         }
 
@@ -103,23 +100,23 @@ class ProducePluginRegisterCommand extends BaseCommand
     protected function deleteCache($tryCount = 0)
     {
         if ($tryCount >= 5) {
-            throw $this->createServiceException("cannot delete cache.");
+            throw $this->createServiceException('cannot delete cache.');
         }
 
         sleep($tryCount * 2);
 
         try {
-            $cachePath  =  dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/cache';
+            $cachePath = dirname($this->getContainer()->getParameter('kernel.root_dir')).'/cache';
             $filesystem = new Filesystem();
             $filesystem->remove($cachePath);
             clearstatcache(true);
             sleep(3);
             //注解需要该目录存在
-            if (!$filesystem->exists($cachePath . '/annotations/topxia')) {
-                $filesystem->mkdir($cachePath . '/annotations/topxia');
+            if (!$filesystem->exists($cachePath.'/annotations/topxia')) {
+                $filesystem->mkdir($cachePath.'/annotations/topxia');
             }
         } catch (\Exception $e) {
-            $tryCount++;
+            ++$tryCount;
             $this->deleteCache($tryCount);
         }
     }
@@ -128,8 +125,8 @@ class ProducePluginRegisterCommand extends BaseCommand
     {
         $filesystem = new Filesystem();
         $filesystem->mirror("{$package}/source", $pluginDir, null, array(
-            'override'        => true,
-            'copy_on_windows' => true
+            'override' => true,
+            'copy_on_windows' => true,
         ));
     }
 
@@ -141,7 +138,7 @@ class ProducePluginRegisterCommand extends BaseCommand
             $filesystem->remove($unzipDir);
         }
 
-        $tmpUnzipDir = $unzipDir . '_tmp';
+        $tmpUnzipDir = $unzipDir.'_tmp';
 
         if ($filesystem->exists($tmpUnzipDir)) {
             $filesystem->remove($tmpUnzipDir);
@@ -149,10 +146,10 @@ class ProducePluginRegisterCommand extends BaseCommand
 
         $filesystem->mkdir($tmpUnzipDir);
 
-        $zip = new \ZipArchive;
+        $zip = new \ZipArchive();
 
         if ($zip->open($filepath) === true) {
-            $tmpUnzipFullDir = $tmpUnzipDir . '/' . $zip->getNameIndex(0);
+            $tmpUnzipFullDir = $tmpUnzipDir.'/'.$zip->getNameIndex(0);
             $zip->extractTo($tmpUnzipDir);
             $zip->close();
             $filesystem->rename($tmpUnzipFullDir, $unzipDir);
@@ -162,7 +159,7 @@ class ProducePluginRegisterCommand extends BaseCommand
         }
     }
 
-    protected function download($url,$tmp,$code)
+    protected function download($url, $tmp, $code)
     {
         // $filename = md5($url).'_'.time();
         $filepath = $tmp.DIRECTORY_SEPARATOR.$code.'.zip';
@@ -178,12 +175,12 @@ class ProducePluginRegisterCommand extends BaseCommand
 
         return $filepath;
     }
-       /**
+
+    /**
      * @return CloudAppDaoImpl
      */
     protected function getAppDao()
     {
         return  $this->getServiceKernel()->createDao('CloudPlatform.CloudAppDao');
     }
-
 }

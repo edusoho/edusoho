@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Biz\Content\Service\BlockService;
@@ -15,8 +16,9 @@ class BlockController extends BaseController
         }
 
         $templateName = $this->getBlockService()->getFullBlockTemplateName($block['category'], $block['templateName'], false);
+
         return $this->render($templateName, array(
-            'block' => $block
+            'block' => $block,
         ));
     }
 

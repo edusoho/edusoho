@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Twig;
 
 class QuestionTypeExtension extends \Twig_Extension
@@ -9,7 +10,7 @@ class QuestionTypeExtension extends \Twig_Extension
     public function __construct($container, $biz)
     {
         $this->container = $container;
-        $this->biz       = $biz;
+        $this->biz = $biz;
     }
 
     public function getFilters()
@@ -21,7 +22,7 @@ class QuestionTypeExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFunction('getQuestionTypes', array($this, 'getQuestionTypes')),
-            new \Twig_SimpleFunction('getQuestionTypeTemplate', array($this, 'getQuestionTypeTemplate'))
+            new \Twig_SimpleFunction('getQuestionTypeTemplate', array($this, 'getQuestionTypeTemplate')),
         );
     }
 
@@ -29,7 +30,7 @@ class QuestionTypeExtension extends \Twig_Extension
     {
         $questionExtension = $this->container->get('extension.default')->getQuestionTypes();
 
-        $types         = array();
+        $types = array();
         $questionTypes = array_walk($questionExtension, function ($value, $type) use (&$types) {
             $types[$type] = $value['name'];
         });

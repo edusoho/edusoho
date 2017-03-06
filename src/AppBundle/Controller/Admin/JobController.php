@@ -13,9 +13,9 @@ class JobController extends BaseController
         $fields = $request->query->all();
         $fields = ArrayToolkit::filter($fields, array(
             'nextExcutedStartTime' => '',
-            'nextExcutedEndTime'   => '',
-            'name'                 => '',
-            'cycle'                => ''
+            'nextExcutedEndTime' => '',
+            'name' => '',
+            'cycle' => '',
         ));
         $paginator = new Paginator(
             $this->get('request'),
@@ -31,8 +31,8 @@ class JobController extends BaseController
         );
 
         return $this->render('admin/system/jobs.html.twig', array(
-            'jobs'      => $jobs,
-            'paginator' => $paginator
+            'jobs' => $jobs,
+            'paginator' => $paginator,
         ));
     }
 

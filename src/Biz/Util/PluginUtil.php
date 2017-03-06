@@ -15,10 +15,10 @@ class PluginUtil extends BaseService
     public static function refresh()
     {
         self::$filesystem = new Filesystem();
-        self::$kernel     = ServiceKernel::instance();
+        self::$kernel = ServiceKernel::instance();
 
         $count = self::getAppService()->findAppCount();
-        $apps  = self::getAppService()->findApps(0, $count);
+        $apps = self::getAppService()->findApps(0, $count);
 
         self::refreshMetaFile($apps);
         self::refreshRoutingFile($apps);
@@ -27,8 +27,8 @@ class PluginUtil extends BaseService
     public static function refreshMetaFile($apps)
     {
         $pluginMetas = array(
-            'protocol'  => '2.0',
-            'installed' => array()
+            'protocol' => '2.0',
+            'installed' => array(),
         );
 
         foreach ($apps as $app) {
@@ -37,10 +37,10 @@ class PluginUtil extends BaseService
             }
 
             $pluginMetas['installed'][$app['code']] = array(
-                'code'     => $app['code'],
-                'version'  => $app['version'],
-                'type'     => $app['type'],
-                'protocol' => empty($app['protocol']) ? 2 : $app['protocol']
+                'code' => $app['code'],
+                'version' => $app['version'],
+                'type' => $app['type'],
+                'protocol' => empty($app['protocol']) ? 2 : $app['protocol'],
             );
         }
 

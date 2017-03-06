@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\OpenCourse\Service;
 
 interface OpenCourseRecommendedService
@@ -11,7 +12,9 @@ interface OpenCourseRecommendedService
 
     /**
      * @before searchRecommendCount
+     *
      * @param  $conditions
+     *
      * @return mixed
      */
     public function countRecommends($conditions);

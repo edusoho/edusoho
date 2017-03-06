@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Util\Service\Impl;
 
 use Biz\BaseService;
@@ -14,10 +15,10 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
         if (empty($targets)) {
             return 0;
         }
-        $targets    = $this->plainTargetId($targets);
+        $targets = $this->plainTargetId($targets);
         $conditions = array(
             'targetType' => 'courselesson',
-            'targets'    => $targets
+            'targets' => $targets,
         );
         $uploadFiles = $this->getUploadFileService()->searchFiles(
             $conditions,
@@ -25,6 +26,7 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
             0,
             500
         );
+
         return $this->removeUploadFiles($uploadFiles);
     }
 
@@ -34,6 +36,7 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
         foreach ($targets as $target) {
             $result[] = $target['targetId'];
         }
+
         return $result;
     }
 
@@ -44,6 +47,7 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
             $result = $this->getUploadFileService()->deleteFile($file['id']);
             $count += $result;
         }
+
         return $count;
     }
 

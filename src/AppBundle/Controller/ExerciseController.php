@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Topxia\Service\Common\ServiceKernel;
@@ -20,11 +21,11 @@ class ExerciseController extends BaseController
 
         if ($result['status'] == 'doing') {
             return $this->redirect($this->generateUrl('exercise_show', array(
-                'resultId' => $result['id']
+                'resultId' => $result['id'],
             )));
         } else {
             return $this->redirect($this->generateUrl('exercise_result_show', array(
-                'resultId' => $result['id']
+                'resultId' => $result['id'],
             )));
         }
     }
@@ -48,13 +49,13 @@ class ExerciseController extends BaseController
         $activity = $this->getActivityService()->getActivity($result['lessonId']);
 
         return $this->render('exercise/do.html.twig', array(
-            'paper'       => $exercise,
-            'questions'   => $questions,
-            'course'      => $course,
+            'paper' => $exercise,
+            'questions' => $questions,
+            'course' => $course,
             'paperResult' => $result,
-            'activity'    => $activity,
+            'activity' => $activity,
             'showTypeBar' => 0,
-            'showHeader'  => 0
+            'showHeader' => 0,
         ));
     }
 
@@ -78,19 +79,20 @@ class ExerciseController extends BaseController
             throw new AccessDeniedException($this->getServiceKernel()->trans('无权查看作业！'));
         }
 
-        $builder   = $this->getTestpaperService()->getTestpaperBuilder($exercise['type']);
+        $builder = $this->getTestpaperService()->getTestpaperBuilder($exercise['type']);
         $questions = $builder->showTestItems($exercise['id'], $exerciseResult['id']);
 
         $student = $this->getUserService()->getUser($exerciseResult['userId']);
 
         $attachments = $this->getTestpaperService()->findAttachments($exercise['id']);
+
         return $this->render('exercise/do.html.twig', array(
-            'questions'   => $questions,
-            'paper'       => $exercise,
+            'questions' => $questions,
+            'paper' => $exercise,
             'paperResult' => $exerciseResult,
-            'student'     => $student,
+            'student' => $student,
             'attachments' => $attachments,
-            'action'      => $request->query->get('action', '')
+            'action' => $request->query->get('action', ''),
         ));
     }
 

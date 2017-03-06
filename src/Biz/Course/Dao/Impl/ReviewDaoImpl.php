@@ -12,6 +12,7 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
     public function getReviewByUserIdAndCourseId($userId, $courseId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND courseId = ? AND parentId = 0 LIMIT 1;";
+
         return $this->db()->fetchAssoc($sql, array($userId, $courseId)) ?: null;
     }
 
@@ -32,15 +33,15 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
     {
         return array(
             'serializes' => array(
-                'meta' => 'json'
+                'meta' => 'json',
             ),
             'timestamps' => array(
-                'createdTime'
+                'createdTime',
             ),
-            'orderbys'   => array(
+            'orderbys' => array(
                 'createdTime',
                 'updatedTime',
-                'rating'
+                'rating',
             ),
             'conditions' => array(
                 'userId = :userId',
@@ -51,8 +52,8 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
                 'courseSetId IN (:courseSetIds)',
                 'courseSetId = :courseSetId',
                 'parentId = :parentId',
-                'private = :private'
-            )
+                'private = :private',
+            ),
         );
     }
 }

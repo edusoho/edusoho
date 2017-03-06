@@ -17,13 +17,13 @@ class TestpaperController extends BaseController
         }
 
         $teacherCourses = $this->getCourseMemberService()->findTeacherMembersByUserId($user['id']);
-        $courseIds      = ArrayToolkit::column($teacherCourses, 'courseId');
-        $courses        = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseIds = ArrayToolkit::column($teacherCourses, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $conditions = array(
-            'status'    => $status,
-            'type'      => 'testpaper',
-            'courseIds' => $courseIds
+            'status' => $status,
+            'type' => 'testpaper',
+            'courseIds' => $courseIds,
         );
 
         $paginator = new Paginator(
@@ -43,22 +43,22 @@ class TestpaperController extends BaseController
 
         $userIds = ArrayToolkit::column($paperResults, 'userId');
         $userIds = array_merge($userIds, ArrayToolkit::column($paperResults, 'checkTeacherId'));
-        $users   = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         $courseSetIds = ArrayToolkit::column($paperResults, 'courseSetId');
-        $courseSets   = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
 
         $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
-        $testpapers   = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
 
         return $this->render('my/testpaper/check-list.html.twig', array(
             'paperResults' => $paperResults,
-            'paginator'    => $paginator,
-            'courses'      => $courses,
-            'courseSets'   => $courseSets,
-            'users'        => $users,
-            'status'       => $status,
-            'testpapers'   => $testpapers
+            'paginator' => $paginator,
+            'courses' => $courses,
+            'courseSets' => $courseSets,
+            'users' => $users,
+            'status' => $status,
+            'testpapers' => $testpapers,
         ));
     }
 
@@ -71,7 +71,7 @@ class TestpaperController extends BaseController
 
         $conditions = array(
             'userId' => $user['id'],
-            'type'   => 'testpaper'
+            'type' => 'testpaper',
         );
 
         $paginator = new Paginator(
@@ -88,25 +88,25 @@ class TestpaperController extends BaseController
         );
 
         $courseSetIds = ArrayToolkit::column($paperResults, 'courseSetId');
-        $courseSets   = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
 
         $courseIds = ArrayToolkit::column($paperResults, 'courseId');
-        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $testpaperIds = ArrayToolkit::column($paperResults, 'testId');
-        $testpapers   = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
 
         $activityIds = ArrayToolkit::column($paperResults, 'lessonId');
-        $tasks       = $this->getTaskService()->findTasksByActivityIds($activityIds);
+        $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
 
         return $this->render('my/testpaper/my-testpaper-list.html.twig', array(
             'paperResults' => $paperResults,
-            'paginator'    => $paginator,
-            'courses'      => $courses,
-            'courseSets'   => $courseSets,
-            'testpapers'   => $testpapers,
-            'tasks'        => $tasks,
-            'nav'          => 'testpaper'
+            'paginator' => $paginator,
+            'courses' => $courses,
+            'courseSets' => $courseSets,
+            'testpapers' => $testpapers,
+            'tasks' => $tasks,
+            'nav' => 'testpaper',
         ));
     }
 

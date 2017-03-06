@@ -5,7 +5,7 @@ use Phpmig\Migration\Migration;
 class C2CourseAddAllFields extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
@@ -36,40 +36,39 @@ class C2CourseAddAllFields extends Migration
         $biz['db']->exec("ALTER TABLE `c2_course` ADD `maxRate` tinyint(3) unsigned NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比';");
         $biz['db']->exec("ALTER TABLE `c2_course` ADD `orgId` int(10) unsigned DEFAULT '1';");
         $biz['db']->exec("ALTER TABLE `c2_course` ADD `orgCode` varchar(255) DEFAULT '1.' COMMENT '组织机构内部编码';");
-
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `originPrice`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `coinPrice`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `originCoinPrice`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `showStudentNumType`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `serializeMode`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `giveCredit`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `categoryId`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `about`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `recommended`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `recommendedSeq`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `recommendedTime`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `locationId`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `address`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `hitNum`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `discountId`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `discount`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `deadlineNotify`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `daysOfNotifyBeforeDeadline`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `useInClassroom`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `singleBuy`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `freeStartTime`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `freeEndTime`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `locked`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `maxRate`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `orgId`;");
-        $biz['db']->exec("ALTER TABLE `c2_course` DROP COLUMN `orgCode`;");
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `originPrice`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `coinPrice`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `originCoinPrice`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `showStudentNumType`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `serializeMode`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `giveCredit`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `categoryId`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `about`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `recommended`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `recommendedSeq`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `recommendedTime`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `locationId`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `address`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `hitNum`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `discountId`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `discount`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `deadlineNotify`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `daysOfNotifyBeforeDeadline`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `useInClassroom`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `singleBuy`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `freeStartTime`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `freeEndTime`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `locked`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `maxRate`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `orgId`;');
+        $biz['db']->exec('ALTER TABLE `c2_course` DROP COLUMN `orgCode`;');
     }
 }

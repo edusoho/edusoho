@@ -66,22 +66,22 @@ interface MemberService
     public function quitCourseByDeadlineReach($userId, $courseId);
 
     /**
-     * 成为学员，即加入课程的学习
+     * 成为学员，即加入课程的学习.
      */
     public function becomeStudent($courseId, $userId, $info = array());
 
     /**
-     * 退学
+     * 退学.
      */
     public function removeStudent($courseId, $userId);
 
     /**
-     * 封锁学员，封锁之后学员不能再查看该课程
+     * 封锁学员，封锁之后学员不能再查看该课程.
      */
     public function lockStudent($courseId, $userId);
 
     /**
-     * 解封学员
+     * 解封学员.
      */
     public function unlockStudent($courseId, $userId);
 
@@ -94,7 +94,7 @@ interface MemberService
     public function refreshMemberNoteNumber($courseId, $userId);
 
     /**
-     * @param  integer $userId
+     * @param int $userId
      *
      * @return array[]
      */
@@ -109,7 +109,7 @@ interface MemberService
     public function findTeacherMembersByUserIdAndCourseSetId($userId, $courseSetId);
 
     /**
-     * @param  integer $userId
+     * @param int $userId
      *
      * @return array[]
      */
