@@ -70,7 +70,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return null;
         }
 
-        $member = $user->isLogin() ? $this->getCourseMemberService()->getCourseMember($courseId, $user['id']) : null;
+        $member = $user->isLogin() ? $this->controller->getCourseMemberService()->getCourseMember($courseId, $user['id']) : null;
         $member = $this->previewAsMember($member, $courseId, $user);
 
         if ($member && $member['locked']) {
