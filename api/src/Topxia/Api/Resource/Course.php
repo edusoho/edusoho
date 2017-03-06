@@ -57,6 +57,8 @@ class Course extends BaseResource
 
         if ($course['isDefault'] == 1 && $course['title']) {
             $course['title'] = $courseSet['title'];
+        } else {
+            $course['title'] = $courseSet['title'] . '-' . $course['title'];
         }
 
         return $course;
@@ -86,22 +88,22 @@ class Course extends BaseResource
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM:ConversationService');
+        return $this->createService('IM:ConversationService');
     }
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     protected function getCourseSetService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseSetService');
+        return $this->createService('Course:CourseSetService');
     }
 
 }
