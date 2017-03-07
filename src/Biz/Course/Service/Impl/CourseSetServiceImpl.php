@@ -65,13 +65,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->getLogService()->info('course', 'cancel_recommend', "取消推荐课程《{$course['title']}》(#{$course['id']})");
     }
 
-    /**
-     * collect course set.
-     *
-     * @param  $id
-     * @throws AccessDeniedException
-     * @return bool
-     */
     public function favorite($id)
     {
         $courseSet = $this->getCourseSet($id);
@@ -109,13 +102,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return !empty($favorite);
     }
 
-    /**
-     * cancel collected course set.
-     *
-     * @param  $id
-     * @throws AccessDeniedException
-     * @return bool
-     */
+
     public function unfavorite($id)
     {
         $courseSet = $this->getCourseSet($id);
@@ -140,11 +127,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return true;
     }
 
-    /**
-     * @param  int $userId
-     * @param  int $courseSetId
-     * @return bool
-     */
+
     public function isUserFavorite($userId, $courseSetId)
     {
         $courseSet = $this->getCourseSet($courseSetId);
@@ -217,13 +200,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $user->hasPermission('admin_course_content_manage');
     }
 
-    /**
-     * @param  array $conditions
-     * @param  array|string $orderBys
-     * @param  int $start
-     * @param  int $limit
-     * @return mixed
-     */
+
     public function searchCourseSets(array $conditions, $orderBys, $start, $limit)
     {
         $orderBys = $this->getOrderBys($orderBys);
@@ -232,19 +209,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit);
     }
 
-    /**
-     * @param  array $conditions
-     * @return mixed
-     */
+
     public function countCourseSets(array $conditions)
     {
         return $this->getCourseSetDao()->count($conditions);
     }
 
-    /**
-     * @param  int $userId
-     * @return int
-     */
+
     public function countUserLearnCourseSets($userId)
     {
         $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
@@ -253,12 +224,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return count($courseSets);
     }
 
-    /**
-     * @param  int $userId
-     * @param  int $start
-     * @param  int $limit
-     * @return array[]
-     */
     public function searchUserLearnCourseSets($userId, $start, $limit)
     {
         $sets = $this->findLearnCourseSetsByUserId($userId);
@@ -587,21 +552,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->dispatchEvent('course-set.closed', new Event($courseSet));
     }
 
-    /**
-     * @param  int $userId
-     * @return int
-     */
+
     public function countUserFavorites($userId)
     {
         return $this->getFavoriteDao()->countByUserId($userId);
     }
 
-    /**
-     * @param  int $userId
-     * @param  int $start
-     * @param  int $limit
-     * @return array[]
-     */
+
     public function searchUserFavorites($userId, $start, $limit)
     {
         return $this->getFavoriteDao()->searchByUserId($userId, $start, $limit);
@@ -609,9 +566,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     /**
      * 根据排序规则返回排序数组.
-     *
-     * @param  string $order
-     * @return array
      */
     protected function getOrderBys($order)
     {
@@ -847,10 +801,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->createService('Course:CourseDeleteService');
     }
 
-    /**
-     * @param  $created
-     * @return array
-     */
     protected function generateDefaultCourse($created)
     {
         $defaultCourse = array(
