@@ -53,6 +53,7 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
     public function declares()
     {
         $declares['orderbys'] = array(
+            'id',
             'testId',
             'courseId',
             'lessonId',
