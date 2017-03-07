@@ -12,7 +12,7 @@ class C2CourseSetAddTeacherIds extends Migration
         $biz = $this->getContainer();
 
         $biz['db']->exec("
-            ALTER TABLE `c2_course_set` ADD 'teacherIds' varchar(1024) DEFAULT null;
+            ALTER TABLE `c2_course_set` ADD `teacherIds` varchar(1024) DEFAULT null;
         ");
     }
 
@@ -24,7 +24,7 @@ class C2CourseSetAddTeacherIds extends Migration
         $biz = $this->getContainer();
 
         $biz['db']->exec("
-            ALTER TABLE `c2_course_set` DROP COLUMN 'teacherIds';
+            ALTER TABLE `c2_course_set` DROP COLUMN `teacherIds`;
         ");
     }
 }

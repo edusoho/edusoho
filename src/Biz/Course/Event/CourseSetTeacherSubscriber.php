@@ -31,18 +31,24 @@ class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscri
         if (empty($course)) {
             return;
         }
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['id']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
-        usort($courses, function ($c1, $c2) {
-            if ($c1['createdTime'] == $c2['createdTime']) {
-                return 0;
-            }
 
-            return $c1['createdTime'] < $c2['createdTime'] ? -1 : 1;
-        });
+        if (empty($courses)) {
+            $firstCourse = $course;
+        } else {
+            usort($courses, function ($c1, $c2) {
+                if ($c1['createdTime'] == $c2['createdTime']) {
+                    return 0;
+                }
 
-        $teachers = $this->getMemberService()->findCourseTeachers($courses[0]['id']);
+                return $c1['createdTime'] < $c2['createdTime'] ? -1 : 1;
+            });
+            $firstCourse = $courses[0];
+        }
+
+        $teachers = $this->getMemberService()->findCourseTeachers($firstCourse['id']);
         if (empty($teachers)) {
             return;
         }
@@ -54,7 +60,6 @@ class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscri
 
             return $t1['seq'] < $t2['seq'] ? -1 : 1;
         });
-
         $courseSet['teacherIds'] = array($teachers[0]['userId']);
 
         $this->getCourseSetService()->updateCourseSet($courseSet['id'], $courseSet);

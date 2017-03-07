@@ -406,6 +406,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'smallPicture',
             'middlePicture',
             'largePicture',
+            'teacherIds',
         ));
 
         if (!empty($fields['tags'])) {

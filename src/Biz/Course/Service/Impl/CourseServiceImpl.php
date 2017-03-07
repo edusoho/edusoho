@@ -143,9 +143,9 @@ class CourseServiceImpl extends BaseService implements CourseService
                 ),
             ));
 
-            $this->dispatchEvent('course.create', new Event($created));
-
             $this->commit();
+
+            $this->dispatchEvent('course.create', new Event($created));
 
             return $created;
         } catch (\Exception $e) {
