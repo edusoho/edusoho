@@ -26,6 +26,7 @@ define(function(require, exports, module) {
 
         var validator = new Validator({
             element: '#classroom-set-form',
+            triggerType: 'change',
             onFormValidated: function(error){
                 if (error) {
                     return false;
