@@ -39,9 +39,12 @@ _filterByFileName() {
 }
 
   _onSelectFile(event) {
+    $('.file-browser-item').removeClass('active');
+    var $that = $(event.currentTarget).addClass('active');
     var $that = $(event.currentTarget);
     var file = $that.data();
     this._onChange(file);
+    
     // this._close();
   }
 

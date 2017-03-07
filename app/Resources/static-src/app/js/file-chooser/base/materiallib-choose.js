@@ -103,7 +103,8 @@ class MaterialLibChoose extends Chooser {
   }
 
   _onSelectFile(event) {
-    var $that = $(event.currentTarget);
+    $('.file-browser-item').removeClass('active');
+    var $that = $(event.currentTarget).addClass('active');
     var file = $that.data();
     $('[data-role="placeholder"]').html(file.name);
 
