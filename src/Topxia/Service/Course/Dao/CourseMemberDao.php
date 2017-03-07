@@ -70,6 +70,8 @@ interface CourseMemberDao
 
     public function updateMembers($conditions, $updateFields);
 
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
 
     public function deleteMember($id);

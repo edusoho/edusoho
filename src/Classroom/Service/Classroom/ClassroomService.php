@@ -24,6 +24,8 @@ interface ClassroomService
 
     public function canCreateThreadEvent($resource);
 
+    public function canCreateThreadWhenClassroomOverDue($classroom);
+
     public function addCoursesToClassroom($classroomId, $courseIds);
 
     /**
@@ -100,9 +102,7 @@ interface ClassroomService
 
     public function updateMember($id, $member);
 
-    public function updateMemberDeadline($id, $deadline);
-
-    public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
+    public function updateMemberDeadlineByMemberId($memberId, $deadline);
 
     public function searchMemberCount($conditions);
 

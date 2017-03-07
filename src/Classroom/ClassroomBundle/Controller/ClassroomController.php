@@ -230,10 +230,10 @@ class ClassroomController extends BaseController
                 return;
             }
 
-            $deadline = $classroom['expiryValue'];
-            if ($classroom['expiryMode'] == 'days') {
-                $deadline = time() + 24 * 60 * 60;
-            }
+            $deadline = ClassroomToolkit::buildMemberDeadline(array(
+                'expiryMode'  => $classroom['expiryMode'],
+                'expiryValue' => $classroom['expiryValue']
+            ));
 
             $member = array(
                 'id'          => 0,

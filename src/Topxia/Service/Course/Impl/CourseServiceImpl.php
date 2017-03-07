@@ -705,11 +705,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserialize($updatedCourse);
     }
 
-    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
-    {
-        return $this->getMemberDao()->updateMembersDeadlineByClassroomId($classroomId, $deadline);
-    }
-
     public function batchUpdateOrg($courseIds, $orgCode)
     {
         if (!is_array($courseIds)) {
@@ -2271,6 +2266,16 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getMemberDao()->updateMembers($conditions, $updateFields);
     }
 
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
+    {
+        return $this->getMemberDao()->updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+    }
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
+    {
+        return $this->getMemberDao()->updateMembersDeadlineByClassroomId($classroomId, $deadline);
+    }
+
     public function getCourseMember($courseId, $userId)
     {
         return $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
@@ -2874,6 +2879,15 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($member['deadline'] > time()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isCourseOverdue($course)
+    {
+        if ($course['expiryMode'] == 'date' && $course['expiryDay'] < time()) {
             return true;
         }
 

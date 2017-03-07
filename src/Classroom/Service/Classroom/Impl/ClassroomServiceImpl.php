@@ -205,7 +205,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             throw $this->createServiceException($this->getKernel()->trans('参数不正确，更新失败！'));
         }
 
-        if (!$this->canSetClassroomExpiryDate($fields, $classroom)) {
+        if (!$this->canUpdateClassroomExpiryDate($fields, $classroom)) {
             throw $this->createServiceException($this->getKernel()->trans('已发布的班级不允许修改班级原先的有效期模式'));
         }
 
@@ -246,7 +246,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return false;
     }
 
-    protected function canSetClassroomExpiryDate($fields, $classroom)
+    protected function canUpdateClassroomExpiryDate($fields, $classroom)
     {
         if (empty($fields['expiryMode']) && empty($fields['expiryValue'])) {
             return true;
@@ -268,8 +268,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'orgCode', 'orgId', 'expiryMode', 'expiryValue'));
 
         if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
-            $fields['expiryValue'] = strtotime($fields['expiryValue'].' 23:59:59');
-
             if ($fields['expiryValue'] < time()) {
                 throw $this->createServiceException($this->getKernel()->trans('设置的有效期小于当前时间！'));
             }
@@ -600,6 +598,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (!in_array($classroom['status'], array('published', 'closed'))) {
             throw $this->createServiceException($this->getKernel()->trans('不能加入未发布班级'));
+        }
+
+        if (!$this->canCreateThreadWhenClassroomOverDue($classroom)) {
+            throw $this->createServiceException($this->getKernel()->trans('不能加入已过期的班级'));
         }
 
         $user = $this->getUserService()->getUser($userId);
@@ -1166,6 +1168,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
+    public function canCreateThreadWhenClassroomOverDue($classroom)
+    {
+        if ($classroom['expiryMode'] == 'date' && $classroom['expiryValue'] < time()) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function canHandleClassroom($id)
     {
         $classroom = $this->getClassroom($id);
@@ -1498,16 +1509,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->updateMember($id, $fields);
     }
 
-    public function updateMemberDeadline($id, $deadline)
+    public function updateMemberDeadlineByMemberId($memberId, $deadline)
     {
-        $member = $this->getClassroomMemberDao()->updateMember($id, $deadline);
+        $member = $this->getClassroomMemberDao()->updateMember($memberId, $deadline);
 
-        $this->dispatchEvent('classroom.member.update', new ServiceEvent(array(
-            'classroomId' => $member['classroomId'],
-            'deadline'    => $deadline['deadline']
+        $this->dispatchEvent('classroom.member.deadline.update', new ServiceEvent(array(
+            'userId'      => $member['userId'],
+            'deadline'    => $deadline['deadline'],
+            'classroomId' => $member['classroomId']
         )));
 
-        return $this->getClassroomMemberDao()->updateMember($id, $deadline);
+        return $this->getClassroomMemberDao()->updateMember($memberId, $deadline);
     }
 
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline)

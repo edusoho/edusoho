@@ -157,10 +157,10 @@ class ClassroomManageController extends BaseController
 
             $deadline = ClassroomToolkit::buildMemberDeadline(array(
                 'expiryMode'  => 'date',
-                'expiryValue' => $fields['deadline']
+                'expiryValue' => strtotime($fields['deadline'].' 23:59:59')
             ));
 
-            $this->getClassroomService()->updateMemberDeadline($member['id'], array(
+            $this->getClassroomService()->updateMemberDeadlineByMemberId($member['id'], array(
                 'deadline' => $deadline
             ));
 
@@ -717,6 +717,7 @@ class ClassroomManageController extends BaseController
             $class = $request->request->all();
 
             $class['tagIds'] = $this->getTagIdsFromRequest($request);
+            $class['expiryValue'] = strtotime($class['expiryValue'].' 23:59:59');
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
 

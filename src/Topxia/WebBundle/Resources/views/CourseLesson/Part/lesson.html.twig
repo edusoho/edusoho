@@ -15,7 +15,11 @@
           href="{{ lessonUrl }}" 
         {% endif %}
       {% else %}
-        href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"
+        {% if (course.expiryMode == 'date' and date(course.expiryDay) < date()) and item.free == 0 and course.tryLookable == 0 %}
+          href="{{ lessonUrl }}"
+        {% else %}
+          href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"
+        {% endif %}}
       {% endif %}
       title="{{ item.title }}">
       {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}

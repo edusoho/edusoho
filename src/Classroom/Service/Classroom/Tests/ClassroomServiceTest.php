@@ -271,7 +271,7 @@ class ClassroomServiceTest extends BaseTestCase
     {
     }
 
-    public function testUpdateMemberDeadline()
+    public function testUpdateMemberDeadlineByMemberId()
     {
         $user          = $this->getCurrentUser();
         $textClassroom = array(
@@ -288,7 +288,7 @@ class ClassroomServiceTest extends BaseTestCase
             'expiryMode' => 'date',
             'expiryValue' => $time
         ));
-        $student = $this->getClassroomService()->updateMemberDeadline($student['id'], array(
+        $student = $this->getClassroomService()->updateMemberDeadlineByMemberId($student['id'], array(
             'deadline' => $deadline
         ));
         $this->assertEquals($time, $student['deadline']);

@@ -120,8 +120,6 @@ interface CourseService
 
     public function updateCourse($id, $fields);
 
-    public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
-
     public function batchUpdateOrg($courseIds, $orgCode);
 
     public function updateCourseCounter($id, $counter);
@@ -318,6 +316,10 @@ interface CourseService
 
     public function updateMembers($conditions, $updateFields);
 
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
+
     public function isMemberNonExpired($course, $member);
 
     public function findCourseStudents($courseId, $start, $limit);
@@ -470,4 +472,6 @@ interface CourseService
     public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
 
     public function canTryLook($courseId, $type);
+
+    public function isCourseOverdue($course);
 }

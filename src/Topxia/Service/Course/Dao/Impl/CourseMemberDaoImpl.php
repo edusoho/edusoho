@@ -457,12 +457,6 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         return $courseMember;
     }
 
-    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
-    {
-        $sql = "UPDATE {$this->table} SET deadline = ? WHERE classroomId = ?";
-        return $this->getConnection()->executeUpdate($sql, array($deadline, $classroomId));
-    }
-
     public function updateMembers($conditions, $updateFields)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
@@ -478,6 +472,18 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
         $this->clearCached();
 
         return true;
+    }
+
+    public function updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline)
+    {
+        $sql = "UPDATE {$this->table} SET deadline = ? WHERE classroomId = ? AND userId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($deadline, $classroomId, $userId));
+    }
+
+    public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
+    {
+        $sql = "UPDATE {$this->table} SET deadline = ? WHERE classroomId = ?";
+        return $this->getConnection()->executeUpdate($sql, array($deadline, $classroomId));
     }
 
     public function deleteMember($id)

@@ -8,13 +8,13 @@ use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Service\Taxonomy\TagOwnerManager;
 
-class ClassroomCourseEventSubscriber implements EventSubscriberInterface
+class ClassroomCourseExpiryDateEventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return array(
-            'classroom.update'        => 'onClassroomUpdate',
-            'classroom.member.update' => 'onClassroomMemberUpdate'
+            'classroom.update'                 => 'onClassroomUpdate',
+            'classroom.member.deadline.update' => 'onClassroomMemberDeadlineUpdate'
         );
     }
 
@@ -27,11 +27,11 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
             $this->getConnection()->beginTransaction();
 
             if (!empty($fields['expiryMode'])) {
-                if ($this->canUpdateCourses($classroom, $fields['expiryMode'])) {
+                if ($this->canUpdateCoursesExpiryDate($classroom, $fields['expiryMode'])) {
                     $this->updateCoursesExpiryDate($classroom['id'], array('expiryMode' => $fields['expiryMode'], 'expiryValue' => $fields['expiryValue']));
                 }
 
-                if ($this->canUpdateCoursesMembers($classroom, $fields['expiryMode'])) {
+                if ($this->canUpdateCoursesMembersDeadline($classroom, $fields['expiryMode'])) {
                     $this->updateCoursesStudentsDeadline($classroom['id'], array('expiryValue' => $fields['expiryValue'], 'expiryMode' => $fields['expiryMode'], 'classroomStatus' => $classroom['status']));
                 }
             }
@@ -43,16 +43,17 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onClassroomMemberUpdate(ServiceEvent $event)
+    public function onClassroomMemberDeadlineUpdate(ServiceEvent $event)
     {
         $arguments   = $event->getSubject();
-        $classroomId = $arguments['classroomId'];
         $deadline    = $arguments['deadline'];
+        $userId      = $arguments['userId'];
+        $classroomId = $arguments['classroomId'];
 
-        $this->getCourseService()->updateMembersDeadlineByClassroomId($classroomId, $deadline);
+        $this->getCourseService()->updateMemberDeadlineByClassroomIdAndUserId($classroomId, $userId, $deadline);
     }
 
-    protected function canUpdateCourses($classroom, $expiryMode)
+    protected function canUpdateCoursesExpiryDate($classroom, $expiryMode)
     {
         if ($classroom['status'] == 'draft') {
             return true;
@@ -65,7 +66,7 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
         return false;
     }
 
-    protected function canUpdateCoursesMembers($classroom, $expiryMode)
+    protected function canUpdateCoursesMembersDeadline($classroom, $expiryMode)
     {
         if ($expiryMode == $classroom['expiryMode'] && $expiryMode != 'days') {
             return true;
@@ -100,7 +101,6 @@ class ClassroomCourseEventSubscriber implements EventSubscriberInterface
     {
         return ServiceKernel::instance()->createDao('Course.CourseDao');
     }
-
 
     protected function getCourseService()
     {

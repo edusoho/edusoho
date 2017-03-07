@@ -3,7 +3,6 @@ namespace Classroom\ClassroomBundle\Controller\Course;
 
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
-use Topxia\Common\ClassroomToolkit;
 
 class LessonController extends BaseController
 {
@@ -30,8 +29,9 @@ class LessonController extends BaseController
             ));
         }
 
-        if (ClassroomToolkit::isClassroomOverdue($classroom)) {
-            return $this->render('ClassroomBundle:Classroom:overdue-tip-modal.html.twig');
+        if ($this->getCourseService()->isCourseOverdue($course)) {
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('班级已经过期！'));
+            return $this->redirect($this->generateUrl('classroom_courses', array('classroomId' => $classroom['id'])));
         }
 
         return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
