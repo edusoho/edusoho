@@ -27,7 +27,7 @@
         {% if  isMarketingPage or  member is empty %}
           {% set task_lock = (course.learnMode  == 'lockMode') %}
         {% else %}
-          {% set task_lock =  (course.learnMode  == 'lockMode')  and task.lock  %}
+          {% set task_lock = (course.learnMode  == 'lockMode')  and task.lock  %}
         {% endif %}
         {% set file = files[task.activity.mediaId]|default(null) %}
         <li class="task-item task-content mouse-control">
@@ -42,7 +42,7 @@
               es-icon-iccheckcircleblack24px color-primary
               {% endif %}
               left-menu"></i>
-          {% if task.status == 'published' %}
+          {% if course.status=='published' and task.status == 'published' %}
             {% if member %}
               {% if task_lock is empty %}
                 <a class="text-overflow title"
@@ -68,7 +68,7 @@
             </span>
             <span class="right-menu mouse-enter">
               {% if not member %}
-                {% if  task.isFree %}
+                {% if course.isFree or task.isFree %}
                   <a class="btn btn-primary" href="#modal" data-toggle="modal"
                      data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
                      style="margin-top:-8px">免费学习</a>
