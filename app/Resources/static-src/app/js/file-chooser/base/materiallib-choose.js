@@ -107,9 +107,7 @@ class MaterialLibChoose extends Chooser {
     var $that = $(event.currentTarget).addClass('active');
     var file = $that.data();
     $('[data-role="placeholder"]').html(file.name);
-
     this.emit('select', file);
-    // this._close();
   }
 
   _getUrlParameter(url, param) {

@@ -240,14 +240,19 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getTestpaperResultDao()->get($id);
     }
 
-    public function getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId)
+    public function getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId)
     {
-        return $this->getTestpaperResultDao()->getUserUnfinishResult($testId, $courseId, $lessonId, $type, $userId);
+        return $this->getTestpaperResultDao()->getUserUnfinishResult($testId, $courseId, $activityId, $type, $userId);
     }
 
-    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type)
+    public function getUserFinishedResult($testId, $courseId, $activityId, $type, $userId)
     {
-        return $this->getTestpaperResultDao()->getUserLatelyResultByTestId($userId, $testId, $courseId, $lessonId, $type);
+        return $this->getTestpaperResultDao()->getUserFinishedResult($testId, $courseId, $activityId, $type, $userId);
+    }
+
+    public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type)
+    {
+        return $this->getTestpaperResultDao()->getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type);
     }
 
     public function findPaperResultsStatusNumGroupByStatus($testId, $courseIds)
@@ -734,9 +739,28 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         if ($user->isAdmin()) {
             return true;
         }
-        //dosomething
 
-        return true;
+        $course = $this->getCourseService()->getCourse($paperResult['courseId']);
+        $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
+
+        if ($member['role'] == 'teacher') {
+            return true;
+        }
+
+        if ($paperResult['userId'] == $user['id']) {
+            return true;
+        }
+
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
+
+            if ($member && (in_array('teacher', $member['role'])) || in_array('headTeacher', $member['role'])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getTestpaperBuilder($type)
@@ -795,6 +819,16 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 
     /**
