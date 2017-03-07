@@ -12,26 +12,27 @@ class Courses extends BaseResource
     public function get(Application $app, Request $request)
     {
         $conditions = $request->query->all();
-
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
-
         if (isset($conditions['cursor'])) {
             $conditions['status']         = 'published';
             $conditions['parentId']       = 0;
             $conditions['updatedTime_GE'] = $conditions['cursor'];
-            $courses                      = $this->getCourseService()->searchCourses($conditions, array('updatedTime' => 'ASC'), $start, $limit);
-            $courses                      = $this->assemblyCourses($courses);
-            $next                         = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses);
-
-            return $this->wrap($this->filter($courses), $next);
+            $order = array('updatedTime' => 'ASC');
         } else {
-            $total   = $this->getCourseService()->searchCourseCount($conditions);
-            $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), $start, $limit);
-            $courses = $this->assemblyCourses($courses);
-
-            return $this->wrap($this->filter($courses), $total);
+            $order = array('createdTime' => 'DESC');
         }
+
+        $courses  = $this->getCourseService()->searchCourses($conditions, $order, $start, $limit);
+        $courses  = $this->assemblyCourses($courses);
+        $courses = $this->filter($courses);
+
+        if (isset($conditions['cursor'])) {
+            $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses);
+        } else {
+            $next = $this->getCourseService()->searchCourseCount($conditions);
+        }
+        return $this->wrap($courses, $next);
     }
 
     public function discoveryColumn(Application $app, Request $request)
@@ -72,6 +73,7 @@ class Courses extends BaseResource
         $total   = $this->getCourseService()->searchCourseCount($conditions);
         $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, $result['showCount']);
         $courses = $this->filter($courses);
+
         foreach ($courses as $key => $value) {
             $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
             $courses[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
@@ -83,15 +85,26 @@ class Courses extends BaseResource
         return $this->wrap($courses, min($result['showCount'], $total));
     }
 
+    public function filter($courses)
+    {
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        foreach($courses as &$course) {
+            $course['courseSet'] = $courseSets[$course['courseSetId']];
+        }
+        return $this->multicallFilter('Course', $courses);
+    }
+
     public function post(Application $app, Request $request)
     {
+
     }
 
     protected function assemblyCourses($courses)
     {
         $categoryIds = ArrayToolkit::column($courses, 'categoryId');
         $categories  = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-
         foreach ($courses as &$course) {
             if (isset($categories[$course['categoryId']])) {
                 $course['category'] = array(
@@ -106,23 +119,23 @@ class Courses extends BaseResource
         return $courses;
     }
 
-    public function filter($res)
-    {
-        return $this->multicallFilter('Course', $res);
-    }
-
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course:CourseService');
+        return $this->createService('Course:CourseService');
+    }
+
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 
     protected function getCategoryService()
     {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     protected function getUserService()
     {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return $this->createService('User:UserService');
     }
 }
