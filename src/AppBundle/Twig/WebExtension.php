@@ -620,7 +620,7 @@ class WebExtension extends \Twig_Extension
 
     public function remainTimeFilter($value, $timeType = '')
     {
-        $remainTime = '';
+        $remainTime = array();
         $remain = $value - time();
 
         if ($remain <= 0 && empty($timeType)) {

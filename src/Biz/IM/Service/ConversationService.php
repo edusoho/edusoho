@@ -4,6 +4,8 @@ namespace Biz\IM\Service;
 
 interface ConversationService
 {
+    public function createConversation($title, $targetType, $targetId, $members);
+
     public function getConversation($id);
 
     public function getConversationByConvNo($convNo);

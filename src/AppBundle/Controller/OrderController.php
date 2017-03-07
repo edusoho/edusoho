@@ -14,6 +14,7 @@ use AppBundle\Common\NumberToolkit;
 use AppBundle\Common\JoinPointToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
+use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 class OrderController extends BaseController
@@ -64,12 +65,6 @@ class OrderController extends BaseController
                 return $this->redirect($processor->callbackUrl($order, $this->container));
             }
         }
-
-        // $couponApp = $this->getAppService()->findInstallApp("Coupon");
-
-        // // if (isset($couponApp["version"]) && version_compare("1.0.5", $couponApp["version"], "<=")) {
-        // $orderInfo["showCoupon"] = true;
-        // // }
 
         $verifiedMobile = '';
 
@@ -319,11 +314,11 @@ class OrderController extends BaseController
     }
 
     /**
-     * @return LevelServiceImpl
+     * @return LevelService
      */
     protected function getLevelService()
     {
-        return $this->getBiz()->service('Vip:Vip:LevelService');
+        return $this->getBiz()->service('VipPlugin:Vip:LevelService');
     }
 
     /**
