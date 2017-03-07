@@ -2,6 +2,7 @@
 
 namespace AppBundle\Twig;
 
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\Course\Service\CourseSetService;
 
@@ -21,7 +22,7 @@ class AppExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('currency', array($this, 'currency')),
-            new \Twig_SimpleFilter('json_encode_utf8', array($this, 'json_encode_utf8')),
+            new \Twig_SimpleFilter('json_encode_utf8', array($this, 'jsonEncodeUtf8')),
         );
     }
 
@@ -32,6 +33,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFunction('classroom_services', array($this, 'buildClassroomServiceTags')),
             new \Twig_SimpleFunction('count', array($this, 'count')),
             new \Twig_SimpleFunction('course_cover', array($this, 'courseCover')),
+            new \Twig_SimpleFunction('course_set_cover', array($this, 'courseSetCover')),
         );
     }
 
@@ -57,7 +59,7 @@ class AppExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function json_encode_utf8($arr)
+    public function jsonEncodeUtf8($arr)
     {
         if (empty($arr)) {
             return '[]';
@@ -177,20 +179,32 @@ class AppExtension extends \Twig_Extension
 
     public function courseCover($course, $type = 'middle')
     {
-        if (empty($course)) {
-            return null;
+        $courseSet = null;
+        if (!empty($course)) {
+            if (!empty($course['courseSet'])) {
+                $courseSet = $course['courseSet'];
+            } else {
+                $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+            }
         }
-        if (!empty($course['courseSet'])) {
-            $courseSet = $course['courseSet'];
-        } else {
-            $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        }
-        $cover = $courseSet['cover'];
-        if (empty($cover) || empty($cover[$type])) {
-            return null;
+        return $this->courseSetCover($courseSet, $type);
+    }
+
+    public function courseSetCover($courseSet, $type = 'middle')
+    {
+        $coverPath = null;
+        if (!empty($courseSet)) {
+            $cover = $courseSet['cover'];
+            if (!empty($cover) && !empty($cover[$type])) {
+                $coverPath = $cover[$type];
+            }
         }
 
-        return $cover[$type];
+        if (empty($coverPath)) {
+            $settings = $this->getSettingService()->get('default');
+            $coverPath = $settings['course.png'] ? $settings['course.png'] : null;
+        }
+        return $coverPath;
     }
 
     protected function sortTags($tags)
@@ -225,5 +239,13 @@ class AppExtension extends \Twig_Extension
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }
