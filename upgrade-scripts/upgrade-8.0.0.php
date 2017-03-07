@@ -35,10 +35,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function batchUpdate($index)
     {
-        $this->c2courseSetMigrate();
-        $this->c2courseMigrate();
-        $this->c2CourseLessonMigrate();
-        $this->c2testpaperMigrate();
+        // $this->c2courseSetMigrate();
+        // $this->c2courseMigrate();
+        // $this->c2CourseLessonMigrate();
+        // $this->c2testpaperMigrate();
         $this->migrate();
     }
 
@@ -1647,7 +1647,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
       if(!$this->isFieldExist('course_favorite', 'courseSetId'))
       {
-        $this->exec('ALTER TABLE course_favorite ADD courseSetId INT(10) NOT NULL DEFAULT '0' COMMENT "课程ID";');
+        $this->exec('ALTER TABLE course_favorite ADD courseSetId INT(10) NOT NULL DEFAULT 0 COMMENT "课程ID";');
       }
 
       if($this->isFieldExist('course_favorite', 'courseId'))
@@ -1685,7 +1685,10 @@ class EduSohoUpgrade extends AbstractUpdater
       $this->exec("UPDATE block_template SET templateName = 'block/live-top-banner.template.html.twig' WHERE code = 'live_top_banner';");
       $this->exec("UPDATE block_template SET templateName = 'block/open-course-top-banner.template.html.twig' WHERE code = 'open_course_top_banner';");
 
-      $this->exec("UPDATE `live_activity` SET roomCreated = 1 WHERE liveId > 0;");
+      if($this->isTableExist('live_activity')) 
+      {
+        $this->exec("UPDATE `live_activity` SET roomCreated = 1 WHERE liveId > 0;");
+      }
       $this->exec("UPDATE crontab_job SET targetType = 'task' WHERE targetType = 'lesson' AND name = 'SmsSendOneDayJob';");
       $this->exec("UPDATE crontab_job SET targetType = 'task' WHERE targetType = 'lesson' AND name = 'SmsSendOneHourJob';");
     }
