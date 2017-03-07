@@ -66,12 +66,6 @@ class OrderController extends BaseController
             }
         }
 
-        // $couponApp = $this->getAppService()->findInstallApp("Coupon");
-
-        // // if (isset($couponApp["version"]) && version_compare("1.0.5", $couponApp["version"], "<=")) {
-        // $orderInfo["showCoupon"] = true;
-        // // }
-
         $verifiedMobile = '';
 
         if ((isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile']) > 0)) {
