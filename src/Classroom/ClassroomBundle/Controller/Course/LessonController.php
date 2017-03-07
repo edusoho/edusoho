@@ -31,9 +31,7 @@ class LessonController extends BaseController
         }
 
         if (ClassroomToolkit::isClassroomOverdue($classroom)) {
-            return $this->redirect($this->generateUrl('classroom_courses', array(
-                'classroomId' => $classroomId
-            )));
+            return $this->render('ClassroomBundle:Classroom:overdue-tip-modal.html.twig');
         }
 
         return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
