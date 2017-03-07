@@ -67,7 +67,7 @@
                                 class="task-overflow ml5">{{ task.title }}</span></span>
                         {% endif %}
                         {% set meta =  activity_meta(task.activity.mediaType) %}
-                        <span class="mouse-leave es-icon es-icon {{ meta.icon }} right-menu task-type-icon "
+                        <span class="es-icon es-icon {{ meta.icon }} right-menu task-type-icon "
                               data-toggle="tooltip" data-placement="top" title=""
                               data-original-title="{{ meta.name }}任务"></span>
                       </li>
@@ -103,7 +103,7 @@
           {% else %}
             <span class="title">{{ task.title }}</span>
           {% endif %}
-          <span class="right-menu mouse-leave">
+          <span class="right-menu">
           {{ task.activity.length|activity_length_format }}
             <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
                data-toggle="tooltip" data-placement="top"

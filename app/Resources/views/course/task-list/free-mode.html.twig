@@ -40,7 +40,7 @@
                 {% endif %}>
                 {% include 'course/task-list/parts/list-li-title.html.twig' %}
               </a>
-              <span class="right-menu color-gray mouse-leave">
+              <span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
                 {{ task.activity.length|default(0)|activity_length_format }}
                 {% set meta = activity_meta(task.activity.mediaType) %}
                 <i class="{{ meta.icon }} color-gray ml10" data-toggle="tooltip" data-placement="top" title=""

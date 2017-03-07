@@ -37,12 +37,8 @@
             {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}任务{{ task.number }}: {{ task.title }}
           </div>
         {% endif %}
-
         {% if task.status != 'published' %}
-          <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
-            <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5"></i>
-          </span>
-          <span class="right-menu mouse-enter color-primary">敬请期待</span>
+          <span class="right-menu ">敬请期待</span>
         {% elseif task_lock %}
           <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5"></i>
