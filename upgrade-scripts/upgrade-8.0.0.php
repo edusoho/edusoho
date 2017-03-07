@@ -84,10 +84,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $result = $this->getConnection()->exec($sql);
         }
 
-        $sqls = array(
-            "alter table c2_course_set change id id int(10);"
-            , "alter table c2_course_set drop primary key;"
-            , "INSERT INTO `c2_course_set` (
+        $sql = "INSERT INTO `c2_course_set` (
               `id`
               ,`title`
               ,`subtitle`
@@ -147,14 +144,9 @@ class EduSohoUpgrade extends AbstractUpdater
               ,concat('{\"large\":\"',largePicture,'\",\"middle\":\"',middlePicture,'\",\"small\":\"',smallPicture,'\"}') as cover
               ,`userId`
               ,`about`
-          FROM `course` where `id` not in (select `id` from `c2_course_set`);"
-            , "alter table c2_course_set add primary key(id);"
-            , "alter table c2_course_set change id id int(10) not null auto_increment;",
-        );
+          FROM `course` where `id` not in (select `id` from `c2_course_set`);";
 
-        foreach ($sqls as $sql) {
-            $result = $this->getConnection()->exec($sql);
-        }
+        $result = $this->getConnection()->exec($sql);
 
         $sql = "UPDATE `c2_course_set` ce, (SELECT count(id) AS num , courseId FROM `course_material` GROUP BY courseId) cm  SET ce.`materialNum` = cm.num  WHERE ce.id = cm.`courseId`;";
         $result = $this->getConnection()->exec($sql);
@@ -228,10 +220,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $result = $this->getConnection()->exec($sql);
         }
 
-        $sqls = array(
-            "alter table c2_course change id id int(10);"
-            , "alter table c2_course drop primary key;"
-            , "INSERT INTO `c2_course` (
+        $sql = "INSERT INTO `c2_course` (
               `id`
               ,`title`
               ,`status`
@@ -333,13 +322,8 @@ class EduSohoUpgrade extends AbstractUpdater
               ,0
               ,1
               ,'freeMode'
-          FROM `course` where `id` not in (select `id` from `c2_course`);"
-            , "alter table c2_course add primary key(id);"
-            , "alter table c2_course change id id int(10) not null auto_increment;",
-        );
-        foreach ($sqls as $sql) {
-            $result = $this->getConnection()->exec($sql);
-        }
+          FROM `course` where `id` not in (select `id` from `c2_course`);";
+        $result = $this->getConnection()->exec($sql);
 
         $sql = "UPDATE `c2_course` AS `c` SET `c`.`courseSetId` =  `c`.`id`";
         $result = $this->getConnection()->exec($sql);
