@@ -79,6 +79,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 `locked` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '是否锁住',
                 `minCoursePrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最低价格',
                 `maxCoursePrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最高价格',
+                `teacherIds` varchar(1024) DEFAULT null,
                 PRIMARY KEY (`id`)
               ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 
@@ -171,7 +172,6 @@ class EduSohoUpgrade extends AbstractUpdater
                   `isDefault` tinyint(1) DEFAULT '0',
                   `maxStudentNum` int(11) DEFAULT '0',
                   `status` varchar(32) DEFAULT NULL COMMENT 'draft, published, closed',
-                  `creator` int(11) DEFAULT NULL,
                   `isFree` tinyint(1) DEFAULT 0,
                   `price` float(10,2) NULL DEFAULT '0',
                   `vipLevelId` int(11) DEFAULT 0,
@@ -184,12 +184,9 @@ class EduSohoUpgrade extends AbstractUpdater
                   `studentNum` int(10) DEFAULT 0 COMMENT '学员数',
                   `teacherIds` VARCHAR(1024) DEFAULT 0 COMMENT '可见教师ID列表',
                   `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id',
-                  `createdTime` INT(10) UNSIGNED NOT NULL COMMENT '课程创建时间',
-                  `updatedTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
                   `ratingNum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程计划评论数',
                   `rating` float UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程计划评分',
                   `noteNum` INT(10) UNSIGNED NOT NULL DEFAULT 0,
-                  `buyExpiryTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '购买开放有效期',
                   `threadNum` int(10) DEFAULt 0 COMMENT '话题数',
                   `type` varchar(32) NOT NULL DEFAULT 'normal' COMMENT '教学计划类型',
                   `approval` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '是否需要实名才能购买',
@@ -211,10 +208,14 @@ class EduSohoUpgrade extends AbstractUpdater
                   `freeEndTime` int(10) NOT NULL DEFAULT '0',
                   `locked` int(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
                   `cover` VARCHAR(1024),
+                  `buyExpiryTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '购买开放有效期',
                   `enableFinish` INT(1) NOT NULL DEFAULT '1' COMMENT '是否允许学院强制完成任务',
                   `materialNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传的资料数量',
                   `maxRate` tinyint(3) DEFAULT 0 COMMENT '最大抵扣百分比',
                   `publishedTaskNum` INT(10) DEFAULT '0' COMMENT '已发布的任务数',
+                  `createdTime` INT(10) UNSIGNED NOT NULL COMMENT '课程创建时间',
+                  `updatedTime` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+                  `creator` int(11) DEFAULT NULL,
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 
