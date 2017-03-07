@@ -39,6 +39,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->c2courseMigrate();
         $this->c2CourseLessonMigrate();
         $this->c2testpaperMigrate();
+        $this->migrate();
     }
 
     protected function c2courseSetMigrate()
@@ -1609,6 +1610,84 @@ class EduSohoUpgrade extends AbstractUpdater
           UPDATE  `activity` AS ay ,`testpaper_activity` AS ty   SET ay.`mediaId`  =  ty.id
           WHERE ay.id  = ty.lessonId   AND ay.`mediaType` = 'testpaper';
          ");
+    }
+
+    protected function migrate()
+    {
+      if($this->isFieldExist('course_note', 'lessonId'))
+      {
+        $this->exec("ALTER TABLE `course_note` CHANGE `lessonId` `taskId` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务ID';");
+      } 
+
+      if(!$this->isFieldExist('course_note', 'courseSetId'))
+      {
+        $this->exec("ALTER TABLE `course_note` ADD COLUMN `courseSetId` INT(10) UNSIGNED NOT NULL;");
+      }
+
+      if(!$this->isFieldExist('course_review', 'courseSetId'))
+      {
+        $this->exec("ALTER TABLE `course_review` add COLUMN `courseSetId` int(10) UNSIGNED NOT NULL DEFAULT '0';");
+      }
+
+
+      if(!$this->isFieldExist('course_thread', 'courseSetId'))
+      {
+        $this->exec("ALTER TABLE `course_thread` ADD courseSetId INT(10) UNSIGNED NOT NULL;");
+      }
+
+      if($this->isFieldExist('course_thread', 'lessonId'))
+      {
+        $this->exec("ALTER TABLE `course_thread` CHANGE `lessonId` `taskId` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务ID';");
+      }
+
+      if($this->isFieldExist('course_thread_post', 'lessonId'))
+      {
+        $this->exec("ALTER TABLE `course_thread_post` CHANGE `lessonId` `taskId` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务ID';");
+      }
+
+      if(!$this->isFieldExist('course_favorite', 'courseSetId'))
+      {
+        $this->exec('ALTER TABLE course_favorite ADD courseSetId INT(10) NOT NULL DEFAULT '0' COMMENT "课程ID";');
+      }
+
+      if($this->isFieldExist('course_favorite', 'courseId'))
+      {
+        $this->exec("ALTER TABLE course_favorite MODIFY courseId INT(10) unsigned NOT NULL COMMENT '教学计划ID';");
+      }
+
+      if($this->isFieldExist('course_favorite', 'courseSetId'))
+      {
+        $this->exec("ALTER TABLE `course_favorite` CHANGE `courseSetId` `courseSetId` INT(10) NOT NULL DEFAULT '0' COMMENT '课程ID';");
+      }
+
+      if(!$this->isFieldExist('course_material', 'courseSetId'))
+      {
+        $this->exec("ALTER TABLE course_material ADD COLUMN courseSetId int(10) default 0 COMMENT '课程ID';");
+      }
+
+      if(!$this->isFieldExist('course_member', 'courseSetId'))
+      {
+        $this->exec("ALTER TABLE `course_member` ADD COLUMN  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID';");
+      }
+
+      if($this->isFieldExist('course_member', 'courseId'))
+      {
+        $this->exec("ALTER TABLE `course_member` MODIFY courseId INT(10) unsigned NOT NULL COMMENT '教学计划ID';");
+      }
+
+      if(!$this->isFieldExist('classroom_courses', 'courseSetId'))
+      {
+        $this->exec("ALTER TABLE `classroom_courses` ADD COLUMN `courseSetId` INT(10) NOT NULL DEFAULT '0' COMMENT '课程ID';");
+      }
+
+      $this->exec('UPDATE course_member AS cm INNER JOIN c2_course c ON c.id = cm.courseId SET cm.courseSetId=c.courseSetId;');
+
+      $this->exec("UPDATE block_template SET templateName = 'block/live-top-banner.template.html.twig' WHERE code = 'live_top_banner';");
+      $this->exec("UPDATE block_template SET templateName = 'block/open-course-top-banner.template.html.twig' WHERE code = 'open_course_top_banner';");
+
+      $this->exec("UPDATE `live_activity` SET roomCreated = 1 WHERE liveId > 0;");
+      $this->exec("UPDATE crontab_job SET targetType = 'task' WHERE targetType = 'lesson' AND name = 'SmsSendOneDayJob';");
+      $this->exec("UPDATE crontab_job SET targetType = 'task' WHERE targetType = 'lesson' AND name = 'SmsSendOneHourJob';");
     }
 
     /**
